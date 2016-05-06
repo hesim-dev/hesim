@@ -1,0 +1,11 @@
+Package: cea
+Type: Package
+Title: Cost-effectiveness analysis
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+LazyData: TRUE
+LinkingTo: Rcpp, RcppArmadillo
+Imports: Rcpp
