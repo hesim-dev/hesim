@@ -6,22 +6,36 @@
 
 using namespace Rcpp;
 
-// markovCohortC
-List markovCohortC(arma::cube P, arma::rowvec z0, int ncycles, arma::mat costs, arma::mat qol, double discount, arma::vec P_indx, arma::vec cost_indx, arma::vec qol_indx);
-RcppExport SEXP cea_markovCohortC(SEXP PSEXP, SEXP z0SEXP, SEXP ncyclesSEXP, SEXP costsSEXP, SEXP qolSEXP, SEXP discountSEXP, SEXP P_indxSEXP, SEXP cost_indxSEXP, SEXP qol_indxSEXP) {
+// matrixC
+arma::mat matrixC(arma::vec v, int nrow, int ncol);
+RcppExport SEXP cea_matrixC(SEXP vSEXP, SEXP nrowSEXP, SEXP ncolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< arma::cube >::type P(PSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type v(vSEXP);
+    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
+    __result = Rcpp::wrap(matrixC(v, nrow, ncol));
+    return __result;
+END_RCPP
+}
+// bayesianMarkovCohortC
+List bayesianMarkovCohortC(arma::rowvec z0, int ncycles, double discount, int nsims, arma::cube P, arma::cube costs, arma::cube qol, arma::vec P_indx, arma::vec cost_indx, arma::vec qol_indx);
+RcppExport SEXP cea_bayesianMarkovCohortC(SEXP z0SEXP, SEXP ncyclesSEXP, SEXP discountSEXP, SEXP nsimsSEXP, SEXP PSEXP, SEXP costsSEXP, SEXP qolSEXP, SEXP P_indxSEXP, SEXP cost_indxSEXP, SEXP qol_indxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< arma::rowvec >::type z0(z0SEXP);
     Rcpp::traits::input_parameter< int >::type ncycles(ncyclesSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type costs(costsSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type qol(qolSEXP);
     Rcpp::traits::input_parameter< double >::type discount(discountSEXP);
+    Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
+    Rcpp::traits::input_parameter< arma::cube >::type P(PSEXP);
+    Rcpp::traits::input_parameter< arma::cube >::type costs(costsSEXP);
+    Rcpp::traits::input_parameter< arma::cube >::type qol(qolSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type P_indx(P_indxSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type cost_indx(cost_indxSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type qol_indx(qol_indxSEXP);
-    __result = Rcpp::wrap(markovCohortC(P, z0, ncycles, costs, qol, discount, P_indx, cost_indx, qol_indx));
+    __result = Rcpp::wrap(bayesianMarkovCohortC(z0, ncycles, discount, nsims, P, costs, qol, P_indx, cost_indx, qol_indx));
     return __result;
 END_RCPP
 }
