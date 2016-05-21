@@ -5,7 +5,8 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 arma::mat matrixC(arma::vec v, int nrow, int ncol){
-  arma::mat m1;
+  int l = v.n_elem;
+  arma::mat m1(l, 1);
   m1.insert_cols(0, v);
   m1.reshape(nrow, ncol);
   return(m1);
@@ -13,7 +14,7 @@ arma::mat matrixC(arma::vec v, int nrow, int ncol){
 
 // Bayesian Markov Cohort Simulation
 // [[Rcpp::export]]
-List bayesianMarkovCohortC(arma::rowvec z0, int ncycles, double discount, int nsims,
+List markovCohortC(arma::rowvec z0, int ncycles, double discount, int nsims,
                            arma::cube P, arma::cube costs, arma::cube qol,
                            arma::vec P_indx, arma::vec cost_indx, arma::vec qol_indx) {
   // Initialize

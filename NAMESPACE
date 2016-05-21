@@ -1,3 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 useDynLib(cea)
+importFrom(ggplot2, ggplot)
 importFrom(Rcpp, evalCpp)
+

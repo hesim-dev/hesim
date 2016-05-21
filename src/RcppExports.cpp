@@ -19,9 +19,9 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// bayesianMarkovCohortC
-List bayesianMarkovCohortC(arma::rowvec z0, int ncycles, double discount, int nsims, arma::cube P, arma::cube costs, arma::cube qol, arma::vec P_indx, arma::vec cost_indx, arma::vec qol_indx);
-RcppExport SEXP cea_bayesianMarkovCohortC(SEXP z0SEXP, SEXP ncyclesSEXP, SEXP discountSEXP, SEXP nsimsSEXP, SEXP PSEXP, SEXP costsSEXP, SEXP qolSEXP, SEXP P_indxSEXP, SEXP cost_indxSEXP, SEXP qol_indxSEXP) {
+// markovCohortC
+List markovCohortC(arma::rowvec z0, int ncycles, double discount, int nsims, arma::cube P, arma::cube costs, arma::cube qol, arma::vec P_indx, arma::vec cost_indx, arma::vec qol_indx);
+RcppExport SEXP cea_markovCohortC(SEXP z0SEXP, SEXP ncyclesSEXP, SEXP discountSEXP, SEXP nsimsSEXP, SEXP PSEXP, SEXP costsSEXP, SEXP qolSEXP, SEXP P_indxSEXP, SEXP cost_indxSEXP, SEXP qol_indxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -35,7 +35,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type P_indx(P_indxSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type cost_indx(cost_indxSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type qol_indx(qol_indxSEXP);
-    __result = Rcpp::wrap(bayesianMarkovCohortC(z0, ncycles, discount, nsims, P, costs, qol, P_indx, cost_indx, qol_indx));
+    __result = Rcpp::wrap(markovCohortC(z0, ncycles, discount, nsims, P, costs, qol, P_indx, cost_indx, qol_indx));
     return __result;
 END_RCPP
 }
