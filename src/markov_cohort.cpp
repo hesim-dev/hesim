@@ -14,7 +14,7 @@ arma::mat matrixC(arma::vec v, int nrow, int ncol){
 
 // Bayesian Markov Cohort Simulation
 // [[Rcpp::export]]
-List markovCohortC(arma::rowvec z0, int ncycles, double discount, int nsims,
+List markov_cohortC(arma::rowvec z0, int ncycles, double discount, int nsims,
                            arma::cube P, arma::cube costs, arma::cube qol,
                            arma::vec P_indx, arma::vec cost_indx, arma::vec qol_indx) {
   // Initialize

@@ -5,8 +5,8 @@ matrixC <- function(v, nrow, ncol) {
     .Call('cea_matrixC', PACKAGE = 'cea', v, nrow, ncol)
 }
 
-markovCohortC <- function(z0, ncycles, discount, nsims, P, costs, qol, P_indx, cost_indx, qol_indx) {
-    .Call('cea_markovCohortC', PACKAGE = 'cea', z0, ncycles, discount, nsims, P, costs, qol, P_indx, cost_indx, qol_indx)
+markov_cohortC <- function(z0, ncycles, discount, nsims, P, costs, qol, P_indx, cost_indx, qol_indx) {
+    .Call('cea_markov_cohortC', PACKAGE = 'cea', z0, ncycles, discount, nsims, P, costs, qol, P_indx, cost_indx, qol_indx)
 }
 
 factorialC <- function(n) {

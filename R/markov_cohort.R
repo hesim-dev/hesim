@@ -49,7 +49,7 @@
 #' \item{qalys}{Vector of quality adjusted life years (QALYs) in each cycle}
 #'
 #' @export
-markovCohort <- function(z0, ncycles, discount = .03, nsims = 1,
+markov_cohort <- function(z0, ncycles, discount = .03, nsims = 1,
                          P, costs, qol,
                          P_indx = NULL, cost_indx = NULL, qol_indx = NULL){
   # conditions for transition matrix
@@ -70,7 +70,7 @@ markovCohort <- function(z0, ncycles, discount = .03, nsims = 1,
   }
 
   # c++ function
-  return(markovCohortC(z0, ncycles, discount, nsims,
+  return(markov_cohortC(z0, ncycles, discount, nsims,
                        P, costs, qol,
                        P_indx, cost_indx, qol_indx))
 }
