@@ -10,5 +10,6 @@ LazyData: TRUE
 LinkingTo: Rcpp, RcppArmadillo
 Imports:
     Rcpp,
-    ggplot2
+    ggplot2,
+    data.table
 RoxygenNote: 5.0.1

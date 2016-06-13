@@ -2,13 +2,10 @@
 % Please edit documentation in R/markov_cohort.R
 \name{markovCohort}
 \alias{markovCohort}
-\alias{times}
 \title{Simulate markov cohort model}
 \usage{
 markovCohort(z0, ncycles, discount = 0.03, nsims = 1, P, costs, qol,
   P_indx = NULL, cost_indx = NULL, qol_indx = NULL)
-
-times(x, y)
 }
 \arguments{
 \item{z0}{Initial state vector (i.e. distribution of cohort in each state during cycle 0).}

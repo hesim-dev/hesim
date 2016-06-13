@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 // Gompertz Distribution
 // [[Rcpp::export]]
-double qGompertz (double p, double shape, double rate) {
+double qgompertzC (double p, double shape, double rate) {
   double q = 0;
   if (shape == 0){
     q = R::qexp(p, rate, 1, 0);
@@ -19,28 +19,28 @@ double qGompertz (double p, double shape, double rate) {
 }
 
 // [[Rcpp::export]]
-double rGompertz (double shape, double rate){
+double rgompertzC (double shape, double rate){
   double u = R::runif(0,1);
-  return qGompertz(u, shape, rate);
+  return qgompertzC(u, shape, rate);
 }
 
 // Random Survival Times
 // [[Rcpp::export]]
-double rSurv(double location, double par2, std::string dist) {
+double rsurv(double location, double par2, std::string dist) {
   double surv = 0.0;
-  if (dist == "exp"){
+  if (dist == "exponential"){
     double rate = exp(location);
-    surv = R::rexp(rate);
+    surv = R::rexp(1/rate);
   }
   else if (dist == "weibull"){
-    double shape = par2;
+    double shape = exp(par2);
     double scale = exp(location);
     surv = R::rweibull(shape, scale);
   }
   else if (dist == "gompertz"){
-    double shape = par2;
+    double shape = exp(par2);
     double rate = exp(location);
-    surv = rGompertz(shape, rate);
+    surv = rgompertzC(shape, rate);
   }
   return surv;
 }

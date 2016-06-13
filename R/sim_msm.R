@@ -1,0 +1,52 @@
+#' Simulate clock-reset multi-state model
+#'
+#' Simulate clock-reset multi-state model
+#'
+#' @param loc_beta Regression coefficients for location parameter. Array with 1st dimension (rows)
+#' indexing random draw of coefficients, 2nd dimension (columns) indexing coefficients, and
+#' 3rd dimension (slice of cube) equal to number of unique transitions.
+#'
+#' @param loc_x Data matrix for location parameter. Number of columns must equal length of
+#' 2nd dimension in loc_beta.
+#'
+#' @param dist Character vector indicating the probability distributions used for each
+#'  transition. These include "weibull", "exponential", and "gompertz".
+#'
+#' @param tmat Matrix indicating model transitions.
+#'
+#' @param par2 1st ancillary paramter (those other than the location parameter) in the model.
+#'
+#' @param maxt Time to simulate model until.
+#'
+#' @param agevar Name of age variable in loc_x.
+#'
+#' @details The code is written in c++ to minmize simulation time.
+#'
+#' @return Dataframe with the following columns:
+#' \item{id}{Identification number for each individual.}
+#' \item{sim}{Simulation number (for each draw of parameters).}
+#' \item{state}{Model state during each transition.}
+#' \item{time}{Time state was reached.}
+#'
+#' @export
+sim_msm <- function(loc_beta, loc_x, dist, tmat, par2, maxt, agevar = NULL){
+  if (is.null(agevar)){
+      agecol <- -1
+  } else{
+      agecol <- which(colnames(x) == agevar) - 1
+  }
+  if (sum(!dist %in% c("exponential", "weibull", "gompertz")) > 0){
+    stop("Distribution not recognized")
+  }
+  absorbing <- absorbing(tmat) - 1
+  tmat[is.na(tmat)] <- 0
+  sim <- sim_msmC(loc_beta, loc_x, dist, tmat, par2, absorbing, maxt, agecol)
+  sim <- as.data.frame(sim)
+  colnames(sim) <- c("id", "sim", "state", "time")
+  return(data.table(sim))
+}
+
+absorbing <- function(tmat){
+  which(apply(tmat, 1, function(x) all(is.na(x))))
+}
+

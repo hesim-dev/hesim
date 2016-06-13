@@ -2,7 +2,6 @@
 #'
 #' Simulate a (Bayesian) Markov cohort model.
 #'
-#'
 #' @param z0 Initial state vector (i.e. distribution of cohort in each state during cycle 0).
 #'
 #' @param ncycles Number of cycles to run model.
@@ -48,7 +47,8 @@
 #' \item{state}{Matrix containing number in cohort in each state during each cycle.}
 #' \item{costs}{Vector of total costs in each cycle.}
 #' \item{qalys}{Vector of quality adjusted life years (QALYs) in each cycle}
-
+#'
+#' @export
 markovCohort <- function(z0, ncycles, discount = .03, nsims = 1,
                          P, costs, qol,
                          P_indx = NULL, cost_indx = NULL, qol_indx = NULL){
@@ -84,7 +84,4 @@ markovCohort <- function(z0, ncycles, discount = .03, nsims = 1,
   }
   return(x)
 }
-
-#' @rdname markovCohort
-times <- function(x, y) x * y
 

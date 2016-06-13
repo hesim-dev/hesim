@@ -1,4 +1,4 @@
-ggplotTornado <- function(data, par = "par", par.values = "par.values",
+ggplot_tornado <- function(data, par = "par", par.values = "par.values",
                           labels = "labels", output.values = "output.values",
                           output.primary, output.label = "ICER"){
   p <- ggplot(data) +

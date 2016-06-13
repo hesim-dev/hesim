@@ -9,3 +9,65 @@ markovCohortC <- function(z0, ncycles, discount, nsims, P, costs, qol, P_indx, c
     .Call('cea_markovCohortC', PACKAGE = 'cea', z0, ncycles, discount, nsims, P, costs, qol, P_indx, cost_indx, qol_indx)
 }
 
+factorialC <- function(n) {
+    .Call('cea_factorialC', PACKAGE = 'cea', n)
+}
+
+pv1 <- function(t1, t2, a, r) {
+    .Call('cea_pv1', PACKAGE = 'cea', t1, t2, a, r)
+}
+
+exponent_int <- function(r, p, t, h) {
+    .Call('cea_exponent_int', PACKAGE = 'cea', r, p, t, h)
+}
+
+poly_int <- function(r, p, t, h, a) {
+    .Call('cea_poly_int', PACKAGE = 'cea', r, p, t, h, a)
+}
+
+pv_poly <- function(r, p, t1, t2, h, a) {
+    .Call('cea_pv_poly', PACKAGE = 'cea', r, p, t1, t2, h, a)
+}
+
+qgompertzC <- function(p, shape, rate) {
+    .Call('cea_qgompertzC', PACKAGE = 'cea', p, shape, rate)
+}
+
+rgompertzC <- function(shape, rate) {
+    .Call('cea_rgompertzC', PACKAGE = 'cea', shape, rate)
+}
+
+rsurv <- function(location, par2, dist) {
+    .Call('cea_rsurv', PACKAGE = 'cea', location, par2, dist)
+}
+
+pv_splines <- function(t1, t2, state, r, x, beta, poly_beta, poly_deg, knots) {
+    .Call('cea_pv_splines', PACKAGE = 'cea', t1, t2, state, r, x, beta, poly_beta, poly_deg, knots)
+}
+
+notinvec <- function(item, v) {
+    .Call('cea_notinvec', PACKAGE = 'cea', item, v)
+}
+
+nxttime <- function(current_time, time_jump, maxt) {
+    .Call('cea_nxttime', PACKAGE = 'cea', current_time, time_jump, maxt)
+}
+
+matS <- function(index, cube, ntrans, k) {
+    .Call('cea_matS', PACKAGE = 'cea', index, cube, ntrans, k)
+}
+
+updateAge <- function(x, age, col) {
+    .Call('cea_updateAge', PACKAGE = 'cea', x, age, col)
+}
+
+#' @export
+sim_msmC <- function(loc_beta, loc_x, dist, tmat, par2, absorbing, maxt, agecol = -1L) {
+    .Call('cea_sim_msmC', PACKAGE = 'cea', loc_beta, loc_x, dist, tmat, par2, absorbing, maxt, agecol)
+}
+
+#' @export
+sim_msm_pvC <- function(id, sim, state, time, r, x, agecol, beta, poly_beta, poly_deg, knots) {
+    .Call('cea_sim_msm_pvC', PACKAGE = 'cea', id, sim, state, time, r, x, agecol, beta, poly_beta, poly_deg, knots)
+}
+
