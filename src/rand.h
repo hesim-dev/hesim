@@ -5,7 +5,7 @@ double qgompertzC (double p, double shape, double rate);
 
 double rgompertzC (double shape, double rate);
 
-double rsurv(double location, double par2, std::string dist);
+double rsurv(double location, double anc1, std::string dist);
 
 # endif
 

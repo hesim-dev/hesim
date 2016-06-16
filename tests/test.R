@@ -1,4 +1,5 @@
-# sim_los ----------------------------------------------------------------------
+# sim_msm and sim_los ----------------------------------------------------------
+## Simulation without Age
 # estimate multi-state model
 library("flexsurv")
 library("data.table")
@@ -19,18 +20,32 @@ sim.flexsurv <- sim.fmsm(x = mod, trans = tmat, newdata = data.frame(treat = 1),
                          t = maxt, M = N)
 
 # cea simulation
-loc_beta <-  array(NA, c(1, 2, nrow(tmat)))
-for (i in 1:nrow(tmat)) loc_beta[, , i] <- coef(mod[[i]])[c("scale", "treat")]
+param <- sim_param(mod)
 loc_x <- as.matrix(data.frame(int = 1, treat = 1))
 loc_x <- loc_x[rep(seq_len(nrow(loc_x)), each = N), ]
-par2 <- unlist(lapply(mod, function (x) coef(x)["shape"]))
-sim.cea <- sim_msm(loc_beta, loc_x, dist, tmat, par2, maxt)
+sim.cea <- sim_msm(param$loc_beta, loc_x, dist, tmat, param$anc1, maxt)
 
 # compare simulations
 mean(sim.flexsurv$t[, ncol(sim.flexsurv$t)])
 sim_los(sim.cea)
 
+## Simulation with Age
+dat$age <- rnorm(nrow(dat), 65, 10)
+mod2 <- vector(3, mode = "list")
+for (i in 1:3){
+  mod2[[i]] <- flexsurvreg(Surv(years, status) ~ treat + age,
+                          subset = (trans == i),  data = dat, dist = dist[i])
+}
+loc_beta2 <-  array(NA, c(1, 3, nrow(tmat)))
+for (i in 1:nrow(tmat)) loc_beta2[, , i] <- coef(mod2[[i]])[c("scale", "treat", "age")]
+loc_x2 <- as.matrix(data.frame(int = 1, treat = 1, age = 50))
+loc_x2 <- loc_x2[rep(seq_len(nrow(loc_x2)), each = N), ]
+par2.2 <- unlist(lapply(mod2, function (x) coef(x)["shape"]))
+sim.cea2 <- sim_msm(loc_beta2, loc_x2, dist, tmat, par2.2, maxt, agevar = "age")
+sim_los(sim.cea2)
+
 # sim_msm_pv -------------------------------------------------------------------
+## Simulation without Age
 # cost data
 x.cost <- loc_x
 beta <- c(500, 500)
@@ -50,3 +65,10 @@ qol <- rep(1, 3)
 pv.cost <- sim_pv(sim.cea, x = x.cost, beta = beta, poly.beta = poly.beta,
        poly.deg = poly.deg, knots = knots)
 pv.qol <- sim_pv(sim.cea, x = x.util, beta = qol)
+
+## Simulation with Age
+x.cost2 <- cbind(x.cost, rnorm(nrow(x.cost), 65, 10))
+colnames(x.cost2)[3] <- "age"
+beta2 <- cbind(beta, rep(1, 3))
+pv.cost2 <- sim_pv(sim.cea2, x = x.cost2, beta = beta2, poly.beta = poly.beta,
+                  poly.deg = poly.deg, knots = knots)

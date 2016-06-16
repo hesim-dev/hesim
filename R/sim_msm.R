@@ -14,7 +14,7 @@
 #'
 #' @param tmat Matrix indicating model transitions.
 #'
-#' @param par2 1st ancillary paramter (those other than the location parameter) in the model.
+#' @param anc1 1st ancillary parameter (those other than the location parameter) in the model.
 #'
 #' @param maxt Time to simulate model until.
 #'
@@ -29,20 +29,28 @@
 #' \item{time}{Time state was reached.}
 #'
 #' @export
-sim_msm <- function(loc_beta, loc_x, dist, tmat, par2, maxt, agevar = NULL){
+sim_msm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL){
+  if (is.null(anc1)){
+    anc1 = rep(0, dim(loc_beta)[3])
+  }
   if (is.null(agevar)){
       agecol <- -1
   } else{
-      agecol <- which(colnames(x) == agevar) - 1
+      agecol <- which(colnames(loc_x) == agevar) - 1
   }
   if (sum(!dist %in% c("exponential", "weibull", "gompertz")) > 0){
     stop("Distribution not recognized")
   }
   absorbing <- absorbing(tmat) - 1
   tmat[is.na(tmat)] <- 0
-  sim <- sim_msmC(loc_beta, loc_x, dist, tmat, par2, absorbing, maxt, agecol)
+  sim <- sim_msmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, agecol)
   sim <- as.data.frame(sim)
-  colnames(sim) <- c("id", "sim", "state", "time")
+  if (is.null(agevar)){
+      colnames(sim) <- c("id", "sim", "state", "time")
+  } else{
+    colnames(sim) <- c("id", "sim", "age", "state", "time")
+  }
+
   return(data.table(sim))
 }
 

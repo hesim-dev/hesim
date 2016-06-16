@@ -7,7 +7,7 @@
 using namespace Rcpp;
 
 // Random times to next states
-arma::vec rtjumps(arma::mat lb, arma::vec loc_x, arma::vec par2,
+arma::vec rtjumps(arma::mat lb, arma::vec loc_x, arma::vec anc1,
                     arma::vec trans, std::vector<std::string> d,
                     int nstates){
   arma::vec time_jumps(nstates);
@@ -17,7 +17,7 @@ arma::vec rtjumps(arma::mat lb, arma::vec loc_x, arma::vec par2,
     }
     else{
       double loc = dot(loc_x, lb.row(trans(j) - 1));
-      time_jumps(j) = rsurv(loc, par2(trans(j) - 1), d[trans(j) - 1]);
+      time_jumps(j) = rsurv(loc, anc1(trans(j) - 1), d[trans(j) - 1]);
     }
   }
   return time_jumps;
@@ -96,7 +96,7 @@ arma::vec updateAge(arma::vec x, double age, int col){
 // [[Rcpp::export]]
 List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
             std::vector<std::string> dist, arma::mat tmat,
-            arma::vec par2, std::vector<int> absorbing,
+            arma::vec anc1, std::vector<int> absorbing,
             int maxt, int agecol = -1) {
   // Initialize
   int N = loc_x.n_rows;
@@ -108,6 +108,7 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
   // Storage vectors
   std::vector<int> id;
   std::vector<int> sim;
+  std::vector<double> age;
   std::vector<int> state;
   std::vector<double> time;
 
@@ -128,9 +129,12 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
 
       // Simulate for patient i
       arma::vec loc_xi = loc_x.row(i).t();
+      if (agecol >= 0){
+        age.push_back(loc_xi(agecol));
+      }
       while (notinvec(state[counter], absorbing) && time[counter] < maxt){
         // Current iteration
-        arma::vec time_jumps = rtjumps(loc_beta_s, loc_xi, par2,
+        arma::vec time_jumps = rtjumps(loc_beta_s, loc_xi, anc1,
                                          tmat.row(state[counter]).t(),
                                          dist, nstates);
         arma::uword next_state;
@@ -143,20 +147,26 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
         // Move to next iteration and update patient
         ++ counter;
         if (agecol >= 0){
-          double age = loc_xi(agecol) + time_jump;
-          loc_xi = updateAge(loc_xi, age, agecol);
+          double newage = loc_xi(agecol) + time_jump;
+          loc_xi = updateAge(loc_xi, newage, agecol);
+          age.push_back(newage);
         }
       }
       ++ counter;
     }
   }
-  return List::create(id, sim, state, time);
+  if (agecol >= 0){
+    return List::create(id, sim, age, state, time);
+  }
+  else{
+    return List::create(id, sim, state, time);
+  }
 }
 
 //' @export
 // [[Rcpp::export]]
-arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec state, arma::vec time,
-                   double r, arma::mat x, int agecol,
+arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec state,
+                      arma::vec time, double r, arma::mat x, int agecol,
                    arma::mat beta, arma::mat poly_beta, arma::mat poly_deg,
                    arma::mat knots) {
   // Initialize/store
@@ -169,6 +179,9 @@ arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec state, arma::vec ti
       pv(i) = 0;
     }
     else{
+      if (agecol >= 0){
+        x(agecol) = age(i-1);
+      }
       pv(i) = pv_splines(time(i - 1), time(i), state(i - 1), r,
          x.row(id(i)).t(), beta.row(state(i - 1)).t(),
          poly_beta.row(state(i - 1)).t(),

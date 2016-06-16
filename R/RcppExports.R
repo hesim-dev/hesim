@@ -33,12 +33,13 @@ qgompertzC <- function(p, shape, rate) {
     .Call('cea_qgompertzC', PACKAGE = 'cea', p, shape, rate)
 }
 
+#' @export
 rgompertzC <- function(shape, rate) {
     .Call('cea_rgompertzC', PACKAGE = 'cea', shape, rate)
 }
 
-rsurv <- function(location, par2, dist) {
-    .Call('cea_rsurv', PACKAGE = 'cea', location, par2, dist)
+rsurv <- function(location, anc1, dist) {
+    .Call('cea_rsurv', PACKAGE = 'cea', location, anc1, dist)
 }
 
 pv_splines <- function(t1, t2, state, r, x, beta, poly_beta, poly_deg, knots) {
@@ -62,12 +63,12 @@ updateAge <- function(x, age, col) {
 }
 
 #' @export
-sim_msmC <- function(loc_beta, loc_x, dist, tmat, par2, absorbing, maxt, agecol = -1L) {
-    .Call('cea_sim_msmC', PACKAGE = 'cea', loc_beta, loc_x, dist, tmat, par2, absorbing, maxt, agecol)
+sim_msmC <- function(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, agecol = -1L) {
+    .Call('cea_sim_msmC', PACKAGE = 'cea', loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, agecol)
 }
 
 #' @export
-sim_msm_pvC <- function(id, sim, state, time, r, x, agecol, beta, poly_beta, poly_deg, knots) {
-    .Call('cea_sim_msm_pvC', PACKAGE = 'cea', id, sim, state, time, r, x, agecol, beta, poly_beta, poly_deg, knots)
+sim_msm_pvC <- function(id, sim, age, state, time, r, x, agecol, beta, poly_beta, poly_deg, knots) {
+    .Call('cea_sim_msm_pvC', PACKAGE = 'cea', id, sim, age, state, time, r, x, agecol, beta, poly_beta, poly_deg, knots)
 }
 

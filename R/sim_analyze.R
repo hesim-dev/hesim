@@ -42,8 +42,9 @@ sim_pv <- function(sim, r = .03, x, beta, poly.beta = NULL, poly.deg = NULL,
       agecol <- which(colnames(sim) == "age") - 1
   } else{
     agecol <- -1
+    sim$age <- rep(0, nrow(sim))
   }
-  if(is.numeric(beta)){
+  if(!is.matrix(beta)){
     beta <- matrix(beta, nrow = n.states, ncol = 1)
   }
   if(is.null(poly.beta)){
@@ -52,7 +53,7 @@ sim_pv <- function(sim, r = .03, x, beta, poly.beta = NULL, poly.deg = NULL,
   if(is.null(poly.deg)){
     poly.deg <- matrix(0, nrow = n.states, ncol = 1)
   }
-  pv <- sim_msm_pvC(sim$id, sim$sim, sim$state, sim$time,
+  pv <- sim_msm_pvC(sim$id, sim$sim, sim$age, sim$state, sim$time,
                     r, x, agecol, beta, poly.beta, poly.deg, knots)
   return(pv)
 }
