@@ -186,8 +186,9 @@ arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec stat
 
   // Loop
   for (int i = 0; i < N; ++i){
+    arma::vec xi = x.row(id(i)).t();
     if (agecol >= 0){
-      x.row(id(i))(agecol) = age(i-1);
+      xi(agecol) = age(i);
     }
     if (final(i) == 1){
       if (!notinvec(state(i), absorbing)){
@@ -199,7 +200,7 @@ arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec stat
     }
     else{
       pv(i) = pv_splines(time(i), time(i + 1), state(i), r,
-         x.row(id(i)).t(), beta.row(state(i)).t(),
+         xi, beta.row(state(i)).t(),
          poly_beta.row(state(i)).t(),
          poly_deg.row(state(i)).t(), knots.row(state(i)).t());
     }

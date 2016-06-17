@@ -33,6 +33,9 @@ sim_pv <- function(sim, tmat, r = .03, x = NULL, beta, poly.beta = NULL, poly.de
                    knots = NULL, name = NULL, agevar = NULL){
   n.states <- length(unique(sim$state))
   zeros <- rep(0, n.states)
+  if(is.data.frame(x)){
+    x <- as.matrix(x)
+  }
   if(is.null(knots)){
       knots <- cbind(zeros, zeros)
   } else{

@@ -71,5 +71,6 @@ x.cost2 <- cbind(x.cost, rnorm(nrow(x.cost), 65, 10))
 colnames(x.cost2)[3] <- "age"
 beta2 <- cbind(beta, rep(1, 3))
 pv.cost2 <- sim_pv(sim.cea2, tmat, x = x.cost2, beta = beta2, poly.beta = poly.beta,
-                  poly.deg = poly.deg, knots = knots, r = 0, name = "costs")
+                  poly.deg = poly.deg, knots = knots, r = 0, name = "costs",
+                  agevar = "age")
 sim.cea2 <- cbind(sim.cea2, pv.cost2)
