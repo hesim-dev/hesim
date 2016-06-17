@@ -30,6 +30,9 @@
 #'
 #' @export
 sim_msm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL){
+  if (is.data.frame(loc_x)){
+    loc_x <- as.matrix(loc_x)
+  }
   if (is.null(anc1)){
     anc1 = rep(0, dim(loc_beta)[3])
   }
@@ -46,15 +49,11 @@ sim_msm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL){
   sim <- sim_msmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, agecol)
   sim <- as.data.frame(sim)
   if (is.null(agevar)){
-      colnames(sim) <- c("id", "sim", "state", "time")
+      colnames(sim) <- c("id", "sim", "state", "final", "time")
   } else{
-    colnames(sim) <- c("id", "sim", "age", "state", "time")
+    colnames(sim) <- c("id", "sim", "age", "state", "final", "time")
   }
-
   return(data.table(sim))
 }
 
-absorbing <- function(tmat){
-  which(apply(tmat, 1, function(x) all(is.na(x))))
-}
 

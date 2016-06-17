@@ -237,8 +237,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // sim_msm_pvC
-arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec state, arma::vec time, double r, arma::mat x, int agecol, arma::mat beta, arma::mat poly_beta, arma::mat poly_deg, arma::mat knots);
-RcppExport SEXP cea_sim_msm_pvC(SEXP idSEXP, SEXP simSEXP, SEXP ageSEXP, SEXP stateSEXP, SEXP timeSEXP, SEXP rSEXP, SEXP xSEXP, SEXP agecolSEXP, SEXP betaSEXP, SEXP poly_betaSEXP, SEXP poly_degSEXP, SEXP knotsSEXP) {
+arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec state, arma::vec final, arma::vec time, std::vector<int> absorbing, double r, arma::mat x, int agecol, arma::mat beta, arma::mat poly_beta, arma::mat poly_deg, arma::mat knots);
+RcppExport SEXP cea_sim_msm_pvC(SEXP idSEXP, SEXP simSEXP, SEXP ageSEXP, SEXP stateSEXP, SEXP finalSEXP, SEXP timeSEXP, SEXP absorbingSEXP, SEXP rSEXP, SEXP xSEXP, SEXP agecolSEXP, SEXP betaSEXP, SEXP poly_betaSEXP, SEXP poly_degSEXP, SEXP knotsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -246,7 +246,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type sim(simSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type age(ageSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type state(stateSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type final(finalSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type absorbing(absorbingSEXP);
     Rcpp::traits::input_parameter< double >::type r(rSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type agecol(agecolSEXP);
@@ -254,7 +256,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type poly_beta(poly_betaSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type poly_deg(poly_degSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type knots(knotsSEXP);
-    __result = Rcpp::wrap(sim_msm_pvC(id, sim, age, state, time, r, x, agecol, beta, poly_beta, poly_deg, knots));
+    __result = Rcpp::wrap(sim_msm_pvC(id, sim, age, state, final, time, absorbing, r, x, agecol, beta, poly_beta, poly_deg, knots));
     return __result;
 END_RCPP
 }

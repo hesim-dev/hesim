@@ -68,7 +68,7 @@ sim_msmC <- function(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, agecol 
 }
 
 #' @export
-sim_msm_pvC <- function(id, sim, age, state, time, r, x, agecol, beta, poly_beta, poly_deg, knots) {
-    .Call('cea_sim_msm_pvC', PACKAGE = 'cea', id, sim, age, state, time, r, x, agecol, beta, poly_beta, poly_deg, knots)
+sim_msm_pvC <- function(id, sim, age, state, final, time, absorbing, r, x, agecol, beta, poly_beta, poly_deg, knots) {
+    .Call('cea_sim_msm_pvC', PACKAGE = 'cea', id, sim, age, state, final, time, absorbing, r, x, agecol, beta, poly_beta, poly_deg, knots)
 }
 

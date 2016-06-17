@@ -1,3 +1,4 @@
+# list to array
 list_to_array <- function(L){
   if (is.matrix(L[[1]]) == T){
       array(unlist(L), dim = c(nrow(L[[1]]), ncol(L[[1]]), length(L)))
@@ -7,3 +8,9 @@ list_to_array <- function(L){
       stop("List must contain matrices or vectors")
   }
 }
+
+# Return vector of absorbing states
+absorbing <- function(tmat){
+  which(apply(tmat, 1, function(x) all(is.na(x))))
+}
+

@@ -42,6 +42,9 @@ sim_param1 <- function(x){
       }
     }
     param[[length(param)]] <- x$dlist$name
+    if (x$dlist$name == "weibull.quiet"){
+      param[[length(param)]] <- "weibull"
+    }
     if (length(d$pars) <= 1){
         names.pars <- "location"
     } else{

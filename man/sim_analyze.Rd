@@ -6,10 +6,10 @@
 \alias{sim_pv}
 \title{Analyze simulated multi-state model}
 \usage{
-sim_pv(sim, r = 0.03, x, beta, poly.beta = NULL, poly.deg = NULL,
-  knots = NULL)
+sim_pv(sim, tmat, r = 0.03, x = NULL, beta, poly.beta = NULL,
+  poly.deg = NULL, knots = NULL, name = NULL, agevar = NULL)
 
-sim_los(sim)
+sim_los(sim, timevar)
 }
 \arguments{
 \item{sim}{A simulated multi-state model from \code{\link{sim_msm}}.}

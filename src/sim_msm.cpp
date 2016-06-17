@@ -110,6 +110,7 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
   std::vector<int> sim;
   std::vector<double> age;
   std::vector<int> state;
+  std::vector<int> final;
   std::vector<double> time;
 
   // Begin simulation
@@ -125,6 +126,7 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
       id.push_back(i);
       sim.push_back(s);
       state.push_back(0);
+      final.push_back(0);
       time.push_back(0.0);
 
       // Simulate for patient i
@@ -139,10 +141,17 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
                                          dist, nstates);
         arma::uword next_state;
         double time_jump = time_jumps.min(next_state);
-        time.push_back(nxttime(time[counter], time_jump, maxt));
-        state.push_back(next_state);
+        if (time[counter] + time_jump > maxt){
+          state.push_back(state[counter]);
+          time_jump = maxt - time[counter];
+        }
+        else {
+          state.push_back(next_state);
+        }
+        time.push_back(time[counter] + time_jump);
         id.push_back(i);
         sim.push_back(s);
+        final.push_back(0);
 
         // Move to next iteration and update patient
         ++ counter;
@@ -152,21 +161,23 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
           age.push_back(newage);
         }
       }
+      final[counter] = 1;
       ++ counter;
     }
   }
   if (agecol >= 0){
-    return List::create(id, sim, age, state, time);
+    return List::create(id, sim, age, state, final, time);
   }
   else{
-    return List::create(id, sim, state, time);
+    return List::create(id, sim, state, final, time);
   }
 }
 
 //' @export
 // [[Rcpp::export]]
 arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec state,
-                      arma::vec time, double r, arma::mat x, int agecol,
+                      arma::vec final, arma::vec time, std::vector<int> absorbing,
+                      double r, arma::mat x, int agecol,
                    arma::mat beta, arma::mat poly_beta, arma::mat poly_deg,
                    arma::mat knots) {
   // Initialize/store
@@ -175,17 +186,22 @@ arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec stat
 
   // Loop
   for (int i = 0; i < N; ++i){
-    if (time(i) == 0){
-      pv(i) = 0;
+    if (agecol >= 0){
+      x.row(id(i))(agecol) = age(i-1);
+    }
+    if (final(i) == 1){
+      if (!notinvec(state(i), absorbing)){
+        pv(i) = dot(beta.row(state(i)).t(), x.row(id(i)).t()) * exp(-r * time(i));
+      }
+      else{
+        pv(i) = 0;
+      }
     }
     else{
-      if (agecol >= 0){
-        x(agecol) = age(i-1);
-      }
-      pv(i) = pv_splines(time(i - 1), time(i), state(i - 1), r,
-         x.row(id(i)).t(), beta.row(state(i - 1)).t(),
-         poly_beta.row(state(i - 1)).t(),
-         poly_deg.row(state(i - 1)).t(), knots.row(state(i - 1)).t());
+      pv(i) = pv_splines(time(i), time(i + 1), state(i), r,
+         x.row(id(i)).t(), beta.row(state(i)).t(),
+         poly_beta.row(state(i)).t(),
+         poly_deg.row(state(i)).t(), knots.row(state(i)).t());
     }
   }
   return pv;

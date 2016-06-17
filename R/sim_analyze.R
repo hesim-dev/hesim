@@ -29,23 +29,26 @@ NULL
 
 #' @rdname sim_analyze
 #' @export
-sim_pv <- function(sim, r = .03, x, beta, poly.beta = NULL, poly.deg = NULL,
-                   knots = NULL){
-  n.states <- length(unique(sim.cea$state))
+sim_pv <- function(sim, tmat, r = .03, x = NULL, beta, poly.beta = NULL, poly.deg = NULL,
+                   knots = NULL, name = NULL, agevar = NULL){
+  n.states <- length(unique(sim$state))
   zeros <- rep(0, n.states)
   if(is.null(knots)){
       knots <- cbind(zeros, zeros)
   } else{
       knots <- cbind(zeros, knots, zeros)
   }
-  if ("age" %in% colnames(sim)){
-      agecol <- which(colnames(sim) == "age") - 1
+  if (is.null(agevar)){
+      agecol <- -1
+      sim$age <- rep(0, nrow(sim))
   } else{
-    agecol <- -1
-    sim$age <- rep(0, nrow(sim))
+      agecol <- which(colnames(x) == agevar) - 1
   }
   if(!is.matrix(beta)){
     beta <- matrix(beta, nrow = n.states, ncol = 1)
+  }
+  if (is.null(x)){
+    x <- matrix(1, nrow = length(unique(sim$id)), ncol = 1)
   }
   if(is.null(poly.beta)){
     poly.beta <- matrix(0, nrow = n.states, ncol = 1)
@@ -53,17 +56,19 @@ sim_pv <- function(sim, r = .03, x, beta, poly.beta = NULL, poly.deg = NULL,
   if(is.null(poly.deg)){
     poly.deg <- matrix(0, nrow = n.states, ncol = 1)
   }
-  pv <- sim_msm_pvC(sim$id, sim$sim, sim$age, sim$state, sim$time,
-                    r, x, agecol, beta, poly.beta, poly.deg, knots)
+  absorbing <- absorbing(tmat) - 1
+  pv <- sim_msm_pvC(sim$id, sim$sim, sim$age, sim$state, sim$final, sim$time,
+                    absorbing, r, x, agecol, beta, poly.beta, poly.deg, knots)
+  colnames(pv) <- name
   return(pv)
 }
 
 #' @rdname sim_analyze
 #' @export
-sim_los <- function(sim){
-  s = copy(sim)
-  s[, n := seq(1, .N), by = "id"]
-  s[, N := .N, by = "id"]
-  s.last <- s[n == N]
-  return(mean(s.last$time))
+sim_los <- function(sim, timevar){
+  n <- length(unique(sim$id))
+  los <- sim[, .(los = sum(get(timevar))), by = "state"]
+  los$los <- los$los/n
+  los <- los[order(state),]
+  return(los)
 }
