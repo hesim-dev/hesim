@@ -43,7 +43,7 @@ param2 <- sim_param(mod2)
 loc_x2 <- cbind(loc_x, rnorm(nrow(loc_x), 50, 5))
 colnames(loc_x2)[3] <- "age"
 sim.cea2 <- sim_msm(param2$loc_beta, loc_x2, dist, tmat, param2$anc1, maxt,
-                    agevar = "age")
+                    agevar = "age", maxage = 80)
 pv.qol2 <- sim_pv(sim.cea2, tmat, beta = c(1, 1, 0), r = 0, name = "qalys")
 sim.cea2 <- cbind(sim.cea2, pv.qol2)
 sim_los(sim.cea2, timevar = "qalys")

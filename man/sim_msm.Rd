@@ -4,7 +4,8 @@
 \alias{sim_msm}
 \title{Simulate clock-reset multi-state model}
 \usage{
-sim_msm(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL)
+sim_msm(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL,
+  maxage = 1000)
 }
 \arguments{
 \item{loc_beta}{Regression coefficients for location parameter. Array with 1st dimension (rows)
@@ -24,6 +25,8 @@ transition. These include "weibull", "exponential", and "gompertz".}
 \item{maxt}{Time to simulate model until.}
 
 \item{agevar}{Name of age variable in loc_x.}
+
+\item{maxage}{Maximum age in simulation.}
 }
 \value{
 Dataframe with the following columns:

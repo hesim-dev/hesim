@@ -63,8 +63,8 @@ updateAge <- function(x, age, col) {
 }
 
 #' @export
-sim_msmC <- function(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, agecol = -1L) {
-    .Call('cea_sim_msmC', PACKAGE = 'cea', loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, agecol)
+sim_msmC <- function(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol = -1L) {
+    .Call('cea_sim_msmC', PACKAGE = 'cea', loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol)
 }
 
 #' @export

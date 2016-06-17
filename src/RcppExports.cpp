@@ -219,8 +219,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // sim_msmC
-List sim_msmC(arma::cube loc_beta, arma::mat loc_x, std::vector<std::string> dist, arma::mat tmat, arma::vec anc1, std::vector<int> absorbing, int maxt, int agecol);
-RcppExport SEXP cea_sim_msmC(SEXP loc_betaSEXP, SEXP loc_xSEXP, SEXP distSEXP, SEXP tmatSEXP, SEXP anc1SEXP, SEXP absorbingSEXP, SEXP maxtSEXP, SEXP agecolSEXP) {
+List sim_msmC(arma::cube loc_beta, arma::mat loc_x, std::vector<std::string> dist, arma::mat tmat, arma::vec anc1, std::vector<int> absorbing, int maxt, int maxage, int agecol);
+RcppExport SEXP cea_sim_msmC(SEXP loc_betaSEXP, SEXP loc_xSEXP, SEXP distSEXP, SEXP tmatSEXP, SEXP anc1SEXP, SEXP absorbingSEXP, SEXP maxtSEXP, SEXP maxageSEXP, SEXP agecolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -231,8 +231,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type anc1(anc1SEXP);
     Rcpp::traits::input_parameter< std::vector<int> >::type absorbing(absorbingSEXP);
     Rcpp::traits::input_parameter< int >::type maxt(maxtSEXP);
+    Rcpp::traits::input_parameter< int >::type maxage(maxageSEXP);
     Rcpp::traits::input_parameter< int >::type agecol(agecolSEXP);
-    __result = Rcpp::wrap(sim_msmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, agecol));
+    __result = Rcpp::wrap(sim_msmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol));
     return __result;
 END_RCPP
 }

@@ -95,9 +95,9 @@ arma::vec updateAge(arma::vec x, double age, int col){
 //' @export
 // [[Rcpp::export]]
 List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
-            std::vector<std::string> dist, arma::mat tmat,
-            arma::vec anc1, std::vector<int> absorbing,
-            int maxt, int agecol = -1) {
+              std::vector<std::string> dist, arma::mat tmat,
+              arma::vec anc1, std::vector<int> absorbing,
+              int maxt, int maxage, int agecol = -1) {
   // Initialize
   int N = loc_x.n_rows;
   int ntrans = loc_beta.n_slices;
@@ -134,16 +134,24 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
       if (agecol >= 0){
         age.push_back(loc_xi(agecol));
       }
-      while (notinvec(state[counter], absorbing) && time[counter] < maxt){
+      else{
+        age.push_back(0);
+      }
+      while (notinvec(state[counter], absorbing) && time[counter] < maxt &&
+             age[counter] < maxage){
         // Current iteration
         arma::vec time_jumps = rtjumps(loc_beta_s, loc_xi, anc1,
-                                         tmat.row(state[counter]).t(),
-                                         dist, nstates);
+                                       tmat.row(state[counter]).t(),
+                                       dist, nstates);
         arma::uword next_state;
         double time_jump = time_jumps.min(next_state);
-        if (time[counter] + time_jump > maxt){
+        double newage = age[counter] + time_jump;
+        double current_time = time[counter] + time_jump;
+        if (current_time > maxt || newage > maxage){
           state.push_back(state[counter]);
-          time_jump = maxt - time[counter];
+          time_jump = std::min(time_jump, std::min(maxt - time[counter],
+                                                   maxage - age[counter]));
+          newage = age[counter] + time_jump;
         }
         else {
           state.push_back(next_state);
@@ -154,12 +162,11 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
         final.push_back(0);
 
         // Move to next iteration and update patient
-        ++ counter;
         if (agecol >= 0){
-          double newage = loc_xi(agecol) + time_jump;
-          loc_xi = updateAge(loc_xi, newage, agecol);
-          age.push_back(newage);
+          loc_xi(agecol) = newage;
         }
+        age.push_back(newage);
+        ++ counter;
       }
       final[counter] = 1;
       ++ counter;

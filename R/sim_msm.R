@@ -18,6 +18,8 @@
 #'
 #' @param maxt Time to simulate model until.
 #'
+#' @param maxage Maximum age in simulation.
+#'
 #' @param agevar Name of age variable in loc_x.
 #'
 #' @details The code is written in c++ to minmize simulation time.
@@ -29,7 +31,7 @@
 #' \item{time}{Time state was reached.}
 #'
 #' @export
-sim_msm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL){
+sim_msm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL, maxage = 1000){
   if (is.data.frame(loc_x)){
     loc_x <- as.matrix(loc_x)
   }
@@ -46,7 +48,7 @@ sim_msm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL){
   }
   absorbing <- absorbing(tmat) - 1
   tmat[is.na(tmat)] <- 0
-  sim <- sim_msmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, agecol)
+  sim <- sim_msmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol)
   sim <- as.data.frame(sim)
   if (is.null(agevar)){
       colnames(sim) <- c("id", "sim", "state", "final", "time")
