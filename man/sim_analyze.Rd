@@ -4,12 +4,15 @@
 \alias{sim_analyze}
 \alias{sim_los}
 \alias{sim_pv}
+\alias{sim_transprob}
 \title{Analyze simulated multi-state model}
 \usage{
 sim_pv(sim, tmat, r = 0.03, x = NULL, beta, poly.beta = NULL,
   poly.deg = NULL, knots = NULL, name = NULL, agevar = NULL)
 
 sim_los(sim, timevar)
+
+sim_transprob(sim, t)
 }
 \arguments{
 \item{sim}{A simulated multi-state model from \code{\link{sim_msm}}.}

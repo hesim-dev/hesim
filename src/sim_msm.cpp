@@ -215,42 +215,58 @@ arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec stat
   return pv;
 }
 
-// R code for testing
-/*** R
-x <- matrix(1, 2, 2)
-tmat <- matrix(c(0, 1, 2, 3, 0, 4, 0, 0, 0), 3, 3, byrow = TRUE)
-par2 <- rep(1, 4)
-beta <- log(array(seq(1, 16), c(2, 2, 4)))
+// This function is for checking pmatrix
+// [[Rcpp::export]]
+std::vector<double> sim_state_t(std::vector<int> state, std::vector<double> time,
+                                std::vector<int> final, double t,
+                                int simindivs) {
+  // Initialize
+  int n = time.size();
+  std::vector<double> state_t;
+  state_t.reserve(simindivs);
 
-# Costs
-cost.poly.beta <- c(1, 2, 3)
-cost.poly.degree <- c(1, 0)
-cost.knots <- c(0, 3, 0)
-t1 <- 5
-t2 <- 10
-xb <- x[, 1] %*% beta[1, , 1]
-Fun(x[, 1], tmat[1, ], par2, x[, 1], t1, t2, 0, .03, beta[1, , 1],
-    cost.poly.beta, cost.poly.degree, cost.knots)
-pvPoly(.03, cost.poly.degree[1], cost.knots[1] + t1,
-       cost.knots[2] + t1, cost.knots[1] + t1, c(xb + 1, 2))
-pvPoly(.03, cost.poly.degree[2], cost.knots[2] + t1,
-       t2, cost.knots[2] + t1, c(xb + 3))
+  // State at time t
+  for (int i = 0; i < n; ++i ){
+    if (t > time[i] & t < time[i + 1]){
+      state_t.push_back(state[i]);
+    }
+    else if (t > time[i] & final[i] == 1) {
+      state_t.push_back(state[i]);
+    }
+  }
 
-# Simulation
-dist <- rep("weibull", 4)
-abosrbing <- 2
-maxt <- 50
-agecol <- 1
-qol <- c(1, 1, 1)
-r <- 0
-cost.poly.beta.mat <- matrix(rep(cost.poly.beta, 3), 3, 3, byrow = T)
-cost.poly.degree.mat <- matrix(rep(cost.poly.degree, 3), 3, 2, byrow = T)
-cost.knots.mat <- matrix(rep(c(0, 3, 0), 3), 3, 3, byrow = T)
-# simMsmC(beta, x, dist, tmat, par2, abosrbing, maxt, agecol, qol, r, x, agecol, beta[,,1],
-#        cost.poly.beta.mat, cost.poly.d,
-#        egree.mat, cost.knots.mat)
-sim <- sim_msmC(beta, x, dist, tmat, par2, abosrbing, maxt, agecol)
-sim_msm_pvC(sim[[1]], sim[[2]], sim[[3]], sim[[4]],
-         .03, x, 1, rbind(beta[,,1], beta[1, , 1]), cost.poly.beta.mat,
-             cost.poly.degree.mat, cost.knots.mat)
-*/
+  // Return
+  return state_t;
+}
+
+//' @export
+// [[Rcpp::export]]
+std::vector<double> sim_transprobC(std::vector<int> state, std::vector<double> time,
+                                   std::vector<int> final, std::vector<double> t,
+                                   int simindivs, int nstates) {
+  // Initialize
+  int n = time.size();
+  int T = t.size();
+  std::vector<double> state_prop(nstates * T, 0.0);
+
+  for (int j = 0; j < T; ++j){
+    int nj = j * nstates;
+    // State at time t
+    for (int i = 0; i < n; ++i ){
+      if (t[j] > time[i] & t[j] < time[i + 1]){
+        state_prop[nj + state[i]] = state_prop[nj + state[i]] + 1;
+      }
+      else if (t[j] > time[i] & final[i] == 1) {
+        state_prop[nj + state[i]] = state_prop[nj + state[i]] + 1;
+      }
+    }
+  }
+
+  // Convert sum to proportion
+  for (int i = 0; i < nstates * T; ++i){
+    state_prop[i] = state_prop[i]/simindivs;
+  }
+
+  // Return
+  return state_prop;
+}

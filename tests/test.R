@@ -27,10 +27,14 @@ sim.cea <- sim_msm(param$loc_beta, loc_x, dist, tmat, param$anc1, maxt)
 pv.qol <- sim_pv(sim.cea, tmat, beta = c(1, 1, 0), r = 0, name = "qalys")
 sim.cea <- cbind(sim.cea, pv.qol)
 
-# compare simulations
+# compare simulations length of stay
 sim.cea.qalys <- sim_los(sim.cea, timevar = "qalys")
 sum(sim.cea.qalys$los)
 mean(sim.flexsurv$t[, ncol(sim.flexsurv$t)])
+
+# compare simulations transition probabilities
+pmatrix.simfs(mod, trans = tmat, t = 5, newdata = data.frame(treat = 1))
+sim_transprob(sim.cea, t = 5)
 
 ## Simulation with Age
 dat$age <- rnorm(nrow(dat), 65, 10)

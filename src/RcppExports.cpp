@@ -261,3 +261,34 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// sim_state_t
+std::vector<double> sim_state_t(std::vector<int> state, std::vector<double> time, std::vector<int> final, double t, int simindivs);
+RcppExport SEXP cea_sim_state_t(SEXP stateSEXP, SEXP timeSEXP, SEXP finalSEXP, SEXP tSEXP, SEXP simindivsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::vector<int> >::type state(stateSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type final(finalSEXP);
+    Rcpp::traits::input_parameter< double >::type t(tSEXP);
+    Rcpp::traits::input_parameter< int >::type simindivs(simindivsSEXP);
+    __result = Rcpp::wrap(sim_state_t(state, time, final, t, simindivs));
+    return __result;
+END_RCPP
+}
+// sim_transprobC
+std::vector<double> sim_transprobC(std::vector<int> state, std::vector<double> time, std::vector<int> final, std::vector<double> t, int simindivs, int nstates);
+RcppExport SEXP cea_sim_transprobC(SEXP stateSEXP, SEXP timeSEXP, SEXP finalSEXP, SEXP tSEXP, SEXP simindivsSEXP, SEXP nstatesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::vector<int> >::type state(stateSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type final(finalSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    Rcpp::traits::input_parameter< int >::type simindivs(simindivsSEXP);
+    Rcpp::traits::input_parameter< int >::type nstates(nstatesSEXP);
+    __result = Rcpp::wrap(sim_transprobC(state, time, final, t, simindivs, nstates));
+    return __result;
+END_RCPP
+}

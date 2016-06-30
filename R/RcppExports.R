@@ -72,3 +72,12 @@ sim_msm_pvC <- function(id, sim, age, state, final, time, absorbing, r, x, ageco
     .Call('cea_sim_msm_pvC', PACKAGE = 'cea', id, sim, age, state, final, time, absorbing, r, x, agecol, beta, poly_beta, poly_deg, knots)
 }
 
+sim_state_t <- function(state, time, final, t, simindivs) {
+    .Call('cea_sim_state_t', PACKAGE = 'cea', state, time, final, t, simindivs)
+}
+
+#' @export
+sim_transprobC <- function(state, time, final, t, simindivs, nstates) {
+    .Call('cea_sim_transprobC', PACKAGE = 'cea', state, time, final, t, simindivs, nstates)
+}
+
