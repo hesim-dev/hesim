@@ -7,7 +7,7 @@ matrixC(c(1, 2, 3, 4, 5, 6), 2, 3)
 # mlogit_prob ------------------------------------------------------------------
 dat <- read.dta("http://www.ats.ucla.edu/stat/data/hsbdemo.dta")
 dat$prog2 <- relevel(dat$prog, ref = "academic")
-mlogit <- multinom(prog2 ~ ses + write, data = ml)
+mlogit <- multinom(prog2 ~ ses + write, data = dat)
 beta <- c(coef(mlogit))
 predict(mlogit, newdata = dat[1, c("ses", "write")], "probs")
 x <- model.matrix(mlogit)[1, ]
@@ -20,3 +20,12 @@ pmat <- mlogit_transprob(x, beta3, 3)
 # transprob_addmort ------------------------------------------------------------
 pmat <- transprob_addmort(pmat, c(.2, .3, .4), 3)
 rowSums(pmat)
+
+# markov_mnl -------------------------------------------------------------------
+beta.array <- array(NA, dim = c(2, length(beta), 3))
+for (i in 1:dim(beta.array)[3]){
+  for (j in 1:dim(beta.array)[1]){
+    beta.array[j,, i] <- beta
+  }
+}
+markov_mlogitC(t(as.matrix(x)), beta.array, c(100, 0, 0), 20, 100)

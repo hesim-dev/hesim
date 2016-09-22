@@ -20,14 +20,15 @@ arma::mat matrixC(arma::rowvec v, int nrow, int ncol){
 // [[Rcpp::export]]
 arma::rowvec mlogit_prob(arma::rowvec x, arma::rowvec beta, int nstates) {
   int k = x.n_elem;
-  arma::mat betamat = matrixC(beta, k, nstates -1);
+  arma::mat betamat = matrixC(beta, k, nstates - 1);
   arma::rowvec onevec(1); onevec.ones();
   arma::rowvec odds = join_rows(onevec, exp(x * betamat));
   double sum = accu(odds);
   return odds/sum;
 }
 
-// Multinomial logit transition probabilities
+// Multinomial logit transition probabilities for one individual
+// (one row for each origin state for beta)
 //' @export
 // [[Rcpp::export]]
 arma::mat mlogit_transprob(arma::rowvec x, arma::mat beta, int nstates) {
@@ -49,11 +50,30 @@ arma::mat transprob_addmort(arma::mat p, arma::vec pmort, int nstates) {
   return p;
 }
 
-//Bayesian Markov Cohort Simulation
+//Markov Cohort Simulation using Multionmial Logit
 //' @export
 // [[Rcpp::export]]
-arma::mat markov_trans2(arma::mat x, arma::cube beta, int ncycles, int maxage) {
-  return x;
+arma::mat markov_mlogitC(arma::mat x, arma::cube beta, arma::rowvec z0, int ncycles, int maxage) {
+  int n_states = beta.n_slices;
+  int nsims = beta.slice(0).n_rows;
+  int beta_cols = beta.n_cols;
+  int N = x.n_rows;
+  arma::mat beta_s(n_states, beta_cols);
+  arma::mat pmat(n_states, n_states);
+  arma::mat Z(ncycles + 1, n_states);
+  for (int s = 0; s < nsims; ++s){
+    for (int j = 0; j < n_states; ++j){
+      beta_s.row(j) = beta.slice(j).row(s);
+    }
+    for (int i = 0; i < N; ++i){
+      Z.row(0) = z0;
+      for (int t = 1; t <= ncycles; ++t){
+        pmat = mlogit_transprob(x.row(i), beta_s, n_states);
+        Z.row(t) = Z.row(t - 1) * pmat;
+      }
+    }
+  }
+  return Z;
 }
 
 //Bayesian Markov Cohort Simulation
