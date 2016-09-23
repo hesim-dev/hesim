@@ -50,10 +50,10 @@ arma::mat transprob_addmort(arma::mat p, arma::vec pmort, int nstates) {
   return p;
 }
 
-//Markov Cohort Simulation using Multionmial Logit
+//Markov Cohort Simulation using Multinomial Logit
 //' @export
 // [[Rcpp::export]]
-arma::mat markov_mlogitC(arma::mat x, arma::cube beta, arma::rowvec z0, int ncycles, int maxage) {
+arma::mat markov_mlogit(arma::mat x, arma::cube beta, arma::rowvec z0, int ncycles, int maxage) {
   int n_states = beta.n_slices;
   int nsims = beta.slice(0).n_rows;
   int beta_cols = beta.n_cols;
@@ -76,34 +76,62 @@ arma::mat markov_mlogitC(arma::mat x, arma::cube beta, arma::rowvec z0, int ncyc
   return Z;
 }
 
-//Bayesian Markov Cohort Simulation
+// Markov Cohort Simulation with Time Constant Transition Probability
 //' @export
 // [[Rcpp::export]]
-arma::mat markov_transC(arma::mat z0, int ncycles, arma::mat P) {
-  // Initialize
-  int n_states = z0.n_cols;
-  int nsims = z0.n_rows;
-  int N = (ncycles + 1) * nsims;
-  arma::mat Z(N, n_states);
-
-  // SIMULATION
+arma::mat markov_pmatC(arma::cube pmat, arma::vec pmat_index, arma::mat z0,
+                      int ncycles, int maxage, int nstates) {
+  int nsims = pmat.slice(0).n_rows;
+  int ncohorts = z0.n_rows;
+  int N = (ncycles + 1) * ncohorts * nsims;
+  arma::mat Z(N, nstates);
+  arma::mat pmati(nstates, nstates);
   int counter = 0;
-  int counter2 = 0;
   for (int s = 0; s < nsims; ++s){
-    for (int t = 0; t <= ncycles; ++t){
-      if(t == 0){
-        Z.row(counter) = z0.row(s);
-      }
-      else{
-        arma::mat Pmat = matrixC(P.row(counter2), n_states, n_states);
-       Z.row(counter) = Z.row(counter - 1) * Pmat;
-      }
-      ++counter;
-      if (t > 0){
-        ++counter2;
+    for (int i = 0; i < ncohorts; ++i){
+      pmati = matrixC(pmat.slice(pmat_index(i)), nstates, nstates);
+      for (int t = 0; t <= ncycles; ++t){
+        if (t == 0){
+          Z.row(counter) = z0.row(i);
+        }
+        else{
+          Z.row(counter) = Z.row(counter - 1) * pmati;
+        }
+        ++counter;
       }
     }
   }
   return Z;
 }
+
+// //Bayesian Markov Cohort Simulation
+// //' @export
+// // [[Rcpp::export]]
+// arma::mat markov_transC(arma::mat z0, int ncycles, arma::mat P) {
+//   // Initialize
+//   int n_states = z0.n_cols;
+//   int nsims = z0.n_rows;
+//   int N = (ncycles + 1) * nsims;
+//   arma::mat Z(N, n_states);
+//
+//   // SIMULATION
+//   int counter = 0;
+//   int counter2 = 0;
+//   for (int s = 0; s < nsims; ++s){
+//     for (int t = 0; t <= ncycles; ++t){
+//       if(t == 0){
+//         Z.row(counter) = z0.row(s);
+//       }
+//       else{
+//         arma::mat Pmat = matrixC(P.row(counter2), n_states, n_states);
+//        Z.row(counter) = Z.row(counter - 1) * Pmat;
+//       }
+//       ++counter;
+//       if (t > 0){
+//         ++counter2;
+//       }
+//     }
+//   }
+//   return Z;
+// }
 
