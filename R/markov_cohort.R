@@ -1,60 +1,64 @@
-#' Simulate markov cohort model
+#' Simulate state transitions in markov cohort model
 #'
-#' Simulate state transitions in a Markov cohort model.
+#' This function simulates state transitions in a Markov cohort model. Allows for the simulation of multiple
+#' cohorts. The model is fully deterministic and is appropriate for estimating population averages
+#' in each cohort.
 #'
-#' @param z0 Matrix of initial state vector (i.e. distribution of cohort
-#' in each state during cycle 0) for each simulation.
+#' @param z0 Matrix of starting distribution. One row for each cohort and one column
+#' for each model state including abosrbing (i.e. death) states. If mortadj = TRUE, then
+#' z0 should have one column for each model state in pmat and an additional column for the
+#' state of death.
 #'
-#' @param ncycles Number of cycles to run model.
+#' @param ncycles Vector with the ith element indicating the number cycles to run the model for
+#' the ith row in z0.
 #'
-#' @param P Matrix with each row containing vector of transition probabilities for each
-#' simulation and cycle. Vector of transition probabilities msut fill the transition matrix
-#' rowwise. Also accepts a single vector of transition probabilities if transition matrix is
-#'  constant accross simulations and cycles.
+#' @param pmat Array of distinct transition probability matrices.
+#'
+#' @param p_index Index vector denoting the probability matrix to apply to each cohort. If NULL,
+#' the 3rd dimension of pmat must equal number of rows in z0.
+#'
+#'@param mortadj Logical. If TRUE, then the a death state is added to the probability matrix
+#' and probabilities are adjusted accordingly. If FALSE, then probability matrix remains as is.
+#'
+#' @param mortprob Array of distinct mortality probability matrices. Each slice of array contains
+#' a matrix with rows denoting model cycle (or patient age) and columns representing model state.
+#'  Each element in the matrix is the probability of mortality for a particular group.
+#' For example, a particular element might contain the probability of mortality for males
+#' (3rd dimension of array) at age 55 (1st dimension of array) in model state 1 (2nd dimension
+#' of array).
+#'
+#' @param mortprob_index Index vector denoting the mortality probability matrix to apply to each
+#' cohort. If NULL, the 3rd dimension of mortprob must equal the number of rows in z0.
 #'
 #' @details The code is written in c++ to minmize simulation time.
 #'
-#' @return List with the following components.
-#' \item{state}{Matrix containing number in cohort in each state during each cycle for each
-#' simulation.}
+#' @return Matrix with the number of simulated individuals in each model state for each cohort
+#' during each cycle.
 #'
 #' @export
-markov_trans <- function(z0, ncycles, P, nsims = NULL){
-  # z0 as a vector
-  if (is.vector(z0)){
-    z0 <- matrix(z0, nrow = 1)
-  }
-  if (nrow(z0) == 1) {
-    if (is.null(nsims)){
-      stop("nsims must be specified if z0 is a vector")
-    }
-    if (nsims > 1){
-      z0 <- z0[rep(1, nsims), ]
+markov_cohort_trans <- function(z0, ncycles, pmat, pmat_index = NULL,
+                                mortadj = FALSE, mortprob = NULL, mortprob_index = NULL){
+  # pmat
+  if (is.null(pmat_index)){
+    if(dim(pmat)[3] != nrow(z0)){
+      stop("If pmat_index = NULL, then the number of matrices in pmat must equal number of
+           rows in z0.")
     }
   }
 
-  # z0 as a matrix
-  if(!is.null(nsims) & nrow(z0) > 1){
-    stop("Only specifiy nsims if z0 is constant accross simulations")
-  }
-  if (nrow(z0) > 1){
-    nsims <- nrow(z0)
-  }
-
-  # P as a vector
-  N <- nsims * ncycles
-  if (is.vector(P)){
-    P <- matrix(P, nrow = 1)
-  }
-  P <-  if (nrow(P) == 1 & N > 1) P[rep(1, N), ]
-
-  # P as a matrix
-  if (nrow(P) != N){
-    stop("Number of rows in P times must equal number of simulations times number of cycles.")
+  # mortality adjustment
+  if(mortadj == TRUE){
+    if(is.null(mortprob_index)){
+      if(dim(mortprob)[3] != nrow(z0)){
+        stop("If mortprob_index = NULL, then the number of matrices in mortprob must equal number
+              of rows in z0.")
+      }
+    }
   }
 
   # c++ function
-  return(markov_transC(z0, ncycles, P))
+  return(markov_cohort_transC(z0, ncycles, pmat, pmat_index,
+                              mortadj, mortprob, mortprob_index))
 }
 
 #' @export
