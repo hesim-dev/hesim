@@ -232,14 +232,14 @@ enb <- function(x, k, sim, arm, grp, e, c){
   return(enb)
 }
 
-#' Expected incremental benefit
+# Expected incremental benefit
 einb <- function(ix, k, sim, arm, grp, e, c){
   einb <- enb(ix, k, sim, arm, grp, e, c)
   setnames(einb, colnames(einb), c(arm, grp, "k", "einb"))
   return(einb)
 }
 
-#' Expected value of perfect information
+# Expected value of perfect information
 evpi <- function(x, k, sim, arm, grp, e, c, nsims, narms, ngrps){
 
   # Choose treatment by maximum expected benefit
@@ -251,7 +251,7 @@ evpi <- function(x, k, sim, arm, grp, e, c, nsims, narms, ngrps){
   # calculate expected value of perfect information
   Vstar <- VstarC(k, x[[e]], x[[c]], nsims, narms, ngrps)
   evpi <- Vstar - c(mu)
-  return(data.table(k = rep(k, each = narms),
+  return(data.table(k = rep(k, each = ngrps),
                     grp = rep(unique(x[[grp]]), times = length(k)),
                     evpi = evpi, enbpi = Vstar, enb = c(mu), best = mu.ind))
 }
