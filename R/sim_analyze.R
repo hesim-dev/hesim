@@ -29,6 +29,7 @@ NULL
 
 #' @rdname sim_analyze
 #' @export
+#' @keywords internal
 sim_pv <- function(sim, tmat, r = .03, x = NULL, beta, poly.beta = NULL, poly.deg = NULL,
                    knots = NULL, name = NULL, agevar = NULL){
   n.states <- length(unique(sim$state))
@@ -68,6 +69,7 @@ sim_pv <- function(sim, tmat, r = .03, x = NULL, beta, poly.beta = NULL, poly.de
 
 #' @rdname sim_analyze
 #' @export
+#' @keywords internal
 sim_los <- function(sim, timevar){
   n <- length(unique(sim$id))
   los <- sim[, .(los = sum(get(timevar))), by = "state"]
@@ -78,6 +80,7 @@ sim_los <- function(sim, timevar){
 
 #' @rdname sim_analyze
 #' @export
+#' @keywords internal
 sim_transprob <- function(sim, t){
   n.states <- length(unique(sim$state))
   simindivs <- length(unique(sim$id)) * length(unique(sim$sim))

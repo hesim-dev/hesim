@@ -11,6 +11,7 @@
 #' \item{par}{1st ancillary parameter in survvial model.}
 #'
 #' @export
+#' @keywords internal
 sim_param <- function(x){
   loc_beta <- anc1 <- list()
   dist <- rep(NA, length(x))

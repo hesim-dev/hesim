@@ -31,6 +31,7 @@
 #' \item{time}{Time state was reached.}
 #'
 #' @export
+#' @keywords internal
 sim_msm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL, maxage = 1000){
   if (is.data.frame(loc_x)){
     loc_x <- as.matrix(loc_x)

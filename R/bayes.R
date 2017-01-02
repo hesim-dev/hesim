@@ -13,6 +13,7 @@
 #' design matrix x and a column for each category.
 #'
 #' @export
+#' @keywords internal
 predict_MCMCmnl <- function(beta, newdata, ncat){
   return(predict_MCMCmnlC(beta, x, ncat))
 }

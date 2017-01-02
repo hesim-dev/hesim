@@ -36,6 +36,7 @@
 #' during each cycle.
 #'
 #' @export
+#' @keywords internal
 markov_cohort_trans <- function(z0, ncycles, pmat, pmat_index = NULL,
                                 mortadj = FALSE, mortprob = NULL, mortprob_index = NULL){
   # pmat
