@@ -26,8 +26,9 @@ The *cea* package aims to help health economists and economic modelers realize t
 
 
 ## Decision Analysis
+
 ### Theory
-Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, decision rules state that for  parameters $\theta$, the optimal treatment arm, $j^{*}$, is the one that maximizes expected net benfit,
+Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, decision rules state that for parameters $\theta$, the optimal treatment arm, $j^{*}$, is the one that maximizes expected net benfit,
 
 $$
 \begin{aligned}
@@ -43,7 +44,7 @@ NB(j,\theta) = e\cdot w - c,
 \end{aligned}
 $$
 
-where $e$ is a measure of clinical effectiveness (e.g. QALYs), $w$ is the value or willingess to pay per unit of effectiveness, and c is costs. Decision makers are typically concerned with expected outcomes, so $e$ and $c$ are usually average (rather than say medians). Separate treatment decision can be made for each patient or for subgroups of patients, although it is most common for decisions to be made uniformly for all patients. 
+where $e$ is a measure of clinical effectiveness (e.g. QALYs), $w$ is the value or willingess to pay per unit of effectiveness, and c is costs. Decision makers are generally concerned with expected outcomes, so $e$ and $c$ are usually averages (rather than say medians). Separate treatment decision can be made for each patient or for subgroups of patients, although it is most common for decisions to be made uniformly for all patients. 
 
 In PSA, the distribution of net benefits is estimated using the distribution of parameters, $\theta$. In other words, the distribution of model inputs is used to produce a distribution of model outputs. Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest of cases), the distribution of $\theta$ approximated using either Bayesian or quasi-Bayesian techniques. That is, in what is often referred to as an "outer loop", $\theta$ is randomly sampled from its joint distribution, and for each random draw, the cost-effectiveness model is simulated, which generates a random sample of model outputs. The output can then be used to form a random sample of size n from the distribution of $e$ and $c$,
 
@@ -54,7 +55,7 @@ c &= [c^1, c^2, \dots, c^n],
 \end{aligned}
 $$
 
-$e^s$ and $c^s$ are $s$th random sample of effectiveness (QALYs) and costs respectively. For example, we can simulate results from three hypothetical treatments. We use $1$ to refer to the existing therapy, and $2$, and $3$ to refer to competing treatment arms.
+$e^s$ and $c^s$ are $s$th random sample of effectiveness (QALYs) and costs respectively. For example, we can simulate results from three hypothetical treatments. We use $1$ to refer to the existing therapy, and $2$, and $3$ to refer to competing treatment arms. 
 
 ```{r ce_output}
 ```
@@ -64,15 +65,12 @@ For a given willingess to pay $k$, it is quite easy to determine the optimal tre
 ```{r enb_example}
 ```
 
-The expected net benefit is largest for arm 3, which implies that if the willingess to pay for a QALY is $150,000, patients should switch to this new treatment. Of course, this analysis ignores uncertainty in $e$ and $c$. We might for instance, be interested in estimating the probability that each treatment is optimal. The function `mce` makes this calculation for various values of $k$. Output is a tidy *data.table*, which facilitates plotting with *ggplot2*.
+The expected net benefit is largest for arm 3, which implies that if the willingess to pay for a QALY is $150,000, patients should switch to this new treatment. 
 
-```{r pcea}
-```
 
-```{r mce_plot}
-```
+Of course, this analysis ignores uncertainty in $e$, $c$, and the willingess to pay threshold. We might for instance, be interested in estimating the probability that each treatment is optimal.
 
-However, the previous figure does not account for the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected net benefit is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that we would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the expected net benefit given perfect information (ENBPI) and the expected net benefit (ENB),
+However, this caclulation ignores the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected net benefit is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that we would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the expected net benefit given perfect information (ENBPI) and the expected net benefit (ENB),
 
 $$
 \begin{aligned}
@@ -81,19 +79,41 @@ EVPI &= \int_s NB(j^{s*}, \theta^s) - NB(j^{*}, \theta^s) \\
 \end{aligned}
 $$
 
-# ```{r evpi}
-# ```
+The function `pcea` makes this calculation for various values of $k$. Output is a tidy *data.table*, which facilitates plotting with *ggplot2*.
+
+```{r pcea}
+```
+
+MCE plot
+```{r mce_plot, fig.cap = "Probability each arm is most cost-effective by subgroup"}
+```
+
+EVPI plot
+
+```{r evpi_plot, fig.cap = "Expected value of perfect information by subgroup"}
+```
 
 In most analyses, the analyst will want estimates of the probability that each treatment is most cost-effective and and EVPI. The function ``psa`` is a wrapper for the ``evpi`` and ``mce`` functions. It also provides a summary table of means and credible intervals for both QALYs and costs. Finally, the user has the option to specify a custom table of summary output. The custom table can contain any quantities of interest (QOIs) as long as they are specified in addition to the sim, arm, e, and c columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hyothetical variable for life-years and create table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
 
-# ```{r psa}
-# ```
+```{r pcea_pw}
+```
+
+Cost-effectiveness plane
+
+```{r ceplane_plot, fig.cap = "Cost-effectiveness plane by subgroup"}
+```
+
+Cost-effectiveness acceptability curve
+
+```{r ceac_plot, fig.cap = "Cost-effectiveness acceptability curve by subgroup"}
+```
+
+ICER
+
+```{r icer}
+```
 
 ### Pairwise comparisons
-
-### Individualized care
-
-### Comparson with BCEA
 
 ## Simulating Disease Progression 
 
