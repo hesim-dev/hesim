@@ -27,24 +27,42 @@ The *cea* package aims to help health economists and economic modelers realize t
 
 ## Decision Analysis
 
-### Theory
-Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, decision rules state that for parameters $\theta$, the optimal treatment arm, $j^{*}$, is the one that maximizes expected net benfit,
+### Net Benefits
+Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, decision the optimal treatment arm is the one that maximizes expected net benfit. The expected net benefit is calculated by averaging over the patient population and uncertain parameters $\theta$. If the population is broken up into distinct subgroups, then the optimal treatment $j^{*}$ is given by,
 
 $$
 \begin{aligned}
-j^{*} = \text{argmax}_j E_\theta NB(j,\theta).
+j^{*} = \text{argmax}_j \int_s \int_\theta w_s NB_s(j,\theta),
 \end{aligned}
 $$
-
-Typically, the net benefit is defined as the difference between the monetized health gains from an intervention less costs, or,
+where $w_s \in (0, 1)$ is a weight denoting that proportion of the population represented by subgroup $s$ and $\sum_{s=1}^{S} w_s = 1$. Net benefits in each subgroup are computed as the difference between the monetized health gains from an intervention less costs, or,
 
 $$
 \begin{aligned}
-NB(j,\theta) = e\cdot w - c,
+NB_s(j,\theta) = e_s\cdot k- c_s,
 \end{aligned}
 $$
 
-where $e$ is a measure of clinical effectiveness (e.g. QALYs), $w$ is the value or willingess to pay per unit of effectiveness, and c is costs. Decision makers are generally concerned with expected outcomes, so $e$ and $c$ are usually averages (rather than say medians). Separate treatment decision can be made for each patient or for subgroups of patients, although it is most common for decisions to be made uniformly for all patients. 
+where $e_s$ and $c_s$ are a measure of clinical effectiveness (e.g. QALYs) and costs in subgroup $s$ respecively, and $k$ is a decision makers willingess to pay per unit of effectiveness. 
+
+Expected net benefits can be increased by selecting separate treatments in each subgroup instead of a single treatment for the entire population. That is, the decision maker should choose the treatment that maximizes net benefits in each subgroup,
+
+$$
+\begin{aligned}
+j^{*}_s = \text{argmax}_j \int_\theta NB_s(j,\theta).
+\end{aligned}
+$$
+[@basu2007value] have shown that the increased in expected net benefit from this individualized care, which they call the expected value of individualized care (EPIC) is commputed as,
+
+$$
+\begin{aligned}
+\int_s \int_\theta NB_s(j^{*}_s,\theta) - \int_s \int_\theta NB_s(j^{*},\theta).
+\end{aligned}
+$$
+
+### Probabilistic sensitivity analysis
+
+One drawback of basing analysis purely on expected values is that it ignores uncertainty in the parameters. 
 
 In PSA, the distribution of net benefits is estimated using the distribution of parameters, $\theta$. In other words, the distribution of model inputs is used to produce a distribution of model outputs. Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest of cases), the distribution of $\theta$ approximated using either Bayesian or quasi-Bayesian techniques. That is, in what is often referred to as an "outer loop", $\theta$ is randomly sampled from its joint distribution, and for each random draw, the cost-effectiveness model is simulated, which generates a random sample of model outputs. The output can then be used to form a random sample of size n from the distribution of $e$ and $c$,
 
