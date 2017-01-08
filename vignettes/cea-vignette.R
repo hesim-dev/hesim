@@ -2,6 +2,21 @@
 ## @knitr functions
 
 ## ---- DECISION ANALYSIS ------------------------------------------------------
+## @knitr mce_example_setup
+library("data.table")
+library("knitr")
+out <- data.table(sim = seq(1:10),
+                nb1 = rnorm(10, 10000, 1000), 
+                nb2 = rnorm(10, 11000, 200),
+                nb3 = rnorm(10, 9500, 2000))
+out[, maxj := apply(out[, .(nb1, nb2, nb3)], 1, which.max)]
+out[, maxj := factor(maxj, levels = c(1, 2, 3))]
+
+## @knitr mce_example
+kable(out, digits = 0)
+mce <- prop.table(table(out$maxj))
+print(mce)
+
 ## @knitr ce_output
 n <- 1000
 
