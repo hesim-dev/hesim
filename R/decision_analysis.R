@@ -1,51 +1,6 @@
-#' Personalized cost-effectiveness analysis
+#' Probabilistic sensitivity analysis
 #'
-#' Conduct cost-effectiveness analysis for subgroups from simulation output.
-#'
-#' @param x Matrix containing information on mean costs and effectiveness for each simulation.
-#' Should be in long form with unit of observation as the simulation and treatment arm.
-#' Should have the following columns (
-#' sim = simulation number,
-#' arm = treatment arm,
-#' c = summary of cost for each simulation and treatment arm
-#' e = summary of clinicial effectiveness for each simulation and treatment arm
-#' )
-#' @param k Vector of willingess to pay values.
-#' @param sim Name of column denoting simulation number. Default is "sim".
-#' @param arm Name of column denoting treatment arm. Default is "arm".
-#' @param grp Name of column denoting subgroup. Default is "grp".
-#' @param e Name of column denoting clinical effectiveness. Default is "e".
-#' @param c Name of column denoting costs. Default is "c".
-#' @param custom_vars Character vector of variable names to use in creating a
-#' custom summary table. Table will contain means and 95\% credible intervals for
-#' each variable. Can contain e and c.
-#' @param custom_fun Function to apply to custom_vars to make custom table.
-#' @return list
-#'
-#' @export
-pcea <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
-                custom_vars = NULL, custom_fun = NULL){
-
-  nsims <- length(unique(x[[sim]]))
-  narms <- length(unique(x[[arm]]))
-  ngrps <- length(unique(x[[grp]]))
-  setorderv(x, c(grp, sim, arm))
-
-  # estimates
-  mce <- mce(x, k, arm, grp, e, c, nsims, narms, ngrps)
-  evpi <- evpi(x, k, sim, arm, grp, e, c, nsims, narms, ngrps)
-  cea.table <- cea_table(x, sim, arm, grp, e, c, ICER = FALSE)
-  l <- list(summary = cea.table, mce = mce, evpi = evpi)
-  if (!is.null(custom_vars)){
-    custom.table <- custom_table(x, arm, grp, custom_vars, custom_fun)
-    l <- c(l, list(custom.table = custom.table))
-  }
-  return(l)
-}
-
-#' Personalized cost-effectiveness analysis with pairwise comparator
-#'
-#' Conduct cost-effectiveness analysis for subgroups from simulation output with pairwise comparator.
+#' Summarize output of probabilistic sensitivity analysis by subgroup.
 #'
 #' @param x Matrix containing information on mean costs and effectiveness for each simulation.
 #' Should be in long form with unit of observation as the simulation and treatment arm.
@@ -65,13 +20,33 @@ pcea <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
 #' custom summary table. Table will contain means and 95% credible intervals for
 #' each variable. Can contain e and c.
 #' @param custom_fun Function to apply to custom_vars to make custom table.
-#' @param custom_wide. If false, arms in custom table are displayed in rows and outcomes
-#'  are displayed columnwise; if TRUE, arms are dispalyed in columns and outcomes are displayed
-#' rowise. Default is FALSE.
+#' @name psa
 #' @return list
 #'
 #' @export
-pcea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
+psa <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
+                custom_vars = NULL, custom_fun = NULL){
+
+  nsims <- length(unique(x[[sim]]))
+  narms <- length(unique(x[[arm]]))
+  ngrps <- length(unique(x[[grp]]))
+  setorderv(x, c(grp, sim, arm))
+
+  # estimates
+  mce <- mce(x, k, arm, grp, e, c, nsims, narms, ngrps)
+  evpi <- evpi(x, k, sim, arm, grp, e, c, nsims, narms, ngrps)
+  cea.table <- cea_table(x, sim, arm, grp, e, c, ICER = FALSE)
+  l <- list(summary = cea.table, mce = mce, evpi = evpi)
+  if (!is.null(custom_vars)){
+    custom.table <- custom_table(x, arm, grp, custom_vars, custom_fun)
+    l <- c(l, list(custom.table = custom.table))
+  }
+  return(l)
+}
+
+#' @export
+#' @rdname psa
+psa_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
                    custom_vars = NULL, custom_fun = NULL){
 
   setorderv(x, c(grp, arm, sim))
@@ -115,8 +90,8 @@ pcea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e
 #' Calculates the total exepected value of perfect information, which is a weighted average of the
 #' subgroup specific EVPIs.
 #'
-#' @param evpi Expected value of information from an object of class pcea.
-#' @param grp Vector of subgroups from object pcea.
+#' @param evpi Expected value of information from an object of class psa
+#' @param grp Vector of subgroups from object psa
 #' @param w Vector of weights for each subgroup. The weight should be equal to the subgroups
 #'  proportion in the population.
 #' @return list
@@ -245,8 +220,8 @@ evpi <- function(x, k, sim, arm, grp, e, c, nsims, narms, ngrps){
   # Choose treatment by maximum expected benefit
   x.enb <- enb(x, k, sim, arm, grp, e, c)
   x.enb <- dcast(x.enb, k + grp ~ arm, value.var = "enb")
-  mu <- rowmaxC(as.matrix(x.enb)[, -c(1:2)])
-  mu.ind <- c(rowmax_indC(as.matrix(x.enb)[, -c(1:2)])) + 1
+  mu <- rowmaxC(as.matrix(x.enb[, -c(1:2), with = FALSE]))
+  mu.ind <- c(rowmax_indC(as.matrix(x.enb[, -c(1:2), with = FALSE]))) + 1
 
   # calculate expected value of perfect information
   Vstar <- VstarC(k, x[[e]], x[[c]], nsims, narms, ngrps)

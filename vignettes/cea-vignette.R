@@ -2,93 +2,109 @@
 ## @knitr functions
 
 ## ---- DECISION ANALYSIS ------------------------------------------------------
-## @knitr mce_example_setup
-library("data.table")
-library("knitr")
-out <- data.table(sim = seq(1:10),
-                nb1 = rnorm(10, 10000, 1000), 
-                nb2 = rnorm(10, 11000, 200),
-                nb3 = rnorm(10, 9500, 2000))
-out[, maxj := apply(out[, .(nb1, nb2, nb3)], 1, which.max)]
-out[, maxj := factor(maxj, levels = c(1, 2, 3))]
-
-## @knitr mce_example
-kable(out, digits = 0)
-mce <- prop.table(table(out$maxj))
-print(mce)
-
 ## @knitr ce_output
-n <- 1000
+nsims <- 1000
 
 # cost
 c <- vector(mode = "list", length = 6)
 names(c) <- c("Arm 1, Grp 1", "Arm 1, Grp 2", "Arm 2, Grp 1",
               "Arm 2, Grp 2", "Arm 3, Grp 1", "Arm 3, Grp 2")
-c[[1]] <- rlnorm(n, 2, .1)
-c[[2]] <- rlnorm(n, 2, .1)
-c[[3]] <- rlnorm(n, 11, .15)
-c[[4]] <- rlnorm(n, 11, .15)
-c[[5]] <- rlnorm(n, 11, .15)
-c[[6]] <- rlnorm(n, 11, .15)
+c[[1]] <- rlnorm(nsims, 2, .1)
+c[[2]] <- rlnorm(nsims, 2, .1)
+c[[3]] <- rlnorm(nsims, 11, .15)
+c[[4]] <- rlnorm(nsims, 11, .15)
+c[[5]] <- rlnorm(nsims, 11, .15)
+c[[6]] <- rlnorm(nsims, 11, .15)
 
 # effectiveness
 e <- c
-e[[1]] <- rnorm(n, 8, .2)
-e[[2]] <- rnorm(n, 8, .2)
-e[[3]] <- rnorm(n, 10, .3)
-e[[4]] <- rnorm(n, 10.5, .3)
-e[[5]] <- rnorm(n, 9.5, .3)
-e[[6]] <- rnorm(n, 11, .3)
+e[[1]] <- rnorm(nsims, 8, .2)
+e[[2]] <- rnorm(nsims, 8, .2)
+e[[3]] <- rnorm(nsims, 10, .8)
+e[[4]] <- rnorm(nsims, 10.5, .8)
+e[[5]] <- rnorm(nsims, 9.5, .6)
+e[[6]] <- rnorm(nsims, 11, .6)
 
 # cost and effectiveness by arm and simulation
 library("data.table")
-ce <- data.table(sim = rep(seq(n), length(e)),
-                             arm = rep(seq(1, 3), each = n * 2),
-                             grp = rep(rep(c(1, 2), each = n), 3),
+ce <- data.table(sim = rep(seq(nsims), length(e)),
+                             arm = rep(paste0("Arm ", seq(1, 3)), 
+                                       each = nsims * 2),
+                             grp = rep(rep(c("Group 1", "Group 2"),
+                                           each = nsims), 3),
                              cost = do.call("c", c), qalys = do.call("c", e))
+head(ce)
 
 ## @knitr enb_example
 ce[, nb := 150000 * qalys - cost]
 enb <- ce[, .(enb = mean(nb)), by = c("arm", "grp")]
 enb <- dcast(enb, arm ~ grp, value.var = "enb")
 print(enb)
-ce[, nb := NULL]
 
-## @knitr pcea
+## @knitr psa
 library("cea")
 ce[, lys := qalys * 1.5]
 cea.fun <- function(x) list(mean = mean(x), quant = quantile(x, c(.025, .975)))
 ktop <- 200000
-pcea.dt <-  pcea(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
-                      grp = "grp", e = "qalys", c = "cost",
-                      custom_vars = c("cost", "lys", "qalys"), custom_fun = cea.fun)
+psa.dt <-  psa(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
+              grp = "grp", e = "qalys", c = "cost",
+              custom_vars = c("cost", "lys", "qalys"), 
+              custom_fun = cea.fun)
+
+## @knitr psa_pw
+psa.pw.dt <-  psa_pw(ce,  k = seq(0, ktop, 500), control = "Arm 1",
+                     sim = "sim", arm = "arm", e = "qalys", c = "cost",
+                     custom_vars = c("cost", "lys", "qalys"))
+
+## @knitr mce_example_setup
+set.seed(131)
+library("knitr")
+ce.nb <- dcast(ce[sim %in% sample(1:nsims, 10) & grp == "Group 2"], 
+               sim ~ arm, value.var = "nb")
+setnames(ce.nb, colnames(ce.nb), c("sim", "nb1", "nb2", "nb3"))
+ce.nb[, maxj := apply(ce.nb[, .(nb1, nb2, nb3)], 1, which.max)]
+ce.nb[, maxj := factor(maxj, levels = c(1, 2, 3))]
+
+## @knitr mce_example
+kable(ce.nb, digits = 0)
+mce <- prop.table(table(ce.nb$maxj))
+print(mce)
 
 ## @knitr mce_plot
 library("ggplot2")
 library("scales")
 theme_set(theme_bw())
-ggplot(pcea.dt$mce, aes(x = k, y = prob, col = factor(arm))) +
+ggplot(psa.dt$mce, aes(x = k, y = prob, col = factor(arm))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
 
+## @knitr evpi_example_a
+armmax.g2 <- which.max(enb[[3]])
+ce.nb[, maxnb := apply(ce.nb[, .(nb1, nb2, nb3)], 1, max)]
+ce.nb[, maxjnb := ce.nb[[armmax.g2 + 1]]]
+kable(ce.nb, digits = 0)
+
+## @knitr evpi_example_b
+emaxnb <- mean(ce.nb$maxnb)
+emaxjnb <- mean(ce.nb$maxjnb)
+print(emaxnb)
+print(emaxjnb)
+print(emaxnb - emaxjnb)
+
 ## @knitr evpi_plot
-ggplot(pcea.dt$evpi, aes(x = k, y = evpi)) +
+ggplot(psa.dt$evpi, aes(x = k, y = evpi)) +
   geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
   ylab("Expected value of perfect information") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
   scale_y_continuous(label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
 
-## @knitr pcea_pw
-pcea.pw.dt <-  pcea_pw(ce,  k = seq(0, ktop, 500), control = "1", e = "qalys", c = "cost",
-                            custom_vars = c("cost", "lys", "qalys"))
-
 ## @knitr ceplane_plot
-ylim <- max(pcea.pw.dt$delta[, icost]) * 2
-xlim <- ceiling(max(pcea.pw.dt$delta[, iqalys]) * 1.5)
-ggplot(pcea.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) + 
+ylim <- max(psa.pw.dt$delta[, icost]) * 2
+xlim <- ceiling(max(psa.pw.dt$delta[, iqalys]) * 1.5)
+ggplot(psa.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) + 
   geom_jitter(size = .5) + facet_wrap(~grp) + 
   xlab("Incremental QALYs") + ylab("Incremental cost") +
   scale_y_continuous(label = dollar, limits = c(-ylim, ylim)) +
@@ -98,15 +114,15 @@ ggplot(pcea.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) +
   geom_hline(yintercept = 0) + geom_vline(xintercept = 0)
 
 ## @knitr ceac_plot
-ggplot(pcea.pw.dt$ceac, aes(x = k, y = prob, col = factor(arm))) +
+ggplot(psa.pw.dt$ceac, aes(x = k, y = prob, col = factor(arm))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
 
 ## @knitr icer
-print(pcea.pw.dt$summary)
+print(psa.pw.dt$summary)
 
 ## @knitr totevpi
-totevpi.dt <- totevpi(pcea.dt$evpi, grp = c(0, 1), w = c(0.25, .75))
+totevpi.dt <- totevpi(psa.dt$evpi, grp = c(0, 1), w = c(0.25, .75))
 

@@ -28,28 +28,28 @@ The *cea* package aims to help health economists and economic modelers realize t
 ## Decision Analysis
 
 ### Net Benefits
-Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, the optimal treatment arm is the one that maximizes expected net benfit. The expected net benefit is calculated by averaging over the patient population and uncertain parameters $\theta$. If the population is broken up into $S$ distinct subgroups, then the optimal treatment $j^{*}$ is given by,
+Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, the optimal treatment arm is the one that maximizes expected net benfit. The expected net benefit is calculated by averaging over the patient population and uncertain parameters $\theta$. If the population is broken up into $G$ distinct subgroups, then the optimal treatment $j^{*}$ is given by,
 
 $$
 \begin{aligned}
-j^{*} = \text{argmax}_j \sum_{s=1}^{S} w_s E_{\theta}\left[NB_s(j,\theta)\right],
+j^{*} = \text{argmax}_j \sum_{g=1}^{G} w_g E_{\theta}\left[NB_g(j,\theta)\right],
 \end{aligned}
 $$
-where $w_s \in (0, 1)$ is a weight denoting that proportion of the population represented by subgroup $s$ and $\sum_{s=1}^{S} w_s = 1$. Net benefits in each subgroup are computed as the difference between the monetized health gains from an intervention less costs, or,
+where $w_g \in (0, 1)$ is a weight denoting that proportion of the population represented by subgroup $g$ and $\sum_{g=1}^{G} w_g = 1$. Net benefits in each subgroup are computed as the difference between the monetized health gains from an intervention less costs, or,
 
 $$
 \begin{aligned}
-NB_s(j,\theta) = e_{sj}\cdot k- c_{sj},
+NB_g(j,\theta) = e_{gj}\cdot k- c_{gj},
 \end{aligned}
 $$
 
-where $e_{sj}$ and $c_{sj}$ are measures of clinical effectiveness (e.g. QALYs) and costs in subgroup $s$ using treatment $j$ respecively, and $k$ is a decision makers willingess to pay per unit of clinical effectiveness.
+where $e_{gj}$ and $c_{gj}$ are measures of clinical effectiveness (e.g. QALYs) and costs in subgroup $g$ using treatment $j$ respecively, and $k$ is a decision makers willingess to pay per unit of clinical effectiveness.
 
 The current analysis ignores any heterogeneity in treatment effects since it assumes that decision makers will choose a single treatment for the entire population. Decision makers could instead select the treatment that maximizes net benefits in each subgroup,
 
 $$
 \begin{aligned}
-j^{*}_s = \text{argmax}_j E_{\theta} \left[NB_s(j,\theta)\right].
+j^{*}_g = \text{argmax}_j E_{\theta} \left[NB_g(j,\theta)\right].
 \end{aligned}
 $$
 
@@ -57,115 +57,121 @@ $$
 
 $$
 \begin{aligned}
-\sum_{s=1}^S w_s E_{\theta}\left[NB_s(j^{*}_s,\theta)\right] - \sum_{s=1}^S w_s  E_{\theta}\left[NB_s(j^{*},\theta)\right].
+\sum_{g=1}^G w_g E_{\theta}\left[NB_g(j^{*}_s,\theta)\right] - \sum_{g=1}^G w_g  E_{\theta}\left[NB_g(j^{*},\theta)\right].
 \end{aligned}
 $$
 
-In practice, new interventions are usually compared to a standard treatment often referred to as the comparator. In these cases, a new treatment in a given subgroup is preferred to the comparator if the expected incremental net benefit of the new treatment is positive; that is, treatment 1 is preferred to treatment 0 in subgroup $s$ if $EINB_s > 0$ where the incremental net benefit (INB) is given by
+In practice, new interventions are usually compared to a standard treatment often referred to as the comparator. In these cases, a new treatment in a given subgroup is preferred to the comparator if the expected incremental net benefit of the new treatment is positive; that is, treatment 1 is preferred to treatment 0 in subgroup $g$ if $EINB_g > 0$ where the incremental net benefit (INB) is given by
 
 $$
 \begin{aligned}
-INB_s = NB_s(j = 1, \theta)] - NB_s(j = 0, \theta),
+INB_g = NB_g(j = 1, \theta)] - NB_g(j = 0, \theta),
 \end{aligned}
 $$
-and $EINB_s =E_\theta \left[INB_s\right]$. Equivalently, treatment $1$ is preferred to treatment $0$ in subgroup $s$ if the incremental cost-effectiveness ratio (ICER) is greater than the willingess to pay $k$,
+and $EINB_g =E_\theta \left[INB_g\right]$. Equivalently, treatment $1$ is preferred to treatment $0$ in subgroup $g$ if the incremental cost-effectiveness ratio (ICER) is greater than the willingess to pay $k$,
 
 $$
 \begin{aligned}
-k > \frac{c_{s1} - c_{s0}}{e_{s1} - e_{s0}} = ICER_s.
+k > \frac{c_{g1} - c_{s0}}{e_{g1} - e_{g0}} = ICER_g.
 \end{aligned}
 $$
-
-
 
 ### Probabilistic sensitivity analysis
+An analysis based on expected net benefits is based entirely on expected values and ignores parameter uncertainty. This implies that net benefits are uncertain and that optimal treatment arms may be selected incorrectly. The extent of this uncertainty and the benefits of collecting additional information to reduce this uncertainty can be quantified using probabilistic sensitivity analysis (PSA), which estimates the distribution of net benefits given the distribution of the parameters for each treatment arm, $p\left(NB_g(j,\theta)\right)$.
 
-The current analysis is based entirely on expected values and ignores parameter uncertainty. This implies that net benefits are uncertain and that optimal treatment arms amy be selected incorrectly. The extent of this uncertainty and the benefits of collecting additional information to reduce this uncertainty can be quantified using probabilistic sensitivity analysis (PSA), which estimates the distribution of net benefits given the distribution of the parameters for each treatment arm, $p\left(NB_s(j,\theta)\right)$.
-
-Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest of cases), the distribution of $\theta$ is approximated using simulation techniques. For each treatment arm and subgroup, the PSA produces $n$ random draws from the posterior distribution of clinicial effectiveness and costs,
-
-$$
-\begin{aligned}
-e_{sj} &= [e_{sj}^1, e_{sj}^2, \dots, e_{sj}^n] \\
-c_{sj} &= [c_{sj}^1, c_{sj}^2, \dots, c_{sj}^n].
-\end{aligned}
-$$
-
-#### Probability most cost-effective
-A number of measures have been proposed in the health economics literature to summarize output from a PSA. A common measure is the probability that each treatment arm is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each arm has the highest net benefits. For example, consider the table below showing net benefits for 3 arms obtained from a simulation of size 10. 
-
-```{r mce_example_setup, echo = FALSE, results = "hide"}
-```
-
-```{r mce_example, echo = 2}
-```
-
-Treatments 1, 2, and 3 have the highest net benefits a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively.
-
-#### Value of perfect information
-One draw back of the previous measure is that it ignores the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected net benefit is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that we would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the expected net benefit given perfect information (ENBPI) and the expected net benefit (ENB),
+Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest of cases), the distribution of $\theta$ is approximated by simulating the parameters from their joint posterior distribution and calculating relevant quantities of interest as a function of the simulated parameters. For each treatment arm and subgroup, the PSA therefore produces $n$ random draws from the posterior distribution of clinicial effectiveness and costs,
 
 $$
 \begin{aligned}
-EVPI &= \int_s NB(j^{s*}, \theta^s) - NB(j^{*}, \theta^s) \\
-&= ENBPI - ENB
+e_{gj} &= [e_{gj}^1, e_{gj}^2, \dots, e_{gj}^n] \\
+c_{gj} &= [c_{gj}^1, c_{gj}^2, \dots, c_{gj}^n].
 \end{aligned}
 $$
 
-#### Cost-effectiveness plane
-
-#### Cost-effectiveness acceptability curve (CEAC)
-
-### PSA with the CEA package
-For example, we can simulate results from three hypothetical treatments. We use $1$ to refer to the existing therapy, and $2$, and $3$ to refer to competing treatment arms. 
+Below we simulate costs and QALYs for three treatment arms and two subgroups (in a real world analysis, this output would be derived from a detailed health-economic simulation model). Arm 1 is the current standard of care; it is the cheapest therapy, but also the least efficacious. Arms 2 and 3 are equally costly, but Arm 2 is more effective in subgroup 1 while Arm 3 is more effective in subgroup 2. 
 
 ```{r ce_output}
 ```
 
-For a given willingess to pay $k$, it is quite easy to determine the optimal treatment by estimating the expected net benefit for each arm. For example, for $W = 150,000$, which is a reasonable estimate of the value of a life-year in the United States, we can calculate, $\text{E}[e] \cdot w - \text{E}[c]$ 
+For any given willingness to pay $k$, expected net benefits can be calculated by arm, subgroup, and simulation number. For example, as expected, with $k=150,000$, a reasonable estimate of the value of a life-year in the United States, Arm 2 provides the most expected net benefits in subgroup 2 while Arm 3 provides the most expected net benefits in subgroup 2.
 
 ```{r enb_example}
 ```
 
-The expected net benefit is largest for arm 3, which implies that if the willingess to pay for a QALY is $150,000, patients should switch to this new treatment. 
+A number of measures have been proposed in the health economics literature to summarize the uncertainty estimated using PSA. Below we describe the most common measures, which are estimated using the functions `psa` and `psa_pw`. The `psa` function summarizes results by taking into account each treatment arm in the analysis, while the function `psa_pw` summarizes "pairiwse" results in which each treatment is compared to a comparator. 
 
-The function `pcea` makes this calculation for various values of $k$. Output is a tidy *data.table*, which facilitates plotting with *ggplot2*.
+We can use the  `psa` function to summarize results from our `data.table` object of simulated output for a range of willingess to pay values,
 
-```{r pcea}
+```{r psa}
 ```
+
+The most important input in the PSA function is the `data.table` object (`x`) containing columns for simulation number (`sim`), treatment arm (`arm`), subgroup (`grp`), clinicial effectiveness (`e`), and costs (`c`). Users specify the names of the relevant columns in their output table as strings. The other relevant paramter is $k$, which is a range of willingess to pay values to use for estimating net benefits. 
+
+Likewise, we can use `psa_pw` to summarize the PSA when directly comparing the two treatment arms (Arm 2 and Arm 3) to the comparator (Arm 1). 
+
+```{r psa_pw}
+```
+
+The same inputs are used as in `psa` except users must specifiy the name of the control arm. 
+
+#### Probability most cost-effective
+A useful summary measure for quantifying uncertainty is the probability that each treatment arm is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each arm has the highest net benefits. For example, consider a random sample of 10 draws from the PSA simulation output and suppose $k$ is again equal to $150,000$. 
+
+```{r mce_example_setup, echo = -1}
+```
+
+```{r mce_example, echo = -1}
+```
+
+In this example, treatments 1, 2, and 3 have the highest net benefits a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `psa` function peforms this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
 
 MCE plot
 ```{r mce_plot, fig.cap = "Probability each arm is most cost-effective by subgroup"}
 ```
 
-EVPI plot
+#### Value of perfect information
+One draw back of the previous measure is that it ignores the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected net benefit is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected net benefit given perfect information and the maximum expected net benefit given current information. In other words, we calculate the net benefit for the optimal treatment arm for each random draw of the parameters and compare that to the net benefit for the treatment arm that is optimal when averaging accross all parameters, 
+
+$$
+\begin{aligned}
+EVPI &= \int_\theta NB_s(j_s^{*}, \theta^s) - NB_s(j_s^{*}, \theta). \\
+\end{aligned}
+$$
+
+To illustrate consider the same random sample of 10 draws from our simulation output used above.
+
+```{r evpi_example_a}
+```
+
+Calculation
+
+```{r evpi_example_b}
+```
+
+Plot
 
 ```{r evpi_plot, fig.cap = "Expected value of perfect information by subgroup"}
 ```
 
-In most analyses, the analyst will want estimates of the probability that each treatment is most cost-effective and and EVPI. The function ``psa`` is a wrapper for the ``evpi`` and ``mce`` functions. It also provides a summary table of means and credible intervals for both QALYs and costs. Finally, the user has the option to specify a custom table of summary output. The custom table can contain any quantities of interest (QOIs) as long as they are specified in addition to the sim, arm, e, and c columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hyothetical variable for life-years and create table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
+#### Distribution of net benefits
 
-```{r pcea_pw}
-```
-
-Cost-effectiveness plane
+#### Cost-effectiveness plane
 
 ```{r ceplane_plot, fig.cap = "Cost-effectiveness plane by subgroup"}
 ```
 
-Cost-effectiveness acceptability curve
+#### Cost-effectiveness acceptability curve (CEAC)
 
 ```{r ceac_plot, fig.cap = "Cost-effectiveness acceptability curve by subgroup"}
 ```
 
-ICER
-
+#### Credible intervals for incremental costs and effectiveness
 ```{r icer}
 ```
 
-### Pairwise comparisons
+In most analyses, the analyst will want estimates of the probability that each treatment is most cost-effective and and EVPI. The function ``psa`` is a wrapper for the ``evpi`` and ``mce`` functions. It also provides a summary table of means and credible intervals for both QALYs and costs. Finally, the user has the option to specify a custom table of summary output. The custom table can contain any quantities of interest (QOIs) as long as they are specified in addition to the sim, arm, e, and c columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hyothetical variable for life-years and create table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
 
-## Simulating Disease Progression 
+### Value of personalized care
 
 ## References
 
