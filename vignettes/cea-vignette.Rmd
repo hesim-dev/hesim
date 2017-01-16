@@ -1,5 +1,5 @@
 ---
-title: "*cea*: An R package for cost-effectiveness analysis"
+title: "*pcea*: An R package for personalized cost-effectiveness analysis"
 author: "Devin Incerti"
 date: "`r Sys.Date()`"
 output: 
@@ -12,30 +12,26 @@ knitr::read_chunk('cea-vignette.R')
 ```
 
 ## Introduction
-Cost-effectiveness modeling tends to be performed in commercial packages (such as TreeAge) or using Microsoft Excel. However, as others have pointed out [@baio2016excel], general purpose programming languages offer a number of advantages over Excel and other commonly used software. For example, R offers the following functionality.
+Personalized cost-effectiveness analysis (pCEA) evaluates the cost-effectiveness of treatments at the individual (or subgroup) level. This has two major implications:
 
-* Reproducibility
-* Generalizability
-* Integration of statistical and economic models
-* Speed and computational power
-* Creation of interactive web applications
+* Optimal treatments will vary across patients.
+* Treatments will be more cost-effective for some patients than others.
 
-The *cea* package aims to help health economists and economic modelers realize this functionality. The package can be easily integrated with existing packages for survival analysis (*survival*) and multi-state modeling (*msm*, *mstate*). Users should also explore the excellent *BCEA* package. 
+The `pcea` package provides a number of functions to help facilitate pCEA. It has has three primary goals:
 
-*cea* is designed for both Bayesian cost-effectiveness analysis (CEA) and patient-level simulation. As such, the computationally heavy code is written in C++ using the *Rcpp* package. Likewise, it makes extensive use of the *data.table* package for fast data manipulation. This speed is especially beneficial when performing probabilistic sensitivity analysis (PSA) with a patient-level simulation models.
+* Help users conduct decision analysis and probabilistic sensitivity analysis at the subgroup level.
+* Run very fast patient-level and cohort simulation models.
+* Analyze outcomes of both discrete and continuous time simulation models.
+
+Since patient-level analyses are computationally intensive, key functions are written in C++ using `Rcpp` and data manipulations are peformed using the `data.table` package. `pcea` is a natural complement to existing packages for survival analysis and multi-state modeling (`survival`, `flexsurv`, `msm`, `mstate`), which are needed for estimating the parameters of disease models.
+
+`pcea` is under development. It currently provides a number of functions for decision analysis and PSA at the subgroup level, but new functionality for simulating and analzing patient-level and cohort health-economic models will be added.
 
 
 ## Decision Analysis
 
 ### Net Benefits
-Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, the optimal treatment arm is the one that maximizes expected net benfit. The expected net benefit is calculated by averaging over the patient population and uncertain parameters $\theta$. If the population is broken up into $G$ distinct subgroups, then the optimal treatment $j^{*}$ is given by,
-
-$$
-\begin{aligned}
-j^{*} = \text{argmax}_j \sum_{g=1}^{G} w_g E_{\theta}\left[NB_g(j,\theta)\right],
-\end{aligned}
-$$
-where $w_g \in (0, 1)$ is a weight denoting that proportion of the population represented by subgroup $g$ and $\sum_{g=1}^{G} w_g = 1$. Net benefits in each subgroup are computed as the difference between the monetized health gains from an intervention less costs, or,
+Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, the optimal treatment arm is the one that maximizes expected net benefit. The expected net benefit is calculated by averaging over the patient population and uncertain parameters $\theta$. For a given subgroup $g$, these net benefits are computed as the difference between the monetized health gains from an intervention less costs, or,
 
 $$
 \begin{aligned}
@@ -43,21 +39,11 @@ NB_g(j,\theta) = e_{gj}\cdot k- c_{gj},
 \end{aligned}
 $$
 
-where $e_{gj}$ and $c_{gj}$ are measures of clinical effectiveness (e.g. QALYs) and costs in subgroup $g$ using treatment $j$ respecively, and $k$ is a decision makers willingess to pay per unit of clinical effectiveness.
-
-The current analysis ignores any heterogeneity in treatment effects since it assumes that decision makers will choose a single treatment for the entire population. Decision makers could instead select the treatment that maximizes net benefits in each subgroup,
+where $e_{gj}$ and $c_{gj}$ are measures of clinical effectiveness (e.g. QALYs) and costs in subgroup $g$ using treatment $j$ respectively, and $k$ is a decision makers willingness to pay per unit of clinical effectiveness. The optimal treatment for a given subgroup is the one that maximizes net benefits,
 
 $$
 \begin{aligned}
 j^{*}_g = \text{argmax}_j E_{\theta} \left[NB_g(j,\theta)\right].
-\end{aligned}
-$$
-
-[@basu2007value] have shown that selecting subgroup specific treatments increases expected net benefits relative to choosing a single treatment for the entire population. They refer to additional net benefit as the expected value of individualized care (EPIC), which is computed as,
-
-$$
-\begin{aligned}
-\sum_{g=1}^G w_g E_{\theta}\left[NB_g(j^{*}_s,\theta)\right] - \sum_{g=1}^G w_g  E_{\theta}\left[NB_g(j^{*},\theta)\right].
 \end{aligned}
 $$
 
@@ -68,7 +54,7 @@ $$
 INB_g = NB_g(j = 1, \theta)] - NB_g(j = 0, \theta),
 \end{aligned}
 $$
-and $EINB_g =E_\theta \left[INB_g\right]$. Equivalently, treatment $1$ is preferred to treatment $0$ in subgroup $g$ if the incremental cost-effectiveness ratio (ICER) is greater than the willingess to pay $k$,
+and $EINB_g =E_\theta \left[INB_g\right]$. Equivalently, treatment $1$ is preferred to treatment $0$ in subgroup $g$ if the incremental cost-effectiveness ratio (ICER) is greater than the willingness to pay $k$,
 
 $$
 \begin{aligned}
@@ -76,10 +62,11 @@ k > \frac{c_{g1} - c_{s0}}{e_{g1} - e_{g0}} = ICER_g.
 \end{aligned}
 $$
 
+
 ### Probabilistic sensitivity analysis
 An analysis based on expected net benefits is based entirely on expected values and ignores parameter uncertainty. This implies that net benefits are uncertain and that optimal treatment arms may be selected incorrectly. The extent of this uncertainty and the benefits of collecting additional information to reduce this uncertainty can be quantified using probabilistic sensitivity analysis (PSA), which estimates the distribution of net benefits given the distribution of the parameters for each treatment arm, $p\left(NB_g(j,\theta)\right)$.
 
-Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest of cases), the distribution of $\theta$ is approximated by simulating the parameters from their joint posterior distribution and calculating relevant quantities of interest as a function of the simulated parameters. For each treatment arm and subgroup, the PSA therefore produces $n$ random draws from the posterior distribution of clinicial effectiveness and costs,
+Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest of cases), the distribution of $\theta$ is approximated by simulating the parameters from their joint posterior distribution and calculating relevant quantities of interest as a function of the simulated parameters. For each treatment arm and subgroup, the PSA therefore produces $n$ random draws from the posterior distribution of clinical effectiveness and costs,
 
 $$
 \begin{aligned}
@@ -98,21 +85,21 @@ For any given willingness to pay $k$, expected net benefits can be calculated by
 ```{r enb_example}
 ```
 
-A number of measures have been proposed in the health economics literature to summarize the uncertainty estimated using PSA. Below we describe the most common measures, which are estimated using the functions `psa` and `psa_pw`. The `psa` function summarizes results by taking into account each treatment arm in the analysis, while the function `psa_pw` summarizes "pairiwse" results in which each treatment is compared to a comparator. 
+A number of measures have been proposed in the health economics literature to summarize the uncertainty estimated using PSA. Below we describe the most common measures, which are estimated using the functions `psa` and `psa_pw`. The `psa` function summarizes results by taking into account each treatment arm in the analysis, while the function `psa_pw` summarizes "pairwise" results in which each treatment is compared to a comparator. 
 
-We can use the  `psa` function to summarize results from our `data.table` object of simulated output for a range of willingess to pay values,
+We can use the  `psa` function to summarize results from our `data.table` object of simulated output for a range of willingness to pay values,
 
 ```{r psa}
 ```
 
-The most important input in the PSA function is the `data.table` object (`x`) containing columns for simulation number (`sim`), treatment arm (`arm`), subgroup (`grp`), clinicial effectiveness (`e`), and costs (`c`). Users specify the names of the relevant columns in their output table as strings. The other relevant paramter is $k$, which is a range of willingess to pay values to use for estimating net benefits. 
+The most important input in the PSA function is the `data.table` object (`x`) containing columns for simulation number (`sim`), treatment arm (`arm`), subgroup (`grp`), clinical effectiveness (`e`), and costs (`c`). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is $k$, which is a range of willingness to pay values to use for estimating net benefits. 
 
 Likewise, we can use `psa_pw` to summarize the PSA when directly comparing the two treatment arms (Arm 2 and Arm 3) to the comparator (Arm 1). 
 
 ```{r psa_pw}
 ```
 
-The same inputs are used as in `psa` except users must specifiy the name of the control arm. 
+The same inputs are used as in `psa` except users must specify the name of the control arm. 
 
 #### Probability most cost-effective
 A useful summary measure for quantifying uncertainty is the probability that each treatment arm is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each arm has the highest net benefits. For example, consider a random sample of 10 draws from the PSA simulation output and suppose $k$ is again equal to $150,000$. 
@@ -123,14 +110,14 @@ A useful summary measure for quantifying uncertainty is the probability that eac
 ```{r mce_example, echo = -1}
 ```
 
-In this example, treatments 1, 2, and 3 have the highest net benefits a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `psa` function peforms this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
+In this example, treatments 1, 2, and 3 have the highest net benefits a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `psa` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
 
 MCE plot
 ```{r mce_plot, fig.cap = "Probability each arm is most cost-effective by subgroup"}
 ```
 
 #### Value of perfect information
-One draw back of the previous measure is that it ignores the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected net benefit is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected net benefit given perfect information and the maximum expected net benefit given current information. In other words, we calculate the net benefit for the optimal treatment arm for each random draw of the parameters and compare that to the net benefit for the treatment arm that is optimal when averaging accross all parameters, 
+One draw back of the previous measure is that it ignores the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected net benefit is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected net benefit given perfect information and the maximum expected net benefit given current information. In other words, we calculate the net benefit for the optimal treatment arm for each random draw of the parameters and compare that to the net benefit for the treatment arm that is optimal when averaging across all parameters, 
 
 $$
 \begin{aligned}
@@ -169,9 +156,29 @@ Plot
 ```{r icer}
 ```
 
-In most analyses, the analyst will want estimates of the probability that each treatment is most cost-effective and and EVPI. The function ``psa`` is a wrapper for the ``evpi`` and ``mce`` functions. It also provides a summary table of means and credible intervals for both QALYs and costs. Finally, the user has the option to specify a custom table of summary output. The custom table can contain any quantities of interest (QOIs) as long as they are specified in addition to the sim, arm, e, and c columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hyothetical variable for life-years and create table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
+In most analyses, the analyst will want estimates of the probability that each treatment is most cost-effective and and EVPI. The function ``psa`` is a wrapper for the ``evpi`` and ``mce`` functions. It also provides a summary table of means and credible intervals for both QALYs and costs. Finally, the user has the option to specify a custom table of summary output. The custom table can contain any quantities of interest (QOIs) as long as they are specified in addition to the sim, arm, e, and c columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hypothetical variable for life-years and create table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
 
 ### Value of personalized care
+The previous analyses allow net benefits and optimal treatment decisions to vary by subgroup. In contrast, most CEAs estimate the treatment, $j^{*}$, that is optimal when averaging net benefits over the entire population. In particular, if the population is broken up into $G$ distinct subgroups, the optimal treatment is given by,
+
+$$
+\begin{aligned}
+j^{*} = \text{argmax}_j \sum_{g=1}^{G} w_g E_{\theta}\left[NB_g(j,\theta)\right],
+\end{aligned}
+$$
+
+@basu2007value have shown that selecting subgroup specific treatments increases expected net benefits relative to this one-size fits all approach. They refer to additional net benefit as the expected value of individualized care (EPIC), which is computed as,
+
+$$
+\begin{aligned}
+\sum_{g=1}^G w_g E_{\theta}\left[NB_g(j^{*}_s,\theta)\right] - \sum_{g=1}^G w_g  E_{\theta}\left[NB_g(j^{*},\theta)\right].
+\end{aligned}
+$$
+
+where $w_g \in (0, 1)$ is a weight denoting that proportion of the population represented by subgroup $g$ and $\sum_{g=1}^{G} w_g = 1$. The `pcea` package can be used to demonstrate the value of individualized care. 
+
+```{r totevpi, fig.cap = "Total expected value of perfect information"}
+```
 
 ## References
 

@@ -91,15 +91,14 @@ psa_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e"
 #' subgroup specific EVPIs.
 #'
 #' @param evpi Expected value of information from an object of class psa
-#' @param grp Vector of subgroups from object psa
-#' @param w Vector of weights for each subgroup. The weight should be equal to the subgroups
-#'  proportion in the population.
+#' @param w.dt Lookup table for group weights. First column should be group
+#' and second column is population weight attached to each group.
 #' @return list
 #'
 #' @export
-totevpi <- function(evpi, grp, w){
-  w.dt <- data.table(grp = grp, w = w)
-  evpi <- merge(evpi, w.dt, by = "grp")
+totevpi <- function(evpi, wdt){
+  grpname <- colnames(wdt)[1]
+  evpi <- merge(evpi, wdt, by = grpname)
   totevpi <- evpi[,lapply(.SD, weighted.mean, w = w),
                  by = "k", .SDcols = c("evpi", "enbpi", "enb")]
   return(totevpi)

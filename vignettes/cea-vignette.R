@@ -124,5 +124,11 @@ ggplot(psa.pw.dt$ceac, aes(x = k, y = prob, col = factor(arm))) +
 print(psa.pw.dt$summary)
 
 ## @knitr totevpi
-totevpi.dt <- totevpi(psa.dt$evpi, grp = c(0, 1), w = c(0.25, .75))
-
+w.dt <- data.table(grp = paste0("Group ", seq(1, 2)), w = c(0.25, .75))
+totevpi.dt <- totevpi(psa.dt$evpi, wdt = w.dt)
+ggplot(totevpi.dt, aes(x = k, y = evpi)) +
+  geom_line() + xlab("Willingess to pay") +
+  ylab("Expected value of perfect information") +
+  scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
+  scale_y_continuous(label = scales::dollar) +
+  theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
