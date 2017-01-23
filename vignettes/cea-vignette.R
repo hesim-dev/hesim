@@ -22,7 +22,7 @@ e[[1]] <- rnorm(nsims, 8, .2)
 e[[2]] <- rnorm(nsims, 8, .2)
 e[[3]] <- rnorm(nsims, 10, .8)
 e[[4]] <- rnorm(nsims, 10.5, .8)
-e[[5]] <- rnorm(nsims, 9.5, .6)
+e[[5]] <- rnorm(nsims, 8.5, .6)
 e[[6]] <- rnorm(nsims, 11, .6)
 
 # cost and effectiveness by arm and simulation
@@ -43,18 +43,13 @@ print(enb)
 
 ## @knitr psa
 library("cea")
-ce[, lys := qalys * 1.5]
-cea.fun <- function(x) list(mean = mean(x), quant = quantile(x, c(.025, .975)))
 ktop <- 200000
 psa.dt <-  psa(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
-              grp = "grp", e = "qalys", c = "cost",
-              custom_vars = c("cost", "lys", "qalys"), 
-              custom_fun = cea.fun)
+              grp = "grp", e = "qalys", c = "cost")
 
 ## @knitr psa_pw
 psa.pw.dt <-  psa_pw(ce,  k = seq(0, ktop, 500), control = "Arm 1",
-                     sim = "sim", arm = "arm", e = "qalys", c = "cost",
-                     custom_vars = c("cost", "lys", "qalys"))
+                     sim = "sim", arm = "arm", e = "qalys", c = "cost")
 
 ## @knitr mce_example_setup
 set.seed(131)
@@ -82,16 +77,16 @@ ggplot(psa.dt$mce, aes(x = k, y = prob, col = factor(arm))) +
 
 ## @knitr evpi_example_a
 armmax.g2 <- which.max(enb[[3]])
-ce.nb[, maxnb := apply(ce.nb[, .(nb1, nb2, nb3)], 1, max)]
-ce.nb[, maxjnb := ce.nb[[armmax.g2 + 1]]]
+ce.nb[, nbpi := apply(ce.nb[, .(nb1, nb2, nb3)], 1, max)]
+ce.nb[, nbci := ce.nb[[armmax.g2 + 1]]]
 kable(ce.nb, digits = 0)
 
 ## @knitr evpi_example_b
-emaxnb <- mean(ce.nb$maxnb)
-emaxjnb <- mean(ce.nb$maxjnb)
-print(emaxnb)
-print(emaxjnb)
-print(emaxnb - emaxjnb)
+enbpi <- mean(ce.nb$nbpi)
+enbci <- mean(ce.nb$nbci)
+print(enbpi)
+print(enbci)
+print(enbpi - enbci)
 
 ## @knitr evpi_plot
 ggplot(psa.dt$evpi, aes(x = k, y = evpi)) +
@@ -101,7 +96,22 @@ ggplot(psa.dt$evpi, aes(x = k, y = evpi)) +
   scale_y_continuous(label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
 
+## @knitr psa_custom
+ce[, lys := qalys * 1.5]
+cea.fun <- function(x) list(mean = mean(x), quant = quantile(x, c(.025, .975)))
+psa.custom.dt <- psa(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
+               grp = "grp", e = "qalys", c = "cost",
+               custom_vars = c("cost", "lys", "qalys"), 
+               custom_fun = cea.fun)
+
+## @knitr outcome_dist1
+psa.custom.dt$summary
+
+## @knitr outcome_dist2
+psa.custom.dt$custom.table
+
 ## @knitr ceplane_plot
+head(psa.pw.dt$delta)
 ylim <- max(psa.pw.dt$delta[, icost]) * 2
 xlim <- ceiling(max(psa.pw.dt$delta[, iqalys]) * 1.5)
 ggplot(psa.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) + 
@@ -125,10 +135,30 @@ print(psa.pw.dt$summary)
 
 ## @knitr totevpi
 w.dt <- data.table(grp = paste0("Group ", seq(1, 2)), w = c(0.25, .75))
-totevpi.dt <- totevpi(psa.dt$evpi, wdt = w.dt)
-ggplot(totevpi.dt, aes(x = k, y = evpi)) +
+evpi <- psa.dt$evpi
+evpi <- merge(evpi, w.dt, by = "grp")
+totevpi <- evpi[,lapply(.SD, weighted.mean, w = w),
+                by = "k", .SDcols = c("evpi")]
+ggplot(totevpi, aes(x = k, y = evpi)) +
   geom_line() + xlab("Willingess to pay") +
-  ylab("Expected value of perfect information") +
+  ylab("Total EVPI") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
   scale_y_continuous(label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
+
+## @knitr totenb
+ce <- merge(ce, w.dt, by = "grp")
+totenb <- ce[, .(totenb = weighted.mean(nb, w = w)), by = c("arm")]
+
+## @knitr evic1
+ptenb.grp.max <- apply(as.matrix(enb[, -1]), 2, max)
+ptenb.max <- sum(ptenb.grp.max * w.dt$w)
+tenb.max <- max(totenb$totenb)
+tnb <- c(ptenb.max, tenb.max)
+names(tnb) <- c("Personalized total TENB", "One-size fits all TENB")
+
+## @knitr evic2
+evic <- tnb[1] - tnb[2]
+names(evic) <- "EVIC"
+print(evic)
+print(evic/150000)

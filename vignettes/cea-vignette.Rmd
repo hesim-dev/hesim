@@ -5,6 +5,7 @@ date: "`r Sys.Date()`"
 output: 
   html_document:
 bibliography: cea-references.bib
+toc: TRUE
 ---
 
 ```{r echo=FALSE}
@@ -21,17 +22,16 @@ The `pcea` package provides a number of functions to help facilitate pCEA. It ha
 
 * Help users conduct decision analysis and probabilistic sensitivity analysis at the subgroup level.
 * Run very fast patient-level and cohort simulation models.
-* Analyze outcomes of both discrete and continuous time simulation models.
+* Analyze the outcomes of both discrete and continuous time simulation models.
 
 Since patient-level analyses are computationally intensive, key functions are written in C++ using `Rcpp` and data manipulations are peformed using the `data.table` package. `pcea` is a natural complement to existing packages for survival analysis and multi-state modeling (`survival`, `flexsurv`, `msm`, `mstate`), which are needed for estimating the parameters of disease models.
 
-`pcea` is under development. It currently provides a number of functions for decision analysis and PSA at the subgroup level, but new functionality for simulating and analzing patient-level and cohort health-economic models will be added.
-
+`pcea` is under development. It currently provides a number of functions for decision analysis and PSA at the subgroup level, but new functionality for simulating and analyzing patient-level and cohort health-economic models will be added.
 
 ## Decision Analysis
 
 ### Net Benefits
-Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, the optimal treatment arm is the one that maximizes expected net benefit. The expected net benefit is calculated by averaging over the patient population and uncertain parameters $\theta$. For a given subgroup $g$, these net benefits are computed as the difference between the monetized health gains from an intervention less costs, or,
+Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Traditionally, the optimal treatment arm is the one that maximizes expected net benefits. The expected net benefit is calculated by averaging over the patient population and uncertain parameters $\theta$. For a given subgroup $g$, these net benefits are computed as the difference between the monetized health gains from an intervention less costs, or,
 
 $$
 \begin{aligned}
@@ -39,7 +39,7 @@ NB_g(j,\theta) = e_{gj}\cdot k- c_{gj},
 \end{aligned}
 $$
 
-where $e_{gj}$ and $c_{gj}$ are measures of clinical effectiveness (e.g. QALYs) and costs in subgroup $g$ using treatment $j$ respectively, and $k$ is a decision makers willingness to pay per unit of clinical effectiveness. The optimal treatment for a given subgroup is the one that maximizes net benefits,
+where $e_{gj}$ and $c_{gj}$ are measures of clinical effectiveness (e.g. QALYs) and costs in subgroup $g$ using treatment $j$ respectively, and $k$ is a decision makers willingness to pay per unit of clinical effectiveness. The optimal treatment for a given subgroup is the one that maximizes expected net benefits,
 
 $$
 \begin{aligned}
@@ -116,6 +116,8 @@ MCE plot
 ```{r mce_plot, fig.cap = "Probability each arm is most cost-effective by subgroup"}
 ```
 
+In group 1, Arm 2 provides the greatest net benefits with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Arm 3 provides the greatest net benefits with a higher probability than Arm 2. 
+
 #### Value of perfect information
 One draw back of the previous measure is that it ignores the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected net benefit is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected net benefit given perfect information and the maximum expected net benefit given current information. In other words, we calculate the net benefit for the optimal treatment arm for each random draw of the parameters and compare that to the net benefit for the treatment arm that is optimal when averaging across all parameters, 
 
@@ -130,24 +132,38 @@ To illustrate consider the same random sample of 10 draws from our simulation ou
 ```{r evpi_example_a}
 ```
 
-Calculation
+To calculate EVPI, we average net benefits given current information and net benefits given perfect information accross simulation draws. 
 
 ```{r evpi_example_b}
 ```
 
-Plot
+The `psa` function peforms this same calculation accross all simulation draws from the PSA and for a number of values of willingess to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal arm changes.
 
 ```{r evpi_plot, fig.cap = "Expected value of perfect information by subgroup"}
 ```
 
-#### Distribution of net benefits
+#### Distribution of health and cost outcomes
+```{r psa_custom}
+```
+
+```{r outcome_dist1}
+```
+
+```{r outcome_dist2}
+```
 
 #### Cost-effectiveness plane
+The cost-effectivenss plane plots the incremental effectivenss of a treatment arm (relative to a comparator) against the incremental cost of the treatment arm. The plot is useful because it demonstrates both the uncertainty and the magnitutde of the estimates. Each point on the plot is from a particular random draw from the PSA.  
+
+Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `psa_pw` function, which, for each randowm draw, estimtes incremental differences in costs, clinical effectivenss, and any other variables specifies in `custom_vars` relative to the comparator. The dotte line in the plot is the willingess to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above are not. 
 
 ```{r ceplane_plot, fig.cap = "Cost-effectiveness plane by subgroup"}
 ```
 
 #### Cost-effectiveness acceptability curve (CEAC)
+The cost-effectivenss acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each arm to a single comparator wheras the MCE plot considers all arms simultaneously. Output to produce a CEAC is generated from the `psa_pw` function.
+
+The plot below shows that, in group 1, Arm 2 has large net benefits than Arm 1 with very high probability for reasonable values of $k$. Arm 3 also has higher net benefits than Arm 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(psa.pw.dt$ceac[arm == "Arm 3" & prob > .5 & grp == "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Arm 2 and Arm 3 have higher net benefits than Arm 1 for almost all values of $k$, although this probability is larger form Arm 2 than Arm 3 when $k$ is smaller.
 
 ```{r ceac_plot, fig.cap = "Cost-effectiveness acceptability curve by subgroup"}
 ```
@@ -156,7 +172,7 @@ Plot
 ```{r icer}
 ```
 
-In most analyses, the analyst will want estimates of the probability that each treatment is most cost-effective and and EVPI. The function ``psa`` is a wrapper for the ``evpi`` and ``mce`` functions. It also provides a summary table of means and credible intervals for both QALYs and costs. Finally, the user has the option to specify a custom table of summary output. The custom table can contain any quantities of interest (QOIs) as long as they are specified in addition to the sim, arm, e, and c columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hypothetical variable for life-years and create table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
+Finally, the user has the option to specify a custom table of summary output. The custom table can contain any quantities of interest (QOIs) as long as they are specified in addition to the sim, arm, e, and c columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hypothetical variable for life-years and create table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
 
 ### Value of personalized care
 The previous analyses allow net benefits and optimal treatment decisions to vary by subgroup. In contrast, most CEAs estimate the treatment, $j^{*}$, that is optimal when averaging net benefits over the entire population. In particular, if the population is broken up into $G$ distinct subgroups, the optimal treatment is given by,
@@ -178,6 +194,15 @@ $$
 where $w_g \in (0, 1)$ is a weight denoting that proportion of the population represented by subgroup $g$ and $\sum_{g=1}^{G} w_g = 1$. The `pcea` package can be used to demonstrate the value of individualized care. 
 
 ```{r totevpi, fig.cap = "Total expected value of perfect information"}
+```
+
+```{r totenb}
+```
+
+```{r evic1}
+```
+
+```{r evic2}
 ```
 
 ## References
