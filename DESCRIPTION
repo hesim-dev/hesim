@@ -1,16 +1,15 @@
-Package: cea
+Package: hesim
 Type: Package
-Title: Cost-effectiveness analysis
+Title: Health-economic simulation modeling
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Devin Incerti
+Maintainer: <devin.incerti@gmail.com>
+Description: Implement and analyze health-economic simulation models
+License: GPLv3
 LazyData: true
 LinkingTo: Rcpp, RcppArmadillo
 Imports:
     Rcpp,
-    ggplot2,
     data.table
 Suggests:
     Testthat
