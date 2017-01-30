@@ -1,5 +1,7 @@
 # hesim
+
 ## About
+
 Simulation models are commonly used in health economics for cost-effectiveness analysis, modeling disease burden, and other purposes. The `hesim` package is designed for computationally intensive simulation and has the following three goals:
 
 * Help users conduct decision analysis and probabilistic sensitivity analysis at the subgroup level.
