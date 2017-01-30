@@ -143,6 +143,7 @@ test_that("psa", {
   expect_equal(evpi$evpi, evpi.test)
 })
 
+
 # Test psa_pw function --------------------------------------------------------
 psa.pw.dt <-  psa_pw(ce,  k = krange, control = "Arm 1",
                      sim = "sim", arm = "arm", e = "qalys", c = "cost")
@@ -185,11 +186,11 @@ test_that("psa_pw", {
   ceac.test <- ceacR(delta, kval = kval, grpname = "Group 2")
   expect_equal(ceac$prob, ceac.test$prob)
   
-  ## einb
+  ## inb
   # group 2
-  einb <- psa.pw.dt$einb[k == kval & grp == "Group 2"]
+  inb <- psa.pw.dt$inb[k == kval & grp == "Group 2"]
   einb.test <- delta[grp == "Group 2", .(einb = mean(iqalys * kval - icost)), 
                      by = "arm"]
-  expect_equal(einb$einb, einb.test$einb)
+  expect_equal(inb$einb, einb.test$einb)
 
 })

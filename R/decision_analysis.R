@@ -33,12 +33,14 @@ psa <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
   setorderv(x, c(grp, sim, arm))
 
   # estimates
+  nb <- nb_summary(x, k, sim, arm, grp, e, c)
   mce <- mce(x, k, arm, grp, e, c, nsims, narms, ngrps)
-  evpi <- evpi(x, k, sim, arm, grp, e, c, nsims, narms, ngrps)
+  evpi <- evpi(x, k, sim, arm, grp, e, c, nsims, narms, ngrps, nb)
   cea.table <- cea_table(x, sim, arm, grp, e, c, ICER = FALSE)
-  l <- list(summary = cea.table, mce = mce, evpi = evpi)
+  l <- list(summary = cea.table, mce = mce, evpi = evpi, nb = nb)
   if (!is.null(custom_vars)){
-    custom.table <- custom_table(x, arm, grp, custom_vars, custom_fun)
+    outcomes <- c(e, c, custom_vars[!custom_vars %in% c(e, c)])
+    custom.table <- custom_table(x, arm, grp, outcomes, custom_fun)
     l <- c(l, list(custom.table = custom.table))
   }
   return(l)
@@ -69,14 +71,14 @@ psa_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e"
     delta <- incr_change_calc(sim_treat, sim_control, sim, arm, grp, outcomes, nsims, narms, ngrps)
   } else{
     outcomes <- c(e, c)
-    delta <- incr_change_calc(sim_treat, sim_control, sim, arm, outcomes, nsims, narms, ngrps)
+    delta <- incr_change_calc(sim_treat, sim_control, sim, arm, grp, outcomes, nsims, narms, ngrps)
   }
   ceac <- ceac(delta, k, sim, arm, grp, e = paste0("i", e), c = paste0("i", c),
                nsims, narms, ngrps)
-  einb <- einb(delta, k, sim, arm, grp, e = paste0("i", e), c = paste0("i", c))
+  inb <- inb_summary(delta, k, sim, arm, grp, e = paste0("i", e), c = paste0("i", c))
   cea.table <- cea_table(delta, sim, arm, grp, e = paste0("i", e), c = paste0("i", c),
                          ICER = TRUE)
-  l <- list(summary = cea.table, delta = delta, ceac = ceac, einb = einb)
+  l <- list(summary = cea.table, delta = delta, ceac = ceac, inb = inb)
   if (!is.null(custom_vars)){
     custom.table <- custom_table(delta, arm, grp, paste0("i", custom_vars),
                                  custom_fun)
@@ -193,32 +195,38 @@ ceac <- function(delta, k, sim, arm, grp, e, c, nsims, narms, ngrps){
   return(prob)
 }
 
-# Expected net benefit
-enb <- function(x, k, sim, arm, grp, e, c){
-  m <- x[, .(e = mean(get(e)), c = mean(get(c))), by = c(arm, grp)]
-  enb <- matrix(NA, nrow = length(k), ncol = nrow(m))
+# net benefits summary statistics
+nb_summary <- function(x, k, sim, arm, grp, e, c){
+  m <- x[, .(e_mean = mean(get(e)), c_mean = mean(get(c)),
+             e_lower = quantile(get(e), .025), 
+             e_upper = quantile(get(e), .975),
+             c_lower = quantile(get(c), .025),
+             c_upper = quantile(get(c), .975)), by = c(arm, grp)]
+  enb <- lnb <- unb <- matrix(NA, nrow = length(k), ncol = nrow(m))
   for (i in 1:nrow(m)){
-    enb[, i] <- k * m[i, e] - m[i, c]
+    enb[, i] <- k * m[i, e_mean] - m[i, c_mean]
+    lnb[, i] <- k * m[i, e_lower] - m[i, c_lower]
+    unb[, i] <- k * m[i, e_upper] - m[i, c_upper]
   }
-  enb <- data.table(rep(m[[arm]], each = length(k)), rep(m[[grp]], each = length(k)),
-                    rep(k, nrow(m)), c(enb))
-  setnames(enb, c(arm, grp, "k", "enb"))
-  return(enb)
+  nb <- data.table(rep(m[[arm]], each = length(k)), rep(m[[grp]], each = length(k)),
+                    rep(k, nrow(m)), c(enb), c(lnb), c(unb))
+  setnames(nb, c(arm, grp, "k", "enb", "lnb", "unb"))
+  return(nb)
 }
 
-# Expected incremental benefit
-einb <- function(ix, k, sim, arm, grp, e, c){
-  einb <- enb(ix, k, sim, arm, grp, e, c)
-  setnames(einb, colnames(einb), c(arm, grp, "k", "einb"))
-  return(einb)
+# incremental benefit summary statistics
+inb_summary <- function(ix, k, sim, arm, grp, e, c){
+  inb <- nb_summary(ix, k, sim, arm, grp, e, c)
+  setnames(inb, colnames(inb), c(arm, grp, "k", "einb", "linb", "uinb"))
+  return(inb)
 }
 
 # Expected value of perfect information
-evpi <- function(x, k, sim, arm, grp, e, c, nsims, narms, ngrps){
+evpi <- function(x, k, sim, arm, grp, e, c, nsims, narms, ngrps, nb){
 
   # Choose treatment by maximum expected benefit
-  x.enb <- enb(x, k, sim, arm, grp, e, c)
-  x.enb <- dcast(x.enb, k + grp ~ arm, value.var = "enb")
+  x.nb = copy(nb)
+  x.enb <- dcast(x.nb, k + grp ~ arm, value.var = "enb")
   mu <- rowmaxC(as.matrix(x.enb[, -c(1:2), with = FALSE]))
   mu.ind <- c(rowmax_indC(as.matrix(x.enb[, -c(1:2), with = FALSE]))) + 1
 
