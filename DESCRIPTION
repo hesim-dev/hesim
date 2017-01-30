@@ -12,4 +12,6 @@ Imports:
     Rcpp,
     ggplot2,
     data.table
+Suggests:
+    Testthat
 RoxygenNote: 5.0.1
