@@ -26,6 +26,9 @@
 #' @export
 psa <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
                 custom_vars = NULL, custom_fun = NULL){
+  if (!is.data.table(x)){
+    x <- data.table(x)
+  }
 
   nsims <- length(unique(x[[sim]]))
   narms <- length(unique(x[[arm]]))
@@ -39,8 +42,7 @@ psa <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
   cea.table <- cea_table(x, sim, arm, grp, e, c, ICER = FALSE)
   l <- list(summary = cea.table, mce = mce, evpi = evpi, nb = nb)
   if (!is.null(custom_vars)){
-    outcomes <- c(e, c, custom_vars[!custom_vars %in% c(e, c)])
-    custom.table <- custom_table(x, arm, grp, outcomes, custom_fun)
+    custom.table <- custom_table(x, arm, grp, custom_vars, custom_fun)
     l <- c(l, list(custom.table = custom.table))
   }
   return(l)
@@ -50,7 +52,9 @@ psa <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
 #' @rdname psa
 psa_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
                    custom_vars = NULL, custom_fun = NULL){
-
+  if (!is.data.table(x)){
+    x <- data.table(x)
+  }
   setorderv(x, c(grp, arm, sim))
   if (!control %in% unique(x[[arm]])){
     stop("Chosen control arm is not in x")

@@ -42,7 +42,7 @@ enb <- dcast(enb, arm ~ grp, value.var = "enb")
 print(enb)
 
 ## @knitr psa
-library("cea")
+library("hesim")
 ktop <- 200000
 psa.dt <-  psa(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
               grp = "grp", e = "qalys", c = "cost")
@@ -112,8 +112,8 @@ psa.custom.dt$custom.table
 
 ## @knitr ceplane_plot
 head(psa.pw.dt$delta)
-ylim <- max(psa.pw.dt$delta[, icost]) * 2
-xlim <- ceiling(max(psa.pw.dt$delta[, iqalys]) * 1.5)
+ylim <- max(psa.pw.dt$delta[, icost]) * 1.1
+xlim <- ceiling(max(psa.pw.dt$delta[, iqalys]) * 1.1)
 ggplot(psa.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) + 
   geom_jitter(size = .5) + facet_wrap(~grp) + 
   xlab("Incremental QALYs") + ylab("Incremental cost") +

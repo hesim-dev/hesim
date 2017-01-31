@@ -100,6 +100,7 @@ ceacR <- function(ix, kval, grpname) {
 psa.dt <-  psa(ce, k = krange, sim = "sim", arm = "arm",
                 grp = "grp", e = "qalys", c = "cost")
 
+
 test_that("psa", {
   kval <- sample(krange, 1)
   
