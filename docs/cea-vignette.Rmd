@@ -5,9 +5,10 @@ date: "`r format(Sys.Date(), format="%B %d, %Y")`"
 output: 
   html_document:
 bibliography: cea-references.bib
-toc: TRUE
 ---
 
+* TOC
+{:toc}
 ```{r echo=FALSE}
 knitr::read_chunk('cea-vignette.R')
 ```

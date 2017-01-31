@@ -1,10 +1,10 @@
 Package: hesim
 Type: Package
-Title: Health-economic simulation modeling
+Title: Fast health-economic simulation modeling
 Version: 0.1.0
 Author: Devin Incerti
 Maintainer: <devin.incerti@gmail.com>
-Description: Implement and analyze health-economic simulation models
+Description: Efficiently implement and analyze health-economic simulation models
 License: GPLv3
 LazyData: true
 LinkingTo: Rcpp, RcppArmadillo

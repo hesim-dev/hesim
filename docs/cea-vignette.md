@@ -5,9 +5,10 @@ date: "January 30, 2017"
 output: 
   html_document:
 bibliography: cea-references.bib
-toc: TRUE
 ---
 
+* TOC
+{:toc}
 
 
 # Overview
@@ -109,12 +110,12 @@ head(ce)
 
 ```
 ##    sim   arm     grp     cost    qalys
-## 1:   1 Arm 1 Group 1 8.369910 7.695261
-## 2:   2 Arm 1 Group 1 7.158258 7.900920
-## 3:   3 Arm 1 Group 1 8.700138 8.098043
-## 4:   4 Arm 1 Group 1 8.694455 7.737548
-## 5:   5 Arm 1 Group 1 7.149561 7.830592
-## 6:   6 Arm 1 Group 1 7.832594 7.835261
+## 1:   1 Arm 1 Group 1 6.735913 8.449514
+## 2:   2 Arm 1 Group 1 7.543181 8.266314
+## 3:   3 Arm 1 Group 1 7.739197 8.009014
+## 4:   4 Arm 1 Group 1 6.569844 7.756109
+## 5:   5 Arm 1 Group 1 7.126620 7.830618
+## 6:   6 Arm 1 Group 1 6.950060 8.000831
 ```
 
 For any given willingness to pay $k$, expected net benefits can be calculated by arm, subgroup, and simulation number. For example, with $k=150,000$, a reasonable estimate of the value of a life-year in the United States, Arm 2 provides the most expected net benefits in subgroup 2 while Arm 3 provides the most expected net benefits in subgroup 2.
@@ -129,9 +130,9 @@ print(enb)
 
 ```
 ##      arm Group 1 Group 2
-## 1: Arm 1 1200045 1199070
-## 2: Arm 2 1447062 1512725
-## 3: Arm 3 1214965 1591327
+## 1: Arm 1 1199431 1198292
+## 2: Arm 2 1440149 1511732
+## 3: Arm 3 1214023 1591438
 ```
 
 A number of measures have been proposed in the health economics literature to summarize the uncertainty estimated using PSA. Below we describe the most common measures, which are estimated using the functions `psa` and `psa_pw`. The `psa` function summarizes results by taking into account each treatment arm in the analysis, while the function `psa_pw` summarizes "pairwise" results in which each treatment is compared to a comparator. 
@@ -174,16 +175,16 @@ ce.nb[, maxj := factor(maxj, levels = c(1, 2, 3))]
 
 | sim|     nb1|     nb2|     nb3|maxj |
 |---:|-------:|-------:|-------:|:----|
-| 125| 1206930| 1734460| 1374214|2    |
-| 207| 1223643| 1641592| 1456707|2    |
-| 237| 1145424| 1512634| 1521956|3    |
-| 293| 1177695| 1592155| 1522299|2    |
-| 324| 1211337| 1448953| 1650928|3    |
-| 375| 1188485| 1556504| 1587057|3    |
-| 516| 1180137| 1616153| 1631500|3    |
-| 527| 1212378| 1512602| 1880520|3    |
-| 843| 1198910| 1371741| 1599482|3    |
-| 907| 1238042| 1486083| 1612145|3    |
+| 125| 1185274| 1659903| 1576115|2    |
+| 207| 1154559| 1393306| 1635672|3    |
+| 237| 1154464| 1298546| 1432624|3    |
+| 293| 1216423| 1432172| 1612988|3    |
+| 324| 1173978| 1494560| 1507685|3    |
+| 375| 1194971| 1495585| 1692310|3    |
+| 516| 1176348| 1467132| 1521095|3    |
+| 527| 1247409| 1731416| 1550940|2    |
+| 843| 1191053| 1481843| 1710277|3    |
+| 907| 1175678| 1544974| 1681721|3    |
 
 ```r
 mce <- prop.table(table(ce.nb$maxj))
@@ -193,10 +194,10 @@ print(mce)
 ```
 ## 
 ##   1   2   3 
-## 0.0 0.3 0.7
+## 0.0 0.2 0.8
 ```
 
-In this example, treatments 1, 2, and 3 have the highest net benefits a fraction 0, 0.3, and 0.7 of the time respectively. The `psa` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
+In this example, treatments 1, 2, and 3 have the highest net benefits a fraction 0, 0.2, and 0.8 of the time respectively. The `psa` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
 
 MCE plot
 
@@ -238,16 +239,16 @@ kable(ce.nb, digits = 0)
 
 | sim|     nb1|     nb2|     nb3|maxj |    nbpi|    nbci|
 |---:|-------:|-------:|-------:|:----|-------:|-------:|
-| 125| 1206930| 1734460| 1374214|2    | 1734460| 1374214|
-| 207| 1223643| 1641592| 1456707|2    | 1641592| 1456707|
-| 237| 1145424| 1512634| 1521956|3    | 1521956| 1521956|
-| 293| 1177695| 1592155| 1522299|2    | 1592155| 1522299|
-| 324| 1211337| 1448953| 1650928|3    | 1650928| 1650928|
-| 375| 1188485| 1556504| 1587057|3    | 1587057| 1587057|
-| 516| 1180137| 1616153| 1631500|3    | 1631500| 1631500|
-| 527| 1212378| 1512602| 1880520|3    | 1880520| 1880520|
-| 843| 1198910| 1371741| 1599482|3    | 1599482| 1599482|
-| 907| 1238042| 1486083| 1612145|3    | 1612145| 1612145|
+| 125| 1185274| 1659903| 1576115|2    | 1659903| 1576115|
+| 207| 1154559| 1393306| 1635672|3    | 1635672| 1635672|
+| 237| 1154464| 1298546| 1432624|3    | 1432624| 1432624|
+| 293| 1216423| 1432172| 1612988|3    | 1612988| 1612988|
+| 324| 1173978| 1494560| 1507685|3    | 1507685| 1507685|
+| 375| 1194971| 1495585| 1692310|3    | 1692310| 1692310|
+| 516| 1176348| 1467132| 1521095|3    | 1521095| 1521095|
+| 527| 1247409| 1731416| 1550940|2    | 1731416| 1550940|
+| 843| 1191053| 1481843| 1710277|3    | 1710277| 1710277|
+| 907| 1175678| 1544974| 1681721|3    | 1681721| 1681721|
 
 To calculate EVPI, we average net benefits given current information and net benefits given perfect information accross simulation draws. 
 
@@ -259,7 +260,7 @@ print(enbpi)
 ```
 
 ```
-## [1] 1645179
+## [1] 1618569
 ```
 
 ```r
@@ -267,7 +268,7 @@ print(enbci)
 ```
 
 ```
-## [1] 1583681
+## [1] 1592143
 ```
 
 ```r
@@ -275,7 +276,7 @@ print(enbpi - enbci)
 ```
 
 ```
-## [1] 61498.73
+## [1] 26426.37
 ```
 
 The `psa` function peforms this same calculation accross all simulation draws from the PSA and for a number of values of willingess to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal arm changes.
@@ -310,19 +311,19 @@ psa.custom.dt$summary
 
 ```
 ##      arm     grp qalys_mean qalys_lower qalys_upper    cost_mean
-## 1: Arm 1 Group 1   8.000350    7.600590    8.368346     7.434632
-## 2: Arm 2 Group 1  10.051914    8.558594   11.633978 60725.187345
-## 3: Arm 3 Group 1   8.502035    7.296087    9.706012 60340.649323
-## 4: Arm 1 Group 2   7.993852    7.619031    8.392413     7.427829
-## 5: Arm 2 Group 2  10.493299    8.895101   11.943591 61269.517065
-## 6: Arm 3 Group 2  11.014482    9.880029   12.196528 60844.865468
+## 1: Arm 1 Group 1   7.996257    7.588626    8.430087     7.395474
+## 2: Arm 2 Group 1  10.003105    8.378064   11.560632 60316.489409
+## 3: Arm 3 Group 1   8.496872    7.283156    9.678301 60508.068527
+## 4: Arm 1 Group 2   7.988661    7.582103    8.396929     7.452108
+## 5: Arm 2 Group 2  10.481121    8.845461   12.004806 60436.512864
+## 6: Arm 3 Group 2  11.010114    9.846793   12.163617 60078.680655
 ##      cost_lower   cost_upper
-## 1:     6.122692     8.854317
-## 2: 45141.930655 79863.729103
-## 3: 44552.709015 81851.456168
-## 4:     6.093684     9.028301
-## 5: 45414.932159 81193.480067
-## 6: 43735.531181 81040.894923
+## 1:     6.076042     8.908801
+## 2: 45348.413567 80314.637656
+## 3: 45401.087646 80398.671574
+## 4:     6.138874     9.117188
+## 5: 45257.998841 81490.980326
+## 6: 44489.642752 78849.935696
 ```
 
 
@@ -332,26 +333,26 @@ psa.custom.dt$custom.table
 
 ```
 ##      arm     grp    cost.mean cost.quant.2.5% cost.quant.97.5% lys.mean
-## 1: Arm 1 Group 1     7.434632        6.122692         8.854317 12.00052
-## 2: Arm 2 Group 1 60725.187345    45141.930655     79863.729103 15.07787
-## 3: Arm 3 Group 1 60340.649323    44552.709015     81851.456168 12.75305
-## 4: Arm 1 Group 2     7.427829        6.093684         9.028301 11.99078
-## 5: Arm 2 Group 2 61269.517065    45414.932159     81193.480067 15.73995
-## 6: Arm 3 Group 2 60844.865468    43735.531181     81040.894923 16.52172
+## 1: Arm 1 Group 1     7.395474        6.076042         8.908801 11.99439
+## 2: Arm 2 Group 1 60316.489409    45348.413567     80314.637656 15.00466
+## 3: Arm 3 Group 1 60508.068527    45401.087646     80398.671574 12.74531
+## 4: Arm 1 Group 2     7.452108        6.138874         9.117188 11.98299
+## 5: Arm 2 Group 2 60436.512864    45257.998841     81490.980326 15.72168
+## 6: Arm 3 Group 2 60078.680655    44489.642752     78849.935696 16.51517
 ##    lys.quant.2.5% lys.quant.97.5% qalys.mean qalys.quant.2.5%
-## 1:       11.40089        12.55252   8.000350         7.600590
-## 2:       12.83789        17.45097  10.051914         8.558594
-## 3:       10.94413        14.55902   8.502035         7.296087
-## 4:       11.42855        12.58862   7.993852         7.619031
-## 5:       13.34265        17.91539  10.493299         8.895101
-## 6:       14.82004        18.29479  11.014482         9.880029
+## 1:       11.38294        12.64513   7.996257         7.588626
+## 2:       12.56710        17.34095  10.003105         8.378064
+## 3:       10.92473        14.51745   8.496872         7.283156
+## 4:       11.37315        12.59539   7.988661         7.582103
+## 5:       13.26819        18.00721  10.481121         8.845461
+## 6:       14.77019        18.24542  11.010114         9.846793
 ##    qalys.quant.97.5%
-## 1:          8.368346
-## 2:         11.633978
-## 3:          9.706012
-## 4:          8.392413
-## 5:         11.943591
-## 6:         12.196528
+## 1:          8.430087
+## 2:         11.560632
+## 3:          9.678301
+## 4:          8.396929
+## 5:         12.004806
+## 6:         12.163617
 ```
 
 ## Cost-effectiveness plane
@@ -366,12 +367,12 @@ head(psa.pw.dt$delta)
 
 ```
 ##    sim   arm     grp   iqalys    icost
-## 1:   1 Arm 2 Group 1 3.019209 50949.24
-## 2:   2 Arm 2 Group 1 2.095131 47452.94
-## 3:   3 Arm 2 Group 1 1.515931 58701.33
-## 4:   4 Arm 2 Group 1 3.522882 54217.40
-## 5:   5 Arm 2 Group 1 4.229280 71664.03
-## 6:   6 Arm 2 Group 1 1.086167 79605.60
+## 1:   1 Arm 2 Group 1 2.134922 42705.08
+## 2:   2 Arm 2 Group 1 2.022850 80448.94
+## 3:   3 Arm 2 Group 1 3.012861 61797.37
+## 4:   4 Arm 2 Group 1 1.996887 66735.06
+## 5:   5 Arm 2 Group 1 2.907354 52049.11
+## 6:   6 Arm 2 Group 1 3.031366 66954.19
 ```
 
 ```r
@@ -392,7 +393,7 @@ ggplot(psa.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) +
 ## Cost-effectiveness acceptability curve (CEAC)
 The cost-effectivenss acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each arm to a single comparator wheras the MCE plot considers all arms simultaneously. Output to produce a CEAC is generated from the `psa_pw` function.
 
-The plot shows that, in subgroup 1, Arm 2 has large net benefits than Arm 1 with very high probability for reasonable values of $k$. Arm 3 also has higher net benefits than Arm 1 with probability over 1/2 for values of $k$ larger than 122,500. In group 2, both Arm 2 and Arm 3 have higher net benefits than Arm 1 for almost all values of $k$, although this probability is larger form Arm 2 than Arm 3 when $k$ is smaller.
+The plot shows that, in subgroup 1, Arm 2 has large net benefits than Arm 1 with very high probability for reasonable values of $k$. Arm 3 also has higher net benefits than Arm 1 with probability over 1/2 for values of $k$ larger than 119,500. In group 2, both Arm 2 and Arm 3 have higher net benefits than Arm 1 for almost all values of $k$, although this probability is larger form Arm 2 than Arm 3 when $k$ is smaller.
 
 
 ```r
@@ -415,15 +416,15 @@ print(psa.pw.dt$summary)
 
 ```
 ##      arm     grp iqalys_mean iqalys_lower iqalys_upper icost_mean
-## 1: Arm 2 Group 1   2.0515639    0.4917031     3.712006   60717.75
-## 2: Arm 3 Group 1   0.5016851   -0.8027223     1.784546   60333.21
-## 3: Arm 2 Group 2   2.4994461    0.9076724     3.959140   61262.09
-## 4: Arm 3 Group 2   3.0206293    1.8088137     4.248837   60837.44
+## 1: Arm 2 Group 1   2.0068483    0.2374925     3.632925   60309.09
+## 2: Arm 3 Group 1   0.5006157   -0.8198998     1.780500   60500.67
+## 3: Arm 2 Group 2   2.4924598    0.8422443     4.021185   60429.06
+## 4: Arm 3 Group 2   3.0214535    1.7988992     4.237330   60071.23
 ##    icost_lower icost_upper      icer
-## 1:    45135.70    79857.18  29595.84
-## 2:    44545.47    81843.57 120261.12
-## 3:    45407.04    81184.83  24510.27
-## 4:    43727.10    81033.70  20140.65
+## 1:    45341.18    80307.81  30051.65
+## 2:    45392.98    80391.27 120852.53
+## 3:    45250.43    81484.04  24244.75
+## 4:    44481.62    78843.60  19881.57
 ```
 
 If the user would like to examine the distribution of outcomes other than those specified this summary table, then they can also generate a custom table of summary output. The custom table can contain any quantities of interest (QOIs) as long as they are specified in addition to the `sim`, `arm`, `e`, and `c` columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hypothetical variable for life-years and create table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
@@ -445,26 +446,26 @@ psa.custom.dt$custom.table
 
 ```
 ##      arm     grp    cost.mean cost.quant.2.5% cost.quant.97.5% lys.mean
-## 1: Arm 1 Group 1     7.434632        6.122692         8.854317 12.00052
-## 2: Arm 2 Group 1 60725.187345    45141.930655     79863.729103 15.07787
-## 3: Arm 3 Group 1 60340.649323    44552.709015     81851.456168 12.75305
-## 4: Arm 1 Group 2     7.427829        6.093684         9.028301 11.99078
-## 5: Arm 2 Group 2 61269.517065    45414.932159     81193.480067 15.73995
-## 6: Arm 3 Group 2 60844.865468    43735.531181     81040.894923 16.52172
+## 1: Arm 1 Group 1     7.395474        6.076042         8.908801 11.99439
+## 2: Arm 2 Group 1 60316.489409    45348.413567     80314.637656 15.00466
+## 3: Arm 3 Group 1 60508.068527    45401.087646     80398.671574 12.74531
+## 4: Arm 1 Group 2     7.452108        6.138874         9.117188 11.98299
+## 5: Arm 2 Group 2 60436.512864    45257.998841     81490.980326 15.72168
+## 6: Arm 3 Group 2 60078.680655    44489.642752     78849.935696 16.51517
 ##    lys.quant.2.5% lys.quant.97.5% qalys.mean qalys.quant.2.5%
-## 1:       11.40089        12.55252   8.000350         7.600590
-## 2:       12.83789        17.45097  10.051914         8.558594
-## 3:       10.94413        14.55902   8.502035         7.296087
-## 4:       11.42855        12.58862   7.993852         7.619031
-## 5:       13.34265        17.91539  10.493299         8.895101
-## 6:       14.82004        18.29479  11.014482         9.880029
+## 1:       11.38294        12.64513   7.996257         7.588626
+## 2:       12.56710        17.34095  10.003105         8.378064
+## 3:       10.92473        14.51745   8.496872         7.283156
+## 4:       11.37315        12.59539   7.988661         7.582103
+## 5:       13.26819        18.00721  10.481121         8.845461
+## 6:       14.77019        18.24542  11.010114         9.846793
 ##    qalys.quant.97.5%
-## 1:          8.368346
-## 2:         11.633978
-## 3:          9.706012
-## 4:          8.392413
-## 5:         11.943591
-## 6:         12.196528
+## 1:          8.430087
+## 2:         11.560632
+## 3:          9.678301
+## 4:          8.396929
+## 5:         12.004806
+## 6:         12.163617
 ```
 
 # Value of personalized care
@@ -527,7 +528,7 @@ print(evic)
 
 ```
 ##     EVIC 
-## 58024.32
+## 56531.62
 ```
 
 ```r
@@ -536,10 +537,10 @@ print(evic/150000)
 
 ```
 ##      EVIC 
-## 0.3868288
+## 0.3768774
 ```
 
-Our estimate of the EVIC is \$58,024, or in terms of net health befits, 0.387 QALYs. 
+Our estimate of the EVIC is \$56,531, or in terms of net health benefits, 0.377 QALYs. 
 
 # References
 
