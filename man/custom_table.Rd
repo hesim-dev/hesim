@@ -4,7 +4,7 @@
 \alias{custom_table}
 \title{Custom CEA summary table}
 \usage{
-custom_table(x, arm, grp, custom_vars, FUN)
+custom_table(x, arm, grp, custom_vars, FUN = NULL)
 }
 \arguments{
 \item{x}{Matrix containing information on outcome variables for each simulation and arm.}
@@ -18,7 +18,11 @@ custom_table(x, arm, grp, custom_vars, FUN)
 \item{FUN}{summary statistic function.}
 }
 \value{
-data.table
+A data.table of summary statistics for each variable specified in 
+\code{custom_vars}. By default, returns the mean, 2.5\%, and 97.5\% quantile of
+each variable. Different summary statistics can be calculated using FUN. 
+This function is used in \code{psa} and \code{psa_pw} to create the
+ \code{custom.table} output.
 }
 \description{
 Custom summary table for CEA

@@ -90,7 +90,7 @@
     <p>Custom summary table for CEA</p>
     
 
-    <pre><span class='fu'>custom_table</span>(<span class='no'>x</span>, <span class='no'>arm</span>, <span class='no'>grp</span>, <span class='no'>custom_vars</span>, <span class='no'>FUN</span>)</pre>
+    <pre><span class='fu'>custom_table</span>(<span class='no'>x</span>, <span class='no'>arm</span>, <span class='no'>grp</span>, <span class='no'>custom_vars</span>, <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -108,7 +108,11 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data.table</p>
+    <p>A data.table of summary statistics for each variable specified in 
+<code>custom_vars</code>. By default, returns the mean, 2.5%, and 97.5% quantile of
+each variable. Different summary statistics can be calculated using FUN. 
+This function is used in <code>psa</code> and <code>psa_pw</code> to create the
+ <code>custom.table</code> output.</p>
     
 
   </div>

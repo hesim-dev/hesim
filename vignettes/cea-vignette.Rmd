@@ -1,14 +1,14 @@
 ---
-title: Personalized cost-effectiveness analysis (pCEA) with `hesim`
+title: Personalized cost-effectiveness analysis (pCEA)
 author: "Devin Incerti"
-date: "`r format(Sys.Date(), format="%B %d, %Y")`"
+date: "`r Sys.Date()`"
 output: 
-  html_document:
+   html_document:
+    toc: true
+    toc_depth: 1
 bibliography: cea-references.bib
 ---
 
-* TOC
-{:toc}
 ```{r echo=FALSE}
 knitr::read_chunk('cea-vignette.R')
 ```
@@ -75,7 +75,7 @@ $$
 
 Below we simulate costs and QALYs for three treatment arms and two subgroups (in a real world analysis, this output would be derived from a detailed health-economic simulation model). Arm 1 is the current standard of care; it is the cheapest therapy, but also the least efficacious. Arms 2 and 3 are equally costly, but Arm 2 is more effective in subgroup 1 while Arm 3 is more effective in subgroup 2. 
 
-```{r ce_output}
+```{r ce_output, warnings = FALSE, message = FALSE}
 ```
 
 For any given willingness to pay $k$, expected net benefits can be calculated by arm, subgroup, and simulation number. For example, with $k=150,000$, a reasonable estimate of the value of a life-year in the United States, Arm 2 provides the most expected net benefits in subgroup 2 while Arm 3 provides the most expected net benefits in subgroup 2.
@@ -99,7 +99,7 @@ Likewise, we can use `psa_pw` to summarize the PSA when directly comparing the t
 
 The same inputs are used as in `psa` except users must specify the name of the control arm. 
 
-## Probability most cost-effective
+## Probability most cost-effective 
 A useful summary measure for quantifying uncertainty is the probability that each treatment arm is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each arm has the highest net benefits. For example, consider a random sample of 10 draws from the PSA simulation output and suppose $k$ is again equal to $150,000$. 
 
 ```{r mce_example_setup, echo = -1}
@@ -111,7 +111,7 @@ A useful summary measure for quantifying uncertainty is the probability that eac
 In this example, treatments 1, 2, and 3 have the highest net benefits a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `psa` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
 
 MCE plot
-```{r mce_plot, fig.cap = "Probability each arm is most cost-effective by subgroup"}
+```{r mce_plot}
 ```
 
 In group 1, Arm 2 provides the greatest net benefits with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Arm 3 provides the greatest net benefits with a higher probability than Arm 2. 
@@ -129,7 +129,7 @@ To illustrate consider the same random sample of 10 draws from our simulation ou
 
 ```{r evpi_example_a}
 ```
-
+<br><br>
 To calculate EVPI, we average net benefits given current information and net benefits given perfect information accross simulation draws. 
 
 ```{r evpi_example_b}
@@ -137,7 +137,7 @@ To calculate EVPI, we average net benefits given current information and net ben
 
 The `psa` function peforms this same calculation accross all simulation draws from the PSA and for a number of values of willingess to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal arm changes.
 
-```{r evpi_plot, fig.cap = "Expected value of perfect information by subgroup"}
+```{r evpi_plot}
 ```
 
 ## Distribution of health and cost outcomes
@@ -155,7 +155,7 @@ The cost-effectivenss plane plots the incremental effectivenss of a treatment ar
 
 Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `psa_pw` function, which, for each sampled parameter set, estimtes incremental differences in costs, clinical effectivenss, and any other variables specifies in `custom_vars` relative to the comparator. The dotted line in the plot is the willingess to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above are not. 
 
-```{r ceplane_plot, fig.cap = "Cost-effectiveness plane by subgroup"}
+```{r ceplane_plot}
 ```
 
 ## Cost-effectiveness acceptability curve (CEAC)
@@ -163,7 +163,7 @@ The cost-effectivenss acceptability curve (CEAC) is similar to the MCE plot. The
 
 The plot shows that, in subgroup 1, Arm 2 has large net benefits than Arm 1 with very high probability for reasonable values of $k$. Arm 3 also has higher net benefits than Arm 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(psa.pw.dt$ceac[arm == "Arm 3" & prob > .5 & grp == "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Arm 2 and Arm 3 have higher net benefits than Arm 1 for almost all values of $k$, although this probability is larger form Arm 2 than Arm 3 when $k$ is smaller.
 
-```{r ceac_plot, fig.cap = "Cost-effectiveness acceptability curve by subgroup"}
+```{r ceac_plot}
 ```
 
 ## Credible intervals for incremental costs and effectiveness
@@ -199,7 +199,7 @@ $$
 
 where $w_g \in (0, 1)$ is a weight denoting that proportion of the population represented by subgroup $g$ and $\sum_{g=1}^{G} w_g = 1$. We can use `hesim` to demonstrate the value of individualized care.
 
-```{r totevpi, fig.cap = "Total expected value of perfect information"}
+```{r totevpi}
 ```
 
 ```{r totenb}

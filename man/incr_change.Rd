@@ -18,7 +18,10 @@ incr_change(x, control, sim, arm, outcomes)
 \item{outcomes}{Name of columns to calculate incremental changes for.}
 }
 \value{
-data.table
+A data.table containing the differences in the values of each variable 
+specified in outcomes between each treatment arm and the 
+comparator. It is the same output generated
+in \code{delta} from \code{psa_pw}.
 }
 \description{
 Calculate incremental change for outcome variables.

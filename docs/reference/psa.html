@@ -120,17 +120,49 @@ e = summary of clinicial effectiveness for each simulation and treatment arm)</d
       <dd>Name of column denoting costs. Default is &quot;c&quot;.</dd>
       <dt>custom_vars</dt>
       <dd>Character vector of variable names to use in creating a
-custom summary table. Table will contain means and 95<!-- % credible intervals for -->
+custom summary table. Table will contain means and 95% credible intervals for
 each variable. Can contain e and c.</dd>
       <dt>custom_fun</dt>
-      <dd>Function to apply to custom_vars to make custom table.</dd>
+      <dd>Function to apply to custom_vars to make custom table. If 
+<code>custom_vars</code> is not NULL and <code>custom_fun</code> is NULL, then returns the mean,
+2.5% quantile, and 97.5% quantile for each variable in <code>custom_vars</code>.</dd>
       <dt>control</dt>
       <dd>Name of the control arm in x.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>list</p>
+    <p><code>psa</code> returns a list containing four data.tables:</p>
+    <p><dl class='dl-horizontal'>
+  <dt>summary</dt><dd>A data.table of the mean, 2.5% quantile, and 97.5% 
+  quantile by arm and group for clinical effectiveness and costs.</dd>
+  <dt>mce</dt><dd>The probability that each arm is the most effective treatment
+  for each group for the range of specified willingess to pay values.</dd>
+  <dt>evpi</dt><dd>The expected value of perfect information by group for the range
+  of specified willingess to pay values.</dd>
+   <dt>nb</dt><dd>The mean, 2.5% quantile, and 97.5% quantile of (monetary) net benefits
+   for the range of specified willingess to pay values.</dd>
+</dl></p>
+    <p>In addition, if <code>custom_vars</code> is not NULL, <code>psa</code> returns <code>custom.table</code>, which is
+ a data.table containing summary statistics for each variable in <code>custom_vars</code>
+  by arm and group.</p>
+    <p><code>psa_pw</code> also returns a list containing four data.tables:
+ <dl class='dl-horizontal'>
+  <dt>summary</dt><dd>A data.table of the mean, 2.5% quantile, and 97.5% 
+  quantile by arm and group for clinical effectiveness and costs.</dd>
+  <dt>delta</dt><dd>Incremental effectiveness and incremental cost for each simulated
+  parameter set by arm and group. Can be used to plot a cost-effectiveness plane. 
+  Also returns the difference between each treatment arm and the comparator for each 
+  variable in <code>custom_vars</code> if <code>custom_vars</code> is not NULL.</dd>
+  <dt>ceac</dt><dd>Values needed to plot a cost-effectiveness acceptability curve by
+  group. In other words, the probability that each arm is more cost-effective than
+  the comparator for the specified willingess to pay values.</dd>
+   <dt>inb</dt><dd>The mean, 2.5% quantile, and 97.5% quantile of (monetary) 
+   incremental net benefits for the range of specified willingess to pay values.</dd>
+</dl></p>
+    <p>If <code>custom_vars</code> is not NULL, also returns <code>custom.table</code>, which is
+ a data.table containing summary statistics for the values of each variable returned
+  in <code>delta</code> by arm and group.</p>
     
 
   </div>

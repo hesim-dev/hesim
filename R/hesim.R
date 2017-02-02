@@ -1,8 +1,5 @@
 #' hesim: an R package for implement and analyzing health-economic simulation models
 #'
-#' To learn more about hesim, start with the vignettes:
-#' \code{browseVignettes(package = "hesim")}
-#'
 #' @docType package
 #' @name hesim
 #' @useDynLib hesim

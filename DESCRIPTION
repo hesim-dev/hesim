@@ -2,9 +2,12 @@ Package: hesim
 Type: Package
 Title: Fast health-economic simulation modeling
 Version: 0.1.0
-Author: Devin Incerti
+Authors@R: c(
+    person("Devin", "Incerti", , "devin.incerti@gmail.com", c("aut", "cre"))
+    )
 Maintainer: <devin.incerti@gmail.com>
 Description: Efficiently implement and analyze health-economic simulation models
+URL: https://github.com/dincerti/hesim
 License: GPLv3
 LazyData: true
 LinkingTo: Rcpp, RcppArmadillo
@@ -13,4 +16,4 @@ Imports:
     data.table
 Suggests:
     Testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.0

@@ -6,6 +6,5 @@
 \alias{hesim-package}
 \title{hesim: an R package for implement and analyzing health-economic simulation models}
 \description{
-To learn more about hesim, start with the vignettes:
-\code{browseVignettes(package = "hesim")}
+hesim: an R package for implement and analyzing health-economic simulation models
 }

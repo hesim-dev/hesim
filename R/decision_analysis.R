@@ -17,12 +17,45 @@
 #' @param e Name of column denoting clinical effectiveness. Default is "e".
 #' @param c Name of column denoting costs. Default is "c".
 #' @param custom_vars Character vector of variable names to use in creating a
-#' custom summary table. Table will contain means and 95% credible intervals for
+#' custom summary table. Table will contain means and 95\% credible intervals for
 #' each variable. Can contain e and c.
-#' @param custom_fun Function to apply to custom_vars to make custom table.
+#' @param custom_fun Function to apply to custom_vars to make custom table. If 
+#' \code{custom_vars} is not NULL and \code{custom_fun} is NULL, then returns the mean,
+#' 2.5\% quantile, and 97.5\% quantile for each variable in \code{custom_vars}.
+#' @return \code{psa} returns a list containing four data.tables:
+#' 
+#' \describe{
+#'   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
+#'   quantile by arm and group for clinical effectiveness and costs.}
+#'   \item{mce}{The probability that each arm is the most effective treatment
+#'   for each group for the range of specified willingess to pay values.}
+#'   \item{evpi}{The expected value of perfect information by group for the range
+#'   of specified willingess to pay values.}
+#'    \item{nb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
+#'    for the range of specified willingess to pay values.}
+#' }
+#' In addition, if \code{custom_vars} is not NULL, \code{psa} returns \code{custom.table}, which is
+#'  a data.table containing summary statistics for each variable in \code{custom_vars}
+#'   by arm and group.
+#' 
+#' \code{psa_pw} also returns a list containing four data.tables:
+#'  \describe{
+#'   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
+#'   quantile by arm and group for clinical effectiveness and costs.}
+#'   \item{delta}{Incremental effectiveness and incremental cost for each simulated
+#'   parameter set by arm and group. Can be used to plot a cost-effectiveness plane. 
+#'   Also returns the difference between each treatment arm and the comparator for each 
+#'   variable in \code{custom_vars} if \code{custom_vars} is not NULL.}
+#'   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
+#'   group. In other words, the probability that each arm is more cost-effective than
+#'   the comparator for the specified willingess to pay values.}
+#'    \item{inb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) 
+#'    incremental net benefits for the range of specified willingess to pay values.}
+#' }
+#' If \code{custom_vars} is not NULL, also returns \code{custom.table}, which is
+#'  a data.table containing summary statistics for the values of each variable returned
+#'   in \code{delta} by arm and group.
 #' @name psa
-#' @return list
-#'
 #' @export
 psa <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
                 custom_vars = NULL, custom_fun = NULL){
@@ -91,25 +124,6 @@ psa_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e"
   return(l)
 }
 
-#' Total EVPI
-#'
-#' Calculates the total exepected value of perfect information, which is a weighted average of the
-#' subgroup specific EVPIs.
-#'
-#' @param evpi Expected value of information from an object of class psa
-#' @param w.dt Lookup table for group weights. First column should be group
-#' and second column is population weight attached to each group.
-#' @return list
-#'
-#' @export
-totevpi <- function(evpi, wdt){
-  grpname <- colnames(wdt)[1]
-  evpi <- merge(evpi, wdt, by = grpname)
-  totevpi <- evpi[,lapply(.SD, weighted.mean, w = w),
-                 by = "k", .SDcols = c("evpi", "enbpi", "enb")]
-  return(totevpi)
-}
-
 #' Incremental changes
 #'
 #' Calculate incremental change for outcome variables.
@@ -119,7 +133,10 @@ totevpi <- function(evpi, wdt){
 #' @param sim Name of column denoting simulation number.
 #' @param arm Name of column denoting treatment arm.
 #' @param outcomes Name of columns to calculate incremental changes for.
-#' @return data.table
+#' @return A data.table containing the differences in the values of each variable 
+#' specified in outcomes between each treatment arm and the 
+#' comparator. It is the same output generated
+#' in \code{delta} from \code{psa_pw}.
 #'
 #' @export
 incr_change <- function(x, control, sim, arm, outcomes){
@@ -149,10 +166,14 @@ incr_change <- function(x, control, sim, arm, outcomes){
 #' @param grp Name of columne denoting subgroup
 #' @param custom_vars Name of custom variables to calculate summary statistic for.
 #' @param FUN summary statistic function.
-#' @return data.table
+#' @return A data.table of summary statistics for each variable specified in 
+#' \code{custom_vars}. By default, returns the mean, 2.5\%, and 97.5\% quantile of
+#' each variable. Different summary statistics can be calculated using FUN. 
+#' This function is used in \code{psa} and \code{psa_pw} to create the
+#'  \code{custom.table} output.
 #'
 #' @export
-custom_table <- function(x, arm, grp, custom_vars, FUN){
+custom_table <- function(x, arm, grp, custom_vars, FUN = NULL){
   if (is.null(FUN)){
     FUN <- function (x){
       return(list(mean = mean(x), quant = quantile(x, c(.025, .975))))

@@ -61,7 +61,12 @@ ce.nb[, maxj := apply(ce.nb[, .(nb1, nb2, nb3)], 1, which.max)]
 ce.nb[, maxj := factor(maxj, levels = c(1, 2, 3))]
 
 ## @knitr mce_example
-kable(ce.nb, digits = 0)
+# library("DT")
+# datatable(ce.nb, filter = "none", rownames = FALSE, 
+#           options = list(searching = FALSE, scrollX = FALSE,
+#                          bPaginate = FALSE, bInfo = FALSE)) %>% 
+#             formatRound(colnames(ce.nb), 0)
+kable(ce.nb, digits = 0, format = "html")
 mce <- prop.table(table(ce.nb$maxj))
 print(mce)
 
@@ -79,7 +84,11 @@ ggplot(psa.dt$mce, aes(x = k, y = prob, col = factor(arm))) +
 armmax.g2 <- which.max(enb[[3]])
 ce.nb[, nbpi := apply(ce.nb[, .(nb1, nb2, nb3)], 1, max)]
 ce.nb[, nbci := ce.nb[[armmax.g2 + 1]]]
-kable(ce.nb, digits = 0)
+# datatable(ce.nb, filter = "none", rownames = FALSE,
+#           options = list(searching = FALSE, scrollX = FALSE,
+#                          bPaginate = FALSE, bInfo = FALSE)) %>% 
+#   formatRound(colnames(ce.nb), 0)
+kable(ce.nb, digits = 0, format = "html")
 
 ## @knitr evpi_example_b
 enbpi <- mean(ce.nb$nbpi)
