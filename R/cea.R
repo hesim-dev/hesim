@@ -1,6 +1,7 @@
-#' Probabilistic sensitivity analysis
+#' Personalized cost-effectiveness analysis
 #'
-#' Summarize output of probabilistic sensitivity analysis by subgroup.
+#' Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
+#' sensitivity analysis) by subgroup.
 #'
 #' @param x Matrix containing information on mean costs and effectiveness for each simulation.
 #' Should be in long form with unit of observation as the simulation and treatment arm.
@@ -22,7 +23,7 @@
 #' @param custom_fun Function to apply to custom_vars to make custom table. If 
 #' \code{custom_vars} is not NULL and \code{custom_fun} is NULL, then returns the mean,
 #' 2.5\% quantile, and 97.5\% quantile for each variable in \code{custom_vars}.
-#' @return \code{psa} returns a list containing four data.tables:
+#' @return \code{pcea} returns a list containing four data.tables:
 #' 
 #' \describe{
 #'   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
@@ -34,11 +35,11 @@
 #'    \item{nb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
 #'    for the range of specified willingess to pay values.}
 #' }
-#' In addition, if \code{custom_vars} is not NULL, \code{psa} returns \code{custom.table}, which is
+#' In addition, if \code{custom_vars} is not NULL, \code{pcea} returns \code{custom.table}, which is
 #'  a data.table containing summary statistics for each variable in \code{custom_vars}
 #'   by arm and group.
 #' 
-#' \code{psa_pw} also returns a list containing four data.tables:
+#' \code{pcea_pw} also returns a list containing four data.tables:
 #'  \describe{
 #'   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
 #'   quantile by arm and group for clinical effectiveness and costs.}
@@ -55,9 +56,9 @@
 #' If \code{custom_vars} is not NULL, also returns \code{custom.table}, which is
 #'  a data.table containing summary statistics for the values of each variable returned
 #'   in \code{delta} by arm and group.
-#' @name psa
+#' @name pcea
 #' @export
-psa <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
+pcea <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
                 custom_vars = NULL, custom_fun = NULL){
   if (!is.data.table(x)){
     x <- data.table(x)
@@ -82,8 +83,8 @@ psa <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
 }
 
 #' @export
-#' @rdname psa
-psa_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
+#' @rdname pcea
+pcea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
                    custom_vars = NULL, custom_fun = NULL){
   if (!is.data.table(x)){
     x <- data.table(x)
@@ -136,7 +137,7 @@ psa_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e"
 #' @return A data.table containing the differences in the values of each variable 
 #' specified in outcomes between each treatment arm and the 
 #' comparator. It is the same output generated
-#' in \code{delta} from \code{psa_pw}.
+#' in \code{delta} from \code{pcea_pw}.
 #'
 #' @export
 incr_change <- function(x, control, sim, arm, outcomes){
@@ -169,7 +170,7 @@ incr_change <- function(x, control, sim, arm, outcomes){
 #' @return A data.table of summary statistics for each variable specified in 
 #' \code{custom_vars}. By default, returns the mean, 2.5\%, and 97.5\% quantile of
 #' each variable. Different summary statistics can be calculated using FUN. 
-#' This function is used in \code{psa} and \code{psa_pw} to create the
+#' This function is used in \code{pcea} and \code{pcea_pw} to create the
 #'  \code{custom.table} output.
 #'
 #' @export

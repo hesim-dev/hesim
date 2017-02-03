@@ -41,14 +41,14 @@ enb <- ce[, .(enb = mean(nb)), by = c("arm", "grp")]
 enb <- dcast(enb, arm ~ grp, value.var = "enb")
 print(enb)
 
-## @knitr psa
+## @knitr pcea
 library("hesim")
 ktop <- 200000
-psa.dt <-  psa(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
+pcea.dt <-  pcea(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
               grp = "grp", e = "qalys", c = "cost")
 
-## @knitr psa_pw
-psa.pw.dt <-  psa_pw(ce,  k = seq(0, ktop, 500), control = "Arm 1",
+## @knitr pcea_pw
+pcea.pw.dt <-  pcea_pw(ce,  k = seq(0, ktop, 500), control = "Arm 1",
                      sim = "sim", arm = "arm", e = "qalys", c = "cost")
 
 ## @knitr mce_example_setup
@@ -74,7 +74,7 @@ print(mce)
 library("ggplot2")
 library("scales")
 theme_set(theme_bw())
-ggplot(psa.dt$mce, aes(x = k, y = prob, col = factor(arm))) +
+ggplot(pcea.dt$mce, aes(x = k, y = prob, col = factor(arm))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
@@ -98,32 +98,32 @@ print(enbci)
 print(enbpi - enbci)
 
 ## @knitr evpi_plot
-ggplot(psa.dt$evpi, aes(x = k, y = evpi)) +
+ggplot(pcea.dt$evpi, aes(x = k, y = evpi)) +
   geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
   ylab("Expected value of perfect information") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
   scale_y_continuous(label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
 
-## @knitr psa_custom
+## @knitr pcea_custom
 ce[, lys := qalys * 1.5]
 cea.fun <- function(x) list(mean = mean(x), quant = quantile(x, c(.025, .975)))
-psa.custom.dt <- psa(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
+pcea.custom.dt <- pcea(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
                grp = "grp", e = "qalys", c = "cost",
                custom_vars = c("cost", "lys", "qalys"), 
                custom_fun = cea.fun)
 
 ## @knitr outcome_dist1
-psa.custom.dt$summary
+pcea.custom.dt$summary
 
 ## @knitr outcome_dist2
-psa.custom.dt$custom.table
+pcea.custom.dt$custom.table
 
 ## @knitr ceplane_plot
-head(psa.pw.dt$delta)
-ylim <- max(psa.pw.dt$delta[, icost]) * 1.1
-xlim <- ceiling(max(psa.pw.dt$delta[, iqalys]) * 1.1)
-ggplot(psa.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) + 
+head(pcea.pw.dt$delta)
+ylim <- max(pcea.pw.dt$delta[, icost]) * 1.1
+xlim <- ceiling(max(pcea.pw.dt$delta[, iqalys]) * 1.1)
+ggplot(pcea.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) + 
   geom_jitter(size = .5) + facet_wrap(~grp) + 
   xlab("Incremental QALYs") + ylab("Incremental cost") +
   scale_y_continuous(label = dollar, limits = c(-ylim, ylim)) +
@@ -133,18 +133,18 @@ ggplot(psa.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) +
   geom_hline(yintercept = 0) + geom_vline(xintercept = 0)
 
 ## @knitr ceac_plot
-ggplot(psa.pw.dt$ceac, aes(x = k, y = prob, col = factor(arm))) +
+ggplot(pcea.pw.dt$ceac, aes(x = k, y = prob, col = factor(arm))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
 
 ## @knitr icer
-print(psa.pw.dt$summary)
+print(pcea.pw.dt$summary)
 
 ## @knitr totevpi
 w.dt <- data.table(grp = paste0("Group ", seq(1, 2)), w = c(0.25, .75))
-evpi <- psa.dt$evpi
+evpi <- pcea.dt$evpi
 evpi <- merge(evpi, w.dt, by = "grp")
 totevpi <- evpi[,lapply(.SD, weighted.mean, w = w),
                 by = "k", .SDcols = c("evpi")]

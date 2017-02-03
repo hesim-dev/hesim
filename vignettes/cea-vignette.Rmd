@@ -83,21 +83,21 @@ For any given willingness to pay $k$, expected net benefits can be calculated by
 ```{r enb_example}
 ```
 
-A number of measures have been proposed in the health economics literature to summarize the uncertainty estimated using PSA. Below we describe the most common measures, which are estimated using the functions `psa` and `psa_pw`. The `psa` function summarizes results by taking into account each treatment arm in the analysis, while the function `psa_pw` summarizes "pairwise" results in which each treatment is compared to a comparator. 
+A number of measures have been proposed in the health economics literature to summarize the uncertainty estimated using PSA. Below we describe the most common measures, which can be calculated using the functions `pcea` and `pcea_pw`. The `pcea` function summarizes results by taking into account each treatment arm in the analysis, while the function `pcea_pw` summarizes "pairwise" results in which each treatment is compared to a comparator. 
 
-We can use the  `psa` function to summarize results from our `data.table` object of simulated output for a range of willingness to pay values,
+We can use the  `pcea` function to summarize results from our `data.table` object of simulated output for a range of willingness to pay values,
 
-```{r psa}
+```{r pcea}
 ```
 
-The most important input in `psa` is the `data.table` object (`x`) containing columns for simulation number (`sim`), treatment arm (`arm`), subgroup (`grp`), clinical effectiveness (`e`), and costs (`c`). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is $k$, which is a range of willingness to pay values to use for estimating net benefits. 
+The most important input in `pcea` is the `data.table` object (`x`) containing columns for simulation number (`sim`), treatment arm (`arm`), subgroup (`grp`), clinical effectiveness (`e`), and costs (`c`). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is $k$, which is a range of willingness to pay values to use for estimating net benefits. 
 
-Likewise, we can use `psa_pw` to summarize the PSA when directly comparing the two treatment arms (Arm 2 and Arm 3) to the comparator (Arm 1). 
+Likewise, we can use `pcea_pw` to summarize the PSA when directly comparing the two treatment arms (Arm 2 and Arm 3) to the comparator (Arm 1). 
 
-```{r psa_pw}
+```{r pcea_pw}
 ```
 
-The same inputs are used as in `psa` except users must specify the name of the control arm. 
+The same inputs are used as in `pcea` except users must specify the name of the control arm. 
 
 ## Probability most cost-effective 
 A useful summary measure for quantifying uncertainty is the probability that each treatment arm is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each arm has the highest net benefits. For example, consider a random sample of 10 draws from the PSA simulation output and suppose $k$ is again equal to $150,000$. 
@@ -108,7 +108,7 @@ A useful summary measure for quantifying uncertainty is the probability that eac
 ```{r mce_example, echo = -1}
 ```
 
-In this example, treatments 1, 2, and 3 have the highest net benefits a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `psa` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
+In this example, treatments 1, 2, and 3 have the highest net benefits a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `pcea` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
 
 MCE plot
 ```{r mce_plot}
@@ -135,13 +135,13 @@ To calculate EVPI, we average net benefits given current information and net ben
 ```{r evpi_example_b}
 ```
 
-The `psa` function peforms this same calculation accross all simulation draws from the PSA and for a number of values of willingess to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal arm changes.
+The `pcea` function peforms this same calculation accross all simulation draws from the PSA and for a number of values of willingess to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal arm changes.
 
 ```{r evpi_plot}
 ```
 
 ## Distribution of health and cost outcomes
-```{r psa_custom}
+```{r pcea_custom}
 ```
 
 ```{r outcome_dist1}
@@ -153,28 +153,28 @@ The `psa` function peforms this same calculation accross all simulation draws fr
 ## Cost-effectiveness plane
 The cost-effectivenss plane plots the incremental effectivenss of a treatment arm (relative to a comparator) against the incremental cost of the treatment arm. The plot is useful because it demonstrates both the uncertainty and the magnitutde of the estimates. Each point on the plot is from a particular random draw from the PSA.  
 
-Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `psa_pw` function, which, for each sampled parameter set, estimtes incremental differences in costs, clinical effectivenss, and any other variables specifies in `custom_vars` relative to the comparator. The dotted line in the plot is the willingess to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above are not. 
+Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `pcea_pw` function, which, for each sampled parameter set, estimtes incremental differences in costs, clinical effectivenss, and any other variables specifies in `custom_vars` relative to the comparator. The dotted line in the plot is the willingess to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above are not. 
 
 ```{r ceplane_plot}
 ```
 
 ## Cost-effectiveness acceptability curve (CEAC)
-The cost-effectivenss acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each arm to a single comparator wheras the MCE plot considers all arms simultaneously. Output to produce a CEAC is generated from the `psa_pw` function.
+The cost-effectivenss acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each arm to a single comparator wheras the MCE plot considers all arms simultaneously. Output to produce a CEAC is generated from the `pcea_pw` function.
 
-The plot shows that, in subgroup 1, Arm 2 has large net benefits than Arm 1 with very high probability for reasonable values of $k$. Arm 3 also has higher net benefits than Arm 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(psa.pw.dt$ceac[arm == "Arm 3" & prob > .5 & grp == "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Arm 2 and Arm 3 have higher net benefits than Arm 1 for almost all values of $k$, although this probability is larger form Arm 2 than Arm 3 when $k$ is smaller.
+The plot shows that, in subgroup 1, Arm 2 has large net benefits than Arm 1 with very high probability for reasonable values of $k$. Arm 3 also has higher net benefits than Arm 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(pcea.pw.dt$ceac[arm == "Arm 3" & prob > .5 & grp == "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Arm 2 and Arm 3 have higher net benefits than Arm 1 for almost all values of $k$, although this probability is larger form Arm 2 than Arm 3 when $k$ is smaller.
 
 ```{r ceac_plot}
 ```
 
 ## Credible intervals for incremental costs and effectiveness
-`psa_pw` contains summary output with expected costs and expected efficacy as well as their respective 95% credible intervals. The table also contains the ICER, which is equal to expected costs divided by the measure of expected efficacy.  
+`pcea_pw` contains summary output with expected costs and expected efficacy as well as their respective 95% credible intervals. The table also contains the ICER, which is equal to expected costs divided by the measure of expected efficacy.  
 
 ```{r icer}
 ```
 
 If the user would like to examine the distribution of outcomes other than those specified this summary table, then they can also generate a custom table of summary output. The custom table can contain any quantities of interest (QOIs) as long as they are specified in addition to the `sim`, `arm`, `e`, and `c` columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hypothetical variable for life-years and create table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
 
-```{r psa_custom}
+```{r pcea_custom}
 ```
 
 ```{r outcome_dist2}

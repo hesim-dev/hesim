@@ -2,8 +2,8 @@
 % Please edit documentation in R/sim_analyze.R
 \name{sim_analyze}
 \alias{sim_analyze}
-\alias{sim_los}
 \alias{sim_pv}
+\alias{sim_los}
 \alias{sim_transprob}
 \title{Analyze simulated multi-state model}
 \usage{
@@ -41,4 +41,4 @@ individual during time spent in state.
 \description{
 Analyze a simulated multi-state model
 }
-
+\keyword{internal}

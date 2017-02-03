@@ -19,4 +19,4 @@ List with the following parameters:
 Extract parameters for simulation from a multi-state model fit using \code{flexsurvreg}
 from the \code{flexsurv} package
 }
-
+\keyword{internal}

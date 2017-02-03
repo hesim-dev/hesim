@@ -41,4 +41,4 @@ Simulate clock-reset multi-state model
 \details{
 The code is written in c++ to minmize simulation time.
 }
-
+\keyword{internal}

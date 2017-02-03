@@ -66,7 +66,7 @@
       <h1>Personalized cost-effectiveness analysis (pCEA)</h1>
                         <h4 class="author">Devin Incerti</h4>
             
-            <h4 class="date">2017-02-01</h4>
+            <h4 class="date">2017-02-02</h4>
           </div>
 
     
@@ -187,17 +187,17 @@ enb &lt;-<span class="st"> </span><span class="kw">dcast</span>(enb, arm ~<span 
 ## 1: Arm 1 1200092 1199550
 ## 2: Arm 2 1440846 1510086
 ## 3: Arm 3 1208362 1590209</code></pre>
-<p>A number of measures have been proposed in the health economics literature to summarize the uncertainty estimated using PSA. Below we describe the most common measures, which are estimated using the functions <code>psa</code> and <code>psa_pw</code>. The <code>psa</code> function summarizes results by taking into account each treatment arm in the analysis, while the function <code>psa_pw</code> summarizes “pairwise” results in which each treatment is compared to a comparator.</p>
-<p>We can use the <code>psa</code> function to summarize results from our <code>data.table</code> object of simulated output for a range of willingness to pay values,</p>
+<p>A number of measures have been proposed in the health economics literature to summarize the uncertainty estimated using PSA. Below we describe the most common measures, which can be calculated using the functions <code>pcea</code> and <code>pcea_pw</code>. The <code>pcea</code> function summarizes results by taking into account each treatment arm in the analysis, while the function <code>pcea_pw</code> summarizes “pairwise” results in which each treatment is compared to a comparator.</p>
+<p>We can use the <code>pcea</code> function to summarize results from our <code>data.table</code> object of simulated output for a range of willingness to pay values,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"hesim"</span>)
 ktop &lt;-<span class="st"> </span><span class="dv">200000</span>
-psa.dt &lt;-<span class="st">  </span><span class="kw"><a href="../reference/psa.html">psa</a></span>(ce, <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">arm =</span> <span class="st">"arm"</span>,
+pcea.dt &lt;-<span class="st">  </span><span class="kw"><a href="../reference/pcea.html">pcea</a></span>(ce, <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">arm =</span> <span class="st">"arm"</span>,
               <span class="dt">grp =</span> <span class="st">"grp"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>)</code></pre></div>
-<p>The most important input in <code>psa</code> is the <code>data.table</code> object (<code>x</code>) containing columns for simulation number (<code>sim</code>), treatment arm (<code>arm</code>), subgroup (<code>grp</code>), clinical effectiveness (<code>e</code>), and costs (<code>c</code>). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is <span class="math inline">\(k\)</span>, which is a range of willingness to pay values to use for estimating net benefits.</p>
-<p>Likewise, we can use <code>psa_pw</code> to summarize the PSA when directly comparing the two treatment arms (Arm 2 and Arm 3) to the comparator (Arm 1).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psa.pw.dt &lt;-<span class="st">  </span><span class="kw"><a href="../reference/psa.html">psa_pw</a></span>(ce,  <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">control =</span> <span class="st">"Arm 1"</span>,
+<p>The most important input in <code>pcea</code> is the <code>data.table</code> object (<code>x</code>) containing columns for simulation number (<code>sim</code>), treatment arm (<code>arm</code>), subgroup (<code>grp</code>), clinical effectiveness (<code>e</code>), and costs (<code>c</code>). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is <span class="math inline">\(k\)</span>, which is a range of willingness to pay values to use for estimating net benefits.</p>
+<p>Likewise, we can use <code>pcea_pw</code> to summarize the PSA when directly comparing the two treatment arms (Arm 2 and Arm 3) to the comparator (Arm 1).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pcea.pw.dt &lt;-<span class="st">  </span><span class="kw"><a href="../reference/pcea.html">pcea_pw</a></span>(ce,  <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">control =</span> <span class="st">"Arm 1"</span>,
                      <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">arm =</span> <span class="st">"arm"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>)</code></pre></div>
-<p>The same inputs are used as in <code>psa</code> except users must specify the name of the control arm.</p>
+<p>The same inputs are used as in <code>pcea</code> except users must specify the name of the control arm.</p>
 <div id="probability-most-cost-effective" class="section level2">
 <h2 class="hasAnchor">
 <html><body><a href="#probability-most-cost-effective" class="anchor"> </a></body></html>Probability most cost-effective</h2>
@@ -431,12 +431,12 @@ maxj
 <pre><code>## 
 ##   1   2   3 
 ## 0.0 0.2 0.8</code></pre>
-<p>In this example, treatments 1, 2, and 3 have the highest net benefits a fraction 0, 0.2, and 0.8 of the time respectively. The <code>psa</code> function performs this same calculations for a range of values of <span class="math inline">\(k\)</span> and all <code>nsims</code> random draws of the simulation output. The output is a tidy <code>data.table</code> which facilitates plotting with <code>ggplot</code>.</p>
+<p>In this example, treatments 1, 2, and 3 have the highest net benefits a fraction 0, 0.2, and 0.8 of the time respectively. The <code>pcea</code> function performs this same calculations for a range of values of <span class="math inline">\(k\)</span> and all <code>nsims</code> random draws of the simulation output. The output is a tidy <code>data.table</code> which facilitates plotting with <code>ggplot</code>.</p>
 <p>MCE plot</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"ggplot2"</span>)
 <span class="kw">library</span>(<span class="st">"scales"</span>)
 <span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())
-<span class="kw">ggplot</span>(psa.dt$mce, <span class="kw">aes</span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, <span class="dt">col =</span> <span class="kw">factor</span>(arm))) +
+<span class="kw">ggplot</span>(pcea.dt$mce, <span class="kw">aes</span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, <span class="dt">col =</span> <span class="kw">factor</span>(arm))) +
 <span class="st">  </span><span class="kw">geom_line</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~grp) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">"Willingess to pay"</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Probability most cost-effective"</span>) +
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">100000</span>), <span class="dt">label =</span> comma) +
@@ -750,8 +750,8 @@ enbci &lt;-<span class="st"> </span><span class="kw">mean</span>(ce.nb$nbci)
 <pre><code>## [1] 1611076</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(enbpi -<span class="st"> </span>enbci)</code></pre></div>
 <pre><code>## [1] 14990.45</code></pre>
-<p>The <code>psa</code> function peforms this same calculation accross all simulation draws from the PSA and for a number of values of willingess to pay values <span class="math inline">\(k\)</span>. A plot by group of the the EVPI for different values of <span class="math inline">\(k\)</span> is shown below. The kinks in the plot represent values of <span class="math inline">\(k\)</span> where the optimal arm changes.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(psa.dt$evpi, <span class="kw">aes</span>(<span class="dt">x =</span> k, <span class="dt">y =</span> evpi)) +
+<p>The <code>pcea</code> function peforms this same calculation accross all simulation draws from the PSA and for a number of values of willingess to pay values <span class="math inline">\(k\)</span>. A plot by group of the the EVPI for different values of <span class="math inline">\(k\)</span> is shown below. The kinks in the plot represent values of <span class="math inline">\(k\)</span> where the optimal arm changes.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(pcea.dt$evpi, <span class="kw">aes</span>(<span class="dt">x =</span> k, <span class="dt">y =</span> evpi)) +
 <span class="st">  </span><span class="kw">geom_line</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~grp) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">"Willingess to pay"</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Expected value of perfect information"</span>) +
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">100000</span>), <span class="dt">label =</span> comma) +
@@ -776,11 +776,11 @@ enbci &lt;-<span class="st"> </span><span class="kw">mean</span>(ce.nb$nbci)
 ## 5999:  999 Arm 3 Group 2 57190.947419 11.692927 1696748 17.53939
 ## 6000: 1000 Arm 3 Group 2 60431.491254 10.967837 1584744 16.45176</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cea.fun &lt;-<span class="st"> </span>function(x) <span class="kw">list</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(x), <span class="dt">quant =</span> <span class="kw">quantile</span>(x, <span class="kw">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>)))
-psa.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../reference/psa.html">psa</a></span>(ce, <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">arm =</span> <span class="st">"arm"</span>,
+pcea.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pcea.html">pcea</a></span>(ce, <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">arm =</span> <span class="st">"arm"</span>,
                <span class="dt">grp =</span> <span class="st">"grp"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>,
                <span class="dt">custom_vars =</span> <span class="kw">c</span>(<span class="st">"cost"</span>, <span class="st">"lys"</span>, <span class="st">"qalys"</span>), 
                <span class="dt">custom_fun =</span> cea.fun)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psa.custom.dt$summary</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pcea.custom.dt$summary</code></pre></div>
 <pre><code>##      arm     grp qalys_mean qalys_lower qalys_upper    cost_mean
 ## 1: Arm 1 Group 1   8.000666    7.614163    8.401574     7.429272
 ## 2: Arm 2 Group 1  10.011648    8.483982   11.508991 60901.497716
@@ -795,7 +795,7 @@ psa.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../referen
 ## 4:     6.136484     8.851044
 ## 5: 43760.351898 79483.970259
 ## 6: 44098.792329 78545.779994</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psa.custom.dt$custom.table</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pcea.custom.dt$custom.table</code></pre></div>
 <pre><code>##      arm     grp    cost.mean cost.quant.2.5% cost.quant.97.5% lys.mean
 ## 1: Arm 1 Group 1     7.429272        6.095222         9.019726 12.00100
 ## 2: Arm 2 Group 1 60901.497716    45050.296428     80359.323323 15.01747
@@ -822,8 +822,8 @@ psa.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../referen
 <h2 class="hasAnchor">
 <html><body><a href="#cost-effectiveness-plane" class="anchor"> </a></body></html>Cost-effectiveness plane</h2>
 <p>The cost-effectivenss plane plots the incremental effectivenss of a treatment arm (relative to a comparator) against the incremental cost of the treatment arm. The plot is useful because it demonstrates both the uncertainty and the magnitutde of the estimates. Each point on the plot is from a particular random draw from the PSA.</p>
-<p>Data for plotting a cost-effectiveness plane comes from the <code>delta</code> output generated from the <code>psa_pw</code> function, which, for each sampled parameter set, estimtes incremental differences in costs, clinical effectivenss, and any other variables specifies in <code>custom_vars</code> relative to the comparator. The dotted line in the plot is the willingess to pay line, with slope equal to the value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are cost-effective while those above are not.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(psa.pw.dt$delta)</code></pre></div>
+<p>Data for plotting a cost-effectiveness plane comes from the <code>delta</code> output generated from the <code>pcea_pw</code> function, which, for each sampled parameter set, estimtes incremental differences in costs, clinical effectivenss, and any other variables specifies in <code>custom_vars</code> relative to the comparator. The dotted line in the plot is the willingess to pay line, with slope equal to the value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are cost-effective while those above are not.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(pcea.pw.dt$delta)</code></pre></div>
 <pre><code>##    sim   arm     grp   iqalys    icost
 ## 1:   1 Arm 2 Group 1 2.264305 58393.10
 ## 2:   2 Arm 2 Group 1 3.749171 60956.05
@@ -831,9 +831,9 @@ psa.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../referen
 ## 4:   4 Arm 2 Group 1 2.732187 55285.89
 ## 5:   5 Arm 2 Group 1 2.437862 57219.49
 ## 6:   6 Arm 2 Group 1 1.393600 54693.67</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ylim &lt;-<span class="st"> </span><span class="kw">max</span>(psa.pw.dt$delta[, icost]) *<span class="st"> </span><span class="fl">1.1</span>
-xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="kw">max</span>(psa.pw.dt$delta[, iqalys]) *<span class="st"> </span><span class="fl">1.1</span>)
-<span class="kw">ggplot</span>(psa.pw.dt$delta, <span class="kw">aes</span>(<span class="dt">x =</span> iqalys, <span class="dt">y =</span> icost, <span class="dt">col =</span> <span class="kw">factor</span>(arm))) +<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ylim &lt;-<span class="st"> </span><span class="kw">max</span>(pcea.pw.dt$delta[, icost]) *<span class="st"> </span><span class="fl">1.1</span>
+xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="kw">max</span>(pcea.pw.dt$delta[, iqalys]) *<span class="st"> </span><span class="fl">1.1</span>)
+<span class="kw">ggplot</span>(pcea.pw.dt$delta, <span class="kw">aes</span>(<span class="dt">x =</span> iqalys, <span class="dt">y =</span> icost, <span class="dt">col =</span> <span class="kw">factor</span>(arm))) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">size =</span> .<span class="dv">5</span>) +<span class="st"> </span><span class="kw">facet_wrap</span>(~grp) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">"Incremental QALYs"</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">"Incremental cost"</span>) +
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">label =</span> dollar, <span class="dt">limits =</span> <span class="kw">c</span>(-ylim, ylim)) +
@@ -846,9 +846,9 @@ xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="
 <div id="cost-effectiveness-acceptability-curve-ceac" class="section level2">
 <h2 class="hasAnchor">
 <html><body><a href="#cost-effectiveness-acceptability-curve-ceac" class="anchor"> </a></body></html>Cost-effectiveness acceptability curve (CEAC)</h2>
-<p>The cost-effectivenss acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each arm to a single comparator wheras the MCE plot considers all arms simultaneously. Output to produce a CEAC is generated from the <code>psa_pw</code> function.</p>
+<p>The cost-effectivenss acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each arm to a single comparator wheras the MCE plot considers all arms simultaneously. Output to produce a CEAC is generated from the <code>pcea_pw</code> function.</p>
 <p>The plot shows that, in subgroup 1, Arm 2 has large net benefits than Arm 1 with very high probability for reasonable values of <span class="math inline">\(k\)</span>. Arm 3 also has higher net benefits than Arm 1 with probability over 1/2 for values of <span class="math inline">\(k\)</span> larger than 133,500. In group 2, both Arm 2 and Arm 3 have higher net benefits than Arm 1 for almost all values of <span class="math inline">\(k\)</span>, although this probability is larger form Arm 2 than Arm 3 when <span class="math inline">\(k\)</span> is smaller.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(psa.pw.dt$ceac, <span class="kw">aes</span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, <span class="dt">col =</span> <span class="kw">factor</span>(arm))) +
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(pcea.pw.dt$ceac, <span class="kw">aes</span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, <span class="dt">col =</span> <span class="kw">factor</span>(arm))) +
 <span class="st">  </span><span class="kw">geom_line</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~grp) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">"Willingess to pay"</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Probability most cost-effective"</span>) +
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">100000</span>), <span class="dt">label =</span> comma) +
@@ -858,8 +858,8 @@ xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="
 <div id="credible-intervals-for-incremental-costs-and-effectiveness" class="section level2">
 <h2 class="hasAnchor">
 <html><body><a href="#credible-intervals-for-incremental-costs-and-effectiveness" class="anchor"> </a></body></html>Credible intervals for incremental costs and effectiveness</h2>
-<p><code>psa_pw</code> contains summary output with expected costs and expected efficacy as well as their respective 95% credible intervals. The table also contains the ICER, which is equal to expected costs divided by the measure of expected efficacy.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(psa.pw.dt$summary)</code></pre></div>
+<p><code>pcea_pw</code> contains summary output with expected costs and expected efficacy as well as their respective 95% credible intervals. The table also contains the ICER, which is equal to expected costs divided by the measure of expected efficacy.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(pcea.pw.dt$summary)</code></pre></div>
 <pre><code>##      arm     grp iqalys_mean iqalys_lower iqalys_upper icost_mean
 ## 1: Arm 2 Group 1   2.0109818    0.3455629     3.593142   60894.07
 ## 2: Arm 3 Group 1   0.4622728   -0.8044014     1.741436   61071.59
@@ -885,11 +885,11 @@ xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="
 ## 5999: 1000 Arm 2 Group 2 90954.124407 11.427954 1623239 17.14193
 ## 6000: 1000 Arm 3 Group 2 60431.491254 10.967837 1584744 16.45176</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cea.fun &lt;-<span class="st"> </span>function(x) <span class="kw">list</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(x), <span class="dt">quant =</span> <span class="kw">quantile</span>(x, <span class="kw">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>)))
-psa.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../reference/psa.html">psa</a></span>(ce, <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">arm =</span> <span class="st">"arm"</span>,
+pcea.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pcea.html">pcea</a></span>(ce, <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">arm =</span> <span class="st">"arm"</span>,
                <span class="dt">grp =</span> <span class="st">"grp"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>,
                <span class="dt">custom_vars =</span> <span class="kw">c</span>(<span class="st">"cost"</span>, <span class="st">"lys"</span>, <span class="st">"qalys"</span>), 
                <span class="dt">custom_fun =</span> cea.fun)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psa.custom.dt$custom.table</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pcea.custom.dt$custom.table</code></pre></div>
 <pre><code>##      arm     grp    cost.mean cost.quant.2.5% cost.quant.97.5% lys.mean
 ## 1: Arm 1 Group 1     7.429272        6.095222         9.019726 12.00100
 ## 2: Arm 2 Group 1 60901.497716    45050.296428     80359.323323 15.01747
@@ -930,7 +930,7 @@ j^{*} = \text{argmax}_j \sum_{g=1}^{G} w_g E_{\theta}\left[NB_g(j,\theta)\right]
 \]</span></p>
 <p>where <span class="math inline">\(w_g \in (0, 1)\)</span> is a weight denoting that proportion of the population represented by subgroup <span class="math inline">\(g\)</span> and <span class="math inline">\(\sum_{g=1}^{G} w_g = 1\)</span>. We can use <code>hesim</code> to demonstrate the value of individualized care.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">w.dt &lt;-<span class="st"> </span><span class="kw">data.table</span>(<span class="dt">grp =</span> <span class="kw">paste0</span>(<span class="st">"Group "</span>, <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">2</span>)), <span class="dt">w =</span> <span class="kw">c</span>(<span class="fl">0.25</span>, .<span class="dv">75</span>))
-evpi &lt;-<span class="st"> </span>psa.dt$evpi
+evpi &lt;-<span class="st"> </span>pcea.dt$evpi
 evpi &lt;-<span class="st"> </span><span class="kw">merge</span>(evpi, w.dt, <span class="dt">by =</span> <span class="st">"grp"</span>)
 totevpi &lt;-<span class="st"> </span>evpi[,<span class="kw">lapply</span>(.SD, weighted.mean, <span class="dt">w =</span> w),
                 by =<span class="st"> "k"</span>, .SDcols =<span class="st"> </span><span class="kw">c</span>(<span class="st">"evpi"</span>)]
