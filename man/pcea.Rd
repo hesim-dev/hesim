@@ -78,6 +78,6 @@ If \code{custom_vars} is not NULL, also returns \code{custom.table}, which is
   in \code{delta} by arm and group.
 }
 \description{
-Conduct Bayesian cost-effectiveness analysis (e.g. summarize probabilistic 
-sensitivity analyses) by subgroup.
+Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
+sensitivity analysis) by subgroup.
 }

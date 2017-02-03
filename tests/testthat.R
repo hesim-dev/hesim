@@ -1,4 +1,4 @@
 library(testthat)
-library(cea)
+library(hesim)
 
 test_check("cea")

@@ -40,7 +40,7 @@ ce[, nb2 := qalys * kval2 - cost]
 
 # Functions to use for testing ------------------------------------------------
 # probabilistic sensitivity analysis
-psaR <- function(x, kval, grpname, output = c("mce", "evpi")){
+pceaR <- function(x, kval, grpname, output = c("mce", "evpi")){
   output <- match.arg(output)
   x <- x[grp == grpname] 
   x[, nb := qalys * kval - cost]
@@ -95,13 +95,13 @@ ceacR <- function(ix, kval, grpname) {
   ceac <- ix[, .(prob = mean(nb >= 0)), by = "arm"]
 }
 
-# Test psa function -----------------------------------------------------------
+# Test pcea function ----------------------------------------------------------
 ### defaults
-psa.dt <-  psa(ce, k = krange, sim = "sim", arm = "arm",
+pcea.dt <-  pcea(ce, k = krange, sim = "sim", arm = "arm",
                 grp = "grp", e = "qalys", c = "cost")
 
 
-test_that("psa", {
+test_that("pcea", {
   kval <- sample(krange, 1)
   
   ## summary
@@ -119,41 +119,41 @@ test_that("psa", {
                               cost_mean = ce.mean$cost_mean, 
                              cost_lower = ce.lower$cost_lower,
                               cost_upper = ce.upper$cost)
-  expect_equal(summary.test, psa.dt$summary[grp == "Group 2", -2, with = FALSE])
+  expect_equal(summary.test, pcea.dt$summary[grp == "Group 2", -2, with = FALSE])
   
   ## mce
   # group 1
-  mce <- psa.dt$mce[grp == "Group 1" &  k == kval]
-  mce.test <- psaR(ce, kval , "Group 1", output = "mce")
+  mce <- pcea.dt$mce[grp == "Group 1" &  k == kval]
+  mce.test <- pceaR(ce, kval , "Group 1", output = "mce")
   expect_equal(mce$prob, mce.test)
   
   # group 2
-  mce <- psa.dt$mce[grp == "Group 2" &  k == kval]
-  mce.test <- psaR(ce, kval , "Group 2", output = "mce")
+  mce <- pcea.dt$mce[grp == "Group 2" &  k == kval]
+  mce.test <- pceaR(ce, kval , "Group 2", output = "mce")
   expect_equal(mce$prob, mce.test)
   
   ## evpi
   # group 1
-  evpi <- psa.dt$evpi[grp == "Group 1" &  k == kval]
-  evpi.test <- psaR(ce, kval , "Group 1", output = "evpi")
+  evpi <- pcea.dt$evpi[grp == "Group 1" &  k == kval]
+  evpi.test <- pceaR(ce, kval , "Group 1", output = "evpi")
   expect_equal(evpi$evpi, evpi.test)
   
   # Group 2
-  evpi <- psa.dt$evpi[grp == "Group 2" &  k == kval]
-  evpi.test <- psaR(ce, kval , "Group 2", output = "evpi")
+  evpi <- pcea.dt$evpi[grp == "Group 2" &  k == kval]
+  evpi.test <- pceaR(ce, kval , "Group 2", output = "evpi")
   expect_equal(evpi$evpi, evpi.test)
 })
 
 
-# Test psa_pw function --------------------------------------------------------
-psa.pw.dt <-  psa_pw(ce,  k = krange, control = "Arm 1",
+# Test pcea_pw function -------------------------------------------------------
+pcea.pw.dt <-  pcea_pw(ce,  k = krange, control = "Arm 1",
                      sim = "sim", arm = "arm", e = "qalys", c = "cost")
 
-test_that("psa_pw", {
+test_that("pcea_pw", {
   kval <- sample(krange, 1)
   
   ## delta
-  delta <- psa.pw.dt$delta
+  delta <- pcea.pw.dt$delta
   delta.test <- deltaR(ce, control = "Arm 1", grpname = "Group 1")
   expect_equal(delta[grp == "Group 1"], delta.test)
   
@@ -174,22 +174,22 @@ test_that("psa_pw", {
                                          icost_lower = delta.lower$icost_lower,
                                          icost_upper = delta.upper$icost, 
                                          icer = icer)
-  expect_equal(summary.test, psa.pw.dt$summary[grp == "Group 2", -2, with = FALSE])
+  expect_equal(summary.test, pcea.pw.dt$summary[grp == "Group 2", -2, with = FALSE])
   
   ## ceac
   # group 1
-  ceac <- psa.pw.dt$ceac[grp == "Group 1" & k == kval]
+  ceac <- pcea.pw.dt$ceac[grp == "Group 1" & k == kval]
   ceac.test <- ceacR(delta, kval = kval, grpname = "Group 1")
   expect_equal(ceac$prob, ceac.test$prob)
   
   # group 2
-  ceac <- psa.pw.dt$ceac[grp == "Group 2" & k == kval]
+  ceac <- pcea.pw.dt$ceac[grp == "Group 2" & k == kval]
   ceac.test <- ceacR(delta, kval = kval, grpname = "Group 2")
   expect_equal(ceac$prob, ceac.test$prob)
   
   ## inb
   # group 2
-  inb <- psa.pw.dt$inb[k == kval & grp == "Group 2"]
+  inb <- pcea.pw.dt$inb[k == kval & grp == "Group 2"]
   einb.test <- delta[grp == "Group 2", .(einb = mean(iqalys * kval - icost)), 
                      by = "arm"]
   expect_equal(inb$einb, einb.test$einb)
