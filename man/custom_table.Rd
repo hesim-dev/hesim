@@ -25,5 +25,5 @@ This function is used in \code{pcea} and \code{pcea_pw} to create the
  \code{custom.table} output.
 }
 \description{
-Custom summary table for CEA
+Custom table summarizing outcomes from probabilistic sensitivity analysis.
 }

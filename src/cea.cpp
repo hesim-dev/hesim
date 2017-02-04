@@ -42,10 +42,10 @@ arma::ucolvec rowmax_indC(arma::mat x) {
   return arma::index_max(x,1);;
 }
 
-// Incremental change in piecewise comparisons
+// Incremental effect in piecewise comparisons
 //' @export
 // [[Rcpp::export]]
-std::vector<double> incr_changeC(std::vector<double> x, std::vector<double> y,
+std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y,
                                 int nsims, int narms, int ngrps){
   int N = x.size();
   std::vector<double> incr_vec;

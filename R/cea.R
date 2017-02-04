@@ -106,10 +106,10 @@ pcea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e
   # estimates
   if (!is.null(custom_vars)){
     outcomes <- c(e, c, custom_vars[!custom_vars %in% c(e, c)])
-    delta <- incr_change_calc(sim_treat, sim_control, sim, arm, grp, outcomes, nsims, narms, ngrps)
+    delta <- calc_incr_effect(sim_treat, sim_control, sim, arm, grp, outcomes, nsims, narms, ngrps)
   } else{
     outcomes <- c(e, c)
-    delta <- incr_change_calc(sim_treat, sim_control, sim, arm, grp, outcomes, nsims, narms, ngrps)
+    delta <- calc_incr_effect(sim_treat, sim_control, sim, arm, grp, outcomes, nsims, narms, ngrps)
   }
   ceac <- ceac(delta, k, sim, arm, grp, e = paste0("i", e), c = paste0("i", c),
                nsims, narms, ngrps)
@@ -125,12 +125,13 @@ pcea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e
   return(l)
 }
 
-#' Incremental changes
+#' Incremental treatment effect
 #'
-#' Calculate incremental change for outcome variables.
+#' Calculate incremental effect of all treatment arms on outcome variables from 
+#' probabilistic sensitivity analysis relative to comparator.
 #'
 #' @param x Matrix containing information on outcome variables for each simulation and arm.
-#' @param control Name of control arm.
+#' @param control Name of control arm (i.e. comparator).
 #' @param sim Name of column denoting simulation number.
 #' @param arm Name of column denoting treatment arm.
 #' @param outcomes Name of columns to calculate incremental changes for.
@@ -140,7 +141,7 @@ pcea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e
 #' in \code{delta} from \code{pcea_pw}.
 #'
 #' @export
-incr_change <- function(x, control, sim, arm, outcomes){
+incr_effect <- function(x, control, sim, arm, outcomes){
   if (!control %in% unique(x[[arm]])){
     stop("Chosen control arm is not in x")
   }
@@ -154,13 +155,13 @@ incr_change <- function(x, control, sim, arm, outcomes){
   setorderv(x_control, c(arm, sim))
 
   # estimation
-  return(incr_change_calc(x_treat, x_control, sim, arm, outcomes, nsims, narms))
+  return(calc_incr_effect(x_treat, x_control, sim, arm, outcomes, nsims, narms))
 }
 
 
 #' Custom CEA summary table
 #'
-#' Custom summary table for CEA
+#' Custom table summarizing outcomes from probabilistic sensitivity analysis.
 #'
 #' @param x Matrix containing information on outcome variables for each simulation and arm.
 #' @param arm Name of column denoting treatment arm.
@@ -185,12 +186,12 @@ custom_table <- function(x, arm, grp, custom_vars, FUN = NULL){
 }
 
 # incremental change calculation
-incr_change_calc <- function(x_treat, x_control, sim, arm, grp, outcomes,
+calc_incr_effect <- function(x_treat, x_control, sim, arm, grp, outcomes,
                              nsims, narms, ngrps){
   outcomes.mat <- matrix(NA, nrow = nrow(x_treat), ncol = length(outcomes))
   colnames(outcomes.mat) <- paste0("i", outcomes)
   for (i in 1:length(outcomes)){
-    outcomes.mat[, i] <- incr_changeC(x_treat[[outcomes[i]]],
+    outcomes.mat[, i] <- incr_effectC(x_treat[[outcomes[i]]],
                                       x_control[[outcomes[i]]],
                                       nsims, narms, ngrps)
   }

@@ -87,9 +87,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// incr_changeC
-std::vector<double> incr_changeC(std::vector<double> x, std::vector<double> y, int nsims, int narms, int ngrps);
-RcppExport SEXP hesim_incr_changeC(SEXP xSEXP, SEXP ySEXP, SEXP nsimsSEXP, SEXP narmsSEXP, SEXP ngrpsSEXP) {
+// incr_effectC
+std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y, int nsims, int narms, int ngrps);
+RcppExport SEXP hesim_incr_effectC(SEXP xSEXP, SEXP ySEXP, SEXP nsimsSEXP, SEXP narmsSEXP, SEXP ngrpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -98,7 +98,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
     Rcpp::traits::input_parameter< int >::type narms(narmsSEXP);
     Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(incr_changeC(x, y, nsims, narms, ngrps));
+    rcpp_result_gen = Rcpp::wrap(incr_effectC(x, y, nsims, narms, ngrps));
     return rcpp_result_gen;
 END_RCPP
 }

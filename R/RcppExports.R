@@ -37,8 +37,8 @@ rowmax_indC <- function(x) {
 }
 
 #' @export
-incr_changeC <- function(x, y, nsims, narms, ngrps) {
-    .Call('hesim_incr_changeC', PACKAGE = 'hesim', x, y, nsims, narms, ngrps)
+incr_effectC <- function(x, y, nsims, narms, ngrps) {
+    .Call('hesim_incr_effectC', PACKAGE = 'hesim', x, y, nsims, narms, ngrps)
 }
 
 #' @export
