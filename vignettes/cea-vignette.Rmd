@@ -169,7 +169,7 @@ In addition, if the user would like to examine outcomes other than those specifi
 ## Cost-effectiveness plane
 The cost-effectiveness plane plots the incremental effectiveness of a treatment arm (relative to a comparator) against the incremental cost of the treatment arm. The plot is useful because it demonstrates both the uncertainty and the magnitude of the estimates. Each point on the plot is from a particular random draw from the PSA.  
 
-Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `pcea_pw` function, which, for each sampled parameter set, estimates incremental differences in costs, clinical effectiveness, and any other variables specifies in `custom_vars` relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above are not. 
+Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `pcea_pw` function, which, for each sampled parameter set and treatment arm, estimates differences in costs, effectiveness, and any other variables specified in `custom_vars`relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above it are not. 
 
 ```{r ceplane_plot}
 ```
@@ -188,7 +188,7 @@ Similar to the `pcea` function, `pcea_pw` produces means, 2.5\% quantiles, and 9
 ```{r icer}
 ```
 
-Again similar to the `pcea` function, the user can also estimate incremental effects for variables not includes in the summary table.
+Again similar to the `pcea` function, the user can also estimate incremental effects for outcome variables not included in the summary table.
 
 # Value of personalized care
 The previous analyses allow NMBs and optimal treatment decisions to vary by subgroup. In contrast, most CEAs estimate the treatment, $j^{*}$, that is optimal when averaging NMBs over the entire population. In particular, if the population is broken up into $G$ distinct subgroups, the optimal treatment is given by,
@@ -199,7 +199,7 @@ j^{*} = \text{argmax}_j \sum_{g=1}^{G} w_g E_{\theta}\left[NMB_g(j,\theta)\right
 \end{aligned}
 $$
 
-@basu2007value have shown that selecting subgroup specific treatments increases expected net benefits relative to this one-size fits all approach. They refer to additional net benefit as the expected value of individualized care (EPIC), which can be computed in terms of NBMs using the subgroup approach illustrated here as,
+@basu2007value have shown that selecting subgroup specific treatments increases expected net benefits relative to this one-size fits all approach. They refer to additional net benefit as the expected value of individualized care (EPIC), which can be computed in terms of NMBs using the subgroup approach illustrated here as,
 
 $$
 \begin{aligned}

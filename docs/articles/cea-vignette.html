@@ -764,7 +764,7 @@ pcea.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../refere
 <h2 class="hasAnchor">
 <html><body><a href="#cost-effectiveness-plane" class="anchor"> </a></body></html>Cost-effectiveness plane</h2>
 <p>The cost-effectiveness plane plots the incremental effectiveness of a treatment arm (relative to a comparator) against the incremental cost of the treatment arm. The plot is useful because it demonstrates both the uncertainty and the magnitude of the estimates. Each point on the plot is from a particular random draw from the PSA.</p>
-<p>Data for plotting a cost-effectiveness plane comes from the <code>delta</code> output generated from the <code>pcea_pw</code> function, which, for each sampled parameter set, estimates incremental differences in costs, clinical effectiveness, and any other variables specifies in <code>custom_vars</code> relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are cost-effective while those above are not.</p>
+<p>Data for plotting a cost-effectiveness plane comes from the <code>delta</code> output generated from the <code>pcea_pw</code> function, which, for each sampled parameter set and treatment arm, estimates differences in costs, effectiveness, and any other variables specified in <code>custom_vars</code>relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are cost-effective while those above it are not.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(pcea.pw.dt$delta)</code></pre></div>
 <pre><code>##    sim   arm     grp   iqalys    icost
 ## 1:   1 Arm 2 Group 1 2.264305 58393.10
@@ -812,7 +812,7 @@ xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="
 ## 2:    44452.81    80529.04 132111.57
 ## 3:    43751.85    79476.30  24338.67
 ## 4:    44090.65    78537.33  20132.97</code></pre>
-<p>Again similar to the <code>pcea</code> function, the user can also estimate incremental effects for variables not includes in the summary table.</p>
+<p>Again similar to the <code>pcea</code> function, the user can also estimate incremental effects for outcome variables not included in the summary table.</p>
 </div>
 </div>
 <div id="value-of-personalized-care" class="section level1">
@@ -824,7 +824,7 @@ xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="
 j^{*} = \text{argmax}_j \sum_{g=1}^{G} w_g E_{\theta}\left[NMB_g(j,\theta)\right].
 \end{aligned}
 \]</span></p>
-<p><span class="citation">Basu and Meltzer (2007)</span> have shown that selecting subgroup specific treatments increases expected net benefits relative to this one-size fits all approach. They refer to additional net benefit as the expected value of individualized care (EPIC), which can be computed in terms of NBMs using the subgroup approach illustrated here as,</p>
+<p><span class="citation">Basu and Meltzer (2007)</span> have shown that selecting subgroup specific treatments increases expected net benefits relative to this one-size fits all approach. They refer to additional net benefit as the expected value of individualized care (EPIC), which can be computed in terms of NMBs using the subgroup approach illustrated here as,</p>
 <p><span class="math display">\[
 \begin{aligned}
 \sum_{g=1}^G w_g E_{\theta}\left[NMB_g(j^{*}_s,\theta)\right] - \sum_{g=1}^G w_g  E_{\theta}\left[NMB_g(j^{*},\theta)\right].
