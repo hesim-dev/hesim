@@ -35,11 +35,11 @@ ce <- data.table(sim = rep(seq(nsims), length(e)),
                              cost = do.call("c", c), qalys = do.call("c", e))
 head(ce)
 
-## @knitr enb_example
-ce[, nb := 150000 * qalys - cost]
-enb <- ce[, .(enb = mean(nb)), by = c("arm", "grp")]
-enb <- dcast(enb, arm ~ grp, value.var = "enb")
-print(enb)
+## @knitr enmb_example
+ce <- ce[, nmb := 150000 * qalys - cost]
+enmb <- ce[, .(enmb = mean(nmb)), by = c("arm", "grp")]
+enmb <- dcast(enmb, arm ~ grp, value.var = "enmb")
+print(enmb)
 
 ## @knitr pcea
 library("hesim")
@@ -54,20 +54,15 @@ pcea.pw.dt <-  pcea_pw(ce,  k = seq(0, ktop, 500), control = "Arm 1",
 ## @knitr mce_example_setup
 set.seed(131)
 library("knitr")
-ce.nb <- dcast(ce[sim %in% sample(1:nsims, 10) & grp == "Group 2"], 
-               sim ~ arm, value.var = "nb")
-setnames(ce.nb, colnames(ce.nb), c("sim", "nb1", "nb2", "nb3"))
-ce.nb[, maxj := apply(ce.nb[, .(nb1, nb2, nb3)], 1, which.max)]
-ce.nb[, maxj := factor(maxj, levels = c(1, 2, 3))]
+ce.nmb <- dcast(ce[sim %in% sample(1:nsims, 10) & grp == "Group 2"], 
+               sim ~ arm, value.var = "nmb")
+setnames(ce.nmb, colnames(ce.nmb), c("sim", "nmb1", "nmb2", "nmb3"))
+ce.nmb <- ce.nmb[, maxj := apply(ce.nmb[, .(nmb1, nmb2, nmb3)], 1, which.max)]
+ce.nmb <- ce.nmb[, maxj := factor(maxj, levels = c(1, 2, 3))]
 
 ## @knitr mce_example
-# library("DT")
-# datatable(ce.nb, filter = "none", rownames = FALSE, 
-#           options = list(searching = FALSE, scrollX = FALSE,
-#                          bPaginate = FALSE, bInfo = FALSE)) %>% 
-#             formatRound(colnames(ce.nb), 0)
-kable(ce.nb, digits = 0, format = "html")
-mce <- prop.table(table(ce.nb$maxj))
+kable(ce.nmb, digits = 0, format = "html")
+mce <- prop.table(table(ce.nmb$maxj))
 print(mce)
 
 ## @knitr mce_plot
@@ -81,21 +76,17 @@ ggplot(pcea.dt$mce, aes(x = k, y = prob, col = factor(arm))) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
 
 ## @knitr evpi_example_a
-armmax.g2 <- which.max(enb[[3]])
-ce.nb[, nbpi := apply(ce.nb[, .(nb1, nb2, nb3)], 1, max)]
-ce.nb[, nbci := ce.nb[[armmax.g2 + 1]]]
-# datatable(ce.nb, filter = "none", rownames = FALSE,
-#           options = list(searching = FALSE, scrollX = FALSE,
-#                          bPaginate = FALSE, bInfo = FALSE)) %>% 
-#   formatRound(colnames(ce.nb), 0)
-kable(ce.nb, digits = 0, format = "html")
+armmax.g2 <- which.max(enmb[[3]])
+ce.nmb <- ce.nmb[, nmbpi := apply(ce.nmb[, .(nmb1, nmb2, nmb3)], 1, max)]
+ce.nmb <- ce.nmb[, nmbci := ce.nmb[[armmax.g2 + 1]]]
+kable(ce.nmb, digits = 0, format = "html")
 
 ## @knitr evpi_example_b
-enbpi <- mean(ce.nb$nbpi)
-enbci <- mean(ce.nb$nbci)
-print(enbpi)
-print(enbci)
-print(enbpi - enbci)
+enmbpi <- mean(ce.nmb$nmbpi)
+enmbci <- mean(ce.nmb$nmbci)
+print(enmbpi)
+print(enmbci)
+print(enmbpi - enmbci)
 
 ## @knitr evpi_plot
 ggplot(pcea.dt$evpi, aes(x = k, y = evpi)) +
@@ -105,8 +96,11 @@ ggplot(pcea.dt$evpi, aes(x = k, y = evpi)) +
   scale_y_continuous(label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
 
+## @knitr pcea_summary
+print(pcea.dt$summary)
+
 ## @knitr pcea_custom
-ce[, lys := qalys * 1.5]
+ce <- ce[, lys := qalys * 1.5]
 cea.fun <- function(x) list(mean = mean(x), quant = quantile(x, c(.025, .975)))
 pcea.custom.dt <- pcea(ce, k = seq(0, ktop, 500), sim = "sim", arm = "arm",
                grp = "grp", e = "qalys", c = "cost",
@@ -155,19 +149,19 @@ ggplot(totevpi, aes(x = k, y = evpi)) +
   scale_y_continuous(label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Arm")
 
-## @knitr totenb
+## @knitr totenmb
 ce <- merge(ce, w.dt, by = "grp")
-totenb <- ce[, .(totenb = weighted.mean(nb, w = w)), by = c("arm")]
+totenmb <- ce[, .(totenmb = weighted.mean(nmb, w = w)), by = c("arm")]
 
 ## @knitr evic1
-ptenb.grp.max <- apply(as.matrix(enb[, -1]), 2, max)
-ptenb.max <- sum(ptenb.grp.max * w.dt$w)
-tenb.max <- max(totenb$totenb)
-tnb <- c(ptenb.max, tenb.max)
-names(tnb) <- c("Personalized total TENB", "One-size fits all TENB")
+ptenmb.grp.max <- apply(as.matrix(enmb[, -1]), 2, max)
+ptenmb.max <- sum(ptenmb.grp.max * w.dt$w)
+tenmb.max <- max(totenmb$totenmb)
+tnmb <- c(ptenmb.max, tenmb.max)
+names(tnmb) <- c("Personalized total TENMB", "One-size fits all TENMB")
 
 ## @knitr evic2
-evic <- tnb[1] - tnb[2]
+evic <- tnmb[1] - tnmb[2]
 names(evic) <- "EVIC"
 print(evic)
 print(evic/150000)

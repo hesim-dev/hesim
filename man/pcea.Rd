@@ -52,7 +52,7 @@ each variable. Can contain e and c.}
   for each group for the range of specified willingess to pay values.}
   \item{evpi}{The expected value of perfect information by group for the range
   of specified willingess to pay values.}
-   \item{nb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
+   \item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
    for the range of specified willingess to pay values.}
 }
 In addition, if \code{custom_vars} is not NULL, \code{pcea} returns \code{custom.table}, which is
@@ -70,7 +70,7 @@ In addition, if \code{custom_vars} is not NULL, \code{pcea} returns \code{custom
   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
   group. In other words, the probability that each arm is more cost-effective than
   the comparator for the specified willingess to pay values.}
-   \item{inb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) 
+   \item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) 
    incremental net benefits for the range of specified willingess to pay values.}
 }
 If \code{custom_vars} is not NULL, also returns \code{custom.table}, which is

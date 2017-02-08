@@ -32,7 +32,7 @@
 #'   for each group for the range of specified willingess to pay values.}
 #'   \item{evpi}{The expected value of perfect information by group for the range
 #'   of specified willingess to pay values.}
-#'    \item{nb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
+#'    \item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
 #'    for the range of specified willingess to pay values.}
 #' }
 #' In addition, if \code{custom_vars} is not NULL, \code{pcea} returns \code{custom.table}, which is
@@ -50,7 +50,7 @@
 #'   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
 #'   group. In other words, the probability that each arm is more cost-effective than
 #'   the comparator for the specified willingess to pay values.}
-#'    \item{inb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) 
+#'    \item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) 
 #'    incremental net benefits for the range of specified willingess to pay values.}
 #' }
 #' If \code{custom_vars} is not NULL, also returns \code{custom.table}, which is
@@ -70,11 +70,11 @@ pcea <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
   setorderv(x, c(grp, sim, arm))
 
   # estimates
-  nb <- nb_summary(x, k, sim, arm, grp, e, c)
+  nmb <- nmb_summary(x, k, sim, arm, grp, e, c)
   mce <- mce(x, k, arm, grp, e, c, nsims, narms, ngrps)
-  evpi <- evpi(x, k, sim, arm, grp, e, c, nsims, narms, ngrps, nb)
+  evpi <- evpi(x, k, sim, arm, grp, e, c, nsims, narms, ngrps, nmb)
   cea.table <- cea_table(x, sim, arm, grp, e, c, ICER = FALSE)
-  l <- list(summary = cea.table, mce = mce, evpi = evpi, nb = nb)
+  l <- list(summary = cea.table, mce = mce, evpi = evpi, nmb = nmb)
   if (!is.null(custom_vars)){
     custom.table <- custom_table(x, arm, grp, custom_vars, custom_fun)
     l <- c(l, list(custom.table = custom.table))
@@ -113,10 +113,10 @@ pcea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e
   }
   ceac <- ceac(delta, k, sim, arm, grp, e = paste0("i", e), c = paste0("i", c),
                nsims, narms, ngrps)
-  inb <- inb_summary(delta, k, sim, arm, grp, e = paste0("i", e), c = paste0("i", c))
+  inmb <- inmb_summary(delta, k, sim, arm, grp, e = paste0("i", e), c = paste0("i", c))
   cea.table <- cea_table(delta, sim, arm, grp, e = paste0("i", e), c = paste0("i", c),
                          ICER = TRUE)
-  l <- list(summary = cea.table, delta = delta, ceac = ceac, inb = inb)
+  l <- list(summary = cea.table, delta = delta, ceac = ceac, inmb = inmb)
   if (!is.null(custom_vars)){
     custom.table <- custom_table(delta, arm, grp, paste0("i", custom_vars),
                                  custom_fun)
@@ -223,46 +223,46 @@ ceac <- function(delta, k, sim, arm, grp, e, c, nsims, narms, ngrps){
 }
 
 # net benefits summary statistics
-nb_summary <- function(x, k, sim, arm, grp, e, c){
+nmb_summary <- function(x, k, sim, arm, grp, e, c){
   m <- x[, .(e_mean = mean(get(e)), c_mean = mean(get(c)),
              e_lower = quantile(get(e), .025), 
              e_upper = quantile(get(e), .975),
              c_lower = quantile(get(c), .025),
              c_upper = quantile(get(c), .975)), by = c(arm, grp)]
-  enb <- lnb <- unb <- matrix(NA, nrow = length(k), ncol = nrow(m))
+  enmb <- lnmb <- unmb <- matrix(NA, nrow = length(k), ncol = nrow(m))
   for (i in 1:nrow(m)){
-    enb[, i] <- k * m[i, e_mean] - m[i, c_mean]
-    lnb[, i] <- k * m[i, e_lower] - m[i, c_lower]
-    unb[, i] <- k * m[i, e_upper] - m[i, c_upper]
+    enmb[, i] <- k * m[i, e_mean] - m[i, c_mean]
+    lnmb[, i] <- k * m[i, e_lower] - m[i, c_lower]
+    unmb[, i] <- k * m[i, e_upper] - m[i, c_upper]
   }
-  nb <- data.table(rep(m[[arm]], each = length(k)), rep(m[[grp]], each = length(k)),
-                    rep(k, nrow(m)), c(enb), c(lnb), c(unb))
-  setnames(nb, c(arm, grp, "k", "enb", "lnb", "unb"))
-  return(nb)
+  nmb <- data.table(rep(m[[arm]], each = length(k)), rep(m[[grp]], each = length(k)),
+                    rep(k, nrow(m)), c(enmb), c(lnmb), c(unmb))
+  setnames(nmb, c(arm, grp, "k", "enmb", "lnmb", "unmb"))
+  return(nmb)
 }
 
 # incremental benefit summary statistics
-inb_summary <- function(ix, k, sim, arm, grp, e, c){
-  inb <- nb_summary(ix, k, sim, arm, grp, e, c)
-  setnames(inb, colnames(inb), c(arm, grp, "k", "einb", "linb", "uinb"))
-  return(inb)
+inmb_summary <- function(ix, k, sim, arm, grp, e, c){
+  inmb <- nmb_summary(ix, k, sim, arm, grp, e, c)
+  setnames(inmb, colnames(inmb), c(arm, grp, "k", "einmb", "linmb", "uinmb"))
+  return(inmb)
 }
 
 # Expected value of perfect information
-evpi <- function(x, k, sim, arm, grp, e, c, nsims, narms, ngrps, nb){
+evpi <- function(x, k, sim, arm, grp, e, c, nsims, narms, ngrps, nmb){
 
   # Choose treatment by maximum expected benefit
-  x.nb = copy(nb)
-  x.enb <- dcast(x.nb, k + grp ~ arm, value.var = "enb")
-  mu <- rowmaxC(as.matrix(x.enb[, -c(1:2), with = FALSE]))
-  mu.ind <- c(rowmax_indC(as.matrix(x.enb[, -c(1:2), with = FALSE]))) + 1
+  x.nmb = copy(nmb)
+  x.enmb <- dcast(x.nmb, k + grp ~ arm, value.var = "enmb")
+  mu <- rowmaxC(as.matrix(x.enmb[, -c(1:2), with = FALSE]))
+  mu.ind <- c(rowmax_indC(as.matrix(x.enmb[, -c(1:2), with = FALSE]))) + 1
 
   # calculate expected value of perfect information
   Vstar <- VstarC(k, x[[e]], x[[c]], nsims, narms, ngrps)
   evpi <- Vstar - c(mu)
   return(data.table(k = rep(k, each = ngrps),
                     grp = rep(unique(x[[grp]]), times = length(k)),
-                    evpi = evpi, enbpi = Vstar, enb = c(mu), best = mu.ind))
+                    evpi = evpi, enmbpi = Vstar, enmb = c(mu), best = mu.ind))
 }
 
 # CEA summary table

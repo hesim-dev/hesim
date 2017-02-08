@@ -187,11 +187,11 @@ test_that("pcea_pw", {
   ceac.test <- ceacR(delta, kval = kval, grpname = "Group 2")
   expect_equal(ceac$prob, ceac.test$prob)
   
-  ## inb
+  ## inmb
   # group 2
-  inb <- pcea.pw.dt$inb[k == kval & grp == "Group 2"]
+  inb <- pcea.pw.dt$inmb[k == kval & grp == "Group 2"]
   einb.test <- delta[grp == "Group 2", .(einb = mean(iqalys * kval - icost)), 
                      by = "arm"]
-  expect_equal(inb$einb, einb.test$einb)
+  expect_equal(inb$einb, einb.test$einmb)
 
 })
