@@ -290,6 +290,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcat1C
+int rcat1C(arma::rowvec probs);
+RcppExport SEXP hesim_rcat1C(SEXP probsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::rowvec >::type probs(probsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcat1C(probs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcatC
+arma::vec rcatC(arma::mat probs);
+RcppExport SEXP hesim_rcatC(SEXP probsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type probs(probsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcatC(probs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // pv_splines
 double pv_splines(double t1, double t2, int state, double r, arma::vec x, arma::vec beta, arma::vec poly_beta, arma::vec poly_deg, arma::vec knots);
 RcppExport SEXP hesim_pv_splines(SEXP t1SEXP, SEXP t2SEXP, SEXP stateSEXP, SEXP rSEXP, SEXP xSEXP, SEXP betaSEXP, SEXP poly_betaSEXP, SEXP poly_degSEXP, SEXP knotsSEXP) {

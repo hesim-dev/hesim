@@ -99,6 +99,16 @@ rsurv <- function(location, anc1, dist) {
     .Call('hesim_rsurv', PACKAGE = 'hesim', location, anc1, dist)
 }
 
+#' @export
+rcat1C <- function(probs) {
+    .Call('hesim_rcat1C', PACKAGE = 'hesim', probs)
+}
+
+#' @export
+rcatC <- function(probs) {
+    .Call('hesim_rcatC', PACKAGE = 'hesim', probs)
+}
+
 pv_splines <- function(t1, t2, state, r, x, beta, poly_beta, poly_deg, knots) {
     .Call('hesim_pv_splines', PACKAGE = 'hesim', t1, t2, state, r, x, beta, poly_beta, poly_deg, knots)
 }

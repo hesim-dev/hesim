@@ -1,6 +1,6 @@
-#include <Rcpp.h>
+#include <RcppArmadillo.h>
+#include <RcppArmadilloExtensions/sample.h>
 using namespace Rcpp;
-
 
 // Gompertz Distribution
 // [[Rcpp::export]]
@@ -47,12 +47,27 @@ double rsurv(double location, double anc1, std::string dist) {
   return surv;
 }
 
-/*** R
-n <- 1000
-r1 <- replicate(n, rGompertz(1, 1))
-r2 <- rgompertz(1000, 1, 1)
-summary(r1)
-summary(r2)
-  */
+// Random generation for categorical distribution
+//' @export
+// [[Rcpp::export]]
+int rcat1C(arma::rowvec probs) {
+  int k = probs.n_elem;
+  double probs_sum = accu(probs);
+  probs = probs/probs_sum;
+  IntegerVector ans(k);
+  rmultinom(1, probs.begin(), k, ans.begin());
+  int max = which_max(ans);
+  return(max);
+}
 
+//' @export
+// [[Rcpp::export]]
+arma::vec rcatC(arma::mat probs){
+  int n = probs.n_rows;
+  arma::vec samp(n);
+  for (int i = 0; i < n; ++i){
+    samp(i) = rcat1C(probs.row(i));
+  }
+  return(samp);
+}
 
