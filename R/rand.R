@@ -1,6 +1,6 @@
-#' Fast random number generation for categorical distribution
+#' Random generation for categorical distribution
 #'
-#' Generate random numbers from a categorical distribution given a matrix of probabilities.
+#' Draw random samples from a categorical distribution given a matrix of probabilities.
 #'  \code{rcat} is vetorized and written in C++ for speed.  
 #'
 #' @param prob A matrix of probabilities where rows correspond to observations 

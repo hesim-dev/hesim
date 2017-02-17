@@ -66,7 +66,7 @@
       <h1>Personalized cost-effectiveness analysis (pCEA)</h1>
                         <h4 class="author">Devin Incerti</h4>
             
-            <h4 class="date">2017-02-07</h4>
+            <h4 class="date">2017-02-16</h4>
           </div>
 
     
@@ -160,21 +160,21 @@ ce &lt;-<span class="st"> </span><span class="kw">data.table</span>(<span class=
                              <span class="dt">cost =</span> <span class="kw">do.call</span>(<span class="st">"c"</span>, c), <span class="dt">qalys =</span> <span class="kw">do.call</span>(<span class="st">"c"</span>, e))
 <span class="kw">head</span>(ce)</code></pre></div>
 <pre><code>##    sim   arm     grp     cost    qalys
-## 1:   1 Arm 1 Group 1 6.423709 7.921085
-## 2:   2 Arm 1 Group 1 7.580140 7.569288
-## 3:   3 Arm 1 Group 1 5.790818 7.825749
-## 4:   4 Arm 1 Group 1 7.384941 7.987739
-## 5:   5 Arm 1 Group 1 7.862898 7.639089
-## 6:   6 Arm 1 Group 1 8.288269 8.224402</code></pre>
+## 1:   1 Arm 1 Group 1 8.131237 8.216945
+## 2:   2 Arm 1 Group 1 6.304915 8.182226
+## 3:   3 Arm 1 Group 1 7.724192 7.967353
+## 4:   4 Arm 1 Group 1 7.288225 8.362419
+## 5:   5 Arm 1 Group 1 6.845404 7.729373
+## 6:   6 Arm 1 Group 1 6.726018 8.577789</code></pre>
 <p>For any given willingness to pay <span class="math inline">\(k\)</span>, expected NMBs can be calculated by arm, subgroup, and simulation number. For example, with <span class="math inline">\(k=150,000\)</span>, a reasonable estimate of the value of a life-year in the United States, Arm 2 provides the highest expected NMBs in subgroup 2 while Arm 3 provides the highest expected NMBs in subgroup 2.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ce &lt;-<span class="st"> </span>ce[, nmb :<span class="er">=</span><span class="st"> </span><span class="dv">150000</span> *<span class="st"> </span>qalys -<span class="st"> </span>cost]
 enmb &lt;-<span class="st"> </span>ce[, .(<span class="dt">enmb =</span> <span class="kw">mean</span>(nmb)), by =<span class="st"> </span><span class="kw">c</span>(<span class="st">"arm"</span>, <span class="st">"grp"</span>)]
 enmb &lt;-<span class="st"> </span><span class="kw">dcast</span>(enmb, arm ~<span class="st"> </span>grp, <span class="dt">value.var =</span> <span class="st">"enmb"</span>)
 <span class="kw">print</span>(enmb)</code></pre></div>
 <pre><code>##      arm Group 1 Group 2
-## 1: Arm 1 1200092 1199550
-## 2: Arm 2 1440846 1510086
-## 3: Arm 3 1208362 1590209</code></pre>
+## 1: Arm 1 1199267 1200289
+## 2: Arm 2 1440968 1518879
+## 3: Arm 3 1215799 1589223</code></pre>
 <p>A number of measures have been proposed in the health economics literature to summarize the PSA. Below we describe the most common measures, which can be calculated using the functions <code>pcea</code> and <code>pcea_pw</code>. The <code>pcea</code> function summarizes results by taking into account each treatment arm in the analysis, while the function <code>pcea_pw</code> summarizes “pairwise” results in which each treatment is compared to a comparator.</p>
 <p>We can use the <code>pcea</code> function to summarize results from our <code>data.table</code> object of simulated output for a range of willingness to pay values,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"hesim"</span>)
@@ -220,13 +220,13 @@ maxj
 125
 </td>
 <td style="text-align:right;">
-1213899
+1193589
 </td>
 <td style="text-align:right;">
-1387516
+1220575
 </td>
 <td style="text-align:right;">
-1522213
+1501698
 </td>
 <td style="text-align:left;">
 3
@@ -237,30 +237,13 @@ maxj
 207
 </td>
 <td style="text-align:right;">
-1193532
+1168515
 </td>
 <td style="text-align:right;">
-1421722
+1641637
 </td>
 <td style="text-align:right;">
-1630048
-</td>
-<td style="text-align:left;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-237
-</td>
-<td style="text-align:right;">
-1163344
-</td>
-<td style="text-align:right;">
-1708217
-</td>
-<td style="text-align:right;">
-1576192
+1468088
 </td>
 <td style="text-align:left;">
 2
@@ -268,16 +251,33 @@ maxj
 </tr>
 <tr>
 <td style="text-align:right;">
+237
+</td>
+<td style="text-align:right;">
+1212834
+</td>
+<td style="text-align:right;">
+1522041
+</td>
+<td style="text-align:right;">
+1660265
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
 293
 </td>
 <td style="text-align:right;">
-1186033
+1239448
 </td>
 <td style="text-align:right;">
-1421500
+1556810
 </td>
 <td style="text-align:right;">
-1741747
+1715482
 </td>
 <td style="text-align:left;">
 3
@@ -288,13 +288,13 @@ maxj
 324
 </td>
 <td style="text-align:right;">
-1213004
+1213264
 </td>
 <td style="text-align:right;">
-1327697
+1385130
 </td>
 <td style="text-align:right;">
-1670839
+1650380
 </td>
 <td style="text-align:left;">
 3
@@ -305,13 +305,13 @@ maxj
 375
 </td>
 <td style="text-align:right;">
-1184721
+1189980
 </td>
 <td style="text-align:right;">
-1535789
+1610756
 </td>
 <td style="text-align:right;">
-1517910
+1527001
 </td>
 <td style="text-align:left;">
 2
@@ -322,13 +322,13 @@ maxj
 516
 </td>
 <td style="text-align:right;">
-1176177
+1213341
 </td>
 <td style="text-align:right;">
-1405865
+1394160
 </td>
 <td style="text-align:right;">
-1642073
+1694636
 </td>
 <td style="text-align:left;">
 3
@@ -339,16 +339,16 @@ maxj
 527
 </td>
 <td style="text-align:right;">
-1246207
+1183460
 </td>
 <td style="text-align:right;">
-1347528
+1624140
 </td>
 <td style="text-align:right;">
-1558576
+1597858
 </td>
 <td style="text-align:left;">
-3
+2
 </td>
 </tr>
 <tr>
@@ -356,13 +356,13 @@ maxj
 843
 </td>
 <td style="text-align:right;">
-1181398
+1243474
 </td>
 <td style="text-align:right;">
-1379139
+1471991
 </td>
 <td style="text-align:right;">
-1518619
+1490191
 </td>
 <td style="text-align:left;">
 3
@@ -373,13 +373,13 @@ maxj
 907
 </td>
 <td style="text-align:right;">
-1190776
+1202379
 </td>
 <td style="text-align:right;">
-1479963
+1464034
 </td>
 <td style="text-align:right;">
-1732546
+1774454
 </td>
 <td style="text-align:left;">
 3
@@ -391,8 +391,8 @@ maxj
 <span class="kw">print</span>(mce)</code></pre></div>
 <pre><code>## 
 ##   1   2   3 
-## 0.0 0.2 0.8</code></pre>
-<p>In this example, treatments 1, 2, and 3 have the highest NMBs a fraction 0, 0.2, and 0.8 of the time respectively. The <code>pcea</code> function performs this same calculations for a range of values of <span class="math inline">\(k\)</span> and all <code>nsims</code> random draws of the simulation output. The output is a tidy <code>data.table</code> which facilitates plotting with <code>ggplot</code>.</p>
+## 0.0 0.3 0.7</code></pre>
+<p>In this example, treatments 1, 2, and 3 have the highest NMBs a fraction 0, 0.3, and 0.7 of the time respectively. The <code>pcea</code> function performs this same calculations for a range of values of <span class="math inline">\(k\)</span> and all <code>nsims</code> random draws of the simulation output. The output is a tidy <code>data.table</code> which facilitates plotting with <code>ggplot</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"ggplot2"</span>)
 <span class="kw">library</span>(<span class="st">"scales"</span>)
 <span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())
@@ -448,22 +448,22 @@ nmbci
 125
 </td>
 <td style="text-align:right;">
-1213899
+1193589
 </td>
 <td style="text-align:right;">
-1387516
+1220575
 </td>
 <td style="text-align:right;">
-1522213
+1501698
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1522213
+1501698
 </td>
 <td style="text-align:right;">
-1522213
+1501698
 </td>
 </tr>
 <tr>
@@ -471,22 +471,22 @@ nmbci
 207
 </td>
 <td style="text-align:right;">
-1193532
+1168515
 </td>
 <td style="text-align:right;">
-1421722
+1641637
 </td>
 <td style="text-align:right;">
-1630048
+1468088
 </td>
 <td style="text-align:left;">
-3
+2
 </td>
 <td style="text-align:right;">
-1630048
+1641637
 </td>
 <td style="text-align:right;">
-1630048
+1468088
 </td>
 </tr>
 <tr>
@@ -494,22 +494,22 @@ nmbci
 237
 </td>
 <td style="text-align:right;">
-1163344
+1212834
 </td>
 <td style="text-align:right;">
-1708217
+1522041
 </td>
 <td style="text-align:right;">
-1576192
+1660265
 </td>
 <td style="text-align:left;">
-2
+3
 </td>
 <td style="text-align:right;">
-1708217
+1660265
 </td>
 <td style="text-align:right;">
-1576192
+1660265
 </td>
 </tr>
 <tr>
@@ -517,22 +517,22 @@ nmbci
 293
 </td>
 <td style="text-align:right;">
-1186033
+1239448
 </td>
 <td style="text-align:right;">
-1421500
+1556810
 </td>
 <td style="text-align:right;">
-1741747
+1715482
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1741747
+1715482
 </td>
 <td style="text-align:right;">
-1741747
+1715482
 </td>
 </tr>
 <tr>
@@ -540,22 +540,22 @@ nmbci
 324
 </td>
 <td style="text-align:right;">
-1213004
+1213264
 </td>
 <td style="text-align:right;">
-1327697
+1385130
 </td>
 <td style="text-align:right;">
-1670839
+1650380
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1670839
+1650380
 </td>
 <td style="text-align:right;">
-1670839
+1650380
 </td>
 </tr>
 <tr>
@@ -563,22 +563,22 @@ nmbci
 375
 </td>
 <td style="text-align:right;">
-1184721
+1189980
 </td>
 <td style="text-align:right;">
-1535789
+1610756
 </td>
 <td style="text-align:right;">
-1517910
+1527001
 </td>
 <td style="text-align:left;">
 2
 </td>
 <td style="text-align:right;">
-1535789
+1610756
 </td>
 <td style="text-align:right;">
-1517910
+1527001
 </td>
 </tr>
 <tr>
@@ -586,22 +586,22 @@ nmbci
 516
 </td>
 <td style="text-align:right;">
-1176177
+1213341
 </td>
 <td style="text-align:right;">
-1405865
+1394160
 </td>
 <td style="text-align:right;">
-1642073
+1694636
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1642073
+1694636
 </td>
 <td style="text-align:right;">
-1642073
+1694636
 </td>
 </tr>
 <tr>
@@ -609,22 +609,22 @@ nmbci
 527
 </td>
 <td style="text-align:right;">
-1246207
+1183460
 </td>
 <td style="text-align:right;">
-1347528
+1624140
 </td>
 <td style="text-align:right;">
-1558576
+1597858
 </td>
 <td style="text-align:left;">
-3
+2
 </td>
 <td style="text-align:right;">
-1558576
+1624140
 </td>
 <td style="text-align:right;">
-1558576
+1597858
 </td>
 </tr>
 <tr>
@@ -632,22 +632,22 @@ nmbci
 843
 </td>
 <td style="text-align:right;">
-1181398
+1243474
 </td>
 <td style="text-align:right;">
-1379139
+1471991
 </td>
 <td style="text-align:right;">
-1518619
+1490191
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1518619
+1490191
 </td>
 <td style="text-align:right;">
-1518619
+1490191
 </td>
 </tr>
 <tr>
@@ -655,22 +655,22 @@ nmbci
 907
 </td>
 <td style="text-align:right;">
-1190776
+1202379
 </td>
 <td style="text-align:right;">
-1479963
+1464034
 </td>
 <td style="text-align:right;">
-1732546
+1774454
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1732546
+1774454
 </td>
 <td style="text-align:right;">
-1732546
+1774454
 </td>
 </tr>
 </tbody>
@@ -679,11 +679,11 @@ nmbci
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">enmbpi &lt;-<span class="st"> </span><span class="kw">mean</span>(ce.nmb$nmbpi)
 enmbci &lt;-<span class="st"> </span><span class="kw">mean</span>(ce.nmb$nmbci)
 <span class="kw">print</span>(enmbpi)</code></pre></div>
-<pre><code>## [1] 1626067</code></pre>
+<pre><code>## [1] 1636364</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(enmbci)</code></pre></div>
-<pre><code>## [1] 1611076</code></pre>
+<pre><code>## [1] 1608005</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(enmbpi -<span class="st"> </span>enmbci)</code></pre></div>
-<pre><code>## [1] 14990.45</code></pre>
+<pre><code>## [1] 28358.6</code></pre>
 <p>The <code>pcea</code> function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values <span class="math inline">\(k\)</span>. A plot by group of the the EVPI for different values of <span class="math inline">\(k\)</span> is shown below. The kinks in the plot represent values of <span class="math inline">\(k\)</span> where the optimal arm changes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(pcea.dt$evpi, <span class="kw">aes</span>(<span class="dt">x =</span> k, <span class="dt">y =</span> evpi)) +
 <span class="st">  </span><span class="kw">geom_line</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~grp) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">"Willingess to pay"</span>) +
@@ -717,19 +717,19 @@ totevpi &lt;-<span class="st"> </span>evpi[,<span class="kw">lapply</span>(.SD, 
 <p><code>pcea</code> produces means, 2.5% quantiles, and 97.5% quantiles for costs and efficacy.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(pcea.dt$summary)</code></pre></div>
 <pre><code>##      arm     grp qalys_mean qalys_lower qalys_upper    cost_mean
-## 1: Arm 1 Group 1   8.000666    7.614163    8.401574     7.429272
-## 2: Arm 2 Group 1  10.011648    8.483982   11.508991 60901.497716
-## 3: Arm 3 Group 1   8.462939    7.269170    9.642918 61079.014318
-## 4: Arm 1 Group 2   7.997047    7.616674    8.374612     7.411710
-## 5: Arm 2 Group 2  10.468262    8.933403   12.064520 60153.482814
-## 6: Arm 3 Group 2  11.005198    9.834746   12.143380 60570.424668
+## 1: Arm 1 Group 1   7.995161    7.586323    8.386558     7.445903
+## 2: Arm 2 Group 1  10.009734    8.496189   11.599521 60491.744078
+## 3: Arm 3 Group 1   8.505385    7.234081    9.591404 60008.950896
+## 4: Arm 1 Group 2   8.001974    7.565241    8.400057     7.447389
+## 5: Arm 2 Group 2  10.528012    8.952184   12.121216 60323.011331
+## 6: Arm 3 Group 2  10.996389    9.853022   12.195674 60235.528148
 ##      cost_lower   cost_upper
-## 1:     6.095222     9.019726
-## 2: 45050.296428 80359.323323
-## 3: 44459.573660 80535.890198
-## 4:     6.136484     8.851044
-## 5: 43760.351898 79483.970259
-## 6: 44098.792329 78545.779994</code></pre>
+## 1:     6.019875     9.035604
+## 2: 45515.815785 79175.368817
+## 3: 44496.744085 79478.743352
+## 4:     6.085085     9.013546
+## 5: 43683.002804 78046.640749
+## 6: 44410.154853 80101.104055</code></pre>
 <p>In addition, if the user would like to examine outcomes other than those specified this summary table, then they can generate a custom table of summary output. The custom table can contain any outcomes as long as they are specified in addition to the <code>sim</code>, <code>arm</code>, <code>e</code>, and <code>c</code> columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hypothetical variable for life-years and create a table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ce &lt;-<span class="st"> </span>ce[, lys :<span class="er">=</span><span class="st"> </span>qalys *<span class="st"> </span><span class="fl">1.5</span>]
 cea.fun &lt;-<span class="st"> </span>function(x) <span class="kw">list</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(x), <span class="dt">quant =</span> <span class="kw">quantile</span>(x, <span class="kw">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>)))
@@ -739,26 +739,26 @@ pcea.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../refere
                <span class="dt">custom_fun =</span> cea.fun)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pcea.custom.dt$custom.table</code></pre></div>
 <pre><code>##      arm     grp    cost.mean cost.quant.2.5% cost.quant.97.5% lys.mean
-## 1: Arm 1 Group 1     7.429272        6.095222         9.019726 12.00100
-## 2: Arm 2 Group 1 60901.497716    45050.296428     80359.323323 15.01747
-## 3: Arm 3 Group 1 61079.014318    44459.573660     80535.890198 12.69441
-## 4: Arm 1 Group 2     7.411710        6.136484         8.851044 11.99557
-## 5: Arm 2 Group 2 60153.482814    43760.351898     79483.970259 15.70239
-## 6: Arm 3 Group 2 60570.424668    44098.792329     78545.779994 16.50780
+## 1: Arm 1 Group 1     7.445903        6.019875         9.035604 11.99274
+## 2: Arm 2 Group 1 60491.744078    45515.815785     79175.368817 15.01460
+## 3: Arm 3 Group 1 60008.950896    44496.744085     79478.743352 12.75808
+## 4: Arm 1 Group 2     7.447389        6.085085         9.013546 12.00296
+## 5: Arm 2 Group 2 60323.011331    43683.002804     78046.640749 15.79202
+## 6: Arm 3 Group 2 60235.528148    44410.154853     80101.104055 16.49458
 ##    lys.quant.2.5% lys.quant.97.5% qalys.mean qalys.quant.2.5%
-## 1:       11.42124        12.60236   8.000666         7.614163
-## 2:       12.72597        17.26349  10.011648         8.483982
-## 3:       10.90376        14.46438   8.462939         7.269170
-## 4:       11.42501        12.56192   7.997047         7.616674
-## 5:       13.40011        18.09678  10.468262         8.933403
-## 6:       14.75212        18.21507  11.005198         9.834746
+## 1:       11.37948        12.57984   7.995161         7.586323
+## 2:       12.74428        17.39928  10.009734         8.496189
+## 3:       10.85112        14.38711   8.505385         7.234081
+## 4:       11.34786        12.60009   8.001974         7.565241
+## 5:       13.42828        18.18182  10.528012         8.952184
+## 6:       14.77953        18.29351  10.996389         9.853022
 ##    qalys.quant.97.5%
-## 1:          8.401574
-## 2:         11.508991
-## 3:          9.642918
-## 4:          8.374612
-## 5:         12.064520
-## 6:         12.143380</code></pre>
+## 1:          8.386558
+## 2:         11.599521
+## 3:          9.591404
+## 4:          8.400057
+## 5:         12.121216
+## 6:         12.195674</code></pre>
 </div>
 <div id="cost-effectiveness-plane" class="section level2">
 <h2 class="hasAnchor">
@@ -766,13 +766,13 @@ pcea.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../refere
 <p>The cost-effectiveness plane plots the incremental effectiveness of a treatment arm (relative to a comparator) against the incremental cost of the treatment arm. The plot is useful because it demonstrates both the uncertainty and the magnitude of the estimates. Each point on the plot is from a particular random draw from the PSA.</p>
 <p>Data for plotting a cost-effectiveness plane comes from the <code>delta</code> output generated from the <code>pcea_pw</code> function, which, for each sampled parameter set and treatment arm, estimates differences in costs, effectiveness, and any other variables specified in <code>custom_vars</code>relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are cost-effective while those above it are not.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(pcea.pw.dt$delta)</code></pre></div>
-<pre><code>##    sim   arm     grp   iqalys    icost
-## 1:   1 Arm 2 Group 1 2.264305 58393.10
-## 2:   2 Arm 2 Group 1 3.749171 60956.05
-## 3:   3 Arm 2 Group 1 1.159779 54210.67
-## 4:   4 Arm 2 Group 1 2.732187 55285.89
-## 5:   5 Arm 2 Group 1 2.437862 57219.49
-## 6:   6 Arm 2 Group 1 1.393600 54693.67</code></pre>
+<pre><code>##    sim   arm     grp     iqalys    icost
+## 1:   1 Arm 2 Group 1 1.91702754 52978.00
+## 2:   2 Arm 2 Group 1 0.43249134 64579.62
+## 3:   3 Arm 2 Group 1 2.34398485 56662.05
+## 4:   4 Arm 2 Group 1 1.24597836 71247.19
+## 5:   5 Arm 2 Group 1 2.91882125 50059.15
+## 6:   6 Arm 2 Group 1 0.09910401 69067.70</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ylim &lt;-<span class="st"> </span><span class="kw">max</span>(pcea.pw.dt$delta[, icost]) *<span class="st"> </span><span class="fl">1.1</span>
 xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="kw">max</span>(pcea.pw.dt$delta[, iqalys]) *<span class="st"> </span><span class="fl">1.1</span>)
 <span class="kw">ggplot</span>(pcea.pw.dt$delta, <span class="kw">aes</span>(<span class="dt">x =</span> iqalys, <span class="dt">y =</span> icost, <span class="dt">col =</span> <span class="kw">factor</span>(arm))) +<span class="st"> </span>
@@ -789,7 +789,7 @@ xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="
 <h2 class="hasAnchor">
 <html><body><a href="#cost-effectiveness-acceptability-curve-ceac" class="anchor"> </a></body></html>Cost-effectiveness acceptability curve (CEAC)</h2>
 <p>The cost-effectiveness acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each arm to a single comparator whereas the MCE plot considers all arms simultaneously. Output to produce a CEAC is generated from the <code>pcea_pw</code> function.</p>
-<p>The plot shows that, in subgroup 1, Arm 2 has larger NMBs than Arm 1 with very high probability for reasonable values of <span class="math inline">\(k\)</span>. Arm 3 also has higher NMBs than Arm 1 with probability over 1/2 for values of <span class="math inline">\(k\)</span> larger than 133,500. In group 2, both Arm 2 and Arm 3 have higher NMBs than Arm 1 for almost all values of <span class="math inline">\(k\)</span>, although this probability is larger for Arm 2 than Arm 3 when <span class="math inline">\(k\)</span> is smaller.</p>
+<p>The plot shows that, in subgroup 1, Arm 2 has larger NMBs than Arm 1 with very high probability for reasonable values of <span class="math inline">\(k\)</span>. Arm 3 also has higher NMBs than Arm 1 with probability over 1/2 for values of <span class="math inline">\(k\)</span> larger than 117,500. In group 2, both Arm 2 and Arm 3 have higher NMBs than Arm 1 for almost all values of <span class="math inline">\(k\)</span>, although this probability is larger for Arm 2 than Arm 3 when <span class="math inline">\(k\)</span> is smaller.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(pcea.pw.dt$ceac, <span class="kw">aes</span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, <span class="dt">col =</span> <span class="kw">factor</span>(arm))) +
 <span class="st">  </span><span class="kw">geom_line</span>() +<span class="st"> </span><span class="kw">facet_wrap</span>(~grp) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">"Willingess to pay"</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Probability most cost-effective"</span>) +
@@ -803,15 +803,15 @@ xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="
 <p>Similar to the <code>pcea</code> function, <code>pcea_pw</code> produces means, 2.5% quantiles, and 97.5% quantiles for incremental costs and incremental efficacy. The table also contains the ICER, which is equal to expected incremental costs divided by the measure of expected incremental efficacy.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(pcea.pw.dt$summary)</code></pre></div>
 <pre><code>##      arm     grp iqalys_mean iqalys_lower iqalys_upper icost_mean
-## 1: Arm 2 Group 1   2.0109818    0.3455629     3.593142   60894.07
-## 2: Arm 3 Group 1   0.4622728   -0.8044014     1.741436   61071.59
-## 3: Arm 2 Group 2   2.4712145    0.9317281     4.070375   60146.07
-## 4: Arm 3 Group 2   3.0081503    1.8055991     4.208971   60563.01
+## 1: Arm 2 Group 1   2.0145736    0.3797703     3.595974   60484.30
+## 2: Arm 3 Group 1   0.5102239   -0.8091586     1.726291   60001.50
+## 3: Arm 2 Group 2   2.5260380    0.9040406     4.183774   60315.56
+## 4: Arm 3 Group 2   2.9944150    1.7905404     4.209492   60228.08
 ##    icost_lower icost_upper      icer
-## 1:    45042.61    80350.86  30280.77
-## 2:    44452.81    80529.04 132111.57
-## 3:    43751.85    79476.30  24338.67
-## 4:    44090.65    78537.33  20132.97</code></pre>
+## 1:    45509.44    79168.21  30023.37
+## 2:    44489.05    79470.97 117598.39
+## 3:    43674.73    78039.16  23877.54
+## 4:    44401.67    80093.37  20113.47</code></pre>
 <p>Again similar to the <code>pcea</code> function, the user can also estimate incremental effects for outcome variables not included in the summary table.</p>
 </div>
 </div>
@@ -842,11 +842,11 @@ tnmb &lt;-<span class="st"> </span><span class="kw">c</span>(ptenmb.max, tenmb.m
 <span class="kw">names</span>(evic) &lt;-<span class="st"> "EVIC"</span>
 <span class="kw">print</span>(evic)</code></pre></div>
 <pre><code>##     EVIC 
-## 58120.97</code></pre>
+## 52758.02</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(evic/<span class="dv">150000</span>)</code></pre></div>
 <pre><code>##      EVIC 
-## 0.3874731</code></pre>
-<p>Our estimate of the EVIC is $58,120, or in terms of net health benefits, 0.387 QALYs.</p>
+## 0.3517202</code></pre>
+<p>Our estimate of the EVIC is $52,758, or in terms of net health benefits, 0.352 QALYs.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

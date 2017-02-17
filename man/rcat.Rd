@@ -2,7 +2,7 @@
 % Please edit documentation in R/rand.R
 \name{rcat}
 \alias{rcat}
-\title{Fast random number generation for categorical distribution}
+\title{Random generation for categorical distribution}
 \usage{
 rcat(prob)
 }
@@ -11,7 +11,7 @@ rcat(prob)
 and columns correspond to categories.}
 }
 \description{
-Generate random numbers from a categorical distribution given a matrix of probabilities.
+Draw random samples from a categorical distribution given a matrix of probabilities.
  \code{rcat} is vetorized and written in C++ for speed.
 }
 \examples{
