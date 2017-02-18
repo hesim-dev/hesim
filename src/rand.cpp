@@ -19,11 +19,40 @@ double qgompertzC (double p, double shape, double rate) {
   return q;
 }
 
-//' @export
 // [[Rcpp::export]]
 double rgompertzC (double shape, double rate){
   double u = R::runif(0,1);
   return qgompertzC(u, shape, rate);
+}
+
+// Piecewise exponential  
+// NOTE: rate in R::rexp is 1/rate in rexp!!!!!!!!
+// [[Rcpp::export]]
+double rpwexp1C (arma::rowvec rate, arma::rowvec time) {
+  int T = rate.n_elem;
+  double surv = 0.0;
+  for (int t = 0; t < T; ++t){
+    double rexp_t = R::rexp(1/rate(t));
+    surv = time(t) + rexp_t;
+    if (t < (T - 1)){
+      if (surv < time(t + 1)){
+        break;
+      }
+    }
+  }
+  return surv;
+}
+
+// Vectorized piecewise exponential 
+// [[Rcpp::export]]
+std::vector<double> rpwexpC (arma::mat rate, arma::rowvec time) {
+  int N = rate.n_rows;
+  std::vector<double> surv;
+  surv.reserve(N);
+  for (int i = 0; i < N; ++i){
+    surv.push_back(rpwexp1C(rate.row(i), time));
+  }
+  return surv;
 }
 
 // Random Survival Times

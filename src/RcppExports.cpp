@@ -277,6 +277,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rpwexp1C
+double rpwexp1C(arma::rowvec rate, arma::rowvec time);
+RcppExport SEXP hesim_rpwexp1C(SEXP rateSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::rowvec >::type rate(rateSEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(rpwexp1C(rate, time));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rpwexpC
+std::vector<double> rpwexpC(arma::mat rate, arma::rowvec time);
+RcppExport SEXP hesim_rpwexpC(SEXP rateSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type rate(rateSEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type time(timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(rpwexpC(rate, time));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rsurv
 double rsurv(double location, double anc1, std::string dist);
 RcppExport SEXP hesim_rsurv(SEXP locationSEXP, SEXP anc1SEXP, SEXP distSEXP) {

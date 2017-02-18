@@ -90,9 +90,16 @@ qgompertzC <- function(p, shape, rate) {
     .Call('hesim_qgompertzC', PACKAGE = 'hesim', p, shape, rate)
 }
 
-#' @export
 rgompertzC <- function(shape, rate) {
     .Call('hesim_rgompertzC', PACKAGE = 'hesim', shape, rate)
+}
+
+rpwexp1C <- function(rate, time) {
+    .Call('hesim_rpwexp1C', PACKAGE = 'hesim', rate, time)
+}
+
+rpwexpC <- function(rate, time) {
+    .Call('hesim_rpwexpC', PACKAGE = 'hesim', rate, time)
 }
 
 rsurv <- function(location, anc1, dist) {

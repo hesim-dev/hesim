@@ -32,3 +32,19 @@ rcat <- function(prob){
   }
   return(rcatC(prob) + 1)
 }
+
+
+#' Random generation for piecewise exponential distribution
+#'
+#' Draw random samples from an exponential distribution with piecewise rates.
+#'  \code{rpwexp} is vetorized and written in C++ for speed.  
+#'
+#' @param rate A matrix of rates where rows correspond to observations 
+#' and columns correspond to rates during specified time intervals. 
+#' @param time A vector equal to the number of columns in \code{rate}, giving the
+#' times at which the rate changes
+#' @name rpwexp
+#' @export
+rpwexp <- function(rate, time){
+  return(rpwexpC(rate, time))
+}
