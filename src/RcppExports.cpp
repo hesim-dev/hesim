@@ -277,6 +277,46 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// qllogisC
+double qllogisC(double p, double shape, double scale, int lt, int lg);
+RcppExport SEXP hesim_qllogisC(SEXP pSEXP, SEXP shapeSEXP, SEXP scaleSEXP, SEXP ltSEXP, SEXP lgSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
+    Rcpp::traits::input_parameter< double >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< int >::type lt(ltSEXP);
+    Rcpp::traits::input_parameter< int >::type lg(lgSEXP);
+    rcpp_result_gen = Rcpp::wrap(qllogisC(p, shape, scale, lt, lg));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rllogisC
+double rllogisC(double shape, double scale);
+RcppExport SEXP hesim_rllogisC(SEXP shapeSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
+    Rcpp::traits::input_parameter< double >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(rllogisC(shape, scale));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rgengammaC
+double rgengammaC(double mu, double sigma, double Q);
+RcppExport SEXP hesim_rgengammaC(SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
+    rcpp_result_gen = Rcpp::wrap(rgengammaC(mu, sigma, Q));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rpwexp1C
 double rpwexp1C(arma::rowvec rate, arma::rowvec time);
 RcppExport SEXP hesim_rpwexp1C(SEXP rateSEXP, SEXP timeSEXP) {
@@ -302,15 +342,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // rsurv
-double rsurv(double location, double anc1, std::string dist);
-RcppExport SEXP hesim_rsurv(SEXP locationSEXP, SEXP anc1SEXP, SEXP distSEXP) {
+double rsurv(double location, double anc1, std::string dist, double anc2);
+RcppExport SEXP hesim_rsurv(SEXP locationSEXP, SEXP anc1SEXP, SEXP distSEXP, SEXP anc2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type location(locationSEXP);
     Rcpp::traits::input_parameter< double >::type anc1(anc1SEXP);
     Rcpp::traits::input_parameter< std::string >::type dist(distSEXP);
-    rcpp_result_gen = Rcpp::wrap(rsurv(location, anc1, dist));
+    Rcpp::traits::input_parameter< double >::type anc2(anc2SEXP);
+    rcpp_result_gen = Rcpp::wrap(rsurv(location, anc1, dist, anc2));
     return rcpp_result_gen;
 END_RCPP
 }

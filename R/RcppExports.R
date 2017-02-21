@@ -94,6 +94,18 @@ rgompertzC <- function(shape, rate) {
     .Call('hesim_rgompertzC', PACKAGE = 'hesim', shape, rate)
 }
 
+qllogisC <- function(p, shape, scale, lt = 1L, lg = 0L) {
+    .Call('hesim_qllogisC', PACKAGE = 'hesim', p, shape, scale, lt, lg)
+}
+
+rllogisC <- function(shape, scale) {
+    .Call('hesim_rllogisC', PACKAGE = 'hesim', shape, scale)
+}
+
+rgengammaC <- function(mu, sigma, Q) {
+    .Call('hesim_rgengammaC', PACKAGE = 'hesim', mu, sigma, Q)
+}
+
 rpwexp1C <- function(rate, time) {
     .Call('hesim_rpwexp1C', PACKAGE = 'hesim', rate, time)
 }
@@ -102,8 +114,8 @@ rpwexpC <- function(rate, time) {
     .Call('hesim_rpwexpC', PACKAGE = 'hesim', rate, time)
 }
 
-rsurv <- function(location, anc1, dist) {
-    .Call('hesim_rsurv', PACKAGE = 'hesim', location, anc1, dist)
+rsurv <- function(location, anc1, dist, anc2 = 0.0) {
+    .Call('hesim_rsurv', PACKAGE = 'hesim', location, anc1, dist, anc2)
 }
 
 #' @export

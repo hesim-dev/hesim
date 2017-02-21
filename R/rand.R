@@ -44,6 +44,14 @@ rcat <- function(prob){
 #' @param time A vector equal to the number of columns in \code{rate}, giving the
 #' times at which the rate changes
 #' @name rpwexp
+#' @examples
+#' rate <- c(.6, 1.2, 1.3)
+#' n <- 100000
+#' ratemat <- matrix(rep(rate, n/2), nrow = n, 
+#'                   ncol = 3, byrow = TRUE)
+#' t <- c(0, 10, 15) 
+#' samp <- rpwexp(ratemat, t)
+#' summary(samp)
 #' @export
 rpwexp <- function(rate, time){
   return(rpwexpC(rate, time))

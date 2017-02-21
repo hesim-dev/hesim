@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 // Gompertz Distribution
 // [[Rcpp::export]]
-double qgompertzC (double p, double shape, double rate) {
+double qgompertzC(double p, double shape, double rate) {
   double q = 0;
   double asymp = 1 - exp(rate/shape);
   if (shape == 0){
@@ -20,9 +20,35 @@ double qgompertzC (double p, double shape, double rate) {
 }
 
 // [[Rcpp::export]]
-double rgompertzC (double shape, double rate){
+double rgompertzC(double shape, double rate){
   double u = R::runif(0,1);
   return qgompertzC(u, shape, rate);
+}
+
+// Log-logistic distribution
+// [[Rcpp::export]]
+double qllogisC(double p, double shape, double scale, int lt = 1, int lg = 0){
+  return exp(R::qlogis(p, log(scale), 1/shape, lt, lg));
+}
+
+// [[Rcpp::export]]
+double rllogisC(double shape, double scale){
+  double u = R::runif(0,1);
+  return qllogisC(u, shape, scale);
+}
+
+// Generalized gamma distribution
+// [[Rcpp::export]]
+double rgengammaC(double mu, double sigma, double Q){
+  double samp = 0.0;
+  if (Q == 0.0){
+    samp = R::rlnorm(mu, sigma);
+  }
+  else{
+    double w = log(pow(Q, 2) * R::rgamma(1/pow(Q, 2), 1))/Q;
+    samp = exp(mu + sigma * w);
+  }
+  return samp;
 }
 
 // Piecewise exponential  
@@ -57,7 +83,7 @@ std::vector<double> rpwexpC (arma::mat rate, arma::rowvec time) {
 
 // Random Survival Times
 // [[Rcpp::export]]
-double rsurv(double location, double anc1, std::string dist) {
+double rsurv(double location, double anc1, std::string dist, double anc2 = 0.0) {
   double surv = 0.0;
   if (dist == "exponential"){
     double rate = exp(location);
@@ -72,6 +98,27 @@ double rsurv(double location, double anc1, std::string dist) {
     double shape = anc1;
     double rate = exp(location);
     surv = rgompertzC(shape, rate);
+  }
+  else if (dist == "lnorm"){
+    double meanlog = location;
+    double sdlog = exp(anc1);
+    surv = R::rlnorm(meanlog, sdlog);
+  }
+  else if (dist == "gamma"){
+    double rate = exp(location);
+    double shape = exp(anc1);
+    surv = R::rgamma(shape, 1/rate);
+  }
+  else if (dist == "llogis"){
+    double scale = exp(location);
+    double shape = exp(anc1);
+    surv = rllogisC(shape, scale);
+  }
+  else if (dist == "gengamma"){
+    double mu = location;
+    double sigma = exp(anc1);
+    double Q = anc2;
+    surv = rgengammaC(mu, sigma, Q);
   }
   return surv;
 }
