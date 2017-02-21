@@ -1,0 +1,28 @@
+templates:
+  params:
+    bootswatch: simplex
+
+reference:
+  - title: "Datasets"
+    contents:
+      - lifetable
+  - title: "Cost-effectiveness analysis"
+    contents:
+      - pcea
+      - pcea_pw
+      - incr_effect
+      - custom_table
+  - title: "Random number generation"
+    contents:
+      - rcat
+      - rpwexp
+
+navbar:
+  title: hesim
+  left:
+  - text: "Reference"
+    href: reference/index.html
+  - text: "Vignettes"
+    menu:
+      - text: "Personalized cost-effectiveness analysis"
+        href: articles/cea-vignette.html

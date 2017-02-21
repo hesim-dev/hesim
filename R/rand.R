@@ -41,7 +41,7 @@ rcat <- function(prob){
 #'
 #' @param rate A matrix of rates where rows correspond to observations 
 #' and columns correspond to rates during specified time intervals. 
-#' @param time A vector equal to the number of columns in \code{rate}, giving the
+#' @param time A vector equal to the number of columns in \code{rate} giving the
 #' times at which the rate changes
 #' @name rpwexp
 #' @examples
@@ -50,7 +50,9 @@ rcat <- function(prob){
 #' ratemat <- matrix(rep(rate, n/2), nrow = n, 
 #'                   ncol = 3, byrow = TRUE)
 #' t <- c(0, 10, 15) 
+#' ptm <- proc.time()
 #' samp <- rpwexp(ratemat, t)
+#' proc.time() - ptm
 #' summary(samp)
 #' @export
 rpwexp <- function(rate, time){
