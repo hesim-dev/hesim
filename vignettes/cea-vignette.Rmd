@@ -120,7 +120,7 @@ One draw back of the previous measure is that it ignores the magnitude of cost o
 
 $$
 \begin{aligned}
-EVPI_g &= E_\theta \left[NMB_s(j_s^{*}, \theta^s)\right] - E_\theta \left [ NMB_s(j_s^{*}, \theta)\right]. \\
+EVPI_g &= E_\theta \left[max_j NMB_g(j, \theta)\right] - max_j E_\theta \left [ NMB_g(j, \theta)\right]. \\
 \end{aligned}
 $$
 
