@@ -4,7 +4,6 @@
 using namespace Rcpp;
 
 // Convert vector to matrix by row
-//' @export
 // [[Rcpp::export]]
 arma::mat matrix_byrow(arma::rowvec v, int nrow, int ncol){
   int l = v.n_elem;
@@ -15,8 +14,7 @@ arma::mat matrix_byrow(arma::rowvec v, int nrow, int ncol){
   return(m1);
 }
 
-// Convert vector to matrix by row
-//' @export
+// Convert vector to matrix by column
 // [[Rcpp::export]]
 arma::mat matrix_bycol(arma::rowvec v, int nrow, int ncol){
   int l = v.n_elem;

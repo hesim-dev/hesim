@@ -171,12 +171,10 @@ sim_transprobC <- function(state, time, final, t, simindivs, nstates) {
     .Call('hesim_sim_transprobC', PACKAGE = 'hesim', state, time, final, t, simindivs, nstates)
 }
 
-#' @export
 matrix_byrow <- function(v, nrow, ncol) {
     .Call('hesim_matrix_byrow', PACKAGE = 'hesim', v, nrow, ncol)
 }
 
-#' @export
 matrix_bycol <- function(v, nrow, ncol) {
     .Call('hesim_matrix_bycol', PACKAGE = 'hesim', v, nrow, ncol)
 }
