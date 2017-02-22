@@ -5,7 +5,6 @@
 using namespace Rcpp;
 
 // Calculate index of maximum of vector
-//' @export
 // [[Rcpp::export]]
 int vecmax_index(std::vector<double> x) {
   std::vector<double>::iterator it = std::max_element(x.begin(), x.end());
@@ -13,7 +12,6 @@ int vecmax_index(std::vector<double> x) {
 }
 
 // Calculate maximum of vector
-//' @export
 // [[Rcpp::export]]
 double vecmax(std::vector<double> x) {
   std::vector<double>::iterator it = std::max_element(x.begin(), x.end());
@@ -21,14 +19,12 @@ double vecmax(std::vector<double> x) {
 }
 
 // row maximum of matrix
-//' @export
 // [[Rcpp::export]]
 arma::colvec rowmaxC(arma::mat x) {
   return arma::max(x, 1);
 }
 
 // test mean
-//' @export
 // [[Rcpp::export]]
 double stdmean(std::vector<double> v) {
   double mean = accumulate(v.begin(), v.end(), 0.0)/v.size();
@@ -36,14 +32,12 @@ double stdmean(std::vector<double> v) {
 }
 
 // row maximum of matrix
-//' @export
 // [[Rcpp::export]]
 arma::ucolvec rowmax_indC(arma::mat x) {
   return arma::index_max(x,1);;
 }
 
 // Incremental effect in piecewise comparisons
-//' @export
 // [[Rcpp::export]]
 std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y,
                                 int nsims, int narms, int ngrps){
@@ -68,7 +62,6 @@ std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y,
 
 
 // Probability CE in pairwise comparisons
-//' @export
 // [[Rcpp::export]]
 std::vector<double> ceacC(std::vector<double> k, std::vector<double> ie,
                             std::vector<double> ic, int nsims, int narms, int ngrps) {
@@ -110,7 +103,6 @@ std::vector<double> ceacC(std::vector<double> k, std::vector<double> ie,
 }
 
 // Probability most cost-effective therapy
-//' @export
 // [[Rcpp::export]]
 std::vector<double> mceC(std::vector<double> k, std::vector<double> e,
                  std::vector<double> c, int nsims, int narms, int ngrps) {
@@ -153,7 +145,6 @@ std::vector<double> mceC(std::vector<double> k, std::vector<double> e,
 }
 
 // Calculate Vstar - expected benefits if choosing optimal arm at each simulation
-//' @export
 // [[Rcpp::export]]
 std::vector<double> VstarC(std::vector<double> k,
                           std::vector<double> e, std::vector<double> c,

@@ -96,12 +96,11 @@ ceacR <- function(ix, kval, grpname) {
 }
 
 # Test pcea function ----------------------------------------------------------
-### defaults
-pcea.dt <-  pcea(ce, k = krange, sim = "sim", arm = "arm",
-                grp = "grp", e = "qalys", c = "cost")
-
-
 test_that("pcea", {
+  
+  ### function gets expected results
+  pcea.dt <-  pcea(ce, k = krange, sim = "sim", arm = "arm",
+                   grp = "grp", e = "qalys", c = "cost")
   kval <- sample(krange, 1)
   
   ## summary
@@ -142,14 +141,23 @@ test_that("pcea", {
   evpi <- pcea.dt$evpi[grp == "Group 2" &  k == kval]
   evpi.test <- pceaR(ce, kval , "Group 2", output = "evpi")
   expect_equal(evpi$evpi, evpi.test)
+  
+  ### function works with other names
+  ce2 = data.table::copy(ce)
+  data.table::setnames(ce2, c("sim", "arm", "grp"), c("samp", "arm_name", "group"))
+  pcea.dt2 <-  pcea(ce2, k = krange, sim = "samp", arm = "arm_name",
+                   grp = "group", e = "qalys", c = "cost")
+  evpi.v2 <- pcea.dt2$evpi[group == "Group 2" &  k == kval]
+  expect_equal(evpi.v2$evpi, evpi$evpi)
 })
 
 
 # Test pcea_pw function -------------------------------------------------------
-pcea.pw.dt <-  pcea_pw(ce,  k = krange, control = "Arm 1",
-                     sim = "sim", arm = "arm", e = "qalys", c = "cost")
-
 test_that("pcea_pw", {
+  
+  ### function gets expected results
+  pcea.pw.dt <-  pcea_pw(ce,  k = krange, control = "Arm 1",
+                         sim = "sim", arm = "arm", e = "qalys", c = "cost")
   kval <- sample(krange, 1)
   
   ## delta
@@ -193,5 +201,11 @@ test_that("pcea_pw", {
   einb.test <- delta[grp == "Group 2", .(einb = mean(iqalys * kval - icost)), 
                      by = "arm"]
   expect_equal(inb$einb, einb.test$einmb)
-
+  
+  ### function works with other names
+  pcea.pw.dt2 <- pcea_pw(ce2,  k = krange, control = "Arm 1",
+                         sim = "samp", arm = "arm_name", grp = "group",
+                         e = "qalys", c = "cost")
+  ceac.v2 <- pcea.pw.dt2$ceac[group == "Group 2" & k == kval]
+  expect_equal(ceac$prob, ceac.v2$prob)
 })

@@ -195,7 +195,7 @@ calc_incr_effect <- function(x_treat, x_control, sim, arm, grp, outcomes,
                                       x_control[[outcomes[i]]],
                                       nsims, narms, ngrps)
   }
-  dt <- data.table(x_treat$sim, x_treat$arm, x_treat$grp, outcomes.mat)
+  dt <- data.table(x_treat[[sim]], x_treat[[arm]], x_treat[[grp]], outcomes.mat)
   setnames(dt, c(sim, arm, grp, paste0("i", outcomes)))
 }
 
@@ -253,16 +253,19 @@ evpi <- function(x, k, sim, arm, grp, e, c, nsims, narms, ngrps, nmb){
 
   # Choose treatment by maximum expected benefit
   x.nmb = copy(nmb)
-  x.enmb <- dcast(x.nmb, k + grp ~ arm, value.var = "enmb")
+  f <- as.formula(paste0("k", "+", grp, "~", arm))
+  x.enmb <- dcast(x.nmb, f, value.var = "enmb")
   mu <- rowmaxC(as.matrix(x.enmb[, -c(1:2), with = FALSE]))
   mu.ind <- c(rowmax_indC(as.matrix(x.enmb[, -c(1:2), with = FALSE]))) + 1
 
   # calculate expected value of perfect information
   Vstar <- VstarC(k, x[[e]], x[[c]], nsims, narms, ngrps)
   evpi <- Vstar - c(mu)
-  return(data.table(k = rep(k, each = ngrps),
+  dt <- data.table(k = rep(k, each = ngrps),
                     grp = rep(unique(x[[grp]]), times = length(k)),
-                    evpi = evpi, enmbpi = Vstar, enmb = c(mu), best = mu.ind))
+                    evpi = evpi, enmbpi = Vstar, enmb = c(mu), best = mu.ind)
+  setnames(dt, "grp", grp)
+  return(dt)
 }
 
 # CEA summary table

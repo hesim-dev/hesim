@@ -11,47 +11,38 @@ predict_MCMCmnlC <- function(beta, x, ncat) {
     .Call('hesim_predict_MCMCmnlC', PACKAGE = 'hesim', beta, x, ncat)
 }
 
-#' @export
 vecmax_index <- function(x) {
     .Call('hesim_vecmax_index', PACKAGE = 'hesim', x)
 }
 
-#' @export
 vecmax <- function(x) {
     .Call('hesim_vecmax', PACKAGE = 'hesim', x)
 }
 
-#' @export
 rowmaxC <- function(x) {
     .Call('hesim_rowmaxC', PACKAGE = 'hesim', x)
 }
 
-#' @export
 stdmean <- function(v) {
     .Call('hesim_stdmean', PACKAGE = 'hesim', v)
 }
 
-#' @export
 rowmax_indC <- function(x) {
     .Call('hesim_rowmax_indC', PACKAGE = 'hesim', x)
 }
 
-#' @export
 incr_effectC <- function(x, y, nsims, narms, ngrps) {
     .Call('hesim_incr_effectC', PACKAGE = 'hesim', x, y, nsims, narms, ngrps)
 }
 
-#' @export
 ceacC <- function(k, ie, ic, nsims, narms, ngrps) {
     .Call('hesim_ceacC', PACKAGE = 'hesim', k, ie, ic, nsims, narms, ngrps)
 }
 
-#' @export
 mceC <- function(k, e, c, nsims, narms, ngrps) {
     .Call('hesim_mceC', PACKAGE = 'hesim', k, e, c, nsims, narms, ngrps)
 }
 
-#' @export
 VstarC <- function(k, e, c, nsims, narms, ngrps) {
     .Call('hesim_VstarC', PACKAGE = 'hesim', k, e, c, nsims, narms, ngrps)
 }
