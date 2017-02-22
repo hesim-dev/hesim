@@ -277,13 +277,15 @@ cea_table <- function(x, sim, arm, grp, e, c, ICER = FALSE){
   setnames(ret, colnames(ret), c(arm, grp,
                                  paste0(e, c("_mean", "_lower", "_upper")),
                                  paste0(c, c("_mean", "_lower", "_upper"))))
+  ie_mean <- paste0(e, "_mean")
+  ic_mean <- paste0(c, "_mean")
   if (ICER == TRUE){
-    ret$icer <- ret[, icost_mean]/ret[, iqalys_mean]
-    ret$icer <- ifelse(ret[, icost_mean] < 0 & ret[, iqalys_mean] >= 0, "Dominates",
+    ret$icer <- ret[, ic_mean, with = FALSE]/ret[, ie_mean, with = FALSE]
+    ret$icer <- ifelse(ret[, ic_mean, with = FALSE] < 0 & ret[, ie_mean, with = FALSE] >= 0, "Dominates",
                        ret$icer)
-    ret$icer <- ifelse(ret[, icost_mean] < 0 & ret[, iqalys_mean] < 0, "NA",
+    ret$icer <- ifelse(ret[, ic_mean, with = FALSE] < 0 & ret[, ie_mean, with = FALSE] < 0, "NA",
                        ret$icer)
-    ret$icer <- ifelse(ret[, icost_mean] > 0 & ret[, iqalys_mean] <= 0, "Dominated",
+    ret$icer <- ifelse(ret[, ic_mean, with = FALSE] > 0 & ret[, ie_mean, with = FALSE] <= 0, "Dominated",
                        ret$icer)
   }
   return(ret)
