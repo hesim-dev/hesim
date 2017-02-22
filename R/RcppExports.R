@@ -86,6 +86,10 @@ pv_poly <- function(r, p, t1, t2, h, a) {
     .Call('hesim_pv_poly', PACKAGE = 'hesim', r, p, t1, t2, h, a)
 }
 
+rtruncnormC <- function(mean, sd, lower, upper) {
+    .Call('hesim_rtruncnormC', PACKAGE = 'hesim', mean, sd, lower, upper)
+}
+
 qgompertzC <- function(p, shape, rate) {
     .Call('hesim_qgompertzC', PACKAGE = 'hesim', p, shape, rate)
 }

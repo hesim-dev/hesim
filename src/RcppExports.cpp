@@ -252,6 +252,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rtruncnormC
+double rtruncnormC(double mean, double sd, double lower, double upper);
+RcppExport SEXP hesim_rtruncnormC(SEXP meanSEXP, SEXP sdSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
+    Rcpp::traits::input_parameter< double >::type sd(sdSEXP);
+    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
+    rcpp_result_gen = Rcpp::wrap(rtruncnormC(mean, sd, lower, upper));
+    return rcpp_result_gen;
+END_RCPP
+}
 // qgompertzC
 double qgompertzC(double p, double shape, double rate);
 RcppExport SEXP hesim_qgompertzC(SEXP pSEXP, SEXP shapeSEXP, SEXP rateSEXP) {

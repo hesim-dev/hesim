@@ -1,5 +1,6 @@
 context("Random number generation")
 library("msm")
+library("truncnorm")
 library("flexsurv")
 
 # Test rcat -------------------------------------------------------------------
@@ -47,6 +48,25 @@ test_that("rpwexp", {
   samp2 <- msm::rpexp(n, ratemat[1, ], t)
   summary(samp2) # not identical because of order of sampling from exponential
 
+})
+
+# Test c++ function rtruncnormC -----------------------------------------------
+test_that("rtruncnormC", {
+  n <- 1000
+  mu <- 50; sigma <- 10; lower <- 25; upper <- 60
+  
+  #rtruncnormC from hesim
+  set.seed(10)
+  samp1 <- replicate(n, hesim:::rtruncnormC(mu, sigma, lower, upper))
+  
+  # rtnorm from msm package
+  set.seed(10)
+  samp2 <- rtnorm(n, mu, sigma, lower, upper)
+  
+  # rtruncnorm from truncnorm package
+  set.seed(10)
+  samp3 <- rtruncnorm(n, lower, upper, mu, sigma)
+  expect_equal(samp1, samp3)
 })
 
 # Test c++ function rsurv -----------------------------------------------------

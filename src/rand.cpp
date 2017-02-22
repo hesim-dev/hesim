@@ -2,7 +2,18 @@
 #include <RcppArmadilloExtensions/sample.h>
 using namespace Rcpp;
 
-// Gompertz Distribution
+// Truncated normal distribution
+// [[Rcpp::export]]
+double rtruncnormC(double mean, double sd, double lower, double upper){
+  double  sample;
+  sample = R::rnorm(mean, sd);
+  while(sample < lower || sample > upper){
+    sample = R::rnorm(mean, sd);
+  } 
+  return sample;
+}
+
+// Gompertz distribution
 // [[Rcpp::export]]
 double qgompertzC(double p, double shape, double rate) {
   double q = 0;
@@ -81,7 +92,7 @@ std::vector<double> rpwexpC (arma::mat rate, arma::rowvec time) {
   return surv;
 }
 
-// Random Survival Times
+// Random survival times
 // [[Rcpp::export]]
 double rsurv(double location, double anc1, std::string dist, double anc2 = 0.0) {
   double surv = 0.0;
