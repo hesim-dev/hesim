@@ -58,3 +58,67 @@ rcat <- function(prob){
 rpwexp <- function(rate, time){
   return(rpwexpC(rate, time))
 }
+
+#' Extract parameters for simulating survival models.
+#'
+#' Extract parameters for simulating survival or multi-state models fit using \code{flexsurvreg}
+#' from the \code{flexsurv} package.
+#'
+#' @param x For \code{rsurv_prep}, a model fit with \code{flexsurvreg}; for \code{rmsm_prep}, a list of
+#' models fit with \code{flexsurvreg}.
+#'
+#' @return List with the following parameters:
+#' \item{loc_beta}{Regression coefficients for location parameter.}
+#' \item{dist}{Distribution used for model fit.}
+#' \item{par}{1st ancillary parameter in survvial model.}
+#'
+#' @name rsurv_prep
+#' @export
+#' @keywords internal
+rmsm_prep <- function(x){
+  loc_beta <- anc1 <- list()
+  dist <- rep(NA, length(x))
+  for (i in 1:length(x)){
+    param <- rsurv_prep(x[[i]])
+    loc_beta[[i]] <- param$location
+    anc1[[i]] <- param$anc1
+    dist[i] <- param$dist
+  }
+  loc_beta <- list_to_array(loc_beta)
+  anc1 <- unlist(anc1)
+  dist <- unlist(dist)
+  return(list(loc_beta = loc_beta, anc1 = anc1, dist = dist))
+}
+
+#' @name rsurv_prep
+#' @export
+rsurv_prep <- function(x){
+  if(class(x) == "flexsurvreg"){
+    d <- x$dlist
+    param <- vector(length(d$pars) + 1, mode = "list")
+    loc.indx <- which(d$pars == d$location)
+    param[[1]] <- x$coef[c(x$basepars[loc.indx],
+                           x$covpars[x$mx[[d$location]]])]
+    if (length(d$pars) > 1){
+      anc.indx <- which(d$pars != d$location)
+      anc.names <- d$pars[anc.indx]
+      for (i in 1:length(anc.names)){
+        param[[i+1]] <- x$coef[c(x$basepars[anc.indx[i]],
+                                 x$covpars[x$mx[[anc.names[i]]]])]
+      }
+    }
+    param[[length(param)]] <- x$dlist$name
+    if (x$dlist$name == "weibull.quiet"){
+      param[[length(param)]] <- "weibull"
+    }
+    if (length(d$pars) <= 1){
+      names.pars <- "location"
+    } else{
+      names.pars <-  c("location", paste0("anc", seq(1, length(param) - 2)))
+    }
+    names(param) <- c(names.pars, "dist")
+  } else{
+    print(paste0("rsurv_prep does not work for an object of class ", class(x)))
+  }
+  return(param)
+}

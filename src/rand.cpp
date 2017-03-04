@@ -135,7 +135,6 @@ double rsurv(double location, double anc1, std::string dist, double anc2 = 0.0) 
 }
 
 // Random generation for categorical distribution
-//' @export
 // [[Rcpp::export]]
 int rcat1C(arma::rowvec probs) {
   int k = probs.n_elem;
@@ -147,7 +146,6 @@ int rcat1C(arma::rowvec probs) {
   return(max);
 }
 
-//' @export
 // [[Rcpp::export]]
 arma::vec rcatC(arma::mat probs){
   int n = probs.n_rows;

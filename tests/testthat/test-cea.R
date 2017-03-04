@@ -203,6 +203,8 @@ test_that("pcea_pw", {
   expect_equal(inb$einb, einb.test$einmb)
   
   ### function works with other names
+  ce2 = data.table::copy(ce)
+  data.table::setnames(ce2, c("sim", "arm", "grp"), c("samp", "arm_name", "group"))
   pcea.pw.dt2 <- pcea_pw(ce2,  k = krange, control = "Arm 1",
                          sim = "samp", arm = "arm_name", grp = "group",
                          e = "qalys", c = "cost")

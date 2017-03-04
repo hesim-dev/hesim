@@ -113,12 +113,10 @@ rsurv <- function(location, anc1, dist, anc2 = 0.0) {
     .Call('hesim_rsurv', PACKAGE = 'hesim', location, anc1, dist, anc2)
 }
 
-#' @export
 rcat1C <- function(probs) {
     .Call('hesim_rcat1C', PACKAGE = 'hesim', probs)
 }
 
-#' @export
 rcatC <- function(probs) {
     .Call('hesim_rcatC', PACKAGE = 'hesim', probs)
 }
