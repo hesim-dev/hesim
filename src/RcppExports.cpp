@@ -6,32 +6,6 @@
 
 using namespace Rcpp;
 
-// mlogit_prob
-arma::rowvec mlogit_prob(arma::mat beta, arma::rowvec x, int ncat);
-RcppExport SEXP hesim_mlogit_prob(SEXP betaSEXP, SEXP xSEXP, SEXP ncatSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< arma::rowvec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type ncat(ncatSEXP);
-    rcpp_result_gen = Rcpp::wrap(mlogit_prob(beta, x, ncat));
-    return rcpp_result_gen;
-END_RCPP
-}
-// predict_MCMCmnlC
-arma::cube predict_MCMCmnlC(arma::mat beta, arma::mat x, int ncat);
-RcppExport SEXP hesim_predict_MCMCmnlC(SEXP betaSEXP, SEXP xSEXP, SEXP ncatSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type ncat(ncatSEXP);
-    rcpp_result_gen = Rcpp::wrap(predict_MCMCmnlC(beta, x, ncat));
-    return rcpp_result_gen;
-END_RCPP
-}
 // vecmax_index
 int vecmax_index(std::vector<double> x);
 RcppExport SEXP hesim_vecmax_index(SEXP xSEXP) {
@@ -147,38 +121,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type narms(narmsSEXP);
     Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
     rcpp_result_gen = Rcpp::wrap(VstarC(k, e, c, nsims, narms, ngrps));
-    return rcpp_result_gen;
-END_RCPP
-}
-// transprob_addmort
-arma::mat transprob_addmort(arma::mat p, arma::rowvec pmort, int nstates, arma::rowvec zerovec, arma::rowvec onescalar);
-RcppExport SEXP hesim_transprob_addmort(SEXP pSEXP, SEXP pmortSEXP, SEXP nstatesSEXP, SEXP zerovecSEXP, SEXP onescalarSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type p(pSEXP);
-    Rcpp::traits::input_parameter< arma::rowvec >::type pmort(pmortSEXP);
-    Rcpp::traits::input_parameter< int >::type nstates(nstatesSEXP);
-    Rcpp::traits::input_parameter< arma::rowvec >::type zerovec(zerovecSEXP);
-    Rcpp::traits::input_parameter< arma::rowvec >::type onescalar(onescalarSEXP);
-    rcpp_result_gen = Rcpp::wrap(transprob_addmort(p, pmort, nstates, zerovec, onescalar));
-    return rcpp_result_gen;
-END_RCPP
-}
-// markov_cohort_transC
-arma::mat markov_cohort_transC(arma::mat z0, arma::vec ncycles, arma::cube& pmat, arma::vec pmat_index, bool mortadj, arma::cube mortprob, arma::vec mortprob_index);
-RcppExport SEXP hesim_markov_cohort_transC(SEXP z0SEXP, SEXP ncyclesSEXP, SEXP pmatSEXP, SEXP pmat_indexSEXP, SEXP mortadjSEXP, SEXP mortprobSEXP, SEXP mortprob_indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type z0(z0SEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type ncycles(ncyclesSEXP);
-    Rcpp::traits::input_parameter< arma::cube& >::type pmat(pmatSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pmat_index(pmat_indexSEXP);
-    Rcpp::traits::input_parameter< bool >::type mortadj(mortadjSEXP);
-    Rcpp::traits::input_parameter< arma::cube >::type mortprob(mortprobSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type mortprob_index(mortprob_indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(markov_cohort_transC(z0, ncycles, pmat, pmat_index, mortadj, mortprob, mortprob_index));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -391,25 +333,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// pv_splines
-double pv_splines(double t1, double t2, int state, double r, arma::vec x, arma::vec beta, arma::vec poly_beta, arma::vec poly_deg, arma::vec knots);
-RcppExport SEXP hesim_pv_splines(SEXP t1SEXP, SEXP t2SEXP, SEXP stateSEXP, SEXP rSEXP, SEXP xSEXP, SEXP betaSEXP, SEXP poly_betaSEXP, SEXP poly_degSEXP, SEXP knotsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type t1(t1SEXP);
-    Rcpp::traits::input_parameter< double >::type t2(t2SEXP);
-    Rcpp::traits::input_parameter< int >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< double >::type r(rSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type poly_beta(poly_betaSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type poly_deg(poly_degSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type knots(knotsSEXP);
-    rcpp_result_gen = Rcpp::wrap(pv_splines(t1, t2, state, r, x, beta, poly_beta, poly_deg, knots));
-    return rcpp_result_gen;
-END_RCPP
-}
 // notinvec
 bool notinvec(int item, std::vector<int> v);
 RcppExport SEXP hesim_notinvec(SEXP itemSEXP, SEXP vSEXP) {
@@ -462,9 +385,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// sim_msmC
-List sim_msmC(arma::cube loc_beta, arma::mat loc_x, std::vector<std::string> dist, arma::mat tmat, arma::vec anc1, std::vector<int> absorbing, int maxt, int maxage, int agecol);
-RcppExport SEXP hesim_sim_msmC(SEXP loc_betaSEXP, SEXP loc_xSEXP, SEXP distSEXP, SEXP tmatSEXP, SEXP anc1SEXP, SEXP absorbingSEXP, SEXP maxtSEXP, SEXP maxageSEXP, SEXP agecolSEXP) {
+// sim_ctsmC
+List sim_ctsmC(arma::cube loc_beta, arma::mat loc_x, std::vector<std::string> dist, arma::mat tmat, arma::vec anc1, std::vector<int> absorbing, int maxt, int maxage, int agecol);
+RcppExport SEXP hesim_sim_ctsmC(SEXP loc_betaSEXP, SEXP loc_xSEXP, SEXP distSEXP, SEXP tmatSEXP, SEXP anc1SEXP, SEXP absorbingSEXP, SEXP maxtSEXP, SEXP maxageSEXP, SEXP agecolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -477,31 +400,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type maxt(maxtSEXP);
     Rcpp::traits::input_parameter< int >::type maxage(maxageSEXP);
     Rcpp::traits::input_parameter< int >::type agecol(agecolSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_msmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol));
-    return rcpp_result_gen;
-END_RCPP
-}
-// sim_msm_pvC
-arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec state, arma::vec final, arma::vec time, std::vector<int> absorbing, double r, arma::mat x, int agecol, arma::mat beta, arma::mat poly_beta, arma::mat poly_deg, arma::mat knots);
-RcppExport SEXP hesim_sim_msm_pvC(SEXP idSEXP, SEXP simSEXP, SEXP ageSEXP, SEXP stateSEXP, SEXP finalSEXP, SEXP timeSEXP, SEXP absorbingSEXP, SEXP rSEXP, SEXP xSEXP, SEXP agecolSEXP, SEXP betaSEXP, SEXP poly_betaSEXP, SEXP poly_degSEXP, SEXP knotsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type id(idSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type sim(simSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type age(ageSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type final(finalSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< std::vector<int> >::type absorbing(absorbingSEXP);
-    Rcpp::traits::input_parameter< double >::type r(rSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type agecol(agecolSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type poly_beta(poly_betaSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type poly_deg(poly_degSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type knots(knotsSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_msm_pvC(id, sim, age, state, final, time, absorbing, r, x, agecol, beta, poly_beta, poly_deg, knots));
+    rcpp_result_gen = Rcpp::wrap(sim_ctsmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -559,6 +458,43 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
     Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
     rcpp_result_gen = Rcpp::wrap(matrix_bycol(v, nrow, ncol));
+    return rcpp_result_gen;
+END_RCPP
+}
+// list_to_vecmats
+std::vector<arma::mat> list_to_vecmats(Rcpp::List L);
+RcppExport SEXP hesim_list_to_vecmats(SEXP LSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type L(LSEXP);
+    rcpp_result_gen = Rcpp::wrap(list_to_vecmats(L));
+    return rcpp_result_gen;
+END_RCPP
+}
+// list_loop
+std::vector<double> list_loop(Rcpp::List L, arma::rowvec beta, int n);
+RcppExport SEXP hesim_list_loop(SEXP LSEXP, SEXP betaSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type L(LSEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(list_loop(L, beta, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cube_loop
+std::vector<double> cube_loop(arma::cube x, arma::rowvec beta, int n);
+RcppExport SEXP hesim_cube_loop(SEXP xSEXP, SEXP betaSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(cube_loop(x, beta, n));
     return rcpp_result_gen;
 END_RCPP
 }

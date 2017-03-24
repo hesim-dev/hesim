@@ -1,6 +1,6 @@
-#' Simulate clock-reset multi-state model
+#' Simulate continuous time semi-markov (clock-reset) multi-state model
 #'
-#' Simulate clock-reset multi-state model
+#' imulate continuous time semi-markov (clock-reset) multi-state model
 #'
 #' @param loc_beta Regression coefficients for location parameter. Array with 1st dimension (rows)
 #' indexing random draw of coefficients, 2nd dimension (columns) indexing coefficients, and
@@ -32,7 +32,7 @@
 #'
 #' @export
 #' @keywords internal
-sim_msm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL, maxage = 1000){
+sim_ctsm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL, maxage = 1000){
   if (is.data.frame(loc_x)){
     loc_x <- as.matrix(loc_x)
   }
@@ -49,7 +49,7 @@ sim_msm <- function(loc_beta, loc_x, dist, tmat, anc1, maxt, agevar = NULL, maxa
   }
   absorbing <- absorbing(tmat) - 1
   tmat[is.na(tmat)] <- 0
-  sim <- sim_msmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol)
+  sim <- sim_ctsmC(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol)
   sim <- as.data.frame(sim)
   if (is.null(agevar)){
       colnames(sim) <- c("id", "sim", "state", "final", "time")

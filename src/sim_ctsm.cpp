@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <RcppArmadillo.h>
 #include "rand.h"
-#include "pv.h"
 using namespace Rcpp;
 
 // Random times to next states
@@ -23,42 +22,6 @@ arma::vec rtjumps(arma::mat lb, arma::vec loc_x, arma::vec anc1,
   return time_jumps;
 }
 
-// Return Polynomial Constants
-std::vector<double> poly_const(std::vector<double> &a, double xb,
-                                  arma::vec coef, int start, int p){
-  a.push_back(xb + coef(start));
-  for (int j = start + 1; j <= start + p; ++j){
-    a.push_back(coef(j));
-  }
-  return a;
-}
-
-// Calculate Present Value from t1 to t2 With Piecewise Polynomials
-// [[Rcpp::export]]
-double pv_splines(double t1, double t2, int state, double r,
-               arma::vec x, arma::vec beta, arma::vec poly_beta,
-               arma::vec poly_deg, arma::vec knots){
-
-  int n = poly_deg.n_elem;
-  knots = knots + t1;
-  knots(n) = t2;
-  knots = sort(knots);
-  double xb = dot(beta, x);
-  std::vector<double> a;
-  double pv = 0;
-  int coef_start = 0;
-  for (int i = 0; i < n; ++i){
-    if (knots(i + 1) > t2){
-      break;
-    }
-    a = poly_const(a, xb, poly_beta, coef_start, poly_deg(i));
-    pv += pv_poly(r, poly_deg(i), knots(i), knots(i + 1),
-                 knots(i), a);
-    a.clear();
-    coef_start = coef_start + poly_deg(i) + 1;
-  }
-  return pv;
-}
 
 // [[Rcpp::export]]
 bool notinvec(int item, std::vector<int> v){
@@ -94,7 +57,7 @@ arma::vec updateAge(arma::vec x, double age, int col){
 
 //' @export
 // [[Rcpp::export]]
-List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
+List sim_ctsmC(arma::cube loc_beta, arma::mat loc_x,
               std::vector<std::string> dist, arma::mat tmat,
               arma::vec anc1, std::vector<int> absorbing,
               int maxt, int maxage, int agecol = -1) {
@@ -178,41 +141,6 @@ List sim_msmC(arma::cube loc_beta, arma::mat loc_x,
   else{
     return List::create(id, sim, state, final, time);
   }
-}
-
-//' @export
-// [[Rcpp::export]]
-arma::vec sim_msm_pvC(arma::vec id, arma::vec sim, arma::vec age, arma::vec state,
-                      arma::vec final, arma::vec time, std::vector<int> absorbing,
-                      double r, arma::mat x, int agecol,
-                   arma::mat beta, arma::mat poly_beta, arma::mat poly_deg,
-                   arma::mat knots) {
-  // Initialize/store
-  int N = time.n_elem;
-  arma::vec pv(N);
-
-  // Loop
-  for (int i = 0; i < N; ++i){
-    arma::vec xi = x.row(id(i)).t();
-    if (agecol >= 0){
-      xi(agecol) = age(i);
-    }
-    if (final(i) == 1){
-      if (!notinvec(state(i), absorbing)){
-        pv(i) = dot(beta.row(state(i)).t(), x.row(id(i)).t()) * exp(-r * time(i));
-      }
-      else{
-        pv(i) = 0;
-      }
-    }
-    else{
-      pv(i) = pv_splines(time(i), time(i + 1), state(i), r,
-         xi, beta.row(state(i)).t(),
-         poly_beta.row(state(i)).t(),
-         poly_deg.row(state(i)).t(), knots.row(state(i)).t());
-    }
-  }
-  return pv;
 }
 
 // This function is for checking pmatrix
