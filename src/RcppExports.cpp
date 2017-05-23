@@ -562,43 +562,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// list_to_vecmats
-std::vector<arma::mat> list_to_vecmats(Rcpp::List L);
-RcppExport SEXP hesim_list_to_vecmats(SEXP LSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type L(LSEXP);
-    rcpp_result_gen = Rcpp::wrap(list_to_vecmats(L));
-    return rcpp_result_gen;
-END_RCPP
-}
-// list_loop
-std::vector<double> list_loop(Rcpp::List L, arma::rowvec beta, int n);
-RcppExport SEXP hesim_list_loop(SEXP LSEXP, SEXP betaSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type L(LSEXP);
-    Rcpp::traits::input_parameter< arma::rowvec >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(list_loop(L, beta, n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cube_loop
-std::vector<double> cube_loop(arma::cube x, arma::rowvec beta, int n);
-RcppExport SEXP hesim_cube_loop(SEXP xSEXP, SEXP betaSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::cube >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::rowvec >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(cube_loop(x, beta, n));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int hesim_RcppExport_validate(const char* sig) { 
@@ -638,4 +601,38 @@ RcppExport SEXP hesim_RcppExport_registerCCallable() {
     R_RegisterCCallable("hesim", "hesim_rdirichlet_matC", (DL_FUNC)hesim_rdirichlet_matC_try);
     R_RegisterCCallable("hesim", "hesim_RcppExport_validate", (DL_FUNC)hesim_RcppExport_validate);
     return R_NilValue;
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"hesim_vecmax_index", (DL_FUNC) &hesim_vecmax_index, 1},
+    {"hesim_vecmax", (DL_FUNC) &hesim_vecmax, 1},
+    {"hesim_rowmaxC", (DL_FUNC) &hesim_rowmaxC, 1},
+    {"hesim_stdmean", (DL_FUNC) &hesim_stdmean, 1},
+    {"hesim_rowmax_indC", (DL_FUNC) &hesim_rowmax_indC, 1},
+    {"hesim_incr_effectC", (DL_FUNC) &hesim_incr_effectC, 5},
+    {"hesim_ceacC", (DL_FUNC) &hesim_ceacC, 6},
+    {"hesim_mceC", (DL_FUNC) &hesim_mceC, 6},
+    {"hesim_VstarC", (DL_FUNC) &hesim_VstarC, 6},
+    {"hesim_rtruncnormC", (DL_FUNC) &hesim_rtruncnormC, 4},
+    {"hesim_qgompertzC", (DL_FUNC) &hesim_qgompertzC, 3},
+    {"hesim_rgompertzC", (DL_FUNC) &hesim_rgompertzC, 2},
+    {"hesim_qllogisC", (DL_FUNC) &hesim_qllogisC, 5},
+    {"hesim_rllogisC", (DL_FUNC) &hesim_rllogisC, 2},
+    {"hesim_rgengammaC", (DL_FUNC) &hesim_rgengammaC, 3},
+    {"hesim_rpwexp1C", (DL_FUNC) &hesim_rpwexp1C, 2},
+    {"hesim_rpwexpC", (DL_FUNC) &hesim_rpwexpC, 2},
+    {"hesim_rsurv", (DL_FUNC) &hesim_rsurv, 4},
+    {"hesim_rcat1C", (DL_FUNC) &hesim_rcat1C, 1},
+    {"hesim_rcatC", (DL_FUNC) &hesim_rcatC, 1},
+    {"hesim_rdirichlet1C", (DL_FUNC) &hesim_rdirichlet1C, 1},
+    {"hesim_rdirichlet_matC", (DL_FUNC) &hesim_rdirichlet_matC, 2},
+    {"hesim_matrix_byrow", (DL_FUNC) &hesim_matrix_byrow, 3},
+    {"hesim_matrix_bycol", (DL_FUNC) &hesim_matrix_bycol, 3},
+    {"hesim_RcppExport_registerCCallable", (DL_FUNC) &hesim_RcppExport_registerCCallable, 0},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_hesim(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

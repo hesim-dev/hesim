@@ -65,7 +65,7 @@ test_that("rtruncnormC", {
   
   # rtruncnorm from truncnorm package
   set.seed(10)
-  samp3 <- rtruncnorm(n, lower, upper, mu, sigma)
+  samp3 <- truncnorm::rtruncnorm(n, lower, upper, mu, sigma)
   expect_equal(samp1, samp3)
 })
 

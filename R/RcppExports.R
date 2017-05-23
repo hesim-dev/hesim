@@ -97,18 +97,6 @@ matrix_bycol <- function(v, nrow, ncol) {
     .Call('hesim_matrix_bycol', PACKAGE = 'hesim', v, nrow, ncol)
 }
 
-list_to_vecmats <- function(L) {
-    .Call('hesim_list_to_vecmats', PACKAGE = 'hesim', L)
-}
-
-list_loop <- function(L, beta, n) {
-    .Call('hesim_list_loop', PACKAGE = 'hesim', L, beta, n)
-}
-
-cube_loop <- function(x, beta, n) {
-    .Call('hesim_cube_loop', PACKAGE = 'hesim', x, beta, n)
-}
-
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('hesim_RcppExport_registerCCallable', PACKAGE = 'hesim')

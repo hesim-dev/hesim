@@ -15,5 +15,5 @@ Imports:
     Rcpp,
     data.table
 Suggests:
-    Testthat
+    testthat
 RoxygenNote: 6.0.0

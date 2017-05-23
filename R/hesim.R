@@ -4,6 +4,5 @@
 #' @name hesim
 #' @useDynLib hesim
 #' @import data.table
-#' @importFrom ggplot2 ggplot
 #' @importFrom Rcpp evalCpp
 NULL
