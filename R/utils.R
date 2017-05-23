@@ -13,4 +13,3 @@ list_to_array <- function(L){
 absorbing <- function(tmat){
   which(apply(tmat, 1, function(x) all(is.na(x))))
 }
-

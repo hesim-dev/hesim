@@ -3,9 +3,6 @@ templates:
     bootswatch: simplex
 
 reference:
-  - title: "Datasets"
-    contents:
-      - lifetable
   - title: "Cost-effectiveness analysis"
     contents:
       - pcea
@@ -16,6 +13,7 @@ reference:
     contents:
       - rcat
       - rpwexp
+      - rdirichlet_mat
 
 navbar:
   title: hesim

@@ -1,3 +1,4 @@
+// [[Rcpp::interfaces(r, cpp)]]
 #include <RcppArmadillo.h>
 #include <RcppArmadilloExtensions/sample.h>
 using namespace Rcpp;
@@ -152,6 +153,30 @@ arma::vec rcatC(arma::mat probs){
   arma::vec samp(n);
   for (int i = 0; i < n; ++i){
     samp(i) = rcat1C(probs.row(i));
+  }
+  return(samp);
+}
+
+// Dirichlet distribution
+// [[Rcpp::export]]
+arma::rowvec rdirichlet1C(arma::rowvec alpha){
+  int alpha_len = alpha.size();
+  arma::rowvec x(alpha_len);
+  for (int i = 0; i < alpha_len; ++i){
+    x(i) = R::rgamma(alpha(i), 1);
+  }
+  return x/arma::sum(x);
+}
+
+// [[Rcpp::export]]
+arma::cube rdirichlet_matC(int n, arma::mat alpha){
+  int J = alpha.n_rows;
+  int K = alpha.n_cols;
+  arma::cube samp(J, K, n);
+  for (int i = 0; i < n; ++i){
+    for (int j = 0; j < J; ++j){
+      samp.slice(i).row(j) = rdirichlet1C(alpha.row(j));
+    }
   }
   return(samp);
 }

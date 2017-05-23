@@ -37,26 +37,6 @@ VstarC <- function(k, e, c, nsims, narms, ngrps) {
     .Call('hesim_VstarC', PACKAGE = 'hesim', k, e, c, nsims, narms, ngrps)
 }
 
-factorialC <- function(n) {
-    .Call('hesim_factorialC', PACKAGE = 'hesim', n)
-}
-
-pv1 <- function(t1, t2, a, r) {
-    .Call('hesim_pv1', PACKAGE = 'hesim', t1, t2, a, r)
-}
-
-exponent_int <- function(r, p, t, h) {
-    .Call('hesim_exponent_int', PACKAGE = 'hesim', r, p, t, h)
-}
-
-poly_int <- function(r, p, t, h, a) {
-    .Call('hesim_poly_int', PACKAGE = 'hesim', r, p, t, h, a)
-}
-
-pv_poly <- function(r, p, t1, t2, h, a) {
-    .Call('hesim_pv_poly', PACKAGE = 'hesim', r, p, t1, t2, h, a)
-}
-
 rtruncnormC <- function(mean, sd, lower, upper) {
     .Call('hesim_rtruncnormC', PACKAGE = 'hesim', mean, sd, lower, upper)
 }
@@ -101,34 +81,12 @@ rcatC <- function(probs) {
     .Call('hesim_rcatC', PACKAGE = 'hesim', probs)
 }
 
-notinvec <- function(item, v) {
-    .Call('hesim_notinvec', PACKAGE = 'hesim', item, v)
+rdirichlet1C <- function(alpha) {
+    .Call('hesim_rdirichlet1C', PACKAGE = 'hesim', alpha)
 }
 
-nxttime <- function(current_time, time_jump, maxt) {
-    .Call('hesim_nxttime', PACKAGE = 'hesim', current_time, time_jump, maxt)
-}
-
-matS <- function(index, cube, ntrans, k) {
-    .Call('hesim_matS', PACKAGE = 'hesim', index, cube, ntrans, k)
-}
-
-updateAge <- function(x, age, col) {
-    .Call('hesim_updateAge', PACKAGE = 'hesim', x, age, col)
-}
-
-#' @export
-sim_ctsmC <- function(loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol = -1L) {
-    .Call('hesim_sim_ctsmC', PACKAGE = 'hesim', loc_beta, loc_x, dist, tmat, anc1, absorbing, maxt, maxage, agecol)
-}
-
-sim_state_t <- function(state, time, final, t, simindivs) {
-    .Call('hesim_sim_state_t', PACKAGE = 'hesim', state, time, final, t, simindivs)
-}
-
-#' @export
-sim_transprobC <- function(state, time, final, t, simindivs, nstates) {
-    .Call('hesim_sim_transprobC', PACKAGE = 'hesim', state, time, final, t, simindivs, nstates)
+rdirichlet_matC <- function(n, alpha) {
+    .Call('hesim_rdirichlet_matC', PACKAGE = 'hesim', n, alpha)
 }
 
 matrix_byrow <- function(v, nrow, ncol) {
@@ -151,3 +109,7 @@ cube_loop <- function(x, beta, n) {
     .Call('hesim_cube_loop', PACKAGE = 'hesim', x, beta, n)
 }
 
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call('hesim_RcppExport_registerCCallable', PACKAGE = 'hesim')
+})

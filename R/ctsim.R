@@ -6,6 +6,7 @@
 #' @param sim An object of class \code{ctsim}.
 #' @return Length of stay for each sampled parameter set. 
 #'
+#' @keywords internal
 #' @export
 los_ctsim <- function(sim, timevar){
   n <- length(unique(sim$id))
@@ -23,6 +24,7 @@ los_ctsim <- function(sim, timevar){
 #' @param sim An object of class \code{ctsim}.
 #' @return Length of stay for each sampled parameter set. 
 #'
+#' @keywords internal
 #' @export
 transprob_ctsim <- function(sim, t){
   n.states <- length(unique(sim$state))
