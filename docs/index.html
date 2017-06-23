@@ -66,12 +66,12 @@
 <div id="overview" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1></div>
-<p><code>hesim</code> helps faciliate computationally intensive simulation modeling, which is commonly used in health economics to model the burden of disease or for cost-effectiveness analysis. The package has two primary aims:</p>
+<p><code>hesim</code> helps facilitate computationally intensive simulation modeling, which is commonly used in health economics to model the burden of disease or for cost-effectiveness analysis. The package has two primary aims:</p>
 <ul>
 <li>Analyze the output of discrete and continuous time simulation models.</li>
-<li>Provide functions at both the R and C++ level to randomly sample from probability distributions commonly used in health-economic simulation modeling.</li>
+<li>Provide functions to randomly sample from probability distributions commonly used in health-economic simulation modeling.</li>
 </ul>
-<p>Since key functions are written in C++ using <code>Rcpp</code> and data manipulations are performed using the <code>data.table</code> package, <code>hesim</code> is well suited for indivdiual patient simulation and probabilistic sensitivity analysis.</p>
+<p>To ensure that simulations can be run (and analyzed) in a reasonable amount of time, most functions are written in C++ using <code>Rcpp</code> and data manipulations are performed using the <code>data.table</code> package. <code>hesim</code> is therefore well suited for individual patient simulation, probabilistic sensitivity analysis, and quantifying structural uncertainty.</p>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
