@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Incremental treatment effect — incr_effect • hesim</title>
+<title>Transition probabilities — transprob_ctsim • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -86,47 +86,27 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Incremental treatment effect</h1>
+    <h1>Transition probabilities</h1>
     </div>
 
     
-    <p>Calculate incremental effect of all treatment arms on outcome variables from 
-probabilistic sensitivity analysis relative to comparator.</p>
+    <p>Transition probabilities for continuous time simulation.</p>
     
 
-    <pre class="usage"><span class='fu'>incr_effect</span>(<span class='no'>x</span>, <span class='no'>control</span>, <span class='no'>sim</span>, <span class='no'>arm</span>, <span class='no'>outcomes</span>)</pre>
+    <pre class="usage"><span class='fu'>transprob_ctsim</span>(<span class='no'>sim</span>, <span class='no'>t</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>Matrix containing information on outcome variables for each simulation and arm.</p></td>
-    </tr>
-    <tr>
-      <th>control</th>
-      <td><p>Name of control arm (i.e. comparator).</p></td>
-    </tr>
-    <tr>
       <th>sim</th>
-      <td><p>Name of column denoting simulation number.</p></td>
-    </tr>
-    <tr>
-      <th>arm</th>
-      <td><p>Name of column denoting treatment arm.</p></td>
-    </tr>
-    <tr>
-      <th>outcomes</th>
-      <td><p>Name of columns to calculate incremental changes for.</p></td>
+      <td><p>An object of class <code>ctsim</code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.table containing the differences in the values of each variable 
-specified in outcomes between each treatment arm and the 
-comparator. It is the same output generated
-in <code>delta</code> from <code>pcea_pw</code>.</p>
+    <p>Length of stay for each sampled parameter set.</p>
     
 
   </div>

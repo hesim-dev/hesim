@@ -9,7 +9,7 @@
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -63,36 +63,34 @@
       </header><div class="row">
   <div class="contents col-md-9">
     
-<div id="hesim" class="section level1">
+<div id="overview" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#hesim" class="anchor"> </a>hesim</h1></div>
-<p>Simulation models are commonly used in health economics for cost-effectiveness analysis, modeling disease burden, and other purposes. The <code>hesim</code> package is designed for computationally intensive simulation and has the following three goals:</p>
+<a href="#overview" class="anchor"></a>Overview</h1></div>
+<p><code>hesim</code> helps faciliate computationally intensive simulation modeling, which is commonly used in health economics to model the burden of disease or for cost-effectiveness analysis. The package has two primary aims:</p>
 <ul>
-<li>Run very fast patient-level and cohort simulation models.</li>
-<li>Analyze the outcomes of both discrete and continuous time simulation models.</li>
-<li>Help users perform Bayesian cost-effectiveness analysis (e.g. summarize probabilistic sensitivity analyses) at the subgroup level.</li>
+<li>Analyze the output of discrete and continuous time simulation models.</li>
+<li>Provide functions at both the R and C++ level to randomly sample from probability distributions commonly used in health-economic simulation modeling.</li>
 </ul>
-<p>Since both PSA and patient-level models are slow using base R, key functions are written in C++ using <code>Rcpp</code> and data manipulations are performed using the <code>data.table</code> package. <code>hesim</code> is a natural complement to existing packages for survival analysis and multi-state modeling (<code>survival</code>, <code>flexsurv</code>, <code>msm</code>, <code>mstate</code>), which are needed for estimating the parameters of disease models.</p>
-<p><code>hesim</code> is under development. It currently provides a number of functions for cost-effectiveness analysis at the subgroup level, but new functionality for simulating and analyzing patient-level and cohort health-economic models is being added.</p>
+<p>Since key functions are written in C++ using <code>Rcpp</code> and data manipulations are performed using the <code>data.table</code> package, <code>hesim</code> is well suited for indivdiual patient simulation and probabilistic sensitivity analysis.</p>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#installation" class="anchor"> </a>Installation</h1>
+<a href="#installation" class="anchor"></a>Installation</h1>
 <p><code>hesim</code> can be installed from GitHub using <code>devtools</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"devtools"</span>)
 <span class="kw">library</span>(devtools)
-devtools::<span class="kw">install_github</span>(<span class="st">"dincerti/hesim"</span>)</code></pre></div>
+devtools::<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"dincerti/hesim"</span>)</code></pre></div>
 <p>It can then be loaded into <code>R</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(hesim)</code></pre></div>
 </div>
 <div id="documentation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#documentation" class="anchor"> </a>Documentation</h1>
+<a href="#documentation" class="anchor"></a>Documentation</h1>
 <p>Documentation is available <a href="reference/index.html">here</a>.</p>
 </div>
 <div id="vignettes" class="section level1">
 <h1 class="hasAnchor">
-<a href="#vignettes" class="anchor"> </a>Vignettes</h1>
+<a href="#vignettes" class="anchor"></a>Vignettes</h1>
 <p>Package vignettes can be found <a href="articles/index.html">here</a>.</p>
 </div>
 

@@ -23,14 +23,17 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -90,21 +93,32 @@
     <p>Custom table summarizing outcomes from probabilistic sensitivity analysis.</p>
     
 
-    <pre><span class='fu'>custom_table</span>(<span class='no'>x</span>, <span class='no'>arm</span>, <span class='no'>grp</span>, <span class='no'>custom_vars</span>, <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>custom_table</span>(<span class='no'>x</span>, <span class='no'>arm</span>, <span class='no'>grp</span>, <span class='no'>custom_vars</span>, <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>Matrix containing information on outcome variables for each simulation and arm.</dd>
-      <dt>arm</dt>
-      <dd>Name of column denoting treatment arm.</dd>
-      <dt>grp</dt>
-      <dd>Name of columne denoting subgroup</dd>
-      <dt>custom_vars</dt>
-      <dd>Name of custom variables to calculate summary statistic for.</dd>
-      <dt>FUN</dt>
-      <dd>summary statistic function.</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>Matrix containing information on outcome variables for each simulation and arm.</p></td>
+    </tr>
+    <tr>
+      <th>arm</th>
+      <td><p>Name of column denoting treatment arm.</p></td>
+    </tr>
+    <tr>
+      <th>grp</th>
+      <td><p>Name of columne denoting subgroup</p></td>
+    </tr>
+    <tr>
+      <th>custom_vars</th>
+      <td><p>Name of custom variables to calculate summary statistic for.</p></td>
+    </tr>
+    <tr>
+      <th>FUN</th>
+      <td><p>summary statistic function.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

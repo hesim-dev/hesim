@@ -23,14 +23,17 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -91,15 +94,20 @@
 <code>rdirichlet_mat</code> is vetorized and written in C++ for speed.</p>
     
 
-    <pre><span class='fu'>rdirichlet_mat</span>(<span class='no'>n</span>, <span class='no'>alpha</span>)</pre>
+    <pre class="usage"><span class='fu'>rdirichlet_mat</span>(<span class='no'>n</span>, <span class='no'>alpha</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>n</dt>
-      <dd>Number of samples to draw.</dd>
-      <dt>alpha</dt>
-      <dd>A matrix where each row is a separate vector of shape parameters.</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>n</th>
+      <td><p>Number of samples to draw.</p></td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td><p>A matrix where each row is a separate vector of shape parameters.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
