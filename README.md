@@ -14,5 +14,5 @@ Documentation and package vignettes are available on the package [website](https
 ```r
 install.packages("devtools")
 library(devtools)
-devtools::install_github("dincerti/hesim")
+devtools::install_github("InnovationValueInitiative/hesim")
 ```

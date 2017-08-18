@@ -12,7 +12,7 @@ To ensure that simulations can be run (and analyzed) in a reasonable amount of t
 ```r
 install.packages("devtools")
 library(devtools)
-devtools::install_github("dincerti/hesim")
+devtools::install_github("InnovationValueInitiative/hesim")
 ```
 
 It can then be loaded into `R`:
