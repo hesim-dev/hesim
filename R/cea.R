@@ -1,4 +1,4 @@
-#' Personalized cost-effectiveness analysis
+#' Individualized cost-effectiveness analysis
 #'
 #' Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
 #' sensitivity analysis) by subgroup.
@@ -23,7 +23,7 @@
 #' @param custom_fun Function to apply to custom_vars to make custom table. If 
 #' \code{custom_vars} is not NULL and \code{custom_fun} is NULL, then returns the mean,
 #' 2.5\% quantile, and 97.5\% quantile for each variable in \code{custom_vars}.
-#' @return \code{pcea} returns a list containing four data.tables:
+#' @return \code{icea} returns a list containing four data.tables:
 #' 
 #' \describe{
 #'   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
@@ -35,11 +35,11 @@
 #'    \item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
 #'    for the range of specified willingess to pay values.}
 #' }
-#' In addition, if \code{custom_vars} is not NULL, \code{pcea} returns \code{custom.table}, which is
+#' In addition, if \code{custom_vars} is not NULL, \code{icea} returns \code{custom.table}, which is
 #'  a data.table containing summary statistics for each variable in \code{custom_vars}
 #'   by arm and group.
 #' 
-#' \code{pcea_pw} also returns a list containing four data.tables:
+#' \code{icea_pw} also returns a list containing four data.tables:
 #'  \describe{
 #'   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
 #'   quantile by arm and group for clinical effectiveness and costs.}
@@ -56,9 +56,9 @@
 #' If \code{custom_vars} is not NULL, also returns \code{custom.table}, which is
 #'  a data.table containing summary statistics for the values of each variable returned
 #'   in \code{delta} by arm and group.
-#' @name pcea
+#' @name icea
 #' @export
-pcea <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
+icea <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
                 custom_vars = NULL, custom_fun = NULL){
   if (!is.data.table(x)){
     x <- data.table(x)
@@ -83,8 +83,8 @@ pcea <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
 }
 
 #' @export
-#' @rdname pcea
-pcea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
+#' @rdname icea
+icea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
                    custom_vars = NULL, custom_fun = NULL){
   if (!is.data.table(x)){
     x <- data.table(x)
@@ -138,7 +138,7 @@ pcea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e
 #' @return A data.table containing the differences in the values of each variable 
 #' specified in outcomes between each treatment arm and the 
 #' comparator. It is the same output generated
-#' in \code{delta} from \code{pcea_pw}.
+#' in \code{delta} from \code{icea_pw}.
 #'
 #' @export
 incr_effect <- function(x, control, sim, arm, outcomes){
@@ -171,7 +171,7 @@ incr_effect <- function(x, control, sim, arm, outcomes){
 #' @return A data.table of summary statistics for each variable specified in 
 #' \code{custom_vars}. By default, returns the mean, 2.5\%, and 97.5\% quantile of
 #' each variable. Different summary statistics can be calculated using FUN. 
-#' This function is used in \code{pcea} and \code{pcea_pw} to create the
+#' This function is used in \code{icea} and \code{icea_pw} to create the
 #'  \code{custom.table} output.
 #'
 #' @export

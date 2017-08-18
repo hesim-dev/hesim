@@ -21,7 +21,7 @@ incr_effect(x, control, sim, arm, outcomes)
 A data.table containing the differences in the values of each variable 
 specified in outcomes between each treatment arm and the 
 comparator. It is the same output generated
-in \code{delta} from \code{pcea_pw}.
+in \code{delta} from \code{icea_pw}.
 }
 \description{
 Calculate incremental effect of all treatment arms on outcome variables from 

@@ -2,102 +2,102 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 vecmax_index <- function(x) {
-    .Call('hesim_vecmax_index', PACKAGE = 'hesim', x)
+    .Call('_hesim_vecmax_index', PACKAGE = 'hesim', x)
 }
 
 vecmax <- function(x) {
-    .Call('hesim_vecmax', PACKAGE = 'hesim', x)
+    .Call('_hesim_vecmax', PACKAGE = 'hesim', x)
 }
 
 rowmaxC <- function(x) {
-    .Call('hesim_rowmaxC', PACKAGE = 'hesim', x)
+    .Call('_hesim_rowmaxC', PACKAGE = 'hesim', x)
 }
 
 stdmean <- function(v) {
-    .Call('hesim_stdmean', PACKAGE = 'hesim', v)
+    .Call('_hesim_stdmean', PACKAGE = 'hesim', v)
 }
 
 rowmax_indC <- function(x) {
-    .Call('hesim_rowmax_indC', PACKAGE = 'hesim', x)
+    .Call('_hesim_rowmax_indC', PACKAGE = 'hesim', x)
 }
 
 incr_effectC <- function(x, y, nsims, narms, ngrps) {
-    .Call('hesim_incr_effectC', PACKAGE = 'hesim', x, y, nsims, narms, ngrps)
+    .Call('_hesim_incr_effectC', PACKAGE = 'hesim', x, y, nsims, narms, ngrps)
 }
 
 ceacC <- function(k, ie, ic, nsims, narms, ngrps) {
-    .Call('hesim_ceacC', PACKAGE = 'hesim', k, ie, ic, nsims, narms, ngrps)
+    .Call('_hesim_ceacC', PACKAGE = 'hesim', k, ie, ic, nsims, narms, ngrps)
 }
 
 mceC <- function(k, e, c, nsims, narms, ngrps) {
-    .Call('hesim_mceC', PACKAGE = 'hesim', k, e, c, nsims, narms, ngrps)
+    .Call('_hesim_mceC', PACKAGE = 'hesim', k, e, c, nsims, narms, ngrps)
 }
 
 VstarC <- function(k, e, c, nsims, narms, ngrps) {
-    .Call('hesim_VstarC', PACKAGE = 'hesim', k, e, c, nsims, narms, ngrps)
+    .Call('_hesim_VstarC', PACKAGE = 'hesim', k, e, c, nsims, narms, ngrps)
 }
 
 rtruncnormC <- function(mean, sd, lower, upper) {
-    .Call('hesim_rtruncnormC', PACKAGE = 'hesim', mean, sd, lower, upper)
+    .Call('_hesim_rtruncnormC', PACKAGE = 'hesim', mean, sd, lower, upper)
 }
 
 qgompertzC <- function(p, shape, rate) {
-    .Call('hesim_qgompertzC', PACKAGE = 'hesim', p, shape, rate)
+    .Call('_hesim_qgompertzC', PACKAGE = 'hesim', p, shape, rate)
 }
 
 rgompertzC <- function(shape, rate) {
-    .Call('hesim_rgompertzC', PACKAGE = 'hesim', shape, rate)
+    .Call('_hesim_rgompertzC', PACKAGE = 'hesim', shape, rate)
 }
 
 qllogisC <- function(p, shape, scale, lt = 1L, lg = 0L) {
-    .Call('hesim_qllogisC', PACKAGE = 'hesim', p, shape, scale, lt, lg)
+    .Call('_hesim_qllogisC', PACKAGE = 'hesim', p, shape, scale, lt, lg)
 }
 
 rllogisC <- function(shape, scale) {
-    .Call('hesim_rllogisC', PACKAGE = 'hesim', shape, scale)
+    .Call('_hesim_rllogisC', PACKAGE = 'hesim', shape, scale)
 }
 
 rgengammaC <- function(mu, sigma, Q) {
-    .Call('hesim_rgengammaC', PACKAGE = 'hesim', mu, sigma, Q)
+    .Call('_hesim_rgengammaC', PACKAGE = 'hesim', mu, sigma, Q)
 }
 
 rpwexp1C <- function(rate, time) {
-    .Call('hesim_rpwexp1C', PACKAGE = 'hesim', rate, time)
+    .Call('_hesim_rpwexp1C', PACKAGE = 'hesim', rate, time)
 }
 
 rpwexpC <- function(rate, time) {
-    .Call('hesim_rpwexpC', PACKAGE = 'hesim', rate, time)
+    .Call('_hesim_rpwexpC', PACKAGE = 'hesim', rate, time)
 }
 
 rsurv <- function(location, anc1, dist, anc2 = 0.0) {
-    .Call('hesim_rsurv', PACKAGE = 'hesim', location, anc1, dist, anc2)
+    .Call('_hesim_rsurv', PACKAGE = 'hesim', location, anc1, dist, anc2)
 }
 
 rcat1C <- function(probs) {
-    .Call('hesim_rcat1C', PACKAGE = 'hesim', probs)
+    .Call('_hesim_rcat1C', PACKAGE = 'hesim', probs)
 }
 
 rcatC <- function(probs) {
-    .Call('hesim_rcatC', PACKAGE = 'hesim', probs)
+    .Call('_hesim_rcatC', PACKAGE = 'hesim', probs)
 }
 
 rdirichlet1C <- function(alpha) {
-    .Call('hesim_rdirichlet1C', PACKAGE = 'hesim', alpha)
+    .Call('_hesim_rdirichlet1C', PACKAGE = 'hesim', alpha)
 }
 
 rdirichlet_matC <- function(n, alpha) {
-    .Call('hesim_rdirichlet_matC', PACKAGE = 'hesim', n, alpha)
+    .Call('_hesim_rdirichlet_matC', PACKAGE = 'hesim', n, alpha)
 }
 
 matrix_byrow <- function(v, nrow, ncol) {
-    .Call('hesim_matrix_byrow', PACKAGE = 'hesim', v, nrow, ncol)
+    .Call('_hesim_matrix_byrow', PACKAGE = 'hesim', v, nrow, ncol)
 }
 
 matrix_bycol <- function(v, nrow, ncol) {
-    .Call('hesim_matrix_bycol', PACKAGE = 'hesim', v, nrow, ncol)
+    .Call('_hesim_matrix_bycol', PACKAGE = 'hesim', v, nrow, ncol)
 }
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('hesim_RcppExport_registerCCallable', PACKAGE = 'hesim')
+    .Call('_hesim_RcppExport_registerCCallable', PACKAGE = 'hesim')
 })

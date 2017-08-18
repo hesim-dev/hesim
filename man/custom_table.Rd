@@ -21,7 +21,7 @@ custom_table(x, arm, grp, custom_vars, FUN = NULL)
 A data.table of summary statistics for each variable specified in 
 \code{custom_vars}. By default, returns the mean, 2.5\%, and 97.5\% quantile of
 each variable. Different summary statistics can be calculated using FUN. 
-This function is used in \code{pcea} and \code{pcea_pw} to create the
+This function is used in \code{icea} and \code{icea_pw} to create the
  \code{custom.table} output.
 }
 \description{

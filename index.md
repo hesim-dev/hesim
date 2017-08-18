@@ -1,6 +1,5 @@
 # Overview
-
-`hesim` helps facilitate computationally intensive simulation modeling, which is commonly used in health economics to model the burden of disease or for cost-effectiveness analysis. The package has two primary aims: 
+`hesim` is an R package for health economic simulation modeling and decision analysis. The package has two primary aims: 
 
 * Analyze the output of discrete and continuous time simulation models.
 * Provide functions to randomly sample from probability distributions commonly used in health-economic simulation modeling.
@@ -21,9 +20,3 @@ It can then be loaded into `R`:
 ```r
 library(hesim)
 ```
-
-# Documentation
-Documentation is available [here](reference/index.html).
-
-# Vignettes
-Package vignettes can be found [here](articles/index.html).

@@ -5,8 +5,8 @@ template:
 reference:
   - title: "Cost-effectiveness analysis"
     contents:
-      - pcea
-      - pcea_pw
+      - icea
+      - icea_pw
       - incr_effect
       - custom_table
   - title: "Random number generation"
@@ -22,5 +22,5 @@ navbar:
     href: reference/index.html
   - text: "Vignettes"
     menu:
-      - text: "Personalized cost-effectiveness analysis"
+      - text: "Individualized cost-effectiveness analysis"
         href: articles/cea-vignette.html

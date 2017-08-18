@@ -8,7 +8,7 @@ Authors@R: c(
 Maintainer: <devin.incerti@gmail.com>
 Description: Efficiently implement and analyze health-economic simulation models
 URL: https://github.com/dincerti/hesim
-License: GPLv3
+License: GPL-3
 LazyData: true
 LinkingTo: Rcpp, RcppArmadillo
 Imports:
