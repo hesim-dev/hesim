@@ -6,7 +6,7 @@
 To ensure that simulations can be run (and analyzed) in a reasonable amount of time, most functions are written in C++ using `Rcpp` and data manipulations are performed using the `data.table` package. `hesim` is therefore well suited for individual patient simulation, probabilistic sensitivity analysis, and quantifying structural uncertainty.
 
 # Documentation
-Documentation and package vignettes can be found at (http://devinincerti.com/hesim/).
+Documentation and package vignettes can be found at (https://innovationvalueinitiative.github.io/hesim/).
 
 # Installation
 `hesim` can be installed from github
