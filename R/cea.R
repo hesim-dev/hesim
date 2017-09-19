@@ -74,6 +74,12 @@ icea <- function(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
   mce <- mce(x, k, arm, grp, e, c, nsims, narms, ngrps)
   evpi <- evpi(x, k, sim, arm, grp, e, c, nsims, narms, ngrps, nmb)
   cea.table <- cea_table(x, sim, arm, grp, e, c, ICER = FALSE)
+  setnames(cea.table, 
+           c(paste0(e, c("_mean", "_lower", "_upper")),
+            paste0(c, c("_mean", "_lower", "_upper"))),
+           c(paste0("e", c("_mean", "_lower", "_upper")),
+             paste0("c", c("_mean", "_lower", "_upper")))
+)
   l <- list(summary = cea.table, mce = mce, evpi = evpi, nmb = nmb)
   if (!is.null(custom_vars)){
     custom.table <- custom_table(x, arm, grp, custom_vars, custom_fun)
@@ -111,13 +117,21 @@ icea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e
     outcomes <- c(e, c)
     delta <- calc_incr_effect(sim_treat, sim_control, sim, arm, grp, outcomes, nsims, narms, ngrps)
   }
-  ceac <- ceac(delta, k, sim, arm, grp, e = paste0("i", e), c = paste0("i", c),
+  setnames(delta, paste0("i", e), "ie")
+  setnames(delta, paste0("i", c), "ic")
+  ceac <- ceac(delta, k, sim, arm, grp, e = "ie", c = "ic",
                nsims, narms, ngrps)
-  inmb <- inmb_summary(delta, k, sim, arm, grp, e = paste0("i", e), c = paste0("i", c))
-  cea.table <- cea_table(delta, sim, arm, grp, e = paste0("i", e), c = paste0("i", c),
+  inmb <- inmb_summary(delta, k, sim, arm, grp, e = "ie", c = "ic")
+  cea.table <- cea_table(delta, sim, arm, grp, e = "ie", c = "ic",
                          ICER = TRUE)
   l <- list(summary = cea.table, delta = delta, ceac = ceac, inmb = inmb)
   if (!is.null(custom_vars)){
+    if (any(custom_vars == e)){
+        custom_vars[custom_vars == e] <- "e"
+    }
+    if (any(custom_vars == c)){
+      custom_vars[custom_vars == c] <- "c"
+    }
     custom.table <- custom_table(delta, arm, grp, paste0("i", custom_vars),
                                  custom_fun)
     l <- c(l, list(custom.table = custom.table))

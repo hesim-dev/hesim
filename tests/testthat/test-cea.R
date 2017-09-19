@@ -40,7 +40,7 @@ ce[, nb2 := qalys * kval2 - cost]
 
 # Functions to use for testing ------------------------------------------------
 # probabilistic sensitivity analysis
-pceaR <- function(x, kval, grpname, output = c("mce", "evpi")){
+iceaR <- function(x, kval, grpname, output = c("mce", "evpi")){
   output <- match.arg(output)
   x <- x[grp == grpname] 
   x[, nb := qalys * kval - cost]
@@ -83,131 +83,126 @@ deltaR <- function(x, control, grpname){
   ret <- data.table::data.table(sim = seq(1, nsims), 
                     arm = rep(unique(x.treat$arm), each = nsims),
                     grp = grpname,
-                    iqalys = c(as.matrix(delta.qalys)), 
-                    icost = c(as.matrix(delta.cost)))
+                    ie = c(as.matrix(delta.qalys)), 
+                    ic = c(as.matrix(delta.cost)))
   return(ret)
 }
 
 # ceac 
 ceacR <- function(ix, kval, grpname) {
   ix <- ix[grp == grpname]
-  ix[, nb := iqalys * kval - icost] 
+  ix[, nb := ie * kval - ic] 
   ceac <- ix[, .(prob = mean(nb >= 0)), by = "arm"]
 }
 
-# Test pcea function ----------------------------------------------------------
-test_that("pcea", {
+# Test icea function ----------------------------------------------------------
+test_that("icea", {
   
   ### function gets expected results
-  pcea.dt <-  pcea(ce, k = krange, sim = "sim", arm = "arm",
+  icea.dt <-  icea(ce, k = krange, sim = "sim", arm = "arm",
                    grp = "grp", e = "qalys", c = "cost")
   kval <- sample(krange, 1)
   
   ## summary
   # group 2
-  ce.mean <- ce[grp == "Group 2", .(qalys_mean = mean(qalys), 
-                                     cost_mean = mean(cost)), by = "arm"]
-  ce.lower <- ce[grp == "Group 2", .(qalys_lower = quantile(qalys, .025), 
-                                     cost_lower = quantile(cost, .025)), by = "arm"]
-  ce.upper <- ce[grp == "Group 2", .(qalys_upper = quantile(qalys, .975), 
-                                     cost_upper = quantile(cost, .975)), by = "arm"]
+  ce.mean <- ce[grp == "Group 2", .(e_mean = mean(qalys), 
+                                     c_mean = mean(cost)), by = "arm"]
+  ce.lower <- ce[grp == "Group 2", .(e_lower = quantile(qalys, .025), 
+                                     c_lower = quantile(cost, .025)), by = "arm"]
+  ce.upper <- ce[grp == "Group 2", .(e_upper = quantile(qalys, .975), 
+                                     c_upper = quantile(cost, .975)), by = "arm"]
   summary.test <- data.table::data.table(arm = ce.mean$arm, 
-                             qalys_mean = ce.mean$qalys_mean,
-                             qalys_lower = ce.lower$qalys_lower, 
-                             qalys_upper = ce.upper$qalys_upper,
-                              cost_mean = ce.mean$cost_mean, 
-                             cost_lower = ce.lower$cost_lower,
-                              cost_upper = ce.upper$cost)
-  expect_equal(summary.test, pcea.dt$summary[grp == "Group 2", -2, with = FALSE])
+                             e_mean = ce.mean$e_mean,
+                             e_lower = ce.lower$e_lower, 
+                             e_upper = ce.upper$e_upper,
+                              c_mean = ce.mean$c_mean, 
+                             c_lower = ce.lower$c_lower,
+                              c_upper = ce.upper$c_upper)
+  expect_equal(summary.test, icea.dt$summary[grp == "Group 2", -2, with = FALSE])
   
   ## mce
   # group 1
-  mce <- pcea.dt$mce[grp == "Group 1" &  k == kval]
-  mce.test <- pceaR(ce, kval , "Group 1", output = "mce")
+  mce <- icea.dt$mce[grp == "Group 1" &  k == kval]
+  mce.test <- iceaR(ce, kval , "Group 1", output = "mce")
   expect_equal(mce$prob, mce.test)
   
   # group 2
-  mce <- pcea.dt$mce[grp == "Group 2" &  k == kval]
-  mce.test <- pceaR(ce, kval , "Group 2", output = "mce")
+  mce <- icea.dt$mce[grp == "Group 2" &  k == kval]
+  mce.test <- iceaR(ce, kval , "Group 2", output = "mce")
   expect_equal(mce$prob, mce.test)
   
   ## evpi
   # group 1
-  evpi <- pcea.dt$evpi[grp == "Group 1" &  k == kval]
-  evpi.test <- pceaR(ce, kval , "Group 1", output = "evpi")
-  expect_equal(evpi$evpi, evpi.test)
-  
-  # Group 2
-  evpi <- pcea.dt$evpi[grp == "Group 2" &  k == kval]
-  evpi.test <- pceaR(ce, kval , "Group 2", output = "evpi")
+  evpi <- icea.dt$evpi[grp == "Group 1" &  k == kval]
+  evpi.test <- iceaR(ce, kval , "Group 1", output = "evpi")
   expect_equal(evpi$evpi, evpi.test)
   
   ### function works with other names
   ce2 = data.table::copy(ce)
   data.table::setnames(ce2, c("sim", "arm", "grp"), c("samp", "arm_name", "group"))
-  pcea.dt2 <-  pcea(ce2, k = krange, sim = "samp", arm = "arm_name",
+  icea.dt2 <-  icea(ce2, k = krange, sim = "samp", arm = "arm_name",
                    grp = "group", e = "qalys", c = "cost")
-  evpi.v2 <- pcea.dt2$evpi[group == "Group 2" &  k == kval]
+  evpi.v2 <- icea.dt2$evpi[group == "Group 1" &  k == kval]
   expect_equal(evpi.v2$evpi, evpi$evpi)
 })
 
 
-# Test pcea_pw function -------------------------------------------------------
-test_that("pcea_pw", {
+# Test icea_pw function -------------------------------------------------------
+test_that("icea_pw", {
   
   ### function gets expected results
-  pcea.pw.dt <-  pcea_pw(ce,  k = krange, control = "Arm 1",
+  icea.pw.dt <-  icea_pw(ce,  k = krange, control = "Arm 1",
                          sim = "sim", arm = "arm", e = "qalys", c = "cost")
   kval <- sample(krange, 1)
   
   ## delta
-  delta <- pcea.pw.dt$delta
+  delta <- icea.pw.dt$delta
   delta.test <- deltaR(ce, control = "Arm 1", grpname = "Group 1")
   expect_equal(delta[grp == "Group 1"], delta.test)
   
   ## summary
   # group 2
-  delta.mean <- delta[grp == "Group 2", .(iqalys_mean = mean(iqalys), 
-                                    icost_mean = mean(icost)), by = "arm"]
-  delta.lower <- delta[grp == "Group 2", .(iqalys_lower = quantile(iqalys, .025), 
-                                     icost_lower = quantile(icost, .025)), by = "arm"]
-  delta.upper <- delta[grp == "Group 2", .(iqalys_upper = quantile(iqalys, .975), 
-                                     icost_upper = quantile(icost, .975)), by = "arm"]
-  icer <- delta.mean$icost_mean/delta.mean$iqalys_mean
+  delta.mean <- delta[grp == "Group 2", .(ie_mean = mean(ie), 
+                                    ic_mean = mean(ic)), by = "arm"]
+  delta.lower <- delta[grp == "Group 2", .(ie_lower = quantile(ie, .025), 
+                                     ic_lower = quantile(ic, .025)), by = "arm"]
+  delta.upper <- delta[grp == "Group 2", .(ie_upper = quantile(ie, .975), 
+                                     ic_upper = quantile(ic, .975)), by = "arm"]
+  icer <- delta.mean$ic_mean/delta.mean$ie_mean
   summary.test <- data.table::data.table(arm = delta.mean$arm, 
-                                         iqalys_mean = delta.mean$iqalys_mean,
-                                         iqalys_lower = delta.lower$iqalys_lower, 
-                                         iqalys_upper = delta.upper$iqalys_upper,
-                                         icost_mean = delta.mean$icost_mean, 
-                                         icost_lower = delta.lower$icost_lower,
-                                         icost_upper = delta.upper$icost, 
+                                         ie_mean = delta.mean$ie_mean,
+                                         ie_lower = delta.lower$ie_lower, 
+                                         ie_upper = delta.upper$ie_upper,
+                                         ic_mean = delta.mean$ic_mean, 
+                                         ic_lower = delta.lower$ic_lower,
+                                         ic_upper = delta.upper$ic_upper, 
                                          icer = icer)
-  expect_equal(summary.test, pcea.pw.dt$summary[grp == "Group 2", -2, with = FALSE])
+  expect_equal(summary.test, icea.pw.dt$summary[grp == "Group 2", -2, with = FALSE])
   
   ## ceac
   # group 1
-  ceac <- pcea.pw.dt$ceac[grp == "Group 1" & k == kval]
+  ceac <- icea.pw.dt$ceac[grp == "Group 1" & k == kval]
   ceac.test <- ceacR(delta, kval = kval, grpname = "Group 1")
   expect_equal(ceac$prob, ceac.test$prob)
   
   # group 2
-  ceac <- pcea.pw.dt$ceac[grp == "Group 2" & k == kval]
+  ceac <- icea.pw.dt$ceac[grp == "Group 2" & k == kval]
   ceac.test <- ceacR(delta, kval = kval, grpname = "Group 2")
   expect_equal(ceac$prob, ceac.test$prob)
   
   ## inmb
   # group 2
-  inb <- pcea.pw.dt$inmb[k == kval & grp == "Group 2"]
-  einb.test <- delta[grp == "Group 2", .(einb = mean(iqalys * kval - icost)), 
+  inb <- icea.pw.dt$inmb[k == kval & grp == "Group 2"]
+  einb.test <- delta[grp == "Group 2", .(einb = mean(ie * kval - ic)), 
                      by = "arm"]
   expect_equal(inb$einb, einb.test$einmb)
   
   ### function works with other names
   ce2 = data.table::copy(ce)
   data.table::setnames(ce2, c("sim", "arm", "grp"), c("samp", "arm_name", "group"))
-  pcea.pw.dt2 <- pcea_pw(ce2,  k = krange, control = "Arm 1",
+  icea.pw.dt2 <- icea_pw(ce2,  k = krange, control = "Arm 1",
                          sim = "samp", arm = "arm_name", grp = "group",
                          e = "qalys", c = "cost")
-  ceac.v2 <- pcea.pw.dt2$ceac[group == "Group 2" & k == kval]
+  ceac.v2 <- icea.pw.dt2$ceac[group == "Group 2" & k == kval]
   expect_equal(ceac$prob, ceac.v2$prob)
 })

@@ -115,9 +115,9 @@ icea.custom.dt$custom.table
 
 ## @knitr ceplane_plot
 head(icea.pw.dt$delta)
-ylim <- max(icea.pw.dt$delta[, icost]) * 1.1
-xlim <- ceiling(max(icea.pw.dt$delta[, iqalys]) * 1.1)
-ggplot(icea.pw.dt$delta, aes(x = iqalys, y = icost, col = factor(arm))) + 
+ylim <- max(icea.pw.dt$delta[, ic]) * 1.1
+xlim <- ceiling(max(icea.pw.dt$delta[, ie]) * 1.1)
+ggplot(icea.pw.dt$delta, aes(x = ie, y = ic, col = factor(arm))) + 
   geom_jitter(size = .5) + facet_wrap(~grp) + 
   xlab("Incremental QALYs") + ylab("Incremental cost") +
   scale_y_continuous(label = dollar, limits = c(-ylim, ylim)) +
