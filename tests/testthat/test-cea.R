@@ -206,3 +206,15 @@ test_that("icea_pw", {
   ceac.v2 <- icea.pw.dt2$ceac[group == "Group 2" & k == kval]
   expect_equal(ceac$prob, ceac.v2$prob)
 })
+
+# Test incr_effect function ---------------------------------------------------
+test_that("incr_effect", {
+  delta <- incr_effect(ce, control = "Arm 1", sim = "sim", arm = "arm", grp = "grp",
+                       outcomes = c("cost", "qalys"))
+  expect_equal(delta[arm == "Arm 2" & grp == "Group 1", icost][1], 
+               ce[arm == "Arm 2" & grp == "Group 1", cost][1] -
+                 ce[arm == "Arm 1" & grp == "Group 1", cost][1])
+  expect_equal(delta[arm == "Arm 2" & grp == "Group 2", icost][5], 
+               ce[arm == "Arm 2" & grp == "Group 2", cost][5] -
+                 ce[arm == "Arm 1" & grp == "Group 2", cost][5])
+})

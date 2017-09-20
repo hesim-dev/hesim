@@ -4,7 +4,7 @@
 \alias{incr_effect}
 \title{Incremental treatment effect}
 \usage{
-incr_effect(x, control, sim, arm, outcomes)
+incr_effect(x, control, sim, arm, grp, outcomes)
 }
 \arguments{
 \item{x}{Matrix containing information on outcome variables for each simulation and arm.}
@@ -14,6 +14,8 @@ incr_effect(x, control, sim, arm, outcomes)
 \item{sim}{Name of column denoting simulation number.}
 
 \item{arm}{Name of column denoting treatment arm.}
+
+\item{grp}{Name of column denoting subgroup.}
 
 \item{outcomes}{Name of columns to calculate incremental changes for.}
 }

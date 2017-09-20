@@ -148,6 +148,7 @@ icea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e
 #' @param control Name of control arm (i.e. comparator).
 #' @param sim Name of column denoting simulation number.
 #' @param arm Name of column denoting treatment arm.
+#' @param grp Name of column denoting subgroup.
 #' @param outcomes Name of columns to calculate incremental changes for.
 #' @return A data.table containing the differences in the values of each variable 
 #' specified in outcomes between each treatment arm and the 
@@ -155,7 +156,7 @@ icea_pw <- function(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e
 #' in \code{delta} from \code{icea_pw}.
 #'
 #' @export
-incr_effect <- function(x, control, sim, arm, outcomes){
+incr_effect <- function(x, control, sim, arm, grp, outcomes){
   if (!control %in% unique(x[[arm]])){
     stop("Chosen control arm is not in x")
   }
@@ -165,11 +166,12 @@ incr_effect <- function(x, control, sim, arm, outcomes){
   x_treat <- x[indx.treat]
   narms <- length(unique(x_treat[[arm]]))
   nsims <- length(unique(x_treat[[sim]]))
+  ngrps <- length(unique(x_treat[[grp]]))
   setorderv(x_treat, c(arm, sim))
   setorderv(x_control, c(arm, sim))
 
   # estimation
-  return(calc_incr_effect(x_treat, x_control, sim, arm, outcomes, nsims, narms))
+  return(calc_incr_effect(x_treat, x_control, sim, arm, grp, outcomes, nsims, narms, ngrps))
 }
 
 
