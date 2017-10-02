@@ -299,8 +299,6 @@ cea_table <- function(x, sim, arm, grp, e, c, ICER = FALSE){
     ret$icer <- ret[, ic_mean, with = FALSE]/ret[, ie_mean, with = FALSE]
     ret$icer <- ifelse(ret[, ic_mean, with = FALSE] < 0 & ret[, ie_mean, with = FALSE] >= 0, "Dominates",
                        ret$icer)
-    ret$icer <- ifelse(ret[, ic_mean, with = FALSE] < 0 & ret[, ie_mean, with = FALSE] < 0, "NA",
-                       ret$icer)
     ret$icer <- ifelse(ret[, ic_mean, with = FALSE] > 0 & ret[, ie_mean, with = FALSE] <= 0, "Dominated",
                        ret$icer)
   }
