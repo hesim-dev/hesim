@@ -40,7 +40,7 @@ arma::ucolvec rowmax_indC(arma::mat x) {
 // Incremental effect in piecewise comparisons
 // [[Rcpp::export]]
 std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y,
-                                int nsims, int narms, int ngrps){
+                                int nsims, int nstrategies, int ngrps){
   int N = x.size();
   std::vector<double> incr_vec;
   incr_vec.reserve(N);
@@ -49,7 +49,7 @@ std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y,
   double incr = 0;
   int counter = 0;
   for (int g = 0; g < ngrps; ++g){
-    for (int j = 0; j < narms; ++j){
+    for (int j = 0; j < nstrategies; ++j){
       for (int s = 0; s < nsims; ++s){
         incr = x[counter] - y[g * nsims + s];
         incr_vec.push_back(incr);
@@ -64,15 +64,15 @@ std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y,
 // Probability CE in pairwise comparisons
 // [[Rcpp::export]]
 std::vector<double> ceacC(std::vector<double> k, std::vector<double> ie,
-                            std::vector<double> ic, int nsims, int narms, int ngrps) {
+                            std::vector<double> ic, int nsims, int nstrategies, int ngrps) {
 
   // Initialize
   int n_k = k.size();
   int sumpos = 0;
   std::vector<double> prob;
-  prob.reserve(n_k * narms * ngrps);
+  prob.reserve(n_k * nstrategies * ngrps);
   std::vector<double> k_vec;
-  k_vec.reserve(n_k * narms);
+  k_vec.reserve(n_k * nstrategies);
   double nb = 0;
 
   // loop over willingess to pay
@@ -82,8 +82,8 @@ std::vector<double> ceacC(std::vector<double> k, std::vector<double> ie,
     // loop over groups
     for (int g = 0; g < ngrps; ++ g){
 
-      // loop over treatment arms
-      for (int i = 0; i < narms; ++i){
+      // loop over treatment strategies
+      for (int i = 0; i < nstrategies; ++i){
         sumpos = 0;
 
         // loop over simulations
@@ -105,10 +105,10 @@ std::vector<double> ceacC(std::vector<double> k, std::vector<double> ie,
 // Probability most cost-effective therapy
 // [[Rcpp::export]]
 std::vector<double> mceC(std::vector<double> k, std::vector<double> e,
-                 std::vector<double> c, int nsims, int narms, int ngrps) {
+                 std::vector<double> c, int nsims, int nstrategies, int ngrps) {
 
   int n_k = k.size();
-  int N = n_k * narms * ngrps;
+  int N = n_k * nstrategies * ngrps;
   std::vector<double> prob(N, 0.0);
   int jg = 0;
 
@@ -122,14 +122,14 @@ std::vector<double> mceC(std::vector<double> k, std::vector<double> e,
       // loop over simulations
       for (int s = 0; s < nsims; ++s){
         std::vector<double> nb;
-        nb.reserve(narms);
+        nb.reserve(nstrategies);
 
-        // loop over treatment arms
-        for (int i = 0; i < narms; ++i){
-          nb.push_back(k[j] * e[sg * narms + i] - c[sg * narms + i]);
+        // loop over treatment strategies
+        for (int i = 0; i < nstrategies; ++i){
+          nb.push_back(k[j] * e[sg * nstrategies + i] - c[sg * nstrategies + i]);
         }
         int nb_ind = vecmax_index(nb);
-        prob[jg * narms + nb_ind] = prob[jg * narms + nb_ind] + 1;
+        prob[jg * nstrategies + nb_ind] = prob[jg * nstrategies + nb_ind] + 1;
         ++sg;
       }
       ++jg;
@@ -148,7 +148,7 @@ std::vector<double> mceC(std::vector<double> k, std::vector<double> e,
 // [[Rcpp::export]]
 std::vector<double> VstarC(std::vector<double> k,
                           std::vector<double> e, std::vector<double> c,
-                          int nsims, int narms, int ngrps) {
+                          int nsims, int nstrategies, int ngrps) {
 
   int n_k = k.size();
   std::vector<double> Vstar;
@@ -166,11 +166,11 @@ std::vector<double> VstarC(std::vector<double> k,
       // loop over simulations
       for (int s = 0; s < nsims; ++s){
         std::vector<double> inb;
-        inb.reserve(narms);
+        inb.reserve(nstrategies);
 
-        // loop over treatment arms
-        for (int i = 0; i < narms; ++i){
-          inb.push_back(k[j] * e[sg * narms + i] - c[sg * narms + i]);
+        // loop over treatment strategies
+        for (int i = 0; i < nstrategies; ++i){
+          inb.push_back(k[j] * e[sg * nstrategies + i] - c[sg * nstrategies + i]);
         }
         Ustar.push_back(vecmax(inb));
         ++sg;

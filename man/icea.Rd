@@ -5,26 +5,26 @@
 \alias{icea_pw}
 \title{Individualized cost-effectiveness analysis}
 \usage{
-icea(x, k, sim = "sim", arm = "arm", grp = "grp", e = "e", c = "c",
-  custom_vars = NULL, custom_fun = NULL)
-
-icea_pw(x, k, control, sim = "sim", arm = "arm", grp = "grp", e = "e",
+icea(x, k, sim = "sim", strategy = "strategy", grp = "grp", e = "e",
   c = "c", custom_vars = NULL, custom_fun = NULL)
+
+icea_pw(x, k, comparator, sim = "sim", strategy = "strategy", grp = "grp",
+  e = "e", c = "c", custom_vars = NULL, custom_fun = NULL)
 }
 \arguments{
 \item{x}{Matrix containing information on mean costs and effectiveness for each simulation.
-Should be in long form with unit of observation as the simulation and treatment arm.
+Should be in long form with unit of observation as the simulation and treatment strategy.
 Should have the following columns (
 sim = simulation number,
-arm = treatment arm,
-c = summary of cost for each simulation and treatment arm
-e = summary of clinicial effectiveness for each simulation and treatment arm)}
+strategy = treatment strategy,
+c = summary of cost for each simulation and treatment strategy
+e = summary of clinicial effectiveness for each simulation and treatment strategy)}
 
 \item{k}{Vector of willingess to pay values}
 
 \item{sim}{Name of column denoting simulation number. Default is "sim".}
 
-\item{arm}{Name of column denoting treatment arm. Default is "arm".}
+\item{strategy}{Name of column denoting treatment strategy. Default is "strategy".}
 
 \item{grp}{Name of column denoting subgroup. Default is "grp".}
 
@@ -40,15 +40,15 @@ each variable. Can contain e and c.}
 \code{custom_vars} is not NULL and \code{custom_fun} is NULL, then returns the mean,
 2.5\% quantile, and 97.5\% quantile for each variable in \code{custom_vars}.}
 
-\item{control}{Name of the control arm in x.}
+\item{comparator}{Name of the comparator strategy in x.}
 }
 \value{
 \code{icea} returns a list containing four data.tables:
 
 \describe{
   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
-  quantile by arm and group for clinical effectiveness and costs.}
-  \item{mce}{The probability that each arm is the most effective treatment
+  quantile by strategy and group for clinical effectiveness and costs.}
+  \item{mce}{The probability that each strategy is the most effective treatment
   for each group for the range of specified willingess to pay values.}
   \item{evpi}{The expected value of perfect information by group for the range
   of specified willingess to pay values.}
@@ -57,25 +57,25 @@ each variable. Can contain e and c.}
 }
 In addition, if \code{custom_vars} is not NULL, \code{icea} returns \code{custom.table}, which is
  a data.table containing summary statistics for each variable in \code{custom_vars}
-  by arm and group.
+  by strategy and group.
 
 \code{icea_pw} also returns a list containing four data.tables:
  \describe{
   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
-  quantile by arm and group for clinical effectiveness and costs.}
+  quantile by strategy and group for clinical effectiveness and costs.}
   \item{delta}{Incremental effectiveness and incremental cost for each simulated
-  parameter set by arm and group. Can be used to plot a cost-effectiveness plane. 
-  Also returns the difference between each treatment arm and the comparator for each 
+  parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. 
+  Also returns the difference between each treatment strategy and the comparator for each 
   variable in \code{custom_vars} if \code{custom_vars} is not NULL.}
   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
-  group. In other words, the probability that each arm is more cost-effective than
+  group. In other words, the probability that each strategy is more cost-effective than
   the comparator for the specified willingess to pay values.}
    \item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) 
    incremental net benefits for the range of specified willingess to pay values.}
 }
 If \code{custom_vars} is not NULL, also returns \code{custom.table}, which is
  a data.table containing summary statistics for the values of each variable returned
-  in \code{delta} by arm and group.
+  in \code{delta} by strategy and group.
 }
 \description{
 Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 

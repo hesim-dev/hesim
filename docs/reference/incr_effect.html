@@ -90,30 +90,34 @@
     </div>
 
     
-    <p>Calculate incremental effect of all treatment arms on outcome variables from 
+    <p>Calculate incremental effect of all treatment strategies on outcome variables from 
 probabilistic sensitivity analysis relative to comparator.</p>
     
 
-    <pre class="usage"><span class='fu'>incr_effect</span>(<span class='no'>x</span>, <span class='no'>control</span>, <span class='no'>sim</span>, <span class='no'>arm</span>, <span class='no'>outcomes</span>)</pre>
+    <pre class="usage"><span class='fu'>incr_effect</span>(<span class='no'>x</span>, <span class='no'>comparator</span>, <span class='no'>sim</span>, <span class='no'>strategy</span>, <span class='no'>grp</span>, <span class='no'>outcomes</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Matrix containing information on outcome variables for each simulation and arm.</p></td>
+      <td><p>Matrix containing information on outcome variables for each simulation and strategy.</p></td>
     </tr>
     <tr>
-      <th>control</th>
-      <td><p>Name of control arm (i.e. comparator).</p></td>
+      <th>comparator</th>
+      <td><p>Name of comparator strategy.</p></td>
     </tr>
     <tr>
       <th>sim</th>
       <td><p>Name of column denoting simulation number.</p></td>
     </tr>
     <tr>
-      <th>arm</th>
-      <td><p>Name of column denoting treatment arm.</p></td>
+      <th>strategy</th>
+      <td><p>Name of column denoting treatment strategy.</p></td>
+    </tr>
+    <tr>
+      <th>grp</th>
+      <td><p>Name of column denoting subgroup.</p></td>
     </tr>
     <tr>
       <th>outcomes</th>
@@ -124,7 +128,7 @@ probabilistic sensitivity analysis relative to comparator.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.table containing the differences in the values of each variable 
-specified in outcomes between each treatment arm and the 
+specified in outcomes between each treatment strategy and the 
 comparator. It is the same output generated
 in <code>delta</code> from <code>icea_pw</code>.</p>
     

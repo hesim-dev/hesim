@@ -21,20 +21,20 @@ rowmax_indC <- function(x) {
     .Call('_hesim_rowmax_indC', PACKAGE = 'hesim', x)
 }
 
-incr_effectC <- function(x, y, nsims, narms, ngrps) {
-    .Call('_hesim_incr_effectC', PACKAGE = 'hesim', x, y, nsims, narms, ngrps)
+incr_effectC <- function(x, y, nsims, nstrategies, ngrps) {
+    .Call('_hesim_incr_effectC', PACKAGE = 'hesim', x, y, nsims, nstrategies, ngrps)
 }
 
-ceacC <- function(k, ie, ic, nsims, narms, ngrps) {
-    .Call('_hesim_ceacC', PACKAGE = 'hesim', k, ie, ic, nsims, narms, ngrps)
+ceacC <- function(k, ie, ic, nsims, nstrategies, ngrps) {
+    .Call('_hesim_ceacC', PACKAGE = 'hesim', k, ie, ic, nsims, nstrategies, ngrps)
 }
 
-mceC <- function(k, e, c, nsims, narms, ngrps) {
-    .Call('_hesim_mceC', PACKAGE = 'hesim', k, e, c, nsims, narms, ngrps)
+mceC <- function(k, e, c, nsims, nstrategies, ngrps) {
+    .Call('_hesim_mceC', PACKAGE = 'hesim', k, e, c, nsims, nstrategies, ngrps)
 }
 
-VstarC <- function(k, e, c, nsims, narms, ngrps) {
-    .Call('_hesim_VstarC', PACKAGE = 'hesim', k, e, c, nsims, narms, ngrps)
+VstarC <- function(k, e, c, nsims, nstrategies, ngrps) {
+    .Call('_hesim_VstarC', PACKAGE = 'hesim', k, e, c, nsims, nstrategies, ngrps)
 }
 
 rtruncnormC <- function(mean, sd, lower, upper) {

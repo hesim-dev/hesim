@@ -4,12 +4,12 @@
 \alias{custom_table}
 \title{Custom CEA summary table}
 \usage{
-custom_table(x, arm, grp, custom_vars, FUN = NULL)
+custom_table(x, strategy, grp, custom_vars, FUN = NULL)
 }
 \arguments{
-\item{x}{Matrix containing information on outcome variables for each simulation and arm.}
+\item{x}{Matrix containing information on outcome variables for each simulation and strategy.}
 
-\item{arm}{Name of column denoting treatment arm.}
+\item{strategy}{Name of column denoting treatment strategy.}
 
 \item{grp}{Name of columne denoting subgroup}
 

@@ -65,23 +65,23 @@ BEGIN_RCPP
 END_RCPP
 }
 // incr_effectC
-std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y, int nsims, int narms, int ngrps);
-RcppExport SEXP _hesim_incr_effectC(SEXP xSEXP, SEXP ySEXP, SEXP nsimsSEXP, SEXP narmsSEXP, SEXP ngrpsSEXP) {
+std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y, int nsims, int nstrategies, int ngrps);
+RcppExport SEXP _hesim_incr_effectC(SEXP xSEXP, SEXP ySEXP, SEXP nsimsSEXP, SEXP nstrategiesSEXP, SEXP ngrpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type y(ySEXP);
     Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
-    Rcpp::traits::input_parameter< int >::type narms(narmsSEXP);
+    Rcpp::traits::input_parameter< int >::type nstrategies(nstrategiesSEXP);
     Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(incr_effectC(x, y, nsims, narms, ngrps));
+    rcpp_result_gen = Rcpp::wrap(incr_effectC(x, y, nsims, nstrategies, ngrps));
     return rcpp_result_gen;
 END_RCPP
 }
 // ceacC
-std::vector<double> ceacC(std::vector<double> k, std::vector<double> ie, std::vector<double> ic, int nsims, int narms, int ngrps);
-RcppExport SEXP _hesim_ceacC(SEXP kSEXP, SEXP ieSEXP, SEXP icSEXP, SEXP nsimsSEXP, SEXP narmsSEXP, SEXP ngrpsSEXP) {
+std::vector<double> ceacC(std::vector<double> k, std::vector<double> ie, std::vector<double> ic, int nsims, int nstrategies, int ngrps);
+RcppExport SEXP _hesim_ceacC(SEXP kSEXP, SEXP ieSEXP, SEXP icSEXP, SEXP nsimsSEXP, SEXP nstrategiesSEXP, SEXP ngrpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -89,15 +89,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type ie(ieSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type ic(icSEXP);
     Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
-    Rcpp::traits::input_parameter< int >::type narms(narmsSEXP);
+    Rcpp::traits::input_parameter< int >::type nstrategies(nstrategiesSEXP);
     Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(ceacC(k, ie, ic, nsims, narms, ngrps));
+    rcpp_result_gen = Rcpp::wrap(ceacC(k, ie, ic, nsims, nstrategies, ngrps));
     return rcpp_result_gen;
 END_RCPP
 }
 // mceC
-std::vector<double> mceC(std::vector<double> k, std::vector<double> e, std::vector<double> c, int nsims, int narms, int ngrps);
-RcppExport SEXP _hesim_mceC(SEXP kSEXP, SEXP eSEXP, SEXP cSEXP, SEXP nsimsSEXP, SEXP narmsSEXP, SEXP ngrpsSEXP) {
+std::vector<double> mceC(std::vector<double> k, std::vector<double> e, std::vector<double> c, int nsims, int nstrategies, int ngrps);
+RcppExport SEXP _hesim_mceC(SEXP kSEXP, SEXP eSEXP, SEXP cSEXP, SEXP nsimsSEXP, SEXP nstrategiesSEXP, SEXP ngrpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -105,15 +105,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type e(eSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type c(cSEXP);
     Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
-    Rcpp::traits::input_parameter< int >::type narms(narmsSEXP);
+    Rcpp::traits::input_parameter< int >::type nstrategies(nstrategiesSEXP);
     Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(mceC(k, e, c, nsims, narms, ngrps));
+    rcpp_result_gen = Rcpp::wrap(mceC(k, e, c, nsims, nstrategies, ngrps));
     return rcpp_result_gen;
 END_RCPP
 }
 // VstarC
-std::vector<double> VstarC(std::vector<double> k, std::vector<double> e, std::vector<double> c, int nsims, int narms, int ngrps);
-RcppExport SEXP _hesim_VstarC(SEXP kSEXP, SEXP eSEXP, SEXP cSEXP, SEXP nsimsSEXP, SEXP narmsSEXP, SEXP ngrpsSEXP) {
+std::vector<double> VstarC(std::vector<double> k, std::vector<double> e, std::vector<double> c, int nsims, int nstrategies, int ngrps);
+RcppExport SEXP _hesim_VstarC(SEXP kSEXP, SEXP eSEXP, SEXP cSEXP, SEXP nsimsSEXP, SEXP nstrategiesSEXP, SEXP ngrpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -121,9 +121,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type e(eSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type c(cSEXP);
     Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
-    Rcpp::traits::input_parameter< int >::type narms(narmsSEXP);
+    Rcpp::traits::input_parameter< int >::type nstrategies(nstrategiesSEXP);
     Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(VstarC(k, e, c, nsims, narms, ngrps));
+    rcpp_result_gen = Rcpp::wrap(VstarC(k, e, c, nsims, nstrategies, ngrps));
     return rcpp_result_gen;
 END_RCPP
 }

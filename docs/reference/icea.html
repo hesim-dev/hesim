@@ -94,11 +94,11 @@
 sensitivity analysis) by subgroup.</p>
     
 
-    <pre class="usage"><span class='fu'>icea</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>, <span class='kw'>arm</span> <span class='kw'>=</span> <span class='st'>"arm"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>,
-  <span class='kw'>custom_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>custom_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>icea</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>,
+  <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>, <span class='kw'>custom_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>custom_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
-<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='no'>control</span>, <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>, <span class='kw'>arm</span> <span class='kw'>=</span> <span class='st'>"arm"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>,
-  <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>, <span class='kw'>custom_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>custom_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='no'>comparator</span>, <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
+  <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>, <span class='kw'>custom_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>custom_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -106,12 +106,12 @@ sensitivity analysis) by subgroup.</p>
     <tr>
       <th>x</th>
       <td><p>Matrix containing information on mean costs and effectiveness for each simulation.
-Should be in long form with unit of observation as the simulation and treatment arm.
+Should be in long form with unit of observation as the simulation and treatment strategy.
 Should have the following columns (
 sim = simulation number,
-arm = treatment arm,
-c = summary of cost for each simulation and treatment arm
-e = summary of clinicial effectiveness for each simulation and treatment arm)</p></td>
+strategy = treatment strategy,
+c = summary of cost for each simulation and treatment strategy
+e = summary of clinicial effectiveness for each simulation and treatment strategy)</p></td>
     </tr>
     <tr>
       <th>k</th>
@@ -122,8 +122,8 @@ e = summary of clinicial effectiveness for each simulation and treatment arm)</p
       <td><p>Name of column denoting simulation number. Default is "sim".</p></td>
     </tr>
     <tr>
-      <th>arm</th>
-      <td><p>Name of column denoting treatment arm. Default is "arm".</p></td>
+      <th>strategy</th>
+      <td><p>Name of column denoting treatment strategy. Default is "strategy".</p></td>
     </tr>
     <tr>
       <th>grp</th>
@@ -150,8 +150,8 @@ each variable. Can contain e and c.</p></td>
 2.5% quantile, and 97.5% quantile for each variable in <code>custom_vars</code>.</p></td>
     </tr>
     <tr>
-      <th>control</th>
-      <td><p>Name of the control arm in x.</p></td>
+      <th>comparator</th>
+      <td><p>Name of the comparator strategy in x.</p></td>
     </tr>
     </table>
     
@@ -159,8 +159,8 @@ each variable. Can contain e and c.</p></td>
 
     <p><code>icea</code> returns a list containing four data.tables:</p><dl class='dl-horizontal'>
   <dt>summary</dt><dd><p>A data.table of the mean, 2.5% quantile, and 97.5% 
-  quantile by arm and group for clinical effectiveness and costs.</p></dd>
-  <dt>mce</dt><dd><p>The probability that each arm is the most effective treatment
+  quantile by strategy and group for clinical effectiveness and costs.</p></dd>
+  <dt>mce</dt><dd><p>The probability that each strategy is the most effective treatment
   for each group for the range of specified willingess to pay values.</p></dd>
   <dt>evpi</dt><dd><p>The expected value of perfect information by group for the range
   of specified willingess to pay values.</p></dd>
@@ -168,23 +168,23 @@ each variable. Can contain e and c.</p></td>
    for the range of specified willingess to pay values.</p></dd>
 </dl><p>In addition, if <code>custom_vars</code> is not NULL, <code>icea</code> returns <code>custom.table</code>, which is
  a data.table containing summary statistics for each variable in <code>custom_vars</code>
-  by arm and group.
+  by strategy and group.
 
 <code>icea_pw</code> also returns a list containing four data.tables:</p><dl class='dl-horizontal'>
   <dt>summary</dt><dd><p>A data.table of the mean, 2.5% quantile, and 97.5% 
-  quantile by arm and group for clinical effectiveness and costs.</p></dd>
+  quantile by strategy and group for clinical effectiveness and costs.</p></dd>
   <dt>delta</dt><dd><p>Incremental effectiveness and incremental cost for each simulated
-  parameter set by arm and group. Can be used to plot a cost-effectiveness plane. 
-  Also returns the difference between each treatment arm and the comparator for each 
+  parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. 
+  Also returns the difference between each treatment strategy and the comparator for each 
   variable in <code>custom_vars</code> if <code>custom_vars</code> is not NULL.</p></dd>
   <dt>ceac</dt><dd><p>Values needed to plot a cost-effectiveness acceptability curve by
-  group. In other words, the probability that each arm is more cost-effective than
+  group. In other words, the probability that each strategy is more cost-effective than
   the comparator for the specified willingess to pay values.</p></dd>
    <dt>inmb</dt><dd><p>The mean, 2.5% quantile, and 97.5% quantile of (monetary) 
    incremental net benefits for the range of specified willingess to pay values.</p></dd>
 </dl><p>If <code>custom_vars</code> is not NULL, also returns <code>custom.table</code>, which is
  a data.table containing summary statistics for the values of each variable returned
-  in <code>delta</code> by arm and group.</p>
+  in <code>delta</code> by strategy and group.</p>
     
 
   </div>

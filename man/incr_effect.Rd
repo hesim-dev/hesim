@@ -4,16 +4,16 @@
 \alias{incr_effect}
 \title{Incremental treatment effect}
 \usage{
-incr_effect(x, control, sim, arm, grp, outcomes)
+incr_effect(x, comparator, sim, strategy, grp, outcomes)
 }
 \arguments{
-\item{x}{Matrix containing information on outcome variables for each simulation and arm.}
+\item{x}{Matrix containing information on outcome variables for each simulation and strategy.}
 
-\item{control}{Name of control arm (i.e. comparator).}
+\item{comparator}{Name of comparator strategy.}
 
 \item{sim}{Name of column denoting simulation number.}
 
-\item{arm}{Name of column denoting treatment arm.}
+\item{strategy}{Name of column denoting treatment strategy.}
 
 \item{grp}{Name of column denoting subgroup.}
 
@@ -21,11 +21,11 @@ incr_effect(x, control, sim, arm, grp, outcomes)
 }
 \value{
 A data.table containing the differences in the values of each variable 
-specified in outcomes between each treatment arm and the 
+specified in outcomes between each treatment strategy and the 
 comparator. It is the same output generated
 in \code{delta} from \code{icea_pw}.
 }
 \description{
-Calculate incremental effect of all treatment arms on outcome variables from 
+Calculate incremental effect of all treatment strategies on outcome variables from 
 probabilistic sensitivity analysis relative to comparator.
 }
