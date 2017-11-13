@@ -24,3 +24,5 @@ navbar:
     menu:
       - text: "Individualized cost-effectiveness analysis"
         href: articles/cea-vignette.html
+  - text: News
+    href: news/index.html

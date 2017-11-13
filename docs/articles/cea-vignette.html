@@ -43,6 +43,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -66,7 +69,7 @@
       <h1>Individualized cost-effectiveness analysis (iCEA)</h1>
                         <h4 class="author">Devin Incerti</h4>
             
-            <h4 class="date">2017-10-25</h4>
+            <h4 class="date">2017-11-12</h4>
           </div>
 
     
@@ -151,40 +154,41 @@ e[[<span class="dv">5</span>]] &lt;-<span class="st"> </span><span class="kw">rn
 e[[<span class="dv">6</span>]] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(nsims, <span class="dv">11</span>, .<span class="dv">6</span>)
 
 <span class="co"># cost and effectiveness by strategy and simulation</span>
-<span class="kw">library</span>(<span class="st">"data.table"</span>)
-ce &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">sim =</span> <span class="kw">rep</span>(<span class="kw">seq</span>(nsims), <span class="kw">length</span>(e)),
-                             <span class="dt">strategy =</span> <span class="kw">rep</span>(<span class="kw">paste0</span>(<span class="st">"Strategy "</span>, <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">3</span>)), 
-                                       <span class="dt">each =</span> nsims *<span class="st"> </span><span class="dv">2</span>),
-                             <span class="dt">grp =</span> <span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">"Group 1"</span>, <span class="st">"Group 2"</span>),
-                                           <span class="dt">each =</span> nsims), <span class="dv">3</span>),
-                             <span class="dt">cost =</span> <span class="kw">do.call</span>(<span class="st">"c"</span>, c), <span class="dt">qalys =</span> <span class="kw">do.call</span>(<span class="st">"c"</span>, e))
+<span class="kw">library</span>(<span class="st">"data.table"</span>)</code></pre></div>
+<pre><code>## Warning: package 'data.table' was built under R version 3.4.2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ce &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">sim =</span> <span class="kw">rep</span>(<span class="kw">seq</span>(nsims), <span class="kw">length</span>(e)),
+                 <span class="dt">strategy =</span> <span class="kw">rep</span>(<span class="kw">paste0</span>(<span class="st">"Strategy "</span>, <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">3</span>)), 
+                                <span class="dt">each =</span> nsims *<span class="st"> </span><span class="dv">2</span>),
+                 <span class="dt">grp =</span> <span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">"Group 1"</span>, <span class="st">"Group 2"</span>),
+                               <span class="dt">each =</span> nsims), <span class="dv">3</span>),
+                 <span class="dt">cost =</span> <span class="kw">do.call</span>(<span class="st">"c"</span>, c), <span class="dt">qalys =</span> <span class="kw">do.call</span>(<span class="st">"c"</span>, e))
 <span class="kw">head</span>(ce)</code></pre></div>
 <pre><code>##    sim   strategy     grp     cost    qalys
-## 1:   1 Strategy 1 Group 1 8.049185 7.840095
-## 2:   2 Strategy 1 Group 1 6.884542 8.372897
-## 3:   3 Strategy 1 Group 1 7.074823 8.080842
-## 4:   4 Strategy 1 Group 1 7.802006 8.125595
-## 5:   5 Strategy 1 Group 1 8.184476 7.895797
-## 6:   6 Strategy 1 Group 1 7.398274 7.896526</code></pre>
+## 1:   1 Strategy 1 Group 1 6.966771 7.926380
+## 2:   2 Strategy 1 Group 1 7.502856 8.123822
+## 3:   3 Strategy 1 Group 1 6.864193 7.890622
+## 4:   4 Strategy 1 Group 1 6.849805 8.044026
+## 5:   5 Strategy 1 Group 1 7.520893 8.289784
+## 6:   6 Strategy 1 Group 1 9.152608 8.122490</code></pre>
 <p>For any given willingness to pay <span class="math inline">\(k\)</span>, expected NMBs can be calculated by strategy, subgroup, and simulation number. For example, with <span class="math inline">\(k=150,000\)</span>, a reasonable estimate of the value of a life-year in the United States, Strategy 2 provides the highest expected NMBs in subgroup 2 while Strategy 3 provides the highest expected NMBs in subgroup 2.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ce &lt;-<span class="st"> </span>ce[, nmb :<span class="er">=</span><span class="st"> </span><span class="dv">150000</span> *<span class="st"> </span>qalys -<span class="st"> </span>cost]
 enmb &lt;-<span class="st"> </span>ce[, .(<span class="dt">enmb =</span> <span class="kw">mean</span>(nmb)), by =<span class="st"> </span><span class="kw">c</span>(<span class="st">"strategy"</span>, <span class="st">"grp"</span>)]
 enmb &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/dcast.data.table">dcast</a></span>(enmb, strategy ~<span class="st"> </span>grp, <span class="dt">value.var =</span> <span class="st">"enmb"</span>)
 <span class="kw">print</span>(enmb)</code></pre></div>
 <pre><code>##      strategy Group 1 Group 2
-## 1: Strategy 1 1199554 1199695
-## 2: Strategy 2 1445743 1514035
-## 3: Strategy 3 1218378 1592219</code></pre>
+## 1: Strategy 1 1199644 1200841
+## 2: Strategy 2 1437153 1517941
+## 3: Strategy 3 1212590 1593517</code></pre>
 <p>A number of measures have been proposed in the health economics literature to summarize the PSA. Below we describe the most common measures, which can be calculated using the functions <code>icea</code> and <code>icea_pw</code>. The <code>icea</code> function summarizes results by taking into account each treatment strategy in the analysis, while the function <code>icea_pw</code> summarizes “pairwise” results in which each treatment is compared to a comparator.</p>
 <p>We can use the <code>icea</code> function to summarize results from our <code>data.table</code> object of simulated output for a range of willingness to pay values,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"hesim"</span>)
 ktop &lt;-<span class="st"> </span><span class="dv">200000</span>
 icea.dt &lt;-<span class="st">  </span><span class="kw"><a href="../reference/icea.html">icea</a></span>(ce, <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">strategy =</span> <span class="st">"strategy"</span>,
-              <span class="dt">grp =</span> <span class="st">"grp"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>)</code></pre></div>
+                 <span class="dt">grp =</span> <span class="st">"grp"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>)</code></pre></div>
 <p>The most important input in <code>icea</code> is the <code>data.table</code> object (<code>x</code>) containing columns for simulation number (<code>sim</code>), treatment strategy (<code>strategy</code>), subgroup (<code>grp</code>), clinical effectiveness (<code>e</code>), and costs (<code>c</code>). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is <span class="math inline">\(k\)</span>, which is a range of willingness to pay values to use for estimating NMBs.</p>
 <p>Likewise, we can use <code>icea_pw</code> to summarize the PSA when directly comparing the two treatment strategies (Strategy 2 and Strategy 3) to the comparator (Strategy 1).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icea.pw.dt &lt;-<span class="st">  </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce,  <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">comparator =</span> <span class="st">"Strategy 1"</span>,
-                     <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">strategy =</span> <span class="st">"strategy"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>)</code></pre></div>
+                       <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">strategy =</span> <span class="st">"strategy"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>)</code></pre></div>
 <p>The same inputs are used as in <code>icea</code> except users must specify the name of the comparator strategy.</p>
 <div id="probability-most-cost-effective" class="section level2">
 <h2 class="hasAnchor">
@@ -192,7 +196,7 @@ icea.dt &lt;-<span class="st">  </span><span class="kw"><a href="../reference/ic
 <p>A useful summary measure for quantifying uncertainty is the probability that each treatment strategy is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each strategy has the highest NMB. For example, consider a random sample of 10 draws from the PSA simulation output and suppose <span class="math inline">\(k\)</span> is again equal to <span class="math inline">\(150,000\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"knitr"</span>)
 ce.nmb &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/dcast.data.table">dcast</a></span>(ce[sim %in%<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:nsims, <span class="dv">10</span>) &amp;<span class="st"> </span>grp ==<span class="st"> "Group 2"</span>], 
-               sim ~<span class="st"> </span>strategy, <span class="dt">value.var =</span> <span class="st">"nmb"</span>)
+                sim ~<span class="st"> </span>strategy, <span class="dt">value.var =</span> <span class="st">"nmb"</span>)
 <span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/setattr">setnames</a></span>(ce.nmb, <span class="kw">colnames</span>(ce.nmb), <span class="kw">c</span>(<span class="st">"sim"</span>, <span class="st">"nmb1"</span>, <span class="st">"nmb2"</span>, <span class="st">"nmb3"</span>))
 ce.nmb &lt;-<span class="st"> </span>ce.nmb[, maxj :<span class="er">=</span><span class="st"> </span><span class="kw">apply</span>(ce.nmb[, .(nmb1, nmb2, nmb3)], <span class="dv">1</span>, which.max)]
 ce.nmb &lt;-<span class="st"> </span>ce.nmb[, maxj :<span class="er">=</span><span class="st"> </span><span class="kw">factor</span>(maxj, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))]</code></pre></div>
@@ -220,13 +224,13 @@ maxj
 125
 </td>
 <td style="text-align:right;">
-1183584
+1206777
 </td>
 <td style="text-align:right;">
-1311171
+1514192
 </td>
 <td style="text-align:right;">
-1646340
+1668273
 </td>
 <td style="text-align:left;">
 3
@@ -237,13 +241,13 @@ maxj
 207
 </td>
 <td style="text-align:right;">
-1214324
+1234655
 </td>
 <td style="text-align:right;">
-1318639
+1496057
 </td>
 <td style="text-align:right;">
-1710698
+1678162
 </td>
 <td style="text-align:left;">
 3
@@ -254,13 +258,13 @@ maxj
 237
 </td>
 <td style="text-align:right;">
-1147152
+1250872
 </td>
 <td style="text-align:right;">
-1401320
+1544899
 </td>
 <td style="text-align:right;">
-1637829
+1590698
 </td>
 <td style="text-align:left;">
 3
@@ -271,13 +275,13 @@ maxj
 293
 </td>
 <td style="text-align:right;">
-1174359
+1178854
 </td>
 <td style="text-align:right;">
-1569918
+1594586
 </td>
 <td style="text-align:right;">
-1483909
+1536547
 </td>
 <td style="text-align:left;">
 2
@@ -288,16 +292,16 @@ maxj
 324
 </td>
 <td style="text-align:right;">
-1169268
+1226832
 </td>
 <td style="text-align:right;">
-1496549
+1490648
 </td>
 <td style="text-align:right;">
-1760686
+1446013
 </td>
 <td style="text-align:left;">
-3
+2
 </td>
 </tr>
 <tr>
@@ -305,13 +309,13 @@ maxj
 375
 </td>
 <td style="text-align:right;">
-1181425
+1156000
 </td>
 <td style="text-align:right;">
-1251044
+1532306
 </td>
 <td style="text-align:right;">
-1568589
+1713021
 </td>
 <td style="text-align:left;">
 3
@@ -322,13 +326,13 @@ maxj
 516
 </td>
 <td style="text-align:right;">
-1207439
+1200145
 </td>
 <td style="text-align:right;">
-1632953
+1602615
 </td>
 <td style="text-align:right;">
-1460941
+1588687
 </td>
 <td style="text-align:left;">
 2
@@ -339,13 +343,13 @@ maxj
 527
 </td>
 <td style="text-align:right;">
-1181160
+1237955
 </td>
 <td style="text-align:right;">
-1493034
+1418712
 </td>
 <td style="text-align:right;">
-1718397
+1566108
 </td>
 <td style="text-align:left;">
 3
@@ -356,13 +360,13 @@ maxj
 843
 </td>
 <td style="text-align:right;">
-1188827
+1156168
 </td>
 <td style="text-align:right;">
-1508477
+1607799
 </td>
 <td style="text-align:right;">
-1535390
+1626698
 </td>
 <td style="text-align:left;">
 3
@@ -373,16 +377,16 @@ maxj
 907
 </td>
 <td style="text-align:right;">
-1215557
+1160237
 </td>
 <td style="text-align:right;">
-1525875
+1501992
 </td>
 <td style="text-align:right;">
-1526483
+1480357
 </td>
 <td style="text-align:left;">
-3
+2
 </td>
 </tr>
 </tbody>
@@ -391,8 +395,8 @@ maxj
 <span class="kw">print</span>(mce)</code></pre></div>
 <pre><code>## 
 ##   1   2   3 
-## 0.0 0.2 0.8</code></pre>
-<p>In this example, treatments 1, 2, and 3 have the highest NMBs a fraction 0, 0.2, and 0.8 of the time respectively. The <code>icea</code> function performs this same calculations for a range of values of <span class="math inline">\(k\)</span> and all <code>nsims</code> random draws of the simulation output. The output is a tidy <code>data.table</code> which facilitates plotting with <code>ggplot</code>.</p>
+## 0.0 0.4 0.6</code></pre>
+<p>In this example, treatments 1, 2, and 3 have the highest NMBs a fraction 0, 0.4, and 0.6 of the time respectively. The <code>icea</code> function performs this same calculations for a range of values of <span class="math inline">\(k\)</span> and all <code>nsims</code> random draws of the simulation output. The output is a tidy <code>data.table</code> which facilitates plotting with <code>ggplot</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"ggplot2"</span>)
 <span class="kw">library</span>(<span class="st">"scales"</span>)
 <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme_get">theme_set</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>())
@@ -448,22 +452,22 @@ nmbci
 125
 </td>
 <td style="text-align:right;">
-1183584
+1206777
 </td>
 <td style="text-align:right;">
-1311171
+1514192
 </td>
 <td style="text-align:right;">
-1646340
+1668273
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1646340
+1668273
 </td>
 <td style="text-align:right;">
-1646340
+1668273
 </td>
 </tr>
 <tr>
@@ -471,22 +475,22 @@ nmbci
 207
 </td>
 <td style="text-align:right;">
-1214324
+1234655
 </td>
 <td style="text-align:right;">
-1318639
+1496057
 </td>
 <td style="text-align:right;">
-1710698
+1678162
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1710698
+1678162
 </td>
 <td style="text-align:right;">
-1710698
+1678162
 </td>
 </tr>
 <tr>
@@ -494,22 +498,22 @@ nmbci
 237
 </td>
 <td style="text-align:right;">
-1147152
+1250872
 </td>
 <td style="text-align:right;">
-1401320
+1544899
 </td>
 <td style="text-align:right;">
-1637829
+1590698
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1637829
+1590698
 </td>
 <td style="text-align:right;">
-1637829
+1590698
 </td>
 </tr>
 <tr>
@@ -517,22 +521,22 @@ nmbci
 293
 </td>
 <td style="text-align:right;">
-1174359
+1178854
 </td>
 <td style="text-align:right;">
-1569918
+1594586
 </td>
 <td style="text-align:right;">
-1483909
+1536547
 </td>
 <td style="text-align:left;">
 2
 </td>
 <td style="text-align:right;">
-1569918
+1594586
 </td>
 <td style="text-align:right;">
-1483909
+1536547
 </td>
 </tr>
 <tr>
@@ -540,22 +544,22 @@ nmbci
 324
 </td>
 <td style="text-align:right;">
-1169268
+1226832
 </td>
 <td style="text-align:right;">
-1496549
+1490648
 </td>
 <td style="text-align:right;">
-1760686
+1446013
 </td>
 <td style="text-align:left;">
-3
+2
 </td>
 <td style="text-align:right;">
-1760686
+1490648
 </td>
 <td style="text-align:right;">
-1760686
+1446013
 </td>
 </tr>
 <tr>
@@ -563,22 +567,22 @@ nmbci
 375
 </td>
 <td style="text-align:right;">
-1181425
+1156000
 </td>
 <td style="text-align:right;">
-1251044
+1532306
 </td>
 <td style="text-align:right;">
-1568589
+1713021
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1568589
+1713021
 </td>
 <td style="text-align:right;">
-1568589
+1713021
 </td>
 </tr>
 <tr>
@@ -586,22 +590,22 @@ nmbci
 516
 </td>
 <td style="text-align:right;">
-1207439
+1200145
 </td>
 <td style="text-align:right;">
-1632953
+1602615
 </td>
 <td style="text-align:right;">
-1460941
+1588687
 </td>
 <td style="text-align:left;">
 2
 </td>
 <td style="text-align:right;">
-1632953
+1602615
 </td>
 <td style="text-align:right;">
-1460941
+1588687
 </td>
 </tr>
 <tr>
@@ -609,22 +613,22 @@ nmbci
 527
 </td>
 <td style="text-align:right;">
-1181160
+1237955
 </td>
 <td style="text-align:right;">
-1493034
+1418712
 </td>
 <td style="text-align:right;">
-1718397
+1566108
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1718397
+1566108
 </td>
 <td style="text-align:right;">
-1718397
+1566108
 </td>
 </tr>
 <tr>
@@ -632,22 +636,22 @@ nmbci
 843
 </td>
 <td style="text-align:right;">
-1188827
+1156168
 </td>
 <td style="text-align:right;">
-1508477
+1607799
 </td>
 <td style="text-align:right;">
-1535390
+1626698
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-1535390
+1626698
 </td>
 <td style="text-align:right;">
-1535390
+1626698
 </td>
 </tr>
 <tr>
@@ -655,22 +659,22 @@ nmbci
 907
 </td>
 <td style="text-align:right;">
-1215557
+1160237
 </td>
 <td style="text-align:right;">
-1525875
+1501992
 </td>
 <td style="text-align:right;">
-1526483
+1480357
 </td>
 <td style="text-align:left;">
-3
+2
 </td>
 <td style="text-align:right;">
-1526483
+1501992
 </td>
 <td style="text-align:right;">
-1526483
+1480357
 </td>
 </tr>
 </tbody>
@@ -679,11 +683,11 @@ nmbci
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">enmbpi &lt;-<span class="st"> </span><span class="kw">mean</span>(ce.nmb$nmbpi)
 enmbci &lt;-<span class="st"> </span><span class="kw">mean</span>(ce.nmb$nmbci)
 <span class="kw">print</span>(enmbpi)</code></pre></div>
-<pre><code>## [1] 1630728</code></pre>
+<pre><code>## [1] 1603280</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(enmbci)</code></pre></div>
-<pre><code>## [1] 1604926</code></pre>
+<pre><code>## [1] 1589456</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(enmbpi -<span class="st"> </span>enmbci)</code></pre></div>
-<pre><code>## [1] 25802.04</code></pre>
+<pre><code>## [1] 13823.64</code></pre>
 <p>The <code>icea</code> function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values <span class="math inline">\(k\)</span>. A plot by group of the the EVPI for different values of <span class="math inline">\(k\)</span> is shown below. The kinks in the plot represent values of <span class="math inline">\(k\)</span> where the optimal strategy changes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(icea.dt$evpi, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> k, <span class="dt">y =</span> evpi)) +
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>() +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/facet_wrap">facet_wrap</a></span>(~grp) +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">xlab</a></span>(<span class="st">"Willingess to pay"</span>) +
@@ -717,48 +721,56 @@ totevpi &lt;-<span class="st"> </span>evpi[,<span class="kw">lapply</span>(.SD, 
 <p><code>icea</code> produces means, 2.5% quantiles, and 97.5% quantiles for costs and efficacy.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(icea.dt$summary)</code></pre></div>
 <pre><code>##      strategy     grp    e_mean  e_lower   e_upper       c_mean
-## 1: Strategy 1 Group 1  7.997078 7.612185  8.378311     7.462866
-## 2: Strategy 2 Group 1 10.040864 8.642013 11.564438 60386.562593
-## 3: Strategy 3 Group 1  8.523499 7.369076  9.687795 60146.666962
-## 4: Strategy 1 Group 2  7.998015 7.609063  8.377031     7.387320
-## 5: Strategy 2 Group 2 10.500944 9.000923 11.964075 61106.855639
-## 6: Strategy 3 Group 2 11.017452 9.918551 12.069537 60398.355355
+## 1: Strategy 1 Group 1  7.997673 7.624426  8.367564     7.404814
+## 2: Strategy 2 Group 1  9.984797 8.431041 11.586825 60566.358666
+## 3: Strategy 3 Group 1  8.488020 7.329090  9.691299 60612.933691
+## 4: Strategy 1 Group 2  8.005653 7.614215  8.413467     7.431984
+## 5: Strategy 2 Group 2 10.525756 9.059217 12.067899 60922.101618
+## 6: Strategy 3 Group 2 11.027044 9.920297 12.215552 60539.693859
 ##         c_lower      c_upper
-## 1:     6.056256     9.069386
-## 2: 44413.618199 80769.910314
-## 3: 44734.867332 79285.644755
-## 4:     6.075584     8.851287
-## 5: 45216.438884 80827.551696
-## 6: 44667.349940 79620.883064</code></pre>
+## 1:     6.077071     9.033743
+## 2: 45145.970431 80629.669002
+## 3: 44326.729106 79164.737776
+## 4:     6.073335     8.972179
+## 5: 43845.362390 80671.145490
+## 6: 44736.570673 79398.679207</code></pre>
 <p>In addition, if the user would like to examine outcomes other than those specified this summary table, then they can generate a custom table of summary output. The custom table can contain any outcomes as long as they are specified in addition to the <code>sim</code>, <code>strategy</code>, <code>e</code>, and <code>c</code> columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hypothetical variable for life-years and create a table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ce &lt;-<span class="st"> </span>ce[, lys :<span class="er">=</span><span class="st"> </span>qalys *<span class="st"> </span><span class="fl">1.5</span>]
 cea.fun &lt;-<span class="st"> </span>function(x) <span class="kw">list</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(x), <span class="dt">quant =</span> <span class="kw">quantile</span>(x, <span class="kw">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>)))
 icea.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea</a></span>(ce, <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">sim =</span> <span class="st">"sim"</span>, <span class="dt">strategy =</span> <span class="st">"strategy"</span>,
-               <span class="dt">grp =</span> <span class="st">"grp"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>,
-               <span class="dt">custom_vars =</span> <span class="kw">c</span>(<span class="st">"cost"</span>, <span class="st">"lys"</span>, <span class="st">"qalys"</span>), 
-               <span class="dt">custom_fun =</span> cea.fun)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icea.custom.dt$custom.table</code></pre></div>
-<pre><code>##      strategy     grp    cost.mean cost.quant.2.5% cost.quant.97.5%
-## 1: Strategy 1 Group 1     7.462866        6.056256         9.069386
-## 2: Strategy 2 Group 1 60386.562593    44413.618199     80769.910314
-## 3: Strategy 3 Group 1 60146.666962    44734.867332     79285.644755
-## 4: Strategy 1 Group 2     7.387320        6.075584         8.851287
-## 5: Strategy 2 Group 2 61106.855639    45216.438884     80827.551696
-## 6: Strategy 3 Group 2 60398.355355    44667.349940     79620.883064
-##    lys.mean lys.quant.2.5% lys.quant.97.5% qalys.mean qalys.quant.2.5%
-## 1: 11.99562       11.41828        12.56747   7.997078         7.612185
-## 2: 15.06130       12.96302        17.34666  10.040864         8.642013
-## 3: 12.78525       11.05361        14.53169   8.523499         7.369076
-## 4: 11.99702       11.41359        12.56555   7.998015         7.609063
-## 5: 15.75142       13.50138        17.94611  10.500944         9.000923
-## 6: 16.52618       14.87783        18.10431  11.017452         9.918551
-##    qalys.quant.97.5%
-## 1:          8.378311
-## 2:         11.564438
-## 3:          9.687795
-## 4:          8.377031
-## 5:         11.964075
-## 6:         12.069537</code></pre>
+                       <span class="dt">grp =</span> <span class="st">"grp"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>,
+                       <span class="dt">custom_vars =</span> <span class="kw">c</span>(<span class="st">"cost"</span>, <span class="st">"lys"</span>, <span class="st">"qalys"</span>), 
+                       <span class="dt">custom_fun =</span> cea.fun)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icea.custom.dt$summary</code></pre></div>
+<pre><code>##      strategy     grp    e_mean  e_lower   e_upper       c_mean
+## 1: Strategy 1 Group 1  7.997673 7.624426  8.367564     7.404814
+## 2: Strategy 2 Group 1  9.984797 8.431041 11.586825 60566.358666
+## 3: Strategy 3 Group 1  8.488020 7.329090  9.691299 60612.933691
+## 4: Strategy 1 Group 2  8.005653 7.614215  8.413467     7.431984
+## 5: Strategy 2 Group 2 10.525756 9.059217 12.067899 60922.101618
+## 6: Strategy 3 Group 2 11.027044 9.920297 12.215552 60539.693859
+##         c_lower      c_upper
+## 1:     6.077071     9.033743
+## 2: 45145.970431 80629.669002
+## 3: 44326.729106 79164.737776
+## 4:     6.073335     8.972179
+## 5: 43845.362390 80671.145490
+## 6: 44736.570673 79398.679207</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icea.custom.dt$summary</code></pre></div>
+<pre><code>##      strategy     grp    e_mean  e_lower   e_upper       c_mean
+## 1: Strategy 1 Group 1  7.997673 7.624426  8.367564     7.404814
+## 2: Strategy 2 Group 1  9.984797 8.431041 11.586825 60566.358666
+## 3: Strategy 3 Group 1  8.488020 7.329090  9.691299 60612.933691
+## 4: Strategy 1 Group 2  8.005653 7.614215  8.413467     7.431984
+## 5: Strategy 2 Group 2 10.525756 9.059217 12.067899 60922.101618
+## 6: Strategy 3 Group 2 11.027044 9.920297 12.215552 60539.693859
+##         c_lower      c_upper
+## 1:     6.077071     9.033743
+## 2: 45145.970431 80629.669002
+## 3: 44326.729106 79164.737776
+## 4:     6.073335     8.972179
+## 5: 43845.362390 80671.145490
+## 6: 44736.570673 79398.679207</code></pre>
 </div>
 <div id="cost-effectiveness-plane" class="section level2">
 <h2 class="hasAnchor">
@@ -767,12 +779,12 @@ icea.custom.dt &lt;-<span class="st"> </span><span class="kw"><a href="../refere
 <p>Data for plotting a cost-effectiveness plane comes from the <code>delta</code> output generated from the <code>icea_pw</code> function, which, for each sampled parameter set and treatment strategy, estimates differences in costs, effectiveness, and any other variables specified in <code>custom_vars</code>relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are cost-effective while those above it are not.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(icea.pw.dt$delta)</code></pre></div>
 <pre><code>##    sim   strategy     grp       ie       ic
-## 1:   1 Strategy 2 Group 1 2.972963 51604.29
-## 2:   2 Strategy 2 Group 1 2.035664 49287.46
-## 3:   3 Strategy 2 Group 1 2.228957 67952.25
-## 4:   4 Strategy 2 Group 1 1.829827 42469.40
-## 5:   5 Strategy 2 Group 1 1.700477 47425.28
-## 6:   6 Strategy 2 Group 1 2.405084 60766.48</code></pre>
+## 1:   1 Strategy 2 Group 1 2.802139 44375.85
+## 2:   2 Strategy 2 Group 1 2.267427 64408.86
+## 3:   3 Strategy 2 Group 1 2.467114 59351.56
+## 4:   4 Strategy 2 Group 1 1.635223 60534.54
+## 5:   5 Strategy 2 Group 1 2.479608 58156.76
+## 6:   6 Strategy 2 Group 1 1.966761 55363.17</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ylim &lt;-<span class="st"> </span><span class="kw">max</span>(icea.pw.dt$delta[, ic]) *<span class="st"> </span><span class="fl">1.1</span>
 xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="kw">max</span>(icea.pw.dt$delta[, ie]) *<span class="st"> </span><span class="fl">1.1</span>)
 <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(icea.pw.dt$delta, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> ie, <span class="dt">y =</span> ic, <span class="dt">col =</span> <span class="kw">factor</span>(strategy))) +<span class="st"> </span>
@@ -789,7 +801,7 @@ xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="
 <h2 class="hasAnchor">
 <a href="#cost-effectiveness-acceptability-curve-ceac" class="anchor"></a>Cost-effectiveness acceptability curve (CEAC)</h2>
 <p>The cost-effectiveness acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each strategy to a single comparator whereas the MCE plot considers all strategies simultaneously. Output to produce a CEAC is generated from the <code>icea_pw</code> function.</p>
-<p>The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of <span class="math inline">\(k\)</span>. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of <span class="math inline">\(k\)</span> larger than 119,000. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of <span class="math inline">\(k\)</span>, although this probability is larger for Strategy 2 than Strategy 3 when <span class="math inline">\(k\)</span> is smaller.</p>
+<p>The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of <span class="math inline">\(k\)</span>. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of <span class="math inline">\(k\)</span> larger than 124,500. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of <span class="math inline">\(k\)</span>, although this probability is larger for Strategy 2 than Strategy 3 when <span class="math inline">\(k\)</span> is smaller.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(icea.pw.dt$ceac, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, <span class="dt">col =</span> <span class="kw">factor</span>(strategy))) +
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>() +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/facet_wrap">facet_wrap</a></span>(~grp) +<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">xlab</a></span>(<span class="st">"Willingess to pay"</span>) +
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ylab</a></span>(<span class="st">"Probability most cost-effective"</span>) +
@@ -802,16 +814,16 @@ xlim &lt;-<span class="st"> </span><span class="kw">ceiling</span>(<span class="
 <a href="#credible-intervals-for-incremental-costs-and-effectiveness" class="anchor"></a>Credible intervals for incremental costs and effectiveness</h2>
 <p>Similar to the <code>icea</code> function, <code>icea_pw</code> produces means, 2.5% quantiles, and 97.5% quantiles for incremental costs and incremental efficacy. The table also contains the ICER, which is equal to expected incremental costs divided by the measure of expected incremental efficacy.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(icea.pw.dt$summary)</code></pre></div>
-<pre><code>##      strategy     grp  ie_mean   ie_lower ie_upper  ic_mean ic_lower
-## 1: Strategy 2 Group 1 2.043786  0.5409818 3.553805 60379.10 44407.22
-## 2: Strategy 3 Group 1 0.526421 -0.7053666 1.777670 60139.20 44727.05
-## 3: Strategy 2 Group 2 2.502929  0.9014298 4.014879 61099.47 45208.33
-## 4: Strategy 3 Group 2 3.019437  1.8549115 4.154244 60390.97 44659.96
+<pre><code>##      strategy     grp   ie_mean   ie_lower ie_upper  ic_mean ic_lower
+## 1: Strategy 2 Group 1 1.9871243  0.4050058 3.625203 60558.95 45139.76
+## 2: Strategy 3 Group 1 0.4903472 -0.7477526 1.748656 60605.53 44319.05
+## 3: Strategy 2 Group 2 2.5201030  1.0183632 4.078506 60914.67 43837.60
+## 4: Strategy 3 Group 2 3.0213909  1.8045586 4.255827 60532.26 44729.21
 ##    ic_upper      icer
-## 1: 80763.74  29542.77
-## 2: 79277.99 114241.64
-## 3: 80819.53  24411.19
-## 4: 79613.91  20000.74</code></pre>
+## 1: 80622.60  30475.68
+## 2: 79155.21 123597.18
+## 3: 80663.30  24171.50
+## 4: 79391.93  20034.57</code></pre>
 <p>Again similar to the <code>icea</code> function, the user can also estimate incremental effects for outcome variables not included in the summary table.</p>
 </div>
 </div>
@@ -842,11 +854,11 @@ tnmb &lt;-<span class="st"> </span><span class="kw">c</span>(ptenmb.max, tenmb.m
 <span class="kw">names</span>(evic) &lt;-<span class="st"> "EVIC"</span>
 <span class="kw">print</span>(evic)</code></pre></div>
 <pre><code>##     EVIC 
-## 56841.21</code></pre>
+## 56140.78</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(evic/<span class="dv">150000</span>)</code></pre></div>
 <pre><code>##      EVIC 
-## 0.3789414</code></pre>
-<p>Our estimate of the EVIC is $56,841, or in terms of net health benefits, 0.379 QALYs.</p>
+## 0.3742719</code></pre>
+<p>Our estimate of the EVIC is $56,140, or in terms of net health benefits, 0.374 QALYs.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
