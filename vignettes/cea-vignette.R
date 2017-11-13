@@ -1,4 +1,4 @@
-# Fitting a muti-state model with unknown transition times
+# Individualized cost-effectiveness analysis
 ## @knitr functions
 
 ## ---- DECISION ANALYSIS ------------------------------------------------------
@@ -28,11 +28,11 @@ e[[6]] <- rnorm(nsims, 11, .6)
 # cost and effectiveness by strategy and simulation
 library("data.table")
 ce <- data.table(sim = rep(seq(nsims), length(e)),
-                             strategy = rep(paste0("Strategy ", seq(1, 3)), 
-                                       each = nsims * 2),
-                             grp = rep(rep(c("Group 1", "Group 2"),
-                                           each = nsims), 3),
-                             cost = do.call("c", c), qalys = do.call("c", e))
+                 strategy = rep(paste0("Strategy ", seq(1, 3)), 
+                                each = nsims * 2),
+                 grp = rep(rep(c("Group 1", "Group 2"),
+                               each = nsims), 3),
+                 cost = do.call("c", c), qalys = do.call("c", e))
 head(ce)
 
 ## @knitr enmb_example
@@ -45,17 +45,17 @@ print(enmb)
 library("hesim")
 ktop <- 200000
 icea.dt <-  icea(ce, k = seq(0, ktop, 500), sim = "sim", strategy = "strategy",
-              grp = "grp", e = "qalys", c = "cost")
+                 grp = "grp", e = "qalys", c = "cost")
 
 ## @knitr icea_pw
 icea.pw.dt <-  icea_pw(ce,  k = seq(0, ktop, 500), comparator = "Strategy 1",
-                     sim = "sim", strategy = "strategy", e = "qalys", c = "cost")
+                       sim = "sim", strategy = "strategy", e = "qalys", c = "cost")
 
 ## @knitr mce_example_setup
 set.seed(131)
 library("knitr")
 ce.nmb <- dcast(ce[sim %in% sample(1:nsims, 10) & grp == "Group 2"], 
-               sim ~ strategy, value.var = "nmb")
+                sim ~ strategy, value.var = "nmb")
 setnames(ce.nmb, colnames(ce.nmb), c("sim", "nmb1", "nmb2", "nmb3"))
 ce.nmb <- ce.nmb[, maxj := apply(ce.nmb[, .(nmb1, nmb2, nmb3)], 1, which.max)]
 ce.nmb <- ce.nmb[, maxj := factor(maxj, levels = c(1, 2, 3))]
@@ -103,9 +103,9 @@ print(icea.dt$summary)
 ce <- ce[, lys := qalys * 1.5]
 cea.fun <- function(x) list(mean = mean(x), quant = quantile(x, c(.025, .975)))
 icea.custom.dt <- icea(ce, k = seq(0, ktop, 500), sim = "sim", strategy = "strategy",
-               grp = "grp", e = "qalys", c = "cost",
-               custom_vars = c("cost", "lys", "qalys"), 
-               custom_fun = cea.fun)
+                       grp = "grp", e = "qalys", c = "cost",
+                       custom_vars = c("cost", "lys", "qalys"), 
+                       custom_fun = cea.fun)
 
 ## @knitr outcome_dist1
 icea.custom.dt$summary

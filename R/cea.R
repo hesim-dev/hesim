@@ -197,7 +197,7 @@ incr_effect <- function(x, comparator, sim, strategy, grp, outcomes){
 custom_table <- function(x, strategy, grp, custom_vars, FUN = NULL){
   if (is.null(FUN)){
     FUN <- function (x){
-      return(list(mean = mean(x), quant = quantile(x, c(.025, .975))))
+      return(list(mean = mean(x), quant = stats::quantile(x, c(.025, .975))))
     }
   }
   ret <- dt_agg(x, FUN = FUN, by = c(strategy, grp), custom_vars)
@@ -243,16 +243,16 @@ ceac <- function(delta, k, sim, strategy, grp, e, c, nsims, nstrategies, ngrps){
 
 # net benefits summary statistics
 nmb_summary <- function(x, k, sim, strategy, grp, e, c){
-  m <- x[, .(e_mean = mean(get(e)), c_mean = mean(get(c)),
-             e_lower = quantile(get(e), .025), 
-             e_upper = quantile(get(e), .975),
-             c_lower = quantile(get(c), .025),
-             c_upper = quantile(get(c), .975)), by = c(strategy, grp)]
+  m <- x[, list(e_mean = mean(get(e)), c_mean = mean(get(c)),
+             e_lower = stats::quantile(get(e), .025), 
+             e_upper = stats::quantile(get(e), .975),
+             c_lower = stats::quantile(get(c), .025),
+             c_upper = stats::quantile(get(c), .975)), by = c(strategy, grp)]
   enmb <- lnmb <- unmb <- matrix(NA, nrow = length(k), ncol = nrow(m))
   for (i in 1:nrow(m)){
-    enmb[, i] <- k * m[i, e_mean] - m[i, c_mean]
-    lnmb[, i] <- k * m[i, e_lower] - m[i, c_lower]
-    unmb[, i] <- k * m[i, e_upper] - m[i, c_upper]
+    enmb[, i] <- k * m[["e_mean"]][i] - m[["c_mean"]][i]
+    lnmb[, i] <- k * m[["e_lower"]][i] - m[["c_lower"]][i]
+    unmb[, i] <- k * m[["e_upper"]][i] - m[["c_upper"]][i]
   }
   nmb <- data.table(rep(m[[strategy]], each = length(k)), rep(m[[grp]], each = length(k)),
                     rep(k, nrow(m)), c(enmb), c(lnmb), c(unmb))
@@ -272,7 +272,7 @@ evpi <- function(x, k, sim, strategy, grp, e, c, nsims, nstrategies, ngrps, nmb)
 
   # Choose treatment by maximum expected benefit
   x.nmb = copy(nmb)
-  f <- as.formula(paste0("k", "+", grp, "~", strategy))
+  f <- stats::as.formula(paste0("k", "+", grp, "~", strategy))
   x.enmb <- dcast(x.nmb, f, value.var = "enmb")
   mu <- rowmaxC(as.matrix(x.enmb[, -c(1:2), with = FALSE]))
   mu.ind <- c(rowmax_indC(as.matrix(x.enmb[, -c(1:2), with = FALSE]))) + 1
@@ -290,7 +290,7 @@ evpi <- function(x, k, sim, strategy, grp, e, c, nsims, nstrategies, ngrps, nmb)
 # CEA summary table
 cea_table <- function(x, sim, strategy, grp, e, c, ICER = FALSE){
     FUN <- function (x){
-      return(list(mean = mean(x), quant = quantile(x, c(.025, .975))))
+      return(list(mean = mean(x), quant = stats::quantile(x, c(.025, .975))))
     }
   ret <- dt_agg(x, FUN = FUN, by = c(strategy, grp), c(e, c))
   setnames(ret, colnames(ret), c(strategy, grp,

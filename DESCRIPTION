@@ -1,19 +1,27 @@
 Package: hesim
 Type: Package
 Title: Fast health-economic simulation modeling
-Version: 0.1.0
+Version: 0.0.0.9000
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", c("aut", "cre"))
     )
 Maintainer: <devin.incerti@gmail.com>
-Description: Efficiently implement and analyze health-economic simulation models
+Description: An R package for health economic simulation modeling and decision analysis. 
 URL: https://github.com/dincerti/hesim
 License: GPL-3
 LazyData: true
 LinkingTo: Rcpp, RcppArmadillo
 Imports:
     Rcpp,
+    stats,
     data.table
 Suggests:
-    testthat
+    testthat,
+    msm, 
+    truncnorm,
+    knitr,
+    rmarkdown,
+    ggplot2,
+    scales
+VignetteBuilder: knitr
 RoxygenNote: 6.0.1

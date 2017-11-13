@@ -1,7 +1,6 @@
 context("Random number generation")
 library("msm")
 library("truncnorm")
-library("flexsurv")
 
 # Test rcat -------------------------------------------------------------------
 test_that("rcat", {

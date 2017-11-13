@@ -8,7 +8,7 @@
 #' @name rcat
 #' @examples
 #' p <- c(.2, .5, .3)
-#' n <- 1000000
+#' n <- 10000
 #' pmat <- matrix(rep(p, n), nrow = n, ncol = length(p), byrow = TRUE)
 #'
 #' # rcat
