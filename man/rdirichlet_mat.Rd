@@ -12,12 +12,11 @@ rdirichlet_mat(n, alpha)
 \item{alpha}{A matrix where each row is a separate vector of shape parameters.}
 }
 \value{
-An array of matrices representing a sample from the dirichlet distribution for
-each row.
+An array of matrices where each row of each matrix is a sample from the dirichlet distribution.
 }
 \description{
-Draw random samples from multiple dirichlet distribution.
-\code{rdirichlet_mat} is vetorized and written in C++ for speed.
+Draw random samples from multiple dirichlet distributions.
+\code{rdirichlet_mat} is vectorized and written in C++ for speed.
 }
 \details{
 This function is particularly useful for representing the distribution of 

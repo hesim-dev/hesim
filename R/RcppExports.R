@@ -65,20 +65,16 @@ rpwexp1C <- function(rate, time) {
     .Call('_hesim_rpwexp1C', PACKAGE = 'hesim', rate, time)
 }
 
-rpwexpC <- function(rate, time) {
-    .Call('_hesim_rpwexpC', PACKAGE = 'hesim', rate, time)
-}
-
-rsurv <- function(location, anc1, dist, anc2 = 0.0) {
-    .Call('_hesim_rsurv', PACKAGE = 'hesim', location, anc1, dist, anc2)
+rpwexpC <- function(n, rate, time) {
+    .Call('_hesim_rpwexpC', PACKAGE = 'hesim', n, rate, time)
 }
 
 rcat1C <- function(probs) {
     .Call('_hesim_rcat1C', PACKAGE = 'hesim', probs)
 }
 
-rcatC <- function(probs) {
-    .Call('_hesim_rcatC', PACKAGE = 'hesim', probs)
+rcatC <- function(n, probs) {
+    .Call('_hesim_rcatC', PACKAGE = 'hesim', n, probs)
 }
 
 rdirichlet1C <- function(alpha) {

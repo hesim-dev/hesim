@@ -158,42 +158,23 @@ namespace hesim {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline std::vector<double> rpwexpC(arma::mat rate, arma::rowvec time) {
-        typedef SEXP(*Ptr_rpwexpC)(SEXP,SEXP);
+    inline std::vector<double> rpwexpC(int n, arma::mat rate, arma::rowvec time) {
+        typedef SEXP(*Ptr_rpwexpC)(SEXP,SEXP,SEXP);
         static Ptr_rpwexpC p_rpwexpC = NULL;
         if (p_rpwexpC == NULL) {
-            validateSignature("std::vector<double>(*rpwexpC)(arma::mat,arma::rowvec)");
+            validateSignature("std::vector<double>(*rpwexpC)(int,arma::mat,arma::rowvec)");
             p_rpwexpC = (Ptr_rpwexpC)R_GetCCallable("hesim", "_hesim_rpwexpC");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_rpwexpC(Shield<SEXP>(Rcpp::wrap(rate)), Shield<SEXP>(Rcpp::wrap(time)));
+            rcpp_result_gen = p_rpwexpC(Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(rate)), Shield<SEXP>(Rcpp::wrap(time)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
-    }
-
-    inline double rsurv(double location, double anc1, std::string dist, double anc2 = 0.0) {
-        typedef SEXP(*Ptr_rsurv)(SEXP,SEXP,SEXP,SEXP);
-        static Ptr_rsurv p_rsurv = NULL;
-        if (p_rsurv == NULL) {
-            validateSignature("double(*rsurv)(double,double,std::string,double)");
-            p_rsurv = (Ptr_rsurv)R_GetCCallable("hesim", "_hesim_rsurv");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_rsurv(Shield<SEXP>(Rcpp::wrap(location)), Shield<SEXP>(Rcpp::wrap(anc1)), Shield<SEXP>(Rcpp::wrap(dist)), Shield<SEXP>(Rcpp::wrap(anc2)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<double >(rcpp_result_gen);
     }
 
     inline int rcat1C(arma::rowvec probs) {
@@ -215,17 +196,17 @@ namespace hesim {
         return Rcpp::as<int >(rcpp_result_gen);
     }
 
-    inline arma::vec rcatC(arma::mat probs) {
-        typedef SEXP(*Ptr_rcatC)(SEXP);
+    inline arma::vec rcatC(int n, arma::mat probs) {
+        typedef SEXP(*Ptr_rcatC)(SEXP,SEXP);
         static Ptr_rcatC p_rcatC = NULL;
         if (p_rcatC == NULL) {
-            validateSignature("arma::vec(*rcatC)(arma::mat)");
+            validateSignature("arma::vec(*rcatC)(int,arma::mat)");
             p_rcatC = (Ptr_rcatC)R_GetCCallable("hesim", "_hesim_rcatC");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_rcatC(Shield<SEXP>(Rcpp::wrap(probs)));
+            rcpp_result_gen = p_rcatC(Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(probs)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -1,10 +1,14 @@
 #' Random generation for categorical distribution
 #'
 #' Draw random samples from a categorical distribution given a matrix of probabilities.
-#'  \code{rcat} is vetorized and written in C++ for speed.  
+#'  \code{rcat} is vectorized and written in C++ for speed.  
 #'
+#' @param n Number of random observations to draw.
 #' @param prob A matrix of probabilities where rows correspond to observations 
 #' and columns correspond to categories.
+#' @return A vector of random samples from the categorical distribution. The length of the sample is 
+#' determined by n. The numerical arguments other than n are recycled so that the number of samples is 
+#' equal to n.
 #' @name rcat
 #' @examples
 #' p <- c(.2, .5, .3)
@@ -14,7 +18,7 @@
 #' # rcat
 #' set.seed(100)
 #' ptm <- proc.time()
-#' samp1 <- rcat(pmat)
+#' samp1 <- rcat(n, pmat)
 #' proc.time() - ptm
 #' prop.table(table(samp1))
 #'
@@ -26,23 +30,34 @@
 #' proc.time() - ptm
 #' prop.table(table(samp2))
 #' @export
-rcat <- function(prob){
-  if(!is.matrix(prob)){
-    stop("prob must be a matrix")
+rcat <- function(n, prob){
+  if(!is.matrix(prob) & !is.vector(prob)){
+      stop("prob must be a vector or a matrix.")
+ } 
+  if (is.vector(prob)){
+    prob <- matrix(prob, nrow = 1)
   }
-  return(rcatC(prob) + 1)
+  if (n <= 0){
+    stop("n must be greater than 0")
+  }
+  sim <- rcatC(n, prob) + 1
+  return(as.numeric(sim))
 }
 
 
 #' Random generation for piecewise exponential distribution
 #'
 #' Draw random samples from an exponential distribution with piecewise rates.
-#'  \code{rpwexp} is vetorized and written in C++ for speed.  
+#'  \code{rpwexp} is vectorized and written in C++ for speed.  
 #'
+#' @param n Number of random observations to draw.
 #' @param rate A matrix of rates where rows correspond to observations 
 #' and columns correspond to rates during specified time intervals. 
 #' @param time A vector equal to the number of columns in \code{rate} giving the
 #' times at which the rate changes
+#' @return A vector of random samples from the piecewise exponential distribution. The length of the sample is 
+#' determined by n. The numerical arguments other than n are recycled so that the number of samples is 
+#' equal to n.
 #' @name rpwexp
 #' @examples
 #' rate <- c(.6, 1.2, 1.3)
@@ -51,18 +66,36 @@ rcat <- function(prob){
 #'                   ncol = 3, byrow = TRUE)
 #' t <- c(0, 10, 15) 
 #' ptm <- proc.time()
-#' samp <- rpwexp(ratemat, t)
+#' samp <- rpwexp(n, ratemat, t)
 #' proc.time() - ptm
 #' summary(samp)
 #' @export
-rpwexp <- function(rate, time){
-  return(rpwexpC(rate, time))
+rpwexp <- function(n, rate = 1, time = 0){
+  if(!is.matrix(rate) & !is.vector(rate)){
+    stop("rate must be a vector or a matrix.")
+  } 
+  if (!is.vector(time)){
+    stop("time must be a vector")
+  }
+  if (is.vector(rate)){
+    if (length(rate) != length(time)){
+      stop("length of time must be equal to the lenght of rate.")
+    }
+    rate <- matrix(rate, nrow = 1)
+  }
+  if (n <= 0){
+    stop("n must be greater than 0")
+  }
+  if (ncol(rate) != length(time)){
+    stop("length of time must be equal to the number of columns in rate.")
+  }
+  return(rpwexpC(n, rate, time))
 }
 
 #' Random generation for multiple dirichlet distributions
 #'
-#' Draw random samples from multiple dirichlet distribution.
-#'\code{rdirichlet_mat} is vetorized and written in C++ for speed.  
+#' Draw random samples from multiple dirichlet distributions.
+#'\code{rdirichlet_mat} is vectorized and written in C++ for speed.  
 #'
 #' @param n Number of samples to draw.
 #' @param alpha A matrix where each row is a separate vector of shape parameters.
@@ -73,10 +106,18 @@ rpwexp <- function(rate, time){
 #' print(samp[, , 1:2])
 #' @details This function is particularly useful for representing the distribution of 
 #' transitions probabilities in a transition matrix.
-#' @return An array of matrices representing a sample from the dirichlet distribution for
-#' each row.
+#' @return An array of matrices where each row of each matrix is a sample from the dirichlet distribution.
 #' @export
 rdirichlet_mat <- function(n, alpha){
+  if (n <= 0){
+    stop("n must be greater than 0")
+  }
+  if (!is.matrix(alpha) & !is.vector(alpha)){
+    stop("alpha must be a vector or a matrix")
+  }
+  if (is.vector(alpha)){
+    alpha <- matrix(alpha, nrow = 1)
+  }
   samp <- rdirichlet_matC(n, alpha)
   return(samp)
 }

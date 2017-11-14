@@ -83,54 +83,12 @@ double rpwexp1C (arma::rowvec rate, arma::rowvec time) {
 
 // Vectorized piecewise exponential 
 // [[Rcpp::export]]
-std::vector<double> rpwexpC (arma::mat rate, arma::rowvec time) {
-  int N = rate.n_rows;
+std::vector<double> rpwexpC (int n, arma::mat rate, arma::rowvec time) {
+  int b = rate.n_rows;
   std::vector<double> surv;
-  surv.reserve(N);
-  for (int i = 0; i < N; ++i){
-    surv.push_back(rpwexp1C(rate.row(i), time));
-  }
-  return surv;
-}
-
-// Random survival times
-// [[Rcpp::export]]
-double rsurv(double location, double anc1, std::string dist, double anc2 = 0.0) {
-  double surv = 0.0;
-  if (dist == "exponential"){
-    double rate = exp(location);
-    surv = R::rexp(1/rate);
-  }
-  else if (dist == "weibull"){
-    double shape = exp(anc1);
-    double scale = exp(location);
-    surv = R::rweibull(shape, scale);
-  }
-  else if (dist == "gompertz"){
-    double shape = anc1;
-    double rate = exp(location);
-    surv = rgompertzC(shape, rate);
-  }
-  else if (dist == "lnorm"){
-    double meanlog = location;
-    double sdlog = exp(anc1);
-    surv = R::rlnorm(meanlog, sdlog);
-  }
-  else if (dist == "gamma"){
-    double rate = exp(location);
-    double shape = exp(anc1);
-    surv = R::rgamma(shape, 1/rate);
-  }
-  else if (dist == "llogis"){
-    double scale = exp(location);
-    double shape = exp(anc1);
-    surv = rllogisC(shape, scale);
-  }
-  else if (dist == "gengamma"){
-    double mu = location;
-    double sigma = exp(anc1);
-    double Q = anc2;
-    surv = rgengammaC(mu, sigma, Q);
+  surv.reserve(n);
+  for (int i = 0; i < n; ++i){
+    surv.push_back(rpwexp1C(rate.row(i % b), time));
   }
   return surv;
 }
@@ -148,11 +106,11 @@ int rcat1C(arma::rowvec probs) {
 }
 
 // [[Rcpp::export]]
-arma::vec rcatC(arma::mat probs){
-  int n = probs.n_rows;
+arma::vec rcatC(int n, arma::mat probs){
+  int b = probs.n_rows;
   arma::vec samp(n);
   for (int i = 0; i < n; ++i){
-    samp(i) = rcat1C(probs.row(i));
+    samp(i) = rcat1C(probs.row(i % b));
   }
   return(samp);
 }
