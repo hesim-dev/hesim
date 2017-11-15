@@ -92,9 +92,9 @@ rpwexp <- function(n, rate = 1, time = 0){
   return(rpwexpC(n, rate, time))
 }
 
-#' Random generation for multiple dirichlet distributions
+#' Random generation for multiple Dirichlet distributions
 #'
-#' Draw random samples from multiple dirichlet distributions.
+#' Draw random samples from multiple Dirichlet distributions.
 #'\code{rdirichlet_mat} is vectorized and written in C++ for speed.  
 #'
 #' @param n Number of samples to draw.
@@ -106,7 +106,7 @@ rpwexp <- function(n, rate = 1, time = 0){
 #' print(samp[, , 1:2])
 #' @details This function is particularly useful for representing the distribution of 
 #' transitions probabilities in a transition matrix.
-#' @return An array of matrices where each row of each matrix is a sample from the dirichlet distribution.
+#' @return An array of matrices where each row of each matrix is a sample from the Dirichlet distribution.
 #' @export
 rdirichlet_mat <- function(n, alpha){
   if (n <= 0){
