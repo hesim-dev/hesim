@@ -5,3 +5,4 @@
 ^docs$
 ^news
 ^cran-comments.md$
+^\.travis\.yml$
