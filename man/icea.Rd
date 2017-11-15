@@ -18,9 +18,9 @@ Should have the following columns (
 sim = simulation number,
 strategy = treatment strategy,
 c = summary of cost for each simulation and treatment strategy
-e = summary of clinicial effectiveness for each simulation and treatment strategy)}
+e = summary of clinical effectiveness for each simulation and treatment strategy)}
 
-\item{k}{Vector of willingess to pay values}
+\item{k}{Vector of willingness to pay values}
 
 \item{sim}{Name of column denoting simulation number. Default is "sim".}
 
@@ -49,11 +49,11 @@ each variable. Can contain e and c.}
   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
   quantile by strategy and group for clinical effectiveness and costs.}
   \item{mce}{The probability that each strategy is the most effective treatment
-  for each group for the range of specified willingess to pay values.}
+  for each group for the range of specified willingness to pay values.}
   \item{evpi}{The expected value of perfect information by group for the range
-  of specified willingess to pay values.}
+  of specified willingness to pay values.}
    \item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
-   for the range of specified willingess to pay values.}
+   for the range of specified willingness to pay values.}
 }
 In addition, if \code{custom_vars} is not NULL, \code{icea} returns \code{custom.table}, which is
  a data.table containing summary statistics for each variable in \code{custom_vars}
@@ -69,9 +69,9 @@ In addition, if \code{custom_vars} is not NULL, \code{icea} returns \code{custom
   variable in \code{custom_vars} if \code{custom_vars} is not NULL.}
   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
   group. In other words, the probability that each strategy is more cost-effective than
-  the comparator for the specified willingess to pay values.}
+  the comparator for the specified willingness to pay values.}
    \item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) 
-   incremental net benefits for the range of specified willingess to pay values.}
+   incremental net benefits for the range of specified willingness to pay values.}
 }
 If \code{custom_vars} is not NULL, also returns \code{custom.table}, which is
  a data.table containing summary statistics for the values of each variable returned

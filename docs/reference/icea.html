@@ -114,11 +114,11 @@ Should have the following columns (
 sim = simulation number,
 strategy = treatment strategy,
 c = summary of cost for each simulation and treatment strategy
-e = summary of clinicial effectiveness for each simulation and treatment strategy)</p></td>
+e = summary of clinical effectiveness for each simulation and treatment strategy)</p></td>
     </tr>
     <tr>
       <th>k</th>
-      <td><p>Vector of willingess to pay values</p></td>
+      <td><p>Vector of willingness to pay values</p></td>
     </tr>
     <tr>
       <th>sim</th>
@@ -164,11 +164,11 @@ each variable. Can contain e and c.</p></td>
   <dt>summary</dt><dd><p>A data.table of the mean, 2.5% quantile, and 97.5% 
   quantile by strategy and group for clinical effectiveness and costs.</p></dd>
   <dt>mce</dt><dd><p>The probability that each strategy is the most effective treatment
-  for each group for the range of specified willingess to pay values.</p></dd>
+  for each group for the range of specified willingness to pay values.</p></dd>
   <dt>evpi</dt><dd><p>The expected value of perfect information by group for the range
-  of specified willingess to pay values.</p></dd>
+  of specified willingness to pay values.</p></dd>
    <dt>nmb</dt><dd><p>The mean, 2.5% quantile, and 97.5% quantile of (monetary) net benefits
-   for the range of specified willingess to pay values.</p></dd>
+   for the range of specified willingness to pay values.</p></dd>
 </dl><p>In addition, if <code>custom_vars</code> is not NULL, <code>icea</code> returns <code>custom.table</code>, which is
  a data.table containing summary statistics for each variable in <code>custom_vars</code>
   by strategy and group.
@@ -182,9 +182,9 @@ each variable. Can contain e and c.</p></td>
   variable in <code>custom_vars</code> if <code>custom_vars</code> is not NULL.</p></dd>
   <dt>ceac</dt><dd><p>Values needed to plot a cost-effectiveness acceptability curve by
   group. In other words, the probability that each strategy is more cost-effective than
-  the comparator for the specified willingess to pay values.</p></dd>
+  the comparator for the specified willingness to pay values.</p></dd>
    <dt>inmb</dt><dd><p>The mean, 2.5% quantile, and 97.5% quantile of (monetary) 
-   incremental net benefits for the range of specified willingess to pay values.</p></dd>
+   incremental net benefits for the range of specified willingness to pay values.</p></dd>
 </dl><p>If <code>custom_vars</code> is not NULL, also returns <code>custom.table</code>, which is
  a data.table containing summary statistics for the values of each variable returned
   in <code>delta</code> by strategy and group.</p>

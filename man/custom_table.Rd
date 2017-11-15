@@ -11,7 +11,7 @@ custom_table(x, strategy, grp, custom_vars, FUN = NULL)
 
 \item{strategy}{Name of column denoting treatment strategy.}
 
-\item{grp}{Name of columne denoting subgroup}
+\item{grp}{Name of column denoting subgroup}
 
 \item{custom_vars}{Name of custom variables to calculate summary statistic for.}
 

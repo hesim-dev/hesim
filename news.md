@@ -1,2 +1,2 @@
-## hesim 0.0.0.9000
-This is current development version of `hesim`.
+## hesim 0.1.0
+This is the initial release of `hesim`.
