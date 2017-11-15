@@ -1,19 +1,23 @@
 Package: hesim
 Type: Package
-Title: Fast health-economic simulation modeling
+Title: Health-economic Simulation Modeling and Decision Analysis
 Version: 0.0.0.9000
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", c("aut", "cre"))
     )
-Description: An R package for health economic simulation modeling and decision analysis. 
+Description: An R package for fast health-economic simulation modeling and decision analysis. 
 URL: https://github.com/InnovationValueInitiative/hesim
+BugReports: https://github.com/InnovationValueInitiative/hesim/issues
 License: GPL-3
 LazyData: true
-LinkingTo: Rcpp, RcppArmadillo
+LinkingTo: Rcpp,
+           RcppArmadillo
+Depends:
+    R (>= 3.2.3)
 Imports:
-    Rcpp,
+    Rcpp (>= 0.12.9),
     stats,
-    data.table
+    data.table 
 Suggests:
     testthat,
     msm, 
