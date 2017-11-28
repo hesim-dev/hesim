@@ -1,5 +1,14 @@
 ## Resubmission
-This is a resubmission. In this version I have:
+This is a resubmission. The previous submission generated the error:
+
+*checking re-building of vignette outputs ... [3s] WARNING
+Error in re-building vignettes:
+  ...
+Error: processing vignette 'cea-vignette.Rmd' failed with diagnostics:
+DLL 'stringi' not found: maybe not installed for this architecture?
+Execution halted*
+
+It was suggested that this was a likely a race condition and I was told to resubmit. 
 
 ## Test environments
 * OS X, R 3.4.1
