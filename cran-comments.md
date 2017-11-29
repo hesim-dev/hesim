@@ -10,6 +10,13 @@ Execution halted*
 
 It was suggested that this was a likely a race condition and I was told to resubmit. 
 
+In addition, in this version I have:
+
+* Converted the DESCRIPTION title to title case.
+
+* Removed 'An R package' from the description and elaborated on the functionality 
+provided by the package.
+
 ## Test environments
 * OS X, R 3.4.1
 * CentOS release 6.7 R 3.2.3

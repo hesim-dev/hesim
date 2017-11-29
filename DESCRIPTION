@@ -1,11 +1,17 @@
 Package: hesim
 Type: Package
-Title: Health-economic Simulation Modeling and Decision Analysis
+Title: Health-Economic Simulation Modeling and Decision Analysis
 Version: 0.1.0
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", c("aut", "cre"))
     )
-Description: An R package for fast health-economic simulation modeling and decision analysis. 
+Description: Functionality for developing and analyzing the output of health-economic 
+    simulation models. Contains random sampling functions for conducting probabilistic  
+    sensitivity analyses and individual patient simulations. Individualized 
+    cost-effectiveness analysis can be performed on simulation output and used to 
+    summarize a probabilistic sensitivity analysis at the subgroup or individual 
+    level. Core functions are written in C++ to facilitate computationally 
+    intensive modeling.
 URL: https://github.com/InnovationValueInitiative/hesim
 BugReports: https://github.com/InnovationValueInitiative/hesim/issues
 License: GPL-3
