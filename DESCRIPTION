@@ -24,16 +24,17 @@ LinkingTo: Rcpp,
 Depends:
     R (>= 3.2.3)
 Imports:
+    data.table,
     Rcpp (>= 0.12.9),
-    stats,
-    data.table 
+    stats
 Suggests:
-    testthat,
-    msm, 
-    truncnorm,
-    knitr,
-    rmarkdown,
+    covr,
     ggplot2,
-    scales
+    knitr,
+    msm,
+    rmarkdown,
+    scales,
+    testthat,
+    truncnorm
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
