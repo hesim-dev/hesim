@@ -105,7 +105,7 @@ rpwexp <- function(n, rate = 1, time = 0){
 #' samp <- rdirichlet_mat(100, alpha)
 #' print(samp[, , 1:2])
 #' @details This function is particularly useful for representing the distribution of 
-#' transitions probabilities in a transition matrix.
+#' transition probabilities in a transition matrix.
 #' @return An array of matrices where each row of each matrix is a sample from the Dirichlet distribution.
 #' @export
 rdirichlet_mat <- function(n, alpha){

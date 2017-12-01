@@ -255,7 +255,7 @@ icea.custom.dt <- icea(ce, k = seq(0, ktop, 500), sim = "sim", strategy = "strat
 
 ```{r outcome_dist}
 icea.custom.dt$summary
-icea.custom.dt$summary
+icea.custom.dt$custom.table
 ```
 
 ## Cost-effectiveness plane

@@ -132,6 +132,29 @@ This function is used in <code>icea</code> and <code>icea_pw</code> to create th
  <code>custom.table</code> output.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># simulation output</span>
+<span class='no'>nsims</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>
+<span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>sim</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>seq</span>(<span class='no'>nsims</span>), <span class='fl'>4</span>),
+             <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>), <span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>),
+                    <span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>), <span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>)),
+             <span class='kw'>e</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>8</span>, <span class='fl'>.2</span>), <span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span>),
+                   <span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11</span>, <span class='fl'>.6</span>), <span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span>)),
+             <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>paste0</span>(<span class='st'>"Strategy "</span>, <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>2</span>)),
+                           <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>nsims</span> * <span class='fl'>2</span>),
+             <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>rep</span>(<span class='fu'>c</span>(<span class='st'>"Group 1"</span>, <span class='st'>"Group 2"</span>),
+                           <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>nsims</span>), <span class='fl'>2</span>)
+)
+
+<span class='co'># Custom summary table</span>
+<span class='no'>custom.fun</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>list</span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>x</span>), <span class='kw'>median</span> <span class='kw'>=</span> <span class='fu'>median</span>(<span class='no'>x</span>),
+                             <span class='fu'>quantile</span>(<span class='no'>x</span>, <span class='fu'>c</span>(<span class='fl'>.025</span>, <span class='fl'>.975</span>)))
+<span class='fu'>custom_table</span>(<span class='no'>sim</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
+           <span class='kw'>custom_vars</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>custom.fun</span>)</div><div class='output co'>#&gt;      strategy     grp    e.mean  e.median    e.2.5%   e.97.5%
+#&gt; 1: Strategy 1 Group 1  7.964688  7.946509  7.585361  8.351772
+#&gt; 2: Strategy 1 Group 2  8.494827  8.489791  8.277958  8.680028
+#&gt; 3: Strategy 2 Group 1 10.902032 10.900710  9.777534 12.246040
+#&gt; 4: Strategy 2 Group 2 11.533259 11.575093 10.361759 12.532697</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -139,7 +162,9 @@ This function is used in <code>icea</code> and <code>icea_pw</code> to create th
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

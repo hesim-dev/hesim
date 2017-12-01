@@ -136,6 +136,29 @@ comparator. It is the same output generated
 in <code>delta</code> from <code>icea_pw</code>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># simulation output</span>
+<span class='no'>nsims</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>
+<span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>sim</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>seq</span>(<span class='no'>nsims</span>), <span class='fl'>4</span>),
+             <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>), <span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>),
+                    <span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>), <span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>)),
+             <span class='kw'>e</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>8</span>, <span class='fl'>.2</span>), <span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span>),
+                   <span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11</span>, <span class='fl'>.6</span>), <span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span>)),
+             <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>paste0</span>(<span class='st'>"Strategy "</span>, <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>2</span>)),
+                           <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>nsims</span> * <span class='fl'>2</span>),
+             <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>rep</span>(<span class='fu'>c</span>(<span class='st'>"Group 1"</span>, <span class='st'>"Group 2"</span>),
+                           <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>nsims</span>), <span class='fl'>2</span>)
+)
+<span class='co'># calculate incremental effect of Strategy 2 relative to Strategy 1 by group</span>
+<span class='no'>incr.effect</span> <span class='kw'>&lt;-</span> <span class='fu'>incr_effect</span>(<span class='no'>sim</span>, <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>, <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>,
+                        <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"c"</span>, <span class='st'>"e"</span>))
+<span class='fu'>head</span>(<span class='no'>incr.effect</span>)</div><div class='output co'>#&gt;    sim   strategy     grp       ic       ie
+#&gt; 1:   1 Strategy 2 Group 1 66036.00 3.380275
+#&gt; 2:   1 Strategy 2 Group 2 55602.63 2.849684
+#&gt; 3:   2 Strategy 2 Group 1 62948.44 3.043868
+#&gt; 4:   2 Strategy 2 Group 2 52071.44 2.242645
+#&gt; 5:   3 Strategy 2 Group 1 67101.16 3.396471
+#&gt; 6:   3 Strategy 2 Group 2 56802.24 2.536194</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -143,7 +166,9 @@ in <code>delta</code> from <code>icea_pw</code>.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

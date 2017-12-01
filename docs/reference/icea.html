@@ -190,6 +190,40 @@ each variable. Can contain e and c.</p></td>
   in <code>delta</code> by strategy and group.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># simulation output</span>
+<span class='no'>nsims</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>
+<span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>sim</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>seq</span>(<span class='no'>nsims</span>), <span class='fl'>4</span>),
+               <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>), <span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>),
+                      <span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>), <span class='fu'>rlnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>)),
+               <span class='kw'>e</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>8</span>, <span class='fl'>.2</span>), <span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span>),
+                     <span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11</span>, <span class='fl'>.6</span>), <span class='fu'>rnorm</span>(<span class='no'>nsims</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span>)),
+               <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>paste0</span>(<span class='st'>"Strategy "</span>, <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>2</span>)),
+                             <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>nsims</span> * <span class='fl'>2</span>),
+               <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>rep</span>(<span class='fu'>c</span>(<span class='st'>"Group 1"</span>, <span class='st'>"Group 2"</span>),
+                             <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>nsims</span>), <span class='fl'>2</span>)
+)
+
+<span class='co'># icea</span>
+<span class='no'>icea.dt</span> <span class='kw'>&lt;-</span> <span class='fu'>icea</span>(<span class='no'>sim</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
+ <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
+<span class='fu'>names</span>(<span class='no'>icea.dt</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'><span class='co'># the probability that each strategy is the most cost-effective </span>
+<span class='co'># in each group with a willingness to pay of 20,000</span>
+<span class='fu'>library</span>(<span class='st'>"data.table"</span>)
+<span class='no'>icea.dt</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp prob
+#&gt; 1: 20000 Strategy 1 Group 1 0.47
+#&gt; 2: 20000 Strategy 2 Group 1 0.53
+#&gt; 3: 20000 Strategy 1 Group 2 0.45
+#&gt; 4: 20000 Strategy 2 Group 2 0.55</div><div class='input'>
+<span class='co'># icea_pw</span>
+<span class='no'>icea.pw.dt</span> <span class='kw'>&lt;-</span>  <span class='fu'>icea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
+                      <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
+<span class='fu'>names</span>(<span class='no'>icea.pw.dt</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
+<span class='fu'>library</span>(<span class='st'>"ggplot2"</span>)
+<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></span>(<span class='no'>icea.pw.dt</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&lt;</span> <span class='fl'>50000</span>], <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes_'>aes_string</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"k"</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"prob"</span>)) +
+ <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_path'>geom_line</a></span>() + <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/facet_wrap'>facet_wrap</a></span>(~<span class='no'>grp</span>) + <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>xlab</a></span>(<span class='st'>"Willingess to pay"</span>) +
+ <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ylab</a></span>(<span class='st'>"Probability Strategy 2 is more cost-effective than Strategy 1"</span>) +
+ <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/theme'>theme</a></span>(<span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"bottom"</span>)</div><div class='img'><img src='icea-1.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -197,7 +231,9 @@ each variable. Can contain e and c.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

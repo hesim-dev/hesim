@@ -20,7 +20,7 @@ Draw random samples from multiple Dirichlet distributions.
 }
 \details{
 This function is particularly useful for representing the distribution of 
-transitions probabilities in a transition matrix.
+transition probabilities in a transition matrix.
 }
 \examples{
 alpha <- matrix(c(100, 200, 500, 50, 70, 75), ncol = 3, nrow = 2, byrow = TRUE)
