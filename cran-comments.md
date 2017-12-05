@@ -17,7 +17,7 @@ In addition, I have made the following changes:
 * Removed 'An R package' from the description and elaborated on the functionality 
 provided by the package.
 
-* Added references for the methods described in the Description' field
+* Added references for the methods described in the 'Description' field
 
 * Added more small executable examples in my RD files.
 

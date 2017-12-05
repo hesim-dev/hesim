@@ -11,16 +11,11 @@
 To ensure that simulations can be run (and analyzed) in a reasonable amount of time, most functions are written in C++ using `Rcpp` and data manipulations are performed using the `data.table` package. `hesim` is therefore well suited for IPS, PSA, and quantifying structural uncertainty.
 
 # Installation
-`hesim` can be installed from GitHub using `devtools`:
-
 ```r
-install.packages("devtools")
-library(devtools)
-devtools::install_github("InnovationValueInitiative/hesim")
-```
+# Install the latest release version from CRAN:
+install.packages("hesim")
 
-It can then be loaded into `R`:
-
-```r
-library(hesim)
+# Or the development version from GitHub:
+# install.packages("devtools")
+devtools::install_github("innovationValueInitiative/hesim")
 ```
