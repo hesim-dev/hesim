@@ -193,7 +193,7 @@ double Gompertz::cumhazard(double x){
     return rate_ * x;
   }
   else{
-    return rate_/shape_ * std::expm1(shape_ * x);
+    return rate_/shape_ * expm1(shape_ * x);
   }
 }
 
