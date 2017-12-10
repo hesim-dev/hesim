@@ -29,6 +29,7 @@ Imports:
     stats
 Suggests:
     covr,
+    flexsurv,
     ggplot2,
     knitr,
     msm,

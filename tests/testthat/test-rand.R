@@ -1,8 +1,9 @@
-context("Random number generation")
+context("rand.R unit tests")
 library("msm")
 library("truncnorm")
+library("flexsurv")
 
-# Test rcat -------------------------------------------------------------------
+# rcat -------------------------------------------------------------------------
 test_that("rcat", {
 
   # does sampling work for a vector?
@@ -43,7 +44,7 @@ test_that("rcat", {
   expect_error(rcat(n = -1, prob = c(.2, .8)))
 })
 
-# Test rpwexp -----------------------------------------------------------------
+# rpwexp -----------------------------------------------------------------------
 test_that("rpwexp", {
   
   # does sampling work for a vector?
@@ -79,7 +80,7 @@ test_that("rpwexp", {
   expect_error(rpwexp(n = 2, rmat))
 })
 
-# Test rdirichlet_mat ---------------------------------------------------------
+# rdirichlet_mat ---------------------------------------------------------------
 rdirichlet <- function(n, alpha){
   l <- length(alpha)
   x <- matrix(rgamma(l * n, alpha), ncol = l, byrow = TRUE)
@@ -103,22 +104,13 @@ expect_error(rdirichlet_mat(n = 1, alpha[1, ]), NA)
 expect_error(rdirichlet_mat(n = -1, alpha))
 expect_error(rdirichlet_mat(n = 1, array(alpha, dim = c(2, 3, 1))))
 
-# Test c++ function rtruncnormC -----------------------------------------------
-test_that("rtruncnormC", {
-  n <- 1000
-  mu <- 50; sigma <- 10; lower <- 25; upper <- 60
-  
-  #rtruncnormC from hesim
-  set.seed(10)
-  samp1 <- replicate(n, hesim:::rtruncnormC(mu, sigma, lower, upper))
-  
-  # rtnorm from msm package
-  set.seed(10)
-  samp2 <- rtnorm(n, mu, sigma, lower, upper)
-  
-  # rtruncnorm from truncnorm package
-  set.seed(10)
-  samp3 <- truncnorm::rtruncnorm(n, lower, upper, mu, sigma)
-  expect_equal(samp1, samp3)
-})
-
+# rdirichlet_mat ---------------------------------------------------------------
+n <- 10000
+m <- 2 ; s <- 1.7; q <- 1
+expect_error(hesim::fast_rgengamma(n, mu = m, sigma = c(1, 1), Q = q))
+expect_error(hesim::fast_rgengamma(n, mu = c(1, 1), sigma = s, Q = q))
+expect_error(hesim::fast_rgengamma(n, mu = m, sigma = s, Q = c(1, 5)))
+r1 <- hesim::fast_rgengamma(n, mu = m, sigma = s, Q = q)
+r2 <- flexsurv::rgengamma(n, mu = m, sigma = s, Q = q)
+expect_equal(mean(r1), mean(r2), tol = .1, size = 1)
+expect_equal(median(r1), median(r2), tol = .1, size = 1)

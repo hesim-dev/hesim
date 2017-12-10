@@ -37,52 +37,56 @@ VstarC <- function(k, e, c, nsims, nstrategies, ngrps) {
     .Call('_hesim_VstarC', PACKAGE = 'hesim', k, e, c, nsims, nstrategies, ngrps)
 }
 
-rtruncnormC <- function(mean, sd, lower, upper) {
-    .Call('_hesim_rtruncnormC', PACKAGE = 'hesim', mean, sd, lower, upper)
+qgompertz <- function(p, shape, rate) {
+    .Call('_hesim_qgompertz', PACKAGE = 'hesim', p, shape, rate)
 }
 
-qgompertzC <- function(p, shape, rate) {
-    .Call('_hesim_qgompertzC', PACKAGE = 'hesim', p, shape, rate)
+rgompertz <- function(shape, rate) {
+    .Call('_hesim_rgompertz', PACKAGE = 'hesim', shape, rate)
 }
 
-rgompertzC <- function(shape, rate) {
-    .Call('_hesim_rgompertzC', PACKAGE = 'hesim', shape, rate)
+qllogis <- function(p, shape, scale, lt = 1L, lg = 0L) {
+    .Call('_hesim_qllogis', PACKAGE = 'hesim', p, shape, scale, lt, lg)
 }
 
-qllogisC <- function(p, shape, scale, lt = 1L, lg = 0L) {
-    .Call('_hesim_qllogisC', PACKAGE = 'hesim', p, shape, scale, lt, lg)
+rllogis <- function(shape, scale) {
+    .Call('_hesim_rllogis', PACKAGE = 'hesim', shape, scale)
 }
 
-rllogisC <- function(shape, scale) {
-    .Call('_hesim_rllogisC', PACKAGE = 'hesim', shape, scale)
+rgengamma <- function(mu, sigma, Q) {
+    .Call('_hesim_rgengamma', PACKAGE = 'hesim', mu, sigma, Q)
 }
 
-rgengammaC <- function(mu, sigma, Q) {
-    .Call('_hesim_rgengammaC', PACKAGE = 'hesim', mu, sigma, Q)
+C_rgengamma_vec <- function(n, mu, sigma, Q) {
+    .Call('_hesim_rgengamma_vec', PACKAGE = 'hesim', n, mu, sigma, Q)
 }
 
-rpwexp1C <- function(rate, time) {
-    .Call('_hesim_rpwexp1C', PACKAGE = 'hesim', rate, time)
+rtruncnorm <- function(mean, sd, lower, upper) {
+    .Call('_hesim_rtruncnorm', PACKAGE = 'hesim', mean, sd, lower, upper)
 }
 
-rpwexpC <- function(n, rate, time) {
-    .Call('_hesim_rpwexpC', PACKAGE = 'hesim', n, rate, time)
+rpwexp <- function(rate, time) {
+    .Call('_hesim_rpwexp', PACKAGE = 'hesim', rate, time)
 }
 
-rcat1C <- function(probs) {
-    .Call('_hesim_rcat1C', PACKAGE = 'hesim', probs)
+C_rpwexp_vec <- function(n, rate, time) {
+    .Call('_hesim_rpwexp_vec', PACKAGE = 'hesim', n, rate, time)
 }
 
-rcatC <- function(n, probs) {
-    .Call('_hesim_rcatC', PACKAGE = 'hesim', n, probs)
+rcat <- function(probs) {
+    .Call('_hesim_rcat', PACKAGE = 'hesim', probs)
 }
 
-rdirichlet1C <- function(alpha) {
-    .Call('_hesim_rdirichlet1C', PACKAGE = 'hesim', alpha)
+C_rcat_vec <- function(n, probs) {
+    .Call('_hesim_rcat_vec', PACKAGE = 'hesim', n, probs)
 }
 
-rdirichlet_matC <- function(n, alpha) {
-    .Call('_hesim_rdirichlet_matC', PACKAGE = 'hesim', n, alpha)
+rdirichlet <- function(alpha) {
+    .Call('_hesim_rdirichlet', PACKAGE = 'hesim', alpha)
+}
+
+C_rdirichlet_mat <- function(n, alpha) {
+    .Call('_hesim_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
 matrix_byrow <- function(v, nrow, ncol) {

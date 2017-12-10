@@ -40,10 +40,9 @@ rcat <- function(n, prob){
   if (n <= 0){
     stop("n must be greater than 0")
   }
-  sim <- rcatC(n, prob) + 1
+  sim <- C_rcat_vec(n, prob) + 1
   return(as.numeric(sim))
 }
-
 
 #' Random generation for piecewise exponential distribution
 #'
@@ -89,7 +88,7 @@ rpwexp <- function(n, rate = 1, time = 0){
   if (ncol(rate) != length(time)){
     stop("length of time must be equal to the number of columns in rate.")
   }
-  return(rpwexpC(n, rate, time))
+  return(C_rpwexp_vec(n, rate, time))
 }
 
 #' Random generation for multiple Dirichlet distributions
@@ -118,6 +117,39 @@ rdirichlet_mat <- function(n, alpha){
   if (is.vector(alpha)){
     alpha <- matrix(alpha, nrow = 1)
   }
-  samp <- rdirichlet_matC(n, alpha)
+  samp <- C_rdirichlet_mat(n, alpha)
   return(samp)
+}
+
+#' Random generation for generalized gamma distribution
+#'
+#' Draw random samples from a generalized gamma distribution using the 
+#' parameterization from \code{flexsurv}. Written in C++
+#' for speed. Equivalent to \code{flexsurv::rgengamma}.
+#'
+#' @param n Number of random observations to draw.
+#' @param mu Vector of location parameters. 
+#' and columns correspond to rates during specified time intervals. 
+#' @param sigma Vector of scale parameters as described in \code{flexsurv}.
+#' @param Q Vector of shape parameters.
+#' @name fast_rgengamma
+#' @examples
+#' n <- 1000
+#' m <- 2 ; s <- 1.7; q <- 1
+#' ptm <- proc.time()
+#' r1 <- fast_rgengamma(n, mu = m, sigma = s, Q = q)
+#' proc.time() - ptm
+#' ptm <- proc.time()
+#' library("flexsurv")
+#' r2 <- flexsurv::rgengamma(n, mu = m, sigma = s, Q = q)
+#' proc.time() - ptm
+#' summary(r1)
+#' summary(r2)
+#' 
+#' @return A vector of random samples from the generalized gamma distribution. The length of the sample is 
+#' determined by n. The numerical arguments other than n are recycled so that the number of samples is 
+#' equal to n.
+#' @export
+fast_rgengamma <- function(n, mu = 0, sigma = 1, Q){
+  return(C_rgengamma_vec(n, mu, sigma, Q))
 }

@@ -1,4 +1,4 @@
-context("Cost-effectiveness analysis")
+context("cea.R unit tests")
 
 # Output for testing ----------------------------------------------------------
 nsims <- 1000

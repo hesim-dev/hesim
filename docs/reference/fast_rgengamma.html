@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Random generation for categorical distribution — rcat • hesim</title>
+<title>Random generation for generalized gamma distribution — fast_rgengamma • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -89,15 +89,16 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Random generation for categorical distribution</h1>
+    <h1>Random generation for generalized gamma distribution</h1>
     </div>
 
     
-    <p>Draw random samples from a categorical distribution given a matrix of probabilities.
- <code>rcat</code> is vectorized and written in C++ for speed.</p>
+    <p>Draw random samples from a generalized gamma distribution using the 
+parameterization from <code>flexsurv</code>. Written in C++
+for speed. Equivalent to <code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/GenGamma'>flexsurv::rgengamma</a></code>.</p>
     
 
-    <pre class="usage"><span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>prob</span>)</pre>
+    <pre class="usage"><span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>Q</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -107,41 +108,43 @@
       <td><p>Number of random observations to draw.</p></td>
     </tr>
     <tr>
-      <th>prob</th>
-      <td><p>A matrix of probabilities where rows correspond to observations 
-and columns correspond to categories.</p></td>
+      <th>mu</th>
+      <td><p>Vector of location parameters. 
+and columns correspond to rates during specified time intervals.</p></td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td><p>Vector of scale parameters as described in <code>flexsurv</code>.</p></td>
+    </tr>
+    <tr>
+      <th>Q</th>
+      <td><p>Vector of shape parameters.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of random samples from the categorical distribution. The length of the sample is 
+    <p>A vector of random samples from the generalized gamma distribution. The length of the sample is 
 determined by n. The numerical arguments other than n are recycled so that the number of samples is 
 equal to n.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.3</span>)
-<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>10000</span>
-<span class='no'>pmat</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rep</span>(<span class='no'>p</span>, <span class='no'>n</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>p</span>), <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
-<span class='co'># rcat</span>
-<span class='fu'>set.seed</span>(<span class='fl'>100</span>)
+    <pre class="examples"><div class='input'><span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span> ; <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fl'>1.7</span>; <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
+<span class='no'>r1</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.005   0.001   0.008 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
-#&gt;      1      2      3 
-#&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
-<span class='co'># rmultinom from base R </span>
-<span class='fu'>set.seed</span>(<span class='fl'>100</span>)
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>t</span>(<span class='fu'>apply</span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
-<span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>apply</span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>which</span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
+#&gt;   0.001   0.000   0.001 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
+<span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘flexsurv’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:hesim’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    qgompertz, qllogis, rgengamma, rgompertz, rllogis</span></div><div class='input'><span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/GenGamma'>rgengamma</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.083   0.014   0.103 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
-#&gt;      1      2      3 
-#&gt; 0.2015 0.5089 0.2896 </div></pre>
+#&gt;   1.084   0.053   1.151 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+#&gt;   0.0001   0.9834   4.1248  11.0162  12.2941 325.7730 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r2</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+#&gt;   0.0002   1.0393   4.1762  12.0013  13.6895 323.3526 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

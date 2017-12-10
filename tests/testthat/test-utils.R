@@ -1,19 +1,32 @@
-context("Utility functions")
+context("util.R unit tests")
 
-# Test c++ function matrix_byrow ----------------------------------------------
-test_that("matrix_byrow", {
-  vec <- c(1, 2, 3, 4, 5, 6)
-  matR <- matrix(vec, nrow = 2, ncol = 3, byrow = TRUE)
-  matC <- matrix_byrow(vec, 2, 3)
-  expect_equal(matR, matC)
+# absorbing --------------------------------------------------------------------
+test_that("absorbing", {
+  tmat <- matrix(c(seq(1, 6), rep(NA, 3)), nrow = 3, ncol = 3, byrow = TRUE)
+  expect_equal(absorbing(tmat), 3)
 })
 
-# Test c++ function matrix_bycol ----------------------------------------------
-test_that("matrix_bycol", {
-  vec <- c(1, 2, 3, 4, 5, 6)
-  matR <- matrix(vec, nrow = 2, ncol = 3, byrow = FALSE)
-  matC <- matrix_bycol(vec, 2, 3)
-  expect_equal(matR, matC)
+# list to array ----------------------------------------------------------------
+test_that("list_to_array", {
+  # vector
+  l1 <- list(a = c(1, 2, 3, 4), b = c(2, 3, 5, 10))
+  a1 <- list_to_array(l1)
+  expect_true(inherits(a1, "array"))
+  expect_equal(dim(a1), c(1, 4, 2))
+  expect_equal(l1$a, a1[,,1])
+  
+  # matrix
+  l1 <- list(a = matrix(seq(1, 4), 2, 2),
+             b = matrix(seq(5, 8), 2, 2))
+  a1 <- list_to_array(l1)
+  expect_true(inherits(a1, "array"))
+  expect_equal(dim(a1), c(2, 2, 2))
+  expect_equal(l1$a, a1[,,1])
+  
+  # non-matrix or non-vector
+  obj <- list(a = data.frame(3))
+  expect_error(list_to_array(obj))
+
 })
 
 

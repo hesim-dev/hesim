@@ -14,7 +14,8 @@ reference:
       - rcat
       - rpwexp
       - rdirichlet_mat
-
+      - fast_rgengamma
+      
 navbar:
   title: hesim
   left:

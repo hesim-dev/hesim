@@ -75,7 +75,7 @@ std::vector<double> ceacC(std::vector<double> k, std::vector<double> ie,
   k_vec.reserve(n_k * nstrategies);
   double nb = 0;
 
-  // loop over willingess to pay
+  // loop over willingness to pay
   for (int j = 0; j < n_k; ++j){
     int counter = 0;
 
@@ -112,7 +112,7 @@ std::vector<double> mceC(std::vector<double> k, std::vector<double> e,
   std::vector<double> prob(N, 0.0);
   int jg = 0;
 
-  // loop over willingess to pay k
+  // loop over willingness to pay k
   for (int j = 0; j < n_k; ++j){
     int sg = 0;
 
@@ -154,7 +154,7 @@ std::vector<double> VstarC(std::vector<double> k,
   std::vector<double> Vstar;
   Vstar.reserve(n_k * ngrps);
 
-  // loop over willingess to pay k
+  // loop over willingness to pay k
   for (int j = 0; j < n_k; ++j){
     int sg = 0;
 
