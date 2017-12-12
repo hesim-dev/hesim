@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Random generation for generalized gamma distribution — fast_rgengamma • hesim</title>
+<title>Randomly sample parameters from a parametric survival model — rsample.flexsurvreg • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -89,60 +89,62 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Random generation for generalized gamma distribution</h1>
+    <h1>Randomly sample parameters from a parametric survival model</h1>
     </div>
 
     
-    <p>Draw random samples from a generalized gamma distribution using the 
-parameterization from <code>flexsurv</code>. Written in C++
-for speed. Equivalent to <code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/GenGamma'>flexsurv::rgengamma</a></code>.</p>
+    <p>Draw random samples from a survival model fit using 
+<code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurv::flexsurvreg</a></code>.</p>
     
 
-    <pre class="usage"><span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>Q</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for flexsurvreg</span>
+<span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>x</span>, <span class='no'>n</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>x</th>
+      <td><p>Output from flexsurvreg from the package flexsurv.</p></td>
+    </tr>
+    <tr>
       <th>n</th>
       <td><p>Number of random observations to draw.</p></td>
     </tr>
     <tr>
-      <th>mu</th>
-      <td><p>Vector of location parameters. 
-and columns correspond to rates during specified time intervals.</p></td>
-    </tr>
-    <tr>
-      <th>sigma</th>
-      <td><p>Vector of scale parameters as described in <code>flexsurv</code>.</p></td>
-    </tr>
-    <tr>
-      <th>Q</th>
-      <td><p>Vector of shape parameters.</p></td>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of random samples from the generalized gamma distribution. The length of the sample is 
-determined by n. The numerical arguments other than n are recycled so that the number of samples is 
-equal to n.</p>
+    <p>List where each element contains random samples of the coefficients
+used to predict a given parameter of the survival distribution.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span> ; <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fl'>1.7</span>; <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>r1</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
-<span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.001   0.000   0.001 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
-<span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/GenGamma'>rgengamma</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
-<span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.003   0.000   0.003 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt;   0.0001   0.9834   4.1248  11.0162  12.2941 325.7730 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r2</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt;   0.0002   1.0393   4.1762  12.0013  13.6895 323.3526 </div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
+                   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
+<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
+<span class='no'>fit.sample</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
+<span class='fu'>head</span>(<span class='no'>fit.sample</span>)</div><div class='output co'>#&gt; $shape
+#&gt;          shape
+#&gt; [1,] 0.9070430
+#&gt; [2,] 0.9261117
+#&gt; [3,] 1.3775045
+#&gt; [4,] 1.1061448
+#&gt; [5,] 1.2992127
+#&gt; 
+#&gt; $scale
+#&gt;          scale
+#&gt; [1,] 1141.0932
+#&gt; [2,] 1693.3634
+#&gt; [3,] 1088.5649
+#&gt; [4,]  966.5907
+#&gt; [5,]  936.4392
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

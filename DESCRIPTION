@@ -25,11 +25,11 @@ Depends:
     R (>= 3.2.3)
 Imports:
     data.table,
+    flexsurv,
     Rcpp (>= 0.12.9),
     stats
 Suggests:
     covr,
-    flexsurv,
     ggplot2,
     knitr,
     msm,
