@@ -2,7 +2,7 @@
 % Please edit documentation in R/survival.R
 \name{rsample.flexsurvreg}
 \alias{rsample.flexsurvreg}
-\title{Randomly sample parameters from a parametric survival model}
+\title{Randomly sample parameters from a flexsurvreg model}
 \usage{
 \method{rsample}{flexsurvreg}(x, n, ...)
 }
@@ -14,12 +14,13 @@
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 }
 \value{
-List where each element contains random samples of the coefficients
-used to predict a given parameter of the survival distribution.
+Returns an object of \link{class} "surv_pars", which is a list 
+containing (i) random samples of the regression coefficients used to predict
+each of the model parameters and (ii) the probability distribution.
 }
 \description{
 Draw random samples from a survival model fit using 
-\code{flexsurv::flexsurvreg}.
+\code{flexsurv::flexsurvreg} or \code{flexsurv::flexsurvspline}.
 }
 \examples{
 library("flexsurv")

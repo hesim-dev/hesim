@@ -23,5 +23,5 @@ a fitted statistical model. Parameters are sampled using the
 multivariate normal distribution.
 }
 \seealso{
-\link{rsample.flexsurvreg}, \link{rsample.flexsurvspline}
+\link{rsample.flexsurvreg}, \link{rsample.list}
 }

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Randomly sample parameters from a flexsurvreg model — rsample.flexsurvreg • hesim</title>
+<title>Randomly sample parameters from a list of flexsurvreg models — rsample.list • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -89,15 +89,15 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Randomly sample parameters from a flexsurvreg model</h1>
+    <h1>Randomly sample parameters from a list of flexsurvreg models</h1>
     </div>
 
     
-    <p>Draw random samples from a survival model fit using 
+    <p>Draw random samples from a list of survival models fit using 
 <code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurv::flexsurvreg</a></code> or <code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvspline'>flexsurv::flexsurvspline</a></code>.</p>
     
 
-    <pre class="usage"><span class='co'># S3 method for flexsurvreg</span>
+    <pre class="usage"><span class='co'># S3 method for list</span>
 <span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>x</span>, <span class='no'>n</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -105,7 +105,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Output from flexsurvreg from the package flexsurv.</p></td>
+      <td><p>A list of models fit usingflexsurvreg from the package
+flexsurv.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -119,35 +120,43 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns an object of class "surv_pars", which is a list 
-containing (i) random samples of the regression coefficients used to predict
-each of the model parameters and (ii) the probability distribution.</p>
+    <p>Returns an object of class "survlist_pars", which is a list 
+of lists. Each list contains (i) random samples of the regression coefficients 
+used to predict each of the model parameters and (ii) the
+ probability distribution.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
-                   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
-<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
-<span class='no'>fit.sample</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
-<span class='fu'>head</span>(<span class='no'>fit.sample</span>)</div><div class='output co'>#&gt; $shape
+    <pre class="examples"><div class='input'><span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'>flexsurvreg</span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='no'>age</span>,
+                    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exponential"</span>)
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'>flexsurvreg</span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
+                   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"gamma"</span>)
+<span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(<span class='kw'>f1</span> <span class='kw'>=</span> <span class='no'>fit1</span>, <span class='kw'>f2</span> <span class='kw'>=</span> <span class='no'>fit2</span>)
+<span class='no'>fits.sample</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>fits</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='fu'>head</span>(<span class='no'>fits.sample</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt; [[1]]$rate
+#&gt;              rate        age
+#&gt; [1,] 6.902267e-07 0.12474079
+#&gt; [2,] 5.687594e-05 0.04479222
+#&gt; 
+#&gt; [[1]]$dist
+#&gt; [1] "exp"
+#&gt; 
+#&gt; 
+#&gt; [[2]]
+#&gt; [[2]]$shape
 #&gt;          shape
-#&gt; [1,] 0.9070430
-#&gt; [2,] 0.9261117
-#&gt; [3,] 1.3775045
-#&gt; [4,] 1.1061448
-#&gt; [5,] 1.2992127
+#&gt; [1,] 0.9079963
+#&gt; [2,] 0.7515023
 #&gt; 
-#&gt; $scale
-#&gt;          scale
-#&gt; [1,] 1141.0932
-#&gt; [2,] 1693.3634
-#&gt; [3,] 1088.5649
-#&gt; [4,]  966.5907
-#&gt; [5,]  936.4392
+#&gt; [[2]]$rate
+#&gt;              rate
+#&gt; [1,] 0.0005515088
+#&gt; [2,] 0.0004014096
 #&gt; 
-#&gt; $dist
-#&gt; [1] "weibull.quiet"
+#&gt; [[2]]$dist
+#&gt; [1] "gamma"
+#&gt; 
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
