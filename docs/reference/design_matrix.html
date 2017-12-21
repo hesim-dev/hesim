@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Random generation for categorical distribution — rcat • hesim</title>
+<title>Obtain design matrix used to fit a model — design_matrix • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -89,59 +89,39 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Random generation for categorical distribution</h1>
+    <h1>Obtain design matrix used to fit a model</h1>
     </div>
 
     
-    <p>Draw random samples from a categorical distribution given a matrix of probabilities.
- <code>rcat</code> is vectorized and written in C++ for speed.</p>
+    <p><code>design_matrix</code> is a generic function for obtaining the design matrix 
+used to fit a statistical model.</p>
     
 
-    <pre class="usage"><span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>prob</span>)</pre>
+    <pre class="usage"><span class='fu'>design_matrix</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>n</th>
-      <td><p>Number of random observations to draw.</p></td>
+      <th>x</th>
+      <td><p>A fitted statistical model.</p></td>
     </tr>
     <tr>
-      <th>prob</th>
-      <td><p>A matrix of probabilities where rows correspond to observations 
-and columns correspond to categories.</p></td>
+      <th>...</th>
+      <td><p>Additional arguments affecting extracted design matrix.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of random samples from the categorical distribution. The length of the sample is 
-determined by n. The numerical arguments other than n are recycled so that the number of samples is 
-equal to n.</p>
+    <p>The form of <code>design_matrix</code> depends on the class of its argument. See the 
+documentation of the particular methods for details of what is produced.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><a href='design_matrix.flexsurvreg.html'>design_matrix.flexsurvreg</a>, <a href='design_matrix.list.html'>design_matrix.list</a></p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.3</span>)
-<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>10000</span>
-<span class='no'>pmat</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rep</span>(<span class='no'>p</span>, <span class='no'>n</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>p</span>), <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
-<span class='co'># rcat</span>
-<span class='fu'>set.seed</span>(<span class='fl'>100</span>)
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
-<span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.003   0.000   0.003 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
-#&gt;      1      2      3 
-#&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
-<span class='co'># rmultinom from base R </span>
-<span class='fu'>set.seed</span>(<span class='fl'>100</span>)
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>t</span>(<span class='fu'>apply</span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
-<span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>apply</span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>which</span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
-<span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.063   0.016   0.081 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
-#&gt;      1      2      3 
-#&gt; 0.2015 0.5089 0.2896 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -149,9 +129,9 @@ equal to n.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>

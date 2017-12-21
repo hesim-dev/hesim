@@ -98,7 +98,7 @@
     
 
     <pre class="usage"><span class='co'># S3 method for list</span>
-<span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>x</span>, <span class='no'>n</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>x</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -111,6 +111,11 @@ flexsurv.</p></td>
     <tr>
       <th>n</th>
       <td><p>Number of random observations to draw.</p></td>
+    </tr>
+    <tr>
+      <th>point_estimate</th>
+      <td><p>If TRUE, then the point estimate is used for prediction
+and no samples are drawn.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -136,9 +141,9 @@ flexsurv.</p></td>
 <span class='fu'>head</span>(<span class='no'>fits.sample</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [[1]]$coefs
 #&gt; [[1]]$coefs$rate
-#&gt;              rate        age
-#&gt; [1,] 6.902267e-07 0.12474079
-#&gt; [2,] 5.687594e-05 0.04479222
+#&gt;            rate        age
+#&gt; [1,] -14.186246 0.12474079
+#&gt; [2,]  -9.774638 0.04479222
 #&gt; 
 #&gt; 
 #&gt; [[1]]$dist
@@ -148,14 +153,14 @@ flexsurv.</p></td>
 #&gt; [[2]]
 #&gt; [[2]]$coefs
 #&gt; [[2]]$coefs$shape
-#&gt;          shape
-#&gt; [1,] 0.9079963
-#&gt; [2,] 0.7515023
+#&gt;            shape
+#&gt; [1,] -0.09651497
+#&gt; [2,] -0.28568095
 #&gt; 
 #&gt; [[2]]$coefs$rate
-#&gt;              rate
-#&gt; [1,] 0.0005515088
-#&gt; [2,] 0.0004014096
+#&gt;           rate
+#&gt; [1,] -7.502853
+#&gt; [2,] -7.820528
 #&gt; 
 #&gt; 
 #&gt; [[2]]$dist

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • hesim</title>
+<title>Survival Simulation — Survival • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -87,103 +87,61 @@
       </header>
 
       <div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.1.0.9000</small>
-      </h1>
+    <h1>Survival Simulation</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    
+    <p>An R6 class for simulating health-economic models based on overall survival.</p>
+    
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <pre class="usage"><span class='no'>Survival</span></pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-cost-effectiveness-analysis" class="hasAnchor"><a href="#section-cost-effectiveness-analysis" class="anchor"></a>Cost-effectiveness analysis</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="icea.html">icea</a></code> <code><a href="icea.html">icea_pw</a></code> </p>
-          </td>
-          <td><p>Individualized cost-effectiveness analysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="incr_effect.html">incr_effect</a></code> </p>
-          </td>
-          <td><p>Incremental treatment effect</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="custom_table.html">custom_table</a></code> </p>
-          </td>
-          <td><p>Custom CEA summary table</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-random-number-generation" class="hasAnchor"><a href="#section-random-number-generation" class="anchor"></a>Random number generation</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="rcat.html">rcat</a></code> </p>
-          </td>
-          <td><p>Random generation for categorical distribution</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="rpwexp.html">rpwexp</a></code> </p>
-          </td>
-          <td><p>Random generation for piecewise exponential distribution</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="rdirichlet_mat.html">rdirichlet_mat</a></code> </p>
-          </td>
-          <td><p>Random generation for multiple Dirichlet distributions</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fast_rgengamma.html">fast_rgengamma</a></code> </p>
-          </td>
-          <td><p>Random generation for generalized gamma distribution</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="rsample.html">rsample</a></code> </p>
-          </td>
-          <td><p>Randomly sample parameters from a fitted model</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="design_matrix.html">design_matrix</a></code> </p>
-          </td>
-          <td><p>Obtain design matrix used to fit a model</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <p><code>R6Class</code> object.</p>
+    
+    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
+
+    
+    <dl class='dl-horizontal'>
+<dt><code>dist_name</code></dt><dd><p>Name of the probability distribution used to model survival.</p></dd>
+    <dt><code>surv_coefs</code></dt><dd><p>An object of class "surv_pars" representing the posterior
+distribution of coefficients from a survival model. For example, the output of
+ <code><a href='rsample.html'>rsample</a></code>.</p></dd>
+    <dt><code>surv_X</code></dt><dd><p>Matrix of covariates used to predict survival using the 
+coefficients from <code>surv_coefs</code>.</p></dd>
+</dl>
+    
+    <h2 class="hasAnchor" id="members"><a class="anchor" href="#members"></a>Members</h2>
+
+    
+    <p></p><dl class='dl-horizontal'>
+  <dt><code>new()</code></dt><dd><p>Create a new object of class <code>Survival</code></p></dd>
+  <dt><code>quantiles(q)</code></dt><dd><p>Generate the quantiles <code>q</code> of the survival 
+  distribution. <code>q</code> is a numeric vector.</p></dd> 
+  <dt><code>surv(t)</code></dt><dd><p>Generate a survival curve give a numeric vector
+  of times <code>t</code>.</p></dd>
+  <dt><code>cumhazard(t)</code></dt><dd><p>Generate cumulative hazards give a numeric vector
+  of times <code>t</code>.</p></dd>
+  <dt><code>hazard(t)</code></dt><dd><p>Generate hazards give a numeric vector
+  of times <code>t</code>.</p></dd>
+</dl>
+    
+
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-cost-effectiveness-analysis">Cost-effectiveness analysis</a></li>
-      <li><a href="#section-random-number-generation">Random number generation</a></li>
-    </ul>
+      
+      <li><a href="#format">Format</a></li>
+
+      <li><a href="#fields">Fields</a></li>
+
+      <li><a href="#members">Members</a></li>
+          </ul>
+
   </div>
 </div>
 

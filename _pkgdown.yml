@@ -16,7 +16,8 @@ reference:
       - rdirichlet_mat
       - fast_rgengamma
       - rsample
-      
+      - design_matrix
+
 navbar:
   title: hesim
   left:

@@ -98,7 +98,7 @@
     
 
     <pre class="usage"><span class='co'># S3 method for flexsurvreg</span>
-<span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>x</span>, <span class='no'>n</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>x</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -110,6 +110,11 @@
     <tr>
       <th>n</th>
       <td><p>Number of random observations to draw.</p></td>
+    </tr>
+    <tr>
+      <th>point_estimate</th>
+      <td><p>If TRUE, then the point estimate is used for prediction
+and no samples are drawn.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -136,20 +141,20 @@ distribution.</p></dd>
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>fit.sample</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'>head</span>(<span class='no'>fit.sample</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; $shape
-#&gt;          shape
-#&gt; [1,] 0.9070430
-#&gt; [2,] 0.9261117
-#&gt; [3,] 1.3775045
-#&gt; [4,] 1.1061448
-#&gt; [5,] 1.2992127
+#&gt;            shape
+#&gt; [1,] -0.09756543
+#&gt; [2,] -0.07676039
+#&gt; [3,]  0.32027351
+#&gt; [4,]  0.10088078
+#&gt; [5,]  0.26175847
 #&gt; 
 #&gt; $scale
-#&gt;          scale
-#&gt; [1,] 1141.0932
-#&gt; [2,] 1693.3634
-#&gt; [3,] 1088.5649
-#&gt; [4,]  966.5907
-#&gt; [5,]  936.4392
+#&gt;         scale
+#&gt; [1,] 7.039742
+#&gt; [2,] 7.434472
+#&gt; [3,] 6.992615
+#&gt; [4,] 6.873775
+#&gt; [5,] 6.842085
 #&gt; </div><div class='input'><span class='no'>fit.sample</span>$<span class='no'>dist</span></div><div class='output co'>#&gt; [1] "weibull.quiet"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

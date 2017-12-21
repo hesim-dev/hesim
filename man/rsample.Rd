@@ -4,12 +4,10 @@
 \alias{rsample}
 \title{Randomly sample parameters from a fitted model}
 \usage{
-rsample(x, n, ...)
+rsample(x, ...)
 }
 \arguments{
 \item{x}{A statistical model to randomly sample parameters from.}
-
-\item{n}{Number of random observations to draw.}
 
 \item{...}{Additional arguments to pass to random sampling functions.}
 }

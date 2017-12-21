@@ -4,13 +4,16 @@
 \alias{rsample.list}
 \title{Randomly sample parameters from a list of flexsurvreg models}
 \usage{
-\method{rsample}{list}(x, n, ...)
+\method{rsample}{list}(x, n = NULL, point_estimate = FALSE, ...)
 }
 \arguments{
 \item{x}{A list of models fit using \link{flexsurvreg} from the package
 \link{flexsurv}.}
 
 \item{n}{Number of random observations to draw.}
+
+\item{point_estimate}{If TRUE, then the point estimate is used for prediction
+and no samples are drawn.}
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 }

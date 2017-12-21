@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Random generation for categorical distribution — rcat • hesim</title>
+<title>Obtain design matrix used to fit a list of flexsurvreg models — design_matrix.list • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -89,59 +89,80 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Random generation for categorical distribution</h1>
+    <h1>Obtain design matrix used to fit a list of flexsurvreg models</h1>
     </div>
 
     
-    <p>Draw random samples from a categorical distribution given a matrix of probabilities.
- <code>rcat</code> is vectorized and written in C++ for speed.</p>
+    <p>Obtain design matrix used to fit a survival model using
+<code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurv::flexsurvreg</a></code> or <code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvspline'>flexsurv::flexsurvspline</a></code>.</p>
     
 
-    <pre class="usage"><span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>prob</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for list</span>
+<span class='fu'><a href='design_matrix.html'>design_matrix</a></span>(<span class='no'>x</span>, <span class='kw'>indices</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>n</th>
-      <td><p>Number of random observations to draw.</p></td>
+      <th>x</th>
+      <td><p>Output from flexsurvreg from the package flexsurv.</p></td>
     </tr>
     <tr>
-      <th>prob</th>
-      <td><p>A matrix of probabilities where rows correspond to observations 
-and columns correspond to categories.</p></td>
+      <th>indices</th>
+      <td><p>Indices from desgin matrices to extract. If NULL, each row 
+from the design matrix using to fit the flexsurvreg object 
+is returned.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of random samples from the categorical distribution. The length of the sample is 
-determined by n. The numerical arguments other than n are recycled so that the number of samples is 
-equal to n.</p>
+    <p>Returns a list of lists matrices. Each list is equivalent to the
+output produced by <a href='design_matrix.flexsurvreg.html'>design_matrix.flexsurvreg</a>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.3</span>)
-<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>10000</span>
-<span class='no'>pmat</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rep</span>(<span class='no'>p</span>, <span class='no'>n</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>p</span>), <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
-<span class='co'># rcat</span>
-<span class='fu'>set.seed</span>(<span class='fl'>100</span>)
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
-<span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.003   0.000   0.003 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
-#&gt;      1      2      3 
-#&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
-<span class='co'># rmultinom from base R </span>
-<span class='fu'>set.seed</span>(<span class='fl'>100</span>)
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>t</span>(<span class='fu'>apply</span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
-<span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>apply</span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>which</span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
-<span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.063   0.016   0.081 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
-#&gt;      1      2      3 
-#&gt; 0.2015 0.5089 0.2896 </div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
+<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
+                   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exponential"</span>)
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
+                   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
+<span class='no'>fit.X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='design_matrix.html'>design_matrix</a></span>(<span class='fu'>list</span>(<span class='no'>fit1</span>, <span class='no'>fit2</span>))
+<span class='fu'>names</span>(<span class='no'>fit.X</span>)</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='fu'>head</span>(<span class='no'>fit.X</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; $rate
+#&gt;    (Intercept)
+#&gt; 1            1
+#&gt; 2            1
+#&gt; 3            1
+#&gt; 4            1
+#&gt; 5            1
+#&gt; 6            1
+#&gt; 7            1
+#&gt; 8            1
+#&gt; 9            1
+#&gt; 10           1
+#&gt; 11           1
+#&gt; 12           1
+#&gt; 13           1
+#&gt; 14           1
+#&gt; 15           1
+#&gt; 16           1
+#&gt; 17           1
+#&gt; 18           1
+#&gt; 19           1
+#&gt; 20           1
+#&gt; 21           1
+#&gt; 22           1
+#&gt; 23           1
+#&gt; 24           1
+#&gt; 25           1
+#&gt; 26           1
+#&gt; attr(,"assign")
+#&gt; [1] 0
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

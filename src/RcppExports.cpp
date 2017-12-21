@@ -538,6 +538,40 @@ RcppExport SEXP _hesim_rdirichlet_mat(SEXP nSEXP, SEXP alphaSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// C_survival_summary
+arma::mat C_survival_summary(std::string dist_name, Rcpp::List surv_coefs, Rcpp::List surv_X, std::vector<double> x, std::string type);
+static SEXP _hesim_C_survival_summary_try(SEXP dist_nameSEXP, SEXP surv_coefsSEXP, SEXP surv_XSEXP, SEXP xSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< std::string >::type dist_name(dist_nameSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type surv_coefs(surv_coefsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type surv_X(surv_XSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_survival_summary(dist_name, surv_coefs, surv_X, x, type));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _hesim_C_survival_summary(SEXP dist_nameSEXP, SEXP surv_coefsSEXP, SEXP surv_XSEXP, SEXP xSEXP, SEXP typeSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_hesim_C_survival_summary_try(dist_nameSEXP, surv_coefsSEXP, surv_XSEXP, xSEXP, typeSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // matrix_byrow
 arma::mat matrix_byrow(arma::rowvec v, int nrow, int ncol);
 RcppExport SEXP _hesim_matrix_byrow(SEXP vSEXP, SEXP nrowSEXP, SEXP ncolSEXP) {
@@ -582,6 +616,7 @@ static int _hesim_RcppExport_validate(const char* sig) {
         signatures.insert("arma::vec(*C_rcat_vec)(int,arma::mat)");
         signatures.insert("arma::rowvec(*rdirichlet)(arma::rowvec)");
         signatures.insert("arma::cube(*C_rdirichlet_mat)(int,arma::mat)");
+        signatures.insert("arma::mat(*C_survival_summary)(std::string,Rcpp::List,Rcpp::List,std::vector<double>,std::string)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -601,6 +636,7 @@ RcppExport SEXP _hesim_RcppExport_registerCCallable() {
     R_RegisterCCallable("hesim", "_hesim_C_rcat_vec", (DL_FUNC)_hesim_rcat_vec_try);
     R_RegisterCCallable("hesim", "_hesim_rdirichlet", (DL_FUNC)_hesim_rdirichlet_try);
     R_RegisterCCallable("hesim", "_hesim_C_rdirichlet_mat", (DL_FUNC)_hesim_rdirichlet_mat_try);
+    R_RegisterCCallable("hesim", "_hesim_C_survival_summary", (DL_FUNC)_hesim_C_survival_summary_try);
     R_RegisterCCallable("hesim", "_hesim_RcppExport_validate", (DL_FUNC)_hesim_RcppExport_validate);
     return R_NilValue;
 }
@@ -630,6 +666,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_rcat_vec", (DL_FUNC) &_hesim_rcat_vec, 2},
     {"_hesim_rdirichlet", (DL_FUNC) &_hesim_rdirichlet, 1},
     {"_hesim_rdirichlet_mat", (DL_FUNC) &_hesim_rdirichlet_mat, 2},
+    {"_hesim_C_survival_summary", (DL_FUNC) &_hesim_C_survival_summary, 5},
     {"_hesim_matrix_byrow", (DL_FUNC) &_hesim_matrix_byrow, 3},
     {"_hesim_matrix_bycol", (DL_FUNC) &_hesim_matrix_bycol, 3},
     {"_rcpp_module_boot_Distributions", (DL_FUNC) &_rcpp_module_boot_Distributions, 0},

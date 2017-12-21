@@ -1,10 +1,11 @@
 # ifndef DISTRIBUTIONS_H
 # define DISTRIBUTIONS_H
+#include <RcppArmadillo.h>
+#include "utils.h"
 
+vecmats convert_distribution_parameters(std::string dist, Rcpp::List R_parlist);
 double qgompertzC (double p, double shape, double rate);
-
 double rgompertzC (double shape, double rate);
-
 double rsurv(double location, double anc1, std::string dist, double anc2 = 0.0);
 
 class Distribution{
@@ -123,6 +124,8 @@ public:
   double random();
 };
 
+Distribution * select_distribution(std::string dist_name, 
+                                   std::vector<double> parameters);
 # endif
 
 

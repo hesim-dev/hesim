@@ -27,6 +27,7 @@ Imports:
     data.table,
     flexsurv,
     Rcpp (>= 0.12.9),
+    R6,
     stats
 Suggests:
     covr,

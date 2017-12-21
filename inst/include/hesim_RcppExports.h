@@ -272,6 +272,25 @@ namespace hesim {
         return Rcpp::as<arma::cube >(rcpp_result_gen);
     }
 
+    inline arma::mat C_survival_summary(std::string dist_name, Rcpp::List surv_coefs, Rcpp::List surv_X, std::vector<double> x, std::string type) {
+        typedef SEXP(*Ptr_C_survival_summary)(SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_C_survival_summary p_C_survival_summary = NULL;
+        if (p_C_survival_summary == NULL) {
+            validateSignature("arma::mat(*C_survival_summary)(std::string,Rcpp::List,Rcpp::List,std::vector<double>,std::string)");
+            p_C_survival_summary = (Ptr_C_survival_summary)R_GetCCallable("hesim", "_hesim_C_survival_summary");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_C_survival_summary(Shield<SEXP>(Rcpp::wrap(dist_name)), Shield<SEXP>(Rcpp::wrap(surv_coefs)), Shield<SEXP>(Rcpp::wrap(surv_X)), Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(type)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<arma::mat >(rcpp_result_gen);
+    }
+
 }
 
 #endif // RCPP_hesim_RCPPEXPORTS_H_GEN_
