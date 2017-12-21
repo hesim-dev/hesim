@@ -119,9 +119,14 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns an object of class "surv_pars", which is a list 
-containing (i) random samples of the regression coefficients used to predict
-each of the model parameters and (ii) the probability distribution.</p>
+    <p>Returns an object of class "survlist_pars". A list with
+the following components is returned:</p><dl class='dl-horizontal'>
+<dt>coefs</dt><dd><p>List where each element is a matrix of sampled values of 
+regression coefficients used to predict a parameter of the probability 
+distribution.</p></dd>
+<dt>dist</dt><dd><p>Name of the probability distribution.</p></dd>
+</dl>
+
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -130,7 +135,7 @@ each of the model parameters and (ii) the probability distribution.</p>
                    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>fit.sample</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
-<span class='fu'>head</span>(<span class='no'>fit.sample</span>)</div><div class='output co'>#&gt; $shape
+<span class='fu'>head</span>(<span class='no'>fit.sample</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; $shape
 #&gt;          shape
 #&gt; [1,] 0.9070430
 #&gt; [2,] 0.9261117
@@ -145,10 +150,7 @@ each of the model parameters and (ii) the probability distribution.</p>
 #&gt; [3,] 1088.5649
 #&gt; [4,]  966.5907
 #&gt; [5,]  936.4392
-#&gt; 
-#&gt; $dist
-#&gt; [1] "weibull.quiet"
-#&gt; </div></pre>
+#&gt; </div><div class='input'><span class='no'>fit.sample</span>$<span class='no'>dist</span></div><div class='output co'>#&gt; [1] "weibull.quiet"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -105,7 +105,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A list of models fit usingflexsurvreg from the package
+      <td><p>A list of models fit using flexsurvreg from the package
 flexsurv.</p></td>
     </tr>
     <tr>
@@ -120,39 +120,43 @@ flexsurv.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns an object of class "survlist_pars", which is a list 
-of lists. Each list contains (i) random samples of the regression coefficients 
-used to predict each of the model parameters and (ii) the
- probability distribution.</p>
+    <p>Returns an object of class "survlist_pars", which is a
+ lists where each element is a list of class "surv_pars" returned by 
+<a href='rsample.flexsurvreg.html'>rsample.flexsurvreg</a>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'>flexsurvreg</span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='no'>age</span>,
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
+<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='no'>age</span>,
                     <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exponential"</span>)
-<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'>flexsurvreg</span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
                    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"gamma"</span>)
 <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(<span class='kw'>f1</span> <span class='kw'>=</span> <span class='no'>fit1</span>, <span class='kw'>f2</span> <span class='kw'>=</span> <span class='no'>fit2</span>)
 <span class='no'>fits.sample</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>fits</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 <span class='fu'>head</span>(<span class='no'>fits.sample</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [[1]]$rate
+#&gt; [[1]]$coefs
+#&gt; [[1]]$coefs$rate
 #&gt;              rate        age
 #&gt; [1,] 6.902267e-07 0.12474079
 #&gt; [2,] 5.687594e-05 0.04479222
+#&gt; 
 #&gt; 
 #&gt; [[1]]$dist
 #&gt; [1] "exp"
 #&gt; 
 #&gt; 
 #&gt; [[2]]
-#&gt; [[2]]$shape
+#&gt; [[2]]$coefs
+#&gt; [[2]]$coefs$shape
 #&gt;          shape
 #&gt; [1,] 0.9079963
 #&gt; [2,] 0.7515023
 #&gt; 
-#&gt; [[2]]$rate
+#&gt; [[2]]$coefs$rate
 #&gt;              rate
 #&gt; [1,] 0.0005515088
 #&gt; [2,] 0.0004014096
+#&gt; 
 #&gt; 
 #&gt; [[2]]$dist
 #&gt; [1] "gamma"

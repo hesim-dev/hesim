@@ -7,7 +7,7 @@
 rsample(x, n, ...)
 }
 \arguments{
-\item{x}{A statistical model to randomly sample paraameters from.}
+\item{x}{A statistical model to randomly sample parameters from.}
 
 \item{n}{Number of random observations to draw.}
 

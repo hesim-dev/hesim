@@ -15,10 +15,9 @@
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 }
 \value{
-Returns an object of \link{class} "survlist_pars", which is a list 
-of lists. Each list contains (i) random samples of the regression coefficients 
-used to predict each of the model parameters and (ii) the
- probability distribution.
+Returns an object of \link{class} "survlist_pars", which is a
+ lists where each element is a list of class "surv_pars" returned by 
+\link{rsample.flexsurvreg}.
 }
 \description{
 Draw random samples from a list of survival models fit using 

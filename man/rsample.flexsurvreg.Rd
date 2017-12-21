@@ -14,9 +14,14 @@
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 }
 \value{
-Returns an object of \link{class} "surv_pars", which is a list 
-containing (i) random samples of the regression coefficients used to predict
-each of the model parameters and (ii) the probability distribution.
+Returns an object of \link{class} "survlist_pars". A list with
+the following components is returned:
+\describe{
+\item{coefs}{List where each element is a matrix of sampled values of 
+regression coefficients used to predict a parameter of the probability 
+distribution.}
+\item{dist}{Name of the probability distribution.}
+}
 }
 \description{
 Draw random samples from a survival model fit using 
@@ -28,5 +33,6 @@ fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1,
                    data = ovarian, dist = "weibull")
 n <- 5
 fit.sample <- rsample(fit, n = n)
-head(fit.sample)
+head(fit.sample$coefs)
+fit.sample$dist
 }

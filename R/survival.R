@@ -3,7 +3,7 @@
 #' \code{rsample} is a generic function for randomly sampling parameters from
 #' a fitted statistical model. Parameters are sampled using the 
 #' multivariate normal distribution.
-#' @param x A statistical model to randomly sample paraameters from.
+#' @param x A statistical model to randomly sample parameters from.
 #' @param n Number of random observations to draw.
 #' @param ... Additional arguments to pass to random sampling functions.
 #' @return The form of \code{rsample} depends on the class of its argument. See the 
@@ -18,20 +18,19 @@ rsample <- function (x, n, ...) {
 rsample_flexsurv1 <- function(x, n){
   sim <- flexsurv::normboot.flexsurvreg(x, B = n, raw = TRUE)
   n.pars <- length(x$dlist$pars)
-  par.samples <- vector(length = n.pars + 1, mode = "list")
-  names(par.samples) <- c(x$dlist$pars, "dist")
+  coefs <- vector(length = n.pars, mode = "list")
+  names(coefs) <- c(x$dlist$pars)
   for (j in seq_along(x$dlist$pars)){
     parname.j <-  x$dlist$pars[j]
     covind.j <- x$mx[[parname.j]]
     if (length(covind.j) > 0){
-        ind.j <- c(j, n.pars + covind.j)
+      ind.j <- c(j, n.pars + covind.j)
     } else{
-        ind.j <- j
+      ind.j <- j
     }
-    par.samples[[j]] <- sim[, ind.j, drop = FALSE]
+    coefs[[j]] <- sim[, ind.j, drop = FALSE]
   }
-  par.samples[["dist"]] <- x$dlist$name
-  return(par.samples)
+  return(list(coefs = coefs, dist = x$dlist$name))
 }
 
 #' Randomly sample parameters from a flexsurvreg model
@@ -42,9 +41,14 @@ rsample_flexsurv1 <- function(x, n){
 #' @param n Number of random observations to draw.
 #' @param x Output from \link{flexsurvreg} from the package \link{flexsurv}. 
 #' @param ... Further arguments passed to or from other methods. Currently unused.
-#' @return Returns an object of \link{class} "surv_pars", which is a list 
-#' containing (i) random samples of the regression coefficients used to predict
-#' each of the model parameters and (ii) the probability distribution. 
+#' @return Returns an object of \link{class} "survlist_pars". A list with
+#' the following components is returned:
+#' \describe{
+#' \item{coefs}{List where each element is a matrix of sampled values of 
+#' regression coefficients used to predict a parameter of the probability 
+#' distribution.}
+#' \item{dist}{Name of the probability distribution.}
+#' }
 #' @name rsample.flexsurvreg
 #' @examples 
 #' library("flexsurv")
@@ -52,7 +56,8 @@ rsample_flexsurv1 <- function(x, n){
 #'                    data = ovarian, dist = "weibull")
 #' n <- 5
 #' fit.sample <- rsample(fit, n = n)
-#' head(fit.sample)
+#' head(fit.sample$coefs)
+#' fit.sample$dist
 #' @export
 rsample.flexsurvreg <- function(x, n, ...){
   sim <- rsample_flexsurv1(x, n)
@@ -69,10 +74,9 @@ rsample.flexsurvreg <- function(x, n, ...){
 #' @param x A list of models fit using \link{flexsurvreg} from the package
 #'  \link{flexsurv}. 
 #' @param ... Further arguments passed to or from other methods. Currently unused.
-#' @return Returns an object of \link{class} "survlist_pars", which is a list 
-#' of lists. Each list contains (i) random samples of the regression coefficients 
-#' used to predict each of the model parameters and (ii) the
-#'  probability distribution.
+#' @return Returns an object of \link{class} "survlist_pars", which is a
+#'  lists where each element is a list of class "surv_pars" returned by 
+#' \link{rsample.flexsurvreg}. 
 #' @name rsample.list
 #' @examples 
 #' library("flexsurv")
