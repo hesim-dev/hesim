@@ -574,36 +574,6 @@ RcppExport SEXP _hesim_C_survival_summary(SEXP dist_nameSEXP, SEXP surv_coefsSEX
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// integrate_test
-double integrate_test(double w);
-static SEXP _hesim_integrate_test_try(SEXP wSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< double >::type w(wSEXP);
-    rcpp_result_gen = Rcpp::wrap(integrate_test(w));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _hesim_integrate_test(SEXP wSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_integrate_test_try(wSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // matrix_byrow
 arma::mat matrix_byrow(arma::rowvec v, int nrow, int ncol);
 RcppExport SEXP _hesim_matrix_byrow(SEXP vSEXP, SEXP nrowSEXP, SEXP ncolSEXP) {
@@ -649,7 +619,6 @@ static int _hesim_RcppExport_validate(const char* sig) {
         signatures.insert("arma::rowvec(*rdirichlet)(arma::rowvec)");
         signatures.insert("arma::cube(*C_rdirichlet_mat)(int,arma::mat)");
         signatures.insert("arma::mat(*C_survival_summary)(std::string,Rcpp::List,Rcpp::List,double,std::vector<double>,std::string)");
-        signatures.insert("double(*integrate_test)(double)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -670,7 +639,6 @@ RcppExport SEXP _hesim_RcppExport_registerCCallable() {
     R_RegisterCCallable("hesim", "_hesim_rdirichlet", (DL_FUNC)_hesim_rdirichlet_try);
     R_RegisterCCallable("hesim", "_hesim_C_rdirichlet_mat", (DL_FUNC)_hesim_rdirichlet_mat_try);
     R_RegisterCCallable("hesim", "_hesim_C_survival_summary", (DL_FUNC)_hesim_C_survival_summary_try);
-    R_RegisterCCallable("hesim", "_hesim_integrate_test", (DL_FUNC)_hesim_integrate_test_try);
     R_RegisterCCallable("hesim", "_hesim_RcppExport_validate", (DL_FUNC)_hesim_RcppExport_validate);
     return R_NilValue;
 }
@@ -701,7 +669,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_rdirichlet", (DL_FUNC) &_hesim_rdirichlet, 1},
     {"_hesim_rdirichlet_mat", (DL_FUNC) &_hesim_rdirichlet_mat, 2},
     {"_hesim_C_survival_summary", (DL_FUNC) &_hesim_C_survival_summary, 6},
-    {"_hesim_integrate_test", (DL_FUNC) &_hesim_integrate_test, 1},
     {"_hesim_matrix_byrow", (DL_FUNC) &_hesim_matrix_byrow, 3},
     {"_hesim_matrix_bycol", (DL_FUNC) &_hesim_matrix_bycol, 3},
     {"_rcpp_module_boot_Distributions", (DL_FUNC) &_rcpp_module_boot_Distributions, 0},

@@ -83,14 +83,4 @@ arma::mat C_survival_summary(std::string dist_name, Rcpp::List surv_coefs,
   return surv.summary(x, type);
 }
 
-// [[Rcpp::export]]
-double integrate_test(double w){
-  Exponential exp(.5);
-  QalysFunc qf(0, w, exp);
-  const double lower = 0, upper = 100;
-  double err_est;
-  int err_code;
-  return integrate(qf, lower, upper, err_est, err_code);
-}
-
 

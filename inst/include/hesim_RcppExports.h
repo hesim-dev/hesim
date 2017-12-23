@@ -292,25 +292,6 @@ namespace hesim {
         return Rcpp::as<arma::mat >(rcpp_result_gen);
     }
 
-    inline double integrate_test(double w) {
-        typedef SEXP(*Ptr_integrate_test)(SEXP);
-        static Ptr_integrate_test p_integrate_test = NULL;
-        if (p_integrate_test == NULL) {
-            validateSignature("double(*integrate_test)(double)");
-            p_integrate_test = (Ptr_integrate_test)R_GetCCallable("hesim", "_hesim_integrate_test");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_integrate_test(Shield<SEXP>(Rcpp::wrap(w)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<double >(rcpp_result_gen);
-    }
-
 }
 
 #endif // RCPP_hesim_RCPPEXPORTS_H_GEN_

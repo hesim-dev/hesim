@@ -93,10 +93,6 @@ C_survival_summary <- function(dist_name, surv_coefs, surv_X, r, x, type) {
     .Call('_hesim_C_survival_summary', PACKAGE = 'hesim', dist_name, surv_coefs, surv_X, r, x, type)
 }
 
-integrate_test <- function(w) {
-    .Call('_hesim_integrate_test', PACKAGE = 'hesim', w)
-}
-
 matrix_byrow <- function(v, nrow, ncol) {
     .Call('_hesim_matrix_byrow', PACKAGE = 'hesim', v, nrow, ncol)
 }

@@ -224,7 +224,7 @@ design_matrix.list <- function(x, indices = NULL, ...){
 #'   of times \code{t}.}
 #'   \item{\code{rmst(t, r = 0)}}{Calculate the (discounted) restricted mean 
 #'   survival time. Calculated for a vector of times \code{t} given a discount
-#'   rate \code{r}. Durvival times are not discounted by default.
+#'   rate \code{r}. Durvival times are not discounted by default.}
 #' }
 #' 
 #' @examples 

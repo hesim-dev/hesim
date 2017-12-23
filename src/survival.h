@@ -41,35 +41,6 @@ double rmst(Distribution * dist, double t, double r){
   return Numer::integrate(fun, lower, upper, err_est, err_code);
 }
 
-// class QalysFunc: public Numer::Func {
-// private:
-//   double r_;
-//   std::vector<double> w_;
-//   Distribution * dist
-// public:
-//   QalysFun(Distribution * dist, double r, std::vector<double> w) : r_(r), w_(w) {}
-//   
-//   double operator()(const double& x) const {
-//     return w_[x] * exp(-r_ * x) * (1 - dist->cdf(x));
-// 
-//   }
-// };
-
-class QalysFunc: public Numer::Func {
-private:
-  double r_;
-  double w_;
-  Exponential exponential_;
-public:
-  QalysFunc(double r, double w, Exponential exponential) : 
-    r_(r), w_(w), exponential_(exponential){}
-
-  double operator()(const double& x) const {
-    return w_ * exp(-r_ * x) * (1 - exponential_.cdf(x));
-
-  }
-};
-
 # endif
 
 
