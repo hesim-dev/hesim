@@ -222,6 +222,9 @@ design_matrix.list <- function(x, indices = NULL, ...){
 #'   of times \code{t}.}
 #'   \item{\code{hazard(t)}}{Generate hazards give a numeric vector
 #'   of times \code{t}.}
+#'   \item{\code{rmst(t, r = 0)}}{Calculate the (discounted) restricted mean 
+#'   survival time. Calculated for a vector of times \code{t} given a discount
+#'   rate \code{r}. Durvival times are not discounted by default.
 #' }
 #' 
 #' @examples 
@@ -231,36 +234,49 @@ Survival <- R6::R6Class("Survival",
     dist_name = NULL,
     surv_coefs = NULL,
     surv_X = NULL,
+    
     initialize = function(dist_name = NULL, surv_coefs = NULL, surv_X = NULL) {
       self$dist_name <- dist_name
       self$surv_coefs <- surv_coefs
-      self$surv_X<- surv_X
+      self$surv_X <- surv_X
     },
     
     quantiles = function(q){
       R_survival_summary(self$dist_name, self$surv_coefs, 
-                                self$surv_X, q, type = "quantiles")
+                         self$surv_X, 0,
+                         q, type = "quantiles")
     },
     
     surv = function(t){
       R_survival_summary(self$dist_name, self$surv_coefs, 
-                                self$surv_X, t, type = "survival")
+                         self$surv_X, 0, 
+                         t, type = "survival")
     },
     
     cumhazard = function(t){
       R_survival_summary(self$dist_name, self$surv_coefs, 
-                                self$surv_X, t, type = "cumhazard")
+                         self$surv_X, 0,
+                         t, type = "cumhazard")
     },
     
     hazard = function(t){
       R_survival_summary(self$dist_name, self$surv_coefs, 
-                                self$surv_X, t, type = "hazard")
+                        self$surv_X, 0,
+                         t, type = "hazard")
+    },
+    
+    rmst = function(t, r = 0){
+      R_survival_summary(self$dist_name, self$surv_coefs, 
+                         self$surv_X, r,
+                         t, type = "rmst")
     }
   )
 )
 
-R_survival_summary <- function(dist_name, surv_coefs, surv_X, x, type){
-  ret <- C_survival_summary(dist_name, surv_coefs, surv_X, x, type)
+R_survival_summary <- function(dist_name, surv_coefs, surv_X, r, 
+                               x, type){
+  ret <- C_survival_summary(dist_name, surv_coefs, surv_X, r, 
+                            x, type)
   ret <- data.table::data.table(ret)
   if (type == "quantiles"){
       setnames(ret, colnames(ret), c("sim", "id", "q", "value"))
@@ -270,5 +286,5 @@ R_survival_summary <- function(dist_name, surv_coefs, surv_X, x, type){
   sim = id = NULL # for no visible binding note in CRAN check
   ret[, sim := sim + 1]
   ret[, id := id + 1]
-  ret
+  ret[]
 }

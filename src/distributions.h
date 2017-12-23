@@ -11,12 +11,12 @@ double rsurv(double location, double anc1, std::string dist, double anc2 = 0.0);
 class Distribution{
 public:
   virtual ~Distribution() {};
-  virtual double pdf(double x) {return 0.0;}
-  virtual double cdf(double x) {return 0.0;}
-  virtual double quantile(double p){return 0.0;}
-  virtual double hazard(double x) {return 0.0;}
-  virtual double cumhazard(double x) {return 0.0;}
-  virtual double random() {return 0.0;}
+  virtual double pdf(double x) const {return 0.0;}
+  virtual double cdf(double x) const {return 0.0;}
+  virtual double quantile(double p) const {return 0.0;}
+  virtual double hazard(double x) const {return 0.0;}
+  virtual double cumhazard(double x) const {return 0.0;}
+  virtual double random() const {return 0.0;}
 };
 
 class Exponential : public Distribution {
@@ -25,12 +25,12 @@ private:
   
 public:
   Exponential(double rate);
-  double pdf(double x);
-  double cdf(double x);
-  double quantile(double p);
-  double hazard(double x);
-  double cumhazard(double x);
-  double random();
+  double pdf(double x) const;
+  double cdf(double x) const;
+  double quantile(double p) const;
+  double hazard(double x) const;
+  double cumhazard(double x) const;
+  double random() const;
 };
 
 class Weibull : public Distribution {
@@ -40,12 +40,12 @@ private:
 
 public:
   Weibull(double shape, double scale);
-  double pdf(double x);
-  double cdf(double x);
-  double quantile(double p);
-  double hazard(double x);
-  double cumhazard(double x);
-  double random();
+  double pdf(double x) const;
+  double cdf(double x) const;
+  double quantile(double p) const;
+  double hazard(double x) const;
+  double cumhazard(double x) const;
+  double random() const;
 };
 
 class Gamma : public Distribution {
@@ -55,12 +55,12 @@ private:
   
 public:
   Gamma(double shape, double rate);
-  double pdf(double x);
-  double cdf(double x);
-  double quantile(double p);
-  double hazard(double x);
-  double cumhazard(double x);
-  double random();
+  double pdf(double x) const;
+  double cdf(double x) const;
+  double quantile(double p) const;
+  double hazard(double x) const;
+  double cumhazard(double x) const;
+  double random() const;
 };
 
 class Lognormal : public Distribution {
@@ -70,12 +70,12 @@ private:
   
 public:
   Lognormal(double meanlog, double sdlog);
-  double pdf(double x);
-  double cdf(double x);
-  double quantile(double p);
-  double hazard(double x);
-  double cumhazard(double x);
-  double random();
+  double pdf(double x) const;
+  double cdf(double x) const;
+  double quantile(double p) const;
+  double hazard(double x) const;
+  double cumhazard(double x) const;
+  double random() const;
 };
 
 class Gompertz : public Distribution {
@@ -85,12 +85,12 @@ private:
   
 public:
   Gompertz(double shape, double rate);
-  double pdf(double x);
-  double cdf(double x);
-  double quantile(double p);
-  double hazard(double x);
-  double cumhazard(double x);
-  double random();
+  double pdf(double x) const;
+  double cdf(double x) const;
+  double quantile(double p) const;
+  double hazard(double x) const;
+  double cumhazard(double x) const;
+  double random() const;
 };
 
 class LogLogistic : public Distribution {
@@ -100,12 +100,12 @@ private:
   
 public:
   LogLogistic(double shape, double scale);
-  double pdf(double x);
-  double cdf(double x);
-  double quantile(double p);
-  double hazard(double x);
-  double cumhazard(double x);
-  double random();
+  double pdf(double x) const;
+  double cdf(double x) const;
+  double quantile(double p) const;
+  double hazard(double x) const;
+  double cumhazard(double x) const;
+  double random() const;
 };
 
 class GeneralizedGamma : public Distribution {
@@ -116,12 +116,12 @@ private:
   
 public:
   GeneralizedGamma(double mu, double sigma, double Q);
-  double pdf(double x);
-  double cdf(double x);
-  double quantile(double p);
-  double hazard(double x);
-  double cumhazard(double x);
-  double random();
+  double pdf(double x) const;
+  double cdf(double x) const;
+  double quantile(double p) const;
+  double hazard(double x) const;
+  double cumhazard(double x) const;
+  double random() const;
 };
 
 Distribution * select_distribution(std::string dist_name, 

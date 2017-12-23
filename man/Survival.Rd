@@ -24,19 +24,4 @@ distribution of coefficients from a survival model. For example, the output of
 coefficients from \code{surv_coefs}.}
 }}
 
-\section{Members}{
-
- \describe{
-  \item{\code{new()}}{Create a new object of class \code{Survival}}
-  \item{\code{quantiles(q)}}{Generate the quantiles \code{q} of the survival 
-  distribution. \code{q} is a numeric vector.} 
-  \item{\code{surv(t)}}{Generate a survival curve give a numeric vector
-  of times \code{t}.}
-  \item{\code{cumhazard(t)}}{Generate cumulative hazards give a numeric vector
-  of times \code{t}.}
-  \item{\code{hazard(t)}}{Generate hazards give a numeric vector
-  of times \code{t}.}
-}
-}
-
 \keyword{datasets}

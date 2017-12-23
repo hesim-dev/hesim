@@ -20,13 +20,16 @@ BugReports: https://github.com/InnovationValueInitiative/hesim/issues
 License: GPL-3
 LazyData: true
 LinkingTo: Rcpp,
-           RcppArmadillo
+           RcppArmadillo,
+           RcppEigen,
+           RcppNumerical
 Depends:
     R (>= 3.2.3)
 Imports:
     data.table,
     flexsurv,
     Rcpp (>= 0.12.9),
+    RcppNumerical,
     R6,
     stats
 Suggests:

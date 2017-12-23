@@ -11,27 +11,27 @@ Exponential::Exponential(double rate){
   rate_ = rate;
 }
 
-double Exponential::pdf(double x){
+double Exponential::pdf(double x) const{
   return rate_ * exp(-rate_ * x);
 }
 
-double Exponential::cdf(double x){
+double Exponential::cdf(double x) const{
   return 1 - exp(-rate_ * x); // R::pexp(x_, 1/rate_, 1, 0)
 }
 
-double Exponential::quantile(double p){
+double Exponential::quantile(double p) const{
   return R::qexp(p, 1/rate_, 1, 0);
 }
 
-double Exponential::hazard(double x){
+double Exponential::hazard(double x) const{
   return rate_;
 }
 
-double Exponential::cumhazard(double x){
+double Exponential::cumhazard(double x) const{
   return rate_ * x;
 }
 
-double Exponential::random(){
+double Exponential::random() const{
   return R::rexp(1/rate_);
 }
 
@@ -43,27 +43,27 @@ Weibull::Weibull(double shape, double scale){
   scale_ = scale;
 }
 
-double Weibull::pdf(double x){
+double Weibull::pdf(double x) const{
   return R::dweibull(x, shape_, scale_, 0);
 }
 
-double Weibull::cdf(double x){
+double Weibull::cdf(double x) const{
   return R::pweibull(x, shape_, scale_, 1, 0);
 }
 
-double Weibull::quantile(double p){
+double Weibull::quantile(double p) const{
   return R::qweibull(p, shape_, scale_, 1, 0);
 }
 
-double Weibull::hazard(double x){
+double Weibull::hazard(double x) const{
   return shape_ * pow(x/scale_, shape_ - 1)/scale_;
 }
 
-double Weibull::cumhazard(double x){
+double Weibull::cumhazard(double x) const{
   return pow(x/scale_, shape_);
 }
 
-double Weibull::random(){
+double Weibull::random() const{
   return R::rweibull(shape_, scale_);
 }
 
@@ -75,27 +75,27 @@ Gamma::Gamma(double shape, double rate){
   rate_ = rate;
 }
 
-double Gamma::pdf(double x){
+double Gamma::pdf(double x) const{
   return R::dgamma(x, shape_, 1/rate_, 0);
 }
 
-double Gamma::cdf(double x){
+double Gamma::cdf(double x) const{
   return R::pgamma(x, shape_, 1/rate_, 1, 0);
 }
 
-double Gamma::quantile(double p){
+double Gamma::quantile(double p) const{
   return R::qgamma(p, shape_, 1/rate_, 1, 0);
 }
 
-double Gamma::hazard(double x){
+double Gamma::hazard(double x) const{
   return Gamma::pdf(x)/(1 - Gamma::cdf(x));
 }
 
-double Gamma::cumhazard(double x){
+double Gamma::cumhazard(double x) const{
   return -R::pgamma(x, shape_, 1/rate_, 0, 1);
 }
 
-double Gamma::random(){
+double Gamma::random() const{
   return R::rgamma(shape_, 1/rate_);
 }
 
@@ -107,27 +107,27 @@ Lognormal::Lognormal(double meanlog, double sdlog){
   sdlog_ = sdlog;
 }
 
-double Lognormal::pdf(double x){
+double Lognormal::pdf(double x) const{
   return R::dlnorm(x, meanlog_, sdlog_, 0);
 }
 
-double Lognormal::cdf(double x){
+double Lognormal::cdf(double x) const{
   return R::plnorm(x, meanlog_, sdlog_, 1, 0);
 }
 
-double Lognormal::quantile(double p){
+double Lognormal::quantile(double p) const{
   return R::qlnorm(p, meanlog_, sdlog_, 1, 0);
 }
 
-double Lognormal::hazard(double x){
+double Lognormal::hazard(double x) const{
   return Lognormal::pdf(x)/(1 - Lognormal::cdf(x));
 }
 
-double Lognormal::cumhazard(double x){
+double Lognormal::cumhazard(double x) const{
   return -R::plnorm(x, meanlog_, sdlog_, 0, 1);
 }
 
-double Lognormal::random(){
+double Lognormal::random() const{
   return R::rlnorm(meanlog_, sdlog_);
 }
 
@@ -159,7 +159,7 @@ Gompertz::Gompertz(double shape, double rate){
   rate_ = rate;
 }
 
-double Gompertz::pdf(double x){
+double Gompertz::pdf(double x) const{
   if (shape_ == 0){
     return R::dexp(x, 1/rate_, 0);
   }
@@ -168,7 +168,7 @@ double Gompertz::pdf(double x){
   }
 }
 
-double Gompertz::cdf(double x){
+double Gompertz::cdf(double x) const{
   if (shape_ == 0){
     return R::pexp(x, 1/rate_, 1, 0);
   }
@@ -180,15 +180,15 @@ double Gompertz::cdf(double x){
   }
 }
 
-double Gompertz::quantile(double p){
+double Gompertz::quantile(double p) const{
   return qgompertz(p, shape_, rate_);
 }
 
-double Gompertz::hazard(double x){
+double Gompertz::hazard(double x) const{
   return rate_ * exp(shape_ * x);
 }
 
-double Gompertz::cumhazard(double x){
+double Gompertz::cumhazard(double x) const{
   if (shape_ == 0){
     return rate_ * x;
   }
@@ -197,7 +197,7 @@ double Gompertz::cumhazard(double x){
   }
 }
 
-double Gompertz::random(){
+double Gompertz::random() const{
   return rgompertz(shape_, rate_);
 }
 
@@ -220,29 +220,29 @@ LogLogistic::LogLogistic(double shape, double scale){
   scale_ = scale;
 }
 
-double LogLogistic::pdf(double x){
+double LogLogistic::pdf(double x) const{
   return (shape_/scale_) * pow((x/scale_), shape_ - 1)/
     pow((1 + pow((x/scale_), shape_)), 2);
 }
 
-double LogLogistic::cdf(double x){
+double LogLogistic::cdf(double x) const{
   return 1 - 1/(1 + pow(x/scale_, shape_));
 }
 
-double LogLogistic::quantile(double p){
+double LogLogistic::quantile(double p) const{
   return exp(R::qlogis(p, log(scale_), 1/shape_, 1, 0));
 }
 
-double LogLogistic::hazard(double x){
+double LogLogistic::hazard(double x) const{
   return (shape_/scale_) * pow((x/scale_), shape_ - 1)/
     (1 + pow((x/scale_), shape_));
 }
 
-double LogLogistic::cumhazard(double x){
+double LogLogistic::cumhazard(double x) const{
   return -log(1 - LogLogistic::cdf(x));
 }
 
-double LogLogistic::random(){
+double LogLogistic::random() const{
   return rllogis(shape_, scale_);
 }
 
@@ -266,7 +266,7 @@ GeneralizedGamma::GeneralizedGamma(double mu, double sigma, double Q){
   Q_ = Q;
 }
 
-double GeneralizedGamma::pdf(double x){
+double GeneralizedGamma::pdf(double x) const{
   if (Q_ != 0){
     double y = log(x);
     double w = (y - mu_)/sigma_;
@@ -280,7 +280,7 @@ double GeneralizedGamma::pdf(double x){
   }
 }
 
-double GeneralizedGamma::cdf(double x){
+double GeneralizedGamma::cdf(double x) const{
   double y = log(x);
   double w = (y - mu_)/sigma_;
   double Q2inv = 1/(Q_ * Q_);
@@ -296,7 +296,7 @@ double GeneralizedGamma::cdf(double x){
   }
 }
 
-double GeneralizedGamma::quantile(double p){
+double GeneralizedGamma::quantile(double p) const{
   if (Q_ == 0){
     return R::qlnorm(p, mu_, 1/(sigma_ * sigma_), 1, 0);
   }
@@ -306,15 +306,15 @@ double GeneralizedGamma::quantile(double p){
   }
 }
 
-double GeneralizedGamma::hazard(double x){
+double GeneralizedGamma::hazard(double x) const{
   return GeneralizedGamma::pdf(x)/(1 - GeneralizedGamma::cdf(x));
 }
 
-double GeneralizedGamma::cumhazard(double x){
+double GeneralizedGamma::cumhazard(double x) const{
   return -log(1 - GeneralizedGamma::cdf(x));
 }
 
-double GeneralizedGamma::random(){
+double GeneralizedGamma::random() const{
   return rgengamma(mu_, sigma_, Q_);
 }
 

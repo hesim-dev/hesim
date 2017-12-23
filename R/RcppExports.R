@@ -89,8 +89,12 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
-C_survival_summary <- function(dist_name, surv_coefs, surv_X, x, type) {
-    .Call('_hesim_C_survival_summary', PACKAGE = 'hesim', dist_name, surv_coefs, surv_X, x, type)
+C_survival_summary <- function(dist_name, surv_coefs, surv_X, r, x, type) {
+    .Call('_hesim_C_survival_summary', PACKAGE = 'hesim', dist_name, surv_coefs, surv_X, r, x, type)
+}
+
+integrate_test <- function(w) {
+    .Call('_hesim_integrate_test', PACKAGE = 'hesim', w)
 }
 
 matrix_byrow <- function(v, nrow, ncol) {

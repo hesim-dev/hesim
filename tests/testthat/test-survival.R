@@ -113,6 +113,10 @@ test_that("Survival class no regressors", {
   surv.haz <- surv$hazard(t = c(0, 1, 2, 3))
   expect_equal(flexsurv::hexp(3, rate = exp(surv$surv_coefs$rate[3])),
                surv.haz[sim == 3 & id == 1 & t == 3, value])
+  
+  # rmst
+  expect_true(surv$rmst(t = c(15, 20), r = 0)[1, "value"] > 
+                surv$rmst(t = c(15, 20), r = 0.03)[1, "value"])
 })
 
 test_that("Survival class with regressors", {
@@ -144,10 +148,19 @@ test_that("Compare survival class with flexsurv", {
       surv <- Survival$new(dist_name = fit$dlist$name,
                            surv_coefs = rsample(fit, point_estimate = TRUE)$coefs,
                            surv_X = design_matrix(fit, indices = 1))
+      
+      # survival probabilities
       flexsurv.sc <- summary(fit, newdata = data.frame(age = fit$data$m$age[1]),
                              t = 100)
       surv.sc <- surv$surv(t = 100)
       expect_equal(flexsurv.sc[[1]]$est, surv.sc$value)
+      
+      # restricted mean survival time
+      flexsurv.rmst <- summary(fit, newdata = data.frame(age = fit$data$m$age[1]),
+                             t = 90, type = "rmst")
+      surv.rmst <- surv$rmst(t = 90, r = 0)
+      expect_equal(flexsurv.rmst[[1]]$est, surv.rmst$value, scale = 1, 
+                   tol = .01)
   }
   flexsurv_comp("exp")
   flexsurv_comp("exponential")

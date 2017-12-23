@@ -5,4 +5,5 @@
 #' @useDynLib hesim
 #' @import data.table
 #' @importFrom Rcpp evalCpp
+#' @import RcppNumerical
 NULL

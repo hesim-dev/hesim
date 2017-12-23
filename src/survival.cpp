@@ -6,21 +6,20 @@ using namespace Rcpp;
 * Simulating survival 
 ********************/
 Survival::Survival(std::string dist_name, Rcpp::List surv_coefs, 
-                   Rcpp::List surv_X){
+                   Rcpp::List surv_X, double r_health, double r_costs){
   dist_name_ = dist_name;
   surv_coefs_ = convert_distribution_parameters(dist_name, surv_coefs);
   surv_X_ = list_to_vecmats(surv_X);
+  r_health_ = r_health;
+  r_costs_ = r_costs;
   nsims_ = surv_coefs_[0].n_rows;
   nindivs_ = surv_X_[0].n_rows;
   npars_ = surv_coefs_.size();
+  index_ = 0;
 }
 
-int Survival::get_nsims(){
-  return nsims_;
-}
-
-int Survival::get_nindivs(){
-  return nindivs_;
+void Survival::set_index(int index){
+  index_ = index;
 }
 
 std::vector<double> Survival::predict_surv_pars(int sim, int id){
@@ -31,67 +30,67 @@ std::vector<double> Survival::predict_surv_pars(int sim, int id){
   return y;
 }
 
-template <typename Func>
-arma::mat Survival::main_loop(Func fun, std::vector<double> xvec){
+void Survival::summary1(int sim, int id, std::string type, Distribution * dist, 
+                        arma::mat &output, std::vector<double> xvec){
   int J = xvec.size();
-  arma::mat output(nsims_ * nindivs_ * J, 4);
-  int it = 0;
+  for (int j = 0; j < J; ++j){
+    output(index_, 0) = sim;
+    output(index_, 1) = id;
+    output(index_, 2) = xvec[j];
+    if (type == "quantiles"){
+      output(index_, 3) = dist->quantile(xvec[j]);
+    }
+    else if (type == "survival"){
+      output(index_, 3) = 1 - dist->cdf(xvec[j]);
+    }
+    else if (type == "cumhazard"){
+      output(index_, 3) = dist->cumhazard(xvec[j]);
+    }
+    else if (type == "hazard"){
+      output(index_, 3) = dist->hazard(xvec[j]);
+    }
+    else if (type == "rmst"){
+      output(index_, 3) = rmst(dist, xvec[j], r_health_);
+    }
+    else{
+      Rcpp::stop("Selected type is not available.");
+    }
+    set_index(++index_);
+  }
+}
+
+void Survival::main_loop(std::string type, std::vector<double> xvec, arma::mat &output){
   for (int s = 0; s < nsims_; ++s){
     for (int i = 0; i < nindivs_; ++i){
       Distribution *dist = select_distribution(dist_name_, predict_surv_pars(s, i));
-      for (int j = 0; j < J; ++j){
-        output(it, 0) = s;
-        output(it, 1) = i;
-        output(it, 2) = xvec[j];
-        output(it, 3) = fun(dist, xvec[j]);
-        ++it;
-      }
+      summary1(s, i, type, dist, output, xvec);
       delete dist;
     }
   }
+}
+
+arma::mat Survival::summary(std::vector<double> xvec, std::string type){
+  arma::mat output(nsims_ * nindivs_ * xvec.size(), 4);
+  main_loop(type, xvec, output);
   return output;
-}
-
-arma::mat Survival::quantiles(std::vector<double> q){
-  QuantileFun qf;
-  return main_loop(qf, q);
-}
-
-arma::mat Survival::hazard(std::vector<double> t){
-  HazardFun hf;
-  return main_loop(hf, t);
-}
-
-arma::mat Survival::cumhazard(std::vector<double> t){
-  CumhazardFun chf;
-  return main_loop(chf, t);
-}
-
-arma::mat Survival::surv(std::vector<double> t){
-  SurvFun surv;
-  return main_loop(surv, t);
 }
 
 // [[Rcpp::export]]
 arma::mat C_survival_summary(std::string dist_name, Rcpp::List surv_coefs, 
-                              Rcpp::List surv_X, std::vector<double> x,
-                              std::string type){
-  Survival surv(dist_name, surv_coefs, surv_X);
-  if (type == "quantiles"){
-    return surv.quantiles(x);
-  }
-  else if (type == "hazard"){
-    return surv.hazard(x);
-  }
-  else if (type == "cumhazard"){
-    return surv.cumhazard(x);
-  }
-  else if (type == "survival"){
-    return surv.surv(x);
-  }
-  else{
-    Rcpp::stop("Selected type is not available");
-  }
+                             Rcpp::List surv_X, double r,
+                             std::vector<double> x, std::string type){
+  Survival surv(dist_name, surv_coefs, surv_X, r, 0.0);
+  return surv.summary(x, type);
+}
+
+// [[Rcpp::export]]
+double integrate_test(double w){
+  Exponential exp(.5);
+  QalysFunc qf(0, w, exp);
+  const double lower = 0, upper = 100;
+  double err_est;
+  int err_code;
+  return integrate(qf, lower, upper, err_est, err_code);
 }
 
 
