@@ -497,7 +497,7 @@ double SurvSplines::cumhazard(double x) const{
         return exp(linear_predict(x));
     }
     else if (scale_ == "log_odds"){
-        return std::log1p(exp(linear_predict(x)));
+        return log1p(exp(linear_predict(x)));
     }
     else if (scale_ == "normal"){
         return -R::pnorm(-linear_predict(x), 0, 1, 1, 1);
