@@ -666,6 +666,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_zeroin
+double test_zeroin();
+RcppExport SEXP _hesim_test_zeroin() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(test_zeroin());
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _hesim_RcppExport_validate(const char* sig) { 
@@ -743,6 +753,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_DecModSurv_costs", (DL_FUNC) &_hesim_C_DecModSurv_costs, 5},
     {"_hesim_matrix_byrow", (DL_FUNC) &_hesim_matrix_byrow, 3},
     {"_hesim_matrix_bycol", (DL_FUNC) &_hesim_matrix_bycol, 3},
+    {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_rcpp_module_boot_Distributions", (DL_FUNC) &_rcpp_module_boot_Distributions, 0},
     {"_hesim_RcppExport_registerCCallable", (DL_FUNC) &_hesim_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}

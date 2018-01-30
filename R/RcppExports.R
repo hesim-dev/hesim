@@ -109,6 +109,10 @@ matrix_bycol <- function(v, nrow, ncol) {
     .Call('_hesim_matrix_bycol', PACKAGE = 'hesim', v, nrow, ncol)
 }
 
+test_zeroin <- function() {
+    .Call('_hesim_test_zeroin', PACKAGE = 'hesim')
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_hesim_RcppExport_registerCCallable', PACKAGE = 'hesim')

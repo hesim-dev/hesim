@@ -37,6 +37,7 @@ Suggests:
     ggplot2,
     knitr,
     msm,
+    numDeriv,
     rmarkdown,
     scales,
     testthat,
