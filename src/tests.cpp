@@ -88,4 +88,17 @@ RCPP_MODULE(Distributions){
     .method("cumhazard", &GeneralizedGamma::cumhazard)
     .method("random", &GeneralizedGamma::random)
   ;
+  
+    class_<SurvSplines>("SurvSplines")
+    .derives<Distribution>("Distribution")
+    .constructor<std::vector<double>, std::vector<double>, std::string, std::string>()
+    .method("linear_predict", &SurvSplines::linear_predict)
+    .method("linear_predict_dx", &SurvSplines::linear_predict_dx)
+    .method("pdf", &SurvSplines::pdf)
+    .method("cdf", &SurvSplines::cdf)
+    .method("quantile", &SurvSplines::quantile)
+    .method("hazard", &SurvSplines::hazard)
+    .method("cumhazard", &SurvSplines::cumhazard)
+    .method("random", &SurvSplines::random)
+  ;
 }

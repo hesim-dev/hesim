@@ -34,4 +34,3 @@ vecmats list_to_vecmats(Rcpp::List l){
   }
   return v;
 }
-

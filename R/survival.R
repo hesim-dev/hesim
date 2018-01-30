@@ -36,7 +36,7 @@ rsample_flexsurv1 <- function(x, n = NULL, point_estimate = FALSE){
     }
     coefs[[j]] <- sim[, ind.j, drop = FALSE]
   }
-  return(list(coefs = coefs, dist = x$dlist$name))
+  return(coefs)
 }
 
 #' Randomly sample parameters from a flexsurvreg model
@@ -200,20 +200,39 @@ design_matrix.list <- function(x, indices = NULL, ...){
   return(ret)
 }
 
-#' Survival Simulation
+#' Set fields
 #' 
-#' An R6 class for simulating health-economic models based on overall survival.
+#' Allow users to set specific public fields in an R6 object.   
+#' @param ... Arguments to pass to R6 object to set fields. 
+#' @export
+set_fields = function(self, ...){
+  fields <- list(...)
+  if(any(names(fields) %in% names(self) == FALSE)){
+    stop("At least one argument is not a field of Survival.")
+  }
+  for (i in 1:length(fields)){
+    self[[names(fields)[[i]]]] <- fields[[i]]
+  }
+}
+
+#' Disease model based on overall survival
+#' 
+#' An R6 class for a modeling disease progression using survival analysis.
 #' @format \code{\link{R6Class}} object.
 #' @field dist_name Name of the probability distribution used to model survival.
-#' @field  surv_coefs An object of class "surv_pars" representing the posterior
+#' @field coefs An object of class "surv_pars" representing the posterior
 #' distribution of coefficients from a survival model. For example, the output of
 #'  \code{\link{rsample}}.
-#' @field surv_X Matrix of covariates used to predict survival using the 
-#' coefficients from \code{surv_coefs}. 
+#' @field X Matrix of covariates used to predict survival using the 
+#' coefficients from \code{surv_coefs}.
+#' @field time_length Length of time units in years. Default is 1, which implies that
+#' time is measured in years. If time were measured in days, then 
+#' \code{time_length} would be set to 1/365.
 #' 
 #' @section Members:
 #'  \describe{
-#'   \item{\code{new()}}{Create a new object of class \code{Survival}}
+#'   \item{\code{new()}}{Create a new object of class \code{Survival}.}
+#'   \item{\code{set_inputs(...)}}{Set the inputs for the class.}
 #'   \item{\code{quantiles(q)}}{Generate the quantiles \code{q} of the survival 
 #'   distribution. \code{q} is a numeric vector.} 
 #'   \item{\code{surv(t)}}{Generate a survival curve give a numeric vector
@@ -224,59 +243,50 @@ design_matrix.list <- function(x, indices = NULL, ...){
 #'   of times \code{t}.}
 #'   \item{\code{rmst(t, r = 0)}}{Calculate the (discounted) restricted mean 
 #'   survival time. Calculated for a vector of times \code{t} given a discount
-#'   rate \code{r}. Durvival times are not discounted by default.}
-#' }
-#' 
-#' @examples 
+#'   rate \code{r}. Survival times are not discounted by default.}
+#'  }
 #' @export
-Survival <- R6::R6Class("Survival",
+DisModSurv <- R6::R6Class("DisModSurv",
   public = list(
     dist_name = NULL,
-    surv_coefs = NULL,
-    surv_X = NULL,
+    coefs = NULL,
+    X = NULL,
+    time_length = NULL,
     
-    initialize = function(dist_name = NULL, surv_coefs = NULL, surv_X = NULL) {
+    initialize = function(dist_name = NULL, coefs = NULL, X = NULL,
+                          time_length = 1) {
       self$dist_name <- dist_name
-      self$surv_coefs <- surv_coefs
-      self$surv_X <- surv_X
+      self$coefs <- coefs
+      self$X <- X
+      self$time_length <- time_length
     },
     
+    set_inputs = function(...) set_fields(self, ...),
+    
     quantiles = function(q){
-      R_survival_summary(self$dist_name, self$surv_coefs, 
-                         self$surv_X, 0,
-                         q, type = "quantiles")
+      R_DisModSurv_summary(self, 0, q, type = "quantiles")
     },
     
     surv = function(t){
-      R_survival_summary(self$dist_name, self$surv_coefs, 
-                         self$surv_X, 0, 
-                         t, type = "survival")
+      R_DisModSurv_summary(self, 0, t, type = "survival")
     },
     
     cumhazard = function(t){
-      R_survival_summary(self$dist_name, self$surv_coefs, 
-                         self$surv_X, 0,
-                         t, type = "cumhazard")
+      R_DisModSurv_summary(self, 0, t, type = "cumhazard")
     },
     
     hazard = function(t){
-      R_survival_summary(self$dist_name, self$surv_coefs, 
-                        self$surv_X, 0,
-                         t, type = "hazard")
+      R_DisModSurv_summary(self, 0, t, type = "hazard")
     },
     
     rmst = function(t, r = 0){
-      R_survival_summary(self$dist_name, self$surv_coefs, 
-                         self$surv_X, r,
-                         t, type = "rmst")
+      R_DisModSurv_summary(self, r, t, type = "rmst")
     }
   )
 )
 
-R_survival_summary <- function(dist_name, surv_coefs, surv_X, r, 
-                               x, type){
-  ret <- C_survival_summary(dist_name, surv_coefs, surv_X, r, 
-                            x, type)
+R_DisModSurv_summary <- function(dis_mod_surv, r, x, type){
+  ret <- C_DisModSurv_summary(dis_mod_surv, r, x, type)
   ret <- data.table::data.table(ret)
   if (type == "quantiles"){
       setnames(ret, colnames(ret), c("sim", "id", "q", "value"))
@@ -288,3 +298,130 @@ R_survival_summary <- function(dist_name, surv_coefs, surv_X, r,
   ret[, id := id + 1]
   ret[]
 }
+
+#' Utility values
+#' 
+#' An R6 class containing utility values for a health economic model.
+#' @format \code{\link{R6Class}} object.
+#' @export
+UtilityValues <- R6::R6Class("UtilityValues",
+  public = list(
+    mean = NULL,
+    
+    initialize = function(mean = NULL) {
+      self$mean <- mean
+    },
+    
+    set_inputs = function(...) set_fields(self, ...)
+  )
+)
+
+#' Cost values
+#' 
+#' An R6 class containing cost values for a health economic model.
+#' @format \code{\link{R6Class}} object.
+#' @field mean Mean Mean cost value per unit time for a user specified number of 
+#' cost components. A list, where each each element is a cost component 
+#' consisting of a matrix, where rows denote sampled parameter values and 
+#' columns denote health states.   
+#' @field names A character vector of names corresponding to the name of each 
+#' cost component. 
+#' @export
+CostValues <- R6::R6Class("CostValues",
+  public = list(
+    mean = NULL,
+    names = NULL,
+    
+    initialize = function(mean = NULL, names = NULL) {
+      self$mean <- mean
+      self$names <- names
+    },
+    
+    set_inputs = function(...) set_fields(self, ...)
+  )
+)
+
+#' Decision model based on overall survival
+#' 
+#' An R6 class for conducting value assessments based on overall survival.
+#' @format \code{\link{R6Class}} object.
+#' @field dis_mod_surv An \code{\link{R6Class}} object of class \code{\link{DisModSurv}}.
+#' @field utility_values An \code{\link{R6Class}} object of class
+#' \code{\link{UtilityValues}}.
+#' @field cost_values An \code{\link{R6Class}} object of class
+#' \code{\link{CostValues}.
+#' @field effects_ Simulated effects from \code{sim_effects}.
+#' @field costs_ Simulated costs from \code{sim_costs}.
+#' 
+#' @section Members:
+#'  \describe{
+#'   \item{\code{new(survival = NULL, utility_values = NULL, 
+#'   cost_values = NULL)}}{Create a new object of class \code{DecModSurv}.}
+#'   \item{\code{sim_effects(max_t, r = 0, type = rep("qalys", length(r)))}}{Simulate effects 
+#'   given a time horizon of \code{max_t}. The model is simulated for a vector of
+#'    discount rates, \code{r}, and model types, \code{type}, which is a 
+#'    vector the same length as \code{r}. Possible values for \code{type} are 
+#'    "qalys" for quality-adjusted life-years (QALYs) and "lys" for 
+#'    life-years. QALYs are based on utility values simulated using \code{utility_values}.}
+#'   \item{\code{sim_costs(t, r = 0)}}{Simulate costs for each cost component over 
+#'   a time-period \code{t} given a discount rate of \code{r}. \code{t} is a vector
+#'   with length equal to the number of cost components where each element is the 
+#'   number of time periods to calculate costs over for the corresponding cost 
+#'   component. \code{r} is a vector; costs for each cost component are calculated
+#'   for each element of \code{r}.}
+#' }
+#' 
+#' @examples 
+#' @export
+DecModSurv <- R6::R6Class("DecModSurv",
+  public = list(
+    dis_mod_surv = NULL,
+    utility_values = NULL,
+    cost_values = NULL,
+    effects_ = NULL,
+    costs_ = NULL,
+    
+    initialize = function(dis_mod_surv = NULL,
+                          utility_values = NULL, cost_values = NULL) {
+      self$dis_mod_surv <- dis_mod_surv
+      private$nsims <- nrow(self$dis_mod_surv$coefs[[1]])
+      self$utility_values <- utility_values
+      self$cost_values <- cost_values
+    },
+    
+    set_inputs = function(...) set_fields(self, ...),
+    
+    sim_effects = function(max_t, r = 0, type = rep("qalys", length(r))){
+      type.int <- ifelse(type == "qalys", 0, 1)
+      out <- C_DecModSurv_effects(self$dis_mod_surv, t = max_t, 
+                                state_values = self$utility_values,
+                                discount_rate = r, type = type.int)
+      out <- data.table::data.table(out)
+      setnames(out, colnames(out)[1:4], c("sim", "id", "type", "value"))
+      sim = id = type = NULL # for no visible binding note in CRAN check
+      out[, sim := sim + 1]
+      out[, id := id + 1]
+      out[, type := factor(ifelse(type == 0, "qalys", "lys"))]
+      self$effects_ <- out[]
+      invisible(self)
+    },
+    
+    sim_costs = function(t, r = 0){
+      out <- C_DecModSurv_costs(self$dis_mod_surv, t = t, state_values = self$cost_values,
+                              n_components = length(self$cost_values$names), 
+                              discount_rate = r)
+      out <- data.table::data.table(out)
+      setnames(out, colnames(out)[1:4], c("sim", "id", "component", "value"))
+      sim = id = component = NULL # for no visible binding note in CRAN check
+      out[, sim := sim + 1]
+      out[, id := id + 1]
+      out[, component := factor(component, labels = self$cost_values$names)]
+      self$costs_ <- out[]
+      invisible(self)
+    }
+  ),
+  
+  private = list(
+    nsims = NULL
+  )
+)

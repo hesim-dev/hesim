@@ -89,8 +89,16 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
-C_survival_summary <- function(dist_name, surv_coefs, surv_X, r, x, type) {
-    .Call('_hesim_C_survival_summary', PACKAGE = 'hesim', dist_name, surv_coefs, surv_X, r, x, type)
+C_DisModSurv_summary <- function(R_DisModSurv, discount_rate, x, type) {
+    .Call('_hesim_C_DisModSurv_summary', PACKAGE = 'hesim', R_DisModSurv, discount_rate, x, type)
+}
+
+C_DecModSurv_effects <- function(R_DisModSurv, t, state_values, discount_rate, type) {
+    .Call('_hesim_C_DecModSurv_effects', PACKAGE = 'hesim', R_DisModSurv, t, state_values, discount_rate, type)
+}
+
+C_DecModSurv_costs <- function(R_DisModSurv, t, state_values, n_components, discount_rate) {
+    .Call('_hesim_C_DecModSurv_costs', PACKAGE = 'hesim', R_DisModSurv, t, state_values, n_components, discount_rate)
 }
 
 matrix_byrow <- function(v, nrow, ncol) {
@@ -99,6 +107,10 @@ matrix_byrow <- function(v, nrow, ncol) {
 
 matrix_bycol <- function(v, nrow, ncol) {
     .Call('_hesim_matrix_bycol', PACKAGE = 'hesim', v, nrow, ncol)
+}
+
+test_zeroin <- function() {
+    .Call('_hesim_test_zeroin', PACKAGE = 'hesim')
 }
 
 # Register entry points for exported C++ functions
