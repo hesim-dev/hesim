@@ -89,6 +89,22 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
+C_test_trapz <- function(t) {
+    .Call('_hesim_C_test_trapz', PACKAGE = 'hesim', t)
+}
+
+C_test_cumtrapz <- function(t) {
+    .Call('_hesim_C_test_cumtrapz', PACKAGE = 'hesim', t)
+}
+
+C_test_simps <- function(t) {
+    .Call('_hesim_C_test_simps', PACKAGE = 'hesim', t)
+}
+
+C_test_cumsimps <- function(t) {
+    .Call('_hesim_C_test_cumsimps', PACKAGE = 'hesim', t)
+}
+
 C_DisModSurv_summary <- function(R_DisModSurv, discount_rate, x, type) {
     .Call('_hesim_C_DisModSurv_summary', PACKAGE = 'hesim', R_DisModSurv, discount_rate, x, type)
 }

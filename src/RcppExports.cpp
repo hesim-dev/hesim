@@ -539,6 +539,50 @@ RcppExport SEXP _hesim_rdirichlet_mat(SEXP nSEXP, SEXP alphaSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// C_test_trapz
+double C_test_trapz(std::vector<double> t);
+RcppExport SEXP _hesim_C_test_trapz(SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_trapz(t));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_cumtrapz
+std::vector<double> C_test_cumtrapz(std::vector<double> t);
+RcppExport SEXP _hesim_C_test_cumtrapz(SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_cumtrapz(t));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_simps
+double C_test_simps(std::vector<double> t);
+RcppExport SEXP _hesim_C_test_simps(SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_simps(t));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_cumsimps
+std::vector<double> C_test_cumsimps(std::vector<double> t);
+RcppExport SEXP _hesim_C_test_cumsimps(SEXP tSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_cumsimps(t));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_DisModSurv_summary
 arma::mat C_DisModSurv_summary(Rcpp::Environment R_DisModSurv, double discount_rate, std::vector<double> x, std::string type);
 static SEXP _hesim_C_DisModSurv_summary_try(SEXP R_DisModSurvSEXP, SEXP discount_rateSEXP, SEXP xSEXP, SEXP typeSEXP) {
@@ -748,6 +792,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_rcat_vec", (DL_FUNC) &_hesim_rcat_vec, 2},
     {"_hesim_rdirichlet", (DL_FUNC) &_hesim_rdirichlet, 1},
     {"_hesim_rdirichlet_mat", (DL_FUNC) &_hesim_rdirichlet_mat, 2},
+    {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 1},
+    {"_hesim_C_test_cumtrapz", (DL_FUNC) &_hesim_C_test_cumtrapz, 1},
+    {"_hesim_C_test_simps", (DL_FUNC) &_hesim_C_test_simps, 1},
+    {"_hesim_C_test_cumsimps", (DL_FUNC) &_hesim_C_test_cumsimps, 1},
     {"_hesim_C_DisModSurv_summary", (DL_FUNC) &_hesim_C_DisModSurv_summary, 4},
     {"_hesim_C_DecModSurv_effects", (DL_FUNC) &_hesim_C_DecModSurv_effects, 5},
     {"_hesim_C_DecModSurv_costs", (DL_FUNC) &_hesim_C_DecModSurv_costs, 5},

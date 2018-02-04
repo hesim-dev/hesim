@@ -38,6 +38,7 @@ Suggests:
     knitr,
     msm,
     numDeriv,
+    pracma,
     rmarkdown,
     scales,
     testthat,
