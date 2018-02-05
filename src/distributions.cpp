@@ -3,8 +3,8 @@
 using namespace Rcpp;
 
 /***************
- * Free functions
- ***************/
+* Free functions
+***************/
 double integrate_hazard(const Distribution * dist, double t){
     HazardFunc fun(dist);
     const double lower = 0, upper = t;
@@ -12,7 +12,7 @@ double integrate_hazard(const Distribution * dist, double t){
     return Numer::integrate(fun, lower, upper, err_est, err_code);
 }
 
-double quantile_numeric(const Distribution * dist, double p){
+double quantile_numeric_work(const Distribution * dist, double p){
     QuantileNumericFunc func(dist, p);
     double lower = -1;
     double upper = 1;
@@ -29,9 +29,20 @@ double quantile_numeric(const Distribution * dist, double p){
                   &tol, &maxiter);
 }
 
+double quantile_numeric(const Distribution * dist, double p){
+  if ( p < 0 || p > 1){
+    return NAN;
+  }
+  else if (p == 0) return R_NegInf;
+  else if (p == 1) return R_PosInf;
+  else{
+    return quantile_numeric_work(dist, p);
+  }
+}
+
 /**************************
- * Exponential distribution
- **************************/
+* Exponential distribution
+**************************/
 Exponential::Exponential(double rate){
     rate_ = rate;
 }
@@ -61,8 +72,8 @@ double Exponential::random() const{
 }
 
 /*********************
- * Weibull distribution
- *********************/
+* Weibull distribution
+*********************/
 Weibull::Weibull(double shape, double scale){
     shape_ = shape;
     scale_ = scale;
@@ -93,8 +104,8 @@ double Weibull::random() const{
 }
 
 /*******************
- * Gamma distribution
- *******************/
+* Gamma distribution
+*******************/
 Gamma::Gamma(double shape, double rate){
     shape_ = shape;
     rate_ = rate;
@@ -124,9 +135,9 @@ double Gamma::random() const{
     return R::rgamma(shape_, 1/rate_);
 }
 
-/***********************
- * Lognormal distribution
- ***********************/
+/************************
+* Lognormal distribution
+***********************/
 Lognormal::Lognormal(double meanlog, double sdlog){
     meanlog_ = meanlog;
     sdlog_ = sdlog;
@@ -157,8 +168,8 @@ double Lognormal::random() const{
 }
 
 /**********************
- * Gompertz distribution
- **********************/
+* Gompertz distribution
+**********************/
 // [[Rcpp::export]]
 double qgompertz(double p, double shape, double rate) {
     double asymp = 1 - exp(rate/shape);
@@ -227,8 +238,8 @@ double Gompertz::random() const{
 }
 
 /**************************
- * Log-logistic distribution
- **************************/
+* Log-logistic distribution
+**************************/
 // [[Rcpp::export]]
 double qllogis(double p, double shape, double scale, int lt = 1, int lg = 0){
     return exp(R::qlogis(p, log(scale), 1/shape, lt, lg));
@@ -272,8 +283,8 @@ double LogLogistic::random() const{
 }
 
 /********************************
- * Generalized gamma distribution
- ********************************/
+* Generalized gamma distribution
+********************************/
 // [[Rcpp::export]]
 double rgengamma(double mu, double sigma, double Q){
     if (Q == 0.0){
@@ -363,8 +374,8 @@ std::vector<double> rgengamma_vec(int n, std::vector<double> mu,
 }
 
 /************************
- * Royston/Parmar Splines
- *************************/
+* Royston/Parmar Splines
+*************************/
 SurvSplines::SurvSplines(std::vector<double> gamma,
                          std::vector<double> knots,
                          std::string scale, std::string timescale){
@@ -539,21 +550,83 @@ double SurvSplines::cdf(double x) const{
 }
 
 double SurvSplines::quantile(double p) const{
-    if ( p < 0 || p > 1){
-      return NAN;
-    }
-    if (p == 0) return R_NegInf;
-    if (p == 1) return R_PosInf;
-    return quantile_numeric(this, p);
+  return quantile_numeric(this, p);
 }
 
 double SurvSplines::random() const{
     return quantile(R::runif(0, 1));
 }
 
+/************************
+* Fractional polynomials
+************************/
+FracPoly::FracPoly(std::vector<double> gamma, std::vector<double> powers){
+  gamma_ = gamma;
+  powers_ = powers;
+}
+
+double FracPoly::basis_power(double x, double power) const{
+  if (power == 0){
+    return log(x);
+  }
+  else{
+    return pow(x, power);
+  }
+}
+
+std::vector<double> FracPoly::basis(double x) const{
+  int n_powers = powers_.size();
+  std::vector<double> basis(n_powers);
+  basis[0] = basis_power(x, powers_[0]);
+  double xp_old = basis[0];
+  double xp_new;
+  if (n_powers > 1){
+    for (int i = 1; i < n_powers; ++i){
+      if (powers_[i] == powers_[i - 1]){
+        xp_new = log(x) * xp_old;
+      }
+      else {
+        xp_new = basis_power(x, powers_[i]);
+      }
+      basis[i] = xp_new;
+      xp_old = xp_new;
+    }
+  }
+  return basis;
+}
+
+double FracPoly::linear_predict(double x) const{
+  std::vector<double> b = basis(x);
+  return std::inner_product(gamma_.begin(), gamma_.end(), b.begin(), 0.0);
+}
+
+double FracPoly::hazard(double x) const{
+  return exp(linear_predict(x));
+}
+
+double FracPoly::cumhazard(double x) const{
+  return integrate_hazard(this, x);
+}
+
+double FracPoly::cdf(double x) const{
+  return 1 - exp(-cumhazard(x));
+}
+
+double FracPoly::pdf(double x) const{
+  return hazard(x) * (1 - cdf(x));
+}
+
+double FracPoly::quantile(double p) const{
+  return quantile_numeric(this, p);
+}
+
+double FracPoly::random() const{
+  return quantile(R::runif(0, 1));
+}
+  
 /*******************************
- * Truncated normal distribution
- ********************************/
+* Truncated normal distribution
+********************************/
 // [[Rcpp::export]]
 double rtruncnorm(double mean, double sd, double lower, double upper){
     double  sample;
@@ -565,8 +638,8 @@ double rtruncnorm(double mean, double sd, double lower, double upper){
 }
 
 /************************************
- * Piecewise exponential distribution
- *************************************/
+* Piecewise exponential distribution
+*************************************/
 // NOTE: rate in R::rexp is 1/rate in rexp!!!!!!!!
 // [[Rcpp::export]]
 double rpwexp (arma::rowvec rate, arma::rowvec time) {
@@ -597,8 +670,8 @@ std::vector<double> rpwexp_vec (int n, arma::mat rate, arma::rowvec time) {
 }
 
 /*************************
- * Categorical distribution
- **************************/
+* Categorical distribution
+**************************/
 // [[Rcpp::export]]
 int rcat(arma::rowvec probs) {
     int k = probs.n_elem;
@@ -621,8 +694,8 @@ arma::vec rcat_vec(int n, arma::mat probs){
 }
 
 /***********************
- * Dirichlet distribution
- ************************/
+* Dirichlet distribution
+************************/
 // [[Rcpp::export]]
 arma::rowvec rdirichlet(arma::rowvec alpha){
     int alpha_len = alpha.size();
@@ -647,8 +720,8 @@ arma::cube rdirichlet_mat(int n, arma::mat alpha){
 }
 
 /**************************************************
- * Convert list of parameters from R to std::vector
- **************************************************/
+* Convert list of parameters from R to std::vector
+**************************************************/
 vecmats convert_distribution_parameters(std::string dist, Rcpp::List R_parlist){
     vecmats C_parlist;
     if (dist == "exponential" || dist == "exp"){
@@ -677,9 +750,9 @@ vecmats convert_distribution_parameters(std::string dist, Rcpp::List R_parlist){
     return C_parlist;
 }
 
-/********************
- * Select distribution
- *********************/
+/*********************
+* Select distribution
+*********************/
 Distribution * select_distribution(std::string dist_name,
                                    std::vector<double> parameters){
     Distribution *d;
@@ -708,4 +781,120 @@ Distribution * select_distribution(std::string dist_name,
         Rcpp::stop("The selected distribution is not available.");
     }
     return d;
+}
+
+/**************
+* RCPP Modules
+**************/
+RCPP_MODULE(Distributions){
+  class_<Distribution>("Distribution")
+  .method("pdf", &Distribution::pdf)
+  .method("cdf", &Distribution::cdf)
+  .method("quantile", &Distribution::quantile)
+  .method("hazard", &Distribution::hazard)
+  .method("cumhazard", &Distribution::cumhazard)
+  .method("random", &Distribution::random)
+  ;
+
+  class_<Exponential>("Exponential")
+    .derives<Distribution>("Distribution")
+    .constructor<double>()
+    .method("pdf", &Exponential::pdf)
+    .method("cdf", &Exponential::cdf)
+    .method("quantile", &Exponential::quantile)
+    .method("hazard", &Exponential::hazard)
+    .method("cumhazard", &Exponential::cumhazard)
+    .method("random", &Exponential::random)
+  ;
+
+  class_<Weibull>("Weibull")
+    .derives<Distribution>("Distribution")
+    .constructor<double, double>()
+    .method("pdf", &Weibull::pdf)
+    .method("cdf", &Weibull::cdf)
+    .method("quantile", &Weibull::quantile)
+    .method("hazard", &Weibull::hazard)
+    .method("cumhazard", &Weibull::cumhazard)
+    .method("random", &Weibull::random)
+  ;
+  
+  class_<Gamma>("Gamma")
+    .derives<Distribution>("Distribution")
+    .constructor<double, double>()
+    .method("pdf", &Gamma::pdf)
+    .method("cdf", &Gamma::cdf)
+    .method("quantile", &Gamma::quantile)
+    .method("hazard", &Gamma::hazard)
+    .method("cumhazard", &Gamma::cumhazard)
+    .method("random", &Gamma::random)
+  ;
+  
+  class_<Lognormal>("Lognormal")
+    .derives<Distribution>("Distribution")
+    .constructor<double, double>()
+    .method("pdf", &Lognormal::pdf)
+    .method("cdf", &Lognormal::cdf)
+    .method("quantile", &Lognormal::quantile)
+    .method("hazard", &Lognormal::hazard)
+    .method("cumhazard", &Lognormal::cumhazard)
+    .method("random", &Lognormal::random)
+  ;
+  
+  class_<Gompertz>("Gompertz")
+    .derives<Distribution>("Distribution")
+    .constructor<double, double>()
+    .method("pdf", &Gompertz::pdf)
+    .method("cdf", &Gompertz::cdf)
+    .method("quantile", &Gompertz::quantile)
+    .method("hazard", &Gompertz::hazard)
+    .method("cumhazard", &Gompertz::cumhazard)
+    .method("random", &Gompertz::random)
+  ;
+  
+  class_<LogLogistic>("LogLogistic")
+    .derives<Distribution>("Distribution")
+    .constructor<double, double>()
+    .method("pdf", &LogLogistic::pdf)
+    .method("cdf", &LogLogistic::cdf)
+    .method("quantile", &LogLogistic::quantile)
+    .method("hazard", &LogLogistic::hazard)
+    .method("cumhazard", &LogLogistic::cumhazard)
+    .method("random", &LogLogistic::random)
+  ;
+  
+  class_<GeneralizedGamma>("GeneralizedGamma")
+    .derives<Distribution>("Distribution")
+    .constructor<double, double, double>()
+    .method("pdf", &GeneralizedGamma::pdf)
+    .method("cdf", &GeneralizedGamma::cdf)
+    .method("quantile", &GeneralizedGamma::quantile)
+    .method("hazard", &GeneralizedGamma::hazard)
+    .method("cumhazard", &GeneralizedGamma::cumhazard)
+    .method("random", &GeneralizedGamma::random)
+  ;
+  
+    class_<SurvSplines>("SurvSplines")
+    .derives<Distribution>("Distribution")
+    .constructor<std::vector<double>, std::vector<double>, std::string, std::string>()
+    .method("linear_predict", &SurvSplines::linear_predict)
+    .method("linear_predict_dx", &SurvSplines::linear_predict_dx)
+    .method("pdf", &SurvSplines::pdf)
+    .method("cdf", &SurvSplines::cdf)
+    .method("quantile", &SurvSplines::quantile)
+    .method("hazard", &SurvSplines::hazard)
+    .method("cumhazard", &SurvSplines::cumhazard)
+    .method("random", &SurvSplines::random)
+  ;
+    
+     class_<FracPoly>("FracPoly")
+    .derives<Distribution>("Distribution")
+    .constructor<std::vector<double>, std::vector<double> >()
+    .method("linear_predict", &FracPoly::linear_predict)
+    .method("pdf", &FracPoly::pdf)
+    .method("cdf", &FracPoly::cdf)
+    .method("quantile", &FracPoly::quantile)
+    .method("hazard", &FracPoly::hazard)
+    .method("cumhazard", &FracPoly::cumhazard)
+    .method("random", &FracPoly::random)
+  ;
 }

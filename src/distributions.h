@@ -177,6 +177,24 @@ public:
   double random() const;
 };
 
+class FracPoly : public Distribution {
+private:
+  std::vector<double> gamma_;
+  std::vector<double> powers_;
+  double basis_power(double x, double power) const;
+  std::vector<double> basis(double x) const;
+  
+public:
+  FracPoly(std::vector<double> gamma, std::vector<double> powers);
+  double linear_predict(double x) const;
+  double pdf(double x) const;
+  double cdf(double x) const;
+  double quantile(double p) const;
+  double hazard(double x) const;
+  double cumhazard(double x) const;
+  double random() const;
+};
+
 Distribution * select_distribution(std::string dist_name, 
                                    std::vector<double> parameters);
 
