@@ -427,7 +427,7 @@ test_that("SurvivalSplines", {
 })
 
 # Survival Fractional Polynomials ----------------------------------------------
-# bfp function from flexsurv tests
+# functions from flexsurv tests
 bfp <- function (x, powers = c(1, 2)) {
   nobs <- length(x)
   npoly <- length(powers)
@@ -447,32 +447,59 @@ bfp <- function (x, powers = c(1, 2)) {
   X
 }
 
+hfp.lh <- function(x, gamma, powers){
+  if(!is.matrix(gamma)) gamma <- matrix(gamma, nrow=1)
+  lg <- nrow(gamma)
+  nret <- max(length(x), lg)
+  gamma <- apply(gamma, 2, function(x)rep(x,length=nret))
+  x <- rep(x, length=nret)
+  basis <- cbind(1, bfp(x, powers))
+  loghaz <- rowSums(basis * gamma)
+  exp(loghaz)
+}
+
+hfp.lh3 <- unroll.function(hfp.lh, gamma = 0:2)
+
+custom.hfp.lh3 <- list(
+  name = "fp.lh3",
+  pars = c(paste0("gamma", 0:2)),
+  location = c("gamma0"),
+  transforms = rep(c(identity), 3), inv.transforms = rep(c(identity), 3)
+)
+
+# fit fractional polynomial model
+powers <- c(1, 0)
+# fp.fit <- flexsurvreg(Surv(recyrs, censrec) ~ 1, data = bc, 
+#                       aux = list(powers = powers), inits = c(-2, 0, 0),
+#                       dist = custom.hfp.lh3)
+gamma <- c(-1.2, -.567, 1.15)
+
 test_that("FracPoly", {
   FracPoly <- module$FracPoly
   
   # specifications 1
-  gamma <- c(.05, .01)
-  powers <- c(1, 2)
   fp <- new(FracPoly, gamma = gamma, powers = powers)
   R_hazard <- function(t){
-    return(exp(c(gamma %*% t(bfp(t, powers)))))
+    return(exp(c(gamma %*% t(cbind(1, bfp(t, powers))))))
   }
-
   R_cumhazard <- function(t){
     stats::integrate(R_hazard, 0, t)$value
   }
   
   ## linear prediction
   expect_equal(fp$linear_predict(3), 
-               c(gamma %*% t(bfp(3, powers))))
+               c(gamma %*% t(cbind(1, bfp(3, powers)))))
   
   ## hazard
   expect_equal(fp$hazard(4), 
                exp(fp$linear_predict(4)))
+  expect_equal(fp$hazard(0), 0)
   
   ## cumhazard
   expect_equal(fp$cumhazard(2), 
-               R_cumhazard(2))
+               R_cumhazard(2),
+               tolerance = .001, scale = 1)
+  expect_equal(fp$cumhazard(0), 0)
   
   ## cdf
   expect_equal(fp$cdf(2.5), 
@@ -501,12 +528,12 @@ test_that("FracPoly", {
   test_linear_predict <- function(gamma, powers){
     fp <- new(FracPoly, gamma = gamma, powers = powers)
     expect_equal(fp$linear_predict(3), 
-               c(gamma %*% t(bfp(3, powers))))
+                        c(gamma %*% t(cbind(1, bfp(3, powers)))))
   }
-  test_linear_predict(.2, 0)
-  test_linear_predict(c(.2, .2), c(0, 0))
-  test_linear_predict(c(.2, .2), c(1, 1))
-  test_linear_predict(c(.2, .2, .5, .5, .2), c(1, 1, 2, 2, 1))
+  test_linear_predict(c(.2, .2), 0)
+  test_linear_predict(c(.2, .2, .2), c(0, 0))
+  test_linear_predict(c(.2, .2, .2), c(1, 1))
+  test_linear_predict(c(.2, .2, .5, .5, .2, .2), c(1, 1, 2, 2, 1))
 })
 
 

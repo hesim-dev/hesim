@@ -576,9 +576,10 @@ double FracPoly::basis_power(double x, double power) const{
 
 std::vector<double> FracPoly::basis(double x) const{
   int n_powers = powers_.size();
-  std::vector<double> basis(n_powers);
-  basis[0] = basis_power(x, powers_[0]);
-  double xp_old = basis[0];
+  std::vector<double> basis(n_powers + 1);
+  basis[0] = 1;
+  basis[1] = basis_power(x, powers_[0]);
+  double xp_old = basis[1];
   double xp_new;
   if (n_powers > 1){
     for (int i = 1; i < n_powers; ++i){
@@ -588,7 +589,7 @@ std::vector<double> FracPoly::basis(double x) const{
       else {
         xp_new = basis_power(x, powers_[i]);
       }
-      basis[i] = xp_new;
+      basis[i + 1] = xp_new;
       xp_old = xp_new;
     }
   }
@@ -601,7 +602,12 @@ double FracPoly::linear_predict(double x) const{
 }
 
 double FracPoly::hazard(double x) const{
-  return exp(linear_predict(x));
+  if (x <= 0){
+    return 0; // spline model is for time >= 0
+  }
+  else{
+    return exp(linear_predict(x));
+  }
 }
 
 double FracPoly::cumhazard(double x) const{
