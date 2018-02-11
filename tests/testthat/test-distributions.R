@@ -21,7 +21,6 @@ expect_equal(stats::pweibull(4, shape, scale),
 # quantile
 expect_equal(stats::qweibull(.8, shape, scale),
              hesim::qweibullNMA(.8, a0 , a1))
-
 # random
 set.seed(3)
 r1 <- stats::rweibull(1, shape, scale)
@@ -40,6 +39,14 @@ expect_equal(flexsurv::Hweibull(.8, shape, scale),
              hesim::HweibullNMA(.8, a0 , a1))
 expect_equal(flexsurv::Hweibull(.8, shape, scale, log = TRUE),
              hesim::HweibullNMA(.8, a0 , a1, log = TRUE))
+
+# rmst
+expect_equal(flexsurv::rmst_weibull(5, shape, scale),
+             hesim::rmst_weibullNMA(5, a0, a1))
+
+# mean
+expect_equal(flexsurv::mean_weibull(shape, scale),
+             hesim::mean_weibullNMA(a0, a1))
 
 # statistical modeling
 ## intercept only
@@ -87,4 +94,5 @@ expect_equal(exp(sum(s1$res.t[c("a1", "a1(groupMedium)"), "est"])),
              exp(sum(s2$res.t[c("shape", "shape(groupMedium)"), "est"])) - 1,
              scale = 1, tol = .001)
 
+# Gompertz distribution for NMA ------------------------------------------------
 

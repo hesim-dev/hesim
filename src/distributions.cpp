@@ -40,6 +40,15 @@ double quantile_numeric(const Distribution * dist, double p){
   }
 }
 
+// [[Rcpp::export]]
+std::vector<double> C_weibull_to_weibullNMA(double shape, double scale){
+  double scalePH = pow(scale, -shape);
+  std::vector<double> a(2);
+  a[0] = log(shape * scalePH);
+  a[1] = shape - 1;
+  return a;
+}
+
 /**************************
 * Exponential distribution
 **************************/

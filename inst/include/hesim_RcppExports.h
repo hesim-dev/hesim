@@ -26,6 +26,25 @@ namespace hesim {
         }
     }
 
+    inline std::vector<double> C_weibull_to_weibullNMA(double shape, double scale) {
+        typedef SEXP(*Ptr_C_weibull_to_weibullNMA)(SEXP,SEXP);
+        static Ptr_C_weibull_to_weibullNMA p_C_weibull_to_weibullNMA = NULL;
+        if (p_C_weibull_to_weibullNMA == NULL) {
+            validateSignature("std::vector<double>(*C_weibull_to_weibullNMA)(double,double)");
+            p_C_weibull_to_weibullNMA = (Ptr_C_weibull_to_weibullNMA)R_GetCCallable("hesim", "_hesim_C_weibull_to_weibullNMA");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_C_weibull_to_weibullNMA(Shield<SEXP>(Rcpp::wrap(shape)), Shield<SEXP>(Rcpp::wrap(scale)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+    }
+
     inline double qgompertz(double p, double shape, double rate) {
         typedef SEXP(*Ptr_qgompertz)(SEXP,SEXP,SEXP);
         static Ptr_qgompertz p_qgompertz = NULL;

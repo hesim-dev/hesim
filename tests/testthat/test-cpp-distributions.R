@@ -4,6 +4,14 @@ library("numDeriv")
 library("Rcpp")
 module <- Rcpp::Module('Distributions', PACKAGE = "hesim")
 
+# Free functions ---------------------------------------------------------------
+shape <- 2
+scale <- 3
+parsC <- hesim:::C_weibull_to_weibullNMA(shape, scale)
+parsR <- hesim:::weibull_to_weibullNMA(shape, scale)
+expect_equal(parsC[1], parsR$a0)
+expect_equal(parsC[2], parsR$a1)
+
 # Exponential distribution -----------------------------------------------------
 test_that("Exponential", {
   Exponential <- module$Exponential

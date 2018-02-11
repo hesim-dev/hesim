@@ -128,6 +128,37 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_weibull_to_weibullNMA
+std::vector<double> C_weibull_to_weibullNMA(double shape, double scale);
+static SEXP _hesim_C_weibull_to_weibullNMA_try(SEXP shapeSEXP, SEXP scaleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
+    Rcpp::traits::input_parameter< double >::type scale(scaleSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_weibull_to_weibullNMA(shape, scale));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _hesim_C_weibull_to_weibullNMA(SEXP shapeSEXP, SEXP scaleSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_hesim_C_weibull_to_weibullNMA_try(shapeSEXP, scaleSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // qgompertz
 double qgompertz(double p, double shape, double rate);
 static SEXP _hesim_qgompertz_try(SEXP pSEXP, SEXP shapeSEXP, SEXP rateSEXP) {
@@ -725,6 +756,7 @@ END_RCPP
 static int _hesim_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
+        signatures.insert("std::vector<double>(*C_weibull_to_weibullNMA)(double,double)");
         signatures.insert("double(*qgompertz)(double,double,double)");
         signatures.insert("double(*rgompertz)(double,double)");
         signatures.insert("double(*qllogis)(double,double,double,int,int)");
@@ -747,6 +779,7 @@ static int _hesim_RcppExport_validate(const char* sig) {
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _hesim_RcppExport_registerCCallable() { 
+    R_RegisterCCallable("hesim", "_hesim_C_weibull_to_weibullNMA", (DL_FUNC)_hesim_C_weibull_to_weibullNMA_try);
     R_RegisterCCallable("hesim", "_hesim_qgompertz", (DL_FUNC)_hesim_qgompertz_try);
     R_RegisterCCallable("hesim", "_hesim_rgompertz", (DL_FUNC)_hesim_rgompertz_try);
     R_RegisterCCallable("hesim", "_hesim_qllogis", (DL_FUNC)_hesim_qllogis_try);
@@ -779,6 +812,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_ceacC", (DL_FUNC) &_hesim_ceacC, 6},
     {"_hesim_mceC", (DL_FUNC) &_hesim_mceC, 6},
     {"_hesim_VstarC", (DL_FUNC) &_hesim_VstarC, 6},
+    {"_hesim_C_weibull_to_weibullNMA", (DL_FUNC) &_hesim_C_weibull_to_weibullNMA, 2},
     {"_hesim_qgompertz", (DL_FUNC) &_hesim_qgompertz, 3},
     {"_hesim_rgompertz", (DL_FUNC) &_hesim_rgompertz, 2},
     {"_hesim_qllogis", (DL_FUNC) &_hesim_qllogis, 5},

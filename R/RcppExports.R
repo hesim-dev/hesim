@@ -37,6 +37,10 @@ VstarC <- function(k, e, c, nsims, nstrategies, ngrps) {
     .Call('_hesim_VstarC', PACKAGE = 'hesim', k, e, c, nsims, nstrategies, ngrps)
 }
 
+C_weibull_to_weibullNMA <- function(shape, scale) {
+    .Call('_hesim_C_weibull_to_weibullNMA', PACKAGE = 'hesim', shape, scale)
+}
+
 qgompertz <- function(p, shape, rate) {
     .Call('_hesim_qgompertz', PACKAGE = 'hesim', p, shape, rate)
 }
