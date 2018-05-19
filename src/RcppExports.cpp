@@ -570,150 +570,153 @@ RcppExport SEXP _hesim_rdirichlet_mat(SEXP nSEXP, SEXP alphaSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// C_test_xptr_TimeFunTest
+SEXP C_test_xptr_TimeFunTest(Rcpp::List L);
+RcppExport SEXP _hesim_C_test_xptr_TimeFunTest(SEXP LSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type L(LSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_xptr_TimeFunTest(L));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_InputDataMP
+arma::rowvec C_test_InputDataMP(Rcpp::Environment R_InputData, int param_index, int strategy_index, int line_index, int state_index, int patient_index);
+RcppExport SEXP _hesim_C_test_InputDataMP(SEXP R_InputDataSEXP, SEXP param_indexSEXP, SEXP strategy_indexSEXP, SEXP line_indexSEXP, SEXP state_indexSEXP, SEXP patient_indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_InputData(R_InputDataSEXP);
+    Rcpp::traits::input_parameter< int >::type param_index(param_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type strategy_index(strategy_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type line_index(line_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type state_index(state_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type patient_index(patient_indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_InputDataMP(R_InputData, param_index, strategy_index, line_index, state_index, patient_index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_TimeFunMP
+arma::rowvec C_test_TimeFunMP(Rcpp::Environment R_InputData, int time_old, int time_new, int state);
+RcppExport SEXP _hesim_C_test_TimeFunMP(SEXP R_InputDataSEXP, SEXP time_oldSEXP, SEXP time_newSEXP, SEXP stateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_InputData(R_InputDataSEXP);
+    Rcpp::traits::input_parameter< int >::type time_old(time_oldSEXP);
+    Rcpp::traits::input_parameter< int >::type time_new(time_newSEXP);
+    Rcpp::traits::input_parameter< int >::type state(stateSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_TimeFunMP(R_InputData, time_old, time_new, state));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_trapzfun
+double C_test_trapzfun(std::vector<double> x);
+RcppExport SEXP _hesim_C_test_trapzfun(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_trapzfun(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_test_trapz
-double C_test_trapz(std::vector<double> t);
-RcppExport SEXP _hesim_C_test_trapz(SEXP tSEXP) {
+double C_test_trapz(std::vector<double> x, std::vector<double> y);
+RcppExport SEXP _hesim_C_test_trapz(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_trapz(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_cumtrapzfun
+std::vector<double> C_test_cumtrapzfun(std::vector<double> t);
+RcppExport SEXP _hesim_C_test_cumtrapzfun(SEXP tSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_trapz(t));
+    rcpp_result_gen = Rcpp::wrap(C_test_cumtrapzfun(t));
     return rcpp_result_gen;
 END_RCPP
 }
-// C_test_cumtrapz
-std::vector<double> C_test_cumtrapz(std::vector<double> t);
-RcppExport SEXP _hesim_C_test_cumtrapz(SEXP tSEXP) {
+// C_test_simpsfun
+double C_test_simpsfun(std::vector<double> t);
+RcppExport SEXP _hesim_C_test_simpsfun(SEXP tSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_cumtrapz(t));
+    rcpp_result_gen = Rcpp::wrap(C_test_simpsfun(t));
     return rcpp_result_gen;
 END_RCPP
 }
-// C_test_simps
-double C_test_simps(std::vector<double> t);
-RcppExport SEXP _hesim_C_test_simps(SEXP tSEXP) {
+// C_test_cumsimpsfun
+std::vector<double> C_test_cumsimpsfun(std::vector<double> t);
+RcppExport SEXP _hesim_C_test_cumsimpsfun(SEXP tSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_simps(t));
+    rcpp_result_gen = Rcpp::wrap(C_test_cumsimpsfun(t));
     return rcpp_result_gen;
 END_RCPP
 }
-// C_test_cumsimps
-std::vector<double> C_test_cumsimps(std::vector<double> t);
-RcppExport SEXP _hesim_C_test_cumsimps(SEXP tSEXP) {
+// C_PartSurvCurves_summary
+Rcpp::DataFrame C_PartSurvCurves_summary(Rcpp::Environment R_PartSurvCurves, std::vector<double> x, std::string type, double dr);
+RcppExport SEXP _hesim_C_PartSurvCurves_summary(SEXP R_PartSurvCurvesSEXP, SEXP xSEXP, SEXP typeSEXP, SEXP drSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_cumsimps(t));
-    return rcpp_result_gen;
-END_RCPP
-}
-// C_DisModSurv_summary
-arma::mat C_DisModSurv_summary(Rcpp::Environment R_DisModSurv, double discount_rate, std::vector<double> x, std::string type);
-static SEXP _hesim_C_DisModSurv_summary_try(SEXP R_DisModSurvSEXP, SEXP discount_rateSEXP, SEXP xSEXP, SEXP typeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_DisModSurv(R_DisModSurvSEXP);
-    Rcpp::traits::input_parameter< double >::type discount_rate(discount_rateSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PartSurvCurves(R_PartSurvCurvesSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_DisModSurv_summary(R_DisModSurv, discount_rate, x, type));
+    Rcpp::traits::input_parameter< double >::type dr(drSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_PartSurvCurves_summary(R_PartSurvCurves, x, type, dr));
     return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
+END_RCPP
 }
-RcppExport SEXP _hesim_C_DisModSurv_summary(SEXP R_DisModSurvSEXP, SEXP discount_rateSEXP, SEXP xSEXP, SEXP typeSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_C_DisModSurv_summary_try(R_DisModSurvSEXP, discount_rateSEXP, xSEXP, typeSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// C_DecModSurv_effects
-arma::mat C_DecModSurv_effects(Rcpp::Environment R_DisModSurv, int t, SEXP state_values, std::vector<double> discount_rate, std::vector<int> type);
-static SEXP _hesim_C_DecModSurv_effects_try(SEXP R_DisModSurvSEXP, SEXP tSEXP, SEXP state_valuesSEXP, SEXP discount_rateSEXP, SEXP typeSEXP) {
+// C_PartSurvStateVals_predict
+Rcpp::DataFrame C_PartSurvStateVals_predict(Rcpp::Environment R_PartSurvStateVals);
+RcppExport SEXP _hesim_C_PartSurvStateVals_predict(SEXP R_PartSurvStateValsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_DisModSurv(R_DisModSurvSEXP);
-    Rcpp::traits::input_parameter< int >::type t(tSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type state_values(state_valuesSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type discount_rate(discount_rateSEXP);
-    Rcpp::traits::input_parameter< std::vector<int> >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_DecModSurv_effects(R_DisModSurv, t, state_values, discount_rate, type));
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PartSurvStateVals(R_PartSurvStateValsSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_PartSurvStateVals_predict(R_PartSurvStateVals));
     return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
+END_RCPP
 }
-RcppExport SEXP _hesim_C_DecModSurv_effects(SEXP R_DisModSurvSEXP, SEXP tSEXP, SEXP state_valuesSEXP, SEXP discount_rateSEXP, SEXP typeSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_C_DecModSurv_effects_try(R_DisModSurvSEXP, tSEXP, state_valuesSEXP, discount_rateSEXP, typeSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// C_DecModSurv_costs
-arma::mat C_DecModSurv_costs(Rcpp::Environment R_DisModSurv, std::vector<int> t, SEXP state_values, int n_components, std::vector<double> discount_rate);
-static SEXP _hesim_C_DecModSurv_costs_try(SEXP R_DisModSurvSEXP, SEXP tSEXP, SEXP state_valuesSEXP, SEXP n_componentsSEXP, SEXP discount_rateSEXP) {
+// C_PartSurv_sim_stateprobs
+Rcpp::List C_PartSurv_sim_stateprobs(Rcpp::Environment R_PartSurv);
+RcppExport SEXP _hesim_C_PartSurv_sim_stateprobs(SEXP R_PartSurvSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_DisModSurv(R_DisModSurvSEXP);
-    Rcpp::traits::input_parameter< std::vector<int> >::type t(tSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type state_values(state_valuesSEXP);
-    Rcpp::traits::input_parameter< int >::type n_components(n_componentsSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type discount_rate(discount_rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_DecModSurv_costs(R_DisModSurv, t, state_values, n_components, discount_rate));
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PartSurv(R_PartSurvSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_PartSurv_sim_stateprobs(R_PartSurv));
     return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
+END_RCPP
 }
-RcppExport SEXP _hesim_C_DecModSurv_costs(SEXP R_DisModSurvSEXP, SEXP tSEXP, SEXP state_valuesSEXP, SEXP n_componentsSEXP, SEXP discount_rateSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_C_DecModSurv_costs_try(R_DisModSurvSEXP, tSEXP, state_valuesSEXP, n_componentsSEXP, discount_rateSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
+// C_PartSurv_sim_auc
+Rcpp::List C_PartSurv_sim_auc(Rcpp::Environment R_PartSurv, Rcpp::DataFrame R_stateprobs, std::vector<double> dr, std::string type, std::vector<std::string> type_names);
+RcppExport SEXP _hesim_C_PartSurv_sim_auc(SEXP R_PartSurvSEXP, SEXP R_stateprobsSEXP, SEXP drSEXP, SEXP typeSEXP, SEXP type_namesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PartSurv(R_PartSurvSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_stateprobs(R_stateprobsSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type dr(drSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type type_names(type_namesSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_PartSurv_sim_auc(R_PartSurv, R_stateprobs, dr, type, type_names));
     return rcpp_result_gen;
+END_RCPP
 }
 // matrix_byrow
 arma::mat matrix_byrow(arma::rowvec v, int nrow, int ncol);
@@ -738,6 +741,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
     Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
     rcpp_result_gen = Rcpp::wrap(matrix_bycol(v, nrow, ncol));
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_C_add_constant
+std::vector<int> test_C_add_constant(std::vector<int> v, double value);
+RcppExport SEXP _hesim_test_C_add_constant(SEXP vSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<int> >::type v(vSEXP);
+    Rcpp::traits::input_parameter< double >::type value(valueSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_C_add_constant(v, value));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -770,9 +785,6 @@ static int _hesim_RcppExport_validate(const char* sig) {
         signatures.insert("arma::vec(*C_rcat_vec)(int,arma::mat)");
         signatures.insert("arma::rowvec(*rdirichlet)(arma::rowvec)");
         signatures.insert("arma::cube(*C_rdirichlet_mat)(int,arma::mat)");
-        signatures.insert("arma::mat(*C_DisModSurv_summary)(Rcpp::Environment,double,std::vector<double>,std::string)");
-        signatures.insert("arma::mat(*C_DecModSurv_effects)(Rcpp::Environment,int,SEXP,std::vector<double>,std::vector<int>)");
-        signatures.insert("arma::mat(*C_DecModSurv_costs)(Rcpp::Environment,std::vector<int>,SEXP,int,std::vector<double>)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -793,9 +805,6 @@ RcppExport SEXP _hesim_RcppExport_registerCCallable() {
     R_RegisterCCallable("hesim", "_hesim_C_rcat_vec", (DL_FUNC)_hesim_rcat_vec_try);
     R_RegisterCCallable("hesim", "_hesim_rdirichlet", (DL_FUNC)_hesim_rdirichlet_try);
     R_RegisterCCallable("hesim", "_hesim_C_rdirichlet_mat", (DL_FUNC)_hesim_rdirichlet_mat_try);
-    R_RegisterCCallable("hesim", "_hesim_C_DisModSurv_summary", (DL_FUNC)_hesim_C_DisModSurv_summary_try);
-    R_RegisterCCallable("hesim", "_hesim_C_DecModSurv_effects", (DL_FUNC)_hesim_C_DecModSurv_effects_try);
-    R_RegisterCCallable("hesim", "_hesim_C_DecModSurv_costs", (DL_FUNC)_hesim_C_DecModSurv_costs_try);
     R_RegisterCCallable("hesim", "_hesim_RcppExport_validate", (DL_FUNC)_hesim_RcppExport_validate);
     return R_NilValue;
 }
@@ -826,15 +835,21 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_rcat_vec", (DL_FUNC) &_hesim_rcat_vec, 2},
     {"_hesim_rdirichlet", (DL_FUNC) &_hesim_rdirichlet, 1},
     {"_hesim_rdirichlet_mat", (DL_FUNC) &_hesim_rdirichlet_mat, 2},
-    {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 1},
-    {"_hesim_C_test_cumtrapz", (DL_FUNC) &_hesim_C_test_cumtrapz, 1},
-    {"_hesim_C_test_simps", (DL_FUNC) &_hesim_C_test_simps, 1},
-    {"_hesim_C_test_cumsimps", (DL_FUNC) &_hesim_C_test_cumsimps, 1},
-    {"_hesim_C_DisModSurv_summary", (DL_FUNC) &_hesim_C_DisModSurv_summary, 4},
-    {"_hesim_C_DecModSurv_effects", (DL_FUNC) &_hesim_C_DecModSurv_effects, 5},
-    {"_hesim_C_DecModSurv_costs", (DL_FUNC) &_hesim_C_DecModSurv_costs, 5},
+    {"_hesim_C_test_xptr_TimeFunTest", (DL_FUNC) &_hesim_C_test_xptr_TimeFunTest, 1},
+    {"_hesim_C_test_InputDataMP", (DL_FUNC) &_hesim_C_test_InputDataMP, 6},
+    {"_hesim_C_test_TimeFunMP", (DL_FUNC) &_hesim_C_test_TimeFunMP, 4},
+    {"_hesim_C_test_trapzfun", (DL_FUNC) &_hesim_C_test_trapzfun, 1},
+    {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
+    {"_hesim_C_test_cumtrapzfun", (DL_FUNC) &_hesim_C_test_cumtrapzfun, 1},
+    {"_hesim_C_test_simpsfun", (DL_FUNC) &_hesim_C_test_simpsfun, 1},
+    {"_hesim_C_test_cumsimpsfun", (DL_FUNC) &_hesim_C_test_cumsimpsfun, 1},
+    {"_hesim_C_PartSurvCurves_summary", (DL_FUNC) &_hesim_C_PartSurvCurves_summary, 4},
+    {"_hesim_C_PartSurvStateVals_predict", (DL_FUNC) &_hesim_C_PartSurvStateVals_predict, 1},
+    {"_hesim_C_PartSurv_sim_stateprobs", (DL_FUNC) &_hesim_C_PartSurv_sim_stateprobs, 1},
+    {"_hesim_C_PartSurv_sim_auc", (DL_FUNC) &_hesim_C_PartSurv_sim_auc, 5},
     {"_hesim_matrix_byrow", (DL_FUNC) &_hesim_matrix_byrow, 3},
     {"_hesim_matrix_bycol", (DL_FUNC) &_hesim_matrix_bycol, 3},
+    {"_hesim_test_C_add_constant", (DL_FUNC) &_hesim_test_C_add_constant, 2},
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_rcpp_module_boot_Distributions", (DL_FUNC) &_rcpp_module_boot_Distributions, 0},
     {"_hesim_RcppExport_registerCCallable", (DL_FUNC) &_hesim_RcppExport_registerCCallable, 0},

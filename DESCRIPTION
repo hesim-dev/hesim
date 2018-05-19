@@ -28,10 +28,12 @@ Depends:
 Imports:
     data.table,
     flexsurv,
+    MASS,
     Rcpp (>= 0.12.9),
     RcppNumerical,
     R6,
-    stats
+    stats,
+    survival
 Suggests:
     covr,
     ggplot2,
@@ -45,3 +47,4 @@ Suggests:
     truncnorm
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
+SystemRequirements: C++11

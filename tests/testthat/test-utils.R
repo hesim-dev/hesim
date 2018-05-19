@@ -1,10 +1,19 @@
-context("util.R unit tests")
+context("utils.R unit tests")
 
 # absorbing --------------------------------------------------------------------
 test_that("absorbing", {
   tmat <- matrix(c(seq(1, 6), rep(NA, 3)), nrow = 3, ncol = 3, byrow = TRUE)
   expect_equal(absorbing(tmat), 3)
 })
+
+# list depth -------------------------------------------------------------------
+list1 <- list(1)
+list2 <- list(1, list1)
+list3 <- list(1, list1, list2)
+
+expect_equal(hesim:::list_depth(list1), 1)
+expect_equal(hesim:::list_depth(list2), 2)
+expect_equal(hesim:::list_depth(list3), 3)
 
 # list to array ----------------------------------------------------------------
 test_that("list_to_array", {
@@ -28,5 +37,6 @@ test_that("list_to_array", {
   expect_error(list_to_array(obj))
 
 })
+
 
 

@@ -1,45 +1,9 @@
 // [[Rcpp::interfaces(r, cpp)]]
-#include "distributions.h"
-using namespace Rcpp;
+#include <hesim/distributions.h>
 
 /***************
 * Free functions
 ***************/
-double integrate_hazard(const Distribution * dist, double t){
-    HazardFunc fun(dist);
-    const double lower = 0, upper = t;
-    double err_est; int err_code;
-    return Numer::integrate(fun, lower, upper, err_est, err_code);
-}
-
-double quantile_numeric_work(const Distribution * dist, double p){
-    QuantileNumericFunc func(dist, p);
-    double lower = -1;
-    double upper = 1;
-    while(func(lower) * func(upper) >= 0){
-        double interval = upper - lower;
-        lower = lower - 0.5 * interval;
-        upper = upper + 0.5 * interval;
-    }
-    double f_lower = func(lower);
-    double f_upper = func(upper);
-    double tol = 0.0001;
-    int maxiter = 1000;
-    return zeroin(lower, upper, f_lower, f_upper, func,
-                  &tol, &maxiter);
-}
-
-double quantile_numeric(const Distribution * dist, double p){
-  if ( p < 0 || p > 1){
-    return NAN;
-  }
-  else if (p == 0) return R_NegInf;
-  else if (p == 1) return R_PosInf;
-  else{
-    return quantile_numeric_work(dist, p);
-  }
-}
-
 // [[Rcpp::export]]
 std::vector<double> C_weibull_to_weibullNMA(double shape, double scale){
   double scalePH = pow(scale, -shape);
@@ -52,127 +16,146 @@ std::vector<double> C_weibull_to_weibullNMA(double shape, double scale){
 /**************************
 * Exponential distribution
 **************************/
-Exponential::Exponential(double rate){
+hesim::Exponential::Exponential(double rate){
     rate_ = rate;
 }
 
-double Exponential::pdf(double x) const{
+void hesim::Exponential::set_params(std::vector<double> params){
+  rate_ = exp(params[0]);
+}
+
+double hesim::Exponential::pdf(double x) const{
     return rate_ * exp(-rate_ * x);
 }
 
-double Exponential::cdf(double x) const{
+double hesim::Exponential::cdf(double x) const{
     return 1 - exp(-rate_ * x); // R::pexp(x_, 1/rate_, 1, 0)
 }
 
-double Exponential::quantile(double p) const{
+double hesim::Exponential::quantile(double p) const{
     return R::qexp(p, 1/rate_, 1, 0);
 }
 
-double Exponential::hazard(double x) const{
+double hesim::Exponential::hazard(double x) const{
     return rate_;
 }
 
-double Exponential::cumhazard(double x) const{
+double hesim::Exponential::cumhazard(double x) const{
     return rate_ * x;
 }
 
-double Exponential::random() const{
+double hesim::Exponential::random() const{
     return R::rexp(1/rate_);
 }
 
 /*********************
 * Weibull distribution
 *********************/
-Weibull::Weibull(double shape, double scale){
+hesim::Weibull::Weibull(double shape, double scale){
     shape_ = shape;
     scale_ = scale;
 }
 
-double Weibull::pdf(double x) const{
+void hesim::Weibull::set_params(std::vector<double> params){
+  shape_ = exp(params[0]);
+  scale_ = exp(params[1]);
+}
+
+double hesim::Weibull::pdf(double x) const{
     return R::dweibull(x, shape_, scale_, 0);
 }
 
-double Weibull::cdf(double x) const{
+double hesim::Weibull::cdf(double x) const{
     return R::pweibull(x, shape_, scale_, 1, 0);
 }
 
-double Weibull::quantile(double p) const{
+double hesim::Weibull::quantile(double p) const{
     return R::qweibull(p, shape_, scale_, 1, 0);
 }
 
-double Weibull::hazard(double x) const{
+double hesim::Weibull::hazard(double x) const{
     return shape_ * pow(x/scale_, shape_ - 1)/scale_;
 }
 
-double Weibull::cumhazard(double x) const{
+double hesim::Weibull::cumhazard(double x) const{
     return pow(x/scale_, shape_);
 }
 
-double Weibull::random() const{
+double hesim::Weibull::random() const{
     return R::rweibull(shape_, scale_);
 }
 
 /*******************
 * Gamma distribution
 *******************/
-Gamma::Gamma(double shape, double rate){
+hesim::Gamma::Gamma(double shape, double rate){
     shape_ = shape;
     rate_ = rate;
 }
 
-double Gamma::pdf(double x) const{
+void hesim::Gamma::set_params(std::vector<double> params){
+  shape_ = exp(params[0]);
+  rate_ = exp(params[1]);
+}
+
+double hesim::Gamma::pdf(double x) const{
     return R::dgamma(x, shape_, 1/rate_, 0);
 }
 
-double Gamma::cdf(double x) const{
+double hesim::Gamma::cdf(double x) const{
     return R::pgamma(x, shape_, 1/rate_, 1, 0);
 }
 
-double Gamma::quantile(double p) const{
+double hesim::Gamma::quantile(double p) const{
     return R::qgamma(p, shape_, 1/rate_, 1, 0);
 }
 
-double Gamma::hazard(double x) const{
+double hesim::Gamma::hazard(double x) const{
     return Gamma::pdf(x)/(1 - Gamma::cdf(x));
 }
 
-double Gamma::cumhazard(double x) const{
+double hesim::Gamma::cumhazard(double x) const{
     return -R::pgamma(x, shape_, 1/rate_, 0, 1);
 }
 
-double Gamma::random() const{
+double hesim::Gamma::random() const{
     return R::rgamma(shape_, 1/rate_);
 }
 
 /************************
 * Lognormal distribution
 ***********************/
-Lognormal::Lognormal(double meanlog, double sdlog){
+hesim::Lognormal::Lognormal(double meanlog, double sdlog){
     meanlog_ = meanlog;
     sdlog_ = sdlog;
 }
 
-double Lognormal::pdf(double x) const{
+void hesim::Lognormal::set_params(std::vector<double> params){
+  meanlog_ = params[0];
+  sdlog_ = exp(params[1]);
+}
+
+double hesim::Lognormal::pdf(double x) const{
     return R::dlnorm(x, meanlog_, sdlog_, 0);
 }
 
-double Lognormal::cdf(double x) const{
+double hesim::Lognormal::cdf(double x) const{
     return R::plnorm(x, meanlog_, sdlog_, 1, 0);
 }
 
-double Lognormal::quantile(double p) const{
+double hesim::Lognormal::quantile(double p) const{
     return R::qlnorm(p, meanlog_, sdlog_, 1, 0);
 }
 
-double Lognormal::hazard(double x) const{
+double hesim::Lognormal::hazard(double x) const{
     return Lognormal::pdf(x)/(1 - Lognormal::cdf(x));
 }
 
-double Lognormal::cumhazard(double x) const{
+double hesim::Lognormal::cumhazard(double x) const{
     return -R::plnorm(x, meanlog_, sdlog_, 0, 1);
 }
 
-double Lognormal::random() const{
+double hesim::Lognormal::random() const{
     return R::rlnorm(meanlog_, sdlog_);
 }
 
@@ -199,12 +182,17 @@ double rgompertz(double shape, double rate){
     return qgompertz(u, shape, rate);
 }
 
-Gompertz::Gompertz(double shape, double rate){
+hesim::Gompertz::Gompertz(double shape, double rate){
     shape_ = shape;
     rate_ = rate;
 }
 
-double Gompertz::pdf(double x) const{
+void hesim::Gompertz::set_params(std::vector<double> params){
+  shape_ = params[0];
+  rate_ = exp(params[1]);
+}
+
+double hesim::Gompertz::pdf(double x) const{
     if (shape_ == 0){
         return R::dexp(x, 1/rate_, 0);
     }
@@ -213,7 +201,7 @@ double Gompertz::pdf(double x) const{
     }
 }
 
-double Gompertz::cdf(double x) const{
+double hesim::Gompertz::cdf(double x) const{
     if (shape_ == 0){
         return R::pexp(x, 1/rate_, 1, 0);
     }
@@ -225,15 +213,15 @@ double Gompertz::cdf(double x) const{
     }
 }
 
-double Gompertz::quantile(double p) const{
+double hesim::Gompertz::quantile(double p) const{
     return qgompertz(p, shape_, rate_);
 }
 
-double Gompertz::hazard(double x) const{
+double hesim::Gompertz::hazard(double x) const{
     return rate_ * exp(shape_ * x);
 }
 
-double Gompertz::cumhazard(double x) const{
+double hesim::Gompertz::cumhazard(double x) const{
     if (shape_ == 0){
         return rate_ * x;
     }
@@ -242,7 +230,7 @@ double Gompertz::cumhazard(double x) const{
     }
 }
 
-double Gompertz::random() const{
+double hesim::Gompertz::random() const{
     return rgompertz(shape_, rate_);
 }
 
@@ -260,34 +248,39 @@ double rllogis(double shape, double scale){
     return qllogis(u, shape, scale);
 }
 
-LogLogistic::LogLogistic(double shape, double scale){
+hesim::LogLogistic::LogLogistic(double shape, double scale){
     shape_ = shape;
     scale_ = scale;
 }
 
-double LogLogistic::pdf(double x) const{
+void hesim::LogLogistic::set_params(std::vector<double> params){
+  shape_ = exp(params[0]);
+  scale_ = exp(params[1]);
+}
+
+double hesim::LogLogistic::pdf(double x) const{
     return (shape_/scale_) * pow((x/scale_), shape_ - 1)/
     pow((1 + pow((x/scale_), shape_)), 2);
 }
 
-double LogLogistic::cdf(double x) const{
+double hesim::LogLogistic::cdf(double x) const{
     return 1 - 1/(1 + pow(x/scale_, shape_));
 }
 
-double LogLogistic::quantile(double p) const{
+double hesim::LogLogistic::quantile(double p) const{
     return exp(R::qlogis(p, log(scale_), 1/shape_, 1, 0));
 }
 
-double LogLogistic::hazard(double x) const{
+double hesim::LogLogistic::hazard(double x) const{
     return (shape_/scale_) * pow((x/scale_), shape_ - 1)/
     (1 + pow((x/scale_), shape_));
 }
 
-double LogLogistic::cumhazard(double x) const{
+double hesim::LogLogistic::cumhazard(double x) const{
     return -log(1 - LogLogistic::cdf(x));
 }
 
-double LogLogistic::random() const{
+double hesim::LogLogistic::random() const{
     return rllogis(shape_, scale_);
 }
 
@@ -305,13 +298,19 @@ double rgengamma(double mu, double sigma, double Q){
     }
 }
 
-GeneralizedGamma::GeneralizedGamma(double mu, double sigma, double Q){
+hesim::GeneralizedGamma::GeneralizedGamma(double mu, double sigma, double Q){
     mu_ = mu;
     sigma_ = sigma;
     Q_ = Q;
 }
 
-double GeneralizedGamma::pdf(double x) const{
+void hesim::GeneralizedGamma::set_params(std::vector<double> params){
+  mu_ = params[0];
+  sigma_ = exp(params[1]);
+  Q_ = exp(params[2]);
+}
+
+double hesim::GeneralizedGamma::pdf(double x) const{
     if (Q_ != 0){
         double y = log(x);
         double w = (y - mu_)/sigma_;
@@ -325,7 +324,7 @@ double GeneralizedGamma::pdf(double x) const{
     }
 }
 
-double GeneralizedGamma::cdf(double x) const{
+double hesim::GeneralizedGamma::cdf(double x) const{
     double y = log(x);
     double w = (y - mu_)/sigma_;
     double Q2inv = 1/(Q_ * Q_);
@@ -341,7 +340,7 @@ double GeneralizedGamma::cdf(double x) const{
     }
 }
 
-double GeneralizedGamma::quantile(double p) const{
+double hesim::GeneralizedGamma::quantile(double p) const{
     if (Q_ == 0){
         return R::qlnorm(p, mu_, 1/(sigma_ * sigma_), 1, 0);
     }
@@ -351,15 +350,15 @@ double GeneralizedGamma::quantile(double p) const{
     }
 }
 
-double GeneralizedGamma::hazard(double x) const{
+double hesim::GeneralizedGamma::hazard(double x) const{
     return GeneralizedGamma::pdf(x)/(1 - GeneralizedGamma::cdf(x));
 }
 
-double GeneralizedGamma::cumhazard(double x) const{
+double hesim::GeneralizedGamma::cumhazard(double x) const{
     return -log(1 - GeneralizedGamma::cdf(x));
 }
 
-double GeneralizedGamma::random() const{
+double hesim::GeneralizedGamma::random() const{
     return rgengamma(mu_, sigma_, Q_);
 }
 
@@ -376,7 +375,7 @@ std::vector<double> rgengamma_vec(int n, std::vector<double> mu,
     }
     for (int i = 0; i < n; ++i){
         int index = i % mu_size;
-        GeneralizedGamma gengamma(mu[index], sigma[index], Q[index]);
+        hesim::GeneralizedGamma gengamma(mu[index], sigma[index], Q[index]);
         sample[i] = gengamma.random();
     }
     return(sample);
@@ -385,7 +384,7 @@ std::vector<double> rgengamma_vec(int n, std::vector<double> mu,
 /************************
 * Royston/Parmar Splines
 *************************/
-SurvSplines::SurvSplines(std::vector<double> gamma,
+hesim::SurvSplines::SurvSplines(std::vector<double> gamma,
                          std::vector<double> knots,
                          std::string scale, std::string timescale){
     if (gamma.size() != knots.size()){
@@ -400,7 +399,11 @@ SurvSplines::SurvSplines(std::vector<double> gamma,
     knot_min_ = *(knots.begin());
 }
 
-double SurvSplines::timescale_fun(double x) const{
+void hesim::SurvSplines::set_params(std::vector<double> params){
+  gamma_ = params;
+}
+
+double hesim::SurvSplines::timescale_fun(double x) const{
     if (timescale_ == "log"){
         return log(x);
     }
@@ -412,7 +415,7 @@ double SurvSplines::timescale_fun(double x) const{
     }
 }
 
-double SurvSplines::timescale_dx_fun(double x) const{
+double hesim::SurvSplines::timescale_dx_fun(double x) const{
     if (timescale_ == "log"){
         return 1/x;
     }
@@ -424,7 +427,7 @@ double SurvSplines::timescale_dx_fun(double x) const{
     }
 }
 
-double SurvSplines::basis_cube(double x) const{
+double hesim::SurvSplines::basis_cube(double x) const{
     if (x <= 0) {
         return 0;
     }
@@ -433,7 +436,7 @@ double SurvSplines::basis_cube(double x) const{
     }
 }
 
-double SurvSplines::basis_cube_dx(double x) const{
+double hesim::SurvSplines::basis_cube_dx(double x) const{
     if (x <= 0) {
         return 0;
     }
@@ -442,7 +445,7 @@ double SurvSplines::basis_cube_dx(double x) const{
     }
 }
 
-double SurvSplines::linear_predict(double x) const{
+double hesim::SurvSplines::linear_predict(double x) const{
     double x_scaled = timescale_fun(x);
     std::vector<double> basis(n_knots_);
     basis[0] = 1; basis[1] = x_scaled;
@@ -454,7 +457,7 @@ double SurvSplines::linear_predict(double x) const{
     return std::inner_product(gamma_.begin(), gamma_.end(), basis.begin(), 0.0);
 }
 
-double SurvSplines::linear_predict_dx(double x) const {
+double hesim::SurvSplines::linear_predict_dx(double x) const {
     double x_scaled = timescale_fun(x);
     std::vector<double> basis_dx(n_knots_);
     basis_dx[0] = 0; basis_dx[1] = 1;
@@ -466,7 +469,7 @@ double SurvSplines::linear_predict_dx(double x) const {
     return std::inner_product(gamma_.begin(), gamma_.end(), basis_dx.begin(), 0.0);
 }
 
-double SurvSplines::survival(double x) const{
+double hesim::SurvSplines::survival(double x) const{
     if (x <= 0){
         return 1; // spline model is for time >= 0
     }
@@ -484,7 +487,7 @@ double SurvSplines::survival(double x) const{
     }
 }
 
-double SurvSplines::hazard(double x) const{
+double hesim::SurvSplines::hazard(double x) const{
     if (x <= 0){
         return 0; // spline model is for time >= 0
     }
@@ -506,7 +509,7 @@ double SurvSplines::hazard(double x) const{
     }
 }
 
-double SurvSplines::cumhazard(double x) const{
+double hesim::SurvSplines::cumhazard(double x) const{
     if (x <= 0){
         return 0; // spline model is for time >= 0
     }
@@ -527,7 +530,7 @@ double SurvSplines::cumhazard(double x) const{
     }
 }
 
-double SurvSplines::pdf(double x) const {
+double hesim::SurvSplines::pdf(double x) const {
     if (x <= 0){
         return 0; // spline model is for time >= 0
     }
@@ -554,27 +557,31 @@ double SurvSplines::pdf(double x) const {
     return prob;
 }
 
-double SurvSplines::cdf(double x) const{
+double hesim::SurvSplines::cdf(double x) const{
     return 1 - survival(x);
 }
 
-double SurvSplines::quantile(double p) const{
+double hesim::SurvSplines::quantile(double p) const{
   return quantile_numeric(this, p);
 }
 
-double SurvSplines::random() const{
+double hesim::SurvSplines::random() const{
     return quantile(R::runif(0, 1));
 }
 
 /************************
 * Fractional polynomials
 ************************/
-FracPoly::FracPoly(std::vector<double> gamma, std::vector<double> powers){
+hesim::FracPoly::FracPoly(std::vector<double> gamma, std::vector<double> powers){
   gamma_ = gamma;
   powers_ = powers;
 }
 
-double FracPoly::basis_power(double x, double power) const{
+void hesim::FracPoly::set_params(std::vector<double> params){
+  gamma_ = params;
+}
+
+double hesim::FracPoly::basis_power(double x, double power) const{
   if (power == 0){
     return log(x);
   }
@@ -583,7 +590,7 @@ double FracPoly::basis_power(double x, double power) const{
   }
 }
 
-std::vector<double> FracPoly::basis(double x) const{
+std::vector<double> hesim::FracPoly::basis(double x) const{
   int n_powers = powers_.size();
   std::vector<double> basis(n_powers + 1);
   basis[0] = 1;
@@ -605,37 +612,37 @@ std::vector<double> FracPoly::basis(double x) const{
   return basis;
 }
 
-double FracPoly::linear_predict(double x) const{
+double hesim::FracPoly::linear_predict(double x) const{
   std::vector<double> b = basis(x);
   return std::inner_product(gamma_.begin(), gamma_.end(), b.begin(), 0.0);
 }
 
-double FracPoly::hazard(double x) const{
+double hesim::FracPoly::hazard(double x) const{
   if (x <= 0){
-    return 0; // spline model is for time >= 0
+    return 0; //  model is for time >= 0
   }
   else{
     return exp(linear_predict(x));
   }
 }
 
-double FracPoly::cumhazard(double x) const{
+double hesim::FracPoly::cumhazard(double x) const{
   return integrate_hazard(this, x);
 }
 
-double FracPoly::cdf(double x) const{
+double hesim::FracPoly::cdf(double x) const{
   return 1 - exp(-cumhazard(x));
 }
 
-double FracPoly::pdf(double x) const{
+double hesim::FracPoly::pdf(double x) const{
   return hazard(x) * (1 - cdf(x));
 }
 
-double FracPoly::quantile(double p) const{
+double hesim::FracPoly::quantile(double p) const{
   return quantile_numeric(this, p);
 }
 
-double FracPoly::random() const{
+double hesim::FracPoly::random() const{
   return quantile(R::runif(0, 1));
 }
   
@@ -692,7 +699,7 @@ int rcat(arma::rowvec probs) {
     int k = probs.n_elem;
     double probs_sum = accu(probs);
     probs = probs/probs_sum;
-    IntegerVector ans(k);
+    Rcpp::IntegerVector ans(k);
     rmultinom(1, probs.begin(), k, ans.begin());
     int max = which_max(ans);
     return(max);
@@ -740,24 +747,24 @@ arma::cube rdirichlet_mat(int n, arma::mat alpha){
 vecmats convert_distribution_parameters(std::string dist, Rcpp::List R_parlist){
     vecmats C_parlist;
     if (dist == "exponential" || dist == "exp"){
-        C_parlist.push_back(as<arma::mat >(R_parlist["rate"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["rate"]));
     }
     else if (dist == "weibull" || dist == "weibull.quiet" || dist == "llogis"){
-        C_parlist.push_back(as<arma::mat >(R_parlist["shape"]));
-        C_parlist.push_back(as<arma::mat >(R_parlist["scale"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["shape"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["scale"]));
     }
     else if (dist == "gompertz" || dist == "gamma"){
-        C_parlist.push_back(as<arma::mat >(R_parlist["shape"]));
-        C_parlist.push_back(as<arma::mat >(R_parlist["rate"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["shape"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["rate"]));
     }
     else if (dist == "lnorm"){
-        C_parlist.push_back(as<arma::mat >(R_parlist["meanlog"]));
-        C_parlist.push_back(as<arma::mat >(R_parlist["sdlog"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["meanlog"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["sdlog"]));
     }
     else if (dist == "gengamma"){
-        C_parlist.push_back(as<arma::mat >(R_parlist["mu"]));
-        C_parlist.push_back(as<arma::mat >(R_parlist["sigma"]));
-        C_parlist.push_back(as<arma::mat >(R_parlist["Q"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["mu"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["sigma"]));
+        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["Q"]));
     }
     else{
         Rcpp::stop("The selected distribution is not available.");
@@ -768,29 +775,29 @@ vecmats convert_distribution_parameters(std::string dist, Rcpp::List R_parlist){
 /*********************
 * Select distribution
 *********************/
-Distribution * select_distribution(std::string dist_name,
+hesim::Distribution * hesim::select_distribution(std::string dist_name,
                                    std::vector<double> parameters){
-    Distribution *d;
+    hesim::Distribution *d;
     if (dist_name == "exponential" || dist_name == "exp"){
-        d = new Exponential(exp(parameters[0]));
+        d = new hesim::Exponential(exp(parameters[0]));
     }
     else if (dist_name == "weibull.quiet" || dist_name == "weibull"){
-        d = new Weibull(exp(parameters[0]), exp(parameters[1]));
+        d = new hesim::Weibull(exp(parameters[0]), exp(parameters[1]));
     }
     else if (dist_name == "gamma"){
-        d = new Gamma(exp(parameters[0]), exp(parameters[1]));
+        d = new hesim::Gamma(exp(parameters[0]), exp(parameters[1]));
     }
     else if (dist_name == "lnorm"){
-        d = new Lognormal(parameters[0], exp(parameters[1]));
+        d = new hesim::Lognormal(parameters[0], exp(parameters[1]));
     }
     else if (dist_name == "gompertz"){
-        d = new Gompertz(parameters[0], exp(parameters[1]));
+        d = new hesim::Gompertz(parameters[0], exp(parameters[1]));
     }
     else if (dist_name == "llogis"){
-        d = new LogLogistic(exp(parameters[0]), exp(parameters[1])); 
+        d = new hesim::LogLogistic(exp(parameters[0]), exp(parameters[1])); 
     }
     else if (dist_name == "gengamma"){
-        d = new GeneralizedGamma(parameters[0], exp(parameters[1]), parameters[2]); 
+        d = new hesim::GeneralizedGamma(parameters[0], exp(parameters[1]), parameters[2]); 
     }
     else{
         Rcpp::stop("The selected distribution is not available.");
@@ -802,114 +809,114 @@ Distribution * select_distribution(std::string dist_name,
 * RCPP Modules
 **************/
 RCPP_MODULE(Distributions){
-  class_<Distribution>("Distribution")
-  .method("pdf", &Distribution::pdf)
-  .method("cdf", &Distribution::cdf)
-  .method("quantile", &Distribution::quantile)
-  .method("hazard", &Distribution::hazard)
-  .method("cumhazard", &Distribution::cumhazard)
-  .method("random", &Distribution::random)
+  Rcpp::class_<hesim::Distribution>("Distribution")
+  .method("pdf", &hesim::Distribution::pdf)
+  .method("cdf", &hesim::Distribution::cdf)
+  .method("quantile", &hesim::Distribution::quantile)
+  .method("hazard", &hesim::Distribution::hazard)
+  .method("cumhazard", &hesim::Distribution::cumhazard)
+  .method("random", &hesim::Distribution::random)
   ;
 
-  class_<Exponential>("Exponential")
-    .derives<Distribution>("Distribution")
+  Rcpp::class_<hesim::Exponential>("Exponential")
+    .derives<hesim::Distribution>("Distribution")
     .constructor<double>()
-    .method("pdf", &Exponential::pdf)
-    .method("cdf", &Exponential::cdf)
-    .method("quantile", &Exponential::quantile)
-    .method("hazard", &Exponential::hazard)
-    .method("cumhazard", &Exponential::cumhazard)
-    .method("random", &Exponential::random)
+    .method("pdf", &hesim::Exponential::pdf)
+    .method("cdf", &hesim::Exponential::cdf)
+    .method("quantile", &hesim::Exponential::quantile)
+    .method("hazard", &hesim::Exponential::hazard)
+    .method("cumhazard", &hesim::Exponential::cumhazard)
+    .method("random", &hesim::Exponential::random)
   ;
 
-  class_<Weibull>("Weibull")
-    .derives<Distribution>("Distribution")
+  Rcpp::class_<hesim::Weibull>("Weibull")
+    .derives<hesim::Distribution>("Distribution")
     .constructor<double, double>()
-    .method("pdf", &Weibull::pdf)
-    .method("cdf", &Weibull::cdf)
-    .method("quantile", &Weibull::quantile)
-    .method("hazard", &Weibull::hazard)
-    .method("cumhazard", &Weibull::cumhazard)
-    .method("random", &Weibull::random)
+    .method("pdf", &hesim::Weibull::pdf)
+    .method("cdf", &hesim::Weibull::cdf)
+    .method("quantile", &hesim::Weibull::quantile)
+    .method("hazard", &hesim::Weibull::hazard)
+    .method("cumhazard", &hesim::Weibull::cumhazard)
+    .method("random", &hesim::Weibull::random)
   ;
   
-  class_<Gamma>("Gamma")
-    .derives<Distribution>("Distribution")
+  Rcpp::class_<hesim::Gamma>("Gamma")
+    .derives<hesim::Distribution>("Distribution")
     .constructor<double, double>()
-    .method("pdf", &Gamma::pdf)
-    .method("cdf", &Gamma::cdf)
-    .method("quantile", &Gamma::quantile)
-    .method("hazard", &Gamma::hazard)
-    .method("cumhazard", &Gamma::cumhazard)
-    .method("random", &Gamma::random)
+    .method("pdf", &hesim::Gamma::pdf)
+    .method("cdf", &hesim::Gamma::cdf)
+    .method("quantile", &hesim::Gamma::quantile)
+    .method("hazard", &hesim::Gamma::hazard)
+    .method("cumhazard", &hesim::Gamma::cumhazard)
+    .method("random", &hesim::Gamma::random)
   ;
   
-  class_<Lognormal>("Lognormal")
-    .derives<Distribution>("Distribution")
+  Rcpp::class_<hesim::Lognormal>("Lognormal")
+    .derives<hesim::Distribution>("Distribution")
     .constructor<double, double>()
-    .method("pdf", &Lognormal::pdf)
-    .method("cdf", &Lognormal::cdf)
-    .method("quantile", &Lognormal::quantile)
-    .method("hazard", &Lognormal::hazard)
-    .method("cumhazard", &Lognormal::cumhazard)
-    .method("random", &Lognormal::random)
+    .method("pdf", &hesim::Lognormal::pdf)
+    .method("cdf", &hesim::Lognormal::cdf)
+    .method("quantile", &hesim::Lognormal::quantile)
+    .method("hazard", &hesim::Lognormal::hazard)
+    .method("cumhazard", &hesim::Lognormal::cumhazard)
+    .method("random", &hesim::Lognormal::random)
   ;
   
-  class_<Gompertz>("Gompertz")
-    .derives<Distribution>("Distribution")
+  Rcpp::class_<hesim::Gompertz>("Gompertz")
+    .derives<hesim::Distribution>("Distribution")
     .constructor<double, double>()
-    .method("pdf", &Gompertz::pdf)
-    .method("cdf", &Gompertz::cdf)
-    .method("quantile", &Gompertz::quantile)
-    .method("hazard", &Gompertz::hazard)
-    .method("cumhazard", &Gompertz::cumhazard)
-    .method("random", &Gompertz::random)
+    .method("pdf", &hesim::Gompertz::pdf)
+    .method("cdf", &hesim::Gompertz::cdf)
+    .method("quantile", &hesim::Gompertz::quantile)
+    .method("hazard", &hesim::Gompertz::hazard)
+    .method("cumhazard", &hesim::Gompertz::cumhazard)
+    .method("random", &hesim::Gompertz::random)
   ;
   
-  class_<LogLogistic>("LogLogistic")
-    .derives<Distribution>("Distribution")
+  Rcpp::class_<hesim::LogLogistic>("LogLogistic")
+    .derives<hesim::Distribution>("Distribution")
     .constructor<double, double>()
-    .method("pdf", &LogLogistic::pdf)
-    .method("cdf", &LogLogistic::cdf)
-    .method("quantile", &LogLogistic::quantile)
-    .method("hazard", &LogLogistic::hazard)
-    .method("cumhazard", &LogLogistic::cumhazard)
-    .method("random", &LogLogistic::random)
+    .method("pdf", &hesim::LogLogistic::pdf)
+    .method("cdf", &hesim::LogLogistic::cdf)
+    .method("quantile", &hesim::LogLogistic::quantile)
+    .method("hazard", &hesim::LogLogistic::hazard)
+    .method("cumhazard", &hesim::LogLogistic::cumhazard)
+    .method("random", &hesim::LogLogistic::random)
   ;
   
-  class_<GeneralizedGamma>("GeneralizedGamma")
-    .derives<Distribution>("Distribution")
+  Rcpp::class_<hesim::GeneralizedGamma>("GeneralizedGamma")
+    .derives<hesim::Distribution>("Distribution")
     .constructor<double, double, double>()
-    .method("pdf", &GeneralizedGamma::pdf)
-    .method("cdf", &GeneralizedGamma::cdf)
-    .method("quantile", &GeneralizedGamma::quantile)
-    .method("hazard", &GeneralizedGamma::hazard)
-    .method("cumhazard", &GeneralizedGamma::cumhazard)
-    .method("random", &GeneralizedGamma::random)
+    .method("pdf", &hesim::GeneralizedGamma::pdf)
+    .method("cdf", &hesim::GeneralizedGamma::cdf)
+    .method("quantile", &hesim::GeneralizedGamma::quantile)
+    .method("hazard", &hesim::GeneralizedGamma::hazard)
+    .method("cumhazard", &hesim::GeneralizedGamma::cumhazard)
+    .method("random", &hesim::GeneralizedGamma::random)
   ;
   
-    class_<SurvSplines>("SurvSplines")
-    .derives<Distribution>("Distribution")
+    Rcpp::class_<hesim::SurvSplines>("SurvSplines")
+    .derives<hesim::Distribution>("Distribution")
     .constructor<std::vector<double>, std::vector<double>, std::string, std::string>()
-    .method("linear_predict", &SurvSplines::linear_predict)
-    .method("linear_predict_dx", &SurvSplines::linear_predict_dx)
-    .method("pdf", &SurvSplines::pdf)
-    .method("cdf", &SurvSplines::cdf)
-    .method("quantile", &SurvSplines::quantile)
-    .method("hazard", &SurvSplines::hazard)
-    .method("cumhazard", &SurvSplines::cumhazard)
-    .method("random", &SurvSplines::random)
+    .method("linear_predict", &hesim::SurvSplines::linear_predict)
+    .method("linear_predict_dx", &hesim::SurvSplines::linear_predict_dx)
+    .method("pdf", &hesim::SurvSplines::pdf)
+    .method("cdf", &hesim::SurvSplines::cdf)
+    .method("quantile", &hesim::SurvSplines::quantile)
+    .method("hazard", &hesim::SurvSplines::hazard)
+    .method("cumhazard", &hesim::SurvSplines::cumhazard)
+    .method("random", &hesim::SurvSplines::random)
   ;
     
-     class_<FracPoly>("FracPoly")
-    .derives<Distribution>("Distribution")
+     Rcpp::class_<hesim::FracPoly>("FracPoly")
+    .derives<hesim::Distribution>("Distribution")
     .constructor<std::vector<double>, std::vector<double> >()
-    .method("linear_predict", &FracPoly::linear_predict)
-    .method("pdf", &FracPoly::pdf)
-    .method("cdf", &FracPoly::cdf)
-    .method("quantile", &FracPoly::quantile)
-    .method("hazard", &FracPoly::hazard)
-    .method("cumhazard", &FracPoly::cumhazard)
-    .method("random", &FracPoly::random)
+    .method("linear_predict", &hesim::FracPoly::linear_predict)
+    .method("pdf", &hesim::FracPoly::pdf)
+    .method("cdf", &hesim::FracPoly::cdf)
+    .method("quantile", &hesim::FracPoly::quantile)
+    .method("hazard", &hesim::FracPoly::hazard)
+    .method("cumhazard", &hesim::FracPoly::cumhazard)
+    .method("random", &hesim::FracPoly::random)
   ;
 }

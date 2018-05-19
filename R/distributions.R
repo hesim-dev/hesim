@@ -17,7 +17,7 @@ weibullNMA_to_weibull <- function(a0, a1){
 sr.weibNMA.inits <- function(aux){
     if (aux$counting){
         lt <- log(t[t > 0])
-        shape <- 1.64/var(lt)
+        shape <- 1.64/stats::var(lt)
         scale <- exp(mean(lt) + 0.572)
         pars <- weibull_to_weibullNMA(shape, scale)
         c(pars$a0, pars$a1)
@@ -25,7 +25,7 @@ sr.weibNMA.inits <- function(aux){
         aux$formula <- aux$forms[[1]]
         aux$forms <- NULL
         aux$dist <- "weibull"
-        sr <- do.call(survreg, aux)
+        sr <- do.call(survival::survreg, aux)
         sr2fsweiNMA(sr)
     }
 }
@@ -34,8 +34,8 @@ sr.weibNMA.inits <- function(aux){
 ## parameterisation, for use as initial values 
 
 sr2fsweiNMA <- function(sr){
-    scale <- exp(coef(sr)[1])
-    beta.scale <- coef(sr)[-1]
+    scale <- exp(stats::coef(sr)[1])
+    beta.scale <- stats::coef(sr)[-1]
     shape <- mean(1/sr$scale)
     beta.shape <- if (length(sr$scale)>1) log(sr$scale[1]/sr$scale[-1]) else numeric()
     pars <- weibull_to_weibullNMA(shape, scale)
@@ -64,37 +64,37 @@ sr2fsweiNMA <- function(sr){
 #' distribution function, \code{qweibullNMA} gives the quantile function,
 #' \code{rweibullNMA} generates random deviates, \code{HweibullNMA} retuns the
 #' cumulative hazard and \code{hweibullNMA} the hazard.
-#' @seealso code{\link{dweibull}}
+#' @seealso \code{\link{dweibull}}
 NULL
 
 #' @rdname weibullNMA
 #' @export
 dweibullNMA <- function(x, a0, a1 = FALSE, log = FALSE) {
   pars <- weibullNMA_to_weibull(a0, a1)
-  dweibull(x, shape = pars$shape, scale = pars$scale, log = log)
+  stats::dweibull(x, shape = pars$shape, scale = pars$scale, log = log)
 }
 
 #' @rdname weibullNMA
 #' @export
 pweibullNMA <- function(q, a0, a1, lower.tail = TRUE, log.p = FALSE) {
   pars <- weibullNMA_to_weibull(a0, a1)
-  pweibull(q, shape = pars$shape, scale = pars$scale, 
-           lower.tail = lower.tail, log.p = log.p)
+  stats::pweibull(q, shape = pars$shape, scale = pars$scale, 
+                  lower.tail = lower.tail, log.p = log.p)
 }
 
 #' @rdname weibullNMA
 #' @export
 qweibullNMA <- function(p, a0, a1, lower.tail = TRUE, log.p = FALSE) {
   pars <- weibullNMA_to_weibull(a0, a1)
-  qweibull(p, shape = pars$shape, scale = pars$scale, 
-           lower.tail = lower.tail, log.p = log.p)
+  stats::qweibull(p, shape = pars$shape, scale = pars$scale, 
+                  lower.tail = lower.tail, log.p = log.p)
 }
 
 #' @rdname weibullNMA
 #' @export
 rweibullNMA <- function(n, a0, a1) {
   pars <- weibullNMA_to_weibull(a0, a1)
-  rweibull(n, shape = pars$shape, scale = pars$scale)
+  stats::rweibull(n, shape = pars$shape, scale = pars$scale)
 }
 
 #' @rdname weibullNMA
@@ -114,14 +114,14 @@ HweibullNMA <- function(n, a0, a1, log = FALSE) {
 #' @rdname weibullNMA
 #' @export
 rmst_weibullNMA = function(t, a0, a1, start = 0){
-  rmst_generic(pweibullNMA, t, start = start, a0 = a0, a1 = a1)
+  flexsurv::rmst_generic(pweibullNMA, t, start = start, a0 = a0, a1 = a1)
 }
 
 #' @rdname weibullNMA
 #' @export
 mean_weibullNMA = function(a0, a1){
   pars <- weibullNMA_to_weibull(a0, a1)
-  mean_weibull(shape = pars$shape, scale = pars$scale)
+  flexsurv::mean_weibull(shape = pars$shape, scale = pars$scale)
 }
 
 #' List of survival distributions

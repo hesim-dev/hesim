@@ -93,32 +93,52 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
-C_test_trapz <- function(t) {
-    .Call('_hesim_C_test_trapz', PACKAGE = 'hesim', t)
+C_test_xptr_TimeFunTest <- function(L) {
+    .Call('_hesim_C_test_xptr_TimeFunTest', PACKAGE = 'hesim', L)
 }
 
-C_test_cumtrapz <- function(t) {
-    .Call('_hesim_C_test_cumtrapz', PACKAGE = 'hesim', t)
+C_test_InputDataMP <- function(R_InputData, param_index, strategy_index, line_index, state_index, patient_index) {
+    .Call('_hesim_C_test_InputDataMP', PACKAGE = 'hesim', R_InputData, param_index, strategy_index, line_index, state_index, patient_index)
 }
 
-C_test_simps <- function(t) {
-    .Call('_hesim_C_test_simps', PACKAGE = 'hesim', t)
+C_test_TimeFunMP <- function(R_InputData, time_old, time_new, state) {
+    .Call('_hesim_C_test_TimeFunMP', PACKAGE = 'hesim', R_InputData, time_old, time_new, state)
 }
 
-C_test_cumsimps <- function(t) {
-    .Call('_hesim_C_test_cumsimps', PACKAGE = 'hesim', t)
+C_test_trapzfun <- function(x) {
+    .Call('_hesim_C_test_trapzfun', PACKAGE = 'hesim', x)
 }
 
-C_DisModSurv_summary <- function(R_DisModSurv, discount_rate, x, type) {
-    .Call('_hesim_C_DisModSurv_summary', PACKAGE = 'hesim', R_DisModSurv, discount_rate, x, type)
+C_test_trapz <- function(x, y) {
+    .Call('_hesim_C_test_trapz', PACKAGE = 'hesim', x, y)
 }
 
-C_DecModSurv_effects <- function(R_DisModSurv, t, state_values, discount_rate, type) {
-    .Call('_hesim_C_DecModSurv_effects', PACKAGE = 'hesim', R_DisModSurv, t, state_values, discount_rate, type)
+C_test_cumtrapzfun <- function(t) {
+    .Call('_hesim_C_test_cumtrapzfun', PACKAGE = 'hesim', t)
 }
 
-C_DecModSurv_costs <- function(R_DisModSurv, t, state_values, n_components, discount_rate) {
-    .Call('_hesim_C_DecModSurv_costs', PACKAGE = 'hesim', R_DisModSurv, t, state_values, n_components, discount_rate)
+C_test_simpsfun <- function(t) {
+    .Call('_hesim_C_test_simpsfun', PACKAGE = 'hesim', t)
+}
+
+C_test_cumsimpsfun <- function(t) {
+    .Call('_hesim_C_test_cumsimpsfun', PACKAGE = 'hesim', t)
+}
+
+C_PartSurvCurves_summary <- function(R_PartSurvCurves, x, type, dr) {
+    .Call('_hesim_C_PartSurvCurves_summary', PACKAGE = 'hesim', R_PartSurvCurves, x, type, dr)
+}
+
+C_PartSurvStateVals_predict <- function(R_PartSurvStateVals) {
+    .Call('_hesim_C_PartSurvStateVals_predict', PACKAGE = 'hesim', R_PartSurvStateVals)
+}
+
+C_PartSurv_sim_stateprobs <- function(R_PartSurv) {
+    .Call('_hesim_C_PartSurv_sim_stateprobs', PACKAGE = 'hesim', R_PartSurv)
+}
+
+C_PartSurv_sim_auc <- function(R_PartSurv, R_stateprobs, dr, type, type_names) {
+    .Call('_hesim_C_PartSurv_sim_auc', PACKAGE = 'hesim', R_PartSurv, R_stateprobs, dr, type, type_names)
 }
 
 matrix_byrow <- function(v, nrow, ncol) {
@@ -127,6 +147,10 @@ matrix_byrow <- function(v, nrow, ncol) {
 
 matrix_bycol <- function(v, nrow, ncol) {
     .Call('_hesim_matrix_bycol', PACKAGE = 'hesim', v, nrow, ncol)
+}
+
+test_C_add_constant <- function(v, value) {
+    .Call('_hesim_test_C_add_constant', PACKAGE = 'hesim', v, value)
 }
 
 test_zeroin <- function() {

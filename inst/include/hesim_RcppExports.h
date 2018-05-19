@@ -41,7 +41,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
@@ -60,7 +60,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
@@ -79,7 +79,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
@@ -98,7 +98,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
@@ -117,7 +117,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
@@ -136,7 +136,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
@@ -155,7 +155,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
@@ -174,7 +174,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
@@ -193,7 +193,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
@@ -212,7 +212,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
@@ -231,7 +231,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<int >(rcpp_result_gen);
     }
 
@@ -250,7 +250,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<arma::vec >(rcpp_result_gen);
     }
 
@@ -269,7 +269,7 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<arma::rowvec >(rcpp_result_gen);
     }
 
@@ -288,65 +288,8 @@ namespace hesim {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<arma::cube >(rcpp_result_gen);
-    }
-
-    inline arma::mat C_DisModSurv_summary(Rcpp::Environment R_DisModSurv, double discount_rate, std::vector<double> x, std::string type) {
-        typedef SEXP(*Ptr_C_DisModSurv_summary)(SEXP,SEXP,SEXP,SEXP);
-        static Ptr_C_DisModSurv_summary p_C_DisModSurv_summary = NULL;
-        if (p_C_DisModSurv_summary == NULL) {
-            validateSignature("arma::mat(*C_DisModSurv_summary)(Rcpp::Environment,double,std::vector<double>,std::string)");
-            p_C_DisModSurv_summary = (Ptr_C_DisModSurv_summary)R_GetCCallable("hesim", "_hesim_C_DisModSurv_summary");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_C_DisModSurv_summary(Shield<SEXP>(Rcpp::wrap(R_DisModSurv)), Shield<SEXP>(Rcpp::wrap(discount_rate)), Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(type)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<arma::mat >(rcpp_result_gen);
-    }
-
-    inline arma::mat C_DecModSurv_effects(Rcpp::Environment R_DisModSurv, int t, SEXP state_values, std::vector<double> discount_rate, std::vector<int> type) {
-        typedef SEXP(*Ptr_C_DecModSurv_effects)(SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_C_DecModSurv_effects p_C_DecModSurv_effects = NULL;
-        if (p_C_DecModSurv_effects == NULL) {
-            validateSignature("arma::mat(*C_DecModSurv_effects)(Rcpp::Environment,int,SEXP,std::vector<double>,std::vector<int>)");
-            p_C_DecModSurv_effects = (Ptr_C_DecModSurv_effects)R_GetCCallable("hesim", "_hesim_C_DecModSurv_effects");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_C_DecModSurv_effects(Shield<SEXP>(Rcpp::wrap(R_DisModSurv)), Shield<SEXP>(Rcpp::wrap(t)), Shield<SEXP>(Rcpp::wrap(state_values)), Shield<SEXP>(Rcpp::wrap(discount_rate)), Shield<SEXP>(Rcpp::wrap(type)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<arma::mat >(rcpp_result_gen);
-    }
-
-    inline arma::mat C_DecModSurv_costs(Rcpp::Environment R_DisModSurv, std::vector<int> t, SEXP state_values, int n_components, std::vector<double> discount_rate) {
-        typedef SEXP(*Ptr_C_DecModSurv_costs)(SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_C_DecModSurv_costs p_C_DecModSurv_costs = NULL;
-        if (p_C_DecModSurv_costs == NULL) {
-            validateSignature("arma::mat(*C_DecModSurv_costs)(Rcpp::Environment,std::vector<int>,SEXP,int,std::vector<double>)");
-            p_C_DecModSurv_costs = (Ptr_C_DecModSurv_costs)R_GetCCallable("hesim", "_hesim_C_DecModSurv_costs");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_C_DecModSurv_costs(Shield<SEXP>(Rcpp::wrap(R_DisModSurv)), Shield<SEXP>(Rcpp::wrap(t)), Shield<SEXP>(Rcpp::wrap(state_values)), Shield<SEXP>(Rcpp::wrap(n_components)), Shield<SEXP>(Rcpp::wrap(discount_rate)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<arma::mat >(rcpp_result_gen);
     }
 
 }

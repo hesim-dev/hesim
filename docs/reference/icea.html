@@ -23,7 +23,7 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
+  <link href="../extra.css" rel="stylesheet">
   
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -56,13 +56,19 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/cea-vignette.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+    </li>
+    <li>
+      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
   </ul>
 </li>
@@ -209,12 +215,11 @@ each variable. Can contain e and c.</p></td>
  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
 <span class='fu'>names</span>(<span class='no'>icea.dt</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'><span class='co'># the probability that each strategy is the most cost-effective </span>
 <span class='co'># in each group with a willingness to pay of 20,000</span>
-<span class='fu'>library</span>(<span class='st'>"data.table"</span>)
-<span class='no'>icea.dt</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp prob
-#&gt; 1: 20000 Strategy 1 Group 1 0.40
-#&gt; 2: 20000 Strategy 2 Group 1 0.60
-#&gt; 3: 20000 Strategy 1 Group 2 0.44
-#&gt; 4: 20000 Strategy 2 Group 2 0.56</div><div class='input'>
+<span class='fu'>library</span>(<span class='st'>"data.table"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package ‘data.table’ was built under R version 3.4.2</span></div><div class='output co'>#&gt; <span class='message'>data.table 1.10.4.3</span></div><div class='output co'>#&gt; <span class='message'>  The fastest way to learn (by data.table authors): https://www.datacamp.com/courses/data-analysis-the-data-table-way</span></div><div class='output co'>#&gt; <span class='message'>  Documentation: ?data.table, example(data.table) and browseVignettes("data.table")</span></div><div class='output co'>#&gt; <span class='message'>  Release notes, videos and slides: http://r-datatable.com</span></div><div class='input'><span class='no'>icea.dt</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp prob
+#&gt; 1: 20000 Strategy 1 Group 1 0.43
+#&gt; 2: 20000 Strategy 2 Group 1 0.57
+#&gt; 3: 20000 Strategy 1 Group 2 0.42
+#&gt; 4: 20000 Strategy 2 Group 2 0.58</div><div class='input'>
 <span class='co'># icea_pw</span>
 <span class='no'>icea.pw.dt</span> <span class='kw'>&lt;-</span>  <span class='fu'>icea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
                       <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)

@@ -23,7 +23,7 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
+  <link href="../extra.css" rel="stylesheet">
   
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -139,32 +139,22 @@ and no samples are drawn.</p></td>
 <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(<span class='kw'>f1</span> <span class='kw'>=</span> <span class='no'>fit1</span>, <span class='kw'>f2</span> <span class='kw'>=</span> <span class='no'>fit2</span>)
 <span class='no'>fits.sample</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>fits</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 <span class='fu'>head</span>(<span class='no'>fits.sample</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [[1]]$coefs
-#&gt; [[1]]$coefs$rate
+#&gt; [[1]]$rate
 #&gt;            rate        age
 #&gt; [1,] -14.186246 0.12474079
 #&gt; [2,]  -9.774638 0.04479222
 #&gt; 
 #&gt; 
-#&gt; [[1]]$dist
-#&gt; [1] "exp"
-#&gt; 
-#&gt; 
 #&gt; [[2]]
-#&gt; [[2]]$coefs
-#&gt; [[2]]$coefs$shape
+#&gt; [[2]]$shape
 #&gt;            shape
 #&gt; [1,] -0.09651497
 #&gt; [2,] -0.28568095
 #&gt; 
-#&gt; [[2]]$coefs$rate
+#&gt; [[2]]$rate
 #&gt;           rate
 #&gt; [1,] -7.502853
 #&gt; [2,] -7.820528
-#&gt; 
-#&gt; 
-#&gt; [[2]]$dist
-#&gt; [1] "gamma"
 #&gt; 
 #&gt; </div></pre>
   </div>

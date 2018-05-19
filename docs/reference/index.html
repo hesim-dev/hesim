@@ -23,7 +23,7 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
+  <link href="../extra.css" rel="stylesheet">
   
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -56,13 +56,19 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/cea-vignette.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+    </li>
+    <li>
+      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
   </ul>
 </li>
@@ -106,28 +112,28 @@
       <tbody>
         <tr>
           <th colspan="2">
-            <h2 id="section-cost-effectiveness-analysis" class="hasAnchor"><a href="#section-cost-effectiveness-analysis" class="anchor"></a>Cost-effectiveness analysis</h2>
+            <h2 id="section-fitted-statistical-models" class="hasAnchor"><a href="#section-fitted-statistical-models" class="anchor"></a>Fitted statistical models</h2>
             <p class="section-desc"></p>
           </th>
         </tr>
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="icea.html">icea</a></code> <code><a href="icea.html">icea_pw</a></code> </p>
+            <p><code><a href="partsurvfit.html">partsurvfit</a></code> </p>
           </td>
-          <td><p>Individualized cost-effectiveness analysis</p></td>
+          <td><p>Partitioned survival regression object</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="incr_effect.html">incr_effect</a></code> </p>
+            <p><code><a href="formula_list.html">formula_list</a></code> </p>
           </td>
-          <td><p>Incremental treatment effect</p></td>
+          <td><p>List of <code>formula</code> objects</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="custom_table.html">custom_table</a></code> </p>
+            <p><code><a href="flexsurvreg_list.html">flexsurvreg_list</a></code> </p>
           </td>
-          <td><p>Custom CEA summary table</p></td>
+          <td><p>List of <code>flexsurvreg</code> objects</p></td>
         </tr>
       </tbody><tbody>
         <tr>
@@ -160,18 +166,154 @@
             <p><code><a href="fast_rgengamma.html">fast_rgengamma</a></code> </p>
           </td>
           <td><p>Random generation for generalized gamma distribution</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-parameters" class="hasAnchor"><a href="#section-parameters" class="anchor"></a>Parameters</h2>
+            <p class="section-desc"></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="form_params.html">form_params</a></code> </p>
+          </td>
+          <td><p>Parameters from a fitted model</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="rsample.html">rsample</a></code> </p>
+            <p><code><a href="params_lm.html">params_lm</a></code> </p>
           </td>
-          <td><p>Randomly sample parameters from a fitted model</p></td>
+          <td><p>Parameters of a linear model</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="design_matrix.html">design_matrix</a></code> </p>
+            <p><code><a href="params_surv.html">params_surv</a></code> </p>
           </td>
-          <td><p>Obtain design matrix used to fit a model</p></td>
+          <td><p>Parameters of a survival model</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="params_surv_list.html">params_surv_list</a></code> </p>
+          </td>
+          <td><p>Parameters of a list of survival models</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-input-data" class="hasAnchor"><a href="#section-input-data" class="anchor"></a>Input data</h2>
+            <p class="section-desc"></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="lines_dt.html">lines_dt</a></code> </p>
+          </td>
+          <td><p>Data table of treatment lines</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="hesim_data.html">hesim_data</a></code> </p>
+          </td>
+          <td><p>Data for health-economic simulation modeling</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="expand_hesim_data.html">expand_hesim_data</a></code> </p>
+          </td>
+          <td><p>Expand hesim_data</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="input_data.html">input_data</a></code> </p>
+          </td>
+          <td><p>Input data for a statistical model</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="form_input_data.html">form_input_data</a></code> </p>
+          </td>
+          <td><p>Form input data</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-partitioned-survival-model" class="hasAnchor"><a href="#section-partitioned-survival-model" class="anchor"></a>Partitioned survival model</h2>
+            <p class="section-desc"></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="PartSurv.html">PartSurv</a></code> </p>
+          </td>
+          <td><p>N-state partitioned survival model</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="PartSurvCurves.html">PartSurvCurves</a></code> </p>
+          </td>
+          <td><p>Partitioned survival curves</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="PartSurvStateVals.html">PartSurvStateVals</a></code> </p>
+          </td>
+          <td><p>State values for partitioned survival model</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="form_PartSurvCurves.html">form_PartSurvCurves</a></code> </p>
+          </td>
+          <td><p>Form <code>PartSurvCurves</code> object</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="form_PartSurvStateVals.html">form_PartSurvStateVals</a></code> </p>
+          </td>
+          <td><p>Form <code>PartSurvStateVals</code> object</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-cost-effectiveness-analysis" class="hasAnchor"><a href="#section-cost-effectiveness-analysis" class="anchor"></a>Cost-effectiveness analysis</h2>
+            <p class="section-desc"></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="icea.html">icea</a></code> <code><a href="icea.html">icea_pw</a></code> </p>
+          </td>
+          <td><p>Individualized cost-effectiveness analysis</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="incr_effect.html">incr_effect</a></code> </p>
+          </td>
+          <td><p>Incremental treatment effect</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="custom_table.html">custom_table</a></code> </p>
+          </td>
+          <td><p>Custom CEA summary table</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-datasets" class="hasAnchor"><a href="#section-datasets" class="anchor"></a>Datasets</h2>
+            <p class="section-desc"></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="part_surv4_simdata.html">part_surv4_simdata</a></code> </p>
+          </td>
+          <td><p>Simulated data for 4-state partitioned survival model</p></td>
         </tr>
       </tbody>
       </table>
@@ -181,8 +323,13 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-cost-effectiveness-analysis">Cost-effectiveness analysis</a></li>
+      <li><a href="#section-fitted-statistical-models">Fitted statistical models</a></li>
       <li><a href="#section-random-number-generation">Random number generation</a></li>
+      <li><a href="#section-parameters">Parameters</a></li>
+      <li><a href="#section-input-data">Input data</a></li>
+      <li><a href="#section-partitioned-survival-model">Partitioned survival model</a></li>
+      <li><a href="#section-cost-effectiveness-analysis">Cost-effectiveness analysis</a></li>
+      <li><a href="#section-datasets">Datasets</a></li>
     </ul>
   </div>
 </div>

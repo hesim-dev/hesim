@@ -3,29 +3,59 @@ template:
     bootswatch: simplex
 
 reference:
-  - title: "Cost-effectiveness analysis"
+  - title: "Fitted statistical models"
     contents:
-      - icea
-      - icea_pw
-      - incr_effect
-      - custom_table
+      - partsurvfit
+      - formula_list
+      - flexsurvreg_list
   - title: "Random number generation"
     contents:
       - rcat
       - rpwexp
       - rdirichlet_mat
       - fast_rgengamma
-      - rsample
-      - design_matrix
+  - title: "Parameters"
+    contents:
+      - form_params
+      - params_lm
+      - params_surv
+      - params_surv_list
+  - title: "Input data"
+    contents:
+      - lines_dt
+      - hesim_data
+      - expand_hesim_data
+      - input_data
+      - form_input_data
+  - title: "Partitioned survival model"
+    contents:
+      - PartSurv
+      - PartSurvCurves
+      - PartSurvStateVals
+      - form_PartSurvCurves
+      - form_PartSurvStateVals
+  - title: "Cost-effectiveness analysis"
+    contents:
+      - icea
+      - icea_pw
+      - incr_effect
+      - custom_table
+  - title: "Datasets"
+    contents:
+    - part_surv4_simdata
 
 navbar:
   title: hesim
   left:
   - text: "Reference"
     href: reference/index.html
-  - text: "Vignettes"
+  - text: "Articles"
     menu:
+      - text: "Introduction"
+        href: articles/intro.html
+      - text: "Partitioned survival models"
+        href: articles/partitioned-survival.html
       - text: "Individualized cost-effectiveness analysis"
-        href: articles/cea-vignette.html
+        href: articles/icea.html
   - text: News
     href: news/index.html

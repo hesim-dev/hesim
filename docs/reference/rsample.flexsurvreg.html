@@ -23,7 +23,7 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
+  <link href="../extra.css" rel="stylesheet">
   
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -140,22 +140,7 @@ distribution.</p></dd>
                    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>fit.sample</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rsample.html'>rsample</a></span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
-<span class='fu'>head</span>(<span class='no'>fit.sample</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; $shape
-#&gt;            shape
-#&gt; [1,] -0.09756543
-#&gt; [2,] -0.07676039
-#&gt; [3,]  0.32027351
-#&gt; [4,]  0.10088078
-#&gt; [5,]  0.26175847
-#&gt; 
-#&gt; $scale
-#&gt;         scale
-#&gt; [1,] 7.039742
-#&gt; [2,] 7.434472
-#&gt; [3,] 6.992615
-#&gt; [4,] 6.873775
-#&gt; [5,] 6.842085
-#&gt; </div><div class='input'><span class='no'>fit.sample</span>$<span class='no'>dist</span></div><div class='output co'>#&gt; [1] "weibull.quiet"</div></pre>
+<span class='fu'>head</span>(<span class='no'>fit.sample</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='no'>fit.sample</span>$<span class='no'>dist</span></div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

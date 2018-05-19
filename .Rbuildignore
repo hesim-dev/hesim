@@ -6,3 +6,5 @@
 ^news
 ^cran-comments.md$
 ^\.travis\.yml$
+^pkgdown$
+^data-raw$

@@ -1,4 +1,4 @@
-#include "zeroin.h"
+#include <hesim/zeroin.h>
 
 /*****************************************************
 * Run an example from uniroot in the R stats library

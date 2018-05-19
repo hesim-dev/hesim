@@ -23,7 +23,7 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
+  <link href="../extra.css" rel="stylesheet">
   
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -56,13 +56,19 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/cea-vignette.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+    </li>
+    <li>
+      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
   </ul>
 </li>
@@ -153,12 +159,12 @@ in <code>delta</code> from <code>icea_pw</code>.</p>
 <span class='no'>incr.effect</span> <span class='kw'>&lt;-</span> <span class='fu'>incr_effect</span>(<span class='no'>sim</span>, <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>, <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>,
                         <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"c"</span>, <span class='st'>"e"</span>))
 <span class='fu'>head</span>(<span class='no'>incr.effect</span>)</div><div class='output co'>#&gt;    sim   strategy     grp       ic       ie
-#&gt; 1:   1 Strategy 2 Group 1 52733.34 2.861069
-#&gt; 2:   1 Strategy 2 Group 2 58579.07 3.497387
-#&gt; 3:   2 Strategy 2 Group 1 63333.84 3.888010
-#&gt; 4:   2 Strategy 2 Group 2 64705.35 3.966245
-#&gt; 5:   3 Strategy 2 Group 1 67083.66 3.483595
-#&gt; 6:   3 Strategy 2 Group 2 55048.01 2.826678</div></pre>
+#&gt; 1:   1 Strategy 2 Group 1 55624.46 4.774443
+#&gt; 2:   1 Strategy 2 Group 2 67009.32 2.901095
+#&gt; 3:   2 Strategy 2 Group 1 62611.06 3.533312
+#&gt; 4:   2 Strategy 2 Group 2 59157.27 2.710318
+#&gt; 5:   3 Strategy 2 Group 1 57662.91 2.171542
+#&gt; 6:   3 Strategy 2 Group 2 60636.89 3.488008</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
