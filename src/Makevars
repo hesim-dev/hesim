@@ -1,4 +1,4 @@
-CXX_STD=CXX11
+CXX_STD=C++11
 PKG_CPPFLAGS = -I../inst/include
 VER=
 CCACHE=ccache

@@ -29,7 +29,7 @@ Imports:
     data.table,
     flexsurv,
     MASS,
-    Rcpp (>= 0.12.9),
+    Rcpp (>= 0.12.16),
     RcppNumerical,
     R6,
     stats,
