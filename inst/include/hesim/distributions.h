@@ -4,6 +4,7 @@
 #include "utils.h"
 #include <RcppNumerical.h>
 #include "zeroin.h"
+#include <memory>
 
 namespace hesim{
 
