@@ -152,7 +152,7 @@ head(part.surv.curves$cumhazard(t = seq(0, 3)))
 head(part.surv.curves$rmst(t = 3))
 ```
 
-We can instantiate a `PartSurvStateVals` object in the same two ways, although here we only use the second method. A `predict()` function is available to predict mean state values by treatment strategy, patient, and health state.
+We can instantiate a `PartSurvStateVals` object in the same two ways, although here we only use the second method. A `$predict()` function is available to predict mean state values by treatment strategy, patient, and health state.
 
 ```{r warning = FALSE, message = FALSE}
 medcost.dat <- subset(part_surv4_simdata$costs$medical, state_name == "state3")

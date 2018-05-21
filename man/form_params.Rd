@@ -36,8 +36,8 @@ drawn by sampling from a multivariate normal distribution. If \code{bootstrap} i
 parameters are bootstrapped using \code{\link{bootstrap}}.}
 }
 \value{
-An object in the family of \code{params} objects.
-Mapping between \code{form_params} and the classes of the returned objects are: 
+An object prefixed by \code{params_}. Mapping between \code{form_params} 
+and the classes of the returned objects are: 
 \itemize{
 \item{\code{form_params.lm} ->}{ \code{params_lm}}
 \item{\code{form_params.flexsurvreg} ->}{ \code{params_surv}}

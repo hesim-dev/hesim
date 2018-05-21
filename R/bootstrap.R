@@ -1,8 +1,7 @@
 #' Bootstrap a statistical model
 #' 
-#' \code{bootstrap} is a generic function for generated bootstrap replicates of the parameters
+#' \code{bootstrap} is a generic function for generating bootstrap replicates of the parameters
 #' of a fitted statistical model.
-#' a statistical model.
 #' @param object A statistical model.
 #' @param B Number of bootstrap replications.
 #' @param ... Further arguments passed to or from other methods. Currently unused.

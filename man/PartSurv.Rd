@@ -44,8 +44,7 @@ using \code{sim_stateprobs}.}
 
 \describe{
 
-\item{\code{new(survival_models, utility_model = NULL, cost_models = NULL, 
-                          n_states = NULL)}}{
+\item{\code{new(survival_models, utility_model = NULL, cost_models = NULL)}}{
 
   Constructor for the class. Note that the number of health states, \code{n_states}, is set equal to the number of survival
   models plus one. 

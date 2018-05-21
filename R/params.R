@@ -328,8 +328,8 @@ form_params_joined <- function(object, n, point_estimate, inner_class){
 #' drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
 #' parameters are bootstrapped using \code{\link{bootstrap}}. 
 #' @param ... Further arguments passed to or from other methods. Currently unused.
-#' @return An object in the family of \code{params} objects.
-#' Mapping between \code{form_params} and the classes of the returned objects are: 
+#' @return An object prefixed by \code{params_}. Mapping between \code{form_params} 
+#' and the classes of the returned objects are: 
 #' \itemize{
 #' \item{\code{form_params.lm} ->}{ \code{params_lm}}
 #' \item{\code{form_params.flexsurvreg} ->}{ \code{params_surv}}
