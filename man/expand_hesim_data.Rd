@@ -9,13 +9,13 @@ expand_hesim_data(data, by = c("strategies", "patients"))
 \arguments{
 \item{data}{An object of class \code{\link{hesim_data}}.}
 
-\item{by}{The character names of the data tables in \code{\link{hesim_data}} to expand by.}
+\item{by}{A character vector of the names of the data tables in \code{\link{hesim_data}} to expand by.}
 }
 \value{
-This function is similar to \code{\link{expand.grid}}, but works for data frames. Specifically, 
-it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. The supplied 
-tables are determined using the \code{by} argument. The resulting dataset will be sorted by prioritizing 
-id variables as follows: 
+This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
+Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. 
+The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by 
+prioritizing id variables as follows: 
 \code{strategy_id}, \code{transition_id}, \code{patient_id}, \code{line}, and \code{state_id}.
 }
 \description{

@@ -8,7 +8,7 @@
 PartSurv
 }
 \description{
-Simulate an N-state partitioned survival model.
+Simulate otcomes from an N-state partitioned survival model.
 
 }
 \section{Fields}{
@@ -17,14 +17,12 @@ Simulate an N-state partitioned survival model.
 \item{\code{survival_models}}{The survival models used to predict survival curves. Must be
 an object of class \code{\link{PartSurvCurves}}.}
 
-\item{\code{utility_model}}{The model or models used to predict utility by health state. Must be
+\item{\code{utility_model}}{The model used to predict utility by health state. Must be
 an object of class \code{\link{PartSurvStateVals}}.}
 
 \item{\code{cost_models}}{The models used to predict costs by health state. Must be a list of
-object of class \code{\link{PartSurvStateVals}}, where each element of the list represents a 
+objects of class \code{\link{PartSurvStateVals}}, where each element of the list represents a 
 different type of costs.}
-
-\item{\code{death_state}}{An integer denoting the death state; in an N-state model, the death state should be equal to N. If not NULL, then costs and utility are assumed equal to 0 in the death state; if NULL, then costs and quality-adjusted life-years (QALYs) in the death state must be explicitly modeled.}
 
 \item{\code{n_states}}{Number of states in the partitioned survival model.}
 
@@ -38,8 +36,7 @@ using \code{sim_stateprobs}.}
 
 \item{\code{costs_}}{Total (discounted) costs by type generated using \code{sim_costs}. }
 
-\item{\code{qalys_}}{Total (discounted) quality-adjusted life-years (QALYs) generated using \code{sim_qalys}..}
-
+\item{\code{qalys_}}{Total (discounted) quality-adjusted life-years (QALYs) generated using \code{sim_qalys}.}
 
 }}
 
@@ -47,18 +44,15 @@ using \code{sim_stateprobs}.}
 
 \describe{
 
-\item{\code{new(part_surv_curves)}}{
+\item{\code{new(survival_models, utility_model = NULL, cost_models = NULL, 
+                          n_states = NULL)}}{
 
-  Constructor for the class.
-
-  \itemize{
-    \item \code{part_surv_curves}: An object of class \code{\link{PartSurvCurves}
-      }
-    }
+  Constructor for the class. Note that the number of health states, \code{n_states}, is set equal to the number of survival
+  models plus one. 
   }
   
   \item{\code{sim_survival(t)}}{
-    Simulate survival curves as a function of time. Equivalent to member function
+    Simulate survival curves as a function of time. Equivalent to the member function
     \code{survival} in \code{\link{PartSurvCurves}}. 
     
      \itemize{
@@ -67,12 +61,12 @@ using \code{sim_stateprobs}.}
   }
   
   \item{\code{sim_stateprobs()}}{
-    Simulate probability of being in each of N health states using the survival curves generated 
+    Simulate the probability of being in each of N health states using the survival curves generated 
     from \code{sim_curves}. 
   }
   
     \item{\code{sim_qalys(dr = .03)}}{
-    Simulate the (discounted) QALYs over the times selected in \code{t} associated with each health state based on the state probabilities calculated using \code{sim_stateprobs}. See "Details".
+    Simulate (discounted) QALYs over the times selected in \code{t} associated with each health state based on the state probabilities calculated using \code{sim_stateprobs}. See "Details".
     
       \itemize{
      \item \code{dr}: Discount rate to apply to QALYs. May be a vector in which case QALYs are calculated for each element in \code{dr}.
@@ -81,7 +75,7 @@ using \code{sim_stateprobs}.}
 
   
    \item{\code{sim_costs(dr = .03)}}{
-    Simulate the (discounted) costs for each cost type over the times selected in \code{t} associated with each health state based on the state probabilities calculated using \code{sim_stateprobs}. See "Details".
+    Simulate (discounted) costs for each cost type over the times selected in \code{t} associated with each health state based on the state probabilities calculated using \code{sim_stateprobs}. See "Details".
     
       \itemize{
      \item \code{dr}: Discount rate to apply to costs. May be a vector in which case costs for each cost type are     calculated for each element in \code{dr}.
@@ -90,7 +84,7 @@ using \code{sim_stateprobs}.}
 
   \item{\code{check()}}{
  
-    Input validation for class. Check that fields are the correct type. 
+    Input validation for class. Checks that fields are the correct type. 
   }
 
 }
@@ -99,7 +93,7 @@ using \code{sim_stateprobs}.}
 \section{Details}{
 Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state. 
 Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
-That is, mathematically, discounted costs and QALYs in health state \eqn{s} are calculated as,
+Mathematically, discounted costs and QALYs in health state \eqn{s} are calculated as,
 
 \deqn{\int_0^T w_s(t)\beta(t)P_s(t) dt },
 

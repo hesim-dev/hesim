@@ -9,39 +9,41 @@ input_data(X, strategy_id, n_strategies, patient_id, n_patients, line = NULL,
   transition_id = NULL, n_transitions = NULL, time_fun = NULL)
 }
 \arguments{
-\item{X}{An input matrix or list of input matrices used for simulating or predicting
-outcomes from a statistical model. The exact form will depend on the statistical model
+\item{X}{An input matrix or list of input matrices used for predicting
+outcomes from a statistical model. The number of matrices depends on the statistical model
 used.}
 
-\item{strategy_id}{A numeric vector denoting the treatment strategy represented by each row
+\item{strategy_id}{A numeric vector of integers denoting the treatment strategy represented by each row
 in \code{X}.}
 
 \item{n_strategies}{A scalar denoting the number of unique treatment strategies.}
 
-\item{patient_id}{A numeric vector denoting the patient represented by each row
+\item{patient_id}{A numeric vector of integers denoting the patient represented by each row
 in \code{X}.}
 
 \item{n_patients}{A scalar denoting the number of unique patients.}
 
-\item{line}{A numeric vector denoting the treatment line represented by each row
-in \code{X}.}
+\item{line}{A numeric vector of integers denoting the treatment line represented by each row
+in \code{X}. Not supported by currently available models.}
 
 \item{n_lines}{A \code{\link{data.table}} denoting the number of treatment lines associated
 with each treatment strategy. Should contain a column, "strategy_id", and a column,
-"N".}
+"N". Not supported by currently available models.}
 
-\item{state_id}{A numeric vector denoting the health state represented by each row
+\item{state_id}{A numeric vector of integers denoting the health state represented by each row
 in \code{X}.}
 
 \item{n_states}{A scalar denoting the number of unique health states.}
 
 \item{transition_id}{Only used for multi-state modeling. A numeric vector denoting the 
 transition represented by each row in \code{X} (for jointly estimated models) or 
-indexing distinct matrices in \code{X} (for separately estimated models).}
+indexing distinct matrices in \code{X} (for separately estimated models). 
+Not supported by currently available models.}
 
-\item{n_transitions}{A scalar denoting the number of unique transitions.}
+\item{n_transitions}{A scalar denoting the number of unique transitions. 
+Not supported by currently available models.}
 
-\item{time_fun}{A pointer to a C++ functor that can be used to updated \code{X} as a function
+\item{time_fun}{A pointer to a C++ functor that can be used to update \code{X} as a function
 of time in a simulation model. Not currently supported.}
 }
 \value{

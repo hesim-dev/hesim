@@ -136,7 +136,7 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
 <span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.005   0.002   0.006 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
+#&gt;   0.004   0.001   0.005 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
 <span class='co'># rmultinom from base R </span>
@@ -145,7 +145,7 @@ equal to n.</p>
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>t</span>(<span class='fu'>apply</span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>apply</span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>which</span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.069   0.005   0.075 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
+#&gt;   0.053   0.001   0.055 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div></pre>
   </div>

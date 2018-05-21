@@ -8,7 +8,7 @@
 PartSurvCurves
 }
 \description{
-Summarize \code{n-1} survival curves for an \code{n} state partitioned survival model.
+Summarize \code{n-1} survival curves for an \code{N} state partitioned survival model.
 
 }
 \section{Fields}{
@@ -28,14 +28,7 @@ Summarize \code{n-1} survival curves for an \code{n} state partitioned survival 
 \item{\code{new(data, params)}}{
 
   Constructor for the class.
-
-  \itemize{
-    \item{\code{data}}{Data used to summarize survival curves by strategy and patient. Must be 
-  an object of class \code{\link{input_data}} where each row in "X" is a strategy and patient pair.}
-
-  \item{\code{params}}{An object of class \code{\link{partsurvfit}}, which contains the parameters for predicting
-  survival.}
-  }
+  
 }
   
   \item{\code{hazard(t)}}{
@@ -81,7 +74,7 @@ Summarize \code{n-1} survival curves for an \code{n} state partitioned survival 
     
     \item{\code{check()}}{
 
-    Input validation for class; checks that fields are the correct type. 
+    Input validation for class. Checks that fields are the correct type. 
 
     }
 

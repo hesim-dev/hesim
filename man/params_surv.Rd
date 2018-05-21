@@ -43,11 +43,10 @@ Auxillary arguments for spline models should be specified as a list containing t
 \item{\code{knots}}{ A numeric vector of knots.}
 \item{\code{scale}}{ A character vector of length 1 denoting the survival outcome to be modeled
 as a spline function. Options are "log_cumhazard", for the log cummulative hazard; 
-"log_hazard" for the log hazard rate;
-"log_odds" for the log cummulative odds;
-and "normal" for the inverse normal distribution function.}
-\item{\code{timescale}}{If "log" (the default), the survival outcome is modeled as a spline function
-of log time; if "identity", it is modeled as a spline function of time.}
+"log_hazard" for the log hazard rate; "log_cumodds" for the log cummulative odds;
+and "inv_normal" for the inverse normal distribution function.}
+\item{\code{timescale}}{If "log" (the default), then survival is modeled as a spline function
+of log time; if "identity", then it is modeled as a spline function of time.}
 }
 }
 \examples{

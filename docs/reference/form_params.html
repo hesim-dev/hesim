@@ -109,9 +109,6 @@ parameters is returned.</p>
 <span class='co'># S3 method for lm</span>
 <span class='fu'>form_params</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for lm_list</span>
-<span class='fu'>form_params</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
 <span class='co'># S3 method for flexsurvreg</span>
 <span class='fu'>form_params</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='no'>...</span>)
@@ -122,24 +119,14 @@ parameters is returned.</p>
 
 <span class='co'># S3 method for partsurvfit</span>
 <span class='fu'>form_params</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>bootstrap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for joined_flexsurvreg</span>
-<span class='fu'>form_params</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for joined_flexsurvreg_list</span>
-<span class='fu'>form_params</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>bootstrap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>A statistical model to randomly sample parameters from. Currently 
-there are methods for <code>lm</code>, <code><a href='lm_list.html'>lm_list</a></code>, <code>flexsurvreg</code>,
-and <code><a href='flexsurvreg_list.html'>flexsurvreg_list</a></code>.</p></td>
+      <td><p>A statistical model to randomly sample parameters from.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -156,16 +143,16 @@ and no samples are drawn.</p></td>
     </tr>
     <tr>
       <th>bootstrap</th>
-      <td><p>If <code>bootstrap</code> is FALSE or not specified, then <code>n</code> observations are 
+      <td><p>If <code>bootstrap</code> is FALSE or not specified, then <code>n</code> parameter sets are 
 drawn by sampling from a multivariate normal distribution. If <code>bootstrap</code> is TRUE, then 
-randomly sampled using the generic function <code><a href='bootstrap.html'>bootstrap</a></code>.</p></td>
+parameters are bootstrapped using <code><a href='bootstrap.html'>bootstrap</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object in the family of <code>params</code> objects.
-Mapping between <code>form_params</code> and the classes of <code>params</code> objects returned are:</p><ul>
+Mapping between <code>form_params</code> and the classes of the returned objects are:</p><ul>
 <li><p><code>form_params.lm</code> -&gt; <code>params_lm</code></p></li>
 <li><p><code>form_params.flexsurvreg</code> -&gt; <code>params_surv</code></p></li>
 <li><p><code>form_params.flexsurvreg_list</code> -&gt; <code>params_surv_list</code></p></li>

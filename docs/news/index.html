@@ -103,7 +103,50 @@
     <div id="hesim-0-1-0-9000" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-0-1-0-9000" class="anchor"></a>hesim 0.1.0.9000</h2>
-<p>The current development version.</p>
+<p>The current development version of <code>hesim</code>.</p>
+<div id="highlights" class="section level3">
+<h3 class="hasAnchor">
+<a href="#highlights" class="anchor"></a>Highlights</h3>
+<p><code>hesim</code> now provides a general framework for integrating statistical models with economic evaluation. Users can build a decision model by specifying a model structure, which consists of a set of statistical models for predicting disease progression, utility values, and costs. Each statistical model is, in turn, used to predict or simulate outcomes as a function of estimated parameters. N-state partitioned survival analysis is now supported.</p>
+</div>
+<div id="new-features" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h3>
+<p>Fitted statistical models</p>
+<ul>
+<li>There are functions to create objects that store collections of fitted statistical models or “formula” objects. These include <code><a href="../reference/partsurvfit.html">partsurvfit()</a></code>, <code><a href="../reference/formula_list.html">formula_list()</a></code>, and <code>flexsurvreg_list</code>.</li>
+</ul>
+<p>Parameters</p>
+<ul>
+<li>Functions prefixed by <code>params_</code> create objects storing samples of parameters of fitted statistical models for probabilistic sensitivity analysis.</li>
+<li>
+<code><a href="../reference/form_params.html">form_params()</a></code> is a generic function for constructing parameter objects from a fitted statistical model or a “formula” object. Parameters can be sampled using Monte Carlo multivariate normal approximations or via bootstrapping.</li>
+<li>Current support for flexible survival modeling (<code><a href="../reference/params_surv.html">params_surv()</a></code>, <code><a href="../reference/params_surv_list.html">params_surv_list()</a></code>) and linear regression (<code><a href="../reference/params_lm.html">params_lm()</a></code>). Splines and parametric distributions (exponential, Weibull, Gompertz, gamma, lognormal log-logistic, generalized gamma) are supported for survival modeling.</li>
+</ul>
+<p>Input data</p>
+<ul>
+<li>
+<code><a href="../reference/hesim_data.html">hesim_data()</a></code> creates an object of class <code>hesim_data</code> for storing a collection of data tables or data frames for simulation modeling.</li>
+<li>
+<code><a href="../reference/expand_hesim_data.html">expand_hesim_data()</a></code> combines some or all of the data tables or data frames in <code><a href="../reference/hesim_data.html">hesim_data()</a></code> into a single long dataset.</li>
+<li>
+<code><a href="../reference/input_data.html">input_data()</a></code> creates an object of class “input_data”, which contains data for predicting or simulating values with a statistical model.</li>
+<li>
+<code><a href="../reference/form_input_data.html">form_input_data()</a></code> creates an object of class “input_data” from a fitted statistical model or a “formula” object.</li>
+</ul>
+<p>Partitioned survival models</p>
+<ul>
+<li>The R6 class <code>PartSurv</code> simulates outcomes from an N-state partitioned survival model.</li>
+<li>A <code>PartSurv</code> object is instantiated with a set of survival models (the R6 class <code>PartSurvCurves</code>) and models for costs and utility (the R6 class <code>PartSurvStateVals</code>).</li>
+<li>
+<code><a href="../reference/form_PartSurvCurves.html">form_PartSurvCurves()</a></code> and <code>form_PartSurvStateVals</code> create <code>PartSurvCurves</code> and <code>PartSurvStateVals</code> objects, respectively, from fitted statistical models or “formula” objects.</li>
+</ul>
+<p>Datasets</p>
+<ul>
+<li>
+<code>part_surv4_simdata</code> provides a number of example datasets for parameterizing a partitioned survival model.</li>
+</ul>
+</div>
 </div>
     <div id="hesim-0-1-0" class="section level2">
 <h2 class="hasAnchor">

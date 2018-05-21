@@ -8,8 +8,8 @@ form_input_data(object, data, ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class. Currently supports \code{\link{formula}},
-\code{\link{formula_list}}, \code{\link{lm}}, \code{\link{lm_list}}, \code{\link{flexsurvreg}},
- \code{\link{flexsurvreg_list}}, and \code{\link{joined_flexsurvreg_list}}.}
+\code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
+ \code{\link{flexsurvreg_list}}, and \code{\link{partsurvfit}}.}
 
 \item{data}{An object of class "expanded_hesim_data" returned by the function
 \code{\link{expand_hesim_data}}. Used to look for the input variables needed to create an input matrix
@@ -23,8 +23,7 @@ An object of class \code{\link{input_data}}.
 \description{
 \code{form_input_data} is a generic function for forming data that can be
 used as a input to a statistical model. Model matrices are formed based on the 
-variables specified in the model \code{object} and the data specified in \code{data}, and
-id variables are created based on the \code{id_vars} argument.
+variables specified in the model \code{object} and the data specified in \code{data}.
 }
 \examples{
 library("flexsurv")
@@ -53,4 +52,3 @@ fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1,
 input.dat <- form_input_data(fit.wei, expanded.dat)
 class(input.dat)
 }
-\keyword{internal}

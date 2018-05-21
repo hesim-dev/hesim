@@ -99,7 +99,7 @@
     </div>
 
     
-    <p>Summarize <code>n-1</code> survival curves for an <code>n</code> state partitioned survival model.</p>
+    <p>Summarize <code>n-1</code> survival curves for an <code>N</code> state partitioned survival model.</p>
     
 
     <pre class="usage"><span class='no'>PartSurvCurves</span></pre>
@@ -121,13 +121,7 @@
 
     
     <dl class='dl-horizontal'>
-    <dt><code>new(data, params)</code></dt><dd><p>Constructor for the class.
-    <ul>
-<li><p><code>data</code>Data used to summarize survival curves by strategy and patient. Must be 
-  an object of class <code><a href='input_data.html'>input_data</a></code> where each row in "X" is a strategy and patient pair.</p></li>
-<li><p><code>params</code>An object of class <code><a href='partsurvfit.html'>partsurvfit</a></code>, which contains the parameters for predicting
-  survival.</p></li>
-</ul></p></dd>
+    <dt><code>new(data, params)</code></dt><dd><p>Constructor for the class.</p></dd>
     <dt><code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard(t)</a></code></dt><dd><p>Predict the hazard function as a function of time.
     <ul>
 <li><p><code>t</code>: A numeric vector of times.</p></li>
@@ -149,7 +143,7 @@
     <ul>
 <li><p><code>p</code>: A numeric vector of probabilities for calculating quantiles.</p></li>
 </ul></p></dd>
-    <dt><code><a href='check.html'>check()</a></code></dt><dd><p>Input validation for class; checks that fields are the correct type.</p></dd>
+    <dt><code><a href='check.html'>check()</a></code></dt><dd><p>Input validation for class. Checks that fields are the correct type.</p></dd>
     </dl>
     
 
@@ -181,28 +175,28 @@
 <span class='co'># Summarize survival curves</span>
 <span class='no'>quantiles</span> <span class='kw'>&lt;-</span> <span class='no'>part.surv.curves</span>$<span class='fu'>quantile</span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>))
 <span class='fu'>head</span>(<span class='no'>quantiles</span>)</div><div class='output co'>#&gt;    curve sample strategy_id patient_id    p  quantile
-#&gt; 1:     1      1           1          1 0.25 0.1811498
-#&gt; 2:     1      1           1          1 0.50 0.4364661
-#&gt; 3:     1      1           1          1 0.75 0.8729322
-#&gt; 4:     1      1           1          2 0.25 0.1716965
-#&gt; 5:     1      1           1          2 0.50 0.4136891
-#&gt; 6:     1      1           1          2 0.75 0.8273782</div><div class='input'>
+#&gt; 1:     1      1           1          1 0.25 0.1819721
+#&gt; 2:     1      1           1          1 0.50 0.4384474
+#&gt; 3:     1      1           1          1 0.75 0.8768949
+#&gt; 4:     1      1           1          2 0.25 0.1724051
+#&gt; 5:     1      1           1          2 0.50 0.4153963
+#&gt; 6:     1      1           1          2 0.75 0.8307927</div><div class='input'>
 <span class='no'>survival</span> <span class='kw'>&lt;-</span> <span class='no'>part.surv.curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>))
 <span class='fu'>head</span>(<span class='no'>survival</span>)</div><div class='output co'>#&gt;    curve sample strategy_id patient_id   t  survival
 #&gt; 1:     1      1           1          1 0.0 1.0000000
-#&gt; 2:     1      1           1          1 0.1 0.8531593
-#&gt; 3:     1      1           1          1 0.2 0.7278809
-#&gt; 4:     1      1           1          1 0.3 0.6209984
-#&gt; 5:     1      1           1          1 0.4 0.5298106
-#&gt; 6:     1      1           1          1 0.5 0.4520128</div><div class='input'>
+#&gt; 2:     1      1           1          1 0.1 0.8537718
+#&gt; 3:     1      1           1          1 0.2 0.7289264
+#&gt; 4:     1      1           1          1 0.3 0.6223368
+#&gt; 5:     1      1           1          1 0.4 0.5313336
+#&gt; 6:     1      1           1          1 0.5 0.4536377</div><div class='input'>
 <span class='no'>rmst</span> <span class='kw'>&lt;-</span> <span class='no'>part.surv.curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>))
 <span class='fu'>head</span>(<span class='no'>rmst</span>)</div><div class='output co'>#&gt;    curve sample strategy_id patient_id t      rmst
-#&gt; 1:     1      1           1          1 2 0.6034012
-#&gt; 2:     1      1           1          1 5 0.6294633
-#&gt; 3:     1      1           1          2 2 0.5759100
-#&gt; 4:     1      1           1          2 5 0.5966900
-#&gt; 5:     1      1           1          3 2 0.5233005
-#&gt; 6:     1      1           1          3 5 0.5361139</div></pre>
+#&gt; 1:     1      1           1          1 2 0.6057587
+#&gt; 2:     1      1           1          1 5 0.6323125
+#&gt; 3:     1      1           1          2 2 0.5779954
+#&gt; 4:     1      1           1          2 5 0.5991476
+#&gt; 5:     1      1           1          3 2 0.5248690
+#&gt; 6:     1      1           1          3 5 0.5378827</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

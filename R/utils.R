@@ -16,6 +16,7 @@ check <- function (object, ...) {
 #' Form a list of objects from \code{...}.
 #' @param ... Objects used to form a list.
 #' @return A list of objects from \code{...}.
+#' @keywords internal
 form_object_list <- function(...){
   objects <- list(...)
   if(length(objects) == 1 & inherits(objects[[1]], "list")){

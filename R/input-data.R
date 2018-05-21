@@ -38,20 +38,21 @@ lines_dt <- function(strategy_list, strategy_ids = NULL){
 #' Data for health-economic simulation modeling
 #' 
 #' A list of tables required for health-economic simulation modeling.
-#' Each table must either be an \code{R} \code{\link{data.frame}} or \code{\link{data.table}}.
-#' @param strategies A table of the treatment strategies. 
-#' Must contain the column \code{strategy_id}, denoting a unique strategy. Other columns
-#' denote characteristics of a treatment strategy. 
+#' Each table must either be a \code{\link{data.frame}} or \code{\link{data.table}}. All id variables within 
+#' each table must be numeric vectors of integers. 
+#' @param strategies A table of treatment strategies. 
+#' Must contain the column \code{strategy_id} denoting a unique strategy. Other columns are variables
+#'  describing the characteristics of a treatment strategy. 
 #' @param patients A table of patient observations. 
 #' Must contain the column \code{patient_id} denoting a unique patient. The 
 #' number of rows should be equal to the number of patients in the model.
 #' Other columns are variables describing the characteristics of a patient.
 #' @param lines A table of treatment lines used for each treatment strategy. Must contain the columns
-#' \code{strategy_id}, denoting a treatment strategy; \code{line}, denoting a treatment line;
-#' and \code{treatment_id} denoting the treatment used for a given strategy and line.
+#' \code{strategy_id}, denoting a treatment strategy; \code{line}, denoting a treatment line; 
+#' and \code{treatment_id}, denoting the treatment used for a given strategy and line.
 #' @param states A table of health states. Must contain the column
 #' \code{state_id}, which denotes a unique health state. The number of rows should
-#' be equal to the number of health states in the model. Other columns can denote
+#' be equal to the number of health states in the model. Other columns can describe the
 #' characteristics of a health state.
 #' @param transitions A table of health state transitions. Must contain the column
 #' \code{transition_id}, which denotes a unique transition; \code{from}, which denotes
@@ -161,11 +162,11 @@ check_hesim_data_type <- function(tbl, tbl_name){
 #' Expand the data tables from an object of class \code{\link{hesim_data}} into a single \code{\link{data.table}} 
 #' of class "expanded_hesim_data". See the description of the return value for details on how this is done.
 #' @param data An object of class \code{\link{hesim_data}}.
-#' @param by The character names of the data tables in \code{\link{hesim_data}} to expand by.
-#' @return This function is similar to \code{\link{expand.grid}}, but works for data frames. Specifically, 
-#' it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. The supplied 
-#' tables are determined using the \code{by} argument. The resulting dataset will be sorted by prioritizing 
-#' id variables as follows: 
+#' @param by A character vector of the names of the data tables in \code{\link{hesim_data}} to expand by.
+#' @return This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
+#' Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. 
+#' The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by 
+#' prioritizing id variables as follows: 
 #' \code{strategy_id}, \code{transition_id}, \code{patient_id}, \code{line}, and \code{state_id}.
 #' @examples 
 #' dt.strategies <- data.frame(strategy_id = c(1, 2))
@@ -236,28 +237,30 @@ sort_hesim_data <- function(data, sorted_by){
 #' by strategy and patient, by strategy, patient, and health state, ...). This object can 
 #' be created more easily using the generic function \code{\link{form_input_data}}. See "details"
 #' for information on soring the rows of the matrices in \code{X}.
-#' @param X An input matrix or list of input matrices used for simulating or predicting
-#' outcomes from a statistical model. The exact form will depend on the statistical model
+#' @param X An input matrix or list of input matrices used for predicting
+#' outcomes from a statistical model. The number of matrices depends on the statistical model
 #' used. 
-#' @param strategy_id A numeric vector denoting the treatment strategy represented by each row
+#' @param strategy_id A numeric vector of integers denoting the treatment strategy represented by each row
 #' in \code{X}.
 #' @param n_strategies A scalar denoting the number of unique treatment strategies.
-#' @param patient_id A numeric vector denoting the patient represented by each row
+#' @param patient_id A numeric vector of integers denoting the patient represented by each row
 #' in \code{X}.
 #' @param n_patients A scalar denoting the number of unique patients.
-#' @param line A numeric vector denoting the treatment line represented by each row
-#' in \code{X}.
+#' @param line A numeric vector of integers denoting the treatment line represented by each row
+#' in \code{X}. Not supported by currently available models.
 #' @param n_lines A \code{\link{data.table}} denoting the number of treatment lines associated
 #' with each treatment strategy. Should contain a column, "strategy_id", and a column,
-#' "N".
-#' @param state_id A numeric vector denoting the health state represented by each row
+#' "N". Not supported by currently available models.
+#' @param state_id A numeric vector of integers denoting the health state represented by each row
 #' in \code{X}.
 #' @param n_states A scalar denoting the number of unique health states.
 #' @param transition_id Only used for multi-state modeling. A numeric vector denoting the 
 #' transition represented by each row in \code{X} (for jointly estimated models) or 
-#' indexing distinct matrices in \code{X} (for separately estimated models).
+#' indexing distinct matrices in \code{X} (for separately estimated models). 
+#' Not supported by currently available models.
 #' @param n_transitions A scalar denoting the number of unique transitions. 
-#' @param time_fun A pointer to a C++ functor that can be used to updated \code{X} as a function
+#' Not supported by currently available models. 
+#' @param time_fun A pointer to a C++ functor that can be used to update \code{X} as a function
 #' of time in a simulation model. Not currently supported.
 #' @details The rows of the matrices in \code{X} must be sorted in a manner consistent with the id variables.
 #' Sorting order should be the same as specified in \code{\link{expand_hesim_data}}; that is,
@@ -458,16 +461,14 @@ get_input_data_id_vars <- function(data){
 #' 
 #' \code{form_input_data} is a generic function for forming data that can be
 #' used as a input to a statistical model. Model matrices are formed based on the 
-#' variables specified in the model \code{object} and the data specified in \code{data}, and
-#' id variables are created based on the \code{id_vars} argument.
+#' variables specified in the model \code{object} and the data specified in \code{data}.
 #' @param object An object of the appropriate class. Currently supports \code{\link{formula}},
-#' \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{lm_list}}, \code{\link{flexsurvreg}},
-#'  \code{\link{flexsurvreg_list}}, and \code{\link{joined_flexsurvreg_list}}.
+#' \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
+#'  \code{\link{flexsurvreg_list}}, and \code{\link{partsurvfit}}.
 #' @param data An object of class "expanded_hesim_data" returned by the function
 #'  \code{\link{expand_hesim_data}}. Used to look for the input variables needed to create an input matrix
 #'  for use in a statistical models and the id variables for indexing rows in the input matrix. 
 #' @param ... Further arguments passed to \code{\link{model.matrix}}.
-#' @keywords internal
 #' @return An object of class \code{\link{input_data}}.
 #' @examples 
 #' library("flexsurv")

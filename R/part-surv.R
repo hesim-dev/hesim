@@ -56,7 +56,7 @@ PartSurvCurves <- R6::R6Class("PartSurvCurves",
     data = NULL,
     params = NULL,
 
-    initialize = function(data = NULL, params = NULL) {
+    initialize = function(data, params) {
       self$data <- data
       self$params <- params
     },
@@ -131,7 +131,7 @@ PartSurvStateVals <- R6::R6Class("PartSurvStateVals",
     data = NULL,
     params = NULL,
 
-    initialize = function(data = NULL, params = NULL) {
+    initialize = function(data, params) {
       self$data <- data
       self$params <- params
     },
@@ -271,16 +271,11 @@ PartSurv <- R6::R6Class("PartSurv",
     cost_models = NULL,
     n_states = NULL,
 
-    initialize = function(survival_models, utility_model = NULL, cost_models = NULL, 
-                          n_states = NULL) {
+    initialize = function(survival_models, utility_model = NULL, cost_models = NULL) {
       self$survival_models <- survival_models
       self$cost_models = cost_models
       self$utility_model = utility_model
-      if (is.null(n_states)){
-        self$n_states <- length(self$survival_models$params) + 1
-      } else{
-        self$n_states <- n_states
-      }
+      self$n_states <- length(self$survival_models$params) + 1
     },
     
     sim_survival = function(t){

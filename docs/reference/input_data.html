@@ -117,13 +117,13 @@ for information on soring the rows of the matrices in <code>X</code>.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>An input matrix or list of input matrices used for simulating or predicting
-outcomes from a statistical model. The exact form will depend on the statistical model
+      <td><p>An input matrix or list of input matrices used for predicting
+outcomes from a statistical model. The number of matrices depends on the statistical model
 used.</p></td>
     </tr>
     <tr>
       <th>strategy_id</th>
-      <td><p>A numeric vector denoting the treatment strategy represented by each row
+      <td><p>A numeric vector of integers denoting the treatment strategy represented by each row
 in <code>X</code>.</p></td>
     </tr>
     <tr>
@@ -132,7 +132,7 @@ in <code>X</code>.</p></td>
     </tr>
     <tr>
       <th>patient_id</th>
-      <td><p>A numeric vector denoting the patient represented by each row
+      <td><p>A numeric vector of integers denoting the patient represented by each row
 in <code>X</code>.</p></td>
     </tr>
     <tr>
@@ -141,18 +141,18 @@ in <code>X</code>.</p></td>
     </tr>
     <tr>
       <th>line</th>
-      <td><p>A numeric vector denoting the treatment line represented by each row
-in <code>X</code>.</p></td>
+      <td><p>A numeric vector of integers denoting the treatment line represented by each row
+in <code>X</code>. Not supported by currently available models.</p></td>
     </tr>
     <tr>
       <th>n_lines</th>
       <td><p>A <code>data.table</code> denoting the number of treatment lines associated
 with each treatment strategy. Should contain a column, "strategy_id", and a column,
-"N".</p></td>
+"N". Not supported by currently available models.</p></td>
     </tr>
     <tr>
       <th>state_id</th>
-      <td><p>A numeric vector denoting the health state represented by each row
+      <td><p>A numeric vector of integers denoting the health state represented by each row
 in <code>X</code>.</p></td>
     </tr>
     <tr>
@@ -163,15 +163,17 @@ in <code>X</code>.</p></td>
       <th>transition_id</th>
       <td><p>Only used for multi-state modeling. A numeric vector denoting the 
 transition represented by each row in <code>X</code> (for jointly estimated models) or 
-indexing distinct matrices in <code>X</code> (for separately estimated models).</p></td>
+indexing distinct matrices in <code>X</code> (for separately estimated models). 
+Not supported by currently available models.</p></td>
     </tr>
     <tr>
       <th>n_transitions</th>
-      <td><p>A scalar denoting the number of unique transitions.</p></td>
+      <td><p>A scalar denoting the number of unique transitions. 
+Not supported by currently available models.</p></td>
     </tr>
     <tr>
       <th>time_fun</th>
-      <td><p>A pointer to a C++ functor that can be used to updated <code>X</code> as a function
+      <td><p>A pointer to a C++ functor that can be used to update <code>X</code> as a function
 of time in a simulation model. Not currently supported.</p></td>
     </tr>
     </table>

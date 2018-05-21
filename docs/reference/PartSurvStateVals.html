@@ -99,8 +99,7 @@
     </div>
 
     
-    <p>Predict or simulate values (i.e., utility or costs) associated with health states in a
-partitioned survival model.</p>
+    <p>Predict or values (i.e., utility or costs) associated with health states in a partitioned survival model.</p>
     
 
     <pre class="usage"><span class='no'>PartSurvStateVals</span></pre>
@@ -114,8 +113,8 @@ partitioned survival model.</p>
     
     <p></p><dl class='dl-horizontal'>
     <dt><code>data</code></dt><dd><p>Data used to predict state values by strategy, patient, and health state. Must be 
-  an object of class <code><a href='input_data.html'>input_data</a></code> where each row in "X" is a unique strategy, patient, and
-  health state. "X" must also be sorted by strategy, patient, and health state.</p></dd>
+  an object of class <code><a href='input_data.html'>input_data</a></code> where each row in the matrix "X" is a unique strategy, patient, and
+  health state. "X" must be sorted by strategy, patient, and health state.</p></dd>
     <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_lm.html'>params_lm</a></code>, which contains the parameters for predicting
   state values.</p></dd>
     </dl>
@@ -124,13 +123,9 @@ partitioned survival model.</p>
 
     
     <dl class='dl-horizontal'>
-    <dt><code>new(data = NULL, params = NULL)</code></dt><dd><p>Constructor for the class.
-    <ul>
-<li><p><code>data</code>: An object of class <code><a href='input_data.html'>input_data</a></code>.</p></li>
-<li><p><code>params</code>: An object of class <code><a href='params_lm.html'>params_lm</a></code>.</p></li>
-</ul></p></dd>
+    <dt><code>new(data, params)</code></dt><dd><p>Constructor for the class.</p></dd>
     <dt><code>predict()</code></dt><dd><p>Predict mean state values by treatment strategy, patient, and health state.</p></dd>
-    <dt><code><a href='check.html'>check()</a></code></dt><dd><p>Input validation for class; checks that fields are the correct type.</p></dd>
+    <dt><code><a href='check.html'>check()</a></code></dt><dd><p>Input validation for class. Checks that fields are the correct type.</p></dd>
     </dl>
     
 
@@ -153,12 +148,12 @@ partitioned survival model.</p>
 
 <span class='co'># Predict</span>
 <span class='fu'>head</span>(<span class='no'>part.surv.costs.medical</span>$<span class='fu'>predict</span>())</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id    value
-#&gt; 1:        1      1           1          1 34467.14
-#&gt; 2:        2      1           1          1 27322.82
-#&gt; 3:        3      1           1          1 36471.79
-#&gt; 4:        1      1           1          2 34467.14
-#&gt; 5:        2      1           1          2 27322.82
-#&gt; 6:        3      1           1          2 36471.79</div></pre>
+#&gt; 1:        1      1           1          1 33625.77
+#&gt; 2:        2      1           1          1 27385.72
+#&gt; 3:        3      1           1          1 33939.33
+#&gt; 4:        1      1           1          2 33625.77
+#&gt; 5:        2      1           1          2 27385.72
+#&gt; 6:        3      1           1          2 33939.33</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

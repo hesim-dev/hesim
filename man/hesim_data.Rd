@@ -8,9 +8,9 @@ hesim_data(strategies, patients, lines = NULL, states = NULL,
   transitions = NULL)
 }
 \arguments{
-\item{strategies}{A table of the treatment strategies. 
-Must contain the column \code{strategy_id}, denoting a unique strategy. Other columns
-denote characteristics of a treatment strategy.}
+\item{strategies}{A table of treatment strategies. 
+Must contain the column \code{strategy_id} denoting a unique strategy. Other columns are variables
+ describing the characteristics of a treatment strategy.}
 
 \item{patients}{A table of patient observations. 
 Must contain the column \code{patient_id} denoting a unique patient. The 
@@ -18,12 +18,12 @@ number of rows should be equal to the number of patients in the model.
 Other columns are variables describing the characteristics of a patient.}
 
 \item{lines}{A table of treatment lines used for each treatment strategy. Must contain the columns
-\code{strategy_id}, denoting a treatment strategy; \code{line}, denoting a treatment line;
-and \code{treatment_id} denoting the treatment used for a given strategy and line.}
+\code{strategy_id}, denoting a treatment strategy; \code{line}, denoting a treatment line; 
+and \code{treatment_id}, denoting the treatment used for a given strategy and line.}
 
 \item{states}{A table of health states. Must contain the column
 \code{state_id}, which denotes a unique health state. The number of rows should
-be equal to the number of health states in the model. Other columns can denote
+be equal to the number of health states in the model. Other columns can describe the
 characteristics of a health state.}
 
 \item{transitions}{A table of health state transitions. Must contain the column
@@ -37,7 +37,8 @@ health economic simulation modeling.
 }
 \description{
 A list of tables required for health-economic simulation modeling.
-Each table must either be an \code{R} \code{\link{data.frame}} or \code{\link{data.table}}.
+Each table must either be a \code{\link{data.frame}} or \code{\link{data.table}}. All id variables within 
+each table must be numeric vectors of integers.
 }
 \examples{
 dt.strategies <- data.frame(strategy_id = c(1, 2))

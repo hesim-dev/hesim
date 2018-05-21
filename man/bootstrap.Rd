@@ -17,6 +17,7 @@ bootstrap(object, B, ...)
 Sampled values of the parameters.
 }
 \description{
-\code{bootstrap} is a generic function for sampling values of the parameters of
+\code{bootstrap} is a generic function for generated bootstrap replicates of the parameters
+of a fitted statistical model.
 a statistical model.
 }

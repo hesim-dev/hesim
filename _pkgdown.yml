@@ -22,7 +22,6 @@ reference:
       - params_surv_list
   - title: "Input data"
     contents:
-      - lines_dt
       - hesim_data
       - expand_hesim_data
       - input_data

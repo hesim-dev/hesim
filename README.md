@@ -3,12 +3,12 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/hesim)](https://cran.r-project.org/package=hesim)
 
 # Overview
-`hesim` is an R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. That package currently supports N-state partitioned survival analysis and summarizing the output of probabilistic sensitivity analysis. It is designed for high performance simulation modeling and heavily utilizes `Rcpp` and `data.table`. `hesim` is being actively developed and we expect to provide support for state transition modeling and individual patient simulations in the near future.
+`hesim` is an R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. The package currently supports N-state partitioned survival analysis and summarizing the output of probabilistic sensitivity analysis. It is designed for high performance simulation modeling and heavily utilizes `Rcpp` and `data.table`. `hesim` is being actively developed and we expect to provide support for state transition modeling and individual patient simulations in the near future.
 
 Features of the current version include:
 
 * N-state partitioned survival analysis
-* Easy to model patient heterogeneity 
+* Modeling patient heterogeneity 
 * Parameter estimates from either an R based model or from an external source
 * Parameter uncertainty propagated with probabilistic sensitivity analysis
 * Sampling parameters of a statistical model fit with R using Monte Carlo methods or bootstrapping.

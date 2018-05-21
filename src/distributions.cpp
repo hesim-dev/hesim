@@ -476,10 +476,10 @@ double hesim::SurvSplines::survival(double x) const{
     if (scale_ == "log_hazard" | scale_ == "log_cumhazard"){
         return exp(-cumhazard(x));
     }
-    else if (scale_ == "log_odds"){
+    else if (scale_ == "log_cumodds"){
         return 1/(1 + exp(linear_predict(x)));
     }
-    else if (scale_ == "normal"){
+    else if (scale_ == "inv_normal"){
         return R::pnorm(-linear_predict(x), 0, 1, 1, 0);
     }
     else {
@@ -497,10 +497,10 @@ double hesim::SurvSplines::hazard(double x) const{
     else if (scale_ == "log_cumhazard"){
         return timescale_dx_fun(x) * linear_predict_dx(x) * exp(linear_predict(x));
     }
-    else if (scale_ == "log_odds"){
+    else if (scale_ == "log_cumodds"){
         return timescale_dx_fun(x) * linear_predict_dx(x) * R::plogis(linear_predict(x), 0, 1, 1, 0);
     }
-    else if (scale_ == "normal"){
+    else if (scale_ == "inv_normal"){
         double lp = linear_predict(x);
         return timescale_dx_fun(x) * linear_predict_dx(x) * R::dnorm(-lp, 0, 1, 0)/R::pnorm(-lp, 0, 1, 1, 0);
     }
@@ -519,10 +519,10 @@ double hesim::SurvSplines::cumhazard(double x) const{
     else if (scale_ == "log_cumhazard"){
         return exp(linear_predict(x));
     }
-    else if (scale_ == "log_odds"){
+    else if (scale_ == "log_cumodds"){
         return log1p(exp(linear_predict(x)));
     }
-    else if (scale_ == "normal"){
+    else if (scale_ == "inv_normal"){
         return -R::pnorm(-linear_predict(x), 0, 1, 1, 1);
     }
     else{
@@ -542,10 +542,10 @@ double hesim::SurvSplines::pdf(double x) const {
     else if (scale_ == "log_cumhazard"){
         prob = timescale_dx_fun(x) * linear_predict_dx(x) * exp(lp - exp(lp));
     }
-    else if (scale_ == "log_odds"){
+    else if (scale_ == "log_cumodds"){
         prob = timescale_dx_fun(x) * linear_predict_dx(x) * exp(lp - 2 * log(1 + exp(lp)));
     }
-    else if (scale_ == "normal"){
+    else if (scale_ == "inv_normal"){
         prob = timescale_dx_fun(x) * linear_predict_dx(x) * R::dnorm(lp, 0, 1, 0);
     }
     else{

@@ -368,8 +368,8 @@ test_that("SurvivalSplines", {
     }
     hesim.scale <- switch(flexsurv_scale,
                           hazard = "log_cumhazard",
-                          odds = "log_odds",
-                          normal = "normal"
+                          odds = "log_cumodds",
+                          normal = "inv_normal"
                           )
     
     surv.splines <- new(surv_splines, gamma = gamma, knots = knots,

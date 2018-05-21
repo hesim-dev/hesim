@@ -77,7 +77,7 @@
 </h1>
                         <h4 class="author">Devin Incerti</h4>
             
-            <h4 class="date">2018-05-19</h4>
+            <h4 class="date">2018-05-20</h4>
           </div>
 
     
@@ -98,11 +98,11 @@
 \begin{aligned}
 P(y| \alpha_0(x_0), \ldots, \alpha_n(x_n)).
 \end{aligned}
-\]</span> The <span class="math inline">\(jth\)</span> model parameter can depend on a vector of coefficients <span class="math inline">\(\beta_j\)</span>, and an input vector, <span class="math inline">\(x_j\)</span>, of covariates through linked transformed linear models <span class="math inline">\(g(\alpha_j(x_j)) = x_j^T \beta_j\)</span>. The outcomes, <span class="math inline">\(y\)</span>, can be predicted using the mean of the distribution, <span class="math inline">\(E(y)\)</span>, or simulated with a random draw the probability distribution.</p>
+\]</span> The <span class="math inline">\(jth\)</span> model parameter can depend on a vector of coefficients, <span class="math inline">\(\beta_j\)</span>, and an input vector, <span class="math inline">\(x_j\)</span>, of covariates through linked transformed linear models <span class="math inline">\(g(\alpha_j(x_j)) = x_j^T \beta_j\)</span>. The outcomes, <span class="math inline">\(y\)</span>, can be predicted using the mean of the distribution, <span class="math inline">\(E(y)\)</span>, or sampled with a random draw the probability distribution.</p>
 <div id="parameter-estimates" class="section level3">
 <h3 class="hasAnchor">
 <a href="#parameter-estimates" class="anchor"></a>Parameter estimates</h3>
-<p>In <code>hesim</code>, the sampled values of the coefficients for each parameter are generally stored in matrices (or a single matrix if the model only has one parameter), where the columns of each matrix are explanatory variables and the rows are random samples. Parameters for statistical models are stored in objects prefixed by <code>params_</code> (e.g., <code>params_surv</code> for a survival model, <code>params_lm</code> for a linear model). A <code>params_</code> prefixed object can be created in one of two ways:</p>
+<p>In <code>hesim</code>, the sampled values of the coefficients for each parameter are generally stored in matrices (or a single matrix if the model only has one parameter), where the columns of each matrix are covariates and the rows are random samples. Parameters for statistical models are stored in objects prefixed by <code>params_</code> (e.g., <code>params_surv</code> for a survival model, <code>params_lm</code> for a linear model). A <code>params_</code> prefixed object can be created in one of two ways:</p>
 <ol style="list-style-type: decimal">
 <li>With a function of the same name such as <code><a href="../reference/params_surv.html">params_surv()</a></code> or <code><a href="../reference/params_lm.html">params_lm()</a></code>
 </li>
@@ -121,15 +121,15 @@ params.wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <pre><code>## $coefs
 ## $coefs$shape
 ##           shape
-## [1,] 0.03853178
-## [2,] 0.04088661
-## [3,] 0.04526705
+## [1,] 0.06834899
+## [2,] 0.05209304
+## [3,] 0.08207807
 ## 
 ## $coefs$scale
-##            scale      female          age
-## [1,] -0.03073669 0.009344042 -0.008982282
-## [2,]  0.01247322 0.096445007 -0.010674800
-## [3,] -0.06826262 0.104065258 -0.009652924
+##            scale     female          age
+## [1,] -0.08032470 0.12112887 -0.010096053
+## [2,] -0.18991173 0.11179009 -0.007603784
+## [3,]  0.05201112 0.09761582 -0.010982652
 ## 
 ## 
 ## $dist
@@ -149,15 +149,15 @@ params.wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <pre><code>## $coefs
 ## $coefs$shape
 ##         shape
-## [1,] 1.064954
-## [2,] 1.024934
-## [3,] 1.074803
+## [1,] 1.055796
+## [2,] 1.060538
+## [3,] 1.018732
 ## 
 ## $coefs$scale
-##          scale      female          age
-## [1,] 0.9227830  0.07611095 -0.009493098
-## [2,] 1.0513045  0.09750283 -0.011835223
-## [3,] 0.8769124 -0.01593123 -0.007574950
+##          scale       female          age
+## [1,] 0.9569205  0.112129841 -0.009906917
+## [2,] 0.9925928  0.060260195 -0.010469719
+## [3,] 0.9817963 -0.009662825 -0.010061584
 ## 
 ## 
 ## $dist
@@ -172,8 +172,14 @@ params.wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <div id="input-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#input-data" class="anchor"></a>Input data</h3>
-<p>The input vectors for each parameter, <span class="math inline">\(x_j\)</span>, are rows in multidimensional input matrices, <span class="math inline">\(X_j\)</span>, where each row denotes a unique observation. The dimensions of the data depend on the decision model and the component of the model structure being modeled. For instance, in a partitioned survival model, each observation in the survival models represents a unique treatment strategy and patient while each observation in the utility and cost models represents a unique treatment strategy, patient, and health state.</p>
-<p>The multidimensional data can be set up as a collection of data frames or data tables stored in a <code>hesim_data</code> object. If we continue with the partitioned survival example (and use the simplest case in which only overall survival is modeled), then are two treatment strategies, two patients, and one (non-death) health state.</p>
+<p>The input vectors for each parameter, <span class="math inline">\(x_j\)</span>, are rows in multidimensional input matrices, <span class="math inline">\(X_j\)</span>, where each row denotes a unique observation. The dimensions of the data will vary across different types of decision models and across submodels. For instance, in a partitioned survival model, each observation in a survival model represents a unique treatment strategy and patient while each observation in the utility and cost models represents a unique treatment strategy, patient, and health state.</p>
+<p>This multidimensional data can be setup in three steps:</p>
+<ol style="list-style-type: decimal">
+<li>Using <code><a href="../reference/hesim_data.html">hesim_data()</a></code> to create a collection of data tables (i.e., a <code>data.frame</code> or <code>data.table</code>) of class <code>hesim_data</code> for storing relevant simulation data (e.g., a treatment strategy table, a patient table, a health state table), which would contain any variables needed for prediction with a statistical model</li>
+<li>Using <code><a href="../reference/expand_hesim_data.html">expand_hesim_data()</a></code> to combine some or all of the tables created by <code><a href="../reference/hesim_data.html">hesim_data()</a></code> into a single long dataset of class <code>expanded_hesim_data</code> with dimensions required for predicting or simulating values with a particular submodel</li>
+<li>Using the dataset in Step 2 to create an object of class <code>input_data</code> with <code><a href="../reference/form_input_data.html">form_input_data()</a></code>. An <code>input_data</code> object contains relevant input matrices, <span class="math inline">\(X_j\)</span>, as well as id variables indexing each row</li>
+</ol>
+<p>If we continue with the partitioned survival example (and use the simplest case where we only model overall survival), then there are two treatment strategies, two patients, and one (non-death) health state. A <code>hesim_data</code> object can be created as follows.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt.strategies &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">strategy_id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
 dt.patients &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">patient_id =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">2</span>),
                           <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">45</span>, <span class="dv">50</span>),
@@ -201,13 +207,13 @@ hesim.dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 ## 
 ## attr(,"class")
 ## [1] "hesim_data"</code></pre>
-<p>A <code>hesim_data</code> object can then be “expanded” using the function <code><a href="../reference/expand_hesim_data.html">expand_hesim_data()</a></code> over the dimensions of interest. The new object is of class <code>expanded_hesim_data</code> and must contain the covariates used in the model fit as well as id variables indexing the dimensions of the data. Given a model object or formula, we extract the input matrix from the <code>expanded_hesim_data</code> object using the generic function <code><a href="../reference/form_input_data.html">form_input_data()</a></code>, which returns an object of class <code>input_data</code> containing the input matrix as well as the relevant id variables.</p>
-<p>Like with parameter estimation, an <code>input_data</code> object can either be derived in one of two ways:</p>
+<p>The <code>hesim_data</code> object can subsequently be “expanded” over the dimensions of interest using <code><a href="../reference/expand_hesim_data.html">expand_hesim_data()</a></code>. The new <code>expanded_hesim_data</code> object must contain the covariates used in the model fit as well as id variables indexing the dimensions of the data. Given a model object or formula, we extract the input matrix from the <code>expanded_hesim_data</code> object using the generic function <code><a href="../reference/form_input_data.html">form_input_data()</a></code>, which returns an <code>input_data</code> object containing the input matrix as well as the relevant id variables.</p>
+<p>As with parameter estimation, an <code>input_data</code> object can be created in one of two ways:</p>
 <ol style="list-style-type: decimal">
 <li>From a model fit using R</li>
-<li>Based on the covariates in model fit outside of R</li>
+<li>Based on the covariates from a model fit outside of R.</li>
 </ol>
-<p>In case 2 a <code>formula</code> or <code>formula_list</code> object can be used in lieu of a fitted model. To illustrate, suppose we would like to predict survival curves by treatment strategy and patient using our fitted Weibull model. We first expand our <code>hesim_data</code> object using the strategies and patients tables so that we have a dataset where each row is a unique treatment strategy and patient. We then use <code><a href="../reference/form_input_data.html">form_input_data()</a></code> to create a model matrix that includes an intercept and dummy variables for age and female, along with <code>strategy_id</code> and <code>patient_id</code> variables indicating the strategy and patient represented by each row in the list of matrices.</p>
+<p>In case 2 a <code>formula</code> or <code>formula_list</code> object can be used in lieu of a fitted model. To illustrate, suppose we would like to predict survival curves by treatment strategy and patient using our fitted Weibull model. We first expand our <code>hesim_data</code> object using the strategies and patients tables so that we have a dataset where each row is a unique treatment strategy and patient. We then use <code><a href="../reference/form_input_data.html">form_input_data()</a></code> to create (i) a model matrix, <code>X</code>, for each parameter (the shape parameter only includes an intercept while the scale parameter includes an age covariate and a dummy variable for gender), (ii) <code>strategy_id</code> and <code>patient_id</code> variables indicating the strategy and patient represented by each row in the list of matrices, and (iii) the number of unique strategies and patients being modeled.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Predict survival curves by treatment strategy and patient</span>
 ## From a model fit with flexsurvreg
 hesim.edata.surv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand_hesim_data.html">expand_hesim_data</a></span>(hesim.dat, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
@@ -301,7 +307,7 @@ hesim.edata.statevals &lt;-<span class="st"> </span><span class="kw"><a href="..
 <h2 class="hasAnchor">
 <a href="#running-a-simulation" class="anchor"></a>Running a simulation</h2>
 <p>A decision model is created by combining the disease, utility, and cost models. Each submodel is, in turn, created by combining input data and parameter estimates. For example, in a partitioned survival model there are three submodels: a set of survival models, a utility model, and a set of cost models for different types of costs. The survival models are of class <code>PartSurvCurves</code> and used to predict the survival curves in a partitioned survival analysis. The cost and utility models are of class <code>PartSurvStateValues</code> and used to predict the values to assign to health states.</p>
-<p>As with the model parameters and input data, there are two ways to instantiate each submodel:</p>
+<p>Again, as with the model parameters and input data, there are two ways to instantiate each submodel:</p>
 <ol style="list-style-type: decimal">
 <li>Based on parameters and input data using <code>$new()</code>
 </li>
@@ -325,28 +331,28 @@ part.surv.curves &lt;-<span class="st"> </span><span class="kw"><a href="../refe
                                         <span class="dt">n =</span> n.samples, <span class="dt">bootstrap =</span> <span class="ot">FALSE</span>)
 <span class="kw">head</span>(part.surv.curves<span class="op">$</span><span class="kw">quantile</span>(.<span class="dv">5</span>))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id   p  quantile
-## 1:     1      1           1          1 0.5 0.4483678
-## 2:     1      1           1          2 0.5 0.4180206
-## 3:     1      1           2          1 0.5 0.4483678
-## 4:     1      1           2          2 0.5 0.4180206
-## 5:     1      2           1          1 0.5 0.4140841
-## 6:     1      2           1          2 0.5 0.4571666</code></pre>
+## 1:     1      1           1          1 0.5 0.4483452
+## 2:     1      1           1          2 0.5 0.4406193
+## 3:     1      1           2          1 0.5 0.4483452
+## 4:     1      1           2          2 0.5 0.4406193
+## 5:     1      2           1          1 0.5 0.4293942
+## 6:     1      2           1          2 0.5 0.4529628</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(part.surv.curves<span class="op">$</span><span class="kw">cumhazard</span>(<span class="dt">t =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>)))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id t cumhazard
 ## 1:     1      1           1          1 0  0.000000
-## 2:     1      1           1          1 1  1.574413
-## 3:     1      1           1          1 2  3.198888
-## 4:     1      1           1          1 3  4.842811
+## 2:     1      1           1          1 1  1.617002
+## 3:     1      1           1          1 2  3.361922
+## 4:     1      1           1          1 3  5.158624
 ## 5:     1      1           1          2 0  0.000000
-## 6:     1      1           1          2 1  1.691406</code></pre>
+## 6:     1      1           1          2 1  1.646956</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(part.surv.curves<span class="op">$</span><span class="kw">rmst</span>(<span class="dt">t =</span> <span class="dv">3</span>))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id t      rmst
-## 1:     1      1           1          1 3 0.6309417
-## 2:     1      1           1          2 3 0.5895820
-## 3:     1      1           2          1 3 0.6309417
-## 4:     1      1           2          2 3 0.5895820
-## 5:     1      2           1          1 3 0.5854251
-## 6:     1      2           1          2 3 0.6441449</code></pre>
+## 1:     1      1           1          1 3 0.6177551
+## 2:     1      1           1          2 3 0.6073935
+## 3:     1      1           2          1 3 0.6177551
+## 4:     1      1           2          2 3 0.6073935
+## 5:     1      2           1          1 3 0.5926033
+## 6:     1      2           1          2 3 0.6242565</code></pre>
 <p>We can instantiate a <code>PartSurvStateVals</code> object in the same two ways, although here we only use the second method. A <code>predict()</code> function is available to predict mean state values by treatment strategy, patient, and health state.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">medcost.dat &lt;-<span class="st"> </span><span class="kw">subset</span>(part_surv4_simdata<span class="op">$</span>costs<span class="op">$</span>medical, state_name <span class="op">==</span><span class="st"> "state3"</span>)
 costs.medical.fit &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(costs <span class="op">~</span><span class="st"> </span>female, <span class="dt">data =</span> medcost.dat)
@@ -354,27 +360,27 @@ part.surv.medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../re
                                              <span class="dt">data =</span> hesim.edata.statevals, <span class="dt">n =</span> n.samples)
 <span class="kw">head</span>(part.surv.medcosts<span class="op">$</span><span class="kw">predict</span>())</code></pre></div>
 <pre><code>##    state_id sample strategy_id patient_id    value
-## 1:        1      1           1          1 34829.80
-## 2:        1      1           1          2 33626.13
-## 3:        1      1           2          1 34829.80
-## 4:        1      1           2          2 33626.13
-## 5:        1      2           1          1 33444.41
-## 6:        1      2           1          2 36828.81</code></pre>
-<p>By combining submodels, a decision model is able to predict disease progression and cost and utility values associated with each disease state. Total discounted costs and QALYs are calculated by summing (or integrating) predicted costs and utility over time. In the partitioned survival example, disease progression is simulated by first generating survival curves and then calculating health states probabilities based on those curves. Cost and QALYs are calculated by numerically integrating the weighted probability of being in each state, where weights are a function of the discount factorand predicted state values.</p>
+## 1:        1      1           1          1 32849.83
+## 2:        1      1           1          2 39947.69
+## 3:        1      1           2          1 32849.83
+## 4:        1      1           2          2 39947.69
+## 5:        1      2           1          1 35037.54
+## 6:        1      2           1          2 37154.59</code></pre>
+<p>By combining submodels, a decision model is able to simulate disease progression and cost and utility values associated with each disease state. Total discounted costs and QALYs are calculated by summing (or integrating) simulated costs and utility over time. In the partitioned survival example, disease progression is simulated by first generating survival curves and then calculating health states probabilities based on those curves. Cost and QALYs are calculated by numerically integrating the weighted probability of being in each state, where weights are a function of the discount factorand predicted state values.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, .<span class="dv">01</span>)
 part.surv &lt;-<span class="st"> </span>PartSurv<span class="op">$</span><span class="kw">new</span>(<span class="dt">survival_models =</span> part.surv.curves,
-             <span class="dt">cost_models =</span> <span class="kw">list</span>(part.surv.medcosts))
+             <span class="dt">cost_models =</span> <span class="kw">list</span>(<span class="dt">medical =</span> part.surv.medcosts))
 part.surv<span class="op">$</span><span class="kw">sim_survival</span>(<span class="dt">t =</span> times)
 part.surv<span class="op">$</span><span class="kw">sim_stateprobs</span>()
 part.surv<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">03</span>))
 <span class="kw">head</span>(part.surv<span class="op">$</span>costs_)</code></pre></div>
-<pre><code>##    state_id sample strategy_id patient_id dr   type    costs
-## 1:        1      1           1          1  0 Type 1 21975.96
-## 2:        1      1           1          2  0 Type 1 19825.77
-## 3:        1      1           2          1  0 Type 1 21975.96
-## 4:        1      1           2          2  0 Type 1 19825.77
-## 5:        1      2           1          1  0 Type 1 19579.61
-## 6:        1      2           1          2  0 Type 1 23723.50</code></pre>
+<pre><code>##    state_id sample strategy_id patient_id dr    type    costs
+## 1:        1      1           1          1  0 medical 20293.45
+## 2:        1      1           1          2  0 medical 24264.34
+## 3:        1      1           2          1  0 medical 20293.45
+## 4:        1      1           2          2  0 medical 24264.34
+## 5:        1      2           1          1  0 medical 20763.70
+## 6:        1      2           1          2  0 medical 23194.34</code></pre>
 </div>
 <div id="decision-analysis" class="section level2">
 <h2 class="hasAnchor">

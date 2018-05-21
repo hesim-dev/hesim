@@ -47,12 +47,12 @@ test_that("form_params.lm", {
 test_that("params_lm_list", {
   params.lm1 <- form_params(fit1, n = 5)
   params.lm2 <- form_params(fit1, n = 5)
-  params.lm.list <- hesim:::params_lm_list(params.lm1, params.lm2)
+  params.lm.list <- params_lm_list(params.lm1, params.lm2)
   expect_equal(length(params.lm.list), 2)
   
   # errors
   params.lm2 <- form_params(fit1, n = 2)
-  expect_error(hesim:::params_lm_list(params.lm1, params.lm2))
+  expect_error(params_lm_list(params.lm1, params.lm2))
 })
 
 test_that("form_params.lm_list", {

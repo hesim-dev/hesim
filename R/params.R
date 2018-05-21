@@ -135,11 +135,10 @@ check.params_lm_list <- function(object){
 #' \item{\code{knots}}{ A numeric vector of knots.}
 #' \item{\code{scale}}{ A character vector of length 1 denoting the survival outcome to be modeled
 #' as a spline function. Options are "log_cumhazard", for the log cummulative hazard; 
-#' "log_hazard" for the log hazard rate;
-#' "log_odds" for the log cummulative odds;
-#' and "normal" for the inverse normal distribution function.}
-#' \item{\code{timescale}}{If "log" (the default), the survival outcome is modeled as a spline function
-#' of log time; if "identity", it is modeled as a spline function of time.}
+#' "log_hazard" for the log hazard rate; "log_cumodds" for the log cummulative odds;
+#' and "inv_normal" for the inverse normal distribution function.}
+#' \item{\code{timescale}}{If "log" (the default), then survival is modeled as a spline function
+#' of log time; if "identity", then it is modeled as a spline function of time.}
 #' }
 #' 
 #' @examples 
@@ -321,18 +320,16 @@ form_params_joined <- function(object, n, point_estimate, inner_class){
 #' \code{form_params} is a generic function for constructing parameters from
 #' a fitted statistical model. A sample from the posterior distribution of 
 #' parameters is returned.
-#' @param object A statistical model to randomly sample parameters from. Currently 
-#' there are methods for \code{\link{lm}}, \code{\link{lm_list}}, \code{\link{flexsurvreg}},
-#' and \code{\link{flexsurvreg_list}}.  
+#' @param object A statistical model to randomly sample parameters from.  
 #' @param n Number of random observations to draw. 
 #' @param point_estimate If TRUE, then the point estimates are returned and
 #' and no samples are drawn.
-#' @param bootstrap If \code{bootstrap} is FALSE or not specified, then \code{n} observations are 
+#' @param bootstrap If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are 
 #' drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
-#' randomly sampled using the generic function \code{\link{bootstrap}}. 
+#' parameters are bootstrapped using \code{\link{bootstrap}}. 
 #' @param ... Further arguments passed to or from other methods. Currently unused.
 #' @return An object in the family of \code{params} objects.
-#' Mapping between \code{form_params} and the classes of \code{params} objects returned are: 
+#' Mapping between \code{form_params} and the classes of the returned objects are: 
 #' \itemize{
 #' \item{\code{form_params.lm} ->}{ \code{params_lm}}
 #' \item{\code{form_params.flexsurvreg} ->}{ \code{params_surv}}
@@ -380,8 +377,9 @@ form_params.lm <- function(object, n = 1000, point_estimate = FALSE, ...){
   }
 }
 
-
-#' @rdname form_params
+#' @export
+# #' @rdname form_params
+#' @keywords internal
 form_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...){
   return(form_params_list(object, n, point_estimate, 
                           inner_class = "params_lm", new_class = "params_lm_list"))
@@ -406,7 +404,8 @@ flexsurvreg_aux <- function(object){
   if(object$dlist$name == "survspline"){
     aux <- object$aux
     if(aux$scale == "hazard") aux$scale <- "log_cumhazard"
-    if(aux$scale == "odds") aux$scale <- "log_odds" # should change this to log_cumodds
+    if(aux$scale == "odds") aux$scale <- "log_cumodds" 
+    if(aux$scale == "normal") aux$scale <- "inv_normal" 
   } else{
     aux <- NULL
   } 
@@ -462,13 +461,15 @@ form_params.partsurvfit <- function(object, n = 1000, point_estimate = FALSE,
 }
 
 #' @export
-#' @rdname form_params
+# #' @rdname form_params
+#' @keywords internal
 form_params.joined_flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, ...){
   return(form_params_joined(object, n, point_estimate, "params_surv"))
 }
 
 #' @export
-#' @rdname form_params
+# #' @rdname form_params
+#' @keywords internal
 form_params.joined_flexsurvreg_list <- function(object, n = 1000, point_estimate = FALSE, ...){
   return(form_params_joined(object, n, point_estimate, "params_surv_list"))
 }

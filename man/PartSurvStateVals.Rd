@@ -8,8 +8,7 @@
 PartSurvStateVals
 }
 \description{
-Predict or simulate values (i.e., utility or costs) associated with health states in a
-partitioned survival model.
+Predict or values (i.e., utility or costs) associated with health states in a partitioned survival model.
 }
 
 \section{Fields}{
@@ -17,8 +16,8 @@ partitioned survival model.
   \describe{
 
   \item{\code{data}}{Data used to predict state values by strategy, patient, and health state. Must be 
-  an object of class \code{\link{input_data}} where each row in "X" is a unique strategy, patient, and
-  health state. "X" must also be sorted by strategy, patient, and health state.}
+  an object of class \code{\link{input_data}} where each row in the matrix "X" is a unique strategy, patient, and
+  health state. "X" must be sorted by strategy, patient, and health state.}
 
   \item{\code{params}}{An object of class \code{\link{params_lm}}, which contains the parameters for predicting
   state values.}
@@ -30,14 +29,10 @@ partitioned survival model.
 
 \describe{
 
-\item{\code{new(data = NULL, params = NULL)}}{
+\item{\code{new(data, params)}}{
 
   Constructor for the class.
 
-  \itemize{
-    \item \code{data}: An object of class \code{\link{input_data}}.
-    \item \code{params}: An object of class \code{\link{params_lm}}.
-    }
   }
 
     \item{\code{predict()}}{
@@ -48,7 +43,7 @@ partitioned survival model.
 
     \item{\code{check()}}{
 
-    Input validation for class; checks that fields are the correct type. 
+    Input validation for class. Checks that fields are the correct type. 
 
     }
 

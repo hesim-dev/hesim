@@ -3,19 +3,14 @@
 \name{form_params}
 \alias{form_params}
 \alias{form_params.lm}
-\alias{form_params.lm_list}
 \alias{form_params.flexsurvreg}
 \alias{form_params.flexsurvreg_list}
 \alias{form_params.partsurvfit}
-\alias{form_params.joined_flexsurvreg}
-\alias{form_params.joined_flexsurvreg_list}
 \title{Parameters from a fitted model}
 \usage{
 form_params(object, n = 1000, point_estimate = FALSE, ...)
 
 \method{form_params}{lm}(object, n = 1000, point_estimate = FALSE, ...)
-
-\method{form_params}{lm_list}(object, n = 1000, point_estimate = FALSE, ...)
 
 \method{form_params}{flexsurvreg}(object, n = 1000, point_estimate = FALSE,
   ...)
@@ -25,17 +20,9 @@ form_params(object, n = 1000, point_estimate = FALSE, ...)
 
 \method{form_params}{partsurvfit}(object, n = 1000, point_estimate = FALSE,
   bootstrap = TRUE, ...)
-
-\method{form_params}{joined_flexsurvreg}(object, n = 1000,
-  point_estimate = FALSE, ...)
-
-\method{form_params}{joined_flexsurvreg_list}(object, n = 1000,
-  point_estimate = FALSE, ...)
 }
 \arguments{
-\item{object}{A statistical model to randomly sample parameters from. Currently 
-there are methods for \code{\link{lm}}, \code{\link{lm_list}}, \code{\link{flexsurvreg}},
-and \code{\link{flexsurvreg_list}}.}
+\item{object}{A statistical model to randomly sample parameters from.}
 
 \item{n}{Number of random observations to draw.}
 
@@ -44,13 +31,13 @@ and no samples are drawn.}
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{bootstrap}{If \code{bootstrap} is FALSE or not specified, then \code{n} observations are 
+\item{bootstrap}{If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are 
 drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
-randomly sampled using the generic function \code{\link{bootstrap}}.}
+parameters are bootstrapped using \code{\link{bootstrap}}.}
 }
 \value{
 An object in the family of \code{params} objects.
-Mapping between \code{form_params} and the classes of \code{params} objects returned are: 
+Mapping between \code{form_params} and the classes of the returned objects are: 
 \itemize{
 \item{\code{form_params.lm} ->}{ \code{params_lm}}
 \item{\code{form_params.flexsurvreg} ->}{ \code{params_surv}}

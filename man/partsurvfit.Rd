@@ -10,7 +10,7 @@ partsurvfit(object, data)
 \item{object}{An object of class \code{\link{flexsurvreg_list}}.}
 
 \item{data}{The data frame used to fit each survival model in \code{object}.
-\code{\link{flexsurvreg}}. There should be one named list for each survival endpoint.}
+\code{\link{flexsurvreg}}.}
 }
 \value{
 Returns an object of class "partsurvfit", which is a list containing two elements. 

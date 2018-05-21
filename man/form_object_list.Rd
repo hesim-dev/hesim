@@ -15,3 +15,4 @@ A list of objects from \code{...}.
 \description{
 Form a list of objects from \code{...}.
 }
+\keyword{internal}

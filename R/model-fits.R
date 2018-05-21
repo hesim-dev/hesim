@@ -65,7 +65,7 @@ flexsurvreg_list <- function(...){
 #' The same data frame must have been used for each fit.  
 #' @param object An object of class \code{\link{flexsurvreg_list}}.
 #' @param data The data frame used to fit each survival model in \code{object}.
-#' \code{\link{flexsurvreg}}. There should be one named list for each survival endpoint.   
+#' \code{\link{flexsurvreg}}.  
 #' @return Returns an object of class "partsurvfit", which is a list containing two elements. 
 #' The first element, "models", contains the survival models passed to \code{object}, and the second 
 #' element, "data" contains the data frame passed to \code{data}.
