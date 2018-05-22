@@ -13,7 +13,7 @@ bibliography: references.bib
 ## Overview
 An N-state partitioned survival model (PSM) simulates the probability that a patient is in each of N distinct health states at a given point of time when treated by a particular therapy. State membership is estimated from a set of non-mutually exclusive survival curves; for an N-state model, N-1 survival curves are required. 
 
-The cummulative survival function, $S(t)_n$, represents the probability that a patient survives to health state $n$ or to a lower indexed state beyond time $t$. The probability that a patient is in health state 1 is always just $S(t)_1$. State membership in health states $2,\ldots, n-1$ is calculated as $S(t)_{n} - S(t)_{n-1}$. Finally, the probability of being in the final health state $n$ (i.e., the dead state) is $1-S(t)_{n-1}$, or one minus the overall survival curve.
+The cumulative survival function, $S(t)_n$, represents the probability that a patient survives to health state $n$ or to a lower indexed state beyond time $t$. The probability that a patient is in health state 1 is always just $S(t)_1$. State membership in health states $2,\ldots, n-1$ is calculated as $S(t)_{n} - S(t)_{n-1}$. Finally, the probability of being in the final health state $n$ (i.e., the dead state) is $1-S(t)_{n-1}$, or one minus the overall survival curve.
 
 In `hesim`, an N-state PSM consists of three types of separate statistical models: a set of N-1 survival models, a model of the utility values to assign to each health state, and a set of models for costs to assign to each health state. Multiple cost models can be used to categorize groups into different categories (e.g., costs of medical care, drug costs). All models can either be fit using R or constructed with external data. 
 
@@ -90,7 +90,7 @@ utility.params <- params_lm(coefs  = cbind(utility1, utility2, utility3))
 A PSM in `hesim` is an [R6](https://cran.r-project.org/web/packages/R6/) object of class `PartSurv` and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class `PartSurvCurves`), (2) a utility model (of class `PartSurvStateVals`), and (3) a set of cost models for each cost component (a list of `PartSurvStateVals` objects). 
 
 ### Simulation data
-The input data required to simulate decision models in `hesim` can be set up in 3 steps as described in our [introduction to hesim](intro.html). First, the data can be set up as a collection of data frames or data tables. A 4-state PSM consists of three types of data tables: a table describing treatment strategies, the patient population of interest, and four health states (death and three non-death  states). In this example, we model three treatment strategies and three distinct patients that differ in age and gender. Relevant tables are combined using `hesim_data()`, which creates a general object of class `hesim_data` for storing data tables for simulation modeling in `hesim`.
+The input data required to simulate partitioned survival models in `hesim` can be set up in 3 steps as described in our [introduction to hesim](intro.html). First, the data can be set up as a collection of data frames or data tables. A 4-state PSM consists of three types of data tables: a table describing treatment strategies, the patient population of interest, and four health states (death and three non-death  states). In this example, we model three treatment strategies and three distinct patients that differ in age and gender. Relevant tables are combined using `hesim_data()`, which creates a general object of class `hesim_data` for storing data tables for simulation modeling in `hesim`.
 
 ```{r, warning = FALSE, message = FALSE}
 library("hesim")
@@ -188,7 +188,7 @@ ggplot(p.data, aes(x = t, y = mean_surv, fill = curve)) +
 ```
 
 ### Simulating health state probabilities 
-After simulating survival, we can calculte the probability of being in each of the four health states using `$sim_stateprobs()`. At a given point in time, the probability of being in state 1 is the survival probabiility from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. We plot these state probabilities for the first patient with the 30th randomly sampled parameter set.
+After simulating survival, we can calculate the probability of being in each of the four health states using `$sim_stateprobs()`. At a given point in time, the probability of being in state 1 is the survival probability from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. We plot these state probabilities for the first patient with the 30th randomly sampled parameter set.
 
 ```{r, warning = FALSE, message = FALSE}
 # Simulate

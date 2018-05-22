@@ -76,7 +76,7 @@
       <h1>Partitioned survival models</h1>
                         <h4 class="author">Devin Incerti</h4>
             
-            <h4 class="date">2018-05-21</h4>
+            <h4 class="date">2018-05-22</h4>
           </div>
 
     
@@ -86,7 +86,7 @@
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
 <p>An N-state partitioned survival model (PSM) simulates the probability that a patient is in each of N distinct health states at a given point of time when treated by a particular therapy. State membership is estimated from a set of non-mutually exclusive survival curves; for an N-state model, N-1 survival curves are required.</p>
-<p>The cummulative survival function, <span class="math inline">\(S(t)_n\)</span>, represents the probability that a patient survives to health state <span class="math inline">\(n\)</span> or to a lower indexed state beyond time <span class="math inline">\(t\)</span>. The probability that a patient is in health state 1 is always just <span class="math inline">\(S(t)_1\)</span>. State membership in health states <span class="math inline">\(2,\ldots, n-1\)</span> is calculated as <span class="math inline">\(S(t)_{n} - S(t)_{n-1}\)</span>. Finally, the probability of being in the final health state <span class="math inline">\(n\)</span> (i.e., the dead state) is <span class="math inline">\(1-S(t)_{n-1}\)</span>, or one minus the overall survival curve.</p>
+<p>The cumulative survival function, <span class="math inline">\(S(t)_n\)</span>, represents the probability that a patient survives to health state <span class="math inline">\(n\)</span> or to a lower indexed state beyond time <span class="math inline">\(t\)</span>. The probability that a patient is in health state 1 is always just <span class="math inline">\(S(t)_1\)</span>. State membership in health states <span class="math inline">\(2,\ldots, n-1\)</span> is calculated as <span class="math inline">\(S(t)_{n} - S(t)_{n-1}\)</span>. Finally, the probability of being in the final health state <span class="math inline">\(n\)</span> (i.e., the dead state) is <span class="math inline">\(1-S(t)_{n-1}\)</span>, or one minus the overall survival curve.</p>
 <p>In <code>hesim</code>, an N-state PSM consists of three types of separate statistical models: a set of N-1 survival models, a model of the utility values to assign to each health state, and a set of models for costs to assign to each health state. Multiple cost models can be used to categorize groups into different categories (e.g., costs of medical care, drug costs). All models can either be fit using R or constructed with external data.</p>
 </div>
 <div id="an-example-4-state-psm" class="section level2">
@@ -157,7 +157,7 @@ utility.params &lt;-<span class="st"> </span><span class="kw"><a href="../refere
 <div id="simulation-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#simulation-data" class="anchor"></a>Simulation data</h3>
-<p>The input data required to simulate decision models in <code>hesim</code> can be set up in 3 steps as described in our <a href="intro.html">introduction to hesim</a>. First, the data can be set up as a collection of data frames or data tables. A 4-state PSM consists of three types of data tables: a table describing treatment strategies, the patient population of interest, and four health states (death and three non-death states). In this example, we model three treatment strategies and three distinct patients that differ in age and gender. Relevant tables are combined using <code><a href="../reference/hesim_data.html">hesim_data()</a></code>, which creates a general object of class <code>hesim_data</code> for storing data tables for simulation modeling in <code>hesim</code>.</p>
+<p>The input data required to simulate partitioned survival models in <code>hesim</code> can be set up in 3 steps as described in our <a href="intro.html">introduction to hesim</a>. First, the data can be set up as a collection of data frames or data tables. A 4-state PSM consists of three types of data tables: a table describing treatment strategies, the patient population of interest, and four health states (death and three non-death states). In this example, we model three treatment strategies and three distinct patients that differ in age and gender. Relevant tables are combined using <code><a href="../reference/hesim_data.html">hesim_data()</a></code>, which creates a general object of class <code>hesim_data</code> for storing data tables for simulation modeling in <code>hesim</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"hesim"</span>)
 <span class="kw">library</span>(<span class="st">"data.table"</span>)
 <span class="kw">set.seed</span>(<span class="dv">101</span>)
@@ -260,7 +260,7 @@ p.data[, mean_surv_min <span class="op">:</span><span class="er">=</span><span c
 <div id="simulating-health-state-probabilities" class="section level3">
 <h3 class="hasAnchor">
 <a href="#simulating-health-state-probabilities" class="anchor"></a>Simulating health state probabilities</h3>
-<p>After simulating survival, we can calculte the probability of being in each of the four health states using <code>$sim_stateprobs()</code>. At a given point in time, the probability of being in state 1 is the survival probabiility from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. We plot these state probabilities for the first patient with the 30th randomly sampled parameter set.</p>
+<p>After simulating survival, we can calculate the probability of being in each of the four health states using <code>$sim_stateprobs()</code>. At a given point in time, the probability of being in state 1 is the survival probability from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. We plot these state probabilities for the first patient with the 30th randomly sampled parameter set.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Simulate</span>
 part.surv<span class="op">$</span><span class="kw">sim_stateprobs</span>()
 
@@ -300,12 +300,12 @@ part.surv<span class="op">$</span><span class="kw">sim_costs</span>(<span class=
 part.surv<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(part.surv<span class="op">$</span>qalys_)</code></pre></div>
 <pre><code>##    state_id sample strategy_id patient_id   dr  type     qalys
-## 1:        1      1           1          1 0.03 qalys 0.4560032
-## 2:        1      1           1          2 0.03 qalys 0.4372257
-## 3:        1      1           1          3 0.03 qalys 0.4659975
-## 4:        1      1           2          1 0.03 qalys 0.4707296
-## 5:        1      1           2          2 0.03 qalys 0.4513495
-## 6:        1      1           2          3 0.03 qalys 0.4810444</code></pre>
+## 1:        1      1           1          1 0.03 qalys 0.4666819
+## 2:        1      1           1          2 0.03 qalys 0.4474647
+## 3:        1      1           1          3 0.03 qalys 0.4769103
+## 4:        1      1           2          1 0.03 qalys 0.4817532
+## 5:        1      1           2          2 0.03 qalys 0.4619193
+## 6:        1      1           2          3 0.03 qalys 0.4923095</code></pre>
 </div>
 </div>
 </div>
