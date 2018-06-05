@@ -100,12 +100,11 @@
 
     
     <p>Create an object of class "input_data", which contains data for use
-as an input to a statistical model. The element <code>X</code> is the input matrix
-used for prediction, and the id variables determine the dimensions for
- which predictions should be made (e.g,
-by strategy and patient, by strategy, patient, and health state, ...). This object can 
-be created more easily using the generic function <code><a href='form_input_data.html'>form_input_data</a></code>. See "details"
-for information on soring the rows of the matrices in <code>X</code>.</p>
+as an input to a statistical model. Data consists of (i) input matrices, <code>X</code>,
+(ii) id variables indexing the rows of each matrix in <code>X</code>, and (iii) the dimensions of
+the <code>X</code> matrices. More details are provided under "Details" below. Note that an "input_data" 
+object can often be created more easily using the generic function 
+<code><a href='form_input_data.html'>form_input_data</a></code>.</p>
     
 
     <pre class="usage"><span class='fu'>input_data</span>(<span class='no'>X</span>, <span class='no'>strategy_id</span>, <span class='no'>n_strategies</span>, <span class='no'>patient_id</span>, <span class='no'>n_patients</span>, <span class='kw'>line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -161,10 +160,12 @@ in <code>X</code>.</p></td>
     </tr>
     <tr>
       <th>transition_id</th>
-      <td><p>Only used for multi-state modeling. A numeric vector denoting the 
-transition represented by each row in <code>X</code> (for jointly estimated models) or 
-indexing distinct matrices in <code>X</code> (for separately estimated models). 
-Not supported by currently available models.</p></td>
+      <td><p>A numeric vector denoting the 
+transition represented by each row in <code>X</code>. This must only be specified when
+estimating the health state transitions with a joint likelihood function. If independent
+models are fit for each transition, then separate <code>X</code> matrices must be specified
+for each transition. Note that this is not currently supported but
+will be supported once <code>hesim</code> provides support for state transition modeling.</p></td>
     </tr>
     <tr>
       <th>n_transitions</th>
@@ -178,17 +179,23 @@ of time in a simulation model. Not currently supported.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>An object of class "input_data", with elements equal to the specified 
-function arguments.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The rows of the matrices in <code>X</code> must be sorted in a manner consistent with the id variables.
-Sorting order should be the same as specified in <code><a href='expand_hesim_data.html'>expand_hesim_data</a></code>; that is,
-the rows of <code>X</code> must be sorted by prioritizing id variables as follows: <code>strategy_id</code>,
-<code>transition_id</code>, <code>patient_id</code>, <code>line</code>, and <code>state_id</code>.</p>
+    <p>Each row of each matrix <code>X</code> is an input vector, \(x_{hijk}\), where \(h\) denotes
+a health-related index, \(i\) indexes a patient, \(j\) indexes a treatment line,
+and \(k\) is a treatment strategy. A health-related index is either a health state
+(e.g., <code>state_id</code>) or a transition between health states (e.g., <code>transition_id</code>).
+In some cases, the health-related index \(h\) can be suppressed and separate models
+can be fit for each health index. This is, for instance, the case in a partitioned survival 
+model where separate models are fit for each survival endpoint. Likewise, models 
+can be fit without multiple treatment lines as would, again, be the case in a 
+partitioned survival analysis where sequential treatment would be incorporated by 
+adding additional health states rather than by using the index \(j\).</p>
+<p>The rows of the matrices in <code>X</code> must be sorted in a manner consistent with the id variables.
+The sorting order should be the same as specified in <code><a href='expand_hesim_data.html'>expand_hesim_data</a></code>; that is,
+the rows of <code>X</code> must be sorted by: (i) <code>strategy_id</code>, (ii) <code>line</code>, 
+(iii) <code>patient_id</code>, and (iv) the health-related id variable (either <code>state_id</code> or
+ <code>transition_id</code>).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -237,8 +244,6 @@ the rows of <code>X</code> must be sorted by prioritizing id variables as follow
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>

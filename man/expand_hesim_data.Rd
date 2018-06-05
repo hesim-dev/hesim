@@ -15,8 +15,8 @@ expand_hesim_data(data, by = c("strategies", "patients"))
 This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
 Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. 
 The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by 
-prioritizing id variables as follows: 
-\code{strategy_id}, \code{transition_id}, \code{patient_id}, \code{line}, and \code{state_id}.
+prioritizing id variables as follows: (i) \code{strategy_id}, (ii) \code{line}, (iii) \code{patient_id},
+(iv) the health-related id variable (either \code{state_id} or \code{transition_id}).
 }
 \description{
 Expand the data tables from an object of class \code{\link{hesim_data}} into a single \code{\link{data.table}} 

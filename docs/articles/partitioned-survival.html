@@ -76,7 +76,7 @@
       <h1>Partitioned survival models</h1>
                         <h4 class="author">Devin Incerti</h4>
             
-            <h4 class="date">2018-05-22</h4>
+            <h4 class="date">2018-06-05</h4>
           </div>
 
     
@@ -87,7 +87,27 @@
 <a href="#overview" class="anchor"></a>Overview</h2>
 <p>An N-state partitioned survival model (PSM) simulates the probability that a patient is in each of N distinct health states at a given point of time when treated by a particular therapy. State membership is estimated from a set of non-mutually exclusive survival curves; for an N-state model, N-1 survival curves are required.</p>
 <p>The cumulative survival function, <span class="math inline">\(S(t)_n\)</span>, represents the probability that a patient survives to health state <span class="math inline">\(n\)</span> or to a lower indexed state beyond time <span class="math inline">\(t\)</span>. The probability that a patient is in health state 1 is always just <span class="math inline">\(S(t)_1\)</span>. State membership in health states <span class="math inline">\(2,\ldots, n-1\)</span> is calculated as <span class="math inline">\(S(t)_{n} - S(t)_{n-1}\)</span>. Finally, the probability of being in the final health state <span class="math inline">\(n\)</span> (i.e., the dead state) is <span class="math inline">\(1-S(t)_{n-1}\)</span>, or one minus the overall survival curve.</p>
-<p>In <code>hesim</code>, an N-state PSM consists of three types of separate statistical models: a set of N-1 survival models, a model of the utility values to assign to each health state, and a set of models for costs to assign to each health state. Multiple cost models can be used to categorize groups into different categories (e.g., costs of medical care, drug costs). All models can either be fit using R or constructed with external data.</p>
+<p>In <code>hesim</code>, an N-state PSM consists of three types of separate statistical models: a set of N-1 survival models, a model of the utility values to assign to each health state, and a set of models for costs to assign to each health state. Multiple cost models can be used to categorize costs into different categories (e.g., costs of medical care, drug costs). All models can either be fit using R or constructed with external data.</p>
+<p>Separate survival curves are predicted for each treatment strategy and patient. That is, the probability of survival given a survival model with <span class="math inline">\(L\)</span> parameters, <span class="math inline">\(\alpha_1, \ldots, \alpha_L\)</span>, for patient <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span> with treatment strategy <span class="math inline">\(k\)</span> is given by,</p>
+<p><span class="math display">\[
+\begin{aligned}
+S_{ik}(t) &amp;= 1 - F(y_{ik} | \alpha_1(x_{1, ik}), \ldots, \alpha_L(x_{L, ik})),\\
+\alpha_l &amp;=  g^{-1}(x_{l,ik}^T \beta_l),
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(F(\cdot)\)</span> is the cumulative distribution function for a non-negative continuous variable, <span class="math inline">\(y\)</span>, reflecting time to an event, <span class="math inline">\(g^{-1}(\cdot)\)</span> is an inverse transformation function, <span class="math inline">\(\beta_l\)</span>, is a vector of coefficients and <span class="math inline">\(x_l\)</span> is an input vector of covariates. Likewise, we predict utility and cost values, <span class="math inline">\(v\)</span>, in health state <span class="math inline">\(h\)</span> for patient <span class="math inline">\(i\)</span> with treatment strategy <span class="math inline">\(k\)</span>,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\hat{v} &amp;= E(v_{hik} | \alpha_1(x_{1, ikl}), \ldots, \alpha_L(x_{L, hik})),\\
+\alpha_l &amp;=  g^{-1}(x_{l, hik}^T \beta_l).
+\end{aligned}
+\]</span> Quality-adjusted life-years (QALYs) and total costs associated with a given health state for a given treatment strategy and patient are calculated by integrating the “weighted” probability of survival, where weights are a function of the discount factor and predicted state values. Mathematically, QALYs and total costs for the <span class="math inline">\(m\)</span>th cost category are calculated as,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\rm{QALYs}_{hik} &amp;= \int_{0}^{T} q_{hik} e^{-rt} p_{hik}(t)dt, \\
+\rm{Costs}_{m,hik} &amp;= \int_{0}^{T} c_{m,hik} e^{-rt} p_{hik}(t)dt,
+\end{aligned}
+\]</span> where <span class="math inline">\(t\)</span> denotes time (typically a year), <span class="math inline">\(q\)</span> is a quality-of-life weight, <span class="math inline">\(c\)</span> represents (assmuming that time is measured in years) annualized costs, <span class="math inline">\(r\)</span> is the discount rate, and <span class="math inline">\(p(t)\)</span> is the probability of being in a given health state at a given time, and QALYs and costs are calculated over <span class="math inline">\(T\)</span> time periods.</p>
 </div>
 <div id="an-example-4-state-psm" class="section level2">
 <h2 class="hasAnchor">
@@ -285,7 +305,7 @@ stateprobs[, strategy <span class="op">:</span><span class="er">=</span><span cl
 <div id="simulating-costs-and-qalys" class="section level3">
 <h3 class="hasAnchor">
 <a href="#simulating-costs-and-qalys" class="anchor"></a>Simulating costs and QALYs</h3>
-<p>Finally, we can simulate discounted costs and QALYs by numerically integrating the “weighted” probabilities in <code>$stateprobs_</code>, where weights are a function of the discount factor and the predicted state values (for more details see the <a href="../reference/PartSurv.html">PartSurv</a> reference page). Costs and QALYs are produced for each treatment strategy, patient, health state, and sampled parameter set.</p>
+<p>Finally, we can simulate discounted costs and QALYs by numerically integrating the “weighted” probabilities in <code>$stateprobs_</code> as described above. Costs and QALYs are produced for each treatment strategy, patient, health state, and sampled parameter set.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Costs</span>
 part.surv<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(part.surv<span class="op">$</span>costs_)</code></pre></div>
@@ -300,12 +320,12 @@ part.surv<span class="op">$</span><span class="kw">sim_costs</span>(<span class=
 part.surv<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(part.surv<span class="op">$</span>qalys_)</code></pre></div>
 <pre><code>##    state_id sample strategy_id patient_id   dr  type     qalys
-## 1:        1      1           1          1 0.03 qalys 0.4666819
-## 2:        1      1           1          2 0.03 qalys 0.4474647
-## 3:        1      1           1          3 0.03 qalys 0.4769103
-## 4:        1      1           2          1 0.03 qalys 0.4817532
-## 5:        1      1           2          2 0.03 qalys 0.4619193
-## 6:        1      1           2          3 0.03 qalys 0.4923095</code></pre>
+## 1:        1      1           1          1 0.03 qalys 0.4859029
+## 2:        1      1           1          2 0.03 qalys 0.4658942
+## 3:        1      1           1          3 0.03 qalys 0.4965526
+## 4:        1      1           2          1 0.03 qalys 0.5015949
+## 5:        1      1           2          2 0.03 qalys 0.4809441
+## 6:        1      1           2          3 0.03 qalys 0.5125860</code></pre>
 </div>
 </div>
 </div>

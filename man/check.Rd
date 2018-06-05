@@ -30,6 +30,9 @@ check(object, ...)
 \arguments{
 \item{object}{object to check.}
 
+\item{inner_class}{When checking a list of objects, the class of elements within
+the inner most list.}
+
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 }
 \value{

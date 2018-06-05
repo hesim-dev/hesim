@@ -123,8 +123,8 @@ of class "expanded_hesim_data". See the description of the return value for deta
     <p>This function is similar to <code>expand.grid</code>, but works for data frames or data tables. 
 Specifically, it creates a <code>data.table</code> from all combinations of the supplied tables in <code>data</code>. 
 The supplied tables are determined using the <code>by</code> argument. The resulting dataset is sorted by 
-prioritizing id variables as follows: 
-<code>strategy_id</code>, <code>transition_id</code>, <code>patient_id</code>, <code>line</code>, and <code>state_id</code>.</p>
+prioritizing id variables as follows: (i) <code>strategy_id</code>, (ii) <code>line</code>, (iii) <code>patient_id</code>,
+(iv) the health-related id variable (either <code>state_id</code> or <code>transition_id</code>).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

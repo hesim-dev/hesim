@@ -11,7 +11,7 @@ Features of the current version include:
 * Modeling patient heterogeneity 
 * Parameter estimates from either an R based model or from an external source
 * Parameter uncertainty propagated with probabilistic sensitivity analysis
-* Sampling parameters of a statistical model fit with R using Monte Carlo methods or bootstrapping.
+* Sampling parameters of a statistical model fit with R using Monte Carlo methods or bootstrapping
 <!--- * Separate survival models during period of observed data and for extrapolation. -->
 * Simulation code written in `C++` to boost performance
 

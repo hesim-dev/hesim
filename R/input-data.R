@@ -166,8 +166,8 @@ check_hesim_data_type <- function(tbl, tbl_name){
 #' @return This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
 #' Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. 
 #' The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by 
-#' prioritizing id variables as follows: 
-#' \code{strategy_id}, \code{transition_id}, \code{patient_id}, \code{line}, and \code{state_id}.
+#' prioritizing id variables as follows: (i) \code{strategy_id}, (ii) \code{line}, (iii) \code{patient_id},
+#' (iv) the health-related id variable (either \code{state_id} or \code{transition_id}).
 #' @examples 
 #' dt.strategies <- data.frame(strategy_id = c(1, 2))
 #' dt.patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
@@ -231,12 +231,12 @@ sort_hesim_data <- function(data, sorted_by){
 #' Input data for a statistical model
 #' 
 #' Create an object of class "input_data", which contains data for use
-#' as an input to a statistical model. The element \code{X} is the input matrix
-#' used for prediction, and the id variables determine the dimensions for
-#'  which predictions should be made (e.g,
-#' by strategy and patient, by strategy, patient, and health state, ...). This object can 
-#' be created more easily using the generic function \code{\link{form_input_data}}. See "details"
-#' for information on soring the rows of the matrices in \code{X}.
+#' as an input to a statistical model. Data consists of (i) input matrices, \code{X},
+#' (ii) id variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
+#' the \code{X} matrices. More details are provided under "Details" below. Note that an "input_data" 
+#' object can often be created more easily using the generic function 
+#' \code{\link{form_input_data}}. 
+#' 
 #' @param X An input matrix or list of input matrices used for predicting
 #' outcomes from a statistical model. The number of matrices depends on the statistical model
 #' used. 
@@ -254,20 +254,33 @@ sort_hesim_data <- function(data, sorted_by){
 #' @param state_id A numeric vector of integers denoting the health state represented by each row
 #' in \code{X}.
 #' @param n_states A scalar denoting the number of unique health states.
-#' @param transition_id Only used for multi-state modeling. A numeric vector denoting the 
-#' transition represented by each row in \code{X} (for jointly estimated models) or 
-#' indexing distinct matrices in \code{X} (for separately estimated models). 
-#' Not supported by currently available models.
+#' @param transition_id A numeric vector denoting the 
+#' health state transition represented by each row in \code{X}. This must only be specified when
+#' estimating the health state transitions with a joint likelihood function. If independent
+#' models are fit for each transition, then separate \code{X} matrices must be specified
+#' for each transition. Note that this is not currently supported but
+#' will be supported once \code{hesim} provides support for state transition modeling.
 #' @param n_transitions A scalar denoting the number of unique transitions. 
 #' Not supported by currently available models. 
 #' @param time_fun A pointer to a C++ functor that can be used to update \code{X} as a function
 #' of time in a simulation model. Not currently supported.
-#' @details The rows of the matrices in \code{X} must be sorted in a manner consistent with the id variables.
-#' Sorting order should be the same as specified in \code{\link{expand_hesim_data}}; that is,
-#' the rows of \code{X} must be sorted by prioritizing id variables as follows: \code{strategy_id},
-#' \code{transition_id}, \code{patient_id}, \code{line}, and \code{state_id}.
-#' @return An object of class "input_data", with elements equal to the specified 
-#' function arguments.
+#' 
+#' @details Each row of each matrix \code{X} is an input vector, \eqn{x_{hijk}}, where \eqn{h} denotes
+#' a health-related index, \eqn{i} indexes a patient, \eqn{j} indexes a treatment line,
+#' and \eqn{k} is a treatment strategy. A health-related index is either a health state
+#' (e.g., \code{state_id}) or a transition between health states (e.g., \code{transition_id}).
+#' In some cases, the health-related index \eqn{h} can be suppressed and separate models
+#' can be fit for each health index. This is, for instance, the case in a partitioned survival 
+#' model where separate models are fit for each survival endpoint. Likewise, models 
+#' can be fit without multiple treatment lines as would, again, be the case in a 
+#' partitioned survival analysis where sequential treatment would be incorporated by 
+#' adding additional health states rather than by using the index \eqn{j}.
+#' 
+#' The rows of the matrices in \code{X} must be sorted in a manner consistent with the id variables.
+#' The sorting order should be the same as specified in \code{\link{expand_hesim_data}}; that is,
+#' the rows of \code{X} must be sorted by: (i) \code{strategy_id}, (ii) \code{line}, 
+#' (iii) \code{patient_id}, and (iv) the health-related id variable (either \code{state_id} or
+#'  \code{transition_id}).
 #' @examples 
 #' dt.strategies <- data.frame(strategy_id = c(1, 2))
 #' dt.patients <- data.frame(patient_id = seq(1, 3), 

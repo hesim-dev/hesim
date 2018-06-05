@@ -15,7 +15,34 @@ An N-state partitioned survival model (PSM) simulates the probability that a pat
 
 The cumulative survival function, $S(t)_n$, represents the probability that a patient survives to health state $n$ or to a lower indexed state beyond time $t$. The probability that a patient is in health state 1 is always just $S(t)_1$. State membership in health states $2,\ldots, n-1$ is calculated as $S(t)_{n} - S(t)_{n-1}$. Finally, the probability of being in the final health state $n$ (i.e., the dead state) is $1-S(t)_{n-1}$, or one minus the overall survival curve.
 
-In `hesim`, an N-state PSM consists of three types of separate statistical models: a set of N-1 survival models, a model of the utility values to assign to each health state, and a set of models for costs to assign to each health state. Multiple cost models can be used to categorize groups into different categories (e.g., costs of medical care, drug costs). All models can either be fit using R or constructed with external data. 
+In `hesim`, an N-state PSM consists of three types of separate statistical models: a set of N-1 survival models, a model of the utility values to assign to each health state, and a set of models for costs to assign to each health state. Multiple cost models can be used to categorize costs into different categories (e.g., costs of medical care, drug costs). All models can either be fit using R or constructed with external data.
+
+Separate survival curves are predicted for each treatment strategy and patient. That is, the probability of survival given a survival model with $L$ parameters, $\alpha_1, \ldots, \alpha_L$, for patient $i$ at time $t$ with treatment strategy $k$ is given by,
+
+$$
+\begin{aligned}
+S_{ik}(t) &= 1 - F(y_{ik} | \alpha_1(x_{1, ik}), \ldots, \alpha_L(x_{L, ik})),\\
+\alpha_l &=  g^{-1}(x_{l,ik}^T \beta_l),
+\end{aligned}
+$$
+
+where $F(\cdot)$ is the cumulative distribution function for a non-negative continuous variable, $y$, reflecting time to an event, $g^{-1}(\cdot)$ is an inverse transformation function,  $\beta_l$, is a vector of coefficients and $x_l$ is an input vector of covariates. Likewise, we predict utility and cost values, $v$, in health state $h$ for  patient $i$ with treatment strategy $k$,  
+
+$$
+\begin{aligned}
+\hat{v} &= E(v_{hik} | \alpha_1(x_{1, ikl}), \ldots, \alpha_L(x_{L, hik})),\\
+\alpha_l &=  g^{-1}(x_{l, hik}^T \beta_l).
+\end{aligned}
+$$
+Quality-adjusted life-years (QALYs) and total costs associated with a given health state for a given treatment strategy and patient are calculated by integrating the "weighted" probability of survival, where weights are a function of the discount factor and predicted state values. Mathematically, QALYs and total costs for the $m$th cost category are calculated as,
+
+$$
+\begin{aligned}
+\rm{QALYs}_{hik} &= \int_{0}^{T} q_{hik} e^{-rt} p_{hik}(t)dt, \\
+\rm{Costs}_{m,hik} &= \int_{0}^{T} c_{m,hik} e^{-rt} p_{hik}(t)dt,
+\end{aligned}
+$$
+where $t$ denotes time (typically a year), $q$ is a quality-of-life weight, $c$ represents (assmuming that time is measured in years) annualized costs, $r$ is the discount rate, and $p(t)$ is the probability of being in a given health state at a given time, and QALYs and costs are calculated over $T$ time periods.
 
 ## An example 4-state PSM
 To illustrate a partitioned survival analysis, consider the evaluation of a two-line sequential treatment strategy in oncology using a 4-state PSM. The 4 health states might be:
@@ -213,7 +240,7 @@ ggplot(stateprobs[strategy_id %in% c(1, 2)],
 ```
 
 ### Simulating costs and QALYs
-Finally, we can simulate discounted costs and QALYs by numerically integrating the "weighted" probabilities in `$stateprobs_`, where weights are a function of the discount factor and the predicted state values (for more details see the [PartSurv](../reference/PartSurv.html) reference page). Costs and QALYs are produced for each treatment strategy, patient, health state, and sampled parameter set.
+Finally, we can simulate discounted costs and QALYs by numerically integrating the "weighted" probabilities in `$stateprobs_` as described above. Costs and QALYs are produced for each treatment strategy, patient, health state, and sampled parameter set.
 
 ```{r, warning = FALSE, message = FALSE}
 # Costs
