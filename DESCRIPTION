@@ -3,7 +3,8 @@ Type: Package
 Title: Health-Economic Simulation Modeling and Decision Analysis
 Version: 0.1.0.9000
 Authors@R: c(
-    person("Devin", "Incerti", , "devin.incerti@gmail.com", c("aut", "cre"))
+    person("Devin", "Incerti", , "devin.incerti@gmail.com", c("aut", "cre")),
+    person("Jeroen P.", "Jansen", , "jeroen.jansen@thevalueinitiative.org", role = "aut")
     )
 Description: Functionality for developing and analyzing the output of health-economic 
     simulation models. Contains random sampling functions for conducting probabilistic  
