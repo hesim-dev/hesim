@@ -94,9 +94,9 @@ Discounted costs and QALYs are calculated by integrating the "weighted" probabil
 Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
 Mathematically, discounted costs and QALYs in health state \eqn{s} are calculated as,
 
-\deqn{\int_0^T w_s(t)\beta(t)P_s(t) dt },
+\deqn{\int_0^T w_h e^{-rt} P_h(t) dt },
 
-where for state \eqn{s} and time {t}, \eqn{w_s(t)} is the predicted cost or QALY weight, \eqn{\beta(t)} is the discount factor, and \eqn{P_s(t)} is the probability of being in a given state. The integral is calculated numerically using the composite trapezoid rule from the points in \code{t_}.
+where for health state \eqn{h} and time {t}, \eqn{w_h} is the predicted cost or QALY weight, \eqn{r} is the discount rate, and \eqn{P_h(t)} is the probability of being in a given health state. The integral is calculated numerically using the composite trapezoid rule from the points in \code{t_}.
 
 }
 

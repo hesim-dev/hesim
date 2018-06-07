@@ -158,8 +158,8 @@ using <code>sim_stateprobs</code>.</p></dd>
     <p>Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state. 
 Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
 Mathematically, discounted costs and QALYs in health state \(s\) are calculated as,
-    $$\int_0^T w_s(t)\beta(t)P_s(t) dt $$,</p>
-<p>where for state \(s\) and time t, \(w_s(t)\) is the predicted cost or QALY weight, \(\beta(t)\) is the discount factor, and \(P_s(t)\) is the probability of being in a given state. The integral is calculated numerically using the composite trapezoid rule from the points in <code>t_</code>.</p>
+    $$\int_0^T w_h e^{-rt} P_h(t) dt $$,</p>
+<p>where for health state \(h\) and time t, \(w_h\) is the predicted cost or QALY weight, \(r\) is the discount rate, and \(P_h(t)\) is the probability of being in a given health state. The integral is calculated numerically using the composite trapezoid rule from the points in <code>t_</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -209,12 +209,12 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 <span class='no'>part.surv</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>part.surv</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'>head</span>(<span class='no'>part.surv</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id   dr    type    costs
-#&gt; 1:        1      1           1          1 0.03 medical 16785.56
-#&gt; 2:        1      1           1          2 0.03 medical 16006.68
-#&gt; 3:        1      1           1          3 0.03 medical 18705.41
-#&gt; 4:        1      1           2          1 0.03 medical 16785.56
-#&gt; 5:        1      1           2          2 0.03 medical 16006.68
-#&gt; 6:        1      1           2          3 0.03 medical 18705.41</div></pre>
+#&gt; 1:        1      1           1          1 0.03 medical 23994.50
+#&gt; 2:        1      1           1          2 0.03 medical 22704.96
+#&gt; 3:        1      1           1          3 0.03 medical 19475.93
+#&gt; 4:        1      1           2          1 0.03 medical 23994.50
+#&gt; 5:        1      1           2          2 0.03 medical 22704.96
+#&gt; 6:        1      1           2          3 0.03 medical 19475.93</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -236,7 +236,7 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Devin Incerti.</p>
+  <p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
 </div>
 
 <div class="pkgdown">
