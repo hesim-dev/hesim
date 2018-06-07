@@ -95,7 +95,7 @@ hesim::WeibullNma::WeibullNma(double a0, double a1)
 }
 
 void hesim::WeibullNma::set_params(std::vector<double> params){
-  wei_ = create_from_Nma(params[0], params[1]);
+  wei_ = create_from_Nma(params[0], exp(params[1]));
 }
 
 double hesim::WeibullNma::pdf(double x) const{

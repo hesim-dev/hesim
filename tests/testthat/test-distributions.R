@@ -51,7 +51,7 @@ expect_equal(flexsurv::mean_weibull(shape, scale),
 # statistical modeling
 ## intercept only
 s1 <- flexsurvreg(Surv(recyrs, censrec) ~ 1, data = bc,
-            dist = hesim.survdists$weibullNMA)
+            dist = hesim_survdists$weibullNMA)
 s2 <- flexsurvreg(Surv(recyrs, censrec) ~ 1, data = bc,
             dist = "weibullPH")
 s1.a1 <- s1$res.t["a1", "est"]; s1.a0 <- s1$res.t["a0", "est"]
@@ -61,7 +61,7 @@ expect_equal(s1.a0, log(exp(s2.shape) * exp(s2.scale)))
 
 # covariates on a0
 s1 <- flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
-            dist = hesim.survdists$weibullNMA)
+            dist = hesim_survdists$weibullNMA)
 s2 <- flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
             dist = "weibullPH")
 s1.a0 <- s1$res.t["a0", "est"]; s1.a1 <- s1$res.t["a1", "est"]
@@ -78,7 +78,7 @@ expect_equal(s1$res.t["groupMedium"],
 # covariates on a0 and a1
 s1 <- suppressWarnings(flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
             anc = list(a1 = ~ group),
-            dist = hesim.survdists$weibullNMA))
+            dist = hesim_survdists$weibullNMA))
 s2 <- suppressWarnings(flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
                   anc = list(shape = ~ group),
             dist = "weibullPH"))

@@ -150,7 +150,7 @@ mean_weibullNMA = function(a0, a1){
 #'    (a scale parameter, for instance) at the mean of \code{t}.}
 #' }
 ##' @export
-hesim.survdists <- list(
+hesim_survdists <- list(
   weibullNMA = list(
              name = "weibullNMA",
              pars = c("a0", "a1"),

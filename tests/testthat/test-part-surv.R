@@ -21,7 +21,7 @@ curves.edata <- expand_hesim_data(hesim.dat, by = c("strategies", "patients"))
 
 # Fit survival curves
 surv.data <- part_surv4_simdata$survival
-fits.exp <- fits.wei <- fits.splines <- vector(mode = "list", length = 3)
+fits.exp <- fits.wei <- fits.weinma <- fits.splines <- vector(mode = "list", length = 3)
 names(fits.exp) <- names(fits.wei) <- names(fits.splines) <- paste0("curves", seq(1, 3))
 formulas <- list("Surv(endpoint1_time, endpoint1_status) ~ age",
                  "Surv(endpoint2_time, endpoint2_status) ~ age",
@@ -33,10 +33,14 @@ for (i in 1:3){
   fits.wei[[i]] <- flexsurv::flexsurvreg(as.formula(formulas[[i]]), 
                                          data = surv.data,
                                           dist = "weibull")
+  fits.weinma[[i]] <- suppressWarnings(flexsurv::flexsurvreg(as.formula(formulas[[i]]), 
+                                         data = surv.data,
+                                         dist = hesim_survdists$weibullNMA))
   fits.splines[[i]] <- flexsurv::flexsurvspline(as.formula(formulas[[i]]), data = surv.data)
 }
 fits.exp <- partsurvfit(flexsurvreg_list(fits.exp), data = surv.data)
 fits.wei <- partsurvfit(flexsurvreg_list(fits.wei), data = surv.data)
+fits.weinma <- partsurvfit(flexsurvreg_list(fits.weinma), data = surv.data)
 fits.splines <- partsurvfit(flexsurvreg_list(fits.splines), data = surv.data)
 
 test_that("form_PartSurvCurves", {
@@ -88,15 +92,19 @@ test_that("PartSurvCurves", {
   
   compare_surv_summary(fits.wei, tmp.data, "survival")
   compare_surv_summary(fits.splines, tmp.data, "survival")
+  compare_surv_summary(fits.weinma, tmp.data, "survival")
   
   compare_surv_summary(fits.wei, tmp.data, "hazard")
   compare_surv_summary(fits.splines, tmp.data, "hazard")
+  compare_surv_summary(fits.weinma, tmp.data, "hazard")
   
   compare_surv_summary(fits.wei, tmp.data, "cumhazard")
   compare_surv_summary(fits.splines, tmp.data, "cumhazard")
+  compare_surv_summary(fits.weinma, tmp.data, "cumhazard")
   
   compare_surv_summary(fits.wei, tmp.data, "rmst")
   compare_surv_summary(fits.splines, tmp.data, "rmst")
+  compare_surv_summary(fits.weinma, tmp.data, "rmst")
   
   # Quantiles
   part.surv.curves <- form_PartSurvCurves(fits.exp, data = curves.edata, n = N)
