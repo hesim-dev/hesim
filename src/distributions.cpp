@@ -1,18 +1,6 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <hesim/distributions.h>
 
-/***************
-* Free functions
-***************/
-// [[Rcpp::export]]
-std::vector<double> C_weibull_to_weibullNMA(double shape, double scale){
-  double scalePH = pow(scale, -shape);
-  std::vector<double> a(2);
-  a[0] = log(shape * scalePH);
-  a[1] = shape - 1;
-  return a;
-}
-
 /**************************
 * Exponential distribution
 **************************/
@@ -56,6 +44,13 @@ hesim::Weibull::Weibull(double shape, double scale){
     scale_ = scale;
 }
 
+hesim::Weibull hesim::Weibull::create_from_Nma(double a0, double a1){
+  double shape = a1 + 1;
+  double scalePH = exp(a0)/shape;
+  double scale = pow(scalePH, -1/shape);
+  return Weibull(shape, scale);
+}
+
 void hesim::Weibull::set_params(std::vector<double> params){
   shape_ = exp(params[0]);
   scale_ = exp(params[1]);
@@ -83,6 +78,48 @@ double hesim::Weibull::cumhazard(double x) const{
 
 double hesim::Weibull::random() const{
     return R::rweibull(shape_, scale_);
+}
+
+/******************************
+* Weibull distribution for NMA
+******************************/
+hesim::Weibull hesim::WeibullNma::create_from_Nma(double a0, double a1){
+  double shape = a1 + 1;
+  double scalePH = exp(a0)/shape;
+  double scale = pow(scalePH, -1/shape);
+  return Weibull(shape, scale);
+}
+
+hesim::WeibullNma::WeibullNma(double a0, double a1)
+  : wei_(create_from_Nma(a0, a1)){
+}
+
+void hesim::WeibullNma::set_params(std::vector<double> params){
+  wei_ = create_from_Nma(params[0], params[1]);
+}
+
+double hesim::WeibullNma::pdf(double x) const{
+    return wei_.pdf(x);
+}
+
+double hesim::WeibullNma::cdf(double x) const{
+    return wei_.cdf(x);
+}
+
+double hesim::WeibullNma::quantile(double p) const{
+    return wei_.quantile(p);
+}
+
+double hesim::WeibullNma::hazard(double x) const{
+    return wei_.hazard(x);
+}
+
+double hesim::WeibullNma::cumhazard(double x) const{
+    return wei_.cumhazard(x);
+}
+
+double hesim::WeibullNma::random() const{
+    return wei_.random();
 }
 
 /*******************
@@ -794,10 +831,10 @@ hesim::Distribution * hesim::select_distribution(std::string dist_name,
         d = new hesim::Gompertz(parameters[0], exp(parameters[1]));
     }
     else if (dist_name == "llogis"){
-        d = new hesim::LogLogistic(exp(parameters[0]), exp(parameters[1])); 
+        d = new hesim::LogLogistic(exp(parameters[0]), exp(parameters[1]));
     }
     else if (dist_name == "gengamma"){
-        d = new hesim::GeneralizedGamma(parameters[0], exp(parameters[1]), parameters[2]); 
+        d = new hesim::GeneralizedGamma(parameters[0], exp(parameters[1]), parameters[2]);
     }
     else{
         Rcpp::stop("The selected distribution is not available.");
@@ -838,6 +875,17 @@ RCPP_MODULE(Distributions){
     .method("hazard", &hesim::Weibull::hazard)
     .method("cumhazard", &hesim::Weibull::cumhazard)
     .method("random", &hesim::Weibull::random)
+  ;
+  
+  Rcpp::class_<hesim::WeibullNma>("WeibullNma")
+    .derives<hesim::Distribution>("Distribution")
+    .constructor<double, double>()
+    .method("pdf", &hesim::WeibullNma::pdf)
+    .method("cdf", &hesim::WeibullNma::cdf)
+    .method("quantile", &hesim::WeibullNma::quantile)
+    .method("hazard", &hesim::WeibullNma::hazard)
+    .method("cumhazard", &hesim::WeibullNma::cumhazard)
+    .method("random", &hesim::WeibullNma::random)
   ;
   
   Rcpp::class_<hesim::Gamma>("Gamma")

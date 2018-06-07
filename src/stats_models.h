@@ -38,6 +38,9 @@ std::unique_ptr<hesim::Distribution> init_Distribution_ptr(ParamsSurv params_sur
   else if (dist_name == "weibull.quiet" || dist_name == "weibull"){
     d = new hesim::Weibull(1, 1);
   }
+  else if (dist_name == "weibullNMA"){
+    d = new hesim::WeibullNma(0, 0); // equivalent to shape = 1, scale = 1 wih weibull
+  }
   else if (dist_name == "gamma"){
     d = new hesim::Gamma(1, 1);
   }

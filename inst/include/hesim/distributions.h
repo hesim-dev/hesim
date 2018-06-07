@@ -45,6 +45,23 @@ private:
 
 public:
   Weibull(double shape, double scale);
+  static Weibull create_from_Nma(double a0, double a1);
+  void set_params(std::vector<double> params);
+  double pdf(double x) const;
+  double cdf(double x) const;
+  double quantile(double p) const;
+  double hazard(double x) const;
+  double cumhazard(double x) const;
+  double random() const;
+};
+
+class WeibullNma : public Distribution {
+private:
+  Weibull wei_;
+  Weibull create_from_Nma(double a0, double a1);
+
+public:
+  WeibullNma(double a0, double a1);
   void set_params(std::vector<double> params);
   double pdf(double x) const;
   double cdf(double x) const;
@@ -183,7 +200,7 @@ public:
   double random() const;
 };
 
-Distribution * select_distribution(std::string dist_name, 
+Distribution * select_distribution(std::string dist_name,
                                    std::vector<double> parameters);
 
 std::unique_ptr<Distribution> init_Distribution_ptr(std::string dist_name,

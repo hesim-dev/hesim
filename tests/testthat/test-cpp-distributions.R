@@ -4,14 +4,6 @@ library("numDeriv")
 library("Rcpp")
 module <- Rcpp::Module('Distributions', PACKAGE = "hesim")
 
-# Free functions ---------------------------------------------------------------
-shape <- 2
-scale <- 3
-parsC <- hesim:::C_weibull_to_weibullNMA(shape, scale)
-parsR <- hesim:::weibull_to_weibullNMA(shape, scale)
-expect_equal(parsC[1], parsR$a0)
-expect_equal(parsC[2], parsR$a1)
-
 # Exponential distribution -----------------------------------------------------
 test_that("Exponential", {
   Exponential <- module$Exponential
@@ -67,6 +59,35 @@ test_that("Weibull", {
   r1 <- wei$random()
   set.seed(101)
   r2 <- rweibull(1, shape = sh, scale = sc)
+  expect_equal(r1, r2)
+})
+
+# Weibull distribution for NMA -------------------------------------------------
+test_that("WeibullNma", {
+  WeibullNma <- module$WeibullNma
+  a0 <- -2.07; a1 <- .2715
+  wei <- new(WeibullNma, a0 = a0, a1 = a1)
+  
+  # pdf
+  expect_equal(wei$pdf(4), dweibullNMA(4, a0 = a0, a1 = a1))
+  
+  # cdf
+  expect_equal(wei$cdf(4), pweibullNMA(4, a0 = a0, a1 = a1))
+  
+  # quantile
+  expect_equal(wei$quantile(.7), qweibullNMA(.7, a0 = a0, a1 = a1))
+  
+  # hazard
+  expect_equal(wei$hazard(2), hweibullNMA(2, a0 = a0, a1 = a1))
+  
+  # cumhazard
+  expect_equal(wei$cumhazard(2), HweibullNMA(2, a0 = a0, a1 = a1)) 
+  
+  # random
+  set.seed(101)
+  r1 <- wei$random()
+  set.seed(101)
+  r2 <- rweibullNMA(1, a0 = a0, a1 = a1)
   expect_equal(r1, r2)
 })
 
