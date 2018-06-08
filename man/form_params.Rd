@@ -19,7 +19,7 @@ form_params(object, n = 1000, point_estimate = FALSE, ...)
   point_estimate = FALSE, ...)
 
 \method{form_params}{partsurvfit}(object, n = 1000, point_estimate = FALSE,
-  bootstrap = TRUE, ...)
+  bootstrap = TRUE, max_errors = 0, ...)
 }
 \arguments{
 \item{object}{A statistical model to randomly sample parameters from.}
@@ -34,6 +34,8 @@ and no samples are drawn.}
 \item{bootstrap}{If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are 
 drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
 parameters are bootstrapped using \code{\link{bootstrap}}.}
+
+\item{max_errors}{Equivalent to the \code{max_errors} argument in \code{\link{bootstrap}}.}
 }
 \value{
 An object prefixed by \code{params_}. Mapping between \code{form_params} 

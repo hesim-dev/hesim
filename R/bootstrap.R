@@ -4,15 +4,20 @@
 #' of a fitted statistical model.
 #' @param object A statistical model.
 #' @param B Number of bootstrap replications.
+#' @param max_errors Maximum number of errors that are allowed when fitting statistical models
+#' during the bootstrap procedure. This argument may be useful if, for instance, the model
+#' fails to converge during some bootstrap replications. Default is 0.
 #' @param ... Further arguments passed to or from other methods. Currently unused.
 #' 
 #' @return Sampled values of the parameters.
+#' @export
 bootstrap <- function (object, B, ...) {
-  UseMethod("bootstrap")
+  UseMethod("bootstrap", object)
 }
 
+#' @name bootstrap
 #' @export
-bootstrap.partsurvfit <- function(object, B){
+bootstrap.partsurvfit <- function(object, B, max_errors = 0, ...){
   n.obs <- nrow(object$data)
   n.models <- length(object$models)
   boot <- vector(mode = "list", length = n.models)
@@ -22,19 +27,43 @@ bootstrap.partsurvfit <- function(object, B){
   }
   
   # Bootstrap replications
-  for(i in 1:B){
+  n.errors <- 0
+  i <- 1
+  while(i <= B){
     index <- sample(x = 1:n.obs, size = n.obs, replace = TRUE)
     data.i <- object$data[index, ]
     fits <- vector(mode = "list", length = n.models)
+    error.j <- 0
     for (j in 1:n.models){
       object$models[[j]]$call$formula <- object$models[[j]]$all.formulae[[1]]
-      fit <- stats::update(object$models[[j]],
+      fit <- try(stats::update(object$models[[j]],
                     #formula = object$models[[j]]$all.formulae[[1]], 
                     # anc = object$models[[j]]$all.formulae[-1], but don't think should be needed
-                    data = data.i)
-      boot[[j]][i, ] <- fit$res.t[, "est"]
+                    data = data.i),
+                 silent = FALSE)
+      if(inherits(fit ,"try-error")){
+        n.errors <- n.errors + 1
+        error.j <- error.j + 1
+        if (n.errors > max_errors){
+              msg <- paste0("There were ", n.errors, " errors when fitting the statistical model, ",
+                  "which is greater than the maximum number of allowed errors (max_errors = ",
+                  max_errors, ").")
+              stop(msg)
+        }
+        break
+      } else{
+        boot[[j]][i, ] <- fit$res.t[, "est"]
+      }
+    }
+    if (error.j == 0){
+      i <- i + 1
     }
   } # end bootstrap loop
+  if (n.errors > 0){
+    msg <- paste0("There were ", n.errors, " errors when fitting the statistical model ",
+                  "during the bootstrap procedure.")
+    warning(msg)
+  }
   
   # Output for params_surv_list
   params.surv.list <- vector(mode = "list", length = n.models)

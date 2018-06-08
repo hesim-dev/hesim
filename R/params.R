@@ -327,6 +327,7 @@ form_params_joined <- function(object, n, point_estimate, inner_class){
 #' @param bootstrap If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are 
 #' drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
 #' parameters are bootstrapped using \code{\link{bootstrap}}. 
+#' @param max_errors Equivalent to the \code{max_errors} argument in \code{\link{bootstrap}}. 
 #' @param ... Further arguments passed to or from other methods. Currently unused.
 #' @return An object prefixed by \code{params_}. Mapping between \code{form_params} 
 #' and the classes of the returned objects are: 
@@ -446,14 +447,14 @@ form_params.flexsurvreg_list <- function(object, n = 1000, point_estimate = FALS
 #' @export
 #' @rdname form_params
 form_params.partsurvfit <- function(object, n = 1000, point_estimate = FALSE, 
-                                      bootstrap = TRUE, ...){
+                                      bootstrap = TRUE, max_errors = 0, ...){
   if (point_estimate == TRUE & bootstrap == TRUE){
     msg <- paste0("When 'point_estimate' = TRUE and 'bootstrap' = TRUE, the 'point_estimate' ",
                   "argument is ignored and bootstrap replications are generated.")
     warning(msg, call. = FALSE)
   }
   if(bootstrap){
-    res <- bootstrap(object, B = n)
+    res <- bootstrap(object, B = n, max_errors = max_errors)
   } else{
     res <- form_params(object$models, n = n, point_estimate = point_estimate)
   }
