@@ -89,26 +89,6 @@ check_joined_times <- function(objects, times){
   }
 }
 
-#' #' Set fields
-#' #'
-#' #' Allow users to set specific public fields in an \code{\link{R6Class}} object.
-#' #' @param self The \code{\link{R6Class}} object.
-#' #' @param check_fun_list List of functions to check fields of class.
-#' #' @param ... Arguments to pass to R6 object to set fields.
-#' set_fields <- function(self, check_fun_list = NULL, ...){
-#'   fields <- list(...)
-#'   if(any(names(fields) %in% names(self) == FALSE)){
-#'     stop("At least one argument is not a field.")
-#'   }
-#'   for (i in 1:length(fields)){
-#'     if(!is.null(check_fun_list)){
-#'       check.fun.sublist <- check_fun_list[match(names(fields),
-#'                                                 names(check_fun_list))]
-#'       check.fun.sublist[[i]](fields[[i]])
-#'     }
-#'     self[[names(fields)[[i]]]] <- fields[[i]]
-#'   }
-#' }
 
 # list to array
 list_to_array <- function(L){
