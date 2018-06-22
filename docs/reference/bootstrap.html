@@ -103,7 +103,10 @@
 of a fitted statistical model.</p>
     
 
-    <pre class="usage"><span class='fu'>bootstrap</span>(<span class='no'>object</span>, <span class='no'>B</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>bootstrap</span>(<span class='no'>object</span>, <span class='no'>B</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for partsurvfit</span>
+<span class='fu'>bootstrap</span>(<span class='no'>object</span>, <span class='no'>B</span>, <span class='kw'>max_errors</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -119,6 +122,12 @@ of a fitted statistical model.</p>
     <tr>
       <th>...</th>
       <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
+    </tr>
+    <tr>
+      <th>max_errors</th>
+      <td><p>Maximum number of errors that are allowed when fitting statistical models
+during the bootstrap procedure. This argument may be useful if, for instance, the model
+fails to converge during some bootstrap replications. Default is 0.</p></td>
     </tr>
     </table>
     
@@ -141,7 +150,7 @@ of a fitted statistical model.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Devin Incerti.</p>
+  <p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
 </div>
 
 <div class="pkgdown">
