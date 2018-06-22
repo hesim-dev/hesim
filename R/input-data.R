@@ -48,8 +48,10 @@ lines_dt <- function(strategy_list, strategy_ids = NULL){
 #' number of rows should be equal to the number of patients in the model.
 #' Other columns are variables describing the characteristics of a patient.
 #' @param lines A table of treatment lines used for each treatment strategy. Must contain the columns
-#' \code{strategy_id}, denoting a treatment strategy; \code{line}, denoting a treatment line; 
-#' and \code{treatment_id}, denoting the treatment used for a given strategy and line.
+#' \code{strategy_id}, denoting a treatment strategy, and \code{line}, denoting a treatment line. Other 
+#' columns are variables describing the characteristics of a treatmnet line for a given treatment
+#' strategy. A column denoting the treatment used for a given strategy and line would often
+#' be specified.
 #' @param states A table of health states. Must contain the column
 #' \code{state_id}, which denotes a unique health state. The number of rows should
 #' be equal to the number of health states in the model. Other columns can describe the
@@ -123,10 +125,6 @@ check.hesim_data <- function(x){
         stop("'line' must be a column of 'lines'.", 
              call. = FALSE)
       }
-      if (!"treatment_id" %in% colnames(x$lines)){
-        stop("'treatment_id' must be a column of 'lines'.", 
-             call. = FALSE)
-      }
   }
   
   # States
@@ -182,6 +180,13 @@ check_hesim_data_type <- function(tbl, tbl_name){
 #' expand_hesim_data(data.tables, by = c("strategies", "patients"))
 #' @export
 expand_hesim_data <- function(data, by = c("strategies", "patients")){
+  if ("transitions" %in% by & "states" %in% by){
+    stop("Cannot expand by both 'transitions' and 'states'.", call. = FALSE)
+  }
+  if (!all(by %in% names(hesim_data_sorting_map()))){
+    stop("One of the elements specified in 'by' is not a table in 'hesim_data'.",
+         call. = FALSE)
+  }
   sorted.by <- hesim_data_sorted_by(by)
   tbl.list <- data[sorted.by]
   for (i in 1:length(tbl.list)){
@@ -203,16 +208,16 @@ expand_hesim_data <- function(data, by = c("strategies", "patients")){
   nonid.cols <- colnames(dat)[!colnames(dat) %in% id.cols]
   dat <- dat[, c(id.cols, nonid.cols), with = FALSE]
   res <- list(data = dat,
-              id_vars = unname(id.cols[id.cols != "treatment_id"]))
+              id_vars = unname(id.cols))
   class(res) <- "expanded_hesim_data"
   return(res)
 }
 
 hesim_data_sorting_map <- function(){
   list(strategies = "strategy_id",
-       transitions = "transition_id",
+       lines = "line",
        patients = "patient_id",
-       lines = c("line", "treatment_id"),
+       transitions = "transition_id",
        states = "state_id")
 }
 
@@ -410,8 +415,8 @@ check.input_data <- function(object){
   sort_hesim_data(indices.df, sorted_by = hesim_data_sorted_by(by))
   if(!all(indices.df$row_num == sorted.seq)){
     msg <- paste0("The id variables are not sorted correctly. The sort priority of the ",
-                  "id variables must be as follows: 'strategy_id', 'transition_id', 'patient_id' ",
-                   "'line', and 'state_id'.")
+                  "id variables must be as follows: 'strategy_id', 'line', 'patient_id' and ",
+                   "the health-related id variable ('state_id' or 'transition_id').")
     stop(msg, call. = FALSE)
   }
 

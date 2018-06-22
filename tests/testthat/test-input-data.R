@@ -10,10 +10,14 @@ dt.patients <- data.table(patient_id = seq(1, 3),
 dt.lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
 dt.states <- data.frame(state_id =  seq(1, 3),
                          state_name = factor(paste0("state", seq(1, 3))))
+dt.trans <- data.frame(transition_id = seq(1, 4),
+                       from = c(1, 1, 2, 2),
+                       to = c(2, 3, 1, 3))
 hesim.dat <- hesim_data(strategies = dt.strategies,
-                              patients = dt.patients,
-                              states = dt.states,
-                              lines = dt.lines)
+                        patients = dt.patients,
+                        lines = dt.lines,
+                        states = dt.states,
+                        transitions = dt.trans)
 
 # lines_dt ---------------------------------------------------------------------
 test_that("lines_dt", {
@@ -66,6 +70,11 @@ test_that("hesim_data", {
   # errors
   expect_error(expand_hesim_data(hesim.dat, by = c("strategies", "patients", 
                                                   "states", "transitions")))
+  expect_error(expand_hesim_data(hesim.dat, by = c("strategies", "patients", 
+                                                  "states", "wrong_table")))
+  hesim.dat2 <- hesim.dat[c("strategies", "patients")]
+  expect_error(expand_hesim_data(hesim.dat2, by = c("strategies", "patients", 
+                                                  "states")))
 })
 
 # input_data class -------------------------------------------------------------
@@ -113,7 +122,7 @@ expect_error(input_data(X = model.matrix(~ age, dat),
                        n_patients = length(unique(dat$patient_id))))
 
 
-# By treatment strategy, patient, and line
+# By treatment strategy, line, and patient
 dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", "lines"))$data
 n.lines <- hesim.dat$lines[, .N, by = "strategy_id"]
 input.dat <- input_data(X = model.matrix(~ age, dat),
@@ -143,6 +152,15 @@ expect_error(input_data(X = model.matrix(~ age, dat),
                        n_patients = length(unique(dat$patient_id)),
                        line = dat$line,
                        n_lines = n.lines + 1))
+
+## line is not sorted correctly
+expect_error(input_data(X = model.matrix(~ age, dat),
+                       strategy_id = dat$strategy_id,
+                       n_strategies = length(unique(dat$strategy_id)),
+                       patient_id = dat$patient_id,
+                       n_patients = length(unique(dat$patient_id)),
+                       line = sort(dat$line),
+                       n_lines = n.lines))
 
 # form_input_data with formula objects -----------------------------------------
 test_that("form_input_data.formula", {
@@ -242,4 +260,3 @@ test_that("form_input_data.joined_flexsurv_list", {
   expect_equal(input.dat$state_id, dat$state_id)
   expect_equal(class(input.dat$X[[1]]$wei$shape), "matrix")
 })
-

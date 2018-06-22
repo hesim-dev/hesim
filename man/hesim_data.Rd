@@ -18,8 +18,10 @@ number of rows should be equal to the number of patients in the model.
 Other columns are variables describing the characteristics of a patient.}
 
 \item{lines}{A table of treatment lines used for each treatment strategy. Must contain the columns
-\code{strategy_id}, denoting a treatment strategy; \code{line}, denoting a treatment line; 
-and \code{treatment_id}, denoting the treatment used for a given strategy and line.}
+\code{strategy_id}, denoting a treatment strategy, and \code{line}, denoting a treatment line. Other 
+columns are variables describing the characteristics of a treatmnet line for a given treatment
+strategy. A column denoting the treatment used for a given strategy and line would often
+be specified.}
 
 \item{states}{A table of health states. Must contain the column
 \code{state_id}, which denotes a unique health state. The number of rows should

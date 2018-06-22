@@ -29,7 +29,7 @@ public:
 ****************/
 // Initialize distribution pointer with dummy values for parameters and actual values for
 // auxillary parameters
-std::unique_ptr<hesim::Distribution> init_Distribution_ptr(ParamsSurv params_surv){
+inline std::unique_ptr<hesim::Distribution> init_Distribution_ptr(ParamsSurv params_surv){
   hesim::Distribution *d;
   std::string dist_name = params_surv.dist_name_;
   if (dist_name == "exponential" || dist_name == "exp"){
