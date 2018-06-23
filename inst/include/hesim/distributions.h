@@ -200,12 +200,6 @@ public:
   double random() const;
 };
 
-Distribution * select_distribution(std::string dist_name,
-                                   std::vector<double> parameters);
-
-std::unique_ptr<Distribution> init_Distribution_ptr(std::string dist_name,
-                                   std::vector<double> parameters);
-
 
 /*****************************
 * Free functions and functors
@@ -299,7 +293,6 @@ inline double rmst(Distribution * dist, double t, double r){
   return Numer::integrate(fun, lower, upper, err_est, err_code);
 }
 
-vecmats convert_distribution_parameters(std::string dist, Rcpp::List R_parlist);
 double qgompertzC (double p, double shape, double rate);
 double rgompertzC (double shape, double rate);
 double rsurv(double location, double anc1, std::string dist, double anc2 = 0.0);

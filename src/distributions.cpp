@@ -778,69 +778,6 @@ arma::cube rdirichlet_mat(int n, arma::mat alpha){
     return(samp);
 }
 
-/**************************************************
-* Convert list of parameters from R to std::vector
-**************************************************/
-vecmats convert_distribution_parameters(std::string dist, Rcpp::List R_parlist){
-    vecmats C_parlist;
-    if (dist == "exponential" || dist == "exp"){
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["rate"]));
-    }
-    else if (dist == "weibull" || dist == "weibull.quiet" || dist == "llogis"){
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["shape"]));
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["scale"]));
-    }
-    else if (dist == "gompertz" || dist == "gamma"){
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["shape"]));
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["rate"]));
-    }
-    else if (dist == "lnorm"){
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["meanlog"]));
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["sdlog"]));
-    }
-    else if (dist == "gengamma"){
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["mu"]));
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["sigma"]));
-        C_parlist.push_back(Rcpp::as<arma::mat >(R_parlist["Q"]));
-    }
-    else{
-        Rcpp::stop("The selected distribution is not available.");
-    }
-    return C_parlist;
-}
-
-/*********************
-* Select distribution
-*********************/
-hesim::Distribution * hesim::select_distribution(std::string dist_name,
-                                   std::vector<double> parameters){
-    hesim::Distribution *d;
-    if (dist_name == "exponential" || dist_name == "exp"){
-        d = new hesim::Exponential(exp(parameters[0]));
-    }
-    else if (dist_name == "weibull.quiet" || dist_name == "weibull"){
-        d = new hesim::Weibull(exp(parameters[0]), exp(parameters[1]));
-    }
-    else if (dist_name == "gamma"){
-        d = new hesim::Gamma(exp(parameters[0]), exp(parameters[1]));
-    }
-    else if (dist_name == "lnorm"){
-        d = new hesim::Lognormal(parameters[0], exp(parameters[1]));
-    }
-    else if (dist_name == "gompertz"){
-        d = new hesim::Gompertz(parameters[0], exp(parameters[1]));
-    }
-    else if (dist_name == "llogis"){
-        d = new hesim::LogLogistic(exp(parameters[0]), exp(parameters[1]));
-    }
-    else if (dist_name == "gengamma"){
-        d = new hesim::GeneralizedGamma(parameters[0], exp(parameters[1]), parameters[2]);
-    }
-    else{
-        Rcpp::stop("The selected distribution is not available.");
-    }
-    return d;
-}
 
 /**************
 * RCPP Modules
