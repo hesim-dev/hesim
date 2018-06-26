@@ -20,7 +20,8 @@ hesim.dat <- hesim_data(strategies = dt.strategies,
                         transitions = dt.trans)
 
 # InputData --------------------------------------------------------------------
-# strategy_id + line + patient_id + state_id
+# Operator()
+## strategy_id + line + patient_id + state_id
 expanded.hesim.dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", 
                                                           "lines", "states"))
 f <- formula(~ age)
@@ -42,6 +43,10 @@ test_InputData_row(strategy_id = 1, line = 2, patient_id = 2, state_id = 2)
 test_InputData_row(strategy_id = 1, line = 3, patient_id = 1, state_id = 1)
 test_InputData_row(strategy_id = 1, line = 3, patient_id = 1, state_id = 2)
 test_InputData_row(strategy_id = 1, line = 3, patient_id = 2, state_id = 2)
+
+rowvecs <- C_test_InputData_get_X(input.dat, param_id = 0, strategy_id = 1,
+                         line = 1, patient_id = 2, health_id = 1)
+expect_equal(c(rowvecs$operator), rowvecs$get_x)
 
 # strategy_id + line + patient_id + transition_id
 expanded.hesim.dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", 
@@ -123,6 +128,8 @@ test_InputData_row(strategy_id = 1, patient_id = 3)
 test_InputData_row(strategy_id = 2, patient_id = 1)
 test_InputData_row(strategy_id = 2, patient_id = 2)
 test_InputData_row(strategy_id = 2, patient_id = 3)
+
+
 
 # TimeFun ----------------------------------------------------------------------
 expanded.hesim.dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients"))

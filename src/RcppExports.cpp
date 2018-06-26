@@ -566,6 +566,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_test_InputData_get_X
+Rcpp::List C_test_InputData_get_X(Rcpp::List R_InputData, int param_id, int strategy_id, int patient_id, int line, int health_id);
+RcppExport SEXP _hesim_C_test_InputData_get_X(SEXP R_InputDataSEXP, SEXP param_idSEXP, SEXP strategy_idSEXP, SEXP patient_idSEXP, SEXP lineSEXP, SEXP health_idSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type R_InputData(R_InputDataSEXP);
+    Rcpp::traits::input_parameter< int >::type param_id(param_idSEXP);
+    Rcpp::traits::input_parameter< int >::type strategy_id(strategy_idSEXP);
+    Rcpp::traits::input_parameter< int >::type patient_id(patient_idSEXP);
+    Rcpp::traits::input_parameter< int >::type line(lineSEXP);
+    Rcpp::traits::input_parameter< int >::type health_id(health_idSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_InputData_get_X(R_InputData, param_id, strategy_id, patient_id, line, health_id));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_test_trapzfun
 double C_test_trapzfun(std::vector<double> x);
 RcppExport SEXP _hesim_C_test_trapzfun(SEXP xSEXP) {
@@ -789,6 +805,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_rdirichlet_mat", (DL_FUNC) &_hesim_rdirichlet_mat, 2},
     {"_hesim_C_test_xptr_TimeFunTest", (DL_FUNC) &_hesim_C_test_xptr_TimeFunTest, 1},
     {"_hesim_C_test_InputData", (DL_FUNC) &_hesim_C_test_InputData, 6},
+    {"_hesim_C_test_InputData_get_X", (DL_FUNC) &_hesim_C_test_InputData_get_X, 6},
     {"_hesim_C_test_trapzfun", (DL_FUNC) &_hesim_C_test_trapzfun, 1},
     {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
     {"_hesim_C_test_cumtrapzfun", (DL_FUNC) &_hesim_C_test_cumtrapzfun, 1},

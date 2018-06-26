@@ -20,11 +20,11 @@ private:
   int line_; // Line used to select observation from V_
   int patient_id_; // Patient id used to select observations from V_;
   int health_id_; // Health id used to select observations from V_;
-  int mat_obs_; // Observation from V_[param_id][strategy_id] based on 
-                // line, patient_id, and health_id (e.g., state_id, transition_id)
   vecmats_3d V_; // One vector for parameters and one for strategies
 public:
   InputData(Rcpp::List R_InputData);
+  int obs_; // Observation from V_[strategy_id][param_id] based on 
+                // line, patient_id, and health_id (e.g., state_id, transition_id)
   int n_strategies_;
   std::vector<int> n_lines_;
   int n_healthvals_; // Number of unique health values (i.e., states, transitions)
@@ -47,9 +47,9 @@ public:
   void set_obs(int patient_id, int health_id);
   void set_obs(int line, int patient_id, int health_id);
   void set_obs(int strategy_id, int line, int patient_id, int health_id);
+  vecmats get_X() const; // Vector of matrices for a given treatment strategy
   arma::rowvec operator()() const;
 };
-
 
 class TimeFunTest : public hesim::TimeFun {
 private:

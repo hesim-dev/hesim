@@ -1,3 +1,6 @@
+# ifndef ZEROIN_H
+# define ZEROIN_H
+
 /*******************************************************************************
 * This is an adaptation of the R_zeroin2() c function from the R Stats Package.
 * The function pointer has been replaced with a functor. 
@@ -199,5 +202,6 @@ inline double zeroin(			/* An estimate of the root */
     return b;
 }
 
+# endif
 
 

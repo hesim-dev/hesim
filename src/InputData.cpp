@@ -45,7 +45,7 @@ InputData::InputData(Rcpp::List R_InputData){
   line_ = 0;
   patient_id_ = 0;
   health_id_ = 0;
-  mat_obs_ = 0;
+  obs_ = 0;
   timefun_ = get_time_fun(R_InputData);
   vecmats_2d V;
   if (Rf_isMatrix(R_InputData["X"])){
@@ -118,10 +118,13 @@ vecmats InputData::split(arma::mat X){
 };
 
 vecmats_2d InputData::split(vecmats V){
+  vecmats_2d V_2d(n_strategies_);
   int n_params = V.size();
-  vecmats_2d V_2d(n_params);
   for (int i = 0; i < n_params; ++i){
-    V_2d[i] = split(V[i]);
+    vecmats v_i = split(V[i]);
+    for (int j = 0; j < n_strategies_; ++j){
+      V_2d[j].push_back(v_i[j]);
+    }
   }
   return V_2d;
 }
@@ -160,19 +163,19 @@ void InputData::set_health_id(int health_id){
 }
 
 void InputData::set_obs(){
-  mat_obs_ = line_ * n_patients_ * n_healthvals_ +
+  obs_ = line_ * n_patients_ * n_healthvals_ +
              patient_id_ * n_healthvals_ +
              health_id_;
 }
 
 void InputData::set_obs(int patient_id, int health_id){
-  mat_obs_ = line_ * n_patients_ * n_healthvals_ +
+  obs_ = line_ * n_patients_ * n_healthvals_ +
               patient_id * n_healthvals_ +
               health_id;
 }
 
 void InputData::set_obs(int line, int patient_id, int health_id){
-  mat_obs_ = line * n_patients_ * n_healthvals_ +
+  obs_ = line * n_patients_ * n_healthvals_ +
               patient_id * n_healthvals_ +
               health_id;
 }
@@ -182,8 +185,12 @@ void InputData::set_obs(int strategy_id, int line, int patient_id, int health_id
   set_obs(line, patient_id, health_id);
 }
 
+vecmats InputData::get_X() const{
+  return V_[model_][strategy_id_];
+}
+
 arma::rowvec InputData::operator()() const {
-  return V_[model_][param_id_][strategy_id_].row(mat_obs_);
+  return V_[model_][strategy_id_][param_id_].row(obs_);
 }
 
 // [[Rcpp::export]]
@@ -216,4 +223,27 @@ arma::rowvec C_test_InputData(Rcpp::List R_InputData,
      input_data.set_obs(strategy_id, line, patient_id, health_id); 
    }
    return(input_data());
+}
+
+// [[Rcpp::export]]
+Rcpp::List C_test_InputData_get_X(Rcpp::List R_InputData,
+                                 int param_id,
+                                 int strategy_id,
+                                 int patient_id,
+                                 int line = -1,
+                                 int health_id = -1){
+  InputData input_data(R_InputData);
+  input_data.set_param_id(param_id);
+  input_data.set_strategy_id(strategy_id);
+  input_data.set_strategy_id(patient_id);
+  input_data.set_line(line);
+  input_data.set_health_id(health_id);
+  input_data.set_obs(strategy_id, line, patient_id, health_id);
+  int obs = input_data.obs_;
+  return(Rcpp::List::create(
+    Rcpp::_["operator"] = input_data(),
+    Rcpp::_["get_x"] = input_data.get_X()[param_id].row(obs)
+  ));
+  
+  
 }
