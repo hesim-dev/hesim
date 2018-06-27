@@ -9,9 +9,8 @@ input_data(X, strategy_id, n_strategies, patient_id, n_patients, line = NULL,
   transition_id = NULL, n_transitions = NULL, time_fun = NULL)
 }
 \arguments{
-\item{X}{An input matrix or list of input matrices used for predicting
-outcomes from a statistical model. The number of matrices depends on the statistical model
-used.}
+\item{X}{A list of input matrices for predicting the values of each parameter in a statistical model. May also be
+a list of lists of input matrices when a list of separate models is fit (e.g., with \link{flexsurvreg_list}).}
 
 \item{strategy_id}{A numeric vector of integers denoting the treatment strategy represented by each row
 in \code{X}.}
@@ -84,7 +83,7 @@ hesim.dat <- hesim_data(strategies = dt.strategies,
                              patients = dt.patients)
 
 dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients"))$data
-input.dat <- input_data(X = model.matrix(~ age, dat),
+input.dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$patient_id,

@@ -1,6 +1,5 @@
 ---
 title: Individualized cost-effectiveness analysis (iCEA)
-author: "Devin Incerti"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -73,6 +72,7 @@ $$
 Below we simulate costs and QALYs for three treatment strategies and two subgroups (in a real world analysis, this output would be derived from a detailed health-economic simulation model). Strategy 1 is the current standard of care; it is the cheapest therapy, but also the least efficacious. Strategies 2 and 3 are equally costly, but Strategy 2 is more effective in subgroup 1 while Strategy 3 is more effective in subgroup 2. 
 
 ```{r ce_output, warnings = FALSE, message = FALSE}
+set.seed(131)
 nsims <- 1000
 
 # cost
@@ -141,7 +141,6 @@ The same inputs are used as in `icea` except users must specify the name of the 
 A useful summary measure for quantifying uncertainty is the probability that each treatment strategy is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each strategy has the highest NMB. For example, consider a random sample of 10 draws from the PSA simulation output and suppose $k$ is again equal to $150,000$. 
 
 ```{r mce_example_setup, echo = -1}
-set.seed(131)
 library("knitr")
 ce.nmb <- dcast(ce[sim %in% sample(1:nsims, 10) & grp == "Group 2"], 
                 sim ~ strategy, value.var = "nmb")

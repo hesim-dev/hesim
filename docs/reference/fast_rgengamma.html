@@ -141,11 +141,11 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
 <span class='no'>r1</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.002   0.000   0.002 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
+#&gt;   0.001   0.000   0.001 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
 <span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/GenGamma'>rgengamma</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.002   0.000   0.002 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+#&gt;   0.037   0.006   0.048 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 #&gt;   0.0001   0.9834   4.1248  11.0162  12.2941 325.7730 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r2</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 #&gt;   0.0002   1.0393   4.1762  12.0013  13.6895 323.3526 </div><div class='input'>
 </div></pre>
@@ -165,7 +165,7 @@ equal to n.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Devin Incerti.</p>
+  <p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
 </div>
 
 <div class="pkgdown">

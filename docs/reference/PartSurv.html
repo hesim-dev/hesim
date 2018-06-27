@@ -196,7 +196,7 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 <span class='no'>part.surv.costs.medical</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='form_PartSurvStateVals.html'>form_PartSurvStateVals</a></span>(<span class='no'>fit.costs.medical</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>expanded.data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>N</span>)
 
 <span class='co'># Utility model</span>
-<span class='no'>part.surv.utility.data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='form_input_data.html'>form_input_data</a></span>(<span class='fu'>formula</span>(~<span class='fl'>1</span>), <span class='no'>expanded.data</span>)
+<span class='no'>part.surv.utility.data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='form_input_data.html'>form_input_data</a></span>(<span class='fu'><a href='formula_list.html'>formula_list</a></span>(~<span class='fl'>1</span>), <span class='no'>expanded.data</span>)
 <span class='no'>part.surv.utility</span> <span class='kw'>&lt;-</span> <span class='no'>PartSurvStateVals</span>$<span class='fu'>new</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>part.surv.utility.data</span>,
                                            <span class='kw'>params</span> <span class='kw'>=</span> <span class='fu'><a href='params_lm.html'>params_lm</a></span>(<span class='kw'>coef</span> <span class='kw'>=</span> <span class='fu'>runif</span>(<span class='no'>N</span>, <span class='fl'>.6</span>, <span class='fl'>.8</span>)))
 
@@ -209,12 +209,12 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 <span class='no'>part.surv</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>part.surv</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'>head</span>(<span class='no'>part.surv</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id   dr    type    costs
-#&gt; 1:        1      1           1          1 0.03 medical 23994.50
-#&gt; 2:        1      1           1          2 0.03 medical 22704.96
-#&gt; 3:        1      1           1          3 0.03 medical 19475.93
-#&gt; 4:        1      1           2          1 0.03 medical 23994.50
-#&gt; 5:        1      1           2          2 0.03 medical 22704.96
-#&gt; 6:        1      1           2          3 0.03 medical 19475.93</div></pre>
+#&gt; 1:        1      1           1          1 0.03 medical 16785.56
+#&gt; 2:        1      1           1          2 0.03 medical 16006.68
+#&gt; 3:        1      1           1          3 0.03 medical 18705.41
+#&gt; 4:        1      1           2          1 0.03 medical 16785.56
+#&gt; 5:        1      1           2          2 0.03 medical 16006.68
+#&gt; 6:        1      1           2          3 0.03 medical 18705.41</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

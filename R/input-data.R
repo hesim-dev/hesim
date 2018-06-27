@@ -242,9 +242,8 @@ sort_hesim_data <- function(data, sorted_by){
 #' object can often be created more easily using the generic function 
 #' \code{\link{form_input_data}}. 
 #' 
-#' @param X An input matrix or list of input matrices used for predicting
-#' outcomes from a statistical model. The number of matrices depends on the statistical model
-#' used. 
+#' @param X A list of input matrices for predicting the values of each parameter in a statistical model. May also be
+#' a list of lists of input matrices when a list of separate models is fit (e.g., with \link{flexsurvreg_list}).
 #' @param strategy_id A numeric vector of integers denoting the treatment strategy represented by each row
 #' in \code{X}.
 #' @param n_strategies A scalar denoting the number of unique treatment strategies.
@@ -296,7 +295,7 @@ sort_hesim_data <- function(data, sorted_by){
 #'                              patients = dt.patients)
 #' 
 #' dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients"))$data
-#' input.dat <- input_data(X = model.matrix(~ age, dat),
+#' input.dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
 #'                        strategy_id = dat$strategy_id,
 #'                        n_strategies = length(unique(dat$strategy_id)),
 #'                        patient_id = dat$patient_id,
@@ -357,7 +356,13 @@ new_input_data <- function(X, strategy_id, n_strategies,
 
 #' @rdname check
 check.input_data <- function(object){
+  if (!is.list(object$X)){
+    stop("'X' must be a list or a list of lists.", call. = FALSE)
+  }
   X <- flatten_lists(object$X)
+  if(!all(sapply(X, function(y) inherits(y, "matrix")))){
+    stop("'X' must be a list or list of lists of matrices.", call. = FALSE)
+  }
   X.nrows <- sapply(X, nrow)
   if (is.list(object$X)){
     if (!all(X.nrows[1] == X.nrows)){
@@ -480,7 +485,7 @@ get_input_data_id_vars <- function(data){
 #' \code{form_input_data} is a generic function for forming data that can be
 #' used as a input to a statistical model. Model matrices are formed based on the 
 #' variables specified in the model \code{object} and the data specified in \code{data}.
-#' @param object An object of the appropriate class. Currently supports \code{\link{formula}},
+#' @param object An object of the appropriate class. Currently supports
 #' \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
 #'  \code{\link{flexsurvreg_list}}, and \code{\link{partsurvfit}}.
 #' @param data An object of class "expanded_hesim_data" returned by the function
@@ -528,14 +533,6 @@ form_input_data <- function (object, data, ...) {
   UseMethod("form_input_data", object)
 }
 
-#' @export
-form_input_data.formula <- function(object, data, ...){
-  X <- stats::model.matrix(object, data = data$data, ...)
-  args <- c(list(X = X),
-           get_input_data_id_vars(data))
-  return(do.call("new_input_data", args))
-}
-
 formula_list_rec <- function(object, data, ...){
   x <- vector(mode = "list", length = length(object))
   names(x) <- names(object)
@@ -566,7 +563,7 @@ get_terms <- function(object){
 form_input_data.lm <- function(object, data, ...){
   terms <- get_terms(object)
   X <- stats::model.matrix(terms, data = data$data, ...)
-  args <- c(list(X = X),
+  args <- c(list(X = list(mu = X)),
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
 }
@@ -577,7 +574,7 @@ form_input_data.lm_list <- function(object, data, ...){
   names(X.list) <- names(object)
   for (i in 1:length(X.list)){
     terms <- get_terms(object[[i]])
-    X.list[[i]] <- stats::model.matrix(terms, data = data$data, ...)
+    X.list[[i]] <- list(mu = stats::model.matrix(terms, data = data$data, ...))
   }
   args <- c(list(X = X.list),
            get_input_data_id_vars(data))

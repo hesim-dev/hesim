@@ -116,9 +116,8 @@ object can often be created more easily using the generic function
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>An input matrix or list of input matrices used for predicting
-outcomes from a statistical model. The number of matrices depends on the statistical model
-used.</p></td>
+      <td><p>A list of input matrices for predicting the values of each parameter in a statistical model. May also be
+a list of lists of input matrices when a list of separate models is fit (e.g., with <a href='flexsurvreg_list.html'>flexsurvreg_list</a>).</p></td>
     </tr>
     <tr>
       <th>strategy_id</th>
@@ -208,12 +207,13 @@ the rows of <code>X</code> must be sorted by: (i) <code>strategy_id</code>, (ii)
                              <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>dt.patients</span>)
 
 <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand_hesim_data.html'>expand_hesim_data</a></span>(<span class='no'>hesim.dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))$<span class='no'>data</span>
-<span class='no'>input.dat</span> <span class='kw'>&lt;-</span> <span class='fu'>input_data</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'>model.matrix</span>(~ <span class='no'>age</span>, <span class='no'>dat</span>),
+<span class='no'>input.dat</span> <span class='kw'>&lt;-</span> <span class='fu'>input_data</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'>model.matrix</span>(~ <span class='no'>age</span>, <span class='no'>dat</span>)),
                        <span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>strategy_id</span>,
                        <span class='kw'>n_strategies</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='fu'>unique</span>(<span class='no'>dat</span>$<span class='no'>strategy_id</span>)),
                        <span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>patient_id</span>,
                        <span class='kw'>n_patients</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='fu'>unique</span>(<span class='no'>dat</span>$<span class='no'>patient_id</span>)))
 <span class='fu'>print</span>(<span class='no'>input.dat</span>)</div><div class='output co'>#&gt; $X
+#&gt; $X$mu
 #&gt;   (Intercept) age
 #&gt; 1           1  45
 #&gt; 2           1  47
@@ -223,6 +223,7 @@ the rows of <code>X</code> must be sorted by: (i) <code>strategy_id</code>, (ii)
 #&gt; 6           1  60
 #&gt; attr(,"assign")
 #&gt; [1] 0 1
+#&gt; 
 #&gt; 
 #&gt; $strategy_id
 #&gt; [1] 1 1 1 2 2 2

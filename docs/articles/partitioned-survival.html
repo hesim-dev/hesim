@@ -74,9 +74,8 @@
   <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>Partitioned survival models</h1>
-                        <h4 class="author">Devin Incerti</h4>
             
-            <h4 class="date">2018-06-05</h4>
+            <h4 class="date">2018-06-26</h4>
           </div>
 
     
@@ -232,11 +231,11 @@ statevals.edata &lt;-<span class="st"> </span><span class="kw"><a href="../refer
 <a href="#creating-cost-and-utility-models" class="anchor"></a>Creating cost and utility models</h3>
 <p>We fit a linear model to medical costs, so we can use the <code><a href="../reference/form_PartSurvStateVals.html">form_PartSurvStateVals()</a></code> to instantiate a <code>PartSurvStateVals</code> object for medical costs.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">part.surv.medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_PartSurvStateVals.html">form_PartSurvStateVals</a></span>(costs.medical.fit, <span class="dt">data =</span> statevals.edata, <span class="dt">n =</span> n.samples)</code></pre></div>
-<p>Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using <code><a href="../reference/form_PartSurvStateVals.html">form_PartSurvStateVals()</a></code>. Instead, we create the model from our <code>params_lm</code> class object and input data (of class <code>input_data</code>). Since we don’t have fitted R model, we can use a <code>formula</code> object to specify the explanatory variables in the model. That is, we use <code>formula()</code> to obtain the variables (<code>strategy_id</code>) in <code>statevals.edata</code> that are needed.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input.dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw">formula</span>(<span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), <span class="dt">data =</span> statevals.edata)
+<p>Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using <code><a href="../reference/form_PartSurvStateVals.html">form_PartSurvStateVals()</a></code>. Instead, we create the model from our <code>params_lm</code> class object and input data (of class <code>input_data</code>). Since we don’t have fitted R model, we can use a <code>formula_list</code> object to specify the explanatory variables in the model. That is, we use <code><a href="../reference/formula_list.html">formula_list()</a></code> to obtain the variables (<code>strategy_id</code>) in <code>statevals.edata</code> that are needed.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input.dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), <span class="dt">data =</span> statevals.edata)
 part.surv.drugcosts &lt;-<span class="st"> </span>PartSurvStateVals<span class="op">$</span><span class="kw">new</span>(<span class="dt">data =</span> input.dat, <span class="dt">params =</span> drugcosts.params)</code></pre></div>
 <p>We can instantiate a utility model in the same manner.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input.dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw">formula</span>(<span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), <span class="dt">data =</span> statevals.edata)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input.dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), <span class="dt">data =</span> statevals.edata)
 part.surv.utility &lt;-<span class="st"> </span>PartSurvStateVals<span class="op">$</span><span class="kw">new</span>(<span class="dt">data =</span> input.dat, <span class="dt">params =</span> utility.params)</code></pre></div>
 </div>
 <div id="combining-the-statistical-models" class="section level3">
@@ -320,12 +319,12 @@ part.surv<span class="op">$</span><span class="kw">sim_costs</span>(<span class=
 part.surv<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(part.surv<span class="op">$</span>qalys_)</code></pre></div>
 <pre><code>##    state_id sample strategy_id patient_id   dr  type     qalys
-## 1:        1      1           1          1 0.03 qalys 0.4859029
-## 2:        1      1           1          2 0.03 qalys 0.4658942
-## 3:        1      1           1          3 0.03 qalys 0.4965526
-## 4:        1      1           2          1 0.03 qalys 0.5015949
-## 5:        1      1           2          2 0.03 qalys 0.4809441
-## 6:        1      1           2          3 0.03 qalys 0.5125860</code></pre>
+## 1:        1      1           1          1 0.03 qalys 0.4834253
+## 2:        1      1           1          2 0.03 qalys 0.4635187
+## 3:        1      1           1          3 0.03 qalys 0.4940207
+## 4:        1      1           2          1 0.03 qalys 0.4990374
+## 5:        1      1           2          2 0.03 qalys 0.4784919
+## 6:        1      1           2          3 0.03 qalys 0.5099724</code></pre>
 </div>
 </div>
 </div>
@@ -349,7 +348,7 @@ part.surv<span class="op">$</span><span class="kw">sim_qalys</span>(<span class=
 
 
       <footer><div class="copyright">
-  <p>Developed by Devin Incerti.</p>
+  <p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
 </div>
 
 <div class="pkgdown">

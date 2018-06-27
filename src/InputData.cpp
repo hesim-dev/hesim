@@ -33,12 +33,14 @@ SEXP C_test_xptr_TimeFunTest(Rcpp::List L) {
 /**********
 * InputData
 **********/
+// Class constructor
 InputData::InputData(Rcpp::List R_InputData){
   n_strategies_ = Rcpp::as<int> (R_InputData["n_strategies"]);
-  n_lines_ = get_n_lines(R_InputData, n_strategies_);
-  n_healthvals_ = get_n_healthvals(R_InputData);
+  n_lines_ = init_n_lines(R_InputData, n_strategies_);
+  n_healthvals_ = init_n_healthvals(R_InputData);
   n_patients_ = Rcpp::as<int> (R_InputData["n_patients"]);
-  n_obs_ = calc_n_obs();
+  n_obs_ = init_n_obs();
+  cum_strategy_sizes_ = init_cum_strategy_sizes();
   model_ = 0;
   param_id_ = 0;
   strategy_id_ = 0;
@@ -47,27 +49,21 @@ InputData::InputData(Rcpp::List R_InputData){
   health_id_ = 0;
   obs_ = 0;
   timefun_ = get_time_fun(R_InputData);
-  vecmats_2d V;
-  if (Rf_isMatrix(R_InputData["X"])){
-    V.resize(1);
-    V[0].push_back(Rcpp::as<arma::mat> (R_InputData["X"]));
+  X_ = init_X(R_InputData["X"]);
+}
+
+std::vector<int> InputData::init_n_lines(Rcpp::List l, int n_strategies){
+  if(l.containsElementNamed("n_lines")){
+    Rcpp::DataFrame n_lines_df = Rcpp::as<Rcpp::DataFrame > (l["n_lines"]);
+    return Rcpp::as<std::vector<int> > (n_lines_df["N"]);
   }
   else{
-    V.resize(1);
-    V[0] = Rcpp::as<vecmats>(R_InputData["X"]);  
+    std::vector<int> n_lines(n_strategies, 1);
+    return n_lines;
   }
-  V_ = split(V);
 }
 
-int InputData::calc_n_obs(){
-  double sum = 0;
-  for (int i = 0; i <n_strategies_; ++i){
-    sum += n_lines_[i] * n_healthvals_ * n_patients_;
-  }
-  return sum;
-}
-
-int InputData::get_n_healthvals(Rcpp::List l){
+int InputData::init_n_healthvals(Rcpp::List l){
   if(l.containsElementNamed("n_states") && l.containsElementNamed("n_transitions")){
     Rcpp::stop("'n_states' and 'n_transitions' cannot both be specified.");
   }
@@ -82,62 +78,39 @@ int InputData::get_n_healthvals(Rcpp::List l){
   }
 }
 
-std::vector<int> InputData::get_n_lines(Rcpp::List l, int n_strategies){
-  if(l.containsElementNamed("n_lines")){
-    Rcpp::DataFrame n_lines_df = Rcpp::as<Rcpp::DataFrame > (l["n_lines"]);
-    return Rcpp::as<std::vector<int> > (n_lines_df["N"]);
+int InputData::init_n_obs(){
+  double sum = 0;
+  for (int i = 0; i <n_strategies_; ++i){
+    sum += n_lines_[i] * n_healthvals_ * n_patients_;
   }
-  else{
-    std::vector<int> n_lines(n_strategies, 1);
-    return n_lines;
-  }
+  return sum;
 }
 
-vecmats InputData::split(arma::mat X){
-  vecmats V(n_strategies_);
-  int counter = 0;
-  // matrix for each strategy
-  for (int k = 0; k < n_strategies_; ++k){
-    int n_row =  n_lines_[k] * n_healthvals_ * n_patients_;
-    V[k].set_size(n_row, X.n_cols);
-
-    // fill matrices
-    for (int l = 0; l < n_lines_[k]; ++l){
-      for (int p = 0; p < n_patients_; ++p){
-        for (int h = 0; h < n_healthvals_; ++h){
-          int obs = l * n_patients_ * n_healthvals_ +
-                      p * n_healthvals_ +
-                      h;
-          V[k].row(obs) = X.row(counter);
-          ++counter;
-          } // end health loop
-        } // end patient loop
-      } // end line loop
-    } // end strategy loop
+std::vector<int> InputData::init_cum_strategy_sizes(){
+  std::vector<int> V(n_strategies_);
+  int cum_size = 0;
+  for (int i = 0; i < n_strategies_; ++i){
+    cum_size += n_lines_.at(i) * n_patients_ * n_healthvals_; 
+    V.push_back(cum_size);
+  }
   return V;
-};
-
-vecmats_2d InputData::split(vecmats V){
-  vecmats_2d V_2d(n_strategies_);
-  int n_params = V.size();
-  for (int i = 0; i < n_params; ++i){
-    vecmats v_i = split(V[i]);
-    for (int j = 0; j < n_strategies_; ++j){
-      V_2d[j].push_back(v_i[j]);
-    }
-  }
-  return V_2d;
 }
 
-vecmats_3d InputData::split(vecmats_2d V){
-  int n_models = V.size();
-  vecmats_3d V_3d(n_models);
-  for (int i = 0; i < n_models; ++i){
-    V_3d[i] = split(V[i]);
+vecmats_2d InputData::init_X(SEXP X){
+  vecmats_2d V;
+  Rcpp::List L = Rcpp::as<Rcpp::List>(X);
+  // If X is a list of matrices (i.e., 1 model, N parameters)
+  if(Rf_isMatrix(L[0])){
+    V.push_back(Rcpp::as<vecmats>(L));
   }
-  return V_3d;
+  // If X is a list of lists of matrices (i.e., N models, N parameters)
+  else{
+    V = Rcpp::as<vecmats_2d>(L);
+  }
+  return V;
 }
 
+// Setters
 void InputData::set_model(int model){
   model_ = model;
 }
@@ -148,6 +121,7 @@ void InputData::set_param_id(int param_id){
 
 void InputData::set_strategy_id(int strategy_id){
   strategy_id_ = strategy_id;
+  cum_strategy_size_ = cum_strategy_sizes_.at(strategy_id_);
 }
 
 void InputData::set_line(int line){
@@ -163,21 +137,24 @@ void InputData::set_health_id(int health_id){
 }
 
 void InputData::set_obs(){
-  obs_ = line_ * n_patients_ * n_healthvals_ +
-             patient_id_ * n_healthvals_ +
-             health_id_;
+  int strategy_row = line_ * n_patients_ * n_healthvals_ +
+                     patient_id_ * n_healthvals_ +
+                     health_id_;
+  obs_ = strategy_row + cum_strategy_size_;
 }
 
 void InputData::set_obs(int patient_id, int health_id){
-  obs_ = line_ * n_patients_ * n_healthvals_ +
-              patient_id * n_healthvals_ +
-              health_id;
+  int strategy_row = line_ * n_patients_ * n_healthvals_ +
+                     patient_id * n_healthvals_ +
+                     health_id;
+  obs_ = strategy_row + cum_strategy_size_;
 }
 
 void InputData::set_obs(int line, int patient_id, int health_id){
-  obs_ = line * n_patients_ * n_healthvals_ +
-              patient_id * n_healthvals_ +
-              health_id;
+  int strategy_row = line * n_patients_ * n_healthvals_ +
+                     patient_id * n_healthvals_ +
+                     health_id;
+  obs_ = strategy_row + cum_strategy_size_;
 }
 
 void InputData::set_obs(int strategy_id, int line, int patient_id, int health_id){
@@ -185,14 +162,12 @@ void InputData::set_obs(int strategy_id, int line, int patient_id, int health_id
   set_obs(line, patient_id, health_id);
 }
 
-vecmats InputData::get_X() const{
-  return V_[model_][strategy_id_];
-}
-
+// Operator
 arma::rowvec InputData::operator()() const {
-  return V_[model_][strategy_id_][param_id_].row(obs_);
+  return X_[model_][param_id_].row(obs_);
 }
 
+// Unit tests
 // [[Rcpp::export]]
 arma::rowvec C_test_InputData(Rcpp::List R_InputData,
                                  int param_id,
@@ -224,26 +199,4 @@ arma::rowvec C_test_InputData(Rcpp::List R_InputData,
    }
    return(input_data());
 }
-
-// [[Rcpp::export]]
-Rcpp::List C_test_InputData_get_X(Rcpp::List R_InputData,
-                                 int param_id,
-                                 int strategy_id,
-                                 int patient_id,
-                                 int line = -1,
-                                 int health_id = -1){
-  InputData input_data(R_InputData);
-  input_data.set_param_id(param_id);
-  input_data.set_strategy_id(strategy_id);
-  input_data.set_strategy_id(patient_id);
-  input_data.set_line(line);
-  input_data.set_health_id(health_id);
-  input_data.set_obs(strategy_id, line, patient_id, health_id);
-  int obs = input_data.obs_;
-  return(Rcpp::List::create(
-    Rcpp::_["operator"] = input_data(),
-    Rcpp::_["get_x"] = input_data.get_X()[param_id].row(obs)
-  ));
   
-  
-}

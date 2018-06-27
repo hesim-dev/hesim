@@ -27,7 +27,8 @@ LmMod::LmMod(Rcpp::Environment R_PartSurvStateVals)
   : StateValMods(R_PartSurvStateVals),
     params_(Rcpp::as<Rcpp::List>(R_PartSurvStateVals["params"])){
   Rcpp::List R_data = Rcpp::as<Rcpp::List > (R_PartSurvStateVals["data"]);
-  X_ = Rcpp::as<arma::mat>(R_data["X"]);
+  Rcpp::List R_X = Rcpp::as<Rcpp::List > (R_data["X"]);
+  X_ = Rcpp::as<arma::mat>(R_X["mu"]);
 }
 
 void LmMod::set_obs(int strategy, int patient, int state){

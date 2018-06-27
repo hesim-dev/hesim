@@ -170,12 +170,12 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>costs</span> ~ <span class='no'>female</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>part_surv4_simdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>)
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params.lm</span> <span class='kw'>&lt;-</span> <span class='fu'>form_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
-<span class='fu'>head</span>(<span class='no'>params.lm</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt;      (Intercept)    female
-#&gt; [1,]    32452.58 -1435.596
-#&gt; [2,]    32281.27  3643.123
-#&gt; [3,]    35033.22 -2915.586
-#&gt; [4,]    31465.69  2262.802
-#&gt; [5,]    30575.49  3618.836</div><div class='input'><span class='fu'>head</span>(<span class='no'>params.lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
+<span class='fu'>head</span>(<span class='no'>params.lm</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt;      (Intercept)     female
+#&gt; [1,]    31253.90  1598.3353
+#&gt; [2,]    33166.57 -1926.0922
+#&gt; [3,]    31444.63  1978.4934
+#&gt; [4,]    31226.01  -834.3395
+#&gt; [5,]    28898.51  3124.9976</div><div class='input'><span class='fu'>head</span>(<span class='no'>params.lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># form_params.flexsurvreg</span>
 <span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
@@ -183,20 +183,20 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params.surv</span> <span class='kw'>&lt;-</span> <span class='fu'>form_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'>print</span>(<span class='no'>params.surv</span>$<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'>head</span>(<span class='no'>params.surv</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; $shape
-#&gt;            shape
-#&gt; [1,] -0.07338911
-#&gt; [2,]  0.71344775
-#&gt; [3,]  0.34712364
-#&gt; [4,] -0.02217379
-#&gt; [5,]  0.29415180
+#&gt;           shape
+#&gt; [1,]  0.6204905
+#&gt; [2,] -0.1780169
+#&gt; [3,]  0.2572189
+#&gt; [4,]  0.1082616
+#&gt; [5,] -0.2551289
 #&gt; 
 #&gt; $scale
 #&gt;         scale
-#&gt; [1,] 7.326029
-#&gt; [2,] 6.513450
-#&gt; [3,] 6.546107
-#&gt; [4,] 7.129277
-#&gt; [5,] 6.815276
+#&gt; [1,] 6.759403
+#&gt; [2,] 6.921508
+#&gt; [3,] 6.868899
+#&gt; [4,] 7.272610
+#&gt; [5,] 7.916436
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

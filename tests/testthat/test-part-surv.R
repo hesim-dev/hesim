@@ -123,12 +123,12 @@ part.surv.costs.medical <- form_PartSurvStateVals(fit.costs.medical, data = edat
 part.surv.costs.medical2 <- form_PartSurvStateVals(fit.costs.medical, data = edat, n = N + 1)
 
 test_that("PartSurvStateVals$predict", {
-  expect_equal(c(part.surv.costs.medical$data$X %*% t(part.surv.costs.medical$params$coefs)),
+  expect_equal(c(part.surv.costs.medical$data$X$mu %*% t(part.surv.costs.medical$params$coefs)),
               part.surv.costs.medical$predict()$value)
   
   expect_error(PartSurvStateVals$new(data = 3, params = 2)$predict())
   
-  input.dat <- form_input_data(formula(~1), edat)
+  input.dat <- form_input_data(formula_list(~1), edat)
   expect_error(PartSurvStateVals$new(data = input.dat, params = 2)$predict())
 })
 
@@ -136,7 +136,7 @@ test_that("PartSurvStateVals$predict", {
 set.seed(101)
 times <- c(0, 2, 5, 8)
 part.surv.curves <- form_PartSurvCurves(fits.wei, data = curves.edata, n = N)
-part.surv.utility.data <- form_input_data(formula(~1), 
+part.surv.utility.data <- form_input_data(formula_list(mu = formula(~1)), 
                                           expand_hesim_data(hesim.dat, 
                                                             by = c("strategies", "patients", "states")),
                                           id_vars = c("strategy_id", "patient_id", "state_id"))
@@ -184,7 +184,7 @@ R_auc <- function(part_surv, type, type_num, dr = .03,
     model <- part_surv$utility_model
   }
   dat <- model$data
-  statevals <- dat$X %*% t(model$params$coefs)
+  statevals <- dat$X$mu %*% t(model$params$coefs)
   obs <- which(dat$state_id == state_id & dat$strategy_id == strategy_id &
                  dat$patient_id == patient_id)
   stateval <- statevals[obs, sample]

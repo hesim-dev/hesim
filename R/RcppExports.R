@@ -97,10 +97,6 @@ C_test_InputData <- function(R_InputData, param_id, strategy_id, patient_id, lin
     .Call('_hesim_C_test_InputData', PACKAGE = 'hesim', R_InputData, param_id, strategy_id, patient_id, line, health_id)
 }
 
-C_test_InputData_get_X <- function(R_InputData, param_id, strategy_id, patient_id, line = -1L, health_id = -1L) {
-    .Call('_hesim_C_test_InputData_get_X', PACKAGE = 'hesim', R_InputData, param_id, strategy_id, patient_id, line, health_id)
-}
-
 C_test_trapzfun <- function(x) {
     .Call('_hesim_C_test_trapzfun', PACKAGE = 'hesim', x)
 }

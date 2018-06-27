@@ -80,42 +80,56 @@ test_that("hesim_data", {
 # input_data class -------------------------------------------------------------
 # By treatment strategy and patient
 dat <- expand_hesim_data(hesim.dat)$data
-input.dat <- input_data(X = model.matrix(~ age, dat),
+input.dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$patient_id,
                        n_patients = length(unique(dat$patient_id)))
 
-## Number of rows in X is inconsistent with strategy_id 
+## X must be a list
 expect_error(input_data(X = model.matrix(~ age, dat),
+                       strategy_id = dat$strategy_id,
+                       n_strategies = length(unique(dat$strategy_id)),
+                       patient_id = dat$patient_id,
+                       n_patients = length(unique(dat$patient_id))))
+
+## X must be a list of matrices
+expect_error(input_data(X = list(model.matrix(~ age, dat), 2),
+                       strategy_id = dat$strategy_id,
+                       n_strategies = length(unique(dat$strategy_id)),
+                       patient_id = dat$patient_id,
+                       n_patients = length(unique(dat$patient_id))))
+
+## Number of rows in X is inconsistent with strategy_id 
+expect_error(input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id[-1],
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$patient_id,
                        n_patients = length(unique(dat$patient_id))))
 
 ## Size of patient_id is incorrect
-expect_error(input_data(X = model.matrix(~ age, dat),
+expect_error(input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = sort(dat$patient_id),
                        n_patients = length(unique(dat$strategy_id))))
 
 ## n_patients is incorrect v1
-expect_error(input_data(X = model.matrix(~ age, dat),
+expect_error(input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$strategy_id,
                        n_patients = length(unique(dat$strategy_id))))
 
 ## n_patients is incorrect v2
-expect_error(input_data(X = model.matrix(~ age, dat),
+expect_error(input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$patient_id,
                        n_patients = 1))
 
 ## patient_id is not sorted correctly
-expect_error(input_data(X = model.matrix(~ age, dat),
+expect_error(input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = sort(dat$patient_id),
@@ -125,7 +139,7 @@ expect_error(input_data(X = model.matrix(~ age, dat),
 # By treatment strategy, line, and patient
 dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", "lines"))$data
 n.lines <- hesim.dat$lines[, .N, by = "strategy_id"]
-input.dat <- input_data(X = model.matrix(~ age, dat),
+input.dat <- input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$patient_id,
@@ -135,7 +149,7 @@ input.dat <- input_data(X = model.matrix(~ age, dat),
 
 ## n_lines is incorrect v1
 n.lines[, N := N + 1]
-expect_error(input_data(X = model.matrix(~ age, dat),
+expect_error(input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$patient_id,
@@ -145,7 +159,7 @@ expect_error(input_data(X = model.matrix(~ age, dat),
 
 ## n_lines is incorrect v2
 n.lines[, N := N - 1]
-expect_error(input_data(X = model.matrix(~ age, dat),
+expect_error(input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$patient_id,
@@ -154,7 +168,7 @@ expect_error(input_data(X = model.matrix(~ age, dat),
                        n_lines = n.lines + 1))
 
 ## line is not sorted correctly
-expect_error(input_data(X = model.matrix(~ age, dat),
+expect_error(input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$patient_id,
@@ -163,23 +177,6 @@ expect_error(input_data(X = model.matrix(~ age, dat),
                        n_lines = n.lines))
 
 # form_input_data with formula objects -----------------------------------------
-test_that("form_input_data.formula", {
-  f <- formula(~ age)
-  dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", "lines", "states"))
-  input.dat <- form_input_data(f, dat)
-  
-  expect_equal(input.dat$state_id, dat$data$state_id)
-  expect_equal(input.dat$strategy_id, dat$data$strategy_id)
-  expect_equal(input.dat$line, dat$data$line)
-  expect_equal(input.dat$patient_id, dat$data$patient_id)
-  expect_equal(ncol(input.dat$X), 2)
-  expect_equal(as.numeric(input.dat$X[, "age"]), dat$data$age)
-  
-  class(dat) <- "data.table"
-  expect_error(form_input_data(f, dat, 
-                              id_vars = c("strategy_id", "patient_id")))
-})
-
 test_that("form_input_data.formula_list", {
   dat <- expand_hesim_data(hesim.dat)
   f.list <- formula_list(list(f1 = formula(~ age), f2 = formula(~ 1)))
@@ -200,8 +197,8 @@ fit1 <- stats::lm(costs ~ female + state_name, data = part_surv4_simdata$costs$m
 test_that("form_input_data.lm", {
   input.dat <- form_input_data(fit1, dat)
   
-  expect_equal(ncol(input.dat$X), 4)
-  expect_equal(as.numeric(input.dat$X[, "female"]), dat$data$female)
+  expect_equal(ncol(input.dat$X$mu), 4)
+  expect_equal(as.numeric(input.dat$X$mu[, "female"]), dat$data$female)
 })
 
 test_that("form_input_data.lm_list", {
@@ -209,9 +206,9 @@ test_that("form_input_data.lm_list", {
   fit.list <- hesim:::lm_list(fit1 = fit1, fit2 = fit2)
   input.dat <- form_input_data(fit.list, dat)
   
-  expect_equal(ncol(input.dat$X$fit1), 4)
-  expect_equal(ncol(input.dat$X$fit2), 1)
-  expect_equal(as.numeric(input.dat$X$fit1[, "female"]), dat$data$female)
+  expect_equal(ncol(input.dat$X$fit1$mu), 4)
+  expect_equal(ncol(input.dat$X$fit2$mu), 1)
+  expect_equal(as.numeric(input.dat$X$fit1$mu[, "female"]), dat$data$female)
 })
 
 # form_input_data with flexsurvreg objects -------------------------------------

@@ -7,7 +7,7 @@
 form_input_data(object, data, ...)
 }
 \arguments{
-\item{object}{An object of the appropriate class. Currently supports \code{\link{formula}},
+\item{object}{An object of the appropriate class. Currently supports
 \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
  \code{\link{flexsurvreg_list}}, and \code{\link{partsurvfit}}.}
 

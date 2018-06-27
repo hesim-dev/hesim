@@ -134,7 +134,7 @@ fit.costs.medical <- stats::lm(costs ~ female + state_name, data = part_surv4_si
 part.surv.costs.medical <- form_PartSurvStateVals(fit.costs.medical, data = expanded.data, n = N)
 
 # Utility model
-part.surv.utility.data <- form_input_data(formula(~1), expanded.data)
+part.surv.utility.data <- form_input_data(formula_list(~1), expanded.data)
 part.surv.utility <- PartSurvStateVals$new(data = part.surv.utility.data,
                                            params = params_lm(coef = runif(N, .6, .8)))
 

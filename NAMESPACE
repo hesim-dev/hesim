@@ -3,7 +3,6 @@
 S3method(bootstrap,partsurvfit)
 S3method(form_input_data,flexsurvreg)
 S3method(form_input_data,flexsurvreg_list)
-S3method(form_input_data,formula)
 S3method(form_input_data,formula_list)
 S3method(form_input_data,joined_flexsurvreg_list)
 S3method(form_input_data,lm)

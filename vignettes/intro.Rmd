@@ -1,6 +1,5 @@
 ---
 title: Introduction to `hesim`
-author: "Devin Incerti"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -121,8 +120,8 @@ input.dat.wei <- form_input_data(fit.wei, data = hesim.edata.surv)
 print(input.dat.wei)
 
 ## From a formula object
-formula.list.wei <- formula_list(shape = formula(~1),
-                                  scale = formula(~ female + age))
+formula.list.wei <- formula_list(shape = ~1,
+                                  scale = ~ female + age)
 input.dat.wei2 <- form_input_data(formula.list.wei, data = hesim.edata.surv)
 
 ```
@@ -130,9 +129,9 @@ input.dat.wei2 <- form_input_data(formula.list.wei, data = hesim.edata.surv)
 We can create input data to make predictions by treatment strategy, patient, and health state (e.g., for our utility and cost models) in a similar fashion. 
 
 ```{r warning = FALSE, message = FALSE}
-# Predict state values by treatment strategy, patient, and health state
+# Predict (mean) state values by treatment strategy, patient, and health state
 hesim.edata.statevals <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", "states"))
-formula.costs <- formula(~ 1 + female)
+formula.costs <- formula_list(mu = ~ 1 + female)
 print(form_input_data(formula.costs, data = hesim.edata.statevals))
 ```
 

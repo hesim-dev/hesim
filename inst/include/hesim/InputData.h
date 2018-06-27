@@ -20,9 +20,16 @@ private:
   int line_; // Line used to select observation from V_
   int patient_id_; // Patient id used to select observations from V_;
   int health_id_; // Health id used to select observations from V_;
-  vecmats_3d V_; // One vector for parameters and one for strategies
+  std::vector<int> cum_strategy_sizes_; // Cumulative number of observations for each strategy
+  int cum_strategy_size_; // Cumulative size of selected stategy_id_;
+  std::vector<int> init_n_lines(Rcpp::List l, int n_strategies);
+  std::vector<int> init_cum_strategy_sizes();
+  int init_n_healthvals(Rcpp::List l);
+  int init_n_obs();
+  vecmats_2d init_X(SEXP X);
 public:
   InputData(Rcpp::List R_InputData);
+  vecmats_2d X_; // Vector of input matrices. One vector for models and one for parameters.
   int obs_; // Observation from V_[strategy_id][param_id] based on 
                 // line, patient_id, and health_id (e.g., state_id, transition_id)
   int n_strategies_;
@@ -31,12 +38,6 @@ public:
   int n_patients_;
   int n_obs_; // Number of observations inclusive of strategies, lines, health values, and patients
   hesim::TimeFun* timefun_;
-  int calc_n_obs();
-  int get_n_healthvals(Rcpp::List l);
-  std::vector<int> get_n_lines(Rcpp::List l, int n_strategies);
-  vecmats split(arma::mat X);
-  vecmats_2d split(vecmats V);
-  vecmats_3d split(vecmats_2d V);
   void set_model(int model);
   void set_param_id(int param_id);
   void set_strategy_id(int strategy_id);
@@ -47,7 +48,6 @@ public:
   void set_obs(int patient_id, int health_id);
   void set_obs(int line, int patient_id, int health_id);
   void set_obs(int strategy_id, int line, int patient_id, int health_id);
-  vecmats get_X() const; // Vector of matrices for a given treatment strategy
   arma::rowvec operator()() const;
 };
 

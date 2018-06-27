@@ -1,6 +1,5 @@
 ---
 title: Partitioned survival models
-author: "Devin Incerti"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -164,17 +163,17 @@ We fit a linear model to medical costs, so we can use the `form_PartSurvStateVal
 part.surv.medcosts <- form_PartSurvStateVals(costs.medical.fit, data = statevals.edata, n = n.samples)
 ```
 
-Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using `form_PartSurvStateVals()`. Instead, we create the model from our `params_lm` class object and input data (of class `input_data`). Since we don't have fitted R model, we can use a `formula` object to specify the explanatory variables in the model. That is, we use `formula()` to obtain the variables (`strategy_id`) in `statevals.edata` that are needed. 
+Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using `form_PartSurvStateVals()`. Instead, we create the model from our `params_lm` class object and input data (of class `input_data`). Since we don't have fitted R model, we can use a `formula_list` object to specify the explanatory variables in the model. That is, we use `formula_list()` to obtain the variables (`strategy_id`) in `statevals.edata` that are needed. 
 
 ```{r, warning = FALSE, message = FALSE}
-input.dat <- form_input_data(formula(~ -1 + factor(state_id)), data = statevals.edata)
+input.dat <- form_input_data(formula_list(mu = ~ -1 + factor(state_id)), data = statevals.edata)
 part.surv.drugcosts <- PartSurvStateVals$new(data = input.dat, params = drugcosts.params)
 ```
 
 We can instantiate a utility model in the same manner.
 
 ```{r, warning = FALSE, message = FALSE}
-input.dat <- form_input_data(formula(~ -1 + factor(state_id)), data = statevals.edata)
+input.dat <- form_input_data(formula_list(mu = ~ -1 + factor(state_id)), data = statevals.edata)
 part.surv.utility <- PartSurvStateVals$new(data = input.dat, params = utility.params)
 ```
 
