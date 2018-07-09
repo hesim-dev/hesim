@@ -7,7 +7,7 @@
 
 namespace part_surv{
 
-// Statistical modeling for predicting state values
+/// Statistical modeling for predicting state values
 class StateValMods{
 protected:
   int n_strategies_;
@@ -43,7 +43,7 @@ public:
 };
 
 
-// Statistical modeling for predicting survival 
+/// Statistical modeling for predicting survival 
 class SurvMods{ 
 public:
   SurvMods(Rcpp::Environment R_PartSurvCurves);
@@ -99,7 +99,7 @@ public:
 
 struct SurvCurvesOut{
   SurvCurvesOut();
-  SurvCurvesOut(int n); // For creating an object to fill
+  SurvCurvesOut(int n); ///< For creating an object to fill
   static SurvCurvesOut create_from_R(Rcpp::Environment R_PartSurv);
   std::vector<int> curve_;
   std::vector<int> sample_;
@@ -120,7 +120,7 @@ public:
 };
 
 struct StateValsOut {
-  StateValsOut(int n); // For creating an object to fill
+  StateValsOut(int n); ///< For creating an object to fill
   std::vector<int> state_id_;
   std::vector<int> sample_;
   std::vector<int> strategy_id_;
