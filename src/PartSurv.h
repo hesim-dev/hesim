@@ -5,16 +5,21 @@
 #include <hesim/utils.h>
 #include "integrate.h"
 
+/** This namespace holds a number of classes and structures used for predicting survival. Here is where you would put more detailed documentation of the namespace.*/
 namespace part_surv{
 
 /// Statistical modeling for predicting state values
+/// This is a virtual class that shouldn't be instantiated, but it's not pure virtual, so be careful.
 class StateValMods{
 protected:
-  int n_strategies_;
-  int n_patients_;
-  int n_states_;
-  int obs_;
+  int n_strategies_; ///< The number of strategies
+  int n_patients_; ///< The number of patients
+  int n_states_; ///< The number of states
+  int obs_; ///< The number of observations
 public:
+  /** This is the main constructor for the StateValMods class. It initializes the class, but hard-codes the number of observations (#obs_) to zero.
+      @param[in] R_PartSurvStateVals this is an R-based data structure used to initialize all the members.
+  */
   StateValMods(Rcpp::Environment R_PartSurvStateVals);
   virtual ~StateValMods() {};
   std::vector<int> state_id_;
@@ -26,9 +31,14 @@ public:
   void virtual set_obs(int obs) {};
   int virtual get_n_obs() {return 0.0;}
   int virtual get_n_samples() {return 0.0;}
+  /** This accessor always produces zero.
+      @returns 0.0
+  */
   double virtual predict() const {return 0.0;}
 };
 
+/** The LmMod class is a concrete implementation of StateValMods that uses StatModLm to predict survival.
+ */
 class LmMod : public StateValMods{
 private:
   ParamsLm params_;
