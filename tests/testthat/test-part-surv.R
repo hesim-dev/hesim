@@ -35,7 +35,8 @@ for (i in 1:3){
                                           dist = "weibull")
   fits.weinma[[i]] <- suppressWarnings(flexsurv::flexsurvreg(as.formula(formulas[[i]]), 
                                          data = surv.data,
-                                         dist = hesim_survdists$weibullNMA))
+                                         dist = hesim_survdists$weibullNMA,
+                                         inits = fits.wei[[i]]$res.t[, "est"]))
   fits.splines[[i]] <- flexsurv::flexsurvspline(as.formula(formulas[[i]]), data = surv.data)
 }
 fits.exp <- partsurvfit(flexsurvreg_list(fits.exp), data = surv.data)

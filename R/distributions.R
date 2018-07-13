@@ -34,15 +34,15 @@ sr.weibNMA.inits <- function(aux){
 ## parameterisation, for use as initial values 
 
 sr2fsweiNMA <- function(sr){
-    scale <- exp(stats::coef(sr)[1])
-    beta.scale <- stats::coef(sr)[-1]
-    shape <- mean(1/sr$scale)
-    beta.shape <- if (length(sr$scale)>1) log(sr$scale[1]/sr$scale[-1]) else numeric()
-    pars <- weibull_to_weibullNMA(shape, scale)
-    c(pars$a0, pars$a1, -beta.scale*shape, beta.shape)
+  scale <- exp(stats::coef(sr)[1])
+  beta.scale <- stats::coef(sr)[-1]
+  shape <- mean(1/sr$scale)
+  beta.shape <- if (length(sr$scale)>1) log(sr$scale[1]/sr$scale[-1]) else numeric()
+  pars <- weibull_to_weibullNMA(shape, scale)
+  c(pars$a0, pars$a1, -beta.scale*shape, beta.shape)
 }
 
-#' Paramaterization of the Weibull distribution for network meta-analysis
+#' Parameterization of the Weibull distribution for network meta-analysis
 #' 
 #' Density, distribution function, hazards, quantile function and random generation
 #' for the Weibull distribution when parameterized for network meta-analysis.

@@ -1,5 +1,5 @@
 # Simulate data for partitioned survival analysis with 3 treatment strategies
-n.strategies <- 3
+n_strategies <- 3
 
 # Survival curves for 4-state partitioned survival model  ----------------------
 sim_surv_data <-  function(X, beta){
@@ -15,7 +15,7 @@ sim_surv_data <-  function(X, beta){
 
 sim_part_surv4_curves <- function(n_strategies = 3, n_patients){ # n_strategies
   set.seed(101)
-  n.obs <- n.strategies * n_patients
+  n_obs <- n_strategies * n_patients
   
   # Parameters
   beta1 <- c(0, .02, .01, -.1, 0)
@@ -24,26 +24,30 @@ sim_part_surv4_curves <- function(n_strategies = 3, n_patients){ # n_strategies
   beta <- matrix(c(beta1, beta2, beta3), nrow = 3, byrow = TRUE) 
   
   # Data
-  female <- rbinom(n.obs, 1, .5)
-  age <- rlnorm(n.obs, meanlog = 4, sdlog = .25)
-  strategy.id <- factor(rep(seq_len(n_strategies), n_patients))
-  sim.data <- data.frame(female, age, strategy_id = strategy.id)
+  female <- rbinom(n_obs, 1, .5)
+  age <- rlnorm(n_obs, meanlog = 4, sdlog = .25)
+  strategy_id <- factor(rep(seq_len(n_strategies), n_patients))
+  sim_data <- data.frame(female, age, strategy_id = strategy_id)
   
   # Simulate
-  n.curves <- nrow(beta)
-  X <- model.matrix(~female + age + strategy_id, sim.data)
+  n_curves <- nrow(beta)
+  X <- model.matrix(~female + age + strategy_id, sim_data)
   colnames(X)[colnames(X) == "(Intercept)"] <- "intercept"
-  surv.data <- vector(mode = "list", length = n.curves)
-  for (i in 1:n.curves){
-    surv.data[[i]] <- sim_surv_data(X, beta = beta[i, ])
-    colnames(surv.data[[i]]) <- c(paste0("endpoint", i, "_time"),
-                                  paste0("endpoint", i, "_status"))
+  surv_data <- data.frame(female = female, age = age, strategy_id = strategy_id)
+  censoring_times <- rexp(n_obs, exp(-2))
+  prior_times <- rep(0, n_obs)
+  
+  for (i in 1:n_curves){
+    latent_surv_times <- rexp(n_obs, exp(X %*% beta[i, ]))
+    status_str <- paste0("endpoint", i, "_status")
+    time_str <- paste0("endpoint", i, "_time")
+    surv_data[[time_str]] <- pmin(latent_surv_times + prior_times, censoring_times) 
+    surv_data[[status_str]] <- as.numeric(latent_surv_times + prior_times <= censoring_times)
   }
-  sim.data <- cbind(sim.data, do.call("cbind", surv.data))
-  return(sim.data)
+  return(surv_data)
 }
 
-survival.simdata <- sim_part_surv4_curves(n_patients = 500)
+survival_simdata <- sim_part_surv4_curves(n_patients = 500)
   
 
 # Costs in 3 health states  ----------------------------------------------------
@@ -52,18 +56,18 @@ sim_cost3_medical <- function(n_patients){
   set.seed(101)
   
   # Parameters
-  beta.intercept <- 30000
-  beta.female <- 1000
-  beta.state2 <- -5000
-  beta.state3 <- 10000
-  beta <- matrix(c(beta.intercept, beta.female, beta.state2, beta.state3),
+  beta_intercept <- 30000
+  beta_female <- 1000
+  beta_state2 <- -5000
+  beta_state3 <- 10000
+  beta <- matrix(c(beta_intercept, beta_female, beta_state2, beta_state3),
                  ncol = 1)
   
   # Data
-  patients.df <- data.frame(patient_id = seq_len(n_patients),
+  patients_df <- data.frame(patient_id = seq_len(n_patients),
                             female = rbinom(n_patients, 1, .5))
   state <- data.frame(state_name = factor(paste0("state", seq(1, 3))))
-  data <- merge(patients.df, state)
+  data <- merge(patients_df, state)
   
   # Simulate
   X <- model.matrix(~female + state_name, data)
@@ -91,12 +95,7 @@ sim_cost3_drugs <- function(){
 costs.simdata <- list(medical = cost.medical.simdata,
                      drugs = sim_cost3_drugs())
 
-# Sample Weibull NMA data  -----------------------------------------------------
-# part_surv4_weibull_NMA <- function(){
-#   
-# }
-
 # Save -------------------------------------------------------------------------
-part_surv4_simdata <- list(survival = survival.simdata,
+part_surv4_simdata <- list(survival = survival_simdata,
                           costs = costs.simdata)
 save(part_surv4_simdata, file = "../data/part_surv4_simdata.rda", compress = "bzip2")

@@ -75,7 +75,7 @@
     <div class="page-header toc-ignore">
       <h1>Individualized cost-effectiveness analysis (iCEA)</h1>
             
-            <h4 class="date">2018-06-26</h4>
+            <h4 class="date">2018-07-12</h4>
           </div>
 
     
@@ -201,6 +201,7 @@ icea.dt &lt;-<span class="st">  </span><span class="kw"><a href="../reference/ic
 <h3 class="hasAnchor">
 <a href="#probability-most-cost-effective" class="anchor"></a>Probability most cost-effective</h3>
 <p>A useful summary measure for quantifying uncertainty is the probability that each treatment strategy is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each strategy has the highest NMB. For example, consider a random sample of 10 draws from the PSA simulation output and suppose <span class="math inline">\(k\)</span> is again equal to <span class="math inline">\(150,000\)</span>.</p>
+<pre><code>## Warning: package 'knitr' was built under R version 3.4.3</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ce.nmb &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/dcast.data.table">dcast</a></span>(ce[sim <span class="op">%in%</span><span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>nsims, <span class="dv">10</span>) <span class="op">&amp;</span><span class="st"> </span>grp <span class="op">==</span><span class="st"> "Group 2"</span>], 
                 sim <span class="op">~</span><span class="st"> </span>strategy, <span class="dt">value.var =</span> <span class="st">"nmb"</span>)
 <span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/setattr">setnames</a></span>(ce.nmb, <span class="kw">colnames</span>(ce.nmb), <span class="kw">c</span>(<span class="st">"sim"</span>, <span class="st">"nmb1"</span>, <span class="st">"nmb2"</span>, <span class="st">"nmb3"</span>))
