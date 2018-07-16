@@ -10,7 +10,7 @@
 \alias{HweibullNMA}
 \alias{rmst_weibullNMA}
 \alias{mean_weibullNMA}
-\title{Paramaterization of the Weibull distribution for network meta-analysis}
+\title{Parameterization of the Weibull distribution for network meta-analysis}
 \usage{
 dweibullNMA(x, a0, a1 = FALSE, log = FALSE)
 
