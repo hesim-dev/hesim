@@ -347,8 +347,8 @@ evpi <- function(x, k, sim, strategy, grp, e, c, nsims, nstrategies, ngrps, nmb)
   x.nmb = copy(nmb)
   f <- stats::as.formula(paste0("k", "+", grp, "~", strategy))
   x.enmb <- dcast(x.nmb, f, value.var = "enmb")
-  mu <- rowmaxC(as.matrix(x.enmb[, -c(1:2), with = FALSE]))
-  mu.ind <- c(rowmax_indC(as.matrix(x.enmb[, -c(1:2), with = FALSE]))) + 1
+  mu <- C_rowmax(as.matrix(x.enmb[, -c(1:2), with = FALSE]))
+  mu.ind <- c(C_rowmax_index(as.matrix(x.enmb[, -c(1:2), with = FALSE]))) + 1
 
   # calculate expected value of perfect information
   Vstar <- VstarC(k, x[[e]], x[[c]], nsims, nstrategies, ngrps)

@@ -1,19 +1,11 @@
 context("util.cpp unit tests")
 
-# Test c++ function matrix_byrow ----------------------------------------------
-test_that("matrix_byrow", {
-  vec <- c(1, 2, 3, 4, 5, 6)
-  matR <- matrix(vec, nrow = 2, ncol = 3, byrow = TRUE)
-  matC <- matrix_byrow(vec, 2, 3)
-  expect_equal(matR, matC)
+# Test c++ function add_constant -----------------------------------------------
+test_that("add_constant", {
+  v1 <- c(1, 2, 3)
+  v2 <- c(1.2, 4, 5.6)
+  expect_equal(hesim:::C_test_add_constant_int(v1, 5.5),
+               floor(v + 5.5))
+  expect_equal(hesim:::C_test_add_constant_double(v2, 5.5),
+               v2 + 5.5)
 })
-
-# Test c++ function matrix_bycol ----------------------------------------------
-test_that("matrix_bycol", {
-  vec <- c(1, 2, 3, 4, 5, 6)
-  matR <- matrix(vec, nrow = 2, ncol = 3, byrow = FALSE)
-  matC <- matrix_bycol(vec, 2, 3)
-  expect_equal(matR, matC)
-})
-
-

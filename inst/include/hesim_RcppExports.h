@@ -45,11 +45,11 @@ namespace hesim {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline double rgompertz(double shape, double rate) {
+    inline /** * Random number generation from Gompertz distribution * with the same paramerization in R stats.  * @param shape The shape parameter. * @param rate The rate parameter. * @return A random sample from the Gompertz distribution. */ double rgompertz(double shape, double rate) {
         typedef SEXP(*Ptr_rgompertz)(SEXP,SEXP);
         static Ptr_rgompertz p_rgompertz = NULL;
         if (p_rgompertz == NULL) {
-            validateSignature("double(*rgompertz)(double,double)");
+            validateSignature("/** * Random number generation from Gompertz distribution * with the same paramerization in R stats.  * @param shape The shape parameter. * @param rate The rate parameter. * @return A random sample from the Gompertz distribution. */ double(*rgompertz)(double,double)");
             p_rgompertz = (Ptr_rgompertz)R_GetCCallable("hesim", "_hesim_rgompertz");
         }
         RObject rcpp_result_gen;
@@ -61,7 +61,7 @@ namespace hesim {
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<double >(rcpp_result_gen);
+        return Rcpp::as</** * Random number generation from Gompertz distribution * with the same paramerization in R stats.  * @param shape The shape parameter. * @param rate The rate parameter. * @return A random sample from the Gompertz distribution. */ double >(rcpp_result_gen);
     }
 
     inline double qllogis(double p, double shape, double scale, int lt = 1, int lg = 0) {

@@ -10,61 +10,6 @@
 
 using namespace Rcpp;
 
-// vecmax_index
-int vecmax_index(std::vector<double> x);
-RcppExport SEXP _hesim_vecmax_index(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(vecmax_index(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// vecmax
-double vecmax(std::vector<double> x);
-RcppExport SEXP _hesim_vecmax(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(vecmax(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rowmaxC
-arma::colvec rowmaxC(arma::mat x);
-RcppExport SEXP _hesim_rowmaxC(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rowmaxC(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// stdmean
-double stdmean(std::vector<double> v);
-RcppExport SEXP _hesim_stdmean(SEXP vSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type v(vSEXP);
-    rcpp_result_gen = Rcpp::wrap(stdmean(v));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rowmax_indC
-arma::ucolvec rowmax_indC(arma::mat x);
-RcppExport SEXP _hesim_rowmax_indC(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rowmax_indC(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // incr_effectC
 std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y, int nsims, int nstrategies, int ngrps);
 RcppExport SEXP _hesim_incr_effectC(SEXP xSEXP, SEXP ySEXP, SEXP nsimsSEXP, SEXP nstrategiesSEXP, SEXP ngrpsSEXP) {
@@ -161,7 +106,7 @@ RcppExport SEXP _hesim_qgompertz(SEXP pSEXP, SEXP shapeSEXP, SEXP rateSEXP) {
     return rcpp_result_gen;
 }
 // rgompertz
-double rgompertz(double shape, double rate);
+/** * Random number generation from Gompertz distribution * with the same paramerization in R stats.  * @param shape The shape parameter. * @param rate The rate parameter. * @return A random sample from the Gompertz distribution. */ double rgompertz(double shape, double rate);
 static SEXP _hesim_rgompertz_try(SEXP shapeSEXP, SEXP rateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -673,41 +618,49 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// matrix_byrow
-arma::mat matrix_byrow(arma::rowvec v, int nrow, int ncol);
-RcppExport SEXP _hesim_matrix_byrow(SEXP vSEXP, SEXP nrowSEXP, SEXP ncolSEXP) {
+// C_rowmax
+arma::colvec C_rowmax(arma::mat x);
+RcppExport SEXP _hesim_C_rowmax(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::rowvec >::type v(vSEXP);
-    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
-    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_byrow(v, nrow, ncol));
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_rowmax(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// matrix_bycol
-arma::mat matrix_bycol(arma::rowvec v, int nrow, int ncol);
-RcppExport SEXP _hesim_matrix_bycol(SEXP vSEXP, SEXP nrowSEXP, SEXP ncolSEXP) {
+// C_rowmax_index
+arma::ucolvec C_rowmax_index(arma::mat x);
+RcppExport SEXP _hesim_C_rowmax_index(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::rowvec >::type v(vSEXP);
-    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
-    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
-    rcpp_result_gen = Rcpp::wrap(matrix_bycol(v, nrow, ncol));
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_rowmax_index(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// test_C_add_constant
-std::vector<int> test_C_add_constant(std::vector<int> v, double value);
-RcppExport SEXP _hesim_test_C_add_constant(SEXP vSEXP, SEXP valueSEXP) {
+// C_test_add_constant_int
+std::vector<int> C_test_add_constant_int(std::vector<int> v, double value);
+RcppExport SEXP _hesim_C_test_add_constant_int(SEXP vSEXP, SEXP valueSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<int> >::type v(vSEXP);
     Rcpp::traits::input_parameter< double >::type value(valueSEXP);
-    rcpp_result_gen = Rcpp::wrap(test_C_add_constant(v, value));
+    rcpp_result_gen = Rcpp::wrap(C_test_add_constant_int(v, value));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_add_constant_double
+std::vector<double> C_test_add_constant_double(std::vector<double> v, double value);
+RcppExport SEXP _hesim_C_test_add_constant_double(SEXP vSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type v(vSEXP);
+    Rcpp::traits::input_parameter< double >::type value(valueSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_add_constant_double(v, value));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -727,7 +680,7 @@ static int _hesim_RcppExport_validate(const char* sig) {
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("double(*qgompertz)(double,double,double)");
-        signatures.insert("double(*rgompertz)(double,double)");
+        signatures.insert("/** * Random number generation from Gompertz distribution * with the same paramerization in R stats.  * @param shape The shape parameter. * @param rate The rate parameter. * @return A random sample from the Gompertz distribution. */ double(*rgompertz)(double,double)");
         signatures.insert("double(*qllogis)(double,double,double,int,int)");
         signatures.insert("double(*rllogis)(double,double)");
         signatures.insert("double(*rgengamma)(double,double,double)");
@@ -765,11 +718,6 @@ RcppExport SEXP _hesim_RcppExport_registerCCallable() {
 RcppExport SEXP _rcpp_module_boot_Distributions();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_hesim_vecmax_index", (DL_FUNC) &_hesim_vecmax_index, 1},
-    {"_hesim_vecmax", (DL_FUNC) &_hesim_vecmax, 1},
-    {"_hesim_rowmaxC", (DL_FUNC) &_hesim_rowmaxC, 1},
-    {"_hesim_stdmean", (DL_FUNC) &_hesim_stdmean, 1},
-    {"_hesim_rowmax_indC", (DL_FUNC) &_hesim_rowmax_indC, 1},
     {"_hesim_incr_effectC", (DL_FUNC) &_hesim_incr_effectC, 5},
     {"_hesim_ceacC", (DL_FUNC) &_hesim_ceacC, 6},
     {"_hesim_mceC", (DL_FUNC) &_hesim_mceC, 6},
@@ -798,9 +746,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_PartSurvStateVals_predict", (DL_FUNC) &_hesim_C_PartSurvStateVals_predict, 1},
     {"_hesim_C_PartSurv_sim_stateprobs", (DL_FUNC) &_hesim_C_PartSurv_sim_stateprobs, 1},
     {"_hesim_C_PartSurv_sim_auc", (DL_FUNC) &_hesim_C_PartSurv_sim_auc, 5},
-    {"_hesim_matrix_byrow", (DL_FUNC) &_hesim_matrix_byrow, 3},
-    {"_hesim_matrix_bycol", (DL_FUNC) &_hesim_matrix_bycol, 3},
-    {"_hesim_test_C_add_constant", (DL_FUNC) &_hesim_test_C_add_constant, 2},
+    {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
+    {"_hesim_C_rowmax_index", (DL_FUNC) &_hesim_C_rowmax_index, 1},
+    {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
+    {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_rcpp_module_boot_Distributions", (DL_FUNC) &_rcpp_module_boot_Distributions, 0},
     {"_hesim_RcppExport_registerCCallable", (DL_FUNC) &_hesim_RcppExport_registerCCallable, 0},

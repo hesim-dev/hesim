@@ -4,6 +4,7 @@
 /**************************
 * Exponential distribution
 **************************/
+/// Class for the exponential distribution.
 hesim::Exponential::Exponential(double rate){
     rate_ = rate;
 }
@@ -214,6 +215,13 @@ double qgompertz(double p, double shape, double rate) {
 }
 
 // [[Rcpp::export]]
+/**
+* Random number generation from Gompertz distribution
+* with the same paramerization in R stats. 
+* @param shape The shape parameter.
+* @param rate The rate parameter.
+* @return A random sample from the Gompertz distribution.
+*/
 double rgompertz(double shape, double rate){
     double u = R::runif(0,1);
     return qgompertz(u, shape, rate);

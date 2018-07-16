@@ -12,7 +12,7 @@ double StatModLm::predict(int sample, int obs){
   return arma::dot(X_.row(obs), params_.coefs_.row(sample));
 }
 
-double StatModLm::simulate(int sample, int obs){
+double StatModLm::random(int sample, int obs){
   return R::rnorm(predict(sample, obs), params_.sigma_[sample]);
 }
 
@@ -49,7 +49,7 @@ std::unique_ptr<hesim::Distribution> init_Distribution_ptr(ParamsSurv params_sur
   }
   else if (dist_name == "survspline"){
     int n_knots = params_surv.spline_aux_.knots_.size();
-    std::vector<double> gamma = zeros<double>(n_knots);
+    std::vector<double> gamma(n_knots, 0.0);
     d = new hesim::SurvSplines(gamma, params_surv.spline_aux_.knots_,
                                params_surv.spline_aux_.scale_,
                                params_surv.spline_aux_.timescale_);
@@ -113,3 +113,8 @@ std::vector<double> StatModSurv::quantile(int sample, int obs, std::vector<doubl
   }
   return out;
 };
+
+double StatModSurv::random(int sample, int obs){
+  set_dist(sample, obs);
+  return dist_->random();
+}

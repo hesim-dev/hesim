@@ -65,9 +65,9 @@ public:
   int virtual get_n_samples() const {return 0.0;}
   int virtual get_n_obs() const {return 0.0;}
   std::vector<double> virtual summary(int model, int sample, int obs, std::vector<double> t, 
-                                      std::string type, double dr = 0) const {return zeros<double>(1);}
+                                      std::string type, double dr = 0) const {return std::vector<double>(1, 0.0);}
   std::vector<double> virtual quantile(int model, int sample, int obs, std::vector<double> p) const {
-    return zeros<double>(1);
+    return std::vector<double>(1, 0.0);
   }
 };
 

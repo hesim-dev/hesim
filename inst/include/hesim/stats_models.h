@@ -12,7 +12,7 @@ public:
   ParamsLm params_;
   StatModLm(arma::mat X, ParamsLm params);
   double predict(int sample, int obs);
-  double simulate(int sample, int obs);
+  double random(int sample, int obs);
 };
 
 /****************
@@ -40,6 +40,9 @@ public:
 
   // Return quantile of distribution
   std::vector<double> quantile(int sample, int obs, std::vector<double> p);
+  
+  // Randomly sample from survival distribution
+  double random(int sample, int obs);
 
 };
 

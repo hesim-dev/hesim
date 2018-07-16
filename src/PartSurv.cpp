@@ -244,8 +244,8 @@ SurvCurvesOut SurvCurvesOut::create_from_R(Rcpp::Environment R_PartSurv){
   out.n_sims_ = out.value_.size()/n_curves;
   
   // R to C++ indexing
-  out.curve_ = add_constant(out.curve_, -1); 
-  out.sample_ = add_constant(out.sample_, -1); 
+  hesim::add_constant(out.curve_, -1); 
+  hesim::add_constant(out.sample_, -1); 
   return out;
 }
 
@@ -386,10 +386,10 @@ StateprobsOut StateprobsOut::create_from_R(Rcpp::DataFrame R_stateprobs){
   out.prob_ = Rcpp::as<std::vector<double> >(R_stateprobs["prob"]);
 
   // R to C++ indexing
-  out.state_id_ = add_constant(out.state_id_, -1);
-  out.sample_ = add_constant(out.sample_, -1);
-  out.strategy_id_ = add_constant(out.strategy_id_, -1);
-  out.patient_id_ = add_constant(out.patient_id_, -1);
+  hesim::add_constant(out.state_id_, -1);
+  hesim::add_constant(out.sample_, -1);
+  hesim::add_constant(out.strategy_id_, -1);
+  hesim::add_constant(out.patient_id_, -1);
   return out;
 }
 

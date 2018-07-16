@@ -1,11 +1,5 @@
 context("utils.R unit tests")
 
-# absorbing --------------------------------------------------------------------
-test_that("absorbing", {
-  tmat <- matrix(c(seq(1, 6), rep(NA, 3)), nrow = 3, ncol = 3, byrow = TRUE)
-  expect_equal(absorbing(tmat), 3)
-})
-
 # list depth -------------------------------------------------------------------
 list1 <- list(1)
 list2 <- list(1, list1)

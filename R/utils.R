@@ -112,9 +112,3 @@ flatten_lists <- function(x) {
   else return(unlist(c(lapply(x, flatten_lists)), recursive = FALSE))
 }
 
-# Return vector of absorbing states
-absorbing <- function(tmat){
-  which(apply(tmat, 1, function(x) all(is.na(x))))
-}
-
-

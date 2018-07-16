@@ -1,41 +1,8 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 #include <RcppArmadillo.h>
-#include <algorithm>
+#include <hesim/utils.h>
 using namespace Rcpp;
-
-// Calculate index of maximum of vector
-// [[Rcpp::export]]
-int vecmax_index(std::vector<double> x) {
-  std::vector<double>::iterator it = std::max_element(x.begin(), x.end());
-  return it - x.begin();
-}
-
-// Calculate maximum of vector
-// [[Rcpp::export]]
-double vecmax(std::vector<double> x) {
-  std::vector<double>::iterator it = std::max_element(x.begin(), x.end());
-  return *it;
-}
-
-// row maximum of matrix
-// [[Rcpp::export]]
-arma::colvec rowmaxC(arma::mat x) {
-  return arma::max(x, 1);
-}
-
-// test mean
-// [[Rcpp::export]]
-double stdmean(std::vector<double> v) {
-  double mean = accumulate(v.begin(), v.end(), 0.0)/v.size();
-  return mean;
-}
-
-// row maximum of matrix
-// [[Rcpp::export]]
-arma::ucolvec rowmax_indC(arma::mat x) {
-  return arma::index_max(x,1);;
-}
 
 // Incremental effect in piecewise comparisons
 // [[Rcpp::export]]
@@ -128,7 +95,7 @@ std::vector<double> mceC(std::vector<double> k, std::vector<double> e,
         for (int i = 0; i < nstrategies; ++i){
           nb.push_back(k[j] * e[sg * nstrategies + i] - c[sg * nstrategies + i]);
         }
-        int nb_ind = vecmax_index(nb);
+        int nb_ind = hesim::max_element_pos(nb.begin(), nb.end());
         prob[jg * nstrategies + nb_ind] = prob[jg * nstrategies + nb_ind] + 1;
         ++sg;
       }
@@ -172,10 +139,10 @@ std::vector<double> VstarC(std::vector<double> k,
         for (int i = 0; i < nstrategies; ++i){
           inb.push_back(k[j] * e[sg * nstrategies + i] - c[sg * nstrategies + i]);
         }
-        Ustar.push_back(vecmax(inb));
+        Ustar.push_back(*std::max_element(inb.begin(), inb.end()));
         ++sg;
       }
-      double Ustar_mean = accumulate(Ustar.begin(), Ustar.end(), 0.0)/Ustar.size();
+      double Ustar_mean = hesim::mean(Ustar);
       Vstar.push_back(Ustar_mean);
     }
   }
