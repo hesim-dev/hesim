@@ -10,66 +10,66 @@
 
 using namespace Rcpp;
 
-// incr_effectC
-std::vector<double> incr_effectC(std::vector<double> x, std::vector<double> y, int nsims, int nstrategies, int ngrps);
-RcppExport SEXP _hesim_incr_effectC(SEXP xSEXP, SEXP ySEXP, SEXP nsimsSEXP, SEXP nstrategiesSEXP, SEXP ngrpsSEXP) {
+// C_incr_effect
+std::vector<double> C_incr_effect(std::vector<double> x, std::vector<double> y, int n_samples, int n_strategies, int n_grps);
+RcppExport SEXP _hesim_C_incr_effect(SEXP xSEXP, SEXP ySEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP n_grpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type y(ySEXP);
-    Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
-    Rcpp::traits::input_parameter< int >::type nstrategies(nstrategiesSEXP);
-    Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(incr_effectC(x, y, nsims, nstrategies, ngrps));
+    Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_strategies(n_strategiesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_grps(n_grpsSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_incr_effect(x, y, n_samples, n_strategies, n_grps));
     return rcpp_result_gen;
 END_RCPP
 }
-// ceacC
-std::vector<double> ceacC(std::vector<double> k, std::vector<double> ie, std::vector<double> ic, int nsims, int nstrategies, int ngrps);
-RcppExport SEXP _hesim_ceacC(SEXP kSEXP, SEXP ieSEXP, SEXP icSEXP, SEXP nsimsSEXP, SEXP nstrategiesSEXP, SEXP ngrpsSEXP) {
+// C_ceac
+std::vector<double> C_ceac(std::vector<double> k, std::vector<double> ie, std::vector<double> ic, int n_samples, int n_strategies, int n_grps);
+RcppExport SEXP _hesim_C_ceac(SEXP kSEXP, SEXP ieSEXP, SEXP icSEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP n_grpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type k(kSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type ie(ieSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type ic(icSEXP);
-    Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
-    Rcpp::traits::input_parameter< int >::type nstrategies(nstrategiesSEXP);
-    Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(ceacC(k, ie, ic, nsims, nstrategies, ngrps));
+    Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_strategies(n_strategiesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_grps(n_grpsSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_ceac(k, ie, ic, n_samples, n_strategies, n_grps));
     return rcpp_result_gen;
 END_RCPP
 }
-// mceC
-std::vector<double> mceC(std::vector<double> k, std::vector<double> e, std::vector<double> c, int nsims, int nstrategies, int ngrps);
-RcppExport SEXP _hesim_mceC(SEXP kSEXP, SEXP eSEXP, SEXP cSEXP, SEXP nsimsSEXP, SEXP nstrategiesSEXP, SEXP ngrpsSEXP) {
+// C_mce
+std::vector<double> C_mce(std::vector<double> k, std::vector<double> e, std::vector<double> c, int n_samples, int n_strategies, int n_grps);
+RcppExport SEXP _hesim_C_mce(SEXP kSEXP, SEXP eSEXP, SEXP cSEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP n_grpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type k(kSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type e(eSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type c(cSEXP);
-    Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
-    Rcpp::traits::input_parameter< int >::type nstrategies(nstrategiesSEXP);
-    Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(mceC(k, e, c, nsims, nstrategies, ngrps));
+    Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_strategies(n_strategiesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_grps(n_grpsSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_mce(k, e, c, n_samples, n_strategies, n_grps));
     return rcpp_result_gen;
 END_RCPP
 }
-// VstarC
-std::vector<double> VstarC(std::vector<double> k, std::vector<double> e, std::vector<double> c, int nsims, int nstrategies, int ngrps);
-RcppExport SEXP _hesim_VstarC(SEXP kSEXP, SEXP eSEXP, SEXP cSEXP, SEXP nsimsSEXP, SEXP nstrategiesSEXP, SEXP ngrpsSEXP) {
+// C_enmbpi
+std::vector<double> C_enmbpi(std::vector<double> k, std::vector<double> e, std::vector<double> c, int n_samples, int n_strategies, int n_grps);
+RcppExport SEXP _hesim_C_enmbpi(SEXP kSEXP, SEXP eSEXP, SEXP cSEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP n_grpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type k(kSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type e(eSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type c(cSEXP);
-    Rcpp::traits::input_parameter< int >::type nsims(nsimsSEXP);
-    Rcpp::traits::input_parameter< int >::type nstrategies(nstrategiesSEXP);
-    Rcpp::traits::input_parameter< int >::type ngrps(ngrpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(VstarC(k, e, c, nsims, nstrategies, ngrps));
+    Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_strategies(n_strategiesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_grps(n_grpsSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_enmbpi(k, e, c, n_samples, n_strategies, n_grps));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -718,10 +718,10 @@ RcppExport SEXP _hesim_RcppExport_registerCCallable() {
 RcppExport SEXP _rcpp_module_boot_Distributions();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_hesim_incr_effectC", (DL_FUNC) &_hesim_incr_effectC, 5},
-    {"_hesim_ceacC", (DL_FUNC) &_hesim_ceacC, 6},
-    {"_hesim_mceC", (DL_FUNC) &_hesim_mceC, 6},
-    {"_hesim_VstarC", (DL_FUNC) &_hesim_VstarC, 6},
+    {"_hesim_C_incr_effect", (DL_FUNC) &_hesim_C_incr_effect, 5},
+    {"_hesim_C_ceac", (DL_FUNC) &_hesim_C_ceac, 6},
+    {"_hesim_C_mce", (DL_FUNC) &_hesim_C_mce, 6},
+    {"_hesim_C_enmbpi", (DL_FUNC) &_hesim_C_enmbpi, 6},
     {"_hesim_qgompertz", (DL_FUNC) &_hesim_qgompertz, 3},
     {"_hesim_rgompertz", (DL_FUNC) &_hesim_rgompertz, 2},
     {"_hesim_qllogis", (DL_FUNC) &_hesim_qllogis, 5},

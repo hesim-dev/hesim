@@ -281,7 +281,7 @@ calc_incr_effect <- function(x_treat, x_comparator, sim, strategy, grp, outcomes
   outcomes.mat <- matrix(NA, nrow = nrow(x_treat), ncol = length(outcomes))
   colnames(outcomes.mat) <- paste0("i", outcomes)
   for (i in 1:length(outcomes)){
-    outcomes.mat[, i] <- incr_effectC(x_treat[[outcomes[i]]],
+    outcomes.mat[, i] <- C_incr_effect(x_treat[[outcomes[i]]],
                                       x_comparator[[outcomes[i]]],
                                       nsims, nstrategies, ngrps)
   }
@@ -294,7 +294,7 @@ mce <- function(x, k, strategy, grp, e, c, nsims, nstrategies, ngrps){
   krep <- rep(k, each = nstrategies * ngrps)
   strategyrep <- rep(unique(x[[strategy]]), times = length(k) * ngrps)
   grprep <- rep(rep(unique(x[[grp]]), each = nstrategies), length(k))
-  prob.vec <- mceC(k, x[[e]], x[[c]], nsims, nstrategies, ngrps)
+  prob.vec <- C_mce(k, x[[e]], x[[c]], nsims, nstrategies, ngrps)
   prob <- data.table(krep, strategyrep, grprep, prob.vec)
   setnames(prob, c("k", strategy, grp, "prob"))
   return(prob)
@@ -305,7 +305,7 @@ ceac <- function(delta, k, sim, strategy, grp, e, c, nsims, nstrategies, ngrps){
   krep <- rep(k, each = nstrategies * ngrps)
   strategyrep <- rep(unique(delta[[strategy]]), times = length(k) * ngrps)
   grprep <- rep(rep(unique(delta[[grp]]), each = nstrategies), length(k))
-  prob.vec <- ceacC(k, delta[[e]], delta[[c]],
+  prob.vec <- C_ceac(k, delta[[e]], delta[[c]],
                           nsims, nstrategies, ngrps)
   prob <- data.table(krep, strategyrep, grprep, prob.vec)
   setnames(prob, c("k", strategy, grp, "prob"))
@@ -351,11 +351,11 @@ evpi <- function(x, k, sim, strategy, grp, e, c, nsims, nstrategies, ngrps, nmb)
   mu.ind <- c(C_rowmax_index(as.matrix(x.enmb[, -c(1:2), with = FALSE]))) + 1
 
   # calculate expected value of perfect information
-  Vstar <- VstarC(k, x[[e]], x[[c]], nsims, nstrategies, ngrps)
-  evpi <- Vstar - c(mu)
+  enmbpi <- C_enmbpi(k, x[[e]], x[[c]], nsims, nstrategies, ngrps)
+  evpi <- enmbpi - c(mu)
   dt <- data.table(k = rep(k, each = ngrps),
                     grp = rep(unique(x[[grp]]), times = length(k)),
-                    evpi = evpi, enmbpi = Vstar, enmb = c(mu), best = mu.ind)
+                    evpi = evpi, enmbpi = enmbpi, enmb = c(mu), best = mu.ind)
   setnames(dt, "grp", grp)
   return(dt)
 }
