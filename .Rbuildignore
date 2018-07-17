@@ -8,3 +8,5 @@
 ^\.travis\.yml$
 ^pkgdown$
 ^data-raw$
+doxyfile
+DoxygenLayout.xml
