@@ -17,28 +17,8 @@ C_enmbpi <- function(k, e, c, n_samples, n_strategies, n_grps) {
     .Call('_hesim_C_enmbpi', PACKAGE = 'hesim', k, e, c, n_samples, n_strategies, n_grps)
 }
 
-qgompertz <- function(p, shape, rate) {
-    .Call('_hesim_qgompertz', PACKAGE = 'hesim', p, shape, rate)
-}
-
-rgompertz <- function(shape, rate) {
-    .Call('_hesim_rgompertz', PACKAGE = 'hesim', shape, rate)
-}
-
-qllogis <- function(p, shape, scale, lt = 1L, lg = 0L) {
-    .Call('_hesim_qllogis', PACKAGE = 'hesim', p, shape, scale, lt, lg)
-}
-
-rllogis <- function(shape, scale) {
-    .Call('_hesim_rllogis', PACKAGE = 'hesim', shape, scale)
-}
-
-rgengamma <- function(mu, sigma, Q) {
-    .Call('_hesim_rgengamma', PACKAGE = 'hesim', mu, sigma, Q)
-}
-
 C_rgengamma_vec <- function(n, mu, sigma, Q) {
-    .Call('_hesim_rgengamma_vec', PACKAGE = 'hesim', n, mu, sigma, Q)
+    .Call('_hesim_C_rgengamma_vec', PACKAGE = 'hesim', n, mu, sigma, Q)
 }
 
 rtruncnorm <- function(mean, sd, lower, upper) {

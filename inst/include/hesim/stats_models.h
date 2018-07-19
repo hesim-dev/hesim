@@ -20,7 +20,7 @@ public:
 ****************/
 // Initialize distribution pointer with dummy values for parameters and actual values for
 // auxillary parameters
-std::unique_ptr<hesim::Distribution> init_Distribution_ptr(ParamsSurv params_surv);
+std::unique_ptr<hesim::stats::distribution> init_distribution_ptr(ParamsSurv params_surv);
 
 class StatModSurv {
 private:
@@ -29,7 +29,7 @@ private:
 public:
   vecmats X_;
   ParamsSurv params_;
-  std::unique_ptr<hesim::Distribution> dist_;
+  std::unique_ptr<hesim::stats::distribution> dist_;
   StatModSurv(vecmats X, ParamsSurv params);
   void set_dist(int sample, int obs);
 

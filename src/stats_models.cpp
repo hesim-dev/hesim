@@ -20,44 +20,44 @@ double StatModLm::random(int sample, int obs){
 * Survival models
 ****************/
 // Initialize distribution
-std::unique_ptr<hesim::Distribution> init_Distribution_ptr(ParamsSurv params_surv){
-  hesim::Distribution *d;
+std::unique_ptr<hesim::stats::distribution> init_distribution_ptr(ParamsSurv params_surv){
+  hesim::stats::distribution *d;
   std::string dist_name = params_surv.dist_name_;
   if (dist_name == "exponential" || dist_name == "exp"){
-    d = new hesim::Exponential(1);
+    d = new hesim::stats::exponential(1);
   }
   else if (dist_name == "weibull.quiet" || dist_name == "weibull"){
-    d = new hesim::Weibull(1, 1);
+    d = new hesim::stats::weibull(1, 1);
   }
   else if (dist_name == "weibullNMA"){
-    d = new hesim::WeibullNma(0, 0); // equivalent to shape = 1, scale = 1 wih weibull
+    d = new hesim::stats::weibull_nma(0, 0); // equivalent to shape = 1, scale = 1 wih weibull
   }
   else if (dist_name == "gamma"){
-    d = new hesim::Gamma(1, 1);
+    d = new hesim::stats::gamma(1, 1);
   }
   else if (dist_name == "lnorm"){
-    d = new hesim::Lognormal(0, 1);
+    d = new hesim::stats::lognormal(0, 1);
   }
   else if (dist_name == "gompertz"){
-    d = new hesim::Gompertz(0, 1);
+    d = new hesim::stats::gompertz(0, 1);
   }
   else if (dist_name == "llogis"){
-    d = new hesim::LogLogistic(1, 1);
+    d = new hesim::stats::loglogistic(1, 1);
   }
   else if (dist_name == "gengamma"){
-    d = new hesim::GeneralizedGamma(0, 1, 0);
+    d = new hesim::stats::gengamma(0, 1, 0);
   }
   else if (dist_name == "survspline"){
     int n_knots = params_surv.spline_aux_.knots_.size();
     std::vector<double> gamma(n_knots, 0.0);
-    d = new hesim::SurvSplines(gamma, params_surv.spline_aux_.knots_,
+    d = new hesim::stats::survsplines(gamma, params_surv.spline_aux_.knots_,
                                params_surv.spline_aux_.scale_,
                                params_surv.spline_aux_.timescale_);
   }
   else{
       Rcpp::stop("The selected distribution is not available.");
   }
-  std::unique_ptr<hesim::Distribution> uptr(d);
+  std::unique_ptr<hesim::stats::distribution> uptr(d);
   return uptr;
 }
 
@@ -73,7 +73,7 @@ std::vector<double> StatModSurv::predict_pars(int sample, int obs) const{
 };
 
 StatModSurv::StatModSurv(vecmats X, ParamsSurv params)
-  : params_(params), dist_(init_Distribution_ptr(params)){
+  : params_(params), dist_(init_distribution_ptr(params)){
   X_ = X;
 }
 
@@ -96,7 +96,7 @@ std::vector<double> StatModSurv::summary(int sample, int obs, std::vector<double
       out[i] = 1 - dist_->cdf(t[i]);
     }
     else if (type == "rmst"){
-      out[i] = hesim::rmst(dist_.get(), t[i], dr);
+      out[i] = hesim::stats::rmst(dist_.get(), t[i], dr);
     }
     else{
       Rcpp::stop("Selected 'type' is not supported.");

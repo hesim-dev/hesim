@@ -73,184 +73,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// qgompertz
-double qgompertz(double p, double shape, double rate);
-static SEXP _hesim_qgompertz_try(SEXP pSEXP, SEXP shapeSEXP, SEXP rateSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
-    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(qgompertz(p, shape, rate));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _hesim_qgompertz(SEXP pSEXP, SEXP shapeSEXP, SEXP rateSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_qgompertz_try(pSEXP, shapeSEXP, rateSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// rgompertz
-/** * Random number generation from Gompertz distribution * with the same paramerization in R stats.  * @param shape The shape parameter. * @param rate The rate parameter. * @return A random sample from the Gompertz distribution. */ double rgompertz(double shape, double rate);
-static SEXP _hesim_rgompertz_try(SEXP shapeSEXP, SEXP rateSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
-    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(rgompertz(shape, rate));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _hesim_rgompertz(SEXP shapeSEXP, SEXP rateSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rgompertz_try(shapeSEXP, rateSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// qllogis
-double qllogis(double p, double shape, double scale, int lt, int lg);
-static SEXP _hesim_qllogis_try(SEXP pSEXP, SEXP shapeSEXP, SEXP scaleSEXP, SEXP ltSEXP, SEXP lgSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
-    Rcpp::traits::input_parameter< double >::type scale(scaleSEXP);
-    Rcpp::traits::input_parameter< int >::type lt(ltSEXP);
-    Rcpp::traits::input_parameter< int >::type lg(lgSEXP);
-    rcpp_result_gen = Rcpp::wrap(qllogis(p, shape, scale, lt, lg));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _hesim_qllogis(SEXP pSEXP, SEXP shapeSEXP, SEXP scaleSEXP, SEXP ltSEXP, SEXP lgSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_qllogis_try(pSEXP, shapeSEXP, scaleSEXP, ltSEXP, lgSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// rllogis
-double rllogis(double shape, double scale);
-static SEXP _hesim_rllogis_try(SEXP shapeSEXP, SEXP scaleSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
-    Rcpp::traits::input_parameter< double >::type scale(scaleSEXP);
-    rcpp_result_gen = Rcpp::wrap(rllogis(shape, scale));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _hesim_rllogis(SEXP shapeSEXP, SEXP scaleSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rllogis_try(shapeSEXP, scaleSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// rgengamma
-double rgengamma(double mu, double sigma, double Q);
-static SEXP _hesim_rgengamma_try(SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
-    rcpp_result_gen = Rcpp::wrap(rgengamma(mu, sigma, Q));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _hesim_rgengamma(SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rgengamma_try(muSEXP, sigmaSEXP, QSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// rgengamma_vec
-std::vector<double> rgengamma_vec(int n, std::vector<double> mu, std::vector<double> sigma, std::vector<double> Q);
-static SEXP _hesim_rgengamma_vec_try(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
+// C_rgengamma_vec
+std::vector<double> C_rgengamma_vec(int n, std::vector<double> mu, std::vector<double> sigma, std::vector<double> Q);
+static SEXP _hesim_C_rgengamma_vec_try(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type mu(muSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type sigma(sigmaSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type Q(QSEXP);
-    rcpp_result_gen = Rcpp::wrap(rgengamma_vec(n, mu, sigma, Q));
+    rcpp_result_gen = Rcpp::wrap(C_rgengamma_vec(n, mu, sigma, Q));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _hesim_rgengamma_vec(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
+RcppExport SEXP _hesim_C_rgengamma_vec(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rgengamma_vec_try(nSEXP, muSEXP, sigmaSEXP, QSEXP));
+        rcpp_result_gen = PROTECT(_hesim_C_rgengamma_vec_try(nSEXP, muSEXP, sigmaSEXP, QSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -679,11 +519,6 @@ END_RCPP
 static int _hesim_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("double(*qgompertz)(double,double,double)");
-        signatures.insert("/** * Random number generation from Gompertz distribution * with the same paramerization in R stats.  * @param shape The shape parameter. * @param rate The rate parameter. * @return A random sample from the Gompertz distribution. */ double(*rgompertz)(double,double)");
-        signatures.insert("double(*qllogis)(double,double,double,int,int)");
-        signatures.insert("double(*rllogis)(double,double)");
-        signatures.insert("double(*rgengamma)(double,double,double)");
         signatures.insert("std::vector<double>(*C_rgengamma_vec)(int,std::vector<double>,std::vector<double>,std::vector<double>)");
         signatures.insert("double(*rtruncnorm)(double,double,double,double)");
         signatures.insert("double(*rpwexp)(arma::rowvec,arma::rowvec)");
@@ -698,12 +533,7 @@ static int _hesim_RcppExport_validate(const char* sig) {
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _hesim_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("hesim", "_hesim_qgompertz", (DL_FUNC)_hesim_qgompertz_try);
-    R_RegisterCCallable("hesim", "_hesim_rgompertz", (DL_FUNC)_hesim_rgompertz_try);
-    R_RegisterCCallable("hesim", "_hesim_qllogis", (DL_FUNC)_hesim_qllogis_try);
-    R_RegisterCCallable("hesim", "_hesim_rllogis", (DL_FUNC)_hesim_rllogis_try);
-    R_RegisterCCallable("hesim", "_hesim_rgengamma", (DL_FUNC)_hesim_rgengamma_try);
-    R_RegisterCCallable("hesim", "_hesim_C_rgengamma_vec", (DL_FUNC)_hesim_rgengamma_vec_try);
+    R_RegisterCCallable("hesim", "_hesim_C_rgengamma_vec", (DL_FUNC)_hesim_C_rgengamma_vec_try);
     R_RegisterCCallable("hesim", "_hesim_rtruncnorm", (DL_FUNC)_hesim_rtruncnorm_try);
     R_RegisterCCallable("hesim", "_hesim_rpwexp", (DL_FUNC)_hesim_rpwexp_try);
     R_RegisterCCallable("hesim", "_hesim_C_rpwexp_vec", (DL_FUNC)_hesim_rpwexp_vec_try);
@@ -715,19 +545,14 @@ RcppExport SEXP _hesim_RcppExport_registerCCallable() {
     return R_NilValue;
 }
 
-RcppExport SEXP _rcpp_module_boot_Distributions();
+RcppExport SEXP _rcpp_module_boot_distributions();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_incr_effect", (DL_FUNC) &_hesim_C_incr_effect, 5},
     {"_hesim_C_ceac", (DL_FUNC) &_hesim_C_ceac, 6},
     {"_hesim_C_mce", (DL_FUNC) &_hesim_C_mce, 6},
     {"_hesim_C_enmbpi", (DL_FUNC) &_hesim_C_enmbpi, 6},
-    {"_hesim_qgompertz", (DL_FUNC) &_hesim_qgompertz, 3},
-    {"_hesim_rgompertz", (DL_FUNC) &_hesim_rgompertz, 2},
-    {"_hesim_qllogis", (DL_FUNC) &_hesim_qllogis, 5},
-    {"_hesim_rllogis", (DL_FUNC) &_hesim_rllogis, 2},
-    {"_hesim_rgengamma", (DL_FUNC) &_hesim_rgengamma, 3},
-    {"_hesim_rgengamma_vec", (DL_FUNC) &_hesim_rgengamma_vec, 4},
+    {"_hesim_C_rgengamma_vec", (DL_FUNC) &_hesim_C_rgengamma_vec, 4},
     {"_hesim_rtruncnorm", (DL_FUNC) &_hesim_rtruncnorm, 4},
     {"_hesim_rpwexp", (DL_FUNC) &_hesim_rpwexp, 2},
     {"_hesim_rpwexp_vec", (DL_FUNC) &_hesim_rpwexp_vec, 3},
@@ -751,7 +576,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
-    {"_rcpp_module_boot_Distributions", (DL_FUNC) &_rcpp_module_boot_Distributions, 0},
+    {"_rcpp_module_boot_distributions", (DL_FUNC) &_rcpp_module_boot_distributions, 0},
     {"_hesim_RcppExport_registerCCallable", (DL_FUNC) &_hesim_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

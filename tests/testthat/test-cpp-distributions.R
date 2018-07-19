@@ -2,11 +2,11 @@ context("distributions.cpp unit tests")
 library("flexsurv")
 library("numDeriv")
 library("Rcpp")
-module <- Rcpp::Module('Distributions', PACKAGE = "hesim")
+module <- Rcpp::Module('distributions', PACKAGE = "hesim")
 
 # Exponential distribution -----------------------------------------------------
 test_that("Exponential", {
-  Exponential <- module$Exponential
+  Exponential <- module$exponential
   rate <- 2
   exp <- new(Exponential, rate = rate)
   
@@ -35,7 +35,7 @@ test_that("Exponential", {
 
 # Weibull distribution ---------------------------------------------------------
 test_that("Weibull", {
-  Weibull <- module$Weibull
+  Weibull <- module$weibull
   sh <- 2; sc <- 1.2
   wei <- new(Weibull, shape = sh, scale = sc)
   
@@ -64,7 +64,7 @@ test_that("Weibull", {
 
 # Weibull distribution for NMA -------------------------------------------------
 test_that("WeibullNma", {
-  WeibullNma <- module$WeibullNma
+  WeibullNma <- module$weibull_nma
   a0 <- -2.07; a1 <- .2715
   wei <- new(WeibullNma, a0 = a0, a1 = a1)
   
@@ -93,7 +93,7 @@ test_that("WeibullNma", {
 
 # Gamma distribution -----------------------------------------------------------
 test_that("Gamma", {
-  Gamma <- module$Gamma
+  Gamma <- module$gamma
   sh <- 2; r <- 1.4
   gamma <- new(Gamma, shape = sh, rate = r)
   
@@ -122,7 +122,7 @@ test_that("Gamma", {
 
 # Lognormal distribution -------------------------------------------------------
 test_that("Lognormal", {
-  Lognormal <- module$Lognormal
+  Lognormal <- module$lognormal
   m <- 8; s <- 2.5
   lognormal <- new(Lognormal, meanlog = m, sdlog = s)
   
@@ -151,7 +151,7 @@ test_that("Lognormal", {
 
 # Gompertz distribution --------------------------------------------------------
 test_that("Gompertz", {
-  Gompertz <- module$Gompertz
+  Gompertz <- module$gompertz
   
   # shape > 0
   sh <- .05; r <- .5
@@ -201,7 +201,7 @@ test_that("Gompertz", {
 
 # Log-logistic distribution ----------------------------------------------------
 test_that("LogLogistic", {
-  LogLogistic <- module$LogLogistic
+  LogLogistic <- module$loglogistic
   sh <- 1; sc <- .5
   llogis <- new(LogLogistic, shape = sh, scale = sc)
   
@@ -230,7 +230,7 @@ test_that("LogLogistic", {
 
 # Generalized gamma distribution -----------------------------------------------
 test_that("GeneralizedGamma", {
-  GeneralizedGamma <- module$GeneralizedGamma
+  GeneralizedGamma <- module$gengamma
   
   # Q < 0
   m <- 2; s <- 1.5; q <- -2
@@ -323,7 +323,7 @@ R_linear_predict <- function(t, gamma, knots, timescale){
 }
 
 test_that("SurvivalSplines", {
-  SurvSplines <- module$SurvSplines
+  SurvSplines <- module$survsplines
 
   # log hazard
   ## Test function
@@ -504,7 +504,7 @@ powers <- c(1, 0)
 gamma <- c(-1.2, -.567, 1.15)
 
 test_that("FracPoly", {
-  FracPoly <- module$FracPoly
+  FracPoly <- module$fracpoly
   
   # specifications 1
   fp <- new(FracPoly, gamma = gamma, powers = powers)
