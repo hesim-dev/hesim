@@ -93,20 +93,20 @@ C_PartSurv_sim_auc <- function(R_PartSurv, R_stateprobs, dr, type, type_names) {
     .Call('_hesim_C_PartSurv_sim_auc', PACKAGE = 'hesim', R_PartSurv, R_stateprobs, dr, type, type_names)
 }
 
-C_rowmax <- function(x) {
-    .Call('_hesim_C_rowmax', PACKAGE = 'hesim', x)
-}
-
-C_rowmax_index <- function(x) {
-    .Call('_hesim_C_rowmax_index', PACKAGE = 'hesim', x)
-}
-
 C_test_add_constant_int <- function(v, value) {
     .Call('_hesim_C_test_add_constant_int', PACKAGE = 'hesim', v, value)
 }
 
 C_test_add_constant_double <- function(v, value) {
     .Call('_hesim_C_test_add_constant_double', PACKAGE = 'hesim', v, value)
+}
+
+C_rowmax <- function(x) {
+    .Call('_hesim_C_rowmax', PACKAGE = 'hesim', x)
+}
+
+C_rowmax_index <- function(x) {
+    .Call('_hesim_C_rowmax_index', PACKAGE = 'hesim', x)
 }
 
 test_zeroin <- function() {

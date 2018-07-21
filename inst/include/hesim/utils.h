@@ -15,8 +15,8 @@ typedef std::vector<arma::cube> vec_cubes;
 ***************/
 namespace hesim{
 
-/** Contains "internal details" that should be ignored by external users.*/
-namespace internal {
+/** "Internal details" for hesim that should be ignored by external users.*/
+namespace detail {
 
 /**
  * Convert an Rcpp::List to a vector  

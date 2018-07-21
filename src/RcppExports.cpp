@@ -458,28 +458,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_rowmax
-arma::colvec C_rowmax(arma::mat x);
-RcppExport SEXP _hesim_C_rowmax(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_rowmax(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// C_rowmax_index
-arma::ucolvec C_rowmax_index(arma::mat x);
-RcppExport SEXP _hesim_C_rowmax_index(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_rowmax_index(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // C_test_add_constant_int
 std::vector<int> C_test_add_constant_int(std::vector<int> v, double value);
 RcppExport SEXP _hesim_C_test_add_constant_int(SEXP vSEXP, SEXP valueSEXP) {
@@ -501,6 +479,28 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type v(vSEXP);
     Rcpp::traits::input_parameter< double >::type value(valueSEXP);
     rcpp_result_gen = Rcpp::wrap(C_test_add_constant_double(v, value));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_rowmax
+arma::colvec C_rowmax(arma::mat x);
+RcppExport SEXP _hesim_C_rowmax(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_rowmax(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_rowmax_index
+arma::ucolvec C_rowmax_index(arma::mat x);
+RcppExport SEXP _hesim_C_rowmax_index(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_rowmax_index(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -571,10 +571,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_PartSurvStateVals_predict", (DL_FUNC) &_hesim_C_PartSurvStateVals_predict, 1},
     {"_hesim_C_PartSurv_sim_stateprobs", (DL_FUNC) &_hesim_C_PartSurv_sim_stateprobs, 1},
     {"_hesim_C_PartSurv_sim_auc", (DL_FUNC) &_hesim_C_PartSurv_sim_auc, 5},
-    {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
-    {"_hesim_C_rowmax_index", (DL_FUNC) &_hesim_C_rowmax_index, 1},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
+    {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
+    {"_hesim_C_rowmax_index", (DL_FUNC) &_hesim_C_rowmax_index, 1},
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_rcpp_module_boot_distributions", (DL_FUNC) &_rcpp_module_boot_distributions, 0},
     {"_hesim_RcppExport_registerCCallable", (DL_FUNC) &_hesim_RcppExport_registerCCallable, 0},

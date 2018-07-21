@@ -6,9 +6,16 @@
 #include "zeroin.h"
 #include <memory>
 
+/** @defgroup stats Statistics
+ *  Probability distributions, random number generation, and statistical functions.
+ */
+
 namespace hesim{
 
-/** This namespace contains probability distributions, random number generation, and statistical functions.*/
+/** @ingroup stats 
+ * This namespace contains probability distributions, random number 
+ * generation, and statistical functions.
+ */
 namespace stats{
 
 /***************************************************************************//** 
@@ -71,9 +78,10 @@ public:
   virtual double random() const {return 0.0;}
 }; // end base class distribution
 
-} //end namespace stats
-
-namespace internal {
+/** @ingroup stats
+ * "Internal details" for @c hesim::stats that should be ignored by external users 
+ */
+namespace detail {
 
 class hazard: public Numer::Func {
   private:
@@ -116,25 +124,24 @@ inline double quantile_numeric_work(const stats::distribution * dist, double p){
     int maxiter = 1000;
     return zeroin(lower, upper, f_lower, f_upper, func,
                   &tol, &maxiter);
-}
+};
 
-} // end namespace internal
+} // end namespace detail
 
-namespace stats{
 
 /***************************************************************************//** 
  * Integrate a hazard function.
  * Integrate a hazard function from 0 to t using Gaussian quadrature. Uses
  * the <a href="https://github.com/yixuan/RcppNumerical">RcppNumerical</a> 
- * R package, which, in turn, is based on the 
+ * @c R package, which, in turn, is based on the 
  * <a href="https://github.com/tbs1980/NumericalIntegration">NumericalIntegration</a> 
- * C++ library.
+ * @c C++ library.
  * @param dist A pointer to the base class of a probability distribution.  
  * @param t Time to integrate hazard until.
  * @return The integral of the hazard function.
  ******************************************************************************/ 
 inline double integrate_hazard(const distribution * dist, double t){
-  internal::hazard fun(dist);
+  detail::hazard fun(dist);
   const double lower = 0, upper = t;
   double err_est; int err_code;
   return Numer::integrate(fun, lower, upper, err_est, err_code);
@@ -144,7 +151,8 @@ inline double integrate_hazard(const distribution * dist, double t){
  * Compute quantile numerically.
  * Uses numerical methods to calculate the quantile of a probability distribution.
  * Should be used for distributions where quantiles cannot be computed 
- * analytically. Equivalent to the function @c qgeneric in @c R::flexsurv.
+ * analytically. Equivalent to the function @c qgeneric in the @c R package
+ * @c flexsurv.
  * @param dist A pointer to the base class of a probability distribution.  
  * @param p A probability to calculate a quantile for.
  * @return The quantile evaluated at @p p. 
@@ -156,7 +164,7 @@ inline double quantile_numeric(const distribution * dist, double p){
   else if (p == 0) return R_NegInf;
   else if (p == 1) return R_PosInf;
   else{
-    return internal::quantile_numeric_work(dist, p);
+    return detail::quantile_numeric_work(dist, p);
   }
 }
 
@@ -169,7 +177,7 @@ inline double quantile_numeric(const distribution * dist, double p){
  * @return Restricted mean survival time.
  ******************************************************************************/ 
 inline double rmst(distribution * dist, double t, double r = 0){
-  internal::discount_surv fun(dist, r);
+  detail::discount_surv fun(dist, r);
   const double lower = 0, upper = t;
   double err_est; int err_code;
   return Numer::integrate(fun, lower, upper, err_est, err_code);
@@ -177,7 +185,7 @@ inline double rmst(distribution * dist, double t, double r = 0){
 
 /***************************************************************************//**
  * The exponential distribution.
- * Uses the same parameterization as in @c R::stats.
+ * Uses the same parameterization as in the @c R package @c stats.
  ******************************************************************************/ 
 class exponential : public distribution {
 private: 
@@ -223,7 +231,7 @@ public:
 
 /***************************************************************************//**
  * The Weibull distribution.
- * Uses the same parameterization as in @c R::stats.
+ * Uses the same parameterization as in the @c R package @c stats.
  ******************************************************************************/ 
 class weibull : public distribution {
 private:
@@ -328,7 +336,7 @@ public:
 
 /***************************************************************************//**
  * The gamma distribution.
- * Uses the same parameterization as in @c R::stats.
+ * Uses the same parameterization as in the @c R package @c stats..
  ******************************************************************************/ 
 class gamma : public distribution {
 private:
@@ -377,7 +385,7 @@ public:
 
 /***************************************************************************//**
  * The lognormal distribution.
- * Uses the same parameterization as in @c R::stats.
+ * Uses the same parameterization as in the @c R package @c stats.
  ******************************************************************************/ 
 class lognormal : public distribution {
 private:
@@ -427,7 +435,7 @@ public:
 
 /***************************************************************************//**
  * The gompertz distribution.
- * Uses the same parameterization as in @c R::flexsurv.
+ * Uses the same parameterization as in the @c R package @c flexsurv.
  ******************************************************************************/ 
 class gompertz : public distribution {
 private:
@@ -504,7 +512,7 @@ public:
 
 /***************************************************************************//**
  * The log-logistic distribution.
- * Uses the same parameterization as in @c R::flexsurv.
+ * Uses the same parameterization as in the @c R package @c flexsurv.
  ******************************************************************************/ 
 class loglogistic : public distribution {
 private:
@@ -557,7 +565,7 @@ public:
 
 /***************************************************************************//**
  * The generalized gamma distribution.
- * Uses the same parameterization as in @c R::flexsurv.
+ * Uses the same parameterization as in the @c R package @c flexsurv.
  ******************************************************************************/ 
 class gengamma : public distribution {
 private:
@@ -644,8 +652,8 @@ public:
 
 /***************************************************************************//**
  * A spline survival distribution.
- * Uses the same parameterization as in @c R::flexsurv. Based on Royston and
- * Parmar (2002)
+ * Uses the same parameterization as in the @c R package @c flexsurv. Based on
+ * Royston and Parmar (2002)
  ******************************************************************************/ 
 class survsplines : public distribution {
 private:

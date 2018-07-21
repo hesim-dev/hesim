@@ -38,7 +38,7 @@ FracPolyAux::FracPolyAux(Rcpp::List R_ParamsSurv){
 // Single survival model
 ParamsSurv::ParamsSurv(Rcpp::List R_ParamsSurv)
   : spline_aux_(R_ParamsSurv), fracpoly_aux_(R_ParamsSurv) {
-  coefs_ = hesim::internal::list_to_vec<vecmats, arma::mat>(R_ParamsSurv["coefs"]);
+  coefs_ = hesim::detail::list_to_vec<vecmats, arma::mat>(R_ParamsSurv["coefs"]);
   dist_name_ = Rcpp::as<std::string>(R_ParamsSurv["dist"]);
   sample_ = 0;
   n_samples_ = Rcpp::as<int> (R_ParamsSurv["n_samples"]);
