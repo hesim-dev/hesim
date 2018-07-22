@@ -8,8 +8,8 @@
 /** \mainpage 
 
 # Overall Description
-
-Here is where you can put information that is not class-specific. The mainpage is what comes up in index.html, but multiple pages can be defined and they can be put in any source file.
+This site documents the @c hesim C++ library, which is desisgned for use with 
+the @c R package by the same name.
  */
 
 #endif // RCPP_hesim_H_GEN_
