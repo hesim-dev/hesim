@@ -3,7 +3,7 @@
 
 #include "hesim_RcppExports.h"
 #include <hesim/distributions.h>
-#include <hesim/TimeFun.h>
+#include <hesim/time_fun.h>
 
 /** \mainpage 
 

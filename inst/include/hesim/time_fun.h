@@ -2,16 +2,16 @@
 // Allows users to either pass custom R functions or C++ functors 
 // Arguments are time and health state
 
-#ifndef hesim_TimeFun_h_
-#define hesim_TimeFun_h_
+#ifndef HESIM_TIME_FUN_H
+#define HESIM_TIME_FUN_H
 
 #include <RcppArmadillo.h>
 
 namespace hesim{
 
-class TimeFun {
+class time_fun {
 public:
-  virtual ~TimeFun() {};
+  virtual ~time_fun() {};
   virtual void eval(arma::mat &m, int i, int time_old, int time_new, int state) const {};
   virtual void eval(arma::rowvec &v, SEXP time) const {};
 };
@@ -28,9 +28,9 @@ public:
 //   }
 // };
 
-class TimeFunR : public TimeFun {
+class R_time_fun : public time_fun {
 public:
-  TimeFunR(SEXP fcall_, SEXP env_) : fcall(fcall_), env(env_) {}
+  R_time_fun(SEXP fcall_, SEXP env_) : fcall(fcall_), env(env_) {}
   void eval(arma::rowvec &v, SEXP time) const {}; 
   // void eval(SEXP time) {
   //     return defaultfun(time);

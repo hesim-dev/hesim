@@ -49,14 +49,6 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
-C_test_xptr_TimeFunTest <- function(L) {
-    .Call('_hesim_C_test_xptr_TimeFunTest', PACKAGE = 'hesim', L)
-}
-
-C_test_InputData <- function(R_InputData, param_id, strategy_id, patient_id, line = -1L, health_id = -1L) {
-    .Call('_hesim_C_test_InputData', PACKAGE = 'hesim', R_InputData, param_id, strategy_id, patient_id, line, health_id)
-}
-
 C_test_trapzfun <- function(x) {
     .Call('_hesim_C_test_trapzfun', PACKAGE = 'hesim', x)
 }
@@ -91,6 +83,14 @@ C_PartSurv_sim_stateprobs <- function(R_PartSurv) {
 
 C_PartSurv_sim_auc <- function(R_PartSurv, R_stateprobs, dr, type, type_names) {
     .Call('_hesim_C_PartSurv_sim_auc', PACKAGE = 'hesim', R_PartSurv, R_stateprobs, dr, type, type_names)
+}
+
+C_test_xptr_test_time_fun <- function(L) {
+    .Call('_hesim_C_test_xptr_test_time_fun', PACKAGE = 'hesim', L)
+}
+
+C_test_InputData <- function(R_InputData, param_id, strategy_id, patient_id, line = -1L, health_id = -1L) {
+    .Call('_hesim_C_test_InputData', PACKAGE = 'hesim', R_InputData, param_id, strategy_id, patient_id, line, health_id)
 }
 
 C_test_add_constant_int <- function(v, value) {
