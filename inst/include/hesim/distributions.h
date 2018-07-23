@@ -15,7 +15,7 @@ namespace hesim{
 namespace stats{
 
 /***************************************************************************//** 
- * A virtual class for probability distributions.
+ * An abstract base class for probability distributions.
  * Each child probability distribution class contains a number of statistical 
  * functions such as a probability density function, 
  * cumulative distribution function, quantile function, hazard function, 
@@ -23,35 +23,34 @@ namespace stats{
  ******************************************************************************/ 
 class distribution{
 public:
-  virtual ~distribution() {};
   
   /** 
    * Set the parameters for the distribution.
    * @param param A vector of the parameters.
    * @return None.
    */ 
-  virtual void set_params(std::vector<double> params){};
+  virtual void set_params(std::vector<double> params) = 0;
   
   /** 
    * Probability density function.
    * @param x Quantile of the distribution.
    * @return. The density evaluated at @p x.
    */   
-  virtual double pdf(double x) const {return 0.0;}
+  virtual double pdf(double x) const = 0;
 
   /** 
    * Cumulative density function.
    * @param x Quantile of the distribution.
    * @return The distribution function evaluated at @p x.
    */     
-  virtual double cdf(double x) const {return 0.0;}
+  virtual double cdf(double x) const = 0;
   
   /** 
    * Quantile function.
    * @param p A probability to calculate a quantile for.
    * @return The quantile evaluated at @p p.
    */      
-  virtual double quantile(double p) const {return 0.0;}
+  virtual double quantile(double p) const = 0;
   
   /** 
    * Hazard function.
