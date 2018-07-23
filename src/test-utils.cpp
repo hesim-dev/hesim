@@ -2,11 +2,6 @@
 #include <RcppArmadillo.h>
 #include <hesim/utils.h>
 
-/** @defgroup test Tests
- *  Tests of C++ code. These functions are exported to @c R using the
- *  @c R package @c Rcpp and the @c R package @c testthat.
- */
-
 /**
  * \ingroup test
  */

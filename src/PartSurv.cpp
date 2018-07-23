@@ -50,8 +50,8 @@ int LmMod::get_n_samples(){
 }
 
 double LmMod::predict() const{
-  StatModLm statmod_lm(X_, params_);
-  return statmod_lm.predict(sample_, obs_);
+  hesim::statmods::lm lm(X_, params_);
+  return lm.predict(sample_, obs_);
 }
 
 // Create pointer to base state values model class
@@ -102,7 +102,7 @@ int NSurvMods::get_n_obs() const {
 
 std::vector<double> NSurvMods::summary(int model, int sample, int obs, std::vector<double> t,
                                     std::string type, double dr) const{
-  StatModSurv statmod_surv(X_[model], params_.params_list_[model]);
+  hesim::statmods::surv statmod_surv(X_[model], params_.params_list_[model]);
   if (type == "hazard"){
     return statmod_surv.summary(sample, obs, t, "hazard");
   }
@@ -121,7 +121,7 @@ std::vector<double> NSurvMods::summary(int model, int sample, int obs, std::vect
 }
 
 std::vector<double> NSurvMods::quantile(int model, int sample, int obs, std::vector<double> p) const{
-  StatModSurv statmod_surv(X_[model], params_.params_list_[model]);
+  hesim::statmods::surv statmod_surv(X_[model], params_.params_list_[model]);
   return statmod_surv.quantile(sample, obs, p);
 }
 

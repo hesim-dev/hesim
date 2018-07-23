@@ -12,4 +12,17 @@ This site documents the @c hesim C++ library, which is desisgned for use with
 the @c R package by the same name.
  */
 
+/** @defgroup stats Statistics
+ *  Probability distributions, random number generation, and statistical functions.
+ */
+
+/** @defgroup statmods Statistical Models
+ *  Prediction and random sampling from different statistical models.
+ */
+
+/** @defgroup test Tests
+ *  Tests of C++ code. These functions are exported to @c R using the
+ *  @c R package @c Rcpp and the @c R package @c testthat.
+ */
+
 #endif // RCPP_hesim_H_GEN_

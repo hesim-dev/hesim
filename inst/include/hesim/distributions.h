@@ -6,10 +6,6 @@
 #include "zeroin.h"
 #include <memory>
 
-/** @defgroup stats Statistics
- *  Probability distributions, random number generation, and statistical functions.
- */
-
 namespace hesim{
 
 /** @ingroup stats 

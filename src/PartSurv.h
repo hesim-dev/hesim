@@ -1,6 +1,6 @@
 # ifndef PARTSURV_H
 # define PARTSURV_H
-#include <hesim/stats_models.h>
+#include <hesim/statmods.h>
 #include <hesim/utils.h>
 #include "integrate.h"
 
