@@ -40,7 +40,7 @@ public:
  */
 class LmMod : public StateValMods{
 private:
-  ParamsLm params_;
+  hesim::statmods::params_lm params_;
 public:   
   LmMod(Rcpp::Environment R_PartSurvStateVals);
   arma::mat X_;
@@ -72,7 +72,7 @@ public:
 
 class NSurvMods : public SurvMods  {
 private:
-  ParamsSurvList params_;
+  hesim::statmods::params_surv_list params_;
 public:
   NSurvMods(Rcpp::Environment R_PartSurvCurves);
   vecmats_2d X_;

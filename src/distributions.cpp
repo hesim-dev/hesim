@@ -208,17 +208,17 @@ RCPP_MODULE(distributions){
     .method("random", &hesim::stats::gengamma::random)
   ;
   
-    Rcpp::class_<hesim::stats::survsplines>("survsplines")
+    Rcpp::class_<hesim::stats::survspline>("survspline")
     .derives<hesim::stats::distribution>("distribution")
     .constructor<std::vector<double>, std::vector<double>, std::string, std::string>()
-    .method("linear_predict", &hesim::stats::survsplines::linear_predict)
-    .method("linear_predict_dx", &hesim::stats::survsplines::linear_predict_dx)
-    .method("pdf", &hesim::stats::survsplines::pdf)
-    .method("cdf", &hesim::stats::survsplines::cdf)
-    .method("quantile", &hesim::stats::survsplines::quantile)
-    .method("hazard", &hesim::stats::survsplines::hazard)
-    .method("cumhazard", &hesim::stats::survsplines::cumhazard)
-    .method("random", &hesim::stats::survsplines::random)
+    .method("linear_predict", &hesim::stats::survspline::linear_predict)
+    .method("linear_predict_dx", &hesim::stats::survspline::linear_predict_dx)
+    .method("pdf", &hesim::stats::survspline::pdf)
+    .method("cdf", &hesim::stats::survspline::cdf)
+    .method("quantile", &hesim::stats::survspline::quantile)
+    .method("hazard", &hesim::stats::survspline::hazard)
+    .method("cumhazard", &hesim::stats::survspline::cumhazard)
+    .method("random", &hesim::stats::survspline::random)
   ;
     
      Rcpp::class_<hesim::stats::fracpoly>("fracpoly")

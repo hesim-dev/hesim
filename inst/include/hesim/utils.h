@@ -15,7 +15,7 @@ typedef std::vector<arma::cube> vec_cubes;
 ***************/
 namespace hesim{
 
-/** "Internal details" for hesim that should be ignored by external users.*/
+/** Internal details for hesim that should be ignored by external users.*/
 namespace detail {
 
 /**

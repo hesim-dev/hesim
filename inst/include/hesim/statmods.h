@@ -1,7 +1,7 @@
 # ifndef STATMODELS_H
 # define STATMODELS_H
 #include <hesim/distributions.h>
-#include <hesim/Params.h>
+#include <hesim/params.h>
 
 namespace hesim {
 
@@ -44,15 +44,16 @@ public:
  * are from a normal distribution.  
  ******************************************************************************/ 
 class lm : public statmod{
-public:
-  arma::mat X_;
-  ParamsLm params_;
+private:
+  arma::mat X_; ///< Matrix of explanatory variables.
+  params_lm params_; ///< Parameters for a linear model.
   
+public:
   /** 
    * The constructor.
    * Instantiates a linear model.
    */ 
-  lm(arma::mat X, ParamsLm params)
+  lm(arma::mat X, params_lm params)
     : params_(params){
     X_ = X;
     
@@ -74,7 +75,10 @@ public:
  ******************************************************************************/ 
 class surv : public statmod {
 private:
-  std::unique_ptr<stats::distribution> dist_; ///<A pointer to the @c distribution base class.
+  params_surv params_; ///< Parameters for a survival model.
+  std::unique_ptr<stats::distribution> dist_; ///<The distribution of the underlying 
+                                              ///< survival distribution; specifically, 
+                                              ///< a pointer to the @c distribution base class.
   
   /** 
    * Initialize @c dist_.
@@ -83,7 +87,7 @@ private:
    * @return A unique pointer to the base class of the underlying probability
    * distribution.
    */ 
-  static std::unique_ptr<stats::distribution> init_dist_(ParamsSurv params_surv){
+  static std::unique_ptr<stats::distribution> init_dist_(params_surv params_surv){
     stats::distribution *d;
     std::string dist_name = params_surv.dist_name_;
     if (dist_name == "exponential" || dist_name == "exp"){
@@ -113,7 +117,7 @@ private:
     else if (dist_name == "survspline"){
       int n_knots = params_surv.spline_aux_.knots_.size();
       std::vector<double> gamma(n_knots, 0.0);
-      d = new stats::survsplines(gamma, params_surv.spline_aux_.knots_,
+      d = new stats::survspline(gamma, params_surv.spline_aux_.knots_,
                                  params_surv.spline_aux_.scale_,
                                  params_surv.spline_aux_.timescale_);
     }
@@ -139,19 +143,6 @@ private:
     }
     return y;    
   }
-
-public:
-  vecmats X_;
-  ParamsSurv params_;
-  
-  /** 
-   * The constructor.
-   * Instantiates a survival model.
-   */ 
-  surv(vecmats X, ParamsSurv params)
-    : params_(params), dist_(init_dist_(params)){
-    X_ = X;
-  }
   
   /** 
    * Set the parameters of the survival distribution.
@@ -163,6 +154,18 @@ public:
    */ 
   void set_dist(int sample, int obs) {
     dist_->set_params(predict_params(sample, obs));
+  }
+
+public:
+  vecmats X_;
+  
+  /** 
+   * The constructor.
+   * Instantiates a survival model.
+   */ 
+  surv(vecmats X, params_surv params)
+    : params_(params), dist_(init_dist_(params)){
+    X_ = X;
   }
 
   /** 
@@ -246,9 +249,9 @@ public:
 
 };
 
-} // end namespace hesim
-
 } // end namespace statmods
+
+} // end namespace hesim
 
 # endif
 

@@ -2,7 +2,7 @@
 #define RCPP_hesim_H_
 
 #include "hesim_RcppExports.h"
-#include <hesim/distributions.h>
+#include <hesim/statmods.h>
 #include <hesim/time_fun.h>
 
 /** \mainpage 

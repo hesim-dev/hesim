@@ -5,7 +5,7 @@ library("Rcpp")
 module <- Rcpp::Module('distributions', PACKAGE = "hesim")
 
 # Exponential distribution -----------------------------------------------------
-test_that("Exponential", {
+test_that("exponential", {
   Exponential <- module$exponential
   rate <- 2
   exp <- new(Exponential, rate = rate)
@@ -34,7 +34,7 @@ test_that("Exponential", {
 })
 
 # Weibull distribution ---------------------------------------------------------
-test_that("Weibull", {
+test_that("weibull", {
   Weibull <- module$weibull
   sh <- 2; sc <- 1.2
   wei <- new(Weibull, shape = sh, scale = sc)
@@ -63,7 +63,7 @@ test_that("Weibull", {
 })
 
 # Weibull distribution for NMA -------------------------------------------------
-test_that("WeibullNma", {
+test_that("weibull_nma", {
   WeibullNma <- module$weibull_nma
   a0 <- -2.07; a1 <- .2715
   wei <- new(WeibullNma, a0 = a0, a1 = a1)
@@ -92,7 +92,7 @@ test_that("WeibullNma", {
 })
 
 # Gamma distribution -----------------------------------------------------------
-test_that("Gamma", {
+test_that("gamma", {
   Gamma <- module$gamma
   sh <- 2; r <- 1.4
   gamma <- new(Gamma, shape = sh, rate = r)
@@ -121,7 +121,7 @@ test_that("Gamma", {
 })
 
 # Lognormal distribution -------------------------------------------------------
-test_that("Lognormal", {
+test_that("lognormal", {
   Lognormal <- module$lognormal
   m <- 8; s <- 2.5
   lognormal <- new(Lognormal, meanlog = m, sdlog = s)
@@ -150,7 +150,7 @@ test_that("Lognormal", {
 })
 
 # Gompertz distribution --------------------------------------------------------
-test_that("Gompertz", {
+test_that("gompertz", {
   Gompertz <- module$gompertz
   
   # shape > 0
@@ -200,7 +200,7 @@ test_that("Gompertz", {
 })
 
 # Log-logistic distribution ----------------------------------------------------
-test_that("LogLogistic", {
+test_that("loglogistic", {
   LogLogistic <- module$loglogistic
   sh <- 1; sc <- .5
   llogis <- new(LogLogistic, shape = sh, scale = sc)
@@ -229,7 +229,7 @@ test_that("LogLogistic", {
 })
 
 # Generalized gamma distribution -----------------------------------------------
-test_that("GeneralizedGamma", {
+test_that("gengamma", {
   GeneralizedGamma <- module$gengamma
   
   # Q < 0
@@ -297,7 +297,7 @@ test_that("GeneralizedGamma", {
   expect_equal(gengamma$cumhazard(1), flexsurv::Hgengamma(1, mu = m, sigma = s, Q = q))
 })
 
-# Survival splines -------------------------------------------------------------
+# Survival spline distribution -------------------------------------------------
 basis_cube <- function(x){
   return (max(0, x^3))
 }
@@ -322,12 +322,12 @@ R_linear_predict <- function(t, gamma, knots, timescale){
   return (res)
 }
 
-test_that("SurvivalSplines", {
-  SurvSplines <- module$survsplines
+test_that("survspline", {
+  SurvSpline <- module$survspline
 
   # log hazard
   ## Test function
-  test_SurvSplines1 <- function(surv_splines, timescale, 
+  test_SurvSpline1 <- function(surv_splines, timescale, 
                                 gamma = c(-1.2, 1.3, .07),
                                 knots = c(.19, 1.7, 6.7)){ 
     surv.splines <- new(surv_splines, gamma = gamma, knots = knots,
@@ -373,12 +373,12 @@ test_that("SurvivalSplines", {
                  tolerance = .001, scale = 1)
     
   }
-  test_SurvSplines1(SurvSplines, timescale = "identity")
-  test_SurvSplines1(SurvSplines, timescale = "log")
+  test_SurvSpline1(SurvSpline, timescale = "identity")
+  test_SurvSpline1(SurvSpline, timescale = "log")
   
   # log cummulative hazard, log odds, and normal
   ## test function
-  test_SurvSplines2 <- function(surv_splines, flexsurv_scale, timescale,
+  test_SurvSpline2 <- function(surv_splines, flexsurv_scale, timescale,
                                 gamma = NULL, knots = NULL){
     if (is.null(gamma) | is.null(knots)){
       spl.fit <- flexsurvspline(Surv(recyrs, censrec) ~ 1, 
@@ -440,17 +440,17 @@ test_that("SurvivalSplines", {
     r2 <- surv.splines$random()
     expect_equal(r1, r2, tolerance = .001, scale = 1)
   }
-  test_SurvSplines2(surv_splines = SurvSplines, flexsurv_scale = "hazard",
+  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "hazard",
                     timescale = "log")
-  test_SurvSplines2(surv_splines = SurvSplines, flexsurv_scale = "hazard",
+  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "hazard",
                     timescale = "identity")
-  test_SurvSplines2(surv_splines = SurvSplines, flexsurv_scale = "odds",
+  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "odds",
                     timescale = "log")
-  test_SurvSplines2(surv_splines = SurvSplines, flexsurv_scale = "odds",
+  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "odds",
                     timescale = "identity")
-  test_SurvSplines2(surv_splines = SurvSplines, flexsurv_scale = "normal",
+  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "normal",
                     timescale = "log")
-  test_SurvSplines2(surv_splines = SurvSplines, flexsurv_scale = "normal",
+  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "normal",
                     timescale = "identity", gamma = c(-1.2, 1.3, .07),
                     knots = c(.19, 1.7, 6.7))
 })

@@ -23,6 +23,7 @@ namespace stats{
  ******************************************************************************/ 
 class distribution{
 public:
+  virtual ~distribution() {};
   
   /** 
    * Set the parameters for the distribution.
@@ -73,9 +74,7 @@ public:
   virtual double random() const {return 0.0;}
 }; // end base class distribution
 
-/** @ingroup stats
- * "Internal details" for @c hesim::stats that should be ignored by external users 
- */
+/** Internal details for hesim::stats that should be ignored by external users.*/
 namespace detail {
 
 class hazard: public Numer::Func {
@@ -650,7 +649,7 @@ public:
  * Uses the same parameterization as in the @c R package @c flexsurv. Based on
  * Royston and Parmar (2002)
  ******************************************************************************/ 
-class survsplines : public distribution {
+class survspline : public distribution {
 private:
   std::vector<double> gamma_; ///< The parameters of the spline model with length
                               ///< equal to the number of knots.
@@ -718,7 +717,7 @@ public:
    * The constructor.
    * Instantiates a spline survival distribution.
    */ 
-  survsplines(std::vector<double> gamma, std::vector<double> knots,
+  survspline(std::vector<double> gamma, std::vector<double> knots,
               std::string scale, std::string timescale) {
     if (gamma.size() != knots.size()){
       Rcpp::stop("Length of gamma should equal number of knots.");
@@ -954,11 +953,6 @@ public:
     return quantile(R::runif(0, 1));
   }
 };
-
-
-/*****************************
-* Free functions and functors
-*****************************/
 
 } //end namespace stats
 
