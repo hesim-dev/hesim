@@ -16,8 +16,12 @@ the @c R package by the same name.
  *  Probability distributions, random number generation, and statistical functions.
  */
 
-/** @defgroup statmods Statistical Models
+/** @defgroup statmods Statistical models
  *  Prediction and random sampling from different statistical models.
+ */
+
+/** @defgroup statevals Health state values
+ *  Simulate costs and QALYs based on time spent in health states.
  */
 
 /** @defgroup test Tests

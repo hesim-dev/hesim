@@ -89,8 +89,8 @@ C_test_xptr_test_time_fun <- function(L) {
     .Call('_hesim_C_test_xptr_test_time_fun', PACKAGE = 'hesim', L)
 }
 
-C_test_InputData <- function(R_InputData, param_id, strategy_id, patient_id, line = -1L, health_id = -1L) {
-    .Call('_hesim_C_test_InputData', PACKAGE = 'hesim', R_InputData, param_id, strategy_id, patient_id, line, health_id)
+C_test_obs_index <- function(R_input_data, strategy_id, patient_id, line = -1L, health_id = -1L) {
+    .Call('_hesim_C_test_obs_index', PACKAGE = 'hesim', R_input_data, strategy_id, patient_id, line, health_id)
 }
 
 C_test_add_constant_int <- function(v, value) {

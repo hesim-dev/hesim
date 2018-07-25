@@ -27,34 +27,30 @@ SEXP C_test_xptr_test_time_fun(Rcpp::List L) {
  * \ingroup test
  */
 // [[Rcpp::export]]
-arma::rowvec C_test_InputData(Rcpp::List R_InputData,
-                                 int param_id,
-                                 int strategy_id,
-                                 int patient_id,
-                                 int line = -1,
-                                 int health_id = -1){
-   hesim::statmods::input_data input_data(R_InputData);
-   input_data.set_param_id(param_id);
-   if (line == -1 && health_id == -1){
-     input_data.set_strategy_id(strategy_id);
-     input_data.set_patient_id(patient_id);
-     input_data.set_obs();
-   }
-   else if (line == -1){
-     input_data.set_strategy_id(strategy_id);
-     input_data.set_patient_id(patient_id);
-     input_data.set_health_id(health_id);
-     input_data.set_obs();
-   }
-   else if (health_id == -1){
-     input_data.set_strategy_id(strategy_id);
-     input_data.set_patient_id(patient_id);
-     input_data.set_line(line);
-     input_data.set_obs();
-   }
-   else{
-     input_data.set_obs(strategy_id, line, patient_id, health_id); 
-   }
-   return(input_data());
+int C_test_obs_index(Rcpp::List R_input_data,
+                 int strategy_id,
+                 int patient_id,
+                 int line = -1,
+                 int health_id = -1){
+  hesim::statmods::obs_index obs_index(R_input_data);
+  if (line == -1 && health_id == -1){
+    obs_index.set_strategy_id(strategy_id);
+    obs_index.set_patient_id(patient_id);
+    return obs_index();  
+  }
+  else if (line == -1){
+    obs_index.set_strategy_id(strategy_id);
+    obs_index.set_patient_id(patient_id);
+    obs_index.set_health_id(health_id);
+    return obs_index();  
+  }
+  else if (health_id == -1){
+    obs_index.set_strategy_id(strategy_id);
+    obs_index.set_patient_id(patient_id);
+    obs_index.set_line(line);
+    return obs_index();
+  }
+  else{
+   return obs_index(strategy_id, line, patient_id, health_id);
+  }
 }
-  

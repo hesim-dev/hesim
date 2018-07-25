@@ -75,6 +75,8 @@ public:
  ******************************************************************************/ 
 class surv : public statmod {
 private:
+  vecmats X_; ///< Vector of matrices with a matrix for each parameter of the
+             ///< underlying survival distribution.
   params_surv params_; ///< Parameters for a survival model.
   std::unique_ptr<stats::distribution> dist_; ///<The distribution of the underlying 
                                               ///< survival distribution; specifically, 
@@ -157,8 +159,6 @@ private:
   }
 
 public:
-  vecmats X_;
-  
   /** 
    * The constructor.
    * Instantiates a survival model.

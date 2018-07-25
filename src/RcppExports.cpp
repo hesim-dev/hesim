@@ -442,19 +442,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_test_InputData
-arma::rowvec C_test_InputData(Rcpp::List R_InputData, int param_id, int strategy_id, int patient_id, int line, int health_id);
-RcppExport SEXP _hesim_C_test_InputData(SEXP R_InputDataSEXP, SEXP param_idSEXP, SEXP strategy_idSEXP, SEXP patient_idSEXP, SEXP lineSEXP, SEXP health_idSEXP) {
+// C_test_obs_index
+int C_test_obs_index(Rcpp::List R_input_data, int strategy_id, int patient_id, int line, int health_id);
+RcppExport SEXP _hesim_C_test_obs_index(SEXP R_input_dataSEXP, SEXP strategy_idSEXP, SEXP patient_idSEXP, SEXP lineSEXP, SEXP health_idSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type R_InputData(R_InputDataSEXP);
-    Rcpp::traits::input_parameter< int >::type param_id(param_idSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type R_input_data(R_input_dataSEXP);
     Rcpp::traits::input_parameter< int >::type strategy_id(strategy_idSEXP);
     Rcpp::traits::input_parameter< int >::type patient_id(patient_idSEXP);
     Rcpp::traits::input_parameter< int >::type line(lineSEXP);
     Rcpp::traits::input_parameter< int >::type health_id(health_idSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_InputData(R_InputData, param_id, strategy_id, patient_id, line, health_id));
+    rcpp_result_gen = Rcpp::wrap(C_test_obs_index(R_input_data, strategy_id, patient_id, line, health_id));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -570,7 +569,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_PartSurv_sim_stateprobs", (DL_FUNC) &_hesim_C_PartSurv_sim_stateprobs, 1},
     {"_hesim_C_PartSurv_sim_auc", (DL_FUNC) &_hesim_C_PartSurv_sim_auc, 5},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
-    {"_hesim_C_test_InputData", (DL_FUNC) &_hesim_C_test_InputData, 6},
+    {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
