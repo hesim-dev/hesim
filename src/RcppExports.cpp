@@ -380,17 +380,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// is_class
-int is_class(SEXP obj);
-RcppExport SEXP _hesim_is_class(SEXP objSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type obj(objSEXP);
-    rcpp_result_gen = Rcpp::wrap(is_class(obj));
-    return rcpp_result_gen;
-END_RCPP
-}
 // C_PartSurvCurves_summary
 Rcpp::DataFrame C_PartSurvCurves_summary(Rcpp::Environment R_PartSurvCurves, std::vector<double> x, std::string type, double dr);
 RcppExport SEXP _hesim_C_PartSurvCurves_summary(SEXP R_PartSurvCurvesSEXP, SEXP xSEXP, SEXP typeSEXP, SEXP drSEXP) {
@@ -577,7 +566,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_cumtrapzfun", (DL_FUNC) &_hesim_C_test_cumtrapzfun, 1},
     {"_hesim_C_test_simpsfun", (DL_FUNC) &_hesim_C_test_simpsfun, 1},
     {"_hesim_C_test_cumsimpsfun", (DL_FUNC) &_hesim_C_test_cumsimpsfun, 1},
-    {"_hesim_is_class", (DL_FUNC) &_hesim_is_class, 1},
     {"_hesim_C_PartSurvCurves_summary", (DL_FUNC) &_hesim_C_PartSurvCurves_summary, 4},
     {"_hesim_C_PartSurv_sim_stateprobs", (DL_FUNC) &_hesim_C_PartSurv_sim_stateprobs, 1},
     {"_hesim_C_psm_sim_wlos", (DL_FUNC) &_hesim_C_psm_sim_wlos, 5},

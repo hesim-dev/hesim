@@ -69,10 +69,6 @@ C_test_cumsimpsfun <- function(t) {
     .Call('_hesim_C_test_cumsimpsfun', PACKAGE = 'hesim', t)
 }
 
-is_class <- function(obj) {
-    .Call('_hesim_is_class', PACKAGE = 'hesim', obj)
-}
-
 C_PartSurvCurves_summary <- function(R_PartSurvCurves, x, type, dr) {
     .Call('_hesim_C_PartSurvCurves_summary', PACKAGE = 'hesim', R_PartSurvCurves, x, type, dr)
 }
