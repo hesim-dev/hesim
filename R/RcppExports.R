@@ -69,20 +69,24 @@ C_test_cumsimpsfun <- function(t) {
     .Call('_hesim_C_test_cumsimpsfun', PACKAGE = 'hesim', t)
 }
 
-C_PartSurvCurves_summary <- function(R_PartSurvCurves, x, type, dr) {
-    .Call('_hesim_C_PartSurvCurves_summary', PACKAGE = 'hesim', R_PartSurvCurves, x, type, dr)
+is_class <- function(obj) {
+    .Call('_hesim_is_class', PACKAGE = 'hesim', obj)
 }
 
-C_PartSurvStateVals_predict <- function(R_PartSurvStateVals) {
-    .Call('_hesim_C_PartSurvStateVals_predict', PACKAGE = 'hesim', R_PartSurvStateVals)
+C_PartSurvCurves_summary <- function(R_PartSurvCurves, x, type, dr) {
+    .Call('_hesim_C_PartSurvCurves_summary', PACKAGE = 'hesim', R_PartSurvCurves, x, type, dr)
 }
 
 C_PartSurv_sim_stateprobs <- function(R_PartSurv) {
     .Call('_hesim_C_PartSurv_sim_stateprobs', PACKAGE = 'hesim', R_PartSurv)
 }
 
-C_PartSurv_sim_auc <- function(R_PartSurv, R_stateprobs, dr, type, type_names) {
-    .Call('_hesim_C_PartSurv_sim_auc', PACKAGE = 'hesim', R_PartSurv, R_stateprobs, dr, type, type_names)
+C_psm_sim_wlos <- function(R_psm, R_stateprobs, dr, type, categories) {
+    .Call('_hesim_C_psm_sim_wlos', PACKAGE = 'hesim', R_psm, R_stateprobs, dr, type, categories)
+}
+
+C_statevals_sim <- function(R_StateVals, times, type) {
+    .Call('_hesim_C_statevals_sim', PACKAGE = 'hesim', R_StateVals, times, type)
 }
 
 C_test_xptr_test_time_fun <- function(L) {

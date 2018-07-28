@@ -76,7 +76,7 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2018-07-12</h4>
+            <h4 class="date">2018-07-28</h4>
           </div>
 
     
@@ -119,16 +119,16 @@ params.wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <span class="kw">print</span>(params.wei)</code></pre></div>
 <pre><code>## $coefs
 ## $coefs$shape
-##            shape
-## [1,] -0.02237211
-## [2,]  0.02278338
-## [3,] -0.01960199
+##             shape
+## [1,] -0.005552784
+## [2,] -0.054547832
+## [3,] -0.028946497
 ## 
 ## $coefs$scale
-##            scale      female          age
-## [1,]  0.03768486 -0.03236954 -0.010247126
-## [2,] -0.18362859 -0.07505953 -0.006036328
-## [3,] -0.01617177 -0.01478489 -0.008669474
+##           scale      female          age
+## [1,]  0.1128312 0.004086413 -0.011201802
+## [2,] -0.1589631 0.026769359 -0.006947391
+## [3,] -0.1288901 0.080509562 -0.008077305
 ## 
 ## 
 ## $dist
@@ -148,15 +148,15 @@ params.wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <pre><code>## $coefs
 ## $coefs$shape
 ##          shape
-## [1,] 0.9749604
-## [2,] 0.9731596
-## [3,] 0.9749189
+## [1,] 0.9679766
+## [2,] 0.9390140
+## [3,] 0.9653692
 ## 
 ## $coefs$scale
-##          scale     female          age
-## [1,] 0.9727441 0.03238948 -0.008729679
-## [2,] 1.2840196 0.01329119 -0.013643119
-## [3,] 1.0538807 0.07163178 -0.011194492
+##          scale       female          age
+## [1,] 0.9504464 -0.001373869 -0.008502268
+## [2,] 0.8013029  0.058884379 -0.006931710
+## [3,] 1.1495367 -0.025305049 -0.011964708
 ## 
 ## 
 ## $dist
@@ -302,12 +302,12 @@ formula.costs &lt;-<span class="st"> </span><span class="kw"><a href="../referen
 <div id="running-a-simulation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#running-a-simulation" class="anchor"></a>Running a simulation</h2>
-<p>A decision model is created by combining the disease, utility, and cost models. Each submodel is, in turn, created by combining input data and parameter estimates. For example, in a partitioned survival model there are three submodels: a set of survival models, a utility model, and a set of cost models for different types of costs. The survival models are <code>R6</code> objects of class <code>PartSurvCurves</code> and used to predict the survival curves in a partitioned survival analysis. The cost and utility models are <code>R6</code> objects of class <code>PartSurvStateValues</code> and used to predict the values to assign to the health states.</p>
+<p>A decision model is created by combining the disease, utility, and cost models. Each submodel is, in turn, created by combining input data and parameter estimates. For example, in a partitioned survival model there are three submodels: a set of survival models, a utility model, and a set of cost models for different types of costs. The survival models are <code>R6</code> objects of class <code>PartSurvCurves</code> and used to predict the survival curves in a partitioned survival analysis. The cost and utility models are <code>R6</code> objects of class <code>StateValues</code> and used to predict the values to assign to the health states.</p>
 <p>Again, as with the model parameters and input data, there are two ways to instantiate each submodel:</p>
 <ol style="list-style-type: decimal">
 <li>Based on parameters and input data using <code>$new()</code>
 </li>
-<li>From fitted statistical models using generic functions prefixed by <code>form_</code> (e.g., <code><a href="../reference/form_PartSurvCurves.html">form_PartSurvCurves()</a></code>, <code><a href="../reference/form_PartSurvStateVals.html">form_PartSurvStateVals()</a></code>).</li>
+<li>From fitted statistical models using generic functions prefixed by <code>form_</code> (e.g., <code><a href="../reference/form_PartSurvCurves.html">form_PartSurvCurves()</a></code>, <code><a href="../reference/form_StateVals.html">form_StateVals()</a></code>).</li>
 </ol>
 <p>We illustrate by instantiating a <code>PartSurvCurves</code> object in both ways.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Instantiate from a 'partsurvfit' object</span>
@@ -327,41 +327,41 @@ part.surv.curves &lt;-<span class="st"> </span><span class="kw"><a href="../refe
                                         <span class="dt">n =</span> n.samples, <span class="dt">bootstrap =</span> <span class="ot">FALSE</span>)
 <span class="kw">head</span>(part.surv.curves<span class="op">$</span><span class="kw">quantile</span>(.<span class="dv">5</span>))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id   p  quantile
-## 1:     1      1           1          1 0.5 0.4622224
-## 2:     1      1           1          2 0.5 0.4511279
-## 3:     1      1           2          1 0.5 0.4622224
-## 4:     1      1           2          2 0.5 0.4511279
-## 5:     1      2           1          1 0.5 0.4482239
-## 6:     1      2           1          2 0.5 0.4238668</code></pre>
+## 1:     1      1           1          1 0.5 0.4531687
+## 2:     1      1           1          2 0.5 0.4499532
+## 3:     1      1           2          1 0.5 0.4531687
+## 4:     1      1           2          2 0.5 0.4499532
+## 5:     1      2           1          1 0.5 0.4450617
+## 6:     1      2           1          2 0.5 0.4133158</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(part.surv.curves<span class="op">$</span><span class="kw">cumhazard</span>(<span class="dt">t =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>)))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id t cumhazard
 ## 1:     1      1           1          1 0  0.000000
-## 2:     1      1           1          1 1  1.503184
-## 3:     1      1           1          1 2  3.012828
-## 4:     1      1           1          1 3  4.524920
+## 2:     1      1           1          1 1  1.487436
+## 3:     1      1           1          1 2  2.903007
+## 4:     1      1           1          1 3  4.292663
 ## 5:     1      1           1          2 0  0.000000
-## 6:     1      1           1          2 1  1.540268</code></pre>
+## 6:     1      1           1          2 1  1.497690</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(part.surv.curves<span class="op">$</span><span class="kw">rmst</span>(<span class="dt">t =</span> <span class="dv">3</span>))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id t      rmst
-## 1:     1      1           1          1 3 0.6580676
-## 2:     1      1           1          2 3 0.6430105
-## 3:     1      1           2          1 3 0.6580676
-## 4:     1      1           2          2 3 0.6430105
-## 5:     1      2           1          1 3 0.6415215
-## 6:     1      2           1          2 3 0.6080761</code></pre>
-<p>We can instantiate a <code>PartSurvStateVals</code> object in the same two ways, although here we only use the second method. A <code>$predict()</code> function is available to predict mean state values by treatment strategy, patient, and health state.</p>
+## 1:     1      1           1          1 3 0.6632461
+## 2:     1      1           1          2 3 0.6588266
+## 3:     1      1           2          1 3 0.6632461
+## 4:     1      1           2          2 3 0.6588266
+## 5:     1      2           1          1 3 0.6441541
+## 6:     1      2           1          2 3 0.6001959</code></pre>
+<p>We can instantiate a <code>StateVals</code> object in the same two ways, although here we only use the second method. A <code>$siulate()</code> function is available to simulate state values by treatment strategy, patient, and health state.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">medcost.dat &lt;-<span class="st"> </span><span class="kw">subset</span>(part_surv4_simdata<span class="op">$</span>costs<span class="op">$</span>medical, state_name <span class="op">==</span><span class="st"> "state3"</span>)
 costs.medical.fit &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(costs <span class="op">~</span><span class="st"> </span>female, <span class="dt">data =</span> medcost.dat)
-part.surv.medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_PartSurvStateVals.html">form_PartSurvStateVals</a></span>(costs.medical.fit, 
+part.surv.medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_StateVals.html">form_StateVals</a></span>(costs.medical.fit, 
                                              <span class="dt">data =</span> hesim.edata.statevals, <span class="dt">n =</span> n.samples)
-<span class="kw">head</span>(part.surv.medcosts<span class="op">$</span><span class="kw">predict</span>())</code></pre></div>
-<pre><code>##    state_id sample strategy_id patient_id    value
-## 1:        1      1           1          1 37549.18
-## 2:        1      1           1          2 35468.44
-## 3:        1      1           2          1 37549.18
-## 4:        1      1           2          2 35468.44
-## 5:        1      2           1          1 30195.07
-## 6:        1      2           1          2 38003.34</code></pre>
+<span class="kw">head</span>(part.surv.medcosts<span class="op">$</span><span class="kw">sim</span>(<span class="dt">t =</span> <span class="dv">3</span>, <span class="dt">type =</span> <span class="st">"predict"</span>))</code></pre></div>
+<pre><code>##    state_id sample strategy_id patient_id time    value
+## 1:        1      1           1          1    3 36183.44
+## 2:        1      1           1          2    3 40438.72
+## 3:        1      1           2          1    3 36183.44
+## 4:        1      1           2          2    3 40438.72
+## 5:        1      2           1          1    3 36604.10
+## 6:        1      2           1          2    3 38099.63</code></pre>
 <p>By combining submodels, a decision model is able to simulate disease progression and cost and utility values associated with each disease state. Total discounted costs and QALYs are calculated by summing (or integrating) simulated costs and utility over time. In the partitioned survival example, disease progression is simulated by first generating survival curves and then calculating health states probabilities based on those curves. Cost and QALYs are calculated by numerically integrating the weighted probability of being in each state, where weights are a function of the discount factorand predicted state values.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, .<span class="dv">01</span>)
 part.surv &lt;-<span class="st"> </span>PartSurv<span class="op">$</span><span class="kw">new</span>(<span class="dt">survival_models =</span> part.surv.curves,
@@ -370,13 +370,13 @@ part.surv<span class="op">$</span><span class="kw">sim_survival</span>(<span cla
 part.surv<span class="op">$</span><span class="kw">sim_stateprobs</span>()
 part.surv<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">03</span>))
 <span class="kw">head</span>(part.surv<span class="op">$</span>costs_)</code></pre></div>
-<pre><code>##    state_id sample strategy_id patient_id dr    type    costs
-## 1:        1      1           1          1  0 medical 24710.35
-## 2:        1      1           1          2  0 medical 22807.02
-## 3:        1      1           2          1  0 medical 24710.35
-## 4:        1      1           2          2  0 medical 22807.02
-## 5:        1      2           1          1  0 medical 19371.18
-## 6:        1      2           1          2  0 medical 23109.45</code></pre>
+<pre><code>##    state_id sample strategy_id patient_id dr category    costs
+## 1:        1      1           1          1  0  medical 23999.08
+## 2:        1      1           1          2  0  medical 26642.73
+## 3:        1      1           2          1  0  medical 23999.08
+## 4:        1      1           2          2  0  medical 26642.73
+## 5:        1      2           1          1  0  medical 23579.21
+## 6:        1      2           1          2  0  medical 22867.82</code></pre>
 </div>
 <div id="decision-analysis" class="section level2">
 <h2 class="hasAnchor">

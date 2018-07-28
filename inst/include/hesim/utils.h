@@ -15,7 +15,9 @@ typedef std::vector<arma::cube> vec_cubes;
 ***************/
 namespace hesim{
 
-/** Internal details for hesim that should be ignored by external users.*/
+/** 
+ * @ingroup general
+ *Internal details for hesim that should be ignored by external users.*/
 namespace detail {
 
 /**
@@ -39,6 +41,7 @@ T1 list_to_vec(Rcpp::List l){
 } //end namespace internal
 
 /**
+ * @ingroup general
  * Find the position of the largest element in the range
  * [first,last) from a container in the Standard 
  * Library.
@@ -51,6 +54,7 @@ inline int max_element_pos(InputIt first, InputIt last) {
 }
 
 /**
+ * @ingroup general
  * Sort a vector in the standard library and
  * erase duplicates.
  * @param v A vector.
@@ -63,6 +67,7 @@ inline void unique(std::vector<T> &v){
 }
 
 /**
+ * @ingroup general
  * Add a constant value to a vector in the Standard
  * Library. 
  * @param v A vector. Should be of type integer
@@ -78,6 +83,7 @@ inline void add_constant(std::vector<T> &v, double value){
 }
 
 /**
+ * @ingroup general
  * Compute the arithmetic mean of a vector in
  * the Standard Library.
  * @param v A vector. Should be of type integer

@@ -117,32 +117,29 @@ test_that("PartSurvCurves", {
   expect_equal(qexp(.5, exp(rate.hat)), quantiles.out$quantile[1])
 })
 
-# Partitioned survival state values --------------------------------------------
-fit.costs.medical <- stats::lm(costs ~ female + state_name, data = part_surv4_simdata$costs$medical)
-edat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", "states"))
-part.surv.costs.medical <- form_PartSurvStateVals(fit.costs.medical, data = edat, n = N)
-part.surv.costs.medical2 <- form_PartSurvStateVals(fit.costs.medical, data = edat, n = N + 1)
-
-test_that("PartSurvStateVals$predict", {
-  expect_equal(c(part.surv.costs.medical$data$X$mu %*% t(part.surv.costs.medical$params$coefs)),
-              part.surv.costs.medical$predict()$value)
-  
-  expect_error(PartSurvStateVals$new(data = 3, params = 2)$predict())
-  
-  input.dat <- form_input_data(formula_list(~1), edat)
-  expect_error(PartSurvStateVals$new(data = input.dat, params = 2)$predict())
-})
-
 # Partitioned survival model  --------------------------------------------------
 set.seed(101)
 times <- c(0, 2, 5, 8)
+
+# Survival models
 part.surv.curves <- form_PartSurvCurves(fits.wei, data = curves.edata, n = N)
+
+# Utility model
 part.surv.utility.data <- form_input_data(formula_list(mu = formula(~1)), 
                                           expand_hesim_data(hesim.dat, 
                                                             by = c("strategies", "patients", "states")),
                                           id_vars = c("strategy_id", "patient_id", "state_id"))
-part.surv.utility <- PartSurvStateVals$new(data = part.surv.utility.data,
-                                           params = params_lm(coef = runif(N, .6, .8)))
+part.surv.utility <- StateVals$new(data = part.surv.utility.data,
+                                  params = params_lm(coef = runif(N, .6, .8)))
+
+# Cost model(s)
+fit.costs.medical <- stats::lm(costs ~ female + state_name, 
+                               data = part_surv4_simdata$costs$medical)
+edat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", "states"))
+part.surv.costs.medical <- form_StateVals(fit.costs.medical, data = edat, n = N)
+part.surv.costs.medical2 <- form_StateVals(fit.costs.medical, data = edat, n = N + 1)
+
+# Combine
 part.surv <- PartSurv$new(survival_models = part.surv.curves,
                           utility_model = part.surv.utility,
                           cost_models = list(medical = part.surv.costs.medical))

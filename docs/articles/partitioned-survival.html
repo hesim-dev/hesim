@@ -75,7 +75,7 @@
     <div class="page-header toc-ignore">
       <h1>Partitioned survival models</h1>
             
-            <h4 class="date">2018-07-12</h4>
+            <h4 class="date">2018-07-28</h4>
           </div>
 
     
@@ -172,7 +172,7 @@ utility.params &lt;-<span class="st"> </span><span class="kw"><a href="../refere
 <div id="forming-a-model-structure" class="section level2">
 <h2 class="hasAnchor">
 <a href="#forming-a-model-structure" class="anchor"></a>Forming a model structure</h2>
-<p>A PSM in <code>hesim</code> is an <a href="https://cran.r-project.org/web/packages/R6/">R6</a> object of class <code>PartSurv</code> and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class <code>PartSurvCurves</code>), (2) a utility model (of class <code>PartSurvStateVals</code>), and (3) a set of cost models for each cost component (a list of <code>PartSurvStateVals</code> objects).</p>
+<p>A PSM in <code>hesim</code> is an <a href="https://cran.r-project.org/web/packages/R6/">R6</a> object of class <code>PartSurv</code> and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class <code>PartSurvCurves</code>), (2) a utility model (of class <code>StateVals</code>), and (3) a set of cost models for each cost component (a list of <code>StateVals</code> objects).</p>
 <div id="simulation-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#simulation-data" class="anchor"></a>Simulation data</h3>
@@ -229,14 +229,14 @@ statevals.edata &lt;-<span class="st"> </span><span class="kw"><a href="../refer
 <div id="creating-cost-and-utility-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-cost-and-utility-models" class="anchor"></a>Creating cost and utility models</h3>
-<p>We fit a linear model to medical costs, so we can use the <code><a href="../reference/form_PartSurvStateVals.html">form_PartSurvStateVals()</a></code> to instantiate a <code>PartSurvStateVals</code> object for medical costs.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">part.surv.medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_PartSurvStateVals.html">form_PartSurvStateVals</a></span>(costs.medical.fit, <span class="dt">data =</span> statevals.edata, <span class="dt">n =</span> n.samples)</code></pre></div>
-<p>Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using <code><a href="../reference/form_PartSurvStateVals.html">form_PartSurvStateVals()</a></code>. Instead, we create the model from our <code>params_lm</code> class object and input data (of class <code>input_data</code>). Since we don’t have fitted R model, we can use a <code>formula_list</code> object to specify the explanatory variables in the model. That is, we use <code><a href="../reference/formula_list.html">formula_list()</a></code> to obtain the variables (<code>strategy_id</code>) in <code>statevals.edata</code> that are needed.</p>
+<p>We fit a linear model to medical costs, so we can use the <code><a href="../reference/form_StateVals.html">form_StateVals()</a></code> to instantiate a <code>StateVals</code> object for medical costs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">part.surv.medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_StateVals.html">form_StateVals</a></span>(costs.medical.fit, <span class="dt">data =</span> statevals.edata, <span class="dt">n =</span> n.samples)</code></pre></div>
+<p>Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using <code><a href="../reference/form_StateVals.html">form_StateVals()</a></code>. Instead, we create the model from our <code>params_lm</code> class object and input data (of class <code>input_data</code>). Since we don’t have fitted R model, we can use a <code>formula_list</code> object to specify the explanatory variables in the model. That is, we use <code><a href="../reference/formula_list.html">formula_list()</a></code> to obtain the variables (<code>strategy_id</code>) in <code>statevals.edata</code> that are needed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input.dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), <span class="dt">data =</span> statevals.edata)
-part.surv.drugcosts &lt;-<span class="st"> </span>PartSurvStateVals<span class="op">$</span><span class="kw">new</span>(<span class="dt">data =</span> input.dat, <span class="dt">params =</span> drugcosts.params)</code></pre></div>
+part.surv.drugcosts &lt;-<span class="st"> </span>StateVals<span class="op">$</span><span class="kw">new</span>(<span class="dt">data =</span> input.dat, <span class="dt">params =</span> drugcosts.params)</code></pre></div>
 <p>We can instantiate a utility model in the same manner.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input.dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), <span class="dt">data =</span> statevals.edata)
-part.surv.utility &lt;-<span class="st"> </span>PartSurvStateVals<span class="op">$</span><span class="kw">new</span>(<span class="dt">data =</span> input.dat, <span class="dt">params =</span> utility.params)</code></pre></div>
+part.surv.utility &lt;-<span class="st"> </span>StateVals<span class="op">$</span><span class="kw">new</span>(<span class="dt">data =</span> input.dat, <span class="dt">params =</span> utility.params)</code></pre></div>
 </div>
 <div id="combining-the-statistical-models" class="section level3">
 <h3 class="hasAnchor">
@@ -308,23 +308,23 @@ stateprobs[, strategy <span class="op">:</span><span class="er">=</span><span cl
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Costs</span>
 part.surv<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(part.surv<span class="op">$</span>costs_)</code></pre></div>
-<pre><code>##    state_id sample strategy_id patient_id   dr    type    costs
-## 1:        1      1           1          1 0.03 medical 14645.53
-## 2:        1      1           1          2 0.03 medical 14042.46
-## 3:        1      1           1          3 0.03 medical 16085.43
-## 4:        1      1           2          1 0.03 medical 15118.51
-## 5:        1      1           2          2 0.03 medical 14496.07
-## 6:        1      1           2          3 0.03 medical 16604.82</code></pre>
+<pre><code>##    state_id sample strategy_id patient_id   dr category    costs
+## 1:        1      1           1          1 0.03  medical 14645.53
+## 2:        1      1           1          2 0.03  medical 14042.46
+## 3:        1      1           1          3 0.03  medical 16085.43
+## 4:        1      1           2          1 0.03  medical 15118.51
+## 5:        1      1           2          2 0.03  medical 14496.07
+## 6:        1      1           2          3 0.03  medical 16604.82</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># QALYs</span>
 part.surv<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(part.surv<span class="op">$</span>qalys_)</code></pre></div>
-<pre><code>##    state_id sample strategy_id patient_id   dr  type     qalys
-## 1:        1      1           1          1 0.03 qalys 0.4335018
-## 2:        1      1           1          2 0.03 qalys 0.4156509
-## 3:        1      1           1          3 0.03 qalys 0.4430030
-## 4:        1      1           2          1 0.03 qalys 0.4475016
-## 5:        1      1           2          2 0.03 qalys 0.4290778
-## 6:        1      1           2          3 0.03 qalys 0.4573073</code></pre>
+<pre><code>##    state_id sample strategy_id patient_id   dr category     qalys
+## 1:        1      1           1          1 0.03    qalys 0.4635255
+## 2:        1      1           1          2 0.03    qalys 0.4444383
+## 3:        1      1           1          3 0.03    qalys 0.4736848
+## 4:        1      1           2          1 0.03    qalys 0.4784949
+## 5:        1      1           2          2 0.03    qalys 0.4587951
+## 6:        1      1           2          3 0.03    qalys 0.4889798</code></pre>
 </div>
 </div>
 </div>

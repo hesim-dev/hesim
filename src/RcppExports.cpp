@@ -380,6 +380,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// is_class
+int is_class(SEXP obj);
+RcppExport SEXP _hesim_is_class(SEXP objSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type obj(objSEXP);
+    rcpp_result_gen = Rcpp::wrap(is_class(obj));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_PartSurvCurves_summary
 Rcpp::DataFrame C_PartSurvCurves_summary(Rcpp::Environment R_PartSurvCurves, std::vector<double> x, std::string type, double dr);
 RcppExport SEXP _hesim_C_PartSurvCurves_summary(SEXP R_PartSurvCurvesSEXP, SEXP xSEXP, SEXP typeSEXP, SEXP drSEXP) {
@@ -394,17 +405,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_PartSurvStateVals_predict
-Rcpp::DataFrame C_PartSurvStateVals_predict(Rcpp::Environment R_PartSurvStateVals);
-RcppExport SEXP _hesim_C_PartSurvStateVals_predict(SEXP R_PartSurvStateValsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PartSurvStateVals(R_PartSurvStateValsSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_PartSurvStateVals_predict(R_PartSurvStateVals));
-    return rcpp_result_gen;
-END_RCPP
-}
 // C_PartSurv_sim_stateprobs
 Rcpp::List C_PartSurv_sim_stateprobs(Rcpp::Environment R_PartSurv);
 RcppExport SEXP _hesim_C_PartSurv_sim_stateprobs(SEXP R_PartSurvSEXP) {
@@ -416,18 +416,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_PartSurv_sim_auc
-Rcpp::List C_PartSurv_sim_auc(Rcpp::Environment R_PartSurv, Rcpp::DataFrame R_stateprobs, std::vector<double> dr, std::string type, std::vector<std::string> type_names);
-RcppExport SEXP _hesim_C_PartSurv_sim_auc(SEXP R_PartSurvSEXP, SEXP R_stateprobsSEXP, SEXP drSEXP, SEXP typeSEXP, SEXP type_namesSEXP) {
+// C_psm_sim_wlos
+Rcpp::DataFrame C_psm_sim_wlos(Rcpp::Environment R_psm, Rcpp::DataFrame R_stateprobs, std::vector<double> dr, std::string type, std::vector<std::string> categories);
+RcppExport SEXP _hesim_C_psm_sim_wlos(SEXP R_psmSEXP, SEXP R_stateprobsSEXP, SEXP drSEXP, SEXP typeSEXP, SEXP categoriesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PartSurv(R_PartSurvSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_psm(R_psmSEXP);
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_stateprobs(R_stateprobsSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type dr(drSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    Rcpp::traits::input_parameter< std::vector<std::string> >::type type_names(type_namesSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_PartSurv_sim_auc(R_PartSurv, R_stateprobs, dr, type, type_names));
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type categories(categoriesSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_psm_sim_wlos(R_psm, R_stateprobs, dr, type, categories));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_statevals_sim
+Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals, std::vector<double> times, std::string type);
+RcppExport SEXP _hesim_C_statevals_sim(SEXP R_StateValsSEXP, SEXP timesSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_StateVals(R_StateValsSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type times(timesSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_statevals_sim(R_StateVals, times, type));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -564,10 +577,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_cumtrapzfun", (DL_FUNC) &_hesim_C_test_cumtrapzfun, 1},
     {"_hesim_C_test_simpsfun", (DL_FUNC) &_hesim_C_test_simpsfun, 1},
     {"_hesim_C_test_cumsimpsfun", (DL_FUNC) &_hesim_C_test_cumsimpsfun, 1},
+    {"_hesim_is_class", (DL_FUNC) &_hesim_is_class, 1},
     {"_hesim_C_PartSurvCurves_summary", (DL_FUNC) &_hesim_C_PartSurvCurves_summary, 4},
-    {"_hesim_C_PartSurvStateVals_predict", (DL_FUNC) &_hesim_C_PartSurvStateVals_predict, 1},
     {"_hesim_C_PartSurv_sim_stateprobs", (DL_FUNC) &_hesim_C_PartSurv_sim_stateprobs, 1},
-    {"_hesim_C_PartSurv_sim_auc", (DL_FUNC) &_hesim_C_PartSurv_sim_auc, 5},
+    {"_hesim_C_psm_sim_wlos", (DL_FUNC) &_hesim_C_psm_sim_wlos, 5},
+    {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
     {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},

@@ -175,28 +175,28 @@
 <span class='co'># Summarize survival curves</span>
 <span class='no'>quantiles</span> <span class='kw'>&lt;-</span> <span class='no'>part.surv.curves</span>$<span class='fu'>quantile</span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>))
 <span class='fu'>head</span>(<span class='no'>quantiles</span>)</div><div class='output co'>#&gt;    curve sample strategy_id patient_id    p  quantile
-#&gt; 1:     1      1           1          1 0.25 0.1819721
-#&gt; 2:     1      1           1          1 0.50 0.4384474
-#&gt; 3:     1      1           1          1 0.75 0.8768949
-#&gt; 4:     1      1           1          2 0.25 0.1724051
-#&gt; 5:     1      1           1          2 0.50 0.4153963
-#&gt; 6:     1      1           1          2 0.75 0.8307927</div><div class='input'>
+#&gt; 1:     1      1           1          1 0.25 0.1878812
+#&gt; 2:     1      1           1          1 0.50 0.4526848
+#&gt; 3:     1      1           1          1 0.75 0.9053696
+#&gt; 4:     1      1           1          2 0.25 0.1777900
+#&gt; 5:     1      1           1          2 0.50 0.4283710
+#&gt; 6:     1      1           1          2 0.75 0.8567420</div><div class='input'>
 <span class='no'>survival</span> <span class='kw'>&lt;-</span> <span class='no'>part.surv.curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>))
 <span class='fu'>head</span>(<span class='no'>survival</span>)</div><div class='output co'>#&gt;    curve sample strategy_id patient_id   t  survival
 #&gt; 1:     1      1           1          1 0.0 1.0000000
-#&gt; 2:     1      1           1          1 0.1 0.8537718
-#&gt; 3:     1      1           1          1 0.2 0.7289264
-#&gt; 4:     1      1           1          1 0.3 0.6223368
-#&gt; 5:     1      1           1          1 0.4 0.5313336
-#&gt; 6:     1      1           1          1 0.5 0.4536377</div><div class='input'>
+#&gt; 2:     1      1           1          1 0.1 0.8580275
+#&gt; 3:     1      1           1          1 0.2 0.7362111
+#&gt; 4:     1      1           1          1 0.3 0.6316894
+#&gt; 5:     1      1           1          1 0.4 0.5420068
+#&gt; 6:     1      1           1          1 0.5 0.4650567</div><div class='input'>
 <span class='no'>rmst</span> <span class='kw'>&lt;-</span> <span class='no'>part.surv.curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>))
 <span class='fu'>head</span>(<span class='no'>rmst</span>)</div><div class='output co'>#&gt;    curve sample strategy_id patient_id t      rmst
-#&gt; 1:     1      1           1          1 2 0.6057587
-#&gt; 2:     1      1           1          1 5 0.6323125
-#&gt; 3:     1      1           1          2 2 0.5779954
-#&gt; 4:     1      1           1          2 5 0.5991476
-#&gt; 5:     1      1           1          3 2 0.5248690
-#&gt; 6:     1      1           1          3 5 0.5378827</div></pre>
+#&gt; 1:     1      1           1          1 2 0.6225373
+#&gt; 2:     1      1           1          1 5 0.6527770
+#&gt; 3:     1      1           1          2 2 0.5937129
+#&gt; 4:     1      1           1          2 5 0.6178193
+#&gt; 5:     1      1           1          3 2 0.5384938
+#&gt; 6:     1      1           1          3 5 0.5533388</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

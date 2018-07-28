@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Random generation for categorical distribution — rcat • hesim</title>
+<title>Form <code>StateVals</code> object — form_StateVals • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -95,59 +95,49 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Random generation for categorical distribution</h1>
+    <h1>Form <code>StateVals</code> object</h1>
     </div>
 
     
-    <p>Draw random samples from a categorical distribution given a matrix of probabilities.
- <code>rcat</code> is vectorized and written in C++ for speed.</p>
+    <p><code>form_StateVals</code> is a generic function for forming an object of class
+ <code><a href='StateVals.html'>StateVals</a></code> from a fitted statistical model.</p>
     
 
-    <pre class="usage"><span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>prob</span>)</pre>
+    <pre class="usage"><span class='fu'>form_StateVals</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>n</th>
-      <td><p>Number of random observations to draw.</p></td>
+      <th>object</th>
+      <td><p>A fitted statistical model object of the appropriate class. Supports
+<code>lm</code>.</p></td>
     </tr>
     <tr>
-      <th>prob</th>
-      <td><p>A matrix of probabilities where rows correspond to observations 
-and columns correspond to categories.</p></td>
+      <th>data</th>
+      <td><p>An object of class "expanded_hesim_data" returned by 
+<code><a href='expand_hesim_data.html'>expand_hesim_data</a></code>. Must be expanded by the data tables "strategies",
+"patients", and "states".</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>Number of random observations of the parameters to draw.</p></td>
+    </tr>
+    <tr>
+      <th>point_estimate</th>
+      <td><p>If <code>TRUE</code>, then the point estimates are returned and and no samples are drawn.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of random samples from the categorical distribution. The length of the sample is 
-determined by n. The numerical arguments other than n are recycled so that the number of samples is 
-equal to n.</p>
+    <p>Returns an <code>R6Class</code> object of class <code><a href='StateVals.html'>StateVals</a></code>.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.3</span>)
-<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>10000</span>
-<span class='no'>pmat</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rep</span>(<span class='no'>p</span>, <span class='no'>n</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>p</span>), <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
-<span class='co'># rcat</span>
-<span class='fu'>set.seed</span>(<span class='fl'>100</span>)
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
-<span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.003   0.001   0.004 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
-#&gt;      1      2      3 
-#&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
-<span class='co'># rmultinom from base R </span>
-<span class='fu'>set.seed</span>(<span class='fl'>100</span>)
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>t</span>(<span class='fu'>apply</span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
-<span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>apply</span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>which</span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
-<span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.062   0.001   0.065 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
-#&gt;      1      2      3 
-#&gt; 0.2015 0.5089 0.2896 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -155,9 +145,7 @@ equal to n.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

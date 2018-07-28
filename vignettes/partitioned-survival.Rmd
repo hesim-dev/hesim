@@ -113,7 +113,7 @@ utility.params <- params_lm(coefs  = cbind(utility1, utility2, utility3))
 ```
 
 ## Forming a model structure
-A PSM in `hesim` is an [R6](https://cran.r-project.org/web/packages/R6/) object of class `PartSurv` and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class `PartSurvCurves`), (2) a utility model (of class `PartSurvStateVals`), and (3) a set of cost models for each cost component (a list of `PartSurvStateVals` objects). 
+A PSM in `hesim` is an [R6](https://cran.r-project.org/web/packages/R6/) object of class `PartSurv` and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class `PartSurvCurves`), (2) a utility model (of class `StateVals`), and (3) a set of cost models for each cost component (a list of `StateVals` objects). 
 
 ### Simulation data
 The input data required to simulate partitioned survival models in `hesim` can be set up in 3 steps as described in our [introduction to hesim](intro.html). First, the data can be set up as a collection of data frames or data tables. A 4-state PSM consists of three types of data tables: a table describing treatment strategies, the patient population of interest, and four health states (death and three non-death  states). In this example, we model three treatment strategies and three distinct patients that differ in age and gender. Relevant tables are combined using `hesim_data()`, which creates a general object of class `hesim_data` for storing data tables for simulation modeling in `hesim`.
@@ -157,24 +157,24 @@ part.surv.curves <- form_PartSurvCurves(part.surv.fits, data = survs.edata, n = 
 ```
 
 ### Creating cost and utility models
-We fit a linear model to medical costs, so we can use the `form_PartSurvStateVals()` to instantiate a `PartSurvStateVals` object for medical costs. 
+We fit a linear model to medical costs, so we can use the `form_StateVals()` to instantiate a `StateVals` object for medical costs. 
 
 ```{r, warning = FALSE, message = FALSE}
-part.surv.medcosts <- form_PartSurvStateVals(costs.medical.fit, data = statevals.edata, n = n.samples)
+part.surv.medcosts <- form_StateVals(costs.medical.fit, data = statevals.edata, n = n.samples)
 ```
 
-Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using `form_PartSurvStateVals()`. Instead, we create the model from our `params_lm` class object and input data (of class `input_data`). Since we don't have fitted R model, we can use a `formula_list` object to specify the explanatory variables in the model. That is, we use `formula_list()` to obtain the variables (`strategy_id`) in `statevals.edata` that are needed. 
+Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using `form_StateVals()`. Instead, we create the model from our `params_lm` class object and input data (of class `input_data`). Since we don't have fitted R model, we can use a `formula_list` object to specify the explanatory variables in the model. That is, we use `formula_list()` to obtain the variables (`strategy_id`) in `statevals.edata` that are needed. 
 
 ```{r, warning = FALSE, message = FALSE}
 input.dat <- form_input_data(formula_list(mu = ~ -1 + factor(state_id)), data = statevals.edata)
-part.surv.drugcosts <- PartSurvStateVals$new(data = input.dat, params = drugcosts.params)
+part.surv.drugcosts <- StateVals$new(data = input.dat, params = drugcosts.params)
 ```
 
 We can instantiate a utility model in the same manner.
 
 ```{r, warning = FALSE, message = FALSE}
 input.dat <- form_input_data(formula_list(mu = ~ -1 + factor(state_id)), data = statevals.edata)
-part.surv.utility <- PartSurvStateVals$new(data = input.dat, params = utility.params)
+part.surv.utility <- StateVals$new(data = input.dat, params = utility.params)
 ```
 
 ### Combining the statistical models

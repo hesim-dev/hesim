@@ -22,8 +22,8 @@ Input data
 
 Partitioned survival models
 * The R6 class `PartSurv` simulates outcomes from an N-state partitioned survival model. 
-* A `PartSurv` object is instantiated with a set of survival models (the R6 class `PartSurvCurves`) and models for costs and utility (the R6 class `PartSurvStateVals`).
-* `form_PartSurvCurves()` and `form_PartSurvStateVals` create `PartSurvCurves` and `PartSurvStateVals` objects, respectively, from fitted statistical models or "formula" objects.
+* A `PartSurv` object is instantiated with a set of survival models (the R6 class `PartSurvCurves`) and models for costs and utility (the R6 class `StateVals`).
+* `form_PartSurvCurves()` and `form_StateVals` create `PartSurvCurves` and `StateVals` objects, respectively, from fitted statistical models or "formula" objects.
 
 Datasets
 * `part_surv4_simdata` provides a number of example datasets for parameterizing a partitioned survival model. 

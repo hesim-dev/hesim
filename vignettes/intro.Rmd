@@ -136,12 +136,12 @@ print(form_input_data(formula.costs, data = hesim.edata.statevals))
 ```
 
 ## Running a simulation
-A decision model is created by combining the disease, utility, and cost models. Each submodel is, in turn, created by combining input data and parameter estimates. For example, in a partitioned survival model there are three submodels: a set of survival models, a utility model, and a set of cost models for different types of costs. The survival models are `R6` objects of class `PartSurvCurves` and used to predict the survival curves in a partitioned survival analysis. The cost and utility models are `R6` objects of class `PartSurvStateValues` and used to predict the values to assign to the health states.
+A decision model is created by combining the disease, utility, and cost models. Each submodel is, in turn, created by combining input data and parameter estimates. For example, in a partitioned survival model there are three submodels: a set of survival models, a utility model, and a set of cost models for different types of costs. The survival models are `R6` objects of class `PartSurvCurves` and used to predict the survival curves in a partitioned survival analysis. The cost and utility models are `R6` objects of class `StateValues` and used to predict the values to assign to the health states.
 
 Again, as with the model parameters and input data, there are two ways to instantiate each submodel:
 
 1. Based on parameters and input data using `$new()`
-2. From fitted statistical models using generic functions prefixed by `form_` (e.g.,  `form_PartSurvCurves()`, `form_PartSurvStateVals()`). 
+2. From fitted statistical models using generic functions prefixed by `form_` (e.g.,  `form_PartSurvCurves()`, `form_StateVals()`). 
 
 We illustrate by instantiating a `PartSurvCurves` object in both ways. 
 
@@ -170,14 +170,14 @@ head(part.surv.curves$cumhazard(t = seq(0, 3)))
 head(part.surv.curves$rmst(t = 3))
 ```
 
-We can instantiate a `PartSurvStateVals` object in the same two ways, although here we only use the second method. A `$predict()` function is available to predict mean state values by treatment strategy, patient, and health state.
+We can instantiate a `StateVals` object in the same two ways, although here we only use the second method. A `$siulate()` function is available to simulate state values by treatment strategy, patient, and health state.
 
 ```{r warning = FALSE, message = FALSE}
 medcost.dat <- subset(part_surv4_simdata$costs$medical, state_name == "state3")
 costs.medical.fit <- stats::lm(costs ~ female, data = medcost.dat)
-part.surv.medcosts <- form_PartSurvStateVals(costs.medical.fit, 
+part.surv.medcosts <- form_StateVals(costs.medical.fit, 
                                              data = hesim.edata.statevals, n = n.samples)
-head(part.surv.medcosts$predict())
+head(part.surv.medcosts$sim(t = 3, type = "predict"))
 ```
 
 By combining submodels, a decision model is able to simulate disease progression and cost and utility values associated with each disease state. Total discounted costs and QALYs are calculated by summing (or integrating) simulated costs and utility over time. In the partitioned survival example, disease progression is simulated by first generating survival curves and then calculating health states probabilities based on those curves. Cost and QALYs are calculated by numerically integrating the weighted probability of being in each state, where weights are a function of the discount factorand predicted state values.

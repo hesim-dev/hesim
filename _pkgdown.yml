@@ -26,13 +26,15 @@ reference:
       - expand_hesim_data
       - input_data
       - form_input_data
+  - title: "Health state values"
+    contents:
+      - StateVals
+      - form_StateVals
   - title: "Partitioned survival model"
     contents:
       - PartSurv
       - PartSurvCurves
-      - PartSurvStateVals
       - form_PartSurvCurves
-      - form_PartSurvStateVals
   - title: "Cost-effectiveness analysis"
     contents:
       - icea

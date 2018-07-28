@@ -23,19 +23,28 @@ public:
    * distribution.
    * @param obs The observation (i.e., row index) for which to make a prediction
    * from the input matrix (or matrices when there are multiple parameters).
-   * @return. The predicted value.
+   * @return The predicted value.
    */ 
   virtual double predict(int sample, int obs) = 0;
   
   /** 
-   * Sample random values from the probability distribution.
+   * Sample random values from the underlying probability distribution of the
+   * statistical model.
    * @param sample A random sample of the parameters from the posterior
    * distribution.
    * @param obs The observation (i.e., row index) for which to make a prediction
    * from the input matrix (or matrices when there are multiple parameters).
-   * @return. A random draw.
+   * @return A random draw.
    */ 
   virtual double random(int sample, int obs) = 0;
+  
+  /** 
+   * Get the number of random samples
+   * Get the number of random samples of the parameters from the posterior
+   * distribution.
+   * @return The number of random samples.
+   */ 
+  virtual int get_n_samples() = 0;  
 };
 
 /***************************************************************************//** 
@@ -65,6 +74,10 @@ public:
   
   double random(int sample, int obs) {
     return R::rnorm(predict(sample, obs), params_.sigma_[sample]);
+  }
+  
+  int get_n_samples(){
+    return params_.n_samples_;
   }
 };
 
@@ -232,19 +245,13 @@ public:
     Rcpp::stop("Predict method is currently unavailable with class 'surv'");
   }
   
-  /** 
-   * Random number generation from survival model.
-   * Draw a random sample from the underlying survival distribution of the survival 
-   * model for a given observation and sample of the parameters.
-   * @param sample A random sample of the parameters from the posterior
-   * distribution.
-   * @param obs The observation (i.e., row index) for which to make a prediction
-   * from the input matrix (or matrices when there are multiple parameters).
-   * @return A random sample from the underlying survival distribution.
-   */ 
   double random(int sample, int obs) {
     set_dist(sample, obs);
     return dist_->random();
+  }
+  
+  int get_n_samples(){
+    return params_.n_samples_;
   }
 
 };

@@ -12,6 +12,15 @@ This site documents the @c hesim C++ library, which is desisgned for use with
 the @c R package by the same name.
  */
 
+/** @defgroup general General
+ *  General classes and functions to facilitate model development. 
+ */
+
+/** @defgroup math Mathematics
+ *  Functions and classes for numerical computing including integration and
+ *  root finding.
+ */
+
 /** @defgroup stats Statistics
  *  Probability distributions, random number generation, and statistical functions.
  */
@@ -20,8 +29,8 @@ the @c R package by the same name.
  *  Prediction and random sampling from different statistical models.
  */
 
-/** @defgroup statevals Health state values
- *  Simulate costs and QALYs based on time spent in health states.
+/** @defgroup psm Partitioned survival models
+ *  Classes and functions for simulating partitioned survival models.
  */
 
 /** @defgroup test Tests

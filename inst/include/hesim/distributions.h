@@ -9,7 +9,7 @@
 namespace hesim{
 
 /** @ingroup stats 
- * This namespace contains probability distributions, random number 
+ * Probability distributions, random number 
  * generation, and statistical functions.
  */
 namespace stats{

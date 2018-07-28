@@ -2,12 +2,12 @@
 # define INTEGRATE_H
 #include <RcppArmadillo.h>
 
-class Trapezoid{
-public:
-  double operator()(double a, double b, double y_a, double y_b) const {
-    return (b - a)/2 * (y_a + y_b);
-  }
-};
+namespace hesim {
+
+/** @ingroup math 
+ * Prediction and random sampling from different statistical models.
+ */
+namespace math {
 
 template <class T>
 class TrapezoidFun{
@@ -65,7 +65,9 @@ inline double trapzfun(Func f, InputIt first, InputIt last){
 
 template <typename InputIt>
 inline double trapz(InputIt x_first, InputIt x_last, InputIt y_first){
-  Trapezoid trapz;
+  auto trapz = [](double a, double b, double y_a, double y_b){
+    return (b - a)/2 * (y_a + y_b);
+  };
   return composite(x_first, x_last, y_first, trapz);
 }
 
@@ -86,5 +88,9 @@ std::vector<double> cumsimpsfun(Func f, InputIt first, InputIt last){
   SimpsonFun<Func> simps;
   return cumulative_composite_fun(f, first, last, simps);
 }
+
+} // end namespace math
+
+} // end namespace hesim
 
 # endif

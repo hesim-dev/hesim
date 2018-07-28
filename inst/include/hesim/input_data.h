@@ -41,10 +41,6 @@ inline time_fun* get_time_fun(Rcpp::List R_input_data){
  ******************************************************************************/ 
 class obs_index {
 private:
-  int strategy_id_; ///< Strategy id used to select observation.
-  int line_; ///< Line used to select observation.
-  int patient_id_; ///< Patient id used to select observation.
-  int health_id_; ///< Health id used to select observation.
   std::vector<int> cum_strategy_sizes_; ///< Cumulative number of observations for first @c n-1 strategies
                                         ///< where @c n is the total number of strategies. First element is
                                         ///< equal to 0. Used to get row index since that number of rows
@@ -107,7 +103,7 @@ private:
    * Initialize the number of observations.
    * @param[out] n_obs_ The private member @c n_obs_.
    */   
-  int init_n_obs_() {
+  void init_n_obs_() {
     n_obs_ = 0;
     for (int i = 0; i <n_strategies_; ++i){
       n_obs_ += n_lines_[i] * n_healthvals_ * n_patients_;
@@ -115,6 +111,11 @@ private:
   }
   
 public:
+  int strategy_id_; ///< Strategy id used to select observation.
+  int line_; ///< Line used to select observation.
+  int patient_id_; ///< Patient id used to select observation.
+  int health_id_; ///< Health id used to select observation.
+  
   int n_strategies_; ///< Number of treatment strategies.
   std::vector<int> n_lines_; ///< Number of treatment lines for each treatment strategy.
   int n_healthvals_; ///< Number of unique health values (i.e., states, transitions).
@@ -207,6 +208,19 @@ public:
     return strategy_row + cum_strategy_size_;  
   }  
 };
+
+/***************************************************************************//** 
+ * Create observation index class.
+ * Create the class obs_index from a @c hesim @R model.
+ * @param R_model An R based model containing data and parameters. The object
+ * must contain an element names "data".
+ ******************************************************************************/ 
+inline obs_index create_obs_index(Rcpp::Environment R_model){
+  Rcpp::List R_data = Rcpp::as<Rcpp::List>(R_model["data"]);
+  obs_index obs_index(R_data);
+  return obs_index;
+}
+
 
 } // end namespace statmods
 
