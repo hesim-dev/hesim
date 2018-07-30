@@ -65,7 +65,7 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
@@ -128,16 +128,16 @@ in <code>coefs</code>.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"MASS"</span>)
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span>
-<span class='no'>params.lm</span> <span class='kw'>&lt;-</span> <span class='fu'>params_lm</span>(<span class='kw'>coefs</span> <span class='kw'>=</span> <span class='kw pkg'>MASS</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/MASS/topics/mvrnorm'>mvrnorm</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.5</span>,<span class='fl'>.6</span>),
+<span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'>params_lm</span>(<span class='kw'>coefs</span> <span class='kw'>=</span> <span class='kw pkg'>MASS</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/MASS/topics/mvrnorm'>mvrnorm</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.5</span>,<span class='fl'>.6</span>),
                                             <span class='kw'>Sigma</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>.05</span>, <span class='fl'>.01</span>, <span class='fl'>.01</span>, <span class='fl'>.05</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>)),
                       <span class='no'>sigma</span> <span class='kw'>&lt;-</span> <span class='fu'>rgamma</span>(<span class='no'>n</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>))
-<span class='fu'>print</span>(<span class='no'>params.lm</span>)</div><div class='output co'>#&gt; $coefs
+<span class='fu'>print</span>(<span class='no'>params</span>)</div><div class='output co'>#&gt; $coefs
 #&gt;           [,1]      [,2]
-#&gt; [1,] 0.4984688 0.6414918
-#&gt; [2,] 0.5513485 0.4215582
+#&gt; [1,] 0.4382271 0.5203288
+#&gt; [2,] 0.3092110 0.8561599
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.05697386 0.06226843
+#&gt; [1] 0.03709213 0.02627740
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2

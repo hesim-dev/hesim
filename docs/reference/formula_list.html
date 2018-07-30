@@ -65,7 +65,7 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
@@ -121,11 +121,11 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Create from "formula" objects</span>
-<span class='no'>formula.list.wei</span> <span class='kw'>&lt;-</span> <span class='fu'>formula_list</span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'>formula</span>(~ <span class='fl'>1</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fu'>formula</span>(~ <span class='no'>x</span>))
-<span class='fu'>class</span>(<span class='no'>formula.list.wei</span>)</div><div class='output co'>#&gt; [1] "formula_list"</div><div class='input'>
+<span class='no'>flist_wei</span> <span class='kw'>&lt;-</span> <span class='fu'>formula_list</span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'>formula</span>(~ <span class='fl'>1</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fu'>formula</span>(~ <span class='no'>x</span>))
+<span class='fu'>class</span>(<span class='no'>flist_wei</span>)</div><div class='output co'>#&gt; [1] "formula_list"</div><div class='input'>
 <span class='co'># Create from "formula_list" objects</span>
-<span class='no'>formula.list</span> <span class='kw'>&lt;-</span> <span class='fu'>formula_list</span>(<span class='kw'>exponential</span> <span class='kw'>=</span> <span class='fu'>formula_list</span>(<span class='kw'>rate</span> <span class='kw'>=</span> <span class='fu'>formula</span>(~<span class='fl'>1</span>)),
-                              <span class='kw'>weibull</span> <span class='kw'>=</span> <span class='no'>formula.list.wei</span>)</div></pre>
+<span class='no'>flist</span> <span class='kw'>&lt;-</span> <span class='fu'>formula_list</span>(<span class='kw'>exponential</span> <span class='kw'>=</span> <span class='fu'>formula_list</span>(<span class='kw'>rate</span> <span class='kw'>=</span> <span class='fu'>formula</span>(~<span class='fl'>1</span>)),
+                              <span class='kw'>weibull</span> <span class='kw'>=</span> <span class='no'>flist_wei</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

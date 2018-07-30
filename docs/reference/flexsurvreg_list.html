@@ -65,7 +65,7 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
@@ -123,8 +123,8 @@
     <pre class="examples"><div class='input'> <span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
  <span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
  <span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
- <span class='no'>flexsurvreg.list</span> <span class='kw'>&lt;-</span> <span class='fu'>flexsurvreg_list</span>(<span class='kw'>wei</span> <span class='kw'>=</span> <span class='no'>fit1</span>, <span class='kw'>exp</span> <span class='kw'>=</span> <span class='no'>fit2</span>)
- <span class='fu'>class</span>(<span class='no'>flexsurvreg.list</span>)</div><div class='output co'>#&gt; [1] "flexsurvreg_list"</div></pre>
+ <span class='no'>fsreg_list</span> <span class='kw'>&lt;-</span> <span class='fu'>flexsurvreg_list</span>(<span class='kw'>wei</span> <span class='kw'>=</span> <span class='no'>fit1</span>, <span class='kw'>exp</span> <span class='kw'>=</span> <span class='no'>fit2</span>)
+ <span class='fu'>class</span>(<span class='no'>fsreg_list</span>)</div><div class='output co'>#&gt; [1] "flexsurvreg_list"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

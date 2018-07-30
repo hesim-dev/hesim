@@ -74,19 +74,19 @@ the rows of \code{X} must be sorted by: (i) \code{strategy_id}, (ii) \code{line}
  \code{transition_id}).
 }
 \examples{
-dt.strategies <- data.frame(strategy_id = c(1, 2))
-dt.patients <- data.frame(patient_id = seq(1, 3), 
+dt_strategies <- data.frame(strategy_id = c(1, 2))
+dt_patients <- data.frame(patient_id = seq(1, 3), 
                           age = c(45, 47, 60),
                           female = c(1, 0, 0),
                           group = factor(c("Good", "Medium", "Poor")))
-hesim.dat <- hesim_data(strategies = dt.strategies,
-                             patients = dt.patients)
+hesim_dat <- hesim_data(strategies = dt_strategies,
+                        patients = dt_patients)
 
-dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients"))$data
-input.dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
+dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))$data
+input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
                        patient_id = dat$patient_id,
                        n_patients = length(unique(dat$patient_id)))
-print(input.dat)
+print(input_dat)
 }

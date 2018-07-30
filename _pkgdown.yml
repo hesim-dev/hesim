@@ -16,10 +16,10 @@ reference:
       - fast_rgengamma
   - title: "Parameters"
     contents:
-      - form_params
       - params_lm
       - params_surv
       - params_surv_list
+      - form_params
   - title: "Input data"
     contents:
       - hesim_data
@@ -32,9 +32,9 @@ reference:
       - form_StateVals
   - title: "Partitioned survival model"
     contents:
-      - PartSurv
-      - PartSurvCurves
-      - form_PartSurvCurves
+      - Psm
+      - PsmCurves
+      - form_PsmCurves
   - title: "Cost-effectiveness analysis"
     contents:
       - icea
@@ -43,7 +43,7 @@ reference:
       - custom_table
   - title: "Datasets"
     contents:
-    - part_surv4_simdata
+    - psm4_exdata
 
 navbar:
   title: hesim
@@ -55,7 +55,7 @@ navbar:
       - text: "Introduction"
         href: articles/intro.html
       - text: "Partitioned survival models"
-        href: articles/partitioned-survival.html
+        href: articles/psm.html
       - text: "Individualized cost-effectiveness analysis"
         href: articles/icea.html
   - text: News

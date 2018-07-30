@@ -42,25 +42,25 @@ This flexibility is provided so that parameters can either be estimated using mo
 ```{r  warning = FALSE, message = FALSE}
 library("hesim")
 library("flexsurv")
-n.samples <- 3
+n_samples <- 3
 
 # Create from fitted R model
-fit.wei <- flexsurv::flexsurvreg(formula = Surv(endpoint1_time, endpoint1_status) ~ female + age, 
-                       data = part_surv4_simdata$survival, dist = "weibull")
-params.wei <- form_params(fit.wei, n = n.samples)
-print(params.wei)
+fit_wei <- flexsurv::flexsurvreg(formula = Surv(endpoint1_time, endpoint1_status) ~ female + age, 
+                                data = psm4_exdata$survival, dist = "weibull")
+params_wei <- form_params(fit_wei, n = n_samples)
+print(params_wei)
 
 # Create with 'params_surv()'
-coefs <- flexsurv::normboot.flexsurvreg(fit.wei, B = n.samples, raw = TRUE)
-params.wei2 <- params_surv(coefs = list(shape = coefs[, "shape", drop = FALSE],
+coefs <- flexsurv::normboot.flexsurvreg(fit_wei, B = n_samples, raw = TRUE)
+params_wei2 <- params_surv(coefs = list(shape = coefs[, "shape", drop = FALSE],
                                         scale = coefs[, c("scale", "female", "age")]),
                           dist = "weibull")
-print(params.wei2)
+print(params_wei2)
 
 ```
 
 ### Input data
-The input vectors for each parameter, $x_{l,hijk}$, are rows in multidimensional input matrices, $X_l$, where each row denotes a unique observation. The input matrix for parameter $l$ is indexed by health-related indices, $h$, patients, $i$, and treatment lines $j$ for a treatment strategy $k$. Example health-related indices include a health state, a transition between two health states, or a survival endpoint in a partitioned survival model. In some cases, the health-related index $h$ can be suppressed and separate models can be fit for each health index. This is, for instance, the case in a partitioned survival model where separate models are fit for each survival endpoint. Likewise, models can be fit without multiple treatment lines as would, again, be the case in a partitioned survival analysis where sequential treatment would be incorporated by adding additional health states.
+The input vectors for each parameter, $x_{l,hijk}$, are rows in multidimensional input matrices, $X_l$, where each row denotes a unique observation. The input matrix for parameter $l$ is indexed by health-related indices, $h$, patients, $i$, and treatment lines $j$ for a treatment strategy $k$. Example health-related indices include a health state, a transition between two health states, or a survival endpoint in a partitioned survival model (PSM). In some cases, the health-related index $h$ can be suppressed and separate models can be fit for each health index. This is, for instance, the case in a PSM where separate models are fit for each survival endpoint. Likewise, models can be fit without multiple treatment lines as would, again, be the case in a PSM where sequential treatment would be incorporated by adding additional health states.
 
 In `hesim`, simulations are made by constructing an object of class `input_data` with the function `input_data()`, which consists of an input matrix $X$ and the indices $h$, $i$, $j$, and $k$. We illustrate in the figure below with an example in which a statistical model with one parameter is used to make predictions across two treatment strategies, two patients, and two health states. (If a statistical model with more than one parameter were used, then a separate input matrix would need to be created for each parameter.)
 
@@ -86,21 +86,20 @@ knitr::include_graphics("create-input-data.png")
 ```
 <br>
 <br>
-To illustrate with `R`, consider a simple partitioned survival model where the only survival endpoint is overall survival, so that there is only one (non-death) health state. Furthermore, suppose that there are two treatment strategies and two patients. A `hesim_data` object can be created as follows.
+To illustrate with `R`, consider a simple PSM where the only survival endpoint is overall survival, so that there is only one (non-death) health state. Furthermore, suppose that there are two treatment strategies and two patients. A `hesim_data` object can be created as follows.
 
 ```{r warning = FALSE, message = FALSE}
-dt.strategies <- data.frame(strategy_id = c(1, 2))
-dt.patients <- data.frame(patient_id = seq(1, 2),
+dt_strategies <- data.frame(strategy_id = c(1, 2))
+dt_patients <- data.frame(patient_id = seq(1, 2),
                           age = c(45, 50),
                           female = c(0, 1))
-dt.states <- data.frame(state_id =  1,
+dt_states <- data.frame(state_id =  1,
                         state_name = "Alive",
                         stringsAsFactors = FALSE)
-hesim.dat <- hesim_data(strategies = dt.strategies,
-                              patients = dt.patients,
-                              states = dt.states)
-print(hesim.dat)
-
+hesim_dat <- hesim_data(strategies = dt_strategies,
+                              patients = dt_patients,
+                              states = dt_states)
+print(hesim_dat)
 ```
 
 The `hesim_data` object can subsequently be "expanded" over the dimensions of interest using `expand_hesim_data()`. The new `expanded_hesim_data` object must contain the covariates used in the model fit as well as id variables indexing the dimensions of the data. Given a model object or formula, we extract the input matrix from the `expanded_hesim_data` object using the generic function `form_input_data()`, which returns an `input_data` object containing the input matrix as well as the relevant id variables.
@@ -115,81 +114,80 @@ In case 2 a `formula` or `formula_list` object can be used in lieu of a fitted m
 ```{r warning = FALSE, message = FALSE}
 # Predict survival curves by treatment strategy and patient
 ## From a model fit with flexsurvreg
-hesim.edata.surv <- expand_hesim_data(hesim.dat, by = c("strategies", "patients"))
-input.dat.wei <- form_input_data(fit.wei, data = hesim.edata.surv)
-print(input.dat.wei)
+hesim_edata_surv <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+input_dat_wei <- form_input_data(fit_wei, data = hesim_edata_surv)
+print(input_dat_wei)
 
 ## From a formula object
-formula.list.wei <- formula_list(shape = ~1,
+formula_list_wei <- formula_list(shape = ~1,
                                   scale = ~ female + age)
-input.dat.wei2 <- form_input_data(formula.list.wei, data = hesim.edata.surv)
-
+input_dat_wei2 <- form_input_data(formula_list_wei, data = hesim_edata_surv)
 ```
 
 We can create input data to make predictions by treatment strategy, patient, and health state (e.g., for our utility and cost models) in a similar fashion. 
 
 ```{r warning = FALSE, message = FALSE}
 # Predict (mean) state values by treatment strategy, patient, and health state
-hesim.edata.statevals <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", "states"))
-formula.costs <- formula_list(mu = ~ 1 + female)
-print(form_input_data(formula.costs, data = hesim.edata.statevals))
+hesim_edata_statevals <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+formula_costs <- formula_list(mu = ~ 1 + female)
+print(form_input_data(formula_costs, data = hesim_edata_statevals))
 ```
 
 ## Running a simulation
-A decision model is created by combining the disease, utility, and cost models. Each submodel is, in turn, created by combining input data and parameter estimates. For example, in a partitioned survival model there are three submodels: a set of survival models, a utility model, and a set of cost models for different types of costs. The survival models are `R6` objects of class `PartSurvCurves` and used to predict the survival curves in a partitioned survival analysis. The cost and utility models are `R6` objects of class `StateValues` and used to predict the values to assign to the health states.
+A decision model is created by combining the disease, utility, and cost models. Each submodel is, in turn, created by combining input data and parameter estimates. For example, in a PSM there are three submodels: a set of survival models, a utility model, and a set of cost models for different types of costs. The survival models are `R6` objects of class `PsmCurves` and used to predict the survival curves in a PSM. The cost and utility models are `R6` objects of class `StateValues` and used to predict the values to assign to the health states.
 
 Again, as with the model parameters and input data, there are two ways to instantiate each submodel:
 
 1. Based on parameters and input data using `$new()`
-2. From fitted statistical models using generic functions prefixed by `form_` (e.g.,  `form_PartSurvCurves()`, `form_StateVals()`). 
+2. From fitted statistical models using generic functions prefixed by `form_` (e.g.,  `form_PsmCurves()`, `form_StateVals()`). 
 
-We illustrate by instantiating a `PartSurvCurves` object in both ways. 
+We illustrate by instantiating a `PsmCurves` object in both ways. 
 
 ```{r warning = FALSE, message = FALSE}
 # Instantiate from a 'partsurvfit' object
-partsurvfit.wei <- partsurvfit(flexsurvreg_list(fit.wei), data = part_surv4_simdata$survival)
-part.surv.curves <- form_PartSurvCurves(partsurvfit.wei, data = hesim.edata.surv,
-                                        n = n.samples, bootstrap = FALSE)
+psfit_wei <- partsurvfit(flexsurvreg_list(fit_wei), data = psm4_exdata$survival)
+psm_curves <- form_PsmCurves(psfit_wei, data = hesim_edata_surv,
+                             n = n_samples, bootstrap = FALSE)
 
 # Instantiate with $new()
-params.wei.list <- params_surv_list(params.wei)
-input.dat.wei.list <- form_input_data(formula_list(formula.list.wei),
-                             data = hesim.edata.surv)
-part.surv.curves2 <- PartSurvCurves$new(params = params_surv_list(params.wei),
-                                        data = input.dat.wei.list)
+params_wei_list <- params_surv_list(params_wei)
+input_dat_wei_list <- form_input_data(formula_list(formula_list_wei),
+                                      data = hesim_edata_surv)
+psm_curves2 <- PsmCurves$new(params = params_surv_list(params_wei),
+                             data = input_dat_wei_list)
 ```
 
-Submodels such as `PartSurvCurves` have a number of member functions that can be used for prediction, simulation, or to evaluate model fit. For example, we can summarize survival curves from a `PartSurvCurves` object with functions to predict hazards, cumulative hazards, survival, restricted mean survival time, and quantiles.
+Submodels such as `PsmCurves` have a number of member functions that can be used for prediction, simulation, or to evaluate model fit. For example, we can summarize survival curves from a `PsmCurves` object with functions to predict hazards, cumulative hazards, survival, restricted mean survival time, and quantiles.
 
 ```{r warning = FALSE, message = FALSE}
-partsurvfit.wei <- partsurvfit(flexsurvreg_list(fit.wei), data = part_surv4_simdata$survival)
-part.surv.curves <- form_PartSurvCurves(partsurvfit.wei, data = hesim.edata.surv,
-                                        n = n.samples, bootstrap = FALSE)
-head(part.surv.curves$quantile(.5))
-head(part.surv.curves$cumhazard(t = seq(0, 3)))
-head(part.surv.curves$rmst(t = 3))
+psm_wei <- partsurvfit(flexsurvreg_list(fit_wei), data = psm4_exdata$survival)
+psm_curves <- form_PsmCurves(psm_wei, data = hesim_edata_surv,
+                             n = n_samples, bootstrap = FALSE)
+head(psm_curves$quantile(.5))
+head(psm_curves$cumhazard(t = seq(0, 3)))
+head(psm_curves$rmst(t = 3))
 ```
 
-We can instantiate a `StateVals` object in the same two ways, although here we only use the second method. A `$siulate()` function is available to simulate state values by treatment strategy, patient, and health state.
+We can instantiate a `StateVals` object in the same two ways, although here we only use the second method. A `$simulate()` function is available to simulate state values by treatment strategy, patient, and health state.
 
 ```{r warning = FALSE, message = FALSE}
-medcost.dat <- subset(part_surv4_simdata$costs$medical, state_name == "state3")
-costs.medical.fit <- stats::lm(costs ~ female, data = medcost.dat)
-part.surv.medcosts <- form_StateVals(costs.medical.fit, 
-                                             data = hesim.edata.statevals, n = n.samples)
-head(part.surv.medcosts$sim(t = 3, type = "predict"))
+medcost_dat <- subset(psm4_exdata$costs$medical, state_name == "state3")
+medcosts_fit <- stats::lm(costs ~ female, data = medcost_dat)
+psm_medcosts <- form_StateVals(medcosts_fit, 
+                               data = hesim_edata_statevals, n = n_samples)
+head(psm_medcosts$sim(t = 3, type = "predict"))
 ```
 
-By combining submodels, a decision model is able to simulate disease progression and cost and utility values associated with each disease state. Total discounted costs and QALYs are calculated by summing (or integrating) simulated costs and utility over time. In the partitioned survival example, disease progression is simulated by first generating survival curves and then calculating health states probabilities based on those curves. Cost and QALYs are calculated by numerically integrating the weighted probability of being in each state, where weights are a function of the discount factorand predicted state values.
+By combining submodels, a decision model is able to simulate disease progression and cost and utility values associated with each disease state. Total discounted costs and QALYs are calculated by summing (or integrating) simulated costs and utility over time. In the PSM example, disease progression is simulated by first generating survival curves and then calculating health states probabilities based on those curves. Cost and QALYs are calculated by numerically integrating the weighted probability of being in each state, where weights are a function of the discount factorand predicted state values.
 
 ```{r warning = FALSE, message = FALSE}
 times <- seq(0, 3, .01)
-part.surv <- PartSurv$new(survival_models = part.surv.curves,
-             cost_models = list(medical = part.surv.medcosts))
-part.surv$sim_survival(t = times)
-part.surv$sim_stateprobs()
-part.surv$sim_costs(dr = c(0, .03))
-head(part.surv$costs_)
+psm <- Psm$new(survival_models = psm_curves,
+              cost_models = list(medical = psm_medcosts))
+psm$sim_survival(t = times)
+psm$sim_stateprobs()
+psm$sim_costs(dr = c(0, .03))
+head(psm$costs_)
 ```
 
 ## Decision analysis
@@ -202,4 +200,4 @@ Once costs and QALYS have been calculated, the PSA output can be summarized with
 Moreover, since patient level outcomes are modeled, output can be summarized by patient or subgroup. These "individualized cost-effectiveness analyses" are performed with the `icea()` function. A detailed explanation is given [here](icea.html).
 
 ## Future development
-`hesim` currently supports N-state partitioned survival analysis; however, the package is being actively developed and support for state transition modeling and individual patient simulation will be added. In addition, we plan to add support for additional statistical techniques such as generalized linear models. 
+`hesim` currently supports N-state PSMs; however, the package is being actively developed and support for state transition modeling and individual patient simulation will be added. In addition, we plan to add support for additional statistical techniques such as generalized linear models. 

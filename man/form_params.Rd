@@ -54,18 +54,18 @@ parameters is returned.
 }
 \examples{
 # form_params.lm
-fit <- stats::lm(costs ~ female, data = part_surv4_simdata$costs$medical)
+fit <- stats::lm(costs ~ female, data = psm4_exdata$costs$medical)
 n <- 5
-params.lm <- form_params(fit, n = n)
-head(params.lm$coefs)
-head(params.lm$sigma)
+params_lm <- form_params(fit, n = n)
+head(params_lm$coefs)
+head(params_lm$sigma)
 
 # form_params.flexsurvreg
 library("flexsurv")
 fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                     data = ovarian, dist = "weibull")
 n <- 5
-params.surv <- form_params(fit, n = n)
-print(params.surv$dist)
-head(params.surv$coefs)
+params_surv_wei <- form_params(fit, n = n)
+print(params_surv_wei$dist)
+head(params_surv_wei$coefs)
 }

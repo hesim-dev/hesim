@@ -2,21 +2,21 @@ context("params.R unit tests")
 library("flexsurv")
 
 # Linear model -----------------------------------------------------------------
-fit1 <- stats::lm(costs ~ female, data = part_surv4_simdata$costs$medical)
-fit2 <- stats::lm(costs ~ 1, data = part_surv4_simdata$costs$medical)
-fit.list <- lm_list(fit1 = fit1,
+fit1 <- stats::lm(costs ~ female, data = psm4_exdata$costs$medical)
+fit2 <- stats::lm(costs ~ 1, data = psm4_exdata$costs$medical)
+fit_list <- lm_list(fit1 = fit1,
                     fit2 = fit2)
 
 test_that("params_lm", {
-  params.lm <- params_lm(coefs = matrix(c(1, 2), nrow = 1),
+  pars_lm <- params_lm(coefs = matrix(c(1, 2), nrow = 1),
                             sigma = 2)
-  expect_equal(params.lm$sigma, 2)
+  expect_equal(pars_lm$sigma, 2)
   
   # errors
-  expect_error(params_lm(coefs = c(1, 3), sigma = 2))
-  expect_error(params_lm(coefs = matrix(c(1, 2), nrow = 1),
+  expect_error(pars_lm(coefs = c(1, 3), sigma = 2))
+  expect_error(pars_lm(coefs = matrix(c(1, 2), nrow = 1),
                             sigma = "cat"))
-  expect_error(params_lm(coefs = matrix(c(1, 2), nrow = 1),
+  expect_error(pars_lm(coefs = matrix(c(1, 2), nrow = 1),
                             sigma = c(1, 2)))
 })
 
@@ -27,56 +27,56 @@ test_that("form_params.lm", {
   expect_error(form_params(list(x = 5), 2))
   
   # point estimates
-  params.lm <- form_params(fit1, n = 5, point_estimate = TRUE)
-  expect_equal(params.lm$coefs[, ], coef(fit1))
-  expect_equal(params.lm$sigma, summary(fit1)$sigma)
-  expect_equal(colnames(params.lm$coefs), names(fit1$coefficients))
+  pars_lm <- form_params(fit1, n = 5, point_estimate = TRUE)
+  expect_equal(pars_lm$coefs[, ], coef(fit1))
+  expect_equal(pars_lm$sigma, summary(fit1)$sigma)
+  expect_equal(colnames(pars_lm$coefs), names(fit1$coefficients))
   
   # sampling
   set.seed(101)
-  params.lm <- form_params(fit1, n = n, point_estimate = FALSE)
+  pars_lm <- form_params(fit1, n = n, point_estimate = FALSE)
   set.seed(101)
   r <- MASS::mvrnorm(n, fit1$coefficients, vcov(fit1))
-  expect_equal(params.lm$coefs, r)
+  expect_equal(pars_lm$coefs, r)
   
   # sample size of 1
-  params.lm <- form_params(fit1, n = 1, point_estimate = FALSE)
-  expect_error(params.lm$coefs, NA)
+  pars_lm <- form_params(fit1, n = 1, point_estimate = FALSE)
+  expect_error(pars_lm$coefs, NA)
 })
 
 test_that("params_lm_list", {
-  params.lm1 <- form_params(fit1, n = 5)
-  params.lm2 <- form_params(fit1, n = 5)
-  params.lm.list <- params_lm_list(params.lm1, params.lm2)
-  expect_equal(length(params.lm.list), 2)
+  pars_lm1 <- form_params(fit1, n = 5)
+  pars_lm2 <- form_params(fit1, n = 5)
+  pars_lm_list <- params_lm_list(pars_lm1, pars_lm2)
+  expect_equal(length(pars_lm_list), 2)
   
   # errors
-  params.lm2 <- form_params(fit1, n = 2)
-  expect_error(params_lm_list(params.lm1, params.lm2))
+  pars_lm2 <- form_params(fit1, n = 2)
+  expect_error(pars_lm_list(pars_lm1, pars_lm2))
 })
 
 test_that("form_params.lm_list", {
-  params.lm.list <- form_params(fit.list, n = 3)
-  expect_equal(length(params.lm.list), length(fit.list))
+  pars_lm_list <- form_params(fit_list, n = 3)
+  expect_equal(length(pars_lm_list), length(fit_list))
 })
 
 # Survival model ---------------------------------------------------------------
 test_that("params_surv", {
-  params.surv <- params_surv(coefs = list(matrix(c(1, 2, 3, 4), nrow = 2)),
+  pars_surv <- params_surv(coefs = list(matrix(c(1, 2, 3, 4), nrow = 2)),
                             dist = "exponential")
-  expect_equal(params.surv$n_samples, 2)
-  expect_true(inherits(params.surv, "params_surv"))
-  params.surv <- params_surv(coefs = list(p1 = matrix(c(1, 2, 3, 4), nrow = 2),
+  expect_equal(pars_surv$n_samples, 2)
+  expect_true(inherits(pars_surv, "params_surv"))
+  pars_surv <- params_surv(coefs = list(p1 = matrix(c(1, 2, 3, 4), nrow = 2),
                                           p2 = matrix(c(5, 6, 7, 8), nrow = 2)),
                             dist = "weibull")
-  expect_equal(params.surv$n_samples, 2)
+  expect_equal(pars_surv$n_samples, 2)
   
   # errors
   expect_error(params_surv(coefs = matrix(c(1, 2, 3, 4), nrow = 2),
                             dist = "exponential"))
   expect_error(params_surv(coefs = list(rep(3, 3)),
                             dist = "exponential"))
-    expect_error(params_surv(coefs = list(matrix(1), 3),
+  expect_error(params_surv(coefs = list(matrix(1), 3),
                             dist = "exponential"))
   expect_error(params_surv(coefs = list(matrix(c(1, 2), nrow = 1),
                                         matrix(c(1, 2, 3, 4), nrow = 2)),
@@ -88,8 +88,8 @@ test_that("form_params.flexsurv", {
   ## exponential
   fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                      data = ovarian, dist = "exponential")
-  params.surv <- form_params(fit, point_estimate = TRUE)
-  expect_equal(params.surv$coefs$rate[, ], fit$res.t["rate", "est"])
+  pars_surv <- form_params(fit, point_estimate = TRUE)
+  expect_equal(pars_surv$coefs$rate[, ], fit$res.t["rate", "est"])
   
   ### sample of size 1
   expect_error(form_params(fit, n = 1)$coefs$rate, NA)
@@ -99,116 +99,116 @@ test_that("form_params.flexsurv", {
                      data = ovarian, dist = "weibull")
   n <- 2
   set.seed(102)
-  params.surv <- form_params(fit, n = n)
+  pars_surv <- form_params(fit, n = n)
   set.seed(102)
   sim <- flexsurv::normboot.flexsurvreg(fit, B = n, transform = TRUE)
-  expect_equal(params.surv$coefs$shape[, ], sim[, "shape"])
-  expect_equal(params.surv$coefs$scale[, ], sim[, "scale"])
+  expect_equal(pars_surv$coefs$shape[, ], sim[, "shape"])
+  expect_equal(pars_surv$coefs$scale[, ], sim[, "scale"])
   
   ## gengamma
   fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                      data = ovarian, dist = "gengamma")
-  params.surv <- form_params(fit)
-  expect_equal(length(params.surv$coefs), 3)
+  pars_surv <- form_params(fit)
+  expect_equal(length(pars_surv$coefs), 3)
   
   ## covariates on 1 paramters
   fit <- flexsurvreg(formula = Surv(futime, fustat) ~ age, 
                      data = ovarian, dist = "lognormal")
-  params.surv <- form_params(fit, n = 3)
-  expect_equal(ncol(params.surv$coefs$meanlog), 2)
-  expect_equal(ncol(params.surv$coefs$sdlog), 1)
+  pars_surv <- form_params(fit, n = 3)
+  expect_equal(ncol(pars_surv$coefs$meanlog), 2)
+  expect_equal(ncol(pars_surv$coefs$sdlog), 1)
   
   ## covariates on 2 paramters
   fit <- flexsurv::flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
                      anc = list(sigma = ~ group), dist = "gengamma") 
-  params.surv <- form_params(fit, n = 2)
-  expect_equal(ncol(params.surv$coefs$mu), 3)
-  expect_equal(ncol(params.surv$coefs$sigma), 3)
-  expect_equal(ncol(params.surv$coefs$Q), 1)
+  pars_surv <- form_params(fit, n = 2)
+  expect_equal(ncol(pars_surv$coefs$mu), 3)
+  expect_equal(ncol(pars_surv$coefs$sigma), 3)
+  expect_equal(ncol(pars_surv$coefs$Q), 1)
   
   # spline
   fit <- flexsurv::flexsurvspline(Surv(recyrs, censrec) ~ group, data = bc, k = 1, 
                         scale = "hazard")
-  params.surv <- form_params(fit, n = 2)
-  expect_error(params.surv$coefs, NA)
+  pars_surv <- form_params(fit, n = 2)
+  expect_error(pars_surv$coefs, NA)
 })
 
-fit.exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ age, 
+fit_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ age, 
                                  data = ovarian, dist = "exp")
-fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ age, 
+fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ age, 
                                  data = ovarian, dist = "weibull")
-fit.lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ age, 
+fit_lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ age, 
                                  data = ovarian, dist = "lognormal")
-params.surv.exp <- form_params(fit.exp, n = 2)
-params.surv.wei <- form_params(fit.wei, n = 2)
-params.surv.lnorm <- form_params(fit.lnorm, n = 2)
+pars_surv_exp <- form_params(fit_exp, n = 2)
+pars_surv_wei <- form_params(fit_wei, n = 2)
+pars_surv_lnorm <- form_params(fit_lnorm, n = 2)
 
-fit.list1 <- flexsurvreg_list(exp = fit.exp, wei = fit.wei)
-fit.list2 <- flexsurvreg_list(exp = fit.exp, wei = fit.lnorm)
+fit_list1 <- flexsurvreg_list(exp = fit_exp, wei = fit_wei)
+fit_list2 <- flexsurvreg_list(exp = fit_exp, wei = fit_lnorm)
 
 
 test_that("params_surv_list", {
-  params.surv.list <- params_surv_list(params.surv.exp, params.surv.wei)
-  expect_equal(length(params.surv.list), 2)
+  pars_surv_list <- params_surv_list(pars_surv_exp, pars_surv_wei)
+  expect_equal(length(pars_surv_list), 2)
 })
 
 test_that("form_params.flexsurvreg_list", {
-  params.surv.list <- form_params(fit.list1, n = 3)
-  expect_true(inherits(params.surv.list, "params_surv_list"))
+  pars_surv_list <- form_params(fit_list1, n = 3)
+  expect_true(inherits(pars_surv_list, "params_surv_list"))
 })
 
 test_that("form_params.partsurvfit", {
   fit1 <- flexsurvspline(Surv(endpoint1_time, endpoint1_status) ~ age,
-                         data = part_surv4_simdata$survival[1:30, ])
+                         data = psm4_exdata$survival[1:30, ])
   fit2 <- flexsurvspline(Surv(endpoint2_time, endpoint2_status) ~ age,
-                         data = part_surv4_simdata$survival[1:30, ])
-  partsurv.fit <- partsurvfit(flexsurvreg_list(fit1 = fit1, fit2 = fit2), data = part_surv4_simdata$survival)
-  params.surv.list <- form_params(partsurv.fit, n = 2)
-  expect_equal(length(params.surv.list), 2)
+                         data = psm4_exdata$survival[1:30, ])
+  partsurv_fit <- partsurvfit(flexsurvreg_list(fit1 = fit1, fit2 = fit2), data = psm4_exdata$survival)
+  pars_surv_list <- form_params(partsurv_fit, n = 2)
+  expect_equal(length(pars_surv_list), 2)
 })
 
 test_that("params_joined_surv", {
-  params.joined.surv <- params_joined_surv(exp = params.surv.exp,
-                                           wei = params.surv.wei,
-                                           times = 3)
-  expect_true(inherits(params.joined.surv, "params_joined_surv"))
-  expect_equal(length(params.joined.surv$models), 2)
-  expect_equal(params.joined.surv$times, 3)
+  pars_joined_surv <- params_joined_surv(exp = pars_surv_exp,
+                                         wei = pars_surv_wei,
+                                         times = 3)
+  expect_true(inherits(pars_joined_surv, "params_joined_surv"))
+  expect_equal(length(pars_joined_surv$models), 2)
+  expect_equal(pars_joined_surv$times, 3)
   
   # errors
-  expect_error(params_joined_surv(exp = params.surv.exp, 5, times = 3))
+  expect_error(params_joined_surv(exp = pars_surv_exp, 5, times = 3))
 })
 
 test_that("params_joined_surv_list", {
-  params.surv.list1 <- params_surv_list(params.surv.exp, params.surv.wei)
-  params.surv.list2 <- params_surv_list(params.surv.exp, params.surv.lnorm)
-  params.joined.surv.list <- params_joined_surv_list(model1 = params.surv.list1,
-                                                     model2 = params.surv.list2,
+  pars_surv_list1 <- params_surv_list(pars_surv_exp, pars_surv_wei)
+  pars_surv_list2 <- params_surv_list(pars_surv_exp, pars_surv_lnorm)
+  pars_joined_surv_list <- params_joined_surv_list(model1 = pars_surv_list1,
+                                                     model2 = pars_surv_list2,
                                                      times = list(3, 5))
-  expect_true(inherits(params.joined.surv.list, "params_joined_surv_list"))
-  expect_equal(length(params.joined.surv.list$models), 2)
+  expect_true(inherits(pars_joined_surv_list, "params_joined_surv_list"))
+  expect_equal(length(pars_joined_surv_list$models), 2)
   
   # errors
-  expect_error(params_joined_surv_list(params.surv.exp, params.surv.wei, times = 3))
-  expect_error(params_joined_surv_list(model1 = params.surv.list1,
-                                       model2 = params.surv.list2, 
+  expect_error(params_joined_surv_list(pars_surv_exp, pars_surv_wei, times = 3))
+  expect_error(params_joined_surv_list(model1 = pars_surv_list1,
+                                       model2 = pars_surv_list2, 
                                        times = 3))
 })
 
 test_that("form_params.joined_flexsurvreg", {
-  joined.flexsurvreg <- joined_flexsurvreg(exp = fit.exp, wei = fit.wei,
+  joined_fsreg <- joined_flexsurvreg(exp = fit_exp, wei = fit_wei,
                                            times = 6)
-  params.joined.surv <- form_params(joined.flexsurvreg, n = 2)
+  pars_joined_surv <- form_params(joined_fsreg, n = 2)
   
-  expect_true(inherits(params.joined.surv, "params_joined_surv"))
-  expect_equal(length(params.joined.surv$models), 2)
+  expect_true(inherits(pars_joined_surv, "params_joined_surv"))
+  expect_equal(length(pars_joined_surv$models), 2)
 })
 
 test_that("form_params.joined_flexsurvreg_list", {
-  joined.flexsurvreg.list <- joined_flexsurvreg_list(fit1 = fit.list1, fit2 = fit.list2,
-                                                times = list(1, 2))
-  params.joined.surv.list <- form_params(joined.flexsurvreg.list, n = 2)
+  joined_fsreg_list <- joined_flexsurvreg_list(fit1 = fit_list1, fit2 = fit_list2,
+                                            times = list(1, 2))
+  pars_joined_surv_list <- form_params(joined_fsreg_list, n = 2)
   
-  expect_true(inherits(params.joined.surv.list, "params_joined_surv_list"))
-  expect_equal(length(params.joined.surv.list$models), 2)
+  expect_true(inherits(pars_joined_surv_list, "params_joined_surv_list"))
+  expect_equal(length(pars_joined_surv_list$models), 2)
 })

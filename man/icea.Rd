@@ -109,9 +109,5 @@ icea.pw.dt <-  icea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
                       sim = "sim", strategy = "strategy", e = "e", c = "c")
 names(icea.pw.dt)
 # cost-effectiveness acceptability curve
-library("ggplot2")
-ggplot2::ggplot(icea.pw.dt$ceac[k < 50000], aes_string(x = "k", y = "prob")) +
- geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
- ylab("Probability Strategy 2 is more cost-effective than Strategy 1") +
- theme(legend.position = "bottom") 
+head(icea.pw.dt$ceac[k >= 20000])
 }

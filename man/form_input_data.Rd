@@ -28,27 +28,27 @@ variables specified in the model \code{object} and the data specified in \code{d
 \examples{
 library("flexsurv")
 
-dt.strategies <- data.frame(strategy_id = c(1, 2))
-dt.patients <- data.frame(patient_id = seq(1, 3), 
+dt_strategies <- data.frame(strategy_id = c(1, 2))
+dt_patients <- data.frame(patient_id = seq(1, 3), 
                           age = c(45, 47, 60),
                           female = c(1, 0, 0),
                           group = factor(c("Good", "Medium", "Poor")))
-dt.states <- data.frame(state_id =  seq(1, 3),
+dt_states <- data.frame(state_id =  seq(1, 3),
                         state_name = factor(paste0("state", seq(1, 3))))
-hesim.dat <- hesim_data(strategies = dt.strategies,
-                        patients = dt.patients,
-                        states = dt.states)
+hesim_dat <- hesim_data(strategies = dt_strategies,
+                        patients = dt_patients,
+                        states = dt_states)
 
 # Class "lm"
-expanded.dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", "states"))
-fit.lm <- stats::lm(costs ~ female + state_name, part_surv4_simdata$costs$medical)
-input.dat <- form_input_data(fit.lm, expanded.dat)
-class(input.dat)
+expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+fit_lm <- stats::lm(costs ~ female + state_name, psm4_exdata$costs$medical)
+input_dat <- form_input_data(fit_lm, expanded_dat)
+class(input_dat)
 
 # Class "flexsurvreg"
-expanded.dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients"))
-fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                  data = ovarian, dist = "weibull")
-input.dat <- form_input_data(fit.wei, expanded.dat)
-class(input.dat)
+input_dat <- form_input_data(fit_wei, expanded_dat)
+class(input_dat)
 }

@@ -380,9 +380,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_PartSurvCurves_summary
-Rcpp::DataFrame C_PartSurvCurves_summary(Rcpp::Environment R_PartSurvCurves, std::vector<double> x, std::string type, double dr);
-RcppExport SEXP _hesim_C_PartSurvCurves_summary(SEXP R_PartSurvCurvesSEXP, SEXP xSEXP, SEXP typeSEXP, SEXP drSEXP) {
+// C_psm_curves_summary
+Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PartSurvCurves, std::vector<double> x, std::string type, double dr);
+RcppExport SEXP _hesim_C_psm_curves_summary(SEXP R_PartSurvCurvesSEXP, SEXP xSEXP, SEXP typeSEXP, SEXP drSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -390,18 +390,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
     Rcpp::traits::input_parameter< double >::type dr(drSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_PartSurvCurves_summary(R_PartSurvCurves, x, type, dr));
+    rcpp_result_gen = Rcpp::wrap(C_psm_curves_summary(R_PartSurvCurves, x, type, dr));
     return rcpp_result_gen;
 END_RCPP
 }
-// C_PartSurv_sim_stateprobs
-Rcpp::List C_PartSurv_sim_stateprobs(Rcpp::Environment R_PartSurv);
-RcppExport SEXP _hesim_C_PartSurv_sim_stateprobs(SEXP R_PartSurvSEXP) {
+// C_psm_sim_stateprobs
+Rcpp::List C_psm_sim_stateprobs(Rcpp::Environment R_PartSurv);
+RcppExport SEXP _hesim_C_psm_sim_stateprobs(SEXP R_PartSurvSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PartSurv(R_PartSurvSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_PartSurv_sim_stateprobs(R_PartSurv));
+    rcpp_result_gen = Rcpp::wrap(C_psm_sim_stateprobs(R_PartSurv));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -566,8 +566,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_cumtrapzfun", (DL_FUNC) &_hesim_C_test_cumtrapzfun, 1},
     {"_hesim_C_test_simpsfun", (DL_FUNC) &_hesim_C_test_simpsfun, 1},
     {"_hesim_C_test_cumsimpsfun", (DL_FUNC) &_hesim_C_test_cumsimpsfun, 1},
-    {"_hesim_C_PartSurvCurves_summary", (DL_FUNC) &_hesim_C_PartSurvCurves_summary, 4},
-    {"_hesim_C_PartSurv_sim_stateprobs", (DL_FUNC) &_hesim_C_PartSurv_sim_stateprobs, 1},
+    {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},
+    {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 1},
     {"_hesim_C_psm_sim_wlos", (DL_FUNC) &_hesim_C_psm_sim_wlos, 5},
     {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},

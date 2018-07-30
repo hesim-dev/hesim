@@ -65,7 +65,7 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
@@ -146,7 +146,7 @@
                               <span class='kw'>states</span> <span class='kw'>=</span> <span class='no'>dt_states</span>)
 
 <span class='co'># Create StateVals object</span>
-<span class='no'>fit_costs_medical</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>costs</span> ~ <span class='no'>female</span> + <span class='no'>state_name</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>part_surv4_simdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>)
+<span class='no'>fit_costs_medical</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>costs</span> ~ <span class='no'>female</span> + <span class='no'>state_name</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>psm4_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>)
 <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand_hesim_data.html'>expand_hesim_data</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>, <span class='st'>"states"</span>))
 <span class='no'>costs_medical</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='form_StateVals.html'>form_StateVals</a></span>(<span class='no'>fit_costs_medical</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)
 

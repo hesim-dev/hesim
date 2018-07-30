@@ -52,8 +52,8 @@ of log time; if "identity", then it is modeled as a spline function of time.}
 \examples{
 library("flexsurv")
 fit <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
-params.surv <- params_surv(coefs = list(shape = fit$res.t["shape", "est", drop = FALSE],
-                                        scale = fit$res.t["scale", "est", drop = FALSE]),
-                           dist = fit$dlist$name)
-print(params.surv)
+params <- params_surv(coefs = list(shape = fit$res.t["shape", "est", drop = FALSE],
+                                   scale = fit$res.t["scale", "est", drop = FALSE]),
+                     dist = fit$dlist$name)
+print(params)
 }

@@ -17,9 +17,9 @@ Return an object of class "lm_list" multiple objects of class
 \code{\link{lm}}.
 }
 \examples{
- dat <- part_surv4_simdata$costs$medical
- lm.list <- lm_list(fit1 = stats::lm(costs ~ 1, data = dat), 
+ dat <- psm4_exdata$costs$medical
+ lm_fits <- lm_list(fit1 = stats::lm(costs ~ 1, data = dat), 
                     fit2 = stats::lm(costs ~ female, data = dat))
- class(lm.list)
+ class(lm_fits)
 }
 \keyword{internal}

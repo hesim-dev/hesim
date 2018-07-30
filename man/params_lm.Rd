@@ -23,9 +23,9 @@ Create a list containing the parmeters of a fitted linear regression model.
 \examples{
 library("MASS")
 n <- 2
-params.lm <- params_lm(coefs = MASS::mvrnorm(n, mu = c(.5,.6),
+params <- params_lm(coefs = MASS::mvrnorm(n, mu = c(.5,.6),
                                             Sigma = matrix(c(.05, .01, .01, .05), nrow = 2)),
                       sigma <- rgamma(n, shape = .5, rate = 4))
-print(params.lm)
+print(params)
 
 }

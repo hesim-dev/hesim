@@ -23,15 +23,15 @@ Expand the data tables from an object of class \code{\link{hesim_data}} into a s
 of class "expanded_hesim_data". See the description of the return value for details on how this is done.
 }
 \examples{
-dt.strategies <- data.frame(strategy_id = c(1, 2))
-dt.patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
+dt_strategies <- data.frame(strategy_id = c(1, 2))
+dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
                           gender = c("Female", "Female", "Male"))
-dt.lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
-dt.states <- data.frame(state_id =  seq(1, 3),
+dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
+dt_states <- data.frame(state_id =  seq(1, 3),
                         state_var = c(2, 1, 9))
-data.tables <- hesim_data(strategies = dt.strategies,
-                          patients = dt.patients,
-                          states = dt.states,
-                          lines = dt.lines)
-expand_hesim_data(data.tables, by = c("strategies", "patients"))
+hesim_dat <- hesim_data(strategies = dt_strategies,
+                        patients = dt_patients,
+                        states = dt_states,
+                        lines = dt_lines)
+expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
 }

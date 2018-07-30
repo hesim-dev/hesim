@@ -65,7 +65,7 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
@@ -198,21 +198,21 @@ the rows of <code>X</code> must be sorted by: (i) <code>strategy_id</code>, (ii)
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dt.strategies</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
-<span class='no'>dt.patients</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
+    <pre class="examples"><div class='input'><span class='no'>dt_strategies</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
+<span class='no'>dt_patients</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
                           <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>45</span>, <span class='fl'>47</span>, <span class='fl'>60</span>),
                           <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
                           <span class='kw'>group</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='fu'>c</span>(<span class='st'>"Good"</span>, <span class='st'>"Medium"</span>, <span class='st'>"Poor"</span>)))
-<span class='no'>hesim.dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>dt.strategies</span>,
-                             <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>dt.patients</span>)
+<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>dt_strategies</span>,
+                        <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>dt_patients</span>)
 
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand_hesim_data.html'>expand_hesim_data</a></span>(<span class='no'>hesim.dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))$<span class='no'>data</span>
-<span class='no'>input.dat</span> <span class='kw'>&lt;-</span> <span class='fu'>input_data</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'>model.matrix</span>(~ <span class='no'>age</span>, <span class='no'>dat</span>)),
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand_hesim_data.html'>expand_hesim_data</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))$<span class='no'>data</span>
+<span class='no'>input_dat</span> <span class='kw'>&lt;-</span> <span class='fu'>input_data</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'>model.matrix</span>(~ <span class='no'>age</span>, <span class='no'>dat</span>)),
                        <span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>strategy_id</span>,
                        <span class='kw'>n_strategies</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='fu'>unique</span>(<span class='no'>dat</span>$<span class='no'>strategy_id</span>)),
                        <span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>patient_id</span>,
                        <span class='kw'>n_patients</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='fu'>unique</span>(<span class='no'>dat</span>$<span class='no'>patient_id</span>)))
-<span class='fu'>print</span>(<span class='no'>input.dat</span>)</div><div class='output co'>#&gt; $X
+<span class='fu'>print</span>(<span class='no'>input_dat</span>)</div><div class='output co'>#&gt; $X
 #&gt; $X$mu
 #&gt;   (Intercept) age
 #&gt; 1           1  45

@@ -22,25 +22,25 @@ objects to be joined.}
 }
 \description{
 Create a list containing the parameters of multiple sets of survival models, each joined
-at specified time points.See \code{\link{joined}} for more details.
+at specified time points. See \code{\link{joined}} for more details.
 }
 \examples{
 library("flexsurv")
-fit.exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+fit_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                  data = ovarian, dist = "exp")
-fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                  data = ovarian, dist = "weibull")
-fit.lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+fit_lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                   data = ovarian, dist = "lognormal")
 
-params.surv.exp <- form_params(fit.exp, n = 2)
-params.surv.wei <- form_params(fit.wei, n = 2)
-params.surv.lnorm <- form_params(fit.lnorm, n = 2)
+params_exp <- form_params(fit_exp, n = 2)
+params_wei <- form_params(fit_wei, n = 2)
+params_lnorm <- form_params(fit_lnorm, n = 2)
 
-params.surv.list1 <- params_surv_list(params.surv.exp, params.surv.wei)
-params.surv.list2 <- params_surv_list(params.surv.exp, params.surv.lnorm)
-params.joined.surv.list <- params_joined_surv_list(model1 = params.surv.list1,
-                                                   model2 = params.surv.list2,
-                                                   times = list(3, 5))
-print(params.joined.surv.list)
+params_list1 <- params_surv_list(params_exp, params_wei)
+params_list2 <- params_surv_list(params_exp, params_lnorm)
+params_joined <- params_joined_surv_list(model1 = params_list1,
+                                         model2 = params_list2,
+                                         times = list(3, 5))
+print(params_joined)
 }

@@ -12,6 +12,7 @@
 #' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
 #' @return Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
+#' @seealso \code{\link{StateVals}}
 #' @export
 form_StateVals <- function(object, data, n = 1000, point_estimate = FALSE){
   if (!inherits(object, c("lm"))){

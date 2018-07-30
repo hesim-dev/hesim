@@ -26,12 +26,12 @@ The same data frame must have been used for each fit.
 \examples{
 library("flexsurv")
 fit1 <- flexsurv::flexsurvreg(formula = Surv(endpoint1_time, endpoint1_status) ~ age, 
-                              data = part_surv4_simdata$survival,
+                              data = psm4_exdata$survival,
                               dist = "weibull")
 fit2 <- flexsurv::flexsurvreg(formula = Surv(endpoint2_time, endpoint2_status) ~ age, 
-                              data = part_surv4_simdata$survival, 
+                              data = psm4_exdata$survival, 
                               dist = "weibull")
-flexsurvreg.list <- flexsurvreg_list(endpoint1 = fit1, endpoint2 = fit2)
-fits <- partsurvfit(flexsurvreg.list, data = part_surv4_simdata$survival)
+fsreg_list <- flexsurvreg_list(endpoint1 = fit1, endpoint2 = fit2)
+fits <- partsurvfit(fsreg_list, data = psm4_exdata$survival)
 class(fits)
 }

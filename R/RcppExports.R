@@ -69,12 +69,12 @@ C_test_cumsimpsfun <- function(t) {
     .Call('_hesim_C_test_cumsimpsfun', PACKAGE = 'hesim', t)
 }
 
-C_PartSurvCurves_summary <- function(R_PartSurvCurves, x, type, dr) {
-    .Call('_hesim_C_PartSurvCurves_summary', PACKAGE = 'hesim', R_PartSurvCurves, x, type, dr)
+C_psm_curves_summary <- function(R_PartSurvCurves, x, type, dr) {
+    .Call('_hesim_C_psm_curves_summary', PACKAGE = 'hesim', R_PartSurvCurves, x, type, dr)
 }
 
-C_PartSurv_sim_stateprobs <- function(R_PartSurv) {
-    .Call('_hesim_C_PartSurv_sim_stateprobs', PACKAGE = 'hesim', R_PartSurv)
+C_psm_sim_stateprobs <- function(R_PartSurv) {
+    .Call('_hesim_C_psm_sim_stateprobs', PACKAGE = 'hesim', R_PartSurv)
 }
 
 C_psm_sim_wlos <- function(R_psm, R_stateprobs, dr, type, categories) {

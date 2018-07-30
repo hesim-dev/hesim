@@ -38,10 +38,10 @@ check_params_joined <- function(x, inner_class, model_list){
 #' @examples 
 #' library("MASS")
 #' n <- 2
-#' params.lm <- params_lm(coefs = MASS::mvrnorm(n, mu = c(.5,.6),
+#' params <- params_lm(coefs = MASS::mvrnorm(n, mu = c(.5,.6),
 #'                                             Sigma = matrix(c(.05, .01, .01, .05), nrow = 2)),
 #'                       sigma <- rgamma(n, shape = .5, rate = 4))
-#' print(params.lm)
+#' print(params)
 #'
 #' @export
 params_lm <- function(coefs, sigma = NULL){
@@ -81,17 +81,17 @@ check.params_lm <- function(object){
 #' @examples 
 #' n <- 2
 #' coefs1 <- MASS::mvrnorm(n, mu = c(.5,.6),
-#'                        Sigma = matrix(c(.05, .01, .01, .05), nrow = 2))
+#'                         Sigma = matrix(c(.05, .01, .01, .05), nrow = 2))
 #' sigma1 <- rgamma(n, shape = .5, rate = 4)
-#' params.lm1 <- params_lm(coefs = coefs1, sigma = sigma1)
-#' 
+#' params1 <- params_lm(coefs = coefs1, sigma = sigma1)
+
 #' coefs2 <- MASS::mvrnorm(n, mu = c(.2,.9),
-#'                        Sigma = matrix(c(.08, .02, .02, .08), nrow = 2))
+#'                         Sigma = matrix(c(.08, .02, .02, .08), nrow = 2))
 #' sigma2 <- rgamma(n, shape = .9, rate = 4)
-#' params.lm2 <- params_lm(coefs = coefs2, sigma = sigma2)
-#' 
-#' params.lm.list <- params_lm_list(params.lm1, params.lm2)
-#' print(params.lm.list)
+#' params2 <- params_lm(coefs = coefs2, sigma = sigma2)
+
+#' params_list <- params_lm_list(params1, params2)
+#' print(params_list)
 params_lm_list <- function(...){
   return(check(new_params_list(..., inner_class = "params_lm",
                                new_class = "params_lm_list")))
@@ -144,18 +144,18 @@ check.params_lm_list <- function(object){
 #' @examples 
 #' library("flexsurv")
 #' fit <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
-#' params.surv <- params_surv(coefs = list(shape = fit$res.t["shape", "est", drop = FALSE],
-#'                                         scale = fit$res.t["scale", "est", drop = FALSE]),
-#'                            dist = fit$dlist$name)
-#' print(params.surv)
+#' params <- params_surv(coefs = list(shape = fit$res.t["shape", "est", drop = FALSE],
+#'                                    scale = fit$res.t["scale", "est", drop = FALSE]),
+#'                      dist = fit$dlist$name)
+#' print(params)
 #' @export
 params_surv <- function(coefs, dist, aux = NULL){
   stopifnot(is.list(coefs))
   if (!is.matrix(coefs[[1]])){
     stop("'coefs' must be a list of matrices.", call. = FALSE)
   }
-  n.samples <- nrow(coefs[[1]])
-  check(new_params_surv(coefs, dist, n.samples, aux))
+  n_samples <- nrow(coefs[[1]])
+  check(new_params_surv(coefs, dist, n_samples, aux))
 }
 
 new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
@@ -231,14 +231,14 @@ check.params_joined_surv <- function(object, inner_class){
 #' objects.
 #' @examples 
 #' library("flexsurv")
-#' fit.wei <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
-#' params.surv.wei <- form_params(fit.wei, n = 2)
+#' fit_wei <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
+#' params_wei <- form_params(fit_wei, n = 2)
 #' 
-#' fit.exp <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
-#' params.surv.exp <- form_params(fit.exp, n = 2)
+#' fit_exp <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
+#' params_exp <- form_params(fit_exp, n = 2)
 #' 
-#' params.surv.list <- params_surv_list(wei = params.surv.wei, exp = params.surv.exp)
-#' print(params.surv.list)
+#' params_list <- params_surv_list(wei = params_wei, exp = params_exp)
+#' print(params_list)
 #' @export
 params_surv_list <- function(...){
   return(check(new_params_list(..., inner_class = "params_surv", 
@@ -253,7 +253,7 @@ check.params_surv_list <- function(object){
 #' Parameters of joined lists of survival models
 #' 
 #' Create a list containing the parameters of multiple sets of survival models, each joined
-#' at specified time points.See \code{\link{joined}} for more details.
+#' at specified time points. See \code{\link{joined}} for more details.
 #' @param ... Objects of class \code{\link{params_surv_list}}, which can be named.
 #' @param times A list of sorted numeric vectors, with the length of each list element equal
 #' to the number of sets of models.
@@ -266,23 +266,23 @@ check.params_surv_list <- function(object){
 #' }
 #' @examples 
 #' library("flexsurv")
-#' fit.exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+#' fit_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                  data = ovarian, dist = "exp")
-#' fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+#' fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                  data = ovarian, dist = "weibull")
-#' fit.lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+#' fit_lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                   data = ovarian, dist = "lognormal")
 #'
-#' params.surv.exp <- form_params(fit.exp, n = 2)
-#' params.surv.wei <- form_params(fit.wei, n = 2)
-#' params.surv.lnorm <- form_params(fit.lnorm, n = 2)
+#' params_exp <- form_params(fit_exp, n = 2)
+#' params_wei <- form_params(fit_wei, n = 2)
+#' params_lnorm <- form_params(fit_lnorm, n = 2)
 #'
-#' params.surv.list1 <- params_surv_list(params.surv.exp, params.surv.wei)
-#' params.surv.list2 <- params_surv_list(params.surv.exp, params.surv.lnorm)
-#' params.joined.surv.list <- params_joined_surv_list(model1 = params.surv.list1,
-#'                                                    model2 = params.surv.list2,
-#'                                                    times = list(3, 5))
-#' print(params.joined.surv.list)
+#' params_list1 <- params_surv_list(params_exp, params_wei)
+#' params_list2 <- params_surv_list(params_exp, params_lnorm)
+#' params_joined <- params_joined_surv_list(model1 = params_list1,
+#'                                          model2 = params_list2,
+#'                                          times = list(3, 5))
+#' print(params_joined)
 #' @export
 params_joined_surv_list <- function(..., times){
   return(check(new_params_joined(..., times = times, inner_class = "params_surv_list"),
@@ -340,20 +340,20 @@ form_params_joined <- function(object, n, point_estimate, inner_class){
 #' @name form_params
 #' @examples 
 #' # form_params.lm
-#' fit <- stats::lm(costs ~ female, data = part_surv4_simdata$costs$medical)
+#' fit <- stats::lm(costs ~ female, data = psm4_exdata$costs$medical)
 #' n <- 5
-#' params.lm <- form_params(fit, n = n)
-#' head(params.lm$coefs)
-#' head(params.lm$sigma)
+#' params_lm <- form_params(fit, n = n)
+#' head(params_lm$coefs)
+#' head(params_lm$sigma)
 #' 
 #' # form_params.flexsurvreg
 #' library("flexsurv")
 #' fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                     data = ovarian, dist = "weibull")
 #' n <- 5
-#' params.surv <- form_params(fit, n = n)
-#' print(params.surv$dist)
-#' head(params.surv$coefs)
+#' params_surv_wei <- form_params(fit, n = n)
+#' print(params_surv_wei$dist)
+#' head(params_surv_wei$coefs)
 #' @export
 #' @rdname form_params
 form_params <- function (object, n = 1000, point_estimate = FALSE, ...) {

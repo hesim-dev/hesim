@@ -20,6 +20,6 @@ Return an object of class "flexsurvreg_list" from multiple objects of class
  library("flexsurv")
  fit1 <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
  fit2 <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
- flexsurvreg.list <- flexsurvreg_list(wei = fit1, exp = fit2)
- class(flexsurvreg.list)
+ fsreg_list <- flexsurvreg_list(wei = fit1, exp = fit2)
+ class(fsreg_list)
 }

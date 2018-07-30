@@ -252,14 +252,14 @@ Rcpp::List stateprobs::sim_probs(){
 * Functions exported to R
 ************************/
 // [[Rcpp::export]]
-Rcpp::DataFrame C_PartSurvCurves_summary(Rcpp::Environment R_PartSurvCurves, std::vector<double> x, 
+Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PartSurvCurves, std::vector<double> x, 
                              std::string type, double dr){
   hesim::psm::surv_curves survcurves(R_PartSurvCurves);
   return survcurves.summary(x, type, dr);
 }
 
 // [[Rcpp::export]]
-Rcpp::List C_PartSurv_sim_stateprobs(Rcpp::Environment R_PartSurv){
+Rcpp::List C_psm_sim_stateprobs(Rcpp::Environment R_PartSurv){
   hesim::psm::stateprobs stprobs(R_PartSurv);
   return stprobs.sim_probs();
 }

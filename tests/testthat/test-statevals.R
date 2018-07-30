@@ -16,7 +16,7 @@ N <- 5
 
 # State values -----------------------------------------------------------------
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
-                               data = part_surv4_simdata$costs$medical)
+                               data = psm4_exdata$costs$medical)
 edat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
 costvals_medical <- form_StateVals(fit_costs_medical, data = edat, n = N)
 costvals_medical$sim(t = c(1, 2, 3), type = "predict")

@@ -63,16 +63,16 @@ lines_dt <- function(strategy_list, strategy_ids = NULL){
 #' @return Returns an object of class "hesim_data", which is a list of data tables for
 #' health economic simulation modeling.
 #' @examples 
-#' dt.strategies <- data.frame(strategy_id = c(1, 2))
-#' dt.patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
+#' dt_strategies <- data.frame(strategy_id = c(1, 2))
+#' dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
 #'                           gender = c("Female", "Female", "Male"))
-#' dt.lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
-#' dt.states <- data.frame(state_id =  seq(1, 3),
+#' dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
+#' dt_states <- data.frame(state_id =  seq(1, 3),
 #'                         state_var = c(2, 1, 9))
-#' hesim.dat <- hesim_data(strategies = dt.strategies,
-#'                           patients = dt.patients,
-#'                           states = dt.states,
-#'                           lines = dt.lines)
+#' hesim_dat <- hesim_data(strategies = dt_strategies,
+#'                           patients = dt_patients,
+#'                           states = dt_states,
+#'                           lines = dt_lines)
 #' @export
 hesim_data <- function(strategies, patients, lines = NULL, states = NULL,
                           transitions = NULL){
@@ -167,17 +167,17 @@ check_hesim_data_type <- function(tbl, tbl_name){
 #' prioritizing id variables as follows: (i) \code{strategy_id}, (ii) \code{line}, (iii) \code{patient_id},
 #' (iv) the health-related id variable (either \code{state_id} or \code{transition_id}).
 #' @examples 
-#' dt.strategies <- data.frame(strategy_id = c(1, 2))
-#' dt.patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
+#' dt_strategies <- data.frame(strategy_id = c(1, 2))
+#' dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
 #'                           gender = c("Female", "Female", "Male"))
-#' dt.lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
-#' dt.states <- data.frame(state_id =  seq(1, 3),
+#' dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
+#' dt_states <- data.frame(state_id =  seq(1, 3),
 #'                         state_var = c(2, 1, 9))
-#' data.tables <- hesim_data(strategies = dt.strategies,
-#'                           patients = dt.patients,
-#'                           states = dt.states,
-#'                           lines = dt.lines)
-#' expand_hesim_data(data.tables, by = c("strategies", "patients"))
+#' hesim_dat <- hesim_data(strategies = dt_strategies,
+#'                         patients = dt_patients,
+#'                         states = dt_states,
+#'                         lines = dt_lines)
+#' expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
 #' @export
 expand_hesim_data <- function(data, by = c("strategies", "patients")){
   if ("transitions" %in% by & "states" %in% by){
@@ -286,21 +286,21 @@ sort_hesim_data <- function(data, sorted_by){
 #' (iii) \code{patient_id}, and (iv) the health-related id variable (either \code{state_id} or
 #'  \code{transition_id}).
 #' @examples 
-#' dt.strategies <- data.frame(strategy_id = c(1, 2))
-#' dt.patients <- data.frame(patient_id = seq(1, 3), 
+#' dt_strategies <- data.frame(strategy_id = c(1, 2))
+#' dt_patients <- data.frame(patient_id = seq(1, 3), 
 #'                           age = c(45, 47, 60),
 #'                           female = c(1, 0, 0),
 #'                           group = factor(c("Good", "Medium", "Poor")))
-#' hesim.dat <- hesim_data(strategies = dt.strategies,
-#'                              patients = dt.patients)
+#' hesim_dat <- hesim_data(strategies = dt_strategies,
+#'                         patients = dt_patients)
 #' 
-#' dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients"))$data
-#' input.dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
+#' dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))$data
+#' input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
 #'                        strategy_id = dat$strategy_id,
 #'                        n_strategies = length(unique(dat$strategy_id)),
 #'                        patient_id = dat$patient_id,
 #'                        n_patients = length(unique(dat$patient_id)))
-#' print(input.dat)
+#' print(input_dat)
 #' @export
 input_data <- function(X, strategy_id, n_strategies,
                        patient_id, n_patients,
@@ -496,29 +496,29 @@ get_input_data_id_vars <- function(data){
 #' @examples 
 #' library("flexsurv")
 #' 
-#' dt.strategies <- data.frame(strategy_id = c(1, 2))
-#' dt.patients <- data.frame(patient_id = seq(1, 3), 
+#' dt_strategies <- data.frame(strategy_id = c(1, 2))
+#' dt_patients <- data.frame(patient_id = seq(1, 3), 
 #'                           age = c(45, 47, 60),
 #'                           female = c(1, 0, 0),
 #'                           group = factor(c("Good", "Medium", "Poor")))
-#' dt.states <- data.frame(state_id =  seq(1, 3),
+#' dt_states <- data.frame(state_id =  seq(1, 3),
 #'                         state_name = factor(paste0("state", seq(1, 3))))
-#' hesim.dat <- hesim_data(strategies = dt.strategies,
-#'                         patients = dt.patients,
-#'                         states = dt.states)
+#' hesim_dat <- hesim_data(strategies = dt_strategies,
+#'                         patients = dt_patients,
+#'                         states = dt_states)
 #'
 #' # Class "lm"
-#' expanded.dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients", "states"))
-#' fit.lm <- stats::lm(costs ~ female + state_name, part_surv4_simdata$costs$medical)
-#' input.dat <- form_input_data(fit.lm, expanded.dat)
-#' class(input.dat)
+#' expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+#' fit_lm <- stats::lm(costs ~ female + state_name, psm4_exdata$costs$medical)
+#' input_dat <- form_input_data(fit_lm, expanded_dat)
+#' class(input_dat)
 #'
 #' # Class "flexsurvreg"
-#' expanded.dat <- expand_hesim_data(hesim.dat, by = c("strategies", "patients"))
-#' fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+#' expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+#' fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                  data = ovarian, dist = "weibull")
-#' input.dat <- form_input_data(fit.wei, expanded.dat)
-#' class(input.dat)
+#' input_dat <- form_input_data(fit_wei, expanded_dat)
+#' class(input_dat)
 #' @export
 form_input_data <- function (object, data, ...) {
   if (missing(object)){

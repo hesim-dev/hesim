@@ -43,7 +43,7 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
@@ -76,7 +76,7 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2018-07-28</h4>
+            <h4 class="date">2018-07-30</h4>
           </div>
 
     
@@ -110,25 +110,25 @@ P(y| \alpha_1(x_1), \ldots, \alpha_L(x_L)).
 <p>This flexibility is provided so that parameters can either be estimated using models fit with <code>R</code> or from an external source. To illustrate, consider the shape and scale parameters of a Weibull survival model, which are stored in a <code>params_surv</code> object (note that <code>hesim</code> accepts Weibull distributions by the name “weibull” or “weibull.quiet”).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"hesim"</span>)
 <span class="kw">library</span>(<span class="st">"flexsurv"</span>)
-n.samples &lt;-<span class="st"> </span><span class="dv">3</span>
+n_samples &lt;-<span class="st"> </span><span class="dv">3</span>
 
 <span class="co"># Create from fitted R model</span>
-fit.wei &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg</a></span>(<span class="dt">formula =</span> <span class="kw">Surv</span>(endpoint1_time, endpoint1_status) <span class="op">~</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>age, 
-                       <span class="dt">data =</span> part_surv4_simdata<span class="op">$</span>survival, <span class="dt">dist =</span> <span class="st">"weibull"</span>)
-params.wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_params.html">form_params</a></span>(fit.wei, <span class="dt">n =</span> n.samples)
-<span class="kw">print</span>(params.wei)</code></pre></div>
+fit_wei &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg</a></span>(<span class="dt">formula =</span> <span class="kw">Surv</span>(endpoint1_time, endpoint1_status) <span class="op">~</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>age, 
+                                <span class="dt">data =</span> psm4_exdata<span class="op">$</span>survival, <span class="dt">dist =</span> <span class="st">"weibull"</span>)
+params_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_params.html">form_params</a></span>(fit_wei, <span class="dt">n =</span> n_samples)
+<span class="kw">print</span>(params_wei)</code></pre></div>
 <pre><code>## $coefs
 ## $coefs$shape
-##             shape
-## [1,] -0.005552784
-## [2,] -0.054547832
-## [3,] -0.028946497
+##            shape
+## [1,] -0.03231221
+## [2,] -0.05051926
+## [3,]  0.01119610
 ## 
 ## $coefs$scale
-##           scale      female          age
-## [1,]  0.1128312 0.004086413 -0.011201802
-## [2,] -0.1589631 0.026769359 -0.006947391
-## [3,] -0.1288901 0.080509562 -0.008077305
+##            scale       female          age
+## [1,] -0.07257538 -0.007053132 -0.007787239
+## [2,] -0.11885140  0.053909023 -0.008032371
+## [3,]  0.03109621  0.047840989 -0.010006257
 ## 
 ## 
 ## $dist
@@ -140,23 +140,23 @@ params.wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 ## attr(,"class")
 ## [1] "params_surv"</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create with 'params_surv()'</span>
-coefs &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/flexsurv/topics/normboot.flexsurvreg">normboot.flexsurvreg</a></span>(fit.wei, <span class="dt">B =</span> n.samples, <span class="dt">raw =</span> <span class="ot">TRUE</span>)
-params.wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/params_surv.html">params_surv</a></span>(<span class="dt">coefs =</span> <span class="kw">list</span>(<span class="dt">shape =</span> coefs[, <span class="st">"shape"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],
+coefs &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/flexsurv/topics/normboot.flexsurvreg">normboot.flexsurvreg</a></span>(fit_wei, <span class="dt">B =</span> n_samples, <span class="dt">raw =</span> <span class="ot">TRUE</span>)
+params_wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/params_surv.html">params_surv</a></span>(<span class="dt">coefs =</span> <span class="kw">list</span>(<span class="dt">shape =</span> coefs[, <span class="st">"shape"</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>],
                                         <span class="dt">scale =</span> coefs[, <span class="kw">c</span>(<span class="st">"scale"</span>, <span class="st">"female"</span>, <span class="st">"age"</span>)]),
                           <span class="dt">dist =</span> <span class="st">"weibull"</span>)
-<span class="kw">print</span>(params.wei2)</code></pre></div>
+<span class="kw">print</span>(params_wei2)</code></pre></div>
 <pre><code>## $coefs
 ## $coefs$shape
 ##          shape
-## [1,] 0.9679766
-## [2,] 0.9390140
-## [3,] 0.9653692
+## [1,] 1.0060344
+## [2,] 0.9645493
+## [3,] 0.9615640
 ## 
 ## $coefs$scale
-##          scale       female          age
-## [1,] 0.9504464 -0.001373869 -0.008502268
-## [2,] 0.8013029  0.058884379 -0.006931710
-## [3,] 1.1495367 -0.025305049 -0.011964708
+##          scale      female          age
+## [1,] 0.9332277  0.01421906 -0.008771975
+## [2,] 1.2065354 -0.06355927 -0.012542092
+## [3,] 0.9256136 -0.09669482 -0.007558864
 ## 
 ## 
 ## $dist
@@ -171,7 +171,7 @@ params.wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <div id="input-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#input-data" class="anchor"></a>Input data</h3>
-<p>The input vectors for each parameter, <span class="math inline">\(x_{l,hijk}\)</span>, are rows in multidimensional input matrices, <span class="math inline">\(X_l\)</span>, where each row denotes a unique observation. The input matrix for parameter <span class="math inline">\(l\)</span> is indexed by health-related indices, <span class="math inline">\(h\)</span>, patients, <span class="math inline">\(i\)</span>, and treatment lines <span class="math inline">\(j\)</span> for a treatment strategy <span class="math inline">\(k\)</span>. Example health-related indices include a health state, a transition between two health states, or a survival endpoint in a partitioned survival model. In some cases, the health-related index <span class="math inline">\(h\)</span> can be suppressed and separate models can be fit for each health index. This is, for instance, the case in a partitioned survival model where separate models are fit for each survival endpoint. Likewise, models can be fit without multiple treatment lines as would, again, be the case in a partitioned survival analysis where sequential treatment would be incorporated by adding additional health states.</p>
+<p>The input vectors for each parameter, <span class="math inline">\(x_{l,hijk}\)</span>, are rows in multidimensional input matrices, <span class="math inline">\(X_l\)</span>, where each row denotes a unique observation. The input matrix for parameter <span class="math inline">\(l\)</span> is indexed by health-related indices, <span class="math inline">\(h\)</span>, patients, <span class="math inline">\(i\)</span>, and treatment lines <span class="math inline">\(j\)</span> for a treatment strategy <span class="math inline">\(k\)</span>. Example health-related indices include a health state, a transition between two health states, or a survival endpoint in a partitioned survival model (PSM). In some cases, the health-related index <span class="math inline">\(h\)</span> can be suppressed and separate models can be fit for each health index. This is, for instance, the case in a PSM where separate models are fit for each survival endpoint. Likewise, models can be fit without multiple treatment lines as would, again, be the case in a PSM where sequential treatment would be incorporated by adding additional health states.</p>
 <p>In <code>hesim</code>, simulations are made by constructing an object of class <code>input_data</code> with the function <code><a href="../reference/input_data.html">input_data()</a></code>, which consists of an input matrix <span class="math inline">\(X\)</span> and the indices <span class="math inline">\(h\)</span>, <span class="math inline">\(i\)</span>, <span class="math inline">\(j\)</span>, and <span class="math inline">\(k\)</span>. We illustrate in the figure below with an example in which a statistical model with one parameter is used to make predictions across two treatment strategies, two patients, and two health states. (If a statistical model with more than one parameter were used, then a separate input matrix would need to be created for each parameter.)</p>
 <p><br><img src="input-data.png" width="500px"><br><br></p>
 <p><code>hesim</code> provides helper functions for constructing objects of class <code>input_data</code>. Specifically, an <code>input_data</code> object can be created by following a three step process.</p>
@@ -182,18 +182,18 @@ params.wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 </li>
 </ol>
 <p>The figure below illustrated this process using the same example above with two treatment strategies, two patients, and two health states.</p>
-<p><br><img src="create-input-data.png" width="700px"><br><br> To illustrate with <code>R</code>, consider a simple partitioned survival model where the only survival endpoint is overall survival, so that there is only one (non-death) health state. Furthermore, suppose that there are two treatment strategies and two patients. A <code>hesim_data</code> object can be created as follows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt.strategies &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">strategy_id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
-dt.patients &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">patient_id =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">2</span>),
+<p><br><img src="create-input-data.png" width="700px"><br><br> To illustrate with <code>R</code>, consider a simple PSM where the only survival endpoint is overall survival, so that there is only one (non-death) health state. Furthermore, suppose that there are two treatment strategies and two patients. A <code>hesim_data</code> object can be created as follows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt_strategies &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">strategy_id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
+dt_patients &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">patient_id =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">2</span>),
                           <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">45</span>, <span class="dv">50</span>),
                           <span class="dt">female =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))
-dt.states &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">state_id =</span>  <span class="dv">1</span>,
+dt_states &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">state_id =</span>  <span class="dv">1</span>,
                         <span class="dt">state_name =</span> <span class="st">"Alive"</span>,
                         <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
-hesim.dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hesim_data.html">hesim_data</a></span>(<span class="dt">strategies =</span> dt.strategies,
-                              <span class="dt">patients =</span> dt.patients,
-                              <span class="dt">states =</span> dt.states)
-<span class="kw">print</span>(hesim.dat)</code></pre></div>
+hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hesim_data.html">hesim_data</a></span>(<span class="dt">strategies =</span> dt_strategies,
+                              <span class="dt">patients =</span> dt_patients,
+                              <span class="dt">states =</span> dt_states)
+<span class="kw">print</span>(hesim_dat)</code></pre></div>
 <pre><code>## $strategies
 ##   strategy_id
 ## 1           1
@@ -220,9 +220,9 @@ hesim.dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 <p>In case 2 a <code>formula</code> or <code>formula_list</code> object can be used in lieu of a fitted model. To illustrate, suppose we would like to predict survival curves by treatment strategy and patient using our fitted Weibull model. We first expand our <code>hesim_data</code> object using the strategies and patients tables so that we have a dataset where each row is a unique treatment strategy and patient. We then use <code><a href="../reference/form_input_data.html">form_input_data()</a></code> to create (i) a model matrix, <code>X</code>, for each parameter (the shape parameter only includes an intercept while the scale parameter includes an age covariate and a dummy variable for gender) and (ii) <code>strategy_id</code> and <code>patient_id</code> variables indicating the strategy and patient represented by each row in the list of matrices. In addition, the number of unique strategies and patients being modeled are returned based on the id variables specified.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Predict survival curves by treatment strategy and patient</span>
 ## From a model fit with flexsurvreg
-hesim.edata.surv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand_hesim_data.html">expand_hesim_data</a></span>(hesim.dat, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
-input.dat.wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(fit.wei, <span class="dt">data =</span> hesim.edata.surv)
-<span class="kw">print</span>(input.dat.wei)</code></pre></div>
+hesim_edata_surv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand_hesim_data.html">expand_hesim_data</a></span>(hesim_dat, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
+input_dat_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(fit_wei, <span class="dt">data =</span> hesim_edata_surv)
+<span class="kw">print</span>(input_dat_wei)</code></pre></div>
 <pre><code>## $X
 ## $X$shape
 ##   (Intercept)
@@ -258,14 +258,14 @@ input.dat.wei &lt;-<span class="st"> </span><span class="kw"><a href="../referen
 ## attr(,"class")
 ## [1] "input_data"</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## From a formula object
-formula.list.wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">shape =</span> <span class="op">~</span><span class="dv">1</span>,
+formula_list_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">shape =</span> <span class="op">~</span><span class="dv">1</span>,
                                   <span class="dt">scale =</span> <span class="op">~</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>age)
-input.dat.wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(formula.list.wei, <span class="dt">data =</span> hesim.edata.surv)</code></pre></div>
+input_dat_wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(formula_list_wei, <span class="dt">data =</span> hesim_edata_surv)</code></pre></div>
 <p>We can create input data to make predictions by treatment strategy, patient, and health state (e.g., for our utility and cost models) in a similar fashion.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Predict (mean) state values by treatment strategy, patient, and health state</span>
-hesim.edata.statevals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand_hesim_data.html">expand_hesim_data</a></span>(hesim.dat, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"states"</span>))
-formula.costs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>female)
-<span class="kw">print</span>(<span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(formula.costs, <span class="dt">data =</span> hesim.edata.statevals))</code></pre></div>
+hesim_edata_statevals &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand_hesim_data.html">expand_hesim_data</a></span>(hesim_dat, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"states"</span>))
+formula_costs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>female)
+<span class="kw">print</span>(<span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(formula_costs, <span class="dt">data =</span> hesim_edata_statevals))</code></pre></div>
 <pre><code>## $X
 ## $X$mu
 ##   (Intercept) female
@@ -302,81 +302,81 @@ formula.costs &lt;-<span class="st"> </span><span class="kw"><a href="../referen
 <div id="running-a-simulation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#running-a-simulation" class="anchor"></a>Running a simulation</h2>
-<p>A decision model is created by combining the disease, utility, and cost models. Each submodel is, in turn, created by combining input data and parameter estimates. For example, in a partitioned survival model there are three submodels: a set of survival models, a utility model, and a set of cost models for different types of costs. The survival models are <code>R6</code> objects of class <code>PartSurvCurves</code> and used to predict the survival curves in a partitioned survival analysis. The cost and utility models are <code>R6</code> objects of class <code>StateValues</code> and used to predict the values to assign to the health states.</p>
+<p>A decision model is created by combining the disease, utility, and cost models. Each submodel is, in turn, created by combining input data and parameter estimates. For example, in a PSM there are three submodels: a set of survival models, a utility model, and a set of cost models for different types of costs. The survival models are <code>R6</code> objects of class <code>PsmCurves</code> and used to predict the survival curves in a PSM. The cost and utility models are <code>R6</code> objects of class <code>StateValues</code> and used to predict the values to assign to the health states.</p>
 <p>Again, as with the model parameters and input data, there are two ways to instantiate each submodel:</p>
 <ol style="list-style-type: decimal">
 <li>Based on parameters and input data using <code>$new()</code>
 </li>
-<li>From fitted statistical models using generic functions prefixed by <code>form_</code> (e.g., <code><a href="../reference/form_PartSurvCurves.html">form_PartSurvCurves()</a></code>, <code><a href="../reference/form_StateVals.html">form_StateVals()</a></code>).</li>
+<li>From fitted statistical models using generic functions prefixed by <code>form_</code> (e.g., <code><a href="../reference/form_PsmCurves.html">form_PsmCurves()</a></code>, <code><a href="../reference/form_StateVals.html">form_StateVals()</a></code>).</li>
 </ol>
-<p>We illustrate by instantiating a <code>PartSurvCurves</code> object in both ways.</p>
+<p>We illustrate by instantiating a <code>PsmCurves</code> object in both ways.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Instantiate from a 'partsurvfit' object</span>
-partsurvfit.wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/partsurvfit.html">partsurvfit</a></span>(<span class="kw"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span>(fit.wei), <span class="dt">data =</span> part_surv4_simdata<span class="op">$</span>survival)
-part.surv.curves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_PartSurvCurves.html">form_PartSurvCurves</a></span>(partsurvfit.wei, <span class="dt">data =</span> hesim.edata.surv,
-                                        <span class="dt">n =</span> n.samples, <span class="dt">bootstrap =</span> <span class="ot">FALSE</span>)
+psfit_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/partsurvfit.html">partsurvfit</a></span>(<span class="kw"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span>(fit_wei), <span class="dt">data =</span> psm4_exdata<span class="op">$</span>survival)
+psm_curves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_PsmCurves.html">form_PsmCurves</a></span>(psfit_wei, <span class="dt">data =</span> hesim_edata_surv,
+                             <span class="dt">n =</span> n_samples, <span class="dt">bootstrap =</span> <span class="ot">FALSE</span>)
 
 <span class="co"># Instantiate with $new()</span>
-params.wei.list &lt;-<span class="st"> </span><span class="kw"><a href="../reference/params_surv_list.html">params_surv_list</a></span>(params.wei)
-input.dat.wei.list &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(formula.list.wei),
-                             <span class="dt">data =</span> hesim.edata.surv)
-part.surv.curves2 &lt;-<span class="st"> </span>PartSurvCurves<span class="op">$</span><span class="kw">new</span>(<span class="dt">params =</span> <span class="kw"><a href="../reference/params_surv_list.html">params_surv_list</a></span>(params.wei),
-                                        <span class="dt">data =</span> input.dat.wei.list)</code></pre></div>
-<p>Submodels such as <code>PartSurvCurves</code> have a number of member functions that can be used for prediction, simulation, or to evaluate model fit. For example, we can summarize survival curves from a <code>PartSurvCurves</code> object with functions to predict hazards, cumulative hazards, survival, restricted mean survival time, and quantiles.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">partsurvfit.wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/partsurvfit.html">partsurvfit</a></span>(<span class="kw"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span>(fit.wei), <span class="dt">data =</span> part_surv4_simdata<span class="op">$</span>survival)
-part.surv.curves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_PartSurvCurves.html">form_PartSurvCurves</a></span>(partsurvfit.wei, <span class="dt">data =</span> hesim.edata.surv,
-                                        <span class="dt">n =</span> n.samples, <span class="dt">bootstrap =</span> <span class="ot">FALSE</span>)
-<span class="kw">head</span>(part.surv.curves<span class="op">$</span><span class="kw">quantile</span>(.<span class="dv">5</span>))</code></pre></div>
+params_wei_list &lt;-<span class="st"> </span><span class="kw"><a href="../reference/params_surv_list.html">params_surv_list</a></span>(params_wei)
+input_dat_wei_list &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(formula_list_wei),
+                                      <span class="dt">data =</span> hesim_edata_surv)
+psm_curves2 &lt;-<span class="st"> </span>PsmCurves<span class="op">$</span><span class="kw">new</span>(<span class="dt">params =</span> <span class="kw"><a href="../reference/params_surv_list.html">params_surv_list</a></span>(params_wei),
+                             <span class="dt">data =</span> input_dat_wei_list)</code></pre></div>
+<p>Submodels such as <code>PsmCurves</code> have a number of member functions that can be used for prediction, simulation, or to evaluate model fit. For example, we can summarize survival curves from a <code>PsmCurves</code> object with functions to predict hazards, cumulative hazards, survival, restricted mean survival time, and quantiles.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psm_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/partsurvfit.html">partsurvfit</a></span>(<span class="kw"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span>(fit_wei), <span class="dt">data =</span> psm4_exdata<span class="op">$</span>survival)
+psm_curves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_PsmCurves.html">form_PsmCurves</a></span>(psm_wei, <span class="dt">data =</span> hesim_edata_surv,
+                             <span class="dt">n =</span> n_samples, <span class="dt">bootstrap =</span> <span class="ot">FALSE</span>)
+<span class="kw">head</span>(psm_curves<span class="op">$</span><span class="kw">quantile</span>(.<span class="dv">5</span>))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id   p  quantile
-## 1:     1      1           1          1 0.5 0.4531687
-## 2:     1      1           1          2 0.5 0.4499532
-## 3:     1      1           2          1 0.5 0.4531687
-## 4:     1      1           2          2 0.5 0.4499532
-## 5:     1      2           1          1 0.5 0.4450617
-## 6:     1      2           1          2 0.5 0.4133158</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(part.surv.curves<span class="op">$</span><span class="kw">cumhazard</span>(<span class="dt">t =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>)))</code></pre></div>
+## 1:     1      1           1          1 0.5 0.4435226
+## 2:     1      1           1          2 0.5 0.4268194
+## 3:     1      1           2          1 0.5 0.4435226
+## 4:     1      1           2          2 0.5 0.4268194
+## 5:     1      2           1          1 0.5 0.4853472
+## 6:     1      2           1          2 0.5 0.4264100</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(psm_curves<span class="op">$</span><span class="kw">cumhazard</span>(<span class="dt">t =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>)))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id t cumhazard
 ## 1:     1      1           1          1 0  0.000000
-## 2:     1      1           1          1 1  1.487436
-## 3:     1      1           1          1 2  2.903007
-## 4:     1      1           1          1 3  4.292663
+## 2:     1      1           1          1 1  1.499802
+## 3:     1      1           1          1 2  2.896166
+## 4:     1      1           1          1 3  4.255980
 ## 5:     1      1           1          2 0  0.000000
-## 6:     1      1           1          2 1  1.497690</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(part.surv.curves<span class="op">$</span><span class="kw">rmst</span>(<span class="dt">t =</span> <span class="dv">3</span>))</code></pre></div>
+## 6:     1      1           1          2 1  1.555469</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(psm_curves<span class="op">$</span><span class="kw">rmst</span>(<span class="dt">t =</span> <span class="dv">3</span>))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id t      rmst
-## 1:     1      1           1          1 3 0.6632461
-## 2:     1      1           1          2 3 0.6588266
-## 3:     1      1           2          1 3 0.6632461
-## 4:     1      1           2          2 3 0.6588266
-## 5:     1      2           1          1 3 0.6441541
-## 6:     1      2           1          2 3 0.6001959</code></pre>
-<p>We can instantiate a <code>StateVals</code> object in the same two ways, although here we only use the second method. A <code>$siulate()</code> function is available to simulate state values by treatment strategy, patient, and health state.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">medcost.dat &lt;-<span class="st"> </span><span class="kw">subset</span>(part_surv4_simdata<span class="op">$</span>costs<span class="op">$</span>medical, state_name <span class="op">==</span><span class="st"> "state3"</span>)
-costs.medical.fit &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(costs <span class="op">~</span><span class="st"> </span>female, <span class="dt">data =</span> medcost.dat)
-part.surv.medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_StateVals.html">form_StateVals</a></span>(costs.medical.fit, 
-                                             <span class="dt">data =</span> hesim.edata.statevals, <span class="dt">n =</span> n.samples)
-<span class="kw">head</span>(part.surv.medcosts<span class="op">$</span><span class="kw">sim</span>(<span class="dt">t =</span> <span class="dv">3</span>, <span class="dt">type =</span> <span class="st">"predict"</span>))</code></pre></div>
+## 1:     1      1           1          1 3 0.6573424
+## 2:     1      1           1          2 3 0.6340686
+## 3:     1      1           2          1 3 0.6573424
+## 4:     1      1           2          2 3 0.6340686
+## 5:     1      2           1          1 3 0.6986178
+## 6:     1      2           1          2 3 0.6181785</code></pre>
+<p>We can instantiate a <code>StateVals</code> object in the same two ways, although here we only use the second method. A <code>$simulate()</code> function is available to simulate state values by treatment strategy, patient, and health state.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">medcost_dat &lt;-<span class="st"> </span><span class="kw">subset</span>(psm4_exdata<span class="op">$</span>costs<span class="op">$</span>medical, state_name <span class="op">==</span><span class="st"> "state3"</span>)
+medcosts_fit &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(costs <span class="op">~</span><span class="st"> </span>female, <span class="dt">data =</span> medcost_dat)
+psm_medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_StateVals.html">form_StateVals</a></span>(medcosts_fit, 
+                               <span class="dt">data =</span> hesim_edata_statevals, <span class="dt">n =</span> n_samples)
+<span class="kw">head</span>(psm_medcosts<span class="op">$</span><span class="kw">sim</span>(<span class="dt">t =</span> <span class="dv">3</span>, <span class="dt">type =</span> <span class="st">"predict"</span>))</code></pre></div>
 <pre><code>##    state_id sample strategy_id patient_id time    value
-## 1:        1      1           1          1    3 36183.44
-## 2:        1      1           1          2    3 40438.72
-## 3:        1      1           2          1    3 36183.44
-## 4:        1      1           2          2    3 40438.72
-## 5:        1      2           1          1    3 36604.10
-## 6:        1      2           1          2    3 38099.63</code></pre>
-<p>By combining submodels, a decision model is able to simulate disease progression and cost and utility values associated with each disease state. Total discounted costs and QALYs are calculated by summing (or integrating) simulated costs and utility over time. In the partitioned survival example, disease progression is simulated by first generating survival curves and then calculating health states probabilities based on those curves. Cost and QALYs are calculated by numerically integrating the weighted probability of being in each state, where weights are a function of the discount factorand predicted state values.</p>
+## 1:        1      1           1          1    3 34231.31
+## 2:        1      1           1          2    3 34823.04
+## 3:        1      1           2          1    3 34231.31
+## 4:        1      1           2          2    3 34823.04
+## 5:        1      2           1          1    3 33998.32
+## 6:        1      2           1          2    3 37193.67</code></pre>
+<p>By combining submodels, a decision model is able to simulate disease progression and cost and utility values associated with each disease state. Total discounted costs and QALYs are calculated by summing (or integrating) simulated costs and utility over time. In the PSM example, disease progression is simulated by first generating survival curves and then calculating health states probabilities based on those curves. Cost and QALYs are calculated by numerically integrating the weighted probability of being in each state, where weights are a function of the discount factorand predicted state values.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, .<span class="dv">01</span>)
-part.surv &lt;-<span class="st"> </span>PartSurv<span class="op">$</span><span class="kw">new</span>(<span class="dt">survival_models =</span> part.surv.curves,
-             <span class="dt">cost_models =</span> <span class="kw">list</span>(<span class="dt">medical =</span> part.surv.medcosts))
-part.surv<span class="op">$</span><span class="kw">sim_survival</span>(<span class="dt">t =</span> times)
-part.surv<span class="op">$</span><span class="kw">sim_stateprobs</span>()
-part.surv<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">03</span>))
-<span class="kw">head</span>(part.surv<span class="op">$</span>costs_)</code></pre></div>
+psm &lt;-<span class="st"> </span>Psm<span class="op">$</span><span class="kw">new</span>(<span class="dt">survival_models =</span> psm_curves,
+              <span class="dt">cost_models =</span> <span class="kw">list</span>(<span class="dt">medical =</span> psm_medcosts))
+psm<span class="op">$</span><span class="kw">sim_survival</span>(<span class="dt">t =</span> times)
+psm<span class="op">$</span><span class="kw">sim_stateprobs</span>()
+psm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">03</span>))
+<span class="kw">head</span>(psm<span class="op">$</span>costs_)</code></pre></div>
 <pre><code>##    state_id sample strategy_id patient_id dr category    costs
-## 1:        1      1           1          1  0  medical 23999.08
-## 2:        1      1           1          2  0  medical 26642.73
-## 3:        1      1           2          1  0  medical 23999.08
-## 4:        1      1           2          2  0  medical 26642.73
-## 5:        1      2           1          1  0  medical 23579.21
-## 6:        1      2           1          2  0  medical 22867.82</code></pre>
+## 1:        1      1           1          1  0  medical 22502.29
+## 2:        1      1           1          2  0  medical 22080.82
+## 3:        1      1           2          1  0  medical 22502.29
+## 4:        1      1           2          2  0  medical 22080.82
+## 5:        1      2           1          1  0  medical 23752.28
+## 6:        1      2           1          2  0  medical 22992.88</code></pre>
 </div>
 <div id="decision-analysis" class="section level2">
 <h2 class="hasAnchor">
@@ -392,7 +392,7 @@ part.surv<span class="op">$</span><span class="kw">sim_costs</span>(<span class=
 <div id="future-development" class="section level2">
 <h2 class="hasAnchor">
 <a href="#future-development" class="anchor"></a>Future development</h2>
-<p><code>hesim</code> currently supports N-state partitioned survival analysis; however, the package is being actively developed and support for state transition modeling and individual patient simulation will be added. In addition, we plan to add support for additional statistical techniques such as generalized linear models.</p>
+<p><code>hesim</code> currently supports N-state PSMs; however, the package is being actively developed and support for state transition modeling and individual patient simulation will be added. In addition, we plan to add support for additional statistical techniques such as generalized linear models.</p>
 </div>
 </div>
   </div>

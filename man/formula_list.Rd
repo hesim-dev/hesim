@@ -18,11 +18,11 @@ Create an object of class "formula_list". The object can be created from either
 }
 \examples{
 # Create from "formula" objects
-formula.list.wei <- formula_list(shape = formula(~ 1), scale = formula(~ x))
-class(formula.list.wei)
+flist_wei <- formula_list(shape = formula(~ 1), scale = formula(~ x))
+class(flist_wei)
 
 # Create from "formula_list" objects
-formula.list <- formula_list(exponential = formula_list(rate = formula(~1)),
-                              weibull = formula.list.wei)
+flist <- formula_list(exponential = formula_list(rate = formula(~1)),
+                              weibull = flist_wei)
 
 }

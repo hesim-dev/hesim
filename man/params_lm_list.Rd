@@ -19,16 +19,14 @@ Create a list containing the parmeters of a list of fitted linear regression mod
 \examples{
 n <- 2
 coefs1 <- MASS::mvrnorm(n, mu = c(.5,.6),
-                       Sigma = matrix(c(.05, .01, .01, .05), nrow = 2))
+                        Sigma = matrix(c(.05, .01, .01, .05), nrow = 2))
 sigma1 <- rgamma(n, shape = .5, rate = 4)
-params.lm1 <- params_lm(coefs = coefs1, sigma = sigma1)
-
+params1 <- params_lm(coefs = coefs1, sigma = sigma1)
 coefs2 <- MASS::mvrnorm(n, mu = c(.2,.9),
-                       Sigma = matrix(c(.08, .02, .02, .08), nrow = 2))
+                        Sigma = matrix(c(.08, .02, .02, .08), nrow = 2))
 sigma2 <- rgamma(n, shape = .9, rate = 4)
-params.lm2 <- params_lm(coefs = coefs2, sigma = sigma2)
-
-params.lm.list <- params_lm_list(params.lm1, params.lm2)
-print(params.lm.list)
+params2 <- params_lm(coefs = coefs2, sigma = sigma2)
+params_list <- params_lm_list(params1, params2)
+print(params_list)
 }
 \keyword{internal}

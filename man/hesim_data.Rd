@@ -43,14 +43,14 @@ Each table must either be a \code{\link{data.frame}} or \code{\link{data.table}}
 each table must be numeric vectors of integers.
 }
 \examples{
-dt.strategies <- data.frame(strategy_id = c(1, 2))
-dt.patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
+dt_strategies <- data.frame(strategy_id = c(1, 2))
+dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
                           gender = c("Female", "Female", "Male"))
-dt.lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
-dt.states <- data.frame(state_id =  seq(1, 3),
+dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
+dt_states <- data.frame(state_id =  seq(1, 3),
                         state_var = c(2, 1, 9))
-hesim.dat <- hesim_data(strategies = dt.strategies,
-                          patients = dt.patients,
-                          states = dt.states,
-                          lines = dt.lines)
+hesim_dat <- hesim_data(strategies = dt_strategies,
+                          patients = dt_patients,
+                          states = dt_states,
+                          lines = dt_lines)
 }

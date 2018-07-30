@@ -27,3 +27,6 @@ Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
 \code{form_StateVals} is a generic function for forming an object of class
  \code{\link{StateVals}} from a fitted statistical model.
 }
+\seealso{
+\code{\link{StateVals}}
+}

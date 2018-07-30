@@ -1,9 +1,9 @@
-# PartSurvCurves ---------------------------------------------------------------
+# PsmCurves --------------------------------------------------------------------
 
-#' Form \code{PartSurvCurves} object
+#' Form \code{PsmCurves} object
 #' 
-#' \code{form_PartSurvCurves} is a generic function for forming an object of class
-#' \code{\link{PartSurvCurves}} from a fitted statistical model.
+#' \code{form_PsmCurves} is a function for forming an object of class
+#' \code{\link{PsmCurves}} from an object of class \code{\link{partsurvfit}}.
 #' @param object An object of class \code{\link{partsurvfit}}.
 #' @param data An object of class "expanded_hesim_data" returned by 
 #' \code{\link{expand_hesim_data}}. Must be expanded by the data tables "strategies" and
@@ -14,28 +14,29 @@
 #'  models in \code{object} on resamples of the sample data; if FALSE, then the parameters for each survival
 #'  model are independently draw from multivariate normal distributions.  
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
-#' @return Returns an \code{\link{R6Class}} object of class \code{\link{PartSurvCurves}}.
+#' @return Returns an \code{\link{R6Class}} object of class \code{\link{PsmCurves}}.
+#' @seealso \code{\link{PsmCurves}}
 #' @export
-form_PartSurvCurves <- function(object, data, n = 1000, point_estimate = FALSE,
+form_PsmCurves <- function(object, data, n = 1000, point_estimate = FALSE,
                                 bootstrap = TRUE){
   if (!inherits(object, c("partsurvfit"))){
     stop("'Object' must be of class 'partsurvfit'.")
   }
-  input.data <- form_input_data(object, data, id_vars = c("strategy_id", "patient_id"))
+  input_data <- form_input_data(object, data, id_vars = c("strategy_id", "patient_id"))
   params <- form_params(object, n = n, point_estimate = point_estimate, bootstrap = bootstrap)
-  return(PartSurvCurves$new(data = input.data, params = params))
+  return(PsmCurves$new(data = input_data, params = params))
 }
 
-# Manual documentation in PartSurvCurves.Rd
+# Manual documentation in PsmCurves.Rd
 #' @export
-PartSurvCurves <- R6::R6Class("PartSurvCurves",
+PsmCurves <- R6::R6Class("PsmCurves",
   private = list(
     summary = function(x, type = c("hazard", "cumhazard", "survival", 
                                    "rmst", "quantile"), 
                        dr = 0){
       self$check()
       type <- match.arg(type)
-      res <- data.table(C_PartSurvCurves_summary(self, x, type, dr))
+      res <- data.table(C_psm_curves_summary(self, x, type, dr))
       res[, curve := curve + 1]
       res[, sample := sample + 1]
       if (type %in% c("hazard", "cumhazard", "survival", "rmst")){
@@ -95,11 +96,10 @@ PartSurvCurves <- R6::R6Class("PartSurvCurves",
   )
 )
 
-
-# PartSurv ---------------------------------------------------------------------
-# Manual documentation in PartSurv.Rd
+# Psm --------------------------------------------------------------------------
+# Manual documentation in Psm.Rd
 #' @export
-PartSurv <- R6::R6Class("PartSurv",
+Psm <- R6::R6Class("Psm",
   private = list(
     .t_ = NULL,
     .survival_ = NULL,
@@ -222,8 +222,8 @@ PartSurv <- R6::R6Class("PartSurv",
       if (t[1] !=0){
         stop("The first element of 't' must be 0.", call. = FALSE)
       }
-      if(!inherits(self$survival_models, "PartSurvCurves")){
-        stop("'survival_models' must be of class 'PartSurvCurves'.")
+      if(!inherits(self$survival_models, "PsmCurves")){
+        stop("'survival_models' must be of class 'PsmCurves'.")
       }
       self$survival_models$check()
       private$.survival_ <- self$survival_models$survival(t)
@@ -237,7 +237,7 @@ PartSurv <- R6::R6Class("PartSurv",
         stop("You must first simulate survival curves using '$sim_survival'.",
             call. = FALSE)
       }
-      res <- C_PartSurv_sim_stateprobs(self)
+      res <- C_psm_sim_stateprobs(self)
       prop.cross <- res$n_crossings/nrow(res$stateprobs)
       if (prop.cross > 0){
         warning(paste0("Survival curves crossed ", prop.cross * 100, 

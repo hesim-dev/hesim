@@ -1,21 +1,21 @@
 \docType{data}
-\name{PartSurv}
-\alias{PartSurv}
+\name{Psm}
+\alias{Psm}
 
 \title{N-state partitioned survival model}
 \format{\code{\link{R6Class}} object.}
 \usage{
-PartSurv
+Psm
 }
 \description{
-Simulate otcomes from an N-state partitioned survival model.
+Simulate outcomes from an N-state partitioned survival model.
 
 }
 \section{Fields}{
 
 \describe{
 \item{\code{survival_models}}{The survival models used to predict survival curves. Must be
-an object of class \code{\link{PartSurvCurves}}.}
+an object of class \code{\link{PsmCurves}}.}
 
 \item{\code{utility_model}}{The model used to predict utility by health state. Must be
 an object of class \code{\link{StateVals}}.}
@@ -52,7 +52,7 @@ using \code{sim_stateprobs}.}
   
   \item{\code{sim_survival(t)}}{
     Simulate survival curves as a function of time. Equivalent to the member function
-    \code{survival} in \code{\link{PartSurvCurves}}. 
+    \code{survival} in \code{\link{PsmCurves}}. 
     
      \itemize{
      \item \code{t}: A numeric vector of times. The first element must be 0.
@@ -116,7 +116,7 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
 N <- 3
 
 # Survival models
-surv_data <- part_surv4_simdata$survival
+surv_data <- psm4_exdata$survival
 fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ age,
                               data = surv_data, dist = "exp")
 fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ age,
@@ -126,25 +126,25 @@ fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age,
 fits <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3), data = surv_data)
 
 curves_data <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
-part_surv_curves <- form_PartSurvCurves(fits, data = curves_data, n = N)
+psm_curves <- form_PsmCurves(fits, data = curves_data, n = N)
 
 # Cost models
 expanded_data <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
-fit_costs_medical <- stats::lm(costs ~ female + state_name, data = part_surv4_simdata$costs$medical)
-part_surv_costs_medical <- form_StateVals(fit_costs_medical, data = expanded_data, n = N)
+fit_costs_medical <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
+psm_costs_medical <- form_StateVals(fit_costs_medical, data = expanded_data, n = N)
 
 # Utility model
-part_surv_utility_data <- form_input_data(formula_list(~1), expanded_data)
-part_surv_utility <- StateVals$new(data = part_surv_utility_data,
-                                   params = params_lm(coef = runif(N, .6, .8)))
+psm_utility_data <- form_input_data(formula_list(~1), expanded_data)
+psm_utility <- StateVals$new(data = psm_utility_data,
+                             params = params_lm(coef = runif(N, .6, .8)))
 
 # Partitioned survival decision model
-part.surv <- PartSurv$new(survival_models = part_surv_curves,
-                          utility_model = part_surv_utility,
-                          cost_models = list(medical = part_surv_costs_medical))
+psm <- Psm$new(survival_models = psm_curves,
+               utility_model = psm_utility,
+               cost_models = list(medical = psm_costs_medical))
 times <- seq(0, 5, .05)
-part.surv$sim_survival(t = seq(0, 5, .05))
-part.surv$sim_stateprobs()
-part.surv$sim_costs(dr = .03)
-head(part.surv$costs_)
+psm$sim_survival(t = seq(0, 5, .05))
+psm$sim_stateprobs()
+psm$sim_costs(dr = .03)
+head(psm$costs_)
 }

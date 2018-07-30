@@ -1,6 +1,6 @@
-#'  Simulated data for 4-state partitioned survival model
+#'  Example data for 4-state partitioned survival model
 #'
-#' A collection of datasets containing simulated survival, cost, and utility data for a 4-state
+#' A collection of example datasets containing simulated survival, cost, and utility data for a 4-state
 #' partitioned survival model.
 #'
 #' 
@@ -41,4 +41,4 @@
 #'  \item{strategy_id}{The id of each treatment strategy.}
 #'  \item{costs}{Annualized drug costs.}
 #'  }
-"part_surv4_simdata"
+"psm4_exdata"

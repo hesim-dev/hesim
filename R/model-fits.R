@@ -7,12 +7,12 @@
 #' @return Returns an object of class "formula_list".
 #' @examples 
 #' # Create from "formula" objects
-#' formula.list.wei <- formula_list(shape = formula(~ 1), scale = formula(~ x))
-#' class(formula.list.wei)
+#' flist_wei <- formula_list(shape = formula(~ 1), scale = formula(~ x))
+#' class(flist_wei)
 #' 
 #' # Create from "formula_list" objects
-#' formula.list <- formula_list(exponential = formula_list(rate = formula(~1)),
-#'                               weibull = formula.list.wei)
+#' flist <- formula_list(exponential = formula_list(rate = formula(~1)),
+#'                               weibull = flist_wei)
 #' 
 #' @export
 formula_list <- function(...){
@@ -32,10 +32,10 @@ formula_list <- function(...){
 #' @keywords internal
 #' @export
 #' @examples 
-#'  dat <- part_surv4_simdata$costs$medical
-#'  lm.list <- lm_list(fit1 = stats::lm(costs ~ 1, data = dat), 
+#'  dat <- psm4_exdata$costs$medical
+#'  lm_fits <- lm_list(fit1 = stats::lm(costs ~ 1, data = dat), 
 #'                     fit2 = stats::lm(costs ~ female, data = dat))
-#'  class(lm.list)
+#'  class(lm_fits)
 lm_list <- function(...){
   return(object_list(..., inner_class = "lm", new_class = "lm_list"))
 }
@@ -50,8 +50,8 @@ lm_list <- function(...){
 #'  library("flexsurv")
 #'  fit1 <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
 #'  fit2 <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
-#'  flexsurvreg.list <- flexsurvreg_list(wei = fit1, exp = fit2)
-#'  class(flexsurvreg.list)
+#'  fsreg_list <- flexsurvreg_list(wei = fit1, exp = fit2)
+#'  class(fsreg_list)
 #' @export
 flexsurvreg_list <- function(...){
   return(object_list(..., inner_class = "flexsurvreg", new_class = "flexsurvreg_list"))
@@ -72,13 +72,13 @@ flexsurvreg_list <- function(...){
 #' @examples 
 #' library("flexsurv")
 #' fit1 <- flexsurv::flexsurvreg(formula = Surv(endpoint1_time, endpoint1_status) ~ age, 
-#'                               data = part_surv4_simdata$survival,
+#'                               data = psm4_exdata$survival,
 #'                               dist = "weibull")
 #' fit2 <- flexsurv::flexsurvreg(formula = Surv(endpoint2_time, endpoint2_status) ~ age, 
-#'                               data = part_surv4_simdata$survival, 
+#'                               data = psm4_exdata$survival, 
 #'                               dist = "weibull")
-#' flexsurvreg.list <- flexsurvreg_list(endpoint1 = fit1, endpoint2 = fit2)
-#' fits <- partsurvfit(flexsurvreg.list, data = part_surv4_simdata$survival)
+#' fsreg_list <- flexsurvreg_list(endpoint1 = fit1, endpoint2 = fit2)
+#' fits <- partsurvfit(fsreg_list, data = psm4_exdata$survival)
 #' class(fits)
 #' @export
 partsurvfit <- function(object, data){

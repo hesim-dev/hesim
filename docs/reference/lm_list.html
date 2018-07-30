@@ -65,7 +65,7 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/partitioned-survival.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
@@ -120,10 +120,10 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>part_surv4_simdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>
- <span class='no'>lm.list</span> <span class='kw'>&lt;-</span> <span class='fu'>lm_list</span>(<span class='kw'>fit1</span> <span class='kw'>=</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>costs</span> ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>),
+    <pre class="examples"><div class='input'> <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>psm4_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>
+ <span class='no'>lm_fits</span> <span class='kw'>&lt;-</span> <span class='fu'>lm_list</span>(<span class='kw'>fit1</span> <span class='kw'>=</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>costs</span> ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>),
                     <span class='kw'>fit2</span> <span class='kw'>=</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>costs</span> ~ <span class='no'>female</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>))
- <span class='fu'>class</span>(<span class='no'>lm.list</span>)</div><div class='output co'>#&gt; [1] "lm_list"</div></pre>
+ <span class='fu'>class</span>(<span class='no'>lm_fits</span>)</div><div class='output co'>#&gt; [1] "lm_list"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -96,6 +96,6 @@ costs.simdata <- list(medical = cost.medical.simdata,
                      drugs = sim_cost3_drugs())
 
 # Save -------------------------------------------------------------------------
-part_surv4_simdata <- list(survival = survival_simdata,
+psm4_exdata <- list(survival = survival_simdata,
                           costs = costs.simdata)
-save(part_surv4_simdata, file = "../data/part_surv4_simdata.rda", compress = "bzip2")
+save(psm4_exdata, file = "../data/psm4_exdata.rda", compress = "bzip2")
