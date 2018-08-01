@@ -45,8 +45,8 @@ fits_wei <- partsurvfit(flexsurvreg_list(fits_wei), data = surv_data)
 fits_weinma <- partsurvfit(flexsurvreg_list(fits_weinma), data = surv_data)
 fits_spline <- partsurvfit(flexsurvreg_list(fits_spline), data = surv_data)
 
-test_that("form_PsmCurves", {
-  psm_curves <- form_PsmCurves(fits_wei, data = curves_edata, n = N,
+test_that("create_PsmCurves", {
+  psm_curves <- create_PsmCurves(fits_wei, data = curves_edata, n = N,
                                           bootstrap = TRUE)
   expect_true(inherits(psm_curves, "PsmCurves"))
   expect_true(inherits(psm_curves$params, "params_surv_list"))
@@ -54,7 +54,7 @@ test_that("form_PsmCurves", {
               curves_edata$data$age)
   
   # errors
-  expect_error(form_PsmCurves(3, data = curves_edata, n = N))
+  expect_error(create_PsmCurves(3, data = curves_edata, n = N))
 })
 
 test_that("PsmCurves", {
@@ -62,11 +62,11 @@ test_that("PsmCurves", {
   
   # Sampling
   ## Weibull
-  psm_curves <- form_PsmCurves(fits_wei, data = curves_edata, n = N)
+  psm_curves <- create_PsmCurves(fits_wei, data = curves_edata, n = N)
   expect_true(inherits(psm_curves$survival(t = times), "data.table"))
   
   ## Splines
-  psm_curves <- form_PsmCurves(fits_spline, data = curves_edata, n = N,
+  psm_curves <- create_PsmCurves(fits_spline, data = curves_edata, n = N,
                                 bootstrap = FALSE)
   expect_equal(max(psm_curves$survival(t = times)$sample), N)
   
@@ -75,7 +75,7 @@ test_that("PsmCurves", {
                                                             "cumhazard", "rmst",
                                                             "quantile")){
     fun_name <- match.arg(fun_name)
-    psm_curves <- form_PsmCurves(fits, data = data,
+    psm_curves <- create_PsmCurves(fits, data = data,
                                        point_estimate = TRUE,
                                        bootstrap = FALSE)
     hesim_out <- psm_curves[[fun_name]](t = times)
@@ -109,7 +109,7 @@ test_that("PsmCurves", {
   compare_surv_summary(fits_weinma, tmp_data, "rmst")
   
   # Quantiles
-  psm_curves <- form_PsmCurves(fits_exp, data = curves_edata, n = N)
+  psm_curves <- create_PsmCurves(fits_exp, data = curves_edata, n = N)
   X <- psm_curves$data$X$curves1$rate[1, , drop = FALSE]
   beta <- psm_curves$params$curves1$coefs$rate[1, , drop = FALSE]
   rate_hat <- X %*% t(beta)
@@ -123,10 +123,10 @@ set.seed(101)
 times <- c(0, 2, 5, 8)
 
 # Survival models
-psm_curves <- form_PsmCurves(fits_wei, data = curves_edata, n = N)
+psm_curves <- create_PsmCurves(fits_wei, data = curves_edata, n = N)
 
 # Utility model
-psm_utility_data <- form_input_data(formula_list(mu = formula(~1)), 
+psm_utility_data <- create_input_data(formula_list(mu = formula(~1)), 
                                     expand_hesim_data(hesim_dat, 
                                      by = c("strategies", "patients", "states")),
                                      id_vars = c("strategy_id", "patient_id", "state_id"))
@@ -137,8 +137,8 @@ psm_utility <- StateVals$new(data = psm_utility_data,
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
 edat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
-psm_costs_medical <- form_StateVals(fit_costs_medical, data = edat, n = N)
-psm_costs_medical2 <- form_StateVals(fit_costs_medical, data = edat, n = N + 1)
+psm_costs_medical <- create_StateVals(fit_costs_medical, data = edat, n = N)
+psm_costs_medical2 <- create_StateVals(fit_costs_medical, data = edat, n = N + 1)
 
 # Combine
 psm <- Psm$new(survival_models = psm_curves,
@@ -234,7 +234,7 @@ test_that("Psm$costs", {
   ## Incorrect number of survival models
   psmfit2 <- partsurvfit(flexsurvreg_list(fits_wei$models[1:2]),
                          data = surv_data)
-  psm_curves2 <- form_PsmCurves(psmfit2, 
+  psm_curves2 <- create_PsmCurves(psmfit2, 
                                data = curves_edata, n = N,
                                bootstrap = TRUE)
   psm2 <- Psm$new(survival_models = psm_curves2,

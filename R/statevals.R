@@ -1,7 +1,7 @@
 # PartSurvStateVals ------------------------------------------------------------
 #' Form \code{StateVals} object
 #' 
-#' \code{form_StateVals} is a generic function for forming an object of class
+#' \code{create_StateVals} is a generic function for forming an object of class
 #'  \code{\link{StateVals}} from a fitted statistical model. 
 #' @param object A fitted statistical model object of the appropriate class. Supports
 #' \code{\link{lm}}.
@@ -14,13 +14,13 @@
 #' @return Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
 #' @seealso \code{\link{StateVals}}
 #' @export
-form_StateVals <- function(object, data, n = 1000, point_estimate = FALSE){
+create_StateVals <- function(object, data, n = 1000, point_estimate = FALSE){
   if (!inherits(object, c("lm"))){
     stop("Class of 'object' is not supported. See documentation.",
          call. = FALSE)
   }
-  input_data <- form_input_data(object, data, id_vars = c("strategy_id", "patient_id", "state_id")) 
-  params <- form_params(object, n, point_estimate)
+  input_data <- create_input_data(object, data, id_vars = c("strategy_id", "patient_id", "state_id")) 
+  params <- create_params(object, n, point_estimate)
   return(StateVals$new(data = input_data, params = params))
 }
 

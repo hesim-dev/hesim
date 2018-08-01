@@ -19,7 +19,7 @@ check <- function (object, ...) {
 #' @param ... Objects used to form a list.
 #' @return A list of objects from \code{...}.
 #' @keywords internal
-form_object_list <- function(...){
+create_object_list <- function(...){
   objects <- list(...)
   if(length(objects) == 1 & inherits(objects[[1]], "list")){
     objects <- objects[[1]]
@@ -39,7 +39,7 @@ check_object_list <- function(x, inner_class){
 }
 
 new_object_list <- function(..., new_class){
-  objects <- form_object_list(...)
+  objects <- create_object_list(...)
   class(objects) <- new_class
   return(objects)
 }
@@ -67,7 +67,7 @@ check_joined_object <- function(x, inner_class, model_list){
 }
 
 new_joined_object <- function(..., times, new_class){
-  objects <- form_object_list(...)
+  objects <- create_object_list(...)
   res <- list(models = objects, times = times)
   class(res) <- new_class
   return(res)

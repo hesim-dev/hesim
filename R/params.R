@@ -14,7 +14,7 @@ check_params_list <- function(x){
 }
 
 new_params_joined <- function(..., times, inner_class){
-  objects <- form_object_list(...)
+  objects <- create_object_list(...)
   res <- list(models = objects, times = times)
   class(res) <- paste0("params_joined", sub("params", "", inner_class))
   return(res)
@@ -205,8 +205,8 @@ check.params_surv <- function(object){
 #'                                  data = ovarian, dist = "exp")
 #' fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                  data = ovarian, dist = "weibull")
-#' params.surv.exp <- form_params(fit.exp, n = 2)
-#' params.surv.wei <- form_params(fit.wei, n = 2)
+#' params.surv.exp <- create_params(fit.exp, n = 2)
+#' params.surv.wei <- create_params(fit.wei, n = 2)
 #' params.joined.surv <- params_joined_surv(exp = params.surv.exp,
 #'                                          wei = params.surv.wei,
 #'                                          times = 3)
@@ -232,10 +232,10 @@ check.params_joined_surv <- function(object, inner_class){
 #' @examples 
 #' library("flexsurv")
 #' fit_wei <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
-#' params_wei <- form_params(fit_wei, n = 2)
+#' params_wei <- create_params(fit_wei, n = 2)
 #' 
 #' fit_exp <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
-#' params_exp <- form_params(fit_exp, n = 2)
+#' params_exp <- create_params(fit_exp, n = 2)
 #' 
 #' params_list <- params_surv_list(wei = params_wei, exp = params_exp)
 #' print(params_list)
@@ -273,9 +273,9 @@ check.params_surv_list <- function(object){
 #' fit_lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                   data = ovarian, dist = "lognormal")
 #'
-#' params_exp <- form_params(fit_exp, n = 2)
-#' params_wei <- form_params(fit_wei, n = 2)
-#' params_lnorm <- form_params(fit_lnorm, n = 2)
+#' params_exp <- create_params(fit_exp, n = 2)
+#' params_wei <- create_params(fit_wei, n = 2)
+#' params_lnorm <- create_params(fit_lnorm, n = 2)
 #'
 #' params_list1 <- params_surv_list(params_exp, params_wei)
 #' params_list2 <- params_surv_list(params_exp, params_lnorm)
@@ -294,30 +294,30 @@ check.params_joined_surv_list <- function(object, inner_class){
   check_params_joined(object, inner_class = inner_class, model_list = TRUE)
 }
 
-form_params_list <- function(object, n, point_estimate, inner_class, new_class){
+create_params_list <- function(object, n, point_estimate, inner_class, new_class){
   n.objects <- length(object)
   params.list <- vector(mode = "list", length = n.objects)
   names(params.list) <- names(object)
   for (i in 1:n.objects){
-    params.list[[i]] <- form_params(object[[i]], n, point_estimate)
+    params.list[[i]] <- create_params(object[[i]], n, point_estimate)
   }
   return(new_params_list(params.list, inner_class = inner_class,
                          new_class = new_class))
 }
 
-form_params_joined <- function(object, n, point_estimate, inner_class){
+create_params_joined <- function(object, n, point_estimate, inner_class){
   n.models <- length(object$models)
   models <- vector(mode = "list", length = n.models)
   names(models) <- names(object$models)
   for (i in 1:n.models){
-    models[[i]] <- form_params(object$models[[i]], n, point_estimate)
+    models[[i]] <- create_params(object$models[[i]], n, point_estimate)
   }
   return(new_params_joined(models, times = object$times, inner_class = inner_class))
 }
 
 #' Parameters from a fitted model
 #' 
-#' \code{form_params} is a generic function for constructing parameters from
+#' \code{create_params} is a generic function for constructing parameters from
 #' a fitted statistical model. A sample from the posterior distribution of 
 #' parameters is returned.
 #' @param object A statistical model to randomly sample parameters from.  
@@ -329,40 +329,40 @@ form_params_joined <- function(object, n, point_estimate, inner_class){
 #' parameters are bootstrapped using \code{\link{bootstrap}}. 
 #' @param max_errors Equivalent to the \code{max_errors} argument in \code{\link{bootstrap}}. 
 #' @param ... Further arguments passed to or from other methods. Currently unused.
-#' @return An object prefixed by \code{params_}. Mapping between \code{form_params} 
+#' @return An object prefixed by \code{params_}. Mapping between \code{create_params} 
 #' and the classes of the returned objects are: 
 #' \itemize{
-#' \item{\code{form_params.lm} ->}{ \code{params_lm}}
-#' \item{\code{form_params.flexsurvreg} ->}{ \code{params_surv}}
-#' \item{\code{form_params.flexsurvreg_list} ->}{ \code{params_surv_list}}
-#' \item{\code{form_params.partsurvfit} ->}{ \code{params_surv_list}}
+#' \item{\code{create_params.lm} ->}{ \code{params_lm}}
+#' \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
+#' \item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}
+#' \item{\code{create_params.partsurvfit} ->}{ \code{params_surv_list}}
 #' }
-#' @name form_params
+#' @name create_params
 #' @examples 
-#' # form_params.lm
+#' # create_params.lm
 #' fit <- stats::lm(costs ~ female, data = psm4_exdata$costs$medical)
 #' n <- 5
-#' params_lm <- form_params(fit, n = n)
+#' params_lm <- create_params(fit, n = n)
 #' head(params_lm$coefs)
 #' head(params_lm$sigma)
 #' 
-#' # form_params.flexsurvreg
+#' # create_params.flexsurvreg
 #' library("flexsurv")
 #' fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                     data = ovarian, dist = "weibull")
 #' n <- 5
-#' params_surv_wei <- form_params(fit, n = n)
+#' params_surv_wei <- create_params(fit, n = n)
 #' print(params_surv_wei$dist)
 #' head(params_surv_wei$coefs)
 #' @export
-#' @rdname form_params
-form_params <- function (object, n = 1000, point_estimate = FALSE, ...) {
-  UseMethod("form_params", object)
+#' @rdname create_params
+create_params <- function (object, n = 1000, point_estimate = FALSE, ...) {
+  UseMethod("create_params", object)
 }
 
 #' @export
-#' @rdname form_params
-form_params.lm <- function(object, n = 1000, point_estimate = FALSE, ...){
+#' @rdname create_params
+create_params.lm <- function(object, n = 1000, point_estimate = FALSE, ...){
   if (point_estimate == FALSE){
       coefs.sim <- MASS::mvrnorm(n, stats::coef(object), stats::vcov(object))
       if(is.vector(coefs.sim)) coefs.sim <- matrix(coefs.sim, nrow = 1)
@@ -379,10 +379,10 @@ form_params.lm <- function(object, n = 1000, point_estimate = FALSE, ...){
 }
 
 #' @export
-# #' @rdname form_params
+# #' @rdname create_params
 #' @keywords internal
-form_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...){
-  return(form_params_list(object, n, point_estimate, 
+create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...){
+  return(create_params_list(object, n, point_estimate, 
                           inner_class = "params_lm", new_class = "params_lm_list"))
 }
 
@@ -414,8 +414,8 @@ flexsurvreg_aux <- function(object){
 }
 
 #' @export
-#' @rdname form_params
-form_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, ...){
+#' @rdname create_params
+create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, ...){
   if (point_estimate == FALSE){
       sim <- flexsurv::normboot.flexsurvreg(object, B = n, raw = TRUE, 
                                             transform = TRUE)
@@ -438,15 +438,15 @@ form_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, ..
 }
 
 #' @export
-#' @rdname form_params
-form_params.flexsurvreg_list <- function(object, n = 1000, point_estimate = FALSE, ...){
-  return(form_params_list(object, n, point_estimate, 
+#' @rdname create_params
+create_params.flexsurvreg_list <- function(object, n = 1000, point_estimate = FALSE, ...){
+  return(create_params_list(object, n, point_estimate, 
                           inner_class = "params_surv", new_class = "params_surv_list"))
 }
 
 #' @export
-#' @rdname form_params
-form_params.partsurvfit <- function(object, n = 1000, point_estimate = FALSE, 
+#' @rdname create_params
+create_params.partsurvfit <- function(object, n = 1000, point_estimate = FALSE, 
                                       bootstrap = TRUE, max_errors = 0, ...){
   if (point_estimate == TRUE & bootstrap == TRUE){
     msg <- paste0("When 'point_estimate' = TRUE and 'bootstrap' = TRUE, the 'point_estimate' ",
@@ -456,21 +456,21 @@ form_params.partsurvfit <- function(object, n = 1000, point_estimate = FALSE,
   if(bootstrap){
     res <- bootstrap(object, B = n, max_errors = max_errors)
   } else{
-    res <- form_params(object$models, n = n, point_estimate = point_estimate)
+    res <- create_params(object$models, n = n, point_estimate = point_estimate)
   }
   return(res)
 }
 
 #' @export
-# #' @rdname form_params
+# #' @rdname create_params
 #' @keywords internal
-form_params.joined_flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, ...){
-  return(form_params_joined(object, n, point_estimate, "params_surv"))
+create_params.joined_flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, ...){
+  return(create_params_joined(object, n, point_estimate, "params_surv"))
 }
 
 #' @export
-# #' @rdname form_params
+# #' @rdname create_params
 #' @keywords internal
-form_params.joined_flexsurvreg_list <- function(object, n = 1000, point_estimate = FALSE, ...){
-  return(form_params_joined(object, n, point_estimate, "params_surv_list"))
+create_params.joined_flexsurvreg_list <- function(object, n = 1000, point_estimate = FALSE, ...){
+  return(create_params_joined(object, n, point_estimate, "params_surv_list"))
 }

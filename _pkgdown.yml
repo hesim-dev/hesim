@@ -19,22 +19,22 @@ reference:
       - params_lm
       - params_surv
       - params_surv_list
-      - form_params
+      - create_params
   - title: "Input data"
     contents:
       - hesim_data
       - expand_hesim_data
       - input_data
-      - form_input_data
+      - create_input_data
   - title: "Health state values"
     contents:
       - StateVals
-      - form_StateVals
+      - create_StateVals
   - title: "Partitioned survival model"
     contents:
       - Psm
       - PsmCurves
-      - form_PsmCurves
+      - create_PsmCurves
   - title: "Cost-effectiveness analysis"
     contents:
       - icea

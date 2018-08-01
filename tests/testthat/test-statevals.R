@@ -18,7 +18,7 @@ N <- 5
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
 edat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
-costvals_medical <- form_StateVals(fit_costs_medical, data = edat, n = N)
+costvals_medical <- create_StateVals(fit_costs_medical, data = edat, n = N)
 costvals_medical$sim(t = c(1, 2, 3), type = "predict")
 
 test_that("StateVals$sim", {
@@ -29,7 +29,7 @@ test_that("StateVals$sim", {
   expect_error(StateVals$new(data = 3, params = 2)$sim(t = 2)) 
   
   # class of 'params' is not supported
-  input_dat <- form_input_data(formula_list(~1), edat)
+  input_dat <- create_input_data(formula_list(~1), edat)
   expect_error(StateVals$new(data = input_dat, params = 2)$sim(3))
 })
 

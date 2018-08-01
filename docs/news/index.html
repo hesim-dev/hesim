@@ -128,7 +128,7 @@
 <ul>
 <li>Functions prefixed by <code>params_</code> create objects storing samples of parameters of fitted statistical models for probabilistic sensitivity analysis.</li>
 <li>
-<code><a href="../reference/form_params.html">form_params()</a></code> is a generic function for constructing parameter objects from a fitted statistical model or a <code>formula</code> object. Parameters can be sampled using Monte Carlo multivariate normal approximations or via bootstrapping.</li>
+<code><a href="../reference/create_params.html">create_params()</a></code> is a generic function for creating parameter objects from a fitted statistical model or a <code>formula</code> object. Parameters can be sampled using Monte Carlo multivariate normal approximations or via bootstrapping.</li>
 <li>Current support for flexible survival modeling (<code><a href="../reference/params_surv.html">params_surv()</a></code>, <code><a href="../reference/params_surv_list.html">params_surv_list()</a></code>) and linear regression (<code><a href="../reference/params_lm.html">params_lm()</a></code>). Splines and parametric distributions (exponential, Weibull, Gompertz, gamma, lognormal log-logistic, generalized gamma) are supported for survival modeling.</li>
 </ul>
 <p>Input data</p>
@@ -140,20 +140,20 @@
 <li>
 <code><a href="../reference/input_data.html">input_data()</a></code> creates an object of class <code>input_data</code>, which contains data for predicting or simulating values with a statistical model.</li>
 <li>
-<code><a href="../reference/form_input_data.html">form_input_data()</a></code> creates an object of class <code>input_data</code> from a fitted statistical model or a <code>formula</code> object.</li>
+<code><a href="../reference/create_input_data.html">create_input_data()</a></code> creates an object of class <code>input_data</code> from a fitted statistical model or a <code>formula</code> object.</li>
 </ul>
 <p>Health state values</p>
 <ul>
 <li>The R6 class <code>StateVals</code> simulates the costs or utilities associated with health states.</li>
 <li>
-<code><a href="../reference/form_StateVals.html">form_StateVals()</a></code> creates a <code>StateVals</code> object from fitted statistical models or <code>formula</code> objects.</li>
+<code><a href="../reference/create_StateVals.html">create_StateVals()</a></code> creates a <code>StateVals</code> object from fitted statistical models or <code>formula</code> objects.</li>
 </ul>
 <p>Partitioned survival models</p>
 <ul>
 <li>The R6 class <code>Psm</code> simulates outcomes from an N-state partitioned survival model.</li>
 <li>A <code>Psm</code> object is instantiated with a set of survival models (the R6 class <code>PsmCurves</code>) and models for costs and utility (the R6 class <code>StateVals</code>).</li>
 <li>
-<code><a href="../reference/form_PsmCurves.html">form_PsmCurves()</a></code> creates a <code>PsmCurves</code> object from fitted statistical models or <code>formula</code> objects.</li>
+<code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> creates a <code>PsmCurves</code> object from fitted statistical models or <code>formula</code> objects.</li>
 </ul>
 <p>Datasets</p>
 <ul>

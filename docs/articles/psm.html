@@ -75,7 +75,7 @@
     <div class="page-header toc-ignore">
       <h1>Partitioned survival models</h1>
             
-            <h4 class="date">2018-07-31</h4>
+            <h4 class="date">2018-08-01</h4>
           </div>
 
     
@@ -220,21 +220,24 @@ statevals_edata &lt;-<span class="st"> </span><span class="kw"><a href="../refer
 <div id="survival-models-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#survival-models-1" class="anchor"></a>Survival models</h3>
-<p>Since we fit our survival models using <code>flexsurvreg</code>, we can create a <code>PsmCurves</code> object using <code><a href="../reference/form_PsmCurves.html">form_PsmCurves()</a></code>, which generates both the input data and samples of the model parameters needed for prediction.</p>
-<p>The model parameters can be sampled in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, <code><a href="../reference/form_PsmCurves.html">form_PsmCurves()</a></code> consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the data element in a <code>partsurvfit</code> object.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psm_curves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_PsmCurves.html">form_PsmCurves</a></span>(psfit_wei, <span class="dt">data =</span> surv_edata, <span class="dt">n =</span> n_samples,
-                             <span class="dt">bootstrap =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Since we fit our survival models using <code>flexsurvreg</code>, we can create a <code>PsmCurves</code> object using <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code>, which generates both the input data and samples of the model parameters needed for prediction.</p>
+<p>The model parameters can be sampled in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the data element in a <code>partsurvfit</code> object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psm_curves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_PsmCurves.html">create_PsmCurves</a></span>(psfit_wei, <span class="dt">data =</span> surv_edata, <span class="dt">n =</span> n_samples,
+                               <span class="dt">bootstrap =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
 <div id="creating-cost-and-utility-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-cost-and-utility-models" class="anchor"></a>Creating cost and utility models</h3>
-<p>We fit a linear model to medical costs, so we can use the <code><a href="../reference/form_StateVals.html">form_StateVals()</a></code> to instantiate a <code>StateVals</code> object for medical costs.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psm_medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_StateVals.html">form_StateVals</a></span>(medcosts_fit, <span class="dt">data =</span> statevals_edata, <span class="dt">n =</span> n_samples)</code></pre></div>
-<p>Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using <code><a href="../reference/form_StateVals.html">form_StateVals()</a></code>. Instead, we create the model from our <code>params_lm</code> class object and input data (of class <code>input_data</code>). Since we don’t have fitted R model, we can use a <code>formula_list</code> object to specify the explanatory variables in the model. That is, we use <code><a href="../reference/formula_list.html">formula_list()</a></code> to obtain the variables (<code>strategy_id</code>) in <code>statevals_edata</code> that are needed.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), <span class="dt">data =</span> statevals_edata)
+<p>We fit a linear model to medical costs, so we can use the <code><a href="../reference/create_StateVals.html">create_StateVals()</a></code> to instantiate a <code>StateVals</code> object for medical costs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psm_medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(medcosts_fit, <span class="dt">data =</span> statevals_edata, 
+                                 <span class="dt">n =</span> n_samples)</code></pre></div>
+<p>Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using <code><a href="../reference/create_StateVals.html">create_StateVals()</a></code>. Instead, we create the model from our <code>params_lm</code> class object and input data (of class <code>input_data</code>). Since we don’t have fitted R model, we can use a <code>formula_list</code> object to specify the explanatory variables in the model. That is, we use <code><a href="../reference/formula_list.html">formula_list()</a></code> to obtain the variables (<code>strategy_id</code>) in <code>statevals_edata</code> that are needed.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_input_data.html">create_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), 
+                               <span class="dt">data =</span> statevals_edata)
 psm_drugcosts &lt;-<span class="st"> </span>StateVals<span class="op">$</span><span class="kw">new</span>(<span class="dt">data =</span> input_dat, <span class="dt">params =</span> drugcosts_params)</code></pre></div>
 <p>We can instantiate a utility model in the same manner.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/form_input_data.html">form_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), <span class="dt">data =</span> statevals_edata)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_input_data.html">create_input_data</a></span>(<span class="kw"><a href="../reference/formula_list.html">formula_list</a></span>(<span class="dt">mu =</span> <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(state_id)), 
+                               <span class="dt">data =</span> statevals_edata)
 psm_utility &lt;-<span class="st"> </span>StateVals<span class="op">$</span><span class="kw">new</span>(<span class="dt">data =</span> input_dat, <span class="dt">params =</span> utility_params)</code></pre></div>
 </div>
 <div id="combining-the-statistical-models" class="section level3">
@@ -318,12 +321,12 @@ psm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">d
 psm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(psm<span class="op">$</span>qalys_)</code></pre></div>
 <pre><code>##    state_id sample strategy_id patient_id   dr category     qalys
-## 1:        1      1           1          1 0.03    qalys 0.5747467
-## 2:        1      1           1          2 0.03    qalys 0.5481834
-## 3:        1      1           1          3 0.03    qalys 0.5057784
-## 4:        1      1           2          1 0.03    qalys 0.6016397
-## 5:        1      1           2          2 0.03    qalys 0.5738488
-## 6:        1      1           2          3 0.03    qalys 0.5294776</code></pre>
+## 1:        1      1           1          1 0.03    qalys 0.5547004
+## 2:        1      1           1          2 0.03    qalys 0.5290635
+## 3:        1      1           1          3 0.03    qalys 0.4881376
+## 4:        1      1           2          1 0.03    qalys 0.5806554
+## 5:        1      1           2          2 0.03    qalys 0.5538337
+## 6:        1      1           2          3 0.03    qalys 0.5110102</code></pre>
 </div>
 </div>
 </div>

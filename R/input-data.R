@@ -240,7 +240,7 @@ sort_hesim_data <- function(data, sorted_by){
 #' (ii) id variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
 #' the \code{X} matrices. More details are provided under "Details" below. Note that an "input_data" 
 #' object can often be created more easily using the generic function 
-#' \code{\link{form_input_data}}. 
+#' \code{\link{create_input_data}}. 
 #' 
 #' @param X A list of input matrices for predicting the values of each parameter in a statistical model. May also be
 #' a list of lists of input matrices when a list of separate models is fit (e.g., with \link{flexsurvreg_list}).
@@ -482,7 +482,7 @@ get_input_data_id_vars <- function(data){
 
 #' Form input data
 #' 
-#' \code{form_input_data} is a generic function for forming data that can be
+#' \code{create_input_data} is a generic function for forming data that can be
 #' used as a input to a statistical model. Model matrices are formed based on the 
 #' variables specified in the model \code{object} and the data specified in \code{data}.
 #' @param object An object of the appropriate class. Currently supports
@@ -510,17 +510,17 @@ get_input_data_id_vars <- function(data){
 #' # Class "lm"
 #' expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
 #' fit_lm <- stats::lm(costs ~ female + state_name, psm4_exdata$costs$medical)
-#' input_dat <- form_input_data(fit_lm, expanded_dat)
+#' input_dat <- create_input_data(fit_lm, expanded_dat)
 #' class(input_dat)
 #'
 #' # Class "flexsurvreg"
 #' expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
 #' fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                  data = ovarian, dist = "weibull")
-#' input_dat <- form_input_data(fit_wei, expanded_dat)
+#' input_dat <- create_input_data(fit_wei, expanded_dat)
 #' class(input_dat)
 #' @export
-form_input_data <- function (object, data, ...) {
+create_input_data <- function (object, data, ...) {
   if (missing(object)){
     stop("'object' is missing with no default.")
   }
@@ -530,7 +530,7 @@ form_input_data <- function (object, data, ...) {
   if (!inherits(data, "expanded_hesim_data")){
     stop("'data' must be of class 'expanded_hesim_data'.")
   }
-  UseMethod("form_input_data", object)
+  UseMethod("create_input_data", object)
 }
 
 formula_list_rec <- function(object, data, ...){
@@ -547,7 +547,7 @@ formula_list_rec <- function(object, data, ...){
 }
 
 #' @export
-form_input_data.formula_list <- function(object, data, ...){
+create_input_data.formula_list <- function(object, data, ...){
   X.list <- formula_list_rec(object, data, ...)
   args <- c(list(X = X.list),
            get_input_data_id_vars(data))
@@ -560,7 +560,7 @@ get_terms <- function(object){
 }
 
 #' @export 
-form_input_data.lm <- function(object, data, ...){
+create_input_data.lm <- function(object, data, ...){
   terms <- get_terms(object)
   X <- stats::model.matrix(terms, data = data$data, ...)
   args <- c(list(X = list(mu = X)),
@@ -569,7 +569,7 @@ form_input_data.lm <- function(object, data, ...){
 }
 
 #' @export 
-form_input_data.lm_list <- function(object, data, ...){
+create_input_data.lm_list <- function(object, data, ...){
   X.list <- vector(mode = "list", length = length(object))
   names(X.list) <- names(object)
   for (i in 1:length(X.list)){
@@ -581,7 +581,7 @@ form_input_data.lm_list <- function(object, data, ...){
   return(do.call("new_input_data", args))
 }
 
-form_input_data_flexsurvreg_X <- function(object, data, ...){
+create_input_data_flexsurvreg_X <- function(object, data, ...){
   pars <- object$dlist$pars
   X.list <- vector(mode = "list", length = length(pars))
   names(X.list) <- pars
@@ -598,19 +598,19 @@ form_input_data_flexsurvreg_X <- function(object, data, ...){
 }
 
 #' @export
-form_input_data.flexsurvreg <- function(object, data,...){
-  X.list <- form_input_data_flexsurvreg_X(object, data, ...)
+create_input_data.flexsurvreg <- function(object, data,...){
+  X.list <- create_input_data_flexsurvreg_X(object, data, ...)
   args <- c(list(X = X.list),
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
 }
 
 #' @export
-form_input_data.flexsurvreg_list <- function(object, data,...){
+create_input_data.flexsurvreg_list <- function(object, data,...){
   X.list.2d <- vector(mode = "list", length = length(object))
   names(X.list.2d) <- names(object)
   for (i in 1:length(object)){
-    X.list.2d[[i]] <- form_input_data_flexsurvreg_X(object[[i]], data, ...)
+    X.list.2d[[i]] <- create_input_data_flexsurvreg_X(object[[i]], data, ...)
   }
   args <- c(list(X = X.list.2d),
            get_input_data_id_vars(data))
@@ -618,12 +618,12 @@ form_input_data.flexsurvreg_list <- function(object, data,...){
 }
 
 #' @export
-form_input_data.partsurvfit <- function(object, data, ...){
-  return(form_input_data.flexsurvreg_list(object$models, data, ...))
+create_input_data.partsurvfit <- function(object, data, ...){
+  return(create_input_data.flexsurvreg_list(object$models, data, ...))
 }
 
 #' @export
-form_input_data.joined_flexsurvreg_list <- function(object, data,...){
+create_input_data.joined_flexsurvreg_list <- function(object, data,...){
   models <- object$models
   X.list.3d <- vector(mode = "list", length = length(models))
   names(X.list.3d) <- names(models)
@@ -631,7 +631,7 @@ form_input_data.joined_flexsurvreg_list <- function(object, data,...){
     X.list.3d[[i]] <- vector(mode = "list", length = length(models[[i]]))
     names(X.list.3d[[i]]) <- names(models[[i]])
     for (j in 1:length(models[[i]])){
-      X.list.3d[[i]][[j]] <- form_input_data_flexsurvreg_X(models[[i]][[j]], data, ...)
+      X.list.3d[[i]][[j]] <- create_input_data_flexsurvreg_X(models[[i]][[j]], data, ...)
     }
   }
   args <- c(list(X = X.list.3d),

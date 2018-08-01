@@ -106,7 +106,7 @@ fits <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3), data = surv_data)
 
 # Form PsmCurves
 curves_data <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
-psm_curves <- form_PsmCurves(fits, data = curves_data, n = 3)
+psm_curves <- create_PsmCurves(fits, data = curves_data, n = 3)
 
 # Summarize survival curves
 head(psm_curves$quantile(p = c(.25, .5, .75)))

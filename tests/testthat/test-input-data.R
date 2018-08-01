@@ -177,12 +177,12 @@ expect_error(input_data(X = list(model.matrix(~ age, dat)),
                        line = sort(dat$line),
                        n_lines = n_lines))
 
-# form_input_data with formula objects -----------------------------------------
-test_that("form_input_data.formula_list", {
+# create_input_data with formula objects ---------------------------------------
+test_that("create_input_data.formula_list", {
   dat <- expand_hesim_data(hesim_dat)
   f_list <- formula_list(list(f1 = formula(~ age), f2 = formula(~ 1)))
   expect_equal(class(f_list), "formula_list")
-  input_dat <- form_input_data(f_list, dat)
+  input_dat <- create_input_data(f_list, dat)
   
   expect_equal(length(input_dat$X), length(f_list))
   expect_equal(names(input_dat$X), names(f_list))
@@ -191,34 +191,34 @@ test_that("form_input_data.formula_list", {
   expect_equal(ncol(input_dat$X$f2), 1)
 })
 
-# form_input_data with lm objects ----------------------------------------------
+# create_input_data with lm objects --------------------------------------------
 dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
 fit1 <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 
-test_that("form_input_data.lm", {
-  input_dat <- form_input_data(fit1, dat)
+test_that("create_input_data.lm", {
+  input_dat <- create_input_data(fit1, dat)
   
   expect_equal(ncol(input_dat$X$mu), 4)
   expect_equal(as.numeric(input_dat$X$mu[, "female"]), dat$data$female)
 })
 
-test_that("form_input_data.lm_list", {
+test_that("create_input_data.lm_list", {
   fit2 <- stats::lm(costs ~ 1, data = psm4_exdata$costs$medical)
   fit_list <- hesim:::lm_list(fit1 = fit1, fit2 = fit2)
-  input_dat <- form_input_data(fit_list, dat)
+  input_dat <- create_input_data(fit_list, dat)
   
   expect_equal(ncol(input_dat$X$fit1$mu), 4)
   expect_equal(ncol(input_dat$X$fit2$mu), 1)
   expect_equal(as.numeric(input_dat$X$fit1$mu[, "female"]), dat$data$female)
 })
 
-# form_input_data with flexsurvreg objects -------------------------------------
-test_that("form_input_data.flexsurv", {
+# create_input_data with flexsurvreg objects -----------------------------------
+test_that("create_input_data.flexsurv", {
   dat <- expand_hesim_data(hesim_dat)
   fit <- flexsurv::flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
                               anc = list(sigma = ~ group), 
                               dist = "gengamma") 
-  input_dat <- form_input_data(fit, dat)
+  input_dat <- create_input_data(fit, dat)
   
   expect_equal(input_dat$strategy_id, dat$data$strategy_id)
   expect_equal(input_dat$state_id, dat$data$state_id)
@@ -238,8 +238,8 @@ fit1_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1,
 flexsurvreg_list1 <- flexsurvreg_list(wei = fit1_wei, exp = fit1_exp)
 dat <- expand_hesim_data(hesim_dat)
 
-test_that("form_input_data.flexsurv_list", {
-  input_dat <- form_input_data(flexsurvreg_list1, dat)  
+test_that("create_input_data.flexsurv_list", {
+  input_dat <- create_input_data(flexsurvreg_list1, dat)  
   
   expect_equal(class(input_dat$X$wei$shape), "matrix")
 })
@@ -255,8 +255,8 @@ joined_flexsurvreg_list <- joined_flexsurvreg_list(mod1 = flexsurvreg_list1,
                                                    mod2 = flexsurvreg_list2,
                                                    times = list(2, 5))
 
-test_that("form_input_data.joined_flexsurv_list", {
-  input_dat <- form_input_data(joined_flexsurvreg_list, dat)  
+test_that("create_input_data.joined_flexsurv_list", {
+  input_dat <- create_input_data(joined_flexsurvreg_list, dat)  
   
   expect_equal(input_dat$state_id, dat$state_id)
   expect_equal(class(input_dat$X[[1]]$wei$shape), "matrix")

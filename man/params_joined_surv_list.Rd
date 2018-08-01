@@ -33,9 +33,9 @@ fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1,
 fit_lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                   data = ovarian, dist = "lognormal")
 
-params_exp <- form_params(fit_exp, n = 2)
-params_wei <- form_params(fit_wei, n = 2)
-params_lnorm <- form_params(fit_lnorm, n = 2)
+params_exp <- create_params(fit_exp, n = 2)
+params_wei <- create_params(fit_wei, n = 2)
+params_lnorm <- create_params(fit_lnorm, n = 2)
 
 params_list1 <- params_surv_list(params_exp, params_wei)
 params_list2 <- params_surv_list(params_exp, params_lnorm)

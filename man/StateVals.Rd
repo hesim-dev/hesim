@@ -71,7 +71,7 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
 # Create StateVals object
 fit_costs_medical <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
-costs_medical <- form_StateVals(fit_costs_medical, data = dat, n = 5)
+costs_medical <- create_StateVals(fit_costs_medical, data = dat, n = 5)
 
 # Predict
 head(costs_medical$sim(t = 5, type = "predict"))

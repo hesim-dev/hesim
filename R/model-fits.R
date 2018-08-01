@@ -16,7 +16,7 @@
 #' 
 #' @export
 formula_list <- function(...){
-  if (inherits(form_object_list(...)[[1]], "formula")){
+  if (inherits(create_object_list(...)[[1]], "formula")){
     return(object_list(..., inner_class = "formula", new_class = "formula_list")) 
   } else {
     return(object_list(..., inner_class = "formula_list", new_class = "formula_list")) 

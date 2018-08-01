@@ -2,7 +2,7 @@
 
 #' Form \code{PsmCurves} object
 #' 
-#' \code{form_PsmCurves} is a function for forming an object of class
+#' \code{create_PsmCurves} is a function for forming an object of class
 #' \code{\link{PsmCurves}} from an object of class \code{\link{partsurvfit}}.
 #' @param object An object of class \code{\link{partsurvfit}}.
 #' @param data An object of class "expanded_hesim_data" returned by 
@@ -17,13 +17,13 @@
 #' @return Returns an \code{\link{R6Class}} object of class \code{\link{PsmCurves}}.
 #' @seealso \code{\link{PsmCurves}}
 #' @export
-form_PsmCurves <- function(object, data, n = 1000, point_estimate = FALSE,
+create_PsmCurves <- function(object, data, n = 1000, point_estimate = FALSE,
                                 bootstrap = TRUE){
   if (!inherits(object, c("partsurvfit"))){
     stop("'Object' must be of class 'partsurvfit'.")
   }
-  input_data <- form_input_data(object, data, id_vars = c("strategy_id", "patient_id"))
-  params <- form_params(object, n = n, point_estimate = point_estimate, bootstrap = bootstrap)
+  input_data <- create_input_data(object, data, id_vars = c("strategy_id", "patient_id"))
+  params <- create_params(object, n = n, point_estimate = point_estimate, bootstrap = bootstrap)
   return(PsmCurves$new(data = input_data, params = params))
 }
 

@@ -53,7 +53,7 @@ as an input to a statistical model. Data consists of (i) input matrices, \code{X
 (ii) id variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
 the \code{X} matrices. More details are provided under "Details" below. Note that an "input_data" 
 object can often be created more easily using the generic function 
-\code{\link{form_input_data}}.
+\code{\link{create_input_data}}.
 }
 \details{
 Each row of each matrix \code{X} is an input vector, \eqn{x_{hijk}}, where \eqn{h} denotes

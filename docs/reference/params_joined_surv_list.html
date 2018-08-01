@@ -138,9 +138,9 @@ objects to be joined.</p></dd>
 <span class='no'>fit_lnorm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
                                   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"lognormal"</span>)
 
-<span class='no'>params_exp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='form_params.html'>form_params</a></span>(<span class='no'>fit_exp</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>params_wei</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='form_params.html'>form_params</a></span>(<span class='no'>fit_wei</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>params_lnorm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='form_params.html'>form_params</a></span>(<span class='no'>fit_lnorm</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='no'>params_exp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span>(<span class='no'>fit_exp</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='no'>params_wei</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span>(<span class='no'>fit_wei</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='no'>params_lnorm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span>(<span class='no'>fit_lnorm</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 
 <span class='no'>params_list1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='params_surv_list.html'>params_surv_list</a></span>(<span class='no'>params_exp</span>, <span class='no'>params_wei</span>)
 <span class='no'>params_list2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='params_surv_list.html'>params_surv_list</a></span>(<span class='no'>params_exp</span>, <span class='no'>params_lnorm</span>)
@@ -153,8 +153,8 @@ objects to be joined.</p></dd>
 #&gt; $coefs
 #&gt; $coefs$rate
 #&gt;           rate
-#&gt; [1,] -7.246340
-#&gt; [2,] -7.369248
+#&gt; [1,] -7.857296
+#&gt; [2,] -7.182386
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -169,14 +169,14 @@ objects to be joined.</p></dd>
 #&gt; [[2]]
 #&gt; $coefs
 #&gt; $coefs$shape
-#&gt;          shape
-#&gt; [1,] 0.1860383
-#&gt; [2,] 0.1998693
+#&gt;            shape
+#&gt; [1,]  0.09157963
+#&gt; [2,] -0.50155012
 #&gt; 
 #&gt; $coefs$scale
 #&gt;         scale
-#&gt; [1,] 7.411933
-#&gt; [2,] 7.067652
+#&gt; [1,] 6.947298
+#&gt; [2,] 7.580437
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -196,8 +196,8 @@ objects to be joined.</p></dd>
 #&gt; $coefs
 #&gt; $coefs$rate
 #&gt;           rate
-#&gt; [1,] -7.246340
-#&gt; [2,] -7.369248
+#&gt; [1,] -7.857296
+#&gt; [2,] -7.182386
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -213,13 +213,13 @@ objects to be joined.</p></dd>
 #&gt; $coefs
 #&gt; $coefs$meanlog
 #&gt;       meanlog
-#&gt; [1,] 7.079560
-#&gt; [2,] 6.801886
+#&gt; [1,] 6.432087
+#&gt; [2,] 6.107499
 #&gt; 
 #&gt; $coefs$sdlog
-#&gt;          sdlog
-#&gt; [1,] 0.7074359
-#&gt; [2,] 0.4065864
+#&gt;             sdlog
+#&gt; [1,]  0.041797261
+#&gt; [2,] -0.007094962
 #&gt; 
 #&gt; 
 #&gt; $dist

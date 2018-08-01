@@ -29,8 +29,8 @@ fit.exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1,
                                  data = ovarian, dist = "exp")
 fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                  data = ovarian, dist = "weibull")
-params.surv.exp <- form_params(fit.exp, n = 2)
-params.surv.wei <- form_params(fit.wei, n = 2)
+params.surv.exp <- create_params(fit.exp, n = 2)
+params.surv.wei <- create_params(fit.wei, n = 2)
 params.joined.surv <- params_joined_surv(exp = params.surv.exp,
                                          wei = params.surv.wei,
                                          times = 3)

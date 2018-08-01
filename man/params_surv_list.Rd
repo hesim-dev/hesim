@@ -19,10 +19,10 @@ Create a list containing the parameters of multiple fitted parametric survival m
 \examples{
 library("flexsurv")
 fit_wei <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
-params_wei <- form_params(fit_wei, n = 2)
+params_wei <- create_params(fit_wei, n = 2)
 
 fit_exp <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
-params_exp <- form_params(fit_exp, n = 2)
+params_exp <- create_params(fit_exp, n = 2)
 
 params_list <- params_surv_list(wei = params_wei, exp = params_exp)
 print(params_list)

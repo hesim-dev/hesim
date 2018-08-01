@@ -146,33 +146,36 @@ statevals_edata <- expand_hesim_data(hesim_dat, by = c("strategies", "patients",
 Third, for a given statistical model, we extract the relevant covariates and id variables from an "expanded_hesim_data" object to construct input matrices and row indices for prediction. We illustrate this third step when creating the survival, utility, and cost models below.
 
 ### Survival models
-Since we fit our survival models using `flexsurvreg`, we can create a `PsmCurves` object using `form_PsmCurves()`, which generates both the input data and samples of the model parameters needed for prediction. 
+Since we fit our survival models using `flexsurvreg`, we can create a `PsmCurves` object using `create_PsmCurves()`, which generates both the input data and samples of the model parameters needed for prediction. 
 
-The model parameters can be sampled in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, `form_PsmCurves()` consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the data element in a `partsurvfit` object. 
+The model parameters can be sampled in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, `create_PsmCurves()` consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the data element in a `partsurvfit` object. 
 
 ```{r, warning = FALSE, message = FALSE, cache = TRUE}
-psm_curves <- form_PsmCurves(psfit_wei, data = surv_edata, n = n_samples,
-                             bootstrap = TRUE)
+psm_curves <- create_PsmCurves(psfit_wei, data = surv_edata, n = n_samples,
+                               bootstrap = TRUE)
 ```
 
 ### Creating cost and utility models
-We fit a linear model to medical costs, so we can use the `form_StateVals()` to instantiate a `StateVals` object for medical costs. 
+We fit a linear model to medical costs, so we can use the `create_StateVals()` to instantiate a `StateVals` object for medical costs. 
 
 ```{r, warning = FALSE, message = FALSE}
-psm_medcosts <- form_StateVals(medcosts_fit, data = statevals_edata, n = n_samples)
+psm_medcosts <- create_StateVals(medcosts_fit, data = statevals_edata, 
+                                 n = n_samples)
 ```
 
-Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using `form_StateVals()`. Instead, we create the model from our `params_lm` class object and input data (of class `input_data`). Since we don't have fitted R model, we can use a `formula_list` object to specify the explanatory variables in the model. That is, we use `formula_list()` to obtain the variables (`strategy_id`) in `statevals_edata` that are needed. 
+Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using `create_StateVals()`. Instead, we create the model from our `params_lm` class object and input data (of class `input_data`). Since we don't have fitted R model, we can use a `formula_list` object to specify the explanatory variables in the model. That is, we use `formula_list()` to obtain the variables (`strategy_id`) in `statevals_edata` that are needed. 
 
 ```{r, warning = FALSE, message = FALSE}
-input_dat <- form_input_data(formula_list(mu = ~ -1 + factor(state_id)), data = statevals_edata)
+input_dat <- create_input_data(formula_list(mu = ~ -1 + factor(state_id)), 
+                               data = statevals_edata)
 psm_drugcosts <- StateVals$new(data = input_dat, params = drugcosts_params)
 ```
 
 We can instantiate a utility model in the same manner.
 
 ```{r, warning = FALSE, message = FALSE}
-input_dat <- form_input_data(formula_list(mu = ~ -1 + factor(state_id)), data = statevals_edata)
+input_dat <- create_input_data(formula_list(mu = ~ -1 + factor(state_id)), 
+                               data = statevals_edata)
 psm_utility <- StateVals$new(data = input_dat, params = utility_params)
 ```
 

@@ -24,7 +24,7 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
                                                           "lines", "states"))
 f <- formula_list(mu = ~ age)
-input_dat <- form_input_data(f, expanded_hesim_dat)
+input_dat <- create_input_data(f, expanded_hesim_dat)
 
 get_R_rowvec <- function(obs){
   v <- input_dat$X[[1]][obs, ]
@@ -52,7 +52,7 @@ test_obs_index(strategy_id = 1, line = 3, patient_id = 2, state_id = 2)
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
                                                           "lines", "transitions"))
 f <- formula_list(~ age)
-input_dat <- form_input_data(f, expanded_hesim_dat)
+input_dat <- create_input_data(f, expanded_hesim_dat)
 
 test_obs_index <- function(strategy_id, line, patient_id, transition_id){
   R_index <- which(input_dat$strategy_id == strategy_id & input_dat$line == line & 
@@ -70,7 +70,7 @@ test_obs_index(strategy_id = 1, line = 3, patient_id = 2, transition_id = 2)
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
                                                           "lines"))
 f <- formula_list(~ age)
-input_dat <- form_input_data(f, expanded_hesim_dat)
+input_dat <- create_input_data(f, expanded_hesim_dat)
 
 test_obs_index <- function(strategy_id, line, patient_id){
   R_index <- which(input_dat$strategy_id == strategy_id & input_dat$line == line & 
@@ -88,7 +88,7 @@ test_obs_index(strategy_id = 1, line = 3, patient_id = 2)
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
                                                           "states"))
 f <- formula_list(~ age)
-input_dat <- form_input_data(f, expanded_hesim_dat)
+input_dat <- create_input_data(f, expanded_hesim_dat)
 
 test_obs_index <- function(strategy_id, patient_id, state_id){
   R_index <- which(input_dat$strategy_id == strategy_id &  input_dat$patient_id == patient_id &
@@ -105,7 +105,7 @@ test_obs_index(strategy_id = 1, patient_id = 2, state_id = 1)
 # strategy_id + patient_id 
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
 f <- formula_list(~ age)
-input_dat <- form_input_data(f, expanded_hesim_dat)
+input_dat <- create_input_data(f, expanded_hesim_dat)
 
 test_obs_index <- function(strategy_id, patient_id){
   R_index <- which(input_dat$strategy_id == strategy_id &  input_dat$patient_id == patient_id)
