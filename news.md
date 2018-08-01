@@ -5,6 +5,10 @@ The current development version of `hesim`.
 `hesim` now provides a general framework for integrating statistical models with economic evaluation. Users can 
 build a decision model by specifying a model structure, which consists of a set of statistical models for disease progression, utility values, and costs. Each statistical model is used to simulate outcomes as a function of estimated parameters. N-state partitioned survival analysis is now supported. 
 
+### API changes
+* The argument `sim` was renamed `sample` in `icea()`, `icea_pw()`, and `incr_effect()`.
+* Custom functions and variables are no longer supported in `icea` and `icea_pw()`.
+
 ### New features
 Fitted statistical models
 * There are functions to create objects that store collections of fitted statistical models or `formula` objects. These include `partsurvfit()`, `formula_list()`, and `flexsurvreg_list()`.  

@@ -76,7 +76,7 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2018-07-30</h4>
+            <h4 class="date">2018-07-31</h4>
           </div>
 
     
@@ -119,16 +119,16 @@ params_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <span class="kw">print</span>(params_wei)</code></pre></div>
 <pre><code>## $coefs
 ## $coefs$shape
-##            shape
-## [1,] -0.03231221
-## [2,] -0.05051926
-## [3,]  0.01119610
+##             shape
+## [1,] -0.002013803
+## [2,] -0.045099122
+## [3,] -0.012997107
 ## 
 ## $coefs$scale
 ##            scale       female          age
-## [1,] -0.07257538 -0.007053132 -0.007787239
-## [2,] -0.11885140  0.053909023 -0.008032371
-## [3,]  0.03109621  0.047840989 -0.010006257
+## [1,] 0.080560896 -0.031815382 -0.011115003
+## [2,] 0.015794495 -0.002630633 -0.009461185
+## [3,] 0.007656707  0.003263053 -0.009850890
 ## 
 ## 
 ## $dist
@@ -148,15 +148,15 @@ params_wei2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <pre><code>## $coefs
 ## $coefs$shape
 ##          shape
-## [1,] 1.0060344
-## [2,] 0.9645493
-## [3,] 0.9615640
+## [1,] 0.9888088
+## [2,] 0.9755564
+## [3,] 0.9542581
 ## 
 ## $coefs$scale
 ##          scale      female          age
-## [1,] 0.9332277  0.01421906 -0.008771975
-## [2,] 1.2065354 -0.06355927 -0.012542092
-## [3,] 0.9256136 -0.09669482 -0.007558864
+## [1,] 0.8810331 -0.01810356 -0.007475146
+## [2,] 0.9768352  0.02417613 -0.009657362
+## [3,] 1.1002996  0.11475689 -0.012520980
 ## 
 ## 
 ## $dist
@@ -327,28 +327,28 @@ psm_curves &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
                              <span class="dt">n =</span> n_samples, <span class="dt">bootstrap =</span> <span class="ot">FALSE</span>)
 <span class="kw">head</span>(psm_curves<span class="op">$</span><span class="kw">quantile</span>(.<span class="dv">5</span>))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id   p  quantile
-## 1:     1      1           1          1 0.5 0.4435226
-## 2:     1      1           1          2 0.5 0.4268194
-## 3:     1      1           2          1 0.5 0.4435226
-## 4:     1      1           2          2 0.5 0.4268194
-## 5:     1      2           1          1 0.5 0.4853472
-## 6:     1      2           1          2 0.5 0.4264100</code></pre>
+## 1:     1      1           1          1 0.5 0.4370301
+## 2:     1      1           1          2 0.5 0.4180618
+## 3:     1      1           2          1 0.5 0.4370301
+## 4:     1      1           2          2 0.5 0.4180618
+## 5:     1      2           1          1 0.5 0.4224327
+## 6:     1      2           1          2 0.5 0.4147254</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(psm_curves<span class="op">$</span><span class="kw">cumhazard</span>(<span class="dt">t =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>)))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id t cumhazard
 ## 1:     1      1           1          1 0  0.000000
-## 2:     1      1           1          1 1  1.499802
-## 3:     1      1           1          1 2  2.896166
-## 4:     1      1           1          1 3  4.255980
+## 2:     1      1           1          1 1  1.515626
+## 3:     1      1           1          1 2  2.918146
+## 4:     1      1           1          1 3  4.280925
 ## 5:     1      1           1          2 0  0.000000
-## 6:     1      1           1          2 1  1.555469</code></pre>
+## 6:     1      1           1          2 1  1.580540</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(psm_curves<span class="op">$</span><span class="kw">rmst</span>(<span class="dt">t =</span> <span class="dv">3</span>))</code></pre></div>
 <pre><code>##    curve sample strategy_id patient_id t      rmst
-## 1:     1      1           1          1 3 0.6573424
-## 2:     1      1           1          2 3 0.6340686
-## 3:     1      1           2          1 3 0.6573424
-## 4:     1      1           2          2 3 0.6340686
-## 5:     1      2           1          1 3 0.6986178
-## 6:     1      2           1          2 3 0.6181785</code></pre>
+## 1:     1      1           1          1 3 0.6503975
+## 2:     1      1           1          2 3 0.6238138
+## 3:     1      1           2          1 3 0.6503975
+## 4:     1      1           2          2 3 0.6238138
+## 5:     1      2           1          1 3 0.6176812
+## 6:     1      2           1          2 3 0.6069125</code></pre>
 <p>We can instantiate a <code>StateVals</code> object in the same two ways, although here we only use the second method. A <code>$simulate()</code> function is available to simulate state values by treatment strategy, patient, and health state.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">medcost_dat &lt;-<span class="st"> </span><span class="kw">subset</span>(psm4_exdata<span class="op">$</span>costs<span class="op">$</span>medical, state_name <span class="op">==</span><span class="st"> "state3"</span>)
 medcosts_fit &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(costs <span class="op">~</span><span class="st"> </span>female, <span class="dt">data =</span> medcost_dat)
@@ -356,12 +356,12 @@ psm_medcosts &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
                                <span class="dt">data =</span> hesim_edata_statevals, <span class="dt">n =</span> n_samples)
 <span class="kw">head</span>(psm_medcosts<span class="op">$</span><span class="kw">sim</span>(<span class="dt">t =</span> <span class="dv">3</span>, <span class="dt">type =</span> <span class="st">"predict"</span>))</code></pre></div>
 <pre><code>##    state_id sample strategy_id patient_id time    value
-## 1:        1      1           1          1    3 34231.31
-## 2:        1      1           1          2    3 34823.04
-## 3:        1      1           2          1    3 34231.31
-## 4:        1      1           2          2    3 34823.04
-## 5:        1      2           1          1    3 33998.32
-## 6:        1      2           1          2    3 37193.67</code></pre>
+## 1:        1      1           1          1    3 33591.09
+## 2:        1      1           1          2    3 36214.72
+## 3:        1      1           2          1    3 33591.09
+## 4:        1      1           2          2    3 36214.72
+## 5:        1      2           1          1    3 33395.04
+## 6:        1      2           1          2    3 37327.47</code></pre>
 <p>By combining submodels, a decision model is able to simulate disease progression and cost and utility values associated with each disease state. Total discounted costs and QALYs are calculated by summing (or integrating) simulated costs and utility over time. In the PSM example, disease progression is simulated by first generating survival curves and then calculating health states probabilities based on those curves. Cost and QALYs are calculated by numerically integrating the weighted probability of being in each state, where weights are a function of the discount factorand predicted state values.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, .<span class="dv">01</span>)
 psm &lt;-<span class="st"> </span>Psm<span class="op">$</span><span class="kw">new</span>(<span class="dt">survival_models =</span> psm_curves,
@@ -371,12 +371,12 @@ psm<span class="op">$</span><span class="kw">sim_stateprobs</span>()
 psm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">03</span>))
 <span class="kw">head</span>(psm<span class="op">$</span>costs_)</code></pre></div>
 <pre><code>##    state_id sample strategy_id patient_id dr category    costs
-## 1:        1      1           1          1  0  medical 22502.29
-## 2:        1      1           1          2  0  medical 22080.82
-## 3:        1      1           2          1  0  medical 22502.29
-## 4:        1      1           2          2  0  medical 22080.82
-## 5:        1      2           1          1  0  medical 23752.28
-## 6:        1      2           1          2  0  medical 22992.88</code></pre>
+## 1:        1      1           1          1  0  medical 21848.17
+## 2:        1      1           1          2  0  medical 22591.92
+## 3:        1      1           2          1  0  medical 21848.17
+## 4:        1      1           2          2  0  medical 22591.92
+## 5:        1      2           1          1  0  medical 20628.02
+## 6:        1      2           1          2  0  medical 22655.12</code></pre>
 </div>
 <div id="decision-analysis" class="section level2">
 <h2 class="hasAnchor">

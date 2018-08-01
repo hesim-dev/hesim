@@ -40,7 +40,6 @@ reference:
       - icea
       - icea_pw
       - incr_effect
-      - custom_table
   - title: "Datasets"
     contents:
     - psm4_exdata

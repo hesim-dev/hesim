@@ -171,11 +171,11 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params_lm</span> <span class='kw'>&lt;-</span> <span class='fu'>form_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'>head</span>(<span class='no'>params_lm</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt;      (Intercept)     female
-#&gt; [1,]    31253.90  1598.3353
-#&gt; [2,]    33166.57 -1926.0922
-#&gt; [3,]    31444.63  1978.4934
-#&gt; [4,]    31226.01  -834.3395
-#&gt; [5,]    28898.51  3124.9976</div><div class='input'><span class='fu'>head</span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
+#&gt; [1,]    31613.36  3181.7528
+#&gt; [2,]    34151.55  -149.8607
+#&gt; [3,]    31849.35 -1071.0210
+#&gt; [4,]    32068.50  2985.1074
+#&gt; [5,]    31064.43   352.5253</div><div class='input'><span class='fu'>head</span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># form_params.flexsurvreg</span>
 <span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
@@ -183,20 +183,20 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params_surv_wei</span> <span class='kw'>&lt;-</span> <span class='fu'>form_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'>print</span>(<span class='no'>params_surv_wei</span>$<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'>head</span>(<span class='no'>params_surv_wei</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; $shape
-#&gt;           shape
-#&gt; [1,]  0.6204905
-#&gt; [2,] -0.1780169
-#&gt; [3,]  0.2572189
-#&gt; [4,]  0.1082616
-#&gt; [5,] -0.2551289
+#&gt;            shape
+#&gt; [1,]  0.22827701
+#&gt; [2,] -0.02675168
+#&gt; [3,]  0.29182640
+#&gt; [4,]  0.16987030
+#&gt; [5,]  0.69141636
 #&gt; 
 #&gt; $scale
 #&gt;         scale
-#&gt; [1,] 6.759403
-#&gt; [2,] 6.921508
-#&gt; [3,] 6.868899
-#&gt; [4,] 7.272610
-#&gt; [5,] 7.916436
+#&gt; [1,] 7.088814
+#&gt; [2,] 7.696662
+#&gt; [3,] 6.868214
+#&gt; [4,] 7.138449
+#&gt; [5,] 7.065942
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

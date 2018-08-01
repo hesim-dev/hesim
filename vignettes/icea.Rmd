@@ -73,35 +73,35 @@ Below we simulate costs and QALYs for three treatment strategies and two subgrou
 
 ```{r ce_output, warnings = FALSE, message = FALSE}
 set.seed(131)
-nsims <- 1000
+n_samples <- 1000
 
 # cost
 c <- vector(mode = "list", length = 6)
 names(c) <- c("Strategy 1, Grp 1", "Strategy 1, Grp 2", "Strategy 2, Grp 1",
               "Strategy 2, Grp 2", "Strategy 3, Grp 1", "Strategy 3, Grp 2")
-c[[1]] <- rlnorm(nsims, 2, .1)
-c[[2]] <- rlnorm(nsims, 2, .1)
-c[[3]] <- rlnorm(nsims, 11, .15)
-c[[4]] <- rlnorm(nsims, 11, .15)
-c[[5]] <- rlnorm(nsims, 11, .15)
-c[[6]] <- rlnorm(nsims, 11, .15)
+c[[1]] <- rlnorm(n_samples, 2, .1)
+c[[2]] <- rlnorm(n_samples, 2, .1)
+c[[3]] <- rlnorm(n_samples, 11, .15)
+c[[4]] <- rlnorm(n_samples, 11, .15)
+c[[5]] <- rlnorm(n_samples, 11, .15)
+c[[6]] <- rlnorm(n_samples, 11, .15)
 
 # effectiveness
 e <- c
-e[[1]] <- rnorm(nsims, 8, .2)
-e[[2]] <- rnorm(nsims, 8, .2)
-e[[3]] <- rnorm(nsims, 10, .8)
-e[[4]] <- rnorm(nsims, 10.5, .8)
-e[[5]] <- rnorm(nsims, 8.5, .6)
-e[[6]] <- rnorm(nsims, 11, .6)
+e[[1]] <- rnorm(n_samples, 8, .2)
+e[[2]] <- rnorm(n_samples, 8, .2)
+e[[3]] <- rnorm(n_samples, 10, .8)
+e[[4]] <- rnorm(n_samples, 10.5, .8)
+e[[5]] <- rnorm(n_samples, 8.5, .6)
+e[[6]] <- rnorm(n_samples, 11, .6)
 
 # cost and effectiveness by strategy and simulation
 library("data.table")
-ce <- data.table(sim = rep(seq(nsims), length(e)),
+ce <- data.table(sample = rep(seq(n_samples), length(e)),
                  strategy = rep(paste0("Strategy ", seq(1, 3)), 
-                                each = nsims * 2),
+                                each = n_samples * 2),
                  grp = rep(rep(c("Group 1", "Group 2"),
-                               each = nsims), 3),
+                               each = n_samples), 3),
                  cost = do.call("c", c), qalys = do.call("c", e))
 head(ce)
 ```
@@ -122,7 +122,7 @@ We can use the  `icea` function to summarize results from our `data.table` objec
 ```{r icea}
 library("hesim")
 ktop <- 200000
-icea.dt <-  icea(ce, k = seq(0, ktop, 500), sim = "sim", strategy = "strategy",
+icea_dt <-  icea(ce, k = seq(0, ktop, 500), sample = "sample", strategy = "strategy",
                  grp = "grp", e = "qalys", c = "cost")
 ```
 
@@ -131,8 +131,8 @@ The most important input in `icea` is the `data.table` object (`x`) containing c
 Likewise, we can use `icea_pw` to summarize the PSA when directly comparing the two treatment strategies (Strategy 2 and Strategy 3) to the comparator (Strategy 1). 
 
 ```{r icea_pw}
-icea.pw.dt <-  icea_pw(ce,  k = seq(0, ktop, 500), comparator = "Strategy 1",
-                       sim = "sim", strategy = "strategy", e = "qalys", c = "cost")
+icea_pw_dt <-  icea_pw(ce,  k = seq(0, ktop, 500), comparator = "Strategy 1",
+                       sample = "sample", strategy = "strategy", e = "qalys", c = "cost")
 ```
 
 The same inputs are used as in `icea` except users must specify the name of the comparator strategy.
@@ -140,18 +140,19 @@ The same inputs are used as in `icea` except users must specify the name of the 
 ### Probability most cost-effective 
 A useful summary measure for quantifying uncertainty is the probability that each treatment strategy is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each strategy has the highest NMB. For example, consider a random sample of 10 draws from the PSA simulation output and suppose $k$ is again equal to $150,000$. 
 
-```{r mce_example_setup, echo = -1}
+```{r mce_example_setup, echo = -1, message = FALSE}
 library("knitr")
-ce.nmb <- dcast(ce[sim %in% sample(1:nsims, 10) & grp == "Group 2"], 
-                sim ~ strategy, value.var = "nmb")
-setnames(ce.nmb, colnames(ce.nmb), c("sim", "nmb1", "nmb2", "nmb3"))
-ce.nmb <- ce.nmb[, maxj := apply(ce.nmb[, .(nmb1, nmb2, nmb3)], 1, which.max)]
-ce.nmb <- ce.nmb[, maxj := factor(maxj, levels = c(1, 2, 3))]
+random_rows <- sample(1:n_samples, 10)
+nmb_dt <- dcast(ce[sample %in% random_rows & grp == "Group 2"], 
+                sample ~ strategy, value.var = "nmb")
+setnames(nmb_dt, colnames(nmb_dt), c("sample", "nmb1", "nmb2", "nmb3"))
+nmb_dt <- nmb_dt[, maxj := apply(nmb_dt[, .(nmb1, nmb2, nmb3)], 1, which.max)]
+nmb_dt <- nmb_dt[, maxj := factor(maxj, levels = c(1, 2, 3))]
 ```
 
 ```{r mce_example, echo = -1}
-kable(ce.nmb, digits = 0, format = "html")
-mce <- prop.table(table(ce.nmb$maxj))
+kable(nmb_dt, digits = 0, format = "html")
+mce <- prop.table(table(nmb_dt$maxj))
 print(mce)
 ```
 
@@ -161,7 +162,7 @@ In this example, treatments 1, 2, and 3 have the highest NMBs a fraction `r mce[
 library("ggplot2")
 library("scales")
 theme_set(theme_bw())
-ggplot(icea.dt$mce, aes(x = k, y = prob, col = factor(strategy))) +
+ggplot2::ggplot(icea_dt$mce, aes(x = k, y = prob, col = factor(strategy))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
@@ -182,17 +183,17 @@ $$
 To illustrate consider the same random sample of 10 draws from our simulation output used above.
 
 ```{r evpi_example_a}
-strategymax.g2 <- which.max(enmb[[3]])
-ce.nmb <- ce.nmb[, nmbpi := apply(ce.nmb[, .(nmb1, nmb2, nmb3)], 1, max)]
-ce.nmb <- ce.nmb[, nmbci := ce.nmb[[strategymax.g2 + 1]]]
-kable(ce.nmb, digits = 0, format = "html")
+strategymax_g2 <- which.max(enmb[[3]])
+nmb_dt <- nmb_dt[, nmbpi := apply(nmb_dt[, .(nmb1, nmb2, nmb3)], 1, max)]
+nmb_dt <- nmb_dt[, nmbci := nmb_dt[[strategymax_g2 + 1]]]
+kable(nmb_dt, digits = 0, format = "html")
 ```
 <br>
 To calculate EVPI, we average NMBs given current information and NMBs given perfect information across simulation draws. 
 
 ```{r evpi_example_b}
-enmbpi <- mean(ce.nmb$nmbpi)
-enmbci <- mean(ce.nmb$nmbci)
+enmbpi <- mean(nmb_dt$nmbpi)
+enmbci <- mean(nmb_dt$nmbci)
 print(enmbpi)
 print(enmbci)
 print(enmbpi - enmbci)
@@ -201,7 +202,7 @@ print(enmbpi - enmbci)
 The `icea` function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal strategy changes.
 
 ```{r evpi_plot}
-ggplot(icea.dt$evpi, aes(x = k, y = evpi)) +
+ggplot2::ggplot(icea_dt$evpi, aes(x = k, y = evpi)) +
   geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
   ylab("Expected value of perfect information") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
@@ -219,12 +220,12 @@ $$
 where $w_g \in (0, 1)$ is a weight denoting that proportion of the population represented by subgroup $g$ and $\sum_{g=1}^{G} w_g = 1$.
 
 ```{r totevpi}
-w.dt <- data.table(grp = paste0("Group ", seq(1, 2)), w = c(0.25, .75))
-evpi <- icea.dt$evpi
-evpi <- merge(evpi, w.dt, by = "grp")
+w_dt <- data.table(grp = paste0("Group ", seq(1, 2)), w = c(0.25, .75))
+evpi <- icea_dt$evpi
+evpi <- merge(evpi, w_dt, by = "grp")
 totevpi <- evpi[,lapply(.SD, weighted.mean, w = w),
                 by = "k", .SDcols = c("evpi")]
-ggplot(totevpi, aes(x = k, y = evpi)) +
+ggplot2::ggplot(totevpi, aes(x = k, y = evpi)) +
   geom_line() + xlab("Willingess to pay") +
   ylab("Total EVPI") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
@@ -237,24 +238,14 @@ ggplot(totevpi, aes(x = k, y = evpi)) +
 `icea` produces means, 2.5\% quantiles, and 97.5\% quantiles for costs and efficacy. 
 
 ```{r icea_summary}
-print(icea.dt$summary)
+print(icea_dt$summary)
 ```
 
-In addition, if the user would like to examine outcomes other than those specified this summary table, then they can generate a custom table of summary output. The custom table can contain any outcomes as long as they are specified in addition to the `sim`, `strategy`, `e`, and `c` columns in the posterior distribution data table. The default is to estimate means, the 2.5% quantile, and the 97.5% quantile for each variable, but any custom function can used. Below, we create a hypothetical variable for life-years and create a table summarizing our estimates of costs, QALYs and life-years. A custom function, identical to the default option, is entered into the function for illustrative purposes.
+Other summary statistics can be computed using R packages such as `data.table`.
 
 ```{r icea_custom}
-ce <- ce[, lys := qalys * 1.5]
-cea.fun <- function(x) list(mean = mean(x), quant = quantile(x, c(.025, .975)))
-icea.custom.dt <- icea(ce, k = seq(0, ktop, 500), sim = "sim", strategy = "strategy",
-                       grp = "grp", e = "qalys", c = "cost",
-                       custom_vars = c("cost", "lys", "qalys"), 
-                       custom_fun = cea.fun)
-
-```
-
-```{r outcome_dist}
-icea.custom.dt$summary
-icea.custom.dt$custom.table
+ce[, .(median_cost = median(cost), median_qalys = median(qalys)),
+   by = c("strategy", "grp")]
 ```
 
 ### Cost-effectiveness plane
@@ -263,10 +254,10 @@ The cost-effectiveness plane plots the incremental effectiveness of a treatment 
 Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `icea_pw` function, which, for each sampled parameter set and treatment strategy, estimates differences in costs, effectiveness, and any other variables specified in `custom_vars`relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above it are not. 
 
 ```{r ceplane_plot}
-head(icea.pw.dt$delta)
-ylim <- max(icea.pw.dt$delta[, ic]) * 1.1
-xlim <- ceiling(max(icea.pw.dt$delta[, ie]) * 1.1)
-ggplot(icea.pw.dt$delta, aes(x = ie, y = ic, col = factor(strategy))) + 
+head(icea_pw_dt$delta)
+ylim <- max(icea_pw_dt$delta[, ic]) * 1.1
+xlim <- ceiling(max(icea_pw_dt$delta[, ie]) * 1.1)
+ggplot2::ggplot(icea_pw_dt$delta, aes(x = ie, y = ic, col = factor(strategy))) + 
   geom_jitter(size = .5) + facet_wrap(~grp) + 
   xlab("Incremental QALYs") + ylab("Incremental cost") +
   scale_y_continuous(label = dollar, limits = c(-ylim, ylim)) +
@@ -279,10 +270,10 @@ ggplot(icea.pw.dt$delta, aes(x = ie, y = ic, col = factor(strategy))) +
 ### Cost-effectiveness acceptability curve (CEAC)
 The cost-effectiveness acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each strategy to a single comparator whereas the MCE plot considers all strategies simultaneously. Output to produce a CEAC is generated from the `icea_pw` function.
 
-The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of $k$. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(icea.pw.dt$ceac[strategy == "Strategy 3" & prob > .5 & grp ==  "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of $k$, although this probability is larger for Strategy 2 than Strategy 3 when $k$ is smaller.
+The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of $k$. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(icea_pw_dt$ceac[strategy == "Strategy 3" & prob > .5 & grp ==  "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of $k$, although this probability is larger for Strategy 2 than Strategy 3 when $k$ is smaller.
 
 ```{r ceac_plot}
-ggplot(icea.pw.dt$ceac, aes(x = k, y = prob, col = factor(strategy))) +
+ggplot2::ggplot(icea_pw_dt$ceac, aes(x = k, y = prob, col = factor(strategy))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
@@ -293,7 +284,7 @@ ggplot(icea.pw.dt$ceac, aes(x = k, y = prob, col = factor(strategy))) +
 Similar to the `icea` function, `icea_pw` produces means, 2.5\% quantiles, and 97.5\% quantiles for incremental costs and incremental efficacy. The table also contains the ICER, which is equal to expected incremental costs divided by the measure of expected incremental efficacy.  
 
 ```{r icer}
-print(icea.pw.dt$summary)
+print(icea_pw_dt$summary)
 ```
 
 Again similar to the `icea` function, the user can also estimate incremental effects for outcome variables not included in the summary table.
@@ -318,21 +309,24 @@ $$
 We can estimate the value of individualized care as follows: 
 
 ```{r totenmb}
-ce <- merge(ce, w.dt, by = "grp")
+# Compute total expected NMB with one-size fits all treatment
+ce <- merge(ce, w_dt, by = "grp")
 totenmb <- ce[, .(totenmb = weighted.mean(nmb, w = w)), by = c("strategy")]
-
+totenmb_max <- max(totenmb$totenmb)
 ```
 
-```{r evic1}
-ptenmb.grp.max <- apply(as.matrix(enmb[, -1]), 2, max)
-ptenmb.max <- sum(ptenmb.grp.max * w.dt$w)
-tenmb.max <- max(totenmb$totenmb)
-tnmb <- c(ptenmb.max, tenmb.max)
-names(tnmb) <- c("Personalized total TENMB", "One-size fits all TENMB")
+```{r ptotenmb}
+# Compute total expected NMB with individualized treatment
+itotenmb_grp_max <- apply(as.matrix(enmb[, -1]), 2, max)
+itotenmb_max <- sum(itotenmb_grp_max * w_dt$w)
 ```
 
 ```{r evic2}
-evic <- tnmb[1] - tnmb[2]
+# Compute EVIC
+totnmb_scenarios <- c(itotenmb_max, totenmb_max)
+names(totnmb_scenarios) <- c("Individualized total expected NMB",
+                              "One-size fits all total expected NMB")
+evic <- totnmb_scenarios[1] - totnmb_scenarios[2]
 names(evic) <- "EVIC"
 print(evic)
 print(evic/150000)

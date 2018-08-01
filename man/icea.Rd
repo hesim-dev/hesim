@@ -5,24 +5,21 @@
 \alias{icea_pw}
 \title{Individualized cost-effectiveness analysis}
 \usage{
-icea(x, k, sim = "sim", strategy = "strategy", grp = "grp", e = "e",
-  c = "c", custom_vars = NULL, custom_fun = NULL)
+icea(x, k, sample = "sample", strategy = "strategy", grp = "grp",
+  e = "e", c = "c")
 
-icea_pw(x, k, comparator, sim = "sim", strategy = "strategy", grp = "grp",
-  e = "e", c = "c", custom_vars = NULL, custom_fun = NULL)
+icea_pw(x, k, comparator, sample = "sample", strategy = "strategy",
+  grp = "grp", e = "e", c = "c")
 }
 \arguments{
-\item{x}{Matrix containing information on mean costs and effectiveness for each simulation.
-Should be in long form with unit of observation as the simulation and treatment strategy.
-Should have the following columns (
-sim = simulation number,
-strategy = treatment strategy,
-c = summary of cost for each simulation and treatment strategy
-e = summary of clinical effectiveness for each simulation and treatment strategy)}
+\item{x}{A \code{data.frame} or \code{data.table} containing simulation output with
+information on mean costs and effectiveness for each randomly sampled parameter set from
+a PSA. Each row should denote a randomly sampled parameter set
+and treatment strategy.}
 
 \item{k}{Vector of willingness to pay values}
 
-\item{sim}{Name of column denoting simulation number. Default is "sim".}
+\item{sample}{Name of column denoting a randomly sampled parameter set. Default is "sample".}
 
 \item{strategy}{Name of column denoting treatment strategy. Default is "strategy".}
 
@@ -31,14 +28,6 @@ e = summary of clinical effectiveness for each simulation and treatment strategy
 \item{e}{Name of column denoting clinical effectiveness. Default is "e".}
 
 \item{c}{Name of column denoting costs. Default is "c".}
-
-\item{custom_vars}{Character vector of variable names to use in creating a
-custom summary table. Table will contain means and 95\% credible intervals for
-each variable. Can contain e and c.}
-
-\item{custom_fun}{Function to apply to custom_vars to make custom table. If 
-\code{custom_vars} is not NULL and \code{custom_fun} is NULL, then returns the mean,
-2.5\% quantile, and 97.5\% quantile for each variable in \code{custom_vars}.}
 
 \item{comparator}{Name of the comparator strategy in x.}
 }
@@ -55,59 +44,60 @@ each variable. Can contain e and c.}
    \item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
    for the range of specified willingness to pay values.}
 }
-In addition, if \code{custom_vars} is not NULL, \code{icea} returns \code{custom.table}, which is
- a data.table containing summary statistics for each variable in \code{custom_vars}
-  by strategy and group.
 
 \code{icea_pw} also returns a list containing four data.tables:
  \describe{
   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
   quantile by strategy and group for clinical effectiveness and costs.}
   \item{delta}{Incremental effectiveness and incremental cost for each simulated
-  parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. 
-  Also returns the difference between each treatment strategy and the comparator for each 
-  variable in \code{custom_vars} if \code{custom_vars} is not NULL.}
+  parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
   group. In other words, the probability that each strategy is more cost-effective than
   the comparator for the specified willingness to pay values.}
    \item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) 
    incremental net benefits for the range of specified willingness to pay values.}
 }
-If \code{custom_vars} is not NULL, also returns \code{custom.table}, which is
- a data.table containing summary statistics for the values of each variable returned
-  in \code{delta} by strategy and group.
 }
 \description{
 Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
-sensitivity analysis) by subgroup.
+sensitivity analysis (PSA)) by subgroup.
+\itemize{
+ \item \code{icea()} compute the probability that
+each treatment is most cost-effective, the expected value of perfect
+information, and the net monetary benefit for each treatment.
+\item \code{icea_pw()} compares interventions to a comparator. Computed
+quantities include the incremental cost-effectiveness ratio, the 
+incremental net monetary benefit, output for a cost-effectiveness plane,
+and output for a cost-effectiveness acceptability curve.
+}
 }
 \examples{
 # simulation output
-nsims <- 100
-sim <- data.frame(sim = rep(seq(nsims), 4),
-               c = c(rlnorm(nsims, 5, .1), rlnorm(nsims, 5, .1),
-                      rlnorm(nsims, 11, .1), rlnorm(nsims, 11, .1)),
-               e = c(rnorm(nsims, 8, .2), rnorm(nsims, 8.5, .1),
-                     rnorm(nsims, 11, .6), rnorm(nsims, 11.5, .6)),
-               strategy = rep(paste0("Strategy ", seq(1, 2)),
-                             each = nsims * 2),
-               grp = rep(rep(c("Group 1", "Group 2"),
-                             each = nsims), 2)
+n_samples <- 100
+sim <- data.frame(sample = rep(seq(n_samples), 4),
+                  c = c(rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
+                        rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)),
+                  e = c(rnorm(n_samples, 8, .2), rnorm(n_samples, 8.5, .1),
+                        rnorm(n_samples, 11, .6), rnorm(n_samples, 11.5, .6)),
+                  strategy = rep(paste0("Strategy ", seq(1, 2)),
+                                 each = n_samples * 2),
+                  grp = rep(rep(c("Group 1", "Group 2"),
+                            each = n_samples), 2)
 )
 
 # icea
-icea.dt <- icea(sim, k = seq(0, 200000, 500), sim = "sim", strategy = "strategy",
+icea_dt <- icea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
  grp = "grp", e = "e", c = "c")
-names(icea.dt)
+names(icea_dt)
 # the probability that each strategy is the most cost-effective 
 # in each group with a willingness to pay of 20,000
 library("data.table")
-icea.dt$mce[k == 20000]
+icea_dt$mce[k == 20000]
 
 # icea_pw
-icea.pw.dt <-  icea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
-                      sim = "sim", strategy = "strategy", e = "e", c = "c")
-names(icea.pw.dt)
+icea_pw_dt <-  icea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
+                       sample = "sample", strategy = "strategy", e = "e", c = "c")
+names(icea_pw_dt)
 # cost-effectiveness acceptability curve
-head(icea.pw.dt$ceac[k >= 20000])
+head(icea_pw_dt$ceac[k >= 20000])
 }
