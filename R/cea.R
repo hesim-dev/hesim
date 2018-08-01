@@ -119,9 +119,9 @@ icea_pw <- function(x, k, comparator, sample = "sample", strategy = "strategy",
 
   # treatment strategies vs comparators
   indx.comparator <- which(x[[strategy]] == comparator)
-  indx.treat <- which(x[[strategy]] != comparator)
+  indx_treat <- which(x[[strategy]] != comparator)
   sim_comparator <- x[indx.comparator]
-  sim_treat <- x[indx.treat]
+  sim_treat <- x[indx_treat]
   n_strategies <- length(unique(sim_treat[[strategy]]))
   n_samples <- length(unique(sim_treat[[sample]]))
   n_grps <- length(unique(sim_treat[[grp]]))
@@ -182,9 +182,9 @@ incr_effect <- function(x, comparator, sample, strategy, grp, outcomes){
     stop("Chosen comparator strategy not in x")
   }
   indx.comparator <- which(x[[strategy]] == comparator)
-  indx.treat <- which(x[[strategy]] != comparator)
+  indx_treat <- which(x[[strategy]] != comparator)
   x_comparator <- x[indx.comparator]
-  x_treat <- x[indx.treat]
+  x_treat <- x[indx_treat]
   n_strategies <- length(unique(x_treat[[strategy]]))
   n_samples <- length(unique(x_treat[[sample]]))
   n_grps <- length(unique(x_treat[[grp]]))
