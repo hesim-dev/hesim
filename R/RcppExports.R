@@ -33,12 +33,8 @@ C_rpwexp_vec <- function(n, rate, time) {
     .Call('_hesim_rpwexp_vec', PACKAGE = 'hesim', n, rate, time)
 }
 
-rcat <- function(probs) {
-    .Call('_hesim_rcat', PACKAGE = 'hesim', probs)
-}
-
-C_rcat_vec <- function(n, probs) {
-    .Call('_hesim_rcat_vec', PACKAGE = 'hesim', n, probs)
+C_rcat <- function(n, probs) {
+    .Call('_hesim_C_rcat', PACKAGE = 'hesim', n, probs)
 }
 
 rdirichlet <- function(alpha) {

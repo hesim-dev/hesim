@@ -40,7 +40,7 @@ rcat <- function(n, prob){
   if (n <= 0){
     stop("n must be greater than 0")
   }
-  sim <- C_rcat_vec(n, prob) + 1
+  sim <- C_rcat(n, prob) + 1
   return(as.numeric(sim))
 }
 

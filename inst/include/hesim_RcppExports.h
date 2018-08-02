@@ -102,42 +102,23 @@ namespace hesim {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
-    inline int rcat(arma::rowvec probs) {
-        typedef SEXP(*Ptr_rcat)(SEXP);
-        static Ptr_rcat p_rcat = NULL;
-        if (p_rcat == NULL) {
-            validateSignature("int(*rcat)(arma::rowvec)");
-            p_rcat = (Ptr_rcat)R_GetCCallable("hesim", "_hesim_rcat");
+    inline std::vector<double> C_rcat(int n, arma::mat probs) {
+        typedef SEXP(*Ptr_C_rcat)(SEXP,SEXP);
+        static Ptr_C_rcat p_C_rcat = NULL;
+        if (p_C_rcat == NULL) {
+            validateSignature("std::vector<double>(*C_rcat)(int,arma::mat)");
+            p_C_rcat = (Ptr_C_rcat)R_GetCCallable("hesim", "_hesim_C_rcat");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_rcat(Shield<SEXP>(Rcpp::wrap(probs)));
+            rcpp_result_gen = p_C_rcat(Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(probs)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<int >(rcpp_result_gen);
-    }
-
-    inline arma::vec C_rcat_vec(int n, arma::mat probs) {
-        typedef SEXP(*Ptr_C_rcat_vec)(SEXP,SEXP);
-        static Ptr_C_rcat_vec p_C_rcat_vec = NULL;
-        if (p_C_rcat_vec == NULL) {
-            validateSignature("arma::vec(*C_rcat_vec)(int,arma::mat)");
-            p_C_rcat_vec = (Ptr_C_rcat_vec)R_GetCCallable("hesim", "_hesim_C_rcat_vec");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_C_rcat_vec(Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(probs)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<arma::vec >(rcpp_result_gen);
+        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
     inline arma::rowvec rdirichlet(arma::rowvec alpha) {

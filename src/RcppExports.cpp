@@ -202,52 +202,22 @@ RcppExport SEXP _hesim_rpwexp_vec(SEXP nSEXP, SEXP rateSEXP, SEXP timeSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// rcat
-int rcat(arma::rowvec probs);
-static SEXP _hesim_rcat_try(SEXP probsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< arma::rowvec >::type probs(probsSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcat(probs));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _hesim_rcat(SEXP probsSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rcat_try(probsSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// rcat_vec
-arma::vec rcat_vec(int n, arma::mat probs);
-static SEXP _hesim_rcat_vec_try(SEXP nSEXP, SEXP probsSEXP) {
+// C_rcat
+std::vector<double> C_rcat(int n, arma::mat probs);
+static SEXP _hesim_C_rcat_try(SEXP nSEXP, SEXP probsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type probs(probsSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcat_vec(n, probs));
+    rcpp_result_gen = Rcpp::wrap(C_rcat(n, probs));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _hesim_rcat_vec(SEXP nSEXP, SEXP probsSEXP) {
+RcppExport SEXP _hesim_C_rcat(SEXP nSEXP, SEXP probsSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rcat_vec_try(nSEXP, probsSEXP));
+        rcpp_result_gen = PROTECT(_hesim_C_rcat_try(nSEXP, probsSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -524,8 +494,7 @@ static int _hesim_RcppExport_validate(const char* sig) {
         signatures.insert("double(*rtruncnorm)(double,double,double,double)");
         signatures.insert("double(*rpwexp)(arma::rowvec,arma::rowvec)");
         signatures.insert("std::vector<double>(*C_rpwexp_vec)(int,arma::mat,arma::rowvec)");
-        signatures.insert("int(*rcat)(arma::rowvec)");
-        signatures.insert("arma::vec(*C_rcat_vec)(int,arma::mat)");
+        signatures.insert("std::vector<double>(*C_rcat)(int,arma::mat)");
         signatures.insert("arma::rowvec(*rdirichlet)(arma::rowvec)");
         signatures.insert("arma::cube(*C_rdirichlet_mat)(int,arma::mat)");
     }
@@ -538,8 +507,7 @@ RcppExport SEXP _hesim_RcppExport_registerCCallable() {
     R_RegisterCCallable("hesim", "_hesim_rtruncnorm", (DL_FUNC)_hesim_rtruncnorm_try);
     R_RegisterCCallable("hesim", "_hesim_rpwexp", (DL_FUNC)_hesim_rpwexp_try);
     R_RegisterCCallable("hesim", "_hesim_C_rpwexp_vec", (DL_FUNC)_hesim_rpwexp_vec_try);
-    R_RegisterCCallable("hesim", "_hesim_rcat", (DL_FUNC)_hesim_rcat_try);
-    R_RegisterCCallable("hesim", "_hesim_C_rcat_vec", (DL_FUNC)_hesim_rcat_vec_try);
+    R_RegisterCCallable("hesim", "_hesim_C_rcat", (DL_FUNC)_hesim_C_rcat_try);
     R_RegisterCCallable("hesim", "_hesim_rdirichlet", (DL_FUNC)_hesim_rdirichlet_try);
     R_RegisterCCallable("hesim", "_hesim_C_rdirichlet_mat", (DL_FUNC)_hesim_rdirichlet_mat_try);
     R_RegisterCCallable("hesim", "_hesim_RcppExport_validate", (DL_FUNC)_hesim_RcppExport_validate);
@@ -557,8 +525,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_rtruncnorm", (DL_FUNC) &_hesim_rtruncnorm, 4},
     {"_hesim_rpwexp", (DL_FUNC) &_hesim_rpwexp, 2},
     {"_hesim_rpwexp_vec", (DL_FUNC) &_hesim_rpwexp_vec, 3},
-    {"_hesim_rcat", (DL_FUNC) &_hesim_rcat, 1},
-    {"_hesim_rcat_vec", (DL_FUNC) &_hesim_rcat_vec, 2},
+    {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
     {"_hesim_rdirichlet", (DL_FUNC) &_hesim_rdirichlet, 1},
     {"_hesim_rdirichlet_mat", (DL_FUNC) &_hesim_rdirichlet_mat, 2},
     {"_hesim_C_test_trapzfun", (DL_FUNC) &_hesim_C_test_trapzfun, 1},

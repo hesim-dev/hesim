@@ -1,10 +1,6 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <hesim/distributions.h>
 
-
-/*************************
-* Functions to export to R
-*************************/
 // [[Rcpp::export]]
 std::vector<double> C_rgengamma_vec(int n, std::vector<double> mu,
                                   std::vector<double> sigma,
@@ -63,25 +59,23 @@ std::vector<double> rpwexp_vec (int n, arma::mat rate, arma::rowvec time) {
   return surv;
 }
 
+/***************************************************************************//**
+ * @ingroup stats
+ * Vectorized random number generation for categorical distribution.
+ * A vectorized version of hesim::stats::rcat that is exported to @c R.
+ * @param probs A matrix with @c K columns specifying the probability of each of the 
+ * @c K categories. An sample is drawn for each of the @c N rows. 
+ * Each row is internally normalized to sum to 1.
+ * @return A vector of @c N random samples. 
+ ******************************************************************************/ 
 // [[Rcpp::export]]
-int rcat(arma::rowvec probs) {
-  int k = probs.n_elem;
-  double probs_sum = accu(probs);
-  probs = probs/probs_sum;
-  Rcpp::IntegerVector ans(k);
-  rmultinom(1, probs.begin(), k, ans.begin());
-  int max = which_max(ans);
-  return(max);
-}
-
-// [[Rcpp::export(name="C_rcat_vec")]]
-arma::vec rcat_vec(int n, arma::mat probs){
+std::vector<double> C_rcat(int n, arma::mat probs){
   int b = probs.n_rows;
-  arma::vec samp(n);
+  std::vector<double> samples(n);
   for (int i = 0; i < n; ++i){
-      samp(i) = rcat(probs.row(i % b));
+    samples[i] = hesim::stats::rcat(probs.row(i % b));
   }
-  return(samp);
+  return(samples);
 }
 
 // [[Rcpp::export]]

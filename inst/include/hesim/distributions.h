@@ -954,6 +954,22 @@ public:
   }
 };
 
+/***************************************************************************//**
+ * Random number generation for categorical distribution.
+ * @param probs A vector of length @c K specifying the probability of each of the 
+ * @c K categories. Internally normalized to sum to 1.
+ * @return A random sample from the categorical distribution.
+ ******************************************************************************/ 
+inline int rcat(arma::rowvec probs) {
+  int k = probs.n_elem;
+  double probs_sum = accu(probs);
+  probs = probs/probs_sum;
+  Rcpp::IntegerVector ans(k);
+  rmultinom(1, probs.begin(), k, ans.begin());
+  int max = which_max(ans);
+  return(max);
+}
+
 } //end namespace stats
 
 } //end namespace hesim
