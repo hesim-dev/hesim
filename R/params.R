@@ -4,10 +4,10 @@ new_params_list <- function(..., inner_class, new_class){
 }
 
 check_params_list <- function(x){
-  inner.class <- class(x[[1]])
-  n.samples <- sapply(x, function(y) y$n_samples)
-  if(!all(n.samples == n.samples[1])){
-    msg <- paste0("The number of samples in each '", inner.class, "' object must be the same.")
+  inner_class <- class(x[[1]])
+  n_samples <- sapply(x, function(y) y$n_samples)
+  if(!all(n_samples == n_samples[1])){
+    msg <- paste0("The number of samples in each '", inner_class, "' object must be the same.")
     stop(msg, call. = FALSE)
   }
   return(x)
@@ -48,8 +48,8 @@ params_lm <- function(coefs, sigma = NULL){
   stopifnot(is.matrix(coefs) | is.vector(coefs))
   if (is.vector(coefs)) coefs <- matrix(coefs, ncol = 1)
   if(is.null(sigma)) sigma <- rep(1, nrow(coefs))
-  n.samples <- nrow(coefs)
-  check(new_params_lm(coefs, sigma, n.samples))
+  n_samples <- nrow(coefs)
+  check(new_params_lm(coefs, sigma, n_samples))
 }
 
 new_params_lm <- function(coefs, sigma, n_samples){
@@ -173,13 +173,13 @@ check.params_surv <- function(object){
   if (list_depth(object$coefs) !=1 | length(object$dist) !=1){
     stop("'coefs' must only contain one survival model.", call. = FALSE)
   }
-  matrix.bool <- unlist(lapply(object$coefs, is.matrix))
-  if(sum(!matrix.bool) > 0){
+  matrix_bool <- unlist(lapply(object$coefs, is.matrix))
+  if(sum(!matrix_bool) > 0){
     stop("'coefs' must be a list of matrices.",
          call. = FALSE)
   }
-  coefs.nrows <- unlist(lapply(object$coefs, nrow))
-  if(!all(object$n_samples == coefs.nrows)){
+  coefs_nrows <- unlist(lapply(object$coefs, nrow))
+  if(!all(object$n_samples == coefs_nrows)){
     stop("Number of rows in all 'coefs' matrices must be equal.",
          call. = FALSE)
   } 
@@ -201,16 +201,16 @@ check.params_surv <- function(object){
 #' }
 #' @examples 
 #' library("flexsurv")
-#' fit.exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+#' fit_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                  data = ovarian, dist = "exp")
-#' fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+#' fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                  data = ovarian, dist = "weibull")
-#' params.surv.exp <- create_params(fit.exp, n = 2)
-#' params.surv.wei <- create_params(fit.wei, n = 2)
-#' params.joined.surv <- params_joined_surv(exp = params.surv.exp,
-#'                                          wei = params.surv.wei,
+#' params_surv_exp <- create_params(fit_exp, n = 2)
+#' params_surv_wei <- create_params(fit_wei, n = 2)
+#' params_joined_surv <- params_joined_surv(exp = params_surv_exp,
+#'                                          wei = params_surv_wei,
 #'                                          times = 3)
-#' print(params.joined.surv)
+#' print(params_joined_surv)
 #' @export
 params_joined_surv <- function(..., times){
   return(check(new_params_joined(..., times = times, inner_class = "params_surv"),
@@ -295,21 +295,21 @@ check.params_joined_surv_list <- function(object, inner_class){
 }
 
 create_params_list <- function(object, n, point_estimate, inner_class, new_class){
-  n.objects <- length(object)
-  params.list <- vector(mode = "list", length = n.objects)
-  names(params.list) <- names(object)
-  for (i in 1:n.objects){
-    params.list[[i]] <- create_params(object[[i]], n, point_estimate)
+  n_objects <- length(object)
+  params_list <- vector(mode = "list", length = n_objects)
+  names(params_list) <- names(object)
+  for (i in 1:n_objects){
+    params_list[[i]] <- create_params(object[[i]], n, point_estimate)
   }
-  return(new_params_list(params.list, inner_class = inner_class,
+  return(new_params_list(params_list, inner_class = inner_class,
                          new_class = new_class))
 }
 
 create_params_joined <- function(object, n, point_estimate, inner_class){
-  n.models <- length(object$models)
-  models <- vector(mode = "list", length = n.models)
+  n_models <- length(object$models)
+  models <- vector(mode = "list", length = n_models)
   names(models) <- names(object$models)
-  for (i in 1:n.models){
+  for (i in 1:n_models){
     models[[i]] <- create_params(object$models[[i]], n, point_estimate)
   }
   return(new_params_joined(models, times = object$times, inner_class = inner_class))
@@ -364,9 +364,9 @@ create_params <- function (object, n = 1000, point_estimate = FALSE, ...) {
 #' @rdname create_params
 create_params.lm <- function(object, n = 1000, point_estimate = FALSE, ...){
   if (point_estimate == FALSE){
-      coefs.sim <- MASS::mvrnorm(n, stats::coef(object), stats::vcov(object))
-      if(is.vector(coefs.sim)) coefs.sim <- matrix(coefs.sim, nrow = 1)
-      return(new_params_lm(coefs = coefs.sim,
+      coefs_sim <- MASS::mvrnorm(n, stats::coef(object), stats::vcov(object))
+      if(is.vector(coefs_sim)) coefs_sim <- matrix(coefs_sim, nrow = 1)
+      return(new_params_lm(coefs = coefs_sim,
                           sigma = rep(summary(object)$sigma, n),
                           n_samples = n))
   } else{
@@ -387,13 +387,13 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 }
 
 flexsurvreg_inds <- function(object){
-  n.pars <- length(object$dlist$pars)
-  inds <- vector(mode = "list", length = n.pars)
-  for (j in 1:n.pars){
-    parname.j <-  object$dlist$pars[j]
-    covind.j <- object$mx[[parname.j]]
-    if (length(covind.j) > 0){
-      inds[[j]] <- c(j, n.pars + covind.j)
+  n_pars <- length(object$dlist$pars)
+  inds <- vector(mode = "list", length = n_pars)
+  for (j in 1:n_pars){
+    parname_j <-  object$dlist$pars[j]
+    covind_j <- object$mx[[parname_j]]
+    if (length(covind_j) > 0){
+      inds[[j]] <- c(j, n_pars + covind_j)
     } else{
       inds[[j]] <- j
     }
@@ -419,13 +419,13 @@ create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, 
   if (point_estimate == FALSE){
       sim <- flexsurv::normboot.flexsurvreg(object, B = n, raw = TRUE, 
                                             transform = TRUE)
-      n.samples <- n
+      n_samples <- n
   } else{
       sim <- t(object$res.t[, "est", drop = FALSE])
-      n.samples <- 1
+      n_samples <- 1
   }
-  n.pars <- length(object$dlist$pars)
-  coefs <- vector(length = n.pars, mode = "list")
+  n_pars <- length(object$dlist$pars)
+  coefs <- vector(length = n_pars, mode = "list")
   names(coefs) <- c(object$dlist$pars)
   inds <- flexsurvreg_inds(object)
   for (j in seq_along(object$dlist$pars)){
@@ -433,7 +433,7 @@ create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, 
   }
   return(new_params_surv(dist = object$dlist$name,
                          coefs = coefs,
-                         n_samples = n.samples,
+                         n_samples = n_samples,
                          aux = flexsurvreg_aux(object)))
 }
 

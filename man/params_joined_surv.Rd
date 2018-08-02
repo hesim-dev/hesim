@@ -25,14 +25,14 @@ Create a list containing the parameters of survival models joined at specified t
 }
 \examples{
 library("flexsurv")
-fit.exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+fit_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                  data = ovarian, dist = "exp")
-fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                  data = ovarian, dist = "weibull")
-params.surv.exp <- create_params(fit.exp, n = 2)
-params.surv.wei <- create_params(fit.wei, n = 2)
-params.joined.surv <- params_joined_surv(exp = params.surv.exp,
-                                         wei = params.surv.wei,
+params_surv_exp <- create_params(fit_exp, n = 2)
+params_surv_wei <- create_params(fit_wei, n = 2)
+params_joined_surv <- params_joined_surv(exp = params_surv_exp,
+                                         wei = params_surv_wei,
                                          times = 3)
-print(params.joined.surv)
+print(params_joined_surv)
 }
