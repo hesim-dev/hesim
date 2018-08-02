@@ -2,7 +2,7 @@
 % Please edit documentation in R/input-data.R
 \name{create_input_data}
 \alias{create_input_data}
-\title{Form input data}
+\title{Create input data}
 \usage{
 create_input_data(object, data, ...)
 }
@@ -22,7 +22,7 @@ An object of class \code{\link{input_data}}.
 }
 \description{
 \code{create_input_data} is a generic function for creating an object of class
-\code{\link{input_data}}. Model matrices are formed based on the 
+\code{\link{input_data}}. Model matrices are constructed based on the 
 variables specified in the model \code{object} and the data specified in \code{data}.
 }
 \examples{

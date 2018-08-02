@@ -23,13 +23,13 @@ lines_dt <- function(strategy_list, strategy_ids = NULL){
   if(!is.numeric(treatments)){
     stop("Elements in 'strategy_list' should be integers.")
   }
-  n.treatments <- unlist(lapply(strategy_list, length), 
+  n_treatments <- unlist(lapply(strategy_list, length), 
                                           use.names = FALSE)
   if (is.null(strategy_ids)){
     strategy_ids <- seq_len(length(strategy_list))
   }
-  strategies <- rep(strategy_ids, times = n.treatments)
-  lines <- unlist(lapply(n.treatments, seq_len), use.names = FALSE)
+  strategies <- rep(strategy_ids, times = n_treatments)
+  lines <- unlist(lapply(n_treatments, seq_len), use.names = FALSE)
   return(data.table(strategy_id = strategies,
                     line = lines,
                     treatment_id = treatments))
@@ -70,9 +70,9 @@ lines_dt <- function(strategy_list, strategy_ids = NULL){
 #' dt_states <- data.frame(state_id =  seq(1, 3),
 #'                         state_var = c(2, 1, 9))
 #' hesim_dat <- hesim_data(strategies = dt_strategies,
-#'                           patients = dt_patients,
-#'                           states = dt_states,
-#'                           lines = dt_lines)
+#'                          patients = dt_patients,
+#'                          states = dt_states,
+#'                          lines = dt_lines)
 #' @export
 hesim_data <- function(strategies, patients, lines = NULL, states = NULL,
                           transitions = NULL){
@@ -187,28 +187,29 @@ expand_hesim_data <- function(data, by = c("strategies", "patients")){
     stop("One of the elements specified in 'by' is not a table in 'hesim_data'.",
          call. = FALSE)
   }
-  sorted.by <- hesim_data_sorted_by(by)
-  tbl.list <- data[sorted.by]
-  for (i in 1:length(tbl.list)){
-    if (is.null(tbl.list[[i]])){
+  sorted_by <- hesim_data_sorted_by(by)
+  tbl_list <- data[sorted_by]
+  for (i in 1:length(tbl_list)){
+    if (is.null(tbl_list[[i]])){
       stop("Cannot merge a NULL data table.")
     }
   }
-  tbl.list <- lapply(tbl.list, function(x) as.data.frame(x))
-  dat <- if ("lines" %in% sorted.by){
-    tbl.list1 <- tbl.list[which(names(tbl.list) != "lines")]
-    dat <- Reduce(function(...) merge(..., by = NULL), tbl.list1)
-    dat <- data.table(merge(dat, tbl.list[[which(names(tbl.list) == "lines")]],
+  tbl_list <- lapply(tbl_list, function(x) as.data.frame(x))
+  dat <- if ("lines" %in% sorted_by){
+    tbl_list1 <- tbl_list[which(names(tbl_list) != "lines")]
+    dat <- Reduce(function(...) merge(..., by = NULL), tbl_list1)
+    dat <- data.table(merge(dat, tbl_list[[which(names(tbl_list) == "lines")]],
                      by = "strategy_id", sort = FALSE))
   } else{
-    dat <- data.table(Reduce(function(...) merge(..., by = NULL, sort = FALSE), tbl.list))
+    dat <- data.table(Reduce(function(...) merge(..., by = NULL, sort = FALSE),
+                             tbl_list))
   }
-  sort_hesim_data(dat, sorted.by)
-  id.cols <- unlist(hesim_data_sorting_map()[sorted.by])
-  nonid.cols <- colnames(dat)[!colnames(dat) %in% id.cols]
-  dat <- dat[, c(id.cols, nonid.cols), with = FALSE]
+  sort_hesim_data(dat, sorted_by)
+  id_cols <- unlist(hesim_data_sorting_map()[sorted_by])
+  nonid_cols <- colnames(dat)[!colnames(dat) %in% id_cols]
+  dat <- dat[, c(id_cols, nonid_cols), with = FALSE]
   res <- list(data = dat,
-              id_vars = unname(id.cols))
+              id_vars = unname(id_cols))
   class(res) <- "expanded_hesim_data"
   return(res)
 }
@@ -222,15 +223,14 @@ hesim_data_sorting_map <- function(){
 }
 
 hesim_data_sorted_by <- function(by){
-  sorted.map <- hesim_data_sorting_map()
-  sorted.by <- names(sorted.map)[names(sorted.map) %in% by]
-  return(sorted.by)
+  sorted_map <- hesim_data_sorting_map()
+  sorted_by <- names(sorted_map)[names(sorted_map) %in% by]
+  return(sorted_by)
 }
 
 sort_hesim_data <- function(data, sorted_by){
   setorderv(data, unlist(hesim_data_sorting_map()[sorted_by]))
 }
-
 
 # input_data class -------------------------------------------------------------
 #' Input data for a statistical model
@@ -363,9 +363,9 @@ check.input_data <- function(object){
   if(!all(sapply(X, function(y) inherits(y, "matrix")))){
     stop("'X' must be a list or list of lists of matrices.", call. = FALSE)
   }
-  X.nrows <- sapply(X, nrow)
+  X_nrows <- sapply(X, nrow)
   if (is.list(object$X)){
-    if (!all(X.nrows[1] == X.nrows)){
+    if (!all(X_nrows[1] == X_nrows)){
       stop("The number of rows in each matrix in 'X' must be the same.",
            call. = FALSE)
     }
@@ -379,31 +379,31 @@ check.input_data <- function(object){
     }
   }
   
-  id.vars <- c("strategy_id", "patient_id", "line", "state_id", "transition_id")
-  id.vars.n <- c("n_strategies", "n_patients", "n_lines", "n_states", "n_transitions")
-  for (i in 1:length(id.vars)){
-    if (!is.null(object[[id.vars[i]]])){
+  id_vars <- c("strategy_id", "patient_id", "line", "state_id", "transition_id")
+  id_vars_n <- c("n_strategies", "n_patients", "n_lines", "n_states", "n_transitions")
+  for (i in 1:length(id_vars)){
+    if (!is.null(object[[id_vars[i]]])){
       
       ## Check number of rows
-      if(length(object[[id.vars[i]]]) != X.nrows[1]){
-        msg <- paste0("The length of '", id.vars[i], "' does not equal the number of rows in the ",
+      if(length(object[[id_vars[i]]]) != X_nrows[1]){
+        msg <- paste0("The length of '", id_vars[i], "' does not equal the number of rows in the ",
                       "'X' matrices.")
         stop(msg, call. = FALSE)
       }
       
       # Check that n_strategies, n_patients, ..., is correct
-        if (id.vars[i] != "line"){
-          if(length(unique(object[[id.vars[i]]])) != object[id.vars.n[i]]){
-            msg <- paste0("The number of unique observations in '", id.vars[i], 
-                      "' does not equal '", id.vars.n[i], "'.")
+        if (id_vars[i] != "line"){
+          if(length(unique(object[[id_vars[i]]])) != object[id_vars_n[i]]){
+            msg <- paste0("The number of unique observations in '", id_vars[i], 
+                      "' does not equal '", id_vars_n[i], "'.")
             stop(msg, call. = FALSE)
           } 
           } else{
-            line <- object[[id.vars[i]]]
-            expected.n <- data.table("strategy_id" = object[["strategy_id"]],
+            line <- object[[id_vars[i]]]
+            expected_n <- data.table("strategy_id" = object[["strategy_id"]],
                                      "line" = line)
-            expected.n <- expected.n[, list(N = length(unique(line))), by = "strategy_id"]
-            if(!all(expected.n$N == object[[id.vars.n[i]]]$N)){
+            expected_n <- expected_n[, list(N = length(unique(line))), by = "strategy_id"]
+            if(!all(expected_n$N == object[[id_vars_n[i]]]$N)){
               msg <- paste0("The number of unique observations in 'line'", 
                         "' within each 'strategy_id' does not equal 'n_lines$N'")
               stop(msg, call. = FALSE)
@@ -413,12 +413,12 @@ check.input_data <- function(object){
   }
   
   # Check if id variables are sorted properly 
-  indices.df <- data.table(do.call("cbind", object[id.vars]))
-  sorted.seq <- seq_len(nrow(indices.df))
-  indices.df[, "row_num" := sorted.seq]
-  by <- id.vars[sapply(object[id.vars], function(x) !is.null(x))]
-  sort_hesim_data(indices.df, sorted_by = hesim_data_sorted_by(by))
-  if(!all(indices.df$row_num == sorted.seq)){
+  indices_df <- data.table(do.call("cbind", object[id_vars]))
+  sorted_seq <- seq_len(nrow(indices_df))
+  indices_df[, "row_num" := sorted_seq]
+  by <- id_vars[sapply(object[id_vars], function(x) !is.null(x))]
+  sort_hesim_data(indices_df, sorted_by = hesim_data_sorted_by(by))
+  if(!all(indices_df$row_num == sorted_seq)){
     msg <- paste0("The id variables are not sorted correctly. The sort priority of the ",
                   "id variables must be as follows: 'strategy_id', 'line', 'patient_id' and ",
                    "the health-related id variable ('state_id' or 'transition_id').")
@@ -426,36 +426,36 @@ check.input_data <- function(object){
   }
 
   # Check if the number of unique observations is correct within groups
-  indices.df[, "row_num" := NULL]
-  for (i in 2:ncol(indices.df)){
-    dt.by <- colnames(indices.df)[i - 1]
-    col <- colnames(indices.df)[i]
-    if (id.vars.n[i] == "n_lines"){
-      len <- indices.df[, list(len = length(unique(get(col)))), 
-                        by = c("strategy_id", dt.by)]$len
+  indices_df[, "row_num" := NULL]
+  for (i in 2:ncol(indices_df)){
+    dt_by <- colnames(indices_df)[i - 1]
+    col <- colnames(indices_df)[i]
+    if (id_vars_n[i] == "n_lines"){
+      len <- indices_df[, list(len = length(unique(get(col)))), 
+                        by = c("strategy_id", dt_by)]$len
     } else{
-      len <- indices.df[, list(len = length(unique(get(col)))), by = dt.by]$len 
+      len <- indices_df[, list(len = length(unique(get(col)))), by = dt_by]$len 
     }
-    if (id.vars.n[i] == "n_lines"){
-      user.n <- object[[id.vars.n[i]]]$N
+    if (id_vars_n[i] == "n_lines"){
+      user_n <- object[[id_vars_n[i]]]$N
     } else{
-      user.n <- object[[id.vars.n[i]]]
+      user_n <- object[[id_vars_n[i]]]
     }
-    if (!all(unique(len) == user.n)){
-      if (id.vars.n[i] == "n_lines"){
+    if (!all(unique(len) == user_n)){
+      if (id_vars_n[i] == "n_lines"){
         msg <- paste0("The number of unique '", col, "' observations within each value",
-                    " of 'strategy_id' and '", dt.by, " ' must be consistent with '", id.vars.n[i], "'.")
+                    " of 'strategy_id' and '", dt_by, " ' must be consistent with '", id_vars_n[i], "'.")
         stop(msg, call. = FALSE)
       } else{
         msg <- paste0("The number of unique '", col, "' observations within each value",
-                    " of '", dt.by, " ' must equal '", id.vars.n[i], "'.")
+                    " of '", dt_by, " ' must equal '", id_vars_n[i], "'.")
         stop(msg, call. = FALSE)
       }
     }
   }
 }
 
-# Form input data from a fitted model ------------------------------------------
+# Create input data from a fitted model ----------------------------------------
 size_id_map <- function(){
   c(strategy_id = "n_strategies", 
     patient_id = "n_patients",
@@ -467,23 +467,23 @@ size_id_map <- function(){
 get_input_data_id_vars <- function(data){
   map <- size_id_map()
   res <- list() 
-  id.vars <- data$id_vars
-  for (i in 1:length(id.vars)){
-    res[[id.vars[i]]] <- data$data[[id.vars[i]]]
-    if (id.vars[i] != "line"){
-       res[[map[id.vars[i]]]] <- length(unique(data$data[[id.vars[i]]]))
+  id_vars <- data$id_vars
+  for (i in 1:length(id_vars)){
+    res[[id_vars[i]]] <- data$data[[id_vars[i]]]
+    if (id_vars[i] != "line"){
+       res[[map[id_vars[i]]]] <- length(unique(data$data[[id_vars[i]]]))
     } else{
-      n.lines <- data$data[, .N, by = c("strategy_id", "line")][, .N, by = "strategy_id"]
-      res[[map[id.vars[i]]]] <- n.lines
+      n_lines <- data$data[, .N, by = c("strategy_id", "line")][, .N, by = "strategy_id"]
+      res[[map[id_vars[i]]]] <- n_lines
     }
   }
   return(res)
 }
 
-#' Form input data
+#' Create input data
 #' 
 #' \code{create_input_data} is a generic function for creating an object of class
-#' \code{\link{input_data}}. Model matrices are formed based on the 
+#' \code{\link{input_data}}. Model matrices are constructed based on the 
 #' variables specified in the model \code{object} and the data specified in \code{data}.
 #' @param object An object of the appropriate class. Currently supports
 #' \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
@@ -548,8 +548,8 @@ formula_list_rec <- function(object, data, ...){
 
 #' @export
 create_input_data.formula_list <- function(object, data, ...){
-  X.list <- formula_list_rec(object, data, ...)
-  args <- c(list(X = X.list),
+  X_list <- formula_list_rec(object, data, ...)
+  args <- c(list(X = X_list),
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
 }
@@ -570,21 +570,21 @@ create_input_data.lm <- function(object, data, ...){
 
 #' @export 
 create_input_data.lm_list <- function(object, data, ...){
-  X.list <- vector(mode = "list", length = length(object))
-  names(X.list) <- names(object)
-  for (i in 1:length(X.list)){
+  X_list <- vector(mode = "list", length = length(object))
+  names(X_list) <- names(object)
+  for (i in 1:length(X_list)){
     terms <- get_terms(object[[i]])
-    X.list[[i]] <- list(mu = stats::model.matrix(terms, data = data$data, ...))
+    X_list[[i]] <- list(mu = stats::model.matrix(terms, data = data$data, ...))
   }
-  args <- c(list(X = X.list),
+  args <- c(list(X = X_list),
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
 }
 
 create_input_data_flexsurvreg_X <- function(object, data, ...){
   pars <- object$dlist$pars
-  X.list <- vector(mode = "list", length = length(pars))
-  names(X.list) <- pars
+  X_list <- vector(mode = "list", length = length(pars))
+  names(X_list) <- pars
   for (i in 1:length(pars)){
     form <- object$all.formulae[[pars[i]]]
     if (is.null(form)){
@@ -592,27 +592,27 @@ create_input_data_flexsurvreg_X <- function(object, data, ...){
     } else{
       form <- stats::delete.response(stats::terms(form))
     }
-    X.list[[i]] <- stats::model.matrix(form, data = data$data, ...)
+    X_list[[i]] <- stats::model.matrix(form, data = data$data, ...)
   }
-  return(X.list)
+  return(X_list)
 }
 
 #' @export
 create_input_data.flexsurvreg <- function(object, data,...){
-  X.list <- create_input_data_flexsurvreg_X(object, data, ...)
-  args <- c(list(X = X.list),
+  X_list <- create_input_data_flexsurvreg_X(object, data, ...)
+  args <- c(list(X = X_list),
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
 }
 
 #' @export
 create_input_data.flexsurvreg_list <- function(object, data,...){
-  X.list.2d <- vector(mode = "list", length = length(object))
-  names(X.list.2d) <- names(object)
+  X_list_2d <- vector(mode = "list", length = length(object))
+  names(X_list_2d) <- names(object)
   for (i in 1:length(object)){
-    X.list.2d[[i]] <- create_input_data_flexsurvreg_X(object[[i]], data, ...)
+    X_list_2d[[i]] <- create_input_data_flexsurvreg_X(object[[i]], data, ...)
   }
-  args <- c(list(X = X.list.2d),
+  args <- c(list(X = X_list_2d),
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
 }
@@ -625,16 +625,16 @@ create_input_data.partsurvfit <- function(object, data, ...){
 #' @export
 create_input_data.joined_flexsurvreg_list <- function(object, data,...){
   models <- object$models
-  X.list.3d <- vector(mode = "list", length = length(models))
-  names(X.list.3d) <- names(models)
+  X_list_3d <- vector(mode = "list", length = length(models))
+  names(X_list_3d) <- names(models)
   for (i in 1:length(models)){
-    X.list.3d[[i]] <- vector(mode = "list", length = length(models[[i]]))
-    names(X.list.3d[[i]]) <- names(models[[i]])
+    X_list_3d[[i]] <- vector(mode = "list", length = length(models[[i]]))
+    names(X_list_3d[[i]]) <- names(models[[i]])
     for (j in 1:length(models[[i]])){
-      X.list.3d[[i]][[j]] <- create_input_data_flexsurvreg_X(models[[i]][[j]], data, ...)
+      X_list_3d[[i]][[j]] <- create_input_data_flexsurvreg_X(models[[i]][[j]], data, ...)
     }
   }
-  args <- c(list(X = X.list.3d),
+  args <- c(list(X = X_list_3d),
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
 }

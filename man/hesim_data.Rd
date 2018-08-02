@@ -50,7 +50,7 @@ dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
 dt_states <- data.frame(state_id =  seq(1, 3),
                         state_var = c(2, 1, 9))
 hesim_dat <- hesim_data(strategies = dt_strategies,
-                          patients = dt_patients,
-                          states = dt_states,
-                          lines = dt_lines)
+                         patients = dt_patients,
+                         states = dt_states,
+                         lines = dt_lines)
 }
