@@ -2,7 +2,7 @@
 % Please edit documentation in R/statevals.R
 \name{create_StateVals}
 \alias{create_StateVals}
-\title{Form \code{StateVals} object}
+\title{Create \code{StateVals} object}
 \usage{
 create_StateVals(object, data, n = 1000, point_estimate = FALSE)
 }
