@@ -24,7 +24,7 @@ create_StateVals(object, data, n = 1000, point_estimate = FALSE)
 Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
 }
 \description{
-\code{create_StateVals} is a generic function for forming an object of class
+\code{create_StateVals} is a generic function for creating an object of class
  \code{\link{StateVals}} from a fitted statistical model.
 }
 \seealso{

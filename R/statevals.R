@@ -1,7 +1,7 @@
 # PartSurvStateVals ------------------------------------------------------------
 #' Form \code{StateVals} object
 #' 
-#' \code{create_StateVals} is a generic function for forming an object of class
+#' \code{create_StateVals} is a generic function for creating an object of class
 #'  \code{\link{StateVals}} from a fitted statistical model. 
 #' @param object A fitted statistical model object of the appropriate class. Supports
 #' \code{\link{lm}}.

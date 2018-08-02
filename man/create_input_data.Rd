@@ -21,8 +21,8 @@ for use in a statistical models and the id variables for indexing rows in the in
 An object of class \code{\link{input_data}}.
 }
 \description{
-\code{create_input_data} is a generic function for forming data that can be
-used as a input to a statistical model. Model matrices are formed based on the 
+\code{create_input_data} is a generic function for creating an object of class
+\code{\link{input_data}}. Model matrices are formed based on the 
 variables specified in the model \code{object} and the data specified in \code{data}.
 }
 \examples{

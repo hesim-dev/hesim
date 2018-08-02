@@ -482,8 +482,8 @@ get_input_data_id_vars <- function(data){
 
 #' Form input data
 #' 
-#' \code{create_input_data} is a generic function for forming data that can be
-#' used as a input to a statistical model. Model matrices are formed based on the 
+#' \code{create_input_data} is a generic function for creating an object of class
+#' \code{\link{input_data}}. Model matrices are formed based on the 
 #' variables specified in the model \code{object} and the data specified in \code{data}.
 #' @param object An object of the appropriate class. Currently supports
 #' \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 

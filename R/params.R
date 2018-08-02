@@ -317,9 +317,9 @@ create_params_joined <- function(object, n, point_estimate, inner_class){
 
 #' Parameters from a fitted model
 #' 
-#' \code{create_params} is a generic function for constructing parameters from
-#' a fitted statistical model. A sample from the posterior distribution of 
-#' parameters is returned.
+#' \code{create_params} is a generic function for creating an object containing 
+#' parameters from a fitted statistical model. If \code{point_estimate = FALSE},
+#' then random samples from the posterior distribution are returned.
 #' @param object A statistical model to randomly sample parameters from.  
 #' @param n Number of random observations to draw. 
 #' @param point_estimate If TRUE, then the point estimates are returned and

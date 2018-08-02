@@ -99,9 +99,9 @@
     </div>
 
     
-    <p><code>create_params</code> is a generic function for constructing parameters from
-a fitted statistical model. A sample from the posterior distribution of 
-parameters is returned.</p>
+    <p><code>create_params</code> is a generic function for creating an object containing 
+parameters from a fitted statistical model. If <code>point_estimate = FALSE</code>,
+then random samples from the posterior distribution are returned.</p>
     
 
     <pre class="usage"><span class='fu'>create_params</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)

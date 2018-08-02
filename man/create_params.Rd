@@ -48,9 +48,9 @@ and the classes of the returned objects are:
 }
 }
 \description{
-\code{create_params} is a generic function for constructing parameters from
-a fitted statistical model. A sample from the posterior distribution of 
-parameters is returned.
+\code{create_params} is a generic function for creating an object containing 
+parameters from a fitted statistical model. If \code{point_estimate = FALSE},
+then random samples from the posterior distribution are returned.
 }
 \examples{
 # create_params.lm

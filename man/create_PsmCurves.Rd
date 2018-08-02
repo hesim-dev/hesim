@@ -28,7 +28,7 @@ model are independently draw from multivariate normal distributions.}
 Returns an \code{\link{R6Class}} object of class \code{\link{PsmCurves}}.
 }
 \description{
-\code{create_PsmCurves} is a function for forming an object of class
+\code{create_PsmCurves} is a function for creating an object of class
 \code{\link{PsmCurves}} from an object of class \code{\link{partsurvfit}}.
 }
 \seealso{

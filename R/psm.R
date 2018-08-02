@@ -2,7 +2,7 @@
 
 #' Form \code{PsmCurves} object
 #' 
-#' \code{create_PsmCurves} is a function for forming an object of class
+#' \code{create_PsmCurves} is a function for creating an object of class
 #' \code{\link{PsmCurves}} from an object of class \code{\link{partsurvfit}}.
 #' @param object An object of class \code{\link{partsurvfit}}.
 #' @param data An object of class "expanded_hesim_data" returned by 
