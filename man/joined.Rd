@@ -43,25 +43,25 @@ partitioned survival analysis).
 }
 \examples{
 # joined_formula
-joined.formula <- joined_formula(f1 = formula(~ age), f2 = formula(~ 1),
+joined_fm <- joined_formula(f1 = formula(~ age), f2 = formula(~ 1),
                                  f3 = formula(~age + age2),
                                  times = c(2, 3))
-print(joined.formula)
+print(joined_fm)
  
 # joined_formula_list
-f.list1 <- formula_list(f1 = formula(~ age), f2 = formula(~ 1))
-f.list2 <- formula_list(f1 = formula(~ age), f2 = formula(~ age2), f3 = formula(~age3))
-joined.formula.list <- joined_formula_list(model1 = f.list1, model2 = f.list2, 
-                                           times = list(5, c(2, 4)))
-class(joined.formula.list)                                             
+fm_list1 <- formula_list(f1 = formula(~ age), f2 = formula(~ 1))
+fm_list2 <- formula_list(f1 = formula(~ age), f2 = formula(~ age2), f3 = formula(~age3))
+joined_fm_list <- joined_formula_list(model1 = fm_list1, model2 = fm_list2, 
+                                     times = list(5, c(2, 4)))
+class(joined_fm_list)                                             
                                             
 # joined_flexsurvreg
 library("flexsurv")
-fit.wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                 data = ovarian, dist = "weibull")
-fit.exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+fit_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                  data = ovarian, dist = "exp")
-joined.flexsurvreg <- joined_flexsurvreg(fit.wei, fit.exp, times = 5)
-class(joined.flexsurvreg)
+joined_fsr <- joined_flexsurvreg(fit_wei, fit_exp, times = 5)
+class(joined_fsr)
 }
 \keyword{internal}
