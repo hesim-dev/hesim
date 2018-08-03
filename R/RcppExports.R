@@ -101,7 +101,3 @@ test_zeroin <- function() {
     .Call('_hesim_test_zeroin', PACKAGE = 'hesim')
 }
 
-# Register entry points for exported C++ functions
-methods::setLoadAction(function(ns) {
-    .Call('_hesim_RcppExport_registerCCallable', PACKAGE = 'hesim')
-})
