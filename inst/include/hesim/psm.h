@@ -1,5 +1,5 @@
-# ifndef HESIM_PARTSURV_H
-# define HESIM_PARTSURV_H
+# ifndef HESIM_PSM_H
+# define HESIM_PSM_H
 #include <hesim/statmods.h>
 #include <hesim/utils.h>
 #include <hesim/integrate.h>

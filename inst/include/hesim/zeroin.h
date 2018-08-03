@@ -1,5 +1,5 @@
-# ifndef ZEROIN_H
-# define ZEROIN_H
+# ifndef HESIM_ZEROIN_H
+# define HESIM_ZEROIN_H
 
 /*******************************************************************************
 * This is an adaptation of the R_zeroin2() c function from the R Stats Package.

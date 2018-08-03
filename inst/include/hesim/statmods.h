@@ -1,5 +1,5 @@
-# ifndef STATMODELS_H
-# define STATMODELS_H
+# ifndef HESIM_STATMODELS_H
+# define HESIM_STATMODELS_H
 #include <hesim/distributions.h>
 #include <hesim/params.h>
 

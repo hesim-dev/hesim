@@ -1,5 +1,5 @@
-# ifndef INTEGRATE_H
-# define INTEGRATE_H
+# ifndef HESIM_MATH_INTEGRATE_H
+# define HESIM_MATH_INTEGRATE_H
 #include <RcppArmadillo.h>
 
 namespace hesim {
