@@ -1,4 +1,4 @@
-context("PartSurv.R unit tests")
+context("psm.R unit tests")
 library("flexsurv")
 library("data.table")
 library("pracma")
