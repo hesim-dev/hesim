@@ -130,6 +130,22 @@ struct stateprobs_out{
     add_constant(strategy_id_, -1);
     add_constant(patient_id_, -1);
   }
+  
+  /** 
+   * Create a data frame to pass to @c R.
+   */   
+  Rcpp::DataFrame create_R_data_frame(){
+    return Rcpp::DataFrame::create(
+      Rcpp::_["state_id"] = state_id_,
+      Rcpp::_["sample"] = sample_,
+      Rcpp::_["strategy_id"] = strategy_id_,
+      Rcpp::_["patient_id"] = patient_id_,
+      Rcpp::_["t"] = t_,
+      Rcpp::_["prob"] = prob_,
+      Rcpp::_["stringsAsFactors"] = false
+    );
+  }
+  
 }; // end struct stateprobs_out
 
 /***************************************************************************//** 

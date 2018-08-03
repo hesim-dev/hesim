@@ -107,7 +107,7 @@ Psm <- R6::R6Class("Psm",
     .costs_ = NULL,
     .qalys_ = NULL,
     
-    sim_auc = function(dr, type){
+    sim_wlos = function(dr, type){
       if(is.null(self$stateprobs_)){
         stop("You must first simulate health state probabilities using '$sim_stateprobs'.",
              call. = FALSE)
@@ -145,22 +145,22 @@ Psm <- R6::R6Class("Psm",
       
       if (type == "costs"){
         if (is.null(names(self$cost_models))){
-          type.names <- paste0("Type ", seq(1, length(self$cost_models)))
+          categories <- paste0("Type ", seq(1, length(self$cost_models)))
         } else{
-            type.names <- names(self$cost_models)
+            categories <- names(self$cost_models)
         } # end if/else names for cost models
       } else{
-        type.names <- "qalys"
+        categories <- "qalys"
       } # end if/else costs vs. qalys
 
-      res <- data.table(C_psm_sim_wlos(self, stateprobs, dr, type, type.names))
+      res <- data.table(C_psm_sim_wlos(self, stateprobs, dr, type, categories))
       res[, state_id := state_id + 1]
       res[, sample := sample + 1]
       res[, strategy_id := strategy_id + 1]
       res[, patient_id := patient_id + 1]
       return(res[])
-    }
-  ),
+    } # end sim_wlos()
+  ), # end private
   
   active = list(
     t_ = function(value) {
@@ -253,7 +253,7 @@ Psm <- R6::R6Class("Psm",
     
     sim_qalys = function(dr = .03){
       self$utility_model$check()
-      qalys <- private$sim_auc(dr, type = "qalys")
+      qalys <- private$sim_wlos(dr, type = "qalys")
       setnames(qalys, "value", "qalys")
       private$.qalys_ <- qalys
       invisible(self)
@@ -266,7 +266,7 @@ Psm <- R6::R6Class("Psm",
       for (i in 1:length(self$cost_models)){
         self$cost_models[[i]]$check()
       }
-      costs <- private$sim_auc(dr, type = "costs")
+      costs <- private$sim_wlos(dr, type = "costs")
       setnames(costs, "value", "costs")
       private$.costs_ <- costs
       invisible(self)

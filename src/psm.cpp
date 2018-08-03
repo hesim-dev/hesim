@@ -10,17 +10,32 @@ namespace psm {
 * Survival models
 ****************/
 // Base case
-surv_mods::surv_mods(Rcpp::Environment R_PartSurvCurves){
-  Rcpp::Environment R_data = Rcpp::as<Rcpp::Environment > (R_PartSurvCurves["data"]);
+surv_mods::surv_mods(Rcpp::Environment R_PsmCurves){
+  Rcpp::Environment R_data = Rcpp::as<Rcpp::Environment > (R_PsmCurves["data"]);
   strategy_id_ = Rcpp::as<std::vector<int> >(R_data["strategy_id"]);
   patient_id_ = Rcpp::as<std::vector<int> >(R_data["patient_id"]);
 }
 
+std::unique_ptr<surv_mods> surv_mods::create(Rcpp::Environment R_PsmCurves){
+    Rcpp::List R_params = Rcpp::as<Rcpp::List>(R_PsmCurves["params"]);
+ 
+    surv_mods * survmods;
+    if (Rf_inherits(R_params, "params_surv_list")){
+        survmods = new surv_list(R_PsmCurves);
+    }
+    else{
+        Rcpp::stop("The selected statistical model is not available.");
+    }
+    std::unique_ptr<surv_mods> uptr(survmods);
+    return uptr;
+}
+
+
 // N separate survival models
-surv_list::surv_list(Rcpp::Environment R_PartSurvCurves)
-  : surv_mods(R_PartSurvCurves),
-    params_(Rcpp::as<Rcpp::List>(R_PartSurvCurves["params"])){
-    Rcpp::List R_data = Rcpp::as<Rcpp::List > (R_PartSurvCurves["data"]);
+surv_list::surv_list(Rcpp::Environment R_PsmCurves)
+  : surv_mods(R_PsmCurves),
+    params_(Rcpp::as<Rcpp::List>(R_PsmCurves["params"])){
+    Rcpp::List R_data = Rcpp::as<Rcpp::List > (R_PsmCurves["data"]);
     X_ = Rcpp::as<vecmats_2d>(R_data["X"]);
 }
 
@@ -62,12 +77,12 @@ std::vector<double> surv_list::quantile(int model, int sample, int obs, std::vec
 }
 
 // Create pointer to base survival class
-std::unique_ptr<surv_mods> create_surv_mods(Rcpp::Environment R_PartSurvCurves){
-    Rcpp::List R_params = Rcpp::as<Rcpp::List>(R_PartSurvCurves["params"]);
+std::unique_ptr<surv_mods> create_surv_mods(Rcpp::Environment R_PsmCurves){
+    Rcpp::List R_params = Rcpp::as<Rcpp::List>(R_PsmCurves["params"]);
  
     surv_mods * survmods;
     if (Rf_inherits(R_params, "params_surv_list")){
-        survmods = new surv_list(R_PartSurvCurves);
+        survmods = new surv_list(R_PsmCurves);
     }
     else{
         Rcpp::stop("The selected statistical model is not available.");
@@ -76,119 +91,15 @@ std::unique_ptr<surv_mods> create_surv_mods(Rcpp::Environment R_PartSurvCurves){
     return uptr;
 }
 
-/****************
-* Survival curves
-****************/
-surv_curves_out::surv_curves_out(){
-}
-
-surv_curves_out::surv_curves_out(int n){
-  curve_.resize(n);
-  sample_.resize(n);
-  strategy_id_.resize(n);
-  patient_id_.resize(n);
-  x_.resize(n);
-  value_.resize(n);
-}
-
-int surv_curves_out::index(int sim, int curve) const{
-  return curve * n_sims_ + sim;
-}
-
-surv_curves_out surv_curves_out::create_from_R(Rcpp::Environment R_PartSurv){
-  surv_curves_out out;
-  Rcpp::DataFrame R_survival = Rcpp::as<Rcpp::DataFrame>(R_PartSurv["survival_"]);
-  
-  out.curve_ = Rcpp::as<std::vector<int> >(R_survival["curve"]);
-  out.sample_ = Rcpp::as<std::vector<int> >(R_survival["sample"]);
-  out.strategy_id_ = Rcpp::as<std::vector<int> >(R_survival["strategy_id"]);
-  out.patient_id_ = Rcpp::as<std::vector<int> >(R_survival["patient_id"]);
-  out.x_ = Rcpp::as<std::vector<double> >(R_survival["t"]);
-  out.value_ = Rcpp::as<std::vector<double> >(R_survival["survival"]);
-  out.n_states_ = Rcpp::as<int>(R_PartSurv["n_states"]);
-  int n_curves = out.n_states_ - 1;
-  out.n_sims_ = out.value_.size()/n_curves;
-  
-  // R to C++ indexing
-  hesim::add_constant(out.curve_, -1); 
-  hesim::add_constant(out.sample_, -1); 
-  return out;
-}
-
-surv_curves::surv_curves(Rcpp::Environment R_PartSurvCurves)
-  : survmods_(create_surv_mods(R_PartSurvCurves)){
-};
-
-Rcpp::DataFrame surv_curves::summary(std::vector<double> x, std::string type,
-                                double dr){
-  // Preallocate
-  int n_models = survmods_->get_n_models();
-  int n_samples = survmods_->get_n_samples();
-  int n_obs = survmods_->get_n_obs();
-  int N = n_models * n_samples * n_obs * x.size();
-  surv_curves_out out(N);            
-
-  // Loop
-  int counter = 0;
-  for (int m = 0; m < n_models; ++m){
-    for (int s = 0; s < n_samples; ++s){
-      for (int i = 0; i < n_obs; ++i){
-        std::vector<double> res_vec;
-        if (type == "survival"){
-          res_vec = survmods_->summary(m, s, i, x, "survival");
-        }
-        else if (type == "cumhazard"){
-          res_vec = survmods_->summary(m, s, i, x, "cumhazard");
-        }
-        else if (type == "hazard"){
-          res_vec = survmods_->summary(m, s, i, x, "hazard");
-        }
-        else if (type == "rmst"){
-          res_vec = survmods_->summary(m, s, i, x, "rmst", dr); 
-        }
-        else if (type == "quantile"){
-          res_vec = survmods_->quantile(m, s, i, x);
-        } 
-        else{
-          Rcpp::stop("Selected type for summarizing survival distribution is not available.");
-        }
-        
-        // store vector
-        for (int j = 0; j < x.size(); ++j){
-          out.curve_[counter] = m;
-          out.sample_[counter] = s;
-          out.strategy_id_[counter] = survmods_->strategy_id_[i];
-          out.patient_id_[counter] = survmods_->patient_id_[i];
-          out.x_[counter] = x[j];
-          out.value_[counter] = res_vec[j];
-          ++counter;
-        }
-      }
-    }
-  }
-
-  // Return
-  Rcpp::DataFrame out_df = Rcpp::DataFrame::create(
-    Rcpp::_["curve"] = out.curve_,
-    Rcpp::_["sample"] = out.sample_,
-    Rcpp::_["strategy_id"] = out.strategy_id_,
-    Rcpp::_["patient_id"] = out.patient_id_,
-    Rcpp::_["x"] = out.x_,
-    Rcpp::_["value"] = out.value_,
-    Rcpp::_["stringsAsFactors"] = false
-  );
-  return out_df;
-}
-
-/************************************
-* Partitioned survival decision model
-************************************/
-stateprobs::stateprobs(Rcpp::Environment R_PartSurv)
-  : survcurves_(surv_curves_out::create_from_R(R_PartSurv)){
+/****************************
+* Health state probabilities
+****************************/
+stateprobs::stateprobs(Rcpp::Environment R_psm)
+  : survcurves_(surv_summary::create_from_R(R_psm)){
   n_crossings_ = 0; // Number of times survival curves cross
 };
 
-double stateprobs::sim_probs1(int sim, int state){
+double stateprobs::sim1(int sim, int state){
   if (state == 0){
     int index = survcurves_.index(sim, state);
     return survcurves_.value_[index];
@@ -210,7 +121,7 @@ double stateprobs::sim_probs1(int sim, int state){
   }
 }
 
-Rcpp::List stateprobs::sim_probs(){
+Rcpp::List stateprobs::sim(){
   stateprobs_out out(survcurves_.n_sims_ * survcurves_.n_states_ );
 
   int counter = 0;
@@ -222,21 +133,13 @@ Rcpp::List stateprobs::sim_probs(){
       out.strategy_id_[counter] = survcurves_.strategy_id_[index];
       out.patient_id_[counter] = survcurves_.patient_id_[index];
       out.t_[counter] = survcurves_.x_[index];
-      out.prob_[counter] = sim_probs1(i, j);
+      out.prob_[counter] = sim1(i, j);
       ++counter;
-    }
-  }
+    } // end health state loop
+  } // end simulation loop
   
   // Return
-  Rcpp::DataFrame stateprobs_df = Rcpp::DataFrame::create(
-    Rcpp::_["state_id"] = out.state_id_,
-    Rcpp::_["sample"] = out.sample_,
-    Rcpp::_["strategy_id"] = out.strategy_id_,
-    Rcpp::_["patient_id"] = out.patient_id_,
-    Rcpp::_["t"] = out.t_,
-    Rcpp::_["prob"] = out.prob_,
-    Rcpp::_["stringsAsFactors"] = false
-  );
+  Rcpp::DataFrame stateprobs_df = out.create_R_data_frame();
   
   return(Rcpp::List::create(
     Rcpp::_["stateprobs"] = stateprobs_df,
@@ -248,29 +151,128 @@ Rcpp::List stateprobs::sim_probs(){
 
 } // end hesim namespace
 
-/************************
-* Functions exported to R
-************************/
+/***************************************************************************//** 
+ * @ingroup psm
+ * Summarize the survival curves from a partitioned survival model.
+ * This function is exported to @c R and used in the private member function
+ *  @c PsmCurves$summary().
+ * @param R_psm_curves An R object of class @c PsmCurves.
+ * @param x A vector of values at which to summarize the survival curves 
+ * (hazard, cumulative hazard, survival, restricted mean survival time, and 
+ * quantiles). Either a vector of quantiles (i.e., times) or a vector of 
+ * probabilities (when computing quantiles).  
+ * @return An R data frame with the following columns:
+ * - @c curve: An integer denoting a summarized curve. 
+ * - @c sample: An integer denoting a randomly sampled parameter set.
+ * - @c strategy_id: An integer denoting a treatemnt strategy id.
+ * - @c patient_id: An integer denoting a patient id.
+ * - @c x: The value of @p x.
+ * - @c value: The summarized value (hazard, cumulative hazard, survival proportion,
+ *     restricted mean survival time, or quantile).
+ ******************************************************************************/ 
 // [[Rcpp::export]]
-Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PartSurvCurves, std::vector<double> x, 
-                             std::string type, double dr){
-  hesim::psm::surv_curves survcurves(R_PartSurvCurves);
-  return survcurves.summary(x, type, dr);
+Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PsmCurves, 
+                                     std::vector<double> x, 
+                                     std::string type, double dr){
+  // Initialize
+  std::unique_ptr<hesim::psm::surv_mods> survmods = hesim::psm::surv_mods::create(R_PsmCurves);
+  int n_models = survmods->get_n_models();
+  int n_samples = survmods->get_n_samples();
+  int n_obs = survmods->get_n_obs();
+  int N = n_models * n_samples * n_obs * x.size();
+  hesim::psm::surv_summary out(N);      
+  
+  // Loop
+  int counter = 0;
+  for (int m = 0; m < n_models; ++m){
+    for (int s = 0; s < n_samples; ++s){
+      for (int i = 0; i < n_obs; ++i){
+        std::vector<double> res_vec;
+        if (type == "survival"){
+          res_vec = survmods->summary(m, s, i, x, "survival");
+        }
+        else if (type == "cumhazard"){
+          res_vec = survmods->summary(m, s, i, x, "cumhazard");
+        }
+        else if (type == "hazard"){
+          res_vec = survmods->summary(m, s, i, x, "hazard");
+        }
+        else if (type == "rmst"){
+          res_vec = survmods->summary(m, s, i, x, "rmst", dr); 
+        }
+        else if (type == "quantile"){
+          res_vec = survmods->quantile(m, s, i, x);
+        } 
+        else{
+          Rcpp::stop("Selected type for summarizing survival distribution is not available.");
+        }
+        
+        // store vector
+        for (int j = 0; j < x.size(); ++j){
+          out.curve_[counter] = m;
+          out.sample_[counter] = s;
+          out.strategy_id_[counter] = survmods->strategy_id_[i];
+          out.patient_id_[counter] = survmods->patient_id_[i];
+          out.x_[counter] = x[j];
+          out.value_[counter] = res_vec[j];
+          ++counter;
+        } // end loop over health states
+      } // end loop over observations
+    } // end loop over samples
+  } // end loop over models
+
+  // Return
+  Rcpp::DataFrame out_df = Rcpp::DataFrame::create(
+    Rcpp::_["curve"] = out.curve_,
+    Rcpp::_["sample"] = out.sample_,
+    Rcpp::_["strategy_id"] = out.strategy_id_,
+    Rcpp::_["patient_id"] = out.patient_id_,
+    Rcpp::_["x"] = out.x_,
+    Rcpp::_["value"] = out.value_,
+    Rcpp::_["stringsAsFactors"] = false
+  );
+  return out_df;  
 }
 
+/***************************************************************************//** 
+ * @ingroup psm
+ * Simulate health state probabilities with a partitioned survival model.
+ * This function is exported to @c R and used in @c Psm$sim_stateprobs().
+ * @param R_psm An R object of class @c Psm
+ * @return The same output returned by hesim::psm::stateprobs::sim.
+ ******************************************************************************/ 
 // [[Rcpp::export]]
-Rcpp::List C_psm_sim_stateprobs(Rcpp::Environment R_PartSurv){
-  hesim::psm::stateprobs stprobs(R_PartSurv);
-  return stprobs.sim_probs();
+Rcpp::List C_psm_sim_stateprobs(Rcpp::Environment R_Psm){
+  hesim::psm::stateprobs stprobs(R_Psm);
+  return stprobs.sim();
 }
 
+/***************************************************************************//** 
+ * @ingroup psm
+ * Simulate weighted length of stay from health state probabilities simulated
+ * using a partitioned survival model.
+ * This function is exported to @c R and used in @c Psm$sim_costs() and
+ * @c Psm$sim_qalys(). 
+ * @param R_psm An @c R object of class @c Psm
+ * @param R_stateprobs State probabilities computed using an R object of class 
+ * @c Psm. (This is needed in addition to @p R_psm because a modified copy of
+ * @c Psm$stateprobs_ is passed to @c C++ and its more efficient to copy a single
+ * data member than the entire class object.)
+ * @param dr Discount rate.
+ * @param type "costs" for costs; "qalys" for quality-adjusted life-years.
+ * @param categories Categories with a given @p type. For QALYs, there is only one
+ * category ("qalys"), but for costs this could consist of different cost categories
+ * such as drug acquisition and administration costs, resource use costs, etc. 
+ * @return An @c R data frame with columns equivalent to the data members in
+ * hesim::wlos_out_out.
+ ******************************************************************************/ 
 // [[Rcpp::export]]
-Rcpp::DataFrame C_psm_sim_wlos(Rcpp::Environment R_psm, Rcpp::DataFrame R_stateprobs, 
+Rcpp::DataFrame C_psm_sim_wlos(Rcpp::Environment R_Psm, Rcpp::DataFrame R_stateprobs, 
                               std::vector<double> dr, std::string type,
                               std::vector<std::string> categories){
-  hesim::wlos wlos(R_psm, type);
+  hesim::wlos wlos(R_Psm, type);
   hesim::stateprobs_out stprobs(R_stateprobs);
-  std::vector<double> times = Rcpp::as<std::vector<double> > (R_psm["t_"]);
+  std::vector<double> times = Rcpp::as<std::vector<double> > (R_Psm["t_"]);
   hesim::wlos_out out = wlos(stprobs, times, dr, categories);
   return out.create_R_data_frame();
 }

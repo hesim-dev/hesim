@@ -193,42 +193,42 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_psm_curves_summary
-Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PartSurvCurves, std::vector<double> x, std::string type, double dr);
-RcppExport SEXP _hesim_C_psm_curves_summary(SEXP R_PartSurvCurvesSEXP, SEXP xSEXP, SEXP typeSEXP, SEXP drSEXP) {
+Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PsmCurves, std::vector<double> x, std::string type, double dr);
+RcppExport SEXP _hesim_C_psm_curves_summary(SEXP R_PsmCurvesSEXP, SEXP xSEXP, SEXP typeSEXP, SEXP drSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PartSurvCurves(R_PartSurvCurvesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PsmCurves(R_PsmCurvesSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
     Rcpp::traits::input_parameter< double >::type dr(drSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_psm_curves_summary(R_PartSurvCurves, x, type, dr));
+    rcpp_result_gen = Rcpp::wrap(C_psm_curves_summary(R_PsmCurves, x, type, dr));
     return rcpp_result_gen;
 END_RCPP
 }
 // C_psm_sim_stateprobs
-Rcpp::List C_psm_sim_stateprobs(Rcpp::Environment R_PartSurv);
-RcppExport SEXP _hesim_C_psm_sim_stateprobs(SEXP R_PartSurvSEXP) {
+Rcpp::List C_psm_sim_stateprobs(Rcpp::Environment R_Psm);
+RcppExport SEXP _hesim_C_psm_sim_stateprobs(SEXP R_PsmSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_PartSurv(R_PartSurvSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_psm_sim_stateprobs(R_PartSurv));
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_Psm(R_PsmSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_psm_sim_stateprobs(R_Psm));
     return rcpp_result_gen;
 END_RCPP
 }
 // C_psm_sim_wlos
-Rcpp::DataFrame C_psm_sim_wlos(Rcpp::Environment R_psm, Rcpp::DataFrame R_stateprobs, std::vector<double> dr, std::string type, std::vector<std::string> categories);
-RcppExport SEXP _hesim_C_psm_sim_wlos(SEXP R_psmSEXP, SEXP R_stateprobsSEXP, SEXP drSEXP, SEXP typeSEXP, SEXP categoriesSEXP) {
+Rcpp::DataFrame C_psm_sim_wlos(Rcpp::Environment R_Psm, Rcpp::DataFrame R_stateprobs, std::vector<double> dr, std::string type, std::vector<std::string> categories);
+RcppExport SEXP _hesim_C_psm_sim_wlos(SEXP R_PsmSEXP, SEXP R_stateprobsSEXP, SEXP drSEXP, SEXP typeSEXP, SEXP categoriesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_psm(R_psmSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_Psm(R_PsmSEXP);
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_stateprobs(R_stateprobsSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type dr(drSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
     Rcpp::traits::input_parameter< std::vector<std::string> >::type categories(categoriesSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_psm_sim_wlos(R_psm, R_stateprobs, dr, type, categories));
+    rcpp_result_gen = Rcpp::wrap(C_psm_sim_wlos(R_Psm, R_stateprobs, dr, type, categories));
     return rcpp_result_gen;
 END_RCPP
 }
