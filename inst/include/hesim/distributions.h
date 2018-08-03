@@ -1,9 +1,9 @@
 # ifndef DISTRIBUTIONS_H
 # define DISTRIBUTIONS_H
 #include <RcppArmadillo.h>
-#include "utils.h"
+#include <hesim/utils.h>
 #include <RcppNumerical.h>
-#include "zeroin.h"
+#include <hesim/zeroin.h>
 #include <memory>
 
 namespace hesim{
@@ -955,7 +955,7 @@ public:
 };
 
 /***************************************************************************//**
- * Random number generation for categorical distribution.
+ * Random number generation for the categorical distribution.
  * @param probs A vector of length @c K specifying the probability of each of the 
  * @c K categories. Internally normalized to sum to 1.
  * @return A random sample from the categorical distribution.
@@ -968,6 +968,60 @@ inline int rcat(arma::rowvec probs) {
   rmultinom(1, probs.begin(), k, ans.begin());
   int max = which_max(ans);
   return(max);
+}
+
+/***************************************************************************//**
+ * Random number generation for the truncated normal distribution.
+ * @param mean Mean of the distribution.
+ * @param sd Standard deviation of the distribution.
+ * @param lower Lower bound.
+ * @param Upper bound
+ * @return A random sample from the truncated normal distribution.
+ ******************************************************************************/ 
+inline double rtruncnorm(double mean, double sd, double lower, double upper){
+  double  sample;
+  sample = R::rnorm(mean, sd);
+  while(sample < lower || sample > upper){
+      sample = R::rnorm(mean, sd);
+  }
+  return sample;
+}
+
+/***************************************************************************//**
+ * Random number generation for the piecewise exponential distribution.
+ * @param rate Vector of rates with each element denoting a unique time
+ * period.
+ * @param time Vector of times of the same length as @p rate giving the times
+ * at which the rate changes.
+ * @return A random sample from the piecewise exponential distribution.
+ ******************************************************************************/ 
+inline double rpwexp (arma::rowvec rate, arma::rowvec time) {
+  int T = rate.n_elem;
+  double surv = 0.0;
+  for (int t = 0; t < T; ++t){
+      double rexp_t = R::rexp(1/rate(t));
+      surv = time(t) + rexp_t;
+      if (t < (T - 1)){
+          if (surv < time(t + 1)){
+              break;
+          }
+      }
+  }
+  return surv;
+}
+
+/***************************************************************************//**
+ * Random number generation for the Dirichlet distribution.
+ * @param alpha Vector of concentration parameters.
+ * @return A random sample from the Dirichlet distribution.
+ ******************************************************************************/ 
+inline arma::rowvec rdirichlet(arma::rowvec alpha){
+  int alpha_len = alpha.size();
+  arma::rowvec x(alpha_len);
+  for (int i = 0; i < alpha_len; ++i){
+      x(i) = R::rgamma(alpha(i), 1);
+  }
+  return x/arma::sum(x);
 }
 
 } //end namespace stats

@@ -73,24 +73,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_rgengamma_vec
-std::vector<double> C_rgengamma_vec(int n, std::vector<double> mu, std::vector<double> sigma, std::vector<double> Q);
-static SEXP _hesim_C_rgengamma_vec_try(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
+// C_rgengamma
+std::vector<double> C_rgengamma(int n, std::vector<double> mu, std::vector<double> sigma, std::vector<double> Q);
+static SEXP _hesim_C_rgengamma_try(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type mu(muSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type sigma(sigmaSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type Q(QSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_rgengamma_vec(n, mu, sigma, Q));
+    rcpp_result_gen = Rcpp::wrap(C_rgengamma(n, mu, sigma, Q));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _hesim_C_rgengamma_vec(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
+RcppExport SEXP _hesim_C_rgengamma(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_C_rgengamma_vec_try(nSEXP, muSEXP, sigmaSEXP, QSEXP));
+        rcpp_result_gen = PROTECT(_hesim_C_rgengamma_try(nSEXP, muSEXP, sigmaSEXP, QSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -106,87 +106,23 @@ RcppExport SEXP _hesim_C_rgengamma_vec(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, 
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// rtruncnorm
-double rtruncnorm(double mean, double sd, double lower, double upper);
-static SEXP _hesim_rtruncnorm_try(SEXP meanSEXP, SEXP sdSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
-    Rcpp::traits::input_parameter< double >::type sd(sdSEXP);
-    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
-    rcpp_result_gen = Rcpp::wrap(rtruncnorm(mean, sd, lower, upper));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _hesim_rtruncnorm(SEXP meanSEXP, SEXP sdSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rtruncnorm_try(meanSEXP, sdSEXP, lowerSEXP, upperSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// rpwexp
-double rpwexp(arma::rowvec rate, arma::rowvec time);
-static SEXP _hesim_rpwexp_try(SEXP rateSEXP, SEXP timeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< arma::rowvec >::type rate(rateSEXP);
-    Rcpp::traits::input_parameter< arma::rowvec >::type time(timeSEXP);
-    rcpp_result_gen = Rcpp::wrap(rpwexp(rate, time));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _hesim_rpwexp(SEXP rateSEXP, SEXP timeSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rpwexp_try(rateSEXP, timeSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// rpwexp_vec
-std::vector<double> rpwexp_vec(int n, arma::mat rate, arma::rowvec time);
-static SEXP _hesim_rpwexp_vec_try(SEXP nSEXP, SEXP rateSEXP, SEXP timeSEXP) {
+// C_rpwexp
+std::vector<double> C_rpwexp(int n, arma::mat rate, arma::rowvec time);
+static SEXP _hesim_C_rpwexp_try(SEXP nSEXP, SEXP rateSEXP, SEXP timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type rate(rateSEXP);
     Rcpp::traits::input_parameter< arma::rowvec >::type time(timeSEXP);
-    rcpp_result_gen = Rcpp::wrap(rpwexp_vec(n, rate, time));
+    rcpp_result_gen = Rcpp::wrap(C_rpwexp(n, rate, time));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _hesim_rpwexp_vec(SEXP nSEXP, SEXP rateSEXP, SEXP timeSEXP) {
+RcppExport SEXP _hesim_C_rpwexp(SEXP nSEXP, SEXP rateSEXP, SEXP timeSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rpwexp_vec_try(nSEXP, rateSEXP, timeSEXP));
+        rcpp_result_gen = PROTECT(_hesim_C_rpwexp_try(nSEXP, rateSEXP, timeSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -233,21 +169,22 @@ RcppExport SEXP _hesim_C_rcat(SEXP nSEXP, SEXP probsSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// rdirichlet
-arma::rowvec rdirichlet(arma::rowvec alpha);
-static SEXP _hesim_rdirichlet_try(SEXP alphaSEXP) {
+// C_rdirichlet_mat
+arma::cube C_rdirichlet_mat(int n, arma::mat alpha);
+static SEXP _hesim_C_rdirichlet_mat_try(SEXP nSEXP, SEXP alphaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< arma::rowvec >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(rdirichlet(alpha));
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_rdirichlet_mat(n, alpha));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _hesim_rdirichlet(SEXP alphaSEXP) {
+RcppExport SEXP _hesim_C_rdirichlet_mat(SEXP nSEXP, SEXP alphaSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rdirichlet_try(alphaSEXP));
+        rcpp_result_gen = PROTECT(_hesim_C_rdirichlet_mat_try(nSEXP, alphaSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -263,22 +200,24 @@ RcppExport SEXP _hesim_rdirichlet(SEXP alphaSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// rdirichlet_mat
-arma::cube rdirichlet_mat(int n, arma::mat alpha);
-static SEXP _hesim_rdirichlet_mat_try(SEXP nSEXP, SEXP alphaSEXP) {
+// C_test_rtruncnorm
+double C_test_rtruncnorm(double mean, double sd, double lower, double upper);
+static SEXP _hesim_C_test_rtruncnorm_try(SEXP meanSEXP, SEXP sdSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(rdirichlet_mat(n, alpha));
+    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
+    Rcpp::traits::input_parameter< double >::type sd(sdSEXP);
+    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_rtruncnorm(mean, sd, lower, upper));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _hesim_rdirichlet_mat(SEXP nSEXP, SEXP alphaSEXP) {
+RcppExport SEXP _hesim_C_test_rtruncnorm(SEXP meanSEXP, SEXP sdSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_hesim_rdirichlet_mat_try(nSEXP, alphaSEXP));
+        rcpp_result_gen = PROTECT(_hesim_C_test_rtruncnorm_try(meanSEXP, sdSEXP, lowerSEXP, upperSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -490,26 +429,22 @@ END_RCPP
 static int _hesim_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("std::vector<double>(*C_rgengamma_vec)(int,std::vector<double>,std::vector<double>,std::vector<double>)");
-        signatures.insert("double(*rtruncnorm)(double,double,double,double)");
-        signatures.insert("double(*rpwexp)(arma::rowvec,arma::rowvec)");
-        signatures.insert("std::vector<double>(*C_rpwexp_vec)(int,arma::mat,arma::rowvec)");
+        signatures.insert("std::vector<double>(*C_rgengamma)(int,std::vector<double>,std::vector<double>,std::vector<double>)");
+        signatures.insert("std::vector<double>(*C_rpwexp)(int,arma::mat,arma::rowvec)");
         signatures.insert("std::vector<double>(*C_rcat)(int,arma::mat)");
-        signatures.insert("arma::rowvec(*rdirichlet)(arma::rowvec)");
         signatures.insert("arma::cube(*C_rdirichlet_mat)(int,arma::mat)");
+        signatures.insert("double(*C_test_rtruncnorm)(double,double,double,double)");
     }
     return signatures.find(sig) != signatures.end();
 }
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _hesim_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("hesim", "_hesim_C_rgengamma_vec", (DL_FUNC)_hesim_C_rgengamma_vec_try);
-    R_RegisterCCallable("hesim", "_hesim_rtruncnorm", (DL_FUNC)_hesim_rtruncnorm_try);
-    R_RegisterCCallable("hesim", "_hesim_rpwexp", (DL_FUNC)_hesim_rpwexp_try);
-    R_RegisterCCallable("hesim", "_hesim_C_rpwexp_vec", (DL_FUNC)_hesim_rpwexp_vec_try);
+    R_RegisterCCallable("hesim", "_hesim_C_rgengamma", (DL_FUNC)_hesim_C_rgengamma_try);
+    R_RegisterCCallable("hesim", "_hesim_C_rpwexp", (DL_FUNC)_hesim_C_rpwexp_try);
     R_RegisterCCallable("hesim", "_hesim_C_rcat", (DL_FUNC)_hesim_C_rcat_try);
-    R_RegisterCCallable("hesim", "_hesim_rdirichlet", (DL_FUNC)_hesim_rdirichlet_try);
-    R_RegisterCCallable("hesim", "_hesim_C_rdirichlet_mat", (DL_FUNC)_hesim_rdirichlet_mat_try);
+    R_RegisterCCallable("hesim", "_hesim_C_rdirichlet_mat", (DL_FUNC)_hesim_C_rdirichlet_mat_try);
+    R_RegisterCCallable("hesim", "_hesim_C_test_rtruncnorm", (DL_FUNC)_hesim_C_test_rtruncnorm_try);
     R_RegisterCCallable("hesim", "_hesim_RcppExport_validate", (DL_FUNC)_hesim_RcppExport_validate);
     return R_NilValue;
 }
@@ -521,13 +456,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_ceac", (DL_FUNC) &_hesim_C_ceac, 6},
     {"_hesim_C_mce", (DL_FUNC) &_hesim_C_mce, 6},
     {"_hesim_C_enmbpi", (DL_FUNC) &_hesim_C_enmbpi, 6},
-    {"_hesim_C_rgengamma_vec", (DL_FUNC) &_hesim_C_rgengamma_vec, 4},
-    {"_hesim_rtruncnorm", (DL_FUNC) &_hesim_rtruncnorm, 4},
-    {"_hesim_rpwexp", (DL_FUNC) &_hesim_rpwexp, 2},
-    {"_hesim_rpwexp_vec", (DL_FUNC) &_hesim_rpwexp_vec, 3},
+    {"_hesim_C_rgengamma", (DL_FUNC) &_hesim_C_rgengamma, 4},
+    {"_hesim_C_rpwexp", (DL_FUNC) &_hesim_C_rpwexp, 3},
     {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
-    {"_hesim_rdirichlet", (DL_FUNC) &_hesim_rdirichlet, 1},
-    {"_hesim_rdirichlet_mat", (DL_FUNC) &_hesim_rdirichlet_mat, 2},
+    {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
+    {"_hesim_C_test_rtruncnorm", (DL_FUNC) &_hesim_C_test_rtruncnorm, 4},
     {"_hesim_C_test_trapzfun", (DL_FUNC) &_hesim_C_test_trapzfun, 1},
     {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
     {"_hesim_C_test_cumtrapzfun", (DL_FUNC) &_hesim_C_test_cumtrapzfun, 1},

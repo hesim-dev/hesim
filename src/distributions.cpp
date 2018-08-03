@@ -1,8 +1,14 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <hesim/distributions.h>
 
+/***************************************************************************//**
+ * @ingroup stats
+ * Vectorized random number generation for the generalized gamma distribution.
+ * A vectorized version of hesim::stats::gengamma.random that is exported to @c R and
+ * used in the @c R function @c fast_rgengamma.
+ ******************************************************************************/ 
 // [[Rcpp::export]]
-std::vector<double> C_rgengamma_vec(int n, std::vector<double> mu,
+std::vector<double> C_rgengamma(int n, std::vector<double> mu,
                                   std::vector<double> sigma,
                                   std::vector<double> Q){
   std::vector<double> sample(n);
@@ -17,44 +23,22 @@ std::vector<double> C_rgengamma_vec(int n, std::vector<double> mu,
       hesim::stats::gengamma gengamma(mu[index], sigma[index], Q[index]);
       sample[i] = gengamma.random();
   }
-  return(sample);
-}
-
-// [[Rcpp::export]]
-double rtruncnorm(double mean, double sd, double lower, double upper){
-  double  sample;
-  sample = R::rnorm(mean, sd);
-  while(sample < lower || sample > upper){
-      sample = R::rnorm(mean, sd);
-  }
   return sample;
 }
 
-// NOTE: rate in R::rexp is 1/rate in rexp!!!!!!!!
+/***************************************************************************//**
+ * @ingroup stats
+ * Vectorized random number generation for the piecewise exponential distribution.
+ * A vectorized version of hesim::stats::rpwexp that is exported to @c R and
+ * used in the @c R function @c rpwexp.
+ ******************************************************************************/ 
 // [[Rcpp::export]]
-double rpwexp (arma::rowvec rate, arma::rowvec time) {
-  int T = rate.n_elem;
-  double surv = 0.0;
-  for (int t = 0; t < T; ++t){
-      double rexp_t = R::rexp(1/rate(t));
-      surv = time(t) + rexp_t;
-      if (t < (T - 1)){
-          if (surv < time(t + 1)){
-              break;
-          }
-      }
-  }
-  return surv;
-}
-
-// Vectorized piecewise exponential
-// [[Rcpp::export(name="C_rpwexp_vec")]]
-std::vector<double> rpwexp_vec (int n, arma::mat rate, arma::rowvec time) {
+std::vector<double> C_rpwexp(int n, arma::mat rate, arma::rowvec time) {
   int b = rate.n_rows;
   std::vector<double> surv;
   surv.reserve(n);
   for (int i = 0; i < n; ++i){
-      surv.push_back(rpwexp(rate.row(i % b), time));
+      surv.push_back(hesim::stats::rpwexp(rate.row(i % b), time));
   }
   return surv;
 }
@@ -62,11 +46,8 @@ std::vector<double> rpwexp_vec (int n, arma::mat rate, arma::rowvec time) {
 /***************************************************************************//**
  * @ingroup stats
  * Vectorized random number generation for categorical distribution.
- * A vectorized version of hesim::stats::rcat that is exported to @c R.
- * @param probs A matrix with @c K columns specifying the probability of each of the 
- * @c K categories. An sample is drawn for each of the @c N rows. 
- * Each row is internally normalized to sum to 1.
- * @return A vector of @c N random samples. 
+ * A vectorized version of hesim::stats::rcat that is exported to @c R and
+ * used in the @c R function @c rcat.
  ******************************************************************************/ 
 // [[Rcpp::export]]
 std::vector<double> C_rcat(int n, arma::mat probs){
@@ -78,32 +59,37 @@ std::vector<double> C_rcat(int n, arma::mat probs){
   return(samples);
 }
 
+/***************************************************************************//**
+ * @ingroup stats
+ * Vectorized random number generation for the Dirichlet distribution.
+ * A vectorized version of hesim::stats::rdirichlet that is exported to @c R and
+ * used in the @c R function @c rdirichlet_mat.
+ ******************************************************************************/ 
 // [[Rcpp::export]]
-arma::rowvec rdirichlet(arma::rowvec alpha){
-  int alpha_len = alpha.size();
-  arma::rowvec x(alpha_len);
-  for (int i = 0; i < alpha_len; ++i){
-      x(i) = R::rgamma(alpha(i), 1);
-  }
-  return x/arma::sum(x);
-}
-
-// [[Rcpp::export(name="C_rdirichlet_mat")]]
-arma::cube rdirichlet_mat(int n, arma::mat alpha){
+arma::cube C_rdirichlet_mat(int n, arma::mat alpha){
   int J = alpha.n_rows;
   int K = alpha.n_cols;
   arma::cube samp(J, K, n);
   for (int i = 0; i < n; ++i){
-      for (int j = 0; j < J; ++j){
-          samp.slice(i).row(j) = rdirichlet(alpha.row(j));
-      }
+    for (int j = 0; j < J; ++j){
+      samp.slice(i).row(j) = hesim::stats::rdirichlet(alpha.row(j));
+    }
   }
   return(samp);
 }
+/***************************************************************************//**
+ * @ingroup stats
+ * Function to test hesim::stats::rtruncnorm.
+ ******************************************************************************/ 
+// [[Rcpp::export]]
+double C_test_rtruncnorm(double mean, double sd, double lower, double upper){
+  return hesim::stats::rtruncnorm(mean, sd, lower, upper);
+}
 
-/**************
-* RCPP Modules
-**************/
+/***************************************************************************//**
+ * @ingroup stats
+ * Rcpp modules containing classes inherited from hesim::stats:::distribution.
+ ******************************************************************************/ 
 RCPP_MODULE(distributions){
   Rcpp::class_<hesim::stats::distribution>("distribution")
   .method("pdf", &hesim::stats::distribution::pdf)

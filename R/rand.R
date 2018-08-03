@@ -88,7 +88,7 @@ rpwexp <- function(n, rate = 1, time = 0){
   if (ncol(rate) != length(time)){
     stop("length of time must be equal to the number of columns in rate.")
   }
-  return(C_rpwexp_vec(n, rate, time))
+  return(C_rpwexp(n, rate, time))
 }
 
 #' Random generation for multiple Dirichlet distributions
@@ -151,5 +151,5 @@ rdirichlet_mat <- function(n, alpha){
 #' equal to n.
 #' @export
 fast_rgengamma <- function(n, mu = 0, sigma = 1, Q){
-  return(C_rgengamma_vec(n, mu, sigma, Q))
+  return(C_rgengamma(n, mu, sigma, Q))
 }

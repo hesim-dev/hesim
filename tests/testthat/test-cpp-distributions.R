@@ -573,7 +573,7 @@ test_that("rtruncnorm", {
   
   #rtruncnorm from hesim
   set.seed(10)
-  samp1 <- replicate(n, hesim:::rtruncnorm(mu, sigma, lower, upper))
+  samp1 <- replicate(n, hesim:::C_test_rtruncnorm(mu, sigma, lower, upper))
   
   # rtruncnorm from truncnorm package
   set.seed(10)

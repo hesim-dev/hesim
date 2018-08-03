@@ -1,7 +1,6 @@
-#ifndef RCPP_hesim_H_
-#define RCPP_hesim_H_
+#ifndef hesim_H_
+#define hesim_H_
 
-#include "hesim_RcppExports.h"
 #include <hesim/statmods.h>
 #include <hesim/time_fun.h>
 
@@ -38,4 +37,4 @@ the @c R package by the same name.
  *  @c R package @c Rcpp and the @c R package @c testthat.
  */
 
-#endif // RCPP_hesim_H_GEN_
+#endif // hesim_H_

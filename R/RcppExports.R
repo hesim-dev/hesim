@@ -17,32 +17,24 @@ C_enmbpi <- function(k, e, c, n_samples, n_strategies, n_grps) {
     .Call('_hesim_C_enmbpi', PACKAGE = 'hesim', k, e, c, n_samples, n_strategies, n_grps)
 }
 
-C_rgengamma_vec <- function(n, mu, sigma, Q) {
-    .Call('_hesim_C_rgengamma_vec', PACKAGE = 'hesim', n, mu, sigma, Q)
+C_rgengamma <- function(n, mu, sigma, Q) {
+    .Call('_hesim_C_rgengamma', PACKAGE = 'hesim', n, mu, sigma, Q)
 }
 
-rtruncnorm <- function(mean, sd, lower, upper) {
-    .Call('_hesim_rtruncnorm', PACKAGE = 'hesim', mean, sd, lower, upper)
-}
-
-rpwexp <- function(rate, time) {
-    .Call('_hesim_rpwexp', PACKAGE = 'hesim', rate, time)
-}
-
-C_rpwexp_vec <- function(n, rate, time) {
-    .Call('_hesim_rpwexp_vec', PACKAGE = 'hesim', n, rate, time)
+C_rpwexp <- function(n, rate, time) {
+    .Call('_hesim_C_rpwexp', PACKAGE = 'hesim', n, rate, time)
 }
 
 C_rcat <- function(n, probs) {
     .Call('_hesim_C_rcat', PACKAGE = 'hesim', n, probs)
 }
 
-rdirichlet <- function(alpha) {
-    .Call('_hesim_rdirichlet', PACKAGE = 'hesim', alpha)
+C_rdirichlet_mat <- function(n, alpha) {
+    .Call('_hesim_C_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
-C_rdirichlet_mat <- function(n, alpha) {
-    .Call('_hesim_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
+C_test_rtruncnorm <- function(mean, sd, lower, upper) {
+    .Call('_hesim_C_test_rtruncnorm', PACKAGE = 'hesim', mean, sd, lower, upper)
 }
 
 C_test_trapzfun <- function(x) {
