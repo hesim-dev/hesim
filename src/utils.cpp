@@ -2,34 +2,7 @@
 #include <RcppArmadillo.h>
 #include <hesim/utils.h>
 
-/****************************
-* Custom Rcpp::as converters
-****************************/
-namespace Rcpp {
-  template <> vecmats as(SEXP object) {
-    Rcpp::List l = Rcpp::as<Rcpp::List>(object);
-    return hesim::detail::list_to_vec<vecmats, arma::mat>(l);
-  }
-  
-  template <> vecmats_2d as(SEXP object) {
-    Rcpp::List l = Rcpp::as<Rcpp::List>(object);
-    return hesim::detail::list_to_vec<vecmats_2d, vecmats>(l);
-  }
-  
-  template <> vecmats_3d as(SEXP object) {
-    Rcpp::List l = Rcpp::as<Rcpp::List>(object);
-    return hesim::detail::list_to_vec<vecmats_3d, vecmats_2d> (l);
-  }
-  
-  template <> vecstrings_2d as(SEXP object) {
-    Rcpp::List l = Rcpp::as<Rcpp::List>(object);
-    return hesim::detail::list_to_vec<vecstrings_2d, vecstrings> (l);
-  }
-}
 
-/************************
-* Functions exported to R
-************************/
 /**
  * Calculate the maximum value of each row in a matrix
  * @param x A matrix from the Armadillo library

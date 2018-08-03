@@ -1,19 +1,15 @@
-# ifndef UTILS_H
-# define UTILS_H
+# ifndef HESIM_UTILS_H
+# define HESIM_UTILS_H
 #include <RcppArmadillo.h>
 
-typedef std::vector<std::string> vecstrings;
-typedef std::vector<vecstrings> vecstrings_2d;
+namespace hesim{
+
 typedef std::vector<arma::mat> vecmats;
 typedef std::vector<vecmats> vecmats_2d;
 typedef std::vector<vecmats_2d> vecmats_3d;
+typedef std::vector<std::string> vecstrings;
+typedef std::vector<vecstrings> vecstrings_2d;
 typedef std::vector<arma::cube> vec_cubes;
-
-
-/***************
-* Free functions
-***************/
-namespace hesim{
 
 /** 
  * @ingroup general
@@ -38,7 +34,7 @@ T1 list_to_vec(Rcpp::List l){
   return v;
 }
 
-} //end namespace internal
+} //end namespace detail
 
 /**
  * @ingroup general
@@ -101,11 +97,27 @@ inline double mean(std::vector<double> v) {
 * Custom Rcpp::as converters
 ****************************/
 namespace Rcpp {
-  template <> vecmats as(SEXP object);
-  template <> vecmats_2d as(SEXP object);
-  template <> vecmats_3d as(SEXP object);
-  template <> vecstrings_2d as(SEXP object);
+  inline hesim::vecmats as(SEXP object) {
+    Rcpp::List l = Rcpp::as<Rcpp::List>(object);
+    return hesim::detail::list_to_vec<hesim::vecmats, arma::mat>(l);
+  }
+  
+  template <> inline hesim::vecmats_2d as(SEXP object) {
+    Rcpp::List l = Rcpp::as<Rcpp::List>(object);
+    return hesim::detail::list_to_vec<hesim::vecmats_2d, hesim::vecmats>(l);
+  }
+  
+  template <> inline hesim::vecmats_3d as(SEXP object) {
+    Rcpp::List l = Rcpp::as<Rcpp::List>(object);
+    return hesim::detail::list_to_vec<hesim::vecmats_3d, hesim::vecmats_2d> (l);
+  }
+  
+  template <> inline hesim::vecstrings_2d as(SEXP object) {
+    Rcpp::List l = Rcpp::as<Rcpp::List>(object);
+    return hesim::detail::list_to_vec<hesim::vecstrings_2d, hesim::vecstrings> (l);
+  }
 } // end Rcpp namespace
+
 
 
 # endif
