@@ -3,7 +3,6 @@
 
 #include "../inst/include/hesim.h"
 #include <RcppArmadillo.h>
-#include <RcppEigen.h>
 #include <Rcpp.h>
 
 using namespace Rcpp;
@@ -271,6 +270,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_quad_functor
+double test_quad_functor();
+RcppExport SEXP _hesim_test_quad_functor() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(test_quad_functor());
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_quad_lambda
+double test_quad_lambda();
+RcppExport SEXP _hesim_test_quad_lambda() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(test_quad_lambda());
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_test_add_constant_int
 std::vector<int> C_test_add_constant_int(std::vector<int> v, double value);
 RcppExport SEXP _hesim_C_test_add_constant_int(SEXP vSEXP, SEXP valueSEXP) {
@@ -351,6 +370,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
     {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
+    {"_hesim_test_quad_functor", (DL_FUNC) &_hesim_test_quad_functor, 0},
+    {"_hesim_test_quad_lambda", (DL_FUNC) &_hesim_test_quad_lambda, 0},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},

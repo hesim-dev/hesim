@@ -21,9 +21,7 @@ BugReports: https://github.com/InnovationValueInitiative/hesim/issues
 License: GPL-3
 LazyData: true
 LinkingTo: Rcpp,
-           RcppArmadillo,
-           RcppEigen,
-           RcppNumerical
+           RcppArmadillo
 Depends:
     R (>= 3.2.3)
 Imports:
@@ -31,7 +29,6 @@ Imports:
     flexsurv,
     MASS,
     Rcpp (>= 0.12.16),
-    RcppNumerical,
     R6,
     stats,
     survival

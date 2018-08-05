@@ -4,9 +4,6 @@
 
 namespace hesim {
 
-/** @ingroup math 
- * Prediction and random sampling from different statistical models.
- */
 namespace math {
 
 template <class T>

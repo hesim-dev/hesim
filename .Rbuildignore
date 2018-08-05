@@ -10,3 +10,4 @@
 ^data-raw$
 doxyfile
 DoxygenLayout.xml
+.covrignore

@@ -2,8 +2,8 @@
 # define DISTRIBUTIONS_H
 #include <RcppArmadillo.h>
 #include <hesim/utils.h>
-#include <RcppNumerical.h>
 #include <hesim/zeroin.h>
+#include <hesim/quad.h>
 #include <memory>
 
 namespace hesim{
@@ -77,30 +77,6 @@ public:
 /** Internal details for hesim::stats that should be ignored by external users.*/
 namespace detail {
 
-class hazard: public Numer::Func {
-  private:
-    const stats::distribution * dist_;
-  public:
-    hazard(const stats::distribution * dist)
-      : dist_(dist){}
-    double operator()(const double& x) const {
-      return dist_->hazard(x);
-    }
-};
-
-class discount_surv: public Numer::Func {
-private:
-  stats::distribution * dist_;
-  double r_;
-public:
-  discount_surv(stats::distribution * dist, double r) 
-    : dist_(dist), r_(r){}
-  
-  double operator()(const double& x) const {
-    return exp(-r_ * x) * (1 - dist_->cdf(x));
-  }
-};
-
 inline double quantile_numeric_work(const stats::distribution * dist, double p){
     auto func = [dist, p](const double& x){ // A lambda to pass to zeroin()
       return dist->cdf(x) - p;
@@ -135,10 +111,12 @@ inline double quantile_numeric_work(const stats::distribution * dist, double p){
  * @return The integral of the hazard function.
  ******************************************************************************/ 
 inline double integrate_hazard(const distribution * dist, double t){
-  detail::hazard fun(dist);
+  auto fun = [dist](double x){
+    return dist->hazard(x);
+  };
   const double lower = 0, upper = t;
-  double err_est; int err_code;
-  return Numer::integrate(fun, lower, upper, err_est, err_code);
+  double abserr; int ier;
+  return math::quad(fun, lower, upper, abserr, ier);
 };
 
 /***************************************************************************//** 
@@ -171,10 +149,12 @@ inline double quantile_numeric(const distribution * dist, double p){
  * @return Restricted mean survival time.
  ******************************************************************************/ 
 inline double rmst(distribution * dist, double t, double r = 0){
-  detail::discount_surv fun(dist, r);
+  auto fun = [dist, r](double x){
+    return exp(-r * x) * (1 - dist->cdf(x));
+  };
   const double lower = 0, upper = t;
   double err_est; int err_code;
-  return Numer::integrate(fun, lower, upper, err_est, err_code);
+  return math::quad(fun, lower, upper, err_est, err_code);
 }
 
 /***************************************************************************//**
