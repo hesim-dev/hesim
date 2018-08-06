@@ -1,5 +1,5 @@
-# ifndef HESIM_STATS_PARAMS_H
-# define HESIM_STATS_PARAMS_H
+# ifndef HESIM_STATMODS_PARAMS_H
+# define HESIM_STATMODS_PARAMS_H
 #include <RcppArmadillo.h>
 #include <hesim/utils.h>
 

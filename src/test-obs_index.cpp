@@ -1,4 +1,4 @@
-#include <hesim/statmods/input_data.h>
+#include <hesim/statmods/obs_index.h>
 
 /**
  * \ingroup test

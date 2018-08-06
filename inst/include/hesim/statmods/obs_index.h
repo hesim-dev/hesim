@@ -1,5 +1,5 @@
-# ifndef INPUTDATA_H
-# define INPUTDATA_H
+# ifndef HESIM_STATMODS_OBS_INDEX_H
+# define HESIM_STATMODS_OBS_INDEX_H
 #include <RcppArmadillo.h>
 #include <hesim/time_fun.h>
 #include <hesim/utils.h>
