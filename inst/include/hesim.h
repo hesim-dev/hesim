@@ -1,7 +1,7 @@
 #ifndef hesim_H_
 #define hesim_H_
 
-#include <hesim/statmods.h>
+#include <hesim/statmods/statmods.h>
 #include <hesim/time_fun.h>
 
 /** \mainpage 

@@ -1,7 +1,7 @@
 # ifndef HESIM_STATMODELS_H
 # define HESIM_STATMODELS_H
-#include <hesim/distributions.h>
-#include <hesim/params.h>
+#include <hesim/stats/distributions.h>
+#include <hesim/statmods/params.h>
 
 namespace hesim {
 

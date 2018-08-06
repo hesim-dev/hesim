@@ -81,15 +81,15 @@ C_test_add_constant_double <- function(v, value) {
     .Call('_hesim_C_test_add_constant_double', PACKAGE = 'hesim', v, value)
 }
 
+test_zeroin <- function() {
+    .Call('_hesim_test_zeroin', PACKAGE = 'hesim')
+}
+
 C_rowmax <- function(x) {
     .Call('_hesim_C_rowmax', PACKAGE = 'hesim', x)
 }
 
 C_rowmax_index <- function(x) {
     .Call('_hesim_C_rowmax_index', PACKAGE = 'hesim', x)
-}
-
-test_zeroin <- function() {
-    .Call('_hesim_test_zeroin', PACKAGE = 'hesim')
 }
 

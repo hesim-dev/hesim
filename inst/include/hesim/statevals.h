@@ -1,7 +1,8 @@
 # ifndef HESIM_STATEVALS_H
 # define HESIM_STATEVALS_H
-#include <hesim/statmods.h>
-#include <hesim/input_data.h>
+
+#include <hesim/statmods/statmods.h>
+#include <hesim/statmods/input_data.h>
 #include <hesim/math/composite.h>
 
 namespace hesim {

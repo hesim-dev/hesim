@@ -2,6 +2,7 @@
 
 #include <RcppArmadillo.h>
 #include <hesim/utils.h>
+#include <hesim/stats/mean.h>
 
 /**
  * Compute the incremental effect of treatment strategies (i.e., "interventions") 
@@ -196,7 +197,7 @@ std::vector<double> C_enmbpi(std::vector<double> k,
         nmbpi.push_back(*std::max_element(inb.begin(), inb.end()));
         ++sg;
       }
-      enmbpi.push_back(hesim::mean(nmbpi));
+      enmbpi.push_back(hesim::stats::mean(nmbpi));
     }
   }
 

@@ -78,18 +78,6 @@ inline void add_constant(std::vector<T> &v, double value){
                  std::bind2nd(std::plus<double>(), value)); 
 }
 
-/**
- * @ingroup general
- * Compute the arithmetic mean of a vector in
- * the Standard Library.
- * @param v A vector. Should be of type integer
- * or double.
- * @return None.
- */
-inline double mean(std::vector<double> v) {
-  return std::accumulate(v.begin(), v.end(), 0.0)/v.size();
-}
-
 } // end hesim namespace
 
 

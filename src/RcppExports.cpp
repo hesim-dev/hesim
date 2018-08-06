@@ -270,6 +270,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_zeroin
+double test_zeroin();
+RcppExport SEXP _hesim_test_zeroin() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(test_zeroin());
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_rowmax
 arma::colvec C_rowmax(arma::mat x);
 RcppExport SEXP _hesim_C_rowmax(SEXP xSEXP) {
@@ -289,16 +299,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
     rcpp_result_gen = Rcpp::wrap(C_rowmax_index(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// test_zeroin
-double test_zeroin();
-RcppExport SEXP _hesim_test_zeroin() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(test_zeroin());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -326,9 +326,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_test_quad_lambda", (DL_FUNC) &_hesim_test_quad_lambda, 0},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
+    {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
     {"_hesim_C_rowmax_index", (DL_FUNC) &_hesim_C_rowmax_index, 1},
-    {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_rcpp_module_boot_distributions", (DL_FUNC) &_rcpp_module_boot_distributions, 0},
     {NULL, NULL, 0}
 };

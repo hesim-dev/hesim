@@ -1,4 +1,4 @@
-#include <hesim/distributions.h>
+#include <hesim/stats/distributions.h>
 
 /***************************************************************************//**
  * @ingroup stats

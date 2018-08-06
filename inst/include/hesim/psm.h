@@ -1,6 +1,6 @@
 # ifndef HESIM_PSM_H
 # define HESIM_PSM_H
-#include <hesim/statmods.h>
+#include <hesim/statmods/statmods.h>
 #include <hesim/math/composite.h>
 
 namespace hesim {
