@@ -2,8 +2,8 @@
 # define DISTRIBUTIONS_H
 #include <RcppArmadillo.h>
 #include <hesim/utils.h>
-#include <hesim/zeroin.h>
-#include <hesim/quad.h>
+#include <hesim/Rbase/zeroin.h>
+#include <hesim/math/quad.h>
 #include <memory>
 
 namespace hesim{
@@ -92,7 +92,7 @@ inline double quantile_numeric_work(const stats::distribution * dist, double p){
     double f_upper = func(upper);
     double tol = 0.0001;
     int maxiter = 1000;
-    return zeroin(lower, upper, f_lower, f_upper, func,
+    return Rbase::zeroin(lower, upper, f_lower, f_upper, func,
                   &tol, &maxiter);
 };
 

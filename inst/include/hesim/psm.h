@@ -1,8 +1,7 @@
 # ifndef HESIM_PSM_H
 # define HESIM_PSM_H
 #include <hesim/statmods.h>
-#include <hesim/utils.h>
-#include <hesim/integrate.h>
+#include <hesim/math/composite.h>
 
 namespace hesim {
 

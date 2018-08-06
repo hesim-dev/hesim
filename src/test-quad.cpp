@@ -1,5 +1,4 @@
-#include <hesim/quad.h>
-#include <Rcpp.h>
+#include <hesim/math/quad.h>
 
 class test_functor{
 public:

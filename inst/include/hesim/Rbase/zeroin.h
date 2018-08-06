@@ -89,6 +89,14 @@
 
 // #include <R_ext/Applic.h> /* This creates a conflict with RcppArmadillo.h and doesn't appear to be needed*/
 
+namespace hesim {
+
+/** @ingroup Rbase 
+ * Adaptations of functions from the @c R standard library for use
+ * with @c C++.
+ */
+namespace Rbase {
+
 #define EPSILON DBL_EPSILON
 
 /* R_zeroin2() is faster for "expensive" f(), in those typical cases where
@@ -201,6 +209,10 @@ inline double zeroin(			/* An estimate of the root */
     *Maxit = -1;
     return b;
 }
+
+} // end namespace Rbase
+
+} // end namespace hesim
 
 # endif
 

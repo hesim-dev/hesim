@@ -1,4 +1,4 @@
-#include <hesim/zeroin.h>
+#include <hesim/Rbase/zeroin.h>
 
 /*****************************************************
 * Run an example from uniroot in the R stats library
@@ -24,7 +24,7 @@ double test_zeroin(){
   // double (*fcnPtr)(double) = zeroin_fun;
   double tol = 0.0001;
   int maxiter = 1000;
-  double root = zeroin(lower, upper, f_lower, f_upper, func,
+  double root = hesim::Rbase::zeroin(lower, upper, f_lower, f_upper, func,
                    &tol, &maxiter);
   // return (double)maxiter;
   // return tol;

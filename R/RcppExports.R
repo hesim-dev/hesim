@@ -37,26 +37,6 @@ C_test_rtruncnorm <- function(mean, sd, lower, upper) {
     .Call('_hesim_C_test_rtruncnorm', PACKAGE = 'hesim', mean, sd, lower, upper)
 }
 
-C_test_trapzfun <- function(x) {
-    .Call('_hesim_C_test_trapzfun', PACKAGE = 'hesim', x)
-}
-
-C_test_trapz <- function(x, y) {
-    .Call('_hesim_C_test_trapz', PACKAGE = 'hesim', x, y)
-}
-
-C_test_cumtrapzfun <- function(t) {
-    .Call('_hesim_C_test_cumtrapzfun', PACKAGE = 'hesim', t)
-}
-
-C_test_simpsfun <- function(t) {
-    .Call('_hesim_C_test_simpsfun', PACKAGE = 'hesim', t)
-}
-
-C_test_cumsimpsfun <- function(t) {
-    .Call('_hesim_C_test_cumsimpsfun', PACKAGE = 'hesim', t)
-}
-
 C_psm_curves_summary <- function(R_PsmCurves, x, type, dr) {
     .Call('_hesim_C_psm_curves_summary', PACKAGE = 'hesim', R_PsmCurves, x, type, dr)
 }
@@ -71,6 +51,10 @@ C_psm_sim_wlos <- function(R_Psm, R_stateprobs, dr, type, categories) {
 
 C_statevals_sim <- function(R_StateVals, times, type) {
     .Call('_hesim_C_statevals_sim', PACKAGE = 'hesim', R_StateVals, times, type)
+}
+
+C_test_trapz <- function(x, y) {
+    .Call('_hesim_C_test_trapz', PACKAGE = 'hesim', x, y)
 }
 
 C_test_xptr_test_time_fun <- function(L) {

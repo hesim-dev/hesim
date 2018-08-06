@@ -2,7 +2,7 @@
 # define HESIM_STATEVALS_H
 #include <hesim/statmods.h>
 #include <hesim/input_data.h>
-#include <hesim/integrate.h>
+#include <hesim/math/composite.h>
 
 namespace hesim {
 

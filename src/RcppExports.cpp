@@ -135,62 +135,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_test_trapzfun
-double C_test_trapzfun(std::vector<double> x);
-RcppExport SEXP _hesim_C_test_trapzfun(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_trapzfun(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// C_test_trapz
-double C_test_trapz(std::vector<double> x, std::vector<double> y);
-RcppExport SEXP _hesim_C_test_trapz(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_trapz(x, y));
-    return rcpp_result_gen;
-END_RCPP
-}
-// C_test_cumtrapzfun
-std::vector<double> C_test_cumtrapzfun(std::vector<double> t);
-RcppExport SEXP _hesim_C_test_cumtrapzfun(SEXP tSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_cumtrapzfun(t));
-    return rcpp_result_gen;
-END_RCPP
-}
-// C_test_simpsfun
-double C_test_simpsfun(std::vector<double> t);
-RcppExport SEXP _hesim_C_test_simpsfun(SEXP tSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_simpsfun(t));
-    return rcpp_result_gen;
-END_RCPP
-}
-// C_test_cumsimpsfun
-std::vector<double> C_test_cumsimpsfun(std::vector<double> t);
-RcppExport SEXP _hesim_C_test_cumsimpsfun(SEXP tSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_cumsimpsfun(t));
-    return rcpp_result_gen;
-END_RCPP
-}
 // C_psm_curves_summary
 Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PsmCurves, std::vector<double> x, std::string type, double dr);
 RcppExport SEXP _hesim_C_psm_curves_summary(SEXP R_PsmCurvesSEXP, SEXP xSEXP, SEXP typeSEXP, SEXP drSEXP) {
@@ -241,6 +185,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type times(timesSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
     rcpp_result_gen = Rcpp::wrap(C_statevals_sim(R_StateVals, times, type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_trapz
+double C_test_trapz(std::vector<double> x, std::vector<double> y);
+RcppExport SEXP _hesim_C_test_trapz(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_trapz(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -359,15 +315,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
     {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
     {"_hesim_C_test_rtruncnorm", (DL_FUNC) &_hesim_C_test_rtruncnorm, 4},
-    {"_hesim_C_test_trapzfun", (DL_FUNC) &_hesim_C_test_trapzfun, 1},
-    {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
-    {"_hesim_C_test_cumtrapzfun", (DL_FUNC) &_hesim_C_test_cumtrapzfun, 1},
-    {"_hesim_C_test_simpsfun", (DL_FUNC) &_hesim_C_test_simpsfun, 1},
-    {"_hesim_C_test_cumsimpsfun", (DL_FUNC) &_hesim_C_test_cumsimpsfun, 1},
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},
     {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 1},
     {"_hesim_C_psm_sim_wlos", (DL_FUNC) &_hesim_C_psm_sim_wlos, 5},
     {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
+    {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
     {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
     {"_hesim_test_quad_functor", (DL_FUNC) &_hesim_test_quad_functor, 0},

@@ -32,6 +32,11 @@ the @c R package by the same name.
  *  Classes and functions for simulating partitioned survival models.
  */
 
+/** @defgroup Rbase R base
+ *  Functions from the @c R standard library. Some functions are adapted for use
+ *  with @c C++.
+ */
+
 /** @defgroup test Tests
  *  Tests of C++ code. These functions are exported to @c R using the
  *  @c R package @c Rcpp and the @c R package @c testthat.
