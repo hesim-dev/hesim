@@ -57,8 +57,27 @@ double quad(Func f, double lower, double upper, double &abserr,
   int *iwork = (int *) R_alloc((size_t) limit, sizeof(int));
   double *work = (double *) R_alloc((size_t) lenw, sizeof(double));
   detail::vectorize<Func> vecf(f);
-  Rbase::Rdqags(vecf, &lower, &upper, &epsabs, &epsrel, &result,
-         &abserr, &neval, &ier, &limit, &lenw, &last, iwork, work);
+  if (std::isinf(lower) || std::isinf(upper)){ // start indefinite integral
+    double bound = 0.0;
+    int inf;
+    if (!std::isinf(lower)){
+      bound = lower;
+      inf = 1;
+    }
+    else if (!std::isinf(upper)){
+      bound = upper;
+      inf = -1;
+    }
+    else{
+      inf = 2;
+    }
+    Rbase::Rdqagi(vecf, &bound, &inf, &epsabs, &epsrel, &result,
+                  &abserr, &neval, &ier, &limit, &lenw, &last, iwork, work);
+  } // end indefinite integral
+  else{ // start definite integral
+    Rbase::Rdqags(vecf, &lower, &upper, &epsabs, &epsrel, &result,
+                  &abserr, &neval, &ier, &limit, &lenw, &last, iwork, work);
+  } // end definite integral
   return result;
 }
 

@@ -65,12 +65,12 @@ C_test_obs_index <- function(R_input_data, strategy_id, patient_id, line = -1L, 
     .Call('_hesim_C_test_obs_index', PACKAGE = 'hesim', R_input_data, strategy_id, patient_id, line, health_id)
 }
 
-test_quad_functor <- function() {
-    .Call('_hesim_test_quad_functor', PACKAGE = 'hesim')
+test_quad_functor <- function(lower, upper) {
+    .Call('_hesim_test_quad_functor', PACKAGE = 'hesim', lower, upper)
 }
 
-test_quad_lambda <- function() {
-    .Call('_hesim_test_quad_lambda', PACKAGE = 'hesim')
+test_quad_lambda <- function(lower, upper) {
+    .Call('_hesim_test_quad_lambda', PACKAGE = 'hesim', lower, upper)
 }
 
 C_test_add_constant_int <- function(v, value) {

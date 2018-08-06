@@ -227,22 +227,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // test_quad_functor
-double test_quad_functor();
-RcppExport SEXP _hesim_test_quad_functor() {
+double test_quad_functor(double lower, double upper);
+RcppExport SEXP _hesim_test_quad_functor(SEXP lowerSEXP, SEXP upperSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(test_quad_functor());
+    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_quad_functor(lower, upper));
     return rcpp_result_gen;
 END_RCPP
 }
 // test_quad_lambda
-double test_quad_lambda();
-RcppExport SEXP _hesim_test_quad_lambda() {
+double test_quad_lambda(double lower, double upper);
+RcppExport SEXP _hesim_test_quad_lambda(SEXP lowerSEXP, SEXP upperSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(test_quad_lambda());
+    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_quad_lambda(lower, upper));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -322,8 +326,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
     {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
-    {"_hesim_test_quad_functor", (DL_FUNC) &_hesim_test_quad_functor, 0},
-    {"_hesim_test_quad_lambda", (DL_FUNC) &_hesim_test_quad_lambda, 0},
+    {"_hesim_test_quad_functor", (DL_FUNC) &_hesim_test_quad_functor, 2},
+    {"_hesim_test_quad_lambda", (DL_FUNC) &_hesim_test_quad_lambda, 2},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
