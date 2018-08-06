@@ -9,7 +9,12 @@ public:
 
 void check_infinity(double &x){
   if (!R_FINITE(x)){
-    x = INFINITY;
+    if(x == R_PosInf){
+      x = INFINITY;
+    }
+    else{
+      x = -INFINITY;
+    }
   }
 }
 

@@ -37,7 +37,7 @@ public:
  * @c dqags and @c dqagi from the @c Fortran library @c QUADPACK.  
  * @param[in] f A functor or lambda expression to integrate. The function must have
  * a single argument of type double.
- * @param[in] lower, upper The limits of integration.
+ * @param[in] lower, upper The limits of integration. 
  * @param[out] abserr Estimate of the modulus of the absolute error.
  * @param[out] ier An integer equal to 0 if the routine terminated normally and
  * reliably; otherwise, the integer denotes a specific error message. See
