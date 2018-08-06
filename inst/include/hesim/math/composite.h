@@ -1,5 +1,5 @@
-# ifndef HESIM_MATH_INTEGRATE_H
-# define HESIM_MATH_INTEGRATE_H
+# ifndef HESIM_MATH_COMPOSITE_H
+# define HESIM_MATH_COMPOSITE_H
 
 namespace hesim {
 
