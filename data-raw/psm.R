@@ -1,4 +1,4 @@
-# Simulate data for partitioned survival analysis with 3 treatment strategies
+# Simulate data for 4-state partitioned survival models
 n_strategies <- 3
 
 # Survival curves for 4-state partitioned survival model  ----------------------
@@ -92,10 +92,16 @@ sim_cost3_drugs <- function(){
 }
 
 # Combine costs
-costs.simdata <- list(medical = cost.medical.simdata,
+costs_simdata <- list(medical = cost.medical.simdata,
                      drugs = sim_cost3_drugs())
+
+# Utility in 3 health states  --------------------------------------------------
+utility <- data.frame(state = paste0("state", seq(1, 3)),
+                      lower = c(.8, .7, .6),
+                      upper = c(.9, .8, .7))
 
 # Save -------------------------------------------------------------------------
 psm4_exdata <- list(survival = survival_simdata,
-                          costs = costs.simdata)
+                    costs = costs_simdata,
+                    utility = utility)
 save(psm4_exdata, file = "../data/psm4_exdata.rda", compress = "bzip2")

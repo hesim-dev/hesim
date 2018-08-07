@@ -43,6 +43,7 @@ reference:
   - title: "Datasets"
     contents:
     - psm4_exdata
+    - ctstm3_exdata
 
 navbar:
   title: hesim

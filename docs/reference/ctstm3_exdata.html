@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Example data for a 4-state partitioned survival model — psm4_exdata • hesim</title>
+<title>Example data for a 3-state continuous time state transition model — ctstm3_exdata • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -95,53 +95,63 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Example data for a 4-state partitioned survival model</h1>
+    <h1>Example data for a 3-state continuous time state transition model</h1>
     </div>
 
     
-    <p>A collection of example datasets containing simulated survival, costs, and utility data for a 4-state
-partitioned survival model.</p>
+    <p>A collection of example datasets containing heatlh state transition, 
+costs, and utility data for a 3-state continuous time state transition model.</p>
     
 
-    <pre class="usage"><span class='no'>psm4_exdata</span></pre>
+    <pre class="usage"><span class='no'>ctstm3_exdata</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A list containing the following elements:</p><ul>
-<li><p>Survival A data frame containining patient information and time to 3 separate survival endpoints.</p></li>
-<li><p>CostsA list of data frames. The first data frame contains medical cost data and the
+<li><p>transitions A data frame containining the times at which patient transitions between health states based
+on the dataset <a href='http://www.rdocumentation.org/packages/mstate/topics/prothr'>prothr</a> from the <code>mstate</code> package.</p></li>
+<li><p>costs A list of data frames. The first data frame contains summary medical cost estimates and the
 second data frame contains drug cost data.</p></li>
+<li><p>utility A data frame of summary utility estimates.</p></li>
 </ul>
     
-    <h2 class="hasAnchor" id="survival-data"><a class="anchor" href="#survival-data"></a>Survival data</h2>
+    <h2 class="hasAnchor" id="transitions-data"><a class="anchor" href="#transitions-data"></a>Transitions data</h2>
 
     
-    <p>The survival data frame contains a list of 3 survival curves, each containing the following columns.</p><dl class='dl-horizontal'>
-<dt>female</dt><dd><p>An indicator variable equal to 1 if the patient is female and 0 otherwise.</p></dd>
-<dt>age</dt><dd><p>The age of the patient in years.</p></dd>
-<dt>strategy_id</dt><dd><p>The id of the treatment strategy used.</p></dd>
-<dt>endpoint1_time</dt><dd><p>Follow up time with right censored data to survival endpoint 1.</p></dd>
-<dt>endpoint1_status</dt><dd><p>A status indicator for survival endpoint 1 equal to 0 if alive and 1 if dead.</p></dd>
-<dt>endpoint2_time</dt><dd><p>Follow up time with right censored data to survival endpoint 2.</p></dd>
-<dt>endpoint2_status</dt><dd><p>A status indicator for survival endpoint 2 equal to 0 if alive and 1 if dead.</p></dd>
-<dt>endpoint3_time</dt><dd><p>Follow up time with right censored data to survival endpoint 3.</p></dd>
-<dt>endpoint3_status</dt><dd><p>A status indicator for survival endpoint 3 equal to 0 if alive and 1 if dead.</p></dd>
+    <p>The data frame has the following columns:</p><dl class='dl-horizontal'>
+<dt>id</dt><dd><p>Patient identification number.</p></dd>
+<dt>from</dt><dd><p>Starting state.</p></dd>
+<dt>to</dt><dd><p>Receiving state.</p></dd>
+<dt>trans</dt><dd><p>Transition number.</p></dd>
+<dt>Tstart</dt><dd><p>Starting time.</p></dd>
+<dt>Tstop</dt><dd><p>Transition time.</p></dd>
+<dt>status</dt><dd><p>Status variable; 1=transition, 0=censored.</p></dd>
+<dt>strategy_id</dt><dd><p>Treatment strategy identification number.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="cost-data"><a class="anchor" href="#cost-data"></a>Cost data</h2>
 
     
-    <p>The cost list contains two data frames.The first data frame contains data on the
-medical costs by patient and health state, and contains the following columns:</p><dl class='dl-horizontal'>
- <dt>patient_id</dt><dd><p>An integer denoting the id of the patient.</p></dd>
-  <dt>female</dt><dd><p>An indicator variable equal to 1 if the patient is female and 0 otherwise.</p></dd>
-  <dt>state_name</dt><dd><p>A categorical variable denoting the three possible health states.</p></dd>
-  <dt>costs</dt><dd><p>Annualized medical costs.</p></dd>
+    <p>The cost list contains two data frames. The first data frame contains summary data on
+medical costs by gender and health state, and contains the following columns:</p><dl class='dl-horizontal'>
+ <dt>gender</dt><dd><p>Female or male</p></dd>
+  <dt>state_id</dt><dd><p>The health state identification number.</p></dd>
+  <dt>mean</dt><dd><p>Mean costs.</p></dd>
+  <dt>se</dt><dd><p>Standard error of medical costs.</p></dd>
  </dl>
     <p>The second data frame contains data on the drug costs associated with each treatment strategy.</p><dl class='dl-horizontal'>
- <dt>strategy_id</dt><dd><p>The id of each treatment strategy.</p></dd>
+ <dt>strategy_id</dt><dd><p>The treatment strategy identification number.</p></dd>
  <dt>costs</dt><dd><p>Annualized drug costs.</p></dd>
  </dl>
+    
+    <h2 class="hasAnchor" id="utility-data"><a class="anchor" href="#utility-data"></a>Utility data</h2>
+
+    
+    <p>The data frame has the following columns:</p><dl class='dl-horizontal'>
+<dt>state_id</dt><dd><p>The health state identification number.</p></dd>
+<dt>mean</dt><dd><p>Mean costs.</p></dd>
+<dt>se</dt><dd><p>Standard error.</p></dd>
+</dl>
     
 
   </div>
@@ -151,9 +161,11 @@ medical costs by patient and health state, and contains the following columns:</
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#survival-data">Survival data</a></li>
+      <li><a href="#transitions-data">Transitions data</a></li>
 
       <li><a href="#cost-data">Cost data</a></li>
+
+      <li><a href="#utility-data">Utility data</a></li>
           </ul>
 
   </div>
