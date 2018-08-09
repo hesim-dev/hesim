@@ -123,7 +123,7 @@
     
     <dl class='dl-horizontal'>
     <dt><code>new(data, params)</code></dt><dd><p>Constructor for the class.</p></dd>
-    <dt><code>hazard(t)</code></dt><dd><p>Predict the hazard functions for each health state transition.
+    <dt><code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard(t)</a></code></dt><dd><p>Predict the hazard functions for each health state transition.
     <ul>
 <li><p><code>t</code>: A numeric vector of times.</p></li>
 </ul></p></dd>
@@ -136,17 +136,19 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Simulation data</span>
-<span class='no'>dt_strategies</span> <span class='kw'>&lt;-</span> <span class='fu'>data.table</span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
-<span class='no'>dt_patients</span> <span class='kw'>&lt;-</span> <span class='fu'>data.table</span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
+
+<span class='co'># Simulation data</span>
+<span class='no'>dt_strategies</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
+<span class='no'>dt_patients</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
                           <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
                           <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
 
 <span class='co'># Multi-state model with transition specific models</span>
 <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'>vector</span>(<span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"list"</span>)
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'>data.table</span>(<span class='no'>bosms3</span>)
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='no'>bosms3</span>)
 <span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'>length</span>(<span class='no'>fits</span>)){
-  <span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'>flexsurvreg</span>(<span class='fu'>Surv</span>(<span class='no'>years</span>, <span class='no'>status</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>[<span class='no'>trans</span> <span class='kw'>==</span> <span class='no'>i</span>],
+  <span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>years</span>, <span class='no'>status</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>[<span class='no'>dat</span>$<span class='no'>trans</span> <span class='kw'>==</span> <span class='no'>i</span>, ],
                            <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
 }
 <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span>(<span class='no'>fits</span>)
@@ -160,7 +162,7 @@
 <span class='no'>fits_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand_hesim_data.html'>expand_hesim_data</a></span>(<span class='no'>hesim_dat</span>)
 <span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_CtstmTrans.html'>create_CtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>fits_data</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
                               <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'>hazard</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t    hazard
+<span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t    hazard
 #&gt; 1:     1      1           0          0 1 0.1898667
 #&gt; 2:     1      1           0          0 2 0.1898667
 #&gt; 3:     1      1           0          0 3 0.1898667
@@ -172,9 +174,7 @@
 #&gt; 3:     1      1           0          0 3 0.5696000
 #&gt; 4:     2      1           0          0 1 0.0534576
 #&gt; 5:     2      1           0          0 2 0.1069152
-#&gt; 6:     2      1           0          0 3 0.1603728</div><div class='input'>                          
-
-</div></pre>
+#&gt; 6:     2      1           0          0 3 0.1603728</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

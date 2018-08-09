@@ -62,17 +62,19 @@ Summarize health state transitions in a continuous time state transition model w
 }
 
 \examples{
+library("flexsurv")
+
 # Simulation data
-dt_strategies <- data.table(strategy_id = c(1, 2, 3))
-dt_patients <- data.table(patient_id = seq(1, 3),
+dt_strategies <- data.frame(strategy_id = c(1, 2, 3))
+dt_patients <- data.frame(patient_id = seq(1, 3),
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
 
 # Multi-state model with transition specific models
 fits <- vector(length = 3, mode = "list")
-dat <- data.table(bosms3)
+dat <- data.frame(bosms3)
 for (i in 1:length(fits)){
-  fits[[i]] <- flexsurvreg(Surv(years, status) ~ 1, data = dat[trans == i],
+  fits[[i]] <- flexsurvreg(Surv(years, status) ~ 1, data = dat[dat$trans == i, ],
                            dist = "exp")
 }
 fits <- flexsurvreg_list(fits)
@@ -88,6 +90,4 @@ transmod <- create_CtstmTrans(fits, data = fits_data, trans_mat = tmat,
                               point_estimate = TRUE)       
 head(transmod$hazard(c(1, 2, 3)))
 head(transmod$cumhazard(c(1, 2, 3)))
-                          
-
 }

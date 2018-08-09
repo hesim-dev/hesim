@@ -109,7 +109,7 @@ create_trans_dt <- function(trans_mat){
 #' dt_strategies <- data.frame(strategy_id = c(1, 2))
 #' dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
 #'                           gender = c("Female", "Female", "Male"))
-#' dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
+#' dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
 #' dt_states <- data.frame(state_id =  seq(1, 3),
 #'                         state_var = c(2, 1, 9))
 #' hesim_dat <- hesim_data(strategies = dt_strategies,
@@ -213,7 +213,7 @@ check_hesim_data_type <- function(tbl, tbl_name){
 #' dt_strategies <- data.frame(strategy_id = c(1, 2))
 #' dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
 #'                           gender = c("Female", "Female", "Male"))
-#' dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
+#' dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
 #' dt_states <- data.frame(state_id =  seq(1, 3),
 #'                         state_var = c(2, 1, 9))
 #' hesim_dat <- hesim_data(strategies = dt_strategies,
