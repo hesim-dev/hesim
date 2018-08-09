@@ -54,3 +54,26 @@ int C_test_obs_index(Rcpp::List R_input_data,
    return obs_index(strategy_id, line, patient_id, health_id);
   }
 }
+
+/**
+ * \ingroup test
+ */
+// [[Rcpp::export]]
+std::vector<int> C_test_obs_ids(Rcpp::List R_input_data, std::string member){
+  hesim::statmods::obs_ids obs_ids(R_input_data);
+  if (member == "strategy_id"){
+    return obs_ids.strategy_id_;
+  }
+  else if (member == "line"){
+    return obs_ids.line_;
+  }
+  else if (member == "patient_id"){
+    return obs_ids.patient_id_;
+  } 
+  else if (member == "state_id"){
+    return obs_ids.state_id_;
+  }
+  else {
+    return obs_ids.transition_id_;
+  }
+}

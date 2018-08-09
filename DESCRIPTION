@@ -36,6 +36,7 @@ Suggests:
     covr,
     ggplot2,
     knitr,
+    mstate,
     msm,
     numDeriv,
     pracma,

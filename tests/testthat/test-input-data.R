@@ -8,7 +8,7 @@ dt_patients <- data.table(patient_id = seq(1, 3),
                           age = c(45, 47, 60),
                           female = c(1, 0, 0),
                           group = factor(c("Good", "Medium", "Poor")))
-dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
+dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
 dt_states <- data.frame(state_id =  seq(1, 3),
                         state_name = factor(paste0("state", seq(1, 3))))
 dt_trans <- data.frame(transition_id = seq(1, 4),
@@ -20,9 +20,9 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
                         states = dt_states,
                         transitions = dt_trans)
 
-# lines_dt ---------------------------------------------------------------------
-test_that("lines_dt", {
-  dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)))
+# create_lines_dt --------------------------------------------------------------
+test_that("create_lines_dt", {
+  dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
   
   expect_true(inherits(dt_lines, "data.table"))
   expect_equal(dt_lines$treatment_id[3], 5)
@@ -30,13 +30,39 @@ test_that("lines_dt", {
                c(seq(1, 3), seq(1, 2)))
   
   # explicit strategy ids
-  dt_lines <- lines_dt(list(c(1, 2, 5), c(1, 2)),
-                                  strategy_ids = c(3, 5))
+  dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)),
+                              strategy_ids = c(3, 5))
   expect_equal(dt_lines$strategy_id, c(3, 3, 3, 5, 5))
   
   # errors
   expect_error(input_data$lines_dt(list(c("tx1", "tx2"),
                                   c("tx1"))))
+})
+
+# create_trans_dt --------------------------------------------------------------
+test_that("create_trans_dt", {
+  tmat <- rbind(c(NA, 1, 2),
+                c(NA, NA, 3),
+                c(NA, NA, NA))
+  dt_trans <- create_trans_dt(tmat)
+  
+  expect_true(inherits(dt_trans, "data.table"))
+  expect_equal(dt_trans$transition_id, 
+               c(1, 2, 3))
+  expect_equal(dt_trans$from, 
+               c(1, 1, 2))
+  expect_equal(dt_trans$to, 
+               c(2, 3, 3))
+  
+  # Row and column names
+  rownames(tmat) <- c("No BOS", "BOS", "Death")
+  dt_trans <- create_trans_dt(tmat)
+  expect_equal(dt_trans$from_name, NULL)
+  
+  colnames(tmat) <- rownames(tmat)
+  dt_trans <- create_trans_dt(tmat)
+  expect_equal(dt_trans$from_name, rownames(tmat)[c(1, 1, 2)])
+  expect_equal(dt_trans$to_name, colnames(tmat)[c(2, 3, 3)])
 })
 
 # hesim data -------------------------------------------------------------------

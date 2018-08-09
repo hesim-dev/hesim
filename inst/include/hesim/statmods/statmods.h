@@ -191,7 +191,9 @@ public:
    * from the input matrix (or matrices when there are multiple parameters).
    * @param t Times at which to make predictions.
    * @param type "hazard" for hazards; "cumhazard" for cumulative hazards;
-   * "survival" for survival probabilities; and "rmst" for restricted mean survival.
+   * "survival" for survival probabilities; and "rmst" for restricted mean survival time.
+   * @param dr Discount rate when computing restricted mean survival time. Not used
+   * for other summary measures.  
    * @return Summary measure as determined by @p type for each time @p t.
    */ 
   std::vector<double> summary(int sample, int obs, std::vector<double> t, std::string type,

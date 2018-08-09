@@ -24,6 +24,7 @@ reference:
     contents:
       - hesim_data
       - expand_hesim_data
+      - create_trans_dt
       - input_data
       - create_input_data
   - title: "Health state values"
@@ -35,6 +36,9 @@ reference:
       - Psm
       - PsmCurves
       - create_PsmCurves
+  - title: "Continuous time state transition model"
+    contents:
+      - CtstmTrans
   - title: "Cost-effectiveness analysis"
     contents:
       - icea

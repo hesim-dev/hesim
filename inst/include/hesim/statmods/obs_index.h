@@ -37,7 +37,7 @@ inline time_fun* get_time_fun(Rcpp::List R_input_data){
  * Observation index
  * A class for obtaining the row index of a specfic observation contained
  * in an input matrix for prediction or sampling. This class is instantiated using 
- * data from the R class @c hesim::input_data.
+ * data from the @c R class @c input_data from the @c hesim package.
  ******************************************************************************/ 
 class obs_index {
 private:
@@ -221,6 +221,38 @@ inline obs_index create_obs_index(Rcpp::Environment R_model){
   return obs_index;
 }
 
+/***************************************************************************//** 
+ * Observation identifiers.
+ * Contains @c strategy_id, @c line, @c patient_id, @c state_id, 
+ * and @c transition_id from the @c R @c input_data class.
+ ******************************************************************************/ 
+struct obs_ids {
+  std::vector<int> strategy_id_;
+  std::vector<int> line_;
+  std::vector<int> patient_id_;
+  std::vector<int> state_id_;
+  std::vector<int> transition_id_;
+  
+  /** 
+   * A constructor.
+   * Instantiates the struct from an @c R model. 
+   * @param R_input_data An @c R object of class @c input_data.
+   */   
+  obs_ids(Rcpp::List R_input_data) {
+    strategy_id_ = Rcpp::as<std::vector<int> >(R_input_data["strategy_id"]);
+    if (R_input_data.containsElementNamed("line")){
+      line_ = Rcpp::as<std::vector<int> >(R_input_data["line"]);
+    }
+    patient_id_ = Rcpp::as<std::vector<int> >(R_input_data["patient_id"]);
+    if (R_input_data.containsElementNamed("transition_id")){
+     transition_id_ = Rcpp::as<std::vector<int> >(R_input_data["transition_id"]); 
+    }
+    if (R_input_data.containsElementNamed("state_id")){
+     state_id_ = Rcpp::as<std::vector<int> >(R_input_data["state_id"]); 
+    }
+  };
+  
+};
 
 } // end namespace statmods
 

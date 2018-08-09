@@ -7,7 +7,7 @@
 /** \mainpage 
 
 # Overall Description
-This site documents the @c hesim C++ library, which is desisgned for use with 
+This site documents the @c hesim C++ library, which is designed for use with 
 the @c R package by the same name.
  */
 
@@ -30,6 +30,10 @@ the @c R package by the same name.
 
 /** @defgroup psm Partitioned survival models
  *  Classes and functions for simulating partitioned survival models.
+ */
+
+/** @defgroup ctstm Continuous time state transiton models
+ *  Classes and functions for simulating continuous time state transiton models.
  */
 
 /** @defgroup Rbase R base

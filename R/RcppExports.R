@@ -17,6 +17,14 @@ C_enmbpi <- function(k, e, c, n_samples, n_strategies, n_grps) {
     .Call('_hesim_C_enmbpi', PACKAGE = 'hesim', k, e, c, n_samples, n_strategies, n_grps)
 }
 
+tmax_max <- function(m) {
+    .Call('_hesim_tmax_max', PACKAGE = 'hesim', m)
+}
+
+C_ctstm_summary <- function(R_CtstmTrans, t, type) {
+    .Call('_hesim_C_ctstm_summary', PACKAGE = 'hesim', R_CtstmTrans, t, type)
+}
+
 C_rgengamma <- function(n, mu, sigma, Q) {
     .Call('_hesim_C_rgengamma', PACKAGE = 'hesim', n, mu, sigma, Q)
 }
@@ -57,12 +65,20 @@ C_test_trapz <- function(x, y) {
     .Call('_hesim_C_test_trapz', PACKAGE = 'hesim', x, y)
 }
 
+C_ctstm_is_absorbing <- function(m) {
+    .Call('_hesim_C_ctstm_is_absorbing', PACKAGE = 'hesim', m)
+}
+
 C_test_xptr_test_time_fun <- function(L) {
     .Call('_hesim_C_test_xptr_test_time_fun', PACKAGE = 'hesim', L)
 }
 
 C_test_obs_index <- function(R_input_data, strategy_id, patient_id, line = -1L, health_id = -1L) {
     .Call('_hesim_C_test_obs_index', PACKAGE = 'hesim', R_input_data, strategy_id, patient_id, line, health_id)
+}
+
+C_test_obs_ids <- function(R_input_data, member) {
+    .Call('_hesim_C_test_obs_ids', PACKAGE = 'hesim', R_input_data, member)
 }
 
 test_quad_functor <- function(lower, upper) {

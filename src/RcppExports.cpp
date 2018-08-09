@@ -70,6 +70,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// tmax_max
+int tmax_max(arma::mat m);
+RcppExport SEXP _hesim_tmax_max(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(tmax_max(m));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_ctstm_summary
+Rcpp::DataFrame C_ctstm_summary(Rcpp::Environment R_CtstmTrans, std::vector<double> t, std::string type);
+RcppExport SEXP _hesim_C_ctstm_summary(SEXP R_CtstmTransSEXP, SEXP tSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_CtstmTrans(R_CtstmTransSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_ctstm_summary(R_CtstmTrans, t, type));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_rgengamma
 std::vector<double> C_rgengamma(int n, std::vector<double> mu, std::vector<double> sigma, std::vector<double> Q);
 RcppExport SEXP _hesim_C_rgengamma(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP) {
@@ -200,6 +224,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_ctstm_is_absorbing
+std::vector<bool> C_ctstm_is_absorbing(arma::mat m);
+RcppExport SEXP _hesim_C_ctstm_is_absorbing(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_ctstm_is_absorbing(m));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_test_xptr_test_time_fun
 SEXP C_test_xptr_test_time_fun(Rcpp::List L);
 RcppExport SEXP _hesim_C_test_xptr_test_time_fun(SEXP LSEXP) {
@@ -223,6 +258,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type line(lineSEXP);
     Rcpp::traits::input_parameter< int >::type health_id(health_idSEXP);
     rcpp_result_gen = Rcpp::wrap(C_test_obs_index(R_input_data, strategy_id, patient_id, line, health_id));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_obs_ids
+std::vector<int> C_test_obs_ids(Rcpp::List R_input_data, std::string member);
+RcppExport SEXP _hesim_C_test_obs_ids(SEXP R_input_dataSEXP, SEXP memberSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type R_input_data(R_input_dataSEXP);
+    Rcpp::traits::input_parameter< std::string >::type member(memberSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_obs_ids(R_input_data, member));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -314,6 +361,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_ceac", (DL_FUNC) &_hesim_C_ceac, 6},
     {"_hesim_C_mce", (DL_FUNC) &_hesim_C_mce, 6},
     {"_hesim_C_enmbpi", (DL_FUNC) &_hesim_C_enmbpi, 6},
+    {"_hesim_tmax_max", (DL_FUNC) &_hesim_tmax_max, 1},
+    {"_hesim_C_ctstm_summary", (DL_FUNC) &_hesim_C_ctstm_summary, 3},
     {"_hesim_C_rgengamma", (DL_FUNC) &_hesim_C_rgengamma, 4},
     {"_hesim_C_rpwexp", (DL_FUNC) &_hesim_C_rpwexp, 3},
     {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
@@ -324,8 +373,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_psm_sim_wlos", (DL_FUNC) &_hesim_C_psm_sim_wlos, 5},
     {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
     {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
+    {"_hesim_C_ctstm_is_absorbing", (DL_FUNC) &_hesim_C_ctstm_is_absorbing, 1},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
     {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
+    {"_hesim_C_test_obs_ids", (DL_FUNC) &_hesim_C_test_obs_ids, 2},
     {"_hesim_test_quad_functor", (DL_FUNC) &_hesim_test_quad_functor, 2},
     {"_hesim_test_quad_lambda", (DL_FUNC) &_hesim_test_quad_lambda, 2},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},

@@ -1,8 +1,9 @@
 # hesim data -------------------------------------------------------------------
 
-#' Data table of treatment lines
+#' Create a data table of treatment lines
 #' 
 #' Convert a list of treatment lines for multiple treatment strategies to a \code{\link{data.table}}
+#' suitable for use with \link{hesim_data}.
 #' @param strategy_list A list where each element is a treatment strategy 
 #' consisting of a vector of treatments. 
 #' @param strategy_ids A numeric vector denoting the numeric id of each strategy
@@ -16,9 +17,9 @@
 #' @examples 
 #' strategies <- list(c(1, 2, 3),
 #'                   c(1, 2))
-#' lines_dt(strategies)
+#' create_lines_dt(strategies)
 #' @export
-lines_dt <- function(strategy_list, strategy_ids = NULL){
+create_lines_dt <- function(strategy_list, strategy_ids = NULL){
   treatments <- unlist(strategy_list, use.names = FALSE)
   if(!is.numeric(treatments)){
     stop("Elements in 'strategy_list' should be integers.")
@@ -33,6 +34,48 @@ lines_dt <- function(strategy_list, strategy_ids = NULL){
   return(data.table(strategy_id = strategies,
                     line = lines,
                     treatment_id = treatments))
+}
+
+#' Create a data table of health state transitions
+#' 
+#' Create a data table of health state transitions from a transition matrix describing 
+#' the states and transitions in a multi-state model suitable for use with \link{hesim_data}. 
+#' @param trans_mat A transition matrix in the format from the \link[mstate]{mstate} package. 
+#' See \link{CtstmTrans}.
+#' @return Returns a \code{\link{data.table}} in tidy format with three columns
+#' \describe{
+#' \item{transition_id}{Health state transition id.}
+#' \item{from}{The starting health state.}
+#' \item{to}{The health state that will be transitions to.}
+#' }
+#' @examples 
+#' tmat <- rbind(c(NA, 1, 2),
+#'               c(NA, NA, 3),
+#'               c(NA, NA, NA))
+#' create_trans_dt(tmat)
+#' @export
+create_trans_dt <- function(trans_mat){
+  n_rows <- nrow(trans_mat)
+  id <- to <- from <- vector(mode = "list", n_rows)
+  for (i in 1:n_rows){
+    id_i <- trans_mat[i, ]
+    id[[i]] <- id_i[!is.na(id_i)]
+    from[[i]] <- rep(i, length(id[[i]]))
+    names(from[[i]]) <- rep(rownames(trans_mat)[i], length(from[[i]]))
+    to[[i]] <- which(!is.na(id_i))
+  }
+  id <- do.call("c", id)
+  from <- do.call("c", from)
+  to <- do.call("c", to)
+  x <- data.table(transition_id = id,
+                  from = from,
+                  to = to)
+  if (!is.null(names(from)) & !is.null(names(to))){
+    x$from_name <- names(from)
+    x$to_name <- names(to)
+  }
+  x <- x[sort(transition_id)]
+  return(x)
 }
 
 #' Data for health-economic simulation modeling
