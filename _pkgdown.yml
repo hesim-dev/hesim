@@ -39,6 +39,7 @@ reference:
   - title: "Continuous time state transition model"
     contents:
       - CtstmTrans
+      - create_CtstmTrans
   - title: "Cost-effectiveness analysis"
     contents:
       - icea
