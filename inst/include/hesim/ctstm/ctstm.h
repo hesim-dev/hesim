@@ -11,37 +11,130 @@ namespace hesim {
 namespace ctstm {
 
 /***************************************************************************//** 
- * Check whether a health state is an absorbing state.
- * A health state is absorbing if a row in @p m has all NAs.
- * @param m A marix of integers indicating allowed transitions in a
- *  multi-state model as allow by the @c R package @c mstate. Thre r,s 
- *  entry is i if the ith transition type 
- *  (reading across rows) is r->s. The matrix has NAs along the diagonal and 
- *  where an r->s transition is not allowed.
- *  @return A vector indicating whether each state is absorbing. 
- ******************************************************************************/ 
-inline std::vector<bool> is_absorbing(arma::mat m){
-  std::vector<bool> v(m.n_rows, FALSE);
-  for (int i = 0; i < m.n_rows; ++i){
-    int sum_NA = 0;
-    for (int j = 0; j < m.n_cols; ++j){
-      if (isnan(m(i, j))){
-        ++sum_NA;
+ * Transition matrix.
+ * A class for summarizing possible health state transitions in a multi-state 
+ * model. 
+ ******************************************************************************/
+class trans_mat {
+private:
+  std::vector<std::vector<int> > trans_id_; ///< A vector of vectors. The outer vector 
+                                            ///< denotes the starting state and each inner 
+                                            ///< vector denotes the transition id
+                                           ///< (indexed from 1 to patient::n_trans_)
+                                           ///< corresponding to the possible transitions
+                                           ///< from that state.
+                                        
+  std::vector<std::vector<int> > to_; ///< A vector of vectors. The outer vector
+                                      ///< denotes the starting state and each inner
+                                      ///< vector denotes a state that can be 
+                                      ///< transitioned to.
+                                        
+  /** 
+   * Count the number of non missing elements in the matrix. 
+   * The number of non missing elements is equal to the number of 
+   * possible transitions. 
+   * @param m The same transition matrix as in the constructor.
+   */                                          
+  int count_non_nan(arma::mat m){
+    int sum_non_nan = 0;
+    for (int i = 0; i < m.n_rows; ++i){
+      for (int j = 0; j < m.n_cols; ++j){
+        if (!isnan(m(i, j))){
+          ++sum_non_nan;
+        }
+      } // end loop over columns
+    } // end loop over rows
+    return sum_non_nan;
+  }
+  
+  /** 
+   * Determine whether each health state is absorbing.
+   * @param trans A vector of vectors of the same format as trans_mat::trans_id_. Should
+   * only be called after trans_ has been initialized. 
+   */     
+  std::vector<bool> is_absorbing(std::vector<std::vector<int> > trans){
+    std::vector<bool> absorbing(trans.size());
+    for (int i = 0; i < trans.size(); ++i){
+      if(trans[i].size() > 0){
+        absorbing[i] = false;
       }
-    } // end column loop
-    if (sum_NA == m.n_cols){
-      v.at(i) = TRUE;
-    }
-  } // end row loop
-  return v;
-}
+      else {
+        absorbing[i] = true;
+      }
+    } // end loop over states
+    return absorbing;
+  }
+  
+public:
+  int n_trans_; ///< The total number of possible transitions.
+  std::vector<bool> absorbing_; ///< A vector indicating whether each state is absorbing.
+                               ///< A state is absorbing if a row in the transition matrix
+                               ///< has all NAs. 
+  
+  /** 
+   * The constructor.
+   * @param m A matrix of integers indicating allowed transitions in a multi-state model
+   *  in the format from the @c R package @c mstate. See
+   * the argument "trans" in @c msprep in the @c mstate documentation.
+   * @param R_index If TRUE, then transition ids in the matrix are assumed to be from R, 
+   * and re-indexed to start from 0 (rather than 1).
+   */                                       
+  trans_mat(arma::mat m, bool R_index = true) {
+    // Initialize n_trans_
+    n_trans_ = count_non_nan(m);
+    
+    // Initialize trans_ and to_
+    for (int i = 0; i < m.n_rows; ++i){
+      arma::rowvec m_row = m.row(i);
+      std::vector<int> trans_i;
+      std::vector<int> to_i;
+      for (int j = 0; j < m_row.n_elem; ++j){
+        if(!isnan(m_row(j))){
+          if (R_index){
+            trans_i.push_back(m_row(j) - 1); 
+          }
+          else{
+            trans_i.push_back(m_row(j)); 
+          }
+          to_i.push_back(j);
+        }
+      } // end loop over columns
+      to_.push_back(to_i);
+      trans_id_.push_back(trans_i);
+    } // end loop over rows
+    
+    // Initialize absorbing_
+    absorbing_ = is_absorbing(trans_id_);
+  }
+  
+  /** 
+   * Return transition number ids. 
+   * @param from_state The state to transition from.
+   * @reurn A vector of the transitions numbers from the specified health state.
+   */   
+  std::vector<int> trans_id(int from_state) {
+    return trans_id_[from_state];
+  }
+  
+  /** 
+   * Return states that can be transitioned to. 
+   * @param from_state The state to transition from.
+   * @reurn A vector of the transition states that can be transitioned to 
+   * from the specified health state.
+   */   
+  std::vector<int> to(int from_state) {
+    return to_[from_state];
+  }  
+  
+};
 
 /***************************************************************************//** 
  * Statistical models for health state transitions.
  ******************************************************************************/
 class transmod{
 public:
- hesim::statmods::obs_index obs_index_; ///< A statmods::obs_index object.
+ statmods::obs_index obs_index_; ///< A statmods::obs_index object.
+ trans_mat trans_mat_; ///<A transition matrix object. 
   
   /** 
    * The constructor.
@@ -49,23 +142,12 @@ public:
    * @param R_CtstmTrans An @c R object of class @c CtstmTrans.
    */ 
   transmod(Rcpp::Environment R_CtstmTrans)
-    : obs_index_(Rcpp::as<Rcpp::List>(R_CtstmTrans["data"])){
-    trans_mat_ = Rcpp::as<arma::mat>(R_CtstmTrans["trans_mat"]);
+    : obs_index_(Rcpp::as<Rcpp::List>(R_CtstmTrans["data"])),
+      trans_mat_(Rcpp::as<arma::mat>(R_CtstmTrans["trans_mat"])){
   }
   virtual ~transmod() {}
   
   static std::unique_ptr<transmod> create(Rcpp::Environment R_CtstmTrans);
-  
-  
-  arma::mat trans_mat_; ///<A transition matrix object. 
-  
-  /** 
-   * Return the number of observations inclusive of treatment strategies,
-   * lines, and patients. 
-   */  
-  int get_n_obs() const {
-    return obs_index_.n_obs_;
-  }
   
   /** 
    * Return the number of modeled treatment strategies.
@@ -94,16 +176,18 @@ public:
   int get_n_states() const {
     return obs_index_.n_healthvals_;
   }
-
-  /** 
-   * Return the number of randomly sampled parmeter sets.
-   */       
-  int virtual get_n_samples() = 0;
   
   /** 
    * Return the number of health state transitions.
    */     
-  int virtual get_n_transitions() = 0;
+  int get_n_transitions() {
+    return trans_mat_.n_trans_;
+  }
+  
+  /** 
+   * Return the number of randomly sampled parmeter sets.
+   */       
+  int virtual get_n_samples() = 0;
   
   /** 
    * Summarize the survival model for a given health state transition.
@@ -168,10 +252,6 @@ public:
     return survmod_.get_n_samples();  
   }
   
-  int get_n_transitions() {
-    return trans_mat_.max();
-  }
-  
   std::vector<double> summary(int trans, int sample, std::vector<double> t, 
                               std::string type) {
     obs_index_.set_health_id(trans);
@@ -179,8 +259,8 @@ public:
   }
   
   double random(int trans, int sample) {
-    // return survmod_.random(sample, obs_index_());
-    return 2.0;
+    obs_index_.set_health_id(trans);
+    return survmod_.random(sample, obs_index_());
   }
     
 };
@@ -227,10 +307,6 @@ public:
     return survmods_[0].get_n_samples();  
   }
   
-  int get_n_transitions() {
-    return survmods_.size();
-  }
-  
   std::vector<double> summary(int trans, int sample,
                               std::vector<double> t, std::string type) {
     return survmods_[trans].summary(sample, obs_index_(), t, type);
@@ -268,7 +344,7 @@ inline std::unique_ptr<transmod> transmod::create(Rcpp::Environment R_CtstmTrans
  * Data container for storing summaries of models of health state transitions.
  ******************************************************************************/ 
 struct transmod_summary{
-  std::vector<int> trans_; ///< The health state transition.. 
+  std::vector<int> trans_; ///< The health state transition.
   std::vector<int> sample_; ///< A randomly sampled parameter set.
   std::vector<int> strategy_id_; ///< A treatment strategy id.
   std::vector<int> patient_id_; ///< A patient id.
@@ -296,20 +372,39 @@ struct transmod_summary{
   }  
 };
 
-/********************************************************************
-* Class for jumping from between health states for individual patient
-********************************************************************/
-class CtStmPatient {
-public:
-  CtStmPatient(transmod * transmod, double age, double time, int state, double max_age, double max_t);
-  transmod * transmod_;
-  double age_;
-  double time_;
-  int state_;
-  double max_age_;
-  double max_t_;
-  void jump(int sample);
+/***************************************************************************//** 
+ * Data container for storing health state probabilities.
+ ******************************************************************************/ 
+struct stateprobs_out{
+  std::vector<int> sample_; ///< A randomly sampled parameter set.
+  std::vector<int> strategy_id_; ///< A treatment strategy id.
+  std::vector<double> state_id_; ///< The health state id. 
+  std::vector<double> patient_id_; ///< The health state id. 
+  std::vector<double> t_; ///< The time. 
+  std::vector<double> prob_; ///< The health state probability. 
+  
+  /** 
+   * A default constructor.
+   * Instantiates a data container for storing simulated health state probabilities.
+   */ 
+  stateprobs_out() {};
+  
+/** 
+   * A constructor.
+   * Instantiates a data container for a predicted survival curve where all 
+   * vectors in the container are initialized to a size @c n.
+   */
+  stateprobs_out(int n) {
+    sample_.resize(n);
+    strategy_id_.resize(n);
+    state_id_.resize(n);
+    patient_id_.resize(n);
+    t_.resize(n);
+    prob_.resize(n);
+  }    
+  
 };
+
 
 } // end namespace ctstm
 

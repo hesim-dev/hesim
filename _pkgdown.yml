@@ -36,10 +36,11 @@ reference:
       - Psm
       - PsmCurves
       - create_PsmCurves
-  - title: "Continuous time state transition model"
+  - title: "Continuous time state transition models"
     contents:
       - CtstmTrans
       - create_CtstmTrans
+      - IndivCtstm
   - title: "Cost-effectiveness analysis"
     contents:
       - icea

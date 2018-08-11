@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create <code>CtstmTrans</code> object — create_CtstmTrans • hesim</title>
+<title>Absorbing states — absorbing • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -95,63 +95,24 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create <code>CtstmTrans</code> object</h1>
+    <h1>Absorbing states</h1>
     </div>
 
     
-    <p><code>create_CtstmTrans</code> is a generic function for creating an object of class
-<code><a href='CtstmTrans.html'>CtstmTrans</a></code>.</p>
+    <p>Returns a vector of absorbing states from a transition matrix.</p>
     
 
-    <pre class="usage"><span class='fu'>create_CtstmTrans</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>trans_mat</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>)
-
-<span class='co'># S3 method for flexsurvreg_list</span>
-<span class='fu'>create_CtstmTrans</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>trans_mat</span>,
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for flexsurvreg</span>
-<span class='fu'>create_CtstmTrans</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>trans_mat</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>absorbing</span>(<span class='no'>trans_mat</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>A fitted statistical model.</p></td>
-    </tr>
-    <tr>
-      <th>data</th>
-      <td><p>An object of class "expanded_hesim_data" returned by 
-<code><a href='expand_hesim_data.html'>expand_hesim_data</a></code>.</p></td>
-    </tr>
-    <tr>
       <th>trans_mat</th>
-      <td><p>The transition matrix describing the states and transitions in a 
-multi-state model in the format from the <a href='http://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package. See <a href='CtstmTrans.html'>CtstmTrans</a>.</p></td>
-    </tr>
-    <tr>
-      <th>n</th>
-      <td><p>Number of random observations of the parameters to draw.</p></td>
-    </tr>
-    <tr>
-      <th>point_estimate</th>
-      <td><p>If <code>TRUE</code>, then the point estimates are returned and and no samples are drawn.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to <code>CtstmTrans$new()</code> in <code><a href='CtstmTrans.html'>CtstmTrans</a></code>.</p></td>
+      <td><p>A transition matrix in the format from the <a href='http://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package. 
+See <a href='CtstmTrans.html'>CtstmTrans</a>.</p></td>
     </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Returns an <code>R6Class</code> object of class <code><a href='CtstmTrans.html'>CtstmTrans</a></code>.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p><code><a href='CtstmTrans.html'>CtstmTrans</a></code></p>
     
 
   </div>
@@ -159,11 +120,7 @@ multi-state model in the format from the <a href='http://www.rdocumentation.org/
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
+                </ul>
 
   </div>
 </div>

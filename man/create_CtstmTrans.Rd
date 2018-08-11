@@ -28,7 +28,7 @@ multi-state model in the format from the \link[mstate]{mstate} package. See \lin
 
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
 
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
+\item{...}{Further arguments passed to \code{CtstmTrans$new()} in \code{\link{CtstmTrans}}.}
 }
 \value{
 Returns an \code{\link{R6Class}} object of class \code{\link{CtstmTrans}}.

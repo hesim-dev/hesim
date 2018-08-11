@@ -118,7 +118,7 @@ an object of class <code><a href='PsmCurves.html'>PsmCurves</a></code>.</p></dd>
 an object of class <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
     <dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state. Must be a list of
 objects of class <code><a href='StateVals.html'>StateVals</a></code>, where each element of the list represents a 
-different type of costs.</p></dd>
+different cost category.</p></dd>
     <dt><code>n_states</code></dt><dd><p>Number of states in the partitioned survival model.</p></dd>
     <dt><code>t_</code></dt><dd><p>A numeric vector of times at which survival curves were predicted. Determined
 by the argument <code>t</code> in <code>sim_curves</code>.</p></dd>
@@ -209,12 +209,12 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 <span class='no'>psm</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>psm</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'>head</span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id   dr category    costs
-#&gt; 1:        1      1           1          1 0.03  medical 21862.03
-#&gt; 2:        1      1           1          2 0.03  medical 20418.26
-#&gt; 3:        1      1           1          3 0.03  medical 18166.93
-#&gt; 4:        1      1           2          1 0.03  medical 21862.03
-#&gt; 5:        1      1           2          2 0.03  medical 20418.26
-#&gt; 6:        1      1           2          3 0.03  medical 18166.93</div></pre>
+#&gt; 1:        1      1           1          1 0.03  medical 19803.54
+#&gt; 2:        1      1           1          2 0.03  medical 18478.02
+#&gt; 3:        1      1           1          3 0.03  medical 17465.83
+#&gt; 4:        1      1           2          1 0.03  medical 19803.54
+#&gt; 5:        1      1           2          2 0.03  medical 18478.02
+#&gt; 6:        1      1           2          3 0.03  medical 17465.83</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

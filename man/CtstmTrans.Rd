@@ -2,7 +2,7 @@
 \name{CtstmTrans}
 \alias{CtstmTrans}
 
-\title{Health state transitions for continuous time state transition models}
+\title{Transitions for continuous time state transition model}
 \format{\code{\link{R6Class}} object.}
 \usage{
 CtstmTrans
@@ -14,12 +14,16 @@ Summarize health state transitions in a continuous time state transition model w
 \section{Fields}{
 
 \describe{
-\item{\code{data}}{Data used to predict health state transitions by strategy and patient. Must be 
-  an object of class \code{\link{input_data}}.}
+\item{\code{data}}{Data used to simulate health state transitions by treatment strategy and patient. Must be 
+  an object of class \code{\link{input_data}}. If \code{params} is a list of models, then \code{data} must contain a unique row for each treatment strategy and patient; if \code{params} is a joint model, then \code{data} must contain a unique row for each treatment strategy, patient, and transition.}
 
-\item{\code{params}}{An object of class \code{\link{params_surv_list}}.}
+\item{\code{params}}{An object of class \code{\link{params_surv}} or \code{\link{params_surv_list}}.}
 
 \item{\code{trans_mat}}{A transition matrix describing the states and transitions in a multi-state model in the format from the \link[mstate]{mstate} package. See the documentation for the argument "trans" in \link[mstate]{msprep}.}
+
+\item{\code{start_ages}}{The starting age of each patient in the simulation. Must be the same length as the number of patients in \code{data}. Used alongside \code{max_age} in \code{sim_stateprobs()} with \code{type = "individual"}; does not otherwise need to be specified.}
+
+\item{\code{death_state}}{The death state in \code{trans_mat}. Used with \code{max_age} in \code{sim_stateprobs} with \code{type = "individual"} and in \code{IndivCtstm$sim_disease} as patients transition to this state upon reaching maximum age; does not otherwise need to be specified. By default, it is set to the final absorbing state (i.e., a row in \code{trans_mat} with all NAs).}
 
 }}
 
@@ -27,7 +31,8 @@ Summarize health state transitions in a continuous time state transition model w
 
 \describe{
 
-\item{\code{new(data, params)}}{
+\item{\code{new(data, params, trans_mat, start_ages = rep(38, data$n_patients),
+                          death_state = NULL)}}{
 
   Constructor for the class.
   
@@ -47,7 +52,22 @@ Summarize health state transitions in a continuous time state transition model w
      \itemize{
      \item \code{t}: A numeric vector of times.
      }
-  }
+  },
+  
+  \item{\code{sim_stateprobs(t, start_state = 1, max_t = 100, max_age = 100,
+                            clock = "reset")}}{
+    Simulate health state probabilities as a function of time.
+    
+     \itemize{
+     \item \code{t}: A numeric vector of times.
+     \item \code{start_state}: The starting health state. Default is the first
+     health state. 
+     \item \code{max_t}: Maximum number of time periods to simulate the model for. Default is 100.
+     \item \code{max_age}: Maximum age to simulate each patient until. Default is 100.
+     \item \code{clock}: Currently only supports \code{"reset"}, which implies that the time-scale of the
+     cumulative hazards depends on time in the present state. 
+     }
+  }  
 
     
     \item{\code{check()}}{
@@ -59,6 +79,10 @@ Summarize health state transitions in a continuous time state transition model w
 }
 
 
+}
+
+\seealso{
+\code{\link{create_CtstmTrans}}, \code{\link{IndivCtstm}}
 }
 
 \examples{
@@ -90,4 +114,5 @@ transmod <- create_CtstmTrans(fits, data = fits_data, trans_mat = tmat,
                               point_estimate = TRUE)       
 head(transmod$hazard(c(1, 2, 3)))
 head(transmod$cumhazard(c(1, 2, 3)))
+head(transmod$sim_stateprobs(t = c(0, 5, 10)))
 }

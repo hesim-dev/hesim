@@ -74,7 +74,7 @@ create_trans_dt <- function(trans_mat){
     x$from_name <- names(from)
     x$to_name <- names(to)
   }
-  x <- x[sort(transition_id)]
+  setorderv(x, "transition_id")
   return(x)
 }
 

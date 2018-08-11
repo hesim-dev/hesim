@@ -1,3 +1,13 @@
+#' Absorbing states
+#' 
+#' Returns a vector of absorbing states from a transition matrix.
+#' @param trans_mat A transition matrix in the format from the \link[mstate]{mstate} package. 
+#' See \link{CtstmTrans}.
+#' @keywords internal
+absorbing <- function(trans_mat){
+  which(apply(trans_mat, 1, function(x) all(is.na(x))))
+}
+
 #' Input validation for class objects
 #' 
 #' \code{check} is a generic function for validating the inputs of class objects.

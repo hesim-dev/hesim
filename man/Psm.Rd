@@ -22,7 +22,7 @@ an object of class \code{\link{StateVals}}.}
 
 \item{\code{cost_models}}{The models used to predict costs by health state. Must be a list of
 objects of class \code{\link{StateVals}}, where each element of the list represents a 
-different type of costs.}
+different cost category.}
 
 \item{\code{n_states}}{Number of states in the partitioned survival model.}
 

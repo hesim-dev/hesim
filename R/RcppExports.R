@@ -41,8 +41,12 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_C_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
-C_test_rtruncnorm <- function(mean, sd, lower, upper) {
-    .Call('_hesim_C_test_rtruncnorm', PACKAGE = 'hesim', mean, sd, lower, upper)
+C_ctstm_sim_disease <- function(R_CtstmTrans, start_state, start_ages, death_state, max_t, max_age) {
+    .Call('_hesim_C_ctstm_sim_disease', PACKAGE = 'hesim', R_CtstmTrans, start_state, start_ages, death_state, max_t, max_age)
+}
+
+C_ctstm_indiv_stateprobs <- function(R_disease_prog, t, n_samples, n_strategies, n_states, n_patients, n_lines = 1L) {
+    .Call('_hesim_C_ctstm_indiv_stateprobs', PACKAGE = 'hesim', R_disease_prog, t, n_samples, n_strategies, n_states, n_patients, n_lines)
 }
 
 C_psm_curves_summary <- function(R_PsmCurves, x, type, dr) {
@@ -65,8 +69,24 @@ C_test_trapz <- function(x, y) {
     .Call('_hesim_C_test_trapz', PACKAGE = 'hesim', x, y)
 }
 
-C_ctstm_is_absorbing <- function(m) {
-    .Call('_hesim_C_ctstm_is_absorbing', PACKAGE = 'hesim', m)
+C_test_is_absorbing <- function(m) {
+    .Call('_hesim_C_test_is_absorbing', PACKAGE = 'hesim', m)
+}
+
+C_test_trans_mat_trans_id <- function(m, from_state) {
+    .Call('_hesim_C_test_trans_mat_trans_id', PACKAGE = 'hesim', m, from_state)
+}
+
+C_test_trans_mat_to <- function(m, from_state) {
+    .Call('_hesim_C_test_trans_mat_to', PACKAGE = 'hesim', m, from_state)
+}
+
+C_test_trans_mat_n_trans <- function(m) {
+    .Call('_hesim_C_test_trans_mat_n_trans', PACKAGE = 'hesim', m)
+}
+
+C_test_rtruncnorm <- function(mean, sd, lower, upper) {
+    .Call('_hesim_C_test_rtruncnorm', PACKAGE = 'hesim', mean, sd, lower, upper)
 }
 
 C_test_xptr_test_time_fun <- function(L) {

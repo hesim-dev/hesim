@@ -76,14 +76,6 @@ arma::cube C_rdirichlet_mat(int n, arma::mat alpha){
   }
   return(samp);
 }
-/***************************************************************************//**
- * @ingroup stats
- * Function to test hesim::stats::rtruncnorm.
- ******************************************************************************/ 
-// [[Rcpp::export]]
-double C_test_rtruncnorm(double mean, double sd, double lower, double upper){
-  return hesim::stats::rtruncnorm(mean, sd, lower, upper);
-}
 
 /***************************************************************************//**
  * @ingroup stats
