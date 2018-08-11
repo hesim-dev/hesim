@@ -114,5 +114,5 @@ transmod <- create_CtstmTrans(fits, data = fits_data, trans_mat = tmat,
                               point_estimate = TRUE)       
 head(transmod$hazard(c(1, 2, 3)))
 head(transmod$cumhazard(c(1, 2, 3)))
-head(transmod$sim_stateprobs(t = c(0, 5, 10)))
+transmod$sim_stateprobs(t = c(0, 5, 10))[t == 5]
 }

@@ -116,5 +116,5 @@ transmod <- create_CtstmTrans(fits, data = fits_data, trans_mat = tmat,
                               point_estimate = TRUE)
 ictstm <- IndivCtstm$new(trans_model = transmod)
 head(ictstm$sim_disease()$disease_prog_)
-head(ictstm$sim_stateprobs(t = c(0, 5, 10))$stateprobs_)
+ictstm$sim_stateprobs(t = c(0, 5, 10))$stateprobs_[t == 5]
 }

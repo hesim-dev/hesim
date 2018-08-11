@@ -45,6 +45,7 @@ indiv_ctstm_stateprobs <- function(disease_prog, t, trans_model) {
   if (is.null(trans_model$data$n_lines)){
     n_lines <- 1
   } # to do after incorporating treatment lines: case where there are multiple treatment lines
+  
   stprobs <- C_ctstm_indiv_stateprobs(disease_prog, t, n_samples,
                                       trans_model$data$n_strategies, 
                                       nrow(trans_model$trans_mat),
