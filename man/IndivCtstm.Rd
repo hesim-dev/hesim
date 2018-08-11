@@ -56,7 +56,7 @@ Simulate outcomes from an individual-level continuous time state transition mode
   
 }
   
-  \item{\code{max_t = 100, max_age = 100}}{
+  \item{\code{sim_disease(max_t = 100, max_age = 100)}}{
     Simulate disease progression.
     
      \itemize{

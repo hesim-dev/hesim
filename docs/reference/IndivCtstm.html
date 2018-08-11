@@ -139,7 +139,7 @@
     
     <dl class='dl-horizontal'>
     <dt><code>new(trans_model, utility_model = NULL, cost_models = NULL)</code></dt><dd><p>Constructor for the class.</p></dd>
-    <dt><code>max_t = 100, max_age = 100</code></dt><dd><p>Simulate disease progression.
+    <dt><code>sim_disease(max_t = 100, max_age = 100)</code></dt><dd><p>Simulate disease progression.
     <ul>
 <li><p><code>max_t</code>: Maximum time to simulate disease until.</p></li>
 <li><p><code>max_age</code>: Maximum age that a patient can live. Upon reaching this age the simulation stops and a patient moves to the "death state" specified by <code>death_state</code>.</p></li>
@@ -187,18 +187,18 @@
                               <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>ictstm</span> <span class='kw'>&lt;-</span> <span class='no'>IndivCtstm</span>$<span class='fu'>new</span>(<span class='kw'>trans_model</span> <span class='kw'>=</span> <span class='no'>transmod</span>)
 <span class='fu'>head</span>(<span class='no'>ictstm</span>$<span class='fu'>sim_disease</span>()$<span class='no'>disease_prog_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id from to final time_start time_stop
-#&gt; 1:      1           1          1    1  2     0  0.0000000 0.4194859
-#&gt; 2:      1           1          1    2  3     1  0.4194859 0.4312096
-#&gt; 3:      1           1          2    1  3     1  0.0000000 1.4320676
-#&gt; 4:      1           1          3    1  3     1  0.0000000 4.8743281
-#&gt; 5:      1           2          1    1  3     1  0.0000000 5.8190213
-#&gt; 6:      1           2          2    1  2     0  0.0000000 1.4541101</div><div class='input'><span class='fu'>head</span>(<span class='no'>ictstm</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))$<span class='no'>stateprobs_</span>)</div><div class='output co'>#&gt;    sample strategy_id state_id  t prob
-#&gt; 1:      1           1        1  0    1
-#&gt; 2:      1           1        1  5    0
-#&gt; 3:      1           1        1 10    0
-#&gt; 4:      1           1        2  0    0
-#&gt; 5:      1           1        2  5    0
-#&gt; 6:      1           1        2 10    0</div></pre>
+#&gt; 1:      1           1          1    1  2     0   0.000000 12.490048
+#&gt; 2:      1           1          1    2  3     1  12.490048 13.253595
+#&gt; 3:      1           1          2    1  3     1   0.000000  8.658507
+#&gt; 4:      1           1          3    1  2     0   0.000000  4.488498
+#&gt; 5:      1           1          3    2  3     1   4.488498  6.553614
+#&gt; 6:      1           2          1    1  2     0   0.000000  0.125005</div><div class='input'><span class='fu'>head</span>(<span class='no'>ictstm</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))$<span class='no'>stateprobs_</span>)</div><div class='output co'>#&gt;    sample strategy_id state_id  t      prob
+#&gt; 1:      1           1        1  0 1.0000000
+#&gt; 2:      1           1        1  5 0.6666667
+#&gt; 3:      1           1        1 10 0.3333333
+#&gt; 4:      1           1        2  0 0.0000000
+#&gt; 5:      1           1        2  5 0.3333333
+#&gt; 6:      1           1        2 10 0.0000000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
