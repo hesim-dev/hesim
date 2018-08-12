@@ -26,9 +26,11 @@ Simulate outcomes from an individual-level continuous time state transition mode
 \item{sample}{A random sample from the PSA.}
 \item{strategy_id}{The treatment strategy ID.}
 \item{patient_id}{The patient ID.}
-\item{state_id}{The health state ID.}
+\item{from}{The health state ID transitioned from.}
+\item{to}{The health state ID transitioned to.}
 \item{final}{An indicator equal to 1 if a patient is in their final health state during the simulation and 0 otherwise.}
-\item{time}{The time when a patient enters a new health state.}
+\item{time_start}{The time at the start of the interval.}
+\item{time_start}{The time at the end of the interval.}
 }
 }
 
