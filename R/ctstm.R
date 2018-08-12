@@ -148,6 +148,21 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
         stop("Class of 'params' is not supported. See documentation.",
              call. = FALSE)
       }
+      if (!is.matrix(self$trans_mat)){
+        stop("'trans_mat' must be a matrix",
+             call. = FALSE)
+      }
+      if(nrow(self$trans_mat) != ncol(self$trans_mat)){
+        stop("'trans_mat' must be a square matrix",
+             call. = FALSE)
+      }
+      if(inherits(self$params, "params_surv_list")){
+        if(nrow(self$trans_mat) != length(self$params)){
+          stop(paste0("The number of models in 'params' must equal the number of rows/columns ",
+                      "in 'trans_mat'."),
+               call. = FALSE)
+        }
+      }
     }
   )
 )
