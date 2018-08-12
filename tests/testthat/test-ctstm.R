@@ -112,6 +112,13 @@ test_that("IndivCtstm", {
   
   # Errors 
   expect_error(ictstm$sim_stateprobs())
+  transmod2 <- transmod$clone()
+  transmod2$trans_mat <- matrix(1)
+  expect_error(transmod2$sim_stateprobs(t = 2))
+  transmod2$trans_mat <-1
+  expect_error(transmod2$sim_stateprobs(t = 2))
+  transmod2$trans_mat <- matrix(seq(1, 6), nrow = 2)
+  expect_error(transmod2$sim_stateprobs(t = 2))
   
   # Base case simulation
   ## Simulate disease progression
