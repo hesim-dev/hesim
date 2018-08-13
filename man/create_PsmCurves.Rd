@@ -2,7 +2,7 @@
 % Please edit documentation in R/psm.R
 \name{create_PsmCurves}
 \alias{create_PsmCurves}
-\title{Form \code{PsmCurves} object}
+\title{Create \code{PsmCurves} object}
 \usage{
 create_PsmCurves(object, data, n = 1000, point_estimate = FALSE,
   bootstrap = TRUE)

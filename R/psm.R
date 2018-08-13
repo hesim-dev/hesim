@@ -1,6 +1,6 @@
 # PsmCurves --------------------------------------------------------------------
 
-#' Form \code{PsmCurves} object
+#' Create \code{PsmCurves} object
 #' 
 #' \code{create_PsmCurves} is a function for creating an object of class
 #' \code{\link{PsmCurves}} from an object of class \code{\link{partsurvfit}}.
