@@ -8,12 +8,13 @@ reference:
       - partsurvfit
       - formula_list
       - flexsurvreg_list
-  - title: "Random number generation"
+  - title: "Probability distributions"
     contents:
+      - beta_mom
+      - fast_rgengamma
       - rcat
       - rpwexp
       - rdirichlet_mat
-      - fast_rgengamma
   - title: "Parameters"
     contents:
       - params_lm

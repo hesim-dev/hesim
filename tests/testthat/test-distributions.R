@@ -1,6 +1,18 @@
 context("distributions.R unit tests")
 library("flexsurv")
 
+# Methods of moments for beta distribution -------------------------------------
+test_that("beta_mom" , {
+  beta_mean <- function(a, b) return(a/(a+b))
+  beta_var <- function(a, b) return((a * b)/((a + b)^2 * (a + b + 1)))
+  beta_params <- beta_mom(.8, .1)
+  expect_equal(beta_mean(beta_params$shape1, beta_params$shape2), 
+               .8)
+  expect_equal(beta_var(beta_params$shape1, beta_params$shape2), 
+               .1^2)
+  expect_error(beta_mom(.5, sqrt(.5 * (1 - .5))))
+})
+
 # Weibull distribution for NMA -------------------------------------------------
 shape <-  1.2715
 scale <- 6.1914
@@ -93,6 +105,4 @@ expect_equal(s2.scale + s2.shape, # since shape is a scalar
 expect_equal(exp(sum(s1$res.t[c("a1", "a1(groupMedium)"), "est"])),
              exp(sum(s2$res.t[c("shape", "shape(groupMedium)"), "est"])) - 1,
              scale = 1, tol = .001)
-
-# Gompertz distribution for NMA ------------------------------------------------
 
