@@ -2,7 +2,7 @@
 % Please edit documentation in R/distributions.R
 \name{beta_mom}
 \alias{beta_mom}
-\title{Methods of moments for beta distribution.}
+\title{Method of moments for beta distribution.}
 \usage{
 beta_mom(mean, sigma)
 }
@@ -21,7 +21,7 @@ deviation of the random variable of interest.
 }
 \details{
 If \eqn{\mu} is the mean and 
-\eqn{\sigma} is the standard deviation of the random variable, then the methods
+\eqn{\sigma} is the standard deviation of the random variable, then the method
 of moments estimates of the parameters \code{shape1} = \eqn{\alpha > 0} and
 \code{shape2} = \eqn{\beta > 0} are:
 \deqn{\alpha = \mu \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)}
