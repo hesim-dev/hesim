@@ -30,5 +30,7 @@ and
 }
 \examples{
 beta_mom(mean = .8, sigma = .1)
+# The function is vectorized.
+beta_mom(mean = c(.6, .8), sigma = c(.08, .1))
 
 }
