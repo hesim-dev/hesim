@@ -1,18 +1,21 @@
 #' Methods of moments for beta distribution.
 #' 
 #' Compute the parameters \code{shape1} and \code{shape2} of the beta distribution
-#' using method of moments using the mean and standard 
+#' using method of moments given the mean and standard 
 #' deviation of the random variable of interest.
 #' @param mean Mean of the random variable.
 #' @param sigma Standard deviation of the random variable.
 #' @details 
 #' If \eqn{\mu} is the mean and 
 #' \eqn{\sigma} is the standard deviation of the random variable, then the methods
-#' of moments estimates of the parameters \code{shape1} = \eqn{\alpha} and
-#' \code{shape2} = \eqn{\beta} are:
+#' of moments estimates of the parameters \code{shape1} = \eqn{\alpha > 0} and
+#' \code{shape2} = \eqn{\beta > 0} are:
 #' \deqn{\alpha = \mu \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)}
 #' and
 #' \deqn{\beta = (1 - \mu) \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)}
+#' 
+#' @examples
+#' beta_mom(mean = .8, sigma = .1)
 #' 
 #' @export
 #' @return A list containing the parameters \code{shape1} and \code{shape2}.
