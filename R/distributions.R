@@ -16,6 +16,8 @@
 #' 
 #' @examples
 #' beta_mom(mean = .8, sigma = .1)
+#' # The function is vectorized.
+#' beta_mom(mean = c(.6, .8), sigma = c(.08, .1))
 #' 
 #' @export
 #' @return A list containing the parameters \code{shape1} and \code{shape2}.
@@ -23,7 +25,7 @@ beta_mom <- function(mean, sigma){
   term <- mean * (1 - mean)/sigma^2 - 1
   shape1 <- mean * term
   shape2 <- (1 - mean) * term
-  if (sigma^2 >= mean * (1 - mean)) stop("sigma^2 must be less than mean * (1 - mean)")
+  if (any(sigma^2 >= mean * (1 - mean))) stop("sigma^2 must be less than mean * (1 - mean)")
   return(list(shape1 = shape1, shape2 = shape2))
 }
 
