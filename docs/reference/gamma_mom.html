@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Method of moments for beta distribution — beta_mom • hesim</title>
+<title>Method of moments for gamma distribution — gamma_mom • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -95,16 +95,15 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Method of moments for beta distribution</h1>
+    <h1>Method of moments for gamma distribution</h1>
     </div>
 
     
-    <p>Compute the parameters <code>shape1</code> and <code>shape2</code> of the beta distribution
-using method of moments given the mean and standard 
-deviation of the random variable of interest.</p>
+    <p>Compute the shape and scale (or rate) parameters of the gamma distribution
+using method of moments for the random variable of interest.</p>
     
 
-    <pre class="usage"><span class='fu'>beta_mom</span>(<span class='no'>mean</span>, <span class='no'>sd</span>)</pre>
+    <pre class="usage"><span class='fu'>gamma_mom</span>(<span class='no'>mean</span>, <span class='no'>sd</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -117,35 +116,42 @@ deviation of the random variable of interest.</p>
       <th>sd</th>
       <td><p>Standard deviation of the random variable.</p></td>
     </tr>
+    <tr>
+      <th>scale</th>
+      <td><p>Logical. If TRUE (default), then the scale parameter is returned; otherwise,
+the rate parameter is returned.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing the parameters <code>shape1</code> and <code>shape2</code>.</p>
+    <p>If <code>scale = TRUE</code>, then a list containing the parameters <code>shape</code> and <code>scale</code>; otherwise,
+ if <code>scale = FALSE</code>, then a list containing the parameters <code>shape</code> and <code>rate</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>If \(\mu\) is the mean and 
 \(\sigma\) is the standard deviation of the random variable, then the method
-of moments estimates of the parameters <code>shape1</code> = \(\alpha &gt; 0\) and
-<code>shape2</code> = \(\beta &gt; 0\) are:
-$$\alpha = \mu \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)$$
+of moments estimates of the parameters <code>shape</code> = \(\alpha &gt; 0\) and
+<code>scale</code> = \(\theta &gt; 0\) are:
+$$\theta = \frac{\sigma^2}{\mu}$$
 and
-$$\beta = (1 - \mu) \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)$$</p>
+$$\alpha = \frac{\mu}{\theta}$$</p>
+<p>The inverse of the scale parmeter, \(\beta = 1/\theta\), is the rate parameter.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>beta_mom</span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>.8</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>.1</span>)</div><div class='output co'>#&gt; $shape1
-#&gt; [1] 12
+    <pre class="examples"><div class='input'><span class='fu'>gamma_mom</span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>10000</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>2000</span>)</div><div class='output co'>#&gt; $shape
+#&gt; [1] 25
 #&gt; 
-#&gt; $shape2
-#&gt; [1] 3
+#&gt; $scale
+#&gt; [1] 400
 #&gt; </div><div class='input'><span class='co'># The function is vectorized.</span>
-<span class='fu'>beta_mom</span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.6</span>, <span class='fl'>.8</span>), <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.08</span>, <span class='fl'>.1</span>))</div><div class='output co'>#&gt; $shape1
-#&gt; [1] 21.9 12.0
+<span class='fu'>gamma_mom</span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>8000</span>, <span class='fl'>10000</span>), <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1500</span>, <span class='fl'>2000</span>))</div><div class='output co'>#&gt; $shape
+#&gt; [1] 28.44444 25.00000
 #&gt; 
-#&gt; $shape2
-#&gt; [1] 14.6  3.0
+#&gt; $scale
+#&gt; [1] 281.25 400.00
 #&gt; </div><div class='input'>
 </div></pre>
   </div>

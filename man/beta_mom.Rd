@@ -2,14 +2,14 @@
 % Please edit documentation in R/distributions.R
 \name{beta_mom}
 \alias{beta_mom}
-\title{Method of moments for beta distribution.}
+\title{Method of moments for beta distribution}
 \usage{
-beta_mom(mean, sigma)
+beta_mom(mean, sd)
 }
 \arguments{
 \item{mean}{Mean of the random variable.}
 
-\item{sigma}{Standard deviation of the random variable.}
+\item{sd}{Standard deviation of the random variable.}
 }
 \value{
 A list containing the parameters \code{shape1} and \code{shape2}.
@@ -29,8 +29,8 @@ and
 \deqn{\beta = (1 - \mu) \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)}
 }
 \examples{
-beta_mom(mean = .8, sigma = .1)
+beta_mom(mean = .8, sd = .1)
 # The function is vectorized.
-beta_mom(mean = c(.6, .8), sigma = c(.08, .1))
+beta_mom(mean = c(.6, .8), sd = c(.08, .1))
 
 }

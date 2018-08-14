@@ -13,6 +13,23 @@ test_that("beta_mom" , {
   expect_error(beta_mom(.5, sqrt(.5 * (1 - .5))))
 })
 
+# Methods of moments for gamma distribution ------------------------------------
+test_that("gamma_mom" , {
+  # With scale parameter
+  gamma_params <- gamma_mom(10000, 1000)
+  expect_equal(gamma_params$shape * gamma_params$scale, 
+               10000)
+  expect_equal(gamma_params$shape * gamma_params$scale^2, 
+               1000^2)
+  
+  # With rate parameter
+  gamma_params <- gamma_mom(10000, 1000, scale = FALSE)
+  expect_equal(gamma_params$shape / gamma_params$rate,
+               10000)
+  expect_equal(gamma_params$shape / gamma_params$rate^2,
+               1000^2)
+})
+
 # Weibull distribution for NMA -------------------------------------------------
 shape <-  1.2715
 scale <- 6.1914

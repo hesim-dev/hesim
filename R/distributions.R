@@ -1,10 +1,10 @@
-#' Method of moments for beta distribution.
+#' Method of moments for beta distribution
 #' 
 #' Compute the parameters \code{shape1} and \code{shape2} of the beta distribution
 #' using method of moments given the mean and standard 
 #' deviation of the random variable of interest.
 #' @param mean Mean of the random variable.
-#' @param sigma Standard deviation of the random variable.
+#' @param sd Standard deviation of the random variable.
 #' @details 
 #' If \eqn{\mu} is the mean and 
 #' \eqn{\sigma} is the standard deviation of the random variable, then the method
@@ -15,18 +15,60 @@
 #' \deqn{\beta = (1 - \mu) \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)}
 #' 
 #' @examples
-#' beta_mom(mean = .8, sigma = .1)
+#' beta_mom(mean = .8, sd = .1)
 #' # The function is vectorized.
-#' beta_mom(mean = c(.6, .8), sigma = c(.08, .1))
+#' beta_mom(mean = c(.6, .8), sd = c(.08, .1))
 #' 
 #' @export
 #' @return A list containing the parameters \code{shape1} and \code{shape2}.
-beta_mom <- function(mean, sigma){
-  term <- mean * (1 - mean)/sigma^2 - 1
+beta_mom <- function(mean, sd){
+  term <- mean * (1 - mean)/sd^2 - 1
   shape1 <- mean * term
   shape2 <- (1 - mean) * term
-  if (any(sigma^2 >= mean * (1 - mean))) stop("sigma^2 must be less than mean * (1 - mean)")
+  if (any(sd^2 >= mean * (1 - mean))) stop("sd^2 must be less than mean * (1 - mean)")
   return(list(shape1 = shape1, shape2 = shape2))
+}
+
+#' Method of moments for gamma distribution
+#' 
+#' Compute the shape and scale (or rate) parameters of the gamma distribution
+#' using method of moments for the random variable of interest. 
+#' @param mean Mean of the random variable.
+#' @param sd Standard deviation of the random variable.
+#' @param scale Logical. If TRUE (default), then the scale parameter is returned; otherwise,
+#' the rate parameter is returned. 
+#' @details 
+#' If \eqn{\mu} is the mean and 
+#' \eqn{\sigma} is the standard deviation of the random variable, then the method
+#' of moments estimates of the parameters \code{shape} = \eqn{\alpha > 0} and
+#' \code{scale} = \eqn{\theta > 0} are:
+#' \deqn{\theta = \frac{\sigma^2}{\mu}}
+#' and
+#' \deqn{\alpha = \frac{\mu}{\theta}} 
+#' 
+#' The inverse of the scale parmeter, \eqn{\beta = 1/\theta}, is the rate parameter. 
+#' 
+#' @examples
+#' gamma_mom(mean = 10000, sd = 2000)
+#' # The function is vectorized.
+#' gamma_mom(mean = c(8000, 10000), sd = c(1500, 2000))
+#' 
+#' @export
+#' @return If \code{scale = TRUE}, then a list containing the parameters \code{shape} and \code{scale}; otherwise,
+#'  if \code{scale = FALSE}, then a list containing the parameters \code{shape} and \code{rate}.
+gamma_mom <- function(mean, sd, scale = TRUE){
+  if (scale){
+    scale <- sd^2/mean
+    shape <- mean/scale
+    params <- list(shape = shape,
+                   scale = scale)
+  } else{
+    rate <- mean/sd^2
+    shape <- mean * rate
+    params <- list(shape = shape,
+                   rate = rate)
+  }
+  return(params)
 }
 
 

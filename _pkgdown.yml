@@ -11,6 +11,7 @@ reference:
   - title: "Probability distributions"
     contents:
       - beta_mom
+      - gamma_mom
       - fast_rgengamma
       - rcat
       - rpwexp
