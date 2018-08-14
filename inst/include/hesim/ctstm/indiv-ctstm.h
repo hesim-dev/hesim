@@ -115,7 +115,12 @@ public:
 /***************************************************************************//** 
  * Disease progression container. 
  * A data container that stores simulated paths through a multi-state model (i.e.,
- * disease progression).
+ * disease progression). Note that converting R indexes (to start from 1) to
+ * C++ indexes (to start from 0) should be done at the R level. The reason for 
+ * this is that this container will sometimes be used directly after a C++ call (
+ * in which case indexes still begin at 0)
+ * but othertimes will be used after the data has been transfered to R (so 
+ * that indexes begin at 1). 
  ******************************************************************************/ 
 struct disease_prog {
   std::vector<int> sample_; ///< A randomly sampled parameter set.
