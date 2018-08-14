@@ -17,6 +17,9 @@ namespace statmods {
  ******************************************************************************/ 
 class statmod {
 public:
+  
+  virtual ~statmod() {};  
+  
   /** 
    * Predict values using the mean of the probability distribution.
    * @param sample A random sample of the parameters from the posterior
