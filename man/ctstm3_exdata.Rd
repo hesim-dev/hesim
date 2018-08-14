@@ -16,7 +16,7 @@ second data frame contains drug cost data.}
 ctstm3_exdata
 }
 \description{
-A collection of example datasets containing heatlh state transition, 
+A collection of example datasets containing health state transition, 
 costs, and utility data for a 3-state continuous time state transition model.
 }
 \section{Transitions data}{

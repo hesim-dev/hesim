@@ -45,7 +45,7 @@
 
 #' Example data for a 3-state continuous time state transition model
 #'
-#' A collection of example datasets containing heatlh state transition, 
+#' A collection of example datasets containing health state transition, 
 #' costs, and utility data for a 3-state continuous time state transition model.
 #'
 #' 
