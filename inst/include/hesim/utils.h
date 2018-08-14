@@ -78,6 +78,24 @@ inline void add_constant(std::vector<T> &v, double value){
                  std::bind2nd(std::plus<double>(), value)); 
 }
 
+/**
+ * @ingroup general
+ * Compute present value in continuous time. 
+ * @param z A fixed value to be discounted.
+ * @param r The discount rate
+ * @param t1 Time at the start of the interval.
+ * @param t2 Time at the end of the interval.
+ * @return Present value with continuous compounding.  
+ */
+inline double pv(double z, double r, double t1, double t2){
+  if (r == 0.0){
+    return z * (t2 - t1);
+  }
+  else{
+    return z * ((exp(-r * t1) - exp(-r * t2))/r); 
+  }
+}
+
 } // end hesim namespace
 
 

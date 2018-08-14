@@ -9,3 +9,11 @@ test_that("add_constant", {
   expect_equal(hesim:::C_test_add_constant_double(v2, 5.5),
                v2 + 5.5)
 })
+
+# Test c++ function pv ---------------------------------------------------------
+test_that("pv", {
+  expect_equal(hesim:::C_test_pv(1, 0, 0, 4),
+               4)
+  expect_equal(hesim:::C_test_pv(2, .03, 1, 4),
+               2 * ((exp(-.03 * 1) - exp(-.03 * 4))/.03))
+})

@@ -389,6 +389,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_test_pv
+double C_test_pv(double z, double r, double t1, double t2);
+RcppExport SEXP _hesim_C_test_pv(SEXP zSEXP, SEXP rSEXP, SEXP t1SEXP, SEXP t2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< double >::type t1(t1SEXP);
+    Rcpp::traits::input_parameter< double >::type t2(t2SEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_pv(z, r, t1, t2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // test_zeroin
 double test_zeroin();
 RcppExport SEXP _hesim_test_zeroin() {
@@ -454,6 +468,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_test_quad_lambda", (DL_FUNC) &_hesim_test_quad_lambda, 2},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
+    {"_hesim_C_test_pv", (DL_FUNC) &_hesim_C_test_pv, 4},
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
     {"_hesim_C_rowmax_index", (DL_FUNC) &_hesim_C_rowmax_index, 1},

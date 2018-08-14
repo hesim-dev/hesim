@@ -117,6 +117,10 @@ C_test_add_constant_double <- function(v, value) {
     .Call('_hesim_C_test_add_constant_double', PACKAGE = 'hesim', v, value)
 }
 
+C_test_pv <- function(z, r, t1, t2) {
+    .Call('_hesim_C_test_pv', PACKAGE = 'hesim', z, r, t1, t2)
+}
+
 test_zeroin <- function() {
     .Call('_hesim_test_zeroin', PACKAGE = 'hesim')
 }
