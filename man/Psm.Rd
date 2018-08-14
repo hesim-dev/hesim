@@ -134,7 +134,7 @@ fit_costs_medical <- stats::lm(costs ~ female + state_name, data = psm4_exdata$c
 psm_costs_medical <- create_StateVals(fit_costs_medical, data = expanded_data, n = N)
 
 # Utility model
-psm_utility_data <- create_input_data(formula_list(~1), expanded_data)
+psm_utility_data <- create_input_data(formula_list(mu = ~1), expanded_data)
 psm_utility <- StateVals$new(data = psm_utility_data,
                              params = params_lm(coef = runif(N, .6, .8)))
 
@@ -147,4 +147,5 @@ psm$sim_survival(t = seq(0, 5, .05))
 psm$sim_stateprobs()
 psm$sim_costs(dr = .03)
 head(psm$costs_)
+head(psm$sim_qalys(dr = .03)$qalys_)
 }

@@ -23,7 +23,7 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  <link href="../extra.css" rel="stylesheet">
+  
   
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -196,7 +196,7 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 <span class='no'>psm_costs_medical</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>fit_costs_medical</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>expanded_data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>N</span>)
 
 <span class='co'># Utility model</span>
-<span class='no'>psm_utility_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_input_data.html'>create_input_data</a></span>(<span class='fu'><a href='formula_list.html'>formula_list</a></span>(~<span class='fl'>1</span>), <span class='no'>expanded_data</span>)
+<span class='no'>psm_utility_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_input_data.html'>create_input_data</a></span>(<span class='fu'><a href='formula_list.html'>formula_list</a></span>(<span class='kw'>mu</span> <span class='kw'>=</span> ~<span class='fl'>1</span>), <span class='no'>expanded_data</span>)
 <span class='no'>psm_utility</span> <span class='kw'>&lt;-</span> <span class='no'>StateVals</span>$<span class='fu'>new</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>psm_utility_data</span>,
                              <span class='kw'>params</span> <span class='kw'>=</span> <span class='fu'><a href='params_lm.html'>params_lm</a></span>(<span class='kw'>coef</span> <span class='kw'>=</span> <span class='fu'>runif</span>(<span class='no'>N</span>, <span class='fl'>.6</span>, <span class='fl'>.8</span>)))
 
@@ -209,12 +209,18 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 <span class='no'>psm</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>psm</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'>head</span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id   dr category    costs
-#&gt; 1:        1      1           1          1 0.03  medical 19803.54
-#&gt; 2:        1      1           1          2 0.03  medical 18478.02
-#&gt; 3:        1      1           1          3 0.03  medical 17465.83
-#&gt; 4:        1      1           2          1 0.03  medical 19803.54
-#&gt; 5:        1      1           2          2 0.03  medical 18478.02
-#&gt; 6:        1      1           2          3 0.03  medical 17465.83</div></pre>
+#&gt; 1:        1      1           1          1 0.03  medical 24800.68
+#&gt; 2:        1      1           1          2 0.03  medical 23579.01
+#&gt; 3:        1      1           1          3 0.03  medical 20417.98
+#&gt; 4:        1      1           2          1 0.03  medical 24800.68
+#&gt; 5:        1      1           2          2 0.03  medical 23579.01
+#&gt; 6:        1      1           2          3 0.03  medical 20417.98</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id   dr category     qalys
+#&gt; 1:        1      1           1          1 0.03    qalys 0.4819449
+#&gt; 2:        1      1           1          2 0.03    qalys 0.4582044
+#&gt; 3:        1      1           1          3 0.03    qalys 0.4140684
+#&gt; 4:        1      1           2          1 0.03    qalys 0.4819449
+#&gt; 5:        1      1           2          2 0.03    qalys 0.4582044
+#&gt; 6:        1      1           2          3 0.03    qalys 0.4140684</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
