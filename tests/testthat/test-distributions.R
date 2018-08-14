@@ -2,28 +2,28 @@ context("distributions.R unit tests")
 library("flexsurv")
 
 # Methods of moments for beta distribution -------------------------------------
-test_that("beta_mom" , {
+test_that("mom_beta" , {
   beta_mean <- function(a, b) return(a/(a+b))
   beta_var <- function(a, b) return((a * b)/((a + b)^2 * (a + b + 1)))
-  beta_params <- beta_mom(.8, .1)
+  beta_params <- mom_beta(.8, .1)
   expect_equal(beta_mean(beta_params$shape1, beta_params$shape2), 
                .8)
   expect_equal(beta_var(beta_params$shape1, beta_params$shape2), 
                .1^2)
-  expect_error(beta_mom(.5, sqrt(.5 * (1 - .5))))
+  expect_error(mom_beta(.5, sqrt(.5 * (1 - .5))))
 })
 
 # Methods of moments for gamma distribution ------------------------------------
-test_that("gamma_mom" , {
+test_that("mom_gamma" , {
   # With scale parameter
-  gamma_params <- gamma_mom(10000, 1000)
+  gamma_params <- mom_gamma(10000, 1000)
   expect_equal(gamma_params$shape * gamma_params$scale, 
                10000)
   expect_equal(gamma_params$shape * gamma_params$scale^2, 
                1000^2)
   
   # With rate parameter
-  gamma_params <- gamma_mom(10000, 1000, scale = FALSE)
+  gamma_params <- mom_gamma(10000, 1000, scale = FALSE)
   expect_equal(gamma_params$shape / gamma_params$rate,
                10000)
   expect_equal(gamma_params$shape / gamma_params$rate^2,

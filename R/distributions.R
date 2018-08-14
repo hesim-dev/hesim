@@ -15,13 +15,13 @@
 #' \deqn{\beta = (1 - \mu) \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)}
 #' 
 #' @examples
-#' beta_mom(mean = .8, sd = .1)
+#' mom_beta(mean = .8, sd = .1)
 #' # The function is vectorized.
-#' beta_mom(mean = c(.6, .8), sd = c(.08, .1))
+#' mom_beta(mean = c(.6, .8), sd = c(.08, .1))
 #' 
 #' @export
 #' @return A list containing the parameters \code{shape1} and \code{shape2}.
-beta_mom <- function(mean, sd){
+mom_beta <- function(mean, sd){
   term <- mean * (1 - mean)/sd^2 - 1
   shape1 <- mean * term
   shape2 <- (1 - mean) * term
@@ -49,14 +49,14 @@ beta_mom <- function(mean, sd){
 #' The inverse of the scale parmeter, \eqn{\beta = 1/\theta}, is the rate parameter. 
 #' 
 #' @examples
-#' gamma_mom(mean = 10000, sd = 2000)
+#' mom_gamma(mean = 10000, sd = 2000)
 #' # The function is vectorized.
-#' gamma_mom(mean = c(8000, 10000), sd = c(1500, 2000))
+#' mom_gamma(mean = c(8000, 10000), sd = c(1500, 2000))
 #' 
 #' @export
 #' @return If \code{scale = TRUE}, then a list containing the parameters \code{shape} and \code{scale}; otherwise,
 #'  if \code{scale = FALSE}, then a list containing the parameters \code{shape} and \code{rate}.
-gamma_mom <- function(mean, sd, scale = TRUE){
+mom_gamma <- function(mean, sd, scale = TRUE){
   if (scale){
     scale <- sd^2/mean
     shape <- mean/scale

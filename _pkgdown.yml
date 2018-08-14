@@ -10,8 +10,8 @@ reference:
       - flexsurvreg_list
   - title: "Probability distributions"
     contents:
-      - beta_mom
-      - gamma_mom
+      - mom_beta
+      - mom_gamma
       - fast_rgengamma
       - rcat
       - rpwexp
