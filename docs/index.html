@@ -93,13 +93,13 @@
 <div id="overview" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1></div>
-<p><code>hesim</code> is an R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. The package currently supports N-state partitioned survival analysis and summarizing the output of probabilistic sensitivity analysis. It is designed for high performance simulation modeling and heavily utilizes <code>Rcpp</code> and <code>data.table</code>. <code>hesim</code> is being actively developed and we expect to provide support for state transition modeling and individual patient simulations in the near future.</p>
+<p><code>hesim</code> is an R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. The package currently supports N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (CTSTMs), as well as summarizing the output of probabilistic sensitivity analysis (PSA). It is designed for high performance simulation modeling and heavily utilizes <code>Rcpp</code> and <code>data.table</code>. <code>hesim</code> is being actively developed and we will provide support for discrete time state transition models (DSTMs) and cohort-level CTSTMs in the near future.</p>
 <p>Features of the current version include:</p>
 <ul>
-<li>N-state partitioned survival analysis</li>
+<li>N-state PSMs and individual-level CTSTMs</li>
 <li>Modeling patient heterogeneity</li>
 <li>Parameter estimates from either an R based model or from an external source</li>
-<li>Parameter uncertainty propagated with probabilistic sensitivity analysis</li>
+<li>Parameter uncertainty propagated with PSA</li>
 <li>Sampling parameters of a statistical model fit with R using Monte Carlo methods or bootstrapping <!--- * Separate survival models during period of observed data and for extrapolation. -->
 </li>
 <li>Simulation code written in <code>C++</code> to boost performance</li>

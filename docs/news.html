@@ -122,7 +122,7 @@
 <div id="highlights" class="section level3">
 <h3 class="hasAnchor">
 <a href="#highlights" class="anchor"></a>Highlights</h3>
-<p><code>hesim</code> now provides a general framework for integrating statistical models with economic evaluation. Users can build a decision model by specifying a model structure, which consists of a set of statistical models for disease progression, utility values, and costs. Each statistical model is used to simulate outcomes as a function of estimated parameters. N-state partitioned survival analysis is now supported.</p>
+<p><code>hesim</code> now provides a general framework for integrating statistical models with economic evaluation. Users can build a decision model by specifying a model structure, which consists of a set of statistical models for disease progression, utility values, and costs. Each statistical model is used to simulate outcomes as a function of estimated parameters. N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (CTSTMs) are now supported.</p>
 </div>
 <div id="api-changes" class="section level3">
 <h3 class="hasAnchor">
@@ -165,15 +165,24 @@
 </ul>
 <p>Partitioned survival models</p>
 <ul>
-<li>The R6 class <code>Psm</code> simulates outcomes from an N-state partitioned survival model.</li>
+<li>The R6 class <code>Psm</code> simulates outcomes from an N-state PSMs.</li>
 <li>A <code>Psm</code> object is instantiated with a set of survival models (the R6 class <code>PsmCurves</code>) and models for costs and utility (the R6 class <code>StateVals</code>).</li>
 <li>
 <code><a href="reference/create_PsmCurves.html">create_PsmCurves()</a></code> creates a <code>PsmCurves</code> object from fitted statistical models or <code>formula</code> objects.</li>
 </ul>
+<p>Continuous time state transition models</p>
+<ul>
+<li>The R6 class <code>IndivCtstm</code> simulates individual-level CTSTMs. Semi-Markov (i.e., “clock reset”) models are currently supported.</li>
+<li>A <code>IndivCtstm</code> object is instantiated with a health state transition model (the R6 class <code>CtstmTrans</code>) and models for costs and utility (the R6 class <code>StateVals</code>).</li>
+<li>
+<code><a href="reference/create_CtstmTrans.html">create_CtstmTrans()</a></code> creates a <code>CtstmTrans</code> object from fitted statistical models or <code>formula</code> objects.</li>
+</ul>
 <p>Datasets</p>
 <ul>
 <li>
-<code>psm4_exdata</code> provides example datasets for parameterizing a partitioned survival model.</li>
+<code>psm4_exdata</code> provides example datasets for parameterizing a PSM.</li>
+<li>
+<code>ctstm3_exdata</code> provides example datasets for parameterizing a CTSTM.</li>
 </ul>
 </div>
 </div>
