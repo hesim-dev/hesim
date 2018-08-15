@@ -1,4 +1,5 @@
 #include <hesim/ctstm/indiv-ctstm.h>
+#include <hesim/statevals.h>
 
 /***************************************************************************//** 
  * @ingroup ctstm
@@ -166,6 +167,40 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
     Rcpp::_["stringsAsFactors"] = false
   );
   return out_df;
+}
+
+/***************************************************************************//** 
+ * @ingroup ctstm
+ * Simulate weighted length of stay given simulated disease progression 
+ * (i.e., a path through a multi-state model) from an individual-level model. 
+ * @param R_disease_prog An R object of simulating disease progression generated
+ * using C_ctstm_sim_disease.
+ * @param R_StateVal An R object of class @c StateVal.
+ * @return A vector of weighted length of stay in each row in R_disease_prog. These
+ * values are then summed by @c patient_id using @c data.table at the @c R level
+ *  in the private member function @c IndivCtstm$sim_wlos. 
+ ******************************************************************************/ 
+// [[Rcpp::export]]
+std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
+                                       Rcpp::Environment R_StateVal,
+                                       double dr, std::string type){
+  hesim::ctstm::disease_prog disease_prog(R_disease_prog);
+  hesim::statevals stvals(R_StateVal);
+  hesim::statmods::obs_index obs_index(Rcpp::as<Rcpp::List>(R_StateVal["data"]));
+  
+  int N = disease_prog.sample_.size();
+  std::vector<double> wlos(N);
+  for (int i = 0; i < N; ++i){
+    int obs = obs_index(disease_prog.strategy_id_[i],
+                        disease_prog.line_[i],
+                        disease_prog.patient_id_[i],
+                        disease_prog.from_[i]);
+    double yhat = stvals.sim(disease_prog.sample_[i], obs, type);
+    wlos[i] = hesim::pv(yhat, dr,
+                        disease_prog.time_start_[i],
+                        disease_prog.time_stop_[i]);
+  }
+  return wlos;
 }
 
 

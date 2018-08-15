@@ -4,11 +4,19 @@ ctstm3_exdata <- list()
 
 # State transitions
 library("mstate")
+library("data.table")
 data(prothr)
-ctstm3_exdata[["transitions"]] <- as.data.frame(prothr)
-ctstm3_exdata$transitions$strategy_id <- ifelse(ctstm3_exdata$transitions$treat == "Placebo", 
-                                                1, 2)
-ctstm3_exdata$transitions$treat <- NULL
+ctstm3_exdata[["transitions"]] <- as.data.table(prothr)
+ctstm3_exdata$transitions[, Tstart := Tstart/365.25]
+ctstm3_exdata$transitions[, Tstop := (Tstop + 1)/365.25]
+ctstm3_exdata$transitions[, years := Tstop - Tstart]
+ctstm3_exdata$transitions[, strategy_id := ifelse(treat == "Placebo", 1, 2)]
+ctstm3_exdata$transitions[, treat := NULL]
+setnames(ctstm3_exdata$transitions, "id", "patient_id")
+setorderv(ctstm3_exdata$transitions,
+          c("strategy_id", "patient_id", "from", "to", "trans",
+            "Tstart", "Tstop", "years", "status"))
+ctstm3_exdata$transitions <- data.frame(ctstm3_exdata$transitions)
 
 # Costs
 ## Drugs

@@ -172,8 +172,68 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
 IndivCtstm <- R6::R6Class("IndivCtstm",
   private = list(  
     .disease_prog_ = NULL,
-    .stateprobs_ = NULL
-  ), # end private
+    .stateprobs_ = NULL,
+    .qalys_ = NULL,
+    .costs_ = NULL,
+    
+    create_C_disease_prog = function(R_disease_prog){
+      x <- copy(R_disease_prog)
+      x[, sample := sample - 1]
+      x[, strategy_id := strategy_id - 1]
+      x[, patient_id := patient_id - 1]
+      x[, from := from - 1]
+      x[, to := to - 1]
+      return(x)
+    },
+  
+    sim_wlos = function(stateval_list, dr, stateval_type = c("costs", "qalys"),
+                        sim_type){
+      C_disease_prog <- private$create_C_disease_prog(self$disease_prog_)
+      stateval_type <- match.arg(stateval_type)
+      if(is.null(self$disease_prog_)){
+        stop("You must first simulate disease progression using '$sim_disease'.",
+            call. = FALSE)
+      }
+      n_cats <- length(stateval_list)
+      if (stateval_type == "costs"){
+        if (is.null(names(stateval_list))){
+          categories <- paste0("Category ", seq(1, n_cats))
+        } else{
+          categories <- names(stateval_list)
+        } # end if/else names for cost models
+      } else{
+        categories <- "qalys"
+      } # end if/else costs vs. qalys
+      
+
+      n_dr <- length(dr)
+      wlos_list <- vector(mode = "list", length = n_cats * n_dr)
+      counter <- 1
+      for (i in 1:n_cats){
+        for (j in 1:n_dr){
+          C_wlos <- C_indiv_ctstm_wlos(C_disease_prog, stateval_list[[i]], dr[j],
+                                       sim_type)
+          self$disease_prog_[, wlos := C_wlos]
+          wlos_list[[counter]] <- self$disease_prog_[, .(wlos = sum(wlos)), 
+                                       by = c("sample", "strategy_id", "patient_id")]
+          wlos_list[[counter]][, "dr" := dr[j]]
+          wlos_list[[counter]][, "category" := categories[i]]
+          self$disease_prog_[, "wlos" := NULL]
+          counter <- counter + 1
+        }
+      }
+      wlos_dt <- rbindlist(wlos_list)
+      setcolorder(wlos_dt, c("sample", "strategy_id", "patient_id", "dr", "category", "wlos"))
+      if (stateval_type == "costs"){
+        setnames(wlos_dt, "wlos", "costs")
+      } else{
+        setnames(wlos_dt, "wlos", "qalys")
+        wlos_dt[, category := NULL]
+      }
+      return(wlos_dt[,])
+     } # end sim_wlos
+    
+  ), # end private  
                                                   
   active = list(
     disease_prog_ = function(value) {
@@ -190,7 +250,23 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       } else {
         stop("'$stateprobs_' is read only", call. = FALSE)
       }
-    }      
+    },
+    
+    qalys_ = function(value) {
+      if (missing(value)) {
+        private$.qalys_
+      } else {
+        stop("'$qalys_' is read only", call. = FALSE)
+      }
+    },
+    
+    costs_ = function(value) {
+      if (missing(value)) {
+        private$.costs_
+      } else {
+        stop("'$costs_' is read only", call. = FALSE)
+      }
+    }
   ), # end active
   
   public = list(
@@ -231,16 +307,22 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
             call. = FALSE)
       }
       
-      # Convert to C++ indices
-      C_disease_prog = copy(self$disease_prog_)
-      C_disease_prog[, sample := sample - 1]
-      C_disease_prog[, strategy_id := strategy_id - 1]
-      C_disease_prog[, patient_id := patient_id - 1]
-      C_disease_prog[, from := from - 1]
-      C_disease_prog[, to := to - 1]
-      
+      C_disease_prog <- private$create_C_disease_prog(self$disease_prog_) # convert to C++ indices
       private$.stateprobs_ <- indiv_ctstm_stateprobs(C_disease_prog, t, self$trans_model)
       invisible(self)
+    },
+    
+    sim_qalys = function(dr = .03, type = c("predict", "random")){
+      type <- match.arg(type)
+      private$.qalys_ <- private$sim_wlos(list(self$utility_model), dr, "qalys", type)
+      invisible(self)
+    },
+    
+    sim_costs = function(dr = .03, type = c("predict", "random")){
+      type <- match.arg(type)
+      private$.costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type)
+      invisible(self)
     }
+    
   ) # end public
 ) # end class

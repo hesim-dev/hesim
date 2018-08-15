@@ -23,14 +23,15 @@ costs, and utility data for a 3-state continuous time state transition model.
 
 The data frame has the following columns:
 \describe{
-\item{id}{Patient identification number.}
+\item{strategy_id}{Treatment strategy identification number.}
+\item{patient_id}{Patient identification number.}
 \item{from}{Starting state.}
 \item{to}{Receiving state.}
 \item{trans}{Transition number.}
 \item{Tstart}{Starting time.}
 \item{Tstop}{Transition time.}
+\item{years}{Elapsed years between \code{Tstart} and \code{Tstop}.}
 \item{status}{Status variable; 1=transition, 0=censored.}
-\item{strategy_id}{Treatment strategy identification number.}
 }
 }
 

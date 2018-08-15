@@ -232,6 +232,38 @@ test_that("Simulate disease and state probabilities", {
   expect_true(all(disprog[time_stop == 5 & final == 1, to] == 3)) # All should have moved to death state
 })
 
+mstate_list <- create_CtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
+                                 n = n_samples)
+test_that("Simulate costs and QALYs", {
+  ictstm <- IndivCtstm$new(trans_model = mstate_list,
+                           utility_model = utilmod,
+                           cost_models = list(medical = medcostsmod, 
+                                              drugs = drugcostsmod))
+  ictstm$sim_disease()
+  
+  # Simulate QALYs
+  ## dr = .03
+  ictstm$sim_qalys(dr = .03)$qalys_
+  
+  disprog1 <- ictstm$disease_prog_[sample == 1 & strategy_id == 1 & patient_id == 2]
+  qalys1 <- ictstm$qalys_[sample == 1 & strategy_id == 1 & patient_id == 2]
+  utilvals <- utility_params$coefs[1, disprog1$from] 
+  qalys_expected <- sum(pv(utilvals, .03, disprog1$time_start, disprog1$time_stop))
+  expect_equal(qalys1$qalys, qalys_expected)
+  
+  ## dr = 0
+  ictstm$utility_model$params$coefs <- matrix(1, nrow = n_samples, ncol = nrow(dt_states))
+  qalys <- ictstm$sim_qalys(dr = 0)$qalys_
+  expect_equal(ictstm$disease_prog_[final == 1][3, time_stop],
+               qalys[3, qalys])
+  
+  # Simulate costs
+   costs <- ictstm$sim_costs(dr = c(0, .03))$costs_
+   expect_equal(unique(costs$category), c("medical", "drugs"))
+   expect_equal(unique(costs$dr), c(0, .03))
+})
+
+
 ## With a joint survival model
 test_that("IndivCtstm", {
   ictstm <- IndivCtstm$new(trans_model = mstate)

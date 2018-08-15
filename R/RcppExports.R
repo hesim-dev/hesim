@@ -49,6 +49,10 @@ C_ctstm_indiv_stateprobs <- function(R_disease_prog, t, n_samples, n_strategies,
     .Call('_hesim_C_ctstm_indiv_stateprobs', PACKAGE = 'hesim', R_disease_prog, t, n_samples, n_strategies, n_states, n_patients, n_lines)
 }
 
+C_indiv_ctstm_wlos <- function(R_disease_prog, R_StateVal, dr, type) {
+    .Call('_hesim_C_indiv_ctstm_wlos', PACKAGE = 'hesim', R_disease_prog, R_StateVal, dr, type)
+}
+
 C_psm_curves_summary <- function(R_PsmCurves, x, type, dr) {
     .Call('_hesim_C_psm_curves_summary', PACKAGE = 'hesim', R_PsmCurves, x, type, dr)
 }

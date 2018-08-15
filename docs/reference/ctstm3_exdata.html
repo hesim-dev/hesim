@@ -119,14 +119,15 @@ second data frame contains drug cost data.</p></li>
 
     
     <p>The data frame has the following columns:</p><dl class='dl-horizontal'>
-<dt>id</dt><dd><p>Patient identification number.</p></dd>
+<dt>strategy_id</dt><dd><p>Treatment strategy identification number.</p></dd>
+<dt>patient_id</dt><dd><p>Patient identification number.</p></dd>
 <dt>from</dt><dd><p>Starting state.</p></dd>
 <dt>to</dt><dd><p>Receiving state.</p></dd>
 <dt>trans</dt><dd><p>Transition number.</p></dd>
 <dt>Tstart</dt><dd><p>Starting time.</p></dd>
 <dt>Tstop</dt><dd><p>Transition time.</p></dd>
+<dt>years</dt><dd><p>Elapsed years between <code>Tstart</code> and <code>Tstop</code>.</p></dd>
 <dt>status</dt><dd><p>Status variable; 1=transition, 0=censored.</p></dd>
-<dt>strategy_id</dt><dd><p>Treatment strategy identification number.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="cost-data"><a class="anchor" href="#cost-data"></a>Cost data</h2>

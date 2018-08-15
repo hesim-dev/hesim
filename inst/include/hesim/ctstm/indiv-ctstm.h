@@ -149,6 +149,9 @@ struct disease_prog {
     if(R_disease_prog.containsElementNamed("line")){
      line_ = Rcpp::as<std::vector<int> >(R_disease_prog["line"]); 
     }
+    else{
+      line_ = std::vector<int>(sample_.size(), 0);
+    }
     patient_id_ = Rcpp::as<std::vector<int> >(R_disease_prog["patient_id"]);
     from_ = Rcpp::as<std::vector<int> >(R_disease_prog["from"]);
     to_ = Rcpp::as<std::vector<int> >(R_disease_prog["to"]);
