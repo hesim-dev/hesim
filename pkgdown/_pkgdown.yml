@@ -1,6 +1,9 @@
 template:
   params:
     bootswatch: simplex
+    
+development:
+  mode: unreleased    
 
 reference:
   - title: "Fitted statistical models"

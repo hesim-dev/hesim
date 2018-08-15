@@ -18,13 +18,28 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
+  <link href="../extra.css" rel="stylesheet">
   
-  
+<meta property="og:title" content="Individual-level continuous time state transition model — IndivCtstm" />
+
+<meta property="og:description" content="Simulate outcomes from an individual-level continuous time state transition model (CTSTM). The class is currently only valid for semi-Markov (i.e., &quot;clock-reset&quot;) models; however,
+functionality will soon be added for Markov  (i.e., &quot;clock-forward&quot;) models." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +62,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">hesim</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">hesim</a>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">0.1.0.9000</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -85,6 +104,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -92,16 +112,20 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Individual-level continuous time state transition model</h1>
+    
+    <div class="hidden name"><code>IndivCtstm.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Simulate outcomes from an individual-level continuous time state transition model (CTSTM). The class is currently only valid for semi-Markov (i.e., "clock-reset") models; however,
 functionality will soon be added for Markov  (i.e., "clock-forward") models.</p>
     
+    </div>
 
     <pre class="usage"><span class='no'>IndivCtstm</span></pre>
         
@@ -184,16 +208,16 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.</p>
 <li><p><code>type</code>: <code>predict</code> for mean values or <code>random</code> for random samples as in <code>$sim()</code> in <code><a href='StateVals.html'>StateVals</a></code>.</p></li>
 </ul>
     The simulated output is stored in <code>costs_</code>.</p></dd>,
-    <dt><code>summarize(stat = mean)</code></dt><dd><p>Summarize costs and QALYs to produce a summary measure of costs and health outcomes across all patients by treatment strategy
+    <dt><code>summarize(stat = mean)</code></dt><dd><p>Summarize costs and QALYs to produce a summary measure of costs and health outcomes across all patients by treatment strategy.
     <ul>
 <li><p><code>stat</code>: The statistic used to summarize costs and QALYs. The default is the mean but any R function can be passed to <code>stat</code>.</p></li>
 </ul>
-    Returns an object of summary cost-effectiveness output of class <code><a href='ce.html'>ce</a></code>. An</p></dd>
+    Returns an object of summary cost-effectiveness output of class <code><a href='ce.html'>ce</a></code>.</p></dd>
     </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='create_CtstmTrans.html'>create_CtstmTrans</a></code>, <code><a href='CtstmTrans.html'>CtstmTrans</a></code></p>
+    <div class='dont-index'><p><code><a href='create_CtstmTrans.html'>create_CtstmTrans</a></code>, <code><a href='CtstmTrans.html'>CtstmTrans</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -257,43 +281,43 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.</p>
 <span class='no'>ictstm</span> <span class='kw'>&lt;-</span> <span class='no'>IndivCtstm</span>$<span class='fu'>new</span>(<span class='kw'>trans_model</span> <span class='kw'>=</span> <span class='no'>transmod</span>,
                          <span class='kw'>utility_model</span> <span class='kw'>=</span> <span class='no'>utilmod</span>,
                          <span class='kw'>cost_models</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>drugs</span> <span class='kw'>=</span> <span class='no'>drugcostmod</span>))
-<span class='fu'>head</span>(<span class='no'>ictstm</span>$<span class='fu'>sim_disease</span>()$<span class='no'>disease_prog_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id from to final time_start time_stop
-#&gt; 1:      1           1          1    1  3     1   0.000000  3.178685
-#&gt; 2:      1           1          2    1  3     1   0.000000 10.525531
-#&gt; 3:      1           1          3    1  2     0   0.000000  3.917897
-#&gt; 4:      1           1          3    2  3     1   3.917897  5.650602
-#&gt; 5:      1           2          1    1  3     1   0.000000  1.646034
-#&gt; 6:      1           2          2    1  2     0   0.000000  5.158390</div><div class='input'><span class='fu'>head</span>(<span class='no'>ictstm</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))$<span class='no'>stateprobs_</span>[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>])</div><div class='output co'>#&gt;    sample strategy_id state_id t      prob
-#&gt; 1:      1           1        1 5 0.3333333
-#&gt; 2:      1           1        2 5 0.3333333
-#&gt; 3:      1           1        3 5 0.3333333
-#&gt; 4:      1           2        1 5 0.6666667
-#&gt; 5:      1           2        2 5 0.0000000
-#&gt; 6:      1           2        3 5 0.3333333</div><div class='input'><span class='no'>ictstm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
+<span class='fu'>head</span>(<span class='no'>ictstm</span>$<span class='fu'>sim_disease</span>()$<span class='no'>disease_prog_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id from to final time_start  time_stop
+#&gt; 1:      1           1          1    1  3     1  0.0000000 0.51147464
+#&gt; 2:      1           1          2    1  2     0  0.0000000 0.35247378
+#&gt; 3:      1           1          2    2  3     1  0.3524738 0.57498942
+#&gt; 4:      1           1          3    1  3     1  0.0000000 0.00344779
+#&gt; 5:      1           2          1    1  3     1  0.0000000 3.57722655
+#&gt; 6:      1           2          2    1  2     0  0.0000000 2.48987431</div><div class='input'><span class='fu'>head</span>(<span class='no'>ictstm</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))$<span class='no'>stateprobs_</span>[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>])</div><div class='output co'>#&gt;    sample strategy_id state_id t prob
+#&gt; 1:      1           1        1 5    0
+#&gt; 2:      1           1        2 5    0
+#&gt; 3:      1           1        3 5    1
+#&gt; 4:      1           2        1 5    0
+#&gt; 5:      1           2        2 5    0
+#&gt; 6:      1           2        3 5    1</div><div class='input'><span class='no'>ictstm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='no'>ictstm</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'>head</span>(<span class='no'>ictstm</span>$<span class='fu'>summarize</span>())</div><div class='output co'>#&gt; $costs
 #&gt;    category   dr sample strategy_id     costs
-#&gt; 1:    drugs 0.03      1           1 31260.527
-#&gt; 2:    drugs 0.03      1           2 26942.026
-#&gt; 3:    drugs 0.03      1           3  8294.160
-#&gt; 4:    drugs 0.03      2           1 24852.625
-#&gt; 5:    drugs 0.03      2           2 22843.289
-#&gt; 6:    drugs 0.03      2           3  7338.554
-#&gt; 7:    drugs 0.03      3           1  4602.389
-#&gt; 8:    drugs 0.03      3           2  8434.610
-#&gt; 9:    drugs 0.03      3           3 38093.850
+#&gt; 1:    drugs 0.03      1           1  2167.531
+#&gt; 2:    drugs 0.03      1           2 14527.999
+#&gt; 3:    drugs 0.03      1           3 35689.335
+#&gt; 4:    drugs 0.03      2           1 18704.018
+#&gt; 5:    drugs 0.03      2           2  6254.678
+#&gt; 6:    drugs 0.03      2           3 14099.266
+#&gt; 7:    drugs 0.03      3           1 17229.288
+#&gt; 8:    drugs 0.03      3           2 17071.675
+#&gt; 9:    drugs 0.03      3           3 23553.444
 #&gt; 
 #&gt; $qalys
 #&gt;      dr sample strategy_id     qalys
-#&gt; 1: 0.03      1           1 5.0789847
-#&gt; 2: 0.03      1           2 4.3827584
-#&gt; 3: 0.03      1           3 1.4705891
-#&gt; 4: 0.03      2           1 2.9490630
-#&gt; 5: 0.03      2           2 2.5466934
-#&gt; 6: 0.03      2           3 0.8328785
-#&gt; 7: 0.03      3           1 0.8938278
-#&gt; 8: 0.03      3           2 1.5859876
-#&gt; 9: 0.03      3           3 7.0344705
+#&gt; 1: 0.03      1           1 0.2299682
+#&gt; 2: 0.03      1           2 1.8480889
+#&gt; 3: 0.03      1           3 4.0020934
+#&gt; 4: 0.03      2           1 1.8321787
+#&gt; 5: 0.03      2           2 0.4957363
+#&gt; 6: 0.03      2           3 0.9023704
+#&gt; 7: 0.03      3           1 1.6510278
+#&gt; 8: 0.03      3           2 1.6232142
+#&gt; 9: 0.03      3           3 2.1365384
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -320,11 +344,14 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

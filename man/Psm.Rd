@@ -100,6 +100,7 @@ where for health state \eqn{h} and time {t}, \eqn{w_h} is the predicted cost or 
 
 }
 
+
 \examples{
 library("flexsurv")
 

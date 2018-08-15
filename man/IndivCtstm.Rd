@@ -131,13 +131,13 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
   },
   
   \item{\code{summarize(stat = mean)}}{
-    Summarize costs and QALYs to produce a summary measure of costs and health outcomes across all patients by treatment strategy
+    Summarize costs and QALYs to produce a summary measure of costs and health outcomes across all patients by treatment strategy.
     
      \itemize{
      \item \code{stat}: The statistic used to summarize costs and QALYs. The default is the mean but any R function can be passed to \code{stat}.
      }
      
-     Returns an object of summary cost-effectiveness output of class \code{\link{ce}}. An 
+     Returns an object of summary cost-effectiveness output of class \code{\link{ce}}. 
   }    
   
 

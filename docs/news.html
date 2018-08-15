@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • hesim</title>
+<title>NA • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,14 +25,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
-  <link href="../extra.css" rel="stylesheet">
+  <link href="extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="NA" />
 
 
 
@@ -48,7 +48,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -59,7 +59,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">hesim</a>
+        <a class="navbar-link" href="index.html">hesim</a>
         <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">0.1.0.9000</span>
       </span>
     </div>
@@ -67,7 +67,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -77,18 +77,18 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="articles/intro.html">Introduction</a>
     </li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
       
@@ -109,13 +109,13 @@
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <h1>NA</h1>
     </div>
 
-    <div id="hesim-0-1-0-9000" class="section level2">
+
+<div id="hesim-0-1-0-9000" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-0-1-0-9000" class="anchor"></a>hesim 0.1.0.9000</h2>
 <p>The current development version of <code>hesim</code>.</p>
@@ -128,8 +128,8 @@
 <h3 class="hasAnchor">
 <a href="#api-changes" class="anchor"></a>API changes</h3>
 <ul>
-<li>The argument <code>sim</code> was renamed <code>sample</code> in <code><a href="../reference/icea.html">icea()</a></code>, <code><a href="../reference/icea.html">icea_pw()</a></code>, and <code><a href="../reference/incr_effect.html">incr_effect()</a></code>.</li>
-<li>Custom functions and variables are no longer supported in <code>icea</code> and <code><a href="../reference/icea.html">icea_pw()</a></code>.</li>
+<li>The argument <code>sim</code> was renamed <code>sample</code> in <code><a href="reference/icea.html">icea()</a></code>, <code><a href="reference/icea.html">icea_pw()</a></code>, and <code><a href="reference/incr_effect.html">incr_effect()</a></code>.</li>
+<li>Custom functions and variables are no longer supported in <code>icea</code> and <code><a href="reference/icea.html">icea_pw()</a></code>.</li>
 </ul>
 </div>
 <div id="new-features" class="section level3">
@@ -137,38 +137,38 @@
 <a href="#new-features" class="anchor"></a>New features</h3>
 <p>Fitted statistical models</p>
 <ul>
-<li>There are functions to create objects that store collections of fitted statistical models or <code>formula</code> objects. These include <code><a href="../reference/partsurvfit.html">partsurvfit()</a></code>, <code><a href="../reference/formula_list.html">formula_list()</a></code>, and <code><a href="../reference/flexsurvreg_list.html">flexsurvreg_list()</a></code>.</li>
+<li>There are functions to create objects that store collections of fitted statistical models or <code>formula</code> objects. These include <code><a href="reference/partsurvfit.html">partsurvfit()</a></code>, <code><a href="reference/formula_list.html">formula_list()</a></code>, and <code><a href="reference/flexsurvreg_list.html">flexsurvreg_list()</a></code>.</li>
 </ul>
 <p>Parameters</p>
 <ul>
 <li>Functions prefixed by <code>params_</code> create objects storing samples of parameters of fitted statistical models for probabilistic sensitivity analysis.</li>
 <li>
-<code><a href="../reference/create_params.html">create_params()</a></code> is a generic function for creating parameter objects from a fitted statistical model or a <code>formula</code> object. Parameters can be sampled using Monte Carlo multivariate normal approximations or via bootstrapping.</li>
-<li>Current support for flexible survival modeling (<code><a href="../reference/params_surv.html">params_surv()</a></code>, <code><a href="../reference/params_surv_list.html">params_surv_list()</a></code>) and linear regression (<code><a href="../reference/params_lm.html">params_lm()</a></code>). Splines and parametric distributions (exponential, Weibull, Gompertz, gamma, lognormal log-logistic, generalized gamma) are supported for survival modeling.</li>
+<code><a href="reference/create_params.html">create_params()</a></code> is a generic function for creating parameter objects from a fitted statistical model or a <code>formula</code> object. Parameters can be sampled using Monte Carlo multivariate normal approximations or via bootstrapping.</li>
+<li>Current support for flexible survival modeling (<code><a href="reference/params_surv.html">params_surv()</a></code>, <code><a href="reference/params_surv_list.html">params_surv_list()</a></code>) and linear regression (<code><a href="reference/params_lm.html">params_lm()</a></code>). Splines and parametric distributions (exponential, Weibull, Gompertz, gamma, lognormal log-logistic, generalized gamma) are supported for survival modeling.</li>
 </ul>
 <p>Input data</p>
 <ul>
 <li>
-<code><a href="../reference/hesim_data.html">hesim_data()</a></code> creates an object of class <code>hesim_data</code> for storing a collection of data tables or data frames for simulation modeling.</li>
+<code><a href="reference/hesim_data.html">hesim_data()</a></code> creates an object of class <code>hesim_data</code> for storing a collection of data tables or data frames for simulation modeling.</li>
 <li>
-<code><a href="../reference/expand_hesim_data.html">expand_hesim_data()</a></code> combines some or all of the data tables or data frames in <code><a href="../reference/hesim_data.html">hesim_data()</a></code> into a single long dataset.</li>
+<code><a href="reference/expand_hesim_data.html">expand_hesim_data()</a></code> combines some or all of the data tables or data frames in <code><a href="reference/hesim_data.html">hesim_data()</a></code> into a single long dataset.</li>
 <li>
-<code><a href="../reference/input_data.html">input_data()</a></code> creates an object of class <code>input_data</code>, which contains data for predicting or simulating values with a statistical model.</li>
+<code><a href="reference/input_data.html">input_data()</a></code> creates an object of class <code>input_data</code>, which contains data for predicting or simulating values with a statistical model.</li>
 <li>
-<code><a href="../reference/create_input_data.html">create_input_data()</a></code> creates an object of class <code>input_data</code> from a fitted statistical model or a <code>formula</code> object.</li>
+<code><a href="reference/create_input_data.html">create_input_data()</a></code> creates an object of class <code>input_data</code> from a fitted statistical model or a <code>formula</code> object.</li>
 </ul>
 <p>Health state values</p>
 <ul>
 <li>The R6 class <code>StateVals</code> simulates the costs or utilities associated with health states.</li>
 <li>
-<code><a href="../reference/create_StateVals.html">create_StateVals()</a></code> creates a <code>StateVals</code> object from fitted statistical models or <code>formula</code> objects.</li>
+<code><a href="reference/create_StateVals.html">create_StateVals()</a></code> creates a <code>StateVals</code> object from fitted statistical models or <code>formula</code> objects.</li>
 </ul>
 <p>Partitioned survival models</p>
 <ul>
 <li>The R6 class <code>Psm</code> simulates outcomes from an N-state partitioned survival model.</li>
 <li>A <code>Psm</code> object is instantiated with a set of survival models (the R6 class <code>PsmCurves</code>) and models for costs and utility (the R6 class <code>StateVals</code>).</li>
 <li>
-<code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> creates a <code>PsmCurves</code> object from fitted statistical models or <code>formula</code> objects.</li>
+<code><a href="reference/create_PsmCurves.html">create_PsmCurves()</a></code> creates a <code>PsmCurves</code> object from fitted statistical models or <code>formula</code> objects.</li>
 </ul>
 <p>Datasets</p>
 <ul>
@@ -177,24 +177,17 @@
 </ul>
 </div>
 </div>
-    <div id="hesim-0-1-0" class="section level2">
+<div id="hesim-0-1-0" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-0-1-0" class="anchor"></a>hesim 0.1.0</h2>
 <p>The initial CRAN submission.</p>
 </div>
-  </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#hesim-0-1-0-9000">0.1.0.9000</a></li>
-        <li><a href="#hesim-0-1-0">0.1.0</a></li>
-      </ul>
-    </div>
+
   </div>
 
 </div>
+
 
       <footer>
       <div class="copyright">

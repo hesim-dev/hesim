@@ -18,13 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
+<meta property="og:title" content="Parameters of a list of linear models — params_lm_list" />
+
+<meta property="og:description" content="Create a list containing the parmeters of a list of fitted linear regression models." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +61,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">hesim</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">hesim</a>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">0.1.0.9000</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -85,6 +103,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -92,19 +111,23 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Parameters of a list of linear models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/R/params.R'><code>R/params.R</code></a></small>
+    <div class="hidden name"><code>params_lm_list.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Create a list containing the parmeters of a list of fitted linear regression models.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>params_lm_list</span>(<span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -132,12 +155,12 @@ objects.</p>
 <span class='no'>params_list</span> <span class='kw'>&lt;-</span> <span class='fu'>params_lm_list</span>(<span class='no'>params1</span>, <span class='no'>params2</span>)
 <span class='fu'>print</span>(<span class='no'>params_list</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; $coefs
-#&gt;           [,1]       [,2]
-#&gt; [1,] 0.2530601 0.09421678
-#&gt; [2,] 0.5792485 0.28811855
+#&gt;           [,1]      [,2]
+#&gt; [1,] 0.4762017 0.9794214
+#&gt; [2,] 0.4960377 0.7460136
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.258323872 0.004801183
+#&gt; [1] 0.66655003 0.04741307
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2
@@ -148,11 +171,11 @@ objects.</p>
 #&gt; [[2]]
 #&gt; $coefs
 #&gt;           [,1]      [,2]
-#&gt; [1,] 0.3339389 1.1231611
-#&gt; [2,] 0.1404516 0.6362351
+#&gt; [1,] 0.0623256 0.7760497
+#&gt; [2,] 0.2086591 0.9224033
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.0325857 0.1453077
+#&gt; [1] 0.02962185 0.48422145
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2
@@ -182,11 +205,14 @@ objects.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

@@ -18,13 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
+<meta property="og:title" content="State values — StateVals" />
+
+<meta property="og:description" content="Simulate values (i.e., utility or costs) associated with health states in a partitioned survival or state transition model." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +61,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">hesim</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">hesim</a>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">0.1.0.9000</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -85,6 +103,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -92,15 +111,19 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>State values</h1>
+    
+    <div class="hidden name"><code>StateVals.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Simulate values (i.e., utility or costs) associated with health states in a partitioned survival or state transition model.</p>
     
+    </div>
 
     <pre class="usage"><span class='no'>StateVals</span></pre>
         
@@ -152,12 +175,12 @@
 
 <span class='co'># Predict</span>
 <span class='fu'>head</span>(<span class='no'>costs_medical</span>$<span class='fu'>sim</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"predict"</span>))</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id time    value
-#&gt; 1:        1      1           1          1    5 29862.70
-#&gt; 2:        2      1           1          1    5 25931.26
-#&gt; 3:        3      1           1          1    5 33029.83
-#&gt; 4:        1      1           1          2    5 29862.70
-#&gt; 5:        2      1           1          2    5 25931.26
-#&gt; 6:        3      1           1          2    5 33029.83</div></pre>
+#&gt; 1:        1      1           1          1    5 28532.85
+#&gt; 2:        2      1           1          1    5 21516.80
+#&gt; 3:        3      1           1          1    5 32120.29
+#&gt; 4:        1      1           1          2    5 28532.85
+#&gt; 5:        2      1           1          2    5 21516.80
+#&gt; 6:        3      1           1          2    5 32120.29</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -181,11 +204,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

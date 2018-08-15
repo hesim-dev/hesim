@@ -18,13 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
+<meta property="og:title" content="Partitioned survival curves — PsmCurves" />
+
+<meta property="og:description" content="Summarize n-1 survival curves for an N state partitioned survival model." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +61,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">hesim</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">hesim</a>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">0.1.0.9000</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -85,6 +103,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -92,15 +111,19 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Partitioned survival curves</h1>
+    
+    <div class="hidden name"><code>PsmCurves.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Summarize <code>n-1</code> survival curves for an <code>N</code> state partitioned survival model.</p>
     
+    </div>
 
     <pre class="usage"><span class='no'>PsmCurves</span></pre>
         
@@ -174,24 +197,24 @@
 
 <span class='co'># Summarize survival curves</span>
 <span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>quantile</span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>)))</div><div class='output co'>#&gt;    curve sample strategy_id patient_id    p  quantile
-#&gt; 1:     1      1           1          1 0.25 0.1761848
-#&gt; 2:     1      1           1          1 0.50 0.4245033
-#&gt; 3:     1      1           1          1 0.75 0.8490066
-#&gt; 4:     1      1           1          2 0.25 0.1685920
-#&gt; 5:     1      1           1          2 0.50 0.4062091
-#&gt; 6:     1      1           1          2 0.75 0.8124182</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    curve sample strategy_id patient_id   t  survival
+#&gt; 1:     1      1           1          1 0.25 0.1865495
+#&gt; 2:     1      1           1          1 0.50 0.4494764
+#&gt; 3:     1      1           1          1 0.75 0.8989527
+#&gt; 4:     1      1           1          2 0.25 0.1783252
+#&gt; 5:     1      1           1          2 0.50 0.4296604
+#&gt; 6:     1      1           1          2 0.75 0.8593208</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    curve sample strategy_id patient_id   t  survival
 #&gt; 1:     1      1           1          1 0.0 1.0000000
-#&gt; 2:     1      1           1          1 0.1 0.8493497
-#&gt; 3:     1      1           1          1 0.2 0.7213949
-#&gt; 4:     1      1           1          1 0.3 0.6127165
-#&gt; 5:     1      1           1          1 0.4 0.5204106
-#&gt; 6:     1      1           1          1 0.5 0.4420106</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    curve sample strategy_id patient_id t      rmst
-#&gt; 1:     1      1           1          1 2 0.5890519
-#&gt; 2:     1      1           1          1 5 0.6122544
-#&gt; 3:     1      1           1          2 2 0.5667259
-#&gt; 4:     1      1           1          2 5 0.5859203
-#&gt; 5:     1      1           1          3 2 0.5237007
-#&gt; 6:     1      1           1          3 5 0.5365650</div><div class='input'>
+#&gt; 2:     1      1           1          1 0.1 0.8570902
+#&gt; 3:     1      1           1          1 0.2 0.7346036
+#&gt; 4:     1      1           1          1 0.3 0.6296215
+#&gt; 5:     1      1           1          1 0.4 0.5396424
+#&gt; 6:     1      1           1          1 0.5 0.4625222</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    curve sample strategy_id patient_id t      rmst
+#&gt; 1:     1      1           1          1 2 0.6187809
+#&gt; 2:     1      1           1          1 5 0.6481668
+#&gt; 3:     1      1           1          2 2 0.5952622
+#&gt; 4:     1      1           1          2 5 0.6196743
+#&gt; 5:     1      1           1          3 2 0.5498348
+#&gt; 6:     1      1           1          3 5 0.5663346</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -216,11 +239,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
