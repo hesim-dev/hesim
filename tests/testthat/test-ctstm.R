@@ -261,6 +261,14 @@ test_that("Simulate costs and QALYs", {
    costs <- ictstm$sim_costs(dr = c(0, .03))$costs_
    expect_equal(unique(costs$category), c("medical", "drugs"))
    expect_equal(unique(costs$dr), c(0, .03))
+   
+  # Summarize costs and QALYs
+  ce_summary <- ictstm$summarize()
+  expect_true(inherits(ce_summary, "ce"))
+  ictstm$sim_disease()
+  expect_error(ictstm$summarize())
+  ictstm$sim_costs()
+  expect_error(ictstm$summarize())
 })
 
 

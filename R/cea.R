@@ -1,3 +1,39 @@
+#'  A cost-effectiveness object
+#'
+#' An object that summarizes simulated measures of clinical effectiveness and costs from a simulation model for use in a cost-effectiveness analysis.
+#'
+#' 
+#' @format 
+#' A list containing two elements:
+#' \itemize{
+#' \item{costs}{ Total (discounted) costs by category.}
+#' \item{QALYs}{ (Discounted) quality-adjusted life-years.}
+#' }
+#' 
+#' @section Costs:
+#' A 'costs' \code{\link{data.table}} contains the following columns:
+#' \describe{
+#' \item{category}{The cost category.}
+#' \item{dr}{The discount rate.}
+#' \item{sample}{A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)}
+#' \item{strategy_id}{The treatment strategy ID.}
+#' \item{grp}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
+#' \item{costs}{Costs.}
+#' }
+#' 
+#' @section Quality-adjusted life-years:
+#' A 'qalys' \code{\link{data.table}} contains the following columns:
+#' \describe{
+#' \item{dr}{The discount rate.}
+#' \item{sample}{A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)}
+#' \item{strategy_id}{The treatment strategy ID.}
+#' \item{grp}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
+#' \item{qalys}{Quality-adjusted life-years}
+#' }
+#' 
+#' @name ce
+NULL
+
 #' Individualized cost-effectiveness analysis
 #'
 #' Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 

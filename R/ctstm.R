@@ -280,6 +280,9 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     },
     
     sim_disease = function(max_t = 100, max_age = 100){
+      private$.qalys_ <- NULL
+      private$.costs_ <- NULL
+      private$.stateprobs_ <- NULL
       start_state <- 1
       self$trans_model$check()
       sim <- C_ctstm_sim_disease(self$trans_model, start_state, 
@@ -322,6 +325,26 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       type <- match.arg(type)
       private$.costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type)
       invisible(self)
+    },
+    
+    summarize = function(stat = mean) {
+      if (is.null(self$costs_)) {
+        stop("Cannot summarize costs without first simulating 'costs_' with '$sim_costs()'.",
+               call. = FALSE)
+      }
+      
+      if (is.null(self$qalys_)) {
+        stop("Cannot summarize QALYs without first simulating 'qalys_' with '$sim_qalys()'.",
+              call. = FALSE)
+      }      
+      
+      costs_summary <- self$costs_[, lapply(.SD, stat), by = c("category", "dr", "sample", "strategy_id"),
+                                   .SDcols = "costs"]
+      qalys_summary <- self$qalys_[, lapply(.SD, stat), by = c("dr", "sample", "strategy_id"),
+                                   .SDcols = "qalys"]
+      ce <- list(costs = costs_summary, qalys = qalys_summary)
+      class(ce) <- "ce"
+      return(ce)
     }
     
   ) # end public
