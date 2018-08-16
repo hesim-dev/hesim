@@ -232,7 +232,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       }
       return(wlos_dt[,])
      } # end sim_wlos
-    
+
   ), # end private  
                                                   
   active = list(
@@ -280,6 +280,12 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     },
     
     sim_disease = function(max_t = 100, max_age = 100){
+      if(!inherits(self$trans_model, "CtstmTrans")){
+        stop("'trans_model' must be an object of class 'CtstmTrans'",
+          call. = FALSE)
+      }
+      
+      
       private$.qalys_ <- NULL
       private$.costs_ <- NULL
       private$.stateprobs_ <- NULL
@@ -316,12 +322,28 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     },
     
     sim_qalys = function(dr = .03, type = c("predict", "random")){
+      if(!inherits(self$utility_model, "StateVals")){
+        stop("'utility_model' must be an object of class 'StateVals'",
+          call. = FALSE)
+      }
       type <- match.arg(type)
       private$.qalys_ <- private$sim_wlos(list(self$utility_model), dr, "qalys", type)
       invisible(self)
     },
     
     sim_costs = function(dr = .03, type = c("predict", "random")){
+      if(!is.list(self$cost_models)){
+        stop("'cost_models' must be a list of objects of class 'StateVals'",
+          call. = FALSE)
+      } else{
+        for (i in 1:length(self$cost_models)){
+          if (!inherits(self$cost_models[[i]], "StateVals")){
+            stop("'cost_models' must be a list of objects of class 'StateVals'",
+                call. = FALSE)
+          }
+        }
+      }
+      
       type <- match.arg(type)
       private$.costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type)
       invisible(self)

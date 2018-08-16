@@ -196,6 +196,8 @@ test_that("Simulate disease and state probabilities", {
   expect_error(mstate_list2$sim_stateprobs(t = 2))
   mstate_list2$trans_mat <- matrix(seq(1, 6), nrow = 2)
   expect_error(mstate_list2$sim_stateprobs(t = 2))
+  ictstm2 <- IndivCtstm$new(trans_model = 2)
+  expect_error(ictstm2$sim_disease())
   
   # Base case simulation
   ## Simulate disease progression
@@ -242,6 +244,11 @@ test_that("Simulate costs and QALYs", {
   ictstm$sim_disease()
   
   # Simulate QALYs
+  ## Errors
+  ictstm2 <- ictstm$clone()
+  ictstm2$utility_model <- 2
+  expect_error(ictstm2$sim_qalys())
+  
   ## dr = .03
   ictstm$sim_qalys(dr = .03)$qalys_
   
@@ -258,9 +265,16 @@ test_that("Simulate costs and QALYs", {
                qalys[3, qalys])
   
   # Simulate costs
-   costs <- ictstm$sim_costs(dr = c(0, .03))$costs_
-   expect_equal(unique(costs$category), c("medical", "drugs"))
-   expect_equal(unique(costs$dr), c(0, .03))
+  # Errors
+  ictstm2$cost_models <- 2
+  expect_error(ictstm2$sim_costs())
+  ictstm2$cost_models <- list(2)
+  expect_error(ictstm2$sim_costs())
+  
+  # Working
+  costs <- ictstm$sim_costs(dr = c(0, .03))$costs_
+  expect_equal(unique(costs$category), c("medical", "drugs"))
+  expect_equal(unique(costs$dr), c(0, .03))
    
   # Summarize costs and QALYs
   ce_summary <- ictstm$summarize()
