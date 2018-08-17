@@ -6,28 +6,31 @@ module <- Rcpp::Module('distributions', PACKAGE = "hesim")
 
 # Exponential distribution -----------------------------------------------------
 test_that("exponential", {
-  Exponential <- module$exponential
   rate <- 2
-  exp <- new(Exponential, rate = rate)
   
   # pdf
-  expect_equal(exp$pdf(3), dexp(3, rate = rate))
+  expect_equal(hesim:::C_test_exponential(rate, "pdf", 3), 
+               dexp(3, rate = rate))
   
   # cdf
-  expect_equal(exp$cdf(2), pexp(2, rate = rate))
-  
+  expect_equal(hesim:::C_test_exponential(rate, "cdf", 3), 
+               pexp(3, rate = rate))  
+
   # quantile
-  expect_equal(exp$quantile(.025), qexp(.025, rate = rate))
+  expect_equal(hesim:::C_test_exponential(rate, "quantile", .025), 
+               qexp(.025, rate = rate))    
   
   # hazard
-  expect_equal(exp$hazard(4), flexsurv::hexp(1, rate = rate))
+  expect_equal(hesim:::C_test_exponential(rate, "hazard", 4), 
+               flexsurv::hexp(1, rate = rate))  
   
   # cumhazard
-  expect_equal(exp$cumhazard(4), flexsurv::Hexp(4, rate = rate))
+  expect_equal(hesim:::C_test_exponential(rate, "cumhazard", 4), 
+               flexsurv::Hexp(4, rate = rate))    
   
   # random
   set.seed(101)
-  r1 <- exp$random()
+  r1 <- hesim:::C_test_exponential(rate, "random")
   set.seed(101)
   r2 <- rexp(1, rate = rate)
   expect_equal(r1, r2)
@@ -35,28 +38,31 @@ test_that("exponential", {
 
 # Weibull distribution ---------------------------------------------------------
 test_that("weibull", {
-  Weibull <- module$weibull
   sh <- 2; sc <- 1.2
-  wei <- new(Weibull, shape = sh, scale = sc)
   
   # pdf
-  expect_equal(wei$pdf(3), dweibull(3, shape = sh, scale = sc))
+  expect_equal(hesim:::C_test_weibull(sh, sc, "pdf", 3), 
+               dweibull(3, shape = sh, scale = sc)) 
   
   # cdf
-  expect_equal(wei$cdf(2), pweibull(2, shape = sh, scale = sc))
+  expect_equal(hesim:::C_test_weibull(sh, sc, "cdf", 2), 
+               pweibull(2, shape = sh, scale = sc))   
   
   # quantile
-  expect_equal(wei$quantile(.025), qweibull(.025, shape = sh, scale = sc))
+  expect_equal(hesim:::C_test_weibull(sh, sc, "quantile", .025), 
+               qweibull(.025, shape = sh, scale = sc))    
   
   # hazard
-  expect_equal(wei$hazard(4), flexsurv::hweibull(4, shape = sh, scale = sc))
+  expect_equal(hesim:::C_test_weibull(sh, sc, "hazard", 4), 
+               flexsurv::hweibull(4, shape = sh, scale = sc))    
   
   # cumhazard
-  expect_equal(wei$cumhazard(4), flexsurv::Hweibull(4, shape = sh, scale = sc))
+  expect_equal(hesim:::C_test_weibull(sh, sc, "cumhazard", 4), 
+               flexsurv::Hweibull(4, shape = sh, scale = sc))  
   
   # random
   set.seed(101)
-  r1 <- wei$random()
+  r1 <- hesim:::C_test_weibull(sh, sc, "random")
   set.seed(101)
   r2 <- rweibull(1, shape = sh, scale = sc)
   expect_equal(r1, r2)
@@ -64,28 +70,31 @@ test_that("weibull", {
 
 # Weibull distribution for NMA -------------------------------------------------
 test_that("weibull_nma", {
-  WeibullNma <- module$weibull_nma
   a0 <- -2.07; a1 <- .2715
-  wei <- new(WeibullNma, a0 = a0, a1 = a1)
   
   # pdf
-  expect_equal(wei$pdf(4), dweibullNMA(4, a0 = a0, a1 = a1))
+  expect_equal(hesim:::C_test_weibull_nma(a0, a1, "pdf", 4), 
+               dweibullNMA(4, a0 = a0, a1 = a1))   
   
   # cdf
-  expect_equal(wei$cdf(4), pweibullNMA(4, a0 = a0, a1 = a1))
+  expect_equal(hesim:::C_test_weibull_nma(a0, a1, "cdf", 4), 
+               pweibullNMA(4, a0 = a0, a1 = a1))   
   
   # quantile
-  expect_equal(wei$quantile(.7), qweibullNMA(.7, a0 = a0, a1 = a1))
+  expect_equal(hesim:::C_test_weibull_nma(a0, a1, "quantile", .7), 
+               qweibullNMA(.7, a0 = a0, a1 = a1))     
   
   # hazard
-  expect_equal(wei$hazard(2), hweibullNMA(2, a0 = a0, a1 = a1))
+  expect_equal(hesim:::C_test_weibull_nma(a0, a1, "hazard", 2), 
+               hweibullNMA(2, a0 = a0, a1 = a1))     
   
   # cumhazard
-  expect_equal(wei$cumhazard(2), HweibullNMA(2, a0 = a0, a1 = a1)) 
+  expect_equal(hesim:::C_test_weibull_nma(a0, a1, "cumhazard", 2), 
+               HweibullNMA(2, a0 = a0, a1 = a1))       
   
   # random
   set.seed(101)
-  r1 <- wei$random()
+  r1 <- hesim:::C_test_weibull_nma(a0, a1, "random")
   set.seed(101)
   r2 <- rweibullNMA(1, a0 = a0, a1 = a1)
   expect_equal(r1, r2)
@@ -93,28 +102,31 @@ test_that("weibull_nma", {
 
 # Gamma distribution -----------------------------------------------------------
 test_that("gamma", {
-  Gamma <- module$gamma
   sh <- 2; r <- 1.4
-  gamma <- new(Gamma, shape = sh, rate = r)
   
   # pdf
-  expect_equal(gamma$pdf(3), dgamma(3, shape = sh, rate = r))
+  expect_equal(hesim:::C_test_gamma(sh, r, "pdf", 3), 
+               dgamma(3, shape = sh, rate = r))   
   
   # cdf
-  expect_equal(gamma$cdf(2), pgamma(2, shape = sh, rate = r))
+  expect_equal(hesim:::C_test_gamma(sh, r, "cdf", 2), 
+               pgamma(2, shape = sh, rate = r))     
   
   # quantile
-  expect_equal(gamma$quantile(.025), qgamma(.025, shape = sh, rate = r))
+  expect_equal(hesim:::C_test_gamma(sh, r, "quantile", .025), 
+               qgamma(.025, shape = sh, rate = r))       
   
   # hazard
-  expect_equal(gamma$hazard(4), flexsurv::hgamma(4, shape = sh, rate = r))
+  expect_equal(hesim:::C_test_gamma(sh, r, "hazard", 4), 
+               flexsurv::hgamma(4, shape = sh, rate = r))     
   
   # cumhazard
-  expect_equal(gamma$cumhazard(4), flexsurv::Hgamma(4, shape = sh, rate = r))
+  expect_equal(hesim:::C_test_gamma(sh, r, "cumhazard", 4), 
+               flexsurv::Hgamma(4, shape = sh, rate = r))      
   
   # random
   set.seed(101)
-  r1 <- gamma$random()
+  r1 <- hesim:::C_test_gamma(sh, r, "random")
   set.seed(101)
   r2 <- rgamma(1, shape = sh, rate = r)
   expect_equal(r1, r2)
@@ -122,28 +134,31 @@ test_that("gamma", {
 
 # Lognormal distribution -------------------------------------------------------
 test_that("lognormal", {
-  Lognormal <- module$lognormal
   m <- 8; s <- 2.5
-  lognormal <- new(Lognormal, meanlog = m, sdlog = s)
   
   # pdf
-  expect_equal(lognormal$pdf(3), dlnorm(3, meanlog = m, sdlog = s))
+  expect_equal(hesim:::C_test_lognormal(m, s, "pdf", 3), 
+               dlnorm(3, meanlog = m, sdlog = s))   
   
   # cdf
-  expect_equal(lognormal$cdf(2), plnorm(2, meanlog = m, sdlog = s))
+  expect_equal(hesim:::C_test_lognormal(m, s, "cdf", 3), 
+               plnorm(3, meanlog = m, sdlog = s))     
   
   # quantile
-  expect_equal(lognormal$quantile(.025), qlnorm(.025, meanlog = m, sdlog = s))
+  expect_equal(hesim:::C_test_lognormal(m, s, "quantile", .33), 
+               qlnorm(.33, meanlog = m, sdlog = s))     
   
   # hazard
-  expect_equal(lognormal$hazard(4), flexsurv::hlnorm(4, meanlog = m, sdlog = s))
+  expect_equal(hesim:::C_test_lognormal(m, s, "hazard", 4), 
+               flexsurv::hlnorm(4, meanlog = m, sdlog = s))    
   
   # cumhazard
-  expect_equal(lognormal$cumhazard(4), flexsurv::Hlnorm(4, meanlog = m, sdlog = s))
+  expect_equal(hesim:::C_test_lognormal(m, s, "cumhazard", 4), 
+               flexsurv::Hlnorm(4, meanlog = m, sdlog = s))     
   
   # random
   set.seed(101)
-  r1 <- lognormal$random()
+  r1 <- hesim:::C_test_lognormal(m, s, "random")
   set.seed(101)
   r2 <- rlnorm(1, meanlog = m, sdlog = s)
   expect_equal(r1, r2)
@@ -151,78 +166,67 @@ test_that("lognormal", {
 
 # Gompertz distribution --------------------------------------------------------
 test_that("gompertz", {
-  Gompertz <- module$gompertz
   
-  # shape > 0
-  sh <- .05; r <- .5
-  gompertz <- new(Gompertz, shape = sh, rate = r)
+    test_gompertz <- function(sh, r){
+    ## pdf
+    expect_equal(hesim:::C_test_gompertz(sh, r, "pdf", 2), 
+                 flexsurv::dgompertz(2, shape = sh, rate = r))   
+    
+    ## cdf
+    expect_equal(hesim:::C_test_gompertz(sh, r, "cdf", 1.5), 
+                 flexsurv::pgompertz(1.5, shape = sh, rate = r))   
   
-  ## pdf
-  expect_equal(gompertz$pdf(2), flexsurv::dgompertz(2, shape = sh, rate = r))
+    ## quantile
+    expect_equal(hesim:::C_test_gompertz(sh, r, "quantile", .21), 
+                 flexsurv::qgompertz(.21, shape = sh, rate = r))     
+    
+    ## hazard
+    expect_equal(hesim:::C_test_gompertz(sh, r, "hazard", 4), 
+                 flexsurv::hgompertz(4, shape = sh, rate = r))     
+    
+    ## cumhazard
+    expect_equal(hesim:::C_test_gompertz(sh, r, "cumhazard", 4), 
+                 flexsurv::Hgompertz(4, shape = sh, rate = r))    
+    
+    ## random
+    set.seed(101)
+    r1 <- hesim:::C_test_gompertz(sh, r, "random")
+    set.seed(101)
+    r2 <- flexsurv::rgompertz(1, shape = sh, rate = r)
+    expect_equal(r1, r2)
+  }
   
-  ## cdf
-  expect_equal(gompertz$cdf(2), flexsurv::pgompertz(2, shape = sh, rate = r))
-  
-  ## quantile
-  expect_equal(gompertz$quantile(.35), flexsurv::qgompertz(.35, shape = sh, rate = r))
-  
-  ## hazard
-  expect_equal(gompertz$hazard(4), flexsurv::hgompertz(4, shape = sh, rate = r))
-  
-  ## cumhazard
-  expect_equal(gompertz$cumhazard(4), flexsurv::Hgompertz(4, shape = sh, rate = r))
-  
-  ## random
-  set.seed(101)
-  r1 <- gompertz$random()
-  set.seed(101)
-  r2 <- flexsurv::rgompertz(1, shape = sh, rate = r)
-  expect_equal(r1, r2)
-  
-  # shape = 0
-  sh <- 0; r <- .5
-  gompertz <- new(Gompertz, shape = sh, rate = r)
-  
-  ## pdf
-  expect_equal(gompertz$pdf(2), flexsurv::dgompertz(2, shape = sh, rate = r))
-  
-  ## cdf
-  expect_equal(gompertz$cdf(2), flexsurv::pgompertz(2, shape = sh, rate = r))
-  
-  # quantile
-  expect_equal(gompertz$quantile(.7), flexsurv::qgompertz(.7, shape = sh, rate = r))
-  
-  # hazard
-  expect_equal(gompertz$hazard(.7), flexsurv::hgompertz(.7, shape = sh, rate = r))
-  
-  # cumhazard
-  expect_equal(gompertz$cumhazard(.7), flexsurv::Hgompertz(.7, shape = sh, rate = r))
+  test_gompertz(.05, .5)   # shape > 0
+  test_gompertz(0, .5)   # shape = 0
 })
 
 # Log-logistic distribution ----------------------------------------------------
 test_that("loglogistic", {
-  LogLogistic <- module$loglogistic
   sh <- 1; sc <- .5
-  llogis <- new(LogLogistic, shape = sh, scale = sc)
   
   # pdf
-  expect_equal(llogis$pdf(2), flexsurv::dllogis(2, shape = sh, scale = sc))
+  expect_equal(hesim:::C_test_loglogistic(sh, sc, "pdf", 2), 
+              flexsurv::dllogis(2, shape = sh, scale = sc))    
   
   # cdf
-  expect_equal(llogis$cdf(2), flexsurv::pllogis(2, shape = sh, scale = sc))
-  
+  expect_equal(hesim:::C_test_loglogistic(sh, sc, "cdf", 2), 
+              flexsurv::pllogis(2, shape = sh, scale = sc))      
+
   # quantile
-  expect_equal(llogis$quantile(.34), flexsurv::qllogis(.34, shape = sh, scale = sc))
-  
+  expect_equal(hesim:::C_test_loglogistic(sh, sc, "quantile", .34), 
+              flexsurv::qllogis(.34, shape = sh, scale = sc))   
+
   # hazard
-  expect_equal(llogis$hazard(6), flexsurv::hllogis(6, shape = sh, scale = sc))
+  expect_equal(hesim:::C_test_loglogistic(sh, sc, "hazard", 6), 
+              flexsurv::hllogis(6, shape = sh, scale = sc))     
   
   # cumhazard
-  expect_equal(llogis$cumhazard(6), flexsurv::Hllogis(6, shape = sh, scale = sc))
-  
+  expect_equal(hesim:::C_test_loglogistic(sh, sc, "cumhazard", 6), 
+              flexsurv::Hllogis(6, shape = sh, scale = sc))   
+
   # random
   set.seed(101)
-  r1 <- llogis$random()
+  r1 <- hesim:::C_test_loglogistic(sh, sc, "random")
   set.seed(101)
   r2 <- flexsurv::rllogis(1, shape = sh, scale = sc)
   expect_equal(r1, r2)
@@ -230,74 +234,35 @@ test_that("loglogistic", {
 
 # Generalized gamma distribution -----------------------------------------------
 test_that("gengamma", {
-  GeneralizedGamma <- module$gengamma
+
+  test_gengamma <- function(m, s, q){
   
-  # Q < 0
-  m <- 2; s <- 1.5; q <- -2
-  gengamma <- new(GeneralizedGamma, mu = m, sigma = s, Q = q)
+    ## pdf
+    expect_equal(hesim:::C_test_gengamma(m, s, q, "pdf", 2), 
+                flexsurv::dgengamma(2, mu = m, sigma = s, Q = q))      
+    
+    ## cdf
+    expect_equal(hesim:::C_test_gengamma(m, s, q, "cdf", 3), 
+                flexsurv::pgengamma(3, mu = m, sigma = s, Q = q))         
+
+    ## quantile
+    expect_equal(hesim:::C_test_gengamma(m, s, q, "quantile", .5), 
+                flexsurv::qgengamma(.5, mu = m, sigma = s, Q = q))      
+
+    ## hazard
+    expect_equal(hesim:::C_test_gengamma(m, s, q, "hazard", 1.8), 
+                flexsurv::hgengamma(1.8, mu = m, sigma = s, Q = q))      
+    ## cumhazard
+    expect_equal(hesim:::C_test_gengamma(m, s, q, "cumhazard", 1.2), 
+                flexsurv::Hgengamma(1.2, mu = m, sigma = s, Q = q))        
+  }
   
-  ## pdf
-  expect_equal(gengamma$pdf(4), flexsurv::dgengamma(4, mu = m, sigma = s, Q = q))
-  
-  ## cdf
-  expect_equal(gengamma$cdf(4), flexsurv::pgengamma(4, mu = m, sigma = s, Q = q))
-  
-  ## quantile
-  expect_equal(gengamma$quantile(.5), flexsurv::qgengamma(.5, mu = m, sigma = s, Q = q))
-  
-  ## hazard
-  expect_equal(gengamma$hazard(1), flexsurv::hgengamma(1, mu = m, sigma = s, Q = q))
-  
-  ## cumhazard
-  expect_equal(gengamma$cumhazard(1), flexsurv::Hgengamma(1, mu = m, sigma = s, Q = q))
-  
-  # Q = 0
-  m <- 5; s <- 2; q <- 0
-  gengamma <- new(GeneralizedGamma, mu = m, sigma = s, Q = q)
-  
-  ## pdf
-  expect_equal(gengamma$pdf(4), flexsurv::dgengamma(4, mu = m, sigma = s, Q = q))
-  
-  ## cdf
-  expect_equal(gengamma$cdf(4), flexsurv::pgengamma(4, mu = m, sigma = s, Q = q))
-  
-  ## quantile
-  expect_equal(gengamma$quantile(.8), flexsurv::qgengamma(.8, mu = m, sigma = s, Q = q))
-  
-  ## hazard
-  expect_equal(gengamma$hazard(1), flexsurv::hgengamma(1, mu = m, sigma = s, Q = q))
-  
-  ## cumhazard
-  expect_equal(gengamma$cumhazard(1), flexsurv::Hgengamma(1, mu = m, sigma = s, Q = q))
-  
-  ## random
-  set.seed(101)
-  r1 <- gengamma$random()
-  set.seed(101)
-  r2 <- flexsurv::rgengamma(1, mu = m, sigma = s, Q = q)
-  expect_equal(r1, r2)
-  
-  # Q > 0
-  m <- 2; s <- 1.1; q <- 2
-  gengamma <- new(GeneralizedGamma, mu = m, sigma = s, Q = q)
-  
-  ## pdf
-  expect_equal(gengamma$pdf(2), flexsurv::dgengamma(2, mu = m, sigma = s, Q = q))
-  
-  ## cdf
-  expect_equal(gengamma$cdf(4), flexsurv::pgengamma(4, mu = m, sigma = s, Q = q))
-  
-  ## quantile
-  expect_equal(gengamma$quantile(.8), flexsurv::qgengamma(.8, mu = m, sigma = s, Q = q))
-  
-  ## hazard
-  expect_equal(gengamma$hazard(1), flexsurv::hgengamma(1, mu = m, sigma = s, Q = q))
-  
-  ## cumhazard
-  expect_equal(gengamma$cumhazard(1), flexsurv::Hgengamma(1, mu = m, sigma = s, Q = q))
+  test_gengamma(2, 1.5, -2) # Q < 0
+  test_gengamma(5, 2, 0) # Q = 0
+  test_gengamma(2, 1.1, 2) # Q > 0
 })
 
-# Survival spline distribution -------------------------------------------------
+# Spline survival distribution -------------------------------------------------
 basis_cube <- function(x){
   return (max(0, x^3))
 }
@@ -323,136 +288,134 @@ R_linear_predict <- function(t, gamma, knots, timescale){
 }
 
 test_that("survspline", {
-  SurvSpline <- module$survspline
-
-  # log hazard
-  ## Test function
-  test_SurvSpline1 <- function(surv_splines, timescale, 
-                                gamma = c(-1.2, 1.3, .07),
-                                knots = c(.19, 1.7, 6.7)){ 
-    surv.splines <- new(surv_splines, gamma = gamma, knots = knots,
-                          scale = "log_hazard", timescale = timescale)
-    t <- 2
-    linear.predict <- surv.splines$linear_predict(t)
-    expect_equal(linear.predict,
-                 R_linear_predict(t, gamma = gamma, knots = knots, 
-                                  timescale = timescale))
-    linear.predict.dx <- surv.splines$linear_predict_dx(t)
-      
-    ### hazard
-    expect_equal(surv.splines$hazard(t), 
-                   exp(linear.predict))
+  
+  # Scale is log hazard
+  test_survspline1 <- function(gamma, knots, timescale){
+    scale <- "log_hazard"
     
-    ### cummulative hazard
+    ### hazard
+    expect_equal(hesim:::C_test_survspline(gamma, knots, scale, timescale, "hazard", 2), 
+                exp(R_linear_predict(2, gamma, knots, timescale)))  
+    
+    ### cumhazard
     R_hazard <- function(t) {
       exp(R_linear_predict(t, gamma = gamma, knots = knots,
-                                          timescale = timescale))
+                          timescale = timescale))
     }
     R_cumhazard <- function(t){
       stats::integrate(R_hazard, 0, t)$value
-    }
-    expect_equal(surv.splines$cumhazard(t), R_cumhazard(t),
-                 tolerance = .001, scale = 1)
+    }    
+    expect_equal(hesim:::C_test_survspline(gamma, knots, scale, timescale, "cumhazard", 2), 
+                 R_cumhazard(2),
+                 tolerance = .001, scale = 1)   
     
     ### cdf
-    expect_equal(surv.splines$cdf(.8),
-                 1 - exp(-surv.splines$cumhazard(.8)))
+    cumhaz <- hesim:::C_test_survspline(gamma, knots, scale, timescale, "cumhazard", .8)
+    expect_equal(hesim:::C_test_survspline(gamma, knots, scale, timescale, "cdf", .8),
+                 1 - exp(-cumhaz))
     
-    ### pdf
+    # pdf
     R_cdf <- function(t){
       return(1 - exp(-R_cumhazard(t)))
     }
-    expect_equal(surv.splines$pdf(0), 0)
-    expect_equal(surv.splines$pdf(.5), 
-                 (1 - surv.splines$cdf(.5)) * surv.splines$hazard(.5))
-    expect_equal(surv.splines$pdf(.5),
-                 numDeriv::grad(R_cdf, .5))
+    expect_equal(hesim:::C_test_survspline(gamma, knots, scale, timescale, "pdf", 0), 
+                 0)
+    expect_equal(hesim:::C_test_survspline(gamma, knots, scale, timescale, "pdf", .5), 
+                 (1 - R_cdf(.5)) * R_hazard(.5))
+    expect_equal(hesim:::C_test_survspline(gamma, knots, scale, timescale, "pdf", .5), 
+                  numDeriv::grad(R_cdf, .5))   
     
     ### quantile
-    expect_equal(surv.splines$cdf(surv.splines$quantile(.55)), .55,
-                 tolerance = .001, scale = 1)
-    
+    quant <- hesim:::C_test_survspline(gamma, knots, scale, timescale, "quantile", .55)
+    prob <- hesim:::C_test_survspline(gamma, knots, scale, timescale, "cdf", quant)
+    expect_equal(prob, .55, tolerance = .001, scale = 1)    
   }
-  test_SurvSpline1(SurvSpline, timescale = "identity")
-  test_SurvSpline1(SurvSpline, timescale = "log")
+
+  g = c(-1.2, 1.3, .07)
+  k = c(.19, 1.7, 6.7)
+  test_survspline1(gamma = g, knots = k, timescale = "identity")
+  test_survspline1(gamma = g, knots = k, timescale = "log")
   
-  # log cummulative hazard, log odds, and normal
-  ## test function
-  test_SurvSpline2 <- function(surv_splines, flexsurv_scale, timescale,
+  # scale is log cummulative hazard, log odds, or normal
+  test_survspline2 <- function(flexsurv_scale, timescale,
                                 gamma = NULL, knots = NULL){
     if (is.null(gamma) | is.null(knots)){
-      spl.fit <- flexsurvspline(Surv(recyrs, censrec) ~ 1, 
+      spl_fit <- flexsurvspline(Surv(recyrs, censrec) ~ 1, 
                           data = bc, k = 1, timescale = timescale,
                           scale = flexsurv_scale)
-      gamma <- spl.fit$res.t[, "est"]
-      knots <- spl.fit$knots
+      gamma <- spl_fit$res.t[, "est"]
+      knots <- spl_fit$knots
     }
-    hesim.scale <- switch(flexsurv_scale,
+    hesim_scale <- switch(flexsurv_scale,
                           hazard = "log_cumhazard",
                           odds = "log_cumodds",
                           normal = "inv_normal"
                           )
     
-    surv.splines <- new(surv_splines, gamma = gamma, knots = knots,
-                    scale = hesim.scale, timescale = timescale)
-    
     ### pdf
-    expect_equal(dsurvspline(5, gamma = gamma, knots = knots, 
+    expect_equal(flexsurv::dsurvspline(5, gamma = gamma, knots = knots, 
                              scale = flexsurv_scale, timescale = timescale),
-                surv.splines$pdf(5))
-    expect_equal(surv.splines$pdf(0), 0)
-    expect_equal(surv.splines$pdf(-5), 0)
+                 hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "pdf", 5))
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "pdf", 0),
+                 0)
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "pdf", -5),
+                 0)
     
     ### cdf
-    expect_equal(psurvspline(.5, gamma = gamma, knots = knots, 
+    expect_equal(flexsurv::psurvspline(5, gamma = gamma, knots = knots, 
                              scale = flexsurv_scale, timescale = timescale),
-               surv.splines$cdf(.5))
-    expect_equal(surv.splines$cdf(0), 0)
-    expect_equal(surv.splines$cdf(-5), 0)
+                 hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "cdf", 5))    
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "cdf", 0),
+                 0)
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "cdf", -5),
+                 0)   
     
     ### quantile
-    expect_equal(qsurvspline(.8, gamma = gamma, knots = knots, 
+    expect_equal(flexsurv::qsurvspline(.8, gamma = gamma, knots = knots, 
                              scale = flexsurv_scale, timescale = timescale),
-                  surv.splines$quantile(.8), tolerance = .001, scale = 1)
-    expect_equal(surv.splines$quantile(-2), NaN)
-    expect_equal(surv.splines$quantile(0), -Inf)
-    expect_equal(surv.splines$quantile(1), Inf)
+                 hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "quantile", .8),
+                  tolerance = .001, scale = 1)      
+    
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "quantile", -2),
+                  NaN)
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "quantile", 0),
+                  -Inf)    
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "quantile", 1),
+                  Inf)        
     
     ### hazard
-    expect_equal(hsurvspline(3, gamma = gamma, knots = knots, 
+    expect_equal(flexsurv::hsurvspline(3, gamma = gamma, knots = knots, 
                              scale = flexsurv_scale, timescale = timescale),
-                  surv.splines$hazard(3))
-    expect_equal(surv.splines$hazard(0), 0)
-    expect_equal(surv.splines$hazard(-5), 0)
+                 hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "hazard", 3))     
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "hazard", 0),
+                 0)
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "hazard", -5),
+                 0)    
     
     ### cumhazard
-    expect_equal(Hsurvspline(3, gamma = gamma, knots = knots, 
+    expect_equal(flexsurv::Hsurvspline(3, gamma = gamma, knots = knots, 
                              scale = flexsurv_scale, timescale = timescale),
-                 surv.splines$cumhazard(3))
-    expect_equal(surv.splines$cumhazard(0), 0)
-    expect_equal(surv.splines$cumhazard(-5), 0)
+                 hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "cumhazard", 3))     
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "cumhazard", 0),
+                 0)
+    expect_equal(hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "cumhazard", -5),
+                 0)   
     
     ### random
     set.seed(12)
     r1 <- rsurvspline(1, gamma = gamma, knots = knots, 
                       scale = flexsurv_scale, timescale = timescale)
     set.seed(12)
-    r2 <- surv.splines$random()
+    r2 <- hesim:::C_test_survspline(gamma, knots, hesim_scale, timescale, "random")
     expect_equal(r1, r2, tolerance = .001, scale = 1)
   }
-  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "hazard",
-                    timescale = "log")
-  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "hazard",
-                    timescale = "identity")
-  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "odds",
-                    timescale = "log")
-  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "odds",
-                    timescale = "identity")
-  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "normal",
-                    timescale = "log")
-  test_SurvSpline2(surv_splines = SurvSpline, flexsurv_scale = "normal",
-                    timescale = "identity", gamma = c(-1.2, 1.3, .07),
-                    knots = c(.19, 1.7, 6.7))
+  test_survspline2(flexsurv_scale = "hazard", timescale = "log")
+  test_survspline2(flexsurv_scale = "hazard", timescale = "identity")
+  test_survspline2(flexsurv_scale = "odds", timescale = "log")
+  test_survspline2(flexsurv_scale = "odds", timescale = "identity")
+  test_survspline2(flexsurv_scale = "normal", timescale = "log")
+  test_survspline2(flexsurv_scale = "normal", timescale = "identity",
+                   gamma = c(-1.2, 1.3, .07), knots = c(.19, 1.7, 6.7))
 })
 
 # Survival Fractional Polynomials ----------------------------------------------
@@ -496,75 +459,71 @@ custom.hfp.lh3 <- list(
   transforms = rep(c(identity), 3), inv.transforms = rep(c(identity), 3)
 )
 
-# fit fractional polynomial model
-powers <- c(1, 0)
-# fp.fit <- flexsurvreg(Surv(recyrs, censrec) ~ 1, data = bc, 
-#                       aux = list(powers = powers), inits = c(-2, 0, 0),
-#                       dist = custom.hfp.lh3)
-gamma <- c(-1.2, -.567, 1.15)
-
 test_that("FracPoly", {
-  FracPoly <- module$fracpoly
-  
-  # specifications 1
-  fp <- new(FracPoly, gamma = gamma, powers = powers)
-  R_hazard <- function(t){
-    return(exp(c(gamma %*% t(cbind(1, bfp(t, powers))))))
-  }
-  R_cumhazard <- function(t){
-    stats::integrate(R_hazard, 0, t)$value
-  }
-  
-  ## linear prediction
-  expect_equal(fp$linear_predict(3), 
-               c(gamma %*% t(cbind(1, bfp(3, powers)))))
-  
-  ## hazard
-  expect_equal(fp$hazard(4), 
-               exp(fp$linear_predict(4)))
-  expect_equal(fp$hazard(0), 0)
-  
-  ## cumhazard
-  expect_equal(fp$cumhazard(2), 
-               R_cumhazard(2),
-               tolerance = .001, scale = 1)
-  expect_equal(fp$cumhazard(0), 0)
-  
-  ## cdf
-  expect_equal(fp$cdf(2.5), 
-               1 - exp(-fp$cumhazard(2.5)))
-  
-  ## pdf
-  R_cdf <- function(t){
-    1 - exp(-R_cumhazard(t))
-  }
-  expect_equal(fp$pdf(.8), 
-               numDeriv::grad(R_cdf, .8))
-  
-  ## quantile
-  expect_equal(.45, 
-               fp$cdf(fp$quantile(.45)),
-               tol = .001, scale = 1)
-  
-  ## random
-  set.seed(101)
-  r1 <- fp$random()
-  set.seed(101)
-  r2 <- fp$quantile(runif(1, 0, 1))
-  expect_equal(r1, r2)
-  
-  # other specifications
-  test_linear_predict <- function(gamma, powers){
-    fp <- new(FracPoly, gamma = gamma, powers = powers)
-    expect_equal(fp$linear_predict(3), 
-                        c(gamma %*% t(cbind(1, bfp(3, powers)))))
-  }
-  test_linear_predict(c(.2, .2), 0)
-  test_linear_predict(c(.2, .2, .2), c(0, 0))
-  test_linear_predict(c(.2, .2, .2), c(1, 1))
-  test_linear_predict(c(.2, .2, .5, .5, .2, .2), c(1, 1, 2, 2, 1))
-})
 
+  test_fracpoly <- function(gamma, powers){
+    R_hazard <- function(t){
+      return(exp(c(gamma %*% t(cbind(1, bfp(t, powers))))))
+    }
+    R_cumhazard <- function(t){
+      stats::integrate(R_hazard, 0, t)$value
+    }
+    R_linear_predict <- function(t){
+      c(gamma %*% t(cbind(1, bfp(t, powers))))
+    }    
+    
+    ## hazard
+    expect_equal(hesim:::C_test_fracpoly(gamma, powers, "hazard", 4),
+                 exp(R_linear_predict(4)))    
+    
+    ## cumhazard
+    expect_equal(hesim:::C_test_fracpoly(gamma, powers, "cumhazard", 2), 
+                 R_cumhazard(2),
+                 tolerance = .001, scale = 1)
+    expect_equal(hesim:::C_test_fracpoly(gamma, powers, "cumhazard", 0), 
+                 0) 
+    
+    ## cdf   
+    expect_equal(hesim:::C_test_fracpoly(gamma, powers, "cdf", 2.5), 
+                 1 - exp(-R_cumhazard(2.5)),
+                 tolerance = .001, scale = 1)  
+    
+    ## pdf
+    R_cdf <- function(t){
+      1 - exp(-R_cumhazard(t))
+    }  
+    expect_equal(hesim:::C_test_fracpoly(gamma, powers, "pdf", .8), 
+                 numDeriv::grad(R_cdf, .8),
+                  tolerance = .001, scale = 1)
+    
+    ## quantile
+    quant <- hesim:::C_test_fracpoly(gamma, powers, "quantile", .45)
+    prob <- hesim:::C_test_fracpoly(gamma, powers, "cdf", quant)
+    expect_equal(.45, prob,
+                 tol = .001, scale = 1) 
+    
+    ## random
+    set.seed(101)
+    r1 <- hesim:::C_test_fracpoly(gamma, powers, "random")
+    set.seed(101)
+    r2 <- hesim:::C_test_fracpoly(gamma, powers, "quantile", runif(1, 0, 1))
+    expect_equal(r1, r2)  
+   } # end test_fracpoly
+
+  # fp.fit <- flexsurvreg(Surv(recyrs, censrec) ~ 1, data = bc, 
+  #                       aux = list(powers = powers), inits = c(-2, 0, 0),
+  #                       dist = custom.hfp.lh3)
+  
+  
+  test_fracpoly(gamma = c(-1.2, -.567, 1.15) ,
+                powers = c(1, 0))
+  test_fracpoly(gamma = c(.2, .2),
+                powers = 0) 
+  test_fracpoly(gamma = c(.2, .2, .2),
+                powers = c(1, 1))   
+  test_fracpoly(gamma = c(.2, .2, .5, .5, .2, .2),
+                powers = c(1, 1, 2, 2, 1))
+})
 
 # Truncated normal distribution ------------------------------------------------
 test_that("rtruncnorm", {

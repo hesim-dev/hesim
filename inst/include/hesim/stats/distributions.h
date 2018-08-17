@@ -71,7 +71,16 @@ public:
    * Random number generator.
    * @return A random sample from the probability distribution.
    */     
-  virtual double random() const {return 0.0;}
+  virtual double random() const = 0;
+  
+  // /** 
+  //  * Random number generator for a truncated distribution.
+  //  * @return A random sample between a lower and upper bound from the probability distribution.
+  //  */     
+  // virtual double random(double lower, double upper) const {
+  //   Rcpp::stop("The chosen distribution does not support sampling within an interval.");
+  // }
+  
 }; // end base class distribution
 
 /** Internal details for hesim::stats that should be ignored by external users.*/

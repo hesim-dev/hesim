@@ -89,6 +89,46 @@ C_test_trans_mat_n_trans <- function(m) {
     .Call('_hesim_C_test_trans_mat_n_trans', PACKAGE = 'hesim', m)
 }
 
+C_test_exponential <- function(rate, fun, x = 0) {
+    .Call('_hesim_C_test_exponential', PACKAGE = 'hesim', rate, fun, x)
+}
+
+C_test_weibull <- function(shape, scale, fun, x = 0) {
+    .Call('_hesim_C_test_weibull', PACKAGE = 'hesim', shape, scale, fun, x)
+}
+
+C_test_weibull_nma <- function(a0, a1, fun, x = 0) {
+    .Call('_hesim_C_test_weibull_nma', PACKAGE = 'hesim', a0, a1, fun, x)
+}
+
+C_test_gamma <- function(shape, rate, fun, x = 0) {
+    .Call('_hesim_C_test_gamma', PACKAGE = 'hesim', shape, rate, fun, x)
+}
+
+C_test_lognormal <- function(meanlog, sdlog, fun, x = 0) {
+    .Call('_hesim_C_test_lognormal', PACKAGE = 'hesim', meanlog, sdlog, fun, x)
+}
+
+C_test_gompertz <- function(shape, rate, fun, x = 0) {
+    .Call('_hesim_C_test_gompertz', PACKAGE = 'hesim', shape, rate, fun, x)
+}
+
+C_test_loglogistic <- function(shape, scale, fun, x = 0) {
+    .Call('_hesim_C_test_loglogistic', PACKAGE = 'hesim', shape, scale, fun, x)
+}
+
+C_test_gengamma <- function(mu, sigma, Q, fun, x = 0) {
+    .Call('_hesim_C_test_gengamma', PACKAGE = 'hesim', mu, sigma, Q, fun, x)
+}
+
+C_test_survspline <- function(gamma, knots, scale, timescale, fun, x = 0) {
+    .Call('_hesim_C_test_survspline', PACKAGE = 'hesim', gamma, knots, scale, timescale, fun, x)
+}
+
+C_test_fracpoly <- function(gamma, powers, fun, x = 0) {
+    .Call('_hesim_C_test_fracpoly', PACKAGE = 'hesim', gamma, powers, fun, x)
+}
+
 C_test_rtruncnorm <- function(mean, sd, lower, upper) {
     .Call('_hesim_C_test_rtruncnorm', PACKAGE = 'hesim', mean, sd, lower, upper)
 }

@@ -303,6 +303,148 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_test_exponential
+double C_test_exponential(double rate, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_exponential(SEXP rateSEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_exponential(rate, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_weibull
+double C_test_weibull(double shape, double scale, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_weibull(SEXP shapeSEXP, SEXP scaleSEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
+    Rcpp::traits::input_parameter< double >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_weibull(shape, scale, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_weibull_nma
+double C_test_weibull_nma(double a0, double a1, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_weibull_nma(SEXP a0SEXP, SEXP a1SEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type a0(a0SEXP);
+    Rcpp::traits::input_parameter< double >::type a1(a1SEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_weibull_nma(a0, a1, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_gamma
+double C_test_gamma(double shape, double rate, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_gamma(SEXP shapeSEXP, SEXP rateSEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
+    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_gamma(shape, rate, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_lognormal
+double C_test_lognormal(double meanlog, double sdlog, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_lognormal(SEXP meanlogSEXP, SEXP sdlogSEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type meanlog(meanlogSEXP);
+    Rcpp::traits::input_parameter< double >::type sdlog(sdlogSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_lognormal(meanlog, sdlog, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_gompertz
+double C_test_gompertz(double shape, double rate, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_gompertz(SEXP shapeSEXP, SEXP rateSEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
+    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_gompertz(shape, rate, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_loglogistic
+double C_test_loglogistic(double shape, double scale, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_loglogistic(SEXP shapeSEXP, SEXP scaleSEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type shape(shapeSEXP);
+    Rcpp::traits::input_parameter< double >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_loglogistic(shape, scale, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_gengamma
+double C_test_gengamma(double mu, double sigma, double Q, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_gengamma(SEXP muSEXP, SEXP sigmaSEXP, SEXP QSEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_gengamma(mu, sigma, Q, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_survspline
+double C_test_survspline(std::vector<double> gamma, std::vector<double> knots, std::string scale, std::string timescale, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_survspline(SEXP gammaSEXP, SEXP knotsSEXP, SEXP scaleSEXP, SEXP timescaleSEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type knots(knotsSEXP);
+    Rcpp::traits::input_parameter< std::string >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< std::string >::type timescale(timescaleSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_survspline(gamma, knots, scale, timescale, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_fracpoly
+double C_test_fracpoly(std::vector<double> gamma, std::vector<double> powers, std::string fun, double x);
+RcppExport SEXP _hesim_C_test_fracpoly(SEXP gammaSEXP, SEXP powersSEXP, SEXP funSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type powers(powersSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fun(funSEXP);
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_fracpoly(gamma, powers, fun, x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_test_rtruncnorm
 double C_test_rtruncnorm(double mean, double sd, double lower, double upper);
 RcppExport SEXP _hesim_C_test_rtruncnorm(SEXP meanSEXP, SEXP sdSEXP, SEXP lowerSEXP, SEXP upperSEXP) {
@@ -450,8 +592,6 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP _rcpp_module_boot_distributions();
-
 static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_incr_effect", (DL_FUNC) &_hesim_C_incr_effect, 5},
     {"_hesim_C_ceac", (DL_FUNC) &_hesim_C_ceac, 6},
@@ -475,6 +615,16 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_trans_mat_trans_id", (DL_FUNC) &_hesim_C_test_trans_mat_trans_id, 2},
     {"_hesim_C_test_trans_mat_to", (DL_FUNC) &_hesim_C_test_trans_mat_to, 2},
     {"_hesim_C_test_trans_mat_n_trans", (DL_FUNC) &_hesim_C_test_trans_mat_n_trans, 1},
+    {"_hesim_C_test_exponential", (DL_FUNC) &_hesim_C_test_exponential, 3},
+    {"_hesim_C_test_weibull", (DL_FUNC) &_hesim_C_test_weibull, 4},
+    {"_hesim_C_test_weibull_nma", (DL_FUNC) &_hesim_C_test_weibull_nma, 4},
+    {"_hesim_C_test_gamma", (DL_FUNC) &_hesim_C_test_gamma, 4},
+    {"_hesim_C_test_lognormal", (DL_FUNC) &_hesim_C_test_lognormal, 4},
+    {"_hesim_C_test_gompertz", (DL_FUNC) &_hesim_C_test_gompertz, 4},
+    {"_hesim_C_test_loglogistic", (DL_FUNC) &_hesim_C_test_loglogistic, 4},
+    {"_hesim_C_test_gengamma", (DL_FUNC) &_hesim_C_test_gengamma, 5},
+    {"_hesim_C_test_survspline", (DL_FUNC) &_hesim_C_test_survspline, 6},
+    {"_hesim_C_test_fracpoly", (DL_FUNC) &_hesim_C_test_fracpoly, 4},
     {"_hesim_C_test_rtruncnorm", (DL_FUNC) &_hesim_C_test_rtruncnorm, 4},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
     {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
@@ -487,7 +637,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
     {"_hesim_C_rowmax_index", (DL_FUNC) &_hesim_C_rowmax_index, 1},
-    {"_rcpp_module_boot_distributions", (DL_FUNC) &_rcpp_module_boot_distributions, 0},
     {NULL, NULL, 0}
 };
 
