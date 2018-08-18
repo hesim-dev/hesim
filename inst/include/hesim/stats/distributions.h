@@ -4,6 +4,7 @@
 #include <hesim/utils.h>
 #include <hesim/Rbase/zeroin.h>
 #include <hesim/math/quad.h>
+#include <hesim/stats/rtrunc.h>
 #include <memory>
 
 namespace hesim{
@@ -73,13 +74,13 @@ public:
    */     
   virtual double random() const = 0;
   
-  // /** 
-  //  * Random number generator for a truncated distribution.
-  //  * @return A random sample between a lower and upper bound from the probability distribution.
-  //  */     
-  // virtual double random(double lower, double upper) const {
-  //   Rcpp::stop("The chosen distribution does not support sampling within an interval.");
-  // }
+  /**
+   * Random number generator for a truncated distribution.
+   * @return A random sample between a lower and upper bound from the probability distribution.
+   */
+  virtual double trandom(double lower, double upper, std::string method = "invcdf") const {
+    Rcpp::stop("The selected distribution cannot randomly sample from a truncated distribution.");
+  }
   
 }; // end base class distribution
 
@@ -210,6 +211,11 @@ public:
   double random() const {
     return R::rexp(1/rate_);
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }
+  
 }; // end class exponential
 
 /***************************************************************************//**
@@ -259,6 +265,10 @@ public:
   double random() const {
     return R::rweibull(shape_, scale_);
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }  
 }; // end class weibull
 
 /***************************************************************************//**
@@ -315,6 +325,11 @@ public:
   double random() const {
     return wei_.random();
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }
+  
 }; // end class weibull_nma
 
 /***************************************************************************//**
@@ -364,6 +379,11 @@ public:
   double random() const {
     return R::rgamma(shape_, 1/rate_);
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }
+  
 }; //end class gamma
 
 /***************************************************************************//**
@@ -414,6 +434,10 @@ public:
   double random() const {
     return R::rlnorm(meanlog_, sdlog_);
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }  
 }; //end class lognormal
 
 /***************************************************************************//**
@@ -491,6 +515,10 @@ public:
     double u = R::runif(0,1);
     return quantile(u);
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }  
 }; //end class gompertz
 
 /***************************************************************************//**
@@ -543,6 +571,10 @@ public:
     double u = R::runif(0,1);
     return quantile(u);
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }  
 }; //end class loglogistic
 
 
@@ -606,9 +638,12 @@ public:
   
   double quantile(double p) const {
     if (Q_ == 0){
-      return R::qlnorm(p, mu_, 1/(sigma_ * sigma_), 1, 0);
+      return R::qlnorm(p, mu_, sigma_, 1, 0);
     }
     else {
+      if (Q_ < 0){
+        p = 1 - p;
+      }
       double gamma_quantile = R::qgamma(p, 1/(Q_ * Q_), 1, 1, 0);
       return exp(mu_ + sigma_ * (log(Q_ * Q_ * gamma_quantile)/Q_));
     }    
@@ -631,6 +666,11 @@ public:
         return exp(mu_ + sigma_ * w);
     }
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }  
+  
 }; // end class gengamma
 
 /***************************************************************************//**
@@ -851,6 +891,10 @@ public:
   double random() const {
     return quantile(R::runif(0, 1));
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }    
 };
 
 /***************************************************************************//**
@@ -941,6 +985,10 @@ public:
   double random() const {
     return quantile(R::runif(0, 1));
   }
+  
+  double trandom(double lower, double upper, std::string method = "invcdf") const   {
+    return rtrunc(this, lower, upper, method);
+  }    
 };
 
 /***************************************************************************//**
