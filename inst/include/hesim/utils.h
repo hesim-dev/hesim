@@ -80,6 +80,27 @@ inline void add_constant(std::vector<T> &v, double value){
 
 /**
  * @ingroup general
+ * Group counter for a sorted vector.
+ * @param v A vector to group by. @p v MUST have been previously sorted.
+ * @return An integer vector equal to 0 for the first group, 1 for the second group, 
+ * and so on.
+ */
+template<typename T>
+inline std::vector<int> grp_counter(std::vector<T> v){
+  std::vector<int> v2(v.size());
+  int grp = 0;
+  v2[0] = grp;
+  for (int i = 1; i < v.size(); ++i){
+    if(v[i] != v[i-1]){
+      ++grp;
+    }
+    v2[i] = grp; 
+  }
+  return v2;
+}
+
+/**
+ * @ingroup general
  * Compute present value in continuous time. 
  * @param z A fixed value to be discounted.
  * @param r The discount rate

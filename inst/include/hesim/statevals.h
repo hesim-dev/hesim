@@ -137,10 +137,10 @@ struct stateprobs_out{
    */   
   Rcpp::DataFrame create_R_data_frame(){
     return Rcpp::DataFrame::create(
-      Rcpp::_["state_id"] = state_id_,
       Rcpp::_["sample"] = sample_,
       Rcpp::_["strategy_id"] = strategy_id_,
       Rcpp::_["patient_id"] = patient_id_,
+      Rcpp::_["state_id"] = state_id_,
       Rcpp::_["t"] = t_,
       Rcpp::_["prob"] = prob_,
       Rcpp::_["stringsAsFactors"] = false
@@ -184,10 +184,10 @@ struct wlos_out {
    */   
   Rcpp::DataFrame create_R_data_frame(){
     return Rcpp::DataFrame::create(
-      Rcpp::_["state_id"] = state_id_,
       Rcpp::_["sample"] = sample_,
       Rcpp::_["strategy_id"] = strategy_id_,
       Rcpp::_["patient_id"] = patient_id_,
+      Rcpp::_["state_id"] = state_id_,
       Rcpp::_["dr"] = dr_,
       Rcpp::_["category"] = category_,
       Rcpp::_["value"] = value_,
@@ -316,37 +316,48 @@ public:
                       std::vector<double> dr, 
                       std::vector<std::string> categories) {
     int N = stateprobs.prob_.size()/times.size();
+    int n_samples = statevals_[0].statmod_->get_n_samples();
+    // int N_check = n_samples *
+    //               obs_index_.n_strategies_ *
+    //               obs_index_.n_patients_ *
+    //               obs_index_.n_healthvals_;
+    // if(N != N_check){
+    //  Rcpp::stop("The number of rows in 'stateprobs_'"
+    //             "must equal the product of the number of unique values of"
+    //             "'sample', 'strategy_id', 'patient_id', 'state_id', and 't'.");
+    // }
     wlos_out out(N * dr.size() * statevals_.size());
     
     int counter = 0;
-    for (int k = 0; k < statevals_.size(); ++k){
-      for (int j = 0; j < dr.size(); ++j){
-        int index = 0;
+    for (int k = 0; k < statevals_.size(); ++k){ // start category loop
+      for (int j = 0; j < dr.size(); ++j){ // start discount rate loop
+        int integrate_start = 0;
         double dr_j = dr[j];
-        for (int i = 0; i < N; ++i){
-          int state_id = stateprobs.state_id_[index];
-          int strategy_id = stateprobs.strategy_id_[index];
-          int patient_id = stateprobs.patient_id_[index];
-          int sample = stateprobs.sample_[index];
-          
-          obs_index_.set_strategy_id(strategy_id);
-          obs_index_.set_patient_id(patient_id);
-          obs_index_.set_health_id(state_id);
-          
-          out.state_id_[counter] = state_id;
-          out.sample_[counter] = sample;
-          out.strategy_id_[counter] = strategy_id;
-          out.patient_id_[counter] = patient_id;
-          out.dr_[counter] = dr_j;
-          out.category_[counter] = categories[k];
-          out.value_[counter] = integrate_trapz(sample, obs_index_(),
-                                                times.begin(), times.end(),
-                                                stateprobs.prob_.begin() + index,
-                                                statevals_[k],
-                                                dr_j);
-          index = index + times.size();
-          ++counter;
-        } // end loop over state probabilities
+        for (int s = 0; s < n_samples; ++s){ // start samples loop
+          for (int ts = 0; ts < obs_index_.n_strategies_; ++ts){ // start treatment strategies loop
+          obs_index_.set_strategy_index(ts);
+            for (int p = 0; p < obs_index_.n_patients_; ++ p){ // start patient loop
+              obs_index_.set_patient_index(p);
+              for (int h = 0; h < obs_index_.n_healthvals_; ++h){ // health state state loop
+                obs_index_.set_health_index(h);
+                
+                out.sample_[counter] = s;
+                out.strategy_id_[counter] = obs_index_.get_strategy_id();
+                out.patient_id_[counter] = obs_index_.get_patient_id();
+                out.state_id_[counter] = obs_index_.get_health_id();;
+                out.dr_[counter] = dr_j;
+                out.category_[counter] = categories[k];
+                out.value_[counter] = integrate_trapz(s, obs_index_(),
+                                                      times.begin(), times.end(),
+                                                      stateprobs.prob_.begin() + integrate_start,
+                                                      statevals_[k],
+                                                      dr_j);
+                integrate_start = integrate_start + times.size();
+                ++counter;
+              } // end health state loop
+            } // end patient loop
+          } // end strategy loop
+        } // end samples loop
       } // end loop over discount rates
     } // end loop over state value models
     return out;

@@ -5,7 +5,7 @@ library("pracma")
 rm(list = ls())
 
 # Simulation
-dt_strategies <- data.table(strategy_id = c(1, 2, 3))
+dt_strategies <- data.table(strategy_id = seq(2, 4)) # testing for cases when doesn't start at 1
 dt_patients <- data.table(patient_id = seq(1, 3),
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
@@ -175,7 +175,7 @@ test_that("Psm$stateprobs", {
 
 # Costs and QALYs
 R_los <- function(psm, type, type_num, dr = .03, 
-                  state_id = 1, sample = 1, strategy_id = 1,
+                  state_id = 1, sample = 1, strategy_id = 2,
                   patient_id = 1){
   if (type == "costs_"){
     model <- psm$cost_models[[type_num]]
@@ -254,5 +254,6 @@ test_that("PartSurv$qalys", {
   psm$sim_qalys(dr = c(0, .05))
   
   los_compare(psm, type = "qalys_", dr = 0, strategy_id = 2)
-  los_compare(psm, type = "qalys_", dr = .05, patient_id = 2)
+  los_compare(psm, type = "qalys_", dr = .05, patient_id = 2,
+              strategy_id = 3)
 })

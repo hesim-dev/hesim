@@ -1,6 +1,7 @@
 # ifndef HESIM_PSM_H
 # define HESIM_PSM_H
 #include <hesim/statmods/statmods.h>
+#include <hesim/statmods/obs_index.h>
 #include <hesim/math/composite.h>
 
 namespace hesim {
@@ -18,6 +19,8 @@ namespace psm {
  ******************************************************************************/ 
 class surv_mods{ 
 public:
+ statmods::obs_index obs_index_; ///< A statmods::obs_index object.  
+  
   /** 
    * The constructor.
    * Instantiates a class containing the survival models of a partitioned survival
@@ -98,6 +101,22 @@ public:
  * Data container for storing summaries of survival models.
  ******************************************************************************/ 
 struct surv_summary{
+  std::vector<int> curve_; ///< The survival curve. 
+  std::vector<int> sample_; ///< A randomly sampled parameter set.
+  std::vector<int> strategy_id_; ///< A treatment strategy id.
+  std::vector<int> patient_id_; ///< A patient id.
+  std::vector<double> x_; ///< Values at which to summarize the survival curves 
+                         ///< (hazard, cumulative hazard, survival, restricted mean survival time, and 
+                         ///< quantiles). Either a vector of quantiles (i.e., times) or a vector of 
+                        ///< probabilities (when computing quantiles).
+  std::vector<double> value_; ///< The summarized value (hazard, cumulative hazard, survival proportion,
+                             ///<restricted mean survival time, or quantile).
+  int n_states_; ///< Number of health states.
+  int n_strategies_; ///< Number of simulated treatment strategies.
+  int n_patients_; ///< Number of simulated patients.
+  int n_sims_; ///< Number of simulations for each curve inclusive of treatment 
+               /// strategies, patients, times, and randomly sampled parameter sets.   
+  
   /** 
    * A default constructor.
    * Instantiates a data container for a predicted survival curve.
@@ -119,99 +138,23 @@ struct surv_summary{
   }
   
   /** 
-   * Create class from R object.
-   * Creates the class from an @c R object of class @c Psm.
+   * A constructor.
+   * Instantiates the class from survival curves previously simulated and stored
+   * in an @c R object of class @c Psm.
    */
-  static surv_summary create_from_R(Rcpp::Environment R_Psm) {
-    surv_summary out;
-    Rcpp::DataFrame R_survival = Rcpp::as<Rcpp::DataFrame>(R_Psm["survival_"]);
-    
-    out.curve_ = Rcpp::as<std::vector<int> >(R_survival["curve"]);
-    out.sample_ = Rcpp::as<std::vector<int> >(R_survival["sample"]);
-    out.strategy_id_ = Rcpp::as<std::vector<int> >(R_survival["strategy_id"]);
-    out.patient_id_ = Rcpp::as<std::vector<int> >(R_survival["patient_id"]);
-    out.x_ = Rcpp::as<std::vector<double> >(R_survival["t"]);
-    out.value_ = Rcpp::as<std::vector<double> >(R_survival["survival"]);
-    out.n_states_ = Rcpp::as<int>(R_Psm["n_states"]);
-    int n_curves = out.n_states_ - 1;
-    out.n_sims_ = out.value_.size()/n_curves;
-    
-    // R to C++ indexing
-    hesim::add_constant(out.curve_, -1); 
-    hesim::add_constant(out.sample_, -1); 
-    return out;    
-  }
-  
-  std::vector<int> curve_; ///< The survival curve. 
-  std::vector<int> sample_; ///< A randomly sampled parameter set.
-  std::vector<int> strategy_id_; ///< A treatment strategy id.
-  std::vector<int> patient_id_; ///< A patient id.
-  std::vector<double> x_; ///< Values at which to summarize the survival curves 
-                         ///< (hazard, cumulative hazard, survival, restricted mean survival time, and 
-                         ///< quantiles). Either a vector of quantiles (i.e., times) or a vector of 
-                        ///< probabilities (when computing quantiles).
-  std::vector<double> value_; ///< The summarized value (hazard, cumulative hazard, survival proportion,
-                             ///<restricted mean survival time, or quantile).
-  int n_states_; ///< Number of health states.
-  int n_sims_; ///< Number of simulations for each curve inclusive of treatment 
-               /// strategies, patients, times, and randomly sampled parameter sets. 
-               
-  /** 
-   * Obtain index for each vector in the struct.
-   * @param sim A simulation number.
-   * @param curve  A survival curve.
-   * @return The index of each vector.
-   */
-  int index(int sim, int curve) const {
-    return curve * n_sims_ + sim;
-  }
-};
+  surv_summary(Rcpp::DataFrame R_psm_survival) {
+    curve_ = Rcpp::as<std::vector<int> >(R_psm_survival["curve"]);
+    sample_ = Rcpp::as<std::vector<int> >(R_psm_survival["sample"]);
+    strategy_id_ = Rcpp::as<std::vector<int> >(R_psm_survival["strategy_id"]);
+    patient_id_ = Rcpp::as<std::vector<int> >(R_psm_survival["patient_id"]);
+    x_ = Rcpp::as<std::vector<double> >(R_psm_survival["t"]);
+    value_ = Rcpp::as<std::vector<double> >(R_psm_survival["survival"]);
 
-/***************************************************************************//** 
- * Simulate health state probabilities with a partitioned survival model.
- * @param R_psm An R object of class @c Psm
- * @return An R list with two elements: 
- *  - @c stateprobs: An @c R data frame with columns equivalent to the data members in 
- *  hesim::stateprobs_out.
- *  - @c n_crossings: An integer denoting the number of times the survival 
- *  curves cross. Equivalent to hesim::psm::stateprobs::n_crossings_.
- ******************************************************************************/ 
-class stateprobs{
-private:
-  surv_summary survcurves_; ///< Predicted survival curves.
-  int n_crossings_; ///< Number of simulations (times, parameter samples, and patients) 
-                   ///< at which the survival curves cross.
-                   
-  /** 
-   * Simulate health state probabilities for a single simulation 
-   * (time, parameter sample,and patient) and health state from a vector of survival 
-   * curves.
-   * @param sim The simulated survival curve (i.e., element in the vector of survival curves).
-   * @param state The health state.
-   * @return The probability that a given patient is in a specific health state at a given point in time
-   * for a given randomly sampled parameter set. 
-   */                      
-  double sim1(int sim, int state); 
-public:
-  /** 
-   * The constructor.
-   * Instantiates a class for computing health state probabilities from (partitioned) 
-   * survival curves.
-   */ 
-  stateprobs(Rcpp::Environment R_psm);
+    // R to C++ indexing
+    hesim::add_constant(curve_, -1); 
+    hesim::add_constant(sample_, -1); 
+  }  
   
-  /** 
-   * Simulate the probability of being in each health states across patients, time periods,
-   * and randomly sampled parameter sets. 
-   * @param R_psm An @c R object of class @Psm. Must contain the data member @c Psm$survival_ simulated
-   * using @c Psm$sim_survival().
-   * @return An @c R list with two elements: 
-   *  - @c stateprobs: An @c R data frame with columns equivalent to the data members in 
-   *  hesim::stateprobs_out.
-   *  - @c n_crossings: An integer denoting the number of times the survival 
-   *  curves cross. Equivalent to hesim::psm::stateprobs::n_crossings_.
-   */   
-  Rcpp::List sim();
 };
 
 

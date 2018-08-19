@@ -22,7 +22,6 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
 # obs_index --------------------------------------------------------------------
 test_that("obs_index", {
 
-
 ## strategy_id + line + patient_id + state_id
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
                                                           "lines", "states"))
@@ -35,21 +34,21 @@ get_R_rowvec <- function(obs){
   return(v)
 }
 
-test_obs_index <- function(strategy_id, line, patient_id, state_id){
-  R_index <- which(input_dat$strategy_id == strategy_id & input_dat$line == line & 
-         input_dat$patient_id == patient_id & input_dat$state_id == state_id)
-  C_index <- hesim:::C_test_obs_index(input_dat, strategy_id = strategy_id - 1,
-                                     line = line - 1, patient_id = patient_id - 1,
-                                     health_id = state_id - 1)
+test_obs_index <- function(strategy_idx, line_idx, patient_idx, state_idx){
+  R_index <- which(input_dat$strategy_id == strategy_idx & input_dat$line == line_idx & 
+         input_dat$patient_id == patient_idx & input_dat$state_id == state_idx)
+  C_index <- hesim:::C_test_obs_index(input_dat, strategy_index= strategy_idx - 1,
+                                     line_index = line_idx - 1, patient_index = patient_idx - 1,
+                                     health_index = state_idx - 1)
   expect_equal(R_index - 1, C_index)
 }
 
-test_obs_index(strategy_id = 2, line = 1, patient_id = 1, state_id = 3)
-test_obs_index(strategy_id = 2, line = 1, patient_id = 3, state_id = 3)
-test_obs_index(strategy_id = 1, line = 2, patient_id = 2, state_id = 2)
-test_obs_index(strategy_id = 1, line = 3, patient_id = 1, state_id = 1)
-test_obs_index(strategy_id = 1, line = 3, patient_id = 1, state_id = 2)
-test_obs_index(strategy_id = 1, line = 3, patient_id = 2, state_id = 2)
+test_obs_index(strategy_idx = 2, line_idx = 1, patient_idx = 1, state_idx = 3)
+test_obs_index(strategy_idx = 2, line_idx = 1, patient_idx = 3, state_idx = 3)
+test_obs_index(strategy_idx = 1, line_idx = 2, patient_idx = 2, state_idx = 2)
+test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 1, state_idx = 1)
+test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 1, state_idx = 2)
+test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 2, state_idx = 2)
 
 # strategy_id + line + patient_id + transition_id
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
@@ -57,17 +56,18 @@ expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patient
 f <- formula_list(~ age)
 input_dat <- create_input_data(f, expanded_hesim_dat)
 
-test_obs_index <- function(strategy_id, line, patient_id, transition_id){
-  R_index <- which(input_dat$strategy_id == strategy_id & input_dat$line == line & 
-         input_dat$patient_id == patient_id & input_dat$transition_id == transition_id)
-  C_index <- hesim:::C_test_obs_index(input_dat, strategy_id = strategy_id - 1,
-                         line = line - 1, patient_id = patient_id - 1, health_id = transition_id - 1)
+test_obs_index <- function(strategy_idx, line_idx, patient_idx, transition_idx){
+  R_index <- which(input_dat$strategy_id == strategy_idx & input_dat$line == line_idx & 
+         input_dat$patient_id == patient_idx & input_dat$transition_id == transition_idx)
+  C_index <- hesim:::C_test_obs_index(input_dat, strategy_index = strategy_idx - 1,
+                         line_index = line_idx - 1, patient_index = patient_idx - 1,
+                         health_index = transition_idx - 1)
   expect_equal(R_index - 1, C_index)
 }
 
-test_obs_index(strategy_id = 1, line = 3, patient_id = 1, transition_id = 1)
-test_obs_index(strategy_id = 2, line = 1, patient_id = 1, transition_id = 3)
-test_obs_index(strategy_id = 1, line = 3, patient_id = 2, transition_id = 2)
+test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 1, transition_idx = 1)
+test_obs_index(strategy_idx = 2, line_idx = 1, patient_idx = 1, transition_idx = 3)
+test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 2, transition_idx = 2)
 
 # strategy_id + line + patient_id
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
@@ -75,17 +75,17 @@ expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patient
 f <- formula_list(~ age)
 input_dat <- create_input_data(f, expanded_hesim_dat)
 
-test_obs_index <- function(strategy_id, line, patient_id){
-  R_index <- which(input_dat$strategy_id == strategy_id & input_dat$line == line & 
-                   input_dat$patient_id == patient_id)
-  C_index <- hesim:::C_test_obs_index(input_dat, strategy_id = strategy_id - 1,
-                                       line = line - 1, patient_id = patient_id - 1)
+test_obs_index <- function(strategy_idx, line_idx, patient_idx){
+  R_index <- which(input_dat$strategy_id == strategy_idx & input_dat$line == line_idx & 
+                   input_dat$patient_id == patient_idx)
+  C_index <- hesim:::C_test_obs_index(input_dat, strategy_index = strategy_idx - 1,
+                                       line_index = line_idx - 1, patient_index = patient_idx - 1)
   expect_equal(R_index - 1, C_index)
 }
 
-test_obs_index(strategy_id = 1, line = 3, patient_id = 1)
-test_obs_index(strategy_id = 2, line = 1, patient_id = 1)
-test_obs_index(strategy_id = 1, line = 3, patient_id = 2)
+test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 1)
+test_obs_index(strategy_idx = 2, line_idx = 1, patient_idx = 1)
+test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 2)
 
 # strategy_id + patient_id + state_id
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
@@ -93,60 +93,77 @@ expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patient
 f <- formula_list(~ age)
 input_dat <- create_input_data(f, expanded_hesim_dat)
 
-test_obs_index <- function(strategy_id, patient_id, state_id){
-  R_index <- which(input_dat$strategy_id == strategy_id &  input_dat$patient_id == patient_id &
-                   input_dat$state_id == state_id)
-  C_index <- hesim:::C_test_obs_index(input_dat, strategy_id = strategy_id - 1,
-                                      patient_id = patient_id - 1, health_id = state_id - 1)
+test_obs_index <- function(strategy_idx, patient_idx, state_idx){
+  R_index <- which(input_dat$strategy_id == strategy_idx &  input_dat$patient_id == patient_idx &
+                   input_dat$state_id == state_idx)
+  C_index <- hesim:::C_test_obs_index(input_dat, strategy_index = strategy_idx - 1,
+                                      patient_index = patient_idx - 1, health_index = state_idx - 1)
   expect_equal(R_index - 1, C_index)
 }
 
-test_obs_index(strategy_id = 1, patient_id = 1, state_id = 2)
-test_obs_index(strategy_id = 2, patient_id = 1, state_id = 3)
-test_obs_index(strategy_id = 1, patient_id = 2, state_id = 1)
+test_obs_index(strategy_idx = 1, patient_idx = 1, state_idx = 2)
+test_obs_index(strategy_idx = 2, patient_idx = 1, state_idx = 3)
+test_obs_index(strategy_idx = 1, patient_idx = 2, state_idx = 1)
 
 # strategy_id + patient_id 
 expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
 f <- formula_list(~ age)
 input_dat <- create_input_data(f, expanded_hesim_dat)
 
-test_obs_index <- function(strategy_id, patient_id){
-  R_index <- which(input_dat$strategy_id == strategy_id &  input_dat$patient_id == patient_id)
-  C_index <- hesim:::C_test_obs_index(input_dat, strategy_id = strategy_id - 1,
-                                        patient_id = patient_id - 1)
+test_obs_index <- function(strategy_idx, patient_idx){
+  R_index <- which(input_dat$strategy_id == strategy_idx &  input_dat$patient_id == patient_idx)
+  C_index <- hesim:::C_test_obs_index(input_dat, strategy_index = strategy_idx - 1,
+                                        patient_index = patient_idx - 1)
   expect_equal(R_index - 1, C_index)
 }
 
-test_obs_index(strategy_id = 1, patient_id = 1)
-test_obs_index(strategy_id = 1, patient_id = 2)
-test_obs_index(strategy_id = 1, patient_id = 3)
-test_obs_index(strategy_id = 2, patient_id = 1)
-test_obs_index(strategy_id = 2, patient_id = 2)
-test_obs_index(strategy_id = 2, patient_id = 3)
+test_obs_index(strategy_idx = 1, patient_idx = 1)
+test_obs_index(strategy_idx = 1, patient_idx = 2)
+test_obs_index(strategy_idx = 1, patient_idx = 3)
+test_obs_index(strategy_idx = 2, patient_idx = 1)
+test_obs_index(strategy_idx = 2, patient_idx = 2)
+test_obs_index(strategy_idx = 2, patient_idx = 3)
+
+# ID getters  
+dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))$data
+input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
+                     strategy_id = dat$strategy_id,
+                     n_strategies = length(unique(dat$strategy_id)),
+                     patient_id = dat$patient_id,
+                     n_patients = length(unique(dat$patient_id)),
+                     state_id = dat$state_id,
+                     n_states = length(unique(dat$state_id)))
+strategy_idx <- 1
+line_idx <- 1
+patient_idx <- 2
+health_idx <- 1
+obs <- hesim:::C_test_obs_index(input_dat, strategy_index = strategy_idx - 1,
+                                line_index = line_idx - 1,
+                                patient_index = patient_idx - 1,
+                                health_index = health_idx - 1)
+test_obs_id <- function(strategy_idx, line_idx, patient_idx, health_idx, member){
+  obs <- hesim:::C_test_obs_index(input_dat, strategy_index = strategy_idx - 1,
+                                line_index = line_idx - 1,
+                                patient_index = patient_idx - 1,
+                                health_index = health_idx - 1)
+  R_id <- input_dat[[member]][obs + 1]
+  C_id <- hesim:::C_test_obs_index_ids(input_dat, strategy_index = strategy_idx - 1,
+                             line_index = line_idx - 1,
+                             patient_index = patient_idx - 1,
+                             health_index = health_idx - 1,
+                             member)
+  expect_equal(R_id, C_id)
+}
+test_obs_id(strategy_idx = 2, line_idx = 1, patient_idx = 3, health_idx = 2, "strategy_id")
+expect_error(test_obs_id(strategy_idx = 2, line_idx = 1, patient_idx = 3, health_idx = 2, "line"))
+test_obs_id(strategy_idx = 2, line_idx = 1, patient_idx = 3, health_idx = 2, "patient_id")
+test_obs_id(strategy_idx = 1, line_idx = 1, patient_idx = 2, health_idx = 2, "patient_id")
+test_obs_id(strategy_idx = 1, line_idx = 1, patient_idx = 2, health_idx = 1, "state_id")
+test_obs_id(strategy_idx = 1, line_idx = 1, patient_idx = 2, health_idx = 2, "state_id")
+test_obs_id(strategy_idx = 1, line_idx = 1, patient_idx = 2, health_idx = 3, "state_id")
+
 
 }) # end test obs_index
-
-# obs_ids ----------------------------------------------------------------------
-test_that("obs_ids", {
-  dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))$data
-  input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
-                       strategy_id = dat$strategy_id,
-                       n_strategies = length(unique(dat$strategy_id)),
-                       patient_id = dat$patient_id,
-                       n_patients = length(unique(dat$patient_id)),
-                       state_id = dat$state_id,
-                       n_states = length(unique(dat$state_id)))
-  expect_equal(hesim:::C_test_obs_ids(input_dat, "strategy_id"),
-               input_dat$strategy_id)
-  expect_equal(hesim:::C_test_obs_ids(input_dat, "line"),
-               integer())
-  expect_equal(hesim:::C_test_obs_ids(input_dat, "patient_id"),
-               input_dat$patient_id)
-  expect_equal(hesim:::C_test_obs_ids(input_dat, "state_id"),
-               input_dat$state_id)
-  expect_equal(hesim:::C_test_obs_ids(input_dat, "transition_id"),
-               integer())
-})
 
 
 # TimeFun ----------------------------------------------------------------------

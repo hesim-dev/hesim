@@ -39,11 +39,11 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
    // Loop
   for (int s = 0; s < n_samples; ++s){
     for (int k = 0; k < n_strategies; ++k){
-      transmod->obs_index_.set_strategy_id(k);
+      transmod->obs_index_.set_strategy_index(k);
         for (int j = 0; j < n_lines[k]; ++j){
-          transmod->obs_index_.set_line(j);
+          transmod->obs_index_.set_line_index(j);
           for (int i = 0; i < n_patients; ++i){
-            transmod->obs_index_.set_patient_id(i);
+            transmod->obs_index_.set_patient_index(i);
             patient.age_ = start_ages[i];
             patient.time_ = 0;
             patient.state_ = start_state;

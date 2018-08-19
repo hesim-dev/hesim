@@ -25,11 +25,11 @@ Rcpp::DataFrame C_ctstm_summary(Rcpp::Environment R_CtstmTrans,
   int counter = 0;
   for (int s = 0; s < n_samples; ++s) { // samples loop
     for (int k = 0; k < n_strategies; ++k) { // strategies loop
-      transmod->obs_index_.set_strategy_id(k);
+      transmod->obs_index_.set_strategy_index(k);
       for (int j = 0; j < n_lines[k]; ++j) { // lines loop
-        transmod->obs_index_.set_line(j);
+        transmod->obs_index_.set_line_index(j);
         for (int i = 0; i < n_patients; ++i) { // patients loop
-          transmod->obs_index_.set_patient_id(i);
+          transmod->obs_index_.set_patient_index(i);
           for (int h = 0; h < n_trans; ++h) { // transitions loop
             
             // summarize multi-state model

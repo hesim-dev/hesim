@@ -28,30 +28,30 @@ SEXP C_test_xptr_test_time_fun(Rcpp::List L) {
  */
 // [[Rcpp::export]]
 int C_test_obs_index(Rcpp::List R_input_data,
-                 int strategy_id,
-                 int patient_id,
-                 int line = -1,
-                 int health_id = -1){
+                 int strategy_index,
+                 int patient_index,
+                 int line_index = -1,
+                 int health_index = -1){
   hesim::statmods::obs_index obs_index(R_input_data);
-  if (line == -1 && health_id == -1){
-    obs_index.set_strategy_id(strategy_id);
-    obs_index.set_patient_id(patient_id);
+  if (line_index == -1 && health_index == -1){
+    obs_index.set_strategy_index(strategy_index);
+    obs_index.set_patient_index(patient_index);
     return obs_index();  
   }
-  else if (line == -1){
-    obs_index.set_strategy_id(strategy_id);
-    obs_index.set_patient_id(patient_id);
-    obs_index.set_health_id(health_id);
+  else if (line_index == -1){
+    obs_index.set_strategy_index(strategy_index);
+    obs_index.set_patient_index(patient_index);
+    obs_index.set_health_index(health_index);
     return obs_index();  
   }
-  else if (health_id == -1){
-    obs_index.set_strategy_id(strategy_id);
-    obs_index.set_patient_id(patient_id);
-    obs_index.set_line(line);
+  else if (health_index == -1){
+    obs_index.set_strategy_index(strategy_index);
+    obs_index.set_patient_index(patient_index);
+    obs_index.set_line_index(line_index);
     return obs_index();
   }
   else{
-   return obs_index(strategy_id, line, patient_id, health_id);
+   return obs_index(strategy_index, line_index, patient_index, health_index);
   }
 }
 
@@ -59,21 +59,31 @@ int C_test_obs_index(Rcpp::List R_input_data,
  * \ingroup test
  */
 // [[Rcpp::export]]
-std::vector<int> C_test_obs_ids(Rcpp::List R_input_data, std::string member){
-  hesim::statmods::obs_ids obs_ids(R_input_data);
+int C_test_obs_index_ids(Rcpp::List R_input_data,
+                                      int strategy_index,
+                                      int patient_index,
+                                      int line_index,
+                                      int health_index,
+                                      std::string member){
+  hesim::statmods::obs_index obs_index(R_input_data);
+  obs_index.set_strategy_index(strategy_index);
+  obs_index.set_patient_index(patient_index);
+  obs_index.set_line_index(line_index);
+  obs_index.set_health_index(health_index);
+  
   if (member == "strategy_id"){
-    return obs_ids.strategy_id_;
+    return obs_index.get_strategy_id();
   }
   else if (member == "line"){
-    return obs_ids.line_;
+    return obs_index.get_line();
   }
   else if (member == "patient_id"){
-    return obs_ids.patient_id_;
+    return obs_index.get_patient_id();
   } 
-  else if (member == "state_id"){
-    return obs_ids.state_id_;
-  }
   else {
-    return obs_ids.transition_id_;
+    return obs_index.get_health_id();
   }
 }
+
+
+

@@ -143,7 +143,6 @@ psm_utility <- StateVals$new(data = psm_utility_data,
 psm <- Psm$new(survival_models = psm_curves,
                utility_model = psm_utility,
                cost_models = list(medical = psm_costs_medical))
-times <- seq(0, 5, .05)
 psm$sim_survival(t = seq(0, 5, .05))
 psm$sim_stateprobs()
 psm$sim_costs(dr = .03)

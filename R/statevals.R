@@ -1,3 +1,39 @@
+# params_statevals -------------------------------------------------------------
+#' Parameters for state values
+#' 
+#' Parameters that are used to simulate values assigned to health states with
+#'  \code{\link{StateVals}}.
+#' @param values Typically a matrix where each column denotes a health state and each
+#' row denotes a random sample of the value assigned to that health state for the
+#' probabilistic sensitivitiy analysis. If health state values vary by strategy, then
+#' it can be an array of matrices where each matrix denotes the values associated with
+#' a different treatment strategy. 
+#' @param timefun An R function that can be used to modify \code{values} as a function
+#' of time. 
+#' 
+#' @return An object of class "params_statevals", which is a list containing \code{values} and
+#' \code{timefun}.
+#' @examples 
+#' # Cost estimates in 2 health states
+#' gamma_params <- mom_gamma(c(5000, 7000), c(1000, 1200))
+#' n <- 1000
+#' vals <- matrix(rgamma(2 * n, 
+#'                       shape = gamma_params$shape, 
+#'                       scale = gamma_params$scale),
+#'                nrow = n, ncol = 2, byrow = TRUE)
+#' params_stvals <- params_statevals(values = vals)
+#' print(params_stvals)
+#'
+#' @export
+params_statevals <- function(values, timefun = NULL){
+  if(!is.matrix(values) | !is.array(values)){
+    stop("'values' must be a matrix or an array.")
+  }
+  l <- list(values = values, timefun = timefun)
+  class(l) <- "params_statevals"
+  return(l)
+}
+
 # PartSurvStateVals ------------------------------------------------------------
 #' Create \code{StateVals} object
 #' 

@@ -41,6 +41,21 @@ inline time_fun* get_time_fun(Rcpp::List R_input_data){
  ******************************************************************************/ 
 class obs_index {
 private:
+  // The current observation index
+  int index_;
+  
+  // Vector of IDs
+  std::vector<int> strategy_id_vec_; ///< Vector of strategy IDs.
+  std::vector<int> line_vec_; ///< Vector of treatment lines.
+  std::vector<int> patient_id_vec_; ///< Vector of patient IDs.
+  std::vector<int> health_id_vec_; ///< Vector of health IDs.
+  
+  // Current strategy index
+  int strategy_index_; ///< Strategy index used to select observation.
+  int line_index_; ///< Line index used to select observation.
+  int patient_index_; ///< Patient index used to select observation.
+  int health_index_; ///< Health index used to select observation.  
+  
   std::vector<int> cum_strategy_sizes_; ///< Cumulative number of observations for first @c n-1 strategies
                                         ///< where @c n is the total number of strategies. First element is
                                         ///< equal to 0. Used to get row index since that number of rows
@@ -50,10 +65,10 @@ private:
                           
   /** 
    * Initialize @c n_lines_.
-   * Initialize the number of treatment lines from @c R object @c input_data.
-   * @param[in] R_input_data The @c R object @c input_data.
-   * @param[in] n_strategies The number of strategies based on @c n_strategies_.
-   * @param[out] n_lines_ The private member @c n_lines_.
+   * Initialize the number of treatment lines (@c n_lines_) from @c R object @c input_data.
+   * @param R_input_data The @c R object @c input_data.
+   * @param n_strategies The number of strategies based on @c n_strategies_.
+   * @return None.
    */  
   void init_n_lines_(Rcpp::List R_input_data, int n_strategies) {
     if(R_input_data.containsElementNamed("n_lines")){
@@ -69,6 +84,7 @@ private:
   /** 
    * Initialize @c cum_strategy_sizes_
    * @param[out] cum_strategy_sizes_ The private member @c cum_strategy_sizes_.
+   * @return None.
    */    
   void init_cum_strategy_sizes_() {
     cum_strategy_sizes_.reserve(n_strategies_);
@@ -83,6 +99,7 @@ private:
   /** 
    * Initialize @c n_healthvals_
    * @param[out] n_healthvals_ The private member @c n_healthvals_.
+   * @return None.
    */     
   void init_n_healthvals_(Rcpp::List R_input_data) {
     if(R_input_data.containsElementNamed("n_states") && R_input_data.containsElementNamed("n_transitions")){
@@ -102,6 +119,7 @@ private:
   /** 
    * Initialize the number of observations.
    * @param[out] n_obs_ The private member @c n_obs_.
+   * @return None.
    */   
   void init_n_obs_() {
     n_obs_ = 0;
@@ -110,12 +128,22 @@ private:
     }
   }
   
-public:
-  int strategy_id_; ///< Strategy id used to select observation.
-  int line_; ///< Line used to select observation.
-  int patient_id_; ///< Patient id used to select observation.
-  int health_id_; ///< Health id used to select observation.
+  /** 
+   * Set the observation index 
+   * Set the observation index given current values of strategy_index_,
+   * line_index_, patient_index_, and health_index_.
+   * @return None.
+   */     
+  void set_index(){
+    int strategy_row = line_index_ * n_patients_ * n_healthvals_ +
+                       patient_index_ * n_healthvals_ +
+                       health_index_;
+    index_ = strategy_row + cum_strategy_size_;
+  }  
   
+public:
+  
+  // Size of each dimension
   int n_strategies_; ///< Number of treatment strategies.
   std::vector<int> n_lines_; ///< Number of treatment lines for each treatment strategy.
   int n_healthvals_; ///< Number of unique health values (i.e., states, transitions).
@@ -127,85 +155,138 @@ public:
    * Instantiates an input data object. 
    */  
   obs_index(Rcpp::List R_input_data){
+    // Size of each dimension
     n_strategies_ = Rcpp::as<int> (R_input_data["n_strategies"]);
     init_n_lines_(R_input_data, n_strategies_);
     init_n_healthvals_(R_input_data);
     n_patients_ = Rcpp::as<int> (R_input_data["n_patients"]);
     init_n_obs_();
+    
     init_cum_strategy_sizes_();
-    strategy_id_ = 0;
-    line_ = 0;
-    patient_id_ = 0;
-    health_id_ = 0;
+    
+    // Current index
+    strategy_index_ = 0;
+    line_index_ = 0;
+    patient_index_ = 0;
+    health_index_ = 0;
+    index_ = 0;
+    
+    // ID vectors
+    strategy_id_vec_ = Rcpp::as<std::vector<int> >(R_input_data["strategy_id"]);
+    if (R_input_data.containsElementNamed("line")){
+      line_vec_ = Rcpp::as<std::vector<int> >(R_input_data["line"]);
+    }
+    patient_id_vec_ = Rcpp::as<std::vector<int> >(R_input_data["patient_id"]);
+    if (R_input_data.containsElementNamed("transition_id") &&
+        R_input_data.containsElementNamed("state_id")){
+      Rcpp::stop("'transition_id' and 'state_id' cannot both be specified.");
+    }
+    if (R_input_data.containsElementNamed("transition_id")){
+     health_id_vec_ = Rcpp::as<std::vector<int> >(R_input_data["transition_id"]); 
+    }
+    if (R_input_data.containsElementNamed("state_id")){
+     health_id_vec_ = Rcpp::as<std::vector<int> >(R_input_data["state_id"]); 
+    }
+    
   }
   
   /** 
-   * Set the strategy id.
+   * Set the strategy index.
    */    
-  void set_strategy_id(int strategy_id) {
-    strategy_id_ = strategy_id;
-    cum_strategy_size_ = cum_strategy_sizes_.at(strategy_id_);
-  }
-
-  /** 
-   * Set the treatment line.
-   */      
-  void set_line(int line) {
-    line_ = line;
+  void set_strategy_index(int strategy_index) {
+    strategy_index_ = strategy_index;
+    cum_strategy_size_ = cum_strategy_sizes_.at(strategy_index_);
+    set_index();
   }
   
   /** 
-   * Set the patient id.
-   */   
-  void set_patient_id(int patient_id) {
-    patient_id_ = patient_id;
+   * Get the strategy ID given the current indices
+   */    
+  int get_strategy_id(){
+    return strategy_id_vec_[index_];
   }
+  
+  /** 
+   * Set the treatment line index.
+   */      
+  void set_line_index(int line_index) {
+    line_index_ = line_index;
+    set_index();
+  }
+  
+ /** 
+   * Get the treatment line given the current indices
+   */    
+  int get_line(){
+      if (line_vec_.size() != n_obs_){
+        Rcpp::stop("There is no 'line' in 'input_data'.");
+      }    
+    return line_vec_[index_];
+  }
+  
+  /** 
+   * Set the patient index.
+   */   
+  void set_patient_index(int patient_index) {
+    patient_index_ = patient_index;
+    set_index();
+  }
+  
+   /** 
+     * Get the patient ID given the current indices
+     */    
+    int get_patient_id(){
+      return patient_id_vec_[index_];
+    }  
 
   /** 
-   * Set the health id.
+   * Set the health index.
    */     
-  void set_health_id(int health_id) {
-    health_id_ = health_id;
+  void set_health_index(int health_index) {
+    health_index_ = health_index;
+    set_index();
   }
+  
+   /** 
+     * Get the health ID given the current indices
+     */    
+    int get_health_id(){
+      if (health_id_vec_.size() != n_obs_){
+        Rcpp::stop("The is no 'health_id' in 'input_data'.");
+      }
+      return health_id_vec_[index_];
+    }    
   
   /** 
    * The observation index.
-   * Computes the row index of a matrix sorted by strategy_id, line,
+   * Computes the row index of a matrix sorted by strategy_index_, line,
    * patient_id, and line based on the current member variable.
    * @return The index.
    */ 
   int operator()() const {
-    int strategy_row = line_ * n_patients_ * n_healthvals_ +
-                       patient_id_ * n_healthvals_ +
-                       health_id_;
-    return strategy_row + cum_strategy_size_; 
+    return index_;
   }  
   
   /** 
    * The observation index.
-   * Computes the row index of a matrix sorted by strategy_id, line,
-   * patient_id, and line based on values pass to the function; member
-   * variables are updated based on these values.
-   * @param[in] strategy_id The strategy id.
-   * @param[in] line The treatment line.
-   * @param[in] patient_id The patient id.
-   * @param[in] health_id The health id.
-   * @param[out] strategy_id_ The member variable denoting the strategy id.
-   * @param[out] line_ Tee member variable denoting the treatment line.
-   * @param[out] patient_id_ The member variable denoting the patient id.
-   * @param[out] health_id_ The member variable denoting the health id.
+   * Computes the row index of a matrix sorted by strategy_index_, line_,
+   * patient_id, and health_id based on values pass to the function; member
+   * variables are updated based on these values. Updates the values of 
+   * strategy_index_, line_index_, patient_index_, health_index_, and index_. 
+   * @param strategy_index The strategy index.
+   * @param line_index The treatment line index.
+   * @param patient_index The patient index.
+   * @param health_index The health index.
    * @return The index.
    */ 
-  int operator()(int strategy_id, int line, int patient_id, int health_id) {
-    strategy_id_ = strategy_id;
-    line_ = line;
-    patient_id_ = patient_id;
-    health_id_ = health_id;
-    int strategy_row = line * n_patients_ * n_healthvals_ +
-                       patient_id * n_healthvals_ +
-                       health_id;
-    cum_strategy_size_ = cum_strategy_sizes_.at(strategy_id);
-    return strategy_row + cum_strategy_size_;  
+  int operator()(int strategy_index, int line_index, int patient_index, int health_index) {
+    strategy_index_ = strategy_index;
+    line_index_ = line_index;
+    patient_index_ = patient_index;
+    health_index_ = health_index;
+    cum_strategy_size_ = cum_strategy_sizes_.at(strategy_index_);
+    set_index();
+    return index_;  
   }  
 };
 

@@ -57,8 +57,8 @@ C_psm_curves_summary <- function(R_PsmCurves, x, type, dr) {
     .Call('_hesim_C_psm_curves_summary', PACKAGE = 'hesim', R_PsmCurves, x, type, dr)
 }
 
-C_psm_sim_stateprobs <- function(R_Psm) {
-    .Call('_hesim_C_psm_sim_stateprobs', PACKAGE = 'hesim', R_Psm)
+C_psm_sim_stateprobs <- function(R_psm_survival, n_samples, n_strategies, n_patients, n_states, n_times) {
+    .Call('_hesim_C_psm_sim_stateprobs', PACKAGE = 'hesim', R_psm_survival, n_samples, n_strategies, n_patients, n_states, n_times)
 }
 
 C_psm_sim_wlos <- function(R_Psm, R_stateprobs, dr, type, categories) {
@@ -97,12 +97,12 @@ C_test_xptr_test_time_fun <- function(L) {
     .Call('_hesim_C_test_xptr_test_time_fun', PACKAGE = 'hesim', L)
 }
 
-C_test_obs_index <- function(R_input_data, strategy_id, patient_id, line = -1L, health_id = -1L) {
-    .Call('_hesim_C_test_obs_index', PACKAGE = 'hesim', R_input_data, strategy_id, patient_id, line, health_id)
+C_test_obs_index <- function(R_input_data, strategy_index, patient_index, line_index = -1L, health_index = -1L) {
+    .Call('_hesim_C_test_obs_index', PACKAGE = 'hesim', R_input_data, strategy_index, patient_index, line_index, health_index)
 }
 
-C_test_obs_ids <- function(R_input_data, member) {
-    .Call('_hesim_C_test_obs_ids', PACKAGE = 'hesim', R_input_data, member)
+C_test_obs_index_ids <- function(R_input_data, strategy_index, patient_index, line_index, health_index, member) {
+    .Call('_hesim_C_test_obs_index_ids', PACKAGE = 'hesim', R_input_data, strategy_index, patient_index, line_index, health_index, member)
 }
 
 test_quad_functor <- function(lower, upper) {

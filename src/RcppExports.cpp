@@ -207,13 +207,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_psm_sim_stateprobs
-Rcpp::List C_psm_sim_stateprobs(Rcpp::Environment R_Psm);
-RcppExport SEXP _hesim_C_psm_sim_stateprobs(SEXP R_PsmSEXP) {
+Rcpp::List C_psm_sim_stateprobs(Rcpp::DataFrame R_psm_survival, int n_samples, int n_strategies, int n_patients, int n_states, int n_times);
+RcppExport SEXP _hesim_C_psm_sim_stateprobs(SEXP R_psm_survivalSEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP n_patientsSEXP, SEXP n_statesSEXP, SEXP n_timesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_Psm(R_PsmSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_psm_sim_stateprobs(R_Psm));
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_psm_survival(R_psm_survivalSEXP);
+    Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_strategies(n_strategiesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_patients(n_patientsSEXP);
+    Rcpp::traits::input_parameter< int >::type n_states(n_statesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_times(n_timesSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_psm_sim_stateprobs(R_psm_survival, n_samples, n_strategies, n_patients, n_states, n_times));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -329,29 +334,33 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_test_obs_index
-int C_test_obs_index(Rcpp::List R_input_data, int strategy_id, int patient_id, int line, int health_id);
-RcppExport SEXP _hesim_C_test_obs_index(SEXP R_input_dataSEXP, SEXP strategy_idSEXP, SEXP patient_idSEXP, SEXP lineSEXP, SEXP health_idSEXP) {
+int C_test_obs_index(Rcpp::List R_input_data, int strategy_index, int patient_index, int line_index, int health_index);
+RcppExport SEXP _hesim_C_test_obs_index(SEXP R_input_dataSEXP, SEXP strategy_indexSEXP, SEXP patient_indexSEXP, SEXP line_indexSEXP, SEXP health_indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type R_input_data(R_input_dataSEXP);
-    Rcpp::traits::input_parameter< int >::type strategy_id(strategy_idSEXP);
-    Rcpp::traits::input_parameter< int >::type patient_id(patient_idSEXP);
-    Rcpp::traits::input_parameter< int >::type line(lineSEXP);
-    Rcpp::traits::input_parameter< int >::type health_id(health_idSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_obs_index(R_input_data, strategy_id, patient_id, line, health_id));
+    Rcpp::traits::input_parameter< int >::type strategy_index(strategy_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type patient_index(patient_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type line_index(line_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type health_index(health_indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_obs_index(R_input_data, strategy_index, patient_index, line_index, health_index));
     return rcpp_result_gen;
 END_RCPP
 }
-// C_test_obs_ids
-std::vector<int> C_test_obs_ids(Rcpp::List R_input_data, std::string member);
-RcppExport SEXP _hesim_C_test_obs_ids(SEXP R_input_dataSEXP, SEXP memberSEXP) {
+// C_test_obs_index_ids
+int C_test_obs_index_ids(Rcpp::List R_input_data, int strategy_index, int patient_index, int line_index, int health_index, std::string member);
+RcppExport SEXP _hesim_C_test_obs_index_ids(SEXP R_input_dataSEXP, SEXP strategy_indexSEXP, SEXP patient_indexSEXP, SEXP line_indexSEXP, SEXP health_indexSEXP, SEXP memberSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type R_input_data(R_input_dataSEXP);
+    Rcpp::traits::input_parameter< int >::type strategy_index(strategy_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type patient_index(patient_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type line_index(line_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type health_index(health_indexSEXP);
     Rcpp::traits::input_parameter< std::string >::type member(memberSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_obs_ids(R_input_data, member));
+    rcpp_result_gen = Rcpp::wrap(C_test_obs_index_ids(R_input_data, strategy_index, patient_index, line_index, health_index, member));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -467,7 +476,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 7},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 4},
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},
-    {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 1},
+    {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 6},
     {"_hesim_C_psm_sim_wlos", (DL_FUNC) &_hesim_C_psm_sim_wlos, 5},
     {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
     {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
@@ -478,7 +487,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_rtruncnorm", (DL_FUNC) &_hesim_C_test_rtruncnorm, 4},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
     {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
-    {"_hesim_C_test_obs_ids", (DL_FUNC) &_hesim_C_test_obs_ids, 2},
+    {"_hesim_C_test_obs_index_ids", (DL_FUNC) &_hesim_C_test_obs_index_ids, 6},
     {"_hesim_test_quad_functor", (DL_FUNC) &_hesim_test_quad_functor, 2},
     {"_hesim_test_quad_lambda", (DL_FUNC) &_hesim_test_quad_lambda, 2},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},

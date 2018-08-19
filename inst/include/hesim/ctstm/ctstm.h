@@ -254,12 +254,12 @@ public:
   
   std::vector<double> summary(int trans, int sample, std::vector<double> t, 
                               std::string type) {
-    obs_index_.set_health_id(trans);
+    obs_index_.set_health_index(trans);
     return survmod_.summary(sample, obs_index_(), t, type);
   }
   
   double random(int trans, int sample) {
-    obs_index_.set_health_id(trans);
+    obs_index_.set_health_index(trans);
     return survmod_.random(sample, obs_index_());
   }
     

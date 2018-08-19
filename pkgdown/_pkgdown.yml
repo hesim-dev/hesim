@@ -36,6 +36,7 @@ reference:
     contents:
       - StateVals
       - create_StateVals
+      - params_statevals
   - title: "Partitioned survival model"
     contents:
       - Psm

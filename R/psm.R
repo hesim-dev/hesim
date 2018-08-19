@@ -117,17 +117,17 @@ Psm <- R6::R6Class("Psm",
                            costs = self$cost_models,
                            qalys = list(self$utility_model))
       
-      statvalmods.name <- switch(type,
+      statvalmods_name <- switch(type,
                                 costs = "cost_models",
                                 qalys = "utility_model")
       
       # Check number of samples
-      expected.samples <- max(self$stateprobs_$sample)
+      expected_samples <- max(self$stateprobs_$sample)
       for (i in 1:length(statvalmods)){
-        if (statvalmods[[i]]$params$n_samples != expected.samples){
-          msg <- paste0("Number of samples in '", statvalmods.name, "' must equal to ",
+        if (statvalmods[[i]]$params$n_samples != expected_samples){
+          msg <- paste0("Number of samples in '", statvalmods_name, "' must equal to ",
                         " the number of samples in 'survival_models', which is ",
-                         expected.samples)
+                         expected_samples)
           stop(msg, call. = FALSE)
         }
       }
@@ -136,7 +136,7 @@ Psm <- R6::R6Class("Psm",
       for (i in 1:length(statvalmods)){
         if(self$n_states != statvalmods[[i]]$data$n_states + 1){
           msg <- paste0("The number of survival models must equal the number of states in '",
-                        statvalmods.name, "' - 1.")
+                        statvalmods_name, "' - 1.")
           stop(msg, call. = FALSE)
         }
       } # loop over models
@@ -154,10 +154,7 @@ Psm <- R6::R6Class("Psm",
       } # end if/else costs vs. qalys
 
       res <- data.table(C_psm_sim_wlos(self, stateprobs, dr, type, categories))
-      res[, state_id := state_id + 1]
       res[, sample := sample + 1]
-      res[, strategy_id := strategy_id + 1]
-      res[, patient_id := patient_id + 1]
       return(res[])
     } # end sim_wlos()
   ), # end private
@@ -237,10 +234,15 @@ Psm <- R6::R6Class("Psm",
         stop("You must first simulate survival curves using '$sim_survival'.",
             call. = FALSE)
       }
-      res <- C_psm_sim_stateprobs(self)
-      prop.cross <- res$n_crossings/nrow(res$stateprobs)
-      if (prop.cross > 0){
-        warning(paste0("Survival curves crossed ", prop.cross * 100, 
+      res <- C_psm_sim_stateprobs(self$survival_,
+                                  n_samples = self$survival_models$params[[1]]$n_samples,
+                                  n_strategies = self$survival_models$data$n_strategies,
+                                  n_patients = self$survival_models$data$n_patients,
+                                  n_states = self$n_states,
+                                  n_times = length(self$t_))
+      prop_cross <- res$n_crossings/nrow(res$stateprobs)
+      if (prop_cross > 0){
+        warning(paste0("Survival curves crossed ", round(prop_cross * 100, 2), 
                        " percent of the time."),
                 call. = FALSE)
       }
