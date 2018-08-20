@@ -227,23 +227,22 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 <span class='no'>psm</span> <span class='kw'>&lt;-</span> <span class='no'>Psm</span>$<span class='fu'>new</span>(<span class='kw'>survival_models</span> <span class='kw'>=</span> <span class='no'>psm_curves</span>,
                <span class='kw'>utility_model</span> <span class='kw'>=</span> <span class='no'>psm_utility</span>,
                <span class='kw'>cost_models</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>medical</span> <span class='kw'>=</span> <span class='no'>psm_costs_medical</span>))
-<span class='no'>times</span> <span class='kw'>&lt;-</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>.05</span>)
 <span class='no'>psm</span>$<span class='fu'>sim_survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>.05</span>))
 <span class='no'>psm</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>psm</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
-<span class='fu'>head</span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id   dr category    costs
-#&gt; 1:        1      1           1          1 0.03  medical 20844.77
-#&gt; 2:        1      1           1          2 0.03  medical 19882.39
-#&gt; 3:        1      1           1          3 0.03  medical 19300.96
-#&gt; 4:        1      1           2          1 0.03  medical 20844.77
-#&gt; 5:        1      1           2          2 0.03  medical 19882.39
-#&gt; 6:        1      1           2          3 0.03  medical 19300.96</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id   dr category     qalys
-#&gt; 1:        1      1           1          1 0.03    qalys 0.4290719
-#&gt; 2:        1      1           1          2 0.03    qalys 0.4092621
-#&gt; 3:        1      1           1          3 0.03    qalys 0.3722579
-#&gt; 4:        1      1           2          1 0.03    qalys 0.4290719
-#&gt; 5:        1      1           2          2 0.03    qalys 0.4092621
-#&gt; 6:        1      1           2          3 0.03    qalys 0.3722579</div></pre>
+<span class='fu'>head</span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category    costs
+#&gt; 1:      1           1          1        1 0.03  medical 22234.54
+#&gt; 2:      1           1          1        2 0.03  medical 11287.38
+#&gt; 3:      1           1          1        3 0.03  medical 12321.46
+#&gt; 4:      1           1          2        1 0.03  medical 21075.97
+#&gt; 5:      1           1          2        2 0.03  medical 10881.95
+#&gt; 6:      1           1          2        3 0.03  medical 12287.82</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category     qalys
+#&gt; 1:      1           1          1        1 0.03    qalys 0.5284682
+#&gt; 2:      1           1          1        2 0.03    qalys 0.3641179
+#&gt; 3:      1           1          1        3 0.03    qalys 0.3307934
+#&gt; 4:      1           1          2        1 0.03    qalys 0.5009315
+#&gt; 5:      1           1          2        2 0.03    qalys 0.3510393
+#&gt; 6:      1           1          2        3 0.03    qalys 0.3298902</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

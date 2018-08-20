@@ -8,7 +8,7 @@ create_trans_dt(trans_mat)
 }
 \arguments{
 \item{trans_mat}{A transition matrix in the format from the \link[mstate]{mstate} package. 
-See \link{CtstmTrans}.}
+See \link{IndivCtstmTrans}.}
 }
 \value{
 Returns a \code{\link{data.table}} in tidy format with three columns

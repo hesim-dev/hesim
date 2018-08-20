@@ -148,6 +148,7 @@ struct disease_prog {
     strategy_id_ = Rcpp::as<std::vector<int> >(R_disease_prog["strategy_id"]);
     if(R_disease_prog.containsElementNamed("line")){
      line_ = Rcpp::as<std::vector<int> >(R_disease_prog["line"]); 
+     add_constant(line_, -1);  
     }
     else{
       line_ = std::vector<int>(sample_.size(), 0);
@@ -158,6 +159,11 @@ struct disease_prog {
     final_ = Rcpp::as<std::vector<int> >(R_disease_prog["final"]);
     time_start_ = Rcpp::as<std::vector<double> >(R_disease_prog["time_start"]);
     time_stop_ = Rcpp::as<std::vector<double> >(R_disease_prog["time_stop"]);
+    
+    // R to C++ indexing
+    add_constant(sample_, -1);
+    add_constant(from_, -1);
+    add_constant(to_, -1);
   };    
   
   /** 

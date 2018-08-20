@@ -36,7 +36,6 @@ reference:
     contents:
       - StateVals
       - create_StateVals
-      - params_statevals
   - title: "Partitioned survival model"
     contents:
       - Psm
@@ -44,8 +43,8 @@ reference:
       - create_PsmCurves
   - title: "Continuous time state transition models"
     contents:
-      - CtstmTrans
-      - create_CtstmTrans
+      - IndivCtstmTrans
+      - create_IndivCtstmTrans
       - IndivCtstm
   - title: "Cost-effectiveness analysis"
     contents:

@@ -162,8 +162,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_ctstm_indiv_stateprobs
-Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog, std::vector<double> t, int n_samples, int n_strategies, int n_states, int n_patients, int n_lines);
-RcppExport SEXP _hesim_C_ctstm_indiv_stateprobs(SEXP R_disease_progSEXP, SEXP tSEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP n_statesSEXP, SEXP n_patientsSEXP, SEXP n_linesSEXP) {
+Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog, std::vector<double> t, int n_samples, int n_strategies, std::vector<int> unique_strategy_id, std::vector<int> strategy_index, int n_states, int n_patients, int n_lines);
+RcppExport SEXP _hesim_C_ctstm_indiv_stateprobs(SEXP R_disease_progSEXP, SEXP tSEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP unique_strategy_idSEXP, SEXP strategy_indexSEXP, SEXP n_statesSEXP, SEXP n_patientsSEXP, SEXP n_linesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -171,24 +171,28 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type t(tSEXP);
     Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
     Rcpp::traits::input_parameter< int >::type n_strategies(n_strategiesSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type unique_strategy_id(unique_strategy_idSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type strategy_index(strategy_indexSEXP);
     Rcpp::traits::input_parameter< int >::type n_states(n_statesSEXP);
     Rcpp::traits::input_parameter< int >::type n_patients(n_patientsSEXP);
     Rcpp::traits::input_parameter< int >::type n_lines(n_linesSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_ctstm_indiv_stateprobs(R_disease_prog, t, n_samples, n_strategies, n_states, n_patients, n_lines));
+    rcpp_result_gen = Rcpp::wrap(C_ctstm_indiv_stateprobs(R_disease_prog, t, n_samples, n_strategies, unique_strategy_id, strategy_index, n_states, n_patients, n_lines));
     return rcpp_result_gen;
 END_RCPP
 }
 // C_indiv_ctstm_wlos
-std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog, Rcpp::Environment R_StateVal, double dr, std::string type);
-RcppExport SEXP _hesim_C_indiv_ctstm_wlos(SEXP R_disease_progSEXP, SEXP R_StateValSEXP, SEXP drSEXP, SEXP typeSEXP) {
+std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog, std::vector<int> strategy_idx, std::vector<int> patient_idx, Rcpp::Environment R_StateVal, double dr, std::string type);
+RcppExport SEXP _hesim_C_indiv_ctstm_wlos(SEXP R_disease_progSEXP, SEXP strategy_idxSEXP, SEXP patient_idxSEXP, SEXP R_StateValSEXP, SEXP drSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_disease_prog(R_disease_progSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type strategy_idx(strategy_idxSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type patient_idx(patient_idxSEXP);
     Rcpp::traits::input_parameter< Rcpp::Environment >::type R_StateVal(R_StateValSEXP);
     Rcpp::traits::input_parameter< double >::type dr(drSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_indiv_ctstm_wlos(R_disease_prog, R_StateVal, dr, type));
+    rcpp_result_gen = Rcpp::wrap(C_indiv_ctstm_wlos(R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -473,8 +477,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
     {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
     {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 6},
-    {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 7},
-    {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 4},
+    {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 9},
+    {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 6},
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},
     {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 6},
     {"_hesim_C_psm_sim_wlos", (DL_FUNC) &_hesim_C_psm_sim_wlos, 5},

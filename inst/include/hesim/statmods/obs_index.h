@@ -175,6 +175,9 @@ public:
     strategy_id_vec_ = Rcpp::as<std::vector<int> >(R_input_data["strategy_id"]);
     if (R_input_data.containsElementNamed("line")){
       line_vec_ = Rcpp::as<std::vector<int> >(R_input_data["line"]);
+    } 
+    else{
+      line_vec_ = std::vector<int>(strategy_id_vec_.size(), 0);
     }
     patient_id_vec_ = Rcpp::as<std::vector<int> >(R_input_data["patient_id"]);
     if (R_input_data.containsElementNamed("transition_id") &&
@@ -218,9 +221,6 @@ public:
    * Get the treatment line given the current indices
    */    
   int get_line(){
-      if (line_vec_.size() != n_obs_){
-        Rcpp::stop("There is no 'line' in 'input_data'.");
-      }    
     return line_vec_[index_];
   }
   

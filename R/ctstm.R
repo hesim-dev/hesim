@@ -1,144 +1,7 @@
 # CtstmTrans -------------------------------------------------------------------
-#' Create \code{CtstmTrans} object
-#' 
-#' \code{create_CtstmTrans} is a generic function for creating an object of class
-#' \code{\link{CtstmTrans}}.
-#' @param object A fitted statistical model. 
-#' @param data An object of class "expanded_hesim_data" returned by 
-#' \code{\link{expand_hesim_data}}.
-#' @param n Number of random observations of the parameters to draw.
-#' @param trans_mat The transition matrix describing the states and transitions in a 
-#' multi-state model in the format from the \link[mstate]{mstate} package. See \link{CtstmTrans}.
-#' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.
-#' @param ... Further arguments passed to \code{CtstmTrans$new()} in \code{\link{CtstmTrans}}.
-#' @return Returns an \code{\link{R6Class}} object of class \code{\link{CtstmTrans}}.
-#' @seealso \code{\link{CtstmTrans}}
-#' @name create_CtstmTrans
-#' @rdname create_CtstmTrans
-#' @export
-create_CtstmTrans <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
-  UseMethod("create_CtstmTrans", object)
-}
-
-#' @export
-#' @rdname create_CtstmTrans
-create_CtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
-  input_data <- create_input_data(object, data, id_vars = c("strategy_id", "patient_id"))
-  params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(CtstmTrans$new(data = input_data, params = params, trans_mat = trans_mat, ...))
-}
-
-#' @export
-#' @rdname create_CtstmTrans
-create_CtstmTrans.flexsurvreg <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
-  input_data <- create_input_data(object, data, id_vars = c("strategy_id", "patient_id", "transition_id"))
-  params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(CtstmTrans$new(data = input_data, params = params, trans_mat = trans_mat, ...))
-}
-
-indiv_ctstm_stateprobs <- function(disease_prog, t, trans_model) {
-  if (inherits(trans_model$params, "params_surv_list")){
-    n_samples <- trans_model$params[[1]]$n_samples
-  } else{
-    n_samples <- trans_model$params$n_samples
-  }
-  if (is.null(trans_model$data$n_lines)){
-    n_lines <- 1
-  } # to do after incorporating treatment lines: case where there are multiple treatment lines
-  
-  stprobs <- C_ctstm_indiv_stateprobs(disease_prog, t, n_samples,
-                                      trans_model$data$n_strategies, 
-                                      nrow(trans_model$trans_mat),
-                                      trans_model$data$n_patients,
-                                      n_lines)
-  
-  stprobs <- data.table(stprobs)
-      
-  ## C++ to R indexing
-  stprobs[, "sample" := get("sample") + 1]
-  stprobs[, "strategy_id" := get("strategy_id") + 1]
-  stprobs[, "state_id" := get("state_id") + 1]
-      
-  # Return
-  return(stprobs[])
-}
-
-#' @export
 CtstmTrans <- R6::R6Class("CtstmTrans",
   private = list(
-      .death_state = NULL,
-      summary = function(t, type = c("hazard", "cumhazard")){
-        self$check()
-        type <- match.arg(type)
-        res <- data.table(C_ctstm_summary(self, t, type))
-        res[, trans := trans + 1]
-        res[, sample := sample + 1]
-        if (type == "hazard") setnames(res, "value", "hazard")
-        if (type == "cumhazard") setnames(res, "value", "cumhazard")
-        return(res[])
-      }
-    ), # end private
-  
-   active = list(
-    death_state = function(value) {
-      if (missing(value)) {
-        private$.death_state
-      } else {
-        stop("'$death_state' is read only", call. = FALSE)
-      }
-     }
-   ), # end active
-  
-  public = list(
-    data = NULL,
-    params = NULL,
-    trans_mat = NULL,
-    start_ages = NULL,
-    initialize = function(data, params, trans_mat, start_ages = rep(38, data$n_patients),
-                          death_state = NULL) {
-      self$data <- data
-      self$params <- params
-      self$trans_mat <- trans_mat
-      
-      # starting ages
-      if (length(start_ages) != data$n_patients){
-        stop("The length of 'start_ages' must equal 'n_patients' in 'data'.",
-             call. = FALSE)
-      } else{
-       self$start_ages <- start_ages 
-      }
-      
-      # death state
-      if (!is.null(death_state)){
-        if (death_state > nrow(trans_mat)){
-          stop("'death_state' cannot be larger than the number of rows in 'trans_mat'",
-               call. = FALSE)
-        } else{
-          private$.death_state <- death_state
-        }
-      } else{
-        absorbing_states <- absorbing(trans_mat) 
-        private$.death_state <- absorbing_states[length(absorbing_states)]
-      }      
-    },
-    
-    hazard = function(t){
-      private$summary(t, "hazard")
-    },
-    
-    cumhazard = function(t){
-       private$summary(t, "cumhazard")
-    },
-    
-    sim_stateprobs = function(t, start_state = 1, max_t = 100, max_age = 100,
-                              clock = "reset"){
-      self$check()
-      disprog <- C_ctstm_sim_disease(self, start_state, self$start_ages,
-                                     self$death_state - 1, max_t, max_age)
-      return(indiv_ctstm_stateprobs(disprog, t, self))
-    },
-    
-    check = function(){
+    check_base = function(){
       if(!inherits(self$data, "input_data")){
         stop("'data' must be an object of class 'input_data'",
             call. = FALSE)
@@ -163,37 +26,247 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
                call. = FALSE)
         }
       }
+    },
+    
+      summary = function(t, type = c("hazard", "cumhazard")){
+        self$check()
+        type <- match.arg(type)
+        res <- data.table(C_ctstm_summary(self, t, type))
+        res[, trans := trans + 1]
+        res[, sample := sample + 1]
+        if (type == "hazard") setnames(res, "value", "hazard")
+        if (type == "cumhazard") setnames(res, "value", "cumhazard")
+        return(res[])
+      }
+    ), # end private
+  
+  public = list(
+    data = NULL,
+    params = NULL,
+    trans_mat = NULL,
+    
+    hazard = function(t){
+      private$summary(t, "hazard")
+    },
+    
+    cumhazard = function(t){
+       private$summary(t, "cumhazard")
     }
   )
+)
+
+# IndivCtstmTrans --------------------------------------------------------------
+indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ...){
+
+  
+  # Simulate disease progression if 'disprog' is missing
+  if (is.null(disprog)){
+    trans_model$check()
+    dots <- list(...)
+    fun <- trans_model$sim_disease
+    disprog <- do.call("fun", dots)
+    
+  } else{
+    disprog <- copy(disprog)
+  }
+  
+  # Compute state probabilities
+  ## Indexing for C++
+  disprog$sim[, strategy_index := .GRP, by = "strategy_id"]
+  strategy_index <- disprog$sim$strategy_id - 1
+  disprog$sim[, strategy_index := NULL]
+
+  ## Dimensions of simulation
+  if (!"line" %in% names(disprog$sim)){
+    n_lines <- 1
+  } # to do after incorporating treatment lines: case where there are multiple treatment lines
+  n_strategies <- length(disprog$unique_strategy_id)
+  n_patients <- length(disprog$unique_patient_id)
+  
+  ## Computation
+  stprobs <- C_ctstm_indiv_stateprobs(disprog$sim, t, 
+                                      disprog$n_samples,
+                                      n_strategies, 
+                                      disprog$unique_strategy_id,
+                                      strategy_index,
+                                      disprog$n_states,
+                                      n_patients,
+                                      n_lines)
+  stprobs <- data.table(stprobs)
+      
+  ## C++ to R indexing
+  stprobs[, "sample" := get("sample") + 1]
+  stprobs[, "state_id" := get("state_id") + 1]
+  
+  # Return
+  return(stprobs[])      
+}
+
+#' Create \code{IndivCtstmTrans} object
+#' 
+#' \code{mTrans} is a generic function for creating an object of class
+#' \code{\link{IndivCtstmTrans}}.
+#' @param object A fitted statistical model. 
+#' @param data An object of class "expanded_hesim_data" returned by 
+#' \code{\link{expand_hesim_data}}.
+#' @param n Number of random observations of the parameters to draw.
+#' @param trans_mat The transition matrix describing the states and transitions in a 
+#' multi-state model in the format from the \link[mstate]{mstate} package. See \link{IndivCtstmTrans}.
+#' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.
+#' @param ... Further arguments passed to \code{IndivCtstmTrans$new()} in \code{\link{IndivCtstmTrans}}.
+#' @return Returns an \code{\link{R6Class}} object of class \code{\link{IndivCtstmTrans}}.
+#' @seealso \code{\link{IndivCtstmTrans}}
+#' @name create_IndivCtstmTrans
+#' @rdname create_IndivCtstmTrans
+#' @export
+create_IndivCtstmTrans <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
+  UseMethod("create_IndivCtstmTrans", object)
+}
+
+#' @export
+#' @rdname create_IndivCtstmTrans
+create_IndivCtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
+  input_data <- create_input_data(object, data, id_vars = c("strategy_id", "patient_id"))
+  params <- create_params(object, n = n, point_estimate = point_estimate)
+  return(IndivCtstmTrans$new(data = input_data, params = params, trans_mat = trans_mat, ...))
+}
+
+#' @export
+#' @rdname create_IndivCtstmTrans
+create_IndivCtstmTrans.flexsurvreg <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
+  input_data <- create_input_data(object, data, id_vars = c("strategy_id", "patient_id", "transition_id"))
+  params <- create_params(object, n = n, point_estimate = point_estimate)
+  return(IndivCtstmTrans$new(data = input_data, params = params, trans_mat = trans_mat, ...))
+}
+
+#' @export
+IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
+  inherit = CtstmTrans,
+  
+  private = list(
+    .death_state = NULL
+  ), # end private
+  
+  active = list(
+    death_state = function(value) {
+      if (missing(value)) {
+        private$.death_state
+      } else {
+        stop("'$death_state' is read only", call. = FALSE)
+      }
+     }
+   ), # end active  
+  
+  public = list(
+    start_state = NULL,
+    start_time = NULL,
+    start_age = NULL,
+    
+    
+    initialize = function(data, params, trans_mat, 
+                          start_state = 1,
+                          start_time = 0,
+                          start_age = 38,
+                          death_state = NULL) {
+      self$data <- data
+      self$params <- params
+      self$trans_mat <- trans_mat
+      
+      # history
+      if (length(start_age) == 1){
+        self$start_age <- rep(start_age, data$n_patients)
+      }
+      if (length(self$start_age) != data$n_patients){
+        stop("The length of 'start_age' must equal 'n_patients' in 'data'.",
+             call. = FALSE)
+      } 
+      self$start_state <- start_state
+      
+      
+      # death state
+      if (!is.null(death_state)){
+        if (death_state > nrow(trans_mat)){
+          stop("'death_state' cannot be larger than the number of rows in 'trans_mat'",
+               call. = FALSE)
+        } else{
+          private$.death_state <- death_state
+        }
+      } else{
+        absorbing_states <- absorbing(trans_mat) 
+        private$.death_state <- absorbing_states[length(absorbing_states)]
+      }
+    },
+    
+    sim_disease = function(max_t = 100, max_age = 100){
+      private$check_base()
+      
+      # Simulate
+      disprog <- C_ctstm_sim_disease(self, self$start_state, self$start_age,
+                                     self$death_state - 1, max_t, max_age)
+      disprog <- data.table(disprog)
+      disprog[, sample := sample + 1]
+      disprog[, from := from + 1]
+      disprog[, to := to + 1]
+      disprog[, line := NULL] # to do after incorporating treatment lines: case where there are multiple treatment lines
+      
+      if (inherits(self$params, "params_surv_list")){
+        n_samples <- self$params[[1]]$n_samples
+      } else{
+        n_samples <- self$params$n_samples
+      }      
+      out <- list(sim = disprog[,], 
+                  n_samples = n_samples,
+                  n_states = nrow(self$trans_mat),
+                  unique_strategy_id = unique(self$data$strategy_id),
+                  unique_patient_id = unique(self$data$patient_id))
+      class(out) <- "indiv_ctstm_disprog"
+      return(out)
+    },
+    
+    
+    sim_stateprobs = function(disprog = NULL, t, ...){
+      return(indiv_ctstm_sim_stateprobs(disprog, self, t))
+    },
+    
+    check = function(){
+      private$check_base()
+    }
+    
+    
+  ) # end public
+  
 )
 
 # IndivCtstm -------------------------------------------------------------------
 #' @export
 IndivCtstm <- R6::R6Class("IndivCtstm",
   private = list(  
-    .disease_prog_ = NULL,
+    .disprog_ = NULL,
     .stateprobs_ = NULL,
     .qalys_ = NULL,
     .costs_ = NULL,
+    disprog_idx = NULL,
     
-    create_C_disease_prog = function(R_disease_prog){
-      x <- copy(R_disease_prog)
-      x[, sample := sample - 1]
-      x[, strategy_id := strategy_id - 1]
-      x[, patient_id := patient_id - 1]
-      x[, from := from - 1]
-      x[, to := to - 1]
-      return(x)
-    },
-  
     sim_wlos = function(stateval_list, dr, stateval_type = c("costs", "qalys"),
                         sim_type){
-      C_disease_prog <- private$create_C_disease_prog(self$disease_prog_)
+     
       stateval_type <- match.arg(stateval_type)
-      if(is.null(self$disease_prog_)){
+      if(is.null(self$disprog_)){
         stop("You must first simulate disease progression using '$sim_disease'.",
             call. = FALSE)
+      }      
+      
+      # Indexing patient and strategy ID's
+      if (is.null(private$disprog_idx)){
+        self$disprog_$sim[, strategy_idx := .GRP, by = "strategy_id"]
+        self$disprog_$sim[, patient_idx := .GRP, by = "patient_id"]
+        private$disprog_idx <- self$disprog_$sim[, c("strategy_idx", "patient_idx"), with = FALSE]
+        self$disprog_$sim[, strategy_idx := NULL]
+        self$disprog_$sim[, patient_idx := NULL]
+        private$disprog_idx[, strategy_idx := strategy_idx - 1]
+        private$disprog_idx[, patient_idx := patient_idx - 1]
       }
+      
       n_cats <- length(stateval_list)
       if (stateval_type == "costs"){
         if (is.null(names(stateval_list))){
@@ -211,14 +284,17 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       counter <- 1
       for (i in 1:n_cats){
         for (j in 1:n_dr){
-          C_wlos <- C_indiv_ctstm_wlos(C_disease_prog, stateval_list[[i]], dr[j],
+          C_wlos <- C_indiv_ctstm_wlos(self$disprog_$sim, # Note: C++ re-indexing done at C level for disprog_
+                                       private$disprog_idx$strategy_idx,
+                                       private$disprog_idx$patient_idx,
+                                       stateval_list[[i]], dr[j],
                                        sim_type)
-          self$disease_prog_[, wlos := C_wlos]
-          wlos_list[[counter]] <- self$disease_prog_[, .(wlos = sum(wlos)), 
+          self$disprog_$sim[, wlos := C_wlos]
+          wlos_list[[counter]] <- self$disprog_$sim[, .(wlos = sum(wlos)), 
                                        by = c("sample", "strategy_id", "patient_id")]
           wlos_list[[counter]][, "dr" := dr[j]]
           wlos_list[[counter]][, "category" := categories[i]]
-          self$disease_prog_[, "wlos" := NULL]
+          self$disprog_$sim[, "wlos" := NULL]
           counter <- counter + 1
         }
       }
@@ -236,11 +312,11 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
   ), # end private  
                                                   
   active = list(
-    disease_prog_ = function(value) {
+    disprog_ = function(value) {
       if (missing(value)) {
-        private$.disease_prog_
+        private$.disprog_
       } else {
-        stop("'$disease_prog_' is read only", call. = FALSE)
+        stop("'$disprog_' is read only", call. = FALSE)
       }
      },  
     
@@ -273,51 +349,36 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     trans_model = NULL,
     utility_model = NULL,
     cost_models = NULL,
-    initialize = function(trans_model, utility_model = NULL, cost_models = NULL) {
+    initialize = function(trans_model = NULL, disprog = NULL, utility_model = NULL, cost_models = NULL) {
       self$trans_model <- trans_model
       self$utility_model = utility_model
       self$cost_models = cost_models
+      private$.disprog_ = disprog
     },
     
     sim_disease = function(max_t = 100, max_age = 100){
-      if(!inherits(self$trans_model, "CtstmTrans")){
-        stop("'trans_model' must be an object of class 'CtstmTrans'",
+      if(!inherits(self$trans_model, "IndivCtstmTrans")){
+        stop("'trans_model' must be an object of class 'IndivCtstmTrans'",
           call. = FALSE)
       }
-      
+      self$trans_model$check()
       
       private$.qalys_ <- NULL
       private$.costs_ <- NULL
       private$.stateprobs_ <- NULL
-      start_state <- 1
-      self$trans_model$check()
-      sim <- C_ctstm_sim_disease(self$trans_model, start_state, 
-                                 self$trans_model$start_ages, 
-                                 self$trans_model$death_state - 1, max_t, max_age)
-      sim <- data.table(sim)
-      
-      # C++ to R indexing
-      sim[, sample := sample + 1]
-      sim[, strategy_id := strategy_id + 1]
-      sim[, line := NULL]
-      sim[, patient_id := patient_id + 1]
-      sim[, from := from + 1]
-      sim[, to := to + 1]
-      
-      # Update class states
-      private$.disease_prog_ <- sim[]
+      private$disprog_idx <- NULL
+      private$.disprog_ <- self$trans_model$sim_disease(max_t = max_t,
+                                                        max_age = max_age)
       private$.stateprobs_ <- NULL
       invisible(self)
     },
     
     sim_stateprobs = function(t){
-      if(is.null(self$disease_prog_)){
+      if(is.null(self$disprog_)){
         stop("You must first simulate disease progression using '$sim_disease'.",
             call. = FALSE)
       }
-      
-      C_disease_prog <- private$create_C_disease_prog(self$disease_prog_) # convert to C++ indices
-      private$.stateprobs_ <- indiv_ctstm_stateprobs(C_disease_prog, t, self$trans_model)
+      private$.stateprobs_ <- indiv_ctstm_sim_stateprobs(self$disprog_, t = t)
       invisible(self)
     },
     

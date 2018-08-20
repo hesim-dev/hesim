@@ -51,13 +51,14 @@ msfit <- flexsurvreg(Surv(time/365.25, status) ~ factor(trans), data = msebmt,
                            dist = "weibull")
 
 # State probabilities  ---------------------------------------------------------
-sample <- strategy_id <-  rep(1, 5) - 1
-patient_id <- c(rep(1, 3), rep(2, 2)) - 1
-from <- c(1, 2, 1, 1, 2) - 1
-to <- c(2, 1, 3, 2, 3) - 1
-final <- c(0, 0, 1, 0, 1)
-time_start <- c(0, 2, 5, 0, 3)
-time_stop <- c(2, 5, 7, 3, 8)
+sample <-  c(rep(1, 9), rep(2, 4)) 
+strategy_id <- c(rep(2, 5), rep(3, 4), rep(2, 2), rep(3, 2))
+patient_id <- c(rep(2, 3), rep(3, 2), rep(2, 2), rep(3, 2), rep(2, 2), rep(3, 2)) 
+from <- c(1, 2, 1, 1, 2, 1, 2, 2, 1, rep(1, 4)) 
+to <- c(2, 1, 3, 2, 3, 2, 3, 1, 3, rep(3, 4)) 
+final <- c(0, 0, 1, 0, 1, 0, 1, 0, 1, rep(1, 4))
+time_start <- c(0, 2, 5, 0, 3, 2, 4, 0, 5, rep(0, 4))
+time_stop <- c(2, 5, 7, 3, 8, 4, 8, 5, 11, rep(2, 2), rep(2.6, 2))
 
 disprog <- data.frame(sample = sample, 
                       strategy_id = strategy_id,
@@ -68,26 +69,37 @@ disprog <- data.frame(sample = sample,
                       time_start = time_start, 
                       time_stop = time_stop)
 
+stprob_fun <- function(time){
+  data.table(hesim:::C_ctstm_indiv_stateprobs(disprog, t = time, n_samples = 2,
+                                              n_strategies = 2, 
+                                              unique_strategy_id = unique(strategy_id),
+                                              strategy_index = c(rep(0, 5), rep(1, 4), rep(0, 2), rep(1, 2)),
+                                              n_states = 3,
+                                              n_patients = 2))
+}
+
+
 test_that("C_ctstm_indiv_stateprobs", {
   # Time 2.5
-  stprobs <- data.table(hesim:::C_ctstm_indiv_stateprobs(disprog, t = 2.5, n_samples = 1,
-                                              n_strategies = 1, n_states = 3,
-                                              n_patients = 2))
-  expect_equal(stprobs[state_id == 1, prob], .5)
-  expect_equal(stprobs[state_id == 2, prob], 0)
+  stprobs <- stprob_fun(2.5)
+  expect_equal(stprobs[sample == 0 & state_id == 1 & strategy_id == 2, prob], .5)
+  expect_equal(stprobs[sample == 0 & state_id == 2 & strategy_id == 2, prob], 0)
+  expect_equal(stprobs[sample == 0 & state_id == 0 & strategy_id == 3, prob], .5)
+  expect_equal(stprobs[sample == 0 & state_id == 1 & strategy_id == 3, prob], .5)
+  expect_equal(stprobs[sample == 1 & state_id == 2 & strategy_id == 2, prob], 1)
+  expect_equal(stprobs[sample == 1 & state_id == 0 & strategy_id == 3, prob], 1)
   
   # Time 3
-  stprobs <- data.table(hesim:::C_ctstm_indiv_stateprobs(disprog, t = 3, n_samples = 1,
-                                              n_strategies = 1, n_states = 3,
-                                              n_patients = 2))
-  expect_equal(stprobs[state_id == 1, prob], 1)
+  stprobs <- stprob_fun(3)
+  expect_equal(stprobs[sample == 0 & state_id == 1 & strategy_id == 2, prob], 1)
+  expect_equal(stprobs[sample == 0 & state_id == 1 & strategy_id == 3, prob], .5)
   
   # Time 10
-  stprobs <- data.table(hesim:::C_ctstm_indiv_stateprobs(disprog, t = 10, n_samples = 1,
-                                              n_strategies = 1, n_states = 3,
-                                              n_patients = 2))
-  expect_equal(stprobs[state_id == 1, prob], 0)
-  expect_equal(stprobs[state_id == 2, prob], 1)
+  stprobs <- stprob_fun(10)
+  expect_equal(stprobs[sample == 0 & state_id == 1 & strategy_id == 2, prob], 0)
+  expect_equal(stprobs[sample == 0 & state_id == 2 & strategy_id == 2, prob], 1)
+  expect_equal(stprobs[sample == 0 & state_id == 0 & strategy_id == 3, prob], .5)
+  expect_equal(stprobs[sample == 0 & state_id == 2 & strategy_id == 3, prob], .5)
 })
 
 # Simulate decision model(s) ---------------------------------------------------
@@ -117,10 +129,10 @@ msfit_list_data <- expand_hesim_data(hesim_dat)
 tmat <- rbind(c(NA, 1, 2),
               c(NA, NA, 3),
               c(NA, NA, NA))
-mstate_list <- create_CtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
+mstate_list <- create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
                                       point_estimate = TRUE)
 
-test_that("CtstmTrans", {
+test_that("IndivCtstmTrans - transition specific", {
   # hazard
   hesim_hazard <- mstate_list$hazard(3)
   expect_equal(hesim_hazard[trans == 1][1]$hazard,
@@ -135,24 +147,26 @@ test_that("CtstmTrans", {
   expect_equal(hesim_cumhazard[trans == 2][1]$cumhazard,
                summary(msfit_list[[2]], type = "cumhaz", t = 5)[[1]][1, "est"])
   
+  # Simulate disease 
+  disprog <- mstate_list$sim_disease()
+  expect_true(inherits(disprog, "indiv_ctstm_disprog"))
+  expect_error(mstate_list$sim_disease(), NA)
+  
   # State probabilities
   expect_error(mstate_list$sim_stateprobs(t = c(0, 1, 2, 3)),
                NA)
+  stprobs <- mstate_list$sim_stateprobs(disprog, t = c(0, 1, 2, 3))
+  expect_true(inherits(stprobs, "data.table"))
   
-  # Errors
-  expect_error(create_CtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
-                                start_ages = rep(1, nrow(dt_patients)),
-                                point_estimate = TRUE),
-               NA)
-  expect_error(create_CtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
-                                start_ages = rep(1, nrow(dt_patients)),
+  # No errors
+  expect_error(create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
                                 death_state = nrow(tmat),
                                 point_estimate = TRUE),
                NA)
-  expect_error(create_CtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
-                                start_ages = rep(1, nrow(dt_patients) - 1),
-                                point_estimate = TRUE))
-  expect_error(create_CtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
+  
+  # Errors
+  expect_error(mstate_list$sim_disease(start_age = rep(2, nrow(dt_patients) - 1)))
+  expect_error(create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
                                 death_state = nrow(tmat) + 1,
                                 point_estimate = TRUE))
 })  
@@ -162,10 +176,10 @@ dt_transitions <- create_trans_dt(tmat_ebmt4)
 dt_transitions[, trans := transition_id]
 hesim_dat$transitions <- dt_transitions
 msfit_data <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "transitions"))
-mstate <- create_CtstmTrans(msfit, data = msfit_data, trans_mat = tmat_ebmt4,
+mstate <- create_IndivCtstmTrans(msfit, data = msfit_data, trans_mat = tmat_ebmt4,
                             point_estimate = TRUE)
 
-test_that("CtstmTrans", {
+test_that("IndivCtstmTrans - joint", {
   # hazard
   hesim_hazard <- mstate$hazard(3)
   expect_equal(hesim_hazard[trans == 1][1]$hazard,
@@ -179,6 +193,9 @@ test_that("CtstmTrans", {
                summary(msfit, type = "cumhaz", t = 3, ci = FALSE)[[1]][1, "est"])
   expect_equal(hesim_cumhazard[trans == 4][1]$cumhazard,
                summary(msfit, type = "cumhaz", t = 3, ci = FALSE)[[4]][1, "est"])
+  
+  # Simulate disease
+  expect_true(inherits(mstate$sim_disease(), "indiv_ctstm_disprog")) 
 })
 
 # Simulate outcomes
@@ -202,7 +219,7 @@ test_that("Simulate disease and state probabilities", {
   # Base case simulation
   ## Simulate disease progression
   set.seed(101)
-  disprog <- ictstm$sim_disease()$disease_prog_
+  disprog <- ictstm$sim_disease()$disprog_$sim
   
   ## Time from first state
   set.seed(101)
@@ -224,17 +241,26 @@ test_that("Simulate disease and state probabilities", {
   
   # Simulation with other cases 
   ## Maximum time = 2
-  disprog <- ictstm$sim_disease(max_t = 2)$disease_prog_
+  disprog <- ictstm$sim_disease(max_t = 2)$disprog_$sim
   expect_equal(ictstm$stateprobs_, NULL)
   expect_equal(max(disprog$time_stop), 2)
   expect_true(all(disprog[final == 1 & time_stop == 2, to] == 1)) # All should have remained in initial state
   
   ## Maximum age = 43 (i.e., max_t = 5)
-  disprog <- ictstm$sim_disease(max_age = 43)$disease_prog_
+  disprog <- ictstm$sim_disease(max_age = 43)$disprog_$sim
   expect_true(all(disprog[time_stop == 5 & final == 1, to] == 3)) # All should have moved to death state
+  
+  # Initiliaze with 'indiv_ctstm_disprog' object
+  mstate_list <- create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat, n = n_samples,
+                                      point_estimate = FALSE)
+  disprog <- mstate_list$sim_disease()
+  ictstm <- IndivCtstm$new(disprog = disprog,
+                           utility_model = utilmod)
+  expect_true(inherits(ictstm$sim_stateprobs(t = seq(0, 3))$stateprobs_, "data.table"))
+  
 })
 
-mstate_list <- create_CtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
+mstate_list <- create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
                                  n = n_samples)
 test_that("Simulate costs and QALYs", {
   ictstm <- IndivCtstm$new(trans_model = mstate_list,
@@ -252,7 +278,7 @@ test_that("Simulate costs and QALYs", {
   ## dr = .03
   ictstm$sim_qalys(dr = .03)$qalys_
   
-  disprog1 <- ictstm$disease_prog_[sample == 1 & strategy_id == 1 & patient_id == 2]
+  disprog1 <- ictstm$disprog_$sim[sample == 1 & strategy_id == 1 & patient_id == 2]
   qalys1 <- ictstm$qalys_[sample == 1 & strategy_id == 1 & patient_id == 2]
   utilvals <- utility_params$coefs[1, disprog1$from] 
   qalys_expected <- sum(pv(utilvals, .03, disprog1$time_start, disprog1$time_stop))
@@ -261,7 +287,7 @@ test_that("Simulate costs and QALYs", {
   ## dr = 0
   ictstm$utility_model$params$coefs <- matrix(1, nrow = n_samples, ncol = nrow(dt_states))
   qalys <- ictstm$sim_qalys(dr = 0)$qalys_
-  expect_equal(ictstm$disease_prog_[final == 1][3, time_stop],
+  expect_equal(ictstm$disprog_$sim[final == 1][3, time_stop],
                qalys[3, qalys])
   
   # Simulate costs
@@ -291,9 +317,9 @@ test_that("IndivCtstm", {
   ictstm <- IndivCtstm$new(trans_model = mstate)
   
   # Simulate disease progression
-  expect_error(ictstm$sim_disease()$disease_prog_, NA)
-  disprog <- ictstm$sim_disease()$disease_prog_
-  expect_true(is.data.table(disprog))
+  expect_error(ictstm$sim_disease()$disprog_, NA)
+  disprog <- ictstm$sim_disease()$disprog_
+  expect_true(is.data.table(disprog$sim))
   
   # Simulate state probabilities
   stprobs <- ictstm$sim_stateprobs(t = c(0, 1, 2, 3))$stateprobs_

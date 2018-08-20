@@ -45,12 +45,12 @@ C_ctstm_sim_disease <- function(R_CtstmTrans, start_state, start_ages, death_sta
     .Call('_hesim_C_ctstm_sim_disease', PACKAGE = 'hesim', R_CtstmTrans, start_state, start_ages, death_state, max_t, max_age)
 }
 
-C_ctstm_indiv_stateprobs <- function(R_disease_prog, t, n_samples, n_strategies, n_states, n_patients, n_lines = 1L) {
-    .Call('_hesim_C_ctstm_indiv_stateprobs', PACKAGE = 'hesim', R_disease_prog, t, n_samples, n_strategies, n_states, n_patients, n_lines)
+C_ctstm_indiv_stateprobs <- function(R_disease_prog, t, n_samples, n_strategies, unique_strategy_id, strategy_index, n_states, n_patients, n_lines = 1L) {
+    .Call('_hesim_C_ctstm_indiv_stateprobs', PACKAGE = 'hesim', R_disease_prog, t, n_samples, n_strategies, unique_strategy_id, strategy_index, n_states, n_patients, n_lines)
 }
 
-C_indiv_ctstm_wlos <- function(R_disease_prog, R_StateVal, dr, type) {
-    .Call('_hesim_C_indiv_ctstm_wlos', PACKAGE = 'hesim', R_disease_prog, R_StateVal, dr, type)
+C_indiv_ctstm_wlos <- function(R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type) {
+    .Call('_hesim_C_indiv_ctstm_wlos', PACKAGE = 'hesim', R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type)
 }
 
 C_psm_curves_summary <- function(R_PsmCurves, x, type, dr) {

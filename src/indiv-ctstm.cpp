@@ -58,9 +58,9 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
               // Results
               if (patient.time_ < max_t || time_start == 0){ 
                 disease_prog.sample_.push_back(s);
-                disease_prog.strategy_id_.push_back(k);
-                disease_prog.line_.push_back(j);
-                disease_prog.patient_id_.push_back(i);
+                disease_prog.strategy_id_.push_back(transmod->obs_index_.get_strategy_id());
+                disease_prog.line_.push_back(transmod->obs_index_.get_line());
+                disease_prog.patient_id_.push_back(transmod->obs_index_.get_patient_id());
                 disease_prog.from_.push_back(from_state);
                 disease_prog.to_.push_back(patient.state_);
                 disease_prog.time_start_.push_back(time_start);
@@ -110,8 +110,11 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
 // [[Rcpp::export]]
 Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
                                          std::vector<double> t, int n_samples,
-                                         int n_strategies, int n_states, 
-                                         int n_patients, int n_lines = 1){
+                                         int n_strategies, std::vector<int> unique_strategy_id,
+                                         std::vector<int> strategy_index,
+                                         int n_states, 
+                                         int n_patients,
+                                         int n_lines = 1){
   hesim::ctstm::disease_prog disease_prog(R_disease_prog);
   hesim::ctstm::stateprobs_out out(n_samples * n_strategies * n_states * t.size());
   
@@ -125,7 +128,7 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
         state = disease_prog.from_[i];
       }
       int index = disease_prog.sample_[i] * n_strategies * n_states * t.size() +
-                  disease_prog.strategy_id_[i] * n_states * t.size() + 
+                  strategy_index[i] * n_states * t.size() + 
                   state * t.size() + // need to use to when final == 1
                   j;
       if ((t[j] >= disease_prog.time_start_[i] & t[j] < disease_prog.time_stop_[i]) ||
@@ -148,7 +151,7 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
       for (int h = 0; h < n_states; ++h){
         for (int r = 0; r < t.size(); ++r){
           out.sample_[index] = s;
-          out.strategy_id_[index] = k;
+          out.strategy_id_[index] = unique_strategy_id[k];
           out.state_id_[index] = h;
           out.t_[index] = t[r];
           ++index;
@@ -182,6 +185,8 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
  ******************************************************************************/ 
 // [[Rcpp::export]]
 std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
+                                       std::vector<int> strategy_idx,
+                                       std::vector<int> patient_idx,
                                        Rcpp::Environment R_StateVal,
                                        double dr, std::string type){
   hesim::ctstm::disease_prog disease_prog(R_disease_prog);
@@ -191,9 +196,9 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
   int N = disease_prog.sample_.size();
   std::vector<double> wlos(N);
   for (int i = 0; i < N; ++i){
-    int obs = obs_index(disease_prog.strategy_id_[i],
+    int obs = obs_index(strategy_idx[i],
                         disease_prog.line_[i],
-                        disease_prog.patient_id_[i],
+                        patient_idx[i],
                         disease_prog.from_[i]);
     double yhat = stvals.sim(disease_prog.sample_[i], obs, type);
     wlos[i] = hesim::pv(yhat, dr,

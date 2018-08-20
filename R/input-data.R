@@ -41,7 +41,7 @@ create_lines_dt <- function(strategy_list, strategy_ids = NULL){
 #' Create a data table of health state transitions from a transition matrix describing 
 #' the states and transitions in a multi-state model suitable for use with \link{hesim_data}. 
 #' @param trans_mat A transition matrix in the format from the \link[mstate]{mstate} package. 
-#' See \link{CtstmTrans}.
+#' See \link{IndivCtstmTrans}.
 #' @return Returns a \code{\link{data.table}} in tidy format with three columns
 #' \describe{
 #' \item{transition_id}{Health state transition id.}

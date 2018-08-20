@@ -2,7 +2,7 @@
 #' 
 #' Returns a vector of absorbing states from a transition matrix.
 #' @param trans_mat A transition matrix in the format from the \link[mstate]{mstate} package. 
-#' See \link{CtstmTrans}.
+#' See \link{IndivCtstmTrans}.
 #' @keywords internal
 absorbing <- function(trans_mat){
   which(apply(trans_mat, 1, function(x) all(is.na(x))))
