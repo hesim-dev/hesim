@@ -104,8 +104,7 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
 
 #' Create \code{IndivCtstmTrans} object
 #' 
-#' \code{mTrans} is a generic function for creating an object of class
-#' \code{\link{IndivCtstmTrans}}.
+#' A generic function for creating an object of class \code{\link{IndivCtstmTrans}}.
 #' @param object A fitted statistical model. 
 #' @param data An object of class "expanded_hesim_data" returned by 
 #' \code{\link{expand_hesim_data}}.

@@ -34,8 +34,7 @@ multi-state model in the format from the \link[mstate]{mstate} package. See \lin
 Returns an \code{\link{R6Class}} object of class \code{\link{IndivCtstmTrans}}.
 }
 \description{
-\code{mTrans} is a generic function for creating an object of class
-\code{\link{IndivCtstmTrans}}.
+A generic function for creating an object of class \code{\link{IndivCtstmTrans}}.
 }
 \seealso{
 \code{\link{IndivCtstmTrans}}
