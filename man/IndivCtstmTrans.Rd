@@ -109,7 +109,7 @@ An object of class "indiv_ctstm_disprog" is a list containing the following elem
 \item{sim}{A \code{\link[data.table]{data.table}} of simulated trajectories through a multi-state model.}
 \item{n_samples}{The number of random samples of the parameters used in the probabilistic sensitivity analysis.}
 \item{n_states}{The number of health states in the model.}
-\item{unique_patient_id}{The ID's of the simulated treatment strategies.}
+\item{unique_strategy_id}{The ID's of the simulated treatment strategies.}
 \item{unique_patient_id}{The ID's of the simulated patients.}
 }
 
@@ -123,7 +123,7 @@ The \code{\link[data.table]{data.table}} \code{sim} contains the following colum
 \item{to}{The health state ID transitioned to.}
 \item{final}{An indicator equal to 1 if a patient is in their final health state during the simulation and 0 otherwise.}
 \item{time_start}{The time at the start of the interval.}
-\item{time_start}{The time at the end of the interval.}
+\item{time_stop}{The time at the end of the interval.}
 }
 
 The fields \code{start_state}, \code{start_time}, \code{start_age}, and the argument \code{max_t} in \code{sim_disease} are vectorized across patients, treatment strategies, and random samples of the parameters. Each argument can be passed in three ways:

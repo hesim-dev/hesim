@@ -189,7 +189,7 @@
 <dt>sim</dt><dd><p>A <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> of simulated trajectories through a multi-state model.</p></dd>
 <dt>n_samples</dt><dd><p>The number of random samples of the parameters used in the probabilistic sensitivity analysis.</p></dd>
 <dt>n_states</dt><dd><p>The number of health states in the model.</p></dd>
-<dt>unique_patient_id</dt><dd><p>The ID's of the simulated treatment strategies.</p></dd>
+<dt>unique_strategy_id</dt><dd><p>The ID's of the simulated treatment strategies.</p></dd>
 <dt>unique_patient_id</dt><dd><p>The ID's of the simulated patients.</p></dd>
 </dl>
     <p>The <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> <code>sim</code> contains the following columns:</p>
@@ -201,7 +201,7 @@
 <dt>to</dt><dd><p>The health state ID transitioned to.</p></dd>
 <dt>final</dt><dd><p>An indicator equal to 1 if a patient is in their final health state during the simulation and 0 otherwise.</p></dd>
 <dt>time_start</dt><dd><p>The time at the start of the interval.</p></dd>
-<dt>time_start</dt><dd><p>The time at the end of the interval.</p></dd>
+<dt>time_stop</dt><dd><p>The time at the end of the interval.</p></dd>
 </dl>
     <p>The fields <code>start_state</code>, <code>start_time</code>, <code>start_age</code>, and the argument <code>max_t</code> in <code>sim_disease</code> are vectorized across patients, treatment strategies, and random samples of the parameters. Each argument can be passed in three ways:</p>
 <ul>
