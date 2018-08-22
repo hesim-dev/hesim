@@ -148,9 +148,23 @@ test_that("IndivCtstmTrans - transition specific", {
                summary(msfit_list[[2]], type = "cumhaz", t = 5)[[1]][1, "est"])
   
   # Simulate disease 
+  ## Using hesim
+  set.seed(101)
   disprog <- mstate_list$sim_disease()
   expect_true(inherits(disprog, "indiv_ctstm_disprog"))
-  expect_error(mstate_list$sim_disease(), NA)
+  
+  ## Time from first state
+  set.seed(101)
+  time_1a <- rexp(1, rate = msfit_list[[1]]$res[, "est"])
+  time_1b <- rexp(1, rate = msfit_list[[2]]$res[, "est"])
+  time1 <- min(time_1a, time_1b)
+  state1 <- which.min(c(time_1a, time_1b)) + 1
+  expect_equal(disprog$sim[1, time_stop], time1)
+  expect_equal(disprog$sim[1, to], state1)
+  
+  ### Time from second state
+  time2 <- rexp(1, rate = msfit_list[[3]]$res[, "est"])
+  expect_equal(disprog$sim[2, time_stop],  time1 + time2)  
   
   # State probabilities
   expect_error(mstate_list$sim_stateprobs(t = c(0, 1, 2, 3)),
@@ -199,6 +213,9 @@ test_that("IndivCtstmTrans - joint", {
 })
 
 # Simulate outcomes
+mstate_list <- create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
+                                 n = n_samples)
+
 ## With transition specific survival models
 test_that("Simulate disease and state probabilities", {
   ictstm <- IndivCtstm$new(trans_model = mstate_list,
@@ -218,21 +235,8 @@ test_that("Simulate disease and state probabilities", {
   
   # Base case simulation
   ## Simulate disease progression
-  set.seed(101)
   disprog <- ictstm$sim_disease()$disprog_$sim
-  
-  ## Time from first state
-  set.seed(101)
-  time_1a <- rexp(1, rate = msfit_list[[1]]$res[, "est"])
-  time_1b <- rexp(1, rate = msfit_list[[2]]$res[, "est"])
-  time1 <- min(time_1a, time_1b)
-  state1 <- which.min(c(time_1a, time_1b)) + 1
-  expect_equal(disprog[1, time_stop], time1)
-  expect_equal(disprog[1, to], state1)
-  
-  ### Time from second state
-  time2 <- rexp(1, rate = msfit_list[[3]]$res[, "est"])
-  expect_equal(disprog[2, time_stop],  time1 + time2)
+  expect_true(inherits(disprog, "data.table"))
   
   ## Simulate state probabilities
   stprobs <- ictstm$sim_stateprobs(t = c(0, 1, 2, 3))$stateprobs_
@@ -244,7 +248,20 @@ test_that("Simulate disease and state probabilities", {
   disprog <- ictstm$sim_disease(max_t = 2)$disprog_$sim
   expect_equal(ictstm$stateprobs_, NULL)
   expect_equal(max(disprog$time_stop), 2)
-  expect_true(all(disprog[final == 1 & time_stop == 2, to] == 1)) # All should have remained in initial state
+  expect_true(all(disprog[final == 1 & time_stop == 2 & from == 1, to] == 1)) # All should have remained in initial state
+  expect_true(all(disprog[final == 1 & time_stop == 2 & from == 2, to] == 2))
+  
+  ## Maximum time differs across patients
+  times <- sample(seq(1, 4), ictstm$trans_model$data$n_patients)
+  disprog <- ictstm$sim_disease(max_t = times)$disprog_$sim    
+  expect_true(max(disprog[patient_id == 2, time_stop]) <= times[2])
+  expect_true(max(disprog[patient_id == 3, time_stop]) <= times[3])
+  
+  ## Maximum time differs across samples
+  times <- ifelse(disprog[final == 1]$sample == 1, 5, 2)
+  disprog <- ictstm$sim_disease(max_t = times)$disprog_$sim  
+  expect_true(max(disprog[sample == 1, time_stop]) <= 5)
+  expect_true(max(disprog[sample == 2, time_stop]) <= 2)
   
   ## Maximum age = 43 (i.e., max_t = 5)
   disprog <- ictstm$sim_disease(max_age = 43)$disprog_$sim
@@ -260,8 +277,6 @@ test_that("Simulate disease and state probabilities", {
   
 })
 
-mstate_list <- create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
-                                 n = n_samples)
 test_that("Simulate costs and QALYs", {
   ictstm <- IndivCtstm$new(trans_model = mstate_list,
                            utility_model = utilmod,
@@ -310,7 +325,6 @@ test_that("Simulate costs and QALYs", {
   ictstm$sim_costs()
   expect_error(ictstm$summarize())
 })
-
 
 ## With a joint survival model
 test_that("IndivCtstm", {

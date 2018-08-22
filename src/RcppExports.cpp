@@ -146,18 +146,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_ctstm_sim_disease
-Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, int start_state, std::vector<int> start_ages, int death_state, double max_t, double max_age);
-RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_agesSEXP, SEXP death_stateSEXP, SEXP max_tSEXP, SEXP max_ageSEXP) {
+Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, arma::cube start_state, arma::cube start_age, arma::cube start_time, int death_state, arma::cube max_t, double max_age);
+RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP start_timeSEXP, SEXP death_stateSEXP, SEXP max_tSEXP, SEXP max_ageSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::Environment >::type R_CtstmTrans(R_CtstmTransSEXP);
-    Rcpp::traits::input_parameter< int >::type start_state(start_stateSEXP);
-    Rcpp::traits::input_parameter< std::vector<int> >::type start_ages(start_agesSEXP);
+    Rcpp::traits::input_parameter< arma::cube >::type start_state(start_stateSEXP);
+    Rcpp::traits::input_parameter< arma::cube >::type start_age(start_ageSEXP);
+    Rcpp::traits::input_parameter< arma::cube >::type start_time(start_timeSEXP);
     Rcpp::traits::input_parameter< int >::type death_state(death_stateSEXP);
-    Rcpp::traits::input_parameter< double >::type max_t(max_tSEXP);
+    Rcpp::traits::input_parameter< arma::cube >::type max_t(max_tSEXP);
     Rcpp::traits::input_parameter< double >::type max_age(max_ageSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_ctstm_sim_disease(R_CtstmTrans, start_state, start_ages, death_state, max_t, max_age));
+    rcpp_result_gen = Rcpp::wrap(C_ctstm_sim_disease(R_CtstmTrans, start_state, start_age, start_time, death_state, max_t, max_age));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -476,7 +477,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_rpwexp", (DL_FUNC) &_hesim_C_rpwexp, 3},
     {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
     {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
-    {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 6},
+    {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 7},
     {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 9},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 6},
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},

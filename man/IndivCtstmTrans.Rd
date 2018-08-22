@@ -21,11 +21,11 @@ Summarize health state transitions in an individual-level continuous time state 
 
 \item{\code{trans_mat}}{A transition matrix describing the states and transitions in a multi-state model in the format from the \link[mstate]{mstate} package. See the documentation for the argument "trans" in \link[mstate]{msprep}.}
 
-\item{\code{start_state}}{The starting health state. Default is the first health state.}
+\item{\code{start_state}}{The vectorized (see "Details") starting health state. Default is the first health state.}
 
-\item{\code{start_time}}{The time at which to begin the simulation. Default is time 0.}
+\item{\code{start_time}}{The vectorized (see "Details")  time at which to begin the simulation. Default is time 0.}
 
-\item{\code{start_age}}{The starting age of each patient in the simulation. If a single number, every patient is assumed to be the same age; otherwise, must be the same length as the number of patients in \code{data}.}
+\item{\code{start_age}}{The vectorized (see "Details") starting age of each patient in the simulation. Default is 38.}
 
 \item{\code{death_state}}{The death state in \code{trans_mat}. Used with \code{max_age} in \code{sim_disease} as patients transition to this state upon reaching maximum age. By default, it is set to the final absorbing state (i.e., a row in \code{trans_mat} with all NAs).}
 
@@ -35,8 +35,8 @@ Summarize health state transitions in an individual-level continuous time state 
 
 \describe{
 
-\item{\code{new(data, params, trans_mat, start_ages = rep(38, data$n_patients),
-                          death_state = NULL)}}{
+\item{\code{new(data, params, trans_mat, start_state = 1, start_time = 0,
+                start_age = 38, death_state = NULL)}}{
 
   Constructor for the class.
   
@@ -62,7 +62,7 @@ Summarize health state transitions in an individual-level continuous time state 
   Simulate disease progression.
   
    \itemize{
-     \item \code{max_t}: Maximum number of time periods to simulate the model.
+     \item \code{max_t}: The vectorized (see "Details") maximum number of time periods to simulate the model.
     \item \code{max_age}: Maximum age to simulate each patient until. Default is 100.
    }
    
@@ -126,6 +126,13 @@ The \code{\link[data.table]{data.table}} \code{sim} contains the following colum
 \item{time_start}{The time at the end of the interval.}
 }
 
+The fields \code{start_state}, \code{start_time}, \code{start_age}, and the argument \code{max_t} in \code{sim_disease} are vectorized across patients, treatment strategies, and random samples of the parameters. Each argument can be passed in three ways:
+
+\itemize{
+\item As a scalar, implying that values are constant across patients, treatment strategies, and samples.
+\item As a vector of length equal to the number of patients, implying that values vary across patients but are constant across treatment strategies and samples.
+\item As a vector of length equal to the product of the number of patients, treatment strategies, and samples. In this case the order should be sorted by sample, treatment strategy, and patient (as with an object of class "indiv_ctstm_disprog"). This option can be used to combine results from multiple simulations using \code{sim_disease}. Specifically, values previously simulated can be used as arguments to simulations from a new instance of \code{IndivCtstmTrans}. 
+}
 }
 
 \seealso{

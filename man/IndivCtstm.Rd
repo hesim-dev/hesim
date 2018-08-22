@@ -58,9 +58,9 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
 
 \describe{
 
-\item{\code{new(trans_model, utility_model = NULL, cost_models = NULL)}}{
+\item{\code{new(trans_model = NULL, disprog = NULL, utility_model = NULL, cost_models = NULL)}}{
 
-  Constructor for the class.
+  Constructor for the class. \code{trans_model} must be specified in order to simulate disease progression with \code{sim_disease}. However, if an object of class "indiv_ctstm_disprog" has already been simulated using \code{\link{IndivCtstmTrans}}, then \code{disprog_} can be initialized using \code{disprog}.  
   
 }
   

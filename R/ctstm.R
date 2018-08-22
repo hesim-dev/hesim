@@ -69,7 +69,7 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
   } else{
     disprog <- copy(disprog)
   }
-  
+
   # Compute state probabilities
   ## Indexing for C++
   disprog$sim[, strategy_index := .GRP, by = "strategy_id"]
@@ -144,7 +144,26 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
   inherit = CtstmTrans,
   
   private = list(
-    .death_state = NULL
+    .death_state = NULL,
+    n_samples = NULL,
+    
+    vec_to_array = function(field){
+      field_name <- deparse(substitute(field))
+      max_len <- self$data$n_patients *nrow(self$trans_mat) * private$n_samples
+      if (length(field) !=1 & length(field) != self$data$n_patients & 
+          length(field) != max_len){
+              stop(paste0("The length of '", field_name, "' must either be 1, equal to the number ",
+                          "of simulated patients, or equal to the product of the number of simulated patients, ",
+                          "the number of treatment strategies, and the number of parameter samples."),
+                 call. = FALSE)
+      }
+      x <- array(field, dim = c(self$data$n_patients,
+                                nrow(self$trans_mat),
+                                private$n_samples))
+    }
+    
+    
+    
   ), # end private
   
   active = list(
@@ -172,16 +191,17 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
       self$params <- params
       self$trans_mat <- trans_mat
       
-      # history
-      if (length(start_age) == 1){
-        self$start_age <- rep(start_age, data$n_patients)
-      }
-      if (length(self$start_age) != data$n_patients){
-        stop("The length of 'start_age' must equal 'n_patients' in 'data'.",
-             call. = FALSE)
-      } 
-      self$start_state <- start_state
+      # Number of parameter samples
+      if (inherits(self$params, "params_surv_list")){
+        private$n_samples <- self$params[[1]]$n_samples
+      } else{
+        private$n_samples <- self$params$n_samples
+      }    
       
+      # history
+      self$start_state <- private$vec_to_array(start_state)
+      self$start_time <- private$vec_to_array(start_time)
+      self$start_age <- private$vec_to_array(start_age)
       
       # death state
       if (!is.null(death_state)){
@@ -199,9 +219,11 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     
     sim_disease = function(max_t = 100, max_age = 100){
       private$check_base()
-      
+      max_t <- private$vec_to_array(max_t)
+
       # Simulate
-      disprog <- C_ctstm_sim_disease(self, self$start_state, self$start_age,
+      disprog <- C_ctstm_sim_disease(self, self$start_state - 1, self$start_age,
+                                     self$start_time,
                                      self$death_state - 1, max_t, max_age)
       disprog <- data.table(disprog)
       disprog[, sample := sample + 1]
@@ -209,13 +231,8 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
       disprog[, to := to + 1]
       disprog[, line := NULL] # to do after incorporating treatment lines: case where there are multiple treatment lines
       
-      if (inherits(self$params, "params_surv_list")){
-        n_samples <- self$params[[1]]$n_samples
-      } else{
-        n_samples <- self$params$n_samples
-      }      
       out <- list(sim = disprog[,], 
-                  n_samples = n_samples,
+                  n_samples = private$n_samples,
                   n_states = nrow(self$trans_mat),
                   unique_strategy_id = unique(self$data$strategy_id),
                   unique_patient_id = unique(self$data$patient_id))

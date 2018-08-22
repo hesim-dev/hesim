@@ -137,7 +137,7 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.</p>
 
     
     <dl class='dl-horizontal'>
-<dt><code>trans_model</code></dt><dd><p>Model for health state transitions. Must be an object of class <code>CtstmTrans</code>.</p></dd>
+<dt><code>trans_model</code></dt><dd><p>Model for health state transitions. Must be an object of class <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></dd>
     <dt><code>utility_model</code></dt><dd><p>The model used to predict utility by health state. Must be an object of class <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
     <dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state. Must be a list of objects of class <code><a href='StateVals.html'>StateVals</a></code>, where each element of the list represents a different cost category.</p></dd>
     <dt><code>disprog_</code></dt><dd><p>An object of class "indiv_ctstm_disprog" simulated using <code>sim_disease</code>. See <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a> for more details.</p></dd>
@@ -165,7 +165,7 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.</p>
 
     
     <dl class='dl-horizontal'>
-    <dt><code>new(trans_model, utility_model = NULL, cost_models = NULL)</code></dt><dd><p>Constructor for the class.</p></dd>
+    <dt><code>new(trans_model = NULL, disprog = NULL, utility_model = NULL, cost_models = NULL)</code></dt><dd><p>Constructor for the class. <code>trans_model</code> must be specified in order to simulate disease progression with <code>sim_disease</code>. However, if an object of class "indiv_ctstm_disprog" has already been simulated using <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>, then <code>disprog_</code> can be initialized using <code>disprog</code>.</p></dd>
     <dt><code>sim_disease(max_t = 100, max_age = 100)</code></dt><dd><p>Simulate disease progression.
     <ul>
 <li><p><code>max_t</code>: Maximum number of time periods to simulate the model.</p></li>

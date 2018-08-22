@@ -139,9 +139,9 @@
   an object of class <code><a href='input_data.html'>input_data</a></code>. If <code>params</code> is a list of models, then <code>data</code> must contain a unique row for each treatment strategy and patient; if <code>params</code> is a joint model, then <code>data</code> must contain a unique row for each treatment strategy, patient, and transition.</p></dd>
     <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_surv.html'>params_surv</a></code> or <code><a href='params_surv_list.html'>params_surv_list</a></code>.</p></dd>
     <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions in a multi-state model in the format from the <a href='http://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package. See the documentation for the argument "trans" in <a href='http://www.rdocumentation.org/packages/mstate/topics/msprep'>msprep</a>.</p></dd>
-    <dt><code>start_state</code></dt><dd><p>The starting health state. Default is the first health state.</p></dd>
-    <dt><code>start_time</code></dt><dd><p>The time at which to begin the simulation. Default is time 0.</p></dd>
-    <dt><code>start_age</code></dt><dd><p>The starting age of each patient in the simulation. If a single number, every patient is assumed to be the same age; otherwise, must be the same length as the number of patients in <code>data</code>.</p></dd>
+    <dt><code>start_state</code></dt><dd><p>The vectorized (see "Details") starting health state. Default is the first health state.</p></dd>
+    <dt><code>start_time</code></dt><dd><p>The vectorized (see "Details")  time at which to begin the simulation. Default is time 0.</p></dd>
+    <dt><code>start_age</code></dt><dd><p>The vectorized (see "Details") starting age of each patient in the simulation. Default is 38.</p></dd>
     <dt><code>death_state</code></dt><dd><p>The death state in <code>trans_mat</code>. Used with <code>max_age</code> in <code>sim_disease</code> as patients transition to this state upon reaching maximum age. By default, it is set to the final absorbing state (i.e., a row in <code>trans_mat</code> with all NAs).</p></dd>
     </dl>
     
@@ -149,8 +149,8 @@
 
     
     <dl class='dl-horizontal'>
-    <dt><code>new(data, params, trans_mat, start_ages = rep(38, data$n_patients),
-                          death_state = NULL)</code></dt><dd><p>Constructor for the class.</p></dd>
+    <dt><code>new(data, params, trans_mat, start_state = 1, start_time = 0,
+                start_age = 38, death_state = NULL)</code></dt><dd><p>Constructor for the class.</p></dd>
     <dt><code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard(t)</a></code></dt><dd><p>Predict the hazard functions for each health state transition.
     <ul>
 <li><p><code>t</code>: A numeric vector of times.</p></li>
@@ -161,7 +161,7 @@
 </ul></p></dd>,
     <dt><code>sim_disease(max_t = 100, max_age = 100)</code></dt><dd><p>Simulate disease progression.
     <ul>
-<li><p><code>max_t</code>: Maximum number of time periods to simulate the model.</p></li>
+<li><p><code>max_t</code>: The vectorized (see "Details") maximum number of time periods to simulate the model.</p></li>
 <li><p><code>max_age</code>: Maximum age to simulate each patient until. Default is 100.</p></li>
 </ul>
     Returns an object of class "indiv_ctstm_disprog". See "Details".</p></dd>,
@@ -203,10 +203,16 @@
 <dt>time_start</dt><dd><p>The time at the start of the interval.</p></dd>
 <dt>time_start</dt><dd><p>The time at the end of the interval.</p></dd>
 </dl>
+    <p>The fields <code>start_state</code>, <code>start_time</code>, <code>start_age</code>, and the argument <code>max_t</code> in <code>sim_disease</code> are vectorized across patients, treatment strategies, and random samples of the parameters. Each argument can be passed in three ways:</p>
+<ul>
+<li><p>As a scalar, implying that values are constant across patients, treatment strategies, and samples.</p></li>
+<li><p>As a vector of length equal to the number of patients, implying that values vary across patients but are constant across treatment strategies and samples.</p></li>
+<li><p>As a vector of length equal to the product of the number of patients, treatment strategies, and samples. In this case the order should be sorted by sample, treatment strategy, and patient (as with an object of class "indiv_ctstm_disprog"). This option can be used to combine results from multiple simulations using <code>sim_disease</code>. Specifically, values previously simulated can be used as arguments to simulations from a new instance of <code>IndivCtstmTrans</code>.</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='mTrans.html'>create_IndivCtstmTrans</a></code>, <code><a href='IndivCtstm.html'>IndivCtstm</a></code></p></div>
+    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></code>, <code><a href='IndivCtstm.html'>IndivCtstm</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -234,7 +240,7 @@
 <span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>dt_strategies</span>,
                         <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>dt_patients</span>)
 <span class='no'>fits_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand_hesim_data.html'>expand_hesim_data</a></span>(<span class='no'>hesim_dat</span>)
-<span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>fits_data</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
+<span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>fits_data</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
                                     <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                     <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t     hazard

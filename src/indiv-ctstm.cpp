@@ -1,13 +1,15 @@
 #include <hesim/ctstm/indiv-ctstm.h>
 #include <hesim/statevals.h>
 
+
 /***************************************************************************//** 
  * @ingroup ctstm
  * Simulate disease progression (i.e., a path through a multi-state model).
  * This function is exported to @c R and used in @c CtstmTrans$sim_stateprobs() and
  * in @c IndivCtstm$sim_disase().
  * @param R_CtstmTrans An R object of class @c CtstmTrans.
- * @param start_state The starting health state.
+ * @param start_state The starting health state for each patient and random sample
+ * of the parameter sets.
  * @param start_ages The starting age of each patient in the simulation.
  * @param max_t The maximum time to simulate the model for.
  * @param max_age The maximum age that a patient can live to.
@@ -15,20 +17,22 @@
  ******************************************************************************/ 
 // [[Rcpp::export]]
 Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, 
-                                    int start_state,
-                                    std::vector<int> start_ages, 
+                                    arma::cube start_state,
+                                    arma::cube start_age, 
+                                    arma::cube start_time,
                                     int death_state,
-                                    double max_t, double max_age){
+                                    arma::cube max_t, double max_age){
  
   // Initialize
   std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
   std::vector<bool> absorbing = transmod->trans_mat_.absorbing_;
-  start_state = start_state - 1; // Switch from R to C++ indexing
+  start_state = start_state; // Switch from R to C++ indexing
   int n_samples = transmod->get_n_samples();
   int n_strategies = transmod->get_n_strategies(); 
   std::vector<int> n_lines = transmod->get_n_lines();
   int n_patients = transmod->get_n_patients();
-  hesim::ctstm::patient patient(transmod.get(), start_ages[0], 0, start_state, max_age, max_t, death_state); 
+  hesim::ctstm::patient patient(transmod.get(), start_age(0, 0, 0), start_time(0, 0, 0),
+                                start_state(0, 0, 0), max_age, max_t(0, 0, 0), death_state); 
   hesim::ctstm::disease_prog disease_prog;
   int N = 0;
   for (int i = 0; i < n_strategies; ++i){
@@ -44,11 +48,12 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
           transmod->obs_index_.set_line_index(j);
           for (int i = 0; i < n_patients; ++i){
             transmod->obs_index_.set_patient_index(i);
-            patient.age_ = start_ages[i];
-            patient.time_ = 0;
-            patient.state_ = start_state;
+            patient.age_ = start_age(i, k, s);
+            patient.time_ = start_time(i, k, s);
+            patient.state_ = start_state(i, k, s);
+            patient.max_t_ = max_t(i, k, s);
            
-            while (!absorbing[patient.state_] && patient.time_ < max_t && patient.age_ < max_age){
+            while (!absorbing[patient.state_] && patient.time_ < max_t(i, k, s) && patient.age_ < max_age){
               int from_state = patient.state_;
               double time_start = patient.time_;
               
@@ -56,25 +61,21 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
               patient.jump(s); // This is the key line!
               
               // Results
-              if (patient.time_ < max_t || time_start == 0){ 
-                disease_prog.sample_.push_back(s);
-                disease_prog.strategy_id_.push_back(transmod->obs_index_.get_strategy_id());
-                disease_prog.line_.push_back(transmod->obs_index_.get_line());
-                disease_prog.patient_id_.push_back(transmod->obs_index_.get_patient_id());
-                disease_prog.from_.push_back(from_state);
-                disease_prog.to_.push_back(patient.state_);
-                disease_prog.time_start_.push_back(time_start);
-                disease_prog.time_stop_.push_back(patient.time_);
-                if (!absorbing[patient.state_] && patient.time_ < max_t && patient.age_ < max_age){
-                  disease_prog.final_.push_back(0);
-                } 
-                else{
-                  disease_prog.final_.push_back(1);
-                }
-              }
+              disease_prog.sample_.push_back(s);
+              disease_prog.strategy_id_.push_back(transmod->obs_index_.get_strategy_id());
+              disease_prog.line_.push_back(transmod->obs_index_.get_line());
+              disease_prog.patient_id_.push_back(transmod->obs_index_.get_patient_id());
+              disease_prog.from_.push_back(from_state);
+              disease_prog.to_.push_back(patient.state_);
+              disease_prog.time_start_.push_back(time_start);
+              disease_prog.time_stop_.push_back(patient.time_);
+              if (!absorbing[patient.state_] && patient.time_ < max_t(i, k, s) && patient.age_ < max_age){
+                disease_prog.final_.push_back(0);
+              } 
               else{
-                disease_prog.time_stop_.back() = patient.time_;
+                disease_prog.final_.push_back(1);
               }
+            
            } // end while loop for patient
          } // end patient loop
        } // end line loop
