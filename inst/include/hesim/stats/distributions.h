@@ -603,7 +603,7 @@ public:
   void set_params(std::vector<double> params) {
     mu_ = params[0];
     sigma_ = exp(params[1]);
-    Q_ = exp(params[2]);
+    Q_ = params[2];
   }
   
   double pdf(double x) const {

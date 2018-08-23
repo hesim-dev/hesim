@@ -22,7 +22,7 @@ curves_edata <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
 
 # Fit survival curves
 surv_data <- psm4_exdata$survival
-fits_exp <- fits_wei <- fits_weinma <- fits_spline <- vector(mode = "list", length = 3)
+fits_exp <- fits_wei <- fits_weinma <- fits_spline <- fits_ggamma <- vector(mode = "list", length = 3)
 names(fits_exp) <- names(fits_wei) <- names(fits_spline) <- paste0("curves", seq(1, 3))
 formulas <- list("Surv(endpoint1_time, endpoint1_status) ~ age",
                  "Surv(endpoint2_time, endpoint2_status) ~ age",
@@ -39,11 +39,15 @@ for (i in 1:3){
                                          dist = hesim_survdists$weibullNMA,
                                          inits = fits_wei[[i]]$res.t[, "est"]))
   fits_spline[[i]] <- flexsurv::flexsurvspline(as.formula(formulas[[i]]), data = surv_data)
+  fits_ggamma[[i]] <- flexsurv::flexsurvreg(as.formula(formulas[[i]]),
+                                         data = surv_data,
+                                        dist = "gengamma")
 }
 fits_exp <- partsurvfit(flexsurvreg_list(fits_exp), data = surv_data)
 fits_wei <- partsurvfit(flexsurvreg_list(fits_wei), data = surv_data)
 fits_weinma <- partsurvfit(flexsurvreg_list(fits_weinma), data = surv_data)
 fits_spline <- partsurvfit(flexsurvreg_list(fits_spline), data = surv_data)
+fits_ggamma <- partsurvfit(flexsurvreg_list(fits_ggamma), data = surv_data)
 
 test_that("create_PsmCurves", {
   psm_curves <- create_PsmCurves(fits_wei, data = curves_edata, n = N,
@@ -78,6 +82,7 @@ test_that("PsmCurves", {
     psm_curves <- create_PsmCurves(fits, data = data,
                                        point_estimate = TRUE,
                                        bootstrap = FALSE)
+    
     hesim_out <- psm_curves[[fun_name]](t = times)
     fun_name2 <- if (fun_name == "cumhazard"){
       "cumhaz"
@@ -95,6 +100,7 @@ test_that("PsmCurves", {
   compare_surv_summary(fits_wei, tmp_data, "survival")
   compare_surv_summary(fits_spline, tmp_data, "survival")
   compare_surv_summary(fits_weinma, tmp_data, "survival")
+  compare_surv_summary(fits_ggamma, tmp_data, "survival")
   
   compare_surv_summary(fits_wei, tmp_data, "hazard")
   compare_surv_summary(fits_spline, tmp_data, "hazard")
