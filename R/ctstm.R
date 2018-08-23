@@ -20,8 +20,8 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
              call. = FALSE)
       }
       if(inherits(self$params, "params_surv_list")){
-        if(nrow(self$trans_mat) != length(self$params)){
-          stop(paste0("The number of models in 'params' must equal the number of rows/columns ",
+        if(max(self$trans_mat, na.rm = TRUE) != length(self$params)){
+          stop(paste0("The number of models in 'params' must equal the maximum integer in ",
                       "in 'trans_mat'."),
                call. = FALSE)
         }
