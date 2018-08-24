@@ -105,10 +105,13 @@ test_that("PsmCurves", {
   compare_surv_summary(fits_wei, tmp_data, "hazard")
   compare_surv_summary(fits_spline, tmp_data, "hazard")
   compare_surv_summary(fits_weinma, tmp_data, "hazard")
+  compare_surv_summary(fits_ggamma, tmp_data, "hazard")
+  
   
   compare_surv_summary(fits_wei, tmp_data, "cumhazard")
   compare_surv_summary(fits_spline, tmp_data, "cumhazard")
   compare_surv_summary(fits_weinma, tmp_data, "cumhazard")
+  compare_surv_summary(fits_ggamma, tmp_data, "cumhazard")
   
   compare_surv_summary(fits_wei, tmp_data, "rmst")
   compare_surv_summary(fits_spline, tmp_data, "rmst")

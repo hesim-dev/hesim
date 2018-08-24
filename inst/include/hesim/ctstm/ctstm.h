@@ -288,7 +288,7 @@ private:
     for (int i = 0; i <R_params_list.size(); ++i){
       Rcpp::List R_params_list_i = Rcpp::as<Rcpp::List>(R_params_list[i]);
       statmods::params_surv  params_surv_i(R_params_list_i);
-      statmods::surv survmod_i(X.at(0), params_surv_i);
+      statmods::surv survmod_i(X.at(i), params_surv_i);
       survmods.push_back(std::move(survmod_i));
     }
     return survmods;

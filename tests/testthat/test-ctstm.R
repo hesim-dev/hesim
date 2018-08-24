@@ -30,12 +30,24 @@ drugcosts_params <- params_lm(coefs  = drugcosts_mat)
 
 # Clock-reset multi-state model
 ## Separate 
-msfit_list <- vector(length = 3, mode = "list")
 dat <- data.table(bosms3)
+
+### fits
+msfit_list <- vector(length = 3, mode = "list")
 for (i in 1:length(msfit_list)){
   msfit_list[[i]] <- flexsurvreg(Surv(years, status) ~ 1, data = dat[trans == i],
                            dist = "exp")
 }
+
+msfit_list_wei <- vector(length = 3, mode = "list")
+for (i in 1:length(msfit_list)){
+  msfit_list_wei[[i]] <- flexsurvreg(Surv(years, status) ~ 1, data = dat[trans == i],
+                           dist = "weibull")
+}
+
+### Flexsurvreg lists
+msfit_list_mix <- flexsurvreg_list(msfit_list[[1]], msfit_list[[2]],
+                                   msfit_list_wei[[3]])
 msfit_list <- flexsurvreg_list(msfit_list)
 
 ## Joint
@@ -131,6 +143,8 @@ tmat <- rbind(c(NA, 1, 2),
               c(NA, NA, NA))
 mstate_list <- create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
                                       point_estimate = TRUE)
+mstate_list_mix <- create_IndivCtstmTrans(msfit_list_mix, data = msfit_list_data, trans_mat = tmat,
+                                      point_estimate = TRUE)
 
 test_that("IndivCtstmTrans - transition specific", {
   # hazard
@@ -152,6 +166,8 @@ test_that("IndivCtstmTrans - transition specific", {
   set.seed(101)
   disprog <- mstate_list$sim_disease()
   expect_true(inherits(disprog, "indiv_ctstm_disprog"))
+  
+  disprog_mix <- mstate_list_mix$sim_disease()
   
   ## Time from first state
   set.seed(101)
