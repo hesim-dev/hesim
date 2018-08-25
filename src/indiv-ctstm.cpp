@@ -1,6 +1,6 @@
 #include <hesim/ctstm/indiv-ctstm.h>
 #include <hesim/statevals.h>
-
+#include <hesim/check_R_infinity.h>
 
 /***************************************************************************//** 
  * @ingroup ctstm
@@ -189,10 +189,12 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
                                        std::vector<int> strategy_idx,
                                        std::vector<int> patient_idx,
                                        Rcpp::Environment R_StateVal,
-                                       double dr, std::string type){
+                                       double dr, std::string type,
+                                       double max_time){
   hesim::ctstm::disease_prog disease_prog(R_disease_prog);
   hesim::statevals stvals(R_StateVal);
   hesim::statmods::obs_index obs_index(Rcpp::as<Rcpp::List>(R_StateVal["data"]));
+  hesim::check_R_infinity(max_time);
   
   int N = disease_prog.sample_.size();
   std::vector<double> wlos(N);
@@ -202,9 +204,13 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
                         patient_idx[i],
                         disease_prog.from_[i]);
     double yhat = stvals.sim(disease_prog.sample_[i], obs, type);
+    double time = disease_prog.time_stop_[i] -  disease_prog.time_start_[i];
+    if (!std::isinf(max_time)){
+      time = std::min(time, max_time);
+    }
     wlos[i] = hesim::pv(yhat, dr,
                         disease_prog.time_start_[i],
-                        disease_prog.time_stop_[i]);
+                        disease_prog.time_start_[i] + time);
   }
   return wlos;
 }

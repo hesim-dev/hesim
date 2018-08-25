@@ -30,7 +30,7 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
 \item{\code{qalys_}}{A tidy \code{\link[data.table]{data.table}} of quality-adjusted life-years (QALYs) simulated using \code{sim_qalys}. Columns are:
 
 \describe{
-\item{sample}{A random sample from the PSA.}
+\item{sample}{A random sample from the probabilistic sensitivity analysis (PSA).}
 \item{strategy_id}{The treatment strategy ID.}
 \item{patient_id}{A patient ID.}
 \item{dr}{The discount rate.}
@@ -85,31 +85,41 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
     The simulated output is stored in \code{stateprobs_}.  
   }
   
-  \item{\code{sim_qalys(dr = .03, type = c("predict", "random")}}{
-    Compute simulated (discounted) QALYs using the simulation output stored in \code{disprog_} by patient and treatment strategy.
+  \item{\code{sim_qalys(dr = .03, type = c("predict", "random"), by_patient = TRUE, stat = mean)}}{
+    Compute simulated (discounted) QALYs using the simulation output stored in \code{disprog_} by random sample from the PSA, treatment strategy, health state, and 
+    (optionally) patient.
     
      \itemize{
      \item \code{dr}: Discount rate to apply to QALYs. May be a vector in which case QALYs are calculated for each element in \code{dr}.
      \item \code{type}: \code{predict} for mean values or \code{random} for random samples as in \code{$sim()} in \code{\link{StateVals}}.
+     \item \code{by_patient}: If \code{TRUE}, QALYs are computed at the patient level. If \code{FALSE}, QALYs are averaged across patients by
+     health state.
+    \item \code{stat}: When \code{by_patient = FALSE}, the statistic used to summarize QALYs by health state. The default is the mean but any R function can be passed to \code{stat}.    
      }
      
      The simulated output is stored in \code{qalys_}.
   } 
   
-  \item{\code{sim_costs(dr = .03, type = c("predict", "random")}}{
-    Compute simulated (discounted) costs using the simulation output stored in \code{disprog_} by patient and treatment strategy.
+  \item{\code{sim_costs(dr = .03, type = c("predict", "random"), by_patient = TRUE, stat = mean, max_t = Inf)}}{
+    Compute simulated (discounted) costs using the simulation output stored in \code{disprog_} by random sample from the PSA, treatment strategy, health state, and 
+    (optionally) patient.
     
      \itemize{
      \item \code{dr}: Discount rate to apply to costs. May be a vector in which case costs are calculated for each element in \code{dr}.
       \item \code{type}: \code{predict} for mean values or \code{random} for random samples as in \code{$sim()} in \code{\link{StateVals}}.
-     
+     \item \code{by_patient}: If \code{TRUE}, costs are computed at the patient level. If \code{FALSE}, costs are averaged across patients by
+     health state.      
+      \item \code{stat}: When \code{by_patient = FALSE}, the statistic used to summarize costs by health state. The default is the mean but any R function can be passed to \code{stat}.  
+      \item \code{max_t}: Maximum time duration to compute costs once a patient has entered a (new) health state. By default, equal to \code{Inf}, 
+      so that costs are computed over the entire duration that a patient is in a given health state. If time varies by each cost category, then time can also be passed
+      as a numeric vector of length equal to the number of cost categories (e.g., \code{c(1, 2, Inf, 3)} for a model with 4 cost categories).
      }
      
     The simulated output is stored in \code{costs_}. 
   },
   
   \item{\code{summarize(stat = mean)}}{
-    Summarize costs and QALYs to produce a summary measure of costs and health outcomes across all patients by treatment strategy.
+    Produce a summary measure of costs and QALYs by random sample from the PSA and treatment strategy.
     
      \itemize{
      \item \code{stat}: The statistic used to summarize costs and QALYs. The default is the mean but any R function can be passed to \code{stat}.

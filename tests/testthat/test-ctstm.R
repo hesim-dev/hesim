@@ -306,20 +306,26 @@ test_that("Simulate costs and QALYs", {
   ictstm2$utility_model <- 2
   expect_error(ictstm2$sim_qalys())
   
-  ## dr = .03
-  ictstm$sim_qalys(dr = .03)$qalys_
+  ## No errors
+  expect_error(ictstm$sim_qalys(dr = .03)$qalys_, NA)
+  
+  ## By patient
+  ### dr = .03
+  ictstm$sim_qalys(dr = .03, by_patient = TRUE)$qalys_
   
   disprog1 <- ictstm$disprog_$sim[sample == 1 & strategy_id == 1 & patient_id == 2]
   qalys1 <- ictstm$qalys_[sample == 1 & strategy_id == 1 & patient_id == 2]
   utilvals <- utility_params$coefs[1, disprog1$from] 
   qalys_expected <- sum(pv(utilvals, .03, disprog1$time_start, disprog1$time_stop))
-  expect_equal(qalys1$qalys, qalys_expected)
+  expect_equal(sum(qalys1$qalys), qalys_expected)
   
-  ## dr = 0
+  ### dr = 0
+  ictstm <- ictstm$clone(deep = TRUE)
   ictstm$utility_model$params$coefs <- matrix(1, nrow = n_samples, ncol = nrow(dt_states))
-  qalys <- ictstm$sim_qalys(dr = 0)$qalys_
-  expect_equal(ictstm$disprog_$sim[final == 1][3, time_stop],
-               qalys[3, qalys])
+  qalys <- ictstm$sim_qalys(dr = 0, by_patient = TRUE)$qalys_
+  expect_equal(ictstm$disprog_$sim[final == 1][sample == 1 & strategy_id == 2 & patient_id == 2, time_stop],
+               sum(qalys[sample == 1 & strategy_id == 2 & patient_id == 2, qalys]))
+  
   
   # Simulate costs
   # Errors
@@ -329,6 +335,15 @@ test_that("Simulate costs and QALYs", {
   expect_error(ictstm2$sim_costs())
   
   # Working
+  costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(Inf, 2))$costs_
+  expect_true(inherits(costs, "data.table"))
+  costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(Inf, Inf))$costs_
+  expect_true(inherits(costs, "data.table"))
+  costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(1, 0))$costs_
+  expect_true(all(costs[category == "drugs", costs] == 0))
+  costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(0, 0))$costs_
+  expect_true(all(costs$costs == 0))
+  
   costs <- ictstm$sim_costs(dr = c(0, .03))$costs_
   expect_equal(unique(costs$category), c("medical", "drugs"))
   expect_equal(unique(costs$dr), c(0, .03))

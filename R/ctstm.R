@@ -264,7 +264,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     disprog_idx = NULL,
     
     sim_wlos = function(stateval_list, dr, stateval_type = c("costs", "qalys"),
-                        sim_type){
+                        sim_type, by_patient = FALSE, max_t = Inf){
      
       stateval_type <- match.arg(stateval_type)
       if(is.null(self$disprog_)){
@@ -283,6 +283,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
         private$disprog_idx[, patient_idx := patient_idx - 1]
       }
       
+      #  Categories
       n_cats <- length(stateval_list)
       if (stateval_type == "costs"){
         if (is.null(names(stateval_list))){
@@ -294,7 +295,17 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
         categories <- "qalys"
       } # end if/else costs vs. qalys
       
-
+      
+      # Maximum time
+      if (!(length(max_t) %in% c(1, n_cats))){
+        stop("'max_t' must either equal the number of cost categories or be of length 1.",
+             call. = FALSE)
+      }
+      if (length(max_t) == 1){
+        max_t <- rep(max_t, n_cats)
+      }
+      
+      # Computation
       n_dr <- length(dr)
       wlos_list <- vector(mode = "list", length = n_cats * n_dr)
       counter <- 1
@@ -304,10 +315,17 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        stateval_list[[i]], dr[j],
-                                       sim_type)
+                                       sim_type, max_t[i])
           self$disprog_$sim[, wlos := C_wlos]
+          
+          by_cols <- c("sample", "strategy_id", "patient_id", "from")
           wlos_list[[counter]] <- self$disprog_$sim[, .(wlos = sum(wlos)), 
-                                       by = c("sample", "strategy_id", "patient_id")]
+                                       by = by_cols]
+          if (by_patient == FALSE){
+            wlos_list[[counter]] <- wlos_list[[counter]][, .(wlos = mean(wlos)),
+                                                         by = c("sample", "strategy_id", "from")]
+            by_cols <- c("sample", "strategy_id", "from")
+          }
           wlos_list[[counter]][, "dr" := dr[j]]
           wlos_list[[counter]][, "category" := categories[i]]
           self$disprog_$sim[, "wlos" := NULL]
@@ -315,7 +333,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
         }
       }
       wlos_dt <- rbindlist(wlos_list)
-      setcolorder(wlos_dt, c("sample", "strategy_id", "patient_id", "dr", "category", "wlos"))
+      setcolorder(wlos_dt, c(by_cols, "dr", "category", "wlos"))
+      setnames(wlos_dt, "from", "state_id")
       if (stateval_type == "costs"){
         setnames(wlos_dt, "wlos", "costs")
       } else{
@@ -398,17 +417,17 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       invisible(self)
     },
     
-    sim_qalys = function(dr = .03, type = c("predict", "random")){
+    sim_qalys = function(dr = .03, type = c("predict", "random"), by_patient = FALSE){
       if(!inherits(self$utility_model, "StateVals")){
         stop("'utility_model' must be an object of class 'StateVals'",
           call. = FALSE)
       }
       type <- match.arg(type)
-      private$.qalys_ <- private$sim_wlos(list(self$utility_model), dr, "qalys", type)
+      private$.qalys_ <- private$sim_wlos(list(self$utility_model), dr, "qalys", type, by_patient)
       invisible(self)
     },
     
-    sim_costs = function(dr = .03, type = c("predict", "random")){
+    sim_costs = function(dr = .03, type = c("predict", "random"), by_patient = FALSE, max_t = Inf){
       if(!is.list(self$cost_models)){
         stop("'cost_models' must be a list of objects of class 'StateVals'",
           call. = FALSE)
@@ -422,7 +441,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       }
       
       type <- match.arg(type)
-      private$.costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type)
+      private$.costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type, by_patient, max_t)
       invisible(self)
     },
     
@@ -437,10 +456,18 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
               call. = FALSE)
       }      
       
+      # Costs
       costs_summary <- self$costs_[, lapply(.SD, stat), by = c("category", "dr", "sample", "strategy_id"),
                                    .SDcols = "costs"]
+      costs_total <- costs_summary[, .(costs = sum(costs)), by = c("dr", "sample", "strategy_id")]
+      costs_total[, category := "total"]
+      costs_summary <- rbind(costs_summary, costs_total)
+      
+      # QALYs
       qalys_summary <- self$qalys_[, lapply(.SD, stat), by = c("dr", "sample", "strategy_id"),
                                    .SDcols = "qalys"]
+      
+      # Combine
       ce <- list(costs = costs_summary, qalys = qalys_summary)
       class(ce) <- "ce"
       return(ce)
