@@ -322,9 +322,15 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
           wlos_list[[counter]] <- self$disprog_$sim[, .(wlos = sum(wlos)), 
                                        by = by_cols]
           if (by_patient == FALSE){
-            wlos_list[[counter]] <- wlos_list[[counter]][, .(wlos = mean(wlos)),
-                                                         by = c("sample", "strategy_id", "from")]
             by_cols <- c("sample", "strategy_id", "from")
+            wlos_list[[counter]] <- wlos_list[[counter]][, .(wlos = mean(wlos)),
+                                                         by = by_cols]
+            setkeyv(wlos_list[[counter]], by_cols)
+            
+            # Pad missing health states within sample/strategy pairs with 0's
+            wlos_list[[counter]] <- wlos_list[[counter]][CJ(sample, strategy_id, from,
+                                                            unique = TRUE)]
+            wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)]
           }
           wlos_list[[counter]][, "dr" := dr[j]]
           wlos_list[[counter]][, "category" := categories[i]]

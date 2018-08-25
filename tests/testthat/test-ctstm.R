@@ -290,7 +290,6 @@ test_that("Simulate disease and state probabilities", {
   ictstm <- IndivCtstm$new(disprog = disprog,
                            utility_model = utilmod)
   expect_true(inherits(ictstm$sim_stateprobs(t = seq(0, 3))$stateprobs_, "data.table"))
-  
 })
 
 test_that("Simulate costs and QALYs", {
@@ -318,6 +317,17 @@ test_that("Simulate costs and QALYs", {
   utilvals <- utility_params$coefs[1, disprog1$from] 
   qalys_expected <- sum(pv(utilvals, .03, disprog1$time_start, disprog1$time_stop))
   expect_equal(sum(qalys1$qalys), qalys_expected)
+  
+  ## Pad 0's with incomplete health states
+  disprog <- mstate_list$sim_disease()
+  disprog$sim <- disprog$sim[(sample == 1 & from == 1) | (sample == 2 & from == 2)]
+  ictstm2 <- IndivCtstm$new(disprog = disprog,
+                            utility_model = utilmod,
+                            cost_models = list(medical = medcostsmod, 
+                                              drugs = drugcostsmod))
+  ictstm2$sim_costs()
+  expect_true(all(ictstm2$costs_[sample == 1 & state_id == 2, costs] == 0))
+  expect_true(all(ictstm2$costs_[sample == 2 & state_id == 1, costs] == 0))
   
   ### dr = 0
   ictstm <- ictstm$clone(deep = TRUE)
