@@ -21,6 +21,7 @@ reference:
       - rdirichlet_mat
   - title: "Parameters"
     contents:
+      - params_mean
       - params_lm
       - params_surv
       - params_surv_list
@@ -34,6 +35,7 @@ reference:
       - create_input_data
   - title: "Health state values"
     contents:
+      - stateval_ests
       - StateVals
       - create_StateVals
   - title: "Partitioned survival model"

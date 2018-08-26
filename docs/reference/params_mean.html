@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Input validation for class objects — check.input_data • hesim</title>
+<title>Parameters of a mean model — params_mean • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,9 +32,9 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Input validation for class objects — check.input_data" />
+<meta property="og:title" content="Parameters of a mean model — params_mean" />
 
-<meta property="og:description" content="check is a generic function for validating the inputs of class objects." />
+<meta property="og:description" content="Create a list containing the parameters of a mean model." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,67 +114,57 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Input validation for class objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/R/input-data.R'><code>R/input-data.R</code></a>, <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
-    <div class="hidden name"><code>check.Rd</code></div>
+    <h1>Parameters of a mean model</h1>
+    <small class="dont-index">Source: <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/R/params.R'><code>R/params.R</code></a></small>
+    <div class="hidden name"><code>params_mean.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>check</code> is a generic function for validating the inputs of class objects.</p>
+    <p>Create a list containing the parameters of a mean model.</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for input_data</span>
-<span class='fu'>check</span>(<span class='no'>object</span>)
-
-<span class='co'># S3 method for params_mean</span>
-<span class='fu'>check</span>(<span class='no'>object</span>)
-
-<span class='co'># S3 method for params_lm</span>
-<span class='fu'>check</span>(<span class='no'>object</span>)
-
-<span class='co'># S3 method for params_lm_list</span>
-<span class='fu'>check</span>(<span class='no'>object</span>)
-
-<span class='co'># S3 method for params_surv</span>
-<span class='fu'>check</span>(<span class='no'>object</span>)
-
-<span class='co'># S3 method for params_joined_surv</span>
-<span class='fu'>check</span>(<span class='no'>object</span>, <span class='no'>inner_class</span>)
-
-<span class='co'># S3 method for params_surv_list</span>
-<span class='fu'>check</span>(<span class='no'>object</span>)
-
-<span class='co'># S3 method for params_joined_surv_list</span>
-<span class='fu'>check</span>(<span class='no'>object</span>, <span class='no'>inner_class</span>)
-
-<span class='fu'>check</span>(<span class='no'>object</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>params_mean</span>(<span class='no'>mu</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>object to check.</p></td>
+      <th>mu</th>
+      <td><p>Matrix of samples from the posterior distribution of the 
+mean. Columns denote random samples and rows denote means for different observations.</p></td>
     </tr>
     <tr>
-      <th>inner_class</th>
-      <td><p>When checking a list of objects, the class of elements within
-the inner most list.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
+      <th>sigma</th>
+      <td><p>A vector of samples of the standard deviation.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If validation is successful, returns the object in question; otherwise,
-informs the user that an error has occurred.</p>
+    <p>An object of class "params_mean", which is a list containing <code>mu</code>,
+<code>sigma</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the number of columns
+in <code>mu</code>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'>params_mean</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>4</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>),
+                      <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>))
+<span class='fu'>print</span>(<span class='no'>params</span>)</div><div class='output co'>#&gt; $mu
+#&gt;      [,1] [,2]
+#&gt; [1,]    1    3
+#&gt; [2,]    2    4
+#&gt; 
+#&gt; $sigma
+#&gt; [1] 0 0
+#&gt; 
+#&gt; $n_samples
+#&gt; [1] 2
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "params_mean"</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -182,7 +172,9 @@ informs the user that an error has occurred.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -14,7 +14,7 @@ An object of class "params_lm_list", which is a list containing \code{\link{para
 objects.
 }
 \description{
-Create a list containing the parmeters of a list of fitted linear regression models.
+Create a list containing the parameters of a list of fitted linear regression models.
 }
 \examples{
 n <- 2

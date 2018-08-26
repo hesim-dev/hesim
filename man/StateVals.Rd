@@ -2,7 +2,7 @@
 \name{StateVals}
 \alias{StateVals}
 
-\title{State values}
+\title{Model for state values}
 \format{\code{\link{R6Class}} object.}
 \usage{
 StateVals

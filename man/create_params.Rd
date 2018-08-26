@@ -2,13 +2,16 @@
 % Please edit documentation in R/params.R
 \name{create_params}
 \alias{create_params}
+\alias{create_params.stateval_ests}
 \alias{create_params.lm}
 \alias{create_params.flexsurvreg}
 \alias{create_params.flexsurvreg_list}
 \alias{create_params.partsurvfit}
-\title{Parameters from a fitted model}
+\title{Create a parameter object from a fitted model}
 \usage{
-create_params(object, n = 1000, point_estimate = FALSE, ...)
+create_params(object, ...)
+
+\method{create_params}{stateval_ests}(object, ...)
 
 \method{create_params}{lm}(object, n = 1000, point_estimate = FALSE, ...)
 
@@ -24,12 +27,12 @@ create_params(object, n = 1000, point_estimate = FALSE, ...)
 \arguments{
 \item{object}{A statistical model to randomly sample parameters from.}
 
+\item{...}{Further arguments passed to or from other methods. Currently unused.}
+
 \item{n}{Number of random observations to draw.}
 
 \item{point_estimate}{If TRUE, then the point estimates are returned and
 and no samples are drawn.}
-
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
 
 \item{bootstrap}{If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are 
 drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
@@ -41,6 +44,7 @@ parameters are bootstrapped using \code{\link{bootstrap}}.}
 An object prefixed by \code{params_}. Mapping between \code{create_params} 
 and the classes of the returned objects are: 
 \itemize{
+\item{\code{create_params.statevals_est} ->}{ \code{params_mean}}
 \item{\code{create_params.lm} ->}{ \code{params_lm}}
 \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
 \item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}

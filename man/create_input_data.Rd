@@ -2,9 +2,30 @@
 % Please edit documentation in R/input-data.R
 \name{create_input_data}
 \alias{create_input_data}
+\alias{create_input_data.formula_list}
+\alias{create_input_data.stateval_ests}
+\alias{create_input_data.lm}
+\alias{create_input_data.lm_list}
+\alias{create_input_data.flexsurvreg}
+\alias{create_input_data.flexsurvreg_list}
+\alias{create_input_data.partsurvfit}
 \title{Create input data}
 \usage{
 create_input_data(object, data, ...)
+
+\method{create_input_data}{formula_list}(object, data, ...)
+
+\method{create_input_data}{stateval_ests}(object, data, ...)
+
+\method{create_input_data}{lm}(object, data, ...)
+
+\method{create_input_data}{lm_list}(object, data, ...)
+
+\method{create_input_data}{flexsurvreg}(object, data, ...)
+
+\method{create_input_data}{flexsurvreg_list}(object, data, ...)
+
+\method{create_input_data}{partsurvfit}(object, data, ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class. Currently supports

@@ -51,6 +51,38 @@ public:
 };
 
 /***************************************************************************//** 
+ * A means model.
+ * Prediction and random sampling from a model based on means. Random samples
+ * are from a normal distribution.  
+ ******************************************************************************/ 
+class mean : public statmod{
+private:
+  params_mean params_; ///< Parameters for a means model.
+  
+public:
+  /** 
+   * The constructor.
+   * Instantiates a means model.
+   */ 
+  mean(params_mean params)
+    : params_(params){
+  }  
+  
+  double predict(int sample, int obs) {
+    return params_.mu_(obs, sample);
+  }  
+  
+  double random(int sample, int obs) {
+    return R::rnorm(predict(sample, obs), params_.sigma_[sample]);
+  }  
+  
+  int get_n_samples(){
+    return params_.n_samples_;
+  }  
+};
+
+
+/***************************************************************************//** 
  * A linear model.
  * Prediction and random sampling from a fitted linear model. Random samples
  * are from a normal distribution.  

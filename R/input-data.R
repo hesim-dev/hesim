@@ -144,7 +144,7 @@ check.hesim_data <- function(x){
   }
   check_hesim_data_type(x$strategies, "strategies")
   if (!"strategy_id" %in% colnames(x$strategies)){
-    stop("'strategy_id' must be a column of 'strategies'.",
+    stop("'strategies' must contain the column 'strategy_id'.",
          call. = FALSE)
   }
   
@@ -152,7 +152,7 @@ check.hesim_data <- function(x){
   if (!is.null(x$patients)){
       check_hesim_data_type(x$patients, "patients")
       if (!"patient_id" %in% colnames(x$patients)){
-        stop("'patient_id' must be a column of 'patients'.", 
+        stop("'patients' must contain the column 'patient_id'.", 
              call. = FALSE)
       }
   }
@@ -161,11 +161,11 @@ check.hesim_data <- function(x){
   if (!is.null(x$lines)){
       check_hesim_data_type(x$lines, "lines")
       if (!"strategy_id" %in% colnames(x$lines)){
-        stop("'strategy_id' must be a column of 'lines'.", 
+        stop("'lines' must contain the column 'strategy_id'.", 
              call. = FALSE)
       }
       if (!"line" %in% colnames(x$lines)){
-        stop("'line' must be a column of 'lines'.", 
+        stop("'lines' must contain the column 'line'.", 
              call. = FALSE)
       }
   }
@@ -174,7 +174,7 @@ check.hesim_data <- function(x){
   if (!is.null(x$states)){
       check_hesim_data_type(x$states, "states")
       if (!"state_id" %in% colnames(x$states)){
-        stop("'state_id' must be a column of 'states'.", 
+        stop("'states' must contain the column 'state_id'.", 
              call. = FALSE)
       }
   }
@@ -183,7 +183,7 @@ check.hesim_data <- function(x){
   if (!is.null(x$transitions)){
       check_hesim_data_type(x$transitions, "transitions")
       if (!"transition_id" %in% colnames(x$transitions)){
-        stop("'transition_id' must be a column of 'transitions'.", 
+        stop("'transitions' must contain the column 'transition_id'.", 
              call. = FALSE)
       }
   }
@@ -273,6 +273,22 @@ hesim_data_sorted_by <- function(by){
 
 sort_hesim_data <- function(data, sorted_by){
   setorderv(data, unlist(hesim_data_sorting_map()[sorted_by]))
+}
+
+create_expanded_hesim_data <- function(object, ...){
+  UseMethod("create_expanded_hesim_data",  object)
+}
+
+create_expanded_hesim_data.stateval_ests <- function(object, ...) {
+  n_states <- dim(object$values)[2]
+  states_dt <- data.table(state_id = seq(1, n_states))
+  patients_dt <- data.table(patient_id = object$patient_id)
+  strategies_dt <- data.table(strategy_id = object$strategy_id)
+  hesim_dat <- hesim_data(strategies = strategies_dt,
+                          patients = patients_dt,
+                          states = states_dt)
+  edat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))   
+  return(edat)
 }
 
 # input_data class -------------------------------------------------------------
@@ -367,7 +383,7 @@ new_input_data <- function(X, strategy_id, n_strategies,
                        state_id = NULL, n_states = NULL,
                        transition_id = NULL, n_transitions = NULL,
                        time_fun = NULL){
-  stopifnot(is.matrix(X) | is.list(X))
+  stopifnot(is.matrix(X) | is.list(X) | is.null(X))
   stopifnot(is.numeric(strategy_id))
   stopifnot(is.numeric(n_strategies))
   stopifnot(is.numeric(patient_id))
@@ -563,15 +579,18 @@ get_input_data_id_vars <- function(data){
 #' input_dat <- create_input_data(fit_wei, expanded_dat)
 #' class(input_dat)
 #' @export
+#' @rdname create_input_data
 create_input_data <- function (object, data, ...) {
   if (missing(object)){
     stop("'object' is missing with no default.")
   }
-  if (missing(data)){
-    stop("'data' is missing with no default.")
-  }
-  if (!inherits(data, "expanded_hesim_data")){
-    stop("'data' must be of class 'expanded_hesim_data'.")
+  if (!inherits(object, "stateval_est")){
+    if (missing(data)){
+      stop("'data' is missing with no default.")
+    }
+    if (!inherits(data, "expanded_hesim_data")){
+      stop("'data' must be of class 'expanded_hesim_data'.")
+    } 
   }
   UseMethod("create_input_data", object)
 }
@@ -590,6 +609,7 @@ formula_list_rec <- function(object, data, ...){
 }
 
 #' @export
+#' @rdname create_input_data
 create_input_data.formula_list <- function(object, data, ...){
   X_list <- formula_list_rec(object, data, ...)
   args <- c(list(X = X_list),
@@ -602,7 +622,16 @@ get_terms <- function(object){
   return(stats::delete.response(tt))
 }
 
+#' @export
+#' @rdname create_input_data
+create_input_data.stateval_ests <- function(object, data, ...){
+  args <- c(list(X = NULL),
+           get_input_data_id_vars(data))
+  return(do.call("new_input_data", args))
+}
+
 #' @export 
+#' @rdname create_input_data
 create_input_data.lm <- function(object, data, ...){
   terms <- get_terms(object)
   X <- stats::model.matrix(terms, data = data$data, ...)
@@ -612,6 +641,7 @@ create_input_data.lm <- function(object, data, ...){
 }
 
 #' @export 
+#' @rdname create_input_data
 create_input_data.lm_list <- function(object, data, ...){
   X_list <- vector(mode = "list", length = length(object))
   names(X_list) <- names(object)
@@ -641,6 +671,7 @@ create_input_data_flexsurvreg_X <- function(object, data, ...){
 }
 
 #' @export
+#' @rdname create_input_data
 create_input_data.flexsurvreg <- function(object, data,...){
   X_list <- create_input_data_flexsurvreg_X(object, data, ...)
   args <- c(list(X = X_list),
@@ -649,6 +680,7 @@ create_input_data.flexsurvreg <- function(object, data,...){
 }
 
 #' @export
+#' @rdname create_input_data
 create_input_data.flexsurvreg_list <- function(object, data,...){
   X_list_2d <- vector(mode = "list", length = length(object))
   names(X_list_2d) <- names(object)
@@ -661,6 +693,7 @@ create_input_data.flexsurvreg_list <- function(object, data,...){
 }
 
 #' @export
+#' @rdname create_input_data
 create_input_data.partsurvfit <- function(object, data, ...){
   return(create_input_data.flexsurvreg_list(object$models, data, ...))
 }

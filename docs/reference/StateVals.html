@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>State values — StateVals • hesim</title>
+<title>Model for state values — StateVals • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,7 +32,7 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="State values — StateVals" />
+<meta property="og:title" content="Model for state values — StateVals" />
 
 <meta property="og:description" content="Simulate values (i.e., utility or costs) associated with health states in a partitioned survival or state transition model." />
 <meta name="twitter:card" content="summary" />
@@ -114,7 +114,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>State values</h1>
+    <h1>Model for state values</h1>
     
     <div class="hidden name"><code>StateVals.Rd</code></div>
     </div>
@@ -174,13 +174,13 @@
 <span class='no'>costs_medical</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>fit_costs_medical</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>)
 
 <span class='co'># Predict</span>
-<span class='fu'>head</span>(<span class='no'>costs_medical</span>$<span class='fu'>sim</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"predict"</span>))</div><div class='output co'>#&gt;    state_id sample strategy_id patient_id time    value
-#&gt; 1:        1      1           1          1    5 28532.85
-#&gt; 2:        2      1           1          1    5 21516.80
-#&gt; 3:        3      1           1          1    5 32120.29
-#&gt; 4:        1      1           1          2    5 28532.85
-#&gt; 5:        2      1           1          2    5 21516.80
-#&gt; 6:        3      1           1          2    5 32120.29</div></pre>
+<span class='fu'>head</span>(<span class='no'>costs_medical</span>$<span class='fu'>sim</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"predict"</span>))</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id time    value
+#&gt; 1:      1           1          1        1    5 29727.60
+#&gt; 2:      1           1          1        2    5 28088.74
+#&gt; 3:      1           1          1        3    5 34057.40
+#&gt; 4:      1           1          2        1    5 29727.60
+#&gt; 5:      1           1          2        2    5 28088.74
+#&gt; 6:      1           1          2        3    5 34057.40</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

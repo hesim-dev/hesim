@@ -18,7 +18,7 @@ An object of class "params_lm", which is a list containing \code{coefs},
 in \code{coefs}.
 }
 \description{
-Create a list containing the parmeters of a fitted linear regression model.
+Create a list containing the parameters of a fitted linear regression model.
 }
 \examples{
 library("MASS")

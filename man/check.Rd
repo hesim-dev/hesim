@@ -2,6 +2,7 @@
 % Please edit documentation in R/input-data.R, R/params.R, R/utils.R
 \name{check.input_data}
 \alias{check.input_data}
+\alias{check.params_mean}
 \alias{check.params_lm}
 \alias{check.params_lm_list}
 \alias{check.params_surv}
@@ -12,6 +13,8 @@
 \title{Input validation for class objects}
 \usage{
 \method{check}{input_data}(object)
+
+\method{check}{params_mean}(object)
 
 \method{check}{params_lm}(object)
 

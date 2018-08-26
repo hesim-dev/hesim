@@ -25,9 +25,49 @@ check_params_joined <- function(x, inner_class, model_list){
   return(x)
 }
 
+#' Parameters of a mean model
+#' 
+#' Create a list containing the parameters of a mean model.
+#' @param mu  Matrix of samples from the posterior distribution of the 
+#' mean. Columns denote random samples and rows denote means for different observations.
+#' @param sigma A vector of samples of the standard deviation.
+#' 
+#' @return An object of class "params_mean", which is a list containing \code{mu},
+#' \code{sigma}, and \code{n_samples}. \code{n_samples} is equal to the number of columns
+#' in \code{mu}.
+#' @examples 
+#' params <- params_mean(mu = matrix(seq(1, 4), nrow = 2), 
+#'                       sigma = c(0, 0))
+#' print(params)
+#'
+#' @export
+params_mean <- function(mu, sigma = NULL){
+  stopifnot(is.matrix(mu))
+  n_samples <- ncol(mu)
+  if(is.null(sigma)) sigma <- rep(1, n_samples)
+  check(new_params_mean(mu, sigma, n_samples))
+}
+
+new_params_mean <- function(mu, sigma, n_samples){
+  stopifnot(is.numeric(sigma))
+  stopifnot(is.numeric(n_samples))
+  l <- list(mu = mu, sigma = sigma, n_samples = n_samples)
+  class(l) <- "params_mean"
+  return(l)
+}
+
+#' @rdname check
+check.params_mean <- function(object){
+  if(object$n_samples != length(object$sigma)){
+    stop("Number of samples in 'sigma' is not equal to the number of samples in 'mu'.",
+         call. = FALSE)
+  }
+  return(object)
+}
+
 #' Parameters of a linear model
 #' 
-#' Create a list containing the parmeters of a fitted linear regression model.
+#' Create a list containing the parameters of a fitted linear regression model.
 #' @param coefs  Matrix of samples from the posterior distribution of the 
 #' regression coefficients.
 #' @param sigma A vector of samples of the standard error of the regression model.
@@ -71,7 +111,7 @@ check.params_lm <- function(object){
 
 #' Parameters of a list of linear models
 #' 
-#' Create a list containing the parmeters of a list of fitted linear regression models.
+#' Create a list containing the parameters of a list of fitted linear regression models.
 #' @param ... Objects of class \code{\link{params_lm}}, which can be named.
 #' 
 #' @return An object of class "params_lm_list", which is a list containing \code{\link{params_lm}}
@@ -315,7 +355,7 @@ create_params_joined <- function(object, n, point_estimate, inner_class){
   return(new_params_joined(models, times = object$times, inner_class = inner_class))
 }
 
-#' Parameters from a fitted model
+#' Create a parameter object from a fitted model
 #' 
 #' \code{create_params} is a generic function for creating an object containing 
 #' parameters from a fitted statistical model. If \code{point_estimate = FALSE},
@@ -332,6 +372,7 @@ create_params_joined <- function(object, n, point_estimate, inner_class){
 #' @return An object prefixed by \code{params_}. Mapping between \code{create_params} 
 #' and the classes of the returned objects are: 
 #' \itemize{
+#' \item{\code{create_params.statevals_est} ->}{ \code{params_mean}}
 #' \item{\code{create_params.lm} ->}{ \code{params_lm}}
 #' \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
 #' \item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}
@@ -356,9 +397,24 @@ create_params_joined <- function(object, n, point_estimate, inner_class){
 #' head(params_surv_wei$coefs)
 #' @export
 #' @rdname create_params
-create_params <- function (object, n = 1000, point_estimate = FALSE, ...) {
+create_params <- function (object, ...) {
   UseMethod("create_params", object)
 }
+
+#' @export
+#' @rdname create_params
+create_params.stateval_ests <- function(object, ...){
+  n_samples <- nrow(object$values)
+  n_patients <- length(object$patient_id)
+  n_strategies <- length(object$strategy_id)
+  vals <- t(object$value)
+  vals <- vals[rep(1:nrow(vals), times = n_patients), ]
+  vals <- vals[rep(1:nrow(vals), times = n_strategies), ]
+  return(new_params_mean(mu = vals, 
+                         sigma = rep(0, n_samples),
+                         n_samples = n_samples))
+}
+
 
 #' @export
 #' @rdname create_params

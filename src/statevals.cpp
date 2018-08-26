@@ -51,10 +51,10 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
   
 // Return
   return Rcpp::DataFrame::create(
-    Rcpp::_["state_id"] = state_id_vec,
     Rcpp::_["sample"] = sample_vec,
     Rcpp::_["strategy_id"] = strategy_id_vec,
     Rcpp::_["patient_id"] = patient_id_vec,
+    Rcpp::_["state_id"] = state_id_vec,    
     Rcpp::_["time"] = times_vec,
     Rcpp::_["value"] = value_vec,
     Rcpp::_["stringsAsFactors"] = false
