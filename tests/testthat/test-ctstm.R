@@ -360,7 +360,7 @@ test_that("Simulate costs and QALYs", {
    
   # Summarize costs and QALYs
   ## By patient = TRUE
-  ce_summary <- ictstm$summarize(stat = mean)
+  ce_summary <- ictstm$summarize()
   expect_true(inherits(ce_summary, "ce"))
   ictstm$sim_disease()
   expect_error(ictstm$summarize())
@@ -371,6 +371,17 @@ test_that("Simulate costs and QALYs", {
   ictstm$sim_qalys(by_patient = TRUE)
   ictstm$sim_costs(by_patient = TRUE)
   expect_error(ictstm$summarize(), NA)
+  
+  ### Check that life-years are correct
+  utilmod2 <- utilmod$clone(deep = TRUE)
+  utilmod2$params$coefs <- matrix(1, nrow = nrow(utilmod2$params$coefs),
+                                  ncol = ncol(utilmod2$params$coefs))
+  ictstm$utility_model <- utilmod2
+  ictstm$sim_qalys(dr = 0)
+  ce_summary <- ictstm$summarize()
+  los <- ictstm$disprog_$sim[final == 1, .(los = mean(time_stop)), 
+                      by = c("sample", "strategy_id")]
+  expect_true(all(round(los$los, 4) == round(ce_summary$qalys$qalys, 4)))
   
 })
 

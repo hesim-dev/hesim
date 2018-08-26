@@ -318,16 +318,24 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                        sim_type, max_t[i])
           self$disprog_$sim[, wlos := C_wlos]
           
-          by_cols <- c("sample", "strategy_id", "patient_id", "from")
-          wlos_list[[counter]] <- self$disprog_$sim[, .(wlos = sum(wlos)), 
-                                       by = by_cols]
-          if (by_patient == FALSE){
-            by_cols <- c("sample", "strategy_id", "from")
-            wlos_list[[counter]] <- wlos_list[[counter]][, .(wlos = mean(wlos)),
-                                                         by = by_cols]
+          
+          if (by_patient == TRUE){
+            by_cols <- c("sample", "strategy_id", "patient_id", "from")
+            wlos_list[[counter]] <- self$disprog_$sim[, .(wlos = sum(wlos)), 
+                                         by = by_cols]
             setkeyv(wlos_list[[counter]], by_cols)
-            
             # Pad missing health states within sample/strategy pairs with 0's
+            wlos_list[[counter]] <- wlos_list[[counter]][CJ(sample, strategy_id, patient_id, from,
+                                                              unique = TRUE)]
+            wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)]
+          } else{
+            by_cols <- c("sample", "strategy_id", "from")
+            n_patients <- length(self$disprog_$unique_patient_id)
+            wlos_list[[counter]] <- self$disprog_$sim[, .(wlos = sum(wlos)),
+                                                         by = by_cols]
+            wlos_list[[counter]][, wlos := wlos/n_patients]
+            # Pad missing health states within sample/strategy pairs with 0's
+            setkeyv(wlos_list[[counter]], by_cols)
             wlos_list[[counter]] <- wlos_list[[counter]][CJ(sample, strategy_id, from,
                                                             unique = TRUE)]
             wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)]
@@ -451,7 +459,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       invisible(self)
     },
     
-    summarize = function(stat = mean) {
+    summarize = function() {
       if (is.null(self$costs_)) {
         stop("Cannot summarize costs without first simulating 'costs_' with '$sim_costs()'.",
                call. = FALSE)
@@ -461,6 +469,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
         stop("Cannot summarize QALYs without first simulating 'qalys_' with '$sim_qalys()'.",
               call. = FALSE)
       }      
+      
+      stat <- mean
       
       # Costs
       if ("patient_id" %in% colnames(self$costs_)){
