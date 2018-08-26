@@ -85,7 +85,7 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
     The simulated output is stored in \code{stateprobs_}.  
   }
   
-  \item{\code{sim_qalys(dr = .03, type = c("predict", "random"), by_patient = TRUE, stat = mean)}}{
+  \item{\code{sim_qalys(dr = .03, type = c("predict", "random"), by_patient = FALSE, stat = mean)}}{
     Compute simulated (discounted) QALYs using the simulation output stored in \code{disprog_} by random sample from the PSA, treatment strategy, health state, and 
     (optionally) patient.
     
@@ -100,7 +100,7 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
      The simulated output is stored in \code{qalys_}.
   } 
   
-  \item{\code{sim_costs(dr = .03, type = c("predict", "random"), by_patient = TRUE, stat = mean, max_t = Inf)}}{
+  \item{\code{sim_costs(dr = .03, type = c("predict", "random"), by_patient = FALSE, stat = mean, max_t = Inf)}}{
     Compute simulated (discounted) costs using the simulation output stored in \code{disprog_} by random sample from the PSA, treatment strategy, health state, and 
     (optionally) patient.
     
@@ -122,7 +122,8 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
     Produce a summary measure of costs and QALYs by random sample from the PSA and treatment strategy.
     
      \itemize{
-     \item \code{stat}: The statistic used to summarize costs and QALYs. The default is the mean but any R function can be passed to \code{stat}.
+     \item \code{stat}: The statistic used to summarize costs and QALYs. The default is the mean but any R function can be passed to \code{stat}. Only used if QALYs or costs
+     were previously summarized by patient.
      }
      
      Returns an object of summary cost-effectiveness output of class \code{\link{ce}}. 

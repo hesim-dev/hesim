@@ -463,16 +463,31 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       }      
       
       # Costs
-      costs_summary <- self$costs_[, lapply(.SD, stat), by = c("category", "dr", "sample", "strategy_id"),
-                                   .SDcols = "costs"]
+      if ("patient_id" %in% colnames(self$costs_)){
+        costs_summary <- self$costs_[, lapply(.SD, stat), by = c("category", "dr", "sample", "strategy_id", "state_id"),
+                                       .SDcols = "costs"]  
+        costs_summary <- costs_summary[, lapply(.SD, sum), by = c("category", "dr", "sample", "strategy_id"),
+                                      .SDcols = "costs"]        
+      } else{
+        costs_summary <- self$costs_[, lapply(.SD, sum), by = c("category", "dr", "sample", "strategy_id"),
+                                        .SDcols = "costs"]
+      }
+
       costs_total <- costs_summary[, .(costs = sum(costs)), by = c("dr", "sample", "strategy_id")]
       costs_total[, category := "total"]
       costs_summary <- rbind(costs_summary, costs_total)
       
       # QALYs
-      qalys_summary <- self$qalys_[, lapply(.SD, stat), by = c("dr", "sample", "strategy_id"),
+      if ("patient_id" %in% colnames(self$qalys_)){
+        qalys_summary <- self$qalys_[, lapply(.SD, stat), by = c("dr", "sample", "strategy_id", "state_id"),
+                                       .SDcols = "qalys"]  
+        qalys_summary <- qalys_summary[, lapply(.SD, sum), by = c("dr", "sample", "strategy_id"),
                                    .SDcols = "qalys"]
-      
+      } else{
+        qalys_summary <- self$qalys_[, lapply(.SD, sum), by = c("dr", "sample", "strategy_id"),
+                                   .SDcols = "qalys"]
+      }      
+
       # Combine
       ce <- list(costs = costs_summary, qalys = qalys_summary)
       class(ce) <- "ce"
