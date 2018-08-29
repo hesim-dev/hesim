@@ -39,7 +39,7 @@ private:
     int sum_non_nan = 0;
     for (int i = 0; i < m.n_rows; ++i){
       for (int j = 0; j < m.n_cols; ++j){
-        if (!isnan(m(i, j))){
+        if (!std::isnan(m(i, j))){
           ++sum_non_nan;
         }
       } // end loop over columns
@@ -89,7 +89,7 @@ public:
       std::vector<int> trans_i;
       std::vector<int> to_i;
       for (int j = 0; j < m_row.n_elem; ++j){
-        if(!isnan(m_row(j))){
+        if(!std::isnan(m_row(j))){
           if (R_index){
             trans_i.push_back(m_row(j) - 1); 
           }
