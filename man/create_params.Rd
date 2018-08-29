@@ -2,7 +2,7 @@
 % Please edit documentation in R/params.R
 \name{create_params}
 \alias{create_params}
-\alias{create_params.stateval_ests}
+\alias{create_params.stateval_means}
 \alias{create_params.lm}
 \alias{create_params.flexsurvreg}
 \alias{create_params.flexsurvreg_list}
@@ -11,7 +11,7 @@
 \usage{
 create_params(object, ...)
 
-\method{create_params}{stateval_ests}(object, ...)
+\method{create_params}{stateval_means}(object, ...)
 
 \method{create_params}{lm}(object, n = 1000, point_estimate = FALSE, ...)
 

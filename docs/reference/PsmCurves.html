@@ -196,25 +196,25 @@
 <span class='no'>psm_curves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_PsmCurves.html'>create_PsmCurves</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>curves_data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 
 <span class='co'># Summarize survival curves</span>
-<span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>quantile</span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>)))</div><div class='output co'>#&gt;    curve sample strategy_id patient_id    p  quantile
-#&gt; 1:     1      1           1          1 0.25 0.1865495
-#&gt; 2:     1      1           1          1 0.50 0.4494764
-#&gt; 3:     1      1           1          1 0.75 0.8989527
-#&gt; 4:     1      1           1          2 0.25 0.1783252
-#&gt; 5:     1      1           1          2 0.50 0.4296604
-#&gt; 6:     1      1           1          2 0.75 0.8593208</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    curve sample strategy_id patient_id   t  survival
-#&gt; 1:     1      1           1          1 0.0 1.0000000
-#&gt; 2:     1      1           1          1 0.1 0.8570902
-#&gt; 3:     1      1           1          1 0.2 0.7346036
-#&gt; 4:     1      1           1          1 0.3 0.6296215
-#&gt; 5:     1      1           1          1 0.4 0.5396424
-#&gt; 6:     1      1           1          1 0.5 0.4625222</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    curve sample strategy_id patient_id t      rmst
-#&gt; 1:     1      1           1          1 2 0.6187809
-#&gt; 2:     1      1           1          1 5 0.6481668
-#&gt; 3:     1      1           1          2 2 0.5952622
-#&gt; 4:     1      1           1          2 5 0.6196743
-#&gt; 5:     1      1           1          3 2 0.5498348
-#&gt; 6:     1      1           1          3 5 0.5663346</div><div class='input'>
+<span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>quantile</span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve    p  quantile
+#&gt; 1:      1           1          1     1 0.25 0.1871003
+#&gt; 2:      1           1          1     1 0.50 0.4508034
+#&gt; 3:      1           1          1     1 0.75 0.9016068
+#&gt; 4:      1           1          1     2 0.25 0.3571035
+#&gt; 5:      1           1          1     2 0.50 0.8604126
+#&gt; 6:      1           1          1     2 0.75 1.7208252</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve   t  survival
+#&gt; 1:      1           1          1     1 0.0 1.0000000
+#&gt; 2:      1           1          1     1 0.1 0.8574793
+#&gt; 3:      1           1          1     1 0.2 0.7352708
+#&gt; 4:      1           1          1     1 0.3 0.6304795
+#&gt; 5:      1           1          1     1 0.4 0.5406232
+#&gt; 6:      1           1          1     1 0.5 0.4635732</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve t      rmst
+#&gt; 1:      1           1          1     1 2 0.6203363
+#&gt; 2:      1           1          1     1 5 0.6500738
+#&gt; 3:      1           1          1     2 2 0.9934868
+#&gt; 4:      1           1          1     2 5 1.2192052
+#&gt; 5:      1           1          1     3 2 1.2138166
+#&gt; 6:      1           1          1     3 5 1.7041101</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

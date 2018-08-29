@@ -403,7 +403,7 @@ create_params <- function (object, ...) {
 
 #' @export
 #' @rdname create_params
-create_params.stateval_ests <- function(object, ...){
+create_params.stateval_means <- function(object, ...){
   n_samples <- nrow(object$values)
   n_patients <- length(object$patient_id)
   n_strategies <- length(object$strategy_id)

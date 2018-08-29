@@ -15,15 +15,15 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
 N <- 5
 
 # State values -----------------------------------------------------------------
-# stateval_ests object
-test_that("stateval_ests", {
+# stateval_means object
+test_that("stateval_means", {
   gamma_params <- mom_gamma(c(5000, 7000), c(1000, 1200))
   n <- 6
   vals <- matrix(rgamma(2 * n, 
                         shape = gamma_params$shape, 
                         scale = gamma_params$scale),
                  nrow = n, ncol = 2, byrow = TRUE)
-  stval_ests <- stateval_ests(values = vals,
+  stval_ests <- stateval_means(values = vals,
                              strategy_id = c(1, 2),
                              patient_id = c(1, 2, 3))
   statevals <- create_StateVals(stval_ests)

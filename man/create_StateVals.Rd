@@ -8,7 +8,7 @@ create_StateVals(object, data = NULL, n = 1000, point_estimate = FALSE)
 }
 \arguments{
 \item{object}{A model object of the appropriate class. Supports
-\code{\link{stateval_ests}} and \code{\link{lm}}.}
+\code{\link{stateval_means}} and \code{\link{lm}}.}
 
 \item{data}{An object of class "expanded_hesim_data" returned by 
 \code{\link{expand_hesim_data}}. Must be expanded by the data tables "strategies",

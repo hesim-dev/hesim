@@ -3,7 +3,7 @@
 \name{create_input_data}
 \alias{create_input_data}
 \alias{create_input_data.formula_list}
-\alias{create_input_data.stateval_ests}
+\alias{create_input_data.stateval_means}
 \alias{create_input_data.lm}
 \alias{create_input_data.lm_list}
 \alias{create_input_data.flexsurvreg}
@@ -15,7 +15,7 @@ create_input_data(object, data, ...)
 
 \method{create_input_data}{formula_list}(object, data, ...)
 
-\method{create_input_data}{stateval_ests}(object, data, ...)
+\method{create_input_data}{stateval_means}(object, data, ...)
 
 \method{create_input_data}{lm}(object, data, ...)
 

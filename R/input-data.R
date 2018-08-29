@@ -279,7 +279,7 @@ create_expanded_hesim_data <- function(object, ...){
   UseMethod("create_expanded_hesim_data",  object)
 }
 
-create_expanded_hesim_data.stateval_ests <- function(object, ...) {
+create_expanded_hesim_data.stateval_means <- function(object, ...) {
   n_states <- dim(object$values)[2]
   states_dt <- data.table(state_id = seq(1, n_states))
   patients_dt <- data.table(patient_id = object$patient_id)
@@ -624,7 +624,7 @@ get_terms <- function(object){
 
 #' @export
 #' @rdname create_input_data
-create_input_data.stateval_ests <- function(object, data, ...){
+create_input_data.stateval_means <- function(object, data, ...){
   args <- c(list(X = NULL),
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
