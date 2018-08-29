@@ -1,0 +1,13 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^_pkgdown\.yml$
+^index
+^docs$
+^news
+^cran-comments.md$
+^\.travis\.yml$
+^pkgdown$
+^data-raw$
+doxyfile
+DoxygenLayout.xml
+.covrignore

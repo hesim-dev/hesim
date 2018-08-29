@@ -4,25 +4,32 @@
 \alias{rcat}
 \title{Random generation for categorical distribution}
 \usage{
-rcat(prob)
+rcat(n, prob)
 }
 \arguments{
+\item{n}{Number of random observations to draw.}
+
 \item{prob}{A matrix of probabilities where rows correspond to observations 
 and columns correspond to categories.}
 }
+\value{
+A vector of random samples from the categorical distribution. The length of the sample is 
+determined by n. The numerical arguments other than n are recycled so that the number of samples is 
+equal to n.
+}
 \description{
 Draw random samples from a categorical distribution given a matrix of probabilities.
- \code{rcat} is vetorized and written in C++ for speed.
+ \code{rcat} is vectorized and written in C++ for speed.
 }
 \examples{
 p <- c(.2, .5, .3)
-n <- 1000000
+n <- 10000
 pmat <- matrix(rep(p, n), nrow = n, ncol = length(p), byrow = TRUE)
 
 # rcat
 set.seed(100)
 ptm <- proc.time()
-samp1 <- rcat(pmat)
+samp1 <- rcat(n, pmat)
 proc.time() - ptm
 prop.table(table(samp1))
 

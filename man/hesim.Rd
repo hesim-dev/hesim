@@ -4,7 +4,7 @@
 \name{hesim}
 \alias{hesim}
 \alias{hesim-package}
-\title{hesim: an R package for implement and analyzing health-economic simulation models}
+\title{hesim: an R package for high performance health-economic simulation modeling}
 \description{
-hesim: an R package for implement and analyzing health-economic simulation models
+hesim: an R package for high performance health-economic simulation modeling
 }

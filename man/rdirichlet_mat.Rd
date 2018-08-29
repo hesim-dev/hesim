@@ -2,7 +2,7 @@
 % Please edit documentation in R/rand.R
 \name{rdirichlet_mat}
 \alias{rdirichlet_mat}
-\title{Random generation for multiple dirichlet distributions}
+\title{Random generation for multiple Dirichlet distributions}
 \usage{
 rdirichlet_mat(n, alpha)
 }
@@ -12,16 +12,15 @@ rdirichlet_mat(n, alpha)
 \item{alpha}{A matrix where each row is a separate vector of shape parameters.}
 }
 \value{
-An array of matrices representing a sample from the dirichlet distribution for
-each row.
+An array of matrices where each row of each matrix is a sample from the Dirichlet distribution.
 }
 \description{
-Draw random samples from multiple dirichlet distribution.
-\code{rdirichlet_mat} is vetorized and written in C++ for speed.
+Draw random samples from multiple Dirichlet distributions.
+\code{rdirichlet_mat} is vectorized and written in C++ for speed.
 }
 \details{
 This function is particularly useful for representing the distribution of 
-transitions probabilities in a transition matrix.
+transition probabilities in a transition matrix.
 }
 \examples{
 alpha <- matrix(c(100, 200, 500, 50, 70, 75), ncol = 3, nrow = 2, byrow = TRUE)

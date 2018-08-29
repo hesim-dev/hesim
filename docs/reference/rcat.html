@@ -18,13 +18,28 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
+  <link href="../extra.css" rel="stylesheet">
   
-  
+<meta property="og:title" content="Random generation for categorical distribution — rcat" />
+
+<meta property="og:description" content="Draw random samples from a categorical distribution given a matrix of probabilities.
+ rcat is vectorized and written in C++ for speed." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +62,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">hesim</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">hesim</a>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">0.1.0.9000</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -56,26 +75,36 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/cea-vignette.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/psm.html">Partitioned survival models</a>
+    </li>
+    <li>
+      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/dincerti/hesim">
+  <a href="https://github.com/InnovationValueInitiative/hesim">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,22 +112,30 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Random generation for categorical distribution</h1>
+    <small class="dont-index">Source: <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/R/rand.R'><code>R/rand.R</code></a></small>
+    <div class="hidden name"><code>rcat.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Draw random samples from a categorical distribution given a matrix of probabilities.
- <code>rcat</code> is vetorized and written in C++ for speed.</p>
+ <code>rcat</code> is vectorized and written in C++ for speed.</p>
     
+    </div>
 
-    <pre class="usage"><span class='fu'>rcat</span>(<span class='no'>prob</span>)</pre>
+    <pre class="usage"><span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>prob</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>n</th>
+      <td><p>Number of random observations to draw.</p></td>
+    </tr>
     <tr>
       <th>prob</th>
       <td><p>A matrix of probabilities where rows correspond to observations 
@@ -106,35 +143,43 @@ and columns correspond to categories.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A vector of random samples from the categorical distribution. The length of the sample is 
+determined by n. The numerical arguments other than n are recycled so that the number of samples is 
+equal to n.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>.2</span>, <span class='fl'>.5</span>, <span class='fl'>.3</span>)
-<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>1000000</span>
+<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>10000</span>
 <span class='no'>pmat</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rep</span>(<span class='no'>p</span>, <span class='no'>n</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>p</span>), <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># rcat</span>
 <span class='fu'>set.seed</span>(<span class='fl'>100</span>)
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>pmat</span>)
+<span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.173   0.021   0.196 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
-#&gt;        1        2        3 
-#&gt; 0.200723 0.499808 0.299469 </div><div class='input'>
+#&gt;   0.004   0.000   0.005 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
+#&gt;      1      2      3 
+#&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
 <span class='co'># rmultinom from base R </span>
 <span class='fu'>set.seed</span>(<span class='fl'>100</span>)
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>t</span>(<span class='fu'>apply</span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'>apply</span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>which</span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   7.576   0.476   8.074 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
-#&gt;        1        2        3 
-#&gt; 0.200723 0.499808 0.299469 </div></pre>
+#&gt;   0.058   0.002   0.063 </div><div class='input'><span class='fu'>prop.table</span>(<span class='fu'>table</span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
+#&gt;      1      2      3 
+#&gt; 0.2015 0.5089 0.2896 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#value">Value</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -143,15 +188,18 @@ and columns correspond to categories.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Devin Incerti.</p>
+  <p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

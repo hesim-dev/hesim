@@ -1,0 +1,75 @@
+template:
+  params:
+    bootswatch: simplex
+    
+development:
+  mode: unreleased    
+
+reference:
+  - title: "Fitted statistical models"
+    contents:
+      - partsurvfit
+      - formula_list
+      - flexsurvreg_list
+  - title: "Probability distributions"
+    contents:
+      - mom_beta
+      - mom_gamma
+      - fast_rgengamma
+      - rcat
+      - rpwexp
+      - rdirichlet_mat
+  - title: "Parameters"
+    contents:
+      - params_mean
+      - params_lm
+      - params_surv
+      - params_surv_list
+      - create_params
+  - title: "Input data"
+    contents:
+      - hesim_data
+      - expand_hesim_data
+      - create_trans_dt
+      - input_data
+      - create_input_data
+  - title: "Health state values"
+    contents:
+      - stateval_ests
+      - StateVals
+      - create_StateVals
+  - title: "Partitioned survival model"
+    contents:
+      - Psm
+      - PsmCurves
+      - create_PsmCurves
+  - title: "Continuous time state transition models"
+    contents:
+      - IndivCtstmTrans
+      - create_IndivCtstmTrans
+      - IndivCtstm
+  - title: "Cost-effectiveness analysis"
+    contents:
+      - icea
+      - icea_pw
+      - incr_effect
+  - title: "Datasets"
+    contents:
+    - psm4_exdata
+    - ctstm3_exdata
+
+navbar:
+  title: hesim
+  left:
+  - text: "Reference"
+    href: reference/index.html
+  - text: "Articles"
+    menu:
+      - text: "Introduction"
+        href: articles/intro.html
+      - text: "Partitioned survival models"
+        href: articles/psm.html
+      - text: "Individualized cost-effectiveness analysis"
+        href: articles/icea.html
+  - text: News
+    href: news/index.html

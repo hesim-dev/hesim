@@ -18,13 +18,36 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
+  <link href="../extra.css" rel="stylesheet">
   
-  
+<meta property="og:title" content="Individualized cost-effectiveness analysis — icea" />
+
+<meta property="og:description" content="Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
+sensitivity analysis (PSA)) by subgroup.
+icea() compute the probability that
+each treatment is most cost-effective, the expected value of perfect
+information, and the net monetary benefit for each treatment.
+icea_pw() compares interventions to a comparator. Computed
+quantities include the incremental cost-effectiveness ratio, the 
+incremental net monetary benefit, output for a cost-effectiveness plane,
+and output for a cost-effectiveness acceptability curve.
+" />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +70,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">hesim</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">hesim</a>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">0.1.0.9000</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -56,26 +83,36 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/cea-vignette.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/intro.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/psm.html">Partitioned survival models</a>
+    </li>
+    <li>
+      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/dincerti/hesim">
+  <a href="https://github.com/InnovationValueInitiative/hesim">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -83,43 +120,52 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Individualized cost-effectiveness analysis</h1>
+    <small class="dont-index">Source: <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/R/cea.R'><code>R/cea.R</code></a></small>
+    <div class="hidden name"><code>icea.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
-sensitivity analysis) by subgroup.</p>
+sensitivity analysis (PSA)) by subgroup.</p><ul>
+<li><p><code>icea()</code> compute the probability that
+each treatment is most cost-effective, the expected value of perfect
+information, and the net monetary benefit for each treatment.</p></li>
+<li><p><code>icea_pw()</code> compares interventions to a comparator. Computed
+quantities include the incremental cost-effectiveness ratio, the 
+incremental net monetary benefit, output for a cost-effectiveness plane,
+and output for a cost-effectiveness acceptability curve.</p></li>
+</ul>
     
+    </div>
 
-    <pre class="usage"><span class='fu'>icea</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>,
-  <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>, <span class='kw'>custom_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>custom_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>icea</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
+  <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
 
-<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='no'>comparator</span>, <span class='kw'>sim</span> <span class='kw'>=</span> <span class='st'>"sim"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
-  <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>, <span class='kw'>custom_vars</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>custom_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='no'>comparator</span>, <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
+  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Matrix containing information on mean costs and effectiveness for each simulation.
-Should be in long form with unit of observation as the simulation and treatment strategy.
-Should have the following columns (
-sim = simulation number,
-strategy = treatment strategy,
-c = summary of cost for each simulation and treatment strategy
-e = summary of clinicial effectiveness for each simulation and treatment strategy)</p></td>
+      <td><p>A <code>data.frame</code> or <code>data.table</code> containing simulation output with
+information on mean costs and effectiveness for each randomly sampled parameter set from
+a PSA. Each row should denote a randomly sampled parameter set
+and treatment strategy.</p></td>
     </tr>
     <tr>
       <th>k</th>
-      <td><p>Vector of willingess to pay values</p></td>
+      <td><p>Vector of willingness to pay values</p></td>
     </tr>
     <tr>
-      <th>sim</th>
-      <td><p>Name of column denoting simulation number. Default is "sim".</p></td>
+      <th>sample</th>
+      <td><p>Name of column denoting a randomly sampled parameter set. Default is "sample".</p></td>
     </tr>
     <tr>
       <th>strategy</th>
@@ -138,18 +184,6 @@ e = summary of clinicial effectiveness for each simulation and treatment strateg
       <td><p>Name of column denoting costs. Default is "c".</p></td>
     </tr>
     <tr>
-      <th>custom_vars</th>
-      <td><p>Character vector of variable names to use in creating a
-custom summary table. Table will contain means and 95% credible intervals for
-each variable. Can contain e and c.</p></td>
-    </tr>
-    <tr>
-      <th>custom_fun</th>
-      <td><p>Function to apply to custom_vars to make custom table. If 
-<code>custom_vars</code> is not NULL and <code>custom_fun</code> is NULL, then returns the mean,
-2.5% quantile, and 97.5% quantile for each variable in <code>custom_vars</code>.</p></td>
-    </tr>
-    <tr>
       <th>comparator</th>
       <td><p>Name of the comparator strategy in x.</p></td>
     </tr>
@@ -157,36 +191,67 @@ each variable. Can contain e and c.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>icea</code> returns a list containing four data.tables:</p><dl class='dl-horizontal'>
+    <p><code>icea</code> returns a list containing four data.tables:</p>
+<dl class='dl-horizontal'>
   <dt>summary</dt><dd><p>A data.table of the mean, 2.5% quantile, and 97.5% 
   quantile by strategy and group for clinical effectiveness and costs.</p></dd>
   <dt>mce</dt><dd><p>The probability that each strategy is the most effective treatment
-  for each group for the range of specified willingess to pay values.</p></dd>
+  for each group for the range of specified willingness to pay values.</p></dd>
   <dt>evpi</dt><dd><p>The expected value of perfect information by group for the range
-  of specified willingess to pay values.</p></dd>
+  of specified willingness to pay values.</p></dd>
    <dt>nmb</dt><dd><p>The mean, 2.5% quantile, and 97.5% quantile of (monetary) net benefits
-   for the range of specified willingess to pay values.</p></dd>
-</dl><p>In addition, if <code>custom_vars</code> is not NULL, <code>icea</code> returns <code>custom.table</code>, which is
- a data.table containing summary statistics for each variable in <code>custom_vars</code>
-  by strategy and group.
+   for the range of specified willingness to pay values.</p></dd>
+</dl>
 
-<code>icea_pw</code> also returns a list containing four data.tables:</p><dl class='dl-horizontal'>
+<p><code>icea_pw</code> also returns a list containing four data.tables:</p><dl class='dl-horizontal'>
   <dt>summary</dt><dd><p>A data.table of the mean, 2.5% quantile, and 97.5% 
   quantile by strategy and group for clinical effectiveness and costs.</p></dd>
   <dt>delta</dt><dd><p>Incremental effectiveness and incremental cost for each simulated
-  parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. 
-  Also returns the difference between each treatment strategy and the comparator for each 
-  variable in <code>custom_vars</code> if <code>custom_vars</code> is not NULL.</p></dd>
+  parameter set by strategy and group. Can be used to plot a cost-effectiveness plane.</p></dd>
   <dt>ceac</dt><dd><p>Values needed to plot a cost-effectiveness acceptability curve by
   group. In other words, the probability that each strategy is more cost-effective than
-  the comparator for the specified willingess to pay values.</p></dd>
+  the comparator for the specified willingness to pay values.</p></dd>
    <dt>inmb</dt><dd><p>The mean, 2.5% quantile, and 97.5% quantile of (monetary) 
-   incremental net benefits for the range of specified willingess to pay values.</p></dd>
-</dl><p>If <code>custom_vars</code> is not NULL, also returns <code>custom.table</code>, which is
- a data.table containing summary statistics for the values of each variable returned
-  in <code>delta</code> by strategy and group.</p>
+   incremental net benefits for the range of specified willingness to pay values.</p></dd>
+</dl>
+
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># simulation output</span>
+<span class='no'>n_samples</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>
+<span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>seq</span>(<span class='no'>n_samples</span>), <span class='fl'>4</span>),
+                  <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>rlnorm</span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>), <span class='fu'>rlnorm</span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>),
+                        <span class='fu'>rlnorm</span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>), <span class='fu'>rlnorm</span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>)),
+                  <span class='kw'>e</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>rnorm</span>(<span class='no'>n_samples</span>, <span class='fl'>8</span>, <span class='fl'>.2</span>), <span class='fu'>rnorm</span>(<span class='no'>n_samples</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span>),
+                        <span class='fu'>rnorm</span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.6</span>), <span class='fu'>rnorm</span>(<span class='no'>n_samples</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span>)),
+                  <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>paste0</span>(<span class='st'>"Strategy "</span>, <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>2</span>)),
+                                 <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n_samples</span> * <span class='fl'>2</span>),
+                  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fu'>rep</span>(<span class='fu'>c</span>(<span class='st'>"Group 1"</span>, <span class='st'>"Group 2"</span>),
+                            <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n_samples</span>), <span class='fl'>2</span>)
+)
+
+<span class='co'># icea</span>
+<span class='no'>icea_dt</span> <span class='kw'>&lt;-</span> <span class='fu'>icea</span>(<span class='no'>sim</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
+ <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
+<span class='fu'>names</span>(<span class='no'>icea_dt</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'><span class='co'># the probability that each strategy is the most cost-effective </span>
+<span class='co'># in each group with a willingness to pay of 20,000</span>
+<span class='fu'>library</span>(<span class='st'>"data.table"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package ‘data.table’ was built under R version 3.4.4</span></div><div class='input'><span class='no'>icea_dt</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp prob
+#&gt; 1: 20000 Strategy 1 Group 1 0.55
+#&gt; 2: 20000 Strategy 2 Group 1 0.45
+#&gt; 3: 20000 Strategy 1 Group 2 0.48
+#&gt; 4: 20000 Strategy 2 Group 2 0.52</div><div class='input'>
+<span class='co'># icea_pw</span>
+<span class='no'>icea_pw_dt</span> <span class='kw'>&lt;-</span>  <span class='fu'>icea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
+                       <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
+<span class='fu'>names</span>(<span class='no'>icea_pw_dt</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
+<span class='fu'>head</span>(<span class='no'>icea_pw_dt</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k   strategy     grp prob
+#&gt; 1: 20000 Strategy 2 Group 1 0.45
+#&gt; 2: 20000 Strategy 2 Group 2 0.52
+#&gt; 3: 20500 Strategy 2 Group 1 0.51
+#&gt; 4: 20500 Strategy 2 Group 2 0.61
+#&gt; 5: 21000 Strategy 2 Group 1 0.58
+#&gt; 6: 21000 Strategy 2 Group 2 0.65</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -194,22 +259,27 @@ each variable. Can contain e and c.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Devin Incerti.</p>
+  <p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

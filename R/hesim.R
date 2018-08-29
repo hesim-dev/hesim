@@ -1,4 +1,4 @@
-#' hesim: an R package for implement and analyzing health-economic simulation models
+#' hesim: an R package for high performance health-economic simulation modeling
 #'
 #' @docType package
 #' @name hesim

@@ -1,0 +1,10 @@
+CXX_STD=C++11
+PKG_CPPFLAGS = -I../inst/include
+VER=
+CCACHE=ccache
+CC=$(CCACHE) gcc$(VER)
+CXX=$(CCACHE) g++$(VER)
+SHLIB_CXXLD=g++$(VER)
+FC=ccache gfortran$(VER)
+#FC=gfortran
+F77=$(CCACHE) gfortran$(VER)

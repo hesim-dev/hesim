@@ -1,18 +1,28 @@
-`hesim` is an R package for health economic simulation modeling and decision analysis. The package can help facilitate computationally intensive simulation modeling and be used to analyze the output of simulation models. Current functionality includes:
+[![Travis-CI Build Status](https://travis-ci.org/InnovationValueInitiative/hesim.svg?branch=master)](https://travis-ci.org/InnovationValueInitiative/hesim)
+[![Coverage Status](https://codecov.io/gh/InnovationValueInitiative/hesim/branch/master/graph/badge.svg)](https://codecov.io/gh/InnovationValueInitiative/hesim)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/hesim)](https://cran.r-project.org/package=hesim)
 
-* Individualized cost-effectiveness analysis
-* Random sampling from probability distributions commonly used in health-economic simulation modeling
+# Overview
+`hesim` is an R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. The package currently supports N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (CTSTMs), as well as summarizing the output of probabilistic sensitivity analysis (PSA). It is designed for high performance simulation modeling and heavily utilizes `Rcpp` and `data.table`. `hesim` is being actively developed and we will provide support for discrete time state transition models (DTSTMs) and cohort-level CTSTMs in the near future.
 
-To ensure that simulations can be run (and analyzed) in a reasonable amount of time, most functions are written in C++ using `Rcpp` and data manipulations are performed using the `data.table` package. `hesim` is therefore well suited for individual patient simulation, probabilistic sensitivity analysis, and quantifying structural uncertainty.
+Features of the current version include:
 
-# Documentation
-Documentation and package vignettes are available on the package [website](https://innovationvalueinitiative.github.io/hesim/).
+* N-state PSMs and individual-level CTSTMs
+* Modeling patient heterogeneity 
+* Parameter estimates from either an R based model or from an external source
+* Parameter uncertainty propagated with PSA
+* Sampling parameters of a statistical model fit with R using Monte Carlo methods or bootstrapping
+<!--- * Separate survival models during period of observed data and for extrapolation. -->
+* Simulation code written in `C++` to boost performance
 
 # Installation
-`hesim` can be installed from GitHub using `devtools`:
-
 ```r
-install.packages("devtools")
-library(devtools)
+# Install the most up to date development version from GitHub:
+# install.packages("devtools")
 devtools::install_github("InnovationValueInitiative/hesim")
+
+# Install v0.1 (without partitioned survival modeling) from CRAN:
+install.packages("hesim")
+
+
 ```

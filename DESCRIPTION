@@ -1,19 +1,49 @@
 Package: hesim
 Type: Package
-Title: Fast health-economic simulation modeling
-Version: 0.1.0
+Title: Health-Economic Simulation Modeling and Decision Analysis
+Version: 0.1.0.9000
 Authors@R: c(
-    person("Devin", "Incerti", , "devin.incerti@gmail.com", c("aut", "cre"))
+    person("Devin", "Incerti", , "devin.incerti@gmail.com", c("aut", "cre")),
+    person("Jeroen P.", "Jansen", , "jeroen.jansen@thevalueinitiative.org", role = "aut")
     )
-Maintainer: <devin.incerti@gmail.com>
-Description: Efficiently implement and analyze health-economic simulation models
-URL: https://github.com/dincerti/hesim
+Description: Functionality for developing and analyzing the output of health-economic 
+    simulation models. Contains random sampling functions for conducting probabilistic  
+    sensitivity analyses (Claxton et al. 2005) <doi:10.1002/hec.985> and 
+    individual patient simulations (Brennan et al. 2006) <doi:10.1002/hec.1148>. 
+    Individualized cost-effectiveness analysis (Basu and Meltzer 2007, Ioannidis and Garber 2011) 
+    <doi:10.1177/0272989X06297393>, <doi:10.1371/journal.pmed.1001058> 
+    can be performed on simulation output and used to 
+    summarize a probabilistic sensitivity analysis at the subgroup or individual 
+    level. Core functions are written in C++ to facilitate computationally 
+    intensive modeling.
+URL: https://github.com/InnovationValueInitiative/hesim
+BugReports: https://github.com/InnovationValueInitiative/hesim/issues
 License: GPL-3
 LazyData: true
-LinkingTo: Rcpp, RcppArmadillo
+LinkingTo: Rcpp,
+           RcppArmadillo
+Depends:
+    R (>= 3.2.3)
 Imports:
-    Rcpp,
-    data.table
+    data.table,
+    flexsurv,
+    MASS,
+    Rcpp (>= 0.12.16),
+    R6,
+    stats,
+    survival
 Suggests:
-    testthat
+    covr,
+    ggplot2,
+    knitr,
+    mstate,
+    msm,
+    numDeriv,
+    pracma,
+    rmarkdown,
+    scales,
+    testthat,
+    truncnorm
+VignetteBuilder: knitr
 RoxygenNote: 6.0.1
+SystemRequirements: C++11

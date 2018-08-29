@@ -1,27 +1,29 @@
 // [[Rcpp::depends(RcppArmadillo)]]
-
 #include <RcppArmadillo.h>
-using namespace Rcpp;
+#include <hesim/utils.h>
 
-// Convert vector to matrix by row
+
+/**
+ * Calculate the maximum value of each row in a matrix
+ * @param x A matrix from the Armadillo library
+ * @return A vector of maximum values with length equal to the number
+ * of rows in x
+ */
 // [[Rcpp::export]]
-arma::mat matrix_byrow(arma::rowvec v, int nrow, int ncol){
-  int l = v.n_elem;
-  arma::mat m1(0, l);
-  m1.insert_rows(0, v);
-  m1.reshape(ncol, nrow);
-  m1 = arma::trans(m1);
-  return(m1);
+arma::colvec C_rowmax(arma::mat x) {
+  return arma::max(x, 1);
 }
 
-// Convert vector to matrix by column
+/**
+ * Calculate the indices of maximum values in each row of a matrix
+ * @param x A matrix from the Armadillo library
+ * @return A vector of the column indices of the maximum values of each row with
+ * length equal to the number of rows in x
+ */
 // [[Rcpp::export]]
-arma::mat matrix_bycol(arma::rowvec v, int nrow, int ncol){
-  int l = v.n_elem;
-  arma::mat m1(0, l);
-  m1.insert_rows(0, v);
-  m1.reshape(nrow, ncol);
-  return(m1);
+arma::ucolvec C_rowmax_index(arma::mat x) {
+  return arma::index_max(x,1);
 }
+
 
 
