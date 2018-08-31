@@ -32,8 +32,15 @@
 #'
 #' @export
 stateval_means <- function(values, strategy_id, patient_id){
-  if(!is.matrix(values) | !is.array(values)){
-    stop("'values' must be a matrix or an array.")
+  if(!(is.matrix(values) | is.array(values))){
+    stop("'values' must be a matrix or an array.", 
+         call. = FALSE)
+  }
+  if (!is.matrix(values)){
+    if (length(strategy_id) != dim(values)[3]){
+      stop("The length of 'strategy_id' must equal the number of matrices in 'values'",
+           call. = FALSE)
+    }
   }
   l <- list(values = values, strategy_id = strategy_id,
             patient_id = patient_id)

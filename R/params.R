@@ -404,12 +404,20 @@ create_params <- function (object, ...) {
 #' @export
 #' @rdname create_params
 create_params.stateval_means <- function(object, ...){
-  n_samples <- nrow(object$values)
+  n_samples <- dim(object$values)[1]
   n_patients <- length(object$patient_id)
   n_strategies <- length(object$strategy_id)
-  vals <- t(object$value)
-  vals <- vals[rep(1:nrow(vals), times = n_patients), ]
-  vals <- vals[rep(1:nrow(vals), times = n_strategies), ]
+  
+  if (is.matrix(object$values)){
+    object$values <- array(object$values, 
+                  dim = c(nrow(object$values), ncol(object$values), n_strategies))
+  }
+  vals <- vector(mode = "list", length = n_strategies)
+  for (i in 1:n_strategies){
+    vals[[i]] <- object$values[,, i][, rep(1:ncol(object$values[,, i]), 
+                                           times = n_patients)]
+  }
+  vals <- matrix(unlist(vals), ncol = n_samples, byrow = TRUE)
   return(new_params_mean(mu = vals, 
                          sigma = rep(0, n_samples),
                          n_samples = n_samples))
