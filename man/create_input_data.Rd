@@ -11,11 +11,11 @@
 \alias{create_input_data.partsurvfit}
 \title{Create input data}
 \usage{
-create_input_data(object, data, ...)
+create_input_data(object, ...)
 
 \method{create_input_data}{formula_list}(object, data, ...)
 
-\method{create_input_data}{stateval_means}(object, data, ...)
+\method{create_input_data}{stateval_means}(object, ...)
 
 \method{create_input_data}{lm}(object, data, ...)
 
@@ -32,19 +32,21 @@ create_input_data(object, data, ...)
 \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
  \code{\link{flexsurvreg_list}}, and \code{\link{partsurvfit}}.}
 
+\item{...}{Further arguments passed to \code{\link{model.matrix}}.}
+
 \item{data}{An object of class "expanded_hesim_data" returned by the function
 \code{\link{expand_hesim_data}}. Used to look for the input variables needed to create an input matrix
 for use in a statistical models and the id variables for indexing rows in the input matrix.}
-
-\item{...}{Further arguments passed to \code{\link{model.matrix}}.}
 }
 \value{
 An object of class \code{\link{input_data}}.
 }
 \description{
 \code{create_input_data} is a generic function for creating an object of class
-\code{\link{input_data}}. Model matrices are constructed based on the 
-variables specified in the model \code{object} and the data specified in \code{data}.
+\code{\link{input_data}}. Model matrices are typically constructed based on the 
+variables specified in the model \code{object} and the data specified in \code{data}, 
+although there are some cases in which \code{\link{input_data}} can be created
+from \code{object} alone.
 }
 \examples{
 library("flexsurv")

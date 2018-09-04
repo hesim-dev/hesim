@@ -35,8 +35,10 @@
 <meta property="og:title" content="Create input data — create_input_data" />
 
 <meta property="og:description" content="create_input_data is a generic function for creating an object of class
-input_data. Model matrices are constructed based on the 
-variables specified in the model object and the data specified in data." />
+input_data. Model matrices are typically constructed based on the 
+variables specified in the model object and the data specified in data, 
+although there are some cases in which input_data can be created
+from object alone." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -124,18 +126,20 @@ variables specified in the model object and the data specified in data." />
     <div class="ref-description">
     
     <p><code>create_input_data</code> is a generic function for creating an object of class
-<code><a href='input_data.html'>input_data</a></code>. Model matrices are constructed based on the 
-variables specified in the model <code>object</code> and the data specified in <code>data</code>.</p>
+<code><a href='input_data.html'>input_data</a></code>. Model matrices are typically constructed based on the 
+variables specified in the model <code>object</code> and the data specified in <code>data</code>, 
+although there are some cases in which <code><a href='input_data.html'>input_data</a></code> can be created
+from <code>object</code> alone.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_input_data</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>create_input_data</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for formula_list</span>
 <span class='fu'>create_input_data</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for stateval_means</span>
-<span class='fu'>create_input_data</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>...</span>)
+<span class='fu'>create_input_data</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for lm</span>
 <span class='fu'>create_input_data</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>...</span>)
@@ -162,14 +166,14 @@ variables specified in the model <code>object</code> and the data specified in <
  <code><a href='flexsurvreg_list.html'>flexsurvreg_list</a></code>, and <code><a href='partsurvfit.html'>partsurvfit</a></code>.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to <code>model.matrix</code>.</p></td>
+    </tr>
+    <tr>
       <th>data</th>
       <td><p>An object of class "expanded_hesim_data" returned by the function
 <code><a href='expand_hesim_data.html'>expand_hesim_data</a></code>. Used to look for the input variables needed to create an input matrix
 for use in a statistical models and the id variables for indexing rows in the input matrix.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to <code>model.matrix</code>.</p></td>
     </tr>
     </table>
     

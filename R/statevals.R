@@ -78,8 +78,7 @@ create_StateVals <- function(object, data = NULL, n = 1000, point_estimate = FAL
     input_data <- create_input_data(object, data) 
   } else{
     params <- create_params(object)
-    data <- create_expanded_hesim_data(object)
-    input_data <- create_input_data(object, data) 
+    input_data <- create_input_data(object) 
   }
   return(StateVals$new(data = input_data, params = params))
 }

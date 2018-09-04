@@ -275,22 +275,6 @@ sort_hesim_data <- function(data, sorted_by){
   setorderv(data, unlist(hesim_data_sorting_map()[sorted_by]))
 }
 
-create_expanded_hesim_data <- function(object, ...){
-  UseMethod("create_expanded_hesim_data",  object)
-}
-
-create_expanded_hesim_data.stateval_means <- function(object, ...) {
-  n_states <- dim(object$values)[2]
-  states_dt <- data.table(state_id = seq(1, n_states))
-  patients_dt <- data.table(patient_id = object$patient_id)
-  strategies_dt <- data.table(strategy_id = object$strategy_id)
-  hesim_dat <- hesim_data(strategies = strategies_dt,
-                          patients = patients_dt,
-                          states = states_dt)
-  edat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))   
-  return(edat)
-}
-
 # input_data class -------------------------------------------------------------
 #' Input data for a statistical model
 #' 
@@ -539,11 +523,29 @@ get_input_data_id_vars <- function(data){
   return(res)
 }
 
+#' Check data argument for \code{create_input_data} 
+#' 
+#' Check that data argument for \code{create_input_data} exists and that it is
+#' of the correct type. 
+#' @param data An object of class "expanded_hesim_data" returned by the function
+#'  \code{\link{expand_hesim_data}}. 
+#' @return If all tests passed, returns nothing; otherwise, throws an exception.
+check_edata <- function(data){
+  if (missing(data)){
+    stop("'data' is missing with no default.")
+  }
+  if (!inherits(data, "expanded_hesim_data")){
+    stop("'data' must be of class 'expanded_hesim_data'.")
+  }   
+}
+
 #' Create input data
 #' 
 #' \code{create_input_data} is a generic function for creating an object of class
-#' \code{\link{input_data}}. Model matrices are constructed based on the 
-#' variables specified in the model \code{object} and the data specified in \code{data}.
+#' \code{\link{input_data}}. Model matrices are typically constructed based on the 
+#' variables specified in the model \code{object} and the data specified in \code{data}, 
+#' although there are some cases in which \code{\link{input_data}} can be created
+#' from \code{object} alone.
 #' @param object An object of the appropriate class. Currently supports
 #' \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
 #'  \code{\link{flexsurvreg_list}}, and \code{\link{partsurvfit}}.
@@ -580,17 +582,9 @@ get_input_data_id_vars <- function(data){
 #' class(input_dat)
 #' @export
 #' @rdname create_input_data
-create_input_data <- function (object, data, ...) {
+create_input_data <- function (object, ...) {
   if (missing(object)){
     stop("'object' is missing with no default.")
-  }
-  if (!inherits(object, "stateval_est")){
-    if (missing(data)){
-      stop("'data' is missing with no default.")
-    }
-    if (!inherits(data, "expanded_hesim_data")){
-      stop("'data' must be of class 'expanded_hesim_data'.")
-    } 
   }
   UseMethod("create_input_data", object)
 }
@@ -611,6 +605,7 @@ formula_list_rec <- function(object, data, ...){
 #' @export
 #' @rdname create_input_data
 create_input_data.formula_list <- function(object, data, ...){
+  check_edata(data)
   X_list <- formula_list_rec(object, data, ...)
   args <- c(list(X = X_list),
            get_input_data_id_vars(data))
@@ -624,15 +619,27 @@ get_terms <- function(object){
 
 #' @export
 #' @rdname create_input_data
-create_input_data.stateval_means <- function(object, data, ...){
+create_input_data.stateval_means <- function(object, ...){
+  # Create expanded hesim data
+  n_states <- dim(object$values)[2]
+  states_dt <- data.table(state_id = seq(1, n_states))
+  patients_dt <- data.table(patient_id = object$patient_id)
+  strategies_dt <- data.table(strategy_id = object$strategy_id)
+  hesim_dat <- hesim_data(strategies = strategies_dt,
+                          patients = patients_dt,
+                          states = states_dt)
+  edat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))   
+  
+  # Create input data
   args <- c(list(X = NULL),
-           get_input_data_id_vars(data))
+           get_input_data_id_vars(edat))
   return(do.call("new_input_data", args))
 }
 
 #' @export 
 #' @rdname create_input_data
 create_input_data.lm <- function(object, data, ...){
+  check_edata(data)
   terms <- get_terms(object)
   X <- stats::model.matrix(terms, data = data$data, ...)
   args <- c(list(X = list(mu = X)),
@@ -643,6 +650,7 @@ create_input_data.lm <- function(object, data, ...){
 #' @export 
 #' @rdname create_input_data
 create_input_data.lm_list <- function(object, data, ...){
+  check_edata(data)
   X_list <- vector(mode = "list", length = length(object))
   names(X_list) <- names(object)
   for (i in 1:length(X_list)){
@@ -673,6 +681,7 @@ create_input_data_flexsurvreg_X <- function(object, data, ...){
 #' @export
 #' @rdname create_input_data
 create_input_data.flexsurvreg <- function(object, data,...){
+  check_edata(data)
   X_list <- create_input_data_flexsurvreg_X(object, data, ...)
   args <- c(list(X = X_list),
            get_input_data_id_vars(data))
@@ -682,6 +691,7 @@ create_input_data.flexsurvreg <- function(object, data,...){
 #' @export
 #' @rdname create_input_data
 create_input_data.flexsurvreg_list <- function(object, data,...){
+  check_edata(data)
   X_list_2d <- vector(mode = "list", length = length(object))
   names(X_list_2d) <- names(object)
   for (i in 1:length(object)){
@@ -695,11 +705,13 @@ create_input_data.flexsurvreg_list <- function(object, data,...){
 #' @export
 #' @rdname create_input_data
 create_input_data.partsurvfit <- function(object, data, ...){
+  check_edata(data)
   return(create_input_data.flexsurvreg_list(object$models, data, ...))
 }
 
 #' @export
 create_input_data.joined_flexsurvreg_list <- function(object, data,...){
+  check_edata(data)
   models <- object$models
   X_list_3d <- vector(mode = "list", length = length(models))
   names(X_list_3d) <- names(models)
