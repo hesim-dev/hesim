@@ -126,11 +126,11 @@ fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age,
                               data = surv_data, dist = "exp")
 fits <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3), data = surv_data)
 
-curves_data <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+curves_data <- expand(hesim_dat, by = c("strategies", "patients"))
 psm_curves <- create_PsmCurves(fits, data = curves_data, n = N)
 
 # Cost models
-expanded_data <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+expanded_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit_costs_medical <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 psm_costs_medical <- create_StateVals(fit_costs_medical, data = expanded_data, n = N)
 

@@ -35,7 +35,7 @@ create_input_data(object, ...)
 \item{...}{Further arguments passed to \code{\link{model.matrix}}.}
 
 \item{data}{An object of class "expanded_hesim_data" returned by the function
-\code{\link{expand_hesim_data}}. Used to look for the input variables needed to create an input matrix
+\code{\link{expand.hesim_data}}. Used to look for the input variables needed to create an input matrix
 for use in a statistical models and the id variables for indexing rows in the input matrix.}
 }
 \value{
@@ -63,13 +63,13 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
                         states = dt_states)
 
 # Class "lm"
-expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+expanded_dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit_lm <- stats::lm(costs ~ female + state_name, psm4_exdata$costs$medical)
 input_dat <- create_input_data(fit_lm, expanded_dat)
 class(input_dat)
 
 # Class "flexsurvreg"
-expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+expanded_dat <- expand(hesim_dat, by = c("strategies", "patients"))
 fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                  data = ovarian, dist = "weibull")
 input_dat <- create_input_data(fit_wei, expanded_dat)

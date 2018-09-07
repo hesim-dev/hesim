@@ -105,7 +105,7 @@ fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age,
 fits <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3), data = surv_data)
 
 # Form PsmCurves
-curves_data <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+curves_data <- expand(hesim_dat, by = c("strategies", "patients"))
 psm_curves <- create_PsmCurves(fits, data = curves_data, n = 3)
 
 # Summarize survival curves

@@ -83,11 +83,11 @@ test_that("hesim_data", {
   expect_equal(hesim_dat$states, dt_states)
   
   # Expand
-  expanded_dt <- expand_hesim_data(hesim_dat, by = c("strategies"))
+  expanded_dt <- expand(hesim_dat, by = c("strategies"))
   expect_equal(expanded_dt$data, data.table(dt_strategies))
   expect_equal(expanded_dt$id_vars, "strategy_id")
-  expanded_dt <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
-  expanded_dt2 <- expand_hesim_data(hesim_dat, by = c("patients", "strategies"))
+  expanded_dt <- expand(hesim_dat, by = c("strategies", "patients"))
+  expanded_dt2 <- expand(hesim_dat, by = c("patients", "strategies"))
   expect_equal(nrow(expanded_dt$data), 
                nrow(dt_strategies) * nrow(dt_patients))
   expect_equal(expanded_dt$data, expanded_dt2$data)
@@ -95,18 +95,18 @@ test_that("hesim_data", {
   expect_equal(expanded_dt$id_vars, c("strategy_id", "patient_id"))
   
   # errors
-  expect_error(expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
+  expect_error(expand(hesim_dat, by = c("strategies", "patients", 
                                                   "states", "transitions")))
-  expect_error(expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
+  expect_error(expand(hesim_dat, by = c("strategies", "patients", 
                                                   "states", "wrong_table")))
   hesim_dat2 <- hesim_dat[c("strategies", "patients")]
-  expect_error(expand_hesim_data(hesim_dat2, by = c("strategies", "patients", 
+  expect_error(expand(hesim_dat2, by = c("strategies", "patients", 
                                                   "states")))
 })
 
 # input_data class -------------------------------------------------------------
 # By treatment strategy and patient
-dat <- expand_hesim_data(hesim_dat)$data
+dat <- expand(hesim_dat)$data
 input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
@@ -164,7 +164,7 @@ expect_error(input_data(X = list(model.matrix(~ age, dat)),
 
 
 # By treatment strategy, line, and patient
-dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "lines"))$data
+dat <- expand(hesim_dat, by = c("strategies", "patients", "lines"))$data
 n_lines <- hesim_dat$lines[, .N, by = "strategy_id"]
 input_dat <- input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
@@ -205,7 +205,7 @@ expect_error(input_data(X = list(model.matrix(~ age, dat)),
 
 # create_input_data with formula objects ---------------------------------------
 test_that("create_input_data.formula_list", {
-  dat <- expand_hesim_data(hesim_dat)
+  dat <- expand(hesim_dat)
   f_list <- formula_list(list(f1 = formula(~ age), f2 = formula(~ 1)))
   expect_equal(class(f_list), "formula_list")
   input_dat <- create_input_data(f_list, dat)
@@ -218,7 +218,7 @@ test_that("create_input_data.formula_list", {
 })
 
 # create_input_data with lm objects --------------------------------------------
-dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit1 <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 
 test_that("create_input_data.lm", {
@@ -240,7 +240,7 @@ test_that("create_input_data.lm_list", {
 
 # create_input_data with flexsurvreg objects -----------------------------------
 test_that("create_input_data.flexsurv", {
-  dat <- expand_hesim_data(hesim_dat)
+  dat <- expand(hesim_dat)
   fit <- flexsurv::flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
                               anc = list(sigma = ~ group), 
                               dist = "gengamma") 
@@ -262,7 +262,7 @@ fit1_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1,
 fit1_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                   data = ovarian, dist = "exp")
 flexsurvreg_list1 <- flexsurvreg_list(wei = fit1_wei, exp = fit1_exp)
-dat <- expand_hesim_data(hesim_dat)
+dat <- expand(hesim_dat)
 
 test_that("create_input_data.flexsurv_list", {
   input_dat <- create_input_data(flexsurvreg_list1, dat)  

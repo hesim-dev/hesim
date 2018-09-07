@@ -177,12 +177,12 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
                         states = dt_states)
                         
 ## Create transition model (i.e., multi-state model)
-transmod_data <- expand_hesim_data(hesim_dat)
+transmod_data <- expand(hesim_dat)
 transmod <- create_IndivCtstmTrans(fits, data = transmod_data, trans_mat = tmat,
                                    n = n_samples)
                         
 ## Create costs and utility models
-statevals_edata <- expand_hesim_data(hesim_dat, by = c("strategies", "patients",
+statevals_edata <- expand(hesim_dat, by = c("strategies", "patients",
                                                        "states"))
 input_dat <- create_input_data(formula_list(mu = ~ -1 + factor(state_id)), 
                                data = statevals_edata)

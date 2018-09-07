@@ -136,11 +136,11 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
 print(hesim_dat)
 ```
 
-Second, we can use `expand_hesim_data()` to "expand" the `hesim_data` object into single "long" dataset of class "expanded_hesim_data" suitable for predictive modeling. To model survival curves, we require a dataset in which each observation is a unique treatment strategy and patient, while each observation in the utility and cost models must be a unique treatment strategy, patient, and health state. 
+Second, we can use `expand.hesim_data()` to "expand" the `hesim_data` object into single "long" dataset of class "expanded_hesim_data" suitable for predictive modeling. To model survival curves, we require a dataset in which each observation is a unique treatment strategy and patient, while each observation in the utility and cost models must be a unique treatment strategy, patient, and health state. 
 
 ```{r, warning = FALSE, message = FALSE}
-surv_edata <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
-statevals_edata <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+surv_edata <- expand(hesim_dat, by = c("strategies", "patients"))
+statevals_edata <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 ```
 
 Third, for a given statistical model, we extract the relevant covariates and id variables from an "expanded_hesim_data" object to construct input matrices and row indices for prediction. We illustrate this third step when creating the survival, utility, and cost models below.

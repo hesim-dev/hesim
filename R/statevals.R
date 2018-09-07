@@ -56,7 +56,7 @@ stateval_means <- function(values, strategy_id, patient_id){
 #' @param object A model object of the appropriate class. Supports
 #'  \code{\link{stateval_means}} and \code{\link{lm}}.
 #' @param data An object of class "expanded_hesim_data" returned by 
-#' \code{\link{expand_hesim_data}}. Must be expanded by the data tables "strategies",
+#' \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies",
 #' "patients", and "states".
 #' @param n Number of random observations of the parameters to draw.
 #' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.

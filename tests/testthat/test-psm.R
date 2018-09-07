@@ -18,7 +18,7 @@ N <- 5
 
 # Partitioned survival curves  -------------------------------------------------
 # Simulation data
-curves_edata <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+curves_edata <- expand(hesim_dat, by = c("strategies", "patients"))
 
 # Fit survival curves
 surv_data <- psm4_exdata$survival
@@ -136,7 +136,7 @@ psm_curves <- create_PsmCurves(fits_wei, data = curves_edata, n = N)
 
 # Utility model
 psm_utility_data <- create_input_data(formula_list(mu = formula(~1)), 
-                                    expand_hesim_data(hesim_dat, 
+                                    expand(hesim_dat, 
                                      by = c("strategies", "patients", "states")),
                                      id_vars = c("strategy_id", "patient_id", "state_id"))
 psm_utility <- StateVals$new(data = psm_utility_data,
@@ -145,7 +145,7 @@ psm_utility <- StateVals$new(data = psm_utility_data,
 # Cost model(s)
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
-edat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+edat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 psm_costs_medical <- create_StateVals(fit_costs_medical, data = edat, n = N)
 psm_costs_medical2 <- create_StateVals(fit_costs_medical, data = edat, n = N + 1)
 

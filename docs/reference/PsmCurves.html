@@ -192,7 +192,7 @@
 <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='partsurvfit.html'>partsurvfit</a></span>(<span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span>(<span class='no'>fit1</span>, <span class='no'>fit2</span>, <span class='no'>fit3</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>surv_data</span>)
 
 <span class='co'># Form PsmCurves</span>
-<span class='no'>curves_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand_hesim_data.html'>expand_hesim_data</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
+<span class='no'>curves_data</span> <span class='kw'>&lt;-</span> <span class='fu'>expand</span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
 <span class='no'>psm_curves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_PsmCurves.html'>create_PsmCurves</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>curves_data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 
 <span class='co'># Summarize survival curves</span>

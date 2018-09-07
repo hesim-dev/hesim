@@ -127,7 +127,7 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
                         states = dt_states)
 
 ## Cost and utility models
-statevals_edata <- expand_hesim_data(hesim_dat, by = c("strategies", "patients",
+statevals_edata <- expand(hesim_dat, by = c("strategies", "patients",
                                                        "states"))
 input_dat <- create_input_data(formula_list(mu = ~ -1 + factor(state_id)), 
                                data = statevals_edata)
@@ -137,7 +137,7 @@ drugcostsmod <- StateVals$new(data = input_dat, params = drugcosts_params)
 
 ## The health state transitions
 ### With transition specific survival models
-msfit_list_data <- expand_hesim_data(hesim_dat)
+msfit_list_data <- expand(hesim_dat)
 tmat <- rbind(c(NA, 1, 2),
               c(NA, NA, 3),
               c(NA, NA, NA))
@@ -205,7 +205,7 @@ test_that("IndivCtstmTrans - transition specific", {
 dt_transitions <- create_trans_dt(tmat_ebmt4)
 dt_transitions[, trans := transition_id]
 hesim_dat$transitions <- dt_transitions
-msfit_data <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "transitions"))
+msfit_data <- expand(hesim_dat, by = c("strategies", "patients", "transitions"))
 mstate <- create_IndivCtstmTrans(msfit, data = msfit_data, trans_mat = tmat_ebmt4,
                             point_estimate = TRUE)
 

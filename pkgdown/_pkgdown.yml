@@ -29,7 +29,7 @@ reference:
   - title: "Input data"
     contents:
       - hesim_data
-      - expand_hesim_data
+      - expand.hesim_data
       - create_trans_dt
       - input_data
       - create_input_data

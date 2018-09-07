@@ -198,11 +198,21 @@ check_hesim_data_type <- function(tbl, tbl_name){
   }
 }
 
+#' Expand object
+#' 
+#' A generic function for "expanding" an object. Only used for 
+#' \code{\link{hesim_data}} objects.
+#' @export
+#' @keywords internal
+expand <- function(object, by){
+  UseMethod("expand", object)
+}
+
 #' Expand hesim_data
 #' 
 #' Expand the data tables from an object of class \code{\link{hesim_data}} into a single \code{\link{data.table}} 
 #' of class "expanded_hesim_data". See the description of the return value for details on how this is done.
-#' @param data An object of class \code{\link{hesim_data}}.
+#' @param object An object of class \code{\link{hesim_data}}.
 #' @param by A character vector of the names of the data tables in \code{\link{hesim_data}} to expand by.
 #' @return This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
 #' Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. 
@@ -220,9 +230,9 @@ check_hesim_data_type <- function(tbl, tbl_name){
 #'                         patients = dt_patients,
 #'                         states = dt_states,
 #'                         lines = dt_lines)
-#' expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+#' expand(hesim_dat, by = c("strategies", "patients"))
 #' @export
-expand_hesim_data <- function(data, by = c("strategies", "patients")){
+expand.hesim_data <- function(object, by = c("strategies", "patients")){
   if ("transitions" %in% by & "states" %in% by){
     stop("Cannot expand by both 'transitions' and 'states'.", call. = FALSE)
   }
@@ -231,7 +241,7 @@ expand_hesim_data <- function(data, by = c("strategies", "patients")){
          call. = FALSE)
   }
   sorted_by <- hesim_data_sorted_by(by)
-  tbl_list <- data[sorted_by]
+  tbl_list <- object[sorted_by]
   for (i in 1:length(tbl_list)){
     if (is.null(tbl_list[[i]])){
       stop("Cannot merge a NULL data table.")
@@ -324,7 +334,7 @@ sort_hesim_data <- function(data, sorted_by){
 #' adding additional health states rather than by using the index \eqn{j}.
 #' 
 #' The rows of the matrices in \code{X} must be sorted in a manner consistent with the id variables.
-#' The sorting order should be the same as specified in \code{\link{expand_hesim_data}}; that is,
+#' The sorting order should be the same as specified in \code{\link{expand.hesim_data}}; that is,
 #' the rows of \code{X} must be sorted by: (i) \code{strategy_id}, (ii) \code{line}, 
 #' (iii) \code{patient_id}, and (iv) the health-related id variable (either \code{state_id} or
 #'  \code{transition_id}).
@@ -337,7 +347,7 @@ sort_hesim_data <- function(data, sorted_by){
 #' hesim_dat <- hesim_data(strategies = dt_strategies,
 #'                         patients = dt_patients)
 #' 
-#' dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))$data
+#' dat <- expand(hesim_dat, by = c("strategies", "patients"))$data
 #' input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
 #'                        strategy_id = dat$strategy_id,
 #'                        n_strategies = length(unique(dat$strategy_id)),
@@ -528,7 +538,7 @@ get_input_data_id_vars <- function(data){
 #' Check that data argument for \code{create_input_data} exists and that it is
 #' of the correct type. 
 #' @param data An object of class "expanded_hesim_data" returned by the function
-#'  \code{\link{expand_hesim_data}}. 
+#'  \code{\link{expand.hesim_data}}. 
 #' @return If all tests passed, returns nothing; otherwise, throws an exception.
 check_edata <- function(data){
   if (missing(data)){
@@ -550,7 +560,7 @@ check_edata <- function(data){
 #' \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
 #'  \code{\link{flexsurvreg_list}}, and \code{\link{partsurvfit}}.
 #' @param data An object of class "expanded_hesim_data" returned by the function
-#'  \code{\link{expand_hesim_data}}. Used to look for the input variables needed to create an input matrix
+#'  \code{\link{expand.hesim_data}}. Used to look for the input variables needed to create an input matrix
 #'  for use in a statistical models and the id variables for indexing rows in the input matrix. 
 #' @param ... Further arguments passed to \code{\link{model.matrix}}.
 #' @return An object of class \code{\link{input_data}}.
@@ -569,13 +579,13 @@ check_edata <- function(data){
 #'                         states = dt_states)
 #'
 #' # Class "lm"
-#' expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+#' expanded_dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 #' fit_lm <- stats::lm(costs ~ female + state_name, psm4_exdata$costs$medical)
 #' input_dat <- create_input_data(fit_lm, expanded_dat)
 #' class(input_dat)
 #'
 #' # Class "flexsurvreg"
-#' expanded_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+#' expanded_dat <- expand(hesim_dat, by = c("strategies", "patients"))
 #' fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                  data = ovarian, dist = "weibull")
 #' input_dat <- create_input_data(fit_wei, expanded_dat)
@@ -628,7 +638,7 @@ create_input_data.stateval_means <- function(object, ...){
   hesim_dat <- hesim_data(strategies = strategies_dt,
                           patients = patients_dt,
                           states = states_dt)
-  edat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))   
+  edat <- expand(hesim_dat, by = c("strategies", "patients", "states"))   
   
   # Create input data
   args <- c(list(X = NULL),

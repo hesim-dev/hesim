@@ -23,7 +23,7 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
 test_that("obs_index", {
 
 ## strategy_id + line + patient_id + state_id
-expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
+expanded_hesim_dat <- expand(hesim_dat, by = c("strategies", "patients", 
                                                           "lines", "states"))
 f <- formula_list(mu = ~ age)
 input_dat <- create_input_data(f, expanded_hesim_dat)
@@ -51,7 +51,7 @@ test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 1, state_idx = 2)
 test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 2, state_idx = 2)
 
 # strategy_id + line + patient_id + transition_id
-expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
+expanded_hesim_dat <- expand(hesim_dat, by = c("strategies", "patients", 
                                                           "lines", "transitions"))
 f <- formula_list(~ age)
 input_dat <- create_input_data(f, expanded_hesim_dat)
@@ -70,7 +70,7 @@ test_obs_index(strategy_idx = 2, line_idx = 1, patient_idx = 1, transition_idx =
 test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 2, transition_idx = 2)
 
 # strategy_id + line + patient_id
-expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
+expanded_hesim_dat <- expand(hesim_dat, by = c("strategies", "patients", 
                                                           "lines"))
 f <- formula_list(~ age)
 input_dat <- create_input_data(f, expanded_hesim_dat)
@@ -88,7 +88,7 @@ test_obs_index(strategy_idx = 2, line_idx = 1, patient_idx = 1)
 test_obs_index(strategy_idx = 1, line_idx = 3, patient_idx = 2)
 
 # strategy_id + patient_id + state_id
-expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", 
+expanded_hesim_dat <- expand(hesim_dat, by = c("strategies", "patients", 
                                                           "states"))
 f <- formula_list(~ age)
 input_dat <- create_input_data(f, expanded_hesim_dat)
@@ -106,7 +106,7 @@ test_obs_index(strategy_idx = 2, patient_idx = 1, state_idx = 3)
 test_obs_index(strategy_idx = 1, patient_idx = 2, state_idx = 1)
 
 # strategy_id + patient_id 
-expanded_hesim_dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+expanded_hesim_dat <- expand(hesim_dat, by = c("strategies", "patients"))
 f <- formula_list(~ age)
 input_dat <- create_input_data(f, expanded_hesim_dat)
 
@@ -125,7 +125,7 @@ test_obs_index(strategy_idx = 2, patient_idx = 2)
 test_obs_index(strategy_idx = 2, patient_idx = 3)
 
 # ID getters  
-dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))$data
+dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))$data
 input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
                      strategy_id = dat$strategy_id,
                      n_strategies = length(unique(dat$strategy_id)),

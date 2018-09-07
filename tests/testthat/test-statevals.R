@@ -54,7 +54,7 @@ test_that("stateval_means", {
 # Linear model
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
-edat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+edat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 costvals_medical <- create_StateVals(fit_costs_medical, data = edat, n = N)
 costvals_medical$sim(t = c(1, 2, 3), type = "predict")
 

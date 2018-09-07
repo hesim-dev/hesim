@@ -75,7 +75,7 @@ knitr::include_graphics("input-data.png")
 `hesim` provides helper functions for constructing objects of class `input_data`. Specifically, an `input_data` object can be created by following a three step process.
 
 1. Using `hesim_data()` to create a collection of data tables (i.e., a `data.frame` or `data.table`) of class `hesim_data` for storing relevant simulation data (e.g., a treatment strategy table, a patient table, a health state table), which would contain any variables needed for prediction with a statistical model
-2. Using `expand_hesim_data()` to combine some or all of the tables created by `hesim_data()` into a single long dataset of class `expanded_hesim_data` with dimensions required for predicting or simulating values with a particular submodel
+2. Using `expand.hesim_data()` to combine some or all of the tables created by `hesim_data()` into a single long dataset of class `expanded_hesim_data` with dimensions required for predicting or simulating values with a particular submodel
 3. Using the dataset in Step 2 to create an object of class `input_data` with `create_input_data()` 
 
 The figure below illustrated this process using the same example above with two treatment strategies, two patients, and two health states.
@@ -102,7 +102,7 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
 print(hesim_dat)
 ```
 
-The `hesim_data` object can subsequently be "expanded" over the dimensions of interest using `expand_hesim_data()`. The new `expanded_hesim_data` object must contain the covariates used in the model fit as well as id variables indexing the dimensions of the data. Given a model object or formula, we extract the input matrix from the `expanded_hesim_data` object using the generic function `create_input_data()`, which returns an `input_data` object containing the input matrix as well as the relevant id variables.
+The `hesim_data` object can subsequently be "expanded" over the dimensions of interest using `expand.hesim_data()`. The new `expanded_hesim_data` object must contain the covariates used in the model fit as well as id variables indexing the dimensions of the data. Given a model object or formula, we extract the input matrix from the `expanded_hesim_data` object using the generic function `create_input_data()`, which returns an `input_data` object containing the input matrix as well as the relevant id variables.
 
 As with parameter estimation, an `input_data` object can be created in one of two ways:
 
@@ -114,7 +114,7 @@ In case 2 a `formula` or `formula_list` object can be used in lieu of a fitted m
 ```{r warning = FALSE, message = FALSE}
 # Predict survival curves by treatment strategy and patient
 ## From a model fit with flexsurvreg
-hesim_edata_surv <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))
+hesim_edata_surv <- expand(hesim_dat, by = c("strategies", "patients"))
 input_dat_wei <- create_input_data(fit_wei, data = hesim_edata_surv)
 print(input_dat_wei)
 
@@ -128,7 +128,7 @@ We can create input data to make predictions by treatment strategy, patient, and
 
 ```{r warning = FALSE, message = FALSE}
 # Predict (mean) state values by treatment strategy, patient, and health state
-hesim_edata_statevals <- expand_hesim_data(hesim_dat, by = c("strategies", "patients", "states"))
+hesim_edata_statevals <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 formula_costs <- formula_list(mu = ~ 1 + female)
 print(create_input_data(formula_costs, data = hesim_edata_statevals))
 ```

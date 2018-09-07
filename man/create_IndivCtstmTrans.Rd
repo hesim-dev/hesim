@@ -19,7 +19,7 @@ create_IndivCtstmTrans(object, data, trans_mat, n = 1000,
 \item{object}{A fitted statistical model.}
 
 \item{data}{An object of class "expanded_hesim_data" returned by 
-\code{\link{expand_hesim_data}}.}
+\code{\link{expand.hesim_data}}.}
 
 \item{trans_mat}{The transition matrix describing the states and transitions in a 
 multi-state model in the format from the \link[mstate]{mstate} package. See \link{IndivCtstmTrans}.}

@@ -20,7 +20,7 @@ Parameters
 
 Input data
 * `hesim_data()` creates an object of class `hesim_data` for storing a collection of data tables or data frames for simulation modeling.
-* `expand_hesim_data()` combines some or all of the data tables or data frames in `hesim_data()` into a single long dataset.
+* `expand.hesim_data()` combines some or all of the data tables or data frames in `hesim_data()` into a single long dataset.
 * `input_data()` creates an object of class `input_data`, which contains data for predicting or simulating values with a statistical model.
 * `create_input_data()` creates an object of class `input_data` from a fitted statistical model or a `formula` object.
 

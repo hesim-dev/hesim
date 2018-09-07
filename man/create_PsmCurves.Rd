@@ -11,7 +11,7 @@ create_PsmCurves(object, data, n = 1000, point_estimate = FALSE,
 \item{object}{An object of class \code{\link{partsurvfit}}.}
 
 \item{data}{An object of class "expanded_hesim_data" returned by 
-\code{\link{expand_hesim_data}}. Must be expanded by the data tables "strategies" and
+\code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
 "patients".}
 
 \item{n}{Number of random observations of the parameters to draw.}

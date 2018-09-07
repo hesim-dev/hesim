@@ -11,7 +11,7 @@ create_StateVals(object, data = NULL, n = 1000, point_estimate = FALSE)
 \code{\link{stateval_means}} and \code{\link{lm}}.}
 
 \item{data}{An object of class "expanded_hesim_data" returned by 
-\code{\link{expand_hesim_data}}. Must be expanded by the data tables "strategies",
+\code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies",
 "patients", and "states".}
 
 \item{n}{Number of random observations of the parameters to draw.}

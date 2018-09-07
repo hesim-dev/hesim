@@ -68,7 +68,7 @@ partitioned survival analysis where sequential treatment would be incorporated b
 adding additional health states rather than by using the index \eqn{j}.
 
 The rows of the matrices in \code{X} must be sorted in a manner consistent with the id variables.
-The sorting order should be the same as specified in \code{\link{expand_hesim_data}}; that is,
+The sorting order should be the same as specified in \code{\link{expand.hesim_data}}; that is,
 the rows of \code{X} must be sorted by: (i) \code{strategy_id}, (ii) \code{line}, 
 (iii) \code{patient_id}, and (iv) the health-related id variable (either \code{state_id} or
  \code{transition_id}).
@@ -82,7 +82,7 @@ dt_patients <- data.frame(patient_id = seq(1, 3),
 hesim_dat <- hesim_data(strategies = dt_strategies,
                         patients = dt_patients)
 
-dat <- expand_hesim_data(hesim_dat, by = c("strategies", "patients"))$data
+dat <- expand(hesim_dat, by = c("strategies", "patients"))$data
 input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),

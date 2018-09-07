@@ -107,7 +107,7 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
 #' A generic function for creating an object of class \code{\link{IndivCtstmTrans}}.
 #' @param object A fitted statistical model. 
 #' @param data An object of class "expanded_hesim_data" returned by 
-#' \code{\link{expand_hesim_data}}.
+#' \code{\link{expand.hesim_data}}.
 #' @param n Number of random observations of the parameters to draw.
 #' @param trans_mat The transition matrix describing the states and transitions in a 
 #' multi-state model in the format from the \link[mstate]{mstate} package. See \link{IndivCtstmTrans}.

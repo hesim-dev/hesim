@@ -163,7 +163,7 @@ tmat <- rbind(c(NA, 1, 2),
 # Simulation model
 hesim_dat <- hesim_data(strategies = dt_strategies,
                         patients = dt_patients)
-fits_data <- expand_hesim_data(hesim_dat)
+fits_data <- expand(hesim_dat)
 transmod <- create_IndivCtstmTrans(fits, data = fits_data, trans_mat = tmat,
                                     n = 2,
                                     point_estimate = FALSE)       
