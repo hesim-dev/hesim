@@ -136,7 +136,7 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
 library("flexsurv")
 
 # Treatment strategies,target population, and health states
-dt_strategies <- data.frame(strategy_id = c(1, 2, 3))
+dt_strategies <- data.frame(strategy_id = c(1, 2))
 dt_patients <- data.frame(patient_id = seq(1, 3),
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
@@ -149,7 +149,7 @@ n_samples <- 2
 fits <- vector(length = 3, mode = "list")
 surv_dat <- data.frame(ctstm3_exdata$transitions)
 for (i in 1:length(fits)){
-  fits[[i]] <- flexsurvreg(Surv(years, status) ~ strategy_id, 
+  fits[[i]] <- flexsurvreg(Surv(years, status) ~ factor(strategy_id), 
                            data = surv_dat,
                            subset = (trans == i),
                            dist = "weibull")
@@ -161,17 +161,13 @@ tmat <- rbind(c(NA, 1, 2),
               
 ## Utility
 beta_params <- mom_beta(ctstm3_exdata$utility$mean, ctstm3_exdata$utility$se)
-utility1 <- rbeta(n_samples, shape1 = beta_params$shape1[1], 
-                  shape2 = beta_params$shape2[1])
-utility2 <- rbeta(n_samples, shape1 = beta_params$shape1[2], 
-                  shape2 = beta_params$shape2[2])
-utility_params <- params_lm(coefs  = cbind(utility1, utility2))
+utility_posterior <- matrix(rbeta(n_samples * 2, shape1 = beta_params$shape1,
+                                  shape2 = beta_params$shape2),
+                            nrow = n_samples, byrow = TRUE)
+## Costs
+drugcosts <- ctstm3_exdata$costs$drugs$costs
 
-# Costs
-drugcost_params <- params_lm(matrix(rep(ctstm3_exdata$costs$drugs$costs, n_samples), 
-                             nrow = n_samples, byrow = TRUE))
-
-# Decision model
+# Economic model
 hesim_dat <- hesim_data(strategies = dt_strategies,
                         patients = dt_patients,
                         states = dt_states)
@@ -181,17 +177,25 @@ transmod_data <- expand(hesim_dat)
 transmod <- create_IndivCtstmTrans(fits, data = transmod_data, trans_mat = tmat,
                                    n = n_samples)
                         
-## Create costs and utility models
-statevals_edata <- expand(hesim_dat, by = c("strategies", "patients",
-                                                       "states"))
-input_dat <- create_input_data(formula_list(mu = ~ -1 + factor(state_id)), 
-                               data = statevals_edata)
-utilmod <- StateVals$new(data = input_dat, params = utility_params)
-drugcostmod <- StateVals$new(data = input_dat, params = drugcost_params)
+## Create utility model
+utility_means <- stateval_means(values = utility_posterior,
+                                strategy_id = dt_strategies$strategy_id,
+                                patient_id = dt_patients$patient_id)
+utilitymod <- create_StateVals(utility_means)
+
+## Create (drug) cost model
+drugcost_array <- array(NA, dim = c(n_samples, 2, 2))
+drugcost_array[, , 1] <- drugcosts[1]
+drugcost_array[, , 2] <- drugcosts[2]
+drugcost_means <- stateval_means(values = drugcost_array,
+                                strategy_id = dt_strategies$strategy_id,
+                                patient_id = dt_patients$patient_id)
+
+drugcostmod <- create_StateVals(drugcost_means)
 
 ## Simulate outcomes
 ictstm <- IndivCtstm$new(trans_model = transmod,
-                         utility_model = utilmod,
+                         utility_model = utilitymod,
                          cost_models = list(drugs = drugcostmod))
 head(ictstm$sim_disease()$disprog_$sim)
 head(ictstm$sim_stateprobs(t = c(0, 5, 10))$stateprobs_[t == 5])
