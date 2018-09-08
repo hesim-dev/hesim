@@ -72,7 +72,7 @@ for speed. Equivalent to flexsurv::rgengamma." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">API</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -166,13 +166,13 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
 <span class='no'>r1</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.005   0.001   0.002 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
+#&gt;   0.007   0.000   0.002 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
 <span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/GenGamma'>rgengamma</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.012   0.003   0.006 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt;   0.0000   0.9072   4.0750  12.3353  14.1334 323.3526 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r2</span>)</div><div class='output co'>#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-#&gt;   0.00049   0.96713   3.75623  11.06074  13.08265 296.01659 </div><div class='input'>
+#&gt;   0.012   0.000   0.003 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+#&gt;   0.0000   0.8738   4.0346  12.2826  14.1089 323.3526 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>r2</span>)</div><div class='output co'>#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#&gt;   0.00049   0.97877   3.75623  11.03542  13.08265 296.01659 </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

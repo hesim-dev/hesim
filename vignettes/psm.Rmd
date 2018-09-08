@@ -41,7 +41,7 @@ $$
 \rm{Costs}_{m,hik} &= \int_{0}^{T} c_{m,hik} e^{-rt} p_{hik}(t)dt,
 \end{aligned}
 $$
-where $t$ denotes time (typically a year), $q$ is a quality-of-life weight, $c$ represents (assmuming that time is measured in years) annualized costs, $r$ is the discount rate, and $p(t)$ is the probability of being in a given health state at a given time, and QALYs and costs are calculated over $T$ time periods.
+where $t$ denotes time (typically a year), $q$ is a quality-of-life weight, $c$ represents (assuming that time is measured in years) annualized costs, $r$ is the discount rate, and $p(t)$ is the probability of being in a given health state at a given time, and QALYs and costs are calculated over $T$ time periods.
 
 ## An example 4-state PSM
 To illustrate a partitioned survival analysis, consider the evaluation of a two-line sequential treatment strategy in oncology using a 4-state PSM. The 4 health states might be:
@@ -54,7 +54,7 @@ To illustrate a partitioned survival analysis, consider the evaluation of a two-
 Below we conduct an example analysis using this setup.
 
 ## Parameter estimation
-The first step in any health-economic simulation is to estimate the model parameters. Since analyses in `hesim` are, by default, based on sampled values of the parameters in order to facilitate probabilistic sensitivity analysis (PSA), it is a good idea to determine the number of sampled parameter sets that are desired. 
+The first step in any health-economic simulation is to estimate the model parameters. Since analyses in `hesim` are, by default, based on sampled values of the parameters from their joint posterior distribution in order to facilitate probabilistic sensitivity analysis (PSA), it is a good idea to determine the number of sampled parameter sets that are desired. 
 
 ```{r, warning = FALSE, message = FALSE}
 n_samples <- 100
@@ -87,113 +87,113 @@ psfit_wei <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3),
                          data = surv_dataset)
 ```
 
+### Utility model
+Although utility and cost models can be fit using regression models, in many cases, we won't fit a model directly, but will use estimated mean values from published sources. For instance, consider an example where we are only given a range of values for utility. We therefore approximate the posterior distribution of mean utility values by health state using a uniform distribution.
+
+```{r, warning = FALSE, message = FALSE}
+utility_posterior <- matrix(runif(n_samples * 3,
+                                  min = psm4_exdata$utility$lower,
+                                  max = psm4_exdata$utility$upper),
+                            nrow = n_samples, byrow = TRUE)
+colnames(utility_posterior) <- paste0("State", seq(1, 3))
+head(utility_posterior)
+```
+
 ### Cost models
-Currently, `hesim` supports  parameterizing a cost or utility model using linear models. For instance, we can fit a model for medical costs as a function of the three non-death health states using the `lm()` function in R. 
+Similar to utility, we will not simulate drug costs based on a statistical model but will instead use published estimates. Drug costs will only vary by treatment strategy (i.e., they do not vary by health state or across samples in the PSA).
+
+```{r, warning = FALSE, message = FALSE}
+drugcosts <- psm4_exdata$costs$drugs$costs
+print(drugcosts)
+```
+
+For cases in which we want to use a regression model to simulate costs, `hesim` supports parameterizing a cost or utility model using linear models. Here, we fit a model for medical costs as a function of the three non-death health states using the `lm()` function in R. 
 
 ```{r, warning = FALSE, message = FALSE}
 medcosts_fit <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 ```
 
-We can also use a linear model to predict drug costs that only vary by treatment strategy. In this case, a linear model parameter object (i.e., an object of class `params_lm`) can be created directly with the `params_lm()` function. The linear model has no intercept (meaning that we specify the costs for strategy 1, strategy 2, and strategy 3) and cost values are constant across samples in the PSA. 
-
-```{r, warning = FALSE, message = FALSE}
-drugcosts_mat <- matrix(rep(psm4_exdata$costs$drugs$costs, n_samples), 
-                         nrow = n_samples, byrow = TRUE)
-drugcosts_params <- params_lm(coefs  = drugcosts_mat)
-```
-
-### Utility model
-We can create a utility model in similar fashion to the drug cost model. Suppose that a study from the literature suggests that utility ranges from .8 to .9 in state 1, .7 to .8 in state 2, and .6 to .7 in state 3. Then we might sample utility in each state using a uniform distribution (although the beta distribution would likely be more appropriate for sampling utility scores).
-
-```{r, warning = FALSE, message = FALSE}
-utility1 <- runif(n_samples, .8, .9)
-utility2 <- runif(n_samples, .7, .8)
-utility3 <- runif(n_samples, .6, .7)
-utility_params <- params_lm(coefs  = cbind(utility1, utility2, utility3))
-```
-
-## Forming a model structure
+## Simulating the economic model
 A PSM in `hesim` is an [R6](https://cran.r-project.org/web/packages/R6/) object of class `Psm` and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class `PsmCurves`), (2) a utility model (of class `StateVals`), and (3) a set of cost models for each cost component (a list of `StateVals` objects). 
 
 ### Simulation data
-The input data required to simulate partitioned survival models in `hesim` can be set up in 3 steps as described in our [introduction to hesim](intro.html). First, the data can be set up as a collection of data frames or data tables. A 4-state PSM consists of three types of data tables: a table describing treatment strategies, the patient population of interest, and four health states (death and three non-death  states). In this example, we model three treatment strategies and three distinct patients that differ in age and gender. Relevant tables are combined using `hesim_data()`, which creates a general object of class `hesim_data` for storing data tables for simulation modeling in `hesim`.
+To simulate a PSM, it is first necessary to specify the treatment strategies, patient population, and health states being modeled. In this example, we model three treatment strategies, three distinct patients (that differ in age and gender), and four health states (death and three non-death states). This information is combined using `hesim_data()`, which creates a general object of class `hesim_data`.
 
 ```{r, warning = FALSE, message = FALSE}
 library("data.table")
 set.seed(101)
-dt_strategies <- data.table(strategy_id = c(1, 2, 3))
-dt_patients <- data.table(patient_id = seq(1, 3),
+strategies_dt <- data.table(strategy_id = c(1, 2, 3))
+patients_dt <- data.table(patient_id = seq(1, 3),
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
-dt_states <- data.frame(state_id =  seq(1, 3),
+states_dt <- data.frame(state_id =  seq(1, 3),
                         state_name = c("Progression free (1st line)",
                                        "Progression free (2nd line)",
                                        "Progressed (2nd line)"),
                         stringsAsFactors = FALSE)
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients,
-                        states = dt_states)
+hesim_dat <- hesim_data(strategies = strategies_dt,
+                        patients = patients_dt,
+                        states = states_dt)
 print(hesim_dat)
 ```
 
-Second, we can use `expand.hesim_data()` to "expand" the `hesim_data` object into single "long" dataset of class "expanded_hesim_data" suitable for predictive modeling. To model survival curves, we require a dataset in which each observation is a unique treatment strategy and patient, while each observation in the utility and cost models must be a unique treatment strategy, patient, and health state. 
-
-```{r, warning = FALSE, message = FALSE}
-surv_edata <- expand(hesim_dat, by = c("strategies", "patients"))
-statevals_edata <- expand(hesim_dat, by = c("strategies", "patients", "states"))
-```
-
-Third, for a given statistical model, we extract the relevant covariates and id variables from an "expanded_hesim_data" object to construct input matrices and row indices for prediction. We illustrate this third step when creating the survival, utility, and cost models below.
-
 ### Survival models
-Since we fit our survival models using `flexsurvreg`, we can create a `PsmCurves` object using `create_PsmCurves()`, which generates both the input data and samples of the model parameters needed for prediction. 
+Survival curves are simulated using `PsmCurves` objects. We can create a `PsmCurves` object using `create_PsmCurves()` as a function of our `partsurvfit` object and a dataset of class `expanded_hesim_data` containing the variables and row identifiers needed for predictive modeling.  
 
-The model parameters can be sampled in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, `create_PsmCurves()` consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the data element in a `partsurvfit` object. 
+To conduct the PSA, we must sample random draws of the regression coefficients from their posterior distribution, which can be done in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, `create_PsmCurves()` consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the data element in a `partsurvfit` object. 
 
 ```{r, warning = FALSE, message = FALSE, cache = TRUE}
-psm_curves <- create_PsmCurves(psfit_wei, data = surv_edata, n = n_samples,
+surv_data <- expand(hesim_dat, by = c("strategies", "patients"))
+survmods <- create_PsmCurves(psfit_wei, data = surv_data, n = n_samples,
                                bootstrap = TRUE)
 ```
 
-### Creating cost and utility models
-We fit a linear model to medical costs, so we can use the `create_StateVals()` to instantiate a `StateVals` object for medical costs. 
+## Utility and cost models
+Utility and cost values are simulated using models of class `StateVals`. When parameter estimates are based on published sources, it is often easiest to instantiate a `StateVals` object from a `statevals_means` object, which stores the posterior distribution of the mean values assigned to health states. We do this to create a utility model. 
 
 ```{r, warning = FALSE, message = FALSE}
-psm_medcosts <- create_StateVals(medcosts_fit, data = statevals_edata, 
+utility_means <- stateval_means(values = utility_posterior,
+                                strategy_id = strategies_dt$strategy_id,
+                                patient_id = patients_dt$patient_id)
+utilitymod <- create_StateVals(utility_means)
+```
+
+In the utility model, health state values vary by health state. A `stateval_means` object can also be used to store health state values that vary by treatment strategy. We take this approach to create a model for drug costs. 
+
+```{r, warning = FALSE, message = FALSE}
+n_strategies <- nrow(strategies_dt) 
+n_states <- nrow(states_dt)
+drugcost_array <- array(rep(drugcosts, each = n_samples * n_states),
+                        dim = c(n_samples, n_states, n_strategies))
+drugcost_means <- stateval_means(values = drugcost_array,
+                                strategy_id = strategies_dt$strategy_id,
+                                patient_id = patients_dt$patient_id)
+drugcostmod <- create_StateVals(drugcost_means)
+```
+
+Finally, we can also instantiate a `StateVals()` from a fitted linear model and a corresponding dataset of class `expanded_hesim_data`.
+
+```{r, warning = FALSE, message = FALSE}
+medcost_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
+medcostmod <- create_StateVals(medcosts_fit, data = medcost_data, 
                                  n = n_samples)
-```
-
-Drug costs were not fit with a model in R, so we cannot instantiate a model for drug costs using `create_StateVals()`. Instead, we create the model from our `params_lm` class object and input data (of class `input_data`). Since we don't have fitted R model, we can use a `formula_list` object to specify the explanatory variables in the model. That is, we use `formula_list()` to obtain the variables (`strategy_id`) in `statevals_edata` that are needed. 
-
-```{r, warning = FALSE, message = FALSE}
-input_dat <- create_input_data(formula_list(mu = ~ -1 + factor(state_id)), 
-                               data = statevals_edata)
-psm_drugcosts <- StateVals$new(data = input_dat, params = drugcosts_params)
-```
-
-We can instantiate a utility model in the same manner.
-
-```{r, warning = FALSE, message = FALSE}
-input_dat <- create_input_data(formula_list(mu = ~ -1 + factor(state_id)), 
-                               data = statevals_edata)
-psm_utility <- StateVals$new(data = input_dat, params = utility_params)
 ```
 
 ### Combining the statistical models
 The PSM model is instantiated using `$new()`. 
 
 ```{r, warning = FALSE, message = FALSE}
-psm <- Psm$new(survival_models = psm_curves,
-               utility_model = psm_utility,
-               cost_models = list(medical = psm_medcosts, 
-                                  drug = psm_drugcosts))
+psm <- Psm$new(survival_models = survmods,
+               utility_model = utilitymod,
+               cost_models = list(medical = medcostmod, 
+                                  drug = drugcostmod))
 ```
 
 ## Simulating outcomes
 ### Simulating survival curves
 Survival curves are predicted by treatment strategy and patient with the function `$sim_survival()`. The predicted curves are returned as a tidy `data.table` to facilitate plotting and stored as a field in the class named `survival_`. Below we plot the mean survival curve for patient 2 with treatment strategy 3. 
 
-```{r, warning = FALSE, message = FALSE}
+```{r survcurves, warning = FALSE, message = FALSE}
 # Simulate
 times <- seq(0, 10, by = .1)
 psm$sim_survival(t = times)
@@ -218,7 +218,7 @@ ggplot(p_data, aes(x = t, y = mean_surv, fill = curve)) +
 ### Simulating health state probabilities 
 After simulating survival, we can calculate the probability of being in each of the four health states using `$sim_stateprobs()`. At a given point in time, the probability of being in state 1 is the survival probability from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. We plot these state probabilities for the first patient with the 30th randomly sampled parameter set.
 
-```{r, warning = FALSE, message = FALSE}
+```{r stateprobs, warning = FALSE, message = FALSE}
 # Simulate
 psm$sim_stateprobs()
 

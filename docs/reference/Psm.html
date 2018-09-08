@@ -70,7 +70,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">API</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -210,11 +210,11 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
                               <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>surv_data</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
 <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='partsurvfit.html'>partsurvfit</a></span>(<span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span>(<span class='no'>fit1</span>, <span class='no'>fit2</span>, <span class='no'>fit3</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>surv_data</span>)
 
-<span class='no'>curves_data</span> <span class='kw'>&lt;-</span> <span class='fu'>expand</span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
+<span class='no'>curves_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
 <span class='no'>psm_curves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_PsmCurves.html'>create_PsmCurves</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>curves_data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>N</span>)
 
 <span class='co'># Cost models</span>
-<span class='no'>expanded_data</span> <span class='kw'>&lt;-</span> <span class='fu'>expand</span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>, <span class='st'>"states"</span>))
+<span class='no'>expanded_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>, <span class='st'>"states"</span>))
 <span class='no'>fit_costs_medical</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>costs</span> ~ <span class='no'>female</span> + <span class='no'>state_name</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>psm4_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>)
 <span class='no'>psm_costs_medical</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>fit_costs_medical</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>expanded_data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>N</span>)
 
@@ -231,18 +231,18 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 <span class='no'>psm</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>psm</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'>head</span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category    costs
-#&gt; 1:      1           1          1        1 0.03  medical 21783.80
-#&gt; 2:      1           1          1        2 0.03  medical 13673.13
-#&gt; 3:      1           1          1        3 0.03  medical 12396.35
-#&gt; 4:      1           1          2        1 0.03  medical 20687.64
-#&gt; 5:      1           1          2        2 0.03  medical 13087.80
-#&gt; 6:      1           1          2        3 0.03  medical 12260.71</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category     qalys
-#&gt; 1:      1           1          1        1 0.03    qalys 0.4177802
-#&gt; 2:      1           1          1        2 0.03    qalys 0.3102934
-#&gt; 3:      1           1          1        3 0.03    qalys 0.2360047
-#&gt; 4:      1           1          2        1 0.03    qalys 0.3967576
-#&gt; 5:      1           1          2        2 0.03    qalys 0.2970101
-#&gt; 6:      1           1          2        3 0.03    qalys 0.2334224</div></pre>
+#&gt; 1:      1           1          1        1 0.03  medical 21043.06
+#&gt; 2:      1           1          1        2 0.03  medical 13853.65
+#&gt; 3:      1           1          1        3 0.03  medical 13445.04
+#&gt; 4:      1           1          2        1 0.03  medical 20038.19
+#&gt; 5:      1           1          2        2 0.03  medical 13242.31
+#&gt; 6:      1           1          2        3 0.03  medical 13319.18</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category     qalys
+#&gt; 1:      1           1          1        1 0.03    qalys 0.4194184
+#&gt; 2:      1           1          1        2 0.03    qalys 0.3244075
+#&gt; 3:      1           1          1        3 0.03    qalys 0.2430992
+#&gt; 4:      1           1          2        1 0.03    qalys 0.3993898
+#&gt; 5:      1           1          2        2 0.03    qalys 0.3100919
+#&gt; 6:      1           1          2        3 0.03    qalys 0.2408234</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
