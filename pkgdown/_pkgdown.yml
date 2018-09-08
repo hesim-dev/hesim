@@ -61,7 +61,7 @@ reference:
 navbar:
   title: hesim
   left:
-  - text: "Reference"
+  - text: "API"
     href: reference/index.html
   - text: "Articles"
     menu:
