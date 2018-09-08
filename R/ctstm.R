@@ -148,7 +148,7 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     
     vec_to_array = function(field){
       field_name <- deparse(substitute(field))
-      max_len <- self$data$n_patients *nrow(self$trans_mat) * private$n_samples
+      max_len <- self$data$n_patients * self$data$n_strategies * private$n_samples
       if (length(field) !=1 & length(field) != self$data$n_patients & 
           length(field) != max_len){
               stop(paste0("The length of '", field_name, "' must either be 1, equal to the number ",
