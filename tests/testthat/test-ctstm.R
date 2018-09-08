@@ -195,7 +195,9 @@ test_that("IndivCtstmTrans - transition specific", {
                NA)
   
   # Errors
-  expect_error(mstate_list$sim_disease(start_age = rep(2, nrow(dt_patients) - 1)))
+  expect_error(create_IndivCtstmTrans(msfit_list, data = msfit_list_data, 
+                                      trans_mat = tmat,
+                                      start_age = rep(2, nrow(dt_patients) - 1)))  
   expect_error(create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
                                 death_state = nrow(tmat) + 1,
                                 point_estimate = TRUE))
