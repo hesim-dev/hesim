@@ -2,30 +2,38 @@
 % Please edit documentation in R/statevals.R
 \name{create_StateVals}
 \alias{create_StateVals}
+\alias{create_StateVals.lm}
+\alias{create_StateVals.stateval_means}
 \title{Create \code{StateVals} object}
 \usage{
-create_StateVals(object, data = NULL, n = 1000, point_estimate = FALSE)
+create_StateVals(object, ...)
+
+\method{create_StateVals}{lm}(object, data = NULL, n = 1000,
+  point_estimate = FALSE, ...)
+
+\method{create_StateVals}{stateval_means}(object, ...)
 }
 \arguments{
-\item{object}{A model object of the appropriate class. Supports
-\code{\link{stateval_means}} and \code{\link{lm}}.}
+\item{object}{A model object of the appropriate class.}
+
+\item{...}{Further arguments passed to or from other methods. Currently unused.}
 
 \item{data}{An object of class "expanded_hesim_data" returned by 
 \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies",
 "patients", and "states".}
 
-\item{n}{Number of random observations of the parameters to draw.}
+\item{n}{Number of random observations of the parameters to draw when parameters 
+are fit using a statistical model.}
 
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
-
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
 }
 \value{
 Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
 }
 \description{
 \code{create_StateVals} is a generic function for creating an object of class
- \code{\link{StateVals}} from a fitted statistical model.
+ \code{\link{StateVals}} from a fitted statistical model or \code{\link{stateval_means}}
+ object.
 }
 \seealso{
 \code{\link{StateVals}}

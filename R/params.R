@@ -372,7 +372,7 @@ create_params_joined <- function(object, n, point_estimate, inner_class){
 #' @return An object prefixed by \code{params_}. Mapping between \code{create_params} 
 #' and the classes of the returned objects are: 
 #' \itemize{
-#' \item{\code{create_params.statevals_est} ->}{ \code{params_mean}}
+#' \item{\code{create_params.statevals_means} ->}{ \code{params_mean}}
 #' \item{\code{create_params.lm} ->}{ \code{params_lm}}
 #' \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
 #' \item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}

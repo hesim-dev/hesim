@@ -48,38 +48,41 @@ stateval_means <- function(values, strategy_id, patient_id){
   return(l)
 }
 
-# PartSurvStateVals ------------------------------------------------------------
+# StateVals --------------------------------------------------------------------
 #' Create \code{StateVals} object
 #' 
 #' \code{create_StateVals} is a generic function for creating an object of class
-#'  \code{\link{StateVals}} from a fitted statistical model. 
-#' @param object A model object of the appropriate class. Supports
-#'  \code{\link{stateval_means}} and \code{\link{lm}}.
+#'  \code{\link{StateVals}} from a fitted statistical model or \code{\link{stateval_means}}
+#'  object. 
+#' @param object A model object of the appropriate class.
 #' @param data An object of class "expanded_hesim_data" returned by 
 #' \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies",
 #' "patients", and "states".
-#' @param n Number of random observations of the parameters to draw.
+#' @param n Number of random observations of the parameters to draw when parameters 
+#' are fit using a statistical model.
 #' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
 #' @return Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
 #' @seealso \code{\link{StateVals}}
 #' @export
-create_StateVals <- function(object, data = NULL, n = 1000, point_estimate = FALSE){
-  if (!inherits(object, c("stateval_means", "lm"))){
-    stop("Class of 'object' is not supported. See documentation.",
-         call. = FALSE)
-  }
-  if (!inherits(object, "stateval_means")){
-    if (is.null(data)){
-      stop("'data' must be specified.",
-           call. = FALSE)
-    }
-    params <- create_params(object, n, point_estimate) 
-    input_data <- create_input_data(object, data) 
-  } else{
-    params <- create_params(object)
-    input_data <- create_input_data(object) 
-  }
+create_StateVals <- function(object, ...){
+  UseMethod("create_StateVals", object)
+} 
+ 
+#' @rdname create_StateVals
+#' @export  
+create_StateVals.lm <- function(object, data = NULL, n = 1000,
+                                point_estimate = FALSE, ...){
+  params <- create_params(object, n, point_estimate) 
+  input_data <- create_input_data(object, data)
+  return(StateVals$new(data = input_data, params = params))
+}
+
+#' @rdname create_StateVals 
+#' @export
+create_StateVals.stateval_means <- function(object, ...){
+  params <- create_params(object)
+  input_data <- create_input_data(object)
   return(StateVals$new(data = input_data, params = params))
 }
 
