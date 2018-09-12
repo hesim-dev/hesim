@@ -217,13 +217,12 @@ test_that("create_input_data.formula_list", {
   expect_equal(ncol(input_dat$X$f2), 1)
 })
 
-# create_input_data with lm objects --------------------------------------------
+# create_input_data with lm objects or params_lm objects -----------------------
 dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit1 <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 
 test_that("create_input_data.lm", {
   input_dat <- create_input_data(fit1, dat)
-  
   expect_equal(ncol(input_dat$X$mu), 4)
   expect_equal(as.numeric(input_dat$X$mu[, "female"]), dat$data$female)
 })
@@ -236,6 +235,18 @@ test_that("create_input_data.lm_list", {
   expect_equal(ncol(input_dat$X$fit1$mu), 4)
   expect_equal(ncol(input_dat$X$fit2$mu), 1)
   expect_equal(as.numeric(input_dat$X$fit1$mu[, "female"]), dat$data$female)
+})
+
+test_that("create_input_data.params_lm", {
+  coef <- as.matrix(data.frame(intercept = c(.2, .3), age = c(.02, .05)))
+  params <- params_lm(coef = coef)
+  data <- list(data = data.table(intercept = c(1, 1), age = c(55, 65),
+                                 patient_id = c(1, 2), strategy_id = c(1, 1)),
+               id_vars = c("patient_id", "strategy_id"))
+  class(data) <- "expanded_hesim_data"
+  input_dat <- create_input_data(params, data)
+  expect_equal(input_dat$X$mu[, "intercept"], c(1, 1))
+  expect_equal(input_dat$patient_id, c(1, 2))
 })
 
 # create_input_data with flexsurvreg objects -----------------------------------
@@ -287,3 +298,4 @@ test_that("create_input_data.joined_flexsurv_list", {
   expect_equal(input_dat$state_id, dat$state_id)
   expect_equal(class(input_dat$X[[1]]$wei$shape), "matrix")
 })
+

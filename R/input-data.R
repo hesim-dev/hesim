@@ -659,6 +659,20 @@ create_input_data.lm <- function(object, data, ...){
 
 #' @export 
 #' @rdname create_input_data
+create_input_data.params_lm <- function(object, data, ...){
+  varnames <- colnames(object$coefs)
+  if(!all(varnames %in% colnames(data$data))){
+    stop("Not all variables in 'object' are contained in 'data'.",
+         call. = FALSE)
+  }
+  X <- as.matrix(data$data[, varnames, with = FALSE])
+  args <- c(list(X = list(mu = X)),
+            get_input_data_id_vars(data))
+  return(do.call("new_input_data", args))
+}
+
+#' @export 
+#' @rdname create_input_data
 create_input_data.lm_list <- function(object, data, ...){
   check_edata(data)
   X_list <- vector(mode = "list", length = length(object))
@@ -736,3 +750,5 @@ create_input_data.joined_flexsurvreg_list <- function(object, data,...){
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
 }
+
+
