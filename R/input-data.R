@@ -210,15 +210,19 @@ expand <- function(object, by){
 
 #' Expand hesim_data
 #' 
-#' Expand the data tables from an object of class \code{\link{hesim_data}} into a single \code{\link{data.table}} 
-#' of class "expanded_hesim_data". See the description of the return value for details on how this is done.
+#' Expand the data tables from an object of class \code{\link{hesim_data}} into a data table in 
+#' long format (one row for each combination of observations as specified with tbe 
+#' ID variables from the tables specified with the \code{by} argument).
+#'  See "Details" for an explanation of how the expansion is done.
 #' @param object An object of class \code{\link{hesim_data}}.
 #' @param by A character vector of the names of the data tables in \code{\link{hesim_data}} to expand by.
-#' @return This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
+#' @details This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
 #' Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. 
 #' The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by 
 #' prioritizing id variables as follows: (i) \code{strategy_id}, (ii) \code{line}, (iii) \code{patient_id},
-#' (iv) the health-related id variable (either \code{state_id} or \code{transition_id}).
+#' and (iv) the health-related id variable (either \code{state_id} or \code{transition_id}).
+#' @return An object of class "expanded_hesim_data", which is a \code{\link{data.table}} with an "id_vars" 
+#' attribute containing the names of the ID variables in the data table.
 #' @examples 
 #' dt_strategies <- data.frame(strategy_id = c(1, 2))
 #' dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
@@ -264,6 +268,13 @@ expand.hesim_data <- function(object, by = c("strategies", "patients")){
   setattr(dat, "id_vars", unname(id_cols))
   setattr(dat, "class", c("expanded_hesim_data", "data.table", "data.frame"))
   return(dat)
+}
+
+#' @export
+`[.expanded_hesim_data` <- function(x, ...) {
+  out <- NextMethod()
+  setattr(out, "id_vars", attributes(x)$id_vars)
+  return(out)
 }
 
 hesim_data_sorting_map <- function(){

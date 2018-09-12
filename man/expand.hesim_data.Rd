@@ -12,15 +12,21 @@
 \item{by}{A character vector of the names of the data tables in \code{\link{hesim_data}} to expand by.}
 }
 \value{
+An object of class "expanded_hesim_data", which is a \code{\link{data.table}} with an "id_vars" 
+attribute containing the names of the ID variables in the data table.
+}
+\description{
+Expand the data tables from an object of class \code{\link{hesim_data}} into a data table in 
+long format (one row for each combination of observations as specified with tbe 
+ID variables from the tables specified with the \code{by} argument).
+ See "Details" for an explanation of how the expansion is done.
+}
+\details{
 This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
 Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. 
 The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by 
 prioritizing id variables as follows: (i) \code{strategy_id}, (ii) \code{line}, (iii) \code{patient_id},
-(iv) the health-related id variable (either \code{state_id} or \code{transition_id}).
-}
-\description{
-Expand the data tables from an object of class \code{\link{hesim_data}} into a single \code{\link{data.table}} 
-of class "expanded_hesim_data". See the description of the return value for details on how this is done.
+and (iv) the health-related id variable (either \code{state_id} or \code{transition_id}).
 }
 \examples{
 dt_strategies <- data.frame(strategy_id = c(1, 2))

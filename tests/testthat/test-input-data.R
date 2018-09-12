@@ -103,6 +103,24 @@ test_that("hesim_data", {
   class(hesim_dat2) <-"hesim_data"
   expect_error(expand(hesim_dat2, by = c("strategies", "patients", 
                                                   "states")))
+  
+  # Attributes are preserved with subsetting
+  ## with data table
+  dat <- expand(hesim_dat)
+  expect_equal(attributes(dat[1])$id_vars, c("strategy_id", "patient_id"))
+  expect_equal(dat[1:2, age], hesim_dat$patients$age[1:2], check.attributes = FALSE)
+  tmp <- dat[1:2, .(age, female)]
+  expect_equal(nrow(tmp), 2)
+  expect_equal(colnames(tmp), c("age", "female"))
+  expect_equal(attributes(tmp)$id_vars, c("strategy_id", "patient_id"))
+  
+  ## with data frame
+  setattr(dat, "class", c("expanded_hesim_data", "data.frame"))
+  expect_equal(attributes(dat[1, ])$id_vars, c("strategy_id", "patient_id"))
+  tmp <- dat[, c("age", "female")]
+  expect_equal(nrow(tmp), nrow(dat))
+  expect_equal(colnames(tmp), c("age", "female"))
+  expect_equal(attributes(tmp)$id_vars, c("strategy_id", "patient_id"))
 })
 
 # input_data class -------------------------------------------------------------

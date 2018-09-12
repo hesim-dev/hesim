@@ -96,7 +96,6 @@ test_that("PsmCurves", {
   }
   tmp_data = curves_edata
   tmp_data <- tmp_data[1, ]
-  setattr(tmp_data, "id_vars", attributes(curves_edata)$id_vars)
   
   compare_surv_summary(fits_wei, tmp_data, "survival")
   compare_surv_summary(fits_spline, tmp_data, "survival")
