@@ -234,7 +234,7 @@ the rows of <code>X</code> must be sorted by: (i) <code>strategy_id</code>, (ii)
 <span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>dt_strategies</span>,
                         <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>dt_patients</span>)
 
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))$<span class='no'>data</span>
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
 <span class='no'>input_dat</span> <span class='kw'>&lt;-</span> <span class='fu'>input_data</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'>model.matrix</span>(~ <span class='no'>age</span>, <span class='no'>dat</span>)),
                        <span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>strategy_id</span>,
                        <span class='kw'>n_strategies</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='fu'>unique</span>(<span class='no'>dat</span>$<span class='no'>strategy_id</span>)),

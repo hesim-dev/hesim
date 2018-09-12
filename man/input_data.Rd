@@ -82,7 +82,7 @@ dt_patients <- data.frame(patient_id = seq(1, 3),
 hesim_dat <- hesim_data(strategies = dt_strategies,
                         patients = dt_patients)
 
-dat <- expand(hesim_dat, by = c("strategies", "patients"))$data
+dat <- expand(hesim_dat, by = c("strategies", "patients"))
 input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),

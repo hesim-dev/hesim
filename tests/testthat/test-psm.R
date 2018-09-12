@@ -55,7 +55,7 @@ test_that("create_PsmCurves", {
   expect_true(inherits(psm_curves, "PsmCurves"))
   expect_true(inherits(psm_curves$params, "params_surv_list"))
   expect_equal(as.numeric(psm_curves$data$X[[1]]$scale[, "age"]), 
-              curves_edata$data$age)
+              curves_edata$age)
   
   # errors
   expect_error(create_PsmCurves(3, data = curves_edata, n = N))
@@ -89,13 +89,14 @@ test_that("PsmCurves", {
     } else{
       fun_name
     }
-    flexsurv_out <- summary(fits$models[[1]], newdata = data.frame(age = data$data[1, age]),
+    flexsurv_out <- summary(fits$models[[1]], newdata = data.frame(age = data[1, age]),
                            t = times, type = fun_name2, tidy = TRUE, ci = FALSE)
     expect_equal(hesim_out[curve == 1, fun_name, with = FALSE][[1]], 
                  flexsurv_out[, "est"], tolerance = .001, scale = 1)
   }
-  tmp_data <- curves_edata
-  tmp_data$data <- tmp_data$data[1, ]
+  tmp_data = curves_edata
+  tmp_data <- tmp_data[1, ]
+  setattr(tmp_data, "id_vars", attributes(curves_edata)$id_vars)
   
   compare_surv_summary(fits_wei, tmp_data, "survival")
   compare_surv_summary(fits_spline, tmp_data, "survival")

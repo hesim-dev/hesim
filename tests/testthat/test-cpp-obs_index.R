@@ -125,7 +125,7 @@ test_obs_index(strategy_idx = 2, patient_idx = 2)
 test_obs_index(strategy_idx = 2, patient_idx = 3)
 
 # ID getters  
-dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))$data
+dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
                      strategy_id = dat$strategy_id,
                      n_strategies = length(unique(dat$strategy_id)),

@@ -261,10 +261,9 @@ expand.hesim_data <- function(object, by = c("strategies", "patients")){
   id_cols <- unlist(hesim_data_sorting_map()[sorted_by])
   nonid_cols <- colnames(dat)[!colnames(dat) %in% id_cols]
   dat <- dat[, c(id_cols, nonid_cols), with = FALSE]
-  res <- list(data = dat,
-              id_vars = unname(id_cols))
-  class(res) <- "expanded_hesim_data"
-  return(res)
+  setattr(dat, "id_vars", unname(id_cols))
+  setattr(dat, "class", c("expanded_hesim_data", "data.table", "data.frame"))
+  return(dat)
 }
 
 hesim_data_sorting_map <- function(){
@@ -347,7 +346,7 @@ sort_hesim_data <- function(data, sorted_by){
 #' hesim_dat <- hesim_data(strategies = dt_strategies,
 #'                         patients = dt_patients)
 #' 
-#' dat <- expand(hesim_dat, by = c("strategies", "patients"))$data
+#' dat <- expand(hesim_dat, by = c("strategies", "patients"))
 #' input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
 #'                        strategy_id = dat$strategy_id,
 #'                        n_strategies = length(unique(dat$strategy_id)),
@@ -520,13 +519,13 @@ size_id_map <- function(){
 get_input_data_id_vars <- function(data){
   map <- size_id_map()
   res <- list() 
-  id_vars <- data$id_vars
+  id_vars <- attributes(data)$id_vars
   for (i in 1:length(id_vars)){
-    res[[id_vars[i]]] <- data$data[[id_vars[i]]]
+    res[[id_vars[i]]] <- data[[id_vars[i]]]
     if (id_vars[i] != "line"){
-       res[[map[id_vars[i]]]] <- length(unique(data$data[[id_vars[i]]]))
+       res[[map[id_vars[i]]]] <- length(unique(data[[id_vars[i]]]))
     } else{
-      n_lines <- data$data[, .N, by = c("strategy_id", "line")][, .N, by = "strategy_id"]
+      n_lines <- data[, .N, by = c("strategy_id", "line")][, .N, by = "strategy_id"]
       res[[map[id_vars[i]]]] <- n_lines
     }
   }
@@ -541,12 +540,15 @@ get_input_data_id_vars <- function(data){
 #'  \code{\link{expand.hesim_data}}. 
 #' @return If all tests passed, returns nothing; otherwise, throws an exception.
 check_edata <- function(data){
-  if (missing(data)){
-    stop("'data' is missing with no default.")
-  }
   if (!inherits(data, "expanded_hesim_data")){
     stop("'data' must be of class 'expanded_hesim_data'.")
+  } 
+  if (!inherits(data, "data.table") & !inherits(data, "data.frame")){
+    stop("'data' must inherit from either 'data.table' or 'data.frame'.")
   }   
+  if (!inherits(data, "data.table")){
+    setattr(data, "class", c("expanded_hesim_data", "data.table", "data.frame"))
+  } 
 }
 
 #' Create input data
@@ -604,7 +606,7 @@ formula_list_rec <- function(object, data, ...){
   names(x) <- names(object)
   for (i in 1:length(x)){
     if (inherits(object[[i]], "formula")){
-      x[[i]] <- stats::model.matrix(object[[i]], data = data$data, ...)
+      x[[i]] <- stats::model.matrix(object[[i]], data = data, ...)
     } else{
       x[[i]] <- formula_list_rec(object[[i]], data = data, ...)
     }
@@ -651,7 +653,7 @@ create_input_data.stateval_means <- function(object, ...){
 create_input_data.lm <- function(object, data, ...){
   check_edata(data)
   terms <- get_terms(object)
-  X <- stats::model.matrix(terms, data = data$data, ...)
+  X <- stats::model.matrix(terms, data = data, ...)
   args <- c(list(X = list(mu = X)),
            get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
@@ -661,11 +663,11 @@ create_input_data.lm <- function(object, data, ...){
 #' @rdname create_input_data
 create_input_data.params_lm <- function(object, data, ...){
   varnames <- colnames(object$coefs)
-  if(!all(varnames %in% colnames(data$data))){
+  if(!all(varnames %in% colnames(data))){
     stop("Not all variables in 'object' are contained in 'data'.",
          call. = FALSE)
   }
-  X <- as.matrix(data$data[, varnames, with = FALSE])
+  X <- as.matrix(data[, varnames, with = FALSE])
   args <- c(list(X = list(mu = X)),
             get_input_data_id_vars(data))
   return(do.call("new_input_data", args))
@@ -679,7 +681,7 @@ create_input_data.lm_list <- function(object, data, ...){
   names(X_list) <- names(object)
   for (i in 1:length(X_list)){
     terms <- get_terms(object[[i]])
-    X_list[[i]] <- list(mu = stats::model.matrix(terms, data = data$data, ...))
+    X_list[[i]] <- list(mu = stats::model.matrix(terms, data = data, ...))
   }
   args <- c(list(X = X_list),
            get_input_data_id_vars(data))
@@ -697,7 +699,7 @@ create_input_data_flexsurvreg_X <- function(object, data, ...){
     } else{
       form <- stats::delete.response(stats::terms(form))
     }
-    X_list[[i]] <- stats::model.matrix(form, data = data$data, ...)
+    X_list[[i]] <- stats::model.matrix(form, data = data, ...)
   }
   return(X_list)
 }

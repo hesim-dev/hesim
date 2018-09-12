@@ -84,15 +84,15 @@ test_that("hesim_data", {
   
   # Expand
   expanded_dt <- expand(hesim_dat, by = c("strategies"))
-  expect_equal(expanded_dt$data, data.table(dt_strategies))
-  expect_equal(expanded_dt$id_vars, "strategy_id")
+  expect_equal(expanded_dt, data.table(dt_strategies), check.attributes = FALSE)
+  expect_equal(attributes(expanded_dt)$id_vars, "strategy_id")
   expanded_dt <- expand(hesim_dat, by = c("strategies", "patients"))
   expanded_dt2 <- expand(hesim_dat, by = c("patients", "strategies"))
-  expect_equal(nrow(expanded_dt$data), 
+  expect_equal(nrow(expanded_dt), 
                nrow(dt_strategies) * nrow(dt_patients))
-  expect_equal(expanded_dt$data, expanded_dt2$data)
-  expect_equal(expanded_dt$id_vars, expanded_dt2$id_vars)
-  expect_equal(expanded_dt$id_vars, c("strategy_id", "patient_id"))
+  expect_equal(expanded_dt, expanded_dt2)
+  expect_equal(attributes(expanded_dt)$id_vars, attributes(expanded_dt2)$id_vars)
+  expect_equal(attributes(expanded_dt)$id_vars, c("strategy_id", "patient_id"))
   
   # errors
   expect_error(expand(hesim_dat, by = c("strategies", "patients", 
@@ -100,13 +100,14 @@ test_that("hesim_data", {
   expect_error(expand(hesim_dat, by = c("strategies", "patients", 
                                                   "states", "wrong_table")))
   hesim_dat2 <- hesim_dat[c("strategies", "patients")]
+  class(hesim_dat2) <-"hesim_data"
   expect_error(expand(hesim_dat2, by = c("strategies", "patients", 
                                                   "states")))
 })
 
 # input_data class -------------------------------------------------------------
 # By treatment strategy and patient
-dat <- expand(hesim_dat)$data
+dat <- expand(hesim_dat)
 input_dat <- input_data(X = list(mu = model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
                        n_strategies = length(unique(dat$strategy_id)),
@@ -164,7 +165,7 @@ expect_error(input_data(X = list(model.matrix(~ age, dat)),
 
 
 # By treatment strategy, line, and patient
-dat <- expand(hesim_dat, by = c("strategies", "patients", "lines"))$data
+dat <- expand(hesim_dat, by = c("strategies", "patients", "lines"))
 n_lines <- hesim_dat$lines[, .N, by = "strategy_id"]
 input_dat <- input_data(X = list(model.matrix(~ age, dat)),
                        strategy_id = dat$strategy_id,
@@ -212,7 +213,7 @@ test_that("create_input_data.formula_list", {
   
   expect_equal(length(input_dat$X), length(f_list))
   expect_equal(names(input_dat$X), names(f_list))
-  expect_equal(as.numeric(input_dat$X$f1[, "age"]), dat$data$age)
+  expect_equal(as.numeric(input_dat$X$f1[, "age"]), dat$age)
   expect_equal(ncol(input_dat$X$f1), 2)
   expect_equal(ncol(input_dat$X$f2), 1)
 })
@@ -222,9 +223,19 @@ dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit1 <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 
 test_that("create_input_data.lm", {
-  input_dat <- create_input_data(fit1, dat)
-  expect_equal(ncol(input_dat$X$mu), 4)
-  expect_equal(as.numeric(input_dat$X$mu[, "female"]), dat$data$female)
+  input_dat1 <- create_input_data(fit1, dat)
+  expect_equal(ncol(input_dat1$X$mu), 4)
+  expect_equal(as.numeric(input_dat1$X$mu[, "female"]), dat$female)
+  
+  # Works with data.frame
+  dat_df = copy(dat)
+  setattr(dat_df, "class", c("expanded_hesim_data", "data.frame"))
+  input_dat2 <- create_input_data(fit1, dat_df)
+  expect_equal(input_dat1, input_dat2)
+  
+  # Error if not data.table or data.frame
+  setattr(dat_df, "class", "expanded_hesim_data")
+  expect_error(create_input_data(fit1, dat_df))
 })
 
 test_that("create_input_data.lm_list", {
@@ -234,16 +245,16 @@ test_that("create_input_data.lm_list", {
   
   expect_equal(ncol(input_dat$X$fit1$mu), 4)
   expect_equal(ncol(input_dat$X$fit2$mu), 1)
-  expect_equal(as.numeric(input_dat$X$fit1$mu[, "female"]), dat$data$female)
+  expect_equal(as.numeric(input_dat$X$fit1$mu[, "female"]), dat$female)
 })
 
 test_that("create_input_data.params_lm", {
   coef <- as.matrix(data.frame(intercept = c(.2, .3), age = c(.02, .05)))
   params <- params_lm(coef = coef)
-  data <- list(data = data.table(intercept = c(1, 1), age = c(55, 65),
-                                 patient_id = c(1, 2), strategy_id = c(1, 1)),
-               id_vars = c("patient_id", "strategy_id"))
-  class(data) <- "expanded_hesim_data"
+  data <- data.table(intercept = c(1, 1), age = c(55, 65),
+                     patient_id = c(1, 2), strategy_id = c(1, 1))
+  setattr(data, "id_vars", c("patient_id", "strategy_id"))
+  setattr(data, "class", c("expanded_hesim_data", "data.table", "data.frame"))
   input_dat <- create_input_data(params, data)
   expect_equal(input_dat$X$mu[, "intercept"], c(1, 1))
   expect_equal(input_dat$patient_id, c(1, 2))
@@ -257,9 +268,9 @@ test_that("create_input_data.flexsurv", {
                               dist = "gengamma") 
   input_dat <- create_input_data(fit, dat)
   
-  expect_equal(input_dat$strategy_id, dat$data$strategy_id)
-  expect_equal(input_dat$state_id, dat$data$state_id)
-  expect_equal(input_dat$patient_id, dat$data$patient_id)
+  expect_equal(input_dat$strategy_id, dat$strategy_id)
+  expect_equal(input_dat$state_id, dat$state_id)
+  expect_equal(input_dat$patient_id, dat$patient_id)
   expect_equal(class(input_dat$X), "list")
   expect_equal(class(input_dat$X[[1]]), "matrix")
   expect_equal(length(input_dat$X), 3)
