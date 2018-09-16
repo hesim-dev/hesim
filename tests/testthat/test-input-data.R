@@ -278,7 +278,7 @@ test_that("create_input_data.params_lm", {
   expect_equal(input_dat$patient_id, c(1, 2))
 })
 
-# create_input_data with flexsurvreg objects -----------------------------------
+# create_input_data with flexsurvreg or params_surv objects --------------------
 test_that("create_input_data.flexsurv", {
   dat <- expand(hesim_dat)
   fit <- flexsurv::flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
@@ -326,5 +326,33 @@ test_that("create_input_data.joined_flexsurv_list", {
   
   expect_equal(input_dat$state_id, dat$state_id)
   expect_equal(class(input_dat$X[[1]]$wei$shape), "matrix")
+})
+
+test_that("create_input_data.params_surv", {
+  # params_surv
+  coef_wei <- list(scale = as.matrix(data.frame(intercept = c(.2, .3), 
+                                            age = c(.02, .05))),
+               shape = as.matrix(data.frame(intercept = c(.2, .3))))
+  params_wei <- params_surv(coef = coef_wei,
+                        dist = "weibull") 
+  data <- data.table(intercept = c(1, 1), age = c(55, 65),
+                     patient_id = c(1, 2), strategy_id = c(1, 1))
+  setattr(data, "id_vars", c("patient_id", "strategy_id"))
+  setattr(data, "class", c("expanded_hesim_data", "data.table", "data.frame"))  
+  input_dat <- create_input_data(params_wei, data)
+  expect_equal(input_dat$X$shape[, "intercept"], c(1, 1))
+  expect_equal(input_dat$X$scale[, "age"], data$age)
+  expect_equal(input_dat$strategy_id, data$strategy_id)
+  
+  # params_surv_list
+  coef_exp <- list(rate = as.matrix(data.frame(intercept = c(.2, .3), 
+                                            age = c(.02, .05))))
+  params_exp <- params_surv(coef = coef_exp,
+                                dist = "exp") 
+  params <- params_surv_list(wei = params_wei, exp = params_exp)
+  input_dat <- create_input_data(params, data) 
+  expect_equal(input_dat$X$wei$scale[, "age"], data$age)
+  expect_equal(input_dat$X$exp$rate[, "age"], data$age)
+  expect_equal(input_dat$strategy_id, data$strategy_id)
 })
 

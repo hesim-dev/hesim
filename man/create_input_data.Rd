@@ -5,11 +5,13 @@
 \alias{create_input_data.formula_list}
 \alias{create_input_data.stateval_means}
 \alias{create_input_data.lm}
-\alias{create_input_data.params_lm}
 \alias{create_input_data.lm_list}
 \alias{create_input_data.flexsurvreg}
 \alias{create_input_data.flexsurvreg_list}
 \alias{create_input_data.partsurvfit}
+\alias{create_input_data.params_lm}
+\alias{create_input_data.params_surv}
+\alias{create_input_data.params_surv_list}
 \title{Create input data}
 \usage{
 create_input_data(object, ...)
@@ -20,8 +22,6 @@ create_input_data(object, ...)
 
 \method{create_input_data}{lm}(object, data, ...)
 
-\method{create_input_data}{params_lm}(object, data, ...)
-
 \method{create_input_data}{lm_list}(object, data, ...)
 
 \method{create_input_data}{flexsurvreg}(object, data, ...)
@@ -29,6 +29,12 @@ create_input_data(object, ...)
 \method{create_input_data}{flexsurvreg_list}(object, data, ...)
 
 \method{create_input_data}{partsurvfit}(object, data, ...)
+
+\method{create_input_data}{params_lm}(object, data, ...)
+
+\method{create_input_data}{params_surv}(object, data, ...)
+
+\method{create_input_data}{params_surv_list}(object, data, ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class. Currently supports

@@ -562,6 +562,16 @@ check_edata <- function(data){
   } 
 }
 
+extract_X <- function(coef_mat, data){
+  varnames <- colnames(coef_mat)
+  if(!all(varnames %in% colnames(data))){
+    stop("Not all variables in 'object' are contained in 'data'.",
+         call. = FALSE)
+  }  
+  X <- as.matrix(data[, varnames, with = FALSE])
+  return(X)
+}
+
 #' Create input data
 #' 
 #' \code{create_input_data} is a generic function for creating an object of class
@@ -672,20 +682,6 @@ create_input_data.lm <- function(object, data, ...){
 
 #' @export 
 #' @rdname create_input_data
-create_input_data.params_lm <- function(object, data, ...){
-  varnames <- colnames(object$coefs)
-  if(!all(varnames %in% colnames(data))){
-    stop("Not all variables in 'object' are contained in 'data'.",
-         call. = FALSE)
-  }
-  X <- as.matrix(data[, varnames, with = FALSE])
-  args <- c(list(X = list(mu = X)),
-            get_input_data_id_vars(data))
-  return(do.call("new_input_data", args))
-}
-
-#' @export 
-#' @rdname create_input_data
 create_input_data.lm_list <- function(object, data, ...){
   check_edata(data)
   X_list <- vector(mode = "list", length = length(object))
@@ -764,4 +760,44 @@ create_input_data.joined_flexsurvreg_list <- function(object, data,...){
   return(do.call("new_input_data", args))
 }
 
+#' @export 
+#' @rdname create_input_data
+create_input_data.params_lm <- function(object, data, ...){
+  check_edata(data)
+  X <- extract_X(object$coefs, data)
+  args <- c(list(X = list(mu = X)),
+            get_input_data_id_vars(data))
+  return(do.call("new_input_data", args))
+}
 
+create_input_data.params_surv_X <- function(object, data){
+  X_list <- vector(mode = "list", length = length(object$coefs))
+  names(X_list) <- names(object$coefs)
+  for (i in 1:length(X_list)){
+    X_list[[i]] <- extract_X(object$coefs[[i]], data)
+  }
+  return(X_list)
+}
+
+#' @export 
+#' @rdname create_input_data
+create_input_data.params_surv <- function(object, data, ...){
+  check_edata(data)
+  X_list <- create_input_data.params_surv_X(object, data)
+  args <- c(list(X = X_list),
+            get_input_data_id_vars(data))
+  return(do.call("new_input_data", args))
+}
+
+#' @export 
+#' @rdname create_input_data
+create_input_data.params_surv_list <- function(object, data, ...){
+  X_list_2d <- vector(mode = "list", length = length(object))
+  names(X_list_2d) <- names(object)
+  for (i in 1:length(object)){
+    X_list_2d[[i]] <- create_input_data.params_surv_X(object[[i]], data)
+  }
+  args <- c(list(X = X_list_2d),
+            get_input_data_id_vars(data))
+  return(do.call("new_input_data", args))
+}
