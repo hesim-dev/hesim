@@ -4,6 +4,7 @@
 \alias{create_IndivCtstmTrans}
 \alias{create_IndivCtstmTrans.flexsurvreg_list}
 \alias{create_IndivCtstmTrans.flexsurvreg}
+\alias{create_IndivCtstmTrans.params_surv}
 \title{Create \code{IndivCtstmTrans} object}
 \usage{
 create_IndivCtstmTrans(object, data, trans_mat, n = 1000,
@@ -14,6 +15,8 @@ create_IndivCtstmTrans(object, data, trans_mat, n = 1000,
 
 \method{create_IndivCtstmTrans}{flexsurvreg}(object, data, trans_mat,
   n = 1000, point_estimate = FALSE, ...)
+
+\method{create_IndivCtstmTrans}{params_surv}(object, data, trans_mat, ...)
 }
 \arguments{
 \item{object}{A fitted statistical model.}

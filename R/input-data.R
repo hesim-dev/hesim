@@ -277,6 +277,15 @@ expand.hesim_data <- function(object, by = c("strategies", "patients")){
   return(out)
 }
 
+#' @export
+cbind.expanded_hesim_data <- function(x, ...) {
+  l <- list(x, ...)
+  out <- cbind.data.frame(l)
+  setattr(out, "class", c("expanded_hesim_data", "data.table", "data.frame"))
+  setattr(out, "id_vars", attributes(x)$id_vars)
+  return(out)
+}
+
 hesim_data_sorting_map <- function(){
   list(strategies = "strategy_id",
        lines = "line",

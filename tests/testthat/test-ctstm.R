@@ -211,6 +211,15 @@ msfit_data <- expand(hesim_dat, by = c("strategies", "patients", "transitions"))
 mstate <- create_IndivCtstmTrans(msfit, data = msfit_data, trans_mat = tmat_ebmt4,
                             point_estimate = TRUE)
 
+test_that("create_IndivCtstmTrans - joint", {
+  # From parameter object
+  params <- create_params(msfit, n = 2)
+  tmp_data <- msfit_data
+  msfit_data <- cbind(msfit_data, model.matrix(~factor(trans), msfit_data), shape = 1, scale = 1)
+  obj <- create_IndivCtstmTrans(params, data = msfit_data, trans_mat = tmat_ebmt4)
+  expect_true(inherits(obj, "IndivCtstmTrans"))
+})
+
 test_that("IndivCtstmTrans - joint", {
   # hazard
   hesim_hazard <- mstate$hazard(3)

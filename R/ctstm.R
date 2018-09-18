@@ -125,7 +125,7 @@ create_IndivCtstmTrans <- function(object, data, trans_mat, n = 1000, point_esti
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
-  input_data <- create_input_data(object, data, id_vars = c("strategy_id", "patient_id"))
+  input_data <- create_input_data(object, data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
   return(IndivCtstmTrans$new(data = input_data, params = params, trans_mat = trans_mat, ...))
 }
@@ -133,9 +133,16 @@ create_IndivCtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, n =
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
-  input_data <- create_input_data(object, data, id_vars = c("strategy_id", "patient_id", "transition_id"))
+  input_data <- create_input_data(object, data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
   return(IndivCtstmTrans$new(data = input_data, params = params, trans_mat = trans_mat, ...))
+}
+
+#' @export
+#' @rdname create_IndivCtstmTrans
+create_IndivCtstmTrans.params_surv <- function(object, data, trans_mat, ...){
+  input_data <- create_input_data(object, data)
+  return(IndivCtstmTrans$new(data = input_data, params = object, trans_mat = trans_mat, ...))
 }
 
 #' @export
