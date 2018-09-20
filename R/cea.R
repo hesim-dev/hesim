@@ -271,23 +271,19 @@ ceac <- function(delta, k, strategy, grp, e, c, n_samples, n_strategies, n_grps)
 
 # net benefits summary statistics
 nmb_summary <- function(x, k, strategy, grp, e, c){
-  x2 = copy(x)
-  setnames(x2, c(e, c), c("e", "c"))
-  m <- x2[, list(e_mean = mean(e), c_mean = mean(c),
-             e_lower = stats::quantile(e, .025), 
-             e_upper = stats::quantile(e, .975),
-             c_lower = stats::quantile(c, .025),
-             c_upper = stats::quantile(c, .975)), by = c(strategy, grp)]
-  enmb <- lnmb <- unmb <- matrix(NA, nrow = length(k), ncol = nrow(m))
-  for (i in 1:nrow(m)){
-    enmb[, i] <- k * m[["e_mean"]][i] - m[["c_mean"]][i]
-    lnmb[, i] <- k * m[["e_lower"]][i] - m[["c_lower"]][i]
-    unmb[, i] <- k * m[["e_upper"]][i] - m[["c_upper"]][i]
-  }
-  nmb <- data.table(rep(m[[strategy]], each = length(k)), rep(m[[grp]], each = length(k)),
-                    rep(k, nrow(m)), c(enmb), c(lnmb), c(unmb))
-  setnames(nmb, c(strategy, grp, "k", "enmb", "lnmb", "unmb"))
-  return(nmb)
+  nmb <- NULL # Avoid CRAN warning for global undefined variable
+  nmb_dt <- data.table(strategy = rep(x[[strategy]], times = length(k)),
+                       grp = rep(x[[grp]], times = length(k)),
+                       k = rep(k, each = nrow(x)),
+                       e = rep(x[[e]], times = length(k)),
+                       c = rep(x[[c]], times = length(k)))
+  nmb_dt[, "nmb" := k * e - c]
+  nmb_summary <- nmb_dt[, list("enmb" = mean(nmb),
+                               "lnmb" = stats::quantile(nmb, .025),
+                               "unmb" = stats::quantile(nmb, .975)),
+                           by = c("strategy", "grp", "k")]
+  setnames(nmb_summary, old = c("strategy", "grp"),  new = c(strategy, grp))
+  return(nmb_summary)
 }
 
 # incremental benefit summary statistics

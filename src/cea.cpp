@@ -40,7 +40,6 @@ std::vector<double> C_incr_effect(std::vector<double> x, std::vector<double> y,
   return incr_vec;
 }
 
-
 // Probability CE in pairwise comparisons
 /**
  * Compute values for cost-effectiveness acceptability curves (i.e., the 
