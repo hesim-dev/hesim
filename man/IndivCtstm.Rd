@@ -35,7 +35,10 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
 \item{patient_id}{A patient ID.}
 \item{dr}{The discount rate.}
 \item{qalys}{Simulated QALYs.}
+\item{lys}{Simulated life-years.}
 }
+
+Note that the \code{lys} column is only computed if \code{lys = TRUE}.
 
 }
 
@@ -85,7 +88,7 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
     Returns an instance of self with simulated output stored in \code{stateprobs_}.  
   }
   
-  \item{\code{sim_qalys(dr = .03, type = c("predict", "random"), by_patient = FALSE)}}{
+  \item{\code{sim_qalys(dr = .03, type = c("predict", "random"), by_patient = FALSE, lys = TRUE)}}{
     Compute simulated (mean discounted) QALYs using the simulation output stored in \code{disprog_} by random sample from the PSA, treatment strategy, health state, and 
     (optionally) patient.
     
@@ -94,6 +97,7 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
      \item \code{type}: \code{predict} for mean values or \code{random} for random samples as in \code{$sim()} in \code{\link{StateVals}}.
      \item \code{by_patient}: If \code{TRUE}, QALYs are computed at the patient level. If \code{FALSE}, QALYs are averaged across patients by
      health state.
+     \item \code{lys}: If \code{TRUE}, then life-years are computed in addition to QALYs.
      }
      
      Returns an instance of self with simulated output stored in \code{qalys_}.

@@ -149,7 +149,9 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.</p>
 <dt>patient_id</dt><dd><p>A patient ID.</p></dd>
 <dt>dr</dt><dd><p>The discount rate.</p></dd>
 <dt>qalys</dt><dd><p>Simulated QALYs.</p></dd>
-</dl></p></dd>
+<dt>lys</dt><dd><p>Simulated life-years.</p></dd>
+</dl>
+    Note that the <code>lys</code> column is only computed if <code>lys = TRUE</code>.</p></dd>
     <dt><code>costs_</code></dt><dd><p>A tidy <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> of costs by category simulated using <code>sim_costs</code>. Columns are:
     <dl class='dl-horizontal'>
 <dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
@@ -177,13 +179,14 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.</p>
 <li><p><code>t</code>: A numeric vector of times.</p></li>
 </ul>
     Returns an instance of self with simulated output stored in <code>stateprobs_</code>.</p></dd>
-    <dt><code>sim_qalys(dr = .03, type = c("predict", "random"), by_patient = FALSE)</code></dt><dd><p>Compute simulated (mean discounted) QALYs using the simulation output stored in <code>disprog_</code> by random sample from the PSA, treatment strategy, health state, and 
+    <dt><code>sim_qalys(dr = .03, type = c("predict", "random"), by_patient = FALSE, lys = TRUE)</code></dt><dd><p>Compute simulated (mean discounted) QALYs using the simulation output stored in <code>disprog_</code> by random sample from the PSA, treatment strategy, health state, and 
     (optionally) patient.
     <ul>
 <li><p><code>dr</code>: Discount rate to apply to QALYs. May be a vector in which case QALYs are calculated for each element in <code>dr</code>.</p></li>
 <li><p><code>type</code>: <code>predict</code> for mean values or <code>random</code> for random samples as in <code>$sim()</code> in <code><a href='StateVals.html'>StateVals</a></code>.</p></li>
 <li><p><code>by_patient</code>: If <code>TRUE</code>, QALYs are computed at the patient level. If <code>FALSE</code>, QALYs are averaged across patients by
      health state.</p></li>
+<li><p><code>lys</code>: If <code>TRUE</code>, then life-years are computed in addition to QALYs.</p></li>
 </ul>
     Returns an instance of self with simulated output stored in <code>qalys_</code>.</p></dd>
     <dt><code>sim_costs(dr = .03, type = c("predict", "random"), by_patient = FALSE, max_t = Inf)</code></dt><dd><p>Compute simulated (mean discounted) costs using the simulation output stored in <code>disprog_</code> by random sample from the PSA, treatment strategy, health state, and 
@@ -208,7 +211,8 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
+
 <span class='co'># Treatment strategies,target population, and health states</span>
 <span class='no'>dt_strategies</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
 <span class='no'>dt_patients</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
