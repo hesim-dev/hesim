@@ -389,6 +389,7 @@ test_that("Simulate costs and QALYs", {
                                   ncol = ncol(utilmod2$params$coefs))
   ictstm$utility_model <- utilmod2
   ictstm$sim_qalys(dr = 0)
+  expect_equal(ictstm$qalys_$qalys, ictstm$qalys_$lys)
   ce_summary <- ictstm$summarize()
   los <- ictstm$disprog_$sim[final == 1, .(los = mean(time_stop)), 
                       by = c("sample", "strategy_id")]

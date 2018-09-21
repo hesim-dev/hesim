@@ -198,6 +198,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_indiv_ctstm_los
+std::vector<double> C_indiv_ctstm_los(Rcpp::DataFrame R_disease_prog, std::vector<int> strategy_idx, std::vector<int> patient_idx, double dr);
+RcppExport SEXP _hesim_C_indiv_ctstm_los(SEXP R_disease_progSEXP, SEXP strategy_idxSEXP, SEXP patient_idxSEXP, SEXP drSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_disease_prog(R_disease_progSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type strategy_idx(strategy_idxSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type patient_idx(patient_idxSEXP);
+    Rcpp::traits::input_parameter< double >::type dr(drSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_indiv_ctstm_los(R_disease_prog, strategy_idx, patient_idx, dr));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_psm_curves_summary
 Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PsmCurves, std::vector<double> x, std::string type, double dr);
 RcppExport SEXP _hesim_C_psm_curves_summary(SEXP R_PsmCurvesSEXP, SEXP xSEXP, SEXP typeSEXP, SEXP drSEXP) {
@@ -481,6 +495,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 7},
     {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 9},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 7},
+    {"_hesim_C_indiv_ctstm_los", (DL_FUNC) &_hesim_C_indiv_ctstm_los, 4},
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},
     {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 6},
     {"_hesim_C_psm_sim_wlos", (DL_FUNC) &_hesim_C_psm_sim_wlos, 5},

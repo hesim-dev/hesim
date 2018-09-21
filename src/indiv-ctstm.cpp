@@ -179,7 +179,13 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
  * (i.e., a path through a multi-state model) from an individual-level model. 
  * @param R_disease_prog An R object of simulating disease progression generated
  * using C_ctstm_sim_disease.
+ * @param strategy_idx The strategy index starting at 0.
+ * @param patient_idx The patient index starting at 0.
  * @param R_StateVal An R object of class @c StateVal.
+ * @param dr The discount rate
+ * @param type @c predict for mean values or @c random for random samples.
+ * @param max_time Maximum time duration to compute costs once a patient has
+ * entered a (new) healthy state. 
  * @return A vector of weighted length of stay in each row in R_disease_prog. These
  * values are then summed by @c patient_id using @c data.table at the @c R level
  *  in the private member function @c IndivCtstm$sim_wlos. 
@@ -213,6 +219,37 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
                         disease_prog.time_start_[i] + time);
   }
   return wlos;
+}
+
+/***************************************************************************//** 
+ * @ingroup ctstm
+ * Simulate length of stay given simulated disease progression 
+ * (i.e., a path through a multi-state model) from an individual-level model. 
+ * @param R_disease_prog An R object of simulating disease progression generated
+ * using C_ctstm_sim_disease.
+ * @param strategy_idx The strategy index starting at 0.
+ * @param patient_idx The patient index starting at 0.
+ * @param dr The discount rate.
+ * @return A vector of weighted length of stay in each row in R_disease_prog. These
+ * values are then summed by @c patient_id using @c data.table at the @c R level
+ *  in the private member function @c IndivCtstm$sim_wlos. 
+ ******************************************************************************/ 
+// [[Rcpp::export]]
+std::vector<double> C_indiv_ctstm_los(Rcpp::DataFrame R_disease_prog,
+                                       std::vector<int> strategy_idx,
+                                       std::vector<int> patient_idx,
+                                       double dr){
+  hesim::ctstm::disease_prog disease_prog(R_disease_prog);
+  
+  int N = disease_prog.sample_.size();
+  std::vector<double> los(N);
+  for (int i = 0; i < N; ++i){
+    double time = disease_prog.time_stop_[i] -  disease_prog.time_start_[i];
+    los[i] = hesim::pv(1, dr,
+                        disease_prog.time_start_[i],
+                        disease_prog.time_start_[i] + time);
+  }
+  return los;
 }
 
 

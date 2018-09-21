@@ -271,7 +271,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     disprog_idx = NULL,
     
     sim_wlos = function(stateval_list, dr, stateval_type = c("costs", "qalys"),
-                        sim_type, by_patient = FALSE, max_t = Inf){
+                        sim_type, by_patient = FALSE, max_t = Inf,
+                        lys = FALSE){
      
       stateval_type <- match.arg(stateval_type)
       if(is.null(self$disprog_)){
@@ -324,37 +325,52 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                        stateval_list[[i]], dr[j],
                                        sim_type, max_t[i])
           self$disprog_$sim[, wlos := C_wlos]
-          
+          if (lys){
+            C_los <- C_indiv_ctstm_los(self$disprog_$sim, # Note: C++ re-indexing done at C level for disprog_
+                                       private$disprog_idx$strategy_idx,
+                                       private$disprog_idx$patient_idx,
+                                       dr[j])
+            self$disprog_$sim[, lys := C_los]
+            sdcols <- c("wlos", "lys")
+          } else{
+            sdcols <- "wlos"
+          }
           
           if (by_patient == TRUE){
             by_cols <- c("sample", "strategy_id", "patient_id", "from")
-            wlos_list[[counter]] <- self$disprog_$sim[, .(wlos = sum(wlos)), 
-                                         by = by_cols]
+            wlos_list[[counter]] <- self$disprog_$sim[, lapply(.SD, sum), 
+                                                        .SDcols = sdcols,
+                                                        by = by_cols]
             setkeyv(wlos_list[[counter]], by_cols)
-            # Pad missing health states within sample/strategy pairs with 0's
+            # Pad missing health states within sample/strategy pairs with  NA's
             wlos_list[[counter]] <- wlos_list[[counter]][CJ(sample, strategy_id, patient_id, from,
                                                               unique = TRUE)]
-            wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)]
           } else{
             by_cols <- c("sample", "strategy_id", "from")
             n_patients <- length(self$disprog_$unique_patient_id)
-            wlos_list[[counter]] <- self$disprog_$sim[, .(wlos = sum(wlos)),
-                                                         by = by_cols]
+            wlos_list[[counter]] <- self$disprog_$sim[, lapply(.SD, sum), 
+                                                        .SDcols = sdcols,
+                                                        by = by_cols]
             wlos_list[[counter]][, wlos := wlos/n_patients]
-            # Pad missing health states within sample/strategy pairs with 0's
+            if(lys) wlos_list[[counter]][, lys := lys/n_patients]
+            # Pad missing health states within sample/strategy pairs with NA's
             setkeyv(wlos_list[[counter]], by_cols)
             wlos_list[[counter]] <- wlos_list[[counter]][CJ(sample, strategy_id, from,
                                                             unique = TRUE)]
-            wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)]
           }
           wlos_list[[counter]][, "dr" := dr[j]]
           wlos_list[[counter]][, "category" := categories[i]]
           self$disprog_$sim[, "wlos" := NULL]
+          wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)] # Replace padded NA's with 0's
+          if (lys){
+            self$disprog_$sim[, "lys" := NULL]
+            wlos_list[[counter]][, lys := ifelse(is.na(lys), 0, lys)] # Replace padded NA's with 0's
+          }
           counter <- counter + 1
         }
       }
       wlos_dt <- rbindlist(wlos_list)
-      setcolorder(wlos_dt, c(by_cols, "dr", "category", "wlos"))
+      setcolorder(wlos_dt, c(by_cols, "dr", "category", sdcols))
       setnames(wlos_dt, "from", "state_id")
       if (stateval_type == "costs"){
         setnames(wlos_dt, "wlos", "costs")
@@ -438,13 +454,16 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       invisible(self)
     },
     
-    sim_qalys = function(dr = .03, type = c("predict", "random"), by_patient = FALSE){
+    sim_qalys = function(dr = .03, type = c("predict", "random"),
+                         lys = TRUE,
+                         by_patient = FALSE){
       if(!inherits(self$utility_model, "StateVals")){
         stop("'utility_model' must be an object of class 'StateVals'",
           call. = FALSE)
       }
       type <- match.arg(type)
-      private$.qalys_ <- private$sim_wlos(list(self$utility_model), dr, "qalys", type, by_patient)
+      private$.qalys_ <- private$sim_wlos(list(self$utility_model), dr, "qalys", type, by_patient,
+                                          lys = lys)
       invisible(self)
     },
     
