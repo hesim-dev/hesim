@@ -21,11 +21,11 @@ Summarize health state transitions in an individual-level continuous time state 
 
 \item{\code{trans_mat}}{A transition matrix describing the states and transitions in a multi-state model in the format from the \link[mstate]{mstate} package. See the documentation for the argument "trans" in \link[mstate]{msprep}.}
 
-\item{\code{start_state}}{The vectorized (see "Details") starting health state. Default is the first health state.}
+\item{\code{start_state}}{A scalar or vector denoting the starting health state. Default is the first health state. If a vector, must be equal to the number of simulated patients.}
 
-\item{\code{start_time}}{The vectorized (see "Details")  time at which to begin the simulation. Default is time 0.}
+\item{\code{start_time}}{A scalar or vector denoting the time at which to begin the simulation. Default is time 0. If a vector, must be equal to the number of simulated patients.}
 
-\item{\code{start_age}}{The vectorized (see "Details") starting age of each patient in the simulation. Default is 38.}
+\item{\code{start_age}}{A scalar or vector denoting the starting age of each patient in the simulation. Default is 38. If a vector, must be equal to the number of simulated patients.}
 
 \item{\code{death_state}}{The death state in \code{trans_mat}. Used with \code{max_age} in \code{sim_disease} as patients transition to this state upon reaching maximum age. By default, it is set to the final absorbing state (i.e., a row in \code{trans_mat} with all NAs).}
 
@@ -58,26 +58,12 @@ Summarize health state transitions in an individual-level continuous time state 
      }
   },
   
-  \item{\code{sim_disease(max_t = 100, max_age = 100)}}{
-  Simulate disease progression.
-  
-   \itemize{
-     \item \code{max_t}: The vectorized (see "Details") maximum number of time periods to simulate the model.
-    \item \code{max_age}: Maximum age to simulate each patient until. Default is 100.
-   }
-   
-   Returns an object of class "indiv_ctstm_disprog". See "Details". 
-  },
-  
-  
-  \item{\code{sim_stateprobs(disprog = NULL, t, ...)}}{
+  \item{\code{sim_stateprobs(t, ...)}}{
     Simulate health state probabilities at distinct times.
     
      \itemize{
-     \item \code{disprog}: If \code{NULL}, then state probabilities are simulated by first simulating disease progression using \code{sim_disease}. Otherwise,
-     state probabilities are computed using the simulation output from \code{disprog}. Must be of class "indiv_ctstm_disprog".
      \item \code{t}: A numeric vector of times.
-     \item \code{...}: Additional arguments to pass to \code{sim_disease} when \code{disprog = NULL}.
+     \item \code{...}: Additional arguments to pass to \code{sim_disease}.
      }
      
     Returns a \code{\link[data.table]{data.table}} with the following columns:
@@ -101,38 +87,6 @@ Summarize health state transitions in an individual-level continuous time state 
 }
 
 
-}
-
-\section{Details}{
-An object of class "indiv_ctstm_disprog" is a list containing the following elements:
-\describe{
-\item{sim}{A \code{\link[data.table]{data.table}} of simulated trajectories through a multi-state model.}
-\item{n_samples}{The number of random samples of the parameters used in the probabilistic sensitivity analysis.}
-\item{n_states}{The number of health states in the model.}
-\item{unique_strategy_id}{The ID's of the simulated treatment strategies.}
-\item{unique_patient_id}{The ID's of the simulated patients.}
-}
-
-The \code{\link[data.table]{data.table}} \code{sim} contains the following columns:
-
-\describe{
-\item{sample}{A random sample from the PSA.}
-\item{strategy_id}{The treatment strategy ID.}
-\item{patient_id}{The patient ID.}
-\item{from}{The health state ID transitioned from.}
-\item{to}{The health state ID transitioned to.}
-\item{final}{An indicator equal to 1 if a patient is in their final health state during the simulation and 0 otherwise.}
-\item{time_start}{The time at the start of the interval.}
-\item{time_stop}{The time at the end of the interval.}
-}
-
-The fields \code{start_state}, \code{start_time}, \code{start_age}, and the argument \code{max_t} in \code{sim_disease} are vectorized across patients, treatment strategies, and random samples of the parameters. Each argument can be passed in three ways:
-
-\itemize{
-\item As a scalar, implying that values are constant across patients, treatment strategies, and samples.
-\item As a vector of length equal to the number of patients, implying that values vary across patients but are constant across treatment strategies and samples.
-\item As a vector of length equal to the product of the number of patients, treatment strategies, and samples. In this case the order should be sorted by sample, treatment strategy, and patient (as with an object of class "indiv_ctstm_disprog"). This option can be used to combine results from multiple simulations using \code{sim_disease}. Specifically, values previously simulated can be used as arguments to simulations from a new instance of \code{IndivCtstmTrans}. 
-}
 }
 
 \seealso{
@@ -169,8 +123,5 @@ transmod <- create_IndivCtstmTrans(fits, data = fits_data, trans_mat = tmat,
                                     point_estimate = FALSE)       
 head(transmod$hazard(c(1, 2, 3)))
 head(transmod$cumhazard(c(1, 2, 3)))
-disprog <- transmod$sim_disease()
-names(disprog)
-head(disprog$sim)
 transmod$sim_stateprobs(t = c(0, 5, 10))[t == 5]
 }

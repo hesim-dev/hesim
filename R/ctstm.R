@@ -56,8 +56,24 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
 )
 
 # IndivCtstmTrans --------------------------------------------------------------
-indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ...){
+indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100){
+  sample <- from <- to <- line <- NULL # to avoid no visible bindings CRAN warning
+  
+  # Simulate
+  disprog <- C_ctstm_sim_disease(trans_model, trans_model$start_state - 1, 
+                                 trans_model$start_age,
+                                 trans_model$start_time,
+                                 trans_model$death_state - 1, 
+                                 max_t, max_age)
+  disprog <- data.table(disprog)
+  disprog[, sample := sample + 1]
+  disprog[, from := from + 1]
+  disprog[, to := to + 1]
+  disprog[, line := NULL] # to do after incorporating treatment lines: case where there are multiple treatment lines
+  return(disprog[, ])
+}
 
+indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ...){
   
   # Simulate disease progression if 'disprog' is missing
   if (is.null(disprog)){
@@ -69,27 +85,35 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
   } else{
     disprog <- copy(disprog)
   }
-
+  
   # Compute state probabilities
   ## Indexing for C++
-  disprog$sim[, strategy_index := .GRP, by = "strategy_id"]
-  strategy_index <- disprog$sim$strategy_id - 1
-  disprog$sim[, strategy_index := NULL]
+  disprog[, strategy_index := .GRP, by = "strategy_id"]
+  strategy_index <- disprog$strategy_id - 1
+  disprog[, strategy_index := NULL]
 
   ## Dimensions of simulation
-  if (!"line" %in% names(disprog$sim)){
+  if (!"line" %in% names(disprog)){
     n_lines <- 1
   } # to do after incorporating treatment lines: case where there are multiple treatment lines
-  n_strategies <- length(disprog$unique_strategy_id)
-  n_patients <- length(disprog$unique_patient_id)
+  n_states <- nrow(trans_model$trans_mat)
+  n_strategies <- trans_model$data$n_strategies
+  n_patients <- trans_model$data$n_patients
+  if (inherits(trans_model$params, "params_surv_list")){
+    n_samples <- trans_model$params[[1]]$n_samples
+  } else{
+    n_samples <- trans_model$params$n_samples
+  }
+  unique_strategy_id <- unique(trans_model$data$strategy_id)
   
   ## Computation
-  stprobs <- C_ctstm_indiv_stateprobs(disprog$sim, t, 
-                                      disprog$n_samples,
+  stprobs <- C_ctstm_indiv_stateprobs(disprog, 
+                                      t, 
+                                      n_samples,
                                       n_strategies, 
-                                      disprog$unique_strategy_id,
+                                      unique_strategy_id,
                                       strategy_index,
-                                      disprog$n_states,
+                                      n_states,
                                       n_patients,
                                       n_lines)
   stprobs <- data.table(stprobs)
@@ -151,21 +175,18 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
   
   private = list(
     .death_state = NULL,
-    n_samples = NULL,
     
-    vec_to_array = function(field){
+    check_history = function(field){
       field_name <- deparse(substitute(field))
-      max_len <- self$data$n_patients * self$data$n_strategies * private$n_samples
-      if (length(field) !=1 & length(field) != self$data$n_patients & 
-          length(field) != max_len){
-              stop(paste0("The length of '", field_name, "' must either be 1, equal to the number ",
-                          "of simulated patients, or equal to the product of the number of simulated patients, ",
-                          "the number of treatment strategies, and the number of parameter samples."),
-                 call. = FALSE)
+      if (length(field) !=1 & length(field) != self$data$n_patients){
+        stop(paste0("The length of '", field_name, "' must either be 1 or the number ",
+                          "of simulated patients."),
+                 call. = FALSE)        
       }
-      x <- array(field, dim = c(self$data$n_patients,
-                                nrow(self$trans_mat),
-                                private$n_samples))
+      if (length(field) == 1){
+        field <- rep(field, self$data$n_patients)
+      }
+      return(field)
     }
     
     
@@ -197,17 +218,10 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
       self$params <- params
       self$trans_mat <- trans_mat
       
-      # Number of parameter samples
-      if (inherits(self$params, "params_surv_list")){
-        private$n_samples <- self$params[[1]]$n_samples
-      } else{
-        private$n_samples <- self$params$n_samples
-      }    
-      
       # history
-      self$start_state <- private$vec_to_array(start_state)
-      self$start_time <- private$vec_to_array(start_time)
-      self$start_age <- private$vec_to_array(start_age)
+      self$start_state <- private$check_history(start_state)
+      self$start_time <- private$check_history(start_time)
+      self$start_age <- private$check_history(start_age)
       
       # death state
       if (!is.null(death_state)){
@@ -223,31 +237,10 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
       }
     },
     
-    sim_disease = function(max_t = 100, max_age = 100){
-      private$check_base()
-      max_t <- private$vec_to_array(max_t)
-
-      # Simulate
-      disprog <- C_ctstm_sim_disease(self, self$start_state - 1, self$start_age,
-                                     self$start_time,
-                                     self$death_state - 1, max_t, max_age)
-      disprog <- data.table(disprog)
-      disprog[, sample := sample + 1]
-      disprog[, from := from + 1]
-      disprog[, to := to + 1]
-      disprog[, line := NULL] # to do after incorporating treatment lines: case where there are multiple treatment lines
-      
-      out <- list(sim = disprog[,], 
-                  n_samples = private$n_samples,
-                  n_states = nrow(self$trans_mat),
-                  unique_strategy_id = unique(self$data$strategy_id),
-                  unique_patient_id = unique(self$data$patient_id))
-      class(out) <- "indiv_ctstm_disprog"
-      return(out)
-    },
-    
-    
-    sim_stateprobs = function(disprog = NULL, t, ...){
+    sim_stateprobs = function(t, ...){
+      self$check()
+      args <- c(trans_model = self, list(...))
+      disprog <- do.call("indiv_ctstm_sim_disease", args)
       return(indiv_ctstm_sim_stateprobs(disprog, self, t))
     },
     
@@ -282,11 +275,11 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       
       # Indexing patient and strategy ID's
       if (is.null(private$disprog_idx)){
-        self$disprog_$sim[, strategy_idx := .GRP, by = "strategy_id"]
-        self$disprog_$sim[, patient_idx := .GRP, by = "patient_id"]
-        private$disprog_idx <- self$disprog_$sim[, c("strategy_idx", "patient_idx"), with = FALSE]
-        self$disprog_$sim[, strategy_idx := NULL]
-        self$disprog_$sim[, patient_idx := NULL]
+        self$disprog_[, strategy_idx := .GRP, by = "strategy_id"]
+        self$disprog_[, patient_idx := .GRP, by = "patient_id"]
+        private$disprog_idx <- self$disprog_[, c("strategy_idx", "patient_idx"), with = FALSE]
+        self$disprog_[, strategy_idx := NULL]
+        self$disprog_[, patient_idx := NULL]
         private$disprog_idx[, strategy_idx := strategy_idx - 1]
         private$disprog_idx[, patient_idx := patient_idx - 1]
       }
@@ -319,26 +312,25 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       counter <- 1
       for (i in 1:n_cats){
         for (j in 1:n_dr){
-          C_wlos <- C_indiv_ctstm_wlos(self$disprog_$sim, # Note: C++ re-indexing done at C level for disprog_
+          C_wlos <- C_indiv_ctstm_wlos(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        stateval_list[[i]], dr[j],
                                        sim_type, max_t[i])
-          self$disprog_$sim[, wlos := C_wlos]
+          self$disprog_[, wlos := C_wlos]
           if (lys){
-            C_los <- C_indiv_ctstm_los(self$disprog_$sim, # Note: C++ re-indexing done at C level for disprog_
+            C_los <- C_indiv_ctstm_los(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        dr[j])
-            self$disprog_$sim[, lys := C_los]
+            self$disprog_[, lys := C_los]
             sdcols <- c("wlos", "lys")
           } else{
             sdcols <- "wlos"
           }
-          
           if (by_patient == TRUE){
             by_cols <- c("sample", "strategy_id", "patient_id", "from")
-            wlos_list[[counter]] <- self$disprog_$sim[, lapply(.SD, sum), 
+            wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]
             setkeyv(wlos_list[[counter]], by_cols)
@@ -347,8 +339,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                                               unique = TRUE)]
           } else{
             by_cols <- c("sample", "strategy_id", "from")
-            n_patients <- length(self$disprog_$unique_patient_id)
-            wlos_list[[counter]] <- self$disprog_$sim[, lapply(.SD, sum), 
+            n_patients <- self$trans_model$data$n_patients
+            wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]
             wlos_list[[counter]][, wlos := wlos/n_patients]
@@ -360,10 +352,10 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
           }
           wlos_list[[counter]][, "dr" := dr[j]]
           wlos_list[[counter]][, "category" := categories[i]]
-          self$disprog_$sim[, "wlos" := NULL]
+          self$disprog_[, "wlos" := NULL]
           wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)] # Replace padded NA's with 0's
           if (lys){
-            self$disprog_$sim[, "lys" := NULL]
+            self$disprog_[, "lys" := NULL]
             wlos_list[[counter]][, lys := ifelse(is.na(lys), 0, lys)] # Replace padded NA's with 0's
           }
           counter <- counter + 1
@@ -421,11 +413,10 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     trans_model = NULL,
     utility_model = NULL,
     cost_models = NULL,
-    initialize = function(trans_model = NULL, disprog = NULL, utility_model = NULL, cost_models = NULL) {
+    initialize = function(trans_model = NULL, utility_model = NULL, cost_models = NULL) {
       self$trans_model <- trans_model
       self$utility_model = utility_model
       self$cost_models = cost_models
-      private$.disprog_ = disprog
     },
     
     sim_disease = function(max_t = 100, max_age = 100){
@@ -439,8 +430,9 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       private$.costs_ <- NULL
       private$.stateprobs_ <- NULL
       private$disprog_idx <- NULL
-      private$.disprog_ <- self$trans_model$sim_disease(max_t = max_t,
-                                                        max_age = max_age)
+      private$.disprog_ <- indiv_ctstm_sim_disease(self$trans_model,
+                                                   max_t = max_t,
+                                                   max_age = max_age)
       private$.stateprobs_ <- NULL
       invisible(self)
     },
@@ -450,7 +442,9 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
         stop("You must first simulate disease progression using '$sim_disease'.",
             call. = FALSE)
       }
-      private$.stateprobs_ <- indiv_ctstm_sim_stateprobs(self$disprog_, t = t)
+      private$.stateprobs_ <- indiv_ctstm_sim_stateprobs(self$disprog_,
+                                                         self$trans_model,
+                                                         t = t)
       invisible(self)
     },
     

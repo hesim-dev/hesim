@@ -19,7 +19,7 @@ knitr::include_graphics("econ-eval-process.png")
 <br>
 <br>
 
-First, a statistical model (or statistical models) are fit to estimate parameters. Second, the parameters are combined to construct an economic model, which, in turn, is used to simulate measures of clinical benefits (e.g., quality-adjusted life-years (QALYs)) and costs. Third, the economic value of a medical technology is evaluated by summarizing clinical benefits and costs. The entire analysis is inherently Bayesian, as uncertainty in the parameters from the statistical analysis is propagated throughout the economic model and decision analysis with probabilistic sensitivity analysis (PSA). Furthermore, since the statistical and economic models are integrated, patient heterogeneity can be easily introduced with patient level covariates.
+First, a statistical model (or statistical models) are fit to estimate parameters. Second, the parameters are combined to construct an economic model, which, in turn, is used to simulate measures of clinical benefits (e.g., quality-adjusted life-years (QALYs)) and costs. Third, the economic value of a medical technology is evaluated by summarizing clinical benefits and costs. The entire analysis is inherently Bayesian, as uncertainty in the parameters from the statistical models is propagated throughout the economic model and decision analysis with probabilistic sensitivity analysis (PSA). Furthermore, since the statistical and economic models are integrated, patient heterogeneity can be easily introduced with patient level covariates.
 
 `hesim` focuses on **step 2** (economic modeling) but is naturally integrated with step 1 (statistical modeling) and provides support for step 3 (decision analysis). As shown in the figure below, a typical analysis would proceed as follows:
 
@@ -92,7 +92,7 @@ tmat <- rbind(c(NA, 1, 2),
               c(NA, NA, NA))
 colnames(tmat) <- rownames(tmat) <- c("Healthy", "Sick", "Dead")
 transitions <- create_trans_dt(tmat)
-transitions[, trans := transition_id]
+transitions[, trans := factor(transition_id)]
 hesim_dat <- hesim_data(strategies = strategies,
                         patients = patients,
                         transitions = transitions)

@@ -139,9 +139,9 @@
   an object of class <code><a href='input_data.html'>input_data</a></code>. If <code>params</code> is a list of models, then <code>data</code> must contain a unique row for each treatment strategy and patient; if <code>params</code> is a joint model, then <code>data</code> must contain a unique row for each treatment strategy, patient, and transition.</p></dd>
     <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_surv.html'>params_surv</a></code> or <code><a href='params_surv_list.html'>params_surv_list</a></code>.</p></dd>
     <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions in a multi-state model in the format from the <a href='http://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package. See the documentation for the argument "trans" in <a href='http://www.rdocumentation.org/packages/mstate/topics/msprep'>msprep</a>.</p></dd>
-    <dt><code>start_state</code></dt><dd><p>The vectorized (see "Details") starting health state. Default is the first health state.</p></dd>
-    <dt><code>start_time</code></dt><dd><p>The vectorized (see "Details")  time at which to begin the simulation. Default is time 0.</p></dd>
-    <dt><code>start_age</code></dt><dd><p>The vectorized (see "Details") starting age of each patient in the simulation. Default is 38.</p></dd>
+    <dt><code>start_state</code></dt><dd><p>A scalar or vector denoting the starting health state. Default is the first health state. If a vector, must be equal to the number of simulated patients.</p></dd>
+    <dt><code>start_time</code></dt><dd><p>A scalar or vector denoting the time at which to begin the simulation. Default is time 0. If a vector, must be equal to the number of simulated patients.</p></dd>
+    <dt><code>start_age</code></dt><dd><p>A scalar or vector denoting the starting age of each patient in the simulation. Default is 38. If a vector, must be equal to the number of simulated patients.</p></dd>
     <dt><code>death_state</code></dt><dd><p>The death state in <code>trans_mat</code>. Used with <code>max_age</code> in <code>sim_disease</code> as patients transition to this state upon reaching maximum age. By default, it is set to the final absorbing state (i.e., a row in <code>trans_mat</code> with all NAs).</p></dd>
     </dl>
     
@@ -159,18 +159,10 @@
     <ul>
 <li><p><code>t</code>: A numeric vector of times.</p></li>
 </ul></p></dd>,
-    <dt><code>sim_disease(max_t = 100, max_age = 100)</code></dt><dd><p>Simulate disease progression.
+    <dt><code>sim_stateprobs(t, ...)</code></dt><dd><p>Simulate health state probabilities at distinct times.
     <ul>
-<li><p><code>max_t</code>: The vectorized (see "Details") maximum number of time periods to simulate the model.</p></li>
-<li><p><code>max_age</code>: Maximum age to simulate each patient until. Default is 100.</p></li>
-</ul>
-    Returns an object of class "indiv_ctstm_disprog". See "Details".</p></dd>,
-    <dt><code>sim_stateprobs(disprog = NULL, t, ...)</code></dt><dd><p>Simulate health state probabilities at distinct times.
-    <ul>
-<li><p><code>disprog</code>: If <code>NULL</code>, then state probabilities are simulated by first simulating disease progression using <code>sim_disease</code>. Otherwise,
-     state probabilities are computed using the simulation output from <code>disprog</code>. Must be of class "indiv_ctstm_disprog".</p></li>
 <li><p><code>t</code>: A numeric vector of times.</p></li>
-<li><p><code>...</code>: Additional arguments to pass to <code>sim_disease</code> when <code>disprog = NULL</code>.</p></li>
+<li><p><code>...</code>: Additional arguments to pass to <code>sim_disease</code>.</p></li>
 </ul>
     Returns a <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> with the following columns:
     <dl class='dl-horizontal'>
@@ -182,33 +174,6 @@
     </dl></p></dd>
     <dt><code><a href='check.html'>check()</a></code></dt><dd><p>Input validation for class. Checks that fields are the correct type.</p></dd>
     </dl>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>An object of class "indiv_ctstm_disprog" is a list containing the following elements:</p><dl class='dl-horizontal'>
-<dt>sim</dt><dd><p>A <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> of simulated trajectories through a multi-state model.</p></dd>
-<dt>n_samples</dt><dd><p>The number of random samples of the parameters used in the probabilistic sensitivity analysis.</p></dd>
-<dt>n_states</dt><dd><p>The number of health states in the model.</p></dd>
-<dt>unique_strategy_id</dt><dd><p>The ID's of the simulated treatment strategies.</p></dd>
-<dt>unique_patient_id</dt><dd><p>The ID's of the simulated patients.</p></dd>
-</dl>
-    <p>The <code><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> <code>sim</code> contains the following columns:</p>
-<dl class='dl-horizontal'>
-<dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
-<dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>
-<dt>patient_id</dt><dd><p>The patient ID.</p></dd>
-<dt>from</dt><dd><p>The health state ID transitioned from.</p></dd>
-<dt>to</dt><dd><p>The health state ID transitioned to.</p></dd>
-<dt>final</dt><dd><p>An indicator equal to 1 if a patient is in their final health state during the simulation and 0 otherwise.</p></dd>
-<dt>time_start</dt><dd><p>The time at the start of the interval.</p></dd>
-<dt>time_stop</dt><dd><p>The time at the end of the interval.</p></dd>
-</dl>
-    <p>The fields <code>start_state</code>, <code>start_time</code>, <code>start_age</code>, and the argument <code>max_t</code> in <code>sim_disease</code> are vectorized across patients, treatment strategies, and random samples of the parameters. Each argument can be passed in three ways:</p>
-<ul>
-<li><p>As a scalar, implying that values are constant across patients, treatment strategies, and samples.</p></li>
-<li><p>As a vector of length equal to the number of patients, implying that values vary across patients but are constant across treatment strategies and samples.</p></li>
-<li><p>As a vector of length equal to the product of the number of patients, treatment strategies, and samples. In this case the order should be sorted by sample, treatment strategy, and patient (as with an object of class "indiv_ctstm_disprog"). This option can be used to combine results from multiple simulations using <code>sim_disease</code>. Specifically, values previously simulated can be used as arguments to simulations from a new instance of <code>IndivCtstmTrans</code>.</p></li>
-</ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -243,45 +208,37 @@
 <span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>fits_data</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
                                     <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                     <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t    hazard
-#&gt; 1:     1      1           0          0 1 0.1838312
-#&gt; 2:     1      1           0          0 2 0.1838312
-#&gt; 3:     1      1           0          0 3 0.1838312
-#&gt; 4:     2      1           0          0 1 0.0365166
-#&gt; 5:     2      1           0          0 2 0.0365166
-#&gt; 6:     2      1           0          0 3 0.0365166</div><div class='input'><span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
-#&gt; 1:     1      1           0          0 1 0.18383115
-#&gt; 2:     1      1           0          0 2 0.36766230
-#&gt; 3:     1      1           0          0 3 0.55149345
-#&gt; 4:     2      1           0          0 1 0.03651660
-#&gt; 5:     2      1           0          0 2 0.07303321
-#&gt; 6:     2      1           0          0 3 0.10954981</div><div class='input'><span class='no'>disprog</span> <span class='kw'>&lt;-</span> <span class='no'>transmod</span>$<span class='fu'>sim_disease</span>()
-<span class='fu'>names</span>(<span class='no'>disprog</span>)</div><div class='output co'>#&gt; [1] "sim"                "n_samples"          "n_states"          
-#&gt; [4] "unique_strategy_id" "unique_patient_id" </div><div class='input'><span class='fu'>head</span>(<span class='no'>disprog</span>$<span class='no'>sim</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id from to final time_start   time_stop
-#&gt; 1:      1           1          1    1  3     1   0.000000  4.64201973
-#&gt; 2:      1           1          2    1  3     1   0.000000  2.82894629
-#&gt; 3:      1           1          3    1  2     0   0.000000  9.60379090
-#&gt; 4:      1           1          3    2  3     1   9.603791 12.06965187
-#&gt; 5:      1           2          1    1  3     1   0.000000  7.11952890
-#&gt; 6:      1           2          2    1  3     1   0.000000  0.08323162</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
-#&gt;  1:      1           1        1 5 0.3333333
-#&gt;  2:      1           1        2 5 0.3333333
-#&gt;  3:      1           1        3 5 0.3333333
-#&gt;  4:      1           2        1 5 0.0000000
+<span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t     hazard
+#&gt; 1:     1      1           0          0 1 0.16540081
+#&gt; 2:     1      1           0          0 2 0.16540081
+#&gt; 3:     1      1           0          0 3 0.16540081
+#&gt; 4:     2      1           0          0 1 0.03399796
+#&gt; 5:     2      1           0          0 2 0.03399796
+#&gt; 6:     2      1           0          0 3 0.03399796</div><div class='input'><span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
+#&gt; 1:     1      1           0          0 1 0.16540081
+#&gt; 2:     1      1           0          0 2 0.33080162
+#&gt; 3:     1      1           0          0 3 0.49620243
+#&gt; 4:     2      1           0          0 1 0.03399796
+#&gt; 5:     2      1           0          0 2 0.06799591
+#&gt; 6:     2      1           0          0 3 0.10199387</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
+#&gt;  1:      1           1        1 5 1.0000000
+#&gt;  2:      1           1        2 5 0.0000000
+#&gt;  3:      1           1        3 5 0.0000000
+#&gt;  4:      1           2        1 5 0.3333333
 #&gt;  5:      1           2        2 5 0.0000000
-#&gt;  6:      1           2        3 5 1.0000000
-#&gt;  7:      1           3        1 5 0.3333333
+#&gt;  6:      1           2        3 5 0.6666667
+#&gt;  7:      1           3        1 5 0.0000000
 #&gt;  8:      1           3        2 5 0.0000000
-#&gt;  9:      1           3        3 5 0.6666667
-#&gt; 10:      2           1        1 5 0.6666667
+#&gt;  9:      1           3        3 5 1.0000000
+#&gt; 10:      2           1        1 5 0.3333333
 #&gt; 11:      2           1        2 5 0.0000000
-#&gt; 12:      2           1        3 5 0.3333333
-#&gt; 13:      2           2        1 5 0.6666667
+#&gt; 12:      2           1        3 5 0.6666667
+#&gt; 13:      2           2        1 5 0.0000000
 #&gt; 14:      2           2        2 5 0.0000000
-#&gt; 15:      2           2        3 5 0.3333333
-#&gt; 16:      2           3        1 5 0.6666667
+#&gt; 15:      2           2        3 5 1.0000000
+#&gt; 16:      2           3        1 5 0.0000000
 #&gt; 17:      2           3        2 5 0.0000000
-#&gt; 18:      2           3        3 5 0.3333333</div></pre>
+#&gt; 18:      2           3        3 5 1.0000000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -292,8 +249,6 @@
       <li><a href="#fields">Fields</a></li>
 
       <li><a href="#methods">Methods</a></li>
-
-      <li><a href="#details">Details</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

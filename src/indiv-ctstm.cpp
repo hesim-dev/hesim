@@ -10,18 +10,19 @@
  * @param R_CtstmTrans An R object of class @c CtstmTrans.
  * @param start_state The starting health state for each patient and random sample
  * of the parameter sets.
- * @param start_ages The starting age of each patient in the simulation.
+ * @param start_age The starting age of each patient in the simulation.
+ * @param start_time The starting time of the simulation.
  * @param max_t The maximum time to simulate the model for.
  * @param max_age The maximum age that a patient can live to.
  * @return An R data frame of the same format as ctstm::disease_prog.
  ******************************************************************************/ 
 // [[Rcpp::export]]
 Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, 
-                                    arma::cube start_state,
-                                    arma::cube start_age, 
-                                    arma::cube start_time,
+                                    std::vector<int> start_state,
+                                    std::vector<double> start_age, 
+                                    std::vector<double> start_time,
                                     int death_state,
-                                    arma::cube max_t, double max_age){
+                                    double max_t, double max_age){
  
   // Initialize
   std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
@@ -31,8 +32,8 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
   int n_strategies = transmod->get_n_strategies(); 
   std::vector<int> n_lines = transmod->get_n_lines();
   int n_patients = transmod->get_n_patients();
-  hesim::ctstm::patient patient(transmod.get(), start_age(0, 0, 0), start_time(0, 0, 0),
-                                start_state(0, 0, 0), max_age, max_t(0, 0, 0), death_state); 
+  hesim::ctstm::patient patient(transmod.get(), start_age[0], start_time[0],
+                                start_state[0], max_age, max_t, death_state); 
   hesim::ctstm::disease_prog disease_prog;
   int N = 0;
   for (int i = 0; i < n_strategies; ++i){
@@ -48,12 +49,12 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
           transmod->obs_index_.set_line_index(j);
           for (int i = 0; i < n_patients; ++i){
             transmod->obs_index_.set_patient_index(i);
-            patient.age_ = start_age(i, k, s);
-            patient.time_ = start_time(i, k, s);
-            patient.state_ = start_state(i, k, s);
-            patient.max_t_ = max_t(i, k, s);
+            patient.age_ = start_age[i];
+            patient.time_ = start_time[i];
+            patient.state_ = start_state[i];
+            patient.max_t_ = max_t;
            
-            while (!absorbing[patient.state_] && patient.time_ < max_t(i, k, s) && patient.age_ < max_age){
+            while (!absorbing[patient.state_] && patient.time_ < max_t && patient.age_ < max_age){
               int from_state = patient.state_;
               double time_start = patient.time_;
               
@@ -69,7 +70,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
               disease_prog.to_.push_back(patient.state_);
               disease_prog.time_start_.push_back(time_start);
               disease_prog.time_stop_.push_back(patient.time_);
-              if (!absorbing[patient.state_] && patient.time_ < max_t(i, k, s) && patient.age_ < max_age){
+              if (!absorbing[patient.state_] && patient.time_ < max_t && patient.age_ < max_age){
                 disease_prog.final_.push_back(0);
               } 
               else{
@@ -111,7 +112,8 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
 // [[Rcpp::export]]
 Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
                                          std::vector<double> t, int n_samples,
-                                         int n_strategies, std::vector<int> unique_strategy_id,
+                                         int n_strategies, 
+                                         std::vector<int> unique_strategy_id,
                                          std::vector<int> strategy_index,
                                          int n_states, 
                                          int n_patients,

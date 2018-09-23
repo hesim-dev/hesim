@@ -9,7 +9,7 @@ IndivCtstm
 }
 \description{
 Simulate outcomes from an individual-level continuous time state transition model (CTSTM). The class is currently only valid for semi-Markov (i.e., "clock-reset") models; however,
-functionality will soon be added for Markov  (i.e., "clock-forward") models.
+functionality will soon be added for Markov  (i.e., "clock-forward") models and mixtures of clock-forward and clock-reset models.
 
 }
 \section{Fields}{
@@ -21,13 +21,26 @@ functionality will soon be added for Markov  (i.e., "clock-forward") models.
 
 \item{\code{cost_models}}{The models used to predict costs by health state. Must be a list of objects of class \code{\link{StateVals}}, where each element of the list represents a different cost category.}
 
-\item{\code{disprog_}}{An object of class "indiv_ctstm_disprog" simulated using \code{sim_disease}. See \link{IndivCtstmTrans} for more details.}
+\item{\code{disprog_}}{A \code{\link[data.table]{data.table}} simulated using \code{sim_disease} containing the following columns:
 
-\item{\code{stateprobs_}}{A tidy \code{\link[data.table]{data.table}} of health state probabilities as a function of time simulated using \code{sim_stateprobs}. The the description of the output of \code{sim_stateprobs} in \code{\link{IndivCtstmTrans}}.
+\describe{
+\item{sample}{A random sample from the PSA.}
+\item{strategy_id}{The treatment strategy ID.}
+\item{patient_id}{The patient ID.}
+\item{from}{The health state ID transitioned from.}
+\item{to}{The health state ID transitioned to.}
+\item{final}{An indicator equal to 1 if a patient is in their final health state during the simulation and 0 otherwise.}
+\item{time_start}{The time at the start of the interval.}
+\item{time_stop}{The time at the end of the interval.}
+}
 
 }
 
-\item{\code{qalys_}}{A tidy \code{\link[data.table]{data.table}} of quality-adjusted life-years (QALYs) simulated using \code{sim_qalys}. Columns are:
+\item{\code{stateprobs_}}{A \code{\link[data.table]{data.table}} of health state probabilities as a function of time simulated using \code{sim_stateprobs}. See the description of the output of \code{sim_stateprobs} in \code{\link{IndivCtstmTrans}}.
+
+}
+
+\item{\code{qalys_}}{A \code{\link[data.table]{data.table}} of quality-adjusted life-years (QALYs) simulated using \code{sim_qalys}. Columns are:
 
 \describe{
 \item{sample}{A random sample from the probabilistic sensitivity analysis (PSA).}
@@ -42,7 +55,7 @@ Note that the \code{lys} column is only computed if \code{lys = TRUE}.
 
 }
 
-\item{\code{costs_}}{A tidy \code{\link[data.table]{data.table}} of costs by category simulated using \code{sim_costs}. Columns are:
+\item{\code{costs_}}{A \code{\link[data.table]{data.table}} of costs by category simulated using \code{sim_costs}. Columns are:
 
 \describe{
 \item{sample}{A random sample from the PSA.}
@@ -61,9 +74,9 @@ Note that the \code{lys} column is only computed if \code{lys = TRUE}.
 
 \describe{
 
-\item{\code{new(trans_model = NULL, disprog = NULL, utility_model = NULL, cost_models = NULL)}}{
+\item{\code{new(trans_model = NULL, utility_model = NULL, cost_models = NULL)}}{
 
-  Constructor for the class. \code{trans_model} must be specified in order to simulate disease progression with \code{sim_disease}. However, if an object of class "indiv_ctstm_disprog" has already been simulated using \code{\link{IndivCtstmTrans}}, then \code{disprog_} can be initialized using \code{disprog}.  
+  Constructor for the class.
   
 }
   
@@ -71,8 +84,8 @@ Note that the \code{lys} column is only computed if \code{lys = TRUE}.
     Simulate disease progression.
     
    \itemize{
-     \item \code{max_t}: Maximum number of time periods to simulate the model.
-    \item \code{max_age}: Maximum age to simulate each patient until. Default is 100.
+     \item \code{max_t}: A scalar or vector denoting the number of time periods to simulate the model. If a vector, must be equal to the number of simulated patients. 
+    \item \code{max_age}: A scalar or vector denoting the maximum age to simulate each patient until. If a vector, must be equal to the number of simulated patients.
    }
      
     Returns an instance of self with simulated output stored in \code{disprog_}. 
@@ -89,8 +102,7 @@ Note that the \code{lys} column is only computed if \code{lys = TRUE}.
   }
   
   \item{\code{sim_qalys(dr = .03, type = c("predict", "random"), by_patient = FALSE, lys = TRUE)}}{
-    Compute simulated (mean discounted) QALYs using the simulation output stored in \code{disprog_} by random sample from the PSA, treatment strategy, health state, and 
-    (optionally) patient.
+    Compute simulated (mean discounted) QALYs using the simulation output stored in \code{disprog_} by random sample from the PSA, treatment strategy, health state, and (optionally) patient.
     
      \itemize{
      \item \code{dr}: Discount rate to apply to QALYs. May be a vector in which case QALYs are calculated for each element in \code{dr}.
