@@ -45,8 +45,8 @@ Rcpp::DataFrame C_ctstm_summary(Rcpp::Environment R_CtstmTrans,
             for (int l = 0; l < t.size(); ++l){
               out.trans_[counter] = h;
               out.sample_[counter] = s;
-              out.strategy_id_[counter] = k;
-              out.patient_id_[counter] = i;
+              out.strategy_id_[counter] = transmod->obs_index_.get_strategy_id();
+              out.patient_id_[counter] = transmod->obs_index_.get_patient_id();
               out.t_[counter] = t[l];
               out.value_[counter] = res_vec[l];
               ++counter;
