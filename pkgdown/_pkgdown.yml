@@ -31,8 +31,7 @@ reference:
       - hesim_data
       - expand.hesim_data
       - create_trans_dt
-      - input_data
-      - create_input_data
+      - create_input_mats
   - title: "Health state values"
     contents:
       - stateval_means

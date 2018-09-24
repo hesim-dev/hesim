@@ -135,11 +135,11 @@ times <- c(0, 2, 5, 8)
 psm_curves <- create_PsmCurves(fits_wei, data = curves_edata, n = N)
 
 # Utility model
-psm_utility_data <- create_input_data(formula_list(mu = formula(~1)), 
-                                    expand(hesim_dat, 
+psm_X <- create_input_mats(formula_list(mu = formula(~1)), 
+                                     expand(hesim_dat, 
                                      by = c("strategies", "patients", "states")),
                                      id_vars = c("strategy_id", "patient_id", "state_id"))
-psm_utility <- StateVals$new(data = psm_utility_data,
+psm_utility <- StateVals$new(data = psm_X,
                              params = params_lm(coef = runif(N, .6, .8)))
 
 # Cost model(s)

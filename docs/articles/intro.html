@@ -83,7 +83,7 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2018-09-22</h4>
+            <h4 class="date">2018-09-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -97,7 +97,7 @@
 <a href="#overview" class="anchor"></a>Overview</h2>
 <p><code>hesim</code> is an R package that integrates statistical modeling, economic modeling, and decision analysis for the economic evaluation of health technologies. Economic evaluation proceeds in a three-step process as shown in the figure (adapted from <a href="https://egon.stats.ucl.ac.uk/projects/BCEAweb/">BCEAweb</a>) below .</p>
 <p><br><img src="econ-eval-process.png" width="600px"><br><br></p>
-<p>First, a statistical model (or statistical models) are fit to estimate parameters. Second, the parameters are combined to construct an economic model, which, in turn, is used to simulate measures of clinical benefits (e.g., quality-adjusted life-years (QALYs)) and costs. Third, the economic value of a medical technology is evaluated by summarizing clinical benefits and costs. The entire analysis is inherently Bayesian, as uncertainty in the parameters from the statistical analysis is propagated throughout the economic model and decision analysis with probabilistic sensitivity analysis (PSA). Furthermore, since the statistical and economic models are integrated, patient heterogeneity can be easily introduced with patient level covariates.</p>
+<p>First, a statistical model (or statistical models) are fit to estimate parameters. Second, the parameters are combined to construct an economic model, which, in turn, is used to simulate measures of clinical benefits (e.g., quality-adjusted life-years (QALYs)) and costs. Third, the economic value of a medical technology is evaluated by summarizing clinical benefits and costs. The entire analysis is inherently Bayesian, as uncertainty in the parameters from the statistical models is propagated throughout the economic model and decision analysis with probabilistic sensitivity analysis (PSA). Furthermore, since the statistical and economic models are integrated, patient heterogeneity can be easily introduced with patient level covariates.</p>
 <p><code>hesim</code> focuses on <strong>step 2</strong> (economic modeling) but is naturally integrated with step 1 (statistical modeling) and provides support for step 3 (decision analysis). As shown in the figure below, a typical analysis would proceed as follows:</p>
 <ol style="list-style-type: decimal">
 <li>The parameters of a statistical model are estimated using an “estimation” dataset, such as extracted data from published studies for a meta-analysis or multi-state survival data from a clinical trial. Parameters are estimated for disease progression, utility, and costs. Each statistical model is constructed by combining the parameter estimates with information on the treatment strategies, patients, and/or health states of interest for the economic model.</li>
@@ -147,23 +147,23 @@ params_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <pre><code>## $coefs
 ## $coefs$shape
 ##           shape shape(trans2) shape(trans3) shape(trans4)
-## [1,] -0.3925906    0.26882859     0.4405331   0.026088685
-## [2,] -0.3045626    0.06771157     0.2837657  -0.060062840
-## [3,] -0.3331116    0.22903537     0.3136608  -0.006430828
+## [1,] -0.2682333     0.1350436     0.2684955  -0.005301398
+## [2,] -0.3561243     0.1815508     0.3663137   0.111147175
+## [3,] -0.2102087     0.1235277     0.3081613  -0.074924677
 ## 
 ## $coefs$scale
-##         scale factor(strategy_id)2    trans2     trans3      trans4
-## [1,] 1.464222            0.2349990 1.0010525 -0.9820598 -0.07709488
-## [2,] 1.555335            0.2594423 1.0814838 -0.9591591  0.03405032
-## [3,] 1.547627            0.2531345 0.8709492 -0.9988741 -0.43448647
+##         scale factor(strategy_id)2   trans2     trans3     trans4
+## [1,] 1.417085            0.2943037 1.149506 -0.8725252 -0.1835109
+## [2,] 1.391582            0.4511535 1.293075 -0.8735096 -0.1799646
+## [3,] 1.384446            0.2059931 1.399053 -0.8362260 -0.2905270
 ##      factor(strategy_id)2:trans2 factor(strategy_id)2:trans3
-## [1,]                  0.11125268                  -0.4111727
-## [2,]                 -0.04999860                  -0.4656955
-## [3,]                  0.04195966                  -0.5016735
+## [1,]                  -0.1743930                  -0.4658583
+## [2,]                  -0.3623341                  -0.7201637
+## [3,]                  -0.4617232                  -0.3103585
 ##      factor(strategy_id)2:trans4
-## [1,]                  -0.4426981
-## [2,]                  -0.9407326
-## [3,]                  -0.1487005
+## [1,]                  -0.4808794
+## [2,]                  -0.6263552
+## [3,]                  -0.1439528
 ## 
 ## 
 ## $dist
@@ -190,7 +190,7 @@ tmat &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumen
               <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>))
 <span class="kw">colnames</span>(tmat) &lt;-<span class="st"> </span><span class="kw">rownames</span>(tmat) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"Healthy"</span>, <span class="st">"Sick"</span>, <span class="st">"Dead"</span>)
 transitions &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_trans_dt.html">create_trans_dt</a></span>(tmat)
-transitions[, trans <span class="op">:</span><span class="er">=</span><span class="st"> </span>transition_id]
+transitions[, trans <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">factor</span>(transition_id)]
 hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hesim_data.html">hesim_data</a></span>(<span class="dt">strategies =</span> strategies,
                         <span class="dt">patients =</span> patients,
                         <span class="dt">transitions =</span> transitions)

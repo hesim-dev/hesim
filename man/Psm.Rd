@@ -114,7 +114,7 @@ dt_states <- data.frame(state_id =  seq(1, 3),
 hesim_dat <- hesim_data(strategies = dt_strategies,
                         patients = dt_patients,
                         states = dt_states)
-N <- 3
+n_samples <- 3
 
 # Survival models
 surv_data <- psm4_exdata$survival
@@ -127,17 +127,22 @@ fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age,
 fits <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3), data = surv_data)
 
 curves_data <- expand(hesim_dat, by = c("strategies", "patients"))
-psm_curves <- create_PsmCurves(fits, data = curves_data, n = N)
+psm_curves <- create_PsmCurves(fits, data = curves_data, n = n_samples)
 
 # Cost models
 expanded_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit_costs_medical <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
-psm_costs_medical <- create_StateVals(fit_costs_medical, data = expanded_data, n = N)
+psm_costs_medical <- create_StateVals(fit_costs_medical, data = expanded_data, n = n_samples)
 
 # Utility model
-psm_utility_data <- create_input_data(formula_list(mu = ~1), expanded_data)
-psm_utility <- StateVals$new(data = psm_utility_data,
-                             params = params_lm(coef = runif(N, .6, .8)))
+utility_posterior <- matrix(runif(n_samples * 3,
+                                  min = psm4_exdata$utility$lower,
+                                  max = psm4_exdata$utility$upper),
+                            nrow = n_samples, byrow = TRUE)
+utility_means <- stateval_means(values = utility_posterior,
+                                strategy_id = dt_strategies$strategy_id,
+                                patient_id = dt_patients$patient_id)
+psm_utility <- create_StateVals(utility_means)
 
 # Partitioned survival decision model
 psm <- Psm$new(survival_models = psm_curves,

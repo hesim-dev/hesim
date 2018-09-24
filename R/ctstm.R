@@ -2,8 +2,8 @@
 CtstmTrans <- R6::R6Class("CtstmTrans",
   private = list(
     check_base = function(){
-      if(!inherits(self$data, "input_data")){
-        stop("'data' must be an object of class 'input_data'",
+      if(!inherits(self$data, "input_mats")){
+        stop("'data' must be an object of class 'input_mats'",
             call. = FALSE)
       }
       if(!inherits(self$params, c("params_surv", 
@@ -149,24 +149,24 @@ create_IndivCtstmTrans <- function(object, data, trans_mat, n = 1000, point_esti
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
-  input_data <- create_input_data(object, data)
+  X <- create_input_mats(object, data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(data = input_data, params = params, trans_mat = trans_mat, ...))
+  return(IndivCtstmTrans$new(data = X, params = params, trans_mat = trans_mat, ...))
 }
 
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
-  input_data <- create_input_data(object, data)
+  X <- create_input_mats(object, data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(data = input_data, params = params, trans_mat = trans_mat, ...))
+  return(IndivCtstmTrans$new(data = X, params = params, trans_mat = trans_mat, ...))
 }
 
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.params_surv <- function(object, data, trans_mat, ...){
-  input_data <- create_input_data(object, data)
-  return(IndivCtstmTrans$new(data = input_data, params = object, trans_mat = trans_mat, ...))
+  X <- create_input_mats(object, data)
+  return(IndivCtstmTrans$new(data = X, params = object, trans_mat = trans_mat, ...))
 }
 
 #' @export

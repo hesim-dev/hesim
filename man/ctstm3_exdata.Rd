@@ -38,9 +38,8 @@ The data frame has the following columns:
 \section{Cost data}{
 
 The cost list contains two data frames. The first data frame contains summary data on
-medical costs by gender and health state, and contains the following columns:
+medical costs by health state, and contains the following columns:
 \describe{
- \item{gender}{Female or male}
   \item{state_id}{The health state identification number.}
   \item{mean}{Mean costs.}
   \item{se}{Standard error of medical costs.}

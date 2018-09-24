@@ -14,19 +14,20 @@ n_samples <- 2
 
 # Utility
 beta_params <- mom_beta(ctstm3_exdata$utility$mean, ctstm3_exdata$utility$se)
-utility1 <- rbeta(n_samples, shape1 = beta_params$shape1[1], 
-                  shape2 = beta_params$shape2[1])
-utility2 <- rbeta(n_samples, shape1 = beta_params$shape1[2], 
-                  shape2 = beta_params$shape2[2])
-utility_params <- params_lm(coefs  = cbind(utility1, utility2))
+utility_dist <- matrix(rbeta(n_samples * 2, shape1 = beta_params$shape1,
+                                  shape2 = beta_params$shape2),
+                            nrow = n_samples, byrow = TRUE)
 
 # Costs
-medcosts_params <- params_lm(coefs = cbind(runif(n_samples, 5000, 10000),
-                                           runif(n_samples, 4000, 8000)))
-drugcosts_mat <- matrix(rep(ctstm3_exdata$costs$drugs$costs, n_samples), 
-                         nrow = n_samples, byrow = TRUE)
-drugcosts_params <- params_lm(coefs  = drugcosts_mat)
- 
+## Medical
+gamma_params <- mom_gamma(ctstm3_exdata$costs$medical$mean, 
+                        ctstm3_exdata$costs$medical$se)
+medcosts_dist <- matrix(rgamma(n_samples * 2, shape = gamma_params$shape,
+                                scale = gamma_params$scale),
+                            nrow = n_samples, byrow = TRUE)
+
+## Drugs
+drugcosts <- ctstm3_exdata$costs$drugs$costs
 
 # Clock-reset multi-state model
 ## Separate 
@@ -117,7 +118,7 @@ test_that("C_ctstm_indiv_stateprobs", {
 # Simulate economic model ------------------------------------------------------
 # Construct a model structure 
 ## Simulation data
-dt_strategies <- data.table(strategy_id = c(1, 2, 3))
+dt_strategies <- data.table(strategy_id = c(1, 2))
 dt_patients <- data.table(patient_id = seq(1, 3),
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
@@ -126,14 +127,28 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
                         patients = dt_patients,
                         states = dt_states)
 
-## Cost and utility models
-statevals_edata <- expand(hesim_dat, by = c("strategies", "patients",
-                                                       "states"))
-input_dat <- create_input_data(formula_list(mu = ~ -1 + factor(state_id)), 
-                               data = statevals_edata)
-utilmod <- StateVals$new(data = input_dat, params = utility_params)
-medcostsmod <- StateVals$new(data = input_dat, params = medcosts_params)  
-drugcostsmod <- StateVals$new(data = input_dat, params = drugcosts_params)  
+## Utility and cost models
+### Utility
+utility_means <- stateval_means(values = utility_dist,
+                                strategy_id = dt_strategies$strategy_id,
+                                patient_id = dt_patients$patient_id)
+utilmod <- create_StateVals(utility_means)
+
+### Costs
+#### Medical
+medcosts_means <- stateval_means(values = medcosts_dist,
+                                strategy_id = dt_strategies$strategy_id,
+                                patient_id = dt_patients$patient_id)
+medcostsmod <- create_StateVals(medcosts_means)
+
+#### Drug
+drugcost_array <- array(NA, dim = c(n_samples, 2, 2))
+drugcost_array[, , 1] <- drugcosts[1]
+drugcost_array[, , 2] <- drugcosts[2]
+drugcost_means <- stateval_means(values = drugcost_array,
+                                strategy_id = dt_strategies$strategy_id,
+                                patient_id = dt_patients$patient_id)
+drugcostsmod <- create_StateVals(drugcost_means)
 
 ## The health state transitions
 ### With transition specific survival models
@@ -302,16 +317,20 @@ test_that("Simulate costs and QALYs", {
   
   disprog1 <- ictstm$disprog_[sample == 1 & strategy_id == 1 & patient_id == 2]
   qalys1 <- ictstm$qalys_[sample == 1 & strategy_id == 1 & patient_id == 2]
-  utilvals <- utility_params$coefs[1, disprog1$from] 
+  utilvals <- utility_means$values[1, disprog1$from] 
   qalys_expected <- sum(pv(utilvals, .03, disprog1$time_start, disprog1$time_stop))
   expect_equal(sum(qalys1$qalys), qalys_expected)
   
   ### dr = 0
   ictstm <- ictstm$clone(deep = TRUE)
-  ictstm$utility_model$params$coefs <- matrix(1, nrow = n_samples, ncol = nrow(dt_states))
+  ictstm$utility_model$params$mu <- matrix(1, nrow = nrow(ictstm$utility_model$params$mu),
+                                           ncol = ncol(ictstm$utility_model$params$mu))
+  ictstm$sim_qalys(dr = 0, by_patient = TRUE)
   qalys <- ictstm$sim_qalys(dr = 0, by_patient = TRUE)$qalys_
+  
   expect_equal(ictstm$disprog_[final == 1][sample == 1 & strategy_id == 2 & patient_id == 2, time_stop],
                sum(qalys[sample == 1 & strategy_id == 2 & patient_id == 2, qalys]))
+  expect_true(all(qalys$qalys == qalys$lys)) # life-years are computed correctly
   
   # Simulate costs
   # Errors
@@ -347,19 +366,6 @@ test_that("Simulate costs and QALYs", {
   ictstm$sim_qalys(by_patient = TRUE)
   ictstm$sim_costs(by_patient = TRUE)
   expect_error(ictstm$summarize(), NA)
-  
-  ### Check that life-years are correct
-  utilmod2 <- utilmod$clone(deep = TRUE)
-  utilmod2$params$coefs <- matrix(1, nrow = nrow(utilmod2$params$coefs),
-                                  ncol = ncol(utilmod2$params$coefs))
-  ictstm$utility_model <- utilmod2
-  ictstm$sim_qalys(dr = 0)
-  expect_equal(ictstm$qalys_$qalys, ictstm$qalys_$lys)
-  ce_summary <- ictstm$summarize()
-  los <- ictstm$disprog_[final == 1, .(los = mean(time_stop)), 
-                      by = c("sample", "strategy_id")]
-  expect_true(all(round(los$los, 4) == round(ce_summary$qalys$qalys, 4)))
-  
 })
 
 ## With a joint survival model

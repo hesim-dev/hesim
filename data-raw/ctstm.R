@@ -24,10 +24,9 @@ ctstm3_exdata$costs$drugs <- data.frame(strategy_id = c(1, 2),
                                              costs = c(5000, 10000))
 
 ## Medical
-medcosts <- data.frame(gender = rep(c("female", "male"), each = 2),
-                       state_id = rep(c(1, 2), 2),
-                       mean = c(800, 1200, 1000, 1600),
-                       se = sqrt(c(100, 160, 120, 200)))
+medcosts <- data.frame(state_id = c(1, 2),
+                       mean = c(1000, 1600),
+                       se = sqrt(c(120, 200)))
 ctstm3_exdata$costs$medical <- medcosts
 
 # Utility

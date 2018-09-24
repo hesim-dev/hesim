@@ -136,7 +136,7 @@
     
     <dl class='dl-horizontal'>
 <dt><code>data</code></dt><dd><p>Data used to predict state values by strategy and patient. Must be 
-  an object of class <code><a href='input_data.html'>input_data</a></code> where each row of a matrix in "X" is a unique strategy and patient. All   matrices in "X" must be sorted by strategy and patient.</p></dd>
+  an object of class <code><a href='input_mats.html'>input_mats</a></code> where each row of a matrix in "X" is a unique strategy and patient. All   matrices in "X" must be sorted by strategy and patient.</p></dd>
     <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_surv_list.html'>params_surv_list</a></code>.</p></dd>
     </dl>
     
@@ -197,24 +197,24 @@
 
 <span class='co'># Summarize survival curves</span>
 <span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>quantile</span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve    p  quantile
-#&gt; 1:      1           1          1     1 0.25 0.1853085
-#&gt; 2:      1           1          1     1 0.50 0.4464862
-#&gt; 3:      1           1          1     1 0.75 0.8929725
-#&gt; 4:      1           1          1     2 0.25 0.3566287
-#&gt; 5:      1           1          1     2 0.50 0.8592686
-#&gt; 6:      1           1          1     2 0.75 1.7185371</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve   t  survival
+#&gt; 1:      1           1          1     1 0.25 0.1865669
+#&gt; 2:      1           1          1     1 0.50 0.4495183
+#&gt; 3:      1           1          1     1 0.75 0.8990365
+#&gt; 4:      1           1          1     2 0.25 0.3605537
+#&gt; 5:      1           1          1     2 0.50 0.8687255
+#&gt; 6:      1           1          1     2 0.75 1.7374511</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve   t  survival
 #&gt; 1:      1           1          1     1 0.0 1.0000000
-#&gt; 2:      1           1          1     1 0.1 0.8562055
-#&gt; 3:      1           1          1     1 0.2 0.7330878
-#&gt; 4:      1           1          1     1 0.3 0.6276738
-#&gt; 5:      1           1          1     1 0.4 0.5374177
-#&gt; 6:      1           1          1     1 0.5 0.4601400</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve t      rmst
-#&gt; 1:      1           1          1     1 2 0.6152671
-#&gt; 2:      1           1          1     1 5 0.6438694
-#&gt; 3:      1           1          1     2 2 0.9926961
-#&gt; 4:      1           1          1     2 5 1.2177021
-#&gt; 5:      1           1          1     3 2 1.2095657
-#&gt; 6:      1           1          1     3 5 1.6933896</div><div class='input'>
+#&gt; 2:      1           1          1     1 0.1 0.8571025
+#&gt; 3:      1           1          1     1 0.2 0.7346247
+#&gt; 4:      1           1          1     1 0.3 0.6296486
+#&gt; 5:      1           1          1     1 0.4 0.5396734
+#&gt; 6:      1           1          1     1 0.5 0.4625554</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve t      rmst
+#&gt; 1:      1           1          1     1 2 0.6188300
+#&gt; 2:      1           1          1     1 5 0.6482270
+#&gt; 3:      1           1          1     2 2 0.9991977
+#&gt; 4:      1           1          1     2 5 1.2301074
+#&gt; 5:      1           1          1     3 2 1.2073159
+#&gt; 6:      1           1          1     3 5 1.6877394</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

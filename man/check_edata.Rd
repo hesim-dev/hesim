@@ -2,7 +2,7 @@
 % Please edit documentation in R/input-data.R
 \name{check_edata}
 \alias{check_edata}
-\title{Check data argument for \code{create_input_data}}
+\title{Check data argument for \code{create_input_mats}}
 \usage{
 check_edata(data)
 }
@@ -14,6 +14,6 @@ check_edata(data)
 If all tests passed, returns nothing; otherwise, throws an exception.
 }
 \description{
-Check that data argument for \code{create_input_data} exists and that it is
+Check that data argument for \code{create_input_mats} exists and that it is
 of the correct type.
 }

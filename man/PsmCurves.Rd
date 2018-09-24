@@ -15,7 +15,7 @@ Summarize \code{n-1} survival curves for an \code{N} state partitioned survival 
 
 \describe{
 \item{\code{data}}{Data used to predict state values by strategy and patient. Must be 
-  an object of class \code{\link{input_data}} where each row of a matrix in "X" is a unique strategy and patient. All   matrices in "X" must be sorted by strategy and patient.}
+  an object of class \code{\link{input_mats}} where each row of a matrix in "X" is a unique strategy and patient. All   matrices in "X" must be sorted by strategy and patient.}
 
 \item{\code{params}}{An object of class \code{\link{params_surv_list}}.}
 

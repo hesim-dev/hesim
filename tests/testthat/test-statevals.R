@@ -62,11 +62,7 @@ test_that("StateVals$sim", {
   expect_equal(c(costvals_medical$data$X$mu %*% t(costvals_medical$params$coefs)),
               costvals_medical$sim(t = 2, type = "predict")$value)
   
-  # data must be of class 'input_data'
+  # data must be of class 'input_mats'
   expect_error(StateVals$new(data = 3, params = 2)$sim(t = 2)) 
-  
-  # class of 'params' is not supported
-  input_dat <- create_input_data(formula_list(~1), edat)
-  expect_error(StateVals$new(data = input_dat, params = 2)$sim(3))
 })
 

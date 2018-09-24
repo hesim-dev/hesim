@@ -22,9 +22,9 @@ create_PsmCurves <- function(object, data, n = 1000, point_estimate = FALSE,
   if (!inherits(object, c("partsurvfit"))){
     stop("'Object' must be of class 'partsurvfit'.")
   }
-  input_data <- create_input_data(object, data, id_vars = c("strategy_id", "patient_id"))
+  X <- create_input_mats(object, data, id_vars = c("strategy_id", "patient_id"))
   params <- create_params(object, n = n, point_estimate = point_estimate, bootstrap = bootstrap)
-  return(PsmCurves$new(data = input_data, params = params))
+  return(PsmCurves$new(data = X, params = params))
 }
 
 # Manual documentation in PsmCurves.Rd
@@ -83,8 +83,8 @@ PsmCurves <- R6::R6Class("PsmCurves",
     },
     
     check = function(){
-      if(!inherits(self$data, "input_data")){
-        stop("'data' must be an object of class 'input_data'",
+      if(!inherits(self$data, "input_mats")){
+        stop("'data' must be an object of class 'input_mats'",
             call. = FALSE)
       }
       if(!inherits(self$params, c("params_surv_list", 
