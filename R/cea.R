@@ -178,10 +178,10 @@ icea_pw <- function(x, k, comparator, sample = "sample", strategy = "strategy",
 
 #' Incremental treatment effect
 #'
-#' Calculate incremental effect of all treatment strategies on outcome variables from 
-#' probabilistic sensitivity analysis relative to comparator.
+#' Computes incremental effect for all treatment strategies 
+#' on outcome variables from a probabilistic sensitivity analysis relative to a comparator.
 #'
-#' @param x A \code{data.frame} or \code{data.table} containing simulation output with  
+#' @param object A \code{data.frame} or \code{data.table} containing simulation output with  
 #' information on outcome variables for each randomly sampled parameter set from
 #' a PSA. Each row should denote a randomly sampled parameter set
 #' and treatment strategy.
@@ -212,10 +212,16 @@ icea_pw <- function(x, k, comparator, sample = "sample", strategy = "strategy",
 #'                         strategy = "strategy", grp = "grp", outcomes = c("c", "e"))
 #' head(ie)
 #' @export
-incr_effect <- function(x, comparator, sample, strategy, grp, outcomes){
-  x <- data.table(x)
+incr_effect <- function(object, comparator, sample, strategy, grp = NULL, outcomes){
+  x <- data.table(object)
   if (!comparator %in% unique(x[[strategy]])){
     stop("Chosen comparator strategy not in x")
+  }
+  if (is.null(grp)){
+    grp = "grp"
+    if (!"grp" %in% colnames(x)){
+      x[, (grp) := 1] 
+    }
   }
   indx.comparator <- which(x[[strategy]] == comparator)
   indx_treat <- which(x[[strategy]] != comparator)

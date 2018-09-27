@@ -209,6 +209,7 @@ test_that("icea_pw", {
 
 # Test incr_effect function ---------------------------------------------------
 test_that("incr_effect", {
+  # Default
   delta <- incr_effect(ce, comparator = "Strategy 1", sample = "sample", 
                        strategy = "strategy", grp = "grp",
                        outcomes = c("cost", "qalys"))
@@ -218,4 +219,14 @@ test_that("incr_effect", {
   expect_equal(delta[strategy == "Strategy 2" & grp == "Group 2", icost][5], 
                ce[strategy == "Strategy 2" & grp == "Group 2", cost][5] -
                  ce[strategy == "Strategy 1" & grp == "Group 2", cost][5])
+  
+  # Without group
+  ce2 <- ce[grp == "Group 1"]
+  ce2[, grp := NULL]
+  delta <- incr_effect(ce2, comparator = "Strategy 1", sample = "sample", 
+                       strategy = "strategy",
+                       outcomes = c("cost", "qalys"))  
+  expect_equal(delta[strategy == "Strategy 2", icost][3], 
+               ce[strategy == "Strategy 2", cost][3] -
+               ce[strategy == "Strategy 1", cost][3])
 })
