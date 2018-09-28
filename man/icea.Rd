@@ -3,39 +3,57 @@
 \name{icea}
 \alias{icea}
 \alias{icea_pw}
+\alias{icea.default}
+\alias{icea_pw.default}
+\alias{icea.ce}
+\alias{icea_pw.ce}
 \title{Individualized cost-effectiveness analysis}
 \usage{
-icea(x, k, sample = "sample", strategy = "strategy", grp = "grp",
-  e = "e", c = "c")
+icea(x, ...)
 
-icea_pw(x, k, comparator, sample = "sample", strategy = "strategy",
-  grp = "grp", e = "e", c = "c")
+icea_pw(x, ...)
+
+\method{icea}{default}(x, k = seq(0, 2e+05, 500), sample, strategy,
+  grp = NULL, e, c, ...)
+
+\method{icea_pw}{default}(x, k = seq(0, 2e+05, 500), comparator, sample,
+  strategy, grp = NULL, e, c, ...)
+
+\method{icea}{ce}(x, k = seq(0, 2e+05, 500), dr, ...)
+
+\method{icea_pw}{ce}(x, k = seq(0, 2e+05, 500), comparator, dr, ...)
 }
 \arguments{
-\item{x}{A \code{data.frame} or \code{data.table} containing simulation output with
-information on mean costs and effectiveness for each randomly sampled parameter set from
-a PSA. Each row should denote a randomly sampled parameter set
+\item{x}{An object of simulation output characterizing the probability distribution
+of clinical effectiveness and costs. If the default method is used, then \code{x}
+must be a \code{data.frame} or \code{data.table} containing columns of
+mean costs and clinical effectiveness where each row denotes a randomly sampled parameter set
 and treatment strategy.}
 
-\item{k}{Vector of willingness to pay values}
+\item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{sample}{Name of column denoting a randomly sampled parameter set. Default is "sample".}
+\item{k}{Vector of willingness to pay values.}
 
-\item{strategy}{Name of column denoting treatment strategy. Default is "strategy".}
+\item{sample}{Character name of column from \code{x} denoting a randomly sampled parameter set.}
 
-\item{grp}{Name of column denoting subgroup. Default is "grp".}
+\item{strategy}{Character name of column from \code{x} denoting treatment strategy.}
 
-\item{e}{Name of column denoting clinical effectiveness. Default is "e".}
+\item{grp}{Character name of column from \code{x} denoting subgroup. If \code{NULL}, then
+it is assumed that there is only one group.}
 
-\item{c}{Name of column denoting costs. Default is "c".}
+\item{e}{Character name of column from \code{x} denoting clinical effectiveness.}
+
+\item{c}{Character name of column from \code{x} denoting costs.}
 
 \item{comparator}{Name of the comparator strategy in x.}
+
+\item{dr}{Discount rate.}
 }
 \value{
-\code{icea} returns a list containing four data.tables:
+\code{icea} returns a list containing four \code{data.table}s:
 
 \describe{
-  \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
+  \item{summary}{A \code{data.table} of the mean, 2.5\% quantile, and 97.5\% 
   quantile by strategy and group for clinical effectiveness and costs.}
   \item{mce}{The probability that each strategy is the most effective treatment
   for each group for the range of specified willingness to pay values.}
@@ -59,10 +77,10 @@ and treatment strategy.}
 }
 }
 \description{
-Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
+Conduct conducting Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
 sensitivity analysis (PSA)) by subgroup.
 \itemize{
- \item \code{icea()} compute the probability that
+ \item \code{icea()} computes the probability that
 each treatment is most cost-effective, the expected value of perfect
 information, and the net monetary benefit for each treatment.
 \item \code{icea_pw()} compares interventions to a comparator. Computed
@@ -89,7 +107,7 @@ sim <- data.frame(sample = rep(seq(n_samples), 4),
 icea_dt <- icea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
  grp = "grp", e = "e", c = "c")
 names(icea_dt)
-# the probability that each strategy is the most cost-effective 
+# The probability that each strategy is the most cost-effective 
 # in each group with a willingness to pay of 20,000
 library("data.table")
 icea_dt$mce[k == 20000]

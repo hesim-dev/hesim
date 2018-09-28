@@ -366,6 +366,14 @@ test_that("Simulate costs and QALYs", {
   ictstm$sim_qalys(by_patient = TRUE)
   ictstm$sim_costs(by_patient = TRUE)
   expect_error(ictstm$summarize(), NA)
+  
+  # Cost-effectiveness analysis
+  icea <- icea(ce_summary, dr = 0)
+  expect_true("mce" %in% names(icea))
+  
+  icea_pw <- icea_pw(ce_summary, comparator = 1, dr = 0)
+  expect_true("ceac" %in% names(icea_pw))
+  
 })
 
 ## With a joint survival model

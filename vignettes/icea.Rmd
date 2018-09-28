@@ -163,9 +163,9 @@ library("ggplot2")
 library("scales")
 theme_set(theme_bw())
 ggplot2::ggplot(icea_dt$mce, aes(x = k, y = prob, col = factor(strategy))) +
-  geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
+  geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
-  scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
+  scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy")
 ```
 
@@ -203,9 +203,9 @@ The `icea` function performs this same calculation across all simulation draws f
 
 ```{r evpi_plot}
 ggplot2::ggplot(icea_dt$evpi, aes(x = k, y = evpi)) +
-  geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
+  geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Expected value of perfect information") +
-  scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
+  scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
   scale_y_continuous(label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy")
 ```
@@ -226,7 +226,7 @@ evpi <- merge(evpi, w_dt, by = "grp")
 totevpi <- evpi[,lapply(.SD, weighted.mean, w = w),
                 by = "k", .SDcols = c("evpi")]
 ggplot2::ggplot(totevpi, aes(x = k, y = evpi)) +
-  geom_line() + xlab("Willingess to pay") +
+  geom_line() + xlab("Willingness to pay") +
   ylab("Total EVPI") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
   scale_y_continuous(label = scales::dollar) +
@@ -274,9 +274,9 @@ The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 w
 
 ```{r ceac_plot}
 ggplot2::ggplot(icea_pw_dt$ceac, aes(x = k, y = prob, col = factor(strategy))) +
-  geom_line() + facet_wrap(~grp) + xlab("Willingess to pay") +
+  geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
-  scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
+  scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy")
 ```
 

@@ -34,9 +34,9 @@
   
 <meta property="og:title" content="Individualized cost-effectiveness analysis — icea" />
 
-<meta property="og:description" content="Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
+<meta property="og:description" content="Conduct conducting Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
 sensitivity analysis (PSA)) by subgroup.
-icea() compute the probability that
+icea() computes the probability that
 each treatment is most cost-effective, the expected value of perfect
 information, and the net monetary benefit for each treatment.
 icea_pw() compares interventions to a comparator. Computed
@@ -130,9 +130,9 @@ and output for a cost-effectiveness acceptability curve.
 
     <div class="ref-description">
     
-    <p>Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
+    <p>Conduct conducting Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
 sensitivity analysis (PSA)) by subgroup.</p><ul>
-<li><p><code>icea()</code> compute the probability that
+<li><p><code>icea()</code> computes the probability that
 each treatment is most cost-effective, the expected value of perfect
 information, and the net monetary benefit for each treatment.</p></li>
 <li><p><code>icea_pw()</code> compares interventions to a comparator. Computed
@@ -143,57 +143,79 @@ and output for a cost-effectiveness acceptability curve.</p></li>
     
     </div>
 
-    <pre class="usage"><span class='fu'>icea</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
-  <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
+    <pre class="usage"><span class='fu'>icea</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='no'>k</span>, <span class='no'>comparator</span>, <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
-  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)</pre>
+<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>icea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>sample</span>, <span class='no'>strategy</span>,
+  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>e</span>, <span class='no'>c</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>comparator</span>, <span class='no'>sample</span>,
+  <span class='no'>strategy</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>e</span>, <span class='no'>c</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for ce</span>
+<span class='fu'>icea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>dr</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for ce</span>
+<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>comparator</span>, <span class='no'>dr</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A <code>data.frame</code> or <code>data.table</code> containing simulation output with
-information on mean costs and effectiveness for each randomly sampled parameter set from
-a PSA. Each row should denote a randomly sampled parameter set
+      <td><p>An object of simulation output characterizing the probability distribution
+of clinical effectiveness and costs. If the default method is used, then <code>x</code>
+must be a <code>data.frame</code> or <code>data.table</code> containing columns of
+mean costs and clinical effectiveness where each row denotes a randomly sampled parameter set
 and treatment strategy.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
+    </tr>
+    <tr>
       <th>k</th>
-      <td><p>Vector of willingness to pay values</p></td>
+      <td><p>Vector of willingness to pay values.</p></td>
     </tr>
     <tr>
       <th>sample</th>
-      <td><p>Name of column denoting a randomly sampled parameter set. Default is "sample".</p></td>
+      <td><p>Character name of column from <code>x</code> denoting a randomly sampled parameter set.</p></td>
     </tr>
     <tr>
       <th>strategy</th>
-      <td><p>Name of column denoting treatment strategy. Default is "strategy".</p></td>
+      <td><p>Character name of column from <code>x</code> denoting treatment strategy.</p></td>
     </tr>
     <tr>
       <th>grp</th>
-      <td><p>Name of column denoting subgroup. Default is "grp".</p></td>
+      <td><p>Character name of column from <code>x</code> denoting subgroup. If <code>NULL</code>, then
+it is assumed that there is only one group.</p></td>
     </tr>
     <tr>
       <th>e</th>
-      <td><p>Name of column denoting clinical effectiveness. Default is "e".</p></td>
+      <td><p>Character name of column from <code>x</code> denoting clinical effectiveness.</p></td>
     </tr>
     <tr>
       <th>c</th>
-      <td><p>Name of column denoting costs. Default is "c".</p></td>
+      <td><p>Character name of column from <code>x</code> denoting costs.</p></td>
     </tr>
     <tr>
       <th>comparator</th>
       <td><p>Name of the comparator strategy in x.</p></td>
     </tr>
+    <tr>
+      <th>dr</th>
+      <td><p>Discount rate.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>icea</code> returns a list containing four data.tables:</p>
+    <p><code>icea</code> returns a list containing four <code>data.table</code>s:</p>
 <dl class='dl-horizontal'>
-  <dt>summary</dt><dd><p>A data.table of the mean, 2.5% quantile, and 97.5% 
+  <dt>summary</dt><dd><p>A <code>data.table</code> of the mean, 2.5% quantile, and 97.5% 
   quantile by strategy and group for clinical effectiveness and costs.</p></dd>
   <dt>mce</dt><dd><p>The probability that each strategy is the most effective treatment
   for each group for the range of specified willingness to pay values.</p></dd>
@@ -234,24 +256,25 @@ and treatment strategy.</p></td>
 <span class='co'># icea</span>
 <span class='no'>icea_dt</span> <span class='kw'>&lt;-</span> <span class='fu'>icea</span>(<span class='no'>sim</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
-<span class='fu'>names</span>(<span class='no'>icea_dt</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'><span class='co'># the probability that each strategy is the most cost-effective </span>
+<span class='fu'>names</span>(<span class='no'>icea_dt</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'><span class='co'># The probability that each strategy is the most cost-effective </span>
 <span class='co'># in each group with a willingness to pay of 20,000</span>
-<span class='fu'>library</span>(<span class='st'>"data.table"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package ‘data.table’ was built under R version 3.4.4</span></div><div class='input'><span class='no'>icea_dt</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp prob
-#&gt; 1: 20000 Strategy 1 Group 1 0.46
-#&gt; 2: 20000 Strategy 2 Group 1 0.54
-#&gt; 3: 20000 Strategy 1 Group 2 0.49
-#&gt; 4: 20000 Strategy 2 Group 2 0.51</div><div class='input'>
+<span class='fu'>library</span>(<span class='st'>"data.table"</span>)
+<span class='no'>icea_dt</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp prob
+#&gt; 1: 20000 Strategy 1 Group 1 0.51
+#&gt; 2: 20000 Strategy 2 Group 1 0.49
+#&gt; 3: 20000 Strategy 1 Group 2 0.46
+#&gt; 4: 20000 Strategy 2 Group 2 0.54</div><div class='input'>
 <span class='co'># icea_pw</span>
 <span class='no'>icea_pw_dt</span> <span class='kw'>&lt;-</span>  <span class='fu'>icea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
                        <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
 <span class='fu'>names</span>(<span class='no'>icea_pw_dt</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
 <span class='fu'>head</span>(<span class='no'>icea_pw_dt</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k   strategy     grp prob
-#&gt; 1: 20000 Strategy 2 Group 1 0.54
-#&gt; 2: 20000 Strategy 2 Group 2 0.51
-#&gt; 3: 20500 Strategy 2 Group 1 0.56
-#&gt; 4: 20500 Strategy 2 Group 2 0.55
-#&gt; 5: 21000 Strategy 2 Group 1 0.61
-#&gt; 6: 21000 Strategy 2 Group 2 0.59</div></pre>
+#&gt; 1: 20000 Strategy 2 Group 1 0.49
+#&gt; 2: 20000 Strategy 2 Group 2 0.54
+#&gt; 3: 20500 Strategy 2 Group 1 0.52
+#&gt; 4: 20500 Strategy 2 Group 2 0.57
+#&gt; 5: 21000 Strategy 2 Group 1 0.54
+#&gt; 6: 21000 Strategy 2 Group 2 0.62</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

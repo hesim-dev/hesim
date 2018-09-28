@@ -36,10 +36,10 @@ NULL
 
 #' Individualized cost-effectiveness analysis
 #'
-#' Conduct Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
+#' Conduct conducting Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
 #' sensitivity analysis (PSA)) by subgroup.
 #' \itemize{
-#'  \item \code{icea()} compute the probability that
+#'  \item \code{icea()} computes the probability that
 #' each treatment is most cost-effective, the expected value of perfect
 #' information, and the net monetary benefit for each treatment.
 #' \item \code{icea_pw()} compares interventions to a comparator. Computed
@@ -49,21 +49,24 @@ NULL
 #' }
 #'  
 #'
-#' @param x A \code{data.frame} or \code{data.table} containing simulation output with  
-#' information on mean costs and effectiveness for each randomly sampled parameter set from
-#' a PSA. Each row should denote a randomly sampled parameter set
+#' @param x An object of simulation output characterizing the probability distribution
+#' of clinical effectiveness and costs. If the default method is used, then \code{x}
+#' must be a \code{data.frame} or \code{data.table} containing columns of
+#' mean costs and clinical effectiveness where each row denotes a randomly sampled parameter set
 #' and treatment strategy.
-#' @param k Vector of willingness to pay values
+#' @param k Vector of willingness to pay values.
 #' @param comparator Name of the comparator strategy in x.
-#' @param sample Name of column denoting a randomly sampled parameter set. Default is "sample".
-#' @param strategy Name of column denoting treatment strategy. Default is "strategy".
-#' @param grp Name of column denoting subgroup. Default is "grp".
-#' @param e Name of column denoting clinical effectiveness. Default is "e".
-#' @param c Name of column denoting costs. Default is "c".
-#' @return \code{icea} returns a list containing four data.tables:
+#' @param sample Character name of column from \code{x} denoting a randomly sampled parameter set.
+#' @param strategy Character name of column from \code{x} denoting treatment strategy.
+#' @param grp Character name of column from \code{x} denoting subgroup. If \code{NULL}, then
+#' it is assumed that there is only one group.
+#' @param e Character name of column from \code{x} denoting clinical effectiveness.
+#' @param c Character name of column from \code{x} denoting costs.
+#' @param ... Further arguments passed to or from other methods. Currently unused.
+#' @return \code{icea} returns a list containing four \code{data.table}s:
 #' 
 #' \describe{
-#'   \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
+#'   \item{summary}{A \code{data.table} of the mean, 2.5\% quantile, and 97.5\% 
 #'   quantile by strategy and group for clinical effectiveness and costs.}
 #'   \item{mce}{The probability that each strategy is the most effective treatment
 #'   for each group for the range of specified willingness to pay values.}
@@ -104,7 +107,7 @@ NULL
 #' icea_dt <- icea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
 #'  grp = "grp", e = "e", c = "c")
 #' names(icea_dt)
-#' # the probability that each strategy is the most cost-effective 
+#' # The probability that each strategy is the most cost-effective 
 #' # in each group with a willingness to pay of 20,000
 #' library("data.table")
 #' icea_dt$mce[k == 20000]
@@ -116,11 +119,34 @@ NULL
 #' # cost-effectiveness acceptability curve
 #' head(icea_pw_dt$ceac[k >= 20000])
 #' @export
-icea <- function(x, k, sample = "sample", strategy = "strategy", grp = "grp", e = "e", c = "c"){
+icea <- function(x, ...) {
+  UseMethod("icea")
+}
+
+#' @export
+#' @rdname icea
+icea_pw <- function(x, ...) {
+  UseMethod("icea_pw")
+}
+
+check_grp <- function(x, grp){
+  if (is.null(grp)){
+    grp <- "grp"
+    if (!"grp" %in% colnames(x)){
+      x[, (grp) := 1] 
+    }
+  }
+  return(grp)
+}
+
+#' @export
+#' @rdname icea
+icea.default <- function(x, k = seq(0, 200000, 500), sample, strategy, 
+                         grp = NULL, e, c, ...){
   if (!is.data.table(x)){
     x <- data.table(x)
   }
-
+  grp <- check_grp(x, grp)
   n_samples <- length(unique(x[[sample]]))
   n_strategies <- length(unique(x[[strategy]]))
   n_grps <- length(unique(x[[grp]]))
@@ -143,20 +169,23 @@ icea <- function(x, k, sample = "sample", strategy = "strategy", grp = "grp", e 
 
 #' @export
 #' @rdname icea
-icea_pw <- function(x, k, comparator, sample = "sample", strategy = "strategy", 
-                    grp = "grp", e = "e", c = "c"){
+icea_pw.default <- function(x, k = seq(0, 200000, 500), comparator, 
+                            sample, strategy, 
+                            grp = NULL, e, c, ...){
   if (!is.data.table(x)){
     x <- data.table(x)
   }
+  grp <-check_grp(x, grp)
   setorderv(x, c(grp, strategy, sample))
   if (!comparator %in% unique(x[[strategy]])){
-    stop("Chosen comparator strategy is not in x")
+    stop("Chosen comparator strategy is not in 'x'.",
+         call. = FALSE)
   }
 
   # treatment strategies vs comparators
-  indx.comparator <- which(x[[strategy]] == comparator)
+  indx_comparator <- which(x[[strategy]] == comparator)
   indx_treat <- which(x[[strategy]] != comparator)
-  sim_comparator <- x[indx.comparator]
+  sim_comparator <- x[indx_comparator]
   sim_treat <- x[indx_treat]
   n_strategies <- length(unique(sim_treat[[strategy]]))
   n_samples <- length(unique(sim_treat[[sample]]))
@@ -176,21 +205,52 @@ icea_pw <- function(x, k, comparator, sample = "sample", strategy = "strategy",
   return(l)
 }
 
+#' @export
+#' @rdname icea
+#' @param dr Discount rate.
+icea.ce <- function(x, k = seq(0, 200000, 500), dr, ...){
+  category <- NULL
+  dr_env <- dr
+  sim <- cbind(x$costs[category == "total" & dr == dr_env,
+                       c("sample", "strategy_id", "costs")],
+               x$qalys[dr == dr_env, "qalys", with = FALSE])
+  res <- icea(sim, k = k, sample = "sample", strategy = "strategy_id",
+              e = "qalys", c = "costs")
+  return(res)
+}
+
+#' @export
+#' @rdname icea
+icea_pw.ce <- function(x, k = seq(0, 200000, 500), comparator, dr, ...){
+  category <- NULL
+  dr_env <- dr
+  sim <- cbind(x$costs[category == "total" & dr == dr_env,
+                       c("sample", "strategy_id", "costs")],
+               x$qalys[dr == dr_env, "qalys", with = FALSE])
+  res <- icea_pw(sim, k = k, comparator = comparator, sample = "sample",
+                 strategy = "strategy_id",
+                 e = "qalys", c = "costs")
+  return(res)
+}
+
 #' Incremental treatment effect
 #'
 #' Computes incremental effect for all treatment strategies 
 #' on outcome variables from a probabilistic sensitivity analysis relative to a comparator.
 #'
-#' @param object A \code{data.frame} or \code{data.table} containing simulation output with  
+#' @param x A \code{data.frame} or \code{data.table} containing simulation output with  
 #' information on outcome variables for each randomly sampled parameter set from
 #' a PSA. Each row should denote a randomly sampled parameter set
 #' and treatment strategy.
-#' @param comparator Name of comparator strategy.
-#' @param sample Name of column denoting a randomly sampled parameter set.
-#' @param strategy Name of column denoting treatment strategy.
-#' @param grp Name of column denoting subgroup.
-#' @param outcomes Name of columns to calculate incremental changes for.
-#' @return A data.table containing the differences in the values of each variable 
+#' @param comparator The comparator strategy. If the strategy column is a character
+#' variable, then must be a character; if the strategy column is an integer variable,
+#' then must be an integer.
+#' @param sample Character name of column denoting a randomly sampled parameter set.
+#' @param strategy Character name of column denoting treatment strategy.
+#' @param grp Character name of column denoting subgroup. If \code{NULL}, then
+#' it is assumed that there is only one group.
+#' @param outcomes Name of columns to compute incremental changes for.
+#' @return A \code{data.table} containing the differences in the values of each variable 
 #' specified in outcomes between each treatment strategy and the 
 #' comparator. It is the same output from \code{delta} generated by \code{\link{icea_pw}}.
 #'
@@ -212,8 +272,8 @@ icea_pw <- function(x, k, comparator, sample = "sample", strategy = "strategy",
 #'                         strategy = "strategy", grp = "grp", outcomes = c("c", "e"))
 #' head(ie)
 #' @export
-incr_effect <- function(object, comparator, sample, strategy, grp = NULL, outcomes){
-  x <- data.table(object)
+incr_effect <- function(x, comparator, sample, strategy, grp = NULL, outcomes){
+  x <- data.table(x)
   if (!comparator %in% unique(x[[strategy]])){
     stop("Chosen comparator strategy not in x")
   }
@@ -223,9 +283,9 @@ incr_effect <- function(object, comparator, sample, strategy, grp = NULL, outcom
       x[, (grp) := 1] 
     }
   }
-  indx.comparator <- which(x[[strategy]] == comparator)
+  indx_comparator <- which(x[[strategy]] == comparator)
   indx_treat <- which(x[[strategy]] != comparator)
-  x_comparator <- x[indx.comparator]
+  x_comparator <- x[indx_comparator]
   x_treat <- x[indx_treat]
   n_strategies <- length(unique(x_treat[[strategy]]))
   n_samples <- length(unique(x_treat[[sample]]))
