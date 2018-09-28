@@ -207,7 +207,7 @@ ggplot2::ggplot(icea_dt$evpi, aes(x = k, y = evpi)) +
   ylab("Expected value of perfect information") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
   scale_y_continuous(label = scales::dollar) +
-  theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy")
+  theme(legend.position = "bottom") 
 ```
 
 We might also be interested in aggregating across subgroups. In particular, the total EVPI can be calculated as a weighted average of the group specific EVPIs,
@@ -228,9 +228,9 @@ totevpi <- evpi[,lapply(.SD, weighted.mean, w = w),
 ggplot2::ggplot(totevpi, aes(x = k, y = evpi)) +
   geom_line() + xlab("Willingness to pay") +
   ylab("Total EVPI") +
-  scale_x_continuous(breaks = seq(0, ktop, 100000), label = comma) +
+  scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
   scale_y_continuous(label = scales::dollar) +
-  theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy")
+  theme(legend.position = "bottom") 
 ```
 
 
