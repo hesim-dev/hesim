@@ -9,7 +9,7 @@ vignette: >
 bibliography: references.bib
 ---
 
-## Overview
+## Overview 
 Individualized cost-effectiveness analysis (iCEA) evaluates the cost-effectiveness of treatments at the individual (or subgroup) level. This has two major implications:
 
 * Optimal treatments will vary across patients.
@@ -71,7 +71,7 @@ $$
 
 Below we simulate costs and QALYs for three treatment strategies and two subgroups (in a real world analysis, this output would be derived from a detailed health-economic simulation model). Strategy 1 is the current standard of care; it is the cheapest therapy, but also the least efficacious. Strategies 2 and 3 are equally costly, but Strategy 2 is more effective in subgroup 1 while Strategy 3 is more effective in subgroup 2. 
 
-```{r ce_output, warnings = FALSE, message = FALSE}
+```{r ce_output, warning = FALSE, message = FALSE}
 set.seed(131)
 n_samples <- 1000
 
@@ -122,7 +122,7 @@ We can use the  `icea` function to summarize results from our `data.table` objec
 ```{r icea}
 library("hesim")
 ktop <- 200000
-icea_dt <-  icea(ce, k = seq(0, ktop, 500), sample = "sample", strategy = "strategy",
+icea <-  icea(ce, k = seq(0, ktop, 500), sample = "sample", strategy = "strategy",
                  grp = "grp", e = "qalys", c = "cost")
 ```
 
@@ -131,7 +131,7 @@ The most important input in `icea` is the `data.table` object (`x`) containing c
 Likewise, we can use `icea_pw` to summarize the PSA when directly comparing the two treatment strategies (Strategy 2 and Strategy 3) to the comparator (Strategy 1). 
 
 ```{r icea_pw}
-icea_pw_dt <-  icea_pw(ce,  k = seq(0, ktop, 500), comparator = "Strategy 1",
+icea_pw <-  icea_pw(ce,  k = seq(0, ktop, 500), comparator = "Strategy 1",
                        sample = "sample", strategy = "strategy", e = "qalys", c = "cost")
 ```
 
@@ -162,7 +162,7 @@ In this example, treatments 1, 2, and 3 have the highest NMBs a fraction `r mce[
 library("ggplot2")
 library("scales")
 theme_set(theme_bw())
-ggplot2::ggplot(icea_dt$mce, aes(x = k, y = prob, col = factor(strategy))) +
+ggplot2::ggplot(icea$mce, aes(x = k, y = prob, col = factor(strategy))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
@@ -202,7 +202,7 @@ print(enmbpi - enmbci)
 The `icea` function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal strategy changes.
 
 ```{r evpi_plot}
-ggplot2::ggplot(icea_dt$evpi, aes(x = k, y = evpi)) +
+ggplot2::ggplot(icea$evpi, aes(x = k, y = evpi)) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Expected value of perfect information") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
@@ -221,7 +221,7 @@ where $w_g \in (0, 1)$ is a weight denoting that proportion of the population re
 
 ```{r totevpi}
 w_dt <- data.table(grp = paste0("Group ", seq(1, 2)), w = c(0.25, .75))
-evpi <- icea_dt$evpi
+evpi <- icea$evpi
 evpi <- merge(evpi, w_dt, by = "grp")
 totevpi <- evpi[,lapply(.SD, weighted.mean, w = w),
                 by = "k", .SDcols = c("evpi")]
@@ -238,7 +238,7 @@ ggplot2::ggplot(totevpi, aes(x = k, y = evpi)) +
 `icea` produces means, 2.5\% quantiles, and 97.5\% quantiles for costs and efficacy. 
 
 ```{r icea_summary}
-print(icea_dt$summary)
+print(icea$summary)
 ```
 
 Other summary statistics can be computed using R packages such as `data.table`.
@@ -254,10 +254,10 @@ The cost-effectiveness plane plots the incremental effectiveness of a treatment 
 Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `icea_pw` function, which, for each sampled parameter set and treatment strategy, estimates differences in costs, effectiveness, and any other variables specified in `custom_vars`relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above it are not. 
 
 ```{r ceplane_plot}
-head(icea_pw_dt$delta)
-ylim <- max(icea_pw_dt$delta[, ic]) * 1.1
-xlim <- ceiling(max(icea_pw_dt$delta[, ie]) * 1.1)
-ggplot2::ggplot(icea_pw_dt$delta, aes(x = ie, y = ic, col = factor(strategy))) + 
+head(icea_pw$delta)
+ylim <- max(icea_pw$delta[, ic]) * 1.1
+xlim <- ceiling(max(icea_pw$delta[, ie]) * 1.1)
+ggplot2::ggplot(icea_pw$delta, aes(x = ie, y = ic, col = factor(strategy))) + 
   geom_jitter(size = .5) + facet_wrap(~grp) + 
   xlab("Incremental QALYs") + ylab("Incremental cost") +
   scale_y_continuous(label = dollar, limits = c(-ylim, ylim)) +
@@ -270,10 +270,10 @@ ggplot2::ggplot(icea_pw_dt$delta, aes(x = ie, y = ic, col = factor(strategy))) +
 ### Cost-effectiveness acceptability curve (CEAC)
 The cost-effectiveness acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each strategy to a single comparator whereas the MCE plot considers all strategies simultaneously. Output to produce a CEAC is generated from the `icea_pw` function.
 
-The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of $k$. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(icea_pw_dt$ceac[strategy == "Strategy 3" & prob > .5 & grp ==  "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of $k$, although this probability is larger for Strategy 2 than Strategy 3 when $k$ is smaller.
+The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of $k$. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(icea_pw$ceac[strategy == "Strategy 3" & prob > .5 & grp ==  "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of $k$, although this probability is larger for Strategy 2 than Strategy 3 when $k$ is smaller.
 
 ```{r ceac_plot}
-ggplot2::ggplot(icea_pw_dt$ceac, aes(x = k, y = prob, col = factor(strategy))) +
+ggplot2::ggplot(icea_pw$ceac, aes(x = k, y = prob, col = factor(strategy))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
@@ -284,7 +284,7 @@ ggplot2::ggplot(icea_pw_dt$ceac, aes(x = k, y = prob, col = factor(strategy))) +
 Similar to the `icea` function, `icea_pw` produces means, 2.5\% quantiles, and 97.5\% quantiles for incremental costs and incremental efficacy. The table also contains the ICER, which is equal to expected incremental costs divided by the measure of expected incremental efficacy.  
 
 ```{r icer}
-print(icea_pw_dt$summary)
+print(icea_pw$summary)
 ```
 
 Again similar to the `icea` function, the user can also estimate incremental effects for outcome variables not included in the summary table.
