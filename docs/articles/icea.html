@@ -204,7 +204,8 @@ icea &lt;-<span class="st">  </span><span class="kw"><a href="../reference/icea.
 <p>The most important input in <code>icea</code> is the <code>data.table</code> object (<code>x</code>) containing columns for simulation number (<code>sim</code>), treatment strategy (<code>strategy</code>), subgroup (<code>grp</code>), clinical effectiveness (<code>e</code>), and costs (<code>c</code>). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is <span class="math inline">\(k\)</span>, which is a range of willingness to pay values to use for estimating NMBs.</p>
 <p>Likewise, we can use <code>icea_pw</code> to summarize the PSA when directly comparing the two treatment strategies (Strategy 2 and Strategy 3) to the comparator (Strategy 1).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icea_pw &lt;-<span class="st">  </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce,  <span class="dt">k =</span> <span class="kw">seq</span>(<span class="dv">0</span>, ktop, <span class="dv">500</span>), <span class="dt">comparator =</span> <span class="st">"Strategy 1"</span>,
-                       <span class="dt">sample =</span> <span class="st">"sample"</span>, <span class="dt">strategy =</span> <span class="st">"strategy"</span>, <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>)</code></pre></div>
+                       <span class="dt">sample =</span> <span class="st">"sample"</span>, <span class="dt">strategy =</span> <span class="st">"strategy"</span>, <span class="dt">grp =</span> <span class="st">"grp"</span>,
+                    <span class="dt">e =</span> <span class="st">"qalys"</span>, <span class="dt">c =</span> <span class="st">"cost"</span>)</code></pre></div>
 <p>The same inputs are used as in <code>icea</code> except users must specify the name of the comparator strategy.</p>
 <div id="probability-most-cost-effective" class="section level3">
 <h3 class="hasAnchor">
@@ -756,10 +757,10 @@ ggplot2<span class="op">::</span><span class="kw"><a href="http://www.rdocumenta
    by =<span class="st"> </span><span class="kw">c</span>(<span class="st">"strategy"</span>, <span class="st">"grp"</span>)]</code></pre></div>
 <pre><code>##      strategy     grp  median_cost median_qalys
 ## 1: Strategy 1 Group 1     7.389074     8.007106
-## 2: Strategy 2 Group 1 59631.933760    10.046966
-## 3: Strategy 3 Group 1 60437.497004     8.504607
-## 4: Strategy 1 Group 2     7.336006     8.007338
-## 5: Strategy 2 Group 2 60164.995846    10.462405
+## 2: Strategy 1 Group 2     7.336006     8.007338
+## 3: Strategy 2 Group 1 59631.933760    10.046966
+## 4: Strategy 2 Group 2 60164.995846    10.462405
+## 5: Strategy 3 Group 1 60437.497004     8.504607
 ## 6: Strategy 3 Group 2 59557.552101    11.006864</code></pre>
 </div>
 <div id="cost-effectiveness-plane" class="section level3">

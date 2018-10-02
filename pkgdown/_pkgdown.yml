@@ -52,6 +52,7 @@ reference:
       - icea
       - icea_pw
       - incr_effect
+      - icer_tbl
   - title: "Datasets"
     contents:
     - psm4_exdata

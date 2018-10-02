@@ -104,20 +104,22 @@ NULL
 #')
 #'
 #' # icea
-#' icea_dt <- icea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
-#'  grp = "grp", e = "e", c = "c")
-#' names(icea_dt)
+#' icea <- icea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
+#'              grp = "grp", e = "e", c = "c")
+#' names(icea)
 #' # The probability that each strategy is the most cost-effective 
 #' # in each group with a willingness to pay of 20,000
 #' library("data.table")
-#' icea_dt$mce[k == 20000]
+#' icea$mce[k == 20000]
 #' 
 #' # icea_pw
-#' icea_pw_dt <-  icea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
-#'                        sample = "sample", strategy = "strategy", e = "e", c = "c")
-#' names(icea_pw_dt)
+#' icea_pw <-  icea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
+#'                     sample = "sample", strategy = "strategy", grp = "grp",
+#'                      e = "e", c = "c")
+#' names(icea_pw)
 #' # cost-effectiveness acceptability curve
-#' head(icea_pw_dt$ceac[k >= 20000])
+#' head(icea_pw$ceac[k >= 20000])
+#' icer_tbl(icea_pw)
 #' @export
 icea <- function(x, ...) {
   UseMethod("icea")
@@ -132,10 +134,11 @@ icea_pw <- function(x, ...) {
 check_grp <- function(x, grp){
   if (is.null(grp)){
     grp <- "grp"
-    if (!"grp" %in% colnames(x)){
-      x[, (grp) := 1] 
+    if ("grp" %in% colnames(x)){
+      x[, ("grp") := NULL]
     }
-  }
+    x[, (grp) := "1"] 
+  } 
   return(grp)
 }
 
@@ -146,6 +149,7 @@ icea.default <- function(x, k = seq(0, 200000, 500), sample, strategy,
   if (!is.data.table(x)){
     x <- data.table(x)
   }
+  x <- copy(x)
   grp <- check_grp(x, grp)
   n_samples <- length(unique(x[[sample]]))
   n_strategies <- length(unique(x[[strategy]]))
@@ -164,6 +168,9 @@ icea.default <- function(x, k = seq(0, 200000, 500), sample, strategy,
              paste0("c", c("_mean", "_lower", "_upper")))
 )
   l <- list(summary = summary_table, mce = mce, evpi = evpi, nmb = nmb)
+  class(l) <- "icea"
+  attr(l, "strategy") <- strategy
+  attr(l, "grp") <- grp  
   return(l)
 }
 
@@ -174,8 +181,9 @@ icea_pw.default <- function(x, k = seq(0, 200000, 500), comparator,
                             grp = NULL, e, c, ...){
   if (!is.data.table(x)){
     x <- data.table(x)
-  }
-  grp <-check_grp(x, grp)
+  } 
+  x <- copy(x)
+  grp <- check_grp(x, grp)
   setorderv(x, c(grp, strategy, sample))
   if (!comparator %in% unique(x[[strategy]])){
     stop("Chosen comparator strategy is not in 'x'.",
@@ -202,6 +210,16 @@ icea_pw.default <- function(x, k = seq(0, 200000, 500), comparator,
   inmb <- inmb_summary(delta, k, strategy, grp, e = "ie", c = "ic")
   summary_table <- cea_table(delta, strategy, grp, e = "ie", c = "ic", icer = TRUE)
   l <- list(summary = summary_table, delta = delta, ceac = ceac, inmb = inmb)
+  class(l) <- "icea_pw"
+  attr(l, "strategy") <- strategy
+  attr(l, "grp") <- grp
+  attr(l, "comparator") <- comparator
+  if (is.factor(x$strategy)){
+    comp_pos <- which(levels(x$strategy) == comparator)
+  } else {
+    comp_pos <- which(sort(unique(x$strategy)) == comparator)
+  }
+  attr(l, "comparator_pos") <- comp_pos  
   return(l)
 }
 
@@ -401,4 +419,170 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
   }
   return(ret)
 }
+
+format_costs <- function(x, digits){
+  formatC(x, format = "f", digits = digits, big.mark = ",")
+}
+
+format_qalys <- function(x, digits){
+  formatC(x, format = "f", digits = digits)
+}
+
+format_cri <- function(est, lower, upper, costs = TRUE, digits){
+  if (costs){
+    lower <- format_costs(lower, digits = digits)
+    upper <- format_costs(upper, digits = digits)
+  } else{
+    lower <- format_qalys(lower, digits = digits)
+    upper <- format_qalys(upper, digits = digits)
+  }
+  paste0(est, " (",lower, ", ", upper, ")")
+}
+
+#' ICER table
+#'
+#' Generate a table of incremental cost-effectiveness ratios given output from 
+#' \code{\link{icea_pw}}.
+#'
+#' @param x An object of class "icea_pw" returned by \code{\link{icea_pw}}.
+#' @param k Willingness to pay.
+#' @param cri If \code{TRUE}, credible intervals are computed; otherwise 
+#' they are not.
+#' @param prob A numeric scalar in the interval \code{(0,1)} giving the credible interval.
+#' Default is 0.95 for a 95 percent credible interval. 
+#' @param digits_qalys Number of digits to use to report QALYs.
+#' @param digits_costs Number of digits to use to report costs.
+#' @param output Should output be a \code{data.table} or a list of matrices for
+#' each group.
+#' @param rownames Row names for matrices when \code{output = "matrix"}.
+#' @param colnames Column names for matrices when \code{output = "matrix"}.
+#' @param drop If \code{TRUE}, then the result is coerced to the lowest possible dimension. 
+#' Relevant if \code{output = "matrix"} and there is one group, in which case a single
+#' matrix will be returned if \code{drop = TRUE} and a list of length 1 will be returned
+#' if \code{drop = FALSE}.
+#' @seealso \code{\link{icea_pw}}
+#' @return If \code{output = "matrix"}, then a list of matrices (or a matrix if
+#' \code{drop = TRUE}) reporting incremental cost-effectiveness ratios (ICERs)
+#' by group. Specifically, each matrix contains five rows for: (i) 
+#' incremental quality-adjusted life-years (QALYs), (ii) incremental costs,
+#' (iii) the incremental net monetary benefit (NMB), (iv) the ICER, 
+#' and (v) a conclusion stating whether each strategy is cost-effective relative
+#'  to a comparator. The number of columns is equal to the
+#' number of strategies (including the comparator).
+#' 
+#' If \code{output = "data.table"}, then the results are reported as a \code{data.table},
+#' with one row for each strategy and group combination.
+#' @export
+icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95, 
+                     digits_qalys = 2, 
+                     digits_costs = 0, output = c("matrix", "data.table"),
+                     rownames = NULL, colnames = NULL,
+                     drop = TRUE){
+  if (!inherits(x, "icea_pw")){
+    stop("'x' must be an object of class 'icea_pw'",
+         call. = FALSE)
+  }
+  if (prob > 1 | prob < 0){
+    stop("'prob' must be in the interval (0,1)",
+         call. = FALSE)
+  }
+  
+  strategy <- attributes(x)$strategy
+  grp <- attributes(x)$grp
+  output <- match.arg(output)
+  tbl <- copy(x$summary)
+  tbl[, "inmb" := k * get("ie_mean") - get("ic_mean")]
+  
+  # Formatting
+  tbl[, "iqalys" := format_qalys(get("ie_mean"), digits = digits_qalys)]
+  tbl[, "icosts" := format_costs(get("ic_mean"), digits = digits_costs)]
+  tbl[, "icer" := format_costs(get("icer"), digits = digits_costs)]
+  tbl[, "inmb" := format_costs(get("inmb"), digits = digits_costs)]
+  
+  if(cri){
+    prob_lower <- (1 - prob)/2
+    prob_upper <- 1 - prob_lower
+    x$delta[, "inmb" := k * get("ie") - get("ic")]
+    if (prob == 0.95){
+      tbl[, "iqalys" := format_cri(get("iqalys"), get("ie_lower"), get("ie_upper"), 
+                                   costs = FALSE,
+                                  digits = digits_qalys)]
+      tbl[, "icosts" := format_cri(get("icosts"), get("ic_lower"), get("ic_upper"),
+                                 costs = TRUE,
+                                  digits = digits_costs)]
+      inmb_dt <- x$delta[, list(mean = mean(get("inmb")),
+                          lower = stats::quantile(get("inmb"), prob_lower),
+                          upper = stats::quantile(get("inmb"), prob_upper)),
+                      by = c(strategy, grp)]
+      tbl[, "inmb" := format_cri(get("inmb"), inmb_dt$lower, inmb_dt$upper,
+                                 costs = TRUE,
+                                digits = digits_costs)]
+    } else {
+      cri_dt <- x$delta[, list(iqalys_lower = stats::quantile(get("ie"), prob_lower),
+                               iqalys_upper = stats::quantile(get("ie"), prob_upper),
+                               icosts_lower = stats::quantile(get("ic"), prob_lower),
+                               icosts_upper = stats::quantile(get("ic"), prob_upper),
+                               inmb_lower = stats::quantile(get("inmb"), prob_lower),
+                               inmb_upper = stats::quantile(get("inmb"), prob_upper)),
+                      by = c(strategy, grp)]
+      tbl[, "iqalys" := format_cri(get("iqalys"), cri_dt$iqalys_lower, 
+                                 cri_dt$iqalys_upper, costs = FALSE,
+                                  digits = digits_qalys)]
+      tbl[, "icosts" := format_cri(get("icosts"), cri_dt$icosts_lower, 
+                                 cri_dt$icosts_upper, costs = TRUE,
+                                  digits = digits_costs)]      
+      tbl[, "inmb" := format_cri(get("inmb"), cri_dt$inmb_lower, 
+                                 cri_dt$inmb_upper, costs = TRUE,
+                                digits = digits_costs)]       
+    }
+    x$delta[, "inmb" := NULL]
+  } # end credible interval calculations
+  icer_numeric <- suppressWarnings(as.numeric(x$summary$icer))
+  tbl[, "conclusion" := ifelse(icer_numeric <= k | 
+                                get("icer") == "Dominates",
+                            "Cost-effective", "Not cost-effective")]
+  tbl <- tbl[, c(strategy, grp, "iqalys", "icosts", "inmb", "icer", "conclusion"),
+             with = FALSE]
+  
+  if (output == "matrix"){
+    tbl_list <- split(tbl, by = grp)
+    mat_list <- vector(mode = "list", length = length(tbl_list))
+    names(mat_list) <- names(tbl_list)
+    n_strategies <- length(unique(tbl$strategy))
+    mat <- matrix(NA, nrow = 5, ncol = n_strategies + 1)
+    if(is.null(rownames)){
+      rownames(mat) <- c("Incremental QALYs", "Incremental costs", 
+                          "Incremental NMB", "ICER", "Conclusion")
+    } else{
+      rownames(mat) <- rownames
+    }
+    comp_pos <- attributes(x)$comparator_pos
+    if (is.null(colnames)){
+      strategy_names <- rep(NA, ncol(mat))
+      strategy_names[comp_pos] <- attributes(x)$comparator
+      strategy_names[-comp_pos] <- as.character(tbl_list[[1]][[strategy]])
+      colnames(mat) <- strategy_names
+    } else{
+      colnames(mat) <- colnames
+    }
+    for (i in 1:length(mat_list)){
+      mat[1, -comp_pos] <- tbl_list[[i]]$iqalys
+      mat[2, -comp_pos] <- tbl_list[[i]]$icosts
+      mat[3, -comp_pos] <- tbl_list[[i]]$inmb
+      mat[4, -comp_pos] <- tbl_list[[i]]$icer
+      mat[5, -comp_pos] <- tbl_list[[i]]$conclusion
+      mat[, comp_pos] <- "-"
+      mat_list[[i]] <- mat 
+    }
+    if (drop){
+      if(length(mat_list) == 1){
+        mat_list <- mat_list[[1]]
+      }
+    }
+    return(mat_list)
+  } else{
+    return(tbl)
+  }
+}
+
 

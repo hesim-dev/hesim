@@ -100,7 +100,7 @@ ceacR <- function(ix, kval, grpname) {
 test_that("icea", {
   
   # function gets expected results
-  icea_dt <-  icea(ce, k = krange, sample = "sample", strategy = "strategy",
+  icea <-  icea(ce, k = krange, sample = "sample", strategy = "strategy",
                    grp = "grp", e = "qalys", c = "cost")
   kval <- sample(krange, 1)
   
@@ -119,31 +119,31 @@ test_that("icea", {
                                         c_mean = ce_mean$c_mean, 
                                         c_lower = ce_lower$c_lower,
                                         c_upper = ce_upper$c_upper)
-  expect_equal(summary_test, icea_dt$summary[grp == "Group 2", -2, with = FALSE])
+  expect_equal(summary_test, icea$summary[grp == "Group 2", -2, with = FALSE])
   
   # mce
   ### group 1
-  mce <- icea_dt$mce[grp == "Group 1" &  k == kval]
+  mce <- icea$mce[grp == "Group 1" &  k == kval]
   mce_test <- iceaR(ce, kval , "Group 1", output = "mce")
   expect_equal(mce$prob, mce_test)
   
   ### group 2
-  mce <- icea_dt$mce[grp == "Group 2" &  k == kval]
+  mce <- icea$mce[grp == "Group 2" &  k == kval]
   mce_test <- iceaR(ce, kval , "Group 2", output = "mce")
   expect_equal(mce$prob, mce_test)
   
   ## evpi
   ### group 1
-  evpi <- icea_dt$evpi[grp == "Group 1" &  k == kval]
+  evpi <- icea$evpi[grp == "Group 1" &  k == kval]
   evpi_test <- iceaR(ce, kval , "Group 1", output = "evpi")
   expect_equal(evpi$evpi, evpi_test)
   
   ## function works with other names
   ce2 = data.table::copy(ce)
   data.table::setnames(ce2, c("sample", "strategy", "grp"), c("samp", "strategy_name", "group"))
-  icea_dt2 <-  icea(ce2, k = krange, sample = "samp", strategy = "strategy_name",
+  icea2 <-  icea(ce2, k = krange, sample = "samp", strategy = "strategy_name",
                    grp = "group", e = "qalys", c = "cost")
-  evpi_v2 <- icea_dt2$evpi[group == "Group 1" &  k == kval]
+  evpi_v2 <- icea2$evpi[group == "Group 1" &  k == kval]
   expect_equal(evpi_v2$evpi, evpi$evpi)
 })
 
@@ -151,12 +151,13 @@ test_that("icea", {
 test_that("icea_pw", {
   
   ### function gets expected results
-  icea_pw_dt <-  icea_pw(ce,  k = krange, comparator = "Strategy 1",
-                         sample = "sample", strategy = "strategy", e = "qalys", c = "cost")
+  icea_pw <-  icea_pw(ce, k = krange, comparator = "Strategy 1",
+                         sample = "sample", strategy = "strategy", grp = "grp",
+                      e = "qalys", c = "cost")
   kval <- sample(krange, 1)
   
   ## delta
-  delta <- icea_pw_dt$delta
+  delta <- icea_pw$delta
   delta_test <- deltaR(ce, comparator = "Strategy 1", grpname = "Group 1")
   expect_equal(delta[grp == "Group 1"], delta_test)
   
@@ -177,22 +178,22 @@ test_that("icea_pw", {
                                          ic_lower = delta_lower$ic_lower,
                                          ic_upper = delta_upper$ic_upper, 
                                          icer = icer)
-  expect_equal(summary_test, icea_pw_dt$summary[grp == "Group 2", -2, with = FALSE])
+  expect_equal(summary_test, icea_pw$summary[grp == "Group 2", -2, with = FALSE])
   
   ## ceac
   # group 1
-  ceac <- icea_pw_dt$ceac[grp == "Group 1" & k == kval]
+  ceac <- icea_pw$ceac[grp == "Group 1" & k == kval]
   ceac_test <- ceacR(delta, kval = kval, grpname = "Group 1")
   expect_equal(ceac$prob, ceac_test$prob)
   
   # group 2
-  ceac <- icea_pw_dt$ceac[grp == "Group 2" & k == kval]
+  ceac <- icea_pw$ceac[grp == "Group 2" & k == kval]
   ceac_test <- ceacR(delta, kval = kval, grpname = "Group 2")
   expect_equal(ceac$prob, ceac_test$prob)
   
   ## inmb
   # group 2
-  inmb <- icea_pw_dt$inmb[k == kval & grp == "Group 2"]
+  inmb <- icea_pw$inmb[k == kval & grp == "Group 2"]
   einmb_test <- delta[grp == "Group 2", .(einmb = mean(ie * kval - ic)), 
                      by = "strategy"]
   expect_equal(inmb$einmb, einmb_test$einmb)
@@ -200,11 +201,51 @@ test_that("icea_pw", {
   ### function works with other names
   ce2 = data.table::copy(ce)
   data.table::setnames(ce2, c("sample", "strategy", "grp"), c("samp", "strategy_name", "group"))
-  icea_pw_dt2 <- icea_pw(ce2,  k = krange, comparator = "Strategy 1",
+  icea_pw2 <- icea_pw(ce2,  k = krange, comparator = "Strategy 1",
                          sample = "samp", strategy = "strategy_name", grp = "group",
                          e = "qalys", c = "cost")
-  ceac_v2 <- icea_pw_dt2$ceac[group == "Group 2" & k == kval]
+  ceac_v2 <- icea_pw2$ceac[group == "Group 2" & k == kval]
   expect_equal(ceac$prob, ceac_v2$prob)
+  
+  ## ICER table
+  icer <- icer_tbl(icea_pw)
+  expect_true(inherits(icer, "list"))
+  expect_true(inherits(icer[[1]], "matrix"))
+  
+  icer <- icer_tbl(icea_pw, cri = FALSE)
+  expect_true(inherits(icer, "list"))
+  
+  icer <- icer_tbl(icea_pw, output = "data.table")
+  expect_true(inherits(icer, "data.table"))
+  
+  icea_pw2 <-  icea_pw(ce[grp == "Group 1"],  k = krange, comparator = "Strategy 1",
+                         sample = "sample", strategy = "strategy", e = "qalys", c = "cost")
+  icer <- icer_tbl(icea_pw2)
+  expect_true(inherits(icer, "matrix"))
+  expect_equal(ncol(icer), 3)
+  
+  icer <- icer_tbl(icea_pw2, drop = FALSE)
+  expect_true(inherits(icer, "list"))
+  
+  cols <- c("S1", "S2", "S3")
+  rows <- c("iqalys", "icosts", "inmb", "icer", "conclusion")
+  icer <- icer_tbl(icea_pw2, 
+                   colnames = cols,
+                   rownames = rows)
+  expect_true(inherits(icer, "matrix"))
+  expect_equal(colnames(icer), cols)
+  expect_equal(rownames(icer), rows)
+  
+  ### Strategy 2 is cost saving and better
+  ce2[strategy_name == "Strategy 3", cost := 2]
+  icea_pw2 <- icea_pw(ce2,  k = krange, comparator = "Strategy 1",
+                      grp = "group",
+                      sample = "samp", strategy = "strategy_name", 
+                      e = "qalys", c = "cost")
+  
+  ### Errors
+  expect_error(icer_tbl(2)) 
+  expect_error(icer_tbl(icea_pw, prob = 1.4)) 
 })
 
 # Test incr_effect function ---------------------------------------------------

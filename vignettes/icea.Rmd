@@ -132,7 +132,8 @@ Likewise, we can use `icea_pw` to summarize the PSA when directly comparing the 
 
 ```{r icea_pw}
 icea_pw <-  icea_pw(ce,  k = seq(0, ktop, 500), comparator = "Strategy 1",
-                       sample = "sample", strategy = "strategy", e = "qalys", c = "cost")
+                       sample = "sample", strategy = "strategy", grp = "grp",
+                    e = "qalys", c = "cost")
 ```
 
 The same inputs are used as in `icea` except users must specify the name of the comparator strategy.

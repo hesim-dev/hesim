@@ -104,18 +104,20 @@ sim <- data.frame(sample = rep(seq(n_samples), 4),
 )
 
 # icea
-icea_dt <- icea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
- grp = "grp", e = "e", c = "c")
-names(icea_dt)
+icea <- icea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
+             grp = "grp", e = "e", c = "c")
+names(icea)
 # The probability that each strategy is the most cost-effective 
 # in each group with a willingness to pay of 20,000
 library("data.table")
-icea_dt$mce[k == 20000]
+icea$mce[k == 20000]
 
 # icea_pw
-icea_pw_dt <-  icea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
-                       sample = "sample", strategy = "strategy", e = "e", c = "c")
-names(icea_pw_dt)
+icea_pw <-  icea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
+                    sample = "sample", strategy = "strategy", grp = "grp",
+                     e = "e", c = "c")
+names(icea_pw)
 # cost-effectiveness acceptability curve
-head(icea_pw_dt$ceac[k >= 20000])
+head(icea_pw$ceac[k >= 20000])
+icer_tbl(icea_pw)
 }
