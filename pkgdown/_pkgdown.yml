@@ -47,11 +47,14 @@ reference:
       - IndivCtstmTrans
       - create_IndivCtstmTrans
       - IndivCtstm
+  - title: "Summarize outcomes"
+    contents:
+      - incr_effect
+      - surv_quantile
   - title: "Cost-effectiveness analysis"
     contents:
       - icea
       - icea_pw
-      - incr_effect
       - icer_tbl
   - title: "Datasets"
     contents:

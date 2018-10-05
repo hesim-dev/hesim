@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Random generation for piecewise exponential distribution — rpwexp • hesim</title>
+<title>Survival quantiles — surv_quantile • hesim</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -32,10 +32,9 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Random generation for piecewise exponential distribution — rpwexp" />
+<meta property="og:title" content="Survival quantiles — surv_quantile" />
 
-<meta property="og:description" content="Draw random samples from an exponential distribution with piecewise rates.
- rpwexp is vectorized and written in C++ for speed." />
+<meta property="og:description" content="Compute quantiles from a survival curve." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,57 +114,66 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Random generation for piecewise exponential distribution</h1>
-    <small class="dont-index">Source: <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/R/rand.R'><code>R/rand.R</code></a></small>
-    <div class="hidden name"><code>rpwexp.Rd</code></div>
+    <h1>Survival quantiles</h1>
+    <small class="dont-index">Source: <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/R/outcomes.R'><code>R/outcomes.R</code></a></small>
+    <div class="hidden name"><code>surv_quantile.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Draw random samples from an exponential distribution with piecewise rates.
- <code>rpwexp</code> is vectorized and written in C++ for speed.</p>
+    <p>Compute quantiles from a survival curve.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>rpwexp</span>(<span class='no'>n</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+    <pre class="usage"><span class='fu'>surv_quantile</span>(<span class='no'>x</span>, <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='no'>t</span>, <span class='no'>surv_cols</span>, <span class='no'>by</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>n</th>
-      <td><p>Number of random observations to draw.</p></td>
+      <th>x</th>
+      <td><p>A <code>data.table</code> or <code>data.frame</code>.</p></td>
     </tr>
     <tr>
-      <th>rate</th>
-      <td><p>A matrix of rates where rows correspond to observations 
-and columns correspond to rates during specified time intervals.</p></td>
+      <th>probs</th>
+      <td><p>A numeric vector of probabilities with values in <code>[0,1]</code>.</p></td>
     </tr>
     <tr>
-      <th>time</th>
-      <td><p>A vector equal to the number of columns in <code>rate</code> giving the
-times at which the rate changes</p></td>
+      <th>t</th>
+      <td><p>A character scalar of the name of the time column.</p></td>
+    </tr>
+    <tr>
+      <th>surv_cols</th>
+      <td><p>A character vector of the names of columns containing 
+survival curves.</p></td>
+    </tr>
+    <tr>
+      <th>by</th>
+      <td><p>A character vector of the names of columns to group by.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of random samples from the piecewise exponential distribution. The length of the sample is 
-determined by n. The numerical arguments other than n are recycled so that the number of samples is 
-equal to n.</p>
+    <p>A <code>data.table</code> of quantiles of each survival curve in 
+<code>surv_cols</code> by each group in <code>by</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>rate</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>.6</span>, <span class='fl'>1.2</span>, <span class='fl'>1.3</span>)
-<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>100000</span>
-<span class='no'>ratemat</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>rep</span>(<span class='no'>rate</span>, <span class='no'>n</span>/<span class='fl'>2</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>n</span>,
-                  <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>15</span>)
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'>proc.time</span>()
-<span class='no'>samp</span> <span class='kw'>&lt;-</span> <span class='fu'>rpwexp</span>(<span class='no'>n</span>, <span class='no'>ratemat</span>, <span class='no'>t</span>)
-<span class='fu'>proc.time</span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.009   0.001   0.010 </div><div class='input'><span class='fu'>summary</span>(<span class='no'>samp</span>)</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#&gt;  0.0000  0.4793  1.1517  1.6597  2.3021 14.4929 </div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"data.table"</span>)
+<span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.01</span>)
+<span class='no'>surv1</span> <span class='kw'>&lt;-</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>.3</span>, <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>t</span>))
+<span class='no'>surv2</span> <span class='kw'>&lt;-</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>.2</span>, <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>t</span>))
+<span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>"Strategy 1"</span>, <span class='st'>"Strategy 2"</span>)
+<span class='no'>surv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='kw'>strategy</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='no'>strategies</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>t</span>)),
+                   <span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='no'>t</span>, <span class='fl'>2</span>),
+                   <span class='kw'>surv</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='no'>surv1</span>, <span class='no'>surv2</span>))
+<span class='fu'>surv_quantile</span>(<span class='no'>surv</span>, <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.4</span>, <span class='fl'>.5</span>), <span class='kw'>t</span> <span class='kw'>=</span> <span class='st'>"t"</span>,
+              <span class='kw'>surv_cols</span> <span class='kw'>=</span> <span class='st'>"surv"</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>)</div><div class='output co'>#&gt;      strategy prob quantile_surv
+#&gt; 1: Strategy 1  0.4          5.72
+#&gt; 2: Strategy 2  0.4          5.00
+#&gt; 3: Strategy 1  0.5          7.15
+#&gt; 4: Strategy 2  0.5          6.25</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
