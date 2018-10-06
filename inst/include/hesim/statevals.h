@@ -23,7 +23,7 @@ private:
    */   
   static std::unique_ptr<statmods::statmod> init_statmod_(Rcpp::Environment R_StateVals){
     statmods::statmod *mod;
-    Rcpp::List R_data = Rcpp::as<Rcpp::List>(R_StateVals["data"]);
+    Rcpp::List R_data = Rcpp::as<Rcpp::List>(R_StateVals["input_mats"]);
     Rcpp::List R_params = Rcpp::as<Rcpp::List>(R_StateVals["params"]);
     if (Rf_inherits(R_params, "params_mean")){
       statmods::params_mean params(R_params);
@@ -225,12 +225,12 @@ private:
   static statmods::obs_index init_obs_index_(Rcpp::Environment R_model, std::string type){
     if (type == "qalys"){
       Rcpp::Environment R_utility_model = Rcpp::as<Rcpp::Environment>(R_model["utility_model"]);
-      return statmods::obs_index(Rcpp::as<Rcpp::List>(R_utility_model["data"]));
+      return statmods::obs_index(Rcpp::as<Rcpp::List>(R_utility_model["input_mats"]));
     }
     else if (type == "costs"){
       Rcpp::List R_cost_models = Rcpp::as<Rcpp::List>(R_model["cost_models"]);
       Rcpp::Environment R_cost_model_0 = Rcpp::as<Rcpp::Environment>(R_cost_models[0]);
-      return statmods::obs_index(Rcpp::as<Rcpp::List>(R_cost_model_0["data"]));
+      return statmods::obs_index(Rcpp::as<Rcpp::List>(R_cost_model_0["input_mats"]));
     }
     else{
       Rcpp::stop("Values of 'costs' or 'qalys' can only be simulated.");

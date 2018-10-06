@@ -22,9 +22,9 @@ create_PsmCurves <- function(object, data, n = 1000, point_estimate = FALSE,
   if (!inherits(object, c("partsurvfit"))){
     stop("'Object' must be of class 'partsurvfit'.")
   }
-  X <- create_input_mats(object, data, id_vars = c("strategy_id", "patient_id"))
+  input_mats <- create_input_mats(object, data, id_vars = c("strategy_id", "patient_id"))
   params <- create_params(object, n = n, point_estimate = point_estimate, bootstrap = bootstrap)
-  return(PsmCurves$new(data = X, params = params))
+  return(PsmCurves$new(input_mats = input_mats, params = params))
 }
 
 # Manual documentation in PsmCurves.Rd
@@ -54,11 +54,11 @@ PsmCurves <- R6::R6Class("PsmCurves",
   ),                            
                               
   public = list(
-    data = NULL,
+    input_mats = NULL,
     params = NULL,
 
-    initialize = function(data, params) {
-      self$data <- data
+    initialize = function(input_mats, params) {
+      self$input_mats <- input_mats
       self$params <- params
     },
     
@@ -83,8 +83,8 @@ PsmCurves <- R6::R6Class("PsmCurves",
     },
     
     check = function(){
-      if(!inherits(self$data, "input_mats")){
-        stop("'data' must be an object of class 'input_mats'",
+      if(!inherits(self$input_mats, "input_mats")){
+        stop("'input_mats' must be an object of class 'input_mats'",
             call. = FALSE)
       }
       if(!inherits(self$params, c("params_surv_list", 
@@ -134,7 +134,7 @@ Psm <- R6::R6Class("Psm",
       
       # Check number of states
       for (i in 1:length(statvalmods)){
-        if(self$n_states != statvalmods[[i]]$data$n_states + 1){
+        if(self$n_states != statvalmods[[i]]$input_mats$n_states + 1){
           msg <- paste0("The number of survival models must equal the number of states in '",
                         statvalmods_name, "' - 1.")
           stop(msg, call. = FALSE)
@@ -236,8 +236,8 @@ Psm <- R6::R6Class("Psm",
       }
       res <- C_psm_sim_stateprobs(self$survival_,
                                   n_samples = self$survival_models$params[[1]]$n_samples,
-                                  n_strategies = self$survival_models$data$n_strategies,
-                                  n_patients = self$survival_models$data$n_patients,
+                                  n_strategies = self$survival_models$input_mats$n_strategies,
+                                  n_patients = self$survival_models$input_mats$n_patients,
                                   n_states = self$n_states,
                                   n_times = length(self$t_))
       prop_cross <- res$n_crossings/nrow(res$stateprobs)

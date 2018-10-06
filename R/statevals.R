@@ -74,27 +74,27 @@ create_StateVals <- function(object, ...){
 create_StateVals.lm <- function(object, data = NULL, n = 1000,
                                 point_estimate = FALSE, ...){
   params <- create_params(object, n, point_estimate) 
-  X <- create_input_mats(object, data)
-  return(StateVals$new(data = X, params = params))
+  input_mats <- create_input_mats(object, data)
+  return(StateVals$new(input_mats = input_mats, params = params))
 }
 
 #' @rdname create_StateVals 
 #' @export
 create_StateVals.stateval_means <- function(object, ...){
   params <- create_params(object)
-  X <- create_input_mats(object)
-  return(StateVals$new(data = X, params = params))
+  input_mats <- create_input_mats(object)
+  return(StateVals$new(input_mats = input_mats, params = params))
 }
 
 # Manual documentation in StateVals.Rd
 #' @export
 StateVals <- R6::R6Class("StateVals",
   public = list(
-    data = NULL,
+    input_mats = NULL,
     params = NULL,
 
-    initialize = function(data, params) {
-      self$data <- data
+    initialize = function(input_mats, params) {
+      self$input_mats <- input_mats
       self$params <- params
     },
     
@@ -107,7 +107,7 @@ StateVals <- R6::R6Class("StateVals",
     },
     
     check = function(){
-      if(!inherits(self$data, "input_mats")){
+      if(!inherits(self$input_mats, "input_mats")){
         stop("'data' must be an object of class 'input_mats'",
             call. = FALSE)
       }

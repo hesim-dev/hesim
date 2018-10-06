@@ -54,7 +54,7 @@ test_that("create_PsmCurves", {
                                           bootstrap = TRUE)
   expect_true(inherits(psm_curves, "PsmCurves"))
   expect_true(inherits(psm_curves$params, "params_surv_list"))
-  expect_equal(as.numeric(psm_curves$data$X[[1]]$scale[, "age"]), 
+  expect_equal(as.numeric(psm_curves$input_mats$X[[1]]$scale[, "age"]), 
               curves_edata$age)
   
   # errors
@@ -119,7 +119,7 @@ test_that("PsmCurves", {
   
   # Quantiles
   psm_curves <- create_PsmCurves(fits_exp, data = curves_edata, n = N)
-  X <- psm_curves$data$X$curves1$rate[1, , drop = FALSE]
+  X <- psm_curves$input_mats$X$curves1$rate[1, , drop = FALSE]
   beta <- psm_curves$params$curves1$coefs$rate[1, , drop = FALSE]
   rate_hat <- X %*% t(beta)
   
@@ -139,7 +139,7 @@ psm_X <- create_input_mats(formula_list(mu = formula(~1)),
                                      expand(hesim_dat, 
                                      by = c("strategies", "patients", "states")),
                                      id_vars = c("strategy_id", "patient_id", "state_id"))
-psm_utility <- StateVals$new(data = psm_X,
+psm_utility <- StateVals$new(input_mats = psm_X,
                              params = params_lm(coef = runif(N, .6, .8)))
 
 # Cost model(s)
@@ -191,7 +191,7 @@ R_los <- function(psm, type, type_num, dr = .03,
   } else{
     model <- psm$utility_model
   }
-  dat <- model$data
+  dat <- model$input_mats
   statevals <- dat$X$mu %*% t(model$params$coefs)
   obs <- which(dat$state_id == state_id & dat$strategy_id == strategy_id &
                  dat$patient_id == patient_id)

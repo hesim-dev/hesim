@@ -74,15 +74,15 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
 # Class "lm"
 expanded_dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit_lm <- stats::lm(costs ~ female + state_name, psm4_exdata$costs$medical)
-X <- create_input_mats(fit_lm, expanded_dat)
-class(X)
+input_mats <- create_input_mats(fit_lm, expanded_dat)
+class(input_mats)
 
 # Class "flexsurvreg"
 expanded_dat <- expand(hesim_dat, by = c("strategies", "patients"))
 fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                  data = ovarian, dist = "weibull")
-X <- create_input_mats(fit_wei, expanded_dat)
-class(X)
+input_mats <- create_input_mats(fit_wei, expanded_dat)
+class(input_mats)
 }
 \seealso{
 \code{\link{input_mats}}.

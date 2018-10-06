@@ -142,7 +142,7 @@ public:
    * @param R_CtstmTrans An @c R object of class @c CtstmTrans.
    */ 
   transmod(Rcpp::Environment R_CtstmTrans)
-    : obs_index_(Rcpp::as<Rcpp::List>(R_CtstmTrans["data"])),
+    : obs_index_(Rcpp::as<Rcpp::List>(R_CtstmTrans["input_mats"])),
       trans_mat_(Rcpp::as<arma::mat>(R_CtstmTrans["trans_mat"])){
   }
   virtual ~transmod() {}
@@ -226,8 +226,8 @@ private:
   static statmods::surv init_survmod_(Rcpp::Environment R_CtstmTrans){
 
     // Input matrices
-    Rcpp::List data = Rcpp::as<Rcpp::List> (R_CtstmTrans["data"]);
-    Rcpp::List X_list = data["X"];
+    Rcpp::List R_input_mats = Rcpp::as<Rcpp::List> (R_CtstmTrans["input_mats"]);
+    Rcpp::List X_list = R_input_mats["X"];
     vecmats X = Rcpp::as<vecmats>(X_list);
 
     // Create statistical models
@@ -278,8 +278,8 @@ private:
   static std::vector<statmods::surv> init_survmods_(Rcpp::Environment R_CtstmTrans){
 
     // Input matrices
-    Rcpp::List data = Rcpp::as<Rcpp::List> (R_CtstmTrans["data"]);
-    Rcpp::List X_list = data["X"];
+    Rcpp::List R_input_mats = Rcpp::as<Rcpp::List> (R_CtstmTrans["input_mats"]);
+    Rcpp::List X_list = R_input_mats["X"];
     vecmats_2d X = Rcpp::as<vecmats_2d>(X_list);
 
     // Create statistical models

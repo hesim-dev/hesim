@@ -366,12 +366,12 @@ sort_hesim_data <- function(data, sorted_by){
 #'                         patients = dt_patients)
 #' 
 #' dat <- expand(hesim_dat, by = c("strategies", "patients"))
-#' X <- input_mats(X = list(mu = model.matrix(~ age, dat)),
-#'                 strategy_id = dat$strategy_id,
-#'                 n_strategies = length(unique(dat$strategy_id)),
-#'                 patient_id = dat$patient_id,
-#'                 n_patients = length(unique(dat$patient_id)))
-#' print(X)
+#' input_mats <- input_mats(X = list(mu = model.matrix(~ age, dat)),
+#'                          strategy_id = dat$strategy_id,
+#'                          n_strategies = length(unique(dat$strategy_id)),
+#'                          patient_id = dat$patient_id,
+#'                         n_patients = length(unique(dat$patient_id)))
+#' print(input_mats)
 #' @export
 input_mats <- function(X, strategy_id, n_strategies,
                        patient_id, n_patients,
@@ -613,15 +613,15 @@ extract_X <- function(coef_mat, data){
 #' # Class "lm"
 #' expanded_dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 #' fit_lm <- stats::lm(costs ~ female + state_name, psm4_exdata$costs$medical)
-#' X <- create_input_mats(fit_lm, expanded_dat)
-#' class(X)
+#' input_mats <- create_input_mats(fit_lm, expanded_dat)
+#' class(input_mats)
 #'
 #' # Class "flexsurvreg"
 #' expanded_dat <- expand(hesim_dat, by = c("strategies", "patients"))
 #' fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
 #'                                  data = ovarian, dist = "weibull")
-#' X <- create_input_mats(fit_wei, expanded_dat)
-#' class(X)
+#' input_mats <- create_input_mats(fit_wei, expanded_dat)
+#' class(input_mats)
 #' @export
 #' @rdname create_input_mats
 create_input_mats <- function (object, ...) {

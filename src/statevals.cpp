@@ -16,10 +16,10 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
                            std::string type){
   // Initialize
   hesim::statevals statevals(R_StateVals);
-  Rcpp::List R_data = Rcpp::as<Rcpp::List>(R_StateVals["data"]);
-  std::vector<int> strategy_id = Rcpp::as<std::vector<int> >(R_data["strategy_id"]);
-  std::vector<int> patient_id = Rcpp::as<std::vector<int> >(R_data["patient_id"]);
-  std::vector<int> state_id = Rcpp::as<std::vector<int> >(R_data["state_id"]);
+  Rcpp::List R_input_mats = Rcpp::as<Rcpp::List>(R_StateVals["input_mats"]);
+  std::vector<int> strategy_id = Rcpp::as<std::vector<int> >(R_input_mats["strategy_id"]);
+  std::vector<int> patient_id = Rcpp::as<std::vector<int> >(R_input_mats["patient_id"]);
+  std::vector<int> state_id = Rcpp::as<std::vector<int> >(R_input_mats["state_id"]);
   
   int n_samples = statevals.statmod_->get_n_samples();
   int n_obs = state_id.size();

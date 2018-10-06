@@ -14,8 +14,8 @@ Summarize health state transitions in an individual-level continuous time state 
 \section{Fields}{
 
 \describe{
-\item{\code{data}}{Data used to simulate health state transitions by treatment strategy and patient. Must be 
-  an object of class \code{\link{input_mats}}. If \code{params} is a list of models, then \code{data} must contain a unique row for each treatment strategy and patient; if \code{params} is a joint model, then \code{data} must contain a unique row for each treatment strategy, patient, and transition.}
+\item{\code{input_mats}}{Input matrices used to simulate health state transitions by treatment strategy and patient. Must be 
+  an object of class \code{\link{input_mats}}. If \code{params} is a list of models, then \code{input_mats} must contain a unique row for each treatment strategy and patient; if \code{params} is a joint model, then \code{input_mats} must contain a unique row for each treatment strategy, patient, and transition.}
 
 \item{\code{params}}{An object of class \code{\link{params_surv}} or \code{\link{params_surv_list}}.}
 
@@ -35,7 +35,7 @@ Summarize health state transitions in an individual-level continuous time state 
 
 \describe{
 
-\item{\code{new(data, params, trans_mat, start_state = 1, start_time = 0,
+\item{\code{new(input_mats, params, trans_mat, start_state = 1, start_time = 0,
                 start_age = 38, death_state = NULL)}}{
 
   Constructor for the class.

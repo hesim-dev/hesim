@@ -2,8 +2,8 @@
 CtstmTrans <- R6::R6Class("CtstmTrans",
   private = list(
     check_base = function(){
-      if(!inherits(self$data, "input_mats")){
-        stop("'data' must be an object of class 'input_mats'",
+      if(!inherits(self$input_mats, "input_mats")){
+        stop("'input_mats' must be an object of class 'input_mats'",
             call. = FALSE)
       }
       if(!inherits(self$params, c("params_surv", 
@@ -41,7 +41,7 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
     ), # end private
   
   public = list(
-    data = NULL,
+    input_mats = NULL,
     params = NULL,
     trans_mat = NULL,
     
@@ -97,14 +97,14 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
     n_lines <- 1
   } # to do after incorporating treatment lines: case where there are multiple treatment lines
   n_states <- nrow(trans_model$trans_mat)
-  n_strategies <- trans_model$data$n_strategies
-  n_patients <- trans_model$data$n_patients
+  n_strategies <- trans_model$input_mats$n_strategies
+  n_patients <- trans_model$input_mats$n_patients
   if (inherits(trans_model$params, "params_surv_list")){
     n_samples <- trans_model$params[[1]]$n_samples
   } else{
     n_samples <- trans_model$params$n_samples
   }
-  unique_strategy_id <- unique(trans_model$data$strategy_id)
+  unique_strategy_id <- unique(trans_model$input_mats$strategy_id)
   
   ## Computation
   stprobs <- C_ctstm_indiv_stateprobs(disprog, 
@@ -149,24 +149,24 @@ create_IndivCtstmTrans <- function(object, data, trans_mat, n = 1000, point_esti
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
-  X <- create_input_mats(object, data)
+  input_mats <- create_input_mats(object, data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(data = X, params = params, trans_mat = trans_mat, ...))
+  return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat, ...))
 }
 
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
-  X <- create_input_mats(object, data)
+  input_mats <- create_input_mats(object, data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(data = X, params = params, trans_mat = trans_mat, ...))
+  return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat, ...))
 }
 
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.params_surv <- function(object, data, trans_mat, ...){
-  X <- create_input_mats(object, data)
-  return(IndivCtstmTrans$new(data = X, params = object, trans_mat = trans_mat, ...))
+  input_mats <- create_input_mats(object, data)
+  return(IndivCtstmTrans$new(input_mats = input_mats, params = object, trans_mat = trans_mat, ...))
 }
 
 #' @export
@@ -178,13 +178,13 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     
     check_history = function(field){
       field_name <- deparse(substitute(field))
-      if (length(field) !=1 & length(field) != self$data$n_patients){
+      if (length(field) !=1 & length(field) != self$input_mats$n_patients){
         stop(paste0("The length of '", field_name, "' must either be 1 or the number ",
                           "of simulated patients."),
                  call. = FALSE)        
       }
       if (length(field) == 1){
-        field <- rep(field, self$data$n_patients)
+        field <- rep(field, self$input_mats$n_patients)
       }
       return(field)
     }
@@ -209,12 +209,12 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     start_age = NULL,
     
     
-    initialize = function(data, params, trans_mat, 
+    initialize = function(input_mats, params, trans_mat, 
                           start_state = 1,
                           start_time = 0,
                           start_age = 38,
                           death_state = NULL) {
-      self$data <- data
+      self$input_mats <- input_mats
       self$params <- params
       self$trans_mat <- trans_mat
       
@@ -339,7 +339,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                                               unique = TRUE)]
           } else{
             by_cols <- c("sample", "strategy_id", "from")
-            n_patients <- self$trans_model$data$n_patients
+            n_patients <- self$trans_model$input_mats$n_patients
             wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]

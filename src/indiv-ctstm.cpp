@@ -201,7 +201,7 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
                                        double max_time){
   hesim::ctstm::disease_prog disease_prog(R_disease_prog);
   hesim::statevals stvals(R_StateVal);
-  hesim::statmods::obs_index obs_index(Rcpp::as<Rcpp::List>(R_StateVal["data"]));
+  hesim::statmods::obs_index obs_index(Rcpp::as<Rcpp::List>(R_StateVal["input_mats"]));
   hesim::check_R_infinity(max_time);
   
   int N = disease_prog.sample_.size();

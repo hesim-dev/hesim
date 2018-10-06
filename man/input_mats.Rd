@@ -82,10 +82,10 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
                         patients = dt_patients)
 
 dat <- expand(hesim_dat, by = c("strategies", "patients"))
-X <- input_mats(X = list(mu = model.matrix(~ age, dat)),
-                strategy_id = dat$strategy_id,
-                n_strategies = length(unique(dat$strategy_id)),
-                patient_id = dat$patient_id,
-                n_patients = length(unique(dat$patient_id)))
-print(X)
+input_mats <- input_mats(X = list(mu = model.matrix(~ age, dat)),
+                         strategy_id = dat$strategy_id,
+                         n_strategies = length(unique(dat$strategy_id)),
+                         patient_id = dat$patient_id,
+                        n_patients = length(unique(dat$patient_id)))
+print(input_mats)
 }

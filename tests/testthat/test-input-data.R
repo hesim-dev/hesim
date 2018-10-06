@@ -227,13 +227,13 @@ test_that("create_input_mats.formula_list", {
   dat <- expand(hesim_dat)
   f_list <- formula_list(list(f1 = formula(~ age), f2 = formula(~ 1)))
   expect_equal(class(f_list), "formula_list")
-  X <- create_input_mats(f_list, dat)
+  input_mats <- create_input_mats(f_list, dat)
   
-  expect_equal(length(X$X), length(f_list))
-  expect_equal(names(X$X), names(f_list))
-  expect_equal(as.numeric(X$X$f1[, "age"]), dat$age)
-  expect_equal(ncol(X$X$f1), 2)
-  expect_equal(ncol(X$X$f2), 1)
+  expect_equal(length(input_mats$X), length(f_list))
+  expect_equal(names(input_mats$X), names(f_list))
+  expect_equal(as.numeric(input_mats$X$f1[, "age"]), dat$age)
+  expect_equal(ncol(input_mats$X$f1), 2)
+  expect_equal(ncol(input_mats$X$f2), 1)
 })
 
 # create_input_mats with lm objects or params_lm objects -----------------------
@@ -241,15 +241,15 @@ dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit1 <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 
 test_that("create_input_mats.lm", {
-  X1 <- create_input_mats(fit1, dat)
-  expect_equal(ncol(X1$X$mu), 4)
-  expect_equal(as.numeric(X1$X$mu[, "female"]), dat$female)
+  input_mats1 <- create_input_mats(fit1, dat)
+  expect_equal(ncol(input_mats1$X$mu), 4)
+  expect_equal(as.numeric(input_mats1$X$mu[, "female"]), dat$female)
   
   # Works with data.frame
   dat_df = copy(dat)
   setattr(dat_df, "class", c("expanded_hesim_data", "data.frame"))
-  X2 <- create_input_mats(fit1, dat_df)
-  expect_equal(X1, X2)
+  input_mats2 <- create_input_mats(fit1, dat_df)
+  expect_equal(input_mats1, input_mats2)
   
   # Error if not data.table or data.frame
   setattr(dat_df, "class", "expanded_hesim_data")
@@ -259,11 +259,11 @@ test_that("create_input_mats.lm", {
 test_that("create_input_mats.lm_list", {
   fit2 <- stats::lm(costs ~ 1, data = psm4_exdata$costs$medical)
   fit_list <- hesim:::lm_list(fit1 = fit1, fit2 = fit2)
-  X <- create_input_mats(fit_list, dat)
+  input_mats <- create_input_mats(fit_list, dat)
   
-  expect_equal(ncol(X$X$fit1$mu), 4)
-  expect_equal(ncol(X$X$fit2$mu), 1)
-  expect_equal(as.numeric(X$X$fit1$mu[, "female"]), dat$female)
+  expect_equal(ncol(input_mats$X$fit1$mu), 4)
+  expect_equal(ncol(input_mats$X$fit2$mu), 1)
+  expect_equal(as.numeric(input_mats$X$fit1$mu[, "female"]), dat$female)
 })
 
 test_that("create_input_mats.params_lm", {
@@ -273,9 +273,9 @@ test_that("create_input_mats.params_lm", {
                      patient_id = c(1, 2), strategy_id = c(1, 1))
   setattr(data, "id_vars", c("patient_id", "strategy_id"))
   setattr(data, "class", c("expanded_hesim_data", "data.table", "data.frame"))
-  X <- create_input_mats(params, data)
-  expect_equal(X$X$mu[, "intercept"], c(1, 1))
-  expect_equal(X$patient_id, c(1, 2))
+  input_mats <- create_input_mats(params, data)
+  expect_equal(input_mats$X$mu[, "intercept"], c(1, 1))
+  expect_equal(input_mats$patient_id, c(1, 2))
 })
 
 # create_input_mats with flexsurvreg or params_surv objects --------------------
@@ -284,17 +284,17 @@ test_that("create_input_mats.flexsurv", {
   fit <- flexsurv::flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
                               anc = list(sigma = ~ group), 
                               dist = "gengamma") 
-  X <- create_input_mats(fit, dat)
+  input_mats <- create_input_mats(fit, dat)
   
-  expect_equal(X$strategy_id, dat$strategy_id)
-  expect_equal(X$state_id, dat$state_id)
-  expect_equal(X$patient_id, dat$patient_id)
-  expect_equal(class(X$X), "list")
-  expect_equal(class(X$X[[1]]), "matrix")
-  expect_equal(length(X$X), 3)
-  expect_equal(ncol(X$X$mu), 3)
-  expect_equal(ncol(X$X$sigma), 3)
-  expect_equal(ncol(X$X$Q), 1)
+  expect_equal(input_mats$strategy_id, dat$strategy_id)
+  expect_equal(input_mats$state_id, dat$state_id)
+  expect_equal(input_mats$patient_id, dat$patient_id)
+  expect_equal(class(input_mats$X), "list")
+  expect_equal(class(input_mats$X[[1]]), "matrix")
+  expect_equal(length(input_mats$X), 3)
+  expect_equal(ncol(input_mats$X$mu), 3)
+  expect_equal(ncol(input_mats$X$sigma), 3)
+  expect_equal(ncol(input_mats$X$Q), 1)
 })
 
 fit1_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
@@ -305,9 +305,9 @@ flexsurvreg_list1 <- flexsurvreg_list(wei = fit1_wei, exp = fit1_exp)
 dat <- expand(hesim_dat)
 
 test_that("create_input_mats.flexsurv_list", {
-  X <- create_input_mats(flexsurvreg_list1, dat)  
+  input_mats <- create_input_mats(flexsurvreg_list1, dat)  
   
-  expect_equal(class(X$X$wei$shape), "matrix")
+  expect_equal(class(input_mats$X$wei$shape), "matrix")
 })
 
 fit2_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1 + age, 
@@ -322,10 +322,10 @@ joined_flexsurvreg_list <- joined_flexsurvreg_list(mod1 = flexsurvreg_list1,
                                                    times = list(2, 5))
 
 test_that("create_input_mats.joined_flexsurv_list", {
-  X <- create_input_mats(joined_flexsurvreg_list, dat)  
+  input_mats <- create_input_mats(joined_flexsurvreg_list, dat)  
   
-  expect_equal(X$state_id, dat$state_id)
-  expect_equal(class(X$X[[1]]$wei$shape), "matrix")
+  expect_equal(input_mats$state_id, dat$state_id)
+  expect_equal(class(input_mats$X[[1]]$wei$shape), "matrix")
 })
 
 test_that("create_input_mats.params_surv", {
@@ -339,10 +339,10 @@ test_that("create_input_mats.params_surv", {
                      patient_id = c(1, 2), strategy_id = c(1, 1))
   setattr(data, "id_vars", c("patient_id", "strategy_id"))
   setattr(data, "class", c("expanded_hesim_data", "data.table", "data.frame"))  
-  X <- create_input_mats(params_wei, data)
-  expect_equal(X$X$shape[, "intercept"], c(1, 1))
-  expect_equal(X$X$scale[, "age"], data$age)
-  expect_equal(X$strategy_id, data$strategy_id)
+  input_mats <- create_input_mats(params_wei, data)
+  expect_equal(input_mats$X$shape[, "intercept"], c(1, 1))
+  expect_equal(input_mats$X$scale[, "age"], data$age)
+  expect_equal(input_mats$strategy_id, data$strategy_id)
   
   # params_surv_list
   coef_exp <- list(rate = as.matrix(data.frame(intercept = c(.2, .3), 
@@ -350,9 +350,9 @@ test_that("create_input_mats.params_surv", {
   params_exp <- params_surv(coef = coef_exp,
                                 dist = "exp") 
   params <- params_surv_list(wei = params_wei, exp = params_exp)
-  X <- create_input_mats(params, data) 
-  expect_equal(X$X$wei$scale[, "age"], data$age)
-  expect_equal(X$X$exp$rate[, "age"], data$age)
-  expect_equal(X$strategy_id, data$strategy_id)
+  input_mats <- create_input_mats(params, data) 
+  expect_equal(input_mats$X$wei$scale[, "age"], data$age)
+  expect_equal(input_mats$X$exp$rate[, "age"], data$age)
+  expect_equal(input_mats$strategy_id, data$strategy_id)
 })
 
