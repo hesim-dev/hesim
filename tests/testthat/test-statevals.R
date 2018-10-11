@@ -1,5 +1,4 @@
 context("statevals.R unit tests")
-library("flexsurv")
 library("data.table")
 rm(list = ls())
 
@@ -116,7 +115,14 @@ test_that("stateval_tbl", {
                                  mean = .5, se = .1))
   expect_error(stateval_tbl(tbl2, dist = "beta",
                             hesim_data = hesim_dat))
-    
+  
+  tbl2 <- tbl2[(strategy_id == 1 & state_id == 1) |
+               (strategy_id == 2 & state_id == 2)]
+  expect_error(stateval_tbl(tbl2, dist = "beta",
+                            hesim_data = hesim_dat))  
+  expect_error(stateval_tbl(tbl2[, !"grp_id", with = FALSE], dist = "beta",
+                            hesim_data = hesim_dat))
+  
   ## Correct columns for distribution
   ### Beta
   expect_error(stateval_tbl(tbl[,.(strategy_id, grp_id, state_id, mean)], 

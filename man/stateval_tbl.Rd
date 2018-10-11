@@ -17,26 +17,29 @@ probabilistic sensitivity analysis.}
 \item{hesim_data}{A \code{\link{hesim_data}} object. Required to specify 
 treatment strategies, patients, and/or health states not included as columns
 in \code{tbl}, or, to match patients in \code{tbl} to groups. Not required
-if\code{tbl} includes one row for each treatment strategy, patient, and
+if \code{tbl} includes one row for each treatment strategy, patient, and
 health state combination.}
 }
 \value{
 An object of class "stateval_tbl", which is a \code{data.table} of
 parameter values with attributes for \code{dist} and optionally 
-\code{patient_lookup} and \code{strategoy_id}. \code{tbl} 
-is in the same format as described in "Details".
+\code{strategy_id}, \code{patients}, and \code{state_id}. \code{tbl} 
+is in the same format as described in "Details". \code{patients} is a 
+\code{data.table} with one column containing \code{patient_id} and 
+optionally a second column containing \code{grp_id}.
 }
 \description{
 Create a table for storing parameter estimates used to simulate costs or 
-utility in an economic mode by treatment strategy, patient, and health state.
+utility in an economic model by treatment strategy, patient, and health state.
 }
 \details{
 \code{tbl} is a \code{data.table} containing columns for treatment 
-strategies (\code{strategy_id}), patient subgroups (\code{grp_id}) and/or
-health states (\code{state_id}). The table must contain at least one column
+strategies (\code{strategy_id}), patient subgroups (\code{grp_id}),
+health states (\code{state_id}), and/or time period (\code{time_start} and
+\code{time_stop}). The table must contain at least one column
 named (\code{strategy_id}, \code{grp_id} or \code{state_id}, but does not need
-to contain all of them. Each row denoted a unique treatment strategy, patient
-subgroup, and/or health state pair.
+to contain all of them. Each row denotes a unique treatment strategy, patient
+subgroup, health state, and/or time period pair.
 
 \code{tbl} must also contain columns summarizing the state values for each
 row, which depend on the probability distribution select with \code{dist}. 

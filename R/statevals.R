@@ -2,7 +2,7 @@
 #' Table to store state value parameters
 #' 
 #' Create a table for storing parameter estimates used to simulate costs or 
-#' utility in an economic mode by treatment strategy, patient, and health state. 
+#' utility in an economic model by treatment strategy, patient, and health state. 
 #' 
 #' @param tbl A \code{data.frame} or \code{data.table} for storing parameter 
 #' values. See "Details" for specifics. 
@@ -11,16 +11,17 @@
 #' @param hesim_data A \code{\link{hesim_data}} object. Required to specify 
 #' treatment strategies, patients, and/or health states not included as columns
 #' in \code{tbl}, or, to match patients in \code{tbl} to groups. Not required
-#' if\code{tbl} includes one row for each treatment strategy, patient, and
+#' if \code{tbl} includes one row for each treatment strategy, patient, and
 #' health state combination.
 #' 
 #' @details 
 #' \code{tbl} is a \code{data.table} containing columns for treatment 
-#' strategies (\code{strategy_id}), patient subgroups (\code{grp_id}) and/or
-#' health states (\code{state_id}). The table must contain at least one column
+#' strategies (\code{strategy_id}), patient subgroups (\code{grp_id}),
+#' health states (\code{state_id}), and/or time period (\code{time_start} and
+#' \code{time_stop}). The table must contain at least one column
 #' named (\code{strategy_id}, \code{grp_id} or \code{state_id}, but does not need
-#' to contain all of them. Each row denoted a unique treatment strategy, patient
-#' subgroup, and/or health state pair.
+#' to contain all of them. Each row denotes a unique treatment strategy, patient
+#' subgroup, health state, and/or time period pair.
 #' 
 #' \code{tbl} must also contain columns summarizing the state values for each
 #' row, which depend on the probability distribution select with \code{dist}. 
@@ -42,8 +43,10 @@
 #' 
 #' @return An object of class "stateval_tbl", which is a \code{data.table} of
 #' parameter values with attributes for \code{dist} and optionally 
-#' \code{patient_lookup} and \code{strategoy_id}. \code{tbl} 
-#' is in the same format as described in "Details".
+#' \code{strategy_id}, \code{patients}, and \code{state_id}. \code{tbl} 
+#' is in the same format as described in "Details". \code{patients} is a 
+#' \code{data.table} with one column containing \code{patient_id} and 
+#' optionally a second column containing \code{grp_id}.
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3),
@@ -141,7 +144,7 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
       }    
   }
   
-  ## Number of rows
+  ## Unique rows
   id_vars_all <- c("strategy_id", "state_id", "grp_id") 
   id_vars <- id_vars_all[which(id_vars_all %in% colnames(tbl))]
   if (!all(tbl[, .N, by = id_vars]$N == 1)) {
@@ -150,6 +153,25 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
          call. = FALSE)
   }
   
+  ## Number of rows
+  size <- function(var){
+    if (is.null(tbl[[var]])){
+      n <- 1
+    } else{
+      n <- length(unique(tbl[[var]]))
+    }
+    return(n)
+  }
+  expected_n_strategies <- size("strategy_id")
+  expected_n_states <- size("state_id")
+  expected_n_grps <- size("grp_id")
+  expected_n <- expected_n_strategies * expected_n_states * expected_n_grps
+  if (nrow(tbl) != expected_n) {
+    stop(paste0("The number of rows in 'tbl' should equal ", expected_n, 
+                " which is the product of the number of unique strategies ",
+                "states, and groups in 'tbl'."))
+  }
+
   # Return
   object <- copy(tbl)
   setattr(object, "class", c("stateval_tbl", "data.table", "data.frame"))

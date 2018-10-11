@@ -35,7 +35,7 @@
 <meta property="og:title" content="Table to store state value parameters — stateval_tbl" />
 
 <meta property="og:description" content="Create a table for storing parameter estimates used to simulate costs or 
-utility in an economic mode by treatment strategy, patient, and health state." />
+utility in an economic model by treatment strategy, patient, and health state." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,7 +123,7 @@ utility in an economic mode by treatment strategy, patient, and health state." /
     <div class="ref-description">
     
     <p>Create a table for storing parameter estimates used to simulate costs or 
-utility in an economic mode by treatment strategy, patient, and health state.</p>
+utility in an economic model by treatment strategy, patient, and health state.</p>
     
     </div>
 
@@ -148,7 +148,7 @@ probabilistic sensitivity analysis.</p></td>
       <td><p>A <code><a href='hesim_data.html'>hesim_data</a></code> object. Required to specify 
 treatment strategies, patients, and/or health states not included as columns
 in <code>tbl</code>, or, to match patients in <code>tbl</code> to groups. Not required
-if<code>tbl</code> includes one row for each treatment strategy, patient, and
+if <code>tbl</code> includes one row for each treatment strategy, patient, and
 health state combination.</p></td>
     </tr>
     </table>
@@ -157,17 +157,20 @@ health state combination.</p></td>
 
     <p>An object of class "stateval_tbl", which is a <code>data.table</code> of
 parameter values with attributes for <code>dist</code> and optionally 
-<code>patient_lookup</code> and <code>strategoy_id</code>. <code>tbl</code> 
-is in the same format as described in "Details".</p>
+<code>strategy_id</code>, <code>patients</code>, and <code>state_id</code>. <code>tbl</code> 
+is in the same format as described in "Details". <code>patients</code> is a 
+<code>data.table</code> with one column containing <code>patient_id</code> and 
+optionally a second column containing <code>grp_id</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>tbl</code> is a <code>data.table</code> containing columns for treatment 
-strategies (<code>strategy_id</code>), patient subgroups (<code>grp_id</code>) and/or
-health states (<code>state_id</code>). The table must contain at least one column
+strategies (<code>strategy_id</code>), patient subgroups (<code>grp_id</code>),
+health states (<code>state_id</code>), and/or time period (<code>time_start</code> and
+<code>time_stop</code>). The table must contain at least one column
 named (<code>strategy_id</code>, <code>grp_id</code> or <code>state_id</code>, but does not need
-to contain all of them. Each row denoted a unique treatment strategy, patient
-subgroup, and/or health state pair.</p>
+to contain all of them. Each row denotes a unique treatment strategy, patient
+subgroup, health state, and/or time period pair.</p>
 <p><code>tbl</code> must also contain columns summarizing the state values for each
 row, which depend on the probability distribution select with <code>dist</code>. 
 Available distributions include the normal (<code>norm</code>), beta (<code>beta</code>),
