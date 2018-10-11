@@ -197,24 +197,24 @@
 
 <span class='co'># Summarize survival curves</span>
 <span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>quantile</span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve    p  quantile
-#&gt; 1:      1           1          1     1 0.25 0.1921720
-#&gt; 2:      1           1          1     1 0.50 0.4630231
-#&gt; 3:      1           1          1     1 0.75 0.9260463
-#&gt; 4:      1           1          1     2 0.25 0.3440260
-#&gt; 5:      1           1          1     2 0.50 0.8289034
-#&gt; 6:      1           1          1     2 0.75 1.6578068</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve   t  survival
+#&gt; 1:      1           1          1     1 0.25 0.1855058
+#&gt; 2:      1           1          1     1 0.50 0.4469615
+#&gt; 3:      1           1          1     1 0.75 0.8939230
+#&gt; 4:      1           1          1     2 0.25 0.3594712
+#&gt; 5:      1           1          1     2 0.50 0.8661175
+#&gt; 6:      1           1          1     2 0.75 1.7322350</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve   t  survival
 #&gt; 1:      1           1          1     1 0.0 1.0000000
-#&gt; 2:      1           1          1     1 0.1 0.8609659
-#&gt; 3:      1           1          1     1 0.2 0.7412623
-#&gt; 4:      1           1          1     1 0.3 0.6382016
-#&gt; 5:      1           1          1     1 0.4 0.5494699
-#&gt; 6:      1           1          1     1 0.5 0.4730748</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve t      rmst
-#&gt; 1:      1           1          1     1 2 0.6345434
-#&gt; 2:      1           1          1     1 5 0.6676261
-#&gt; 3:      1           1          1     2 2 0.9712881
-#&gt; 4:      1           1          1     2 5 1.1775803
-#&gt; 5:      1           1          1     3 2 1.1766838
-#&gt; 6:      1           1          1     3 5 1.6124135</div><div class='input'>
+#&gt; 2:      1           1          1     1 0.1 0.8563468
+#&gt; 3:      1           1          1     1 0.2 0.7333298
+#&gt; 4:      1           1          1     1 0.3 0.6279847
+#&gt; 5:      1           1          1     1 0.4 0.5377726
+#&gt; 6:      1           1          1     1 0.5 0.4605199</div><div class='input'><span class='fu'>head</span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve t      rmst
+#&gt; 1:      1           1          1     1 2 0.6158264
+#&gt; 2:      1           1          1     1 5 0.6445525
+#&gt; 3:      1           1          1     2 2 0.9974124
+#&gt; 4:      1           1          1     2 5 1.2266907
+#&gt; 5:      1           1          1     3 2 1.2073274
+#&gt; 6:      1           1          1     3 5 1.6877682</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

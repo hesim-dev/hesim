@@ -105,15 +105,15 @@ where for health state \eqn{h} and time {t}, \eqn{w_h} is the predicted cost or 
 library("flexsurv")
 
 # Simulation data
-dt_strategies <- data.frame(strategy_id = c(1, 2, 3))
-dt_patients <- data.frame(patient_id = seq(1, 3),
+strategies <- data.frame(strategy_id = c(1, 2, 3))
+patients <- data.frame(patient_id = seq(1, 3),
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
-dt_states <- data.frame(state_id =  seq(1, 3),
+states <- data.frame(state_id =  seq(1, 3),
                         state_name = paste0("state", seq(1, 3)))
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients,
-                        states = dt_states)
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients,
+                        states = states)
 n_samples <- 3
 
 # Survival models
@@ -129,20 +129,18 @@ fits <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3), data = surv_data)
 curves_data <- expand(hesim_dat, by = c("strategies", "patients"))
 psm_curves <- create_PsmCurves(fits, data = curves_data, n = n_samples)
 
-# Cost models
+# Cost model(s)
 expanded_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit_costs_medical <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 psm_costs_medical <- create_StateVals(fit_costs_medical, data = expanded_data, n = n_samples)
 
 # Utility model
-utility_posterior <- matrix(runif(n_samples * 3,
-                                  min = psm4_exdata$utility$lower,
-                                  max = psm4_exdata$utility$upper),
-                            nrow = n_samples, byrow = TRUE)
-utility_means <- stateval_means(values = utility_posterior,
-                                strategy_id = dt_strategies$strategy_id,
-                                patient_id = dt_patients$patient_id)
-psm_utility <- create_StateVals(utility_means)
+utility_tbl <- stateval_tbl(tbl = data.frame(state_id = states$state_id,
+                                             min = psm4_exdata$utility$lower,
+                                             max = psm4_exdata$utility$upper),
+                            dist = "unif",
+                            hesim_data = hesim_dat)
+psm_utility <- create_StateVals(utility_tbl, n = n_samples)
 
 # Partitioned survival decision model
 psm <- Psm$new(survival_models = psm_curves,

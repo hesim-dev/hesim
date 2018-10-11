@@ -151,16 +151,17 @@ Note that the \code{lys} column is only computed if \code{lys = TRUE}.
 \examples{
 library("flexsurv")
 
-# Treatment strategies,target population, and health states
-dt_strategies <- data.frame(strategy_id = c(1, 2))
-dt_patients <- data.frame(patient_id = seq(1, 3),
+# Treatment strategies, target population, and model structure
+strategies <- data.frame(strategy_id = c(1, 2))
+patients <- data.frame(patient_id = seq(1, 3),
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
-dt_states <- data.frame(state_id = c(1, 2))
+states <- data.frame(state_id = c(1, 2))
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients,
+                        states = states)
 
 # Parameter estimation
-n_samples <- 2
-
 ## Multi-state model
 fits <- vector(length = 3, mode = "list")
 surv_dat <- data.frame(ctstm3_exdata$transitions)
@@ -176,44 +177,48 @@ tmat <- rbind(c(NA, 1, 2),
               c(NA, NA, NA))
               
 ## Utility
-beta_params <- mom_beta(ctstm3_exdata$utility$mean, ctstm3_exdata$utility$se)
-utility_posterior <- matrix(rbeta(n_samples * 2, shape1 = beta_params$shape1,
-                                  shape2 = beta_params$shape2),
-                            nrow = n_samples, byrow = TRUE)
+utility_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
+                                       mean = ctstm3_exdata$utility$mean,
+                                       se = ctstm3_exdata$utility$se),
+                            dist = "beta",
+                            hesim_data = hesim_dat)
 ## Costs
-drugcosts <- ctstm3_exdata$costs$drugs$costs
+drugcost_tbl <- stateval_tbl(data.frame(strategy_id = strategies$strategy_id,
+                                       est = ctstm3_exdata$costs$drugs$costs),
+                            dist = "fixed",
+                            hesim_data = hesim_dat) 
+medcost_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
+                                       mean = ctstm3_exdata$costs$medical$mean,
+                                       se = ctstm3_exdata$costs$medical$se),
+                            dist = "gamma",
+                            hesim_data = hesim_dat)  
 
 # Economic model
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients,
-                        states = dt_states)
-                        
-## Create transition model (i.e., multi-state model)
+n_samples = 2
+
+## Construct model
+### Transitions 
 transmod_data <- expand(hesim_dat)
 transmod <- create_IndivCtstmTrans(fits, data = transmod_data, trans_mat = tmat,
                                    n = n_samples)
                         
-## Create utility model
-utility_means <- stateval_means(values = utility_posterior,
-                                strategy_id = dt_strategies$strategy_id,
-                                patient_id = dt_patients$patient_id)
-utilitymod <- create_StateVals(utility_means)
+### Utility 
+utilitymod <- create_StateVals(utility_tbl, n = n_samples)
 
-## Create (drug) cost model
-drugcost_array <- array(NA, dim = c(n_samples, 2, 2))
-drugcost_array[, , 1] <- drugcosts[1]
-drugcost_array[, , 2] <- drugcosts[2]
-drugcost_means <- stateval_means(values = drugcost_array,
-                                strategy_id = dt_strategies$strategy_id,
-                                patient_id = dt_patients$patient_id)
-
-drugcostmod <- create_StateVals(drugcost_means)
-
-## Simulate outcomes
+### Costs
+drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples)
+medcostmod <- create_StateVals(medcost_tbl, n = n_samples)
+costmods <- list(drugs = drugcostmod,
+                 medical = medcostmod)
+                 
+### Combine
 ictstm <- IndivCtstm$new(trans_model = transmod,
                          utility_model = utilitymod,
-                         cost_models = list(drugs = drugcostmod))
-head(ictstm$sim_disease()$disprog_$sim)
+                         cost_models = costmods)
+
+
+## Simulate outcomes
+head(ictstm$sim_disease()$disprog_)
 head(ictstm$sim_stateprobs(t = c(0, 5, 10))$stateprobs_[t == 5])
 ictstm$sim_qalys(dr = .03)
 ictstm$sim_costs(dr = .03)

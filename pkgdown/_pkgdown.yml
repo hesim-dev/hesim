@@ -34,7 +34,7 @@ reference:
       - create_input_mats
   - title: "Health state values"
     contents:
-      - stateval_means
+      - stateval_tbl
       - StateVals
       - create_StateVals
   - title: "Partitioned survival model"

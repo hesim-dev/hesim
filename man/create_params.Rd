@@ -2,7 +2,6 @@
 % Please edit documentation in R/params.R
 \name{create_params}
 \alias{create_params}
-\alias{create_params.stateval_means}
 \alias{create_params.lm}
 \alias{create_params.flexsurvreg}
 \alias{create_params.flexsurvreg_list}
@@ -10,8 +9,6 @@
 \title{Create a parameter object from a fitted model}
 \usage{
 create_params(object, ...)
-
-\method{create_params}{stateval_means}(object, ...)
 
 \method{create_params}{lm}(object, n = 1000, point_estimate = FALSE, ...)
 
@@ -44,7 +41,6 @@ parameters are bootstrapped using \code{\link{bootstrap}}.}
 An object prefixed by \code{params_}. Mapping between \code{create_params} 
 and the classes of the returned objects are: 
 \itemize{
-\item{\code{create_params.statevals_means} ->}{ \code{params_mean}}
 \item{\code{create_params.lm} ->}{ \code{params_lm}}
 \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
 \item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}
@@ -73,3 +69,4 @@ params_surv_wei <- create_params(fit, n = n)
 print(params_surv_wei$dist)
 head(params_surv_wei$coefs)
 }
+\keyword{internal}

@@ -131,9 +131,6 @@ then random samples from the posterior distribution are returned.</p>
 
     <pre class="usage"><span class='fu'>create_params</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for stateval_means</span>
-<span class='fu'>create_params</span>(<span class='no'>object</span>, <span class='no'>...</span>)
-
 <span class='co'># S3 method for lm</span>
 <span class='fu'>create_params</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
@@ -185,7 +182,6 @@ parameters are bootstrapped using <code>bootstrap</code>.</p></td>
 
     <p>An object prefixed by <code>params_</code>. Mapping between <code>create_params</code> 
 and the classes of the returned objects are:</p><ul>
-<li><p><code>create_params.statevals_means</code> -&gt; <code>params_mean</code></p></li>
 <li><p><code>create_params.lm</code> -&gt; <code>params_lm</code></p></li>
 <li><p><code>create_params.flexsurvreg</code> -&gt; <code>params_surv</code></p></li>
 <li><p><code>create_params.flexsurvreg_list</code> -&gt; <code>params_surv_list</code></p></li>
@@ -199,12 +195,12 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>costs</span> ~ <span class='no'>female</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>psm4_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>)
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params_lm</span> <span class='kw'>&lt;-</span> <span class='fu'>create_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
-<span class='fu'>head</span>(<span class='no'>params_lm</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt;      (Intercept)    female
-#&gt; [1,]    31617.61 1039.4739
-#&gt; [2,]    29318.69 7532.0366
-#&gt; [3,]    29875.51 5521.3612
-#&gt; [4,]    31919.15 -489.8279
-#&gt; [5,]    29773.83 5237.4733</div><div class='input'><span class='fu'>head</span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
+<span class='fu'>head</span>(<span class='no'>params_lm</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt;      (Intercept)      female
+#&gt; [1,]    31919.15  -489.82786
+#&gt; [2,]    29773.83  5237.47334
+#&gt; [3,]    30377.56  2700.37029
+#&gt; [4,]    33218.15 -1430.43966
+#&gt; [5,]    32038.24    77.35053</div><div class='input'><span class='fu'>head</span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># create_params.flexsurvreg</span>
 <span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
@@ -213,19 +209,19 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>params_surv_wei</span> <span class='kw'>&lt;-</span> <span class='fu'>create_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'>print</span>(<span class='no'>params_surv_wei</span>$<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'>head</span>(<span class='no'>params_surv_wei</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; $shape
 #&gt;           shape
-#&gt; [1,]  0.1858866
-#&gt; [2,]  0.1599931
-#&gt; [3,]  0.2439016
-#&gt; [4,]  0.4359156
-#&gt; [5,] -0.2269182
+#&gt; [1,]  0.4225771
+#&gt; [2,] -0.3277314
+#&gt; [3,]  0.5476954
+#&gt; [4,]  0.1458902
+#&gt; [5,]  0.3172702
 #&gt; 
 #&gt; $scale
 #&gt;         scale
-#&gt; [1,] 7.213547
-#&gt; [2,] 7.463594
-#&gt; [3,] 6.723926
-#&gt; [4,] 7.418594
-#&gt; [5,] 7.194479
+#&gt; [1,] 7.091914
+#&gt; [2,] 7.690561
+#&gt; [3,] 6.633596
+#&gt; [4,] 6.908870
+#&gt; [5,] 7.620746
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

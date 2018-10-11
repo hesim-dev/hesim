@@ -3,7 +3,6 @@
 \name{create_input_mats}
 \alias{create_input_mats}
 \alias{create_input_mats.formula_list}
-\alias{create_input_mats.stateval_means}
 \alias{create_input_mats.lm}
 \alias{create_input_mats.lm_list}
 \alias{create_input_mats.flexsurvreg}
@@ -17,8 +16,6 @@
 create_input_mats(object, ...)
 
 \method{create_input_mats}{formula_list}(object, data, ...)
-
-\method{create_input_mats}{stateval_means}(object, ...)
 
 \method{create_input_mats}{lm}(object, data, ...)
 
@@ -87,3 +84,4 @@ class(input_mats)
 \seealso{
 \code{\link{input_mats}}.
 }
+\keyword{internal}

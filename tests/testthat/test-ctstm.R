@@ -9,25 +9,38 @@ pv <- function(z, r, t1, t2) {
   z * ((exp(-r * t1) - exp(-r * t2))/r)
 }
 
-# Statistical models to estimate parameters  -----------------------------------
+# Strategies, population, and model structure  ---------------------------------
+strategies <- data.table(strategy_id = c(1, 2))
+patients <- data.table(patient_id = seq(1, 3),
+                          age = c(45, 50, 60),
+                          female = c(0, 0, 1))
+states <- data.table(state_id = c(1, 2))
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients,
+                        states = states)
 n_samples <- 2
 
+# Statistical models to estimate parameters  -----------------------------------
 # Utility
-beta_params <- mom_beta(ctstm3_exdata$utility$mean, ctstm3_exdata$utility$se)
-utility_dist <- matrix(rbeta(n_samples * 2, shape1 = beta_params$shape1,
-                                  shape2 = beta_params$shape2),
-                            nrow = n_samples, byrow = TRUE)
+utility_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
+                                       est = c(0.90, 0.55)),
+                            dist = "fixed",
+                            hesim_data = hesim_dat)
 
 # Costs
 ## Medical
-gamma_params <- mom_gamma(ctstm3_exdata$costs$medical$mean, 
-                        ctstm3_exdata$costs$medical$se)
-medcosts_dist <- matrix(rgamma(n_samples * 2, shape = gamma_params$shape,
-                                scale = gamma_params$scale),
-                            nrow = n_samples, byrow = TRUE)
+medcost_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
+                                       mean = c(800, 1500),
+                                       se = c(100, 150)),
+                            dist = "gamma",
+                            hesim_data = hesim_dat)
+
 
 ## Drugs
-drugcosts <- ctstm3_exdata$costs$drugs$costs
+drugcost_tbl <- stateval_tbl(tbl = data.frame(strategy_id = strategies$strategy_id,
+                                           est = c(10000, 12500)),
+                            dist = "fixed",
+                            hesim_data = hesim_dat)
 
 # Clock-reset multi-state model
 ## Separate 
@@ -116,41 +129,15 @@ test_that("C_ctstm_indiv_stateprobs", {
 })
 
 # Simulate economic model ------------------------------------------------------
-# Construct a model structure 
-## Simulation data
-dt_strategies <- data.table(strategy_id = c(1, 2))
-dt_patients <- data.table(patient_id = seq(1, 3),
-                          age = c(45, 50, 60),
-                          female = c(0, 0, 1))
-dt_states <- data.table(state_id = c(1, 2))
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients,
-                        states = dt_states)
+# Construct economic model
+## Utility
+utilmod <- create_StateVals(utility_tbl, n = n_samples)
 
-## Utility and cost models
-### Utility
-utility_means <- stateval_means(values = utility_dist,
-                                strategy_id = dt_strategies$strategy_id,
-                                patient_id = dt_patients$patient_id)
-utilmod <- create_StateVals(utility_means)
+## Costs
+medcostsmod <- create_StateVals(medcost_tbl, n = n_samples)
+drugcostsmod <- create_StateVals(drugcost_tbl, n = n_samples) 
 
-### Costs
-#### Medical
-medcosts_means <- stateval_means(values = medcosts_dist,
-                                strategy_id = dt_strategies$strategy_id,
-                                patient_id = dt_patients$patient_id)
-medcostsmod <- create_StateVals(medcosts_means)
-
-#### Drug
-drugcost_array <- array(NA, dim = c(n_samples, 2, 2))
-drugcost_array[, , 1] <- drugcosts[1]
-drugcost_array[, , 2] <- drugcosts[2]
-drugcost_means <- stateval_means(values = drugcost_array,
-                                strategy_id = dt_strategies$strategy_id,
-                                patient_id = dt_patients$patient_id)
-drugcostsmod <- create_StateVals(drugcost_means)
-
-## The health state transitions
+## Transitions
 ### With transition specific survival models
 msfit_list_data <- expand(hesim_dat)
 tmat <- rbind(c(NA, 1, 2),
@@ -193,8 +180,8 @@ test_that("IndivCtstmTrans - transition specific", {
                                       trans_mat = tmat,
                                       start_age = rep(55, nrow(dt_patients) + 1))) 
   expect_error(create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
-                                death_state = nrow(tmat) + 1,
-                                point_estimate = TRUE))
+                                      death_state = nrow(tmat) + 1,
+                                      point_estimate = TRUE))
   
   mstate_list2 <- mstate_list$clone()
   mstate_list2$trans_mat <- matrix(1)
@@ -206,9 +193,9 @@ test_that("IndivCtstmTrans - transition specific", {
 })  
 
 ### With a joint model
-dt_transitions <- create_trans_dt(tmat_ebmt4)
-dt_transitions[, trans := transition_id]
-hesim_dat$transitions <- dt_transitions
+transitions <- create_trans_dt(tmat_ebmt4)
+transitions[, trans := transition_id]
+hesim_dat$transitions <- transitions
 msfit_data <- expand(hesim_dat, by = c("strategies", "patients", "transitions"))
 
 test_that("create_IndivCtstmTrans - joint", {
@@ -317,8 +304,9 @@ test_that("Simulate costs and QALYs", {
   
   disprog1 <- ictstm$disprog_[sample == 1 & strategy_id == 1 & patient_id == 2]
   qalys1 <- ictstm$qalys_[sample == 1 & strategy_id == 1 & patient_id == 2]
-  utilvals <- utility_means$values[1, disprog1$from] 
-  qalys_expected <- sum(pv(utilvals, .03, disprog1$time_start, disprog1$time_stop))
+  utilvals <- merge(data.frame(state_id = disprog1$from), utility_tbl, 
+                    by = "state_id")
+  qalys_expected <- sum(pv(utilvals$est, .03, disprog1$time_start, disprog1$time_stop))
   expect_equal(sum(qalys1$qalys), qalys_expected)
   
   ### dr = 0
@@ -334,6 +322,7 @@ test_that("Simulate costs and QALYs", {
   
   # Simulate costs
   # Errors
+  ## Cost models must be lists of StateVal objects
   ictstm2$cost_models <- 2
   expect_error(ictstm2$sim_costs())
   ictstm2$cost_models <- list(2)

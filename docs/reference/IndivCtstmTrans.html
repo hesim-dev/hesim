@@ -209,36 +209,36 @@
                                     <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                     <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t     hazard
-#&gt; 1:     1      1           1          1 1 0.16540081
-#&gt; 2:     1      1           1          1 2 0.16540081
-#&gt; 3:     1      1           1          1 3 0.16540081
-#&gt; 4:     2      1           1          1 1 0.03399796
-#&gt; 5:     2      1           1          1 2 0.03399796
-#&gt; 6:     2      1           1          1 3 0.03399796</div><div class='input'><span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
-#&gt; 1:     1      1           1          1 1 0.16540081
-#&gt; 2:     1      1           1          1 2 0.33080162
-#&gt; 3:     1      1           1          1 3 0.49620243
-#&gt; 4:     2      1           1          1 1 0.03399796
-#&gt; 5:     2      1           1          1 2 0.06799591
-#&gt; 6:     2      1           1          1 3 0.10199387</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
-#&gt;  1:      1           1        1 5 1.0000000
+#&gt; 1:     1      1           1          1 1 0.24909177
+#&gt; 2:     1      1           1          1 2 0.24909177
+#&gt; 3:     1      1           1          1 3 0.24909177
+#&gt; 4:     2      1           1          1 1 0.05951133
+#&gt; 5:     2      1           1          1 2 0.05951133
+#&gt; 6:     2      1           1          1 3 0.05951133</div><div class='input'><span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
+#&gt; 1:     1      1           1          1 1 0.24909177
+#&gt; 2:     1      1           1          1 2 0.49818354
+#&gt; 3:     1      1           1          1 3 0.74727531
+#&gt; 4:     2      1           1          1 1 0.05951133
+#&gt; 5:     2      1           1          1 2 0.11902267
+#&gt; 6:     2      1           1          1 3 0.17853400</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
+#&gt;  1:      1           1        1 5 0.3333333
 #&gt;  2:      1           1        2 5 0.0000000
-#&gt;  3:      1           1        3 5 0.0000000
+#&gt;  3:      1           1        3 5 0.6666667
 #&gt;  4:      1           2        1 5 0.3333333
 #&gt;  5:      1           2        2 5 0.0000000
 #&gt;  6:      1           2        3 5 0.6666667
 #&gt;  7:      1           3        1 5 0.0000000
 #&gt;  8:      1           3        2 5 0.0000000
 #&gt;  9:      1           3        3 5 1.0000000
-#&gt; 10:      2           1        1 5 0.3333333
+#&gt; 10:      2           1        1 5 0.0000000
 #&gt; 11:      2           1        2 5 0.0000000
-#&gt; 12:      2           1        3 5 0.6666667
-#&gt; 13:      2           2        1 5 0.0000000
+#&gt; 12:      2           1        3 5 1.0000000
+#&gt; 13:      2           2        1 5 0.3333333
 #&gt; 14:      2           2        2 5 0.0000000
-#&gt; 15:      2           2        3 5 1.0000000
-#&gt; 16:      2           3        1 5 0.0000000
+#&gt; 15:      2           2        3 5 0.6666667
+#&gt; 16:      2           3        1 5 0.3333333
 #&gt; 17:      2           3        2 5 0.0000000
-#&gt; 18:      2           3        3 5 1.0000000</div></pre>
+#&gt; 18:      2           3        3 5 0.6666667</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

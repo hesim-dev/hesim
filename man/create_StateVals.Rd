@@ -3,7 +3,7 @@
 \name{create_StateVals}
 \alias{create_StateVals}
 \alias{create_StateVals.lm}
-\alias{create_StateVals.stateval_means}
+\alias{create_StateVals.stateval_tbl}
 \title{Create \code{StateVals} object}
 \usage{
 create_StateVals(object, ...)
@@ -11,7 +11,7 @@ create_StateVals(object, ...)
 \method{create_StateVals}{lm}(object, data = NULL, n = 1000,
   point_estimate = FALSE, ...)
 
-\method{create_StateVals}{stateval_means}(object, ...)
+\method{create_StateVals}{stateval_tbl}(object, n = 1000, ...)
 }
 \arguments{
 \item{object}{A model object of the appropriate class.}
@@ -32,7 +32,7 @@ Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
 }
 \description{
 \code{create_StateVals} is a generic function for creating an object of class
- \code{\link{StateVals}} from a fitted statistical model or \code{\link{stateval_means}}
+ \code{\link{StateVals}} from a fitted statistical model or a \code{\link{stateval_tbl}}
  object.
 }
 \seealso{

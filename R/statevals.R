@@ -1,58 +1,170 @@
-# stateval_means ----------------------------------------------------------------
-#' Mean values for health states
+# stateval_tbl -----------------------------------------------------------------
+#' Table to store state value parameters
 #' 
-#' Estimated means that are used to simulate values assigned to health states with
-#'  \code{\link{StateVals}}.
-#' @param values Typically a matrix where each column denotes a health state and each
-#' row denotes a random sample of the value assigned to that health state for the
-#' probabilistic sensitivitiy analysis. If health state values vary by strategy, then
-#' it can be an array of matrices where each matrix denotes the values associated with
-#' a different treatment strategy. 
-#' @param strategy_id If a matrix, a vector denoting the strategy ID's to be modeled; if an array,
-#' a vector denoting the strategy ID associated with each matrix in the array.
-#' @param patient_id The patient ID's that will be modeled in the simulation. Note that state
-#' values are assumed to be constant across patients when using objects of class "stateval_means". 
+#' Create a table for storing parameter estimates used to simulate costs or 
+#' utility in an economic mode by treatment strategy, patient, and health state. 
 #' 
-#' @return An object of class "stateval_means", which is a list containing \code{values},
-#' \code{strategy_id}, and \code{patient_id}.
+#' @param tbl A \code{data.frame} or \code{data.table} for storing parameter 
+#' values. See "Details" for specifics. 
+#' @param dist Probability distribution used to sample parameters for a 
+#' probabilistic sensitivity analysis. 
+#' @param hesim_data A \code{\link{hesim_data}} object. Required to specify 
+#' treatment strategies, patients, and/or health states not included as columns
+#' in \code{tbl}, or, to match patients in \code{tbl} to groups. Not required
+#' if\code{tbl} includes one row for each treatment strategy, patient, and
+#' health state combination.
+#' 
+#' @details 
+#' \code{tbl} is a \code{data.table} containing columns for treatment 
+#' strategies (\code{strategy_id}), patient subgroups (\code{grp_id}) and/or
+#' health states (\code{state_id}). The table must contain at least one column
+#' named (\code{strategy_id}, \code{grp_id} or \code{state_id}, but does not need
+#' to contain all of them. Each row denoted a unique treatment strategy, patient
+#' subgroup, and/or health state pair.
+#' 
+#' \code{tbl} must also contain columns summarizing the state values for each
+#' row, which depend on the probability distribution select with \code{dist}. 
+#' Available distributions include the normal (\code{norm}), beta (\code{beta}),
+#' gamma (\code{gamma}), lognormal (\code{lnorm}), and uniform (\code{unif})
+#'  distributions. In addition, the option \code{fixed} can be used if estimates
+#'  are known with certainty. The columns in \code{tbl} that must be included,
+#'  by distribution are:
+#' 
+#' \describe{
+#' \item{norm}{\code{mean} and \code{sd}}
+#' \item{beta}{\code{mean} and \code{se} or \code{shape1} and \code{shape2}}
+#' \item{gamma}{\code{mean} and \code{se}, \code{shape} and \code{rate}, 
+#' or \code{shape} and {scale}}
+#' \item{lnorm}{\code{meanlog} or \code{sdlog}}
+#' \item{unif}{\code{min} and \code{max}}
+#' \item{fixed}{\code{est}}
+#' }
+#' 
+#' @return An object of class "stateval_tbl", which is a \code{data.table} of
+#' parameter values with attributes for \code{dist} and optionally 
+#' \code{patient_lookup} and \code{strategoy_id}. \code{tbl} 
+#' is in the same format as described in "Details".
 #' @examples 
-#' # Cost estimates in 2 health states for a model with 2 treatment strategies and 3 patients
-#' gamma_params <- mom_gamma(c(5000, 7000), c(1000, 1200))
-#' n <- 3
-#' vals <- matrix(rgamma(2 * n, 
-#'                       shape = gamma_params$shape, 
-#'                       scale = gamma_params$scale),
-#'                nrow = n, ncol = 2, byrow = TRUE)
-#' stval_ests <- stateval_means(values = vals,
-#'                            strategy_id = c(1, 2),
-#'                            patient_id = c(1, 2, 3))
-#' print(stval_ests)
-#' stateval_mod <- create_StateVals(stval_ests)
-#' head(stateval_mod$sim(t = c(1, 2, 3), type = "predict"))
+#' strategies <- data.frame(strategy_id = c(1, 2))
+#' patients <- data.frame(patient_id = seq(1, 3),
+#'                        grp_id = c(1, 1, 2),
+#'                        age = c(45, 50, 60),
+#'                        female = c(0, 0, 1))
+#' states <- data.frame(state_id = c(1, 2))
+#' hesim_dat <- hesim_data(strategies = strategies,
+#'                         patients = patients,
+#'                         states = states)
+#'
+#' # Utility varies by health state and patient group
+#' utility_tbl <- stateval_tbl(data.frame(state_id = rep(states$state_id, 2),
+#'                                        grp_id = rep(rep(c(1, 2)), each = nrow(states)), 
+#'                                        mean = c(.8, .7, .75, .55),
+#'                                        se = c(.18, .12, .10, .06)),
+#'                             dist = "beta",
+#'                             hesim_data = hesim_dat)
+#' print(utility_tbl)
+#' utilmod <- create_StateVals(utility_tbl, n = 2)
+#'
+#' # Costs vary by treatment strategy
+#' cost_tbl <- stateval_tbl(data.frame(strategy_id = strategies$strategy_id,
+#'                                     mean = c(5000, 3000),
+#'                                     se = c(200, 100)),
+#'                          dist = "gamma",
+#'                          hesim_data = hesim_dat)
+#' print(cost_tbl)
+#' costmod <- create_StateVals(cost_tbl, n = 2)
+#'
 #'
 #' @export
-stateval_means <- function(values, strategy_id, patient_id){
-  if(!(is.matrix(values) | is.array(values))){
-    stop("'values' must be a matrix or an array.", 
-         call. = FALSE)
-  }
-  if (!is.matrix(values)){
-    if (length(strategy_id) != dim(values)[3]){
-      stop("The length of 'strategy_id' must equal the number of matrices in 'values'",
-           call. = FALSE)
+stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma", 
+                                       "lnorm", "unif", "fixed"),
+                         hesim_data = NULL){
+  dist <- match.arg(dist)
+  tbl <- data.table(tbl)
+  cols <- colnames(tbl)
+  
+  # Check
+  ## Column names
+  check_column <- function(var){
+    if (is.null(tbl[[var]])){
+      if (is.null(hesim_data)){
+        msg <- paste0("If '", var, "' is not a column in 'tbl' ",
+                      "then 'hesim_data' must be included as an argument.")
+        stop(msg, call. = FALSE)
+      }
     }
   }
-  l <- list(values = values, strategy_id = strategy_id,
-            patient_id = patient_id)
-  class(l) <- "stateval_means"
-  return(l)
+  check_column("state_id")
+  check_column("strategy_id")
+  check_column("patient_id")
+  
+  ## Correct columns for probability distributions
+  if (dist == "norm"){
+    if (!all(c("mean", "sd") %in% cols)){
+      msg <- stop("If a normal distribution is specified, then tbl must ",
+                    "contain the columns 'mean' and 'sd'.")
+      stop(msg, call. = FALSE)         
+    }
+  } else if (dist == "beta"){
+      if (!all(c("mean", "se") %in% cols) &
+          !all(c("shape1", "shape2") %in% cols)){
+        msg <- stop("If a beta distribution is specified, then tbl must either ",
+                    "contain the columns 'mean' and 'se' or 'shape1' and 'shape2'.")
+        stop(msg, call. = FALSE)      
+      }
+  } else if (dist == "gamma"){
+      if (!all(c("mean", "se") %in% cols) &
+          !all(c("shape", "rate") %in% cols) &
+          !all(c("shape", "scale") %in% cols)){
+        msg <- stop("If a gamma distribution is specified, then tbl must either ",
+                  "contain the columns 'mean' and 'se', 'shape' and 'rate', ",
+                  "or 'shape' and 'scale'.")
+        stop(msg, call. = FALSE)        
+      }
+  } else if (dist == "lnorm"){
+    if (!all(c("meanlog", "sdlog") %in% cols)){
+      msg <- stop("If a lognormal distribution is specified, then tbl must ",
+                  "contain the columns 'meanlog' and 'sdlog'.")
+      stop(msg, call. = FALSE) 
+    }
+  } else if (dist == "unif"){
+      if (!all(c("min", "max") %in% cols)){
+        msg <- stop("If a uniform distribution is specified, then tbl must ",
+                    "contain the columns 'min' and 'max'.")
+        stop(msg, call. = FALSE)
+      }
+  } else if (dist == "fixed"){
+      if (!all(c("est") %in% cols)){
+        msg <- stop("If 'dist' = 'fixed', then tbl must ",
+                    "contain the column 'est'.")
+        stop(msg, call. = FALSE)
+      }    
+  }
+  
+  ## Number of rows
+  id_vars_all <- c("strategy_id", "state_id", "grp_id") 
+  id_vars <- id_vars_all[which(id_vars_all %in% colnames(tbl))]
+  if (!all(tbl[, .N, by = id_vars]$N == 1)) {
+    stop(paste0("There must only be one row for each 'strategy_id', 'state_id' ,",
+                "and 'grp_id' combination in 'tbl'."),
+         call. = FALSE)
+  }
+  
+  # Return
+  object <- copy(tbl)
+  setattr(object, "class", c("stateval_tbl", "data.table", "data.frame"))
+  setattr(object, "dist", dist)
+  setattr(object, "strategy_id", hesim_data$strategies$strategy_id)
+  setattr(object, "patients", data.table(hesim_data$patients))
+  setattr(object, "state_id", hesim_data$states$state_id)
+  return(object)
 }
 
 # StateVals --------------------------------------------------------------------
 #' Create \code{StateVals} object
 #' 
 #' \code{create_StateVals} is a generic function for creating an object of class
-#'  \code{\link{StateVals}} from a fitted statistical model or \code{\link{stateval_means}}
+#'  \code{\link{StateVals}} from a fitted statistical model or a \code{\link{stateval_tbl}}
 #'  object. 
 #' @param object A model object of the appropriate class.
 #' @param data An object of class "expanded_hesim_data" returned by 
@@ -80,11 +192,94 @@ create_StateVals.lm <- function(object, data = NULL, n = 1000,
 
 #' @rdname create_StateVals 
 #' @export
-create_StateVals.stateval_means <- function(object, ...){
-  params <- create_params(object)
-  input_mats <- create_input_mats(object)
+create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
+
+  # Parameters
+  tbl <- copy(object)
+  tbl[, ("row_num") := 1:.N]
+  n_rows <- nrow(tbl)
+  if (attr(object, "dist") == "norm"){
+    mu <- stats::rnorm(n * n_rows, mean = tbl$mean, sd = tbl$sd)
+  } else if (attr(object, "dist") == "beta"){
+    if (all(c("shape1", "shape2") %in% colnames(tbl))){
+      mu <- stats::rbeta(n * n_rows, shape1 = tbl$shape1, shape2 = tbl$shape2)
+    } else if (all(c("mean", "se") %in% colnames(tbl))){
+      mom_params <- mom_beta(tbl$mean, tbl$se)
+      mu <- stats::rbeta(n * n_rows, shape1 = mom_params$shape1, shape2 = mom_params$shape2) 
+    } 
+  } else if (attr(object, "dist") == "gamma"){
+      if (all(c("shape", "rate") %in% colnames(tbl))){
+        mu <- stats::rgamma(n * n_rows, shape = tbl$shape, rate = tbl$rate)
+      } else if (all(c("shape", "scale") %in% colnames(tbl))){
+        mu <- stats::rgamma(n * n_rows, shape = tbl$shape, scale = tbl$scale)
+      } else if (all(c("mean", "se") %in% colnames(tbl))){
+        mom_params <- mom_gamma(tbl$mean, tbl$se)
+        mu <- stats::rgamma(n * n_rows, shape = mom_params$shape, scale = mom_params$scale) 
+      } 
+  } else if (attr(object, "dist") == "lnorm"){
+      mu <- stats::rlnorm(n * n_rows, meanlog = tbl$meanlog, sdlog = tbl$sdlog)
+  } else if (attr(object, "dist") == "unif"){
+      mu <- stats::runif(n * n_rows, min = tbl$min, max = tbl$max) 
+  } else if (attr(object, "dist") == "fixed"){
+      mu <- rep(tbl$est, times = n)
+  }
+  mu <- matrix(mu, ncol = n, byrow = FALSE)
+  
+  ## Expand by strategy_id and/or state_id
+  tbl_list <- list()
+  id_vars <- c("strategy_id", "state_id")
+  i <- 1
+  for (var in id_vars){
+    if (is.null(tbl[[var]])){
+      if (!is.null(attr(object, var))){
+        tbl_i <- data.frame(tmp_var = attr(object, var))
+        setnames(tbl_i, "tmp_var", var)
+        tbl_list[[i]] <- tbl_i
+        i <- i + 1
+      }
+    }
+  }
+  tbl_list <- c(list(data.frame(tbl)), tbl_list)
+  tbl <- Reduce(function(...) merge(..., by = NULL), tbl_list)
+  tbl <- data.table(tbl)
+  
+  ## Expand by patient
+  merge <- TRUE
+  if (is.null(tbl$grp_id)){ # If group ID is not specified
+    tbl[, ("grp_id") := 1]
+    patient_lookup <- data.table(patient_id = attr(object, "patients")$patient_id, 
+                                 grp_id = 1)
+  } else { # Else if group ID is specified
+    if (is.null(attr(object, "patients")$grp_id)) { # If the patient lookup table does not exist
+      setnames(tbl, "grp_id", "patient_id")
+      merge <- FALSE
+    } else{
+        patient_lookup <- attr(object, "patients")[, c("patient_id", "grp_id"), 
+                                                    with = FALSE] 
+    }
+  }
+  if (merge){
+    tbl <- merge(tbl, patient_lookup, by = c("grp_id"), allow.cartesian = TRUE,
+                 sort = FALSE) 
+  }
+  setorderv(tbl, cols = c("strategy_id", "patient_id", "state_id")) 
+  mu <- mu[tbl$row_num, , drop = FALSE]
+
+  ## Create object
+  params <- new_params_mean(mu = mu, 
+                            sigma = rep(0, n),
+                            n_samples = n)
+  # Input matrices
+  input_mats <- new_input_mats(X = NULL,
+                              strategy_id = tbl$strategy_id,
+                              n_strategies = length(unique(tbl$strategy_id)),
+                              patient_id = tbl$patient_id,
+                              n_patients = length(unique(tbl$patient_id)),
+                              state_id = tbl$state_id,
+                              n_states = length(unique(tbl$state_id)))
   return(StateVals$new(input_mats = input_mats, params = params))
 }
+
 
 # Manual documentation in StateVals.Rd
 #' @export

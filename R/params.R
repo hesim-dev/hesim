@@ -33,8 +33,8 @@ check_params_joined <- function(x, inner_class, model_list){
 #' @param sigma A vector of samples of the standard deviation.
 #' 
 #' @return An object of class "params_mean", which is a list containing \code{mu},
-#' \code{sigma}, and \code{n_samples}. \code{n_samples} is equal to the number of columns
-#' in \code{mu}.
+#' \code{sigma}, and \code{n_samples}.
+#'  \code{n_samples} is equal to the number of columns in \code{mu}.
 #' @examples 
 #' params <- params_mean(mu = matrix(seq(1, 4), nrow = 2), 
 #'                       sigma = c(0, 0))
@@ -48,7 +48,7 @@ params_mean <- function(mu, sigma = NULL){
   check(new_params_mean(mu, sigma, n_samples))
 }
 
-new_params_mean <- function(mu, sigma, n_samples){
+new_params_mean <- function(mu, sigma, n_samples, strategy_id, patient_id, state_id){
   stopifnot(is.numeric(sigma))
   stopifnot(is.numeric(n_samples))
   l <- list(mu = mu, sigma = sigma, n_samples = n_samples)
@@ -372,12 +372,12 @@ create_params_joined <- function(object, n, point_estimate, inner_class){
 #' @return An object prefixed by \code{params_}. Mapping between \code{create_params} 
 #' and the classes of the returned objects are: 
 #' \itemize{
-#' \item{\code{create_params.statevals_means} ->}{ \code{params_mean}}
 #' \item{\code{create_params.lm} ->}{ \code{params_lm}}
 #' \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
 #' \item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}
 #' \item{\code{create_params.partsurvfit} ->}{ \code{params_surv_list}}
 #' }
+#' @keywords internal
 #' @name create_params
 #' @examples 
 #' # create_params.lm
@@ -400,29 +400,6 @@ create_params_joined <- function(object, n, point_estimate, inner_class){
 create_params <- function (object, ...) {
   UseMethod("create_params", object)
 }
-
-#' @export
-#' @rdname create_params
-create_params.stateval_means <- function(object, ...){
-  n_samples <- dim(object$values)[1]
-  n_patients <- length(object$patient_id)
-  n_strategies <- length(object$strategy_id)
-  
-  if (is.matrix(object$values)){
-    object$values <- array(object$values, 
-                  dim = c(nrow(object$values), ncol(object$values), n_strategies))
-  }
-  vals <- vector(mode = "list", length = n_strategies)
-  for (i in 1:n_strategies){
-    vals[[i]] <- object$values[,, i][, rep(1:ncol(object$values[,, i]), 
-                                           times = n_patients)]
-  }
-  vals <- matrix(unlist(vals), ncol = n_samples, byrow = TRUE)
-  return(new_params_mean(mu = vals, 
-                         sigma = rep(0, n_samples),
-                         n_samples = n_samples))
-}
-
 
 #' @export
 #' @rdname create_params

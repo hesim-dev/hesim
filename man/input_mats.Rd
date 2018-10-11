@@ -89,3 +89,6 @@ input_mats <- input_mats(X = list(mu = model.matrix(~ age, dat)),
                         n_patients = length(unique(dat$patient_id)))
 print(input_mats)
 }
+\seealso{
+\code{\link{create_input_mats}}
+}

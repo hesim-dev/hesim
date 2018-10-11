@@ -14,8 +14,8 @@ mean. Columns denote random samples and rows denote means for different observat
 }
 \value{
 An object of class "params_mean", which is a list containing \code{mu},
-\code{sigma}, and \code{n_samples}. \code{n_samples} is equal to the number of columns
-in \code{mu}.
+\code{sigma}, and \code{n_samples}.
+ \code{n_samples} is equal to the number of columns in \code{mu}.
 }
 \description{
 Create a list containing the parameters of a mean model.

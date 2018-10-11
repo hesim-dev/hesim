@@ -372,6 +372,7 @@ sort_hesim_data <- function(data, sorted_by){
 #'                          patient_id = dat$patient_id,
 #'                         n_patients = length(unique(dat$patient_id)))
 #' print(input_mats)
+#' @seealso \code{\link{create_input_mats}}
 #' @export
 input_mats <- function(X, strategy_id, n_strategies,
                        patient_id, n_patients,
@@ -596,6 +597,7 @@ extract_X <- function(coef_mat, data){
 #' @param ... Further arguments passed to \code{\link{model.matrix}}.
 #' @return An object of class \code{\link{input_mats}}.
 #' @seealso \code{\link{input_mats}}.
+#' @keywords internal
 #' @examples 
 #' library("flexsurv")
 #' 
@@ -657,25 +659,6 @@ create_input_mats.formula_list <- function(object, data, ...){
 get_terms <- function(object){
   tt <- stats::terms(object)
   return(stats::delete.response(tt))
-}
-
-#' @export
-#' @rdname create_input_mats
-create_input_mats.stateval_means <- function(object, ...){
-  # Create expanded hesim data
-  n_states <- dim(object$values)[2]
-  states_dt <- data.table(state_id = seq(1, n_states))
-  patients_dt <- data.table(patient_id = object$patient_id)
-  strategies_dt <- data.table(strategy_id = object$strategy_id)
-  hesim_dat <- hesim_data(strategies = strategies_dt,
-                          patients = patients_dt,
-                          states = states_dt)
-  edat <- expand(hesim_dat, by = c("strategies", "patients", "states"))   
-  
-  # Create input data
-  args <- c(list(X = NULL),
-           get_input_mats_id_vars(edat))
-  return(do.call("new_input_mats", args))
 }
 
 #' @export 
