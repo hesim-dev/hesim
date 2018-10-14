@@ -35,11 +35,11 @@ utility in an economic model by treatment strategy, patient, and health state.
 \details{
 \code{tbl} is a \code{data.table} containing columns for treatment 
 strategies (\code{strategy_id}), patient subgroups (\code{grp_id}),
-health states (\code{state_id}), and/or time period (\code{time_start} and
-\code{time_stop}). The table must contain at least one column
-named (\code{strategy_id}, \code{grp_id} or \code{state_id}, but does not need
+health states (\code{state_id}), and/or the start of time intervals 
+(\code{time_start}). The table must contain at least one column
+named \code{strategy_id}, \code{grp_id} or \code{state_id}, but does not need
 to contain all of them. Each row denotes a unique treatment strategy, patient
-subgroup, health state, and/or time period pair.
+subgroup, health state, and/or time interval pair.
 
 \code{tbl} must also contain columns summarizing the state values for each
 row, which depend on the probability distribution select with \code{dist}. 
@@ -47,7 +47,7 @@ Available distributions include the normal (\code{norm}), beta (\code{beta}),
 gamma (\code{gamma}), lognormal (\code{lnorm}), and uniform (\code{unif})
  distributions. In addition, the option \code{fixed} can be used if estimates
  are known with certainty. The columns in \code{tbl} that must be included,
- by distribution are:
+ by distribution, are:
 
 \describe{
 \item{norm}{\code{mean} and \code{sd}}
@@ -90,4 +90,7 @@ print(cost_tbl)
 costmod <- create_StateVals(cost_tbl, n = 2)
 
 
+}
+\seealso{
+\code{\link{create_StateVals}}
 }

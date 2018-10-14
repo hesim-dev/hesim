@@ -113,6 +113,19 @@ Psm <- R6::R6Class("Psm",
              call. = FALSE)
       }
       
+      # Time varying state values are not currently supported
+      if (type == "qalys"){
+        if (!is.null(self$utility_model$input_mats$time_intervals)){
+          stop("Time varying utilities are not currently supported with PSMs.")
+        }
+      } else{
+          for (i in 1:length(self$cost_models)){
+            if (!is.null(self$cost_models[[i]]$input_mats$time_intervals)){
+              stop("Time varying costs are not currently supported with PSMs.")
+            } 
+          }
+      }
+      
       statvalmods <- switch(type,
                            costs = self$cost_models,
                            qalys = list(self$utility_model))

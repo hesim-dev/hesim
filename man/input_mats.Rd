@@ -6,7 +6,8 @@
 \usage{
 input_mats(X, strategy_id, n_strategies, patient_id, n_patients, line = NULL,
   n_lines = NULL, state_id = NULL, n_states = NULL,
-  transition_id = NULL, n_transitions = NULL, time_fun = NULL)
+  transition_id = NULL, n_transitions = NULL, time_id = NULL,
+  time_intervals = NULL, n_times = NULL, time_fun = NULL)
 }
 \arguments{
 \item{X}{A list of input matrices for predicting the values of each parameter in a statistical model. May also be
@@ -25,7 +26,7 @@ in \code{X}.}
 \item{line}{A numeric vector of integers denoting the treatment line represented by each row
 in \code{X}. Not supported by currently available models.}
 
-\item{n_lines}{A \code{\link{data.table}} denoting the number of treatment lines associated
+\item{n_lines}{A \code{data.table} denoting the number of treatment lines associated
 with each treatment strategy. Should contain a column, "strategy_id", and a column,
 "N". Not supported by currently available models.}
 
@@ -44,13 +45,25 @@ will be supported once \code{hesim} provides support for state transition modeli
 \item{n_transitions}{A scalar denoting the number of unique transitions. 
 Not supported by currently available models.}
 
+\item{time_id}{A numeric vector of integers denoting a unique time interval.}
+
+\item{time_intervals}{A \code{data.table} denotes unique time intervals. Must 
+contain the columns \code{time_id}, \code{time_start}, and \code{time_stop}.
+\code{time_start} is the starting time of an interval and \code{time_stop} is
+the stopping time of an interval. Time intervals are closed on the left and
+open on the right, and in the final interval, \code{time_stop} is equal to 
+infinity.}
+
+\item{n_times}{A scalar denoting the number of time intervals. Equal to the
+number of rows in \code{time_intervals}.}
+
 \item{time_fun}{A pointer to a C++ functor that can be used to update \code{X} as a function
 of time in a simulation model. Not currently supported.}
 }
 \description{
 Create an object of class "input_mats", which contains inputs matrices
 for simulating a statistical model. Consists of (i) input matrices, \code{X},
-(ii) id variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
+(ii) ID variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
 the \code{X} matrices. More details are provided under "Details" below. Note that an "input_mats" 
 object should be created using \code{\link{create_input_mats}}.
 }
@@ -66,20 +79,20 @@ can be fit without multiple treatment lines as would, again, be the case in a
 partitioned survival analysis where sequential treatment would be incorporated by 
 adding additional health states rather than by using the index \eqn{j}.
 
-The rows of the matrices in \code{X} must be sorted in a manner consistent with the id variables.
+The rows of the matrices in \code{X} must be sorted in a manner consistent with the ID variables.
 The sorting order should be the same as specified in \code{\link{expand.hesim_data}}; that is,
 the rows of \code{X} must be sorted by: (i) \code{strategy_id}, (ii) \code{line}, 
-(iii) \code{patient_id}, and (iv) the health-related id variable (either \code{state_id} or
+(iii) \code{patient_id}, and (iv) the health-related ID variable (either \code{state_id} or
  \code{transition_id}).
 }
 \examples{
-dt_strategies <- data.frame(strategy_id = c(1, 2))
-dt_patients <- data.frame(patient_id = seq(1, 3), 
+strategies <- data.frame(strategy_id = c(1, 2))
+patients <- data.frame(patient_id = seq(1, 3), 
                           age = c(45, 47, 60),
                           female = c(1, 0, 0),
                           group = factor(c("Good", "Medium", "Poor")))
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients)
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients)
 
 dat <- expand(hesim_dat, by = c("strategies", "patients"))
 input_mats <- input_mats(X = list(mu = model.matrix(~ age, dat)),

@@ -13,7 +13,7 @@ See \link{IndivCtstmTrans}.}
 \value{
 Returns a \code{\link{data.table}} in tidy format with three columns
 \describe{
-\item{transition_id}{Health state transition id.}
+\item{transition_id}{Health state transition ID.}
 \item{from}{The starting health state.}
 \item{to}{The health state that will be transitions to.}
 }

@@ -290,16 +290,19 @@ test_that("Simulate costs and QALYs", {
   ictstm$sim_disease()
   
   # Simulate QALYs
-  ## Errors
+  ## Across patients
+  ### Time constant utility
+  #### Errors
   ictstm2 <- ictstm$clone()
   ictstm2$utility_model <- 2
   expect_error(ictstm2$sim_qalys())
   
-  ## No errors
+  #### No errors
   expect_error(ictstm$sim_qalys(dr = .03)$qalys_, NA)
   
   ## By patient
-  ### dr = .03
+  ### Time constant utility
+  #### dr = .03
   ictstm$sim_qalys(dr = .03, by_patient = TRUE)$qalys_
   
   disprog1 <- ictstm$disprog_[sample == 1 & strategy_id == 1 & patient_id == 2]
@@ -309,7 +312,7 @@ test_that("Simulate costs and QALYs", {
   qalys_expected <- sum(pv(utilvals$est, .03, disprog1$time_start, disprog1$time_stop))
   expect_equal(sum(qalys1$qalys), qalys_expected)
   
-  ### dr = 0
+  #### dr = 0
   ictstm <- ictstm$clone(deep = TRUE)
   ictstm$utility_model$params$mu <- matrix(1, nrow = nrow(ictstm$utility_model$params$mu),
                                            ncol = ncol(ictstm$utility_model$params$mu))
@@ -320,6 +323,43 @@ test_that("Simulate costs and QALYs", {
                sum(qalys[sample == 1 & strategy_id == 2 & patient_id == 2, qalys]))
   expect_true(all(qalys$qalys == qalys$lys)) # life-years are computed correctly
   
+  ### Time varying utility
+  t2 <- .2
+  utility_tbl2 <- data.table(state_id = rep(states$state_id, 2),
+                             time_start = c(0, 0, t2, t2),
+                             est = c(.90, .55, .70, .35))
+  utility_tbl2 <- stateval_tbl(utility_tbl2, dist = "fixed", hesim_data = hesim_dat)
+  utilmod2 <- create_StateVals(utility_tbl2, n = n_samples)
+  ictstm2 <- ictstm$clone()
+  ictstm2$utility_model <- utilmod2
+  ictstm2$sim_disease()
+  ictstm2$sim_qalys(by_patient = TRUE, dr = .03)
+  
+  disprog1 <- ictstm2$disprog_[sample == 1 & strategy_id == 1 & patient_id == 2]
+  qalys1 <- ictstm2$qalys_[sample == 1 & strategy_id == 1 & patient_id == 2]
+  wlos1 <- rep(NA, nrow(disprog1))
+  for (i in 1:2){
+    if (i <= nrow(disprog1)){
+      if (disprog1$time_start[i] < t2){
+        z <- utility_tbl2[state_id == disprog1[i]$from & time_start == 0]$est
+        wlos1[i] <- pv(z, .03, disprog1[i]$time_start, min(t2, disprog1[i]$time_stop))
+        if (disprog1[i]$time_stop > t2){
+          z <- utility_tbl2[state_id == disprog1[i]$from & time_start == t2]$est
+          wlos1[i] <- wlos1[i] + pv(z, .03, t2, disprog1[i]$time_stop)
+        }
+      } else{
+          z <- utility_tbl2[state_id == disprog1[i]$from & time_start == t2]$est
+          wlos1[i] <- pv(z, .03, disprog1[i]$time_start, disprog1[i]$time_stop)
+      }      
+    } else{
+      wlos1[i] <- 0
+    }
+  }
+  # print(wlos1)
+  # print(qalys1)
+  # print(disprog1)
+  expect_equal(wlos1, qalys1$qalys)
+
   # Simulate costs
   # Errors
   ## Cost models must be lists of StateVal objects

@@ -166,18 +166,18 @@ optionally a second column containing <code>grp_id</code>.</p>
 
     <p><code>tbl</code> is a <code>data.table</code> containing columns for treatment 
 strategies (<code>strategy_id</code>), patient subgroups (<code>grp_id</code>),
-health states (<code>state_id</code>), and/or time period (<code>time_start</code> and
-<code>time_stop</code>). The table must contain at least one column
-named (<code>strategy_id</code>, <code>grp_id</code> or <code>state_id</code>, but does not need
+health states (<code>state_id</code>), and/or the start of time intervals 
+(<code>time_start</code>). The table must contain at least one column
+named <code>strategy_id</code>, <code>grp_id</code> or <code>state_id</code>, but does not need
 to contain all of them. Each row denotes a unique treatment strategy, patient
-subgroup, health state, and/or time period pair.</p>
+subgroup, health state, and/or time interval pair.</p>
 <p><code>tbl</code> must also contain columns summarizing the state values for each
 row, which depend on the probability distribution select with <code>dist</code>. 
 Available distributions include the normal (<code>norm</code>), beta (<code>beta</code>),
 gamma (<code>gamma</code>), lognormal (<code>lnorm</code>), and uniform (<code>unif</code>)
  distributions. In addition, the option <code>fixed</code> can be used if estimates
  are known with certainty. The columns in <code>tbl</code> that must be included,
- by distribution are:</p>
+ by distribution, are:</p>
 <dl class='dl-horizontal'>
 <dt>norm</dt><dd><p><code>mean</code> and <code>sd</code></p></dd>
 <dt>beta</dt><dd><p><code>mean</code> and <code>se</code> or <code>shape1</code> and <code>shape2</code></p></dd>
@@ -187,6 +187,10 @@ or <code>shape</code> and scale</p></dd>
 <dt>unif</dt><dd><p><code>min</code> and <code>max</code></p></dd>
 <dt>fixed</dt><dd><p><code>est</code></p></dd>
 </dl>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='create_StateVals.html'>create_StateVals</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -207,11 +211,11 @@ or <code>shape</code> and scale</p></dd>
                                        <span class='kw'>se</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.18</span>, <span class='fl'>.12</span>, <span class='fl'>.10</span>, <span class='fl'>.06</span>)),
                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"beta"</span>,
                             <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
-<span class='fu'>print</span>(<span class='no'>utility_tbl</span>)</div><div class='output co'>#&gt;    state_id grp_id mean   se
-#&gt; 1:        1      1 0.80 0.18
-#&gt; 2:        2      1 0.70 0.12
-#&gt; 3:        1      2 0.75 0.10
-#&gt; 4:        2      2 0.55 0.06</div><div class='input'><span class='no'>utilmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>utility_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='fu'>print</span>(<span class='no'>utility_tbl</span>)</div><div class='output co'>#&gt;    grp_id state_id mean   se
+#&gt; 1:      1        1 0.80 0.18
+#&gt; 2:      1        2 0.70 0.12
+#&gt; 3:      2        1 0.75 0.10
+#&gt; 4:      2        2 0.55 0.06</div><div class='input'><span class='no'>utilmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>utility_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 
 <span class='co'># Costs vary by treatment strategy</span>
 <span class='no'>cost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'>stateval_tbl</span>(<span class='fu'>data.frame</span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='no'>strategies</span>$<span class='no'>strategy_id</span>,
@@ -231,6 +235,8 @@ or <code>shape</code> and scale</p></dd>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

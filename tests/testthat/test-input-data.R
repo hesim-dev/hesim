@@ -3,36 +3,38 @@ library("flexsurv")
 library("data.table")
 rm(list = ls())
 
-dt_strategies <- data.table(strategy_id = c(1, 2))
-dt_patients <- data.table(patient_id = seq(1, 3), 
+strategies_dt <- data.table(strategy_id = c(1, 2))
+patients_dt <- data.table(patient_id = seq(1, 3), 
                           age = c(45, 47, 60),
                           female = c(1, 0, 0),
                           group = factor(c("Good", "Medium", "Poor")))
-dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
-dt_states <- data.frame(state_id =  seq(1, 3),
+lines_dt <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
+states_dt <- data.frame(state_id =  seq(1, 3),
                         state_name = factor(paste0("state", seq(1, 3))))
-dt_trans <- data.frame(transition_id = seq(1, 4),
+trans_dt <- data.frame(transition_id = seq(1, 4),
                        from = c(1, 1, 2, 2),
                        to = c(2, 3, 1, 3))
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients,
-                        lines = dt_lines,
-                        states = dt_states,
-                        transitions = dt_trans)
+times_dt <- data.frame(time_start = c(0, 4, 9))
+hesim_dat <- hesim_data(strategies = strategies_dt,
+                        patients = patients_dt,
+                        lines = lines_dt,
+                        states = states_dt,
+                        transitions = trans_dt,
+                        times = times_dt)
 
 # create_lines_dt --------------------------------------------------------------
 test_that("create_lines_dt", {
-  dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
+  lines_dt <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
   
-  expect_true(inherits(dt_lines, "data.table"))
-  expect_equal(dt_lines$treatment_id[3], 5)
-  expect_equal(dt_lines$line, 
+  expect_true(inherits(lines_dt, "data.table"))
+  expect_equal(lines_dt$treatment_id[3], 5)
+  expect_equal(lines_dt$line, 
                c(seq(1, 3), seq(1, 2)))
   
   # explicit strategy ids
-  dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)),
+  lines_dt <- create_lines_dt(list(c(1, 2, 5), c(1, 2)),
                               strategy_ids = c(3, 5))
-  expect_equal(dt_lines$strategy_id, c(3, 3, 3, 5, 5))
+  expect_equal(lines_dt$strategy_id, c(3, 3, 3, 5, 5))
   
   # errors
   expect_error(create_lines_dt(list(c("tx1", "tx2"),
@@ -44,55 +46,62 @@ test_that("create_trans_dt", {
   tmat <- rbind(c(NA, 1, 2),
                 c(NA, NA, 3),
                 c(NA, NA, NA))
-  dt_trans <- create_trans_dt(tmat)
+  trans_dt <- create_trans_dt(tmat)
   
-  expect_true(inherits(dt_trans, "data.table"))
-  expect_equal(dt_trans$transition_id, 
+  expect_true(inherits(trans_dt, "data.table"))
+  expect_equal(trans_dt$transition_id, 
                c(1, 2, 3))
-  expect_equal(dt_trans$from, 
+  expect_equal(trans_dt$from, 
                c(1, 1, 2))
-  expect_equal(dt_trans$to, 
+  expect_equal(trans_dt$to, 
                c(2, 3, 3))
   
   # Row and column names
   rownames(tmat) <- c("No BOS", "BOS", "Death")
-  dt_trans <- create_trans_dt(tmat)
-  expect_equal(dt_trans$from_name, NULL)
+  trans_dt <- create_trans_dt(tmat)
+  expect_equal(trans_dt$from_name, NULL)
   
   colnames(tmat) <- rownames(tmat)
-  dt_trans <- create_trans_dt(tmat)
-  expect_equal(dt_trans$from_name, rownames(tmat)[c(1, 1, 2)])
-  expect_equal(dt_trans$to_name, colnames(tmat)[c(2, 3, 3)])
+  trans_dt <- create_trans_dt(tmat)
+  expect_equal(trans_dt$from_name, rownames(tmat)[c(1, 1, 2)])
+  expect_equal(trans_dt$to_name, colnames(tmat)[c(2, 3, 3)])
 })
 
 # hesim data -------------------------------------------------------------------
 test_that("hesim_data", {
 
   # strategy by patient
-  hesim_dat <- hesim_data(strategies = dt_strategies,
-                          patients = dt_patients)
+  hesim_dat2 <- hesim_data(strategies = strategies_dt,
+                          patients = patients_dt)
   
-  expect_true(inherits(hesim_dat, "hesim_data"))
-  expect_equal(hesim_dat$state, NULL)
-  expect_equal(hesim_dat$patients, dt_patients)
+  expect_true(inherits(hesim_dat2, "hesim_data"))
+  expect_equal(hesim_dat2$state, NULL)
+  expect_equal(hesim_dat2$patients, patients_dt)
   
   # strategy by patient by state
-  hesim_dat <- hesim_data(strategies = dt_strategies,
-                          patients = dt_patients, 
-                          states = dt_states)
-  expect_equal(hesim_dat$states, dt_states)
+  hesim_dat2 <- hesim_data(strategies = strategies_dt,
+                            patients = patients_dt, 
+                            states = states_dt)
+  expect_equal(hesim_dat2$states, states_dt)
   
   # Expand
   expanded_dt <- expand(hesim_dat, by = c("strategies"))
-  expect_equal(expanded_dt, data.table(dt_strategies), check.attributes = FALSE)
+  expect_equal(expanded_dt, data.table(strategies_dt), check.attributes = FALSE)
   expect_equal(attributes(expanded_dt)$id_vars, "strategy_id")
+  
   expanded_dt <- expand(hesim_dat, by = c("strategies", "patients"))
   expanded_dt2 <- expand(hesim_dat, by = c("patients", "strategies"))
   expect_equal(nrow(expanded_dt), 
-               nrow(dt_strategies) * nrow(dt_patients))
+               nrow(strategies_dt) * nrow(patients_dt))
   expect_equal(expanded_dt, expanded_dt2)
   expect_equal(attributes(expanded_dt)$id_vars, attributes(expanded_dt2)$id_vars)
   expect_equal(attributes(expanded_dt)$id_vars, c("strategy_id", "patient_id"))
+  
+  expanded_dt <- expand(hesim_dat, by = c("strategies", "patients", "times"))
+  expect_equal(nrow(expanded_dt), 
+               nrow(strategies_dt) * nrow(patients_dt) * nrow(times_dt))
+  
+  
   
   # errors
   expect_error(expand(hesim_dat, by = c("strategies", "patients", 

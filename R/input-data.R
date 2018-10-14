@@ -12,7 +12,7 @@
 #' \describe{
 #' \item{strategy_id}{Treatment strategy ids.}
 #' \item{line}{Line of therapy.}
-#' \item{treatment_id}{Treatment id for treatment used at a given line of therapy within a treatment strategy.}
+#' \item{treatment_id}{Treatment ID for treatment used at a given line of therapy within a treatment strategy.}
 #' }
 #' @examples 
 #' strategies <- list(c(1, 2, 3),
@@ -44,7 +44,7 @@ create_lines_dt <- function(strategy_list, strategy_ids = NULL){
 #' See \link{IndivCtstmTrans}.
 #' @return Returns a \code{\link{data.table}} in tidy format with three columns
 #' \describe{
-#' \item{transition_id}{Health state transition id.}
+#' \item{transition_id}{Health state transition ID.}
 #' \item{from}{The starting health state.}
 #' \item{to}{The health state that will be transitions to.}
 #' }
@@ -81,7 +81,7 @@ create_trans_dt <- function(trans_mat){
 #' Data for health-economic simulation modeling
 #' 
 #' A list of tables required for health-economic simulation modeling.
-#' Each table must either be a \code{\link{data.frame}} or \code{\link{data.table}}. All id variables within 
+#' Each table must either be a \code{\link{data.frame}} or \code{\link{data.table}}. All ID variables within 
 #' each table must be numeric vectors of integers. 
 #' @param strategies A table of treatment strategies. 
 #' Must contain the column \code{strategy_id} denoting a unique strategy. Other columns are variables
@@ -94,7 +94,7 @@ create_trans_dt <- function(trans_mat){
 #' \code{strategy_id}, denoting a treatment strategy, and \code{line}, denoting a treatment line. Other 
 #' columns are variables describing the characteristics of a treatmnet line for a given treatment
 #' strategy. A column denoting the treatment used for a given strategy and line would often
-#' be specified.
+#' be specified. Not currently supported.
 #' @param states A table of health states. Must contain the column
 #' \code{state_id}, which denotes a unique health state. The number of rows should
 #' be equal to the number of health states in the model. Other columns can describe the
@@ -103,35 +103,46 @@ create_trans_dt <- function(trans_mat){
 #' \code{transition_id}, which denotes a unique transition; \code{from}, which denotes
 #' the starting health state; and \code{to} which denotes the state that will be
 #' transitioned to.
+#' @param times A table of time intervals. Must contain the column \code{time_start}, 
+#' which denotes the starting time of times intervals defined between \code{time_start}
+#'  and \code{time_stop}. \code{hesim_data()} automatically creates the columns
+#'  \code{time_stop} and \code{time_id} (a vector of integers sorted by \code{time_start}).
+#'  Time intervals are closed on the left and open on the right and the final time
+#'   interval is defined from \code{time_start} to infinity.
 #' @return Returns an object of class "hesim_data", which is a list of data tables for
 #' health economic simulation modeling.
+#' @seealso \code{\link{expand.hesim_data}}
 #' @examples 
-#' dt_strategies <- data.frame(strategy_id = c(1, 2))
-#' dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
+#' strategies <- data.frame(strategy_id = c(1, 2))
+#' patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
 #'                           gender = c("Female", "Female", "Male"))
-#' dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
-#' dt_states <- data.frame(state_id =  seq(1, 3),
+#' states <- data.frame(state_id =  seq(1, 3),
 #'                         state_var = c(2, 1, 9))
-#' hesim_dat <- hesim_data(strategies = dt_strategies,
-#'                          patients = dt_patients,
-#'                          states = dt_states,
-#'                          lines = dt_lines)
+#' times <- data.frame(time_id = c(1, 2, 3),
+#'                     time_start = c(0, 4, 9),
+#'                     time_stop = c(4, 9, Inf))
+#' hesim_dat <- hesim_data(strategies = strategies,
+#'                          patients = patients,
+#'                          states = states,
+#'                          times = times)
 #' @export
 hesim_data <- function(strategies, patients, lines = NULL, states = NULL,
-                          transitions = NULL){
+                          transitions = NULL, times = NULL){
   object <- new_hesim_data(strategies = strategies, patients = patients,
-                           lines = lines, states = states, transitions = transitions)
+                           lines = lines, states = states, transitions = transitions,
+                           times = times)
   return(check(object))
 }
 
 new_hesim_data <- function(strategies, patients, lines = NULL, states = NULL,
-                          transitions = NULL){
+                          transitions = NULL, times = NULL){
   data <- list()
   data$strategies <- strategies 
   data$patients <- patients
   data$lines <- lines
   data$states <- states
   data$transitions <- transitions
+  data$times <- times
   class(data) <- c("hesim_data")
   return(data)
 }
@@ -150,44 +161,64 @@ check.hesim_data <- function(x){
   
   # Patients
   if (!is.null(x$patients)){
-      check_hesim_data_type(x$patients, "patients")
-      if (!"patient_id" %in% colnames(x$patients)){
-        stop("'patients' must contain the column 'patient_id'.", 
-             call. = FALSE)
-      }
+    check_hesim_data_type(x$patients, "patients")
+    if (!"patient_id" %in% colnames(x$patients)){
+      stop("'patients' must contain the column 'patient_id'.", 
+          call. = FALSE)
+    }
   }
   
   # Lines
   if (!is.null(x$lines)){
-      check_hesim_data_type(x$lines, "lines")
-      if (!"strategy_id" %in% colnames(x$lines)){
-        stop("'lines' must contain the column 'strategy_id'.", 
-             call. = FALSE)
-      }
-      if (!"line" %in% colnames(x$lines)){
-        stop("'lines' must contain the column 'line'.", 
-             call. = FALSE)
-      }
+    check_hesim_data_type(x$lines, "lines")
+    if (!"strategy_id" %in% colnames(x$lines)){
+      stop("'lines' must contain the column 'strategy_id'.", 
+           call. = FALSE)
+    }
+    if (!"line" %in% colnames(x$lines)){
+      stop("'lines' must contain the column 'line'.", 
+           call. = FALSE)
+    }
   }
   
   # States
   if (!is.null(x$states)){
-      check_hesim_data_type(x$states, "states")
-      if (!"state_id" %in% colnames(x$states)){
-        stop("'states' must contain the column 'state_id'.", 
-             call. = FALSE)
-      }
+    check_hesim_data_type(x$states, "states")
+    if (!"state_id" %in% colnames(x$states)){
+      stop("'states' must contain the column 'state_id'.", 
+           call. = FALSE)
+    }
   }
   
   # Transitions
   if (!is.null(x$transitions)){
-      check_hesim_data_type(x$transitions, "transitions")
-      if (!"transition_id" %in% colnames(x$transitions)){
-        stop("'transitions' must contain the column 'transition_id'.", 
-             call. = FALSE)
+    check_hesim_data_type(x$transitions, "transitions")
+    if (!"transition_id" %in% colnames(x$transitions)){
+      stop("'transitions' must contain the column 'transition_id'.", 
+            call. = FALSE)
       }
   }
-
+  
+  # Times
+  if (!is.null(x$times)){
+    check_hesim_data_type(x$times, "times")
+      
+    ## time_start    
+    if (!"time_start" %in% colnames(x$times)){
+      stop("'times' must contain the column 'time_start'.",
+           call. = FALSE)
+    }
+    
+    ## time_stop
+    time_stop <- shift(x$times$time_start, type = "lead")
+    time_stop[is.na(time_stop)] <- Inf
+    x$times$time_stop <- time_stop
+    
+    ## time_id
+    x$times$time_id <- 1:nrow(x$times)
+    x$times <- setcolorder(x$times, c("time_id", "time_start", "time_stop"))
+  }
+  
   return(x)
 }
 
@@ -211,29 +242,28 @@ expand <- function(object, by){
 #' Expand hesim_data
 #' 
 #' Expand the data tables from an object of class \code{\link{hesim_data}} into a data table in 
-#' long format (one row for each combination of observations as specified with tbe 
+#' long format (one row for each combination of observations as specified with the 
 #' ID variables from the tables specified with the \code{by} argument).
 #'  See "Details" for an explanation of how the expansion is done.
 #' @param object An object of class \code{\link{hesim_data}}.
 #' @param by A character vector of the names of the data tables in \code{\link{hesim_data}} to expand by.
 #' @details This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
-#' Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. 
+#' Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{object}. 
 #' The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by 
-#' prioritizing id variables as follows: (i) \code{strategy_id}, (ii) \code{line}, (iii) \code{patient_id},
-#' and (iv) the health-related id variable (either \code{state_id} or \code{transition_id}).
-#' @return An object of class "expanded_hesim_data", which is a \code{\link{data.table}} with an "id_vars" 
+#' prioritizing ID variables as follows: (i) \code{strategy_id}, (ii) \code{line}, (iii) \code{patient_id},
+#' (iv) the health-related ID variable (either \code{state_id} or \code{transition_id}), and
+#' (v) the time interval (i.e., \code{time_id}).
+#' @return An object of class "expanded_hesim_data", which is a \code{data.table} with an "id_vars" 
 #' attribute containing the names of the ID variables in the data table.
 #' @examples 
-#' dt_strategies <- data.frame(strategy_id = c(1, 2))
-#' dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
+#' strategies <- data.frame(strategy_id = c(1, 2))
+#' patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
 #'                           gender = c("Female", "Female", "Male"))
-#' dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
-#' dt_states <- data.frame(state_id =  seq(1, 3),
-#'                         state_var = c(2, 1, 9))
-#' hesim_dat <- hesim_data(strategies = dt_strategies,
-#'                         patients = dt_patients,
-#'                         states = dt_states,
-#'                         lines = dt_lines)
+#' states <- data.frame(state_id =  seq(1, 3),
+#'                      state_var = c(2, 1, 9))
+#' hesim_dat <- hesim_data(strategies = strategies,
+#'                         patients = patients,
+#'                         states = states)
 #' expand(hesim_dat, by = c("strategies", "patients"))
 #' @export
 expand.hesim_data <- function(object, by = c("strategies", "patients")){
@@ -291,7 +321,8 @@ hesim_data_sorting_map <- function(){
        lines = "line",
        patients = "patient_id",
        transitions = "transition_id",
-       states = "state_id")
+       states = "state_id",
+       times = "time_id")
 }
 
 hesim_data_sorted_by <- function(by){
@@ -309,7 +340,7 @@ sort_hesim_data <- function(data, sorted_by){
 #' 
 #' Create an object of class "input_mats", which contains inputs matrices
 #' for simulating a statistical model. Consists of (i) input matrices, \code{X},
-#' (ii) id variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
+#' (ii) ID variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
 #' the \code{X} matrices. More details are provided under "Details" below. Note that an "input_mats" 
 #' object should be created using \code{\link{create_input_mats}}. 
 #' 
@@ -323,7 +354,7 @@ sort_hesim_data <- function(data, sorted_by){
 #' @param n_patients A scalar denoting the number of unique patients.
 #' @param line A numeric vector of integers denoting the treatment line represented by each row
 #' in \code{X}. Not supported by currently available models.
-#' @param n_lines A \code{\link{data.table}} denoting the number of treatment lines associated
+#' @param n_lines A \code{data.table} denoting the number of treatment lines associated
 #' with each treatment strategy. Should contain a column, "strategy_id", and a column,
 #' "N". Not supported by currently available models.
 #' @param state_id A numeric vector of integers denoting the health state represented by each row
@@ -337,6 +368,15 @@ sort_hesim_data <- function(data, sorted_by){
 #' will be supported once \code{hesim} provides support for state transition modeling.
 #' @param n_transitions A scalar denoting the number of unique transitions. 
 #' Not supported by currently available models. 
+#' @param time_id A numeric vector of integers denoting a unique time interval.
+#' @param time_intervals A \code{data.table} denotes unique time intervals. Must 
+#' contain the columns \code{time_id}, \code{time_start}, and \code{time_stop}.
+#' \code{time_start} is the starting time of an interval and \code{time_stop} is
+#' the stopping time of an interval. Time intervals are closed on the left and
+#' open on the right, and in the final interval, \code{time_stop} is equal to 
+#' infinity. 
+#' @param n_times A scalar denoting the number of time intervals. Equal to the
+#' number of rows in \code{time_intervals}.
 #' @param time_fun A pointer to a C++ functor that can be used to update \code{X} as a function
 #' of time in a simulation model. Not currently supported.
 #' 
@@ -351,19 +391,19 @@ sort_hesim_data <- function(data, sorted_by){
 #' partitioned survival analysis where sequential treatment would be incorporated by 
 #' adding additional health states rather than by using the index \eqn{j}.
 #' 
-#' The rows of the matrices in \code{X} must be sorted in a manner consistent with the id variables.
+#' The rows of the matrices in \code{X} must be sorted in a manner consistent with the ID variables.
 #' The sorting order should be the same as specified in \code{\link{expand.hesim_data}}; that is,
 #' the rows of \code{X} must be sorted by: (i) \code{strategy_id}, (ii) \code{line}, 
-#' (iii) \code{patient_id}, and (iv) the health-related id variable (either \code{state_id} or
+#' (iii) \code{patient_id}, and (iv) the health-related ID variable (either \code{state_id} or
 #'  \code{transition_id}).
 #' @examples 
-#' dt_strategies <- data.frame(strategy_id = c(1, 2))
-#' dt_patients <- data.frame(patient_id = seq(1, 3), 
+#' strategies <- data.frame(strategy_id = c(1, 2))
+#' patients <- data.frame(patient_id = seq(1, 3), 
 #'                           age = c(45, 47, 60),
 #'                           female = c(1, 0, 0),
 #'                           group = factor(c("Good", "Medium", "Poor")))
-#' hesim_dat <- hesim_data(strategies = dt_strategies,
-#'                         patients = dt_patients)
+#' hesim_dat <- hesim_data(strategies = strategies,
+#'                         patients = patients)
 #' 
 #' dat <- expand(hesim_dat, by = c("strategies", "patients"))
 #' input_mats <- input_mats(X = list(mu = model.matrix(~ age, dat)),
@@ -379,12 +419,14 @@ input_mats <- function(X, strategy_id, n_strategies,
                        line = NULL, n_lines = NULL,
                        state_id = NULL, n_states = NULL,
                        transition_id = NULL, n_transitions = NULL,
+                       time_id = NULL, time_intervals = NULL, n_times = NULL,
                        time_fun = NULL){
   object <- new_input_mats(X, strategy_id, n_strategies,
                            patient_id, n_patients,
                            line, n_lines,
                            state_id, n_states,
                            transition_id, n_transitions,
+                           time_id, time_intervals, n_times,
                            time_fun)
   check(object)
   return(object)
@@ -395,6 +437,7 @@ new_input_mats <- function(X, strategy_id, n_strategies,
                            line = NULL, n_lines = NULL,
                            state_id = NULL, n_states = NULL,
                            transition_id = NULL, n_transitions = NULL,
+                           time_id = NULL, time_intervals = NULL, n_times = NULL,
                            time_fun = NULL){
   stopifnot(is.matrix(X) | is.list(X) | is.null(X))
   stopifnot(is.numeric(strategy_id))
@@ -407,6 +450,9 @@ new_input_mats <- function(X, strategy_id, n_strategies,
   stopifnot(is.numeric(n_states) | is.null(n_states))
   stopifnot(is.numeric(transition_id) | is.null(n_transitions))
   stopifnot(is.numeric(n_transitions) | is.null(n_transitions))
+  stopifnot(is.numeric(time_id) | is.null(time_id))
+  stopifnot(is.data.table(time_intervals) | is.null(time_intervals))
+  stopifnot(is.numeric(n_times) | is.null(n_times))
   if(!is.null(time_fun)){
    if(!inherits(time_fun, "externalptr")){
      stop("If not NULL, 'time_fun' must be of class 'externalptr'.",
@@ -420,7 +466,8 @@ new_input_mats <- function(X, strategy_id, n_strategies,
                  line = line, n_lines = n_lines,
                  state_id = state_id, n_states = n_states,
                  transition_id = transition_id, n_transitions = n_transitions,
-                time_fun = time_fun)
+                 time_id = time_id, time_intervals = time_intervals, n_times = n_times,
+                 time_fun = time_fun)
   object[sapply(object, is.null)] <- NULL
   class(object) <- "input_mats"
   return(object)
@@ -451,8 +498,10 @@ check.input_mats <- function(object){
     }
   }
   
-  id_vars <- c("strategy_id", "patient_id", "line", "state_id", "transition_id")
-  id_vars_n <- c("n_strategies", "n_patients", "n_lines", "n_states", "n_transitions")
+  id_vars <- c("strategy_id", "patient_id", "line", "state_id", "transition_id",
+               "time_id")
+  id_vars_n <- c("n_strategies", "n_patients", "n_lines", "n_states", "n_transitions",
+                 "n_times")
   for (i in 1:length(id_vars)){
     if (!is.null(object[[id_vars[i]]])){
       
@@ -491,9 +540,10 @@ check.input_mats <- function(object){
   by <- id_vars[sapply(object[id_vars], function(x) !is.null(x))]
   sort_hesim_data(indices_df, sorted_by = hesim_data_sorted_by(by))
   if(!all(indices_df$row_num == sorted_seq)){
-    msg <- paste0("The id variables are not sorted correctly. The sort priority of the ",
-                  "id variables must be as follows: 'strategy_id', 'line', 'patient_id' and ",
-                   "the health-related id variable ('state_id' or 'transition_id').")
+    msg <- paste0("The ID variables are not sorted correctly. The sort priority of the ",
+                  "ID variables must be as follows: 'strategy_id', 'line', 'patient_id' ",
+                   "the health-related ID variable ('state_id' or 'transition_id') ",
+                   "and 'time_id'.")
     stop(msg, call. = FALSE)
   }
 
@@ -533,7 +583,8 @@ size_id_map <- function(){
     patient_id = "n_patients",
     line = "n_lines",
     state_id = "n_states",
-    transition_id = "n_transitions")
+    transition_id = "n_transitions",
+    time_id = "n_times")
 }
 
 get_input_mats_id_vars <- function(data){

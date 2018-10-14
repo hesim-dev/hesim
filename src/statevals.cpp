@@ -17,15 +17,12 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
   // Initialize
   hesim::statevals statevals(R_StateVals);
   Rcpp::List R_input_mats = Rcpp::as<Rcpp::List>(R_StateVals["input_mats"]);
-  std::vector<int> strategy_id = Rcpp::as<std::vector<int> >(R_input_mats["strategy_id"]);
-  std::vector<int> patient_id = Rcpp::as<std::vector<int> >(R_input_mats["patient_id"]);
-  std::vector<int> state_id = Rcpp::as<std::vector<int> >(R_input_mats["state_id"]);
-  
-  int n_samples = statevals.statmod_->get_n_samples();
-  int n_obs = state_id.size();
-  
+  hesim::statmods::obs_index obs_index(R_input_mats);
+
   // Storage
-  int N = times.size() * n_samples * n_obs;
+  int n_samples = statevals.statmod_->get_n_samples();
+  int N = times.size() * n_samples * obs_index.n_strategies_ *
+          obs_index.n_patients_ * obs_index.n_healthvals_;
   std::vector<int> state_id_vec(N);
   std::vector<int> sample_vec(N);
   std::vector<int> strategy_id_vec(N);
@@ -35,19 +32,28 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
   
   // Main loop
   int index = 0;
-  for (int t = 0 ; t < times.size(); ++t){
-    for (int s = 0; s < n_samples; ++s){
-      for (int i = 0; i < n_obs; ++i){
-        state_id_vec[index] = state_id[i];
-        sample_vec[index] = s;
-        strategy_id_vec[index] = strategy_id[i];
-        patient_id_vec[index] = patient_id[i];
-        times_vec[index] = times[t];
-        value_vec[index] = statevals.sim(s, i, type);
-        ++index;
-      } // end observation loop
-    } // end random samples loop
-  } // end time loop
+  for (int s = 0; s < n_samples; ++s){
+    for (int k = 0; k < obs_index.n_strategies_;++k){
+      for (int i = 0; i < obs_index.n_patients_;++i){
+        for (int h = 0; h < obs_index.n_healthvals_; ++h){
+          int time_index = 0;
+          for (int t = 0; t < times.size(); ++t){
+            int obs = obs_index(k, 0, i, h, time_index);
+            strategy_id_vec[index] = obs_index.get_strategy_id();
+            sample_vec[index] = s;
+            state_id_vec[index] = obs_index.get_health_id();
+            patient_id_vec[index] = obs_index.get_patient_id();
+            times_vec[index] = times[t];
+            value_vec[index] = statevals.sim(s, obs, type);
+            ++index;
+            if (times[t] >= obs_index.get_time_stop()){
+              ++time_index;
+            }
+          } // end time loop
+        } // end health states loop
+      } // end patients loop
+    } // end strategy loop
+  } // end random samples loop
   
 // Return
   return Rcpp::DataFrame::create(

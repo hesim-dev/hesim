@@ -5,15 +5,15 @@ library("pracma")
 rm(list = ls())
 
 # Simulation
-dt_strategies <- data.table(strategy_id = seq(2, 4)) # testing for cases when doesn't start at 1
-dt_patients <- data.table(patient_id = seq(1, 3),
+strategies_dt <- data.table(strategy_id = seq(2, 4)) # testing for cases when doesn't start at 1
+patients_dt <- data.table(patient_id = seq(1, 3),
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
-dt_states <- data.frame(state_id =  seq(1, 3),
+states_dt <- data.frame(state_id =  seq(1, 3),
                         state_name = paste0("state", seq(1, 3)))
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients,
-                        states = dt_states)
+hesim_dat <- hesim_data(strategies = strategies_dt,
+                        patients = patients_dt,
+                        states = states_dt)
 N <- 5
 
 # Partitioned survival curves  -------------------------------------------------
@@ -142,6 +142,7 @@ psm_X <- create_input_mats(formula_list(mu = formula(~1)),
 psm_utility <- StateVals$new(input_mats = psm_X,
                              params = params_lm(coef = runif(N, .6, .8)))
 
+
 # Cost model(s)
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
@@ -253,16 +254,36 @@ test_that("Psm$costs", {
   psm2$sim_stateprobs()
   expect_error(psm2$sim_costs())
   
+  ## Time varying costs are not currently supported
+  drugcost_tbl = data.frame(strategy_id = strategies_dt$strategy_id,
+                            time_start = c(0, 0, 0, 2, 2, 2),
+                            est = c(1000, 1500, 2000, 3000, 4000, 5000)
+                            )
+  drugcost_tbl <- stateval_tbl(drugcost_tbl, dist = "fixed", hesim_data = hesim_dat)
+  psm_drugcost <- create_StateVals(drugcost_tbl, n = N)
+  psm2$cost_models <- list(medical = psm2$cost_models$medical, drug = psm_drugcost)
+  expect_error(psm2$sim_costs())
+  
   ## Incorrect types
   psm2 <- Psm$new(survival_models = NULL)
   expect_error(psm2$sim_survival(t = times))
 })
 
-test_that("PartSurv$qalys", {
+test_that("Psm$qalys", {
+  # Time constant
   psm$sim_stateprobs()$stateprobs_
   psm$sim_qalys(dr = c(0, .05))
   
   los_compare(psm, type = "qalys_", dr = 0, strategy_id = 2)
   los_compare(psm, type = "qalys_", dr = .05, patient_id = 2,
               strategy_id = 3)
+  
+  # Time varying
+  utility_tbl2 <- data.frame(state_id = states_dt$state_id,
+                             time_start = c(0, 0, 0, 2, 2, 2),
+                             est = c(.90, .85, .80, .75, .65, .55))
+  utility_tbl2 <- stateval_tbl(utility_tbl2, dist = "fixed", hesim_data = hesim_dat)
+  psm_utility2 <- create_StateVals(utility_tbl2, n = N)
+  psm$utility_model <- psm_utility2
+  expect_error(psm$sim_qalys())
 })

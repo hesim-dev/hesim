@@ -4,12 +4,15 @@ rm(list = ls())
 
 # Simulation
 strategies <- data.table(strategy_id = c(1, 2))
+n_strategies <- nrow(strategies)
 patients <- data.table(patient_id = seq(1, 3),
                        grp_id = c(1, 1, 2),
                        age = c(45, 50, 60),
                        female = c(0, 0, 1))
+n_patients <- nrow(patients)
 states <- data.frame(state_id =  seq(1, 3),
                      state_name = paste0("state", seq(1, 3)))
+n_states <- nrow(states)
 hesim_dat <- hesim_data(strategies = strategies,
                         patients = patients,
                         states = states)
@@ -19,8 +22,6 @@ N <- 5
 # stateval_tbl
 test_that("stateval_tbl", {
   n_grps <- 2
-  n_strategies <- nrow(strategies)
-  n_states <- nrow(states)
   strategy_id <- rep(strategies$strategy_id, each = n_grps * n_states)
   state_id <- rep(states$state_id, times = n_grps * n_strategies)
   grp_id <- rep(rep(c(1, 2), each = n_states), times = n_strategies)
@@ -67,7 +68,7 @@ test_that("stateval_tbl", {
                                hesim_data = hesim_dat)  
   mod <- create_StateVals(stateval_tbl, n = 2) 
   expect_equal(nrow(mod$params$mu), 
-               nrow(stateval_tbl) * nrow(patients) * nrow(strategies)) 
+               nrow(stateval_tbl) * n_patients * n_strategies) 
   
   # Strategy only
   stateval_tbl <- stateval_tbl(tbl[state_id == 3 & grp_id == 1,
@@ -99,6 +100,18 @@ test_that("stateval_tbl", {
   mod <- create_StateVals(stateval_tbl, n = 2)
   expect_equal(nrow(mod$params$mu),
                nrow(stateval_tbl))
+  
+  # State and time period
+  tbl2 <- tbl[strategy_id == 1]
+  tbl2[, time_start := ifelse(grp_id == 1, 0, 4)]
+  tbl2[, time_stop := ifelse(grp_id == 1, 4, 10)]
+  stateval_tbl <- stateval_tbl(tbl2[,.(state_id, time_start, time_stop,
+                                      mean, se)], 
+                                dist = "beta",
+                               hesim_data = hesim_dat)
+  mod <- create_StateVals(stateval_tbl, n = 2)
+  expect_equal(nrow(mod$params$mu),
+               n_states * n_strategies * n_patients * 2)
   
   # Errors
   ## state_id and strategy_id are correctly specified
@@ -149,10 +162,27 @@ costvals_medical <- create_StateVals(fit_costs_medical, data = edat, n = N)
 costvals_medical$sim(t = c(1, 2, 3), type = "predict")
 
 test_that("StateVals$sim", {
+  # Time constant state values 
   expect_equal(c(costvals_medical$input_mats$X$mu %*% t(costvals_medical$params$coefs)),
               costvals_medical$sim(t = 2, type = "predict")$value)
   
-  # data must be of class 'input_mats'
-  expect_error(StateVals$new(data = 3, params = 2)$sim(t = 2)) 
+  ## data must be of class 'input_mats'
+  expect_error(StateVals$new(input_mats = 3, params = 2)$sim(t = 2)) 
+  
+  # Time varying state values
+  tbl <- data.table(state_id = rep(c(1, 2, 3), 2),
+                    time_start = rep(c(0, 4), each = 3),
+                    est = c(1000, 1500, 2000, 2000, 3500, 4000))
+  stateval_tbl <- stateval_tbl(tbl, 
+                               dist = "fixed", 
+                               hesim_data = hesim_dat) 
+  mod <- create_StateVals(stateval_tbl, n = 2)
+  pred <- mod$sim(t = c(1, 2, 3, 4, 5), type = "predict")
+  expect_equal(pred[sample == 1 & strategy_id == 1 & 
+                      patient_id == 1 & state_id == 1 & time == 1]$value,
+               tbl[state_id == 1 & time_start == 0, est])
+  expect_equal(pred[sample == 1 & strategy_id == 1 & 
+                      patient_id == 1 & state_id == 3 & time == 5]$value,
+               tbl[state_id == 3 & time_start == 4, est])
 })
 

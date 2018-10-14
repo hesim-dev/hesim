@@ -17,11 +17,11 @@
 #' @details 
 #' \code{tbl} is a \code{data.table} containing columns for treatment 
 #' strategies (\code{strategy_id}), patient subgroups (\code{grp_id}),
-#' health states (\code{state_id}), and/or time period (\code{time_start} and
-#' \code{time_stop}). The table must contain at least one column
-#' named (\code{strategy_id}, \code{grp_id} or \code{state_id}, but does not need
+#' health states (\code{state_id}), and/or the start of time intervals 
+#' (\code{time_start}). The table must contain at least one column
+#' named \code{strategy_id}, \code{grp_id} or \code{state_id}, but does not need
 #' to contain all of them. Each row denotes a unique treatment strategy, patient
-#' subgroup, health state, and/or time period pair.
+#' subgroup, health state, and/or time interval pair.
 #' 
 #' \code{tbl} must also contain columns summarizing the state values for each
 #' row, which depend on the probability distribution select with \code{dist}. 
@@ -29,7 +29,7 @@
 #' gamma (\code{gamma}), lognormal (\code{lnorm}), and uniform (\code{unif})
 #'  distributions. In addition, the option \code{fixed} can be used if estimates
 #'  are known with certainty. The columns in \code{tbl} that must be included,
-#'  by distribution are:
+#'  by distribution, are:
 #' 
 #' \describe{
 #' \item{norm}{\code{mean} and \code{sd}}
@@ -47,6 +47,7 @@
 #' is in the same format as described in "Details". \code{patients} is a 
 #' \code{data.table} with one column containing \code{patient_id} and 
 #' optionally a second column containing \code{grp_id}.
+#' @seealso \code{\link{create_StateVals}}
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3),
@@ -84,12 +85,24 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
                          hesim_data = NULL){
   dist <- match.arg(dist)
   tbl <- data.table(tbl)
-  cols <- colnames(tbl)
+  tbl2 <- copy(tbl)
+  cols <- colnames(tbl2)
+  
+  # Time intervals in the correct format
+  if (!is.null(tbl2$time_start)){
+    time_intervals <- data.table(time_start = unique(tbl2$time_start))
+    time_intervals[, "time_stop" := shift(get("time_start"), type = "lead")]
+    time_intervals[is.na(get("time_stop")), "time_stop" := Inf]
+    time_intervals[, "time_id" := 1:nrow(time_intervals)]
+    pos <- match(tbl2$time_start, time_intervals$time_start)
+    tbl2[, "time_id" := time_intervals$time_id[pos]]
+    tbl2[, "time_stop" := time_intervals$time_stop[pos]]
+  }
   
   # Check
   ## Column names
   check_column <- function(var){
-    if (is.null(tbl[[var]])){
+    if (is.null(tbl2[[var]])){
       if (is.null(hesim_data)){
         msg <- paste0("If '", var, "' is not a column in 'tbl' ",
                       "then 'hesim_data' must be included as an argument.")
@@ -145,41 +158,48 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   }
   
   ## Unique rows
-  id_vars_all <- c("strategy_id", "state_id", "grp_id") 
-  id_vars <- id_vars_all[which(id_vars_all %in% colnames(tbl))]
-  if (!all(tbl[, .N, by = id_vars]$N == 1)) {
+  id_vars_all <- c("strategy_id", "state_id", "grp_id", "time_start") 
+  id_vars <- id_vars_all[which(id_vars_all %in% colnames(tbl2))]
+  if (!all(tbl2[, .N, by = id_vars]$N == 1)) {
     stop(paste0("There must only be one row for each 'strategy_id', 'state_id' ,",
-                "and 'grp_id' combination in 'tbl'."),
+                "'grp_id', and optionally 'time_start) ",
+                "combination in 'tbl'."),
          call. = FALSE)
   }
   
   ## Number of rows
   size <- function(var){
-    if (is.null(tbl[[var]])){
+    if (is.null(tbl2[[var]])){
       n <- 1
     } else{
-      n <- length(unique(tbl[[var]]))
+      n <- length(unique(tbl2[[var]]))
     }
     return(n)
   }
   expected_n_strategies <- size("strategy_id")
   expected_n_states <- size("state_id")
   expected_n_grps <- size("grp_id")
-  expected_n <- expected_n_strategies * expected_n_states * expected_n_grps
-  if (nrow(tbl) != expected_n) {
+  expected_n_times <- size("time_start")
+  expected_n <- expected_n_strategies * expected_n_states * expected_n_grps * expected_n_times
+  if (nrow(tbl2) != expected_n) {
     stop(paste0("The number of rows in 'tbl' should equal ", expected_n, 
                 " which is the product of the number of unique strategies ",
-                "states, and groups in 'tbl'."))
+                "states, groups, and time intervals in 'tbl'."))
   }
-
+  
+  # Nice sorting
+  id_cols <- c("strategy_id", "patient_id", "grp_id", "state_id", "time_id",
+               "time_start", "time_stop") 
+  pos <- which(id_cols %in% colnames(tbl2))
+  setcolorder(tbl2, id_cols[pos])
+  
   # Return
-  object <- copy(tbl)
-  setattr(object, "class", c("stateval_tbl", "data.table", "data.frame"))
-  setattr(object, "dist", dist)
-  setattr(object, "strategy_id", hesim_data$strategies$strategy_id)
-  setattr(object, "patients", data.table(hesim_data$patients))
-  setattr(object, "state_id", hesim_data$states$state_id)
-  return(object)
+  setattr(tbl2, "class", c("stateval_tbl", "data.table", "data.frame"))
+  setattr(tbl2, "dist", dist)
+  setattr(tbl2, "strategy_id", hesim_data$strategies$strategy_id)
+  setattr(tbl2, "patients", data.table(hesim_data$patients))
+  setattr(tbl2, "state_id", hesim_data$states$state_id)
+  return(tbl2)
 }
 
 # StateVals --------------------------------------------------------------------
@@ -247,9 +267,9 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
   }
   mu <- matrix(mu, ncol = n, byrow = FALSE)
   
-  ## Expand by strategy_id and/or state_id
+  ## Expand by strategy_id, state_id, and/or time interval
   tbl_list <- list()
-  id_vars <- c("strategy_id", "state_id")
+  id_vars <- c("strategy_id", "state_id", "time_start")
   i <- 1
   for (var in id_vars){
     if (is.null(tbl[[var]])){
@@ -284,7 +304,12 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
     tbl <- merge(tbl, patient_lookup, by = c("grp_id"), allow.cartesian = TRUE,
                  sort = FALSE) 
   }
-  setorderv(tbl, cols = c("strategy_id", "patient_id", "state_id")) 
+  if (is.null(tbl[["time_start"]])){
+    setorderv(tbl, cols = c("strategy_id", "patient_id", "state_id")) 
+  } else{
+    setorderv(tbl, cols = c("strategy_id", "patient_id", "state_id", 
+                            "time_id")) 
+  }
   mu <- mu[tbl$row_num, , drop = FALSE]
 
   ## Create object
@@ -292,13 +317,22 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
                             sigma = rep(0, n),
                             n_samples = n)
   # Input matrices
+  if (!is.null(tbl$time_id)){
+    time_intervals <- unique(object[, c("time_id", "time_start", "time_stop")]) 
+  } else{
+    time_intervals <- NULL
+  }
+  
   input_mats <- new_input_mats(X = NULL,
                               strategy_id = tbl$strategy_id,
                               n_strategies = length(unique(tbl$strategy_id)),
                               patient_id = tbl$patient_id,
                               n_patients = length(unique(tbl$patient_id)),
                               state_id = tbl$state_id,
-                              n_states = length(unique(tbl$state_id)))
+                              n_states = length(unique(tbl$state_id)),
+                              time_id = tbl$time_id,
+                              time_intervals = time_intervals,
+                              n_times = nrow(time_intervals)) 
   return(StateVals$new(input_mats = input_mats, params = params))
 }
 
@@ -325,7 +359,7 @@ StateVals <- R6::R6Class("StateVals",
     
     check = function(){
       if(!inherits(self$input_mats, "input_mats")){
-        stop("'data' must be an object of class 'input_mats'",
+        stop("'input_mats' must be an object of class 'input_mats'",
             call. = FALSE)
       }
       if(!inherits(self$params, c("params_mean", "params_lm"))){

@@ -206,20 +206,54 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
   
   int N = disease_prog.sample_.size();
   std::vector<double> wlos(N);
+  int time_index = 0;
+
   for (int i = 0; i < N; ++i){
-    int obs = obs_index(strategy_idx[i],
-                        disease_prog.line_[i],
-                        patient_idx[i],
-                        disease_prog.from_[i]);
-    double yhat = stvals.sim(disease_prog.sample_[i], obs, type);
-    double time = disease_prog.time_stop_[i] -  disease_prog.time_start_[i];
-    if (!std::isinf(max_time)){
-      time = std::min(time, max_time);
-    }
-    wlos[i] = hesim::pv(yhat, dr,
-                        disease_prog.time_start_[i],
-                        disease_prog.time_start_[i] + time);
-  }
+    double wlos_it = 0; //Weighted LOS by row and time interval
+    double time_start_it = disease_prog.time_start_[i];
+    double time_stop_it_max = disease_prog.time_stop_[i];
+    if (disease_prog.time_start_[i] == 0){ // If a new patient, reset time
+      time_index = 0;
+    } 
+    int t_start = time_index;
+    for (int t = t_start; t < obs_index.n_times_; ++t){
+      int obs = obs_index(strategy_idx[i],
+                          disease_prog.line_[i],
+                          patient_idx[i],
+                          disease_prog.from_[i],
+                          t);  
+      if (obs_index.get_time_start() > disease_prog.time_stop_[i]){
+        break;
+      }           
+      
+      double yhat = stvals.sim(disease_prog.sample_[i], obs, type);
+      if (!std::isinf(max_time)){
+        time_stop_it_max = std::min(disease_prog.time_stop_[i],
+                                    disease_prog.time_start_[i] + max_time);
+      } 
+      double time_stop_it = std::min(obs_index.get_time_stop(), time_stop_it_max);
+      wlos_it = hesim::pv(yhat, dr,
+                          time_start_it,
+                          time_stop_it);
+      // 
+      // if (disease_prog.sample_[i] == 0 && strategy_idx[i] == 0 &&
+      //     patient_idx[i] == 1){
+      //   Rcpp::Rcout << "yhat: " << yhat << std::endl;
+      //   Rcpp::Rcout << "time_index: " << time_index << std::endl;
+      //   Rcpp::Rcout << "time_start_it: " << time_start_it << std::endl;
+      //   Rcpp::Rcout << "time_stop_it: " << time_stop_it << std::endl;
+      //   Rcpp::Rcout << "dp_time_stop: " << disease_prog.time_stop_[i] << std::endl;
+      //   Rcpp::Rcout << "obs_index_time_stop: " << obs_index.get_time_stop() << std::endl;
+      //   Rcpp::Rcout << "wlos_it: " << wlos_it << std::endl;
+      // }
+        
+      wlos[i] += wlos_it; 
+      time_start_it = time_stop_it;
+      if (t < (obs_index.n_times_ - 1 && time_stop_it >= obs_index.get_time_stop())){
+        time_index = t + 1; 
+      }
+    } // end look over time intervals
+  } // end loop over rows
   return wlos;
 }
 

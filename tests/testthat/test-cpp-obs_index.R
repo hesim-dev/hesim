@@ -2,22 +2,24 @@ context("obs_index.h unit tests")
 library("flexsurv")
 library("data.table")
 
-dt_strategies <- data.table(strategy_id = c(1, 2))
-dt_patients <- data.table(patient_id = seq(1, 3), 
+strategies_dt <- data.table(strategy_id = c(1, 2))
+patients_dt <- data.table(patient_id = seq(1, 3), 
                           age = c(45, 47, 60),
                           female = c(1, 0, 0),
                           group = factor(c("Good", "Medium", "Poor")))
-dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
-dt_states <- data.frame(state_id =  seq(1, 3),
+lines_dt <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
+states_dt <- data.frame(state_id =  seq(1, 3),
                          state_name = factor(paste0("state", seq(1, 3))))
-dt_trans <- data.frame(transition_id = seq(1, 4),
+trans_dt <- data.frame(transition_id = seq(1, 4),
                        from = c(1, 1, 2, 2),
                        to = c(2, 3, 1, 3))
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        lines = dt_lines,
-                        patients = dt_patients,
-                        states = dt_states,
-                        transitions = dt_trans)
+times_dt <- data.frame(time_start = c(0, 4, 15))
+hesim_dat <- hesim_data(strategies = strategies_dt,
+                        lines = lines_dt,
+                        patients = patients_dt,
+                        states = states_dt,
+                        transitions = trans_dt,
+                        times = times_dt)
 
 # obs_index --------------------------------------------------------------------
 test_that("obs_index", {
@@ -164,7 +166,3 @@ test_obs_id(strategy_idx = 1, line_idx = 1, patient_idx = 2, health_idx = 3, "st
 
 
 }) # end test obs_index
-
-
-# TimeFun ----------------------------------------------------------------------
-# To do

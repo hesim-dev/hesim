@@ -12,32 +12,31 @@
 \item{by}{A character vector of the names of the data tables in \code{\link{hesim_data}} to expand by.}
 }
 \value{
-An object of class "expanded_hesim_data", which is a \code{\link{data.table}} with an "id_vars" 
+An object of class "expanded_hesim_data", which is a \code{data.table} with an "id_vars" 
 attribute containing the names of the ID variables in the data table.
 }
 \description{
 Expand the data tables from an object of class \code{\link{hesim_data}} into a data table in 
-long format (one row for each combination of observations as specified with tbe 
+long format (one row for each combination of observations as specified with the 
 ID variables from the tables specified with the \code{by} argument).
  See "Details" for an explanation of how the expansion is done.
 }
 \details{
 This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
-Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{data}. 
+Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{object}. 
 The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by 
-prioritizing id variables as follows: (i) \code{strategy_id}, (ii) \code{line}, (iii) \code{patient_id},
-and (iv) the health-related id variable (either \code{state_id} or \code{transition_id}).
+prioritizing ID variables as follows: (i) \code{strategy_id}, (ii) \code{line}, (iii) \code{patient_id},
+(iv) the health-related ID variable (either \code{state_id} or \code{transition_id}), and
+(v) the time interval (i.e., \code{time_id}).
 }
 \examples{
-dt_strategies <- data.frame(strategy_id = c(1, 2))
-dt_patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
+strategies <- data.frame(strategy_id = c(1, 2))
+patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
                           gender = c("Female", "Female", "Male"))
-dt_lines <- create_lines_dt(list(c(1, 2, 5), c(1, 2)))
-dt_states <- data.frame(state_id =  seq(1, 3),
-                        state_var = c(2, 1, 9))
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients,
-                        states = dt_states,
-                        lines = dt_lines)
+states <- data.frame(state_id =  seq(1, 3),
+                     state_var = c(2, 1, 9))
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients,
+                        states = states)
 expand(hesim_dat, by = c("strategies", "patients"))
 }
