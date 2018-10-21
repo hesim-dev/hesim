@@ -70,6 +70,36 @@ test_that("stateval_tbl", {
   expect_equal(nrow(mod$params$mu), 
                nrow(stateval_tbl) * n_patients * n_strategies) 
   
+  ## Custom distribution
+  tbl2 <- data.table(state_id = rep(states$state_id, 2),
+                    sample = rep(c(1, 2), each = n_states),
+                    value = rnorm(6, 4))
+  expect_error(stateval_tbl(tbl2, 
+                            hesim_data = hesim_dat))
+  stateval_tbl <- stateval_tbl(tbl2, 
+                               dist = "custom",
+                               hesim_data = hesim_dat) 
+  
+  ### n is greater than number of samples in tbl
+  expect_warning(mod <- create_StateVals(stateval_tbl, n = 3))
+  expect_equal(ncol(mod$params$mu), 3)
+  expect_true(mod$params$mu[1, 1] == tbl2[state_id == 1 & sample == 1, value] |
+              mod$params$mu[1, 1] == tbl2[state_id == 1 & sample == 2, value]) 
+  
+  ### n equals number of samples in tbl
+  mod <- create_StateVals(stateval_tbl, n = 2) 
+  expect_equal(ncol(mod$params$mu), 2)
+  expect_equal(nrow(mod$params$mu), 
+               n_states * n_patients * n_strategies) 
+  expect_equal(mod$params$mu[5, 1],
+               tbl2[state_id == 2 & sample == 1, value])
+  
+  ### n is less than the number of samples in tbl
+  mod <- create_StateVals(stateval_tbl, n = 1) 
+  expect_equal(ncol(mod$params$mu), 1)
+  expect_true(mod$params$mu[3, 1] == tbl2[state_id == 3 & sample == 1, value] |
+              mod$params$mu[3, 1] == tbl2[state_id == 3 & sample == 2, value]) 
+  
   # Strategy only
   stateval_tbl <- stateval_tbl(tbl[state_id == 3 & grp_id == 1,
                                    .(strategy_id, mean, se)], 

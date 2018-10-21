@@ -35,7 +35,8 @@
 <meta property="og:title" content="Table to store state value parameters — stateval_tbl" />
 
 <meta property="og:description" content="Create a table for storing parameter estimates used to simulate costs or 
-utility in an economic model by treatment strategy, patient, and health state." />
+utility in an economic model by treatment strategy, patient, health state, and
+(optionally) time interval." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,12 +124,13 @@ utility in an economic model by treatment strategy, patient, and health state." 
     <div class="ref-description">
     
     <p>Create a table for storing parameter estimates used to simulate costs or 
-utility in an economic model by treatment strategy, patient, and health state.</p>
+utility in an economic model by treatment strategy, patient, health state, and
+(optionally) time interval.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>stateval_tbl</span>(<span class='no'>tbl</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"norm"</span>, <span class='st'>"beta"</span>, <span class='st'>"gamma"</span>, <span class='st'>"lnorm"</span>, <span class='st'>"unif"</span>, <span class='st'>"fixed"</span>),
-  <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>stateval_tbl</span>(<span class='no'>tbl</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"norm"</span>, <span class='st'>"beta"</span>, <span class='st'>"gamma"</span>, <span class='st'>"lnorm"</span>, <span class='st'>"unif"</span>, <span class='st'>"fixed"</span>,
+  <span class='st'>"custom"</span>), <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,15 +143,19 @@ values. See "Details" for specifics.</p></td>
     <tr>
       <th>dist</th>
       <td><p>Probability distribution used to sample parameters for a 
-probabilistic sensitivity analysis.</p></td>
+probabilistic sensitivity analysis (PSA).</p></td>
     </tr>
     <tr>
       <th>hesim_data</th>
       <td><p>A <code><a href='hesim_data.html'>hesim_data</a></code> object. Required to specify 
-treatment strategies, patients, and/or health states not included as columns
-in <code>tbl</code>, or, to match patients in <code>tbl</code> to groups. Not required
-if <code>tbl</code> includes one row for each treatment strategy, patient, and
-health state combination.</p></td>
+treatment strategies , patients,
+ and/or health states not included as columns
+in <code>tbl</code>, or, to match patients in <code>tbl</code> to groups.
+ Not required if <code>tbl</code> includes one row for each treatment strategy, patient, and
+health state combination. Patients are matched to groups by specifying both a 
+<code>patient_id</code> and a <code>grp_id</code> column in the <code>patients</code> table;
+if <code>hesim_data = NULL</code> but <code>grp_id</code> is included as a column
+in <code>tbl</code>, then each group is assumed to be a unique patient.</p></td>
     </tr>
     </table>
     
@@ -168,15 +174,18 @@ optionally a second column containing <code>grp_id</code>.</p>
 strategies (<code>strategy_id</code>), patient subgroups (<code>grp_id</code>),
 health states (<code>state_id</code>), and/or the start of time intervals 
 (<code>time_start</code>). The table must contain at least one column
-named <code>strategy_id</code>, <code>grp_id</code> or <code>state_id</code>, but does not need
-to contain all of them. Each row denotes a unique treatment strategy, patient
-subgroup, health state, and/or time interval pair.</p>
-<p><code>tbl</code> must also contain columns summarizing the state values for each
-row, which depend on the probability distribution select with <code>dist</code>. 
+named <code>strategy_id</code>, <code>grp_id</code>, or <code>state_id</code>, 
+but does not need to contain all of them. Each row denotes a unique 
+treatment strategy, patient subgroup, health state, and/or time interval pair.</p>
+    <p><code>tbl</code> must also contain columns summarizing the state values for each
+row, which depend on the probability distribution selected with <code>dist</code>. 
 Available distributions include the normal (<code>norm</code>), beta (<code>beta</code>),
 gamma (<code>gamma</code>), lognormal (<code>lnorm</code>), and uniform (<code>unif</code>)
  distributions. In addition, the option <code>fixed</code> can be used if estimates
- are known with certainty. The columns in <code>tbl</code> that must be included,
+ are known with certainty and <code>custom</code> can be used if 
+ parameter values for a PSA  have been previously
+sampled from an arbitrary probability distribution.
+ The columns in <code>tbl</code> that must be included,
  by distribution, are:</p>
 <dl class='dl-horizontal'>
 <dt>norm</dt><dd><p><code>mean</code> and <code>sd</code></p></dd>
@@ -186,7 +195,16 @@ or <code>shape</code> and scale</p></dd>
 <dt>lnorm</dt><dd><p><code>meanlog</code> or <code>sdlog</code></p></dd>
 <dt>unif</dt><dd><p><code>min</code> and <code>max</code></p></dd>
 <dt>fixed</dt><dd><p><code>est</code></p></dd>
+<dt>custom</dt><dd><p><code>sample</code> and <code>value</code></p></dd>
 </dl>
+    <p>Note that if <code>dist = "custom"</code>, then <code>tbl</code> must include a column 
+named <code>sample</code> (an integer vector denoting a unique random draw) and
+ <code>value</code> (denoting the value of the randomly sampled parameter). In this case, there is a unique
+row in <code>tbl</code> for each random draw (<code>sample</code>) and
+ each combination of strategies, patients, health states, and/or time intervals.
+Again, <code>tbl</code> must contain at least one column
+named <code>strategy_id</code>, <code>grp_id</code>, or <code>state_id</code>,
+ but does not need to contain them all.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
