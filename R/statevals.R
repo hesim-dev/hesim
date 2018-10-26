@@ -124,16 +124,21 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   ## Column names
   check_column <- function(var){
     if (is.null(tbl2[[var]])){
-      if (is.null(hesim_data)){
+      name <- switch(var,
+                     "state_id" = "states",
+                     "strategy_id" = "strategies",
+                     "grp_id" = "patients")
+      if (is.null(hesim_data[[name]])){
         msg <- paste0("If '", var, "' is not a column in 'tbl' ",
-                      "then 'hesim_data' must be included as an argument.")
+                      "then 'hesim_data' must be included as an argument ",
+                      "and '",  name, "' must be an element of 'hesim_data'.")
         stop(msg, call. = FALSE)
       }
     }
   }
   check_column("state_id")
   check_column("strategy_id")
-  check_column("patient_id")
+  check_column("grp_id")
   
   ## Samples
   if (dist != "custom") {
