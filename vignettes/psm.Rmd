@@ -1,7 +1,13 @@
 ---
 title: Partitioned survival models
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  bookdown::html_document2:
+    toc: yes
+    toc_depth: 2
+    number_sections: TRUE
+pkgdown:
+  as_is: true
 vignette: >
   %\VignetteIndexEntry{Partitioned survival models}
   %\VignetteEngine{knitr::rmarkdown}
@@ -9,7 +15,7 @@ vignette: >
 bibliography: references.bib
 ---
 
-## Overview
+# Overview
 An N-state partitioned survival model (PSM) simulates the probability that a patient is in each of N distinct health states at a given point of time when treated by a particular therapy. State membership is estimated from a set of non-mutually exclusive survival curves; for an N-state model, N-1 survival curves are required. 
 
 The cumulative survival function, $S(t)_n$, represents the probability that a patient survives to health state $n$ or to a lower indexed state beyond time $t$. The probability that a patient is in health state 1 is always just $S(t)_1$. State membership in health states $2,\ldots, n-1$ is calculated as $S(t)_{n} - S(t)_{n-1}$. Finally, the probability of being in the final health state $n$ (i.e., the dead state) is $1-S(t)_{n-1}$, or one minus the overall survival curve.
@@ -43,7 +49,7 @@ $$
 $$
 where $t$ denotes time (typically a year), $q$ is a quality-of-life weight, $c$ represents (assuming that time is measured in years) annualized costs, $r$ is the discount rate, and $p(t)$ is the probability of being in a given health state at a given time, and QALYs and costs are calculated over $T$ time periods.
 
-## An example 4-state PSM
+# An example 4-state PSM
 To illustrate a partitioned survival analysis, consider the evaluation of a two-line sequential treatment strategy in oncology using a 4-state PSM. The 4 health states might be:
 
 * Progression free on first line treatment
@@ -72,9 +78,9 @@ hesim_dat <- hesim_data(strategies = strategies_dt,
 print(hesim_dat)
 ```
 
-## Parameter estimation
+# Parameter estimation
 
-### Survival models
+## Survival models
 The parameters of the survival models would typically be estimated in one of two ways. First, if access to patient level data from a clinical trial were available, survival models would be fit using available R packages. Second, a formal evidence synthesis---such as a network meta-analysis---might be conducted. Here, we provide an example of an analysis with trial level data.
 
 We consider a dataset with three survival endpoints with endpoint 1 denoting the lowest indexed state, endpoint 2 the next indexed state, and endpoint 3 representing overall survival. In our example, endpoint 1 represents progression on 1st line treatment, endpoint 2 represents progression on 2nd line treatment, and endpoint 3 represents death. 
@@ -100,7 +106,7 @@ psfit_wei <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3),
                          data = surv_dataset)
 ```
 
-### Utility model
+## Utility model
 Although utility and cost models can be fit using regression models, in many cases, we won't fit a model directly, but will use estimated mean values from published sources. In this case, we can use a `stateval_tbl()` to store estimates. For instance, consider an example where we are only given a range of values for utility and we therefore approximate the posterior distribution of mean utility values by health state using a uniform distribution.
 
 ```{r, warning = FALSE, message = FALSE}
@@ -111,7 +117,7 @@ utility_tbl <- stateval_tbl(tbl = data.frame(state_id = states_dt$state_id,
                             hesim_data = hesim_dat)
 ```
 
-### Cost models
+## Cost models
 Similar to utility, we will not simulate drug costs based on a statistical model but will instead use published estimates. Drug costs will only vary by treatment strategy (i.e., they do not vary by health state or across samples in the PSA).
 
 ```{r, warning = FALSE, message = FALSE}
@@ -127,14 +133,14 @@ For cases in which we want to use a regression model to simulate costs, `hesim` 
 medcosts_fit <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 ```
 
-## Simulating the economic model
+# Simulating the economic model
 A PSM in `hesim` is an [R6](https://cran.r-project.org/web/packages/R6/) object of class `Psm` and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class `PsmCurves`), (2) a utility model (of class `StateVals`), and (3) a set of cost models for each cost component (a list of `StateVals` objects).  Since analyses in `hesim` are, by default, based on sampled values of the parameters from their joint posterior distribution in order to facilitate probabilistic sensitivity analysis (PSA), we will specify the number of sampled parameter sets that are desired. 
 
 ```{r, warning = FALSE, message = FALSE}
 n_samples <- 100
 ``` 
 
-### Survival models
+## Survival models
 Survival curves are simulated using `PsmCurves` objects. We can create a `PsmCurves` object using `create_PsmCurves()` as a function of our `partsurvfit` object and a dataset of class `expanded_hesim_data` containing the variables and row identifiers needed for predictive modeling.  
 
 To conduct the PSA, we must sample random draws of the regression coefficients from their posterior distribution, which can be done in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, `create_PsmCurves()` consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the data element in a `partsurvfit` object. 
@@ -145,7 +151,7 @@ survmods <- create_PsmCurves(psfit_wei, data = surv_data, n = n_samples,
                                bootstrap = TRUE)
 ```
 
-### Utility and cost models
+## Utility and cost models
 Utility and cost values are simulated using models of class `StateVals`. We can instantiate a `StateVals` object from a 'stateval_tbl` object, which creates a "mean model" that predicts mean state values for each treatment strategy, patient, and health state combination. In the utility model, utility only varies across health states and is constant within patients and treatment strategies conditional on health state.
 
 ```{r, warning = FALSE, message = FALSE}
@@ -166,7 +172,7 @@ medcostmod <- create_StateVals(medcosts_fit, data = medcost_data,
                                  n = n_samples)
 ```
 
-### Combining the statistical models
+## Combining the statistical models
 The PSM model is instantiated using `$new()`. 
 
 ```{r, warning = FALSE, message = FALSE}
@@ -176,8 +182,8 @@ psm <- Psm$new(survival_models = survmods,
                                   drug = drugcostmod))
 ```
 
-## Simulating outcomes
-### Simulating survival curves
+# Simulating outcomes
+## Simulating survival curves
 Survival curves are predicted by treatment strategy and patient with the function `$sim_survival()`. The predicted curves are returned as a tidy `data.table` to facilitate plotting and stored as a field in the class named `survival_`. Below we plot the mean survival curve for patient 2 with treatment strategy 3. 
 
 ```{r survcurves, warning = FALSE, message = FALSE}
@@ -202,7 +208,7 @@ ggplot(p_data, aes(x = t, y = mean_surv, fill = curve)) +
       theme(legend.position = "bottom")
 ```
 
-### Simulating health state probabilities 
+## Simulating health state probabilities 
 After simulating survival, we can calculate the probability of being in each of the four health states using `$sim_stateprobs()`. At a given point in time, the probability of being in state 1 is the survival probability from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. We plot these state probabilities for the first patient with the 30th randomly sampled parameter set.
 
 ```{r stateprobs, warning = FALSE, message = FALSE}
@@ -227,7 +233,7 @@ ggplot(stateprobs[strategy_id %in% c(1, 2)],
   theme(legend.position = "bottom")
 ```
 
-### Simulating costs and QALYs
+## Simulating costs and QALYs
 Finally, we can simulate discounted costs and QALYs by numerically integrating the "weighted" probabilities in `$stateprobs_` as described above. Costs and QALYs are produced for each treatment strategy, patient, health state, and sampled parameter set.
 
 ```{r, warning = FALSE, message = FALSE}

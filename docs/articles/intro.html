@@ -83,7 +83,7 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2018-10-21</h4>
+            <h4 class="date">2018-10-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -92,99 +92,53 @@
 
     
     
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
-<p><code>hesim</code> is an R package that integrates statistical modeling, economic modeling, and decision analysis for the economic evaluation of health technologies. Economic evaluation proceeds in a three-step process as shown in the figure (adapted from <a href="https://egon.stats.ucl.ac.uk/projects/BCEAweb/">BCEAweb</a>) below .</p>
-<p><br><img src="econ-eval-process.png" width="600px"><br><br></p>
-<p>First, a statistical model (or statistical models) are fit to estimate parameters. Second, the parameters are combined to construct an economic model, which, in turn, is used to simulate measures of clinical benefits (e.g., quality-adjusted life-years (QALYs)) and costs. Third, the economic value of a medical technology is evaluated by summarizing clinical benefits and costs. The entire analysis is inherently Bayesian, as uncertainty in the parameters from the statistical models is propagated throughout the economic model and decision analysis with probabilistic sensitivity analysis (PSA). Furthermore, since the statistical and economic models are integrated, patient heterogeneity can be easily introduced with patient level covariates.</p>
-<p><code>hesim</code> focuses on <strong>step 2</strong> (economic modeling) but is naturally integrated with step 1 (statistical modeling) and provides support for step 3 (decision analysis). As shown in the figure below, a typical analysis would proceed as follows:</p>
+<div id="overview" class="section level1">
+<h1 class="hasAnchor">
+<a href="#overview" class="anchor"></a><span class="header-section-number">1</span> Overview</h1>
+<p><code>hesim</code> is an R package for health-economic simulation modeling that is naturally integrated with statistical modeling and provides support for decision analysis.</p>
+<p>Both cohort and individual-level economic models are supported. Cohort-level models simulate a representative cohorts of patients with similar characteristics while individual-level models simulate individual patients probabilistically using random number generation. The models are implemented as <a href="https://r6.r-lib.org/index.html">R6</a> classes and have methods for simulating disease progression, costs, and QALYs. Models that are currently available are shown in the table below.</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Model</th>
+<th align="left">R6 class</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">N-state partitioned survival model (PSM)</td>
+<td align="left"><a href="../reference/Psm.html">Psm</a></td>
+</tr>
+<tr class="even">
+<td align="left">Individual-level continuous time state transition model (iCTSTM)</td>
+<td align="left"><a href="../reference/IndivCtstm.html">IndivCtstm</a></td>
+</tr>
+</tbody>
+</table>
+<p>(<em>Note that the package is under active development and we expect to add cohort-level continuous time state transition models (cCTSTMs) and cohort-level discrete time state transition models (cDTSTMs) in early 2019.</em>)</p>
+<p>An economic model is constructed by combining statistical models for disease progression, costs, and utilities. As shown in the figure, a typical analysis proceeds in a 3-step process as follows:</p>
+<p><br><img src="econ-eval-process-hesim.png" width="600px"><br><br></p>
 <ol style="list-style-type: decimal">
-<li>The parameters of a statistical model are estimated using an “estimation” dataset, such as extracted data from published studies for a meta-analysis or multi-state survival data from a clinical trial. Parameters are estimated for disease progression, utility, and costs. Each statistical model is constructed by combining the parameter estimates with information on the treatment strategies, patients, and/or health states of interest for the economic model.</li>
-<li>The disease progression, utility, and cost models are combined into a coherent economic model to simulate outcomes of interest such as disease progression, QALYs, and costs.</li>
-<li>Relevant outcomes from step 2 are used to perform decision analysis using approaches such as <a href="https://en.wikipedia.org/wiki/Cost-effectiveness_analysis">cost-effectiveness analysis (CEA)</a> and <a href="https://en.wikipedia.org/wiki/Multiple-criteria_decision_analysis">multi-criteria decision analysis (MCDA)</a>.</li>
+<li>
+<strong>Parameterization</strong>: An economic model is parameterized by estimating statistical models for disease progression, costs, and utilities using “estimation” datasets, such as extracted data from published studies for a meta-analysis or multi-state survival data from a clinical trial.</li>
+<li>
+<strong>Simulation</strong>: The statistical models estimated in Step 1 are combined to construct an economic model. For a given model structure, disease progression, QALYs, and costs are simulated for the target population and treatment strategies of interest.</li>
+<li>
+<strong>Decision analysis</strong>: Simulated outcomes from Step 2 are used to perform decision analysis using approaches such as <a href="https://en.wikipedia.org/wiki/Cost-effectiveness_analysis">cost-effectiveness analysis (CEA)</a> and <a href="https://en.wikipedia.org/wiki/Multiple-criteria_decision_analysis">multi-criteria decision analysis (MCDA)</a>.</li>
 </ol>
-<p><br><img src="econ-eval-process-hesim.png" width="800px"><br><br></p>
-<p><code>hesim</code> supports both cohort-level and individual-level economic models. The cohort-level models simulate disease progression for representative cohorts of patients with similar characteristics while the individual-level models simulate individual patients probabilistically using random number generation. Economic models currently supported include:</p>
-<ul>
-<li>N-state partitioned survival models (PSMs)</li>
-<li>Individual-level continuous time state transition models (CTSTMs)</li>
-</ul>
-<p>The package is under active development and new features are being added. We expect to release a stable version of the package in the beginning of January and to add cohort-level CTSTMs and cohort-level discrete time state transition models (DTSTMs).</p>
+<p>The entire analysis is inherently Bayesian, as uncertainty in the parameters from the statistical models is propagated throughout the economic model and decision analysis with probabilistic sensitivity analysis (PSA). Furthermore, since the statistical and economic models are integrated, patient heterogeneity can be easily introduced with patient level covariates.</p>
 </div>
-<div id="statistical-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#statistical-models" class="anchor"></a>Statistical models</h2>
-<p>The statistical models in <code>hesim</code> are characterized by a distribution over outcomes, <span class="math inline">\(y\)</span>, which depend on model parameters, <span class="math inline">\(\alpha_1, \ldots, \alpha_L\)</span>,</p>
-<p><span class="math display">\[
-\begin{aligned}
-P(y| \alpha_1(x_1), \ldots, \alpha_L(x_L)).
-\end{aligned}
-\]</span> The <span class="math inline">\(l\)</span>th model parameter can depend on a vector of coefficients, <span class="math inline">\(\beta_l\)</span>, and an input vector, <span class="math inline">\(x_l\)</span>, of covariates through linked transformed linear models <span class="math inline">\(g(\alpha_l(x_l)) = x_l^T \beta_l\)</span>. The outcomes, <span class="math inline">\(y\)</span>, can be predicted using the mean of the distribution, <span class="math inline">\(E(y|\cdot)\)</span>, or sampled with a random draw from the probability distribution, <span class="math inline">\(P(y|\cdot)\)</span>.</p>
-<div id="parameter-estimates" class="section level3">
-<h3 class="hasAnchor">
-<a href="#parameter-estimates" class="anchor"></a>Parameter estimates</h3>
-<p>In <code>hesim</code>, the estimated coefficients for each parameter are generally stored in matrices (or a single matrix if the model only has one parameter), where the columns of each matrix are covariates and the rows are random samples from a relevant probability distribution (i.e. the posterior distribution in a Bayesian model). Parameters are stored in objects prefixed by <code>params_</code> (e.g., <code>params_surv</code> for a survival model, <code>params_lm</code> for a linear model). A <code>params_</code> prefixed object can be created in one of two ways:</p>
-<ol style="list-style-type: decimal">
-<li>With a function of the same name such as <code><a href="../reference/params_surv.html">params_surv()</a></code> or <code><a href="../reference/params_lm.html">params_lm()</a></code>
-</li>
-<li>By using the generic function <code><a href="../reference/create_params.html">create_params()</a></code> to create objects from fitted statistical models</li>
-</ol>
-<p>This flexibility is provided so that parameters can either be estimated using models fit with <code>R</code> or from an external source. Here we illustrate the second method by fitting a 3 state (4 transition) Weibull multi-state model using <code><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg()</a></code> from the <a href="https://cran.r-project.org/web/packages/flexsurv/index.html">flexsurv</a> package. We randomly draw 3 samples of the coefficients for the shape and scale parameters from a multivariate normal distribution that approximates the Bayesian posterior distribution and store them in a <code>params_surv</code> object (note that <code>hesim</code> accepts Weibull distributions by the name “weibull” or “weibull.quiet”).</p>
+<div id="treatment-strategies-target-population-and-model-structure" class="section level1">
+<h1 class="hasAnchor">
+<a href="#treatment-strategies-target-population-and-model-structure" class="anchor"></a><span class="header-section-number">2</span> Treatment strategies, target population, and model structure</h1>
+<p>Before beginning an analysis, it is necessary to define the treatment strategies of interest, the target population, and the model structure. This can be done in <code>hesim</code> by creating a <code>hesim_data</code> object with the function <code><a href="../reference/hesim_data.html">hesim_data()</a></code>. Let’s consider an example where we use an iCTSTM to evaluate two competing treatment strategies. We will consider a model with three health states (<em>healthy</em>, <em>sick</em>, and <em>dead</em>) with four transitions (<em>healthy -&gt; sick</em>, <em>sick -&gt; healthy</em>, <em>healthy -&gt; dead</em>, and <em>sick -&gt; dead</em>). Since we are using an individual-level model, we must simulate a target population that is sufficiently large so that uncertainty reflects uncertainty in the model parameters, rather than variability across simulated individuals.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"hesim"</span>)
-<span class="kw">library</span>(<span class="st">"flexsurv"</span>)
 <span class="kw">library</span>(<span class="st">"data.table"</span>)
-
-n_samples &lt;-<span class="st"> </span><span class="dv">3</span> 
-mstate_data &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(hesim<span class="op">::</span>ctstm3_exdata<span class="op">$</span>transitions)
-mstate_data[, trans <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">factor</span>(trans)]
-fit_wei &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg</a></span>(<span class="kw">Surv</span>(years, status) <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(strategy_id)<span class="op">*</span>trans <span class="op">+</span>
-<span class="st">                                                    </span><span class="kw">shape</span>(trans), 
-                                                    <span class="dt">data =</span> mstate_data, 
-                                                    <span class="dt">dist =</span> <span class="st">"weibull"</span>)
-params_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_params.html">create_params</a></span>(fit_wei, <span class="dt">n =</span> n_samples)
-<span class="kw">print</span>(params_wei)</code></pre></div>
-<pre><code>## $coefs
-## $coefs$shape
-##           shape shape(trans2) shape(trans3) shape(trans4)
-## [1,] -0.2981318    0.21634562     0.3326618  -0.003180183
-## [2,] -0.2618417    0.09772622     0.2945335  -0.071728351
-## [3,] -0.3021900    0.17222356     0.3865460   0.028857401
-## 
-## $coefs$scale
-##         scale factor(strategy_id)2    trans2     trans3      trans4
-## [1,] 1.286250            0.4182135 1.3056487 -0.6847185 -0.14385712
-## [2,] 1.362507            0.2971626 1.4484461 -0.8254492  0.06281405
-## [3,] 1.535374            0.2782085 0.9924034 -1.0435452 -0.28365820
-##      factor(strategy_id)2:trans2 factor(strategy_id)2:trans3
-## [1,]                  -0.2442806                  -0.5614953
-## [2,]                  -0.5065691                  -0.4951938
-## [3,]                  -0.1443417                  -0.5677017
-##      factor(strategy_id)2:trans4
-## [1,]                  -0.2190645
-## [2,]                  -0.6900635
-## [3,]                  -0.5223254
-## 
-## 
-## $dist
-## [1] "weibull.quiet"
-## 
-## $n_samples
-## [1] 3
-## 
-## attr(,"class")
-## [1] "params_surv"</code></pre>
-</div>
-<div id="input-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#input-data" class="anchor"></a>Input data</h3>
-<p>The input vectors for each parameter, <span class="math inline">\(x_{l,hijk}\)</span>, are rows in multidimensional input matrices, <span class="math inline">\(X_l\)</span>, where each row denotes a unique observation. The input matrix for parameter <span class="math inline">\(l\)</span> is indexed by health-related indices <span class="math inline">\(h\)</span> and patients <span class="math inline">\(i\)</span> for a treatment strategy <span class="math inline">\(k\)</span>. Example health-related indices include a health state, a transition between two health states, or a survival endpoint in a partitioned survival model (PSM). In some cases, the health-related index <span class="math inline">\(h\)</span> can be suppressed and separate models can be fit for each health index. This is, for instance, the case in a PSM where separate models are fit for each survival endpoint.</p>
-<p>The data and variables needed for the statistical models are stored in objects of class “expanded_hesim_data”, which are <a href="https://github.com/Rdatatable/data.table/wiki">data tables</a> or data frames in long format that contain (i) treatment strategy, patient, and/or health-related ID variables indexing each row, and (ii) the covariates for the statistical model. The names of the ID variables are attributes of the data table.</p>
-<p>An “expanded_hesim_data” object can be created directly or by expanding an object of class “hesim_data”, which contains relevant data for the economic model. For instance, suppose we would like to create a dataset for modeling transitions between 3 health states for 2 treatment strategies and 2 representative patients. We first use <code><a href="../reference/hesim_data.html">hesim_data()</a></code> to store the data for each treatment strategy, representative patient, and transition.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">strategies &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">strategy_id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
-patients &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">patient_id =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">2</span>),
-                          <span class="dt">age =</span> <span class="kw">c</span>(<span class="dv">45</span>, <span class="dv">50</span>),
-                          <span class="dt">female =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))
+strategies &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">strategy_id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
+n_patients &lt;-<span class="st"> </span><span class="dv">1000</span>
+patients &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">patient_id =</span> <span class="dv">1</span><span class="op">:</span>n_patients,
+                          <span class="dt">age =</span> <span class="kw">rnorm</span>(n_patients, <span class="dt">mean =</span> <span class="dv">45</span>, <span class="dt">sd =</span> <span class="dv">7</span>),
+                          <span class="dt">female =</span> <span class="kw">rbinom</span>(n_patients, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">prob =</span> .<span class="dv">51</span>))
+states &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">state_id =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),
+                     <span class="dt">state_name =</span> <span class="kw">c</span>(<span class="st">"Healthy"</span>, <span class="st">"Sick"</span>)) <span class="co"># Non-death health states</span>
 tmat &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/rbindlist">rbind</a></span>(<span class="kw">c</span>(<span class="ot">NA</span>, <span class="dv">1</span>, <span class="dv">2</span>),
               <span class="kw">c</span>(<span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">4</span>),
               <span class="kw">c</span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>))
@@ -192,7 +146,8 @@ tmat &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumen
 transitions &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_trans_dt.html">create_trans_dt</a></span>(tmat)
 transitions[, trans <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">factor</span>(transition_id)]
 hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hesim_data.html">hesim_data</a></span>(<span class="dt">strategies =</span> strategies,
-                        <span class="dt">patients =</span> patients,
+                        <span class="dt">patients =</span> patients, 
+                        <span class="dt">states =</span> states,
                         <span class="dt">transitions =</span> transitions)
 <span class="kw">print</span>(hesim_dat)</code></pre></div>
 <pre><code>## $strategies
@@ -201,9 +156,23 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 ## 2:           2
 ## 
 ## $patients
-##    patient_id age female
-## 1:          1  45      0
-## 2:          2  50      1
+##       patient_id      age female
+##    1:          1 50.43998      1
+##    2:          2 39.92251      1
+##    3:          3 44.55352      1
+##    4:          4 50.30411      1
+##    5:          5 43.87022      0
+##   ---                           
+##  996:        996 31.59049      1
+##  997:        997 42.82574      0
+##  998:        998 41.30641      0
+##  999:        999 51.72858      1
+## 1000:       1000 46.90531      0
+## 
+## $states
+##    state_id state_name
+## 1:        1    Healthy
+## 2:        2       Sick
 ## 
 ## $transitions
 ##    transition_id from to from_name to_name trans
@@ -214,67 +183,299 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 ## 
 ## attr(,"class")
 ## [1] "hesim_data"</code></pre>
-<p>Then we use <code><a href="../reference/expand.html">expand()</a></code> to create a dataset in long format where there is one row for each treatment strategy, patient, and transition.</p>
+</div>
+<div id="parameterization" class="section level1">
+<h1 class="hasAnchor">
+<a href="#parameterization" class="anchor"></a><span class="header-section-number">3</span> Parameterization</h1>
+<div id="disease-progression" class="section level2">
+<h2 class="hasAnchor">
+<a href="#disease-progression" class="anchor"></a><span class="header-section-number">3.1</span> Disease progression</h2>
+<p>As shown in the table below, the statistical model used to parameterize the disease model component of an economic model varies by the type of economic model. For example, a set of <em>N-1</em> independent survival models are used to parameterize an <em>N</em>-state partitioned survival model, while multi-state models are used to parameterize an iCTSTM.</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Statistical model</th>
+<th align="left">Parameter object</th>
+<th align="left">Model fit object</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Independent survival models</td>
+<td align="left"><a href="../reference/params_surv_list.html">params_surv_list</a></td>
+<td align="left"><a href="../reference/partsurvfit.html">partsurvfit</a></td>
+</tr>
+<tr class="even">
+<td align="left">Multi-state model</td>
+<td align="left">
+<a href="../reference/params_surv.html">params_surv</a> or <a href="../reference/params_surv_list.html">params_surv_list</a>
+</td>
+<td align="left">
+<a href="https://www.rdocumentation.org/packages/flexsurv/versions/1.0.0/topics/flexsurvreg">flexsurv::flexsurvreg</a> or <a href="../reference/flexsurvreg_list.html">hesim::flexsurvreg_list</a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The easiest way to parameterize a disease model is by fitting a statistical model using <code>R</code>. For example, survival models for PSMs and multi-state models for iCTSTMs can be fit using <code><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg()</a></code>. A multi-state model can either be fit as a single model with a joint likelihood (a <code>flexsurvreg</code> object) or as a list of transition-specific models (a <code>flexsurvreg_list</code> object) (see <a href="https://cran.r-project.org/web/packages/flexsurv/vignettes/flexsurv.pdf">Section 6 from the flexsurv vignette</a> for details). Survival models fit with <code><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg()</a></code> for a PSM are stored along with the survival data used for fitting (to facilitate bootstrapping) in a <code><a href="../reference/partsurvfit.html">partsurvfit()</a></code> object.</p>
+<p>In other cases, the disease models will not be fit directly with R (for instance, when performing a network meta-analysis). In these cases, the estimates of a disease model can be directly stored in objects prefixed by “params_”. When a single survival model or a multi-state model with a joint likelihood is fit, parameters are stored in <code>params_surv</code> objects; when multiple independent survival or multi-state models with transition specific fits are used, parameters are stored in <code>params_surv_list</code> objects.</p>
+<p>We will illustrate using the first approach, by estimating a multi-state model with a joint likelihood using <code><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg()</a></code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"flexsurv"</span>)
+mstate_data &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(ctstm3_exdata<span class="op">$</span>transitions)
+mstate_data[, trans <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">factor</span>(trans)]
+fit_wei &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg</a></span>(<span class="kw">Surv</span>(years, status) <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(strategy_id)<span class="op">*</span>trans <span class="op">+</span>
+<span class="st">                                                    </span><span class="kw">shape</span>(trans), 
+                                                    <span class="dt">data =</span> mstate_data, 
+                                                    <span class="dt">dist =</span> <span class="st">"weibull"</span>)</code></pre></div>
+</div>
+<div id="costs-and-utility" class="section level2">
+<h2 class="hasAnchor">
+<a href="#costs-and-utility" class="anchor"></a><span class="header-section-number">3.2</span> Costs and utility</h2>
+<p><code>hesim</code> currently supports two types of models for modeling costs and utilities: mean (i.e., intercept-only) models and linear models.</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Statistical model</th>
+<th align="left">Parameter object</th>
+<th align="left">Model fit object</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mean model</td>
+<td align="left"><a href="../reference/params_mean.html">params_mean</a></td>
+<td align="left"><a href="../reference/stateval_tbl.html">stateval_tbl</a></td>
+</tr>
+<tr class="even">
+<td align="left">Linear model</td>
+<td align="left"><a href="../reference/params_lm.html">params_lm</a></td>
+<td align="left"><a href="https://www.rdocumentation.org/packages/stats/versions/3.5.1/topics/lm">stats::lm</a></td>
+</tr>
+</tbody>
+</table>
+<p>Linear models can be fit using <code>lm()</code>. Mean models are most easily constructed from a <code>stateval_tbl</code> object, which is a special object used to assign values to health states. The table allows users to specify mean values that can vary across health states, treatment strategies, patients, and/or time intervals. State values can be specified either as moments (i.e., mean and standard error) or parameters (e.g., shape and scale of gamma distribution) of a probability distribution, or by pre-simulating values from a suitable probability distribution. Here we will use <code>stateval_tbl</code> objects for utility and two cost categories (drug and medical).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Utility</span>
+utility_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">state_id =</span> states<span class="op">$</span>state_id,
+                                       <span class="dt">mean =</span> ctstm3_exdata<span class="op">$</span>utility<span class="op">$</span>mean,
+                                       <span class="dt">se =</span> ctstm3_exdata<span class="op">$</span>utility<span class="op">$</span>se),
+                            <span class="dt">dist =</span> <span class="st">"beta"</span>,
+                            <span class="dt">hesim_data =</span> hesim_dat)
+
+<span class="co"># Costs</span>
+drugcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">strategy_id =</span> strategies<span class="op">$</span>strategy_id,
+                                       <span class="dt">est =</span> ctstm3_exdata<span class="op">$</span>costs<span class="op">$</span>drugs<span class="op">$</span>costs),
+                            <span class="dt">dist =</span> <span class="st">"fixed"</span>,
+                            <span class="dt">hesim_data =</span> hesim_dat) 
+medcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">state_id =</span> states<span class="op">$</span>state_id,
+                                       <span class="dt">mean =</span> ctstm3_exdata<span class="op">$</span>costs<span class="op">$</span>medical<span class="op">$</span>mean,
+                                       <span class="dt">se =</span> ctstm3_exdata<span class="op">$</span>costs<span class="op">$</span>medical<span class="op">$</span>se),
+                            <span class="dt">dist =</span> <span class="st">"gamma"</span>,
+                            <span class="dt">hesim_data =</span> hesim_dat)  </code></pre></div>
+</div>
+</div>
+<div id="simulation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#simulation" class="anchor"></a><span class="header-section-number">4</span> Simulation</h1>
+<div id="constructing-an-economic-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#constructing-an-economic-model" class="anchor"></a><span class="header-section-number">4.1</span> Constructing an economic model</h2>
+<p>An economic model consists of a disease model, a utility model, and a set of cost models for each cost category. The utility and cost models are always <code>StateVals</code> objects, whereas the disease models vary by economic model. In a PSM, the disease model is a <code>PsmCurves</code> object used to simulate survival curves. The disease model in an iCTSTM simulated health states transitions and is a <code>IndivCtstmTrans</code> object.</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Economic model</th>
+<th align="left">Disease model</th>
+<th align="left">Utility model</th>
+<th align="left">Cost model(s)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="../reference/Psm.html">Psm</a></td>
+<td align="left"><a href="../reference/PsmCurves.html">PsmCurves</a></td>
+<td align="left"><a href="../reference/StateVals.html">StateVals</a></td>
+<td align="left"><a href="../reference/StateVals.html">StateVals</a></td>
+</tr>
+<tr class="even">
+<td align="left"><a href="../reference/IndivCtstm.html">IndivCtstm</a></td>
+<td align="left"><a href="../reference/IndivCtstmTrans.html">IndivCtstmTrans</a></td>
+<td align="left"><a href="../reference/StateVals.html">StateVals</a></td>
+<td align="left"><a href="../reference/StateVals.html">StateVals</a></td>
+</tr>
+</tbody>
+</table>
+<p>Since economic models in <code>hesim</code> are inherently Bayesian, we must specify the number of parameter samples we will use for the PSA before constructing the model.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n_samples &lt;-<span class="st"> </span><span class="dv">100</span></code></pre></div>
+<div id="disease-model" class="section level3">
+<h3 class="hasAnchor">
+<a href="#disease-model" class="anchor"></a><span class="header-section-number">4.1.1</span> Disease model</h3>
+<p>Models are constructed as a function of parameters (or model fits) and in regression models, input data. The input data must be objects of class <code>expanded_hesim_data</code>, which are <a href="https://github.com/Rdatatable/data.table/wiki">data tables</a> containing the covariates for the statistical model. In our multi-state model, each row is a unique treatment strategy, patient, and health-state transition. The ID variables (<code>strategy_id</code>, <code>patient_id</code>, and <code>transition_id</code>) are stored as attributes of the dataset.</p>
+<p>An “expanded_hesim_data” object can be created directly or by expanding an object of class “hesim_data” using <code><a href="../reference/expand.hesim_data.html">expand.hesim_data()</a></code>. Here, we will use the latter approach,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">transmod_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand.html">expand</a></span>(hesim_dat, 
                         <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"transitions"</span>))
-transmod_data[<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>]</code></pre></div>
-<pre><code>##     strategy_id patient_id transition_id age female from to from_name
-##  1:           1          1             1  45      0    1  2   Healthy
-##  2:           1          1             2  45      0    1  3   Healthy
-##  3:           1          1             3  45      0    2  1      Sick
-##  4:           1          1             4  45      0    2  3      Sick
-##  5:           1          2             1  50      1    1  2   Healthy
-##  6:           1          2             2  50      1    1  3   Healthy
-##  7:           1          2             3  50      1    2  1      Sick
-##  8:           1          2             4  50      1    2  3      Sick
-##  9:           2          1             1  45      0    1  2   Healthy
-## 10:           2          1             2  45      0    1  3   Healthy
-## 11:           2          1             3  45      0    2  1      Sick
-## 12:           2          1             4  45      0    2  3      Sick
-## 13:           2          2             1  50      1    1  2   Healthy
-## 14:           2          2             2  50      1    1  3   Healthy
-## 15:           2          2             3  50      1    2  1      Sick
-## 16:           2          2             4  50      1    2  3      Sick
-##     to_name trans
-##  1:    Sick     1
-##  2:    Dead     2
-##  3: Healthy     3
-##  4:    Dead     4
-##  5:    Sick     1
-##  6:    Dead     2
-##  7: Healthy     3
-##  8:    Dead     4
-##  9:    Sick     1
-## 10:    Dead     2
-## 11: Healthy     3
-## 12:    Dead     4
-## 13:    Sick     1
-## 14:    Dead     2
-## 15: Healthy     3
-## 16:    Dead     4</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># These are the ID variables</span>
-<span class="kw">attributes</span>(transmod_data)<span class="op">$</span>id_vars</code></pre></div>
+<span class="kw">head</span>(transmod_data)</code></pre></div>
+<pre><code>##    strategy_id patient_id transition_id      age female from to from_name
+## 1:           1          1             1 50.43998      1    1  2   Healthy
+## 2:           1          1             2 50.43998      1    1  3   Healthy
+## 3:           1          1             3 50.43998      1    2  1      Sick
+## 4:           1          1             4 50.43998      1    2  3      Sick
+## 5:           1          2             1 39.92251      1    1  2   Healthy
+## 6:           1          2             2 39.92251      1    1  3   Healthy
+##    to_name trans
+## 1:    Sick     1
+## 2:    Dead     2
+## 3: Healthy     3
+## 4:    Dead     4
+## 5:    Sick     1
+## 6:    Dead     2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attr</span>(transmod_data, <span class="st">"id_vars"</span>)</code></pre></div>
 <pre><code>## [1] "strategy_id"   "patient_id"    "transition_id"</code></pre>
-</div>
-<div id="creating-a-statistical-model" class="section level3">
-<h3 class="hasAnchor">
-<a href="#creating-a-statistical-model" class="anchor"></a>Creating a statistical model</h3>
-<p>A statistical model is instantiated by combining the parameter estimates and input data. A statistical model can be created from an “expanded_hesim_data” object and either a parameter object (prefixed by <code>params_</code>) or a fitted statistical model using functions prefixed by <code>create_</code>. For example, we can create a model of health state transitions for an individual-level CTSTM using <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans()</a></code> from the <code>fit_wei</code> object above, which is a fitted Weibull multi-state model.</p>
+<p>We can now construct the health state transition model, which creates an <code>IndivCtstmTrans</code> object that can be used to simulate health state transitions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">transmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span>(fit_wei, transmod_data,
-                                   <span class="dt">trans_mat =</span> tmat, <span class="dt">n =</span> <span class="dv">100</span>)
+                                   <span class="dt">trans_mat =</span> tmat, <span class="dt">n =</span> n_samples)
 <span class="kw">class</span>(transmod)</code></pre></div>
 <pre><code>## [1] "IndivCtstmTrans" "CtstmTrans"      "R6"</code></pre>
 </div>
+<div id="cost-and-utility-models" class="section level3">
+<h3 class="hasAnchor">
+<a href="#cost-and-utility-models" class="anchor"></a><span class="header-section-number">4.1.2</span> Cost and utility models</h3>
+<p>Since we did not use a regression model for costs or utilities, we do not need to specific input data. Instead, we can construct the cost and utility models directly from the <code>stateval_tbl</code> objects.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Utility</span>
+utilitymod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(utility_tbl, <span class="dt">n =</span> n_samples)
+
+<span class="co"># Costs</span>
+drugcostmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(drugcost_tbl, <span class="dt">n =</span> n_samples)
+medcostmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(medcost_tbl, <span class="dt">n =</span> n_samples)
+costmods &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">drugs =</span> drugcostmod,
+                 <span class="dt">medical =</span> medcostmod)</code></pre></div>
 </div>
-<div id="economic-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#economic-model" class="anchor"></a>Economic model</h2>
-<p>An economic model for an individual-level CTSTM would be constructed by combining the <code>transmod</code> object with statistical models for costs and utility. Examples analyses are currently available for <a href="psm.html">PSMs</a> and <a href="https://innovationvalueinitiative.github.io/modern-software-HTA/example.html">individual-level CTSTMs</a>.</p>
+<div id="combining-the-disease-progression-cost-and-utility-models" class="section level3">
+<h3 class="hasAnchor">
+<a href="#combining-the-disease-progression-cost-and-utility-models" class="anchor"></a><span class="header-section-number">4.1.3</span> Combining the disease progression, cost, and utility models</h3>
+<p>Once the disease, utility, and cost model have been constructed, we combine them to create the full economic model.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm &lt;-<span class="st"> </span>IndivCtstm<span class="op">$</span><span class="kw">new</span>(<span class="dt">trans_model =</span> transmod,
+                         <span class="dt">utility_model =</span> utilitymod,
+                         <span class="dt">cost_models =</span> costmods)</code></pre></div>
 </div>
-<div id="decision-analysis" class="section level2">
+</div>
+<div id="simulating-outcomes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#decision-analysis" class="anchor"></a>Decision analysis</h2>
-<p>Once output has been simulated with an economic model, a CEA or MCDA can be performed. <code>hesim</code> (<a href="icea.html">here</a>) provides support for CEA including summarizing a PSA and individualized cost-effectiveness analysis. Output from <code>hesim</code> economic models can also be easily analyzed using other R packages such as <a href="https://sites.google.com/a/statistica.it/gianluca/bcea">bcea</a>.</p>
+<a href="#simulating-outcomes" class="anchor"></a><span class="header-section-number">4.2</span> Simulating outcomes</h2>
+<p>Each economic model contains methods (i.e., functions) for simulating disease progression, costs, and QALYs. These methods are summarized in the table below.</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Economic model</th>
+<th align="left">Disease progression</th>
+<th align="left">QALYs</th>
+<th align="left">Costs</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="../reference/Psm.html">Psm</a></td>
+<td align="left">$sim_survival() and $sim_stateprobs()</td>
+<td align="left">$sim_qalys()</td>
+<td align="left">$sim_costs()</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="../reference/IndivCtstm.html">IndivCtstm</a></td>
+<td align="left">$sim_disease() and $sim_stateprobs()</td>
+<td align="left">$sim_qalys()</td>
+<td align="left">$sim_costs()</td>
+</tr>
+</tbody>
+</table>
+<p>More specifically, the methods for each economic model can be summarized as follows:</p>
+<ul>
+<li>
+<strong>PSM</strong>: <code>$sim_survival()</code> simulates survival curves and <code>$sim_stateprobs()</code> computed health state probabilities as a function of time based on those survival curves. <code>$sim_costs()</code> and <code>$sim_qalys()</code> compute simulated costs and QALYs based on the values assigned to states from the cost and utility models and the expected time spent in each state.</li>
+<li>
+<strong>iCTSTM</strong>: <code>$sim_disease()</code> uses random number generation to simulate a disease trajectory and <code>$sim_stateprobs</code> summarize that trajectory by computing the probability patients in the target population are in each health state as a function of time. <code>$sim_costs()</code> and <code>$sim_qalys()</code> compute simulated costs and QALYs for each simulated patient based on the times at which they enter health states.</li>
+</ul>
+<p>We illustrate with the iCTSTM. First we simulate disease progression for each patient.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_disease</span>()
+<span class="kw">head</span>(ictstm<span class="op">$</span>disprog_)</code></pre></div>
+<pre><code>##    sample strategy_id patient_id from to final time_start time_stop
+## 1:      1           1          1    1  3     1          0 5.5764517
+## 2:      1           1          2    1  3     1          0 0.1306065
+## 3:      1           1          3    1  3     1          0 3.3657811
+## 4:      1           1          4    1  3     1          0 6.1984985
+## 5:      1           1          5    1  3     1          0 2.1997351
+## 6:      1           1          6    1  2     0          0 1.0519930</code></pre>
+<p>The disease trajectory can be summarized with <code>$sim_stateprobs()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>))
+<span class="kw">head</span>(ictstm<span class="op">$</span>stateprobs_)</code></pre></div>
+<pre><code>##    sample strategy_id state_id t  prob
+## 1:      1           1        1 0 1.000
+## 2:      1           1        1 1 0.670
+## 3:      1           1        1 2 0.530
+## 4:      1           1        1 3 0.432
+## 5:      1           1        1 4 0.346
+## 6:      1           1        1 5 0.292</code></pre>
+<p>We can then compute costs and QALYs (using a discount rate of 3 percent).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># QALYs</span>
+ictstm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
+<span class="kw">head</span>(ictstm<span class="op">$</span>qalys_)</code></pre></div>
+<pre><code>##    sample strategy_id state_id   dr     qalys       lys
+## 1:      1           1        1 0.03 3.1221533 3.6508107
+## 2:      1           1        2 0.03 0.4432545 0.4522026
+## 3:      1           2        1 0.03 3.8080387 4.4528333
+## 4:      1           2        2 0.03 0.3202761 0.3267416
+## 5:      2           1        1 0.03 3.1077211 3.7344946
+## 6:      2           1        2 0.03 0.4921350 0.4923336</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Costs</span>
+ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
+<span class="kw">head</span>(ictstm<span class="op">$</span>costs_)</code></pre></div>
+<pre><code>##    sample strategy_id state_id   dr category     costs
+## 1:      1           1        1 0.03    drugs 18254.053
+## 2:      1           1        2 0.03    drugs  2261.013
+## 3:      1           2        1 0.03    drugs 44528.333
+## 4:      1           2        2 0.03    drugs  3267.416
+## 5:      2           1        1 0.03    drugs 18672.473
+## 6:      2           1        2 0.03    drugs  2461.668</code></pre>
+</div>
+</div>
+<div id="decision-analysis" class="section level1">
+<h1 class="hasAnchor">
+<a href="#decision-analysis" class="anchor"></a><span class="header-section-number">5</span> Decision analysis</h1>
+<p>Once output has been simulated with an economic model, a decision analysis can be performed. Cost-effectiveness analyses can be performed using other R packages such as <a href="https://sites.google.com/a/statistica.it/gianluca/bcea">BCEA</a> or directly with <code>hesim</code> as described in more detail <a href="icea.html">here</a>. <code>hesim</code> does not currently provide support for MCDA.</p>
+<p>To perform a CEA, simulated costs and QALYs can be summarized to create a <code>ce</code> object, which contains mean costs and QALYs for each sample from the PSA by treatment strategy.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ce &lt;-<span class="st"> </span>ictstm<span class="op">$</span><span class="kw">summarize</span>()
+<span class="kw">print</span>(ce)</code></pre></div>
+<pre><code>## $costs
+##      category   dr sample strategy_id    costs
+##   1:    drugs 0.03      1           1 20515.07
+##   2:    drugs 0.03      1           2 47795.75
+##   3:    drugs 0.03      2           1 21134.14
+##   4:    drugs 0.03      2           2 46737.95
+##   5:    drugs 0.03      3           1 17756.68
+##  ---                                          
+## 596:    total 0.03     98           2 55255.45
+## 597:    total 0.03     99           1 25592.99
+## 598:    total 0.03     99           2 48115.58
+## 599:    total 0.03    100           1 21617.06
+## 600:    total 0.03    100           2 51966.03
+## 
+## $qalys
+##        dr sample strategy_id    qalys
+##   1: 0.03      1           1 3.565408
+##   2: 0.03      1           2 4.128315
+##   3: 0.03      2           1 3.599856
+##   4: 0.03      2           2 3.950075
+##   5: 0.03      3           1 2.310821
+##  ---                                 
+## 196: 0.03     98           2 3.179165
+## 197: 0.03     99           1 2.196786
+## 198: 0.03     99           2 2.200057
+## 199: 0.03    100           1 2.813768
+## 200: 0.03    100           2 3.711079
+## 
+## attr(,"class")
+## [1] "ce"</code></pre>
+<p>The functions <code><a href="../reference/icea.html">icea()</a></code> and <code>icea_pw</code>, which perform individualized cost-effectiveness analysis and incremental individualized cost-effectiveness analysis, respectively, can be used.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icea &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea</a></span>(ce, <span class="dt">dr =</span> .<span class="dv">03</span>)
+icea_pw &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce, <span class="dt">dr =</span> .<span class="dv">03</span>, <span class="dt">comparator =</span> <span class="dv">1</span>)</code></pre></div>
+<p>For instance, we might want to plot a cost-effectiveness acceptability curve (CEAC) displaying the probability that treatment strategy 2 is more cost-effective than treatment strategy 1 at a given willingness to pay for a QALY.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"ggplot2"</span>)
+ggplot2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(icea_pw<span class="op">$</span>ceac, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, <span class="dt">col =</span> <span class="kw">factor</span>(strategy_id))) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">xlab</a></span>(<span class="st">"Willingness to pay"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/labs">ylab</a></span>(<span class="st">"Probability most cost-effective"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_continuous">scale_x_continuous</a></span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">200000</span>, <span class="dv">100000</span>), <span class="dt">label =</span> scales<span class="op">::</span>dollar) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/scale_hue">scale_colour_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Strategy"</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_minimal</a></span>()</code></pre></div>
+<p><img src="intro_files/figure-html/ceac_plot-1.png" width="672"></p>
 </div>
   </div>
 
@@ -283,10 +484,21 @@ transmod_data[<span class="dv">1</span><span class="op">:</span><span class="dv"
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#overview">Overview</a></li>
-      <li><a href="#statistical-models">Statistical models</a></li>
-      <li><a href="#economic-model">Economic model</a></li>
-      <li><a href="#decision-analysis">Decision analysis</a></li>
+<li><a href="#overview"><span class="toc-section-number">1</span> Overview</a></li>
+      <li><a href="#treatment-strategies-target-population-and-model-structure"><span class="toc-section-number">2</span> Treatment strategies, target population, and model structure</a></li>
+      <li>
+<a href="#parameterization"><span class="toc-section-number">3</span> Parameterization</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#disease-progression"><span class="toc-section-number">3.1</span> Disease progression</a></li>
+      <li><a href="#costs-and-utility"><span class="toc-section-number">3.2</span> Costs and utility</a></li>
+      </ul>
+</li>
+      <li>
+<a href="#simulation"><span class="toc-section-number">4</span> Simulation</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#constructing-an-economic-model"><span class="toc-section-number">4.1</span> Constructing an economic model</a></li>
+      <li><a href="#simulating-outcomes"><span class="toc-section-number">4.2</span> Simulating outcomes</a></li>
+      </ul>
+</li>
+      <li><a href="#decision-analysis"><span class="toc-section-number">5</span> Decision analysis</a></li>
       </ul>
 </div>
       </div>
