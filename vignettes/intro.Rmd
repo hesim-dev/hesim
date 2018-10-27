@@ -25,7 +25,7 @@ Both cohort and individual-level economic models are supported. Cohort-level mod
 psm <- c("N-state partitioned survival model (PSM)", "[Psm](../reference/Psm.html)")
 ictstm <- c("Individual-level continuous time state transition model (iCTSTM)", "[IndivCtstm](../reference/IndivCtstm.html)")
 tbl <- rbind(psm, ictstm)
-colnames(tbl) <- c("Model", "R6 class")
+colnames(tbl) <- c("Economic model", "R6 class")
 knitr::kable(tbl, row.names = FALSE)
 ```
 
@@ -78,10 +78,10 @@ print(hesim_dat)
 As shown in the table below, the statistical model used to parameterize the disease model component of an economic model varies by the type of economic model. For example, a set of *N-1* independent survival models are used to parameterize an *N*-state partitioned survival model, while multi-state models are used to parameterize an iCTSTM. 
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
-psm <- c("Independent survival models", "[params_surv_list](../reference/params_surv_list.html)", "[partsurvfit](../reference/partsurvfit.html)")
-ictstm <- c("Multi-state model", "[params_surv](../reference/params_surv.html) or [params_surv_list](../reference/params_surv_list.html)", "[flexsurv::flexsurvreg](https://www.rdocumentation.org/packages/flexsurv/versions/1.0.0/topics/flexsurvreg) or [hesim::flexsurvreg_list](../reference/flexsurvreg_list.html)")
+psm <- c("[Psm](../reference/Psm.html)", "Independent survival models", "[params_surv_list](../reference/params_surv_list.html)", "[partsurvfit](../reference/partsurvfit.html)")
+ictstm <- c("[IndivCtstm](../reference/IndivCtstm.html)", "Multi-state model", "[params_surv](../reference/params_surv.html) or [params_surv_list](../reference/params_surv_list.html)", "[flexsurv::flexsurvreg](https://www.rdocumentation.org/packages/flexsurv/versions/1.0.0/topics/flexsurvreg) or [hesim::flexsurvreg_list](../reference/flexsurvreg_list.html)")
 tbl <- rbind(psm, ictstm)
-colnames(tbl) <- c("Statistical model", "Parameter object", "Model fit object")
+colnames(tbl) <- c("Economic model (R6 class)", "Statistical model", "Parameter object", "Model fit object")
 knitr::kable(tbl, row.names = FALSE)
 ```
 
@@ -204,7 +204,7 @@ Each economic model contains methods (i.e., functions) for simulating disease pr
 psm_methods <- c("[Psm](../reference/Psm.html)", "$sim_survival() and $sim_stateprobs()", "$sim_qalys()", "$sim_costs()")
 ictstm_methods <- c("[IndivCtstm](../reference/IndivCtstm.html)", "$sim_disease() and $sim_stateprobs()", "$sim_qalys()", "$sim_costs()")
 tbl <- rbind(psm_methods, ictstm_methods)
-colnames(tbl) <- c("Economic model", "Disease progression", "QALYs", "Costs")
+colnames(tbl) <- c("Economic model (R6 class)", "Disease progression", "QALYs", "Costs")
 knitr::kable(tbl, row.names = FALSE)
 ```
 

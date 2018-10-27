@@ -33,6 +33,7 @@ Imports:
     stats,
     survival
 Suggests:
+    bookdown,
     covr,
     ggplot2,
     knitr,
