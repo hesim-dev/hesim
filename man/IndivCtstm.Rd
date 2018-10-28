@@ -163,7 +163,10 @@ hesim_dat <- hesim_data(strategies = strategies,
 
 # Parameter estimation
 ## Multi-state model
-fits <- vector(length = 3, mode = "list")
+tmat <- rbind(c(NA, 1, 2),
+              c(3, NA, 4),
+              c(NA, NA, NA))
+fits <- vector(length = max(tmat, na.rm = TRUE), mode = "list")
 surv_dat <- data.frame(ctstm3_exdata$transitions)
 for (i in 1:length(fits)){
   fits[[i]] <- flexsurvreg(Surv(years, status) ~ factor(strategy_id), 
@@ -172,10 +175,7 @@ for (i in 1:length(fits)){
                            dist = "weibull")
 }
 fits <- flexsurvreg_list(fits)
-tmat <- rbind(c(NA, 1, 2),
-              c(NA, NA, 3),
-              c(NA, NA, NA))
-              
+
 ## Utility
 utility_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
                                        mean = ctstm3_exdata$utility$mean,

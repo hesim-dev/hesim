@@ -97,26 +97,26 @@ Summarize health state transitions in an individual-level continuous time state 
 library("flexsurv")
 
 # Simulation data
-dt_strategies <- data.frame(strategy_id = c(1, 2, 3))
-dt_patients <- data.frame(patient_id = seq(1, 3),
+strategies <- data.frame(strategy_id = c(1, 2, 3))
+patients <- data.frame(patient_id = seq(1, 3),
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
 
 # Multi-state model with transition specific models
-fits <- vector(length = 3, mode = "list")
-dat <- data.frame(bosms3)
-for (i in 1:length(fits)){
-  fits[[i]] <- flexsurvreg(Surv(years, status) ~ 1, data = dat[dat$trans == i, ],
-                           dist = "exp")
-}
-fits <- flexsurvreg_list(fits)
 tmat <- rbind(c(NA, 1, 2),
               c(NA, NA, 3),
               c(NA, NA, NA))
+fits <- vector(length = max(tmat, na.rm = TRUE), mode = "list")
+for (i in 1:length(fits)){
+  fits[[i]] <- flexsurvreg(Surv(years, status) ~ 1, 
+                            data = bosms3[bosms3$trans == i, ],
+                           dist = "exp")
+}
+fits <- flexsurvreg_list(fits)
 
 # Simulation model
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients)
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients)
 fits_data <- expand(hesim_dat)
 transmod <- create_IndivCtstmTrans(fits, data = fits_data, trans_mat = tmat,
                                     n = 2,
