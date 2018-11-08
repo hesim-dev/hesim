@@ -214,10 +214,10 @@ icea_pw.default <- function(x, k = seq(0, 200000, 500), comparator,
   attr(l, "strategy") <- strategy
   attr(l, "grp") <- grp
   attr(l, "comparator") <- comparator
-  if (is.factor(x$strategy)){
-    comp_pos <- which(levels(x$strategy) == comparator)
+  if (is.factor(x[[strategy]])){
+    comp_pos <- which(levels(x[[strategy]]) == comparator)
   } else {
-    comp_pos <- which(sort(unique(x$strategy)) == comparator)
+    comp_pos <- which(sort(unique(x[[strategy]])) == comparator)
   }
   attr(l, "comparator_pos") <- comp_pos  
   return(l)
@@ -412,12 +412,13 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
   grp <- attributes(x)$grp
   output <- match.arg(output)
   tbl <- copy(x$summary)
+  tbl[, "icer_numeric" := get("ic_mean")/get("ie_mean")]  
   tbl[, "inmb" := k * get("ie_mean") - get("ic_mean")]
   
   # Formatting
   tbl[, "iqalys" := format_qalys(get("ie_mean"), digits = digits_qalys)]
   tbl[, "icosts" := format_costs(get("ic_mean"), digits = digits_costs)]
-  tbl[, "icer" := format_costs(get("icer"), digits = digits_costs)]
+  tbl[, "icer" := format_costs(get("icer_numeric"), digits = digits_costs)]
   tbl[, "inmb" := format_costs(get("inmb"), digits = digits_costs)]
   
   if(cri){
@@ -458,8 +459,7 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
     }
     x$delta[, "inmb" := NULL]
   } # end credible interval calculations
-  icer_numeric <- suppressWarnings(as.numeric(x$summary$icer))
-  tbl[, "conclusion" := ifelse(icer_numeric <= k | 
+  tbl[, "conclusion" := ifelse(get("icer_numeric") <= k | 
                                 get("icer") == "Dominates",
                             "Cost-effective", "Not cost-effective")]
   tbl <- tbl[, c(strategy, grp, "iqalys", "icosts", "inmb", "icer", "conclusion"),
@@ -469,7 +469,7 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
     tbl_list <- split(tbl, by = grp)
     mat_list <- vector(mode = "list", length = length(tbl_list))
     names(mat_list) <- names(tbl_list)
-    n_strategies <- length(unique(tbl$strategy))
+    n_strategies <- length(unique(tbl[[strategy]]))
     mat <- matrix(NA, nrow = 5, ncol = n_strategies + 1)
     if(is.null(rownames)){
       rownames(mat) <- c("Incremental QALYs", "Incremental costs", 

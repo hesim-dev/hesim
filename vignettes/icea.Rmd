@@ -168,7 +168,7 @@ In this example, treatments 1, 2, and 3 have the highest NMBs a fraction `r mce[
 ```{r mce_plot}
 library("ggplot2")
 library("scales")
-theme_set(theme_bw())
+theme_set(theme_minimal())
 ggplot2::ggplot(icea$mce, aes(x = k, y = prob, col = factor(strategy))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
