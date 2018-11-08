@@ -419,6 +419,8 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
   tbl[, "iqalys" := format_qalys(get("ie_mean"), digits = digits_qalys)]
   tbl[, "icosts" := format_costs(get("ic_mean"), digits = digits_costs)]
   tbl[, "icer" := format_costs(get("icer_numeric"), digits = digits_costs)]
+  tbl[, "icer" := ifelse(get("ic_mean") < 0 & get("ie_mean") >= 0, "Dominates", get("icer"))]
+  tbl[, "icer" := ifelse(get("ic_mean") > 0 & get("ie_mean") <= 0, "Dominated", get("icer"))]
   tbl[, "inmb" := format_costs(get("inmb"), digits = digits_costs)]
   
   if(cri){
