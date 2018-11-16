@@ -59,11 +59,11 @@ public:
     // New time based on the 3 scenarios: (1) randomly sampled time, 
     // (2) maximum time, (3) time based on maximum age
     double new_age = std::min(age_ + *random_it, max_age_);
-    std::vector<double> scenario_times = {time_ + *random_it, max_t_, time_ + new_age - age_};
+    std::vector<double> scenario_times = {time_ + *random_it, max_t_, time_ + max_age_ - age_};
     auto scenarios_it = std::min_element(scenario_times.begin(), scenario_times.end());
     time_ = *scenarios_it;
     age_ = new_age; 
-    
+
     // New states under under the 3 scenarios
     int min_pos = scenarios_it - scenario_times.begin();
     if (min_pos == 0) { // (1) Use randomly sampled time and state at that time
