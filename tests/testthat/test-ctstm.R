@@ -75,6 +75,9 @@ covs <- c("match", "proph", "year", "agecl")
 msebmt <- expand.covs(msebmt, covs, longnames = FALSE)
 msfit <- flexsurvreg(Surv(time/365.25, status) ~ factor(trans), data = msebmt,
                            dist = "weibull")
+msfit_cf <- flexsurvreg(Surv(Tstart/365.25, Tstop/365.25, status) ~ factor(trans),
+                        data = msebmt,
+                        dist = "weibull")
 
 # State probabilities  ---------------------------------------------------------
 sample <-  c(rep(1, 9), rep(2, 4)) 
@@ -407,6 +410,7 @@ test_that("Simulate costs and QALYs", {
 
 ## With a joint survival model
 test_that("IndivCtstm", {
+  # Clock-reset
   mstate <- create_IndivCtstmTrans(msfit, data = msfit_data, trans_mat = tmat_ebmt4,
                                     n = n_samples)      
   ictstm <- IndivCtstm$new(trans_model = mstate)
@@ -420,6 +424,13 @@ test_that("IndivCtstm", {
   stprobs <- ictstm$sim_stateprobs(t = c(0, 1, 2, 3))$stateprobs_
   expect_true(all(stprobs[t == 0 & state_id == 1, prob] ==  1))
   expect_true(all(stprobs[t == 0 & state_id != 1, prob] ==  0))
+  
+  # Clock-forward
+  mstate_cf <- create_IndivCtstmTrans(msfit_cf, data = msfit_data, trans_mat = tmat_ebmt4,
+                                      clock = "forward", n = n_samples)
+  ictstm <- IndivCtstm$new(trans_model = mstate_cf)
+  disprog <- ictstm$sim_disease()$disprog_
+  expect_true(is.data.table(disprog))
 })
 
 

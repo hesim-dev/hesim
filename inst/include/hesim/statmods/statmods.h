@@ -287,6 +287,22 @@ public:
     return dist_->random();
   }
   
+  /** 
+   * Sample random values from a survival distribution using a truncated 
+   * probability distribution.
+   * @param sample A random sample of the parameters from the posterior
+   * distribution.
+   * @param obs The observation (i.e., row index) for which to make a prediction
+   * from the input matrix (or matrices when there are multiple parameters).
+   * @param lower, upper Lower and upper bounds of the random variable.
+   * @param method Method to use for sampling. See hesim::stats::rtrunc_repeat. 
+   * @return A random draw.
+   */ 
+  double trandom(int sample, int obs, double lower, double upper, std::string method = "invcdf") {
+    set_dist(sample, obs);
+    return dist_->trandom(lower, upper, method);
+  }
+  
   int get_n_samples(){
     return params_.n_samples_;
   }

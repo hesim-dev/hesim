@@ -211,6 +211,13 @@ public:
    * from health state r to health state s.
    */    
   double virtual random(int trans, int sample) = 0;
+  
+  /** 
+   * Randomly sample a health state transition from a truncated distributon.
+   * Randomly sample an r->s health state transition; that is, a transition
+   * from health state r to health state s that is left truncated at @c lower.
+   */    
+  double virtual trandom(int trans, int sample, double lower) = 0;  
 };
 
 /***************************************************************************//**
@@ -262,6 +269,11 @@ public:
     obs_index_.set_health_index(trans);
     return survmod_.random(sample, obs_index_());
   }
+  
+  double trandom(int trans, int sample, double lower) {
+    obs_index_.set_health_index(trans);
+    return survmod_.trandom(sample, obs_index_(), lower, INFINITY);
+  }  
     
 };
 
@@ -315,6 +327,10 @@ public:
   double random(int trans, int sample) {
     return survmods_[trans].random(sample, obs_index_());
   }
+  
+  double trandom(int trans, int sample, double lower) {
+    return survmods_[trans].trandom(sample, obs_index_(), lower, INFINITY);
+  } 
 };
 
  /** 

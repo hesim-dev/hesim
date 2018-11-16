@@ -22,6 +22,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
                                     std::vector<double> start_age, 
                                     std::vector<double> start_time,
                                     int death_state,
+                                    std::string clock,
                                     double max_t, double max_age){
  
   // Initialize
@@ -33,7 +34,8 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
   std::vector<int> n_lines = transmod->get_n_lines();
   int n_patients = transmod->get_n_patients();
   hesim::ctstm::patient patient(transmod.get(), start_age[0], start_time[0],
-                                start_state[0], max_age, max_t, death_state); 
+                                start_state[0], max_age, max_t, death_state, 
+                                clock); 
   hesim::ctstm::disease_prog disease_prog;
   int N = 0;
   for (int i = 0; i < n_strategies; ++i){

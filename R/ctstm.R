@@ -64,6 +64,7 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100){
                                  trans_model$start_age,
                                  trans_model$start_time,
                                  trans_model$death_state - 1, 
+                                 trans_model$clock,
                                  max_t, max_age)
   disprog <- data.table(disprog)
   disprog[, sample := sample + 1]
@@ -135,6 +136,8 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
 #' @param n Number of random observations of the parameters to draw.
 #' @param trans_mat The transition matrix describing the states and transitions in a 
 #' multi-state model in the format from the \link[mstate]{mstate} package. See \link{IndivCtstmTrans}.
+#' @param clock "reset" for a clock-reset model and "forward" for a clock-forward model. See the field
+#' \code{clock} in \code{\link{IndivCtstmTrans}}.
 #' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.
 #' @param ... Further arguments passed to \code{IndivCtstmTrans$new()} in \code{\link{IndivCtstmTrans}}.
 #' @return Returns an \code{\link{R6Class}} object of class \code{\link{IndivCtstmTrans}}.
@@ -142,31 +145,38 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
 #' @name create_IndivCtstmTrans
 #' @rdname create_IndivCtstmTrans
 #' @export
-create_IndivCtstmTrans <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
+create_IndivCtstmTrans <- function(object, data, trans_mat, clock = c("reset", "forward"),
+                                   n = 1000, point_estimate = FALSE, ...){
   UseMethod("create_IndivCtstmTrans", object)
 }
 
 #' @export
 #' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
+create_IndivCtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, clock = c("reset", "forward"),
+                                                    n = 1000, point_estimate = FALSE, ...){
   input_mats <- create_input_mats(object, data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat, ...))
+  return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat,
+                             clock = match.arg(clock), ...))
 }
 
 #' @export
 #' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.flexsurvreg <- function(object, data, trans_mat, n = 1000, point_estimate = FALSE, ...){
+create_IndivCtstmTrans.flexsurvreg <- function(object, data, trans_mat, clock = c("reset", "forward"),
+                                               n = 1000, point_estimate = FALSE, ...){
   input_mats <- create_input_mats(object, data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat, ...))
+  return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat, 
+                             clock = match.arg(clock), ...))
 }
 
 #' @export
 #' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.params_surv <- function(object, data, trans_mat, ...){
+create_IndivCtstmTrans.params_surv <- function(object, data, trans_mat, 
+                                               clock = c("reset", "forward"), ...){
   input_mats <- create_input_mats(object, data)
-  return(IndivCtstmTrans$new(input_mats = input_mats, params = object, trans_mat = trans_mat, ...))
+  return(IndivCtstmTrans$new(input_mats = input_mats, params = object, trans_mat = trans_mat,
+                             clock = match.arg(clock), ...))
 }
 
 #' @export
@@ -207,16 +217,19 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     start_state = NULL,
     start_time = NULL,
     start_age = NULL,
+    clock = NULL,
     
     
     initialize = function(input_mats, params, trans_mat, 
                           start_state = 1,
                           start_time = 0,
                           start_age = 38,
-                          death_state = NULL) {
+                          death_state = NULL,
+                          clock = c("reset", "forward")) {
       self$input_mats <- input_mats
       self$params <- params
       self$trans_mat <- trans_mat
+      self$clock <- match.arg(clock)
       
       # history
       self$start_state <- private$check_history(start_state)

@@ -20,13 +20,14 @@ public:
   int death_state_;
   double max_age_;
   double max_t_;
+  std::string clock_;
   
 /** 
    * The constructor.
    * Instantiates an individual patient. 
    */  
   patient(transmod * transmod, double age, double time, int state,
-          double max_age, double max_t, int death_state) 
+          double max_age, double max_t, int death_state, std::string clock = "reset") 
     : transmod_(transmod) {
     age_ = age;
     time_ = time;
@@ -34,6 +35,7 @@ public:
     max_age_ = max_age;
     max_t_ = max_t;
     death_state_ = death_state;
+    clock_ = clock;
   }
   
   /** 
@@ -50,7 +52,11 @@ public:
     int n_trans = trans_ids.size();
     std::vector<double> random_times(n_trans);
     for (int i = 0; i < n_trans; ++i){
-      random_times[i] = transmod_->random(trans_ids[i], sample);
+      if (clock_ == "reset"){
+        random_times[i] = transmod_->random(trans_ids[i], sample); 
+      } else{
+        random_times[i] = transmod_->trandom(trans_ids[i], sample, time_);
+      }
     }
     
     // State with the minimum randomly sampled time
@@ -76,39 +82,6 @@ public:
     else { // Patient dies at maximum age
       state_ = death_state_;
     }
-     
-    
-    // Rcpp::Rcout << "random_it: " << *random_it << std::endl;
-    // Rcpp::Rcout << "scenarios_it: " << *scenarios_it << std::endl;
-    
-        
-        
- 
-    
-    // New states under under 3 scenarios
-    // switch(scenarios_it - scenario_times.begin()){
-    // case 0 : {// (1) elapsed time
-    //     int state_pos = random_it - random_times.begin();
-    //     state_ = transmod_->trans_mat_.to(state_)[state_pos];
-    //     break;
-    // }
-    //   case 1 : // maximum time
-    //     break;
-    //     // Do nothing
-    //   case 2 :
-    //     state_ = death_state_;
-    //     break;
-    // }
-    
-    // 
-    // auto scenario_it = std::min_element({time_ + *it, max_t_, time_ + new_age - age_});
-    // 
-    // 
-    // time_ = std::min({time_ + *it, max_t_, time_ + new_age - age_});
-    // 
-    // 
-    // int state_pos = it - random_times.begin();
-    // state_ = transmod_->trans_mat_.to(state_)[state_pos];
   }
 };
 

@@ -41,8 +41,8 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_C_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
-C_ctstm_sim_disease <- function(R_CtstmTrans, start_state, start_age, start_time, death_state, max_t, max_age) {
-    .Call('_hesim_C_ctstm_sim_disease', PACKAGE = 'hesim', R_CtstmTrans, start_state, start_age, start_time, death_state, max_t, max_age)
+C_ctstm_sim_disease <- function(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, max_t, max_age) {
+    .Call('_hesim_C_ctstm_sim_disease', PACKAGE = 'hesim', R_CtstmTrans, start_state, start_age, start_time, death_state, clock, max_t, max_age)
 }
 
 C_ctstm_indiv_stateprobs <- function(R_disease_prog, t, n_samples, n_strategies, unique_strategy_id, strategy_index, n_states, n_patients, n_lines = 1L) {

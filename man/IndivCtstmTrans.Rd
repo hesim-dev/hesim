@@ -25,6 +25,8 @@ Summarize health state transitions in an individual-level continuous time state 
 
 \item{\code{start_time}}{A scalar or vector denoting the time at which to begin the simulation. Default is time 0. If a vector, must be equal to the number of simulated patients.}
 
+\item{\code{clock}}{"reset" for clock-rest model and "forward" for a clock-forward model. A clock-reset model is a semi-Markov model in which transition rates depend on time since entering a state. A clock-forward model is a Markov model in which transition rates depend on time since \code{start_time}.}
+
 \item{\code{start_age}}{A scalar or vector denoting the starting age of each patient in the simulation. Default is 38. If a vector, must be equal to the number of simulated patients.}
 
 \item{\code{death_state}}{The death state in \code{trans_mat}. Used with \code{max_age} in \code{sim_disease} as patients transition to this state upon reaching maximum age. By default, it is set to the final absorbing state (i.e., a row in \code{trans_mat} with all NAs).}
