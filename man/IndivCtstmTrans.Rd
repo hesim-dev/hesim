@@ -25,7 +25,10 @@ Summarize health state transitions in an individual-level continuous time state 
 
 \item{\code{start_time}}{A scalar or vector denoting the time at which to begin the simulation. Default is time 0. If a vector, must be equal to the number of simulated patients.}
 
-\item{\code{clock}}{"reset" for clock-rest model and "forward" for a clock-forward model. A clock-reset model is a semi-Markov model in which transition rates depend on time since entering a state. A clock-forward model is a Markov model in which transition rates depend on time since \code{start_time}.}
+\item{\code{clock}}{"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
+of clock-reset and clock-forward models. A clock-reset model is a semi-Markov model in which transition rates depend on time since entering a state. A clock-forward model is a Markov model in which transition rates depend on time since \code{start_time}. If \code{"mix"} is used, then \code{reset_states} must be specified.}
+
+\item{\code{reset_states}}{A vector denoting the states in which time resets. Hazard functions are always a function of elapsed time since either the start of the model or from when time was previously reset. Only used if \code{clock = "mix"}.}
 
 \item{\code{start_age}}{A scalar or vector denoting the starting age of each patient in the simulation. Default is 38. If a vector, must be equal to the number of simulated patients.}
 

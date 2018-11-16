@@ -11,12 +11,13 @@ create_IndivCtstmTrans(object, data, trans_mat, clock = c("reset", "forward"),
   n = 1000, point_estimate = FALSE, ...)
 
 \method{create_IndivCtstmTrans}{flexsurvreg_list}(object, data, trans_mat,
-  n = 1000, point_estimate = FALSE, ...)
+  clock = c("reset", "forward"), n = 1000, point_estimate = FALSE, ...)
 
 \method{create_IndivCtstmTrans}{flexsurvreg}(object, data, trans_mat,
-  n = 1000, point_estimate = FALSE, ...)
+  clock = c("reset", "forward"), n = 1000, point_estimate = FALSE, ...)
 
-\method{create_IndivCtstmTrans}{params_surv}(object, data, trans_mat, ...)
+\method{create_IndivCtstmTrans}{params_surv}(object, data, trans_mat,
+  clock = c("reset", "forward", "mix"), reset_states = NULL, ...)
 }
 \arguments{
 \item{object}{A fitted statistical model.}
@@ -27,14 +28,17 @@ create_IndivCtstmTrans(object, data, trans_mat, clock = c("reset", "forward"),
 \item{trans_mat}{The transition matrix describing the states and transitions in a 
 multi-state model in the format from the \link[mstate]{mstate} package. See \link{IndivCtstmTrans}.}
 
-\item{clock}{"reset" for a clock-reset model and "forward" for a clock-forward model. See the field
-\code{clock} in \code{\link{IndivCtstmTrans}}.}
+\item{clock}{"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
+of clock-reset and clock-forward models. See the field \code{clock} in \code{\link{IndivCtstmTrans}}.}
 
 \item{n}{Number of random observations of the parameters to draw.}
 
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
 
 \item{...}{Further arguments passed to \code{IndivCtstmTrans$new()} in \code{\link{IndivCtstmTrans}}.}
+
+\item{reset_states}{A vector denoting the states in which time resets. See the field 
+\code{reset_states} in \code{\link{IndivCtstmTrans}}.}
 }
 \value{
 Returns an \code{\link{R6Class}} object of class \code{\link{IndivCtstmTrans}}.

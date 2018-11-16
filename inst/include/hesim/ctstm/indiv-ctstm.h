@@ -21,13 +21,16 @@ public:
   double max_age_;
   double max_t_;
   std::string clock_;
+  std::vector<int> reset_states_;
+  double clockmix_time_;
   
 /** 
    * The constructor.
    * Instantiates an individual patient. 
    */  
   patient(transmod * transmod, double age, double time, int state,
-          double max_age, double max_t, int death_state, std::string clock = "reset") 
+          double max_age, double max_t, int death_state, std::string clock,
+          std::vector<int> reset_states) 
     : transmod_(transmod) {
     age_ = age;
     time_ = time;
@@ -36,6 +39,22 @@ public:
     max_t_ = max_t;
     death_state_ = death_state;
     clock_ = clock;
+    reset_states_ = reset_states;
+  }
+  
+  /** 
+   * Should model time be reset when a patient is in the current health state?
+   * @return True if the current state is a reset state and false otherwise.
+   */    
+  bool is_reset_state(){
+    bool is = false;
+    for (int i = 0; i < reset_states_.size(); ++i){
+      if (state_ == reset_states_[i]){
+        is = true;
+        break;
+      }
+    }
+    return is;
   }
   
   /** 
@@ -51,13 +70,20 @@ public:
     std::vector<int> trans_ids = transmod_->trans_mat_.trans_id(state_);
     int n_trans = trans_ids.size();
     std::vector<double> random_times(n_trans);
-    for (int i = 0; i < n_trans; ++i){
+    for (int i = 0; i < n_trans; ++i){ 
       if (clock_ == "reset"){
         random_times[i] = transmod_->random(trans_ids[i], sample); 
-      } else{
+      } else if (clock_ == "forward"){
         random_times[i] = transmod_->trandom(trans_ids[i], sample, time_);
+      } else { // clock == "mix" case
+          if (is_reset_state()){
+            random_times[i] = transmod_->random(trans_ids[i], sample); 
+            clockmix_time_ = 0;
+          } else{
+           random_times[i] = transmod_->trandom(trans_ids[i], sample, clockmix_time_); 
+          }
       }
-    }
+    } // end loop over transitions
     
     // State with the minimum randomly sampled time
     auto random_it = std::min_element(random_times.begin(), random_times.end());
@@ -67,6 +93,10 @@ public:
     double new_age = std::min(age_ + *random_it, max_age_);
     std::vector<double> scenario_times = {time_ + *random_it, max_t_, time_ + max_age_ - age_};
     auto scenarios_it = std::min_element(scenario_times.begin(), scenario_times.end());
+    if (clock_ == "mix"){
+      double elapsed_time = *scenarios_it - time_;
+      clockmix_time_ = clockmix_time_ + elapsed_time;
+    }
     time_ = *scenarios_it;
     age_ = new_age; 
 

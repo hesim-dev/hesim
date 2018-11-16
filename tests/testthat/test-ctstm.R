@@ -201,15 +201,6 @@ transitions[, trans := transition_id]
 hesim_dat$transitions <- transitions
 msfit_data <- expand(hesim_dat, by = c("strategies", "patients", "transitions"))
 
-test_that("create_IndivCtstmTrans - joint", {
-  # From parameter object
-  params <- create_params(msfit, n = 2)
-  tmp_data <- msfit_data
-  msfit_data <- cbind(msfit_data, model.matrix(~factor(trans), msfit_data), shape = 1, scale = 1)
-  obj <- create_IndivCtstmTrans(params, data = msfit_data, trans_mat = tmat_ebmt4)
-  expect_true(inherits(obj, "IndivCtstmTrans"))
-})
-
 test_that("IndivCtstmTrans - joint", {
   mstate <- create_IndivCtstmTrans(msfit, data = msfit_data, trans_mat = tmat_ebmt4,
                             point_estimate = TRUE)    
@@ -429,6 +420,16 @@ test_that("IndivCtstm", {
   mstate_cf <- create_IndivCtstmTrans(msfit_cf, data = msfit_data, trans_mat = tmat_ebmt4,
                                       clock = "forward", n = n_samples)
   ictstm <- IndivCtstm$new(trans_model = mstate_cf)
+  disprog <- ictstm$sim_disease()$disprog_
+  expect_true(is.data.table(disprog))
+  
+  # Mixture
+  params <- create_params(msfit, n = 2)
+  msfit_data <- cbind(msfit_data, model.matrix(~factor(trans), msfit_data), shape = 1, scale = 1)
+  mstate_mix <- create_IndivCtstmTrans(params, data = msfit_data, trans_mat = tmat_ebmt4,
+                                       clock = "mix", reset_states = 1:nrow(tmat_ebmt4))  
+  expect_true(inherits(mstate_mix, "IndivCtstmTrans"))
+  ictstm <- IndivCtstm$new(trans_model = mstate_mix)
   disprog <- ictstm$sim_disease()$disprog_
   expect_true(is.data.table(disprog))
 })

@@ -8,8 +8,7 @@
 IndivCtstm
 }
 \description{
-Simulate outcomes from an individual-level continuous time state transition model (CTSTM). The class is currently only valid for semi-Markov (i.e., "clock-reset") models; however,
-functionality will soon be added for Markov  (i.e., "clock-forward") models and mixtures of clock-forward and clock-reset models.
+Simulate outcomes from an individual-level continuous time state transition model (CTSTM). The class supports "clock-reset" (i.e., semi-Markov), "clock-forward" (i.e., Markov), and mixtures of clock-reset and clock-forward models as described in \code{\link{IndivCtstmTrans}}. 
 
 }
 \section{Fields}{
