@@ -7,8 +7,7 @@
 \alias{create_IndivCtstmTrans.params_surv}
 \title{Create \code{IndivCtstmTrans} object}
 \usage{
-create_IndivCtstmTrans(object, data, trans_mat, clock = c("reset", "forward"),
-  n = 1000, point_estimate = FALSE, ...)
+create_IndivCtstmTrans(object, ...)
 
 \method{create_IndivCtstmTrans}{flexsurvreg_list}(object, data, trans_mat,
   clock = c("reset", "forward"), n = 1000, point_estimate = FALSE, ...)
@@ -22,6 +21,8 @@ create_IndivCtstmTrans(object, data, trans_mat, clock = c("reset", "forward"),
 \arguments{
 \item{object}{A fitted statistical model.}
 
+\item{...}{Further arguments passed to \code{IndivCtstmTrans$new()} in \code{\link{IndivCtstmTrans}}.}
+
 \item{data}{An object of class "expanded_hesim_data" returned by 
 \code{\link{expand.hesim_data}}.}
 
@@ -34,8 +35,6 @@ of clock-reset and clock-forward models. See the field \code{clock} in \code{\li
 \item{n}{Number of random observations of the parameters to draw.}
 
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
-
-\item{...}{Further arguments passed to \code{IndivCtstmTrans$new()} in \code{\link{IndivCtstmTrans}}.}
 
 \item{reset_states}{A vector denoting the states in which time resets. See the field 
 \code{reset_states} in \code{\link{IndivCtstmTrans}}.}

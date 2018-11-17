@@ -67,7 +67,7 @@ test_that("params_surv", {
   expect_equal(pars_surv$n_samples, 2)
   expect_true(inherits(pars_surv, "params_surv"))
   pars_surv <- params_surv(coefs = list(p1 = matrix(c(1, 2, 3, 4), nrow = 2),
-                                          p2 = matrix(c(5, 6, 7, 8), nrow = 2)),
+                                        p2 = matrix(c(5, 6, 7, 8), nrow = 2)),
                             dist = "weibull")
   expect_equal(pars_surv$n_samples, 2)
   

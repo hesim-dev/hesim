@@ -147,8 +147,7 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
 #' @name create_IndivCtstmTrans
 #' @rdname create_IndivCtstmTrans
 #' @export
-create_IndivCtstmTrans <- function(object, data, trans_mat, clock = c("reset", "forward"),
-                                   n = 1000, point_estimate = FALSE, ...){
+create_IndivCtstmTrans <- function(object, ...){
   UseMethod("create_IndivCtstmTrans", object)
 }
 
