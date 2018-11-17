@@ -141,6 +141,9 @@
     <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions in a multi-state model in the format from the <a href='http://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package. See the documentation for the argument "trans" in <a href='http://www.rdocumentation.org/packages/mstate/topics/msprep'>msprep</a>.</p></dd>
     <dt><code>start_state</code></dt><dd><p>A scalar or vector denoting the starting health state. Default is the first health state. If a vector, must be equal to the number of simulated patients.</p></dd>
     <dt><code>start_time</code></dt><dd><p>A scalar or vector denoting the time at which to begin the simulation. Default is time 0. If a vector, must be equal to the number of simulated patients.</p></dd>
+    <dt><code>clock</code></dt><dd><p>"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
+of clock-reset and clock-forward models. A clock-reset model is a semi-Markov model in which transition rates depend on time since entering a state. A clock-forward model is a Markov model in which transition rates depend on time since <code>start_time</code>. If <code>"mix"</code> is used, then <code>reset_states</code> must be specified.</p></dd>
+    <dt><code>reset_states</code></dt><dd><p>A vector denoting the states in which time resets. Hazard functions are always a function of elapsed time since either the start of the model or from when time was previously reset. Only used if <code>clock = "mix"</code>.</p></dd>
     <dt><code>start_age</code></dt><dd><p>A scalar or vector denoting the starting age of each patient in the simulation. Default is 38. If a vector, must be equal to the number of simulated patients.</p></dd>
     <dt><code>death_state</code></dt><dd><p>The death state in <code>trans_mat</code>. Used with <code>max_age</code> in <code>sim_disease</code> as patients transition to this state upon reaching maximum age. By default, it is set to the final absorbing state (i.e., a row in <code>trans_mat</code> with all NAs).</p></dd>
     </dl>
@@ -184,61 +187,61 @@
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
 
 <span class='co'># Simulation data</span>
-<span class='no'>dt_strategies</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
-<span class='no'>dt_patients</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
+<span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
+<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
                           <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
                           <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
 
 <span class='co'># Multi-state model with transition specific models</span>
-<span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'>vector</span>(<span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"list"</span>)
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='no'>bosms3</span>)
-<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'>length</span>(<span class='no'>fits</span>)){
-  <span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>years</span>, <span class='no'>status</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>[<span class='no'>dat</span>$<span class='no'>trans</span> <span class='kw'>==</span> <span class='no'>i</span>, ],
-                           <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
-}
-<span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span>(<span class='no'>fits</span>)
 <span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>NA</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
               <span class='fu'>c</span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>3</span>),
               <span class='fu'>c</span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
+<span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'>vector</span>(<span class='kw'>length</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='no'>tmat</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"list"</span>)
+<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'>length</span>(<span class='no'>fits</span>)){
+  <span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>years</span>, <span class='no'>status</span>) ~ <span class='fl'>1</span>,
+                            <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bosms3</span>[<span class='no'>bosms3</span>$<span class='no'>trans</span> <span class='kw'>==</span> <span class='no'>i</span>, ],
+                           <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
+}
+<span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span>(<span class='no'>fits</span>)
 
 <span class='co'># Simulation model</span>
-<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>dt_strategies</span>,
-                        <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>dt_patients</span>)
+<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
+                        <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>)
 <span class='no'>fits_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>)
 <span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>fits_data</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
                                     <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                     <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t     hazard
-#&gt; 1:     1      1           1          1 1 0.24909177
-#&gt; 2:     1      1           1          1 2 0.24909177
-#&gt; 3:     1      1           1          1 3 0.24909177
-#&gt; 4:     2      1           1          1 1 0.05951133
-#&gt; 5:     2      1           1          1 2 0.05951133
-#&gt; 6:     2      1           1          1 3 0.05951133</div><div class='input'><span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
-#&gt; 1:     1      1           1          1 1 0.24909177
-#&gt; 2:     1      1           1          1 2 0.49818354
-#&gt; 3:     1      1           1          1 3 0.74727531
-#&gt; 4:     2      1           1          1 1 0.05951133
-#&gt; 5:     2      1           1          1 2 0.11902267
-#&gt; 6:     2      1           1          1 3 0.17853400</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
-#&gt;  1:      1           1        1 5 0.3333333
+#&gt; 1:     1      1           1          1 1 0.21087494
+#&gt; 2:     1      1           1          1 2 0.21087494
+#&gt; 3:     1      1           1          1 3 0.21087494
+#&gt; 4:     2      1           1          1 1 0.05853501
+#&gt; 5:     2      1           1          1 2 0.05853501
+#&gt; 6:     2      1           1          1 3 0.05853501</div><div class='input'><span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
+#&gt; 1:     1      1           1          1 1 0.21087494
+#&gt; 2:     1      1           1          1 2 0.42174988
+#&gt; 3:     1      1           1          1 3 0.63262482
+#&gt; 4:     2      1           1          1 1 0.05853501
+#&gt; 5:     2      1           1          1 2 0.11707001
+#&gt; 6:     2      1           1          1 3 0.17560502</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
+#&gt;  1:      1           1        1 5 0.6666667
 #&gt;  2:      1           1        2 5 0.0000000
-#&gt;  3:      1           1        3 5 0.6666667
+#&gt;  3:      1           1        3 5 0.3333333
 #&gt;  4:      1           2        1 5 0.3333333
-#&gt;  5:      1           2        2 5 0.0000000
-#&gt;  6:      1           2        3 5 0.6666667
-#&gt;  7:      1           3        1 5 0.0000000
+#&gt;  5:      1           2        2 5 0.3333333
+#&gt;  6:      1           2        3 5 0.3333333
+#&gt;  7:      1           3        1 5 0.3333333
 #&gt;  8:      1           3        2 5 0.0000000
-#&gt;  9:      1           3        3 5 1.0000000
+#&gt;  9:      1           3        3 5 0.6666667
 #&gt; 10:      2           1        1 5 0.0000000
-#&gt; 11:      2           1        2 5 0.0000000
-#&gt; 12:      2           1        3 5 1.0000000
+#&gt; 11:      2           1        2 5 0.3333333
+#&gt; 12:      2           1        3 5 0.6666667
 #&gt; 13:      2           2        1 5 0.3333333
 #&gt; 14:      2           2        2 5 0.0000000
 #&gt; 15:      2           2        3 5 0.6666667
-#&gt; 16:      2           3        1 5 0.3333333
+#&gt; 16:      2           3        1 5 0.6666667
 #&gt; 17:      2           3        2 5 0.0000000
-#&gt; 18:      2           3        3 5 0.6666667</div></pre>
+#&gt; 18:      2           3        3 5 0.3333333</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

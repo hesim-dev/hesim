@@ -259,35 +259,35 @@ it is assumed that there is only one group.</p></td>
 <span class='fu'>names</span>(<span class='no'>icea</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'><span class='co'># The probability that each strategy is the most cost-effective </span>
 <span class='co'># in each group with a willingness to pay of 20,000</span>
 <span class='fu'>library</span>(<span class='st'>"data.table"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package ‘data.table’ was built under R version 3.4.4</span></div><div class='input'><span class='no'>icea</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp prob
-#&gt; 1: 20000 Strategy 1 Group 1 0.52
-#&gt; 2: 20000 Strategy 2 Group 1 0.48
-#&gt; 3: 20000 Strategy 1 Group 2 0.49
-#&gt; 4: 20000 Strategy 2 Group 2 0.51</div><div class='input'>
+#&gt; 1: 20000 Strategy 1 Group 1 0.46
+#&gt; 2: 20000 Strategy 2 Group 1 0.54
+#&gt; 3: 20000 Strategy 1 Group 2 0.46
+#&gt; 4: 20000 Strategy 2 Group 2 0.54</div><div class='input'>
 <span class='co'># icea_pw</span>
 <span class='no'>icea_pw</span> <span class='kw'>&lt;-</span>  <span class='fu'>icea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
                     <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
                      <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
 <span class='fu'>names</span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
 <span class='fu'>head</span>(<span class='no'>icea_pw</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k   strategy     grp prob
-#&gt; 1: 20000 Strategy 2 Group 1 0.48
-#&gt; 2: 20000 Strategy 2 Group 2 0.51
-#&gt; 3: 20500 Strategy 2 Group 1 0.54
-#&gt; 4: 20500 Strategy 2 Group 2 0.59
-#&gt; 5: 21000 Strategy 2 Group 1 0.62
-#&gt; 6: 21000 Strategy 2 Group 2 0.62</div><div class='input'><span class='fu'><a href='icer_tbl.html'>icer_tbl</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; $`Group 1`
+#&gt; 1: 20000 Strategy 2 Group 1 0.54
+#&gt; 2: 20000 Strategy 2 Group 2 0.54
+#&gt; 3: 20500 Strategy 2 Group 1 0.58
+#&gt; 4: 20500 Strategy 2 Group 2 0.58
+#&gt; 5: 21000 Strategy 2 Group 1 0.65
+#&gt; 6: 21000 Strategy 2 Group 2 0.59</div><div class='input'><span class='fu'><a href='icer_tbl.html'>icer_tbl</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; $`Group 1`
 #&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "3.02 (1.75, 4.13)"       
-#&gt; Incremental costs "-"        "60,073 (49,913, 72,608)" 
-#&gt; Incremental NMB   "-"        "90,898 (30,606, 145,450)"
-#&gt; ICER              "-"        "19,896"                  
+#&gt; Incremental QALYs "-"        "3.07 (1.93, 4.14)"       
+#&gt; Incremental costs "-"        "59,943 (49,913, 70,885)" 
+#&gt; Incremental NMB   "-"        "93,555 (35,062, 145,760)"
+#&gt; ICER              "-"        "19,526"                  
 #&gt; Conclusion        "-"        "Cost-effective"          
 #&gt; 
 #&gt; $`Group 2`
 #&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "2.99 (1.92, 4.06)"       
-#&gt; Incremental costs "-"        "59,985 (49,561, 74,794)" 
-#&gt; Incremental NMB   "-"        "89,615 (30,859, 144,013)"
-#&gt; ICER              "-"        "20,048"                  
+#&gt; Incremental QALYs "-"        "2.98 (1.88, 3.97)"       
+#&gt; Incremental costs "-"        "60,164 (49,468, 76,002)" 
+#&gt; Incremental NMB   "-"        "88,832 (30,027, 137,724)"
+#&gt; ICER              "-"        "20,190"                  
 #&gt; Conclusion        "-"        "Cost-effective"          
 #&gt; </div></pre>
   </div>

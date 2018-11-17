@@ -125,19 +125,19 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_IndivCtstmTrans</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>trans_mat</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>create_IndivCtstmTrans</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for flexsurvreg_list</span>
 <span class='fu'>create_IndivCtstmTrans</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>trans_mat</span>,
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+  <span class='kw'>clock</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"reset"</span>, <span class='st'>"forward"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for flexsurvreg</span>
 <span class='fu'>create_IndivCtstmTrans</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>trans_mat</span>,
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+  <span class='kw'>clock</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"reset"</span>, <span class='st'>"forward"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for params_surv</span>
-<span class='fu'>create_IndivCtstmTrans</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>trans_mat</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>create_IndivCtstmTrans</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>trans_mat</span>,
+  <span class='kw'>clock</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"reset"</span>, <span class='st'>"forward"</span>, <span class='st'>"mix"</span>), <span class='kw'>reset_states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,6 +145,10 @@
     <tr>
       <th>object</th>
       <td><p>A fitted statistical model.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to <code>IndivCtstmTrans$new()</code> in <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></td>
     </tr>
     <tr>
       <th>data</th>
@@ -157,6 +161,11 @@
 multi-state model in the format from the <a href='http://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package. See <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>.</p></td>
     </tr>
     <tr>
+      <th>clock</th>
+      <td><p>"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
+of clock-reset and clock-forward models. See the field <code>clock</code> in <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></td>
+    </tr>
+    <tr>
       <th>n</th>
       <td><p>Number of random observations of the parameters to draw.</p></td>
     </tr>
@@ -165,8 +174,9 @@ multi-state model in the format from the <a href='http://www.rdocumentation.org/
       <td><p>If <code>TRUE</code>, then the point estimates are returned and and no samples are drawn.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to <code>IndivCtstmTrans$new()</code> in <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></td>
+      <th>reset_states</th>
+      <td><p>A vector denoting the states in which time resets. See the field 
+<code>reset_states</code> in <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></td>
     </tr>
     </table>
     
