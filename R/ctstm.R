@@ -130,7 +130,7 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
 #' Create \code{IndivCtstmTrans} object
 #' 
 #' A generic function for creating an object of class \code{\link{IndivCtstmTrans}}.
-#' @param object A fitted statistical model. 
+#' @param object A fitted survival model or the parameters of a survival model.  
 #' @param data An object of class "expanded_hesim_data" returned by 
 #' \code{\link{expand.hesim_data}}.
 #' @param n Number of random observations of the parameters to draw.

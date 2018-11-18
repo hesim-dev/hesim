@@ -170,6 +170,12 @@ private:
       d = new stats::survspline(gamma, params_surv.spline_aux_.knots_,
                                  params_surv.spline_aux_.scale_,
                                  params_surv.spline_aux_.timescale_);
+    } 
+    else if (dist_name == "fracpoly"){
+      int n_powers = params_surv.fracpoly_aux_.powers_.size();
+      std::vector<double> gamma(n_powers + 1, 0.0);
+      d = new stats::fracpoly(gamma,
+                              params_surv.fracpoly_aux_.powers_);
     }
     else{
         Rcpp::stop("The selected distribution is not available.");

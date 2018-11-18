@@ -19,7 +19,7 @@ create_IndivCtstmTrans(object, ...)
   clock = c("reset", "forward", "mix"), reset_states = NULL, ...)
 }
 \arguments{
-\item{object}{A fitted statistical model.}
+\item{object}{A fitted survival model or the parameters of a survival model.}
 
 \item{...}{Further arguments passed to \code{IndivCtstmTrans$new()} in \code{\link{IndivCtstmTrans}}.}
 

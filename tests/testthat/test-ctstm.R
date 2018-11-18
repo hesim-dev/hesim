@@ -400,7 +400,7 @@ test_that("Simulate costs and QALYs", {
 })
 
 ## With a joint survival model
-test_that("IndivCtstm", {
+test_that("IndivCtstm - joint", {
   # Clock-reset
   mstate <- create_IndivCtstmTrans(msfit, data = msfit_data, trans_mat = tmat_ebmt4,
                                     n = n_samples)      
@@ -434,4 +434,23 @@ test_that("IndivCtstm", {
   expect_true(is.data.table(disprog))
 })
 
-
+## With fractional polynomial from parameters object
+test_that("IndivCtstm - fracpoly", {
+  # Parameters
+  coefs_fp <- list(gamma0 = matrix(log(1/5), nrow = 2, ncol = 1),
+                   gamma1 = matrix(1, nrow = 2, ncol = 1))
+  colnames(coefs_fp$gamma0) <- colnames(coefs_fp$gamma1) <- c("intercept")
+  params_fp <- params_surv(coefs = coefs_fp,
+                           dist = "fracpoly",
+                           aux = list(powers = 1))
+  
+  # Input data
+  edat <- copy(msfit_data)
+  edat$intercept <- 1
+  
+  # IndivCtstmTrans object
+  mstate_fp <- create_IndivCtstmTrans(params_fp, data = edat, trans_mat = tmat_ebmt4)
+  ictstm <- IndivCtstm$new(trans_model = mstate_fp)
+  disprog <- ictstm$sim_disease()$disprog_
+  expect_true(is.data.table(disprog))  
+})

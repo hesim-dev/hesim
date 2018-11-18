@@ -635,6 +635,22 @@ test_that("FracPoly", {
                 powers = c(1, 1))   
   test_fracpoly(gamma = c(.2, .2, .5, .5, .2, .2),
                 powers = c(1, 1, 2, 2, 1))
+  
+  # Equivalence of fractional polynomial and gompertz
+  rate <- 1/5; shape <- 1
+  fp <- new(FracPoly, gamma = c(log(rate), shape), powers = 1)
+  expect_equal(fp$hazard(5),
+               flexsurv::hgompertz(5, shape = shape, rate = rate))
+  expect_equal(fp$cdf(2),
+               flexsurv::pgompertz(2, shape = shape, rate = rate))
+  
+  # Equivalence of fractional polynomial and weibull
+  a0 <- -2; a1 <- 1
+  fp <- new(FracPoly, gamma = c(a0, a1), powers = 0)
+  expect_equal(fp$hazard(3), 
+               hweibullNMA(3, a0 = a0, a1 = a1))
+  expect_equal(fp$cdf(4), 
+               pweibullNMA(4, a0 = a0, a1 = a1))
 })
 
 # Truncated normal distribution ------------------------------------------------

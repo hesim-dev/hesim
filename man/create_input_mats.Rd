@@ -34,9 +34,7 @@ create_input_mats(object, ...)
 \method{create_input_mats}{params_surv_list}(object, data, ...)
 }
 \arguments{
-\item{object}{An object of the appropriate class. Currently supports
-\code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
- \code{\link{flexsurvreg_list}}, and \code{\link{partsurvfit}}.}
+\item{object}{An object of the appropriate class.}
 
 \item{...}{Further arguments passed to \code{\link{model.matrix}}.}
 

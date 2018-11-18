@@ -152,19 +152,47 @@ a given parameter.</p></td>
     <p>An object of class "params_surv", which is a list containing <code>coefs</code>,
 <code>dist</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the number of rows
 in each element of <code>coefs</code>, which must be the same. The list may also contain <code>aux</code>, if
-a spline model is fit.</p>
+a spline or fractional polynomial model is fit.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The types of distributions that can be specified are:</p><ul>
-<li><p><code>exponential</code> or <code>exp</code> Exponential distribution</p></li>
-<li><p><code>weibull</code> or <code>weibull.quiet</code> Weibull distribution</p></li>
-<li><p><code>gamma</code> Gamma distribution</p></li>
-<li><p><code>lnorm</code> Lognormal distribution</p></li>
-<li><p><code>gompertz</code> Gompertz distribution</p></li>
-<li><p><code>llogis</code> Log-logistic distribution</p></li>
-<li><p><code>gengamma</code> Generalized gamma distribution</p></li>
-<li><p><code>survspline</code> Survival splines</p></li>
+<li><p><code>exponential</code> or <code>exp</code> Exponential distribution. <code>coef</code>
+must contain the <code>rate</code> parameter on the log scale and the same parameterization as in 
+<code><a href='http://www.rdocumentation.org/packages/stats/topics/Exponential'>Exponential</a></code>..</p></li>
+<li><p><code>weibull</code> or <code>weibull.quiet</code> Weibull distribution. The first 
+element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
+element is the <code>scale</code> parameter (also on the log scale). The parameterization is
+that same as in <code><a href='http://www.rdocumentation.org/packages/stats/topics/Weibull'>Weibull</a></code>.</p></li>
+<li><p><code>gamma</code> Gamma distribution. The first 
+element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
+element is the <code>rate</code> parameter (also on the log scale). The parameterization is
+that same as in <code><a href='http://www.rdocumentation.org/packages/stats/topics/GammaDist'>GammaDist</a></code>.</p></li>
+<li><p><code>lnorm</code> Lognormal distribution. The first 
+element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the mean on the log scale) and the second
+element is the <code>sdlog</code> parameter (i.e., the standard deviation on the log scale). The parameterization is
+that same as in <code><a href='http://www.rdocumentation.org/packages/stats/topics/Lognormal'>Lognormal</a></code>.</p></li>
+<li><p><code>gompertz</code> Gompertz distribution. The first 
+element of <code>coef</code> is the <code>shape</code> parameter and the second
+element is the <code>rate</code> parameter (on the log scale). The parameterization is
+that same as in <code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/Gompertz'>Gompertz</a></code>.</p></li>
+<li><p><code>llogis</code> Log-logistic distribution. The first 
+element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
+element is the <code>scale</code> parameter (also on the log scale). The parameterization is
+that same as in <code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/Llogis'>Llogis</a></code>.</p></li>
+<li><p><code>gengamma</code> Generalized gamma distribution. The first 
+element of <code>coef</code> is the location parameter <code>mu</code>, the second
+element is the scale parameter <code>sigma</code> (on the log scale), and the
+third element is the shape parameter <code>Q</code>. The parameterization is
+that same as in <code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/GenGamma'>GenGamma</a></code>.</p></li>
+<li><p><code>survspline</code> Survival splines. Each element of <code>coef</code> is a parameter of the
+spline model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
+to the number of knots (including the boundary knots). See below for details on the
+auxillary arguments. The parameterization is that same as in <code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/Survspline'>Survspline</a></code>.</p></li>
+<li><p><code>fracpoly</code> Fractional polynomials. Each element of <code>coef</code> is a parameter of the
+fractional polynomial model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
+to the number of powers minus 1. See below for details on the auxillary arguments 
+(i.e., <code>powers</code>).</p></li>
 </ul>
     <p>Auxillary arguments for spline models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
 <dt><code>knots</code></dt><dd><p>A numeric vector of knots.</p></dd>
@@ -174,6 +202,10 @@ as a spline function. Options are "log_cumhazard", for the log cummulative hazar
 and "inv_normal" for the inverse normal distribution function.</p></dd>
 <dt><code>timescale</code></dt><dd><p>If "log" (the default), then survival is modeled as a spline function
 of log time; if "identity", then it is modeled as a spline function of time.</p></dd>
+</dl>
+    <p>Auxillary arguments for fractional polynomial models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
+<dt><code>powers</code></dt><dd><p>A vector of the powers of the fractional polynomial with each element
+ chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
 </dl>
     
 

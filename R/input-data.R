@@ -624,6 +624,9 @@ check_edata <- function(data){
 
 extract_X <- function(coef_mat, data){
   varnames <- colnames(coef_mat)
+  if (is.null(varnames)){
+    stop("Variable names for coefficients cannot be NULL.")
+  }
   if(!all(varnames %in% colnames(data))){
     stop("Not all variables in 'object' are contained in 'data'.",
          call. = FALSE)
@@ -639,9 +642,7 @@ extract_X <- function(coef_mat, data){
 #' variables specified in the model \code{object} and the data specified in \code{data}, 
 #' although there are some cases in which \code{\link{input_mats}} can be created
 #' from \code{object} alone.
-#' @param object An object of the appropriate class. Currently supports
-#' \code{\link{formula_list}}, \code{\link{lm}}, \code{\link{flexsurvreg}}, 
-#'  \code{\link{flexsurvreg_list}}, and \code{\link{partsurvfit}}.
+#' @param object An object of the appropriate class. 
 #' @param data An object of class "expanded_hesim_data" returned by the function
 #'  \code{\link{expand.hesim_data}}. Used to look for the input variables needed to create an input matrix
 #'  for use in a statistical models and the id variables for indexing rows in the input matrix. 
