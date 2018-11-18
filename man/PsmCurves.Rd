@@ -95,18 +95,19 @@ hesim_dat <- hesim_data(strategies = dt_strategies,
                         patients = dt_patients)
 
 # Fit survival models
-surv_data <- psm4_exdata$survival
+surv_est_data <- psm4_exdata$survival
 fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ age,
-                              data = surv_data, dist = "exp")
+                              data = surv_est_data, dist = "exp")
 fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ age,
-                              data = surv_data, dist = "exp")
+                              data = surv_est_data, dist = "exp")
 fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age,
-                              data = surv_data, dist = "exp")
-fits <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3), data = surv_data)
+                              data = surv_est_data, dist = "exp")
+fits <- flexsurvreg_list(fit1, fit2, fit3)
 
 # Form PsmCurves
-curves_data <- expand(hesim_dat, by = c("strategies", "patients"))
-psm_curves <- create_PsmCurves(fits, data = curves_data, n = 3)
+surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+psm_curves <- create_PsmCurves(fits, data = surv_input_data, n = 3,
+                                bootstrap = TRUE, est_data = surv_est_data)
 
 # Summarize survival curves
 head(psm_curves$quantile(p = c(.25, .5, .75)))

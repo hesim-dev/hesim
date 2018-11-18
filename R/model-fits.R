@@ -81,11 +81,12 @@ flexsurvreg_list <- function(...){
 #' fits <- partsurvfit(fsreg_list, data = psm4_exdata$survival)
 #' class(fits)
 #' @export
+#' @keywords internal
 partsurvfit <- function(object, data){
   if(!inherits(object, "flexsurvreg_list")){
     stop("'Object' must be of class 'flexsurvreg_list'.")
   }
-  stopifnot(is.data.frame(data) | is.data.table(data))
+  stopifnot(is.data.frame(data) | is.data.table(data) | is.null(data))
   res <- list(models = object, data = data)
   class(res) <- "partsurvfit"
   return(res)

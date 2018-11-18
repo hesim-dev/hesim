@@ -78,14 +78,14 @@ print(hesim_dat)
 As shown in the table below, the statistical model used to parameterize the disease model component of an economic model varies by the type of economic model. For example, a set of *N-1* independent survival models are used to parameterize an *N*-state partitioned survival model, while multi-state models are used to parameterize an iCTSTM. 
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
-psm <- c("[Psm](../reference/Psm.html)", "Independent survival models", "[params_surv_list](../reference/params_surv_list.html)", "[partsurvfit](../reference/partsurvfit.html)")
+psm <- c("[Psm](../reference/Psm.html)", "Independent survival models", "[params_surv_list](../reference/params_surv_list.html)", "[hesim::flexsurvreg_list](../reference/flexsurvreg_list.html)")
 ictstm <- c("[IndivCtstm](../reference/IndivCtstm.html)", "Multi-state model", "[params_surv](../reference/params_surv.html) or [params_surv_list](../reference/params_surv_list.html)", "[flexsurv::flexsurvreg](https://www.rdocumentation.org/packages/flexsurv/versions/1.0.0/topics/flexsurvreg) or [hesim::flexsurvreg_list](../reference/flexsurvreg_list.html)")
 tbl <- rbind(psm, ictstm)
 colnames(tbl) <- c("Economic model (R6 class)", "Statistical model", "Parameter object", "Model fit object")
 knitr::kable(tbl, row.names = FALSE)
 ```
 
-The easiest way to parameterize a disease model is by fitting a statistical model using `R`. For example, survival models for PSMs and multi-state models for iCTSTMs can be fit using `flexsurvreg()`. A multi-state model can either be fit as a single model with a joint likelihood (a `flexsurvreg` object) or as a list of transition-specific models (a `flexsurvreg_list` object) (see [Section 6 from the flexsurv vignette](https://cran.r-project.org/web/packages/flexsurv/vignettes/flexsurv.pdf) for details). Survival models fit with `flexsurvreg()` for a PSM are stored along with the survival data used for fitting (to facilitate bootstrapping) in a `partsurvfit()` object.
+The easiest way to parameterize a disease model is by fitting a statistical model using `R`. For example, survival models for PSMs and multi-state models for iCTSTMs can be fit using `flexsurvreg()`. A multi-state model can either be fit as a single model with a joint likelihood (a `flexsurvreg` object) or as a list of transition-specific models (a `flexsurvreg_list` object) (see [Section 6 from the flexsurv vignette](https://cran.r-project.org/web/packages/flexsurv/vignettes/flexsurv.pdf) for details). Likewise, a list of survival models for a PSM are stored as a `flexsurvreg_list` object.
 
 In other cases, the disease models will not be fit directly with R (for instance, when performing a network meta-analysis). In these cases, the estimates of a disease model can be directly stored in objects prefixed by "params_". When a single survival model or a multi-state model with a joint likelihood is fit, parameters are stored in `params_surv` objects; when multiple independent survival or multi-state models with transition specific fits are used, parameters are stored in `params_surv_list` objects.
 

@@ -117,22 +117,24 @@ hesim_dat <- hesim_data(strategies = strategies,
 n_samples <- 3
 
 # Survival models
-surv_data <- psm4_exdata$survival
+surv_est_data <- psm4_exdata$survival
 fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ age,
-                              data = surv_data, dist = "exp")
+                              data = surv_est_data, dist = "exp")
 fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ age,
-                              data = surv_data, dist = "exp")
+                              data = surv_est_data, dist = "exp")
 fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age,
-                              data = surv_data, dist = "exp")
-fits <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3), data = surv_data)
+                              data = surv_est_data, dist = "exp")
+fits <- flexsurvreg_list(fit1, fit2, fit3)
 
-curves_data <- expand(hesim_dat, by = c("strategies", "patients"))
-psm_curves <- create_PsmCurves(fits, data = curves_data, n = n_samples)
+surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+psm_curves <- create_PsmCurves(fits, data = surv_input_data,
+                               bootstrap = TRUE, est_data = surv_est_data, 
+                               n = n_samples)
 
 # Cost model(s)
-expanded_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
+cost_input_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit_costs_medical <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
-psm_costs_medical <- create_StateVals(fit_costs_medical, data = expanded_data, n = n_samples)
+psm_costs_medical <- create_StateVals(fit_costs_medical, data = cost_input_data, n = n_samples)
 
 # Utility model
 utility_tbl <- stateval_tbl(tbl = data.frame(state_id = states$state_id,

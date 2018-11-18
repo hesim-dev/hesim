@@ -18,10 +18,10 @@ N <- 5
 
 # Partitioned survival curves  -------------------------------------------------
 # Simulation data
-curves_edata <- expand(hesim_dat, by = c("strategies", "patients"))
+surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
 
 # Fit survival curves
-surv_data <- psm4_exdata$survival
+surv_est_data <- psm4_exdata$survival
 fits_exp <- fits_wei <- fits_weinma <- fits_spline <- fits_ggamma <- vector(mode = "list", length = 3)
 names(fits_exp) <- names(fits_wei) <- names(fits_spline) <- paste0("curves", seq(1, 3))
 formulas <- list("Surv(endpoint1_time, endpoint1_status) ~ age",
@@ -29,36 +29,39 @@ formulas <- list("Surv(endpoint1_time, endpoint1_status) ~ age",
                  "Surv(endpoint3_time, endpoint3_status) ~ age")
 for (i in 1:3){
   fits_exp[[i]] <- flexsurv::flexsurvreg(as.formula(formulas[[i]]),
-                                         data = surv_data,
+                                         data = surv_est_data,
                                         dist = "exp")
   fits_wei[[i]] <- flexsurv::flexsurvreg(as.formula(formulas[[i]]), 
-                                         data = surv_data,
+                                         data = surv_est_data,
                                           dist = "weibull")
   fits_weinma[[i]] <- suppressWarnings(flexsurv::flexsurvreg(as.formula(formulas[[i]]), 
-                                         data = surv_data,
+                                         data = surv_est_data,
                                          dist = hesim_survdists$weibullNMA,
                                          inits = fits_wei[[i]]$res.t[, "est"]))
-  fits_spline[[i]] <- flexsurv::flexsurvspline(as.formula(formulas[[i]]), data = surv_data)
+  fits_spline[[i]] <- flexsurv::flexsurvspline(as.formula(formulas[[i]]), data = surv_est_data)
   fits_ggamma[[i]] <- flexsurv::flexsurvreg(as.formula(formulas[[i]]),
-                                         data = surv_data,
+                                         data = surv_est_data,
                                         dist = "gengamma")
 }
-fits_exp <- partsurvfit(flexsurvreg_list(fits_exp), data = surv_data)
-fits_wei <- partsurvfit(flexsurvreg_list(fits_wei), data = surv_data)
-fits_weinma <- partsurvfit(flexsurvreg_list(fits_weinma), data = surv_data)
-fits_spline <- partsurvfit(flexsurvreg_list(fits_spline), data = surv_data)
-fits_ggamma <- partsurvfit(flexsurvreg_list(fits_ggamma), data = surv_data)
+fits_exp <- flexsurvreg_list(fits_exp)
+fits_wei <- flexsurvreg_list(fits_wei)
+fits_weinma <- flexsurvreg_list(fits_weinma)
+fits_spline <- flexsurvreg_list(fits_spline)
+fits_ggamma <- flexsurvreg_list(fits_ggamma)
 
 test_that("create_PsmCurves", {
-  psm_curves <- create_PsmCurves(fits_wei, data = curves_edata, n = N,
-                                          bootstrap = TRUE)
+  psm_curves <- create_PsmCurves(fits_wei, data = surv_input_data, n = N,
+                                 bootstrap = TRUE, est_data = surv_est_data)
   expect_true(inherits(psm_curves, "PsmCurves"))
   expect_true(inherits(psm_curves$params, "params_surv_list"))
   expect_equal(as.numeric(psm_curves$input_mats$X[[1]]$scale[, "age"]), 
-              curves_edata$age)
+              surv_input_data$age)
   
   # errors
-  expect_error(create_PsmCurves(3, data = curves_edata, n = N))
+  expect_error(create_PsmCurves(3, data = surv_input_data, n = N,
+                                bootstrap = FALSE))
+  expect_error(create_PsmCurves(fits_wei, data = surv_input_data, n = N,
+                                 bootstrap = TRUE))
 })
 
 test_that("PsmCurves", {
@@ -66,11 +69,13 @@ test_that("PsmCurves", {
   
   # Sampling
   ## Weibull
-  psm_curves <- create_PsmCurves(fits_wei, data = curves_edata, n = N)
+  psm_curves <- create_PsmCurves(fits_wei, data = surv_input_data, n = N,
+                                 bootstrap = TRUE,
+                                 est_data = surv_est_data)
   expect_true(inherits(psm_curves$survival(t = times), "data.table"))
   
   ## Splines
-  psm_curves <- create_PsmCurves(fits_spline, data = curves_edata, n = N,
+  psm_curves <- create_PsmCurves(fits_spline, data = surv_input_data, n = N,
                                 bootstrap = FALSE)
   expect_equal(max(psm_curves$survival(t = times)$sample), N)
   
@@ -80,8 +85,8 @@ test_that("PsmCurves", {
                                                             "quantile")){
     fun_name <- match.arg(fun_name)
     psm_curves <- create_PsmCurves(fits, data = data,
-                                       point_estimate = TRUE,
-                                       bootstrap = FALSE)
+                                   point_estimate = TRUE,
+                                   bootstrap = FALSE)
     
     hesim_out <- psm_curves[[fun_name]](t = times)
     fun_name2 <- if (fun_name == "cumhazard"){
@@ -89,12 +94,12 @@ test_that("PsmCurves", {
     } else{
       fun_name
     }
-    flexsurv_out <- summary(fits$models[[1]], newdata = data.frame(age = data[1, age]),
+    flexsurv_out <- summary(fits[[1]], newdata = data.frame(age = data[1, age]),
                            t = times, type = fun_name2, tidy = TRUE, ci = FALSE)
     expect_equal(hesim_out[curve == 1, fun_name, with = FALSE][[1]], 
                  flexsurv_out[, "est"], tolerance = .001, scale = 1)
   }
-  tmp_data = curves_edata
+  tmp_data = surv_input_data
   tmp_data <- tmp_data[1, ]
   
   compare_surv_summary(fits_wei, tmp_data, "survival")
@@ -118,7 +123,8 @@ test_that("PsmCurves", {
   compare_surv_summary(fits_weinma, tmp_data, "rmst")
   
   # Quantiles
-  psm_curves <- create_PsmCurves(fits_exp, data = curves_edata, n = N)
+  psm_curves <- create_PsmCurves(fits_exp, data = surv_input_data, n = N,
+                                 bootstrap = TRUE, est_data = surv_est_data)
   X <- psm_curves$input_mats$X$curves1$rate[1, , drop = FALSE]
   beta <- psm_curves$params$curves1$coefs$rate[1, , drop = FALSE]
   rate_hat <- X %*% t(beta)
@@ -132,7 +138,8 @@ set.seed(101)
 times <- c(0, 2, 5, 8)
 
 # Survival models
-psm_curves <- create_PsmCurves(fits_wei, data = curves_edata, n = N)
+psm_curves <- create_PsmCurves(fits_wei, data = surv_input_data, n = N,
+                               bootstrap = FALSE)
 
 # Utility model
 psm_X <- create_input_mats(formula_list(mu = formula(~1)), 
@@ -146,9 +153,9 @@ psm_utility <- StateVals$new(input_mats = psm_X,
 # Cost model(s)
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
-edat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
-psm_costs_medical <- create_StateVals(fit_costs_medical, data = edat, n = N)
-psm_costs_medical2 <- create_StateVals(fit_costs_medical, data = edat, n = N + 1)
+cost_input_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
+psm_costs_medical <- create_StateVals(fit_costs_medical, data = cost_input_data, n = N)
+psm_costs_medical2 <- create_StateVals(fit_costs_medical, data = cost_input_data, n = N + 1)
 
 # Combine
 psm <- Psm$new(survival_models = psm_curves,
@@ -242,11 +249,10 @@ test_that("Psm$costs", {
   expect_error(psm2$sim_costs(dr = 0))
   
   ## Incorrect number of survival models
-  psmfit2 <- partsurvfit(flexsurvreg_list(fits_wei$models[1:2]),
-                         data = surv_data)
-  psm_curves2 <- create_PsmCurves(psmfit2, 
-                               data = curves_edata, n = N,
-                               bootstrap = TRUE)
+  fits_wei2 <- flexsurvreg_list(fits_wei[1:2])
+  psm_curves2 <- create_PsmCurves(fits_wei2, 
+                               data = surv_input_data, n = N,
+                               bootstrap = TRUE, est_data = surv_est_data)
   psm2 <- Psm$new(survival_models = psm_curves2,
                   utility_model = psm_utility,
                   cost_models = list(medical = psm_costs_medical))

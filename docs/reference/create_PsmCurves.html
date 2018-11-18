@@ -35,7 +35,7 @@
 <meta property="og:title" content="Create <code>PsmCurves</code> object — create_PsmCurves" />
 
 <meta property="og:description" content="create_PsmCurves is a function for creating an object of class
-PsmCurves from an object of class partsurvfit." />
+PsmCurves from fitted survival models." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,19 +123,26 @@ PsmCurves from an object of class partsurvfit." />
     <div class="ref-description">
     
     <p><code>create_PsmCurves</code> is a function for creating an object of class
-<code><a href='PsmCurves.html'>PsmCurves</a></code> from an object of class <code><a href='partsurvfit.html'>partsurvfit</a></code>.</p>
+<code><a href='PsmCurves.html'>PsmCurves</a></code> from fitted survival models.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>bootstrap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for flexsurvreg_list</span>
+<span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>bootstrap</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>est_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>An object of class <code><a href='partsurvfit.html'>partsurvfit</a></code>.</p></td>
+      <td><p>Fitted survival models.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     <tr>
       <th>data</th>
@@ -158,8 +165,9 @@ models in <code>object</code> on resamples of the sample data; if FALSE, then th
 model are independently draw from multivariate normal distributions.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
+      <th>est_data</th>
+      <td><p>A <code>data.table</code> or <code>data.frame</code> of estimation data 
+used to fit survival models during bootstrap replications.</p></td>
     </tr>
     </table>
     

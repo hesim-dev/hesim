@@ -82,7 +82,7 @@
     <div class="page-header toc-ignore">
       <h1>Partitioned survival models</h1>
             
-            <h4 class="date">2018-11-17</h4>
+            <h4 class="date">2018-11-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/psm.Rmd"><code>vignettes/psm.Rmd</code></a></small>
       <div class="hidden name"><code>psm.Rmd</code></div>
@@ -173,24 +173,23 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 <h2 class="hasAnchor">
 <a href="#survival-models" class="anchor"></a><span class="header-section-number">3.1</span> Survival models</h2>
 <p>The parameters of the survival models would typically be estimated in one of two ways. First, if access to patient level data from a clinical trial were available, survival models would be fit using available R packages. Second, a formal evidence synthesis—such as a network meta-analysis—might be conducted. Here, we provide an example of an analysis with trial level data.</p>
-<p>We consider a dataset with three survival endpoints with endpoint 1 denoting the lowest indexed state, endpoint 2 the next indexed state, and endpoint 3 representing overall survival. In our example, endpoint 1 represents progression on 1st line treatment, endpoint 2 represents progression on 2nd line treatment, and endpoint 3 represents death.</p>
-<p>Survival models in <code>hesim</code> can be fit using either <code>flexsurvreg</code> or <code>flexsurvspline</code> from the <code>flexsurv</code> package. <code>hesim</code> currently supports parametric (exponential, Weibull, Gompertz, gamma, log-logistic, lognormal, and generalized gamma) and spline survival models. In this example, we fit a Weibull model to each of the three survival endpoints. We then create an object of class <code>partsurvfit</code>, which stores the fitted survival models along with the data using for the fitting.</p>
+<p>We consider an estimation dataset (<code>surv_est_data</code>) with three survival endpoints with endpoint 1 denoting the lowest indexed state, endpoint 2 the next indexed state, and endpoint 3 representing overall survival. In our example, endpoint 1 represents progression on 1st line treatment, endpoint 2 represents progression on 2nd line treatment, and endpoint 3 represents death.</p>
+<p>Survival models in <code>hesim</code> can be fit using either <code>flexsurvreg</code> or <code>flexsurvspline</code> from the <code>flexsurv</code> package. <code>hesim</code> currently supports parametric (exponential, Weibull, Gompertz, gamma, log-logistic, lognormal, and generalized gamma), splines, and fractional polynomial survival models (see <a href="file:///Users/devin.incerti/IVI/hesim/docs/reference/params_surv.html">params_surv</a>). In this example, we fit a Weibull model to each of the three survival endpoints.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"flexsurv"</span>)
-surv_dataset &lt;-<span class="st"> </span>psm4_exdata<span class="op">$</span>survival
+surv_est_data &lt;-<span class="st"> </span>psm4_exdata<span class="op">$</span>survival
 fit1 &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg</a></span>(<span class="kw">Surv</span>(endpoint1_time, endpoint1_status) <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>
 <span class="st">                                   </span><span class="kw">factor</span>(strategy_id),
-                              <span class="dt">data =</span> surv_dataset,
+                              <span class="dt">data =</span> surv_est_data,
                               <span class="dt">dist =</span> <span class="st">"weibull"</span>)
 fit2 &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg</a></span>(<span class="kw">Surv</span>(endpoint2_time, endpoint2_status) <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>female <span class="op">+</span>
 <span class="st">                                   </span><span class="kw">factor</span>(strategy_id),
-                              <span class="dt">data =</span> surv_dataset,
+                              <span class="dt">data =</span> surv_est_data,
                               <span class="dt">dist =</span> <span class="st">"weibull"</span>)
 fit3 &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg</a></span>(<span class="kw">Surv</span>(endpoint3_time, endpoint3_status) <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>female <span class="op">+</span>
 <span class="st">                                   </span><span class="kw">factor</span>(strategy_id),
-                              <span class="dt">data =</span> surv_dataset,
+                              <span class="dt">data =</span> surv_est_data,
                               <span class="dt">dist =</span> <span class="st">"weibull"</span>)
-psfit_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/partsurvfit.html">partsurvfit</a></span>(<span class="kw"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span>(fit1, fit2, fit3), 
-                         <span class="dt">data =</span> surv_dataset)</code></pre></div>
+psfit_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span>(fit1, fit2, fit3)</code></pre></div>
 </div>
 <div id="utility-model" class="section level2">
 <h2 class="hasAnchor">
@@ -222,11 +221,11 @@ psfit_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/p
 <div id="survival-models-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#survival-models-1" class="anchor"></a><span class="header-section-number">4.1</span> Survival models</h2>
-<p>Survival curves are simulated using <code>PsmCurves</code> objects. We can create a <code>PsmCurves</code> object using <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> as a function of our <code>partsurvfit</code> object and a dataset of class <code>expanded_hesim_data</code> containing the variables and row identifiers needed for predictive modeling.</p>
-<p>To conduct the PSA, we must sample random draws of the regression coefficients from their posterior distribution, which can be done in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the data element in a <code>partsurvfit</code> object.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">surv_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand.html">expand</a></span>(hesim_dat, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
-survmods &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_PsmCurves.html">create_PsmCurves</a></span>(psfit_wei, <span class="dt">data =</span> surv_data, <span class="dt">n =</span> n_samples,
-                               <span class="dt">bootstrap =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Survival curves are simulated using <code>PsmCurves</code> objects. We can create a <code>PsmCurves</code> object using <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> as a function of our fitted Weibull models and input data describing the target population and treatment strategies.</p>
+<p>To conduct the PSA, we must sample random draws of the regression coefficients from suitable probability distribution, which can be done in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the estimation dataset.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">surv_input_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand.html">expand</a></span>(hesim_dat, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
+survmods &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_PsmCurves.html">create_PsmCurves</a></span>(psfit_wei, <span class="dt">data =</span> surv_input_data, <span class="dt">n =</span> n_samples,
+                               <span class="dt">bootstrap =</span> <span class="ot">TRUE</span>, <span class="dt">est_data =</span> surv_est_data)</code></pre></div>
 </div>
 <div id="utility-and-cost-models" class="section level2">
 <h2 class="hasAnchor">

@@ -35,3 +35,4 @@ fsreg_list <- flexsurvreg_list(endpoint1 = fit1, endpoint2 = fit2)
 fits <- partsurvfit(fsreg_list, data = psm4_exdata$survival)
 class(fits)
 }
+\keyword{internal}

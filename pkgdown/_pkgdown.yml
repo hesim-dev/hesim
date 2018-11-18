@@ -8,7 +8,6 @@ development:
 reference:
   - title: "Fitted statistical models"
     contents:
-      - partsurvfit
       - formula_list
       - flexsurvreg_list
   - title: "Probability distributions"

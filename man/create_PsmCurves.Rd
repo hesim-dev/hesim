@@ -2,13 +2,18 @@
 % Please edit documentation in R/psm.R
 \name{create_PsmCurves}
 \alias{create_PsmCurves}
+\alias{create_PsmCurves.flexsurvreg_list}
 \title{Create \code{PsmCurves} object}
 \usage{
-create_PsmCurves(object, data, n = 1000, point_estimate = FALSE,
-  bootstrap = TRUE)
+create_PsmCurves(object, ...)
+
+\method{create_PsmCurves}{flexsurvreg_list}(object, data, n = 1000,
+  point_estimate = FALSE, bootstrap = FALSE, est_data = NULL, ...)
 }
 \arguments{
-\item{object}{An object of class \code{\link{partsurvfit}}.}
+\item{object}{Fitted survival models.}
+
+\item{...}{Further arguments passed to or from other methods. Currently unused.}
 
 \item{data}{An object of class "expanded_hesim_data" returned by 
 \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
@@ -22,14 +27,15 @@ create_PsmCurves(object, data, n = 1000, point_estimate = FALSE,
 models in \code{object} on resamples of the sample data; if FALSE, then the parameters for each survival
 model are independently draw from multivariate normal distributions.}
 
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
+\item{est_data}{A \code{data.table} or \code{data.frame} of estimation data 
+used to fit survival models during bootstrap replications.}
 }
 \value{
 Returns an \code{\link{R6Class}} object of class \code{\link{PsmCurves}}.
 }
 \description{
 \code{create_PsmCurves} is a function for creating an object of class
-\code{\link{PsmCurves}} from an object of class \code{\link{partsurvfit}}.
+\code{\link{PsmCurves}} from fitted survival models.
 }
 \seealso{
 \code{\link{PsmCurves}}

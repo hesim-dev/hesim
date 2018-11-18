@@ -83,7 +83,7 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2018-11-17</h4>
+            <h4 class="date">2018-11-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -157,17 +157,17 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 ## 
 ## $patients
 ##       patient_id      age female
-##    1:          1 43.50708      1
-##    2:          2 54.84142      1
-##    3:          3 27.91648      1
-##    4:          4 54.62334      0
-##    5:          5 49.78572      0
+##    1:          1 48.01052      1
+##    2:          2 50.83674      1
+##    3:          3 46.39454      0
+##    4:          4 37.75712      1
+##    5:          5 50.65592      1
 ##   ---                           
-##  996:        996 45.82324      0
-##  997:        997 33.72178      1
-##  998:        998 46.20440      0
-##  999:        999 39.42546      0
-## 1000:       1000 37.26257      0
+##  996:        996 42.20073      0
+##  997:        997 22.14382      1
+##  998:        998 41.49411      0
+##  999:        999 49.82759      1
+## 1000:       1000 35.61845      1
 ## 
 ## $states
 ##    state_id state_name
@@ -203,7 +203,7 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 <td align="left"><a href="../reference/Psm.html">Psm</a></td>
 <td align="left">Independent survival models</td>
 <td align="left"><a href="../reference/params_surv_list.html">params_surv_list</a></td>
-<td align="left"><a href="../reference/partsurvfit.html">partsurvfit</a></td>
+<td align="left"><a href="../reference/flexsurvreg_list.html">hesim::flexsurvreg_list</a></td>
 </tr>
 <tr class="even">
 <td align="left"><a href="../reference/IndivCtstm.html">IndivCtstm</a></td>
@@ -217,7 +217,7 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 </tr>
 </tbody>
 </table>
-<p>The easiest way to parameterize a disease model is by fitting a statistical model using <code>R</code>. For example, survival models for PSMs and multi-state models for iCTSTMs can be fit using <code><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg()</a></code>. A multi-state model can either be fit as a single model with a joint likelihood (a <code>flexsurvreg</code> object) or as a list of transition-specific models (a <code>flexsurvreg_list</code> object) (see <a href="https://cran.r-project.org/web/packages/flexsurv/vignettes/flexsurv.pdf">Section 6 from the flexsurv vignette</a> for details). Survival models fit with <code><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg()</a></code> for a PSM are stored along with the survival data used for fitting (to facilitate bootstrapping) in a <code><a href="../reference/partsurvfit.html">partsurvfit()</a></code> object.</p>
+<p>The easiest way to parameterize a disease model is by fitting a statistical model using <code>R</code>. For example, survival models for PSMs and multi-state models for iCTSTMs can be fit using <code><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg()</a></code>. A multi-state model can either be fit as a single model with a joint likelihood (a <code>flexsurvreg</code> object) or as a list of transition-specific models (a <code>flexsurvreg_list</code> object) (see <a href="https://cran.r-project.org/web/packages/flexsurv/vignettes/flexsurv.pdf">Section 6 from the flexsurv vignette</a> for details). Likewise, a list of survival models for a PSM are stored as a <code>flexsurvreg_list</code> object.</p>
 <p>In other cases, the disease models will not be fit directly with R (for instance, when performing a network meta-analysis). In these cases, the estimates of a disease model can be directly stored in objects prefixed by “params_”. When a single survival model or a multi-state model with a joint likelihood is fit, parameters are stored in <code>params_surv</code> objects; when multiple independent survival or multi-state models with transition specific fits are used, parameters are stored in <code>params_surv_list</code> objects.</p>
 <p>We will illustrate using the first approach, by estimating a multi-state model with a joint likelihood using <code><a href="http://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg()</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"flexsurv"</span>)
@@ -311,12 +311,12 @@ medcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference
                         <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"transitions"</span>))
 <span class="kw">head</span>(transmod_data)</code></pre></div>
 <pre><code>##    strategy_id patient_id transition_id      age female from to from_name
-## 1:           1          1             1 43.50708      1    1  2   Healthy
-## 2:           1          1             2 43.50708      1    1  3   Healthy
-## 3:           1          1             3 43.50708      1    2  1      Sick
-## 4:           1          1             4 43.50708      1    2  3      Sick
-## 5:           1          2             1 54.84142      1    1  2   Healthy
-## 6:           1          2             2 54.84142      1    1  3   Healthy
+## 1:           1          1             1 48.01052      1    1  2   Healthy
+## 2:           1          1             2 48.01052      1    1  3   Healthy
+## 3:           1          1             3 48.01052      1    2  1      Sick
+## 4:           1          1             4 48.01052      1    2  3      Sick
+## 5:           1          2             1 50.83674      1    1  2   Healthy
+## 6:           1          2             2 50.83674      1    1  3   Healthy
 ##    to_name trans
 ## 1:    Sick     1
 ## 2:    Dead     2
@@ -390,44 +390,44 @@ costmods &lt;-<span class="st"> </span><span class="kw">list</span>(<span class=
 <p>We illustrate with the iCTSTM. First we simulate disease progression for each patient.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_disease</span>()
 <span class="kw">head</span>(ictstm<span class="op">$</span>disprog_)</code></pre></div>
-<pre><code>##    sample strategy_id patient_id from to final time_start   time_stop
-## 1:      1           1          1    1  3     1   0.000000 0.001203368
-## 2:      1           1          2    1  3     1   0.000000 0.762573221
-## 3:      1           1          3    1  3     1   0.000000 1.631501727
-## 4:      1           1          4    1  2     0   0.000000 4.584203104
-## 5:      1           1          4    2  3     1   4.584203 4.823543673
-## 6:      1           1          5    1  2     0   0.000000 9.127019135</code></pre>
+<pre><code>##    sample strategy_id patient_id from to final time_start time_stop
+## 1:      1           1          1    1  2     0  0.0000000 0.1871251
+## 2:      1           1          1    2  1     0  0.1871251 1.6348007
+## 3:      1           1          1    1  2     0  1.6348007 9.2164214
+## 4:      1           1          1    2  3     1  9.2164214 9.5359351
+## 5:      1           1          2    1  2     0  0.0000000 2.2502352
+## 6:      1           1          2    2  1     0  2.2502352 6.1282916</code></pre>
 <p>The disease trajectory can be summarized with <code>$sim_stateprobs()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>))
 <span class="kw">head</span>(ictstm<span class="op">$</span>stateprobs_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id t  prob
 ## 1:      1           1        1 0 1.000
-## 2:      1           1        1 1 0.708
-## 3:      1           1        1 2 0.591
-## 4:      1           1        1 3 0.538
-## 5:      1           1        1 4 0.460
-## 6:      1           1        1 5 0.379</code></pre>
+## 2:      1           1        1 1 0.677
+## 3:      1           1        1 2 0.572
+## 4:      1           1        1 3 0.491
+## 5:      1           1        1 4 0.442
+## 6:      1           1        1 5 0.384</code></pre>
 <p>We can then compute costs and QALYs (using a discount rate of 3 percent).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># QALYs</span>
 ictstm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(ictstm<span class="op">$</span>qalys_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id   dr     qalys       lys
-## 1:      1           1        1 0.03 4.0587521 4.9641840
-## 2:      1           1        2 0.03 0.9384451 1.1526214
-## 3:      1           2        1 0.03 4.6362853 5.6705541
-## 4:      1           2        2 0.03 0.8561048 1.0514890
-## 5:      2           1        1 0.03 4.0037212 4.4943921
-## 6:      2           1        2 0.03 0.9353104 0.9716156</code></pre>
+## 1:      1           1        1 0.03 2.2996818 4.5982002
+## 2:      1           1        2 0.03 0.8935741 1.2971008
+## 3:      1           2        1 0.03 3.2328111 6.4639865
+## 4:      1           2        2 0.03 0.5842778 0.8481302
+## 5:      2           1        1 0.03 3.8472473 4.6299899
+## 6:      2           1        2 0.03 1.0558227 1.0780787</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Costs</span>
 ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(ictstm<span class="op">$</span>costs_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id   dr category     costs
-## 1:      1           1        1 0.03    drugs 24820.920
-## 2:      1           1        2 0.03    drugs  5763.107
-## 3:      1           2        1 0.03    drugs 56705.541
-## 4:      1           2        2 0.03    drugs 10514.890
-## 5:      2           1        1 0.03    drugs 22471.960
-## 6:      2           1        2 0.03    drugs  4858.078</code></pre>
+## 1:      1           1        1 0.03    drugs 22991.001
+## 2:      1           1        2 0.03    drugs  6485.504
+## 3:      1           2        1 0.03    drugs 64639.865
+## 4:      1           2        2 0.03    drugs  8481.302
+## 5:      2           1        1 0.03    drugs 23149.949
+## 6:      2           1        2 0.03    drugs  5390.394</code></pre>
 </div>
 </div>
 <div id="decision-analysis" class="section level1">
@@ -439,31 +439,31 @@ ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt
 <span class="kw">print</span>(ce)</code></pre></div>
 <pre><code>## $costs
 ##      category   dr sample strategy_id    costs
-##   1:    drugs 0.03      1           1 30584.03
-##   2:    drugs 0.03      1           2 67220.43
-##   3:    drugs 0.03      2           1 27330.04
-##   4:    drugs 0.03      2           2 71656.30
-##   5:    drugs 0.03      3           1 33746.67
+##   1:    drugs 0.03      1           1 29476.50
+##   2:    drugs 0.03      1           2 73121.17
+##   3:    drugs 0.03      2           1 28540.34
+##   4:    drugs 0.03      2           2 66056.01
+##   5:    drugs 0.03      3           1 26608.27
 ##  ---                                          
-## 596:    total 0.03     98           2 72526.74
-## 597:    total 0.03     99           1 38900.57
-## 598:    total 0.03     99           2 73301.81
-## 599:    total 0.03    100           1 38042.01
-## 600:    total 0.03    100           2 67242.56
+## 596:    total 0.03     98           2 94231.80
+## 597:    total 0.03     99           1 34697.05
+## 598:    total 0.03     99           2 78456.36
+## 599:    total 0.03    100           1 37473.01
+## 600:    total 0.03    100           2 81417.96
 ## 
 ## $qalys
 ##        dr sample strategy_id    qalys
-##   1: 0.03      1           1 4.997197
-##   2: 0.03      1           2 5.492390
-##   3: 0.03      2           1 4.939032
-##   4: 0.03      2           2 6.445743
-##   5: 0.03      3           1 4.406841
+##   1: 0.03      1           1 3.193256
+##   2: 0.03      1           2 3.817089
+##   3: 0.03      2           1 4.903070
+##   4: 0.03      2           2 5.604668
+##   5: 0.03      3           1 4.300378
 ##  ---                                 
-## 196: 0.03     98           2 5.197064
-## 197: 0.03     99           1 5.682123
-## 198: 0.03     99           2 5.858197
-## 199: 0.03    100           1 4.014832
-## 200: 0.03    100           2 3.685158
+## 196: 0.03     98           2 7.084240
+## 197: 0.03     99           1 4.040230
+## 198: 0.03     99           2 4.965200
+## 199: 0.03    100           1 3.889656
+## 200: 0.03    100           2 4.495100
 ## 
 ## attr(,"class")
 ## [1] "ce"</code></pre>

@@ -83,27 +83,26 @@ print(hesim_dat)
 ## Survival models
 The parameters of the survival models would typically be estimated in one of two ways. First, if access to patient level data from a clinical trial were available, survival models would be fit using available R packages. Second, a formal evidence synthesis---such as a network meta-analysis---might be conducted. Here, we provide an example of an analysis with trial level data.
 
-We consider a dataset with three survival endpoints with endpoint 1 denoting the lowest indexed state, endpoint 2 the next indexed state, and endpoint 3 representing overall survival. In our example, endpoint 1 represents progression on 1st line treatment, endpoint 2 represents progression on 2nd line treatment, and endpoint 3 represents death. 
+We consider an estimation dataset (`surv_est_data`) with three survival endpoints with endpoint 1 denoting the lowest indexed state, endpoint 2 the next indexed state, and endpoint 3 representing overall survival. In our example, endpoint 1 represents progression on 1st line treatment, endpoint 2 represents progression on 2nd line treatment, and endpoint 3 represents death. 
 
-Survival models in `hesim` can be fit using either `flexsurvreg` or `flexsurvspline` from the `flexsurv` package. `hesim` currently supports parametric (exponential, Weibull, Gompertz, gamma, log-logistic, lognormal, and generalized gamma) and spline survival models. In this example, we fit a Weibull model to each of the three survival endpoints. We then create an object of class `partsurvfit`, which stores the fitted survival models along with the data using for the fitting. 
+Survival models in `hesim` can be fit using either `flexsurvreg` or `flexsurvspline` from the `flexsurv` package. `hesim` currently supports parametric (exponential, Weibull, Gompertz, gamma, log-logistic, lognormal, and generalized gamma), splines, and fractional polynomial survival models (see [params_surv](file:///Users/devin.incerti/IVI/hesim/docs/reference/params_surv.html)). In this example, we fit a Weibull model to each of the three survival endpoints.
 
 ```{r, warning = FALSE, message = FALSE}
 library("flexsurv")
-surv_dataset <- psm4_exdata$survival
+surv_est_data <- psm4_exdata$survival
 fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ age + female + 
                                    factor(strategy_id),
-                              data = surv_dataset,
+                              data = surv_est_data,
                               dist = "weibull")
 fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ age + female +
                                    factor(strategy_id),
-                              data = surv_dataset,
+                              data = surv_est_data,
                               dist = "weibull")
 fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age + female +
                                    factor(strategy_id),
-                              data = surv_dataset,
+                              data = surv_est_data,
                               dist = "weibull")
-psfit_wei <- partsurvfit(flexsurvreg_list(fit1, fit2, fit3), 
-                         data = surv_dataset)
+psfit_wei <- flexsurvreg_list(fit1, fit2, fit3)
 ```
 
 ## Utility model
@@ -141,14 +140,14 @@ n_samples <- 100
 ``` 
 
 ## Survival models
-Survival curves are simulated using `PsmCurves` objects. We can create a `PsmCurves` object using `create_PsmCurves()` as a function of our `partsurvfit` object and a dataset of class `expanded_hesim_data` containing the variables and row identifiers needed for predictive modeling.  
+Survival curves are simulated using `PsmCurves` objects. We can create a `PsmCurves` object using `create_PsmCurves()` as a function of our fitted Weibull models and input data describing the target population and treatment strategies. 
 
-To conduct the PSA, we must sample random draws of the regression coefficients from their posterior distribution, which can be done in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, `create_PsmCurves()` consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the data element in a `partsurvfit` object. 
+To conduct the PSA, we must sample random draws of the regression coefficients from suitable probability distribution, which can be done in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, `create_PsmCurves()` consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the estimation dataset.  
 
 ```{r, warning = FALSE, message = FALSE, cache = TRUE}
-surv_data <- expand(hesim_dat, by = c("strategies", "patients"))
-survmods <- create_PsmCurves(psfit_wei, data = surv_data, n = n_samples,
-                               bootstrap = TRUE)
+surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+survmods <- create_PsmCurves(psfit_wei, data = surv_input_data, n = n_samples,
+                               bootstrap = TRUE, est_data = surv_est_data)
 ```
 
 ## Utility and cost models
