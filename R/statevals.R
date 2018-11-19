@@ -322,6 +322,7 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
   if (attr(object, "dist") != "custom"){
     mu <- matrix(mu, ncol = n, byrow = FALSE) 
   } else {
+    setorderv(tbl, "sample") 
     if (!is.null(n)){
       n_samples <- length(unique(tbl$sample))
       mu <- matrix(mu, ncol = n_samples, byrow = FALSE)
