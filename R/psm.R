@@ -3,7 +3,7 @@
 #' Create \code{PsmCurves} object
 #' 
 #' \code{create_PsmCurves} is a function for creating an object of class
-#' \code{\link{PsmCurves}} from fitted survival models.
+#' \code{\link{PsmCurves}}.
 #' @param object Fitted survival models.
 #' @param data An object of class "expanded_hesim_data" returned by 
 #' \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
@@ -35,6 +35,14 @@ create_PsmCurves.flexsurvreg_list <- function(object, data, n = 1000, point_esti
   params <- create_params(psfit, n = n, point_estimate = point_estimate, bootstrap = bootstrap)
   return(PsmCurves$new(input_mats = input_mats, params = params))
 }
+
+#' @export
+#' @rdname create_PsmCurves
+create_PsmCurves.params_surv_list <- function(object, data, ...){
+  input_mats <- create_input_mats(object, data)
+  return(PsmCurves$new(input_mats = input_mats, params = object))
+}
+
 
 # Manual documentation in PsmCurves.Rd
 #' @export

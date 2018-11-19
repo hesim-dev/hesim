@@ -3,12 +3,15 @@
 \name{create_PsmCurves}
 \alias{create_PsmCurves}
 \alias{create_PsmCurves.flexsurvreg_list}
+\alias{create_PsmCurves.params_surv_list}
 \title{Create \code{PsmCurves} object}
 \usage{
 create_PsmCurves(object, ...)
 
 \method{create_PsmCurves}{flexsurvreg_list}(object, data, n = 1000,
   point_estimate = FALSE, bootstrap = FALSE, est_data = NULL, ...)
+
+\method{create_PsmCurves}{params_surv_list}(object, data, ...)
 }
 \arguments{
 \item{object}{Fitted survival models.}
@@ -35,7 +38,7 @@ Returns an \code{\link{R6Class}} object of class \code{\link{PsmCurves}}.
 }
 \description{
 \code{create_PsmCurves} is a function for creating an object of class
-\code{\link{PsmCurves}} from fitted survival models.
+\code{\link{PsmCurves}}.
 }
 \seealso{
 \code{\link{PsmCurves}}

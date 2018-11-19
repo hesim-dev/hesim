@@ -50,6 +50,7 @@ fits_spline <- flexsurvreg_list(fits_spline)
 fits_ggamma <- flexsurvreg_list(fits_ggamma)
 
 test_that("create_PsmCurves", {
+  # From fitted model
   psm_curves <- create_PsmCurves(fits_wei, data = surv_input_data, n = N,
                                  bootstrap = TRUE, est_data = surv_est_data)
   expect_true(inherits(psm_curves, "PsmCurves"))
@@ -57,7 +58,7 @@ test_that("create_PsmCurves", {
   expect_equal(as.numeric(psm_curves$input_mats$X[[1]]$scale[, "age"]), 
               surv_input_data$age)
   
-  # errors
+  ## errors
   expect_error(create_PsmCurves(3, data = surv_input_data, n = N,
                                 bootstrap = FALSE))
   expect_error(create_PsmCurves(fits_wei, data = surv_input_data, n = N,
@@ -292,4 +293,24 @@ test_that("Psm$qalys", {
   psm_utility2 <- create_StateVals(utility_tbl2, n = N)
   psm$utility_model <- psm_utility2
   expect_error(psm$sim_qalys())
+})
+
+test_that("Psm - from parameter object", {
+  # PsmCurves
+  params_wei <- create_params(fits_wei)
+  tmp_input_data <- surv_input_data
+  tmp_input_data$shape <- 1
+  tmp_input_data$scale <- 1
+  psm_curves <- create_PsmCurves(params_wei, data = tmp_input_data)
+  expect_true(inherits(psm_curves$hazard(t = c(1, 2, 3)),
+                      "data.table"))
+  
+  # Psm
+  psm <- Psm$new(survival_models = psm_curves)
+  psm$sim_survival(t = c(0, 1, 2, 3))
+  expect_true(inherits(psm$survival_,
+                      "data.table")) 
+  psm$sim_stateprobs()
+  expect_true(inherits(psm$stateprobs_,
+                      "data.table")) 
 })
