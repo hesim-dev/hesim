@@ -291,18 +291,18 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                         lys = FALSE){
      
       stateval_type <- match.arg(stateval_type)
-      if(is.null(self$disprog_)){
+      if(is.null(private$.disprog_)){
         stop("You must first simulate disease progression using '$sim_disease'.",
             call. = FALSE)
       }      
       
       # Indexing patient and strategy ID's
       if (is.null(private$disprog_idx)){
-        self$disprog_[, strategy_idx := .GRP, by = "strategy_id"]
-        self$disprog_[, patient_idx := .GRP, by = "patient_id"]
-        private$disprog_idx <- self$disprog_[, c("strategy_idx", "patient_idx"), with = FALSE]
-        self$disprog_[, strategy_idx := NULL]
-        self$disprog_[, patient_idx := NULL]
+        private$.disprog_[, strategy_idx := .GRP, by = "strategy_id"]
+        private$.disprog_[, patient_idx := .GRP, by = "patient_id"]
+        private$disprog_idx <- private$.disprog_[, c("strategy_idx", "patient_idx"), with = FALSE]
+        private$.disprog_[, strategy_idx := NULL]
+        private$.disprog_[, patient_idx := NULL]
         private$disprog_idx[, strategy_idx := strategy_idx - 1]
         private$disprog_idx[, patient_idx := patient_idx - 1]
       }
@@ -335,25 +335,25 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       counter <- 1
       for (i in 1:n_cats){
         for (j in 1:n_dr){
-          C_wlos <- C_indiv_ctstm_wlos(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
+          C_wlos <- C_indiv_ctstm_wlos(private$.disprog_, # Note: C++ re-indexing done at C level for disprog_
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        stateval_list[[i]], dr[j],
                                        sim_type, max_t[i])
-          self$disprog_[, wlos := C_wlos]
+          private$.disprog_[, wlos := C_wlos]
           if (lys){
-            C_los <- C_indiv_ctstm_los(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
+            C_los <- C_indiv_ctstm_los(private$.disprog_, # Note: C++ re-indexing done at C level for disprog_
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        dr[j])
-            self$disprog_[, lys := C_los]
+            private$.disprog_[, lys := C_los]
             sdcols <- c("wlos", "lys")
           } else{
             sdcols <- "wlos"
           }
           if (by_patient == TRUE){
             by_cols <- c("sample", "strategy_id", "patient_id", "from")
-            wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
+            wlos_list[[counter]] <- private$.disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]
             setkeyv(wlos_list[[counter]], by_cols)
@@ -363,7 +363,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
           } else{
             by_cols <- c("sample", "strategy_id", "from")
             n_patients <- self$trans_model$input_mats$n_patients
-            wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
+            wlos_list[[counter]] <- private$.disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]
             wlos_list[[counter]][, wlos := wlos/n_patients]
@@ -375,10 +375,10 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
           }
           wlos_list[[counter]][, "dr" := dr[j]]
           wlos_list[[counter]][, "category" := categories[i]]
-          self$disprog_[, "wlos" := NULL]
+          private$.disprog_[, "wlos" := NULL]
           wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)] # Replace padded NA's with 0's
           if (lys){
-            self$disprog_[, "lys" := NULL]
+            private$.disprog_[, "lys" := NULL]
             wlos_list[[counter]][, lys := ifelse(is.na(lys), 0, lys)] # Replace padded NA's with 0's
           }
           counter <- counter + 1
@@ -461,11 +461,11 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     },
     
     sim_stateprobs = function(t){
-      if(is.null(self$disprog_)){
+      if(is.null(private$.disprog_)){
         stop("You must first simulate disease progression using '$sim_disease'.",
             call. = FALSE)
       }
-      private$.stateprobs_ <- indiv_ctstm_sim_stateprobs(self$disprog_,
+      private$.stateprobs_ <- indiv_ctstm_sim_stateprobs(private$.disprog_,
                                                          self$trans_model,
                                                          t = t)
       invisible(self)
