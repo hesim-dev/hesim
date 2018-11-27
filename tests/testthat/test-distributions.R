@@ -83,24 +83,24 @@ s1 <- flexsurvreg(Surv(recyrs, censrec) ~ 1, data = bc,
             dist = hesim_survdists$weibullNMA)
 s2 <- flexsurvreg(Surv(recyrs, censrec) ~ 1, data = bc,
             dist = "weibullPH")
-s1.a1 <- s1$res.t["a1", "est"]; s1.a0 <- s1$res.t["a0", "est"]
-s2.shape <- s2$res.t["shape", "est"]; s2.scale <- s2$res.t["scale", "est"]
-expect_equal(exp(s1.a1), exp(s2.shape) - 1)
-expect_equal(s1.a0, log(exp(s2.shape) * exp(s2.scale)))
+s1_a1 <- s1$res.t["a1", "est"]; s1_a0 <- s1$res.t["a0", "est"]
+s2_shape <- s2$res.t["shape", "est"]; s2_scale <- s2$res.t["scale", "est"]
+expect_equal(s1_a1, exp(s2_shape) - 1)
+expect_equal(s1_a0, log(exp(s2_shape) * exp(s2_scale)))
 
 # covariates on a0
 s1 <- flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
             dist = hesim_survdists$weibullNMA)
 s2 <- flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
             dist = "weibullPH")
-s1.a0 <- s1$res.t["a0", "est"]; s1.a1 <- s1$res.t["a1", "est"]
-s2.shape <- s2$res.t["shape", "est"]; s2.scale <- s2$res.t["scale", "est"]
-expect_equal(exp(s1.a1), 
-             exp(s2.shape) - 1)
-expect_equal(log(exp(s2.scale) * exp(s2.shape)), 
-             s1.a0)
-expect_equal(s2.scale + s2.shape, # since shape is a scalar
-             s1.a0)
+s1_a0 <- s1$res.t["a0", "est"]; s1_a1 <- s1$res.t["a1", "est"]
+s2_shape <- s2$res.t["shape", "est"]; s2_scale <- s2$res.t["scale", "est"]
+expect_equal(s1_a1, 
+             exp(s2_shape) - 1)
+expect_equal(log(exp(s2_scale) * exp(s2_shape)), 
+             s1_a0)
+expect_equal(s2_scale + s2_shape, # since shape is a scalar
+             s1_a0)
 expect_equal(s1$res.t["groupMedium"],
              s2$res.t["groupMedium"])
 
@@ -111,15 +111,15 @@ s1 <- suppressWarnings(flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
 s2 <- suppressWarnings(flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
                   anc = list(shape = ~ group),
             dist = "weibullPH"))
-s1.a0 <- s1$res.t["a0", "est"]; s1.a1 <- s1$res.t["a1", "est"]
-s2.shape <- s2$res.t["shape", "est"]; s2.scale <- s2$res.t["scale", "est"]
-expect_equal(exp(s1.a1),
-             exp(s2.shape) - 1,
+s1_a0 <- s1$res.t["a0", "est"]; s1_a1 <- s1$res.t["a1", "est"]
+s2_shape <- s2$res.t["shape", "est"]; s2_scale <- s2$res.t["scale", "est"]
+expect_equal(s1_a1,
+             exp(s2_shape) - 1,
              scale = 1, tol = .001)
-expect_equal(s2.scale + s2.shape, # since shape is a scalar
-             s1.a0, 
+expect_equal(s2_scale + s2_shape, # since shape is a scalar
+             s1_a0, 
              scale = 1, tol = .001)
-expect_equal(exp(sum(s1$res.t[c("a1", "a1(groupMedium)"), "est"])),
+expect_equal(sum(s1$res.t[c("a1", "a1(groupMedium)"), "est"]),
              exp(sum(s2$res.t[c("shape", "shape(groupMedium)"), "est"])) - 1,
              scale = 1, tol = .001)
 

@@ -229,8 +229,8 @@ hesim_survdists <- list(
              name = "weibullNMA",
              pars = c("a0", "a1"),
              location = "a0",
-             transforms = c(identity, log),
-             inv.transforms = c(identity, exp),
+             transforms = c(identity, identity),
+             inv.transforms = c(identity, identity),
              inits = sr.weibNMA.inits
   )
   

@@ -299,7 +299,7 @@ public:
   }
   
   void set_params(std::vector<double> params) {
-    wei_ = create_from_Nma(params[0], exp(params[1]));
+    wei_ = create_from_Nma(params[0], params[1]);
   }
   
   double pdf(double x) const {
