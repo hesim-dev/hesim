@@ -118,11 +118,6 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #' @export
 Psm <- R6::R6Class("Psm",
   private = list(
-    .t_ = NULL,
-    .survival_ = NULL,
-    .stateprobs_ = NULL,
-    .costs_ = NULL,
-    .qalys_ = NULL,
     
     sim_wlos = function(dr, type){
       if(is.null(self$stateprobs_)){
@@ -188,55 +183,17 @@ Psm <- R6::R6Class("Psm",
       return(res[])
     } # end sim_wlos()
   ), # end private
-  
-  active = list(
-    t_ = function(value) {
-      if (missing(value)) {
-        private$.t_
-      } else {
-        stop("'$t_' is read only", call. = FALSE)
-      }
-    },
-    
-    survival_ = function(value) {
-      if (missing(value)) {
-        private$.survival_
-      } else {
-        stop("'$survival_' is read only", call. = FALSE)
-      }
-    },
-    
-    stateprobs_ = function(value) {
-      if (missing(value)) {
-        private$.stateprobs_
-      } else {
-        stop("'$stateprobs_' is read only", call. = FALSE)
-      }
-    },
-    
-    qalys_ = function(value) {
-      if (missing(value)) {
-        private$.qalys_
-      } else {
-        stop("'$qalys_' is read only", call. = FALSE)
-      }
-    },
-    
-    costs_ = function(value) {
-      if (missing(value)) {
-        private$.costs_
-      } else {
-        stop("'$costs_' is read only", call. = FALSE)
-      }
-    }
-    
-  ),
                         
   public = list(
     survival_models = NULL,
     utility_model = NULL,
     cost_models = NULL,
     n_states = NULL,
+    t_ = NULL,
+    survival_ = NULL,
+    stateprobs_ = NULL,
+    qalys_ = NULL,
+    costs_ = NULL,
 
     initialize = function(survival_models, utility_model = NULL, cost_models = NULL) {
       self$survival_models <- survival_models
@@ -253,9 +210,9 @@ Psm <- R6::R6Class("Psm",
         stop("'survival_models' must be of class 'PsmCurves'.")
       }
       self$survival_models$check()
-      private$.survival_ <- self$survival_models$survival(t)
-      private$.t_ <- t
-      private$.stateprobs_ <- NULL
+      self$survival_ <- self$survival_models$survival(t)
+      self$t_ <- t
+      self$stateprobs_ <- NULL
       invisible(self)
     },
     
@@ -279,7 +236,7 @@ Psm <- R6::R6Class("Psm",
       stateprobs <- data.table(res$stateprobs)
       stateprobs[, state_id := state_id + 1]
       stateprobs[, sample := sample + 1]
-      private$.stateprobs_ <- stateprobs[]
+      self$stateprobs_ <- stateprobs[]
       invisible(self)
     },
     
@@ -287,7 +244,7 @@ Psm <- R6::R6Class("Psm",
       self$utility_model$check()
       qalys <- private$sim_wlos(dr, type = "qalys")
       setnames(qalys, "value", "qalys")
-      private$.qalys_ <- qalys
+      self$qalys_ <- qalys
       invisible(self)
     },
     
@@ -300,7 +257,7 @@ Psm <- R6::R6Class("Psm",
       }
       costs <- private$sim_wlos(dr, type = "costs")
       setnames(costs, "value", "costs")
-      private$.costs_ <- costs
+      self$costs_ <- costs
       invisible(self)
     }
   )

@@ -186,7 +186,6 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
   inherit = CtstmTrans,
   
   private = list(
-    .death_state = NULL,
     
     check_history = function(field){
       field_name <- deparse(substitute(field))
@@ -204,21 +203,12 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     
     
   ), # end private
-  
-  active = list(
-    death_state = function(value) {
-      if (missing(value)) {
-        private$.death_state
-      } else {
-        stop("'$death_state' is read only", call. = FALSE)
-      }
-     }
-   ), # end active  
-  
+
   public = list(
     start_state = NULL,
     start_time = NULL,
     start_age = NULL,
+    death_state = NULL,
     clock = NULL,
     reset_states = NULL,
     
@@ -252,11 +242,11 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
           stop("'death_state' cannot be larger than the number of rows in 'trans_mat'",
                call. = FALSE)
         } else{
-          private$.death_state <- death_state
+          self$death_state <- death_state
         }
       } else{
         absorbing_states <- absorbing(trans_mat) 
-        private$.death_state <- absorbing_states[length(absorbing_states)]
+        self$death_state <- absorbing_states[length(absorbing_states)]
       }
     },
     
@@ -280,7 +270,6 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #' @export
 IndivCtstm <- R6::R6Class("IndivCtstm",
   private = list(  
-    .disprog_ = NULL,
     .stateprobs_ = NULL,
     .qalys_ = NULL,
     .costs_ = NULL,
@@ -291,18 +280,18 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                         lys = FALSE){
      
       stateval_type <- match.arg(stateval_type)
-      if(is.null(private$.disprog_)){
+      if(is.null(self$disprog_)){
         stop("You must first simulate disease progression using '$sim_disease'.",
             call. = FALSE)
       }      
       
       # Indexing patient and strategy ID's
       if (is.null(private$disprog_idx)){
-        private$.disprog_[, strategy_idx := .GRP, by = "strategy_id"]
-        private$.disprog_[, patient_idx := .GRP, by = "patient_id"]
-        private$disprog_idx <- private$.disprog_[, c("strategy_idx", "patient_idx"), with = FALSE]
-        private$.disprog_[, strategy_idx := NULL]
-        private$.disprog_[, patient_idx := NULL]
+        self$disprog_[, strategy_idx := .GRP, by = "strategy_id"]
+        self$disprog_[, patient_idx := .GRP, by = "patient_id"]
+        private$disprog_idx <- self$disprog_[, c("strategy_idx", "patient_idx"), with = FALSE]
+        self$disprog_[, strategy_idx := NULL]
+        self$disprog_[, patient_idx := NULL]
         private$disprog_idx[, strategy_idx := strategy_idx - 1]
         private$disprog_idx[, patient_idx := patient_idx - 1]
       }
@@ -335,25 +324,25 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       counter <- 1
       for (i in 1:n_cats){
         for (j in 1:n_dr){
-          C_wlos <- C_indiv_ctstm_wlos(private$.disprog_, # Note: C++ re-indexing done at C level for disprog_
+          C_wlos <- C_indiv_ctstm_wlos(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        stateval_list[[i]], dr[j],
                                        sim_type, max_t[i])
-          private$.disprog_[, wlos := C_wlos]
+          self$disprog_[, wlos := C_wlos]
           if (lys){
-            C_los <- C_indiv_ctstm_los(private$.disprog_, # Note: C++ re-indexing done at C level for disprog_
+            C_los <- C_indiv_ctstm_los(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        dr[j])
-            private$.disprog_[, lys := C_los]
+            self$disprog_[, lys := C_los]
             sdcols <- c("wlos", "lys")
           } else{
             sdcols <- "wlos"
           }
           if (by_patient == TRUE){
             by_cols <- c("sample", "strategy_id", "patient_id", "from")
-            wlos_list[[counter]] <- private$.disprog_[, lapply(.SD, sum), 
+            wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]
             setkeyv(wlos_list[[counter]], by_cols)
@@ -363,7 +352,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
           } else{
             by_cols <- c("sample", "strategy_id", "from")
             n_patients <- self$trans_model$input_mats$n_patients
-            wlos_list[[counter]] <- private$.disprog_[, lapply(.SD, sum), 
+            wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]
             wlos_list[[counter]][, wlos := wlos/n_patients]
@@ -375,10 +364,10 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
           }
           wlos_list[[counter]][, "dr" := dr[j]]
           wlos_list[[counter]][, "category" := categories[i]]
-          private$.disprog_[, "wlos" := NULL]
+          self$disprog_[, "wlos" := NULL]
           wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)] # Replace padded NA's with 0's
           if (lys){
-            private$.disprog_[, "lys" := NULL]
+            self$disprog_[, "lys" := NULL]
             wlos_list[[counter]][, lys := ifelse(is.na(lys), 0, lys)] # Replace padded NA's with 0's
           }
           counter <- counter + 1
@@ -398,44 +387,14 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
 
   ), # end private  
                                                   
-  active = list(
-    disprog_ = function(value) {
-      if (missing(value)) {
-        private$.disprog_
-      } else {
-        stop("'$disprog_' is read only", call. = FALSE)
-      }
-     },  
-    
-    stateprobs_ = function(value) {
-      if (missing(value)) {
-        private$.stateprobs_
-      } else {
-        stop("'$stateprobs_' is read only", call. = FALSE)
-      }
-    },
-    
-    qalys_ = function(value) {
-      if (missing(value)) {
-        private$.qalys_
-      } else {
-        stop("'$qalys_' is read only", call. = FALSE)
-      }
-    },
-    
-    costs_ = function(value) {
-      if (missing(value)) {
-        private$.costs_
-      } else {
-        stop("'$costs_' is read only", call. = FALSE)
-      }
-    }
-  ), # end active
-  
   public = list(
     trans_model = NULL,
     utility_model = NULL,
     cost_models = NULL,
+    disprog_ = NULL,
+    stateprobs_ = NULL,
+    qalys_ = NULL,
+    costs_ = NULL,
     initialize = function(trans_model = NULL, utility_model = NULL, cost_models = NULL) {
       self$trans_model <- trans_model
       self$utility_model = utility_model
@@ -449,23 +408,23 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       }
       self$trans_model$check()
       
-      private$.qalys_ <- NULL
-      private$.costs_ <- NULL
-      private$.stateprobs_ <- NULL
+      self$qalys_ <- NULL
+      self$costs_ <- NULL
+      self$stateprobs_ <- NULL
       private$disprog_idx <- NULL
-      private$.disprog_ <- indiv_ctstm_sim_disease(self$trans_model,
+      self$disprog_ <- indiv_ctstm_sim_disease(self$trans_model,
                                                    max_t = max_t,
                                                    max_age = max_age)
-      private$.stateprobs_ <- NULL
+      self$stateprobs_ <- NULL
       invisible(self)
     },
     
     sim_stateprobs = function(t){
-      if(is.null(private$.disprog_)){
+      if(is.null(self$disprog_)){
         stop("You must first simulate disease progression using '$sim_disease'.",
             call. = FALSE)
       }
-      private$.stateprobs_ <- indiv_ctstm_sim_stateprobs(private$.disprog_,
+      self$stateprobs_ <- indiv_ctstm_sim_stateprobs(self$disprog_,
                                                          self$trans_model,
                                                          t = t)
       invisible(self)
@@ -479,7 +438,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
           call. = FALSE)
       }
       type <- match.arg(type)
-      private$.qalys_ <- private$sim_wlos(list(self$utility_model), dr, "qalys", type, by_patient,
+      self$qalys_ <- private$sim_wlos(list(self$utility_model), dr, "qalys", type, by_patient,
                                           lys = lys)
       invisible(self)
     },
@@ -498,7 +457,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       }
       
       type <- match.arg(type)
-      private$.costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type, by_patient, max_t)
+      self$costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type, by_patient, max_t)
       invisible(self)
     },
     
