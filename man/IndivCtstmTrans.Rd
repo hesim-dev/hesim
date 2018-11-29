@@ -41,7 +41,9 @@ of clock-reset and clock-forward models. A clock-reset model is a semi-Markov mo
 \describe{
 
 \item{\code{new(input_mats, params, trans_mat, start_state = 1, start_time = 0,
-                start_age = 38, death_state = NULL)}}{
+                start_age = 38, death_state = NULL,
+                clock = c("reset", "forward", "mix"),
+                reset_states = NULL))}}{
 
   Constructor for the class.
   

@@ -74,13 +74,13 @@ public:
       if (clock_ == "reset"){
         random_times[i] = transmod_->random(trans_ids[i], sample); 
       } else if (clock_ == "forward"){
-        random_times[i] = transmod_->trandom(trans_ids[i], sample, time_);
+        random_times[i] = transmod_->trandom(trans_ids[i], sample, time_) - time_;
       } else { // clock == "mix" case
           if (is_reset_state()){
             random_times[i] = transmod_->random(trans_ids[i], sample); 
             clockmix_time_ = 0;
           } else{
-           random_times[i] = transmod_->trandom(trans_ids[i], sample, clockmix_time_); 
+           random_times[i] = transmod_->trandom(trans_ids[i], sample, clockmix_time_) - clockmix_time_; 
           }
       }
     } // end loop over transitions

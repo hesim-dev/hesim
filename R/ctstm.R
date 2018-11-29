@@ -64,7 +64,7 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100){
                                  trans_model$start_age,
                                  trans_model$start_time,
                                  trans_model$death_state - 1, 
-                                 trans_model$clock, trans_model$reset_states,
+                                 trans_model$clock, trans_model$reset_states - 1,
                                  max_t, max_age)
   disprog <- data.table(disprog)
   disprog[, sample := sample + 1]
