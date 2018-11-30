@@ -78,6 +78,24 @@ double quad(Func f, double lower, double upper, double &abserr,
     Rbase::Rdqags(vecf, &lower, &upper, &epsabs, &epsrel, &result,
                   &abserr, &neval, &ier, &limit, &lenw, &last, iwork, work);
   } // end definite integral
+  
+  // Warnings and errors
+  if (ier != 0){
+    switch(ier){
+      case 1: Rcpp::warning("Maximum number of subdivisions reached.");
+              break;
+      case 2: Rcpp::warning("Roundoff error was detected.");
+              break;
+      case 3: Rcpp::warning("Extremely bad integrand behaviour.");
+              break;
+      case 4: Rcpp::warning("Roundoff error is detected in the extrapolation table.");
+              break;
+      case 5: Rcpp::warning("The integral is probably divergent.");
+              break;
+      case 6: Rcpp::stop("The input is invalid.");
+              break;
+    }
+  }
   return result;
 }
 

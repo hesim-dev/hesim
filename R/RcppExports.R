@@ -109,12 +109,20 @@ C_test_obs_index_ids <- function(R_input_data, strategy_index, patient_index, li
     .Call('_hesim_C_test_obs_index_ids', PACKAGE = 'hesim', R_input_data, strategy_index, patient_index, line_index, health_index, member)
 }
 
-test_quad_functor <- function(lower, upper) {
-    .Call('_hesim_test_quad_functor', PACKAGE = 'hesim', lower, upper)
+test_quad_dnorm <- function(lower, upper) {
+    .Call('_hesim_test_quad_dnorm', PACKAGE = 'hesim', lower, upper)
 }
 
-test_quad_lambda <- function(lower, upper) {
-    .Call('_hesim_test_quad_lambda', PACKAGE = 'hesim', lower, upper)
+test_quad_ier1 <- function() {
+    .Call('_hesim_test_quad_ier1', PACKAGE = 'hesim')
+}
+
+test_quad_ier4 <- function() {
+    .Call('_hesim_test_quad_ier4', PACKAGE = 'hesim')
+}
+
+test_quad_ier5 <- function() {
+    .Call('_hesim_test_quad_ier5', PACKAGE = 'hesim')
 }
 
 C_test_add_constant_int <- function(v, value) {

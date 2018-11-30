@@ -386,27 +386,45 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// test_quad_functor
-double test_quad_functor(double lower, double upper);
-RcppExport SEXP _hesim_test_quad_functor(SEXP lowerSEXP, SEXP upperSEXP) {
+// test_quad_dnorm
+double test_quad_dnorm(double lower, double upper);
+RcppExport SEXP _hesim_test_quad_dnorm(SEXP lowerSEXP, SEXP upperSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
     Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
-    rcpp_result_gen = Rcpp::wrap(test_quad_functor(lower, upper));
+    rcpp_result_gen = Rcpp::wrap(test_quad_dnorm(lower, upper));
     return rcpp_result_gen;
 END_RCPP
 }
-// test_quad_lambda
-double test_quad_lambda(double lower, double upper);
-RcppExport SEXP _hesim_test_quad_lambda(SEXP lowerSEXP, SEXP upperSEXP) {
+// test_quad_ier1
+double test_quad_ier1();
+RcppExport SEXP _hesim_test_quad_ier1() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
-    rcpp_result_gen = Rcpp::wrap(test_quad_lambda(lower, upper));
+    rcpp_result_gen = Rcpp::wrap(test_quad_ier1());
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_quad_ier4
+double test_quad_ier4();
+RcppExport SEXP _hesim_test_quad_ier4() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(test_quad_ier4());
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_quad_ier5
+double test_quad_ier5();
+RcppExport SEXP _hesim_test_quad_ier5() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(test_quad_ier5());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -511,8 +529,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
     {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
     {"_hesim_C_test_obs_index_ids", (DL_FUNC) &_hesim_C_test_obs_index_ids, 6},
-    {"_hesim_test_quad_functor", (DL_FUNC) &_hesim_test_quad_functor, 2},
-    {"_hesim_test_quad_lambda", (DL_FUNC) &_hesim_test_quad_lambda, 2},
+    {"_hesim_test_quad_dnorm", (DL_FUNC) &_hesim_test_quad_dnorm, 2},
+    {"_hesim_test_quad_ier1", (DL_FUNC) &_hesim_test_quad_ier1, 0},
+    {"_hesim_test_quad_ier4", (DL_FUNC) &_hesim_test_quad_ier4, 0},
+    {"_hesim_test_quad_ier5", (DL_FUNC) &_hesim_test_quad_ier5, 0},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_C_test_pv", (DL_FUNC) &_hesim_C_test_pv, 4},
