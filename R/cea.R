@@ -462,7 +462,7 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
     x$delta[, "inmb" := NULL]
   } # end credible interval calculations
   tbl[, "conclusion" := ifelse((get("icer_numeric") >= 0 & get("icer_numeric") <= k) | 
-                                icer == "Dominates",
+                                get("icer") == "Dominates",
                             "Cost-effective", "Not cost-effective")]
   tbl <- tbl[, c(strategy, grp, "iqalys", "icosts", "inmb", "icer", "conclusion"),
              with = FALSE]
