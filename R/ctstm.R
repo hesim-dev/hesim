@@ -224,12 +224,11 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
       self$params <- params
       self$trans_mat <- trans_mat
       self$clock <- match.arg(clock)
-      if (is.null(self$reset_states)){
+      if (is.null(reset_states)){
         self$reset_states <- vector(mode = "double")
       } else{
         self$reset_states <- reset_states
       }
-      
       
       # history
       self$start_state <- private$check_history(start_state)
