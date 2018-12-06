@@ -27,6 +27,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
                                     double max_t, double max_age){
  
   // Initialize
+  hesim::check_R_infinity(max_t);
   std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
   std::vector<bool> absorbing = transmod->trans_mat_.absorbing_;
   start_state = start_state; // Switch from R to C++ indexing

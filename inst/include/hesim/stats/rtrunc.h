@@ -41,7 +41,12 @@ inline double rtrunc_repeat(Func f, double lower, double upper){
 template <typename Func1, typename Func2>
 inline double qtrunc(Func1 f_cdf, Func2 f_quantile, double p, double lower, double upper){
   if (f_cdf(lower) == f_cdf(upper)) {
-    Rcpp::stop( "Truncation interval is not inside the domain of the quantile function");
+    if (!std::isinf(lower) && !std::isinf(upper)){
+      return R::runif(lower, upper);
+    }
+    else{
+     Rcpp::stop( "Truncation interval is not inside the domain of the quantile function"); 
+    }
   }    
   double v = f_cdf(lower) + (f_cdf(upper) - f_cdf(lower)) * p;
   return f_quantile(v);
