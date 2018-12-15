@@ -176,10 +176,11 @@
     
     <dl class='dl-horizontal'>
     <dt><code>new(trans_model = NULL, utility_model = NULL, cost_models = NULL)</code></dt><dd><p>Constructor for the class.</p></dd>
-    <dt><code>sim_disease(max_t = 100, max_age = 100)</code></dt><dd><p>Simulate disease progression.
+    <dt><code>sim_disease(max_t = 100, max_age = 100, progress = NULL)</code></dt><dd><p>Simulate disease progression.
     <ul>
 <li><p><code>max_t</code>: A scalar or vector denoting the number of time periods to simulate the model. If a vector, must be equal to the number of simulated patients.</p></li>
 <li><p><code>max_age</code>: A scalar or vector denoting the maximum age to simulate each patient until. If a vector, must be equal to the number of simulated patients.</p></li>
+<li><p><code>progress</code>: An integer, specifying the PSA iteration (i.e., sample) that should be printed every <code>progress</code> PSA iterations. For example, if <code>progress = 2</code>, then every second PSA iteration is printed. Default is <code>NULL</code>, in which case no output is printed.</p></li>
 </ul>
     Returns an instance of self with simulated output stored in <code>disprog_</code>.</p></dd>
     <dt><code>sim_stateprobs(t)</code></dt><dd><p>Simulate the probability of being in each health state as a function of time using the simulation output stored in <code>disprog_</code>.
@@ -218,7 +219,8 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='st'>"flexsurv"</span>)
+
 <span class='co'># Treatment strategies, target population, and model structure</span>
 <span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='fl'>3</span>),

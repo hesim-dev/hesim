@@ -409,6 +409,7 @@ test_that("IndivCtstm - joint", {
   # Simulate disease progression
   expect_error(ictstm$sim_disease()$disprog_, NA)
   disprog <- ictstm$sim_disease()$disprog_
+  expect_error(ictstm$sim_disease(progress = 1), NA)
   expect_true(is.data.table(disprog))
   
   # Simulate state probabilities

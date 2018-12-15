@@ -190,6 +190,11 @@ public:
   int virtual get_n_samples() = 0;
   
   /** 
+   * Set the maximum of the support for the survival model.
+   */    
+  void virtual set_max_x(double max_x) = 0;
+  
+  /** 
    * Summarize the survival model for a given health state transition.
    * The summary is conditional on the randomly sampled parameter set,
    * the health state transition, the treatment strategy, line, and patient. The
@@ -259,6 +264,10 @@ public:
     return survmod_.get_n_samples();  
   }
   
+  void set_max_x(double max_x){
+    survmod_.dist_->max_x_ = max_x;
+  }
+  
   std::vector<double> summary(int trans, int sample, std::vector<double> t, 
                               std::string type) {
     obs_index_.set_health_index(trans);
@@ -318,6 +327,13 @@ public:
   int get_n_samples() {
     return survmods_[0].get_n_samples();  
   }
+  
+  void set_max_x(double max_x){
+    int n_models = survmods_.size();
+    for (int i = 0; i < n_models; ++i){
+      survmods_[i].dist_->max_x_ = max_x;
+    }
+  }  
   
   std::vector<double> summary(int trans, int sample,
                               std::vector<double> t, std::string type) {

@@ -17,3 +17,17 @@ test_that("pv", {
   expect_equal(hesim:::C_test_pv(2, .03, 1, 4),
                2 * ((exp(-.03 * 1) - exp(-.03 * 4))/.03))
 })
+
+# Test c++ function seq --------------------------------------------------------
+test_that("seq", {
+  expect_equal(hesim:::C_test_seq(0, 3, .1),
+               seq(0, 3, .1))
+  expect_equal(hesim:::C_test_seq(0, 2.9, .2),
+               seq(0, 2.9, .2))
+  expect_equal(hesim:::C_test_seq(0, -3, -.1),
+               seq(0, -3, -.1))
+  expect_equal(hesim:::C_test_seq(2, -2.45, -.13),
+               seq(2, -2.45, -.13))
+  expect_error(hesim:::C_test_seq(0, -3, .1))
+  expect_error(hesim:::C_test_seq(0, 3, -.1))
+})

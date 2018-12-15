@@ -126,9 +126,6 @@ private:
   vecmats X_; ///< Vector of matrices with a matrix for each parameter of the
              ///< underlying survival distribution.
   params_surv params_; ///< Parameters for a survival model.
-  std::unique_ptr<stats::distribution> dist_; ///<The distribution of the underlying 
-                                              ///< survival distribution; specifically, 
-                                              ///< a pointer to the @c distribution base class.
   
   /** 
    * Initialize @c dist_.
@@ -213,6 +210,9 @@ private:
   }
 
 public:
+  std::unique_ptr<stats::distribution> dist_; ///<The distribution of the underlying 
+                                              ///< survival distribution; specifically, 
+                                              ///< a pointer to the @c distribution base class.  
   /** 
    * The constructor.
    * Instantiates a survival model.
@@ -304,9 +304,9 @@ public:
    * @param method Method to use for sampling. See hesim::stats::rtrunc_repeat. 
    * @return A random draw.
    */ 
-  double trandom(int sample, int obs, double lower, double upper, std::string method = "invcdf") {
+  double trandom(int sample, int obs, double lower, double upper) {
     set_dist(sample, obs);
-    return dist_->trandom(lower, upper, method);
+    return dist_->trandom(lower, upper);
   }
   
   int get_n_samples(){

@@ -24,11 +24,13 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
                                     int death_state,
                                     std::string clock, 
                                     std::vector<int> reset_states,
-                                    double max_t, double max_age){
+                                    double max_t, double max_age,
+                                    int progress){
  
   // Initialize
   hesim::check_R_infinity(max_t);
   std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
+  transmod->set_max_x(max_t);
   std::vector<bool> absorbing = transmod->trans_mat_.absorbing_;
   start_state = start_state; // Switch from R to C++ indexing
   int n_samples = transmod->get_n_samples();
@@ -47,6 +49,11 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
   
    // Loop
   for (int s = 0; s < n_samples; ++s){
+    if (progress > 0){
+      if ((s + 1) % progress == 0){ // R-based indexing
+        Rcpp::Rcout << "sample = " << s + 1 << std::endl;  
+      }
+    } 
     for (int k = 0; k < n_strategies; ++k){
       transmod->obs_index_.set_strategy_index(k);
         for (int j = 0; j < n_lines[k]; ++j){
@@ -240,17 +247,6 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
       wlos_it = hesim::pv(yhat, dr,
                           time_start_it,
                           time_stop_it);
-      // 
-      // if (disease_prog.sample_[i] == 0 && strategy_idx[i] == 0 &&
-      //     patient_idx[i] == 1){
-      //   Rcpp::Rcout << "yhat: " << yhat << std::endl;
-      //   Rcpp::Rcout << "time_index: " << time_index << std::endl;
-      //   Rcpp::Rcout << "time_start_it: " << time_start_it << std::endl;
-      //   Rcpp::Rcout << "time_stop_it: " << time_stop_it << std::endl;
-      //   Rcpp::Rcout << "dp_time_stop: " << disease_prog.time_stop_[i] << std::endl;
-      //   Rcpp::Rcout << "obs_index_time_stop: " << obs_index.get_time_stop() << std::endl;
-      //   Rcpp::Rcout << "wlos_it: " << wlos_it << std::endl;
-      // }
         
       wlos[i] += wlos_it; 
       time_start_it = time_stop_it;

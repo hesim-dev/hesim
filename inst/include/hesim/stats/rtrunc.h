@@ -2,6 +2,7 @@
 # define HESIM_STATS_RTRUNC_H
 
 # include <Rcpp/Rmath.h>
+# include <hesim/utils.h>
 
 namespace hesim {
   
@@ -17,7 +18,7 @@ namespace stats {
  * @param f A functor or lambda expression used to randomly draw samples from
  * the non-truncated distribution.
  * @param lower, upper Lower and upper bounds of the random variable.
- * @return A random sample from the truncated normal distribution.
+ * @return A random sample from the truncated distribution.
  ******************************************************************************/ 
 template <typename Func>
 inline double rtrunc_repeat(Func f, double lower, double upper){
@@ -36,16 +37,18 @@ inline double rtrunc_repeat(Func f, double lower, double upper){
  * distribution.
  * @param p A probability to calculate a quantile for.
  * @param lower, upper Lower and upper bounds of the random variable.
+ * @param max_x Maximum value of the support. By default it is infinity.
  * @return The quantile evaluated at @p p.
  ******************************************************************************/ 
 template <typename Func1, typename Func2>
-inline double qtrunc(Func1 f_cdf, Func2 f_quantile, double p, double lower, double upper){
+inline double qtrunc(Func1 f_cdf, Func2 f_quantile, double p, double lower, 
+                     double upper, double max_x){
   if (f_cdf(lower) == f_cdf(upper)) {
-    if (!std::isinf(lower) && !std::isinf(upper)){
-      return R::runif(lower, upper);
+    if (!std::isinf(lower) && !std::isinf(max_x)){
+      return R::runif(lower, max_x);
     }
     else{
-     Rcpp::stop( "Truncation interval is not inside the domain of the quantile function"); 
+     Rcpp::stop("Truncation interval is not inside the domain of the quantile function"); 
     }
   }    
   double v = f_cdf(lower) + (f_cdf(upper) - f_cdf(lower)) * p;
@@ -59,12 +62,14 @@ inline double qtrunc(Func1 f_cdf, Func2 f_quantile, double p, double lower, doub
  * @param f A functor or lambda expression used to compute quantiles for the
  * the non-truncated distribution.
  * @param lower, upper Lower and upper bounds of the random variable.
- * @return A random sample from the truncated normal distribution.
+ * @param max_x Maximum value of the support. By default it is infinity.
+ * @return A random sample from the truncated distribution.
  ******************************************************************************/ 
 template <typename Func1, typename Func2>
-inline double rtrunc_invcdf(Func1 f_cdf, Func2 f_quantile, double lower, double upper){
+inline double rtrunc_invcdf(Func1 f_cdf, Func2 f_quantile, double lower, 
+                            double upper, double max_x){
   double u = R::runif(0, 1);
-  return qtrunc(f_cdf, f_quantile, u, lower, upper);
+  return qtrunc(f_cdf, f_quantile, u, lower, upper, max_x);
 }
 
 /***************************************************************************//**
@@ -77,7 +82,8 @@ inline double rtrunc_invcdf(Func1 f_cdf, Func2 f_quantile, double lower, double 
  * @param method "invcdf" for the inverse CDF method as in hesim::stats::rtrunc_invcdf
  * and "repeat" for repeated sampling from the non-truncated distribution as in
  * hesim::stats::rtrunc_repeat. 
- * @return A random sample from the truncated normal distribution.
+ * @param max_x Maximum value of the support. By default it is infinity.
+ * @return A random sample from the truncated distribution.
  ******************************************************************************/ 
 template <class Dist>
 inline double rtrunc(Dist dist, double lower, double upper, 
@@ -85,7 +91,11 @@ inline double rtrunc(Dist dist, double lower, double upper,
   if (method == "invcdf"){
     auto f_cdf = [dist](double x){ return dist->cdf(x); };
     auto f_quantile = [dist](double p){ return dist->quantile(p); };    
-    return rtrunc_invcdf(f_cdf, f_quantile, lower, upper);
+    return rtrunc_invcdf(f_cdf, f_quantile, lower, upper, dist->max_x_);
+  }
+  else if (method == "cumhazard"){
+    auto f_haz = [dist](double x){ return dist->hazard(x); };
+    return rsurv(f_haz, lower, upper, dist->max_x_);
   }
   else {
     auto f_random = [dist](){ return dist->random(); };

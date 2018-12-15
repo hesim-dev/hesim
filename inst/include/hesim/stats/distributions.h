@@ -1,7 +1,7 @@
 # ifndef DISTRIBUTIONS_H
 # define DISTRIBUTIONS_H
-#include <RcppArmadillo.h>
 #include <hesim/utils.h>
+#include <hesim/stats/rsurv.h>
 #include <hesim/Rbase/zeroin.h>
 #include <hesim/math/quad.h>
 #include <hesim/stats/rtrunc.h>
@@ -15,6 +15,7 @@ namespace hesim{
  */
 namespace stats{
 
+
 /***************************************************************************//** 
  * An abstract base class for probability distributions.
  * Each child probability distribution class contains a number of statistical 
@@ -25,6 +26,8 @@ namespace stats{
 class distribution{
 public:
   virtual ~distribution() {};
+  
+  double max_x_ = INFINITY; ///< Maximum value for support of distribution. Can be infinity.
   
   /** 
    * Set the parameters for the distribution.
@@ -78,7 +81,7 @@ public:
    * Random number generator for a truncated distribution.
    * @return A random sample between a lower and upper bound from the probability distribution.
    */
-  virtual double trandom(double lower, double upper, std::string method = "invcdf") const {
+  virtual double trandom(double lower, double upper) const {
     Rcpp::stop("The selected distribution cannot randomly sample from a truncated distribution.");
   }
   
@@ -111,11 +114,8 @@ inline double quantile_numeric_work(const stats::distribution * dist, double p){
 
 /***************************************************************************//** 
  * Integrate a hazard function.
- * Integrate a hazard function from 0 to t using Gaussian quadrature. Uses
- * the <a href="https://github.com/yixuan/RcppNumerical">RcppNumerical</a> 
- * @c R package, which, in turn, is based on the 
- * <a href="https://github.com/tbs1980/NumericalIntegration">NumericalIntegration</a> 
- * @c C++ library.
+ * Integrate a hazard function from 0 to t using Gaussian quadrature. See also
+ * quad().
  * @param dist A pointer to the base class of a probability distribution.  
  * @param t Time to integrate hazard until.
  * @return The integral of the hazard function.
@@ -212,8 +212,8 @@ public:
     return R::rexp(1/rate_);
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
   }
   
 }; // end class exponential
@@ -266,8 +266,8 @@ public:
     return R::rweibull(shape_, scale_);
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
   }  
 }; // end class weibull
 
@@ -326,8 +326,8 @@ public:
     return wei_.random();
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
   }
   
 }; // end class weibull_nma
@@ -380,8 +380,8 @@ public:
     return R::rgamma(shape_, 1/rate_);
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
   }
   
 }; //end class gamma
@@ -435,8 +435,8 @@ public:
     return R::rlnorm(meanlog_, sdlog_);
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
   }  
 }; //end class lognormal
 
@@ -516,8 +516,8 @@ public:
     return quantile(u);
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
   }  
 }; //end class gompertz
 
@@ -572,8 +572,8 @@ public:
     return quantile(u);
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
   }  
 }; //end class loglogistic
 
@@ -667,8 +667,8 @@ public:
     }
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
   }  
   
 }; // end class gengamma
@@ -892,8 +892,8 @@ public:
     return quantile(R::runif(0, 1));
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
   }    
 };
 
@@ -983,11 +983,22 @@ public:
   }
   
   double random() const {
-    return quantile(R::runif(0, 1));
+    if (isinf(max_x_)){
+      return quantile(R::runif(0, 1));
+    }
+    else {
+      auto hazfun = [this](double x){ return this->hazard(x); };
+      return rsurv(hazfun, 0, INFINITY, max_x_);
+    }
   }
   
-  double trandom(double lower, double upper, std::string method = "invcdf") const   {
-    return rtrunc(this, lower, upper, method);
+  double trandom(double lower, double upper) const   {
+    if (isinf(max_x_)){
+      return rtrunc(this, lower, upper, "invcdf");
+    }
+    else{
+     return rtrunc(this, lower, upper, "cumhazard"); 
+    }
   }    
 };
 

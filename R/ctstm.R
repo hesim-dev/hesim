@@ -56,8 +56,12 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
 )
 
 # IndivCtstmTrans --------------------------------------------------------------
-indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100){
+indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
+                                    progress = NULL){
   sample <- from <- to <- line <- NULL # to avoid no visible bindings CRAN warning
+  if (is.null(progress)){
+    progress <- 0
+  }
   
   # Simulate
   disprog <- C_ctstm_sim_disease(trans_model, trans_model$start_state - 1, 
@@ -65,7 +69,7 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100){
                                  trans_model$start_time,
                                  trans_model$death_state - 1, 
                                  trans_model$clock, trans_model$reset_states - 1,
-                                 max_t, max_age)
+                                 max_t, max_age, progress)
   disprog <- data.table(disprog)
   disprog[, sample := sample + 1]
   disprog[, from := from + 1]
@@ -400,7 +404,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       self$cost_models = cost_models
     },
     
-    sim_disease = function(max_t = 100, max_age = 100){
+    sim_disease = function(max_t = 100, max_age = 100, progress = NULL){
       if(!inherits(self$trans_model, "IndivCtstmTrans")){
         stop("'trans_model' must be an object of class 'IndivCtstmTrans'",
           call. = FALSE)
@@ -412,8 +416,9 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       self$stateprobs_ <- NULL
       private$disprog_idx <- NULL
       self$disprog_ <- indiv_ctstm_sim_disease(self$trans_model,
-                                                   max_t = max_t,
-                                                   max_age = max_age)
+                                               max_t = max_t,
+                                               max_age = max_age,
+                                               progress = progress)
       self$stateprobs_ <- NULL
       invisible(self)
     },

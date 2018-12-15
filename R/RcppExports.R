@@ -41,8 +41,8 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_C_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
-C_ctstm_sim_disease <- function(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age) {
-    .Call('_hesim_C_ctstm_sim_disease', PACKAGE = 'hesim', R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age)
+C_ctstm_sim_disease <- function(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress) {
+    .Call('_hesim_C_ctstm_sim_disease', PACKAGE = 'hesim', R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress)
 }
 
 C_ctstm_indiv_stateprobs <- function(R_disease_prog, t, n_samples, n_strategies, unique_strategy_id, strategy_index, n_states, n_patients, n_lines = 1L) {
@@ -125,6 +125,14 @@ test_quad_ier5 <- function() {
     .Call('_hesim_test_quad_ier5', PACKAGE = 'hesim')
 }
 
+C_test_rsurv <- function(time, est, type = "surv", time_inf = TRUE) {
+    .Call('_hesim_C_test_rsurv', PACKAGE = 'hesim', time, est, type, time_inf)
+}
+
+C_test_rtrunc_repeat <- function(lower, upper) {
+    .Call('_hesim_C_test_rtrunc_repeat', PACKAGE = 'hesim', lower, upper)
+}
+
 C_test_add_constant_int <- function(v, value) {
     .Call('_hesim_C_test_add_constant_int', PACKAGE = 'hesim', v, value)
 }
@@ -135,6 +143,10 @@ C_test_add_constant_double <- function(v, value) {
 
 C_test_pv <- function(z, r, t1, t2) {
     .Call('_hesim_C_test_pv', PACKAGE = 'hesim', z, r, t1, t2)
+}
+
+C_test_seq <- function(from, to, by) {
+    .Call('_hesim_C_test_seq', PACKAGE = 'hesim', from, to, by)
 }
 
 test_zeroin <- function() {

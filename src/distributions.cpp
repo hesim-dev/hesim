@@ -83,6 +83,7 @@ arma::cube C_rdirichlet_mat(int n, arma::mat alpha){
  ******************************************************************************/ 
 RCPP_MODULE(distributions){
   Rcpp::class_<hesim::stats::distribution>("distribution")
+  .field("max_x_", &hesim::stats::distribution::max_x_)
   .method("pdf", &hesim::stats::distribution::pdf)
   .method("cdf", &hesim::stats::distribution::cdf)
   .method("quantile", &hesim::stats::distribution::quantile)

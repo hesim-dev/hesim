@@ -27,3 +27,8 @@ std::vector<double> C_test_add_constant_double(std::vector<double> v, double val
 double C_test_pv(double z, double r, double t1, double t2){
   return(hesim::pv(z, r, t1, t2));
 }
+
+// [[Rcpp::export]]
+std::vector<double> C_test_seq(double from, double to, double by){
+  return hesim::seq(from, to , by);
+}

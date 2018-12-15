@@ -79,12 +79,13 @@ Note that the \code{lys} column is only computed if \code{lys = TRUE}.
   
 }
   
-  \item{\code{sim_disease(max_t = 100, max_age = 100)}}{
+  \item{\code{sim_disease(max_t = 100, max_age = 100, progress = NULL)}}{
     Simulate disease progression.
     
    \itemize{
      \item \code{max_t}: A scalar or vector denoting the number of time periods to simulate the model. If a vector, must be equal to the number of simulated patients. 
     \item \code{max_age}: A scalar or vector denoting the maximum age to simulate each patient until. If a vector, must be equal to the number of simulated patients.
+    \item \code{progress}: An integer, specifying the PSA iteration (i.e., sample) that should be printed every \code{progress} PSA iterations. For example, if \code{progress = 2}, then every second PSA iteration is printed. Default is \code{NULL}, in which case no output is printed.
    }
      
     Returns an instance of self with simulated output stored in \code{disprog_}. 

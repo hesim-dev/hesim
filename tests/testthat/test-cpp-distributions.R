@@ -38,12 +38,9 @@ test_that("exponential", {
   expect_equal(r1, r2)
   
   # Truncated random
-  r <- replicate(10, exp$trandom(1, 5, "invcdf"))
+  r <- replicate(10, exp$trandom(1, 5))
   expect_true(all(r >= 1))
   expect_true(all(r <= 5))
-  
-  r <- replicate(10, exp$trandom(0, 3, "repeat")) 
-  expect_true(all(r <= 3))
 })
 
 # Weibull distribution ---------------------------------------------------------
@@ -80,7 +77,7 @@ test_that("weibull", {
   expect_equal(r1, r2)
   
   # Truncated random
-  r <- replicate(10, wei$trandom(0, 1, "invcdf"))
+  r <- replicate(10, wei$trandom(0, 1))
   expect_true(all(r >= 0))
   expect_true(all(r <= 1))  
 })
@@ -119,7 +116,7 @@ test_that("weibull_nma", {
   expect_equal(r1, r2)
   
   # Truncated random
-  r <- replicate(10, wei$trandom(0, 11, "invcdf"))
+  r <- replicate(10, wei$trandom(0, 11))
   expect_true(all(r >= 0))
   expect_true(all(r <= 11))  
 })
@@ -158,7 +155,7 @@ test_that("gamma", {
   expect_equal(r1, r2)
   
   # Truncated random
-  r <- replicate(10, gamma$trandom(0, 11, "invcdf"))
+  r <- replicate(10, gamma$trandom(0, 11))
   expect_true(all(r >= 0))
   expect_true(all(r <= 11))   
 })
@@ -197,7 +194,7 @@ test_that("lognormal", {
   expect_equal(r1, r2)
   
   # Truncated random
-  r <- replicate(10, lnorm$trandom(10, 21, "invcdf"))
+  r <- replicate(10, lnorm$trandom(10, 21))
   expect_true(all(r >= 10))
   expect_true(all(r <= 21))     
 })
@@ -238,7 +235,7 @@ test_that("gompertz", {
     expect_equal(r1, r2)
     
     ## Truncated random
-    r <- replicate(10, gomp$trandom(2, 9, "repeat"))
+    r <- replicate(10, gomp$trandom(2, 9))
     expect_true(all(r >= 2))
     expect_true(all(r <= 9))    
   }
@@ -281,7 +278,7 @@ test_that("loglogistic", {
   expect_equal(r1, r2)
   
   ## Truncated random
-  r <- replicate(10, llogis$trandom(2, 9, "invcdf"))
+  r <- replicate(10, llogis$trandom(2, 9))
   expect_true(all(r >= 2))
   expect_true(all(r <= 9))   
 })
@@ -332,13 +329,9 @@ test_that("gengamma", {
     }
   
     ## Truncated random
-    r <- replicate(10, gengamma$trandom(2, 9, "invcdf")) 
+    r <- replicate(10, gengamma$trandom(2, 9)) 
     expect_true(all(r >= 2))
     expect_true(all(r <= 9)) 
-    
-    r <- replicate(10, gengamma$trandom(10, 100, "repeat")) 
-    expect_true(all(r >= 10))
-    expect_true(all(r <= 100))  
   }
   
   test_gengamma(m = 2, s = 1.5, q = -2) # Q < 0
@@ -420,7 +413,7 @@ test_that("survspline", {
                  NA)
     
     ## truncated random
-    r <- replicate(10, spline$trandom(2, 2.5, "invcdf")) 
+    r <- replicate(10, spline$trandom(2, 2.5)) 
     expect_true(all(r >= 2))
     expect_true(all(r <= 2.5)) 
     
@@ -508,7 +501,7 @@ test_that("survspline", {
     expect_equal(r1, r2, tolerance = .001, scale = 1)
     
     ## truncated random
-    r <- replicate(10, spline$trandom(2, 5, "invcdf")) 
+    r <- replicate(10, spline$trandom(2, 5)) 
     expect_true(all(r >= 2))
     expect_true(all(r <= 5))     
   }
@@ -601,7 +594,7 @@ test_that("FracPoly", {
     }  
     expect_equal(fp$pdf(.8), 
                  numDeriv::grad(R_cdf, .8),
-                  tolerance = .001, scale = 1)
+                 tolerance = .001, scale = 1)
     
     ## quantile
     expect_equal(fp$quantile(fp$cdf(.45)),
@@ -609,16 +602,26 @@ test_that("FracPoly", {
                  tol = .001, scale = 1) 
     
     ## random
+    ### Using numeric quantile when max_x_ is infinity
     set.seed(101)
     r1 <- fp$random()
     set.seed(101)
     r2 <- fp$quantile(runif(1, 0, 1))
-    expect_equal(r1, r2)  
+    expect_equal(r1, r2)
+    
+    ### Using discrete cumulative hazard otherwise
+    fp$max_x_ <- 30
+    expect_error(fp$random(), NA) # See manual tests for correctness
     
     ## truncated random
-    r <- replicate(10, fp$trandom(2, 5, "invcdf")) 
-    expect_true(all(r >= 2))
-    expect_true(all(r <= 5))      
+    ### With max_x_ != infinity
+    r <- replicate(10, fp$trandom(2, 5)) 
+    expect_true(all(r >= 2 & r <= 5))
+    
+    ### With max_x_ == infinity
+    fp$max_x_ <- Inf
+    r <- replicate(10, fp$trandom(2, 5)) 
+    expect_true(all(r >= 2 & r <= 5))
     
    } # end test_fracpoly
 
@@ -627,7 +630,7 @@ test_that("FracPoly", {
   #                       dist = custom.hfp.lh3)
   
   
-  test_fracpoly(gamma = c(-1.2, -.567, 1.15) ,
+  test_fracpoly(gamma = c(-1.2, -.567, 1.15),
                 powers = c(1, 0))
   test_fracpoly(gamma = c(.2, .2),
                 powers = 0) 

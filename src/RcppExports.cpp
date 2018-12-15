@@ -146,8 +146,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_ctstm_sim_disease
-Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, std::vector<int> start_state, std::vector<double> start_age, std::vector<double> start_time, int death_state, std::string clock, std::vector<int> reset_states, double max_t, double max_age);
-RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP start_timeSEXP, SEXP death_stateSEXP, SEXP clockSEXP, SEXP reset_statesSEXP, SEXP max_tSEXP, SEXP max_ageSEXP) {
+Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, std::vector<int> start_state, std::vector<double> start_age, std::vector<double> start_time, int death_state, std::string clock, std::vector<int> reset_states, double max_t, double max_age, int progress);
+RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP start_timeSEXP, SEXP death_stateSEXP, SEXP clockSEXP, SEXP reset_statesSEXP, SEXP max_tSEXP, SEXP max_ageSEXP, SEXP progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -160,7 +160,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<int> >::type reset_states(reset_statesSEXP);
     Rcpp::traits::input_parameter< double >::type max_t(max_tSEXP);
     Rcpp::traits::input_parameter< double >::type max_age(max_ageSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_ctstm_sim_disease(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age));
+    Rcpp::traits::input_parameter< int >::type progress(progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_ctstm_sim_disease(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -428,6 +429,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_test_rsurv
+double C_test_rsurv(std::vector<double> time, std::vector<double> est, std::string type, bool time_inf);
+RcppExport SEXP _hesim_C_test_rsurv(SEXP timeSEXP, SEXP estSEXP, SEXP typeSEXP, SEXP time_infSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type est(estSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    Rcpp::traits::input_parameter< bool >::type time_inf(time_infSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_rsurv(time, est, type, time_inf));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_rtrunc_repeat
+double C_test_rtrunc_repeat(double lower, double upper);
+RcppExport SEXP _hesim_C_test_rtrunc_repeat(SEXP lowerSEXP, SEXP upperSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_rtrunc_repeat(lower, upper));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_test_add_constant_int
 std::vector<int> C_test_add_constant_int(std::vector<int> v, double value);
 RcppExport SEXP _hesim_C_test_add_constant_int(SEXP vSEXP, SEXP valueSEXP) {
@@ -463,6 +490,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type t1(t1SEXP);
     Rcpp::traits::input_parameter< double >::type t2(t2SEXP);
     rcpp_result_gen = Rcpp::wrap(C_test_pv(z, r, t1, t2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_seq
+std::vector<double> C_test_seq(double from, double to, double by);
+RcppExport SEXP _hesim_C_test_seq(SEXP fromSEXP, SEXP toSEXP, SEXP bySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type from(fromSEXP);
+    Rcpp::traits::input_parameter< double >::type to(toSEXP);
+    Rcpp::traits::input_parameter< double >::type by(bySEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_seq(from, to, by));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -512,7 +552,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_rpwexp", (DL_FUNC) &_hesim_C_rpwexp, 3},
     {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
     {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
-    {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 9},
+    {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 10},
     {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 9},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 7},
     {"_hesim_C_indiv_ctstm_los", (DL_FUNC) &_hesim_C_indiv_ctstm_los, 4},
@@ -533,9 +573,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_test_quad_ier1", (DL_FUNC) &_hesim_test_quad_ier1, 0},
     {"_hesim_test_quad_ier4", (DL_FUNC) &_hesim_test_quad_ier4, 0},
     {"_hesim_test_quad_ier5", (DL_FUNC) &_hesim_test_quad_ier5, 0},
+    {"_hesim_C_test_rsurv", (DL_FUNC) &_hesim_C_test_rsurv, 4},
+    {"_hesim_C_test_rtrunc_repeat", (DL_FUNC) &_hesim_C_test_rtrunc_repeat, 2},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_C_test_pv", (DL_FUNC) &_hesim_C_test_pv, 4},
+    {"_hesim_C_test_seq", (DL_FUNC) &_hesim_C_test_seq, 3},
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
     {"_hesim_C_rowmax_index", (DL_FUNC) &_hesim_C_rowmax_index, 1},

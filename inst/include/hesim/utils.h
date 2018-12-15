@@ -117,6 +117,28 @@ inline double pv(double z, double r, double t1, double t2){
   }
 }
 
+/**
+ * @ingroup general
+ * Generate a sequence of numbers.
+ * @param from, to The starting and (maximal) end values of the sequence.
+ * @param by Step size of the sequence. 
+ * @return A sequence of numbers.
+ */
+inline std::vector<double> seq(double from, double to, double by){
+  if ((from < to && by < 0) || (from > to && by > 0)){
+    Rcpp::stop("Wrong sign in 'by' argument.");
+  } 
+  int size = int((to - from)/by) + 1;
+  std::vector<double> result(size);
+  result[0] = from;
+  if (size > 1){
+    for (int i = 1; i < size; ++i){
+      result[i] = result[i - 1] + by;
+    }
+  }
+  return result;
+};
+
 } // end hesim namespace
 
 

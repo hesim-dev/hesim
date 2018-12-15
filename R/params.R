@@ -150,11 +150,11 @@ check.params_lm_list <- function(object){
 #' the posterior distribution of the regression coefficients used to predict
 #' a given parameter.
 #' @param dist Character vector denoting the parametric distribution. See "Details".
-#' @param aux Auxillary arguments used with splines. See "Details". 
+#' @param aux Auxillary arguments used with splines or fractional polynomials. See "Details". 
 #' 
 #' @return An object of class "params_surv", which is a list containing \code{coefs},
 #' \code{dist}, and \code{n_samples}. \code{n_samples} is equal to the number of rows
-#' in each element of \code{coefs}, which must be the same. The list may also contain \code{aux}, if
+#' in each element of \code{coefs}, which must be the same. The list may also contain \code{aux} if
 #' a spline or fractional polynomial model is fit. 
 #' 
 #' @details 

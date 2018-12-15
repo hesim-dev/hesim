@@ -129,7 +129,7 @@ public:
   std::string dist_name_; ///< A string denoting the name of the underlying 
                          ///< probability distribution.
   detail::survspline_aux spline_aux_; ///< Auxiliary parameters for a spline survival model. 
-  detail::fracpoly_aux fracpoly_aux_; ///< Auxiliary parameters for a fractional polynomial survival model. 
+  detail::fracpoly_aux fracpoly_aux_; ///< Auxiliary parameters for a fractional polynomial survival model.
   
   /** 
    * The constructor.
@@ -143,7 +143,7 @@ public:
     dist_name_ = Rcpp::as<std::string>(R_params_surv["dist"]);
     sample_ = 0;
     n_samples_ = Rcpp::as<int> (R_params_surv["n_samples"]);
-    n_pars_ = coefs_.size();     
+    n_pars_ = coefs_.size();   
   }
 };
 
