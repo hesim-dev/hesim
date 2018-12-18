@@ -71,7 +71,7 @@ inline double rsurv(std::vector<double> &time, std::vector<double> est,
     time.push_back(INFINITY); 
   }
   int size = 1;
-  return Rcpp::RcppArmadillo::sample(time, size, false, prob)[0];
+  return Rbase::sample(time, size, false, prob)[0];
 }
 
 /***************************************************************************//** 

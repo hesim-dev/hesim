@@ -34,8 +34,9 @@
 // You should have received a copy of the GNU General Public License
 // along with RcppArmadillo.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace Rcpp{
-    namespace RcppArmadillo{
+namespace hesim {
+
+namespace Rbase {
     
         inline void FixProb(arma::vec &prob, const int size, const bool replace) {
             // prob is modified in-place.  
@@ -82,7 +83,7 @@ namespace Rcpp{
 
         // Convert from NumericVector to arma vector
         template <class T> 
-        T sample(const T &x, const int size, const bool replace, NumericVector prob_){
+        T sample(const T &x, const int size, const bool replace, Rcpp::NumericVector prob_){
           arma::vec prob(prob_.begin(), prob_.size(), false);
           return sample_main(x, size, replace, prob);
         }
