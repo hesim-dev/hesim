@@ -97,16 +97,16 @@ inline double rsurv(Func hazfun, double lower = 0, double upper = INFINITY,
   if (lower < 0){
     Rcpp::stop("'lower' cannot be negative.");
   }
-  if (isinf(upper) && max_survtime < 0){
+  if (std::isinf(upper) && max_survtime < 0){
     Rcpp::stop("'max_survtime' cannot be negative.");
   }
-  if (isinf(max_survtime)){
+  if (std::isinf(max_survtime)){
     Rcpp::stop("'max_survtime' cannot be infinite.");
   }
   
   // Times to compute hazards at
   std::vector<double> time;
-  if (isinf(upper)){
+  if (std::isinf(upper)){
     double step = (1.0/12.0) * (max_survtime/100);
     time = seq(lower, max_survtime, step);
   } 
@@ -120,7 +120,7 @@ inline double rsurv(Func hazfun, double lower = 0, double upper = INFINITY,
   
   // Sample
   bool time_inf = false;
-  if (isinf(upper)){
+  if (std::isinf(upper)){
     time_inf = true;
   }
   return rsurv(time, cumhazard, "cumhazard", time_inf);

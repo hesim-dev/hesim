@@ -983,7 +983,7 @@ public:
   }
   
   double random() const {
-    if (isinf(max_x_)){
+    if (std::isinf(max_x_)){
       return quantile(R::runif(0, 1));
     }
     else {
@@ -993,7 +993,7 @@ public:
   }
   
   double trandom(double lower, double upper) const   {
-    if (isinf(max_x_)){
+    if (std::isinf(max_x_)){
       return rtrunc(this, lower, upper, "invcdf");
     }
     else{
