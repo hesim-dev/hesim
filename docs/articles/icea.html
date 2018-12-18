@@ -425,9 +425,9 @@ ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyv
 <p><img src="icea_files/figure-html/mce_plot-1.png" width="672"></p>
 <p>In group 1, Strategy 2 provides the greatest NMBs with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Strategy 3 provides the greatest NMBs with a higher probability than Strategy 2.</p>
 </div>
-<div id="cost-effectiveness-acceptability-frontier-ceac" class="section level2">
+<div id="cost-effectiveness-acceptability-frontier-ceaf" class="section level2">
 <h2 class="hasAnchor">
-<a href="#cost-effectiveness-acceptability-frontier-ceac" class="anchor"></a><span class="header-section-number">3.2</span> Cost-effectiveness acceptability frontier (CEAC)</h2>
+<a href="#cost-effectiveness-acceptability-frontier-ceaf" class="anchor"></a><span class="header-section-number">3.2</span> Cost-effectiveness acceptability frontier (CEAF)</h2>
 <p>One drawback of the previous plot is that the probability of being cost-effective cannot be used to determine the optimal treatment option. Instead, if a decision-makers objective is to maximize health gain, then decisions should be based on the expected net monetary benefit <span class="citation">(Barton, Briggs, and Fenwick 2008)</span>. The cost-effectiveness acceptability frontier (CEAF), which plots the probability that the optimal treatment strategy (i.e., the strategy with the highest expected NMB) is cost-effective, is appropriate in this context.</p>
 <p>A CEAF curve can be easily created by using the <code>best</code> column to subset to the treatment strategy with the highest expected NMB for each willingness to pay value and group.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(icea<span class="op">$</span>mce[best <span class="op">==</span><span class="st"> </span><span class="dv">1</span>], <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob)) <span class="op">+</span>
@@ -899,7 +899,7 @@ evic &lt;-<span class="st"> </span>totnmb_scenarios[<span class="dv">1</span>] <
       <li>
 <a href="#probabilistic-sensitivity-analysis"><span class="toc-section-number">3</span> Probabilistic sensitivity analysis</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#probability-most-cost-effective"><span class="toc-section-number">3.1</span> Probability most cost-effective</a></li>
-      <li><a href="#cost-effectiveness-acceptability-frontier-ceac"><span class="toc-section-number">3.2</span> Cost-effectiveness acceptability frontier (CEAC)</a></li>
+      <li><a href="#cost-effectiveness-acceptability-frontier-ceaf"><span class="toc-section-number">3.2</span> Cost-effectiveness acceptability frontier (CEAF)</a></li>
       <li><a href="#value-of-perfect-information"><span class="toc-section-number">3.3</span> Value of perfect information</a></li>
       <li><a href="#distribution-of-health-and-cost-outcomes"><span class="toc-section-number">3.4</span> Distribution of health and cost outcomes</a></li>
       <li><a href="#cost-effectiveness-plane"><span class="toc-section-number">3.5</span> Cost-effectiveness plane</a></li>
