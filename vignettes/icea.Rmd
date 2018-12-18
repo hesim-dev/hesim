@@ -125,7 +125,7 @@ A number of measures have been proposed in the health economics literature to su
 
 We can use the  `icea` function to summarize results from our `data.table` object of simulated output for a range of willingness to pay values,
 
-```{r icea}
+```{r icea, warning = FALSE, message = FALSE}
 library("hesim")
 ktop <- 200000
 icea <-  icea(ce, k = seq(0, ktop, 500), sample = "sample", strategy = "strategy",
@@ -147,7 +147,7 @@ The same inputs are used as in `icea` except users must specify the name of the 
 ## Probability most cost-effective 
 A useful summary measure for quantifying uncertainty is the probability that each treatment strategy is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each strategy has the highest NMB. For example, consider a random sample of 10 draws from the PSA simulation output and suppose $k$ is again equal to $150,000$. 
 
-```{r mce_example_setup, echo = -1, message = FALSE}
+```{r mce_example_setup, echo = -1, warning = FALSE, message = FALSE}
 library("knitr")
 random_rows <- sample(1:n_samples, 10)
 nmb_dt <- dcast(ce[sample %in% random_rows & grp == "Group 2"], 
@@ -165,7 +165,7 @@ print(mce)
 
 In this example, treatments 1, 2, and 3 have the highest NMBs a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `icea` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
 
-```{r mce_plot}
+```{r mce_plot, warning = FALSE, message = FALSE}
 library("ggplot2")
 library("scales")
 theme_set(theme_minimal())
@@ -177,6 +177,20 @@ ggplot2::ggplot(icea$mce, aes(x = k, y = prob, col = factor(strategy))) +
 ```
 
 In group 1, Strategy 2 provides the greatest NMBs with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Strategy 3 provides the greatest NMBs with a higher probability than Strategy 2. 
+
+## Cost-effectiveness acceptability frontier (CEAC)
+One drawback of the previous plot is that the probability of being cost-effective cannot be used to determine the optimal treatment option. Instead, if a decision-makers objective is to maximize health gain, then decisions should be based on the expected net monetary benefit [@barton2008optimal]. The cost-effectiveness acceptability frontier (CEAF), which plots the probability that the optimal treatment strategy (i.e., the strategy with the highest expected NMB) is cost-effective, is appropriate in this context. 
+
+A CEAF curve can be easily created by using the `best` column to subset to the treatment strategy with the highest expected NMB for each willingness to pay value and group. 
+
+```{r ceaf_plot}
+ggplot2::ggplot(icea$mce[best == 1], aes(x = k, y = prob)) +
+  geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
+  ylab("Probability most cost-effective") +
+  scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
+  theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy")
+```
+
 
 ## Value of perfect information
 One draw back of the previous measure is that it ignores the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected NMB is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected NMB given perfect information and the maximum expected NMB given current information. In other words, we calculate the NMB for the optimal treatment strategy for each random draw of the parameters and compare that to the NMB for the treatment strategy that is optimal when averaging across all parameters. Mathematically, the EVPI for subgroup $g$ is, 

@@ -36,13 +36,13 @@ NULL
 
 #' Individualized cost-effectiveness analysis
 #'
-#' Conduct conducting Bayesian cost-effectiveness analysis (e.g. summarize a probabilistic 
-#' sensitivity analysis (PSA)) by subgroup.
+#' Conduct individualized cost-effectiveness analysis (ICEA) given output of an economic
+#' model. That is, summarize a probabilistic sensitivity analysis (PSA) by subgroup.
 #' \itemize{
 #'  \item \code{icea()} computes the probability that
-#' each treatment is most cost-effective, the expected value of perfect
-#' information, and the net monetary benefit for each treatment.
-#' \item \code{icea_pw()} compares interventions to a comparator. Computed
+#' each treatment is most cost-effective, output for a cost-effectiveness acceptability frontier,
+#' the expected value of perfect information, and the net monetary benefit for each treatment.
+#' \item \code{icea_pw()} conducts pairwise ICEA by comparing strategies to a comparator. Computed
 #' quantities include the incremental cost-effectiveness ratio, the 
 #' incremental net monetary benefit, output for a cost-effectiveness plane,
 #' and output for a cost-effectiveness acceptability curve.
@@ -69,10 +69,16 @@ NULL
 #'   \item{summary}{A \code{data.table} of the mean, 2.5\% quantile, and 97.5\% 
 #'   quantile by strategy and group for clinical effectiveness and costs.}
 #'   \item{mce}{The probability that each strategy is the most effective treatment
-#'   for each group for the range of specified willingness to pay values.}
-#'   \item{evpi}{The expected value of perfect information by group for the range
-#'   of specified willingness to pay values.}
-#'    \item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) net benefits
+#'   for each group for the range of specified willingness to pay values. In addition,
+#'   the column \code{best} denotes the optimal strategy (i.e., the strategy with the
+#'   highest expected net monetary benefit), which can be used to plot the 
+#'   cost-effectiveness acceptability frontier (CEAF).}
+#'   \item{evpi}{The expected value of perfect information (EVPI) by group for the range
+#'   of specified willingness to pay values. The EVPI is computed by subtracting the expected net
+#'   monetary benefit given current information (i.e., the strategy with the highest
+#'   expected net monetary benefit) from the expected net monetary benefit given
+#'   perfect information.}
+#'    \item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of net monetary benefits
 #'    for the range of specified willingness to pay values.}
 #' }
 #' 
@@ -83,10 +89,10 @@ NULL
 #'   \item{delta}{Incremental effectiveness and incremental cost for each simulated
 #'   parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
 #'   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
-#'   group. In other words, the probability that each strategy is more cost-effective than
+#'   group. The CEAC plots the probability that each strategy is more cost-effective than
 #'   the comparator for the specified willingness to pay values.}
-#'    \item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of (monetary) 
-#'    incremental net benefits for the range of specified willingness to pay values.}
+#'    \item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of
+#'    incremental net monetary benefits for the range of specified willingness to pay values.}
 #' }
 #' @name icea
 #' @examples
@@ -158,8 +164,10 @@ icea.default <- function(x, k = seq(0, 200000, 500), sample, strategy,
 
   # estimates
   nmb <- nmb_summary(x, k, strategy, grp, e, c)
-  mce <- mce(x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps)
-  evpi <- evpi(x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps, nmb)
+  enmb_best <- enmb_best(nmb, strategy, grp)
+  mce <- mce(x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps, enmb_best$row)
+  enmb_best[, row := NULL]
+  evpi <- evpi(x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps, enmb_best)
   summary_table <- cea_table(x, strategy, grp, e, c)
   setnames(summary_table, 
            c(paste0(e, c("_mean", "_lower", "_upper")),
@@ -252,13 +260,17 @@ icea_pw.ce <- function(x, k = seq(0, 200000, 500), comparator, dr, ...){
 }
 
 # Probability of being most cost-effective
-mce <- function(x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps){
+mce <- function(x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps,
+                best_row){
   k_rep <- rep(k, each = n_strategies * n_grps)
   strategy_rep <- rep(unique(x[[strategy]]), times = length(k) * n_grps)
   grp_rep <- rep(rep(unique(x[[grp]]), each = n_strategies), length(k))
   prob_vec <- C_mce(k, x[[e]], x[[c]], n_samples, n_strategies, n_grps)
   prob <- data.table(k_rep, strategy_rep, grp_rep, prob_vec)
   setnames(prob, c("k", strategy, grp, "prob"))
+  prob[, ("best") := 0]
+  set(prob, best_row, "best", 1)
+  setcolorder(prob, c("k", strategy, grp, "best", "prob"))
   return(prob)
 }
 
@@ -298,25 +310,29 @@ inmb_summary <- function(ix, k, strategy, grp, e, c){
   return(inmb)
 }
 
+# Compute optimal strategy and associated ENMB
+enmb_best <- function(nmb, strategy, grp){
+  enmb <- NULL
+  ind <- nmb[, .I[which.max(enmb)], by = c("k", grp)]$V1
+  res <- nmb[ind, c(strategy, grp, "k", "enmb"), with = FALSE]
+  res$row <- ind
+  setnames(res, strategy, "best")
+  setnames(res, "enmb", "enmb_best")
+  setcolorder(res, c(grp, "k", "enmb_best", "best"))
+  return(res)
+}
+
 # Expected value of perfect information
 evpi <- function(x, k, strategy, grp, e, c, 
-                 n_samples, n_strategies, n_grps, nmb){
-
-  # Choose treatment by maximum expected benefit
-  x_nmb = copy(nmb)
-  f <- stats::as.formula(paste0("k", "+", grp, "~", strategy))
-  x_enmb <- dcast(x_nmb, f, value.var = "enmb")
-  mu <- C_rowmax(as.matrix(x_enmb[, -c(1:2), with = FALSE]))
-  mu_ind <- c(C_rowmax_index(as.matrix(x_enmb[, -c(1:2), with = FALSE]))) + 1
-
+                 n_samples, n_strategies, n_grps, enmb){
+  evpi <- enmbpi <- enmb_best <- NULL
+  
   # calculate expected value of perfect information
-  enmbpi <- C_enmbpi(k, x[[e]], x[[c]], n_samples, n_strategies, n_grps)
-  evpi <- enmbpi - c(mu)
-  dt <- data.table(k = rep(k, each = n_grps),
-                    grp = rep(unique(x[[grp]]), times = length(k)),
-                    evpi = evpi, enmbpi = enmbpi, enmb = c(mu), best = mu_ind)
-  setnames(dt, "grp", grp)
-  return(dt)
+  enmb$enmbpi <-  C_enmbpi(k, x[[e]], x[[c]], n_samples, n_strategies, n_grps)
+  enmb[, evpi := enmbpi - enmb_best]
+  setnames(enmb, "enmb_best", "enmbci")
+  setcolorder(enmb, c(grp, "k", "best", "enmbci", "enmbpi", "evpi"))
+  return(enmb)
 }
 
 # CEA summary table

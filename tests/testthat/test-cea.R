@@ -36,36 +36,36 @@ ce <- data.table::data.table(sample = rep(seq(n_samples), length(e)),
 krange <- seq(100000, 120000, 500)
 kval1 <- sample(krange, 1)
 kval2 <- sample(krange, 1)
-ce[, nb1 := qalys * kval1 - cost]
-ce[, nb2 := qalys * kval2 - cost]
+ce[, nmb1 := qalys * kval1 - cost]
+ce[, nmb2 := qalys * kval2 - cost]
 
 # Functions to use for testing ------------------------------------------------
 # probabilistic sensitivity analysis
-iceaR <- function(x, kval, grpname, output = c("mce", "evpi")){
-  output <- match.arg(output)
+iceaR <- function(x, kval, grpname){
   x <- x[grp == grpname] 
-  x[, nb := qalys * kval - cost]
-  nb <- data.table::dcast(x, sample ~ strategy, value.var = "nb")
-  strategies <- seq(1, ncol(nb) - 1)
-  nb_names <- paste0("nb", strategies)
-  data.table::setnames(nb, colnames(nb), c("sample", nb_names))
-  nb[, maxj := apply(nb[, -1, with = FALSE], 1, which.max)]
-  nb[, maxj := factor(maxj, levels = strategies)]
+  x[, nmb := qalys * kval - cost]
+  nmb <- data.table::dcast(x, sample ~ strategy, value.var = "nmb")
+  strategies <- seq(1, ncol(nmb) - 1)
+  nmb_names <- paste0("nmb", strategies)
+  data.table::setnames(nmb, colnames(nmb), c("sample", nmb_names))
+  nmb[, maxj := apply(nmb[, -1, with = FALSE], 1, which.max)]
+  nmb[, maxj := factor(maxj, levels = strategies)]
+  prob_ce <- as.numeric(prop.table(table(nmb$maxj)))
+  enmb <- as.numeric(nmb[, lapply(.SD, mean), .SDcols = nmb_names])
+  enmb_maxj <- which.max(enmb)
+  ret <- list()
   
   # mce
-  if (output == "mce"){
-    ret <- as.numeric(prop.table(table(nb$maxj)))
-  }
+  ret$mce <- prob_ce
+  
+  # CEAF
+  ret$ceaf <- prob_ce[enmb_maxj]
   
   # evpi
-  if (output == "evpi"){
-    enb <- as.numeric(nb[, lapply(.SD, mean), .SDcols = nb_names])
-    enb_maxj <- which.max(enb)
-    nb[, nbpi := apply(nb[, 2:(ncol(nb) -1), with = FALSE], 1, max)]
-    nb$nbci <- nb[[nb_names[enb_maxj]]]
-    vpi <- nb$nbpi - nb$nbci
-    ret <- mean(vpi)
-  }
+  nmb[, nmbpi := apply(nmb[, 2:(ncol(nmb) -1), with = FALSE], 1, max)]
+  nmb$nmbci <- nmb[[nmb_names[enmb_maxj]]]
+  vpi <- nmb$nmbpi - nmb$nmbci
+  ret$evpi <- mean(vpi)
   
   # return
   return(ret)
@@ -92,8 +92,8 @@ deltaR <- function(x, comparator, grpname){
 # ceac 
 ceacR <- function(ix, kval, grpname) {
   ix <- ix[grp == grpname]
-  ix[, nb := ie * kval - ic] 
-  ceac <- ix[, .(prob = mean(nb >= 0)), by = "strategy"]
+  ix[, nmb := ie * kval - ic] 
+  ceac <- ix[, .(prob = mean(nmb >= 0)), by = "strategy"]
 }
 
 # Test icea function ----------------------------------------------------------
@@ -103,6 +103,8 @@ test_that("icea", {
   icea <-  icea(ce, k = krange, sample = "sample", strategy = "strategy",
                    grp = "grp", e = "qalys", c = "cost")
   kval <- sample(krange, 1)
+  iceaR_1 <- iceaR(ce, kval , "Group 1")
+  iceaR_2 <- iceaR(ce, kval , "Group 2")
   
   ## summary
   ### group 2
@@ -124,18 +126,29 @@ test_that("icea", {
   # mce
   ### group 1
   mce <- icea$mce[grp == "Group 1" &  k == kval]
-  mce_test <- iceaR(ce, kval , "Group 1", output = "mce")
+  mce_test <- iceaR_1$mce
   expect_equal(mce$prob, mce_test)
   
   ### group 2
   mce <- icea$mce[grp == "Group 2" &  k == kval]
-  mce_test <- iceaR(ce, kval , "Group 2", output = "mce")
+  mce_test <- iceaR_2$mce
   expect_equal(mce$prob, mce_test)
+  
+  ## CEAF
+  ### group 1
+  ceaf <- icea$mce[best == 1 & grp == "Group 1" &  k == kval]
+  ceaf_test <- iceaR_1$ceaf
+  expect_equal(ceaf$prob, ceaf_test)
+  
+  ### group 2
+  ceaf <- icea$mce[best == 1 & grp == "Group 2" &  k == kval]
+  ceaf_test <- iceaR_2$ceaf
+  expect_equal(ceaf$prob, ceaf_test)  
   
   ## evpi
   ### group 1
   evpi <- icea$evpi[grp == "Group 1" &  k == kval]
-  evpi_test <- iceaR(ce, kval , "Group 1", output = "evpi")
+  evpi_test <- iceaR_1$evpi
   expect_equal(evpi$evpi, evpi_test)
   
   ## function works with other names
