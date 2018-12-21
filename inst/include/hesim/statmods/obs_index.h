@@ -96,7 +96,7 @@ private:
     int cum_size = 0;
     cum_strategy_sizes_.push_back(cum_size);
     for (int i = 0; i < n_strategies_ - 1; ++i){
-      cum_size += n_lines_.at(i) * n_patients_ * n_healthvals_; 
+      cum_size += n_lines_.at(i) * n_patients_ * n_healthvals_ * n_times_; 
       cum_strategy_sizes_.push_back(cum_size);
     }
   }
