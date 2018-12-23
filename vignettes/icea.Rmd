@@ -184,7 +184,7 @@ One drawback of the previous plot is that the probability of being cost-effectiv
 A CEAF curve can be easily created by using the `best` column to subset to the treatment strategy with the highest expected NMB for each willingness to pay value and group. 
 
 ```{r ceaf_plot}
-ggplot2::ggplot(icea$mce[best == 1], aes(x = k, y = prob)) +
+ggplot2::ggplot(icea$mce[best == 1], aes(x = k, y = prob, col = strategy)) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
