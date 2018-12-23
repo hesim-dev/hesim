@@ -428,16 +428,16 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
   grp <- attributes(x)$grp
   output <- match.arg(output)
   tbl <- copy(x$summary)
-  tbl[, "icer_numeric" := get("ic_mean")/get("ie_mean")]  
-  tbl[, "inmb" := k * get("ie_mean") - get("ic_mean")]
+  tbl[, "icer" := get("ic_mean")/get("ie_mean")]  
+  tbl[, "inmb_numeric" := k * get("ie_mean") - get("ic_mean")]
   
   # Formatting
   tbl[, "iqalys" := format_qalys(get("ie_mean"), digits = digits_qalys)]
   tbl[, "icosts" := format_costs(get("ic_mean"), digits = digits_costs)]
-  tbl[, "icer" := format_costs(get("icer_numeric"), digits = digits_costs)]
+  tbl[, "icer" := format_costs(get("icer"), digits = digits_costs)]
   tbl[, "icer" := ifelse(get("ic_mean") < 0 & get("ie_mean") >= 0, "Dominates", get("icer"))]
   tbl[, "icer" := ifelse(get("ic_mean") > 0 & get("ie_mean") <= 0, "Dominated", get("icer"))]
-  tbl[, "inmb" := format_costs(get("inmb"), digits = digits_costs)]
+  tbl[, "inmb" := format_costs(get("inmb_numeric"), digits = digits_costs)]
   
   if(cri){
     prob_lower <- (1 - prob)/2
@@ -477,8 +477,7 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
     }
     x$delta[, "inmb" := NULL]
   } # end credible interval calculations
-  tbl[, "conclusion" := ifelse((get("icer_numeric") >= 0 & get("icer_numeric") <= k) | 
-                                get("icer") == "Dominates",
+  tbl[, "conclusion" := ifelse(get("inmb_numeric") >= 0,
                             "Cost-effective", "Not cost-effective")]
   tbl <- tbl[, c(strategy, grp, "iqalys", "icosts", "inmb", "icer", "conclusion"),
              with = FALSE]
