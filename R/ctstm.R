@@ -135,7 +135,7 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
 #' 
 #' A generic function for creating an object of class \code{\link{IndivCtstmTrans}}.
 #' @param object A fitted survival model or the parameters of a survival model.  
-#' @param data An object of class "expanded_hesim_data" returned by 
+#' @param input_data An object of class "expanded_hesim_data" returned by 
 #' \code{\link{expand.hesim_data}}.
 #' @param n Number of random observations of the parameters to draw.
 #' @param trans_mat The transition matrix describing the states and transitions in a 
@@ -157,9 +157,9 @@ create_IndivCtstmTrans <- function(object, ...){
 
 #' @export
 #' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, clock = c("reset", "forward"),
+create_IndivCtstmTrans.flexsurvreg_list <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
                                                     n = 1000, point_estimate = FALSE, ...){
-  input_mats <- create_input_mats(object, data)
+  input_mats <- create_input_mats(object, input_data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
   return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat,
                              clock = match.arg(clock), ...))
@@ -167,9 +167,9 @@ create_IndivCtstmTrans.flexsurvreg_list <- function(object, data, trans_mat, clo
 
 #' @export
 #' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.flexsurvreg <- function(object, data, trans_mat, clock = c("reset", "forward"),
+create_IndivCtstmTrans.flexsurvreg <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
                                                n = 1000, point_estimate = FALSE, ...){
-  input_mats <- create_input_mats(object, data)
+  input_mats <- create_input_mats(object, input_data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
   return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat, 
                              clock = match.arg(clock), ...))
@@ -177,10 +177,10 @@ create_IndivCtstmTrans.flexsurvreg <- function(object, data, trans_mat, clock = 
 
 #' @export
 #' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.params_surv <- function(object, data, trans_mat, 
+create_IndivCtstmTrans.params_surv <- function(object, input_data, trans_mat, 
                                                clock = c("reset", "forward", "mix"),
                                                reset_states = NULL,...){
-  input_mats <- create_input_mats(object, data)
+  input_mats <- create_input_mats(object, input_data)
   return(IndivCtstmTrans$new(input_mats = input_mats, params = object, trans_mat = trans_mat,
                              clock = match.arg(clock), reset_states = reset_states, ...))
 }

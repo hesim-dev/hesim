@@ -188,7 +188,7 @@ test_that("stateval_tbl", {
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
 edat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
-costvals_medical <- create_StateVals(fit_costs_medical, data = edat, n = N)
+costvals_medical <- create_StateVals(fit_costs_medical, input_data = edat, n = N)
 costvals_medical$sim(t = c(1, 2, 3), type = "predict")
 
 test_that("StateVals$sim", {

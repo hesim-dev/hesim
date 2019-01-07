@@ -9,13 +9,13 @@
 \usage{
 create_IndivCtstmTrans(object, ...)
 
-\method{create_IndivCtstmTrans}{flexsurvreg_list}(object, data, trans_mat,
+\method{create_IndivCtstmTrans}{flexsurvreg_list}(object, input_data, trans_mat,
   clock = c("reset", "forward"), n = 1000, point_estimate = FALSE, ...)
 
-\method{create_IndivCtstmTrans}{flexsurvreg}(object, data, trans_mat,
+\method{create_IndivCtstmTrans}{flexsurvreg}(object, input_data, trans_mat,
   clock = c("reset", "forward"), n = 1000, point_estimate = FALSE, ...)
 
-\method{create_IndivCtstmTrans}{params_surv}(object, data, trans_mat,
+\method{create_IndivCtstmTrans}{params_surv}(object, input_data, trans_mat,
   clock = c("reset", "forward", "mix"), reset_states = NULL, ...)
 }
 \arguments{
@@ -23,7 +23,7 @@ create_IndivCtstmTrans(object, ...)
 
 \item{...}{Further arguments passed to \code{IndivCtstmTrans$new()} in \code{\link{IndivCtstmTrans}}.}
 
-\item{data}{An object of class "expanded_hesim_data" returned by 
+\item{input_data}{An object of class "expanded_hesim_data" returned by 
 \code{\link{expand.hesim_data}}.}
 
 \item{trans_mat}{The transition matrix describing the states and transitions in a 

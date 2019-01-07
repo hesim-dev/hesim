@@ -51,7 +51,7 @@ fits_ggamma <- flexsurvreg_list(fits_ggamma)
 
 test_that("create_PsmCurves", {
   # From fitted model
-  psm_curves <- create_PsmCurves(fits_wei, data = surv_input_data, n = N,
+  psm_curves <- create_PsmCurves(fits_wei, input_data = surv_input_data, n = N,
                                  bootstrap = TRUE, est_data = surv_est_data)
   expect_true(inherits(psm_curves, "PsmCurves"))
   expect_true(inherits(psm_curves$params, "params_surv_list"))
@@ -59,9 +59,9 @@ test_that("create_PsmCurves", {
               surv_input_data$age)
   
   ## errors
-  expect_error(create_PsmCurves(3, data = surv_input_data, n = N,
+  expect_error(create_PsmCurves(3, input_data = surv_input_data, n = N,
                                 bootstrap = FALSE))
-  expect_error(create_PsmCurves(fits_wei, data = surv_input_data, n = N,
+  expect_error(create_PsmCurves(fits_wei, input_data = surv_input_data, n = N,
                                  bootstrap = TRUE))
 })
 
@@ -70,13 +70,13 @@ test_that("PsmCurves", {
   
   # Sampling
   ## Weibull
-  psm_curves <- create_PsmCurves(fits_wei, data = surv_input_data, n = N,
+  psm_curves <- create_PsmCurves(fits_wei, input_data = surv_input_data, n = N,
                                  bootstrap = TRUE,
                                  est_data = surv_est_data)
   expect_true(inherits(psm_curves$survival(t = times), "data.table"))
   
   ## Splines
-  psm_curves <- create_PsmCurves(fits_spline, data = surv_input_data, n = N,
+  psm_curves <- create_PsmCurves(fits_spline, input_data = surv_input_data, n = N,
                                 bootstrap = FALSE)
   expect_equal(max(psm_curves$survival(t = times)$sample), N)
   
@@ -85,7 +85,7 @@ test_that("PsmCurves", {
                                                             "cumhazard", "rmst",
                                                             "quantile")){
     fun_name <- match.arg(fun_name)
-    psm_curves <- create_PsmCurves(fits, data = data,
+    psm_curves <- create_PsmCurves(fits, input_data = data,
                                    point_estimate = TRUE,
                                    bootstrap = FALSE)
     
@@ -124,7 +124,7 @@ test_that("PsmCurves", {
   compare_surv_summary(fits_weinma, tmp_data, "rmst")
   
   # Quantiles
-  psm_curves <- create_PsmCurves(fits_exp, data = surv_input_data, n = N,
+  psm_curves <- create_PsmCurves(fits_exp, input_data = surv_input_data, n = N,
                                  bootstrap = TRUE, est_data = surv_est_data)
   X <- psm_curves$input_mats$X$curves1$rate[1, , drop = FALSE]
   beta <- psm_curves$params$curves1$coefs$rate[1, , drop = FALSE]
@@ -139,7 +139,7 @@ set.seed(101)
 times <- c(0, 2, 5, 8)
 
 # Survival models
-psm_curves <- create_PsmCurves(fits_wei, data = surv_input_data, n = N,
+psm_curves <- create_PsmCurves(fits_wei, input_data = surv_input_data, n = N,
                                bootstrap = FALSE)
 
 # Utility model
@@ -155,8 +155,12 @@ psm_utility <- StateVals$new(input_mats = psm_X,
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
 cost_input_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
-psm_costs_medical <- create_StateVals(fit_costs_medical, data = cost_input_data, n = N)
-psm_costs_medical2 <- create_StateVals(fit_costs_medical, data = cost_input_data, n = N + 1)
+psm_costs_medical <- create_StateVals(fit_costs_medical, 
+                                      input_data = cost_input_data, 
+                                      n = N)
+psm_costs_medical2 <- create_StateVals(fit_costs_medical, 
+                                       input_data = cost_input_data, 
+                                       n = N + 1)
 
 # Combine
 psm <- Psm$new(survival_models = psm_curves,
@@ -252,7 +256,7 @@ test_that("Psm$costs", {
   ## Incorrect number of survival models
   fits_wei2 <- flexsurvreg_list(fits_wei[1:2])
   psm_curves2 <- create_PsmCurves(fits_wei2, 
-                               data = surv_input_data, n = N,
+                               input_data = surv_input_data, n = N,
                                bootstrap = TRUE, est_data = surv_est_data)
   psm2 <- Psm$new(survival_models = psm_curves2,
                   utility_model = psm_utility,
@@ -301,7 +305,7 @@ test_that("Psm - from parameter object", {
   tmp_input_data <- surv_input_data
   tmp_input_data$shape <- 1
   tmp_input_data$scale <- 1
-  psm_curves <- create_PsmCurves(params_wei, data = tmp_input_data)
+  psm_curves <- create_PsmCurves(params_wei, input_data = tmp_input_data)
   expect_true(inherits(psm_curves$hazard(t = c(1, 2, 3)),
                       "data.table"))
   

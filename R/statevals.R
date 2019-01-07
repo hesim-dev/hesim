@@ -261,7 +261,7 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 #'  \code{\link{StateVals}} from a fitted statistical model or a \code{\link{stateval_tbl}}
 #'  object. 
 #' @param object A model object of the appropriate class.
-#' @param data An object of class "expanded_hesim_data" returned by 
+#' @param input_data An object of class "expanded_hesim_data" returned by 
 #' \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies",
 #' "patients", and "states".
 #' @param n Number of random observations of the parameters to draw when parameters 
@@ -277,10 +277,10 @@ create_StateVals <- function(object, ...){
  
 #' @rdname create_StateVals
 #' @export  
-create_StateVals.lm <- function(object, data = NULL, n = 1000,
+create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
                                 point_estimate = FALSE, ...){
   params <- create_params(object, n, point_estimate) 
-  input_mats <- create_input_mats(object, data)
+  input_mats <- create_input_mats(object, input_data)
   return(StateVals$new(input_mats = input_mats, params = params))
 }
 

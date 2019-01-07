@@ -643,7 +643,7 @@ extract_X <- function(coef_mat, data){
 #' although there are some cases in which \code{\link{input_mats}} can be created
 #' from \code{object} alone.
 #' @param object An object of the appropriate class. 
-#' @param data An object of class "expanded_hesim_data" returned by the function
+#' @param input_data An object of class "expanded_hesim_data" returned by the function
 #'  \code{\link{expand.hesim_data}}. Used to look for the input variables needed to create an input matrix
 #'  for use in a statistical models and the id variables for indexing rows in the input matrix. 
 #' @param ... Further arguments passed to \code{\link{model.matrix}}.
@@ -685,14 +685,14 @@ create_input_mats <- function (object, ...) {
   UseMethod("create_input_mats", object)
 }
 
-formula_list_rec <- function(object, data, ...){
+formula_list_rec <- function(object, input_data, ...){
   x <- vector(mode = "list", length = length(object))
   names(x) <- names(object)
   for (i in 1:length(x)){
     if (inherits(object[[i]], "formula")){
-      x[[i]] <- stats::model.matrix(object[[i]], data = data, ...)
+      x[[i]] <- stats::model.matrix(object[[i]], data = input_data, ...)
     } else{
-      x[[i]] <- formula_list_rec(object[[i]], data = data, ...)
+      x[[i]] <- formula_list_rec(object[[i]], data = input_data, ...)
     }
   }
   return(x)
@@ -700,11 +700,11 @@ formula_list_rec <- function(object, data, ...){
 
 #' @export
 #' @rdname create_input_mats
-create_input_mats.formula_list <- function(object, data, ...){
-  check_edata(data)
-  X_list <- formula_list_rec(object, data, ...)
+create_input_mats.formula_list <- function(object, input_data, ...){
+  check_edata(input_data)
+  X_list <- formula_list_rec(object, input_data, ...)
   args <- c(list(X = X_list),
-           get_input_mats_id_vars(data))
+           get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
@@ -715,31 +715,31 @@ get_terms <- function(object){
 
 #' @export 
 #' @rdname create_input_mats
-create_input_mats.lm <- function(object, data, ...){
-  check_edata(data)
+create_input_mats.lm <- function(object, input_data, ...){
+  check_edata(input_data)
   terms <- get_terms(object)
-  X <- stats::model.matrix(terms, data = data, ...)
+  X <- stats::model.matrix(terms, data = input_data, ...)
   args <- c(list(X = list(mu = X)),
-           get_input_mats_id_vars(data))
+           get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
 #' @export 
 #' @rdname create_input_mats
-create_input_mats.lm_list <- function(object, data, ...){
-  check_edata(data)
+create_input_mats.lm_list <- function(object, input_data, ...){
+  check_edata(input_data)
   X_list <- vector(mode = "list", length = length(object))
   names(X_list) <- names(object)
   for (i in 1:length(X_list)){
     terms <- get_terms(object[[i]])
-    X_list[[i]] <- list(mu = stats::model.matrix(terms, data = data, ...))
+    X_list[[i]] <- list(mu = stats::model.matrix(terms, data = input_data, ...))
   }
   args <- c(list(X = X_list),
-           get_input_mats_id_vars(data))
+           get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
-create_input_mats_flexsurvreg_X <- function(object, data, ...){
+create_input_mats_flexsurvreg_X <- function(object, input_data, ...){
   pars <- object$dlist$pars
   X_list <- vector(mode = "list", length = length(pars))
   names(X_list) <- pars
@@ -750,45 +750,45 @@ create_input_mats_flexsurvreg_X <- function(object, data, ...){
     } else{
       form <- stats::delete.response(stats::terms(form))
     }
-    X_list[[i]] <- stats::model.matrix(form, data = data, ...)
+    X_list[[i]] <- stats::model.matrix(form, data = input_data, ...)
   }
   return(X_list)
 }
 
 #' @export
 #' @rdname create_input_mats
-create_input_mats.flexsurvreg <- function(object, data,...){
-  check_edata(data)
-  X_list <- create_input_mats_flexsurvreg_X(object, data, ...)
+create_input_mats.flexsurvreg <- function(object, input_data,...){
+  check_edata(input_data)
+  X_list <- create_input_mats_flexsurvreg_X(object, input_data, ...)
   args <- c(list(X = X_list),
-           get_input_mats_id_vars(data))
+           get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
 #' @export
 #' @rdname create_input_mats
-create_input_mats.flexsurvreg_list <- function(object, data,...){
-  check_edata(data)
+create_input_mats.flexsurvreg_list <- function(object, input_data,...){
+  check_edata(input_data)
   X_list_2d <- vector(mode = "list", length = length(object))
   names(X_list_2d) <- names(object)
   for (i in 1:length(object)){
-    X_list_2d[[i]] <- create_input_mats_flexsurvreg_X(object[[i]], data, ...)
+    X_list_2d[[i]] <- create_input_mats_flexsurvreg_X(object[[i]], input_data, ...)
   }
   args <- c(list(X = X_list_2d),
-           get_input_mats_id_vars(data))
+           get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
 #' @export
 #' @rdname create_input_mats
-create_input_mats.partsurvfit <- function(object, data, ...){
-  check_edata(data)
-  return(create_input_mats.flexsurvreg_list(object$models, data, ...))
+create_input_mats.partsurvfit <- function(object, input_data, ...){
+  check_edata(input_data)
+  return(create_input_mats.flexsurvreg_list(object$models, input_data, ...))
 }
 
 #' @export
-create_input_mats.joined_flexsurvreg_list <- function(object, data,...){
-  check_edata(data)
+create_input_mats.joined_flexsurvreg_list <- function(object, input_data,...){
+  check_edata(input_data)
   models <- object$models
   X_list_3d <- vector(mode = "list", length = length(models))
   names(X_list_3d) <- names(models)
@@ -796,52 +796,52 @@ create_input_mats.joined_flexsurvreg_list <- function(object, data,...){
     X_list_3d[[i]] <- vector(mode = "list", length = length(models[[i]]))
     names(X_list_3d[[i]]) <- names(models[[i]])
     for (j in 1:length(models[[i]])){
-      X_list_3d[[i]][[j]] <- create_input_mats_flexsurvreg_X(models[[i]][[j]], data, ...)
+      X_list_3d[[i]][[j]] <- create_input_mats_flexsurvreg_X(models[[i]][[j]], input_data, ...)
     }
   }
   args <- c(list(X = X_list_3d),
-           get_input_mats_id_vars(data))
+           get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
 #' @export 
 #' @rdname create_input_mats
-create_input_mats.params_lm <- function(object, data, ...){
-  check_edata(data)
-  X <- extract_X(object$coefs, data)
+create_input_mats.params_lm <- function(object, input_data, ...){
+  check_edata(input_data)
+  X <- extract_X(object$coefs, input_data)
   args <- c(list(X = list(mu = X)),
-            get_input_mats_id_vars(data))
+            get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
-create_input_mats.params_surv_X <- function(object, data){
+create_input_mats.params_surv_X <- function(object, input_data){
   X_list <- vector(mode = "list", length = length(object$coefs))
   names(X_list) <- names(object$coefs)
   for (i in 1:length(X_list)){
-    X_list[[i]] <- extract_X(object$coefs[[i]], data)
+    X_list[[i]] <- extract_X(object$coefs[[i]], input_data)
   }
   return(X_list)
 }
 
 #' @export 
 #' @rdname create_input_mats
-create_input_mats.params_surv <- function(object, data, ...){
-  check_edata(data)
-  X_list <- create_input_mats.params_surv_X(object, data)
+create_input_mats.params_surv <- function(object, input_data, ...){
+  check_edata(input_data)
+  X_list <- create_input_mats.params_surv_X(object, input_data)
   args <- c(list(X = X_list),
-            get_input_mats_id_vars(data))
+            get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
 #' @export 
 #' @rdname create_input_mats
-create_input_mats.params_surv_list <- function(object, data, ...){
+create_input_mats.params_surv_list <- function(object, input_data, ...){
   X_list_2d <- vector(mode = "list", length = length(object))
   names(X_list_2d) <- names(object)
   for (i in 1:length(object)){
-    X_list_2d[[i]] <- create_input_mats.params_surv_X(object[[i]], data)
+    X_list_2d[[i]] <- create_input_mats.params_surv_X(object[[i]], input_data)
   }
   args <- c(list(X = X_list_2d),
-            get_input_mats_id_vars(data))
+            get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }

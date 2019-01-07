@@ -146,7 +146,7 @@ To conduct the PSA, we must sample random draws of the regression coefficients f
 
 ```{r, warning = FALSE, message = FALSE, cache = TRUE}
 surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
-survmods <- create_PsmCurves(psfit_wei, data = surv_input_data, n = n_samples,
+survmods <- create_PsmCurves(psfit_wei, input_data = surv_input_data, n = n_samples,
                                bootstrap = TRUE, est_data = surv_est_data)
 ```
 
@@ -167,7 +167,7 @@ Finally, we can also instantiate a `StateVals()` from a fitted linear model and 
 
 ```{r, warning = FALSE, message = FALSE}
 medcost_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
-medcostmod <- create_StateVals(medcosts_fit, data = medcost_data, 
+medcostmod <- create_StateVals(medcosts_fit, input_data = medcost_data, 
                                  n = n_samples)
 ```
 

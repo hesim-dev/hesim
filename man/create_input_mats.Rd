@@ -15,30 +15,30 @@
 \usage{
 create_input_mats(object, ...)
 
-\method{create_input_mats}{formula_list}(object, data, ...)
+\method{create_input_mats}{formula_list}(object, input_data, ...)
 
-\method{create_input_mats}{lm}(object, data, ...)
+\method{create_input_mats}{lm}(object, input_data, ...)
 
-\method{create_input_mats}{lm_list}(object, data, ...)
+\method{create_input_mats}{lm_list}(object, input_data, ...)
 
-\method{create_input_mats}{flexsurvreg}(object, data, ...)
+\method{create_input_mats}{flexsurvreg}(object, input_data, ...)
 
-\method{create_input_mats}{flexsurvreg_list}(object, data, ...)
+\method{create_input_mats}{flexsurvreg_list}(object, input_data, ...)
 
-\method{create_input_mats}{partsurvfit}(object, data, ...)
+\method{create_input_mats}{partsurvfit}(object, input_data, ...)
 
-\method{create_input_mats}{params_lm}(object, data, ...)
+\method{create_input_mats}{params_lm}(object, input_data, ...)
 
-\method{create_input_mats}{params_surv}(object, data, ...)
+\method{create_input_mats}{params_surv}(object, input_data, ...)
 
-\method{create_input_mats}{params_surv_list}(object, data, ...)
+\method{create_input_mats}{params_surv_list}(object, input_data, ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class.}
 
 \item{...}{Further arguments passed to \code{\link{model.matrix}}.}
 
-\item{data}{An object of class "expanded_hesim_data" returned by the function
+\item{input_data}{An object of class "expanded_hesim_data" returned by the function
 \code{\link{expand.hesim_data}}. Used to look for the input variables needed to create an input matrix
 for use in a statistical models and the id variables for indexing rows in the input matrix.}
 }

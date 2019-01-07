@@ -8,7 +8,7 @@
 \usage{
 create_StateVals(object, ...)
 
-\method{create_StateVals}{lm}(object, data = NULL, n = 1000,
+\method{create_StateVals}{lm}(object, input_data = NULL, n = 1000,
   point_estimate = FALSE, ...)
 
 \method{create_StateVals}{stateval_tbl}(object, n = 1000, ...)
@@ -18,7 +18,7 @@ create_StateVals(object, ...)
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{data}{An object of class "expanded_hesim_data" returned by 
+\item{input_data}{An object of class "expanded_hesim_data" returned by 
 \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies",
 "patients", and "states".}
 

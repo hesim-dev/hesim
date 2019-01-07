@@ -269,7 +269,8 @@
 <span class='co'>## Construct model</span>
 <span class='co'>### Transitions </span>
 <span class='no'>transmod_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>)
-<span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>transmod_data</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
+<span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='no'>transmod_data</span>,
+                                   <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
                                    <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
 
 <span class='co'>### Utility </span>

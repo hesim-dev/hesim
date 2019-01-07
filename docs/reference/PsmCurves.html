@@ -193,7 +193,7 @@
 
 <span class='co'># Form PsmCurves</span>
 <span class='no'>surv_input_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
-<span class='no'>psm_curves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_PsmCurves.html'>create_PsmCurves</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>surv_input_data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+<span class='no'>psm_curves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_PsmCurves.html'>create_PsmCurves</a></span>(<span class='no'>fits</span>, <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='no'>surv_input_data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>,
                                 <span class='kw'>bootstrap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>est_data</span> <span class='kw'>=</span> <span class='no'>surv_est_data</span>)
 
 <span class='co'># Summarize survival curves</span>

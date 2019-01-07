@@ -199,7 +199,8 @@ n_samples = 2
 ## Construct model
 ### Transitions 
 transmod_data <- expand(hesim_dat)
-transmod <- create_IndivCtstmTrans(fits, data = transmod_data, trans_mat = tmat,
+transmod <- create_IndivCtstmTrans(fits, input_data = transmod_data, 
+                                   trans_mat = tmat,
                                    n = n_samples)
                         
 ### Utility 

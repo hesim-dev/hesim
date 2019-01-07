@@ -83,7 +83,7 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2018-11-18</h4>
+            <h4 class="date">2019-01-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -157,17 +157,17 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 ## 
 ## $patients
 ##       patient_id      age female
-##    1:          1 48.01052      1
-##    2:          2 50.83674      1
-##    3:          3 46.39454      0
-##    4:          4 37.75712      1
-##    5:          5 50.65592      1
+##    1:          1 57.73114      1
+##    2:          2 39.84330      0
+##    3:          3 53.41989      0
+##    4:          4 40.23161      1
+##    5:          5 47.20005      1
 ##   ---                           
-##  996:        996 42.20073      0
-##  997:        997 22.14382      1
-##  998:        998 41.49411      0
-##  999:        999 49.82759      1
-## 1000:       1000 35.61845      1
+##  996:        996 46.67660      1
+##  997:        997 47.34884      1
+##  998:        998 47.32818      1
+##  999:        999 46.05175      1
+## 1000:       1000 46.79359      0
 ## 
 ## $states
 ##    state_id state_name
@@ -311,12 +311,12 @@ medcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference
                         <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"transitions"</span>))
 <span class="kw">head</span>(transmod_data)</code></pre></div>
 <pre><code>##    strategy_id patient_id transition_id      age female from to from_name
-## 1:           1          1             1 48.01052      1    1  2   Healthy
-## 2:           1          1             2 48.01052      1    1  3   Healthy
-## 3:           1          1             3 48.01052      1    2  1      Sick
-## 4:           1          1             4 48.01052      1    2  3      Sick
-## 5:           1          2             1 50.83674      1    1  2   Healthy
-## 6:           1          2             2 50.83674      1    1  3   Healthy
+## 1:           1          1             1 57.73114      1    1  2   Healthy
+## 2:           1          1             2 57.73114      1    1  3   Healthy
+## 3:           1          1             3 57.73114      1    2  1      Sick
+## 4:           1          1             4 57.73114      1    2  3      Sick
+## 5:           1          2             1 39.84330      0    1  2   Healthy
+## 6:           1          2             2 39.84330      0    1  3   Healthy
 ##    to_name trans
 ## 1:    Sick     1
 ## 2:    Dead     2
@@ -390,44 +390,44 @@ costmods &lt;-<span class="st"> </span><span class="kw">list</span>(<span class=
 <p>We illustrate with the iCTSTM. First we simulate disease progression for each patient.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_disease</span>()
 <span class="kw">head</span>(ictstm<span class="op">$</span>disprog_)</code></pre></div>
-<pre><code>##    sample strategy_id patient_id from to final time_start time_stop
-## 1:      1           1          1    1  2     0  0.0000000 0.1871251
-## 2:      1           1          1    2  1     0  0.1871251 1.6348007
-## 3:      1           1          1    1  2     0  1.6348007 9.2164214
-## 4:      1           1          1    2  3     1  9.2164214 9.5359351
-## 5:      1           1          2    1  2     0  0.0000000 2.2502352
-## 6:      1           1          2    2  1     0  2.2502352 6.1282916</code></pre>
+<pre><code>##    sample strategy_id patient_id from to final time_start   time_stop
+## 1:      1           1          1    1  3     1  0.0000000  0.30989260
+## 2:      1           1          2    1  2     0  0.0000000  0.03166140
+## 3:      1           1          2    2  3     1  0.0316614  0.03187639
+## 4:      1           1          3    1  2     0  0.0000000  9.81592126
+## 5:      1           1          3    2  3     1  9.8159213 10.44197034
+## 6:      1           1          4    1  2     0  0.0000000  4.71321828</code></pre>
 <p>The disease trajectory can be summarized with <code>$sim_stateprobs()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>))
 <span class="kw">head</span>(ictstm<span class="op">$</span>stateprobs_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id t  prob
 ## 1:      1           1        1 0 1.000
-## 2:      1           1        1 1 0.677
-## 3:      1           1        1 2 0.572
-## 4:      1           1        1 3 0.491
-## 5:      1           1        1 4 0.442
-## 6:      1           1        1 5 0.384</code></pre>
+## 2:      1           1        1 1 0.706
+## 3:      1           1        1 2 0.592
+## 4:      1           1        1 3 0.507
+## 5:      1           1        1 4 0.451
+## 6:      1           1        1 5 0.400</code></pre>
 <p>We can then compute costs and QALYs (using a discount rate of 3 percent).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># QALYs</span>
 ictstm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(ictstm<span class="op">$</span>qalys_)</code></pre></div>
-<pre><code>##    sample strategy_id state_id   dr     qalys       lys
-## 1:      1           1        1 0.03 2.2996818 4.5982002
-## 2:      1           1        2 0.03 0.8935741 1.2971008
-## 3:      1           2        1 0.03 3.2328111 6.4639865
-## 4:      1           2        2 0.03 0.5842778 0.8481302
-## 5:      2           1        1 0.03 3.8472473 4.6299899
-## 6:      2           1        2 0.03 1.0558227 1.0780787</code></pre>
+<pre><code>##    sample strategy_id state_id   dr    qalys      lys
+## 1:      1           1        1 0.03 3.576253 5.193811
+## 2:      1           1        2 0.03 1.137729 1.137729
+## 3:      1           2        1 0.03 4.791236 6.958337
+## 4:      1           2        2 0.03 1.073530 1.073531
+## 5:      2           1        1 0.03 3.747483 5.142911
+## 6:      2           1        2 0.03 1.024548 1.169795</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Costs</span>
 ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(ictstm<span class="op">$</span>costs_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id   dr category     costs
-## 1:      1           1        1 0.03    drugs 22991.001
-## 2:      1           1        2 0.03    drugs  6485.504
-## 3:      1           2        1 0.03    drugs 64639.865
-## 4:      1           2        2 0.03    drugs  8481.302
-## 5:      2           1        1 0.03    drugs 23149.949
-## 6:      2           1        2 0.03    drugs  5390.394</code></pre>
+## 1:      1           1        1 0.03    drugs 25969.054
+## 2:      1           1        2 0.03    drugs  5688.647
+## 3:      1           2        1 0.03    drugs 69583.369
+## 4:      1           2        2 0.03    drugs 10735.311
+## 5:      2           1        1 0.03    drugs 25714.555
+## 6:      2           1        2 0.03    drugs  5848.975</code></pre>
 </div>
 </div>
 <div id="decision-analysis" class="section level1">
@@ -439,31 +439,31 @@ ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt
 <span class="kw">print</span>(ce)</code></pre></div>
 <pre><code>## $costs
 ##      category   dr sample strategy_id    costs
-##   1:    drugs 0.03      1           1 29476.50
-##   2:    drugs 0.03      1           2 73121.17
-##   3:    drugs 0.03      2           1 28540.34
-##   4:    drugs 0.03      2           2 66056.01
-##   5:    drugs 0.03      3           1 26608.27
+##   1:    drugs 0.03      1           1 31657.70
+##   2:    drugs 0.03      1           2 80318.68
+##   3:    drugs 0.03      2           1 31563.53
+##   4:    drugs 0.03      2           2 60147.09
+##   5:    drugs 0.03      3           1 28450.54
 ##  ---                                          
-## 596:    total 0.03     98           2 94231.80
-## 597:    total 0.03     99           1 34697.05
-## 598:    total 0.03     99           2 78456.36
-## 599:    total 0.03    100           1 37473.01
-## 600:    total 0.03    100           2 81417.96
+## 596:    total 0.03     98           2 73457.72
+## 597:    total 0.03     99           1 40122.22
+## 598:    total 0.03     99           2 84297.60
+## 599:    total 0.03    100           1 33359.24
+## 600:    total 0.03    100           2 82017.28
 ## 
 ## $qalys
 ##        dr sample strategy_id    qalys
-##   1: 0.03      1           1 3.193256
-##   2: 0.03      1           2 3.817089
-##   3: 0.03      2           1 4.903070
-##   4: 0.03      2           2 5.604668
-##   5: 0.03      3           1 4.300378
+##   1: 0.03      1           1 4.713982
+##   2: 0.03      1           2 5.864766
+##   3: 0.03      2           1 4.772031
+##   4: 0.03      2           2 4.483482
+##   5: 0.03      3           1 4.774052
 ##  ---                                 
-## 196: 0.03     98           2 7.084240
-## 197: 0.03     99           1 4.040230
-## 198: 0.03     99           2 4.965200
-## 199: 0.03    100           1 3.889656
-## 200: 0.03    100           2 4.495100
+## 196: 0.03     98           2 4.968371
+## 197: 0.03     99           1 3.578335
+## 198: 0.03     99           2 3.777744
+## 199: 0.03    100           1 4.610145
+## 200: 0.03    100           2 6.162716
 ## 
 ## attr(,"class")
 ## [1] "ce"</code></pre>
@@ -472,12 +472,12 @@ ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt
 icea_pw &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce, <span class="dt">dr =</span> .<span class="dv">03</span>, <span class="dt">comparator =</span> <span class="dv">1</span>)</code></pre></div>
 <p>For instance, we might want to plot a cost-effectiveness acceptability curve (CEAC) displaying the probability that treatment strategy 2 is more cost-effective than treatment strategy 1 at a given willingness to pay for a QALY.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"ggplot2"</span>)
-ggplot2<span class="op">::</span><span class="kw"><a href="ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(icea_pw<span class="op">$</span>ceac, <span class="kw"><a href="ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, <span class="dt">col =</span> <span class="kw">factor</span>(strategy_id))) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Willingness to pay"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability most cost-effective"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">200000</span>, <span class="dv">100000</span>), <span class="dt">label =</span> scales<span class="op">::</span>dollar) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/scale_hue.html">scale_colour_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Strategy"</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span>()</code></pre></div>
+ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(icea_pw<span class="op">$</span>ceac, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, <span class="dt">col =</span> <span class="kw">factor</span>(strategy_id))) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Willingness to pay"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability most cost-effective"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">200000</span>, <span class="dv">100000</span>), <span class="dt">label =</span> scales<span class="op">::</span>dollar) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_colour_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Strategy"</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span>()</code></pre></div>
 <p><img src="intro_files/figure-html/ceac_plot-1.png" width="672"></p>
 </div>
   </div>

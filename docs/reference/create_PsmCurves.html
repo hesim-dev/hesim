@@ -130,11 +130,11 @@ PsmCurves." />
     <pre class="usage"><span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for flexsurvreg_list</span>
-<span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+<span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>input_data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
   <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>bootstrap</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>est_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for params_surv_list</span>
-<span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>data</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>input_data</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,7 +148,7 @@ PsmCurves." />
       <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     <tr>
-      <th>data</th>
+      <th>input_data</th>
       <td><p>An object of class "expanded_hesim_data" returned by 
 <code><a href='expand.hesim_data.html'>expand.hesim_data</a></code>. Must be expanded by the data tables "strategies" and
 "patients".</p></td>

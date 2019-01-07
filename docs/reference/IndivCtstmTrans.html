@@ -153,7 +153,9 @@ of clock-reset and clock-forward models. A clock-reset model is a semi-Markov mo
     
     <dl class='dl-horizontal'>
     <dt><code>new(input_mats, params, trans_mat, start_state = 1, start_time = 0,
-                start_age = 38, death_state = NULL)</code></dt><dd><p>Constructor for the class.</p></dd>
+                start_age = 38, death_state = NULL,
+                clock = c("reset", "forward", "mix"),
+                reset_states = NULL))</code></dt><dd><p>Constructor for the class.</p></dd>
     <dt><code><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard(t)</a></code></dt><dd><p>Predict the hazard functions for each health state transition.
     <ul>
 <li><p><code>t</code>: A numeric vector of times.</p></li>
@@ -208,7 +210,8 @@ of clock-reset and clock-forward models. A clock-reset model is a semi-Markov mo
 <span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
                         <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>)
 <span class='no'>fits_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>)
-<span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>fits_data</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
+<span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='no'>fits_data</span>,
+                                    <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
                                     <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                     <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'>head</span>(<span class='no'>transmod</span>$<span class='fu'><a href='http://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t     hazard

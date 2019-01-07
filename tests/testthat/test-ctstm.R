@@ -148,8 +148,9 @@ tmat <- rbind(c(NA, 1, 2),
               c(NA, NA, NA))
 
 test_that("IndivCtstmTrans - transition specific", {
-  mstate_list <- create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
-                                      point_estimate = TRUE)  
+  mstate_list <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
+                                        trans_mat = tmat,
+                                        point_estimate = TRUE)  
   
   # hazard
   hesim_hazard <- mstate_list$hazard(3)
@@ -173,16 +174,18 @@ test_that("IndivCtstmTrans - transition specific", {
   expect_true(inherits(stprobs, "data.table"))
   
   # No errors
-  expect_error(create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
-                                death_state = nrow(tmat),
-                                point_estimate = TRUE),
+  expect_error(create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
+                                      trans_mat = tmat,
+                                      death_state = nrow(tmat),
+                                      point_estimate = TRUE),
                NA)
   
   # Errors
-  expect_error(create_IndivCtstmTrans(msfit_list, data = msfit_list_data, 
+  expect_error(create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
                                       trans_mat = tmat,
                                       start_age = rep(55, nrow(dt_patients) + 1))) 
-  expect_error(create_IndivCtstmTrans(msfit_list, data = msfit_list_data, trans_mat = tmat,
+  expect_error(create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
+                                      trans_mat = tmat,
                                       death_state = nrow(tmat) + 1,
                                       point_estimate = TRUE))
   
@@ -202,8 +205,9 @@ hesim_dat$transitions <- transitions
 msfit_data <- expand(hesim_dat, by = c("strategies", "patients", "transitions"))
 
 test_that("IndivCtstmTrans - joint", {
-  mstate <- create_IndivCtstmTrans(msfit, data = msfit_data, trans_mat = tmat_ebmt4,
-                            point_estimate = TRUE)    
+  mstate <- create_IndivCtstmTrans(msfit, input_data = msfit_data, 
+                                   trans_mat = tmat_ebmt4,
+                                   point_estimate = TRUE)    
   # hazard
   hesim_hazard <- mstate$hazard(3)
   expect_equal(hesim_hazard[trans == 1][1]$hazard,
@@ -225,7 +229,7 @@ test_that("IndivCtstmTrans - joint", {
 # Simulate outcomes
 ## With transition specific survival models
 test_that("Simulate disease progression with transition specific models", {
-  mstate_list <- create_IndivCtstmTrans(msfit_list, data = msfit_list_data, 
+  mstate_list <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
                                          trans_mat = tmat,
                                          point_estimate = TRUE)
   ictstm <- IndivCtstm$new(trans_model = mstate_list,
@@ -274,7 +278,7 @@ test_that("Simulate disease progression with transition specific models", {
 })
 
 test_that("Simulate costs and QALYs", {
-  mstate_list <- create_IndivCtstmTrans(msfit_list, data = msfit_list_data, 
+  mstate_list <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
                                          trans_mat = tmat,
                                          n = n_samples)  
   ictstm <- IndivCtstm$new(trans_model = mstate_list,
@@ -402,8 +406,9 @@ test_that("Simulate costs and QALYs", {
 ## With a joint survival model
 test_that("IndivCtstm - joint", {
   # Clock-reset
-  mstate <- create_IndivCtstmTrans(msfit, data = msfit_data, trans_mat = tmat_ebmt4,
-                                    n = n_samples)      
+  mstate <- create_IndivCtstmTrans(msfit, input_data = msfit_data, 
+                                   trans_mat = tmat_ebmt4,
+                                   n = n_samples)      
   ictstm <- IndivCtstm$new(trans_model = mstate)
   
   # Simulate disease progression
@@ -418,7 +423,8 @@ test_that("IndivCtstm - joint", {
   expect_true(all(stprobs[t == 0 & state_id != 1, prob] ==  0))
   
   # Clock-forward
-  mstate_cf <- create_IndivCtstmTrans(msfit_cf, data = msfit_data, trans_mat = tmat_ebmt4,
+  mstate_cf <- create_IndivCtstmTrans(msfit_cf, input_data = msfit_data, 
+                                      trans_mat = tmat_ebmt4,
                                       clock = "forward", n = n_samples)
   ictstm <- IndivCtstm$new(trans_model = mstate_cf)
   disprog <- ictstm$sim_disease()$disprog_
@@ -427,7 +433,8 @@ test_that("IndivCtstm - joint", {
   # Mixture
   params <- create_params(msfit, n = 2)
   msfit_data <- cbind(msfit_data, model.matrix(~factor(trans), msfit_data), shape = 1, scale = 1)
-  mstate_mix <- create_IndivCtstmTrans(params, data = msfit_data, trans_mat = tmat_ebmt4,
+  mstate_mix <- create_IndivCtstmTrans(params, input_data = msfit_data, 
+                                       trans_mat = tmat_ebmt4,
                                        clock = "mix", reset_states = 1:nrow(tmat_ebmt4))  
   expect_true(inherits(mstate_mix, "IndivCtstmTrans"))
   ictstm <- IndivCtstm$new(trans_model = mstate_mix)
@@ -450,7 +457,8 @@ test_that("IndivCtstm - fracpoly", {
   edat$intercept <- 1
   
   # IndivCtstmTrans object
-  mstate_fp <- create_IndivCtstmTrans(params_fp, data = edat, trans_mat = tmat_ebmt4)
+  mstate_fp <- create_IndivCtstmTrans(params_fp, input_data = edat, 
+                                      trans_mat = tmat_ebmt4)
   ictstm <- IndivCtstm$new(trans_model = mstate_fp)
   disprog <- ictstm$sim_disease()$disprog_
   expect_true(is.data.table(disprog))  

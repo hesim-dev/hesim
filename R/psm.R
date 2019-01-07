@@ -5,7 +5,7 @@
 #' \code{create_PsmCurves} is a function for creating an object of class
 #' \code{\link{PsmCurves}}.
 #' @param object Fitted survival models.
-#' @param data An object of class "expanded_hesim_data" returned by 
+#' @param input_data An object of class "expanded_hesim_data" returned by 
 #' \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
 #' "patients". 
 #' @param n Number of random observations of the parameters to draw.
@@ -25,21 +25,21 @@ create_PsmCurves <- function(object, ...){
  
 #' @export
 #' @rdname create_PsmCurves
-create_PsmCurves.flexsurvreg_list <- function(object, data, n = 1000, point_estimate = FALSE,
+create_PsmCurves.flexsurvreg_list <- function(object, input_data, n = 1000, point_estimate = FALSE,
                                               bootstrap = FALSE, est_data = NULL, ...){
   if (bootstrap == TRUE & is.null(est_data)){
-    stop("If 'boostrap' == TRUE, then 'est_data' cannot be NULL")
+    stop("If 'bootstrap' == TRUE, then 'est_data' cannot be NULL")
   }
   psfit <- partsurvfit(object, est_data)
-  input_mats <- create_input_mats(psfit, data, id_vars = c("strategy_id", "patient_id"))
+  input_mats <- create_input_mats(psfit, input_data, id_vars = c("strategy_id", "patient_id"))
   params <- create_params(psfit, n = n, point_estimate = point_estimate, bootstrap = bootstrap)
   return(PsmCurves$new(input_mats = input_mats, params = params))
 }
 
 #' @export
 #' @rdname create_PsmCurves
-create_PsmCurves.params_surv_list <- function(object, data, ...){
-  input_mats <- create_input_mats(object, data)
+create_PsmCurves.params_surv_list <- function(object, input_data, ...){
+  input_mats <- create_input_mats(object, input_data)
   return(PsmCurves$new(input_mats = input_mats, params = object))
 }
 

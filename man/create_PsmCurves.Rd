@@ -8,17 +8,17 @@
 \usage{
 create_PsmCurves(object, ...)
 
-\method{create_PsmCurves}{flexsurvreg_list}(object, data, n = 1000,
+\method{create_PsmCurves}{flexsurvreg_list}(object, input_data, n = 1000,
   point_estimate = FALSE, bootstrap = FALSE, est_data = NULL, ...)
 
-\method{create_PsmCurves}{params_surv_list}(object, data, ...)
+\method{create_PsmCurves}{params_surv_list}(object, input_data, ...)
 }
 \arguments{
 \item{object}{Fitted survival models.}
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{data}{An object of class "expanded_hesim_data" returned by 
+\item{input_data}{An object of class "expanded_hesim_data" returned by 
 \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
 "patients".}
 

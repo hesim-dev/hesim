@@ -125,7 +125,8 @@ fits <- flexsurvreg_list(fits)
 hesim_dat <- hesim_data(strategies = strategies,
                         patients = patients)
 fits_data <- expand(hesim_dat)
-transmod <- create_IndivCtstmTrans(fits, data = fits_data, trans_mat = tmat,
+transmod <- create_IndivCtstmTrans(fits, input_data = fits_data, 
+                                    trans_mat = tmat,
                                     n = 2,
                                     point_estimate = FALSE)       
 head(transmod$hazard(c(1, 2, 3)))

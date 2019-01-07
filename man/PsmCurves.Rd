@@ -106,7 +106,7 @@ fits <- flexsurvreg_list(fit1, fit2, fit3)
 
 # Form PsmCurves
 surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
-psm_curves <- create_PsmCurves(fits, data = surv_input_data, n = 3,
+psm_curves <- create_PsmCurves(fits, input_data = surv_input_data, n = 3,
                                 bootstrap = TRUE, est_data = surv_est_data)
 
 # Summarize survival curves
