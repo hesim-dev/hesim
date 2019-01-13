@@ -429,6 +429,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_cum_riemann_x2
+std::vector<double> test_cum_riemann_x2(std::vector<double> x);
+RcppExport SEXP _hesim_test_cum_riemann_x2(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_cum_riemann_x2(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_test_rsurv
 double C_test_rsurv(std::vector<double> time, std::vector<double> est, std::string type, bool time_inf);
 RcppExport SEXP _hesim_C_test_rsurv(SEXP timeSEXP, SEXP estSEXP, SEXP typeSEXP, SEXP time_infSEXP) {
@@ -573,6 +584,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_test_quad_ier1", (DL_FUNC) &_hesim_test_quad_ier1, 0},
     {"_hesim_test_quad_ier4", (DL_FUNC) &_hesim_test_quad_ier4, 0},
     {"_hesim_test_quad_ier5", (DL_FUNC) &_hesim_test_quad_ier5, 0},
+    {"_hesim_test_cum_riemann_x2", (DL_FUNC) &_hesim_test_cum_riemann_x2, 1},
     {"_hesim_C_test_rsurv", (DL_FUNC) &_hesim_C_test_rsurv, 4},
     {"_hesim_C_test_rtrunc_repeat", (DL_FUNC) &_hesim_C_test_rtrunc_repeat, 2},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},

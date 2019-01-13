@@ -73,6 +73,7 @@ struct survspline_aux{
   std::vector<double> knots_; 
   std::string scale_;
   std::string timescale_;
+  std::string integrate_hazard_;
   
   /** 
    * The constructor.
@@ -87,6 +88,7 @@ struct survspline_aux{
       knots_ = Rcpp::as<std::vector<double> > (aux["knots"]);
       scale_ = Rcpp::as<std::string> (aux["scale"]);
       timescale_  = Rcpp::as<std::string> (aux["timescale"]); 
+      integrate_hazard_ = Rcpp::as<std::string> (aux["integrate_hazard"]); 
     }
   }
 };
@@ -97,6 +99,7 @@ struct survspline_aux{
  ******************************************************************************/ 
 struct fracpoly_aux {
   std::vector<double> powers_;
+  std::string integrate_hazard_;
   
   /** 
    * The constructor.
@@ -109,6 +112,7 @@ struct fracpoly_aux {
     if (dist_name == "fracpoly"){
       Rcpp::List aux = Rcpp::as<Rcpp::List> (R_params_surv["aux"]);
       powers_ = Rcpp::as<std::vector<double> > (aux["powers"]);
+      integrate_hazard_ = Rcpp::as<std::string> (aux["integrate_hazard"]); 
     }  
   }
 };

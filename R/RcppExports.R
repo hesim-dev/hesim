@@ -125,6 +125,10 @@ test_quad_ier5 <- function() {
     .Call('_hesim_test_quad_ier5', PACKAGE = 'hesim')
 }
 
+test_cum_riemann_x2 <- function(x) {
+    .Call('_hesim_test_cum_riemann_x2', PACKAGE = 'hesim', x)
+}
+
 C_test_rsurv <- function(time, est, type = "surv", time_inf = TRUE) {
     .Call('_hesim_C_test_rsurv', PACKAGE = 'hesim', time, est, type, time_inf)
 }

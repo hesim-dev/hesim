@@ -200,9 +200,9 @@ check.params_lm_list <- function(object){
 #' 
 #' Auxillary arguments for spline models should be specified as a list containing the elements:
 #' \describe{
-#' \item{\code{knots}}{ A numeric vector of knots.}
-#' \item{\code{scale}}{ A character vector of length 1 denoting the survival outcome to be modeled
-#' as a spline function. Options are "log_cumhazard", for the log cummulative hazard; 
+#' \item{\code{knots}}{A numeric vector of knots.}
+#' \item{\code{scale}}{The survival outcome to be modeled
+#' as a spline function. Options are "log_cumhazard" for the log cummulative hazard; 
 #' "log_hazard" for the log hazard rate; "log_cumodds" for the log cummulative odds;
 #' and "inv_normal" for the inverse normal distribution function.}
 #' \item{\code{timescale}}{If "log" (the default), then survival is modeled as a spline function
@@ -213,6 +213,15 @@ check.params_lm_list <- function(object){
 #' \describe{
 #' \item{\code{powers}}{ A vector of the powers of the fractional polynomial with each element
 #'  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
+#'  \item{\code{integrate_hazard}}{Options are the same as for splines.}
+#' }
+#' 
+#' Furthermore, when either splines for fractional polynomials are used, the following additional auxillary arguments
+#' can be specified:
+#' \describe{
+#' \item{\code{integrate_hazard}}{Numerical method used to integrate the hazard function when
+#' computing the cumulative hazard. Options are "riemann" for Riemann sum and "quad" for adaptive
+#' quadrature. }
 #' }
 #' 
 #' @examples 
@@ -236,7 +245,12 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
   stopifnot(is.vector(dist) & is.character(dist))
   stopifnot(is.numeric(n_samples))
   res <- list(coefs = coefs, dist = dist)
-  if (!is.null(aux)) res[["aux"]] <- aux
+  if (!is.null(aux)) {
+    res[["aux"]] <- aux
+    if (is.null(aux$integrate_hazard)){
+      res[["aux"]]$integrate_hazard <- "quad"
+    }
+  }
   res[["n_samples"]] <- n_samples
   class(res) <- "params_surv"
   return(res)
