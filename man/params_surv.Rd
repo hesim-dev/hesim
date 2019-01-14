@@ -30,7 +30,7 @@ The types of distributions that can be specified are:
 \itemize{
 \item{\code{exponential} or \code{exp}}{ Exponential distribution. \code{coef}
 must contain the \code{rate} parameter on the log scale and the same parameterization as in 
-\code{\link[stats]{Exponential}}.}.
+\code{\link[stats]{Exponential}}}.
 \item{\code{weibull} or \code{weibull.quiet}}{ Weibull distribution. The first 
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{scale} parameter (also on the log scale). The parameterization is
@@ -81,15 +81,17 @@ Auxillary arguments for fractional polynomial models should be specified as a li
 \describe{
 \item{\code{powers}}{ A vector of the powers of the fractional polynomial with each element
  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
- \item{\code{integrate_hazard}}{Options are the same as for splines.}
 }
 
 Furthermore, when either splines for fractional polynomials are used, the following additional auxillary arguments
 can be specified:
 \describe{
-\item{\code{integrate_hazard}}{Numerical method used to integrate the hazard function when
-computing the cumulative hazard. Options are "riemann" for Riemann sum and "quad" for adaptive
-quadrature. }
+\item{\code{cumhaz_method}}{Numerical method used to compute cumulative hazard 
+(i.e., to integrate the hazard function). Options are and "quad" for adaptive
+quadrature and "riemann" for Riemann sum.}
+\item{\code{step}}{Step size for computation of cumulative hazard with 
+numerical integration. Only required when integrating with
+ using "riemann". No step size is required for "quad".}
 }
 }
 \examples{

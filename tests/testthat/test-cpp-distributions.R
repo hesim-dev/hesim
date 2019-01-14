@@ -367,12 +367,13 @@ R_linear_predict <- function(t, gamma, knots, timescale){
 test_that("survspline", {
 
   SurvSpline <- module$survspline
-  
+
   # Scale is log hazard
   test_survspline1 <- function(gamma, knots, timescale){
     
     spline <- new(SurvSpline, gamma = gamma, knots = knots,
-                          scale = "log_hazard", timescale = timescale)
+                  scale = "log_hazard", timescale = timescale,
+                  cumhaz_method = "quad", step = -1)
     
     ## hazard
     expect_equal(spline$hazard(2), 
@@ -441,7 +442,8 @@ test_that("survspline", {
                           )
     
     spline <- new(SurvSpline, gamma = gamma, knots = knots,
-                    scale = hesim_scale, timescale = timescale)
+                  scale = hesim_scale, timescale = timescale,
+                  cumhaz_method = "quad", step = -1)
     
     ### pdf
     expect_equal(flexsurv::dsurvspline(5, gamma = gamma, knots = knots, 
@@ -570,7 +572,8 @@ test_that("FracPoly", {
       c(gamma %*% t(cbind(1, bfp(t, powers))))
     }    
     
-    fp <- new(FracPoly, gamma = gamma, powers = powers)
+    fp <- new(FracPoly, gamma = gamma, powers = powers, 
+              cumhaz_method = "quad", step = -1)
     
     ## hazard
     expect_equal(fp$hazard(4),
@@ -641,7 +644,8 @@ test_that("FracPoly", {
   
   # Equivalence of fractional polynomial and gompertz
   rate <- 1/5; shape <- 1
-  fp <- new(FracPoly, gamma = c(log(rate), shape), powers = 1)
+  fp <- new(FracPoly, gamma = c(log(rate), shape), powers = 1,
+            cumhaz_method = "quad", step = -1)
   expect_equal(fp$hazard(5),
                flexsurv::hgompertz(5, shape = shape, rate = rate))
   expect_equal(fp$cdf(2),
@@ -649,7 +653,8 @@ test_that("FracPoly", {
   
   # Equivalence of fractional polynomial and weibull
   a0 <- -2; a1 <- 1
-  fp <- new(FracPoly, gamma = c(a0, a1), powers = 0)
+  fp <- new(FracPoly, gamma = c(a0, a1), powers = 0,
+            cumhaz_method = "quad", step = -1)
   expect_equal(fp$hazard(3), 
                hweibullNMA(3, a0 = a0, a1 = a1))
   expect_equal(fp$cdf(4), 

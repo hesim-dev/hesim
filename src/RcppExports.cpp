@@ -429,6 +429,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_riemann_x2
+double test_riemann_x2(std::vector<double> x);
+RcppExport SEXP _hesim_test_riemann_x2(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_riemann_x2(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // test_cum_riemann_x2
 std::vector<double> test_cum_riemann_x2(std::vector<double> x);
 RcppExport SEXP _hesim_test_cum_riemann_x2(SEXP xSEXP) {
@@ -437,6 +448,18 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type x(xSEXP);
     rcpp_result_gen = Rcpp::wrap(test_cum_riemann_x2(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_rtrunc_repeat
+double C_test_rtrunc_repeat(double lower, double upper);
+RcppExport SEXP _hesim_C_test_rtrunc_repeat(SEXP lowerSEXP, SEXP upperSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_rtrunc_repeat(lower, upper));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -451,18 +474,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
     Rcpp::traits::input_parameter< bool >::type time_inf(time_infSEXP);
     rcpp_result_gen = Rcpp::wrap(C_test_rsurv(time, est, type, time_inf));
-    return rcpp_result_gen;
-END_RCPP
-}
-// C_test_rtrunc_repeat
-double C_test_rtrunc_repeat(double lower, double upper);
-RcppExport SEXP _hesim_C_test_rtrunc_repeat(SEXP lowerSEXP, SEXP upperSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
-    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_rtrunc_repeat(lower, upper));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -584,9 +595,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_test_quad_ier1", (DL_FUNC) &_hesim_test_quad_ier1, 0},
     {"_hesim_test_quad_ier4", (DL_FUNC) &_hesim_test_quad_ier4, 0},
     {"_hesim_test_quad_ier5", (DL_FUNC) &_hesim_test_quad_ier5, 0},
+    {"_hesim_test_riemann_x2", (DL_FUNC) &_hesim_test_riemann_x2, 1},
     {"_hesim_test_cum_riemann_x2", (DL_FUNC) &_hesim_test_cum_riemann_x2, 1},
-    {"_hesim_C_test_rsurv", (DL_FUNC) &_hesim_C_test_rsurv, 4},
     {"_hesim_C_test_rtrunc_repeat", (DL_FUNC) &_hesim_C_test_rtrunc_repeat, 2},
+    {"_hesim_C_test_rsurv", (DL_FUNC) &_hesim_C_test_rsurv, 4},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_C_test_pv", (DL_FUNC) &_hesim_C_test_pv, 4},

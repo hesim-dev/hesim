@@ -14,6 +14,14 @@ f <- function(x) x^2
 
 test_that("Riemann sum", {
   x <- seq(0, 1, .01)
+  R_value <- cum_riemann(x, f)[length(x)]
+  stats::integrate(f, 0, 1)
+  expect_equal(hesim:::test_riemann_x2(x), 
+               R_value)
+})
+
+test_that("Riemann sum", {
+  x <- seq(0, 1, .01)
   R_value <- cum_riemann(x, f)
   stats::integrate(f, 0, 1)
   expect_equal(hesim:::test_cum_riemann_x2(x), 

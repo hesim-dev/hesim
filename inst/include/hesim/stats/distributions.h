@@ -1,9 +1,9 @@
 # ifndef DISTRIBUTIONS_H
 # define DISTRIBUTIONS_H
 #include <hesim/utils.h>
-#include <hesim/stats/rsurv.h>
 #include <hesim/Rbase/zeroin.h>
 #include <hesim/math/quad.h>
+#include <hesim/stats/survfuns.h>
 #include <hesim/stats/rtrunc.h>
 #include <memory>
 
@@ -113,23 +113,6 @@ inline double quantile_numeric_work(const stats::distribution * dist, double p){
 
 
 /***************************************************************************//** 
- * Integrate a hazard function.
- * Integrate a hazard function from 0 to t using Gaussian quadrature. See also
- * quad().
- * @param dist A pointer to the base class of a probability distribution.  
- * @param t Time to integrate hazard until.
- * @return The integral of the hazard function.
- ******************************************************************************/ 
-inline double integrate_hazard(const distribution * dist, double t){
-  auto fun = [dist](double x){
-    return dist->hazard(x);
-  };
-  const double lower = 0, upper = t;
-  double abserr; int ier;
-  return math::quad(fun, lower, upper, abserr, ier);
-};
-
-/***************************************************************************//** 
  * Compute quantile numerically.
  * Uses numerical methods to calculate the quantile of a probability distribution.
  * Should be used for distributions where quantiles cannot be computed 
@@ -150,22 +133,6 @@ inline double quantile_numeric(const distribution * dist, double p){
   }
 }
 
-/***************************************************************************//** 
- * Compute restricted mean survival time.
- * Compute restricted mean survival time over a given time period for a chosen
- * probability distribution. Optionally discount survival at a rate @p r > 0. 
- * @param dist A pointer to the base class of a probability distribution.  
- * @param t Time to calculate mean survival time until.
- * @return Restricted mean survival time.
- ******************************************************************************/ 
-inline double rmst(distribution * dist, double t, double r = 0){
-  auto fun = [dist, r](double x){
-    return exp(-r * x) * (1 - dist->cdf(x));
-  };
-  const double lower = 0, upper = t;
-  double err_est; int err_code;
-  return math::quad(fun, lower, upper, err_est, err_code);
-}
 
 /***************************************************************************//**
  * The exponential distribution.
@@ -691,9 +658,11 @@ private:
   std::string timescale_; ///< If "log" (the default), then survival is modeled as a 
                           ///< spline function of log time; if "identity", then 
                           ///< it is modeled as a spline function of time.
-  int n_knots_; /// Number of knots.
-  double knot_max_; /// The largest knot.
-  double knot_min_; /// The smallest knot.
+  int n_knots_; ///< Number of knots.
+  double knot_max_; ///< The largest knot.
+  double knot_min_; ///< The smallest knot.
+  std::string cumhaz_method_; ///< Method used to compute the cumulative hazard 
+                             ///<(i.e., to integrate the hazard function)
   
   // Function of time used for modeling survival.
   double timescale_fun(double x) const {
@@ -742,12 +711,16 @@ private:
   }
 
 public:
+  double step_; ///< Step size for computation of cumulative hazard with 
+                ///< numerical integration
+                
   /** 
    * The constructor.
    * Instantiates a spline survival distribution.
    */ 
   survspline(std::vector<double> gamma, std::vector<double> knots,
-              std::string scale, std::string timescale) {
+              std::string scale, std::string timescale,
+              std::string cumhaz_method = "quad", double step = -1) {
     if (gamma.size() != knots.size()){
       Rcpp::stop("Length of gamma should equal number of knots.");
     }
@@ -758,6 +731,8 @@ public:
     n_knots_ = knots.size();
     knot_max_ = *(knots.end() - 1);
     knot_min_ = *(knots.begin());
+    cumhaz_method_ = cumhaz_method;
+    step_ = step;
   }
   
   void set_params(std::vector<double> params) {
@@ -872,7 +847,7 @@ public:
       return 0; // spline model is for time >= 0
     }
     if (scale_ == "log_hazard"){
-      return integrate_hazard(this, x);
+      return integrate_hazard(this, x, cumhaz_method_);
     }
     else if (scale_ == "log_cumhazard"){
       return exp(linear_predict(x));
@@ -905,6 +880,8 @@ class fracpoly : public distribution {
 private:
   std::vector<double> gamma_; ///< The scale and shape parameters.
   std::vector<double> powers_; ///< The powers of the fractional polynomial.
+  std::string cumhaz_method_; ///< Method used to compute the cumulative hazard 
+                             ///<(i.e., to integrate the hazard function) 
   
   // 
   double basis_power(double x, double power) const {
@@ -939,13 +916,19 @@ private:
   }
   
 public:
+  double step_; ///< Step size for computation of cumulative hazard with 
+                ///< numerical integration   
+                
   /** 
    * The constructor.
    * Instantiates a fractional polynomial survival distribution.
    */ 
-  fracpoly(std::vector<double> gamma, std::vector<double> powers) {
+  fracpoly(std::vector<double> gamma, std::vector<double> powers,
+           std::string cumhaz_method = "quad", double step = -1) {
     gamma_ = gamma;
     powers_ = powers;
+    cumhaz_method_ = cumhaz_method;
+    step_ = step;
   }
   
   void set_params(std::vector<double> params) {
@@ -979,7 +962,7 @@ public:
   }
   
   double cumhazard(double x) const {
-    return integrate_hazard(this, x);
+    return integrate_hazard(this, x, cumhaz_method_);
   }
   
   double random() const {

@@ -1,6 +1,6 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
-#include <hesim/stats/rsurv.h>
+#include <hesim/stats/survfuns.h>
 
 // [[Rcpp::export]]
 double C_test_rsurv(std::vector<double> time, std::vector<double> est,

@@ -11,6 +11,24 @@ namespace hesim {
 namespace math {
 
 /***************************************************************************//** 
+ * Riemann sum.
+ * Compute (midpoint) Riemann sum given function @c fun at the points in x.  
+ * @param x_first, x_last Iterators defining the values of the points x.  
+ * @param f Function used to compute sum.
+ * @return The integral of the function approximated by the Riemann sum.
+ ******************************************************************************/ 
+template <typename InputIt, typename Func>
+inline double riemann(InputIt x_first, InputIt x_last, Func f){
+  double sum = 0;
+  for (InputIt x_it = (x_first + 1); x_it != x_last; ++x_it){
+    double step = *x_it - *(x_it - 1);
+    double mid = *(x_it - 1) + step/2;
+    sum += step * f(mid);
+  }
+  return sum;
+}
+
+/***************************************************************************//** 
  * Cumulative Riemann sum.
  * Compute (midpoint) cumulative Riemann sum given function @c fun at the points in x.  
  * @param x_first, x_last Iterators defining the values of the points x.  

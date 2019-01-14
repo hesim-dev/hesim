@@ -1,12 +1,95 @@
-# ifndef HESIM_STATS_RSURV_H
-# define HESIM_STATS_RSURV_H
+# ifndef HESIM_STATS_SURVFUNS_H
+# define HESIM_STATS_SURVFUNS_H
 
 #include <hesim/Rbase/sample.h>
+#include <hesim/math/quad.h>
+#include <hesim/math/riemann.h>
 #include <hesim/utils.h>
 
 namespace hesim{
 
 namespace stats{
+
+namespace detail {
+
+/***************************************************************************//** 
+ * Integrate a hazard function using quadrature.
+ * Integrate a hazard function from 0 to t using Gaussian quadrature. Also see
+ * quad().
+ * @param dist A pointer to the base class of a probability distribution.  
+ * @param t Time to integrate hazard until.
+ * @return The integral of the hazard function.
+ ******************************************************************************/ 
+template <class Dist>
+inline double integrate_hazard_quad(Dist dist, double t){
+  auto fun = [dist](double x){
+    return dist->hazard(x);
+  };
+  const double lower = 0, upper = t;
+  double abserr; int ier;
+  return math::quad(fun, lower, upper, abserr, ier);
+};
+
+/***************************************************************************//** 
+ * Integrate a hazard function using a riemann sum.
+ * Integrate a hazard function from 0 to t using a riemann sum. Also see
+ * riemann().
+ * @param dist A pointer to the base class of a probability distribution.  
+ * @param t Time to integrate hazard until.
+ * @return The integral of the hazard function.
+ ******************************************************************************/ 
+template <class Dist>
+inline double integrate_hazard_riemann(Dist dist, double t){
+  auto fun = [dist](double x){
+    return dist->hazard(x);
+  };
+  std::vector<double> times = hesim::seq(0, t, dist->step_);
+  return math::riemann(times.begin(), times.end(), fun);
+};
+
+}
+
+/***************************************************************************//** 
+ * Integrate a hazard function.
+ * Integrate a hazard function from 0 to t using a variety of integration 
+ * methods.
+ * @param dist A pointer to the base class of a probability distribution.  
+ * @param t Time to integrate hazard until.
+ * @param method Integration method to use. Options are "quad" for quadrature
+ * or "riemann" for an approximation via a riemann sum.
+ * @return The integral of the hazard function.
+ ******************************************************************************/ 
+template <class Dist>
+inline double integrate_hazard(Dist dist, double t, std::string method){
+  if (method == "quad"){
+    return detail::integrate_hazard_quad(dist, t);
+  }
+  else if (method == "riemann"){
+    return detail::integrate_hazard_riemann(dist, t);
+  }
+  else {
+    Rcpp::stop("The integration method must be 'quad' or 'riemann'.");
+  }
+};
+
+/***************************************************************************//** 
+ * Compute restricted mean survival time.
+ * Compute restricted mean survival time over a given time period for a chosen
+ * probability distribution. Optionally discount survival at a rate @p r > 0. 
+ * @param dist A pointer to the base class of a probability distribution.  
+ * @param t Time to calculate mean survival time until.
+ * @return Restricted mean survival time.
+ ******************************************************************************/ 
+template <class Dist>
+inline double rmst(Dist dist, double t, double r = 0){
+  auto fun = [dist, r](double x){
+    return exp(-r * x) * (1 - dist->cdf(x));
+  };
+  const double lower = 0, upper = t;
+  double err_est; int err_code;
+  return math::quad(fun, lower, upper, err_est, err_code);
+}
+
 
 /***************************************************************************//** 
  * Compute cumulative hazards by taking the cumulative sum of the
