@@ -19,9 +19,10 @@ icea_pw(x, ...)
 \method{icea_pw}{default}(x, k = seq(0, 2e+05, 500), comparator, sample,
   strategy, grp = NULL, e, c, ...)
 
-\method{icea}{ce}(x, k = seq(0, 2e+05, 500), dr, ...)
+\method{icea}{ce}(x, k = seq(0, 2e+05, 500), dr_qalys, dr_costs, ...)
 
-\method{icea_pw}{ce}(x, k = seq(0, 2e+05, 500), comparator, dr, ...)
+\method{icea_pw}{ce}(x, k = seq(0, 2e+05, 500), comparator, dr_qalys,
+  dr_costs, ...)
 }
 \arguments{
 \item{x}{An object of simulation output characterizing the probability distribution
@@ -47,7 +48,9 @@ it is assumed that there is only one group.}
 
 \item{comparator}{Name of the comparator strategy in x.}
 
-\item{dr}{Discount rate.}
+\item{dr_qalys}{Discount rate for quality-adjusted life-years (QALYs).}
+
+\item{dr_costs}{Discount rate for costs.}
 }
 \value{
 \code{icea} returns a list containing four \code{data.table}s:

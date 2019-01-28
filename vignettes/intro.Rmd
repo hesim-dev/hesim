@@ -249,8 +249,8 @@ print(ce)
 The functions `icea()` and `icea_pw`, which perform individualized cost-effectiveness analysis and incremental individualized cost-effectiveness analysis, respectively, can be used. 
 
 ```{r}
-icea <- icea(ce, dr = .03)
-icea_pw <- icea_pw(ce, dr = .03, comparator = 1)
+icea <- icea(ce, dr_qalys = .03, dr_costs = .03)
+icea_pw <- icea_pw(ce, dr_qalys = .03, dr_costs = .03, comparator = 1)
 ```
 
 For instance, we might want to plot a cost-effectiveness acceptability curve (CEAC) displaying the probability that treatment strategy 2 is more cost-effective than treatment strategy 1 at a given willingness to pay for a QALY.
