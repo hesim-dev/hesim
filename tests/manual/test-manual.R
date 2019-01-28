@@ -26,7 +26,7 @@ flexsurv_stateprobs <- pmatrix.simfs(fit, M = n_pats, t = 5, trans = tmat)
 
 ## Simulate hesim
 transmod <- create_IndivCtstmTrans(fit, 
-                                   data = hesim_edat, trans_mat = tmat,
+                                   input_data = hesim_edat, trans_mat = tmat,
                                    point_estimate = TRUE)
 hesim_stateprobs <- transmod$sim_stateprobs(t = 5)
 

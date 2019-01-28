@@ -145,6 +145,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_fun
+int test_fun(std::vector<double> random_times, double age_, double max_age_);
+RcppExport SEXP _hesim_test_fun(SEXP random_timesSEXP, SEXP age_SEXP, SEXP max_age_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type random_times(random_timesSEXP);
+    Rcpp::traits::input_parameter< double >::type age_(age_SEXP);
+    Rcpp::traits::input_parameter< double >::type max_age_(max_age_SEXP);
+    rcpp_result_gen = Rcpp::wrap(test_fun(random_times, age_, max_age_));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_ctstm_sim_disease
 Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, std::vector<int> start_state, std::vector<double> start_age, std::vector<double> start_time, int death_state, std::string clock, std::vector<int> reset_states, double max_t, double max_age, int progress);
 RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP start_timeSEXP, SEXP death_stateSEXP, SEXP clockSEXP, SEXP reset_statesSEXP, SEXP max_tSEXP, SEXP max_ageSEXP, SEXP progressSEXP) {
@@ -574,6 +587,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_rpwexp", (DL_FUNC) &_hesim_C_rpwexp, 3},
     {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
     {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
+    {"_hesim_test_fun", (DL_FUNC) &_hesim_test_fun, 3},
     {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 10},
     {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 9},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 7},

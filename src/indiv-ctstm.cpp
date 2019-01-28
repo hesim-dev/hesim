@@ -2,6 +2,25 @@
 #include <hesim/statevals.h>
 #include <hesim/check_R_infinity.h>
 
+
+// [[Rcpp::export]]
+int test_fun(std::vector<double> random_times, double age_, double max_age_){
+  auto random_it = std::min_element(random_times.begin(), random_times.end());
+  double time_ = 0;
+  double max_t_ = 100;
+    
+  // New time based on the 3 scenarios: (1) randomly sampled time, 
+  // (2) maximum time, (3) time based on maximum age
+  double new_age = std::min(age_ + *random_it, max_age_);
+  std::vector<double> scenario_times = {time_ + *random_it, max_t_, time_ + new_age - age_};
+  auto scenarios_it = std::min_element(scenario_times.begin(), scenario_times.end());
+  time_ = *scenarios_it;
+  age_ = new_age; 
+  int min_pos = scenarios_it - scenario_times.begin();
+  return min_pos;
+}
+
+
 /***************************************************************************//** 
  * @ingroup ctstm
  * Simulate disease progression (i.e., a path through a multi-state model).

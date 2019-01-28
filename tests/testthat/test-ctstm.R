@@ -191,7 +191,6 @@ test_that("IndivCtstmTrans - transition specific", {
   
   mstate_list2 <- mstate_list$clone()
   mstate_list2$trans_mat <- matrix(1)
-  expect_error(mstate_list2$sim_disease(t = 2))
   mstate_list2$trans_mat <-1
   expect_error(mstate_list2$sim_stateprobs(t = 2))
   mstate_list2$trans_mat <- matrix(seq(1, 6), nrow = 2)
@@ -237,6 +236,7 @@ test_that("Simulate disease progression with transition specific models", {
   
   # Errors
   expect_error(ictstm$sim_stateprobs())
+  expect_error(ictstm$sim_disease(max_age = 12))
   ictstm2 <- IndivCtstm$new(trans_model = 2)
   expect_error(ictstm2$sim_disease())
   

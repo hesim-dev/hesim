@@ -59,6 +59,10 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
 indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
                                     progress = NULL){
   sample <- from <- to <- line <- NULL # to avoid no visible bindings CRAN warning
+  if (any(trans_model$start_age > max_age)){
+    stop("Starting ages in the simulation must be less than maximum age.",
+         call. = FALSE)
+  }
   if (is.null(progress)){
     progress <- 0
   }
