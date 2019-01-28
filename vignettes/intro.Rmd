@@ -18,8 +18,7 @@ bibliography: references.bib
 # Overview
 `hesim` is an R package for health-economic simulation modeling that is naturally integrated with statistical modeling and provides support for decision analysis. 
 
-Both cohort and individual-level economic models are supported. Cohort-level models simulate a representative cohorts of patients with similar characteristics while individual-level models simulate individual patients probabilistically using random number generation. The models are implemented as [R6](https://r6.r-lib.org/index.html) classes and have methods for simulating disease progression, costs, and QALYs. Models that are currently available are shown in the table below.
-
+As shown in the table below, N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are currently supported. The PSM is a cohort-level model that simulates representative cohorts of patients with similar characteristics while the iCTSTM simulates individual patients probabilistically using random number generation. The models are implemented as [R6](https://r6.r-lib.org/index.html) classes and have methods for simulating disease progression, costs, and QALYs. We expected to add  cohort-level state transition models in the near future.  
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
 psm <- c("N-state partitioned survival model (PSM)", "[Psm](../reference/Psm.html)")
@@ -28,8 +27,6 @@ tbl <- rbind(psm, ictstm)
 colnames(tbl) <- c("Economic model", "R6 class")
 knitr::kable(tbl, row.names = FALSE)
 ```
-
-(*Note that the package is under active development and we expect to add cohort-level continuous time state transition models (cCTSTMs) and cohort-level discrete time state transition models (cDTSTMs) in early 2019.*) 
 
 An economic model is constructed by combining statistical models for disease progression, costs, and utilities. As shown in the figure, a typical analysis proceeds in a 3-step process as follows:
 
