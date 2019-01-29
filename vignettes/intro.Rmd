@@ -18,7 +18,7 @@ bibliography: references.bib
 # Overview
 `hesim` is an R package for health-economic simulation modeling that is naturally integrated with statistical modeling and provides support for decision analysis. 
 
-As shown in the table below, N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are currently supported. The PSM is a cohort-level model that simulates representative cohorts of patients with similar characteristics while the iCTSTM simulates individual patients probabilistically using random number generation. The models are implemented as [R6](https://r6.r-lib.org/index.html) classes and have methods for simulating disease progression, costs, and QALYs. We expected to add  cohort-level state transition models in the near future.  
+As shown in the table below, N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are currently supported. The PSM is a cohort-level model that simulates representative cohorts of patients with similar characteristics while the iCTSTM simulates individual patients probabilistically using random number generation. The models are implemented as [R6](https://r6.r-lib.org/index.html) classes and have methods for simulating disease progression, costs, and QALYs. We expect to add  cohort-level state transition models in the near future.  
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
 psm <- c("N-state partitioned survival model (PSM)", "[Psm](../reference/Psm.html)")

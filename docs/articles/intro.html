@@ -83,7 +83,7 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2019-01-28</h4>
+            <h4 class="date">2019-01-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -96,7 +96,7 @@
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a><span class="header-section-number">1</span> Overview</h1>
 <p><code>hesim</code> is an R package for health-economic simulation modeling that is naturally integrated with statistical modeling and provides support for decision analysis.</p>
-<p>As shown in the table below, N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are currently supported. The PSM is a cohort-level model that simulates representative cohorts of patients with similar characteristics while the iCTSTM simulates individual patients probabilistically using random number generation. The models are implemented as <a href="https://r6.r-lib.org/index.html">R6</a> classes and have methods for simulating disease progression, costs, and QALYs. We expected to add cohort-level state transition models in the near future.</p>
+<p>As shown in the table below, N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are currently supported. The PSM is a cohort-level model that simulates representative cohorts of patients with similar characteristics while the iCTSTM simulates individual patients probabilistically using random number generation. The models are implemented as <a href="https://r6.r-lib.org/index.html">R6</a> classes and have methods for simulating disease progression, costs, and QALYs. We expect to add cohort-level state transition models in the near future.</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Economic model</th>
@@ -156,17 +156,17 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 ## 
 ## $patients
 ##       patient_id      age female
-##    1:          1 34.88300      0
-##    2:          2 46.86629      1
-##    3:          3 49.31848      0
-##    4:          4 24.61814      0
-##    5:          5 50.63012      0
+##    1:          1 35.93040      0
+##    2:          2 35.82239      0
+##    3:          3 50.28311      0
+##    4:          4 32.73504      0
+##    5:          5 48.08640      0
 ##   ---                           
-##  996:        996 40.98002      1
-##  997:        997 36.07025      0
-##  998:        998 35.89945      1
-##  999:        999 53.79099      1
-## 1000:       1000 44.52351      1
+##  996:        996 41.52376      0
+##  997:        997 55.61670      0
+##  998:        998 41.62055      1
+##  999:        999 35.89651      0
+## 1000:       1000 32.70706      1
 ## 
 ## $states
 ##    state_id state_name
@@ -310,12 +310,12 @@ medcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference
                         <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"transitions"</span>))
 <span class="kw">head</span>(transmod_data)</code></pre></div>
 <pre><code>##    strategy_id patient_id transition_id      age female from to from_name
-## 1:           1          1             1 34.88300      0    1  2   Healthy
-## 2:           1          1             2 34.88300      0    1  3   Healthy
-## 3:           1          1             3 34.88300      0    2  1      Sick
-## 4:           1          1             4 34.88300      0    2  3      Sick
-## 5:           1          2             1 46.86629      1    1  2   Healthy
-## 6:           1          2             2 46.86629      1    1  3   Healthy
+## 1:           1          1             1 35.93040      0    1  2   Healthy
+## 2:           1          1             2 35.93040      0    1  3   Healthy
+## 3:           1          1             3 35.93040      0    2  1      Sick
+## 4:           1          1             4 35.93040      0    2  3      Sick
+## 5:           1          2             1 35.82239      0    1  2   Healthy
+## 6:           1          2             2 35.82239      0    1  3   Healthy
 ##    to_name trans
 ## 1:    Sick     1
 ## 2:    Dead     2
@@ -390,43 +390,43 @@ costmods &lt;-<span class="st"> </span><span class="kw">list</span>(<span class=
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_disease</span>()
 <span class="kw">head</span>(ictstm<span class="op">$</span>disprog_)</code></pre></div>
 <pre><code>##    sample strategy_id patient_id from to final time_start time_stop
-## 1:      1           1          1    1  2     0   0.000000  2.580019
-## 2:      1           1          1    2  1     0   2.580019  4.533610
-## 3:      1           1          1    1  2     0   4.533610  7.458124
-## 4:      1           1          1    2  1     0   7.458124  8.493116
-## 5:      1           1          1    1  2     0   8.493116 10.360818
-## 6:      1           1          1    2  1     0  10.360818 14.098959</code></pre>
+## 1:      1           1          1    1  2     0   0.000000  1.595554
+## 2:      1           1          1    2  3     1   1.595554  1.724827
+## 3:      1           1          2    1  3     1   0.000000  7.888299
+## 4:      1           1          3    1  2     0   0.000000  2.669210
+## 5:      1           1          3    2  1     0   2.669210  4.832636
+## 6:      1           1          3    1  2     0   4.832636  6.610701</code></pre>
 <p>The disease trajectory can be summarized with <code>$sim_stateprobs()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>))
 <span class="kw">head</span>(ictstm<span class="op">$</span>stateprobs_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id t  prob
 ## 1:      1           1        1 0 1.000
-## 2:      1           1        1 1 0.700
-## 3:      1           1        1 2 0.584
-## 4:      1           1        1 3 0.483
-## 5:      1           1        1 4 0.422
-## 6:      1           1        1 5 0.365</code></pre>
+## 2:      1           1        1 1 0.668
+## 3:      1           1        1 2 0.552
+## 4:      1           1        1 3 0.473
+## 5:      1           1        1 4 0.395
+## 6:      1           1        1 5 0.357</code></pre>
 <p>We can then compute costs and QALYs (using a discount rate of 3 percent).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># QALYs</span>
 ictstm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(ictstm<span class="op">$</span>qalys_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id   dr     qalys       lys
-## 1:      1           1        1 0.03 3.9747597 4.5907913
-## 2:      1           1        2 0.03 0.2381634 1.2780091
-## 3:      1           2        1 0.03 5.1653521 5.9659088
-## 4:      1           2        2 0.03 0.1722739 0.9244391
-## 5:      2           1        1 0.03 2.7880619 3.9631713
-## 6:      2           1        2 0.03 0.8134794 0.9913634</code></pre>
+## 1:      1           1        1 0.03 1.2388465 4.4457746
+## 2:      1           1        2 0.03 0.9426177 1.0166796
+## 3:      1           2        1 0.03 1.6830102 6.0397186
+## 4:      1           2        2 0.03 0.8020732 0.8650924
+## 5:      2           1        1 0.03 3.4186577 4.8615286
+## 6:      2           1        2 0.03 0.7422403 1.0505063</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Costs</span>
 ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw">head</span>(ictstm<span class="op">$</span>costs_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id   dr category     costs
-## 1:      1           1        1 0.03    drugs 22953.957
-## 2:      1           1        2 0.03    drugs  6390.046
-## 3:      1           2        1 0.03    drugs 59659.088
-## 4:      1           2        2 0.03    drugs  9244.391
-## 5:      2           1        1 0.03    drugs 19815.857
-## 6:      2           1        2 0.03    drugs  4956.817</code></pre>
+## 1:      1           1        1 0.03    drugs 22228.873
+## 2:      1           1        2 0.03    drugs  5083.398
+## 3:      1           2        1 0.03    drugs 60397.186
+## 4:      1           2        2 0.03    drugs  8650.924
+## 5:      2           1        1 0.03    drugs 24307.643
+## 6:      2           1        2 0.03    drugs  5252.532</code></pre>
 </div>
 </div>
 <div id="decision-analysis" class="section level1">
@@ -438,31 +438,31 @@ ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt
 <span class="kw">print</span>(ce)</code></pre></div>
 <pre><code>## $costs
 ##      category   dr sample strategy_id    costs
-##   1:    drugs 0.03      1           1 29344.00
-##   2:    drugs 0.03      1           2 68903.48
-##   3:    drugs 0.03      2           1 24772.67
-##   4:    drugs 0.03      2           2 74420.97
-##   5:    drugs 0.03      3           1 31323.19
+##   1:    drugs 0.03      1           1 27312.27
+##   2:    drugs 0.03      1           2 69048.11
+##   3:    drugs 0.03      2           1 29560.17
+##   4:    drugs 0.03      2           2 66135.41
+##   5:    drugs 0.03      3           1 26713.03
 ##  ---                                          
-## 596:    total 0.03     98           2 81383.19
-## 597:    total 0.03     99           1 37777.34
-## 598:    total 0.03     99           2 63006.44
-## 599:    total 0.03    100           1 38662.46
-## 600:    total 0.03    100           2 90308.65
+## 596:    total 0.03     98           2 89015.93
+## 597:    total 0.03     99           1 38235.63
+## 598:    total 0.03     99           2 69886.52
+## 599:    total 0.03    100           1 33454.57
+## 600:    total 0.03    100           2 77046.14
 ## 
 ## $qalys
 ##        dr sample strategy_id    qalys
-##   1: 0.03      1           1 4.212923
-##   2: 0.03      1           2 5.337626
-##   3: 0.03      2           1 3.601541
-##   4: 0.03      2           2 5.337307
-##   5: 0.03      3           1 4.291101
+##   1: 0.03      1           1 2.181464
+##   2: 0.03      1           2 2.485083
+##   3: 0.03      2           1 4.160898
+##   4: 0.03      2           2 4.653675
+##   5: 0.03      3           1 3.916445
 ##  ---                                 
-## 196: 0.03     98           2 5.348004
-## 197: 0.03     99           1 3.244439
-## 198: 0.03     99           2 2.879162
-## 199: 0.03    100           1 3.791658
-## 200: 0.03    100           2 4.938641
+## 196: 0.03     98           2 6.031254
+## 197: 0.03     99           1 3.544027
+## 198: 0.03     99           2 3.353062
+## 199: 0.03    100           1 2.757914
+## 200: 0.03    100           2 3.558880
 ## 
 ## attr(,"class")
 ## [1] "ce"</code></pre>
