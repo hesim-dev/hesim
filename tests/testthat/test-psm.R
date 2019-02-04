@@ -244,14 +244,21 @@ test_that("Psm$costs", {
   los_compare(psm, type = "costs_", type_num = 1, dr = 0, strategy_id = 2)
   los_compare(psm, type = "costs_", type_num = 1, dr = .03, strategy_id = 3)
   
-  # Error messages
+  # Errors
+  ## Cannot have same discount rate twice
+  expect_error(psm$sim_costs(dr = c(.05, .05)))
+  
+  ## must first simulate state_probs
   psm2 <- Psm$new(survival_models = psm_curves,
                   utility_model = psm_utility,
                   cost_models = list(medical = psm_costs_medical2))
   psm2$sim_survival(t = times)
   expect_error(psm2$sim_costs(dr = c(0, .03)))
+  
+  ## number of PSA samples must be consistent accross statistical models
   psm2$sim_stateprobs()
   expect_error(psm2$sim_costs(dr = 0))
+
   
   ## Incorrect number of survival models
   fits_wei2 <- flexsurvreg_list(fits_wei[1:2])

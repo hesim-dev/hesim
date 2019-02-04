@@ -290,7 +290,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       if(is.null(self$disprog_)){
         stop("You must first simulate disease progression using '$sim_disease'.",
             call. = FALSE)
-      }      
+      }
+      check_dr(dr)
       
       # Indexing patient and strategy ID's
       if (is.null(private$disprog_idx)){

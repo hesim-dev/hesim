@@ -124,6 +124,7 @@ Psm <- R6::R6Class("Psm",
         stop("You must first simulate health state probabilities using '$sim_stateprobs'.",
              call. = FALSE)
       }
+      check_dr(dr)
       
       # Time varying state values are not currently supported
       if (type == "qalys"){

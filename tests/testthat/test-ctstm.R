@@ -291,9 +291,13 @@ test_that("Simulate costs and QALYs", {
   ## Across patients
   ### Time constant utility
   #### Errors
+  ##### Incorrect utility model
   ictstm2 <- ictstm$clone()
   ictstm2$utility_model <- 2
   expect_error(ictstm2$sim_qalys())
+  
+  ##### Cannot repeat discount rates
+  expect_error(ictstm$sim_qalys(dr = c(.03, .03))$qalys)
   
   #### No errors
   expect_error(ictstm$sim_qalys(dr = .03)$qalys_, NA)

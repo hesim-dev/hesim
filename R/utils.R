@@ -23,6 +23,13 @@ check <- function (object, ...) {
   UseMethod("check")
 }
 
+check_dr <- function(dr){
+  if(any(table(dr) > 1)){
+    stop("You cannot specify the same discount rate twice.",
+         call. = FALSE)
+  }  
+}
+
 #' Form a list from \code{...}
 #' 
 #' Form a list of objects from \code{...}.
