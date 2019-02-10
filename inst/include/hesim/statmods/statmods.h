@@ -168,7 +168,8 @@ private:
                                  params_surv.spline_aux_.scale_,
                                  params_surv.spline_aux_.timescale_,
                                  params_surv.spline_aux_.cumhaz_method_,
-                                 params_surv.spline_aux_.step_);
+                                 params_surv.spline_aux_.step_,
+                                 params_surv.spline_aux_.random_method_);
     } 
     else if (dist_name == "fracpoly"){
       int n_powers = params_surv.fracpoly_aux_.powers_.size();
@@ -176,7 +177,8 @@ private:
       d = new stats::fracpoly(gamma,
                               params_surv.fracpoly_aux_.powers_,
                               params_surv.fracpoly_aux_.cumhaz_method_,
-                              params_surv.fracpoly_aux_.step_);
+                              params_surv.fracpoly_aux_.step_,
+                              params_surv.spline_aux_.random_method_);
     }
     else{
         Rcpp::stop("The selected distribution is not available.");

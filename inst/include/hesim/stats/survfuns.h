@@ -112,7 +112,7 @@ inline std::vector<double> cumhazard_discrete(Func hazfun, std::vector<double> t
 /***************************************************************************//** 
  * Randomly number generation from an arbitrary survival distribution.
  * Randomly draw a single observation from a survival distribution given 
- * cumulative hazard curves or survival curves.
+ * discrete cumulative hazard curves or survival curves.
  * @param time Times at which estimates were computed. 
  * @param est Estimates of the cumulative hazard or survival curves.
  * @param type Is the estimate a cumulative hazard curve (@c "cumhazard") or
@@ -123,7 +123,7 @@ inline std::vector<double> cumhazard_discrete(Func hazfun, std::vector<double> t
  * individuals are assumed to only survive to the final time period in @p time.
  * @return A random sample from the survival distribution.
  ******************************************************************************/ 
-inline double rsurv(std::vector<double> &time, std::vector<double> est,
+inline double surv_sample(std::vector<double> &time, std::vector<double> est,
                    std::string type = "cumhazard", bool time_inf = true){
 
   auto diff = [](std::vector<double> x){
@@ -174,7 +174,7 @@ inline double rsurv(std::vector<double> &time, std::vector<double> est,
  * @return A random sample from the survival distribution.
  ******************************************************************************/ 
 template <class Func>
-inline double rsurv(Func hazfun, double lower = 0, double upper = INFINITY,
+inline double surv_sample(Func hazfun, double lower = 0, double upper = INFINITY,
                     double max_survtime = -1) {
   // Exceptions
   if (lower < 0){
@@ -206,7 +206,7 @@ inline double rsurv(Func hazfun, double lower = 0, double upper = INFINITY,
   if (std::isinf(upper)){
     time_inf = true;
   }
-  return rsurv(time, cumhazard, "cumhazard", time_inf);
+  return surv_sample(time, cumhazard, "cumhazard", time_inf);
 }
 
 } // End namespace stats

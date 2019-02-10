@@ -109,6 +109,27 @@ inline double quantile_numeric_work(const stats::distribution * dist, double p){
                   &tol, &maxiter);
 };
 
+inline double random_numeric(const stats::distribution * dist, 
+                             std::string random_method) {
+  if (random_method == "invcdf"){
+    return dist->quantile(R::runif(0, 1));
+  }
+  else {
+    auto hazfun = [dist](double x){ return dist->hazard(x); };
+    return surv_sample(hazfun, 0, INFINITY, dist->max_x_);
+  }  
+}
+
+inline double trandom_numeric(const stats::distribution * dist, 
+                              double lower, double upper,
+                             std::string random_method) {
+  if (random_method == "invcdf"){
+    return rtrunc(dist, lower, upper, "invcdf");
+  } else{
+    return rtrunc(dist, lower, upper, "sample"); 
+  }
+}
+
 } // end namespace detail
 
 
@@ -662,7 +683,9 @@ private:
   double knot_max_; ///< The largest knot.
   double knot_min_; ///< The smallest knot.
   std::string cumhaz_method_; ///< Method used to compute the cumulative hazard 
-                             ///<(i.e., to integrate the hazard function)
+                             ///<(i.e., to integrate the hazard function).
+  std::string random_method_; ///< Method used to randomly draw from 
+                             ///< survival function.                            
   
   // Function of time used for modeling survival.
   double timescale_fun(double x) const {
@@ -720,7 +743,8 @@ public:
    */ 
   survspline(std::vector<double> gamma, std::vector<double> knots,
               std::string scale, std::string timescale,
-              std::string cumhaz_method = "quad", double step = -1) {
+              std::string cumhaz_method = "quad", double step = -1,
+              std::string random_method = "invcdf") {
     if (gamma.size() != knots.size()){
       Rcpp::stop("Length of gamma should equal number of knots.");
     }
@@ -733,6 +757,7 @@ public:
     knot_min_ = *(knots.begin());
     cumhaz_method_ = cumhaz_method;
     step_ = step;
+    random_method_ = random_method;
   }
   
   void set_params(std::vector<double> params) {
@@ -864,11 +889,11 @@ public:
   }
   
   double random() const {
-    return quantile(R::runif(0, 1));
+    return detail::random_numeric(this, random_method_);
   }
   
   double trandom(double lower, double upper) const   {
-    return rtrunc(this, lower, upper, "invcdf");
+    return detail::trandom_numeric(this, lower, upper, random_method_);
   }    
 };
 
@@ -881,7 +906,9 @@ private:
   std::vector<double> gamma_; ///< The scale and shape parameters.
   std::vector<double> powers_; ///< The powers of the fractional polynomial.
   std::string cumhaz_method_; ///< Method used to compute the cumulative hazard 
-                             ///<(i.e., to integrate the hazard function) 
+                             ///< (i.e., to integrate the hazard function). 
+  std::string random_method_; ///< Method used to randomly draw from 
+                             ///< survival function.                               
   
   // 
   double basis_power(double x, double power) const {
@@ -924,11 +951,13 @@ public:
    * Instantiates a fractional polynomial survival distribution.
    */ 
   fracpoly(std::vector<double> gamma, std::vector<double> powers,
-           std::string cumhaz_method = "quad", double step = -1) {
+           std::string cumhaz_method = "quad", double step = -1,
+           std::string random_method = "invcdf") {
     gamma_ = gamma;
     powers_ = powers;
     cumhaz_method_ = cumhaz_method;
     step_ = step;
+    random_method_ = random_method;
   }
   
   void set_params(std::vector<double> params) {
@@ -966,22 +995,11 @@ public:
   }
   
   double random() const {
-    if (std::isinf(max_x_)){
-      return quantile(R::runif(0, 1));
-    }
-    else {
-      auto hazfun = [this](double x){ return this->hazard(x); };
-      return rsurv(hazfun, 0, INFINITY, max_x_);
-    }
+    return detail::random_numeric(this, random_method_);
   }
   
   double trandom(double lower, double upper) const   {
-    if (std::isinf(max_x_)){
-      return rtrunc(this, lower, upper, "invcdf");
-    }
-    else{
-     return rtrunc(this, lower, upper, "cumhazard"); 
-    }
+    return detail::trandom_numeric(this, lower, upper, random_method_);
   }    
 };
 

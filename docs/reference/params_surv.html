@@ -159,7 +159,7 @@ a spline or fractional polynomial model is fit.</p>
     <p>The types of distributions that can be specified are:</p><ul>
 <li><p><code>exponential</code> or <code>exp</code> Exponential distribution. <code>coef</code>
 must contain the <code>rate</code> parameter on the log scale and the same parameterization as in 
-<code><a href='http://www.rdocumentation.org/packages/stats/topics/Exponential'>Exponential</a></code>..</p></li>
+<code><a href='http://www.rdocumentation.org/packages/stats/topics/Exponential'>Exponential</a></code>.</p></li>
 <li><p><code>weibull</code> or <code>weibull.quiet</code> Weibull distribution. The first 
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
@@ -196,8 +196,8 @@ to the number of powers minus 1. See below for details on the auxillary argument
 </ul>
     <p>Auxillary arguments for spline models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
 <dt><code>knots</code></dt><dd><p>A numeric vector of knots.</p></dd>
-<dt><code>scale</code></dt><dd><p>A character vector of length 1 denoting the survival outcome to be modeled
-as a spline function. Options are "log_cumhazard", for the log cummulative hazard; 
+<dt><code>scale</code></dt><dd><p>The survival outcome to be modeled
+as a spline function. Options are "log_cumhazard" for the log cummulative hazard; 
 "log_hazard" for the log hazard rate; "log_cumodds" for the log cummulative odds;
 and "inv_normal" for the inverse normal distribution function.</p></dd>
 <dt><code>timescale</code></dt><dd><p>If "log" (the default), then survival is modeled as a spline function
@@ -206,6 +206,19 @@ of log time; if "identity", then it is modeled as a spline function of time.</p>
     <p>Auxillary arguments for fractional polynomial models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
 <dt><code>powers</code></dt><dd><p>A vector of the powers of the fractional polynomial with each element
  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
+</dl>
+    <p>Furthermore, when either splines or fractional polynomials are used, the following additional auxillary arguments
+can be specified:</p><dl class='dl-horizontal'>
+<dt><code>cumhaz_method</code></dt><dd><p>Numerical method used to compute cumulative hazard 
+(i.e., to integrate the hazard function). Options are "quad" for adaptive
+quadrature and "riemann" for Riemann sum.</p></dd>
+<dt><code>step</code></dt><dd><p>Step size for computation of cumulative hazard with 
+numerical integration. Only required when integrating
+ using "riemann". No step size is required for "quad".</p></dd>
+ <dt><code>random_method</code></dt><dd><p>Method used to randomly draw from
+ an arbitrary survival function. Options are "invcdf" for the inverse CDF and
+ "sample" for randomly sampling from discrete survival probabilities. When
+ "sample" is chosen, the cumulative hazard must be integrated using "riemann".</p></dd>
 </dl>
     
 

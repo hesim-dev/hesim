@@ -215,15 +215,19 @@ check.params_lm_list <- function(object){
 #'  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
 #' }
 #' 
-#' Furthermore, when either splines for fractional polynomials are used, the following additional auxillary arguments
+#' Furthermore, when either splines or fractional polynomials are used, the following additional auxillary arguments
 #' can be specified:
 #' \describe{
 #' \item{\code{cumhaz_method}}{Numerical method used to compute cumulative hazard 
-#' (i.e., to integrate the hazard function). Options are and "quad" for adaptive
+#' (i.e., to integrate the hazard function). Options are "quad" for adaptive
 #' quadrature and "riemann" for Riemann sum.}
 #' \item{\code{step}}{Step size for computation of cumulative hazard with 
-#' numerical integration. Only required when integrating with
+#' numerical integration. Only required when integrating
 #'  using "riemann". No step size is required for "quad".}
+#'  \item{\code{random_method}}{Method used to randomly draw from
+#'  an arbitrary survival function. Options are "invcdf" for the inverse CDF and
+#'  "sample" for randomly sampling from discrete survival probabilities. When
+#'  "sample" is chosen, the cumulative hazard must be integrated using "riemann".}
 #' }
 #' 
 #' @examples 
@@ -258,8 +262,22 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
                      "hazard, then the step size must be specified.")
         stop(msg)
       } 
-    }    
-  }
+    }  
+    if (is.null(aux$random_method)){
+      if (res[["aux"]]$cumhaz_method == "quad"){
+        res[["aux"]]$random_method <- "invcdf"
+      } else{
+       res[["aux"]]$random_method <- "sample" 
+      }
+    }
+    if (res[["aux"]]$random_method == "sample" & 
+        res[["aux"]]$cumhaz_method !="riemann"){
+      msg <- paste0("If 'sample' is used to draw survival times, then ", 
+                    "the Riemann sum must be used to compute the cumulative ",
+                     "hazard.")
+      stop(msg) 
+    } 
+  } # End if statement for aux
   res[["n_samples"]] <- n_samples
   class(res) <- "params_surv"
   return(res)

@@ -79,7 +79,8 @@ inline double rtrunc_invcdf(Func1 f_cdf, Func2 f_quantile, double lower,
  * @c cdf for computing the cumulative density function, @c quantile for 
  * computing quantiles, and @c random for random number generation.
  * @param lower, upper Lower and upper bounds of the random variable.
- * @param method "invcdf" for the inverse CDF method as in hesim::stats::rtrunc_invcdf
+ * @param method "invcdf" for the inverse CDF method as in hesim::stats::rtrunc_invcdf;
+ * "sample" for sampling from an arbitrary survival function as in hesim::stats::surv_sample;
  * and "repeat" for repeated sampling from the non-truncated distribution as in
  * hesim::stats::rtrunc_repeat. 
  * @param max_x Maximum value of the support. By default it is infinity.
@@ -95,7 +96,7 @@ inline double rtrunc(Dist dist, double lower, double upper,
   }
   else if (method == "cumhazard"){
     auto f_haz = [dist](double x){ return dist->hazard(x); };
-    return rsurv(f_haz, lower, upper, dist->max_x_);
+    return surv_sample(f_haz, lower, upper, dist->max_x_);
   }
   else {
     auto f_random = [dist](){ return dist->random(); };

@@ -83,15 +83,19 @@ Auxillary arguments for fractional polynomial models should be specified as a li
  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
 }
 
-Furthermore, when either splines for fractional polynomials are used, the following additional auxillary arguments
+Furthermore, when either splines or fractional polynomials are used, the following additional auxillary arguments
 can be specified:
 \describe{
 \item{\code{cumhaz_method}}{Numerical method used to compute cumulative hazard 
-(i.e., to integrate the hazard function). Options are and "quad" for adaptive
+(i.e., to integrate the hazard function). Options are "quad" for adaptive
 quadrature and "riemann" for Riemann sum.}
 \item{\code{step}}{Step size for computation of cumulative hazard with 
-numerical integration. Only required when integrating with
+numerical integration. Only required when integrating
  using "riemann". No step size is required for "quad".}
+ \item{\code{random_method}}{Method used to randomly draw from
+ an arbitrary survival function. Options are "invcdf" for the inverse CDF and
+ "sample" for randomly sampling from discrete survival probabilities. When
+ "sample" is chosen, the cumulative hazard must be integrated using "riemann".}
 }
 }
 \examples{

@@ -75,6 +75,7 @@ struct survspline_aux{
   std::string timescale_;
   std::string cumhaz_method_;
   double step_;
+  std::string random_method_;
   
   /** 
    * The constructor.
@@ -93,6 +94,7 @@ struct survspline_aux{
       if (aux.containsElementNamed("step")){
         step_ = Rcpp::as<double> (aux["step"]); 
       } 
+      random_method_ = Rcpp::as<std::string> (aux["random_method"]);
     }
   }
 };
@@ -105,6 +107,7 @@ struct fracpoly_aux {
   std::vector<double> powers_;
   std::string cumhaz_method_;
   double step_;
+  std::string random_method_;
   
   /** 
    * The constructor.
@@ -121,6 +124,7 @@ struct fracpoly_aux {
       if (aux.containsElementNamed("step")){
         step_ = Rcpp::as<double> (aux["step"]); 
       }
+      random_method_ = Rcpp::as<std::string> (aux["random_method"]); 
     }  
   }
 };
