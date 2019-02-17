@@ -373,7 +373,8 @@ test_that("survspline", {
     
     spline <- new(SurvSpline, gamma = gamma, knots = knots,
                   scale = "log_hazard", timescale = timescale,
-                  cumhaz_method = "quad", step = -1)
+                  cumhaz_method = "quad", step = -1, 
+                  random_method = "invcdf")
     
     ## hazard
     expect_equal(spline$hazard(2), 
@@ -443,7 +444,7 @@ test_that("survspline", {
     
     spline <- new(SurvSpline, gamma = gamma, knots = knots,
                   scale = hesim_scale, timescale = timescale,
-                  cumhaz_method = "quad", step = -1)
+                  cumhaz_method = "quad", step = -1, random_method = "invcdf")
     
     ### pdf
     expect_equal(flexsurv::dsurvspline(5, gamma = gamma, knots = knots, 
@@ -517,46 +518,6 @@ test_that("survspline", {
 })
 
 # Survival Fractional Polynomials ----------------------------------------------
-# functions from flexsurv tests
-bfp <- function (x, powers = c(1, 2)) {
-  nobs <- length(x)
-  npoly <- length(powers)
-  X <- matrix(0, nrow = nobs, ncol = npoly)
-  x1 <- ifelse(powers[1] != rep(0, nobs), x^powers[1], log(x))
-  X[, 1] <- x1
-  if (npoly >= 2) {
-      for (i in 2:npoly) {
-          if (powers[i] == powers[(i - 1)]) 
-              x2 <- log(x) * x1
-          else x2 <- ifelse(powers[i] != rep(0, nobs), x^powers[i], 
-              log(x))
-          X[, i] <- x2
-          x1 <- x2
-      }
-  }
-  X
-}
-
-hfp.lh <- function(x, gamma, powers){
-  if(!is.matrix(gamma)) gamma <- matrix(gamma, nrow=1)
-  lg <- nrow(gamma)
-  nret <- max(length(x), lg)
-  gamma <- apply(gamma, 2, function(x)rep(x,length=nret))
-  x <- rep(x, length=nret)
-  basis <- cbind(1, bfp(x, powers))
-  loghaz <- rowSums(basis * gamma)
-  exp(loghaz)
-}
-
-hfp.lh3 <- unroll.function(hfp.lh, gamma = 0:2)
-
-custom.hfp.lh3 <- list(
-  name = "fp.lh3",
-  pars = c(paste0("gamma", 0:2)),
-  location = c("gamma0"),
-  transforms = rep(c(identity), 3), inv.transforms = rep(c(identity), 3)
-)
-
 test_that("FracPoly", {
   
   FracPoly <- module$fracpoly
@@ -573,7 +534,8 @@ test_that("FracPoly", {
     }    
     
     fp <- new(FracPoly, gamma = gamma, powers = powers, 
-              cumhaz_method = "quad", step = -1)
+              cumhaz_method = "quad", step = -1,
+              random_method = "invcdf")
     
     ## hazard
     expect_equal(fp$hazard(4),
@@ -627,11 +589,6 @@ test_that("FracPoly", {
     expect_true(all(r >= 2 & r <= 5))
     
    } # end test_fracpoly
-
-  # fp.fit <- flexsurvreg(Surv(recyrs, censrec) ~ 1, data = bc, 
-  #                       aux = list(powers = powers), inits = c(-2, 0, 0),
-  #                       dist = custom.hfp.lh3)
-  
   
   test_fracpoly(gamma = c(-1.2, -.567, 1.15),
                 powers = c(1, 0))
@@ -645,7 +602,7 @@ test_that("FracPoly", {
   # Equivalence of fractional polynomial and gompertz
   rate <- 1/5; shape <- 1
   fp <- new(FracPoly, gamma = c(log(rate), shape), powers = 1,
-            cumhaz_method = "quad", step = -1)
+            cumhaz_method = "quad", step = -1, random_method = "invcdf")
   expect_equal(fp$hazard(5),
                flexsurv::hgompertz(5, shape = shape, rate = rate))
   expect_equal(fp$cdf(2),
@@ -654,7 +611,7 @@ test_that("FracPoly", {
   # Equivalence of fractional polynomial and weibull
   a0 <- -2; a1 <- 1
   fp <- new(FracPoly, gamma = c(a0, a1), powers = 0,
-            cumhaz_method = "quad", step = -1)
+            cumhaz_method = "quad", step = -1, random_method = "invcdf")
   expect_equal(fp$hazard(3), 
                hweibullNMA(3, a0 = a0, a1 = a1))
   expect_equal(fp$cdf(4), 
