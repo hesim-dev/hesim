@@ -83,7 +83,7 @@ Auxillary arguments for fractional polynomial models should be specified as a li
  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
 }
 
-Furthermore, when splines (with \code{scale = "log_cumhazard"}) or fractional 
+Furthermore, when splines (with \code{scale = "log_hazard"}) or fractional 
 polynomials are used, numerical methods must be used to compute the cumulative 
 hazard and for random number generation. The following additional auxillary arguments
 can therefore be specified:
@@ -94,11 +94,10 @@ but only used for splines if \code{scale = "log_hazard"}.
 Options are "quad" for adaptive quadrature and "riemann" for Riemann sum.}
  \item{\code{random_method}}{Method used to randomly draw from
  an arbitrary survival function. Options are "invcdf" for the inverse CDF and
- "sample" for randomly sampling from discrete survival probabilities. Typically
- considerably faster when integrating using "riemann" rather than "quad".}
+ "sample" for randomly sampling from discrete survival probabilities.}
  \item{\code{step}}{Step size for computation of cumulative hazard with 
-numerical integration. Only required when cumhaz_method 
- using "riemann" or using "sample" for random number generation.}
+numerical integration. Only required when using "riemann" to compute the 
+cumulative hazard or using "sample" for random number generation.}
 }
 }
 \examples{
