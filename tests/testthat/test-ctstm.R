@@ -448,24 +448,82 @@ test_that("IndivCtstm - joint", {
   expect_true(is.data.table(disprog))
 })
 
-## With fractional polynomial from parameters object
+## With fractional polynomial or survival spline from parameters object
+### Input data
+edat <- copy(msfit_data[patient_id == 1])
+edat$intercept <- 1
+
+### Simulate disease progression
+sim_disprog <- function(params){
+  mstate_fp <- create_IndivCtstmTrans(params, input_data = edat, 
+                                      trans_mat = tmat_ebmt4)
+  ictstm <- IndivCtstm$new(trans_model = mstate_fp)
+  return(ictstm$sim_disease()$disprog_)
+}
+  
 test_that("IndivCtstm - fracpoly", {
-  # Parameters
+  # Initial parameters
   coefs_fp <- list(gamma0 = matrix(log(1/5), nrow = 2, ncol = 1),
                    gamma1 = matrix(1, nrow = 2, ncol = 1))
   colnames(coefs_fp$gamma0) <- colnames(coefs_fp$gamma1) <- c("intercept")
-  params_fp <- params_surv(coefs = coefs_fp,
-                           dist = "fracpoly",
-                           aux = list(powers = 1))
+  fp_args <- list(coefs = coefs_fp, dist = "fracpoly", aux = list(powers = 0))
+  params_fp <- do.call("params_surv", fp_args)
   
-  # Input data
-  edat <- copy(msfit_data)
-  edat$intercept <- 1
+  # Working
+  ## Inverse CDF and quadrature
+  expect_true(is.data.table(sim_disprog(params_fp)))
   
-  # IndivCtstmTrans object
-  mstate_fp <- create_IndivCtstmTrans(params_fp, input_data = edat, 
-                                      trans_mat = tmat_ebmt4)
-  ictstm <- IndivCtstm$new(trans_model = mstate_fp)
-  disprog <- ictstm$sim_disease()$disprog_
-  expect_true(is.data.table(disprog))  
+  ## Inverse CDF and riemann
+  params_fp$aux$cumhaz_method <- "riemann"
+  params_fp$aux$step <- 1/12
+  expect_true(is.data.table(sim_disprog(params_fp)))
+  
+  ## Sample and riemann
+  params_fp$aux$random_method <- "sample"
+  expect_true(is.data.table(sim_disprog(params_fp)))
+  
+  ## Sample and quadrature
+  params_fp$aux$cumhaz_method <- "quad"
+  expect_true(is.data.table(sim_disprog(params_fp)))
+  
+  # Errors
+  ## Need step size
+  ### (1)
+  fp_args$aux$random_method <- "sample"
+  expect_error(do.call("params_surv", fp_args))
+  
+  ### (2)
+  fp_args$aux$random_method <- "invcdf"
+  fp_args$aux$cumhaz_method <- "riemann"
+  expect_error(do.call("params_surv", fp_args))
+})
+
+## With survival splines from parameters object
+test_that("IndivCtstm - survspline", {
+  # Initial parameters
+  coefs_spline <- list(gamma0 = matrix(-2, nrow = 2, ncol = 1),
+                       gamma1 = matrix(1, nrow = 2, ncol = 1))  
+  colnames(coefs_spline$gamma0) <- colnames(coefs_spline$gamma1) <- c("intercept")
+  spline_args <- list(coefs = coefs_spline,
+                      dist = "survspline",
+                      aux = list(knots = c(-10, 10),
+                                 scale = "log_hazard",
+                                 timescale = "log",
+                                 random_method = "invcdf"))
+  params_spline <- do.call("params_surv", spline_args)
+  
+  # Working
+  expect_equal(params_spline$aux$random_method, "invcdf")
+  expect_equal(params_spline$aux$cumhaz_method, "quad")
+  
+  # Errors
+  ## Need step size
+  ### (1)
+  spline_args$aux$random_method <- "sample"
+  expect_error(do.call("params_surv", spline_args))
+  
+  ### (2)
+  spline_args$aux$random_method <- "invcdf"
+  spline_args$aux$cumhaz_method <- "riemann"
+  expect_error(do.call("params_surv", spline_args)) 
 })

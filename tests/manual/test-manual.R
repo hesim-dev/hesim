@@ -1,4 +1,3 @@
-context("Manual ctstm.R unit tests")
 library("flexsurv")
 library("mstate")
 library("data.table")
@@ -165,7 +164,7 @@ fp_params <- weiNMA_params
 fp_params$dist <- "fracpoly"
 fp_params$aux <- list(powers = c(0, 0),
                       cumhaz_method = "riemann", 
-                      step = .02,
+                      step = 1/12,
                       random_method = "sample")
 names(fp_params$coefs) <- c("gamma0", "gamma1")
 colnames(fp_params$coefs$gamma0)[1] <- "gamma0"
@@ -189,18 +188,53 @@ sim_stprobs_fp <- function(obj, param_names, n_patients, mod_name){
   stprobs[, lab := mod_name]
   return(stprobs)
 }
-weiNMA_stprobs <- sim_stprobs_fp(weiNMA_params, c("a0", "a1"), 1000, 
-                                 "Weibull")
-fp_stprobs <- sim_stprobs_fp(fp_params, c("gamma0", "gamma1"), 1000, 
-                             "Fractional polynomial")
-pdat <- rbind(weiNMA_stprobs, fp_stprobs)
-p <- ggplot(pdat, aes(x = t, y = prob, col = lab)) +
+
+fp_plot <- function(fp_stprobs, wei_stprobs){
+  pdat <- rbind(fp_stprobs, wei_stprobs)
+  p <- ggplot(pdat, aes(x = t, y = prob, col = lab)) +
             geom_line() + 
             facet_wrap(~state_id) +
             xlab("Years") + ylab("Probability in health state") +
             scale_color_discrete(name = "") + theme_minimal() +
             theme(legend.position = "bottom") 
-ggsave("figs/stprobs-reset-fracpoly.pdf", p, width = 5, height = 7)
+ return(p)
+}
+
+weiNMA_stprobs <- sim_stprobs_fp(weiNMA_params, c("a0", "a1"), 10000, 
+                                 "Weibull")
+
+## Sample and riemann integration
+fp_stprobs <- sim_stprobs_fp(fp_params, c("gamma0", "gamma1"), 10000, 
+                             "Fractional polynomial")
+p <- fp_plot(weiNMA_stprobs, fp_stprobs)
+ggsave("figs/stprobs-reset-fracpoly-sample-riemann.pdf", p, width = 5, height = 7)
+
+## Sample and quadrature (Note: this is very slow)
+# fp_params$aux$cumhaz_method <- "quad"
+# fp_stprobs <- sim_stprobs_fp(fp_params, c("gamma0", "gamma1"), 100, 
+#                              "Fractional polynomial")
+# p <- fp_plot(weiNMA_stprobs, fp_stprobs)
+
+# Inverse CDF and quadrature 
+fp_params$aux$cumhaz_method <- "quad"
+fp_params$aux$random_method <- "invcdf"
+fp_stprobs <- sim_stprobs_fp(fp_params, c("gamma0", "gamma1"), 1000,
+                             "Fractional polynomial")
+p <- fp_plot(weiNMA_stprobs, fp_stprobs)
+ggsave("figs/stprobs-reset-fracpoly-invcdf-quad.pdf", p, width = 5, height = 7)
+
+# Inverse CDF and riemann
+fp_params$aux$cumhaz_method <- "riemann"
+fp_stprobs <- sim_stprobs_fp(fp_params, c("gamma0", "gamma1"), 10000, 
+                             "Fractional polynomial")
+p <- fp_plot(weiNMA_stprobs, fp_stprobs)
+ggsave("figs/stprobs-reset-fracpoly-invcdf-riemann.pdf", p, width = 5, height = 7)
+
+# Modify step size
+fp_params$aux$step <- .02
+fp_stprobs <- sim_stprobs_fp(fp_params, c("gamma0", "gamma1"), 10000, 
+                             "Fractional polynomial")
+p <- fp_plot(weiNMA_stprobs, fp_stprobs)
 
 # Simulate survival from arbitrary cumulative hazards --------------------------
 module <- Rcpp::Module('distributions', PACKAGE = "hesim")
@@ -222,7 +256,7 @@ FracPoly <- module$fracpoly
 gamma = c(-1.2, -.567, 1.15)
 powers = c(1, 0)
 fp <- new(FracPoly, gamma = gamma, powers = powers,
-          cumhaz_method = "quad", step = .01, random_method = "riemann")
+          cumhaz_method = "riemann", step = 1/12, random_method = "sample")
 fp$max_x_ <- 40
 lower <- 0
 upper <- fp$max_x_
@@ -230,7 +264,7 @@ step <- 1/12
 time <- seq(lower, upper, step)
 
 ## Random sample with hesim
-r1 <- replicate(10000, fp$random())
+r1 <- replicate(1000, fp$random())
 fun <- ecdf(r1)
 esurv <- 1 - fun(time)
 dat1 <- data.frame(time = time, surv = esurv, lab = "Random")

@@ -178,7 +178,7 @@ private:
                               params_surv.fracpoly_aux_.powers_,
                               params_surv.fracpoly_aux_.cumhaz_method_,
                               params_surv.fracpoly_aux_.step_,
-                              params_surv.spline_aux_.random_method_);
+                              params_surv.fracpoly_aux_.random_method_);
     }
     else{
         Rcpp::stop("The selected distribution is not available.");

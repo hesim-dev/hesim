@@ -87,15 +87,23 @@ struct survspline_aux{
     std::string dist_name = Rcpp::as<std::string>(R_params_surv["dist"]);
     if (dist_name == "survspline"){
       Rcpp::List aux = Rcpp::as<Rcpp::List> (R_params_surv["aux"]);
+      
+      // Knots, scale, timescale, and RNG method
       knots_ = Rcpp::as<std::vector<double> > (aux["knots"]);
       scale_ = Rcpp::as<std::string> (aux["scale"]);
       timescale_  = Rcpp::as<std::string> (aux["timescale"]); 
-      cumhaz_method_ = Rcpp::as<std::string> (aux["cumhaz_method"]); 
+      random_method_ = Rcpp::as<std::string> (aux["random_method"]);
+      
+      // Numerical method for cumulative hazard
+      if (aux.containsElementNamed("cumhaz_method")){
+       cumhaz_method_ = Rcpp::as<std::string> (aux["cumhaz_method"]); 
+      }
+      
+      // Step size
       if (aux.containsElementNamed("step")){
         step_ = Rcpp::as<double> (aux["step"]); 
       } 
-      random_method_ = Rcpp::as<std::string> (aux["random_method"]);
-    }
+    } // End if for survspline
   }
 };
 
@@ -120,12 +128,12 @@ struct fracpoly_aux {
     if (dist_name == "fracpoly"){
       Rcpp::List aux = Rcpp::as<Rcpp::List> (R_params_surv["aux"]);
       powers_ = Rcpp::as<std::vector<double> > (aux["powers"]);
+      random_method_ = Rcpp::as<std::string> (aux["random_method"]);
       cumhaz_method_ = Rcpp::as<std::string> (aux["cumhaz_method"]); 
       if (aux.containsElementNamed("step")){
         step_ = Rcpp::as<double> (aux["step"]); 
-      }
-      random_method_ = Rcpp::as<std::string> (aux["random_method"]); 
-    }  
+      } 
+    } // End if for fracpoly  
   }
 };
 

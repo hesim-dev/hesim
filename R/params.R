@@ -215,19 +215,22 @@ check.params_lm_list <- function(object){
 #'  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
 #' }
 #' 
-#' Furthermore, when either splines or fractional polynomials are used, the following additional auxillary arguments
-#' can be specified:
+#' Furthermore, when splines (with \code{scale = "log_cumhazard"}) or fractional 
+#' polynomials are used, numerical methods must be used to compute the cumulative 
+#' hazard and for random number generation. The following additional auxillary arguments
+#' can therefore be specified:
 #' \describe{
 #' \item{\code{cumhaz_method}}{Numerical method used to compute cumulative hazard 
-#' (i.e., to integrate the hazard function). Options are "quad" for adaptive
-#' quadrature and "riemann" for Riemann sum.}
-#' \item{\code{step}}{Step size for computation of cumulative hazard with 
-#' numerical integration. Only required when integrating
-#'  using "riemann". No step size is required for "quad".}
+#' (i.e., to integrate the hazard function). Always used for fractional polynomials
+#' but only used for splines if \code{scale = "log_hazard"}.
+#' Options are "quad" for adaptive quadrature and "riemann" for Riemann sum.}
 #'  \item{\code{random_method}}{Method used to randomly draw from
 #'  an arbitrary survival function. Options are "invcdf" for the inverse CDF and
-#'  "sample" for randomly sampling from discrete survival probabilities. When
-#'  "sample" is chosen, the cumulative hazard must be integrated using "riemann".}
+#'  "sample" for randomly sampling from discrete survival probabilities. Typically
+#'  considerably faster when integrating using "riemann" rather than "quad".}
+#'  \item{\code{step}}{Step size for computation of cumulative hazard with 
+#' numerical integration. Only required when cumhaz_method 
+#'  using "riemann" or using "sample" for random number generation.}
 #' }
 #' 
 #' @examples 
@@ -253,30 +256,39 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
   res <- list(coefs = coefs, dist = dist)
   if (!is.null(aux)) {
     res[["aux"]] <- aux
-    if (is.null(aux$cumhaz_method)){
-      res[["aux"]]$cumhaz_method <- "quad"
-    }
-    if (is.null(aux$step)){
-      if(res[["aux"]]$cumhaz_method %in% c("riemann")){
-        msg <- paste0("If the Riemann sum is used to compute the cumulative ",
-                     "hazard, then the step size must be specified.")
-        stop(msg)
-      } 
-    }  
+    
+    # RNG default
     if (is.null(aux$random_method)){
-      if (res[["aux"]]$cumhaz_method == "quad"){
-        res[["aux"]]$random_method <- "invcdf"
-      } else{
-       res[["aux"]]$random_method <- "sample" 
+      res[["aux"]]$random_method <- "invcdf"
+    }
+    
+    # Cumulative hazard default
+    if (is.null(aux$cumhaz_method)){
+      if (dist == "survspline"){
+        if (aux$scale == "log_hazard"){
+          res[["aux"]]$cumhaz_method <- "quad"
+        }
+      } else {
+         res[["aux"]]$cumhaz_method <- "quad"
       }
     }
-    if (res[["aux"]]$random_method == "sample" & 
-        res[["aux"]]$cumhaz_method !="riemann"){
-      msg <- paste0("If 'sample' is used to draw survival times, then ", 
-                    "the Riemann sum must be used to compute the cumulative ",
-                     "hazard.")
-      stop(msg) 
+    
+    # Step size warning
+    check_step <- function(aux){
+      if (aux$random_method == "sample" | aux$cumhaz_method == "riemann"){
+        if (is.null(aux$step)){
+            stop("'step' must be specied.", call. = FALSE)
+        }  
+      }
+    }
+    if (dist == "survspline"){
+      if (aux$scale == "log_hazard"){
+        check_step(res[["aux"]])
+      }
     } 
+    if (dist == "fracpoly"){
+      check_step(res[["aux"]])
+    }
   } # End if statement for aux
   res[["n_samples"]] <- n_samples
   class(res) <- "params_surv"

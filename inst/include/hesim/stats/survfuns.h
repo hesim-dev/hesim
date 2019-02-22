@@ -43,8 +43,13 @@ inline double integrate_hazard_riemann(Dist dist, double t){
   auto fun = [dist](double x){
     return dist->hazard(x);
   };
-  std::vector<double> times = hesim::seq(0, t, dist->step_);
-  return math::riemann(times.begin(), times.end(), fun);
+  if (t <= 0){
+    return 0;
+  }
+  else{
+    std::vector<double> times = hesim::seq(0, t, dist->step_);
+    return math::riemann(times.begin(), times.end(), fun); 
+  }
 };
 
 }
@@ -73,6 +78,37 @@ inline double integrate_hazard(Dist dist, double t, std::string method){
 };
 
 /***************************************************************************//** 
+ * Compute cumulative hazard numerically.
+ * Compute a cumulative hazard function at discrete time points numerically by
+ *  integrating the hazard function. 
+ * @param hazfun A hazard function.  
+ * @param times Times to compute the cumulative hazard function at. 
+ * @param method Integration method to use. Options are "quad" for quadrature
+ * or "riemann" for an approximation via a riemann sum.
+ * @return The cumulative hazard.
+ ******************************************************************************/ 
+template <class Func>
+inline std::vector<double> cumhazard_numeric(Func hazfun, std::vector<double> times,
+                                             std::string method){
+  if (method == "quad"){
+    std::vector<double> cumhazard(times.size());
+    const double lower = 0;
+    double abserr; int ier;
+    for (int i = 0; i < times.size(); ++i){
+      const double upper = times[i];
+      cumhazard[i] = math::quad(hazfun, lower, upper, abserr, ier);
+    }
+    return cumhazard;  
+  }
+  else if (method == "riemann"){
+    return math::cum_riemann(times.begin(), times.end(), hazfun);
+  }
+  else {
+    Rcpp::stop("The integration method must be 'quad' or 'riemann'.");
+  }
+};
+
+/***************************************************************************//** 
  * Compute restricted mean survival time.
  * Compute restricted mean survival time over a given time period for a chosen
  * probability distribution. Optionally discount survival at a rate @p r > 0. 
@@ -88,25 +124,6 @@ inline double rmst(Dist dist, double t, double r = 0){
   const double lower = 0, upper = t;
   double err_est; int err_code;
   return math::quad(fun, lower, upper, err_est, err_code);
-}
-
-
-/***************************************************************************//** 
- * Compute cumulative hazards by taking the cumulative sum of the
- * hazard within each discrete time interval.
- * @param hazfun A hazard function.
- * @param t Time to compute the cumulative hazard until.
- * @return The cumulative hazard.
- ******************************************************************************/ 
-template <class Func>
-inline std::vector<double> cumhazard_discrete(Func hazfun, std::vector<double> time){
-  std::vector<double> cumhazard(time.size());
-  cumhazard[0] = 0;
-  for (int i = 1; i < time.size(); ++i){
-    double step = time[i] - time[i - 1];
-    cumhazard[i] = step * hazfun(time[i]) + cumhazard[i - 1];
-  }
-  return cumhazard;
 }
 
 /***************************************************************************//** 
@@ -162,8 +179,7 @@ inline double surv_sample(std::vector<double> &time, std::vector<double> est,
  * Randomly draw a single observation from a survival distribution given 
  * a hazard function. The hazard function is used to generate cumulative
  * hazard curves.
- * @param hazfun A functor or lambda expression to compute the hazard as a 
- * function of time.
+ * @param dist A pointer to the base class of a probability distribution.
  * @param lower, upper The cumulative hazard function is computed from @p lower 
  * to @p upper. @p lower must be non-negative.
  * @param max_survtime The maximum value of time that survival probabilities are
@@ -173,8 +189,8 @@ inline double surv_sample(std::vector<double> &time, std::vector<double> est,
  * @p max_survtime. Must be positive and cannot be infinite.
  * @return A random sample from the survival distribution.
  ******************************************************************************/ 
-template <class Func>
-inline double surv_sample(Func hazfun, double lower = 0, double upper = INFINITY,
+template <class Dist>
+inline double surv_sample(Dist dist, double lower = 0, double upper = INFINITY,
                     double max_survtime = -1) {
   // Exceptions
   if (lower < 0){
@@ -190,16 +206,21 @@ inline double surv_sample(Func hazfun, double lower = 0, double upper = INFINITY
   // Times to compute hazards at
   std::vector<double> time;
   if (std::isinf(upper)){
-    double step = (1.0/12.0) * (max_survtime/100);
-    time = seq(lower, max_survtime, step);
+    time = seq(lower, max_survtime, dist->step_);
+    // double step = (1.0/12.0) * (max_survtime/100);
+    // time = seq(lower, max_survtime, step);
   } 
   else{
-    double step = (1.0/12.0) * (upper/100);
-    time = seq(lower, upper, step);
+    time = seq(lower, upper, dist->step_);
+    // double step = (1.0/12.0) * (upper/100);
+    // time = seq(lower, upper, step);
   }
   
   // Compute hazards
-  std::vector<double> cumhazard = cumhazard_discrete(hazfun, time);
+  auto hazfun = [dist](double x){
+    return dist->hazard(x);
+  };
+  std::vector<double> cumhazard = cumhazard_numeric(hazfun, time, dist->cumhaz_method_);
   
   // Sample
   bool time_inf = false;

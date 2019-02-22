@@ -78,7 +78,7 @@ test_that("stateval_tbl", {
                             hesim_data = hesim_dat))
   stateval_tbl <- stateval_tbl(tbl2, 
                                dist = "custom",
-                               hesim_data = hesim_dat) 
+                               hesim_data = hesim_dat)
   
   ### n is greater than number of samples in tbl
   expect_warning(mod <- create_StateVals(stateval_tbl, n = 3))

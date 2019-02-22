@@ -27,7 +27,14 @@ class distribution{
 public:
   virtual ~distribution() {};
   
-  double max_x_ = INFINITY; ///< Maximum value for support of distribution. Can be infinity.
+  double max_x_ = INFINITY; ///< Maximum value for support of distribution. Can be infinity. 
+                           ////< Only used when randomly sampling using numerical methods by 
+                          ////< sampling from a cumulative hazard function.
+  std::string cumhaz_method_; ///< Method used to compute the cumulative hazard 
+                             ///< when is must be done numerically by integrating the hazard function.
+  double step_; ////< Step size used to compute cumulative hazard at discrete points. 
+               ////< Only used when randomly sampling using numerical methods by 
+               ////< sampling from a cumulative hazard function.
   
   /** 
    * Set the parameters for the distribution.
@@ -114,19 +121,25 @@ inline double random_numeric(const stats::distribution * dist,
   if (random_method == "invcdf"){
     return dist->quantile(R::runif(0, 1));
   }
-  else {
-    auto hazfun = [dist](double x){ return dist->hazard(x); };
-    return surv_sample(hazfun, 0, INFINITY, dist->max_x_);
-  }  
+  else if (random_method == "sample") {
+    return surv_sample(dist, 0, INFINITY, dist->max_x_);
+  }
+  else{
+    Rcpp::stop("'random_method' must be either 'invcdf' or 'sample'.");
+  }
 }
 
 inline double trandom_numeric(const stats::distribution * dist, 
                               double lower, double upper,
-                             std::string random_method) {
+                              std::string random_method) {
   if (random_method == "invcdf"){
     return rtrunc(dist, lower, upper, "invcdf");
-  } else{
+  }
+  else if (random_method == "sample"){
     return rtrunc(dist, lower, upper, "sample"); 
+  }
+  else{
+    Rcpp::stop("'random_method' must be either 'invcdf' or 'sample'.");
   }
 }
 
@@ -682,8 +695,6 @@ private:
   int n_knots_; ///< Number of knots.
   double knot_max_; ///< The largest knot.
   double knot_min_; ///< The smallest knot.
-  std::string cumhaz_method_; ///< Method used to compute the cumulative hazard 
-                             ///<(i.e., to integrate the hazard function).
   std::string random_method_; ///< Method used to randomly draw from 
                              ///< survival function.                            
   
@@ -734,9 +745,7 @@ private:
   }
 
 public:
-  double step_; ///< Step size for computation of cumulative hazard with 
-                ///< numerical integration
-                
+  
   /** 
    * The constructor.
    * Instantiates a spline survival distribution.
@@ -905,8 +914,6 @@ class fracpoly : public distribution {
 private:
   std::vector<double> gamma_; ///< The scale and shape parameters.
   std::vector<double> powers_; ///< The powers of the fractional polynomial.
-  std::string cumhaz_method_; ///< Method used to compute the cumulative hazard 
-                             ///< (i.e., to integrate the hazard function). 
   std::string random_method_; ///< Method used to randomly draw from 
                              ///< survival function.                               
   
@@ -943,9 +950,7 @@ private:
   }
   
 public:
-  double step_; ///< Step size for computation of cumulative hazard with 
-                ///< numerical integration   
-                
+   
   /** 
    * The constructor.
    * Instantiates a fractional polynomial survival distribution.

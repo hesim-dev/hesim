@@ -192,7 +192,6 @@ RCPP_MODULE(distributions){
     .derives<hesim::stats::distribution>("distribution")
     .constructor<std::vector<double>, std::vector<double>, std::string, 
                  std::string, std::string, double, std::string>()
-    .field("step_", &hesim::stats::survspline::step_)
     .method("linear_predict", &hesim::stats::survspline::linear_predict)
     .method("linear_predict_dx", &hesim::stats::survspline::linear_predict_dx)
     .method("pdf", &hesim::stats::survspline::pdf)
@@ -208,7 +207,6 @@ RCPP_MODULE(distributions){
     .derives<hesim::stats::distribution>("distribution")
     .constructor<std::vector<double>, std::vector<double>, std::string, 
                   double, std::string >()
-    .field("step_", &hesim::stats::fracpoly::step_)
     .method("linear_predict", &hesim::stats::fracpoly::linear_predict)
     .method("pdf", &hesim::stats::fracpoly::pdf)
     .method("cdf", &hesim::stats::fracpoly::cdf)

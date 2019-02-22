@@ -95,8 +95,7 @@ inline double rtrunc(Dist dist, double lower, double upper,
     return rtrunc_invcdf(f_cdf, f_quantile, lower, upper, dist->max_x_);
   }
   else if (method == "cumhazard"){
-    auto f_haz = [dist](double x){ return dist->hazard(x); };
-    return surv_sample(f_haz, lower, upper, dist->max_x_);
+    return surv_sample(dist, lower, upper, dist->max_x_);
   }
   else {
     auto f_random = [dist](){ return dist->random(); };
