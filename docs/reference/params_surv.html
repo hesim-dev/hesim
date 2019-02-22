@@ -207,18 +207,21 @@ of log time; if "identity", then it is modeled as a spline function of time.</p>
 <dt><code>powers</code></dt><dd><p>A vector of the powers of the fractional polynomial with each element
  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
 </dl>
-    <p>Furthermore, when either splines or fractional polynomials are used, the following additional auxillary arguments
-can be specified:</p><dl class='dl-horizontal'>
+    <p>Furthermore, when splines (with <code>scale = "log_cumhazard"</code>) or fractional 
+polynomials are used, numerical methods must be used to compute the cumulative 
+hazard and for random number generation. The following additional auxillary arguments
+can therefore be specified:</p><dl class='dl-horizontal'>
 <dt><code>cumhaz_method</code></dt><dd><p>Numerical method used to compute cumulative hazard 
-(i.e., to integrate the hazard function). Options are "quad" for adaptive
-quadrature and "riemann" for Riemann sum.</p></dd>
-<dt><code>step</code></dt><dd><p>Step size for computation of cumulative hazard with 
-numerical integration. Only required when integrating
- using "riemann". No step size is required for "quad".</p></dd>
+(i.e., to integrate the hazard function). Always used for fractional polynomials
+but only used for splines if <code>scale = "log_hazard"</code>.
+Options are "quad" for adaptive quadrature and "riemann" for Riemann sum.</p></dd>
  <dt><code>random_method</code></dt><dd><p>Method used to randomly draw from
  an arbitrary survival function. Options are "invcdf" for the inverse CDF and
- "sample" for randomly sampling from discrete survival probabilities. When
- "sample" is chosen, the cumulative hazard must be integrated using "riemann".</p></dd>
+ "sample" for randomly sampling from discrete survival probabilities. Typically
+ considerably faster when integrating using "riemann" rather than "quad".</p></dd>
+ <dt><code>step</code></dt><dd><p>Step size for computation of cumulative hazard with 
+numerical integration. Only required when cumhaz_method 
+ using "riemann" or using "sample" for random number generation.</p></dd>
 </dl>
     
 
