@@ -6,14 +6,14 @@
 \format{A list containing two elements:
 \itemize{
 \item{costs}{ Total (discounted) costs by category.}
-\item{QALYs}{ (Discounted) quality-adjusted life-years.}
+\item{qalys}{ (Discounted) quality-adjusted life-years.}
 }}
 \description{
 An object that summarizes simulated measures of clinical effectiveness and costs from a simulation model for use in a cost-effectiveness analysis.
 }
 \section{Costs}{
 
-A 'costs' \code{\link{data.table}} contains the following columns:
+The 'costs' \code{\link{data.table}} contains the following columns:
 \describe{
 \item{category}{The cost category.}
 \item{dr}{The discount rate.}
@@ -26,7 +26,7 @@ A 'costs' \code{\link{data.table}} contains the following columns:
 
 \section{Quality-adjusted life-years}{
 
-A 'qalys' \code{\link{data.table}} contains the following columns:
+The 'qalys' \code{\link{data.table}} contains the following columns:
 \describe{
 \item{dr}{The discount rate.}
 \item{sample}{A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)}
