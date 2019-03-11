@@ -128,14 +128,13 @@ inline std::vector<double> seq(double from, double to, double by){
   if ((from < to && by < 0) || (from > to && by > 0)){
     Rcpp::stop("Wrong sign in 'by' argument.");
   } 
-  int size = (int)((to - from)/by + 1e-10) + 1;
+  int size = int((to - from)/by) + 1;
   std::vector<double> result(size);
   result[0] = from;
   if (size > 1){
     for (int i = 1; i < size; ++i){
       result[i] = result[i - 1] + by;
     }
-    result[size] = std::min(result[size], to);
   }
   return result;
 };
