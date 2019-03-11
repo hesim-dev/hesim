@@ -52,6 +52,7 @@ reference:
       - surv_quantile
   - title: "Cost-effectiveness analysis"
     contents:
+      - ce
       - icea
       - icea_pw
       - icer_tbl
@@ -59,6 +60,14 @@ reference:
     contents:
     - psm4_exdata
     - ctstm3_exdata
+
+articles:
+- title: "Using hesim"
+  contents:
+  - intro
+  - psm
+  - ctstm
+  - icea
 
 navbar:
   title: hesim
@@ -71,6 +80,8 @@ navbar:
         href: articles/intro.html
       - text: "Partitioned survival models"
         href: articles/psm.html
+      - text: "Continuous time state transition models"
+        href: articles/ctstm.html
       - text: "Individualized cost-effectiveness analysis"
         href: articles/icea.html
   - text: News

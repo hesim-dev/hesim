@@ -2,7 +2,6 @@
 % Please edit documentation in R/bootstrap.R
 \name{bootstrap}
 \alias{bootstrap}
-\alias{bootstrap}
 \alias{bootstrap.partsurvfit}
 \title{Bootstrap a statistical model}
 \usage{
