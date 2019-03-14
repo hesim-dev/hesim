@@ -86,7 +86,7 @@
     <div class="page-header toc-ignore">
       <h1>Continuous time state transition models</h1>
             
-            <h4 class="date">2019-03-11</h4>
+            <h4 class="date">2019-03-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/ctstm.Rmd"><code>vignettes/ctstm.Rmd</code></a></small>
       <div class="hidden name"><code>ctstm.Rmd</code></div>
@@ -131,11 +131,7 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 ## Healthy      NA    1    2
 ## Sick          3   NA    4
 ## Dead         NA   NA   NA</code></pre>
-</div>
-<div id="treatment-strategies-target-population-and-model-structure" class="section level1">
-<h1 class="hasAnchor">
-<a href="#treatment-strategies-target-population-and-model-structure" class="anchor"></a><span class="header-section-number">3</span> Treatment strategies, target population, and model structure</h1>
-<p>In a cost-effectiveness analysis, the treatments strategies of interest, characteristics of the target population, and selected model structure must be specified. We will consider a simple case with two treatment strategies and a heterogeneous population of 1000 patients who differ by age and gender. Furthermore, as discussed above, we will use a model with 3 health states (2 of which are non-death states).</p>
+<p>In a cost-effectiveness analysis, the treatments strategies of interest and characteristics of the target population must be specified in addition to selected model structure. We will consider a simple case with two treatment strategies and a heterogeneous population of 1000 patients who differ by age and gender. The model contains 3 health states (2 of which are non-death states).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"hesim"</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"data.table"</span>)
 strategies &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">strategy_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>))
@@ -151,10 +147,10 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 </div>
 <div id="parameter-estimation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#parameter-estimation" class="anchor"></a><span class="header-section-number">4</span> Parameter estimation</h1>
+<a href="#parameter-estimation" class="anchor"></a><span class="header-section-number">3</span> Parameter estimation</h1>
 <div id="multi-state-model" class="section level2">
 <h2 class="hasAnchor">
-<a href="#multi-state-model" class="anchor"></a><span class="header-section-number">4.1</span> Multi-state model</h2>
+<a href="#multi-state-model" class="anchor"></a><span class="header-section-number">3.1</span> Multi-state model</h2>
 <p>CTSTMs can be parameterized by fitting statistical models in <code>R</code> or by storing the parameters from a model fit outside <code>R</code> as described in the <a href="intro.html#disease-progression">introduction</a> to <code>hesim</code>. Either a single joint model can be estimated encompassing all transitions or separate models can be estimated for each possible transition. In the <a href="intro.html#disease-progression">introduction</a> we considered a joint model; here, we will fit separate models. A number of parametric and flexibly parametric approaches are available (as described more detail in the <code><a href="../reference/params_surv.html">params_surv()</a></code> documentation), but we will illustrate with a generalized gamma model.</p>
 <p>We will begin by fitting a “clock reset” model using <code><a href="https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg()</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"flexsurv"</span>)
@@ -179,7 +175,7 @@ ggamma_fits_cf &lt;-<span class="st"> </span><span class="kw"><a href="../refere
 </div>
 <div id="utility-and-costs" class="section level2">
 <h2 class="hasAnchor">
-<a href="#utility-and-costs" class="anchor"></a><span class="header-section-number">4.2</span> Utility and costs</h2>
+<a href="#utility-and-costs" class="anchor"></a><span class="header-section-number">3.2</span> Utility and costs</h2>
 <p>The most straightforward way to assign utility and cost values to health states is with a <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code>. For example, we can specify the mean and standard error of utilities by health state (implying that utility values do not vary by treatment strategy or patient) and that we will use a beta distribution to randomly sample utility values for the probabilistic sensitivity analysis (PSA).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">utility_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">state_id =</span> states<span class="op">$</span>state_id,
                                        <span class="dt">mean =</span> ctstm3_exdata<span class="op">$</span>utility<span class="op">$</span>mean,
@@ -204,26 +200,26 @@ medcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 </div>
 <div id="simulation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#simulation" class="anchor"></a><span class="header-section-number">5</span> Simulation</h1>
+<a href="#simulation" class="anchor"></a><span class="header-section-number">4</span> Simulation</h1>
 <div id="constructing-the-economic-model" class="section level2">
 <h2 class="hasAnchor">
-<a href="#constructing-the-economic-model" class="anchor"></a><span class="header-section-number">5.1</span> Constructing the economic model</h2>
+<a href="#constructing-the-economic-model" class="anchor"></a><span class="header-section-number">4.1</span> Constructing the economic model</h2>
 <p>The economic model consists of a model for disease progression and models for assigning utility and cost values to health states. Since we are performing a PSA, we must specify the number of times to sample the parameters.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n_samples &lt;-<span class="st"> </span><span class="dv">1000</span></code></pre></div>
 <div id="disease-model" class="section level3">
 <h3 class="hasAnchor">
-<a href="#disease-model" class="anchor"></a><span class="header-section-number">5.1.1</span> Disease model</h3>
+<a href="#disease-model" class="anchor"></a><span class="header-section-number">4.1.1</span> Disease model</h3>
 <p>We begin by constructing the model for health state transitions, which is a function of input data (i.e., covariates) and a fitted multi-state model (or a parameter object). When separate multi-state models are fit by transition, the input data consists of one observation for each treatment strategy and patient combination (joint models consist of one observation for each treatment strategy, patient, and transition combination). It can be created easily by using the <code><a href="../reference/expand.html">expand()</a></code> function to expand the <code><a href="../reference/hesim_data.html">hesim_data()</a></code> object created above.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">transmod_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand.html">expand</a></span>(hesim_dat, 
                         <span class="dt">by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(transmod_data)</code></pre></div>
 <pre><code>##    strategy_id patient_id      age female
-## 1:           1          1 35.13617      1
-## 2:           1          2 50.54897      0
-## 3:           1          3 40.12804      1
-## 4:           1          4 43.18942      1
-## 5:           1          5 45.53781      0
-## 6:           1          6 34.23311      0</code></pre>
+## 1:           1          1 57.75473      1
+## 2:           1          2 37.65360      0
+## 3:           1          3 37.36654      1
+## 4:           1          4 50.31933      1
+## 5:           1          5 50.35428      1
+## 6:           1          6 39.89207      1</code></pre>
 <p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">transmod_cr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span>(ggamma_fits_cr, transmod_data,
                                       <span class="dt">trans_mat =</span> tmat, <span class="dt">n =</span> n_samples,
@@ -271,7 +267,7 @@ haz[, trans_name <span class="op">:</span><span class="er">=</span><span class="
 </div>
 <div id="utility-and-cost-models" class="section level3">
 <h3 class="hasAnchor">
-<a href="#utility-and-cost-models" class="anchor"></a><span class="header-section-number">5.1.2</span> Utility and cost models</h3>
+<a href="#utility-and-cost-models" class="anchor"></a><span class="header-section-number">4.1.2</span> Utility and cost models</h3>
 <p>Mean only models (see <code><a href="../reference/params_mean.html">params_mean()</a></code>) can be created directly from the utility and cost tables using since they do not include covariates and therefore do not require input data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Utility</span>
 utilitymod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(utility_tbl, <span class="dt">n =</span> n_samples)
@@ -284,7 +280,7 @@ costmods &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdo
 </div>
 <div id="combining-the-disease-progression-cost-and-utility-models" class="section level3">
 <h3 class="hasAnchor">
-<a href="#combining-the-disease-progression-cost-and-utility-models" class="anchor"></a><span class="header-section-number">5.1.3</span> Combining the disease progression, cost, and utility models</h3>
+<a href="#combining-the-disease-progression-cost-and-utility-models" class="anchor"></a><span class="header-section-number">4.1.3</span> Combining the disease progression, cost, and utility models</h3>
 <p>Now that the necessary transition, utility,and cost models have been created, we combine them to create separate economic models based on the “clock reset” and “clock forward” transition models, respectively.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">econmod_cr &lt;-<span class="st"> </span>IndivCtstm<span class="op">$</span><span class="kw">new</span>(<span class="dt">trans_model =</span> transmod_cr,
                              <span class="dt">utility_model =</span> utilitymod,
@@ -296,21 +292,21 @@ econmod_cf &lt;-<span class="st"> </span>IndivCtstm<span class="op">$</span><spa
 </div>
 <div id="simulating-outcomes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#simulating-outcomes" class="anchor"></a><span class="header-section-number">5.2</span> Simulating outcomes</h2>
+<a href="#simulating-outcomes" class="anchor"></a><span class="header-section-number">4.2</span> Simulating outcomes</h2>
 <div id="disease-progression" class="section level3">
 <h3 class="hasAnchor">
-<a href="#disease-progression" class="anchor"></a><span class="header-section-number">5.2.1</span> Disease progression</h3>
+<a href="#disease-progression" class="anchor"></a><span class="header-section-number">4.2.1</span> Disease progression</h3>
 <p>Disease progression can be simulated using the <code>$sim_disease()</code> method. In the individual-level simulation, unique trajectories through the multi-state model are simulated for each patient, treatment strategy, and PSA sample. Patients transition <code>from</code> an old health state that was entered at time <code>time_start</code> <code>to</code> a new health state at time <code>time_stop</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># "Clock reset"</span>
 econmod_cr<span class="op">$</span><span class="kw">sim_disease</span>()
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>disprog_)</code></pre></div>
 <pre><code>##    sample strategy_id patient_id from to final time_start  time_stop
-## 1:      1           1          1    1  3     1   0.000000 0.02200816
-## 2:      1           1          2    1  2     0   0.000000 1.89819152
-## 3:      1           1          2    2  1     0   1.898192 2.48848348
-## 4:      1           1          2    1  2     0   2.488483 7.18900095
-## 5:      1           1          2    2  1     0   7.189001 7.47741090
-## 6:      1           1          2    1  2     0   7.477411 8.50167119</code></pre>
+## 1:      1           1          1    1  2     0  0.0000000  0.9869946
+## 2:      1           1          1    2  1     0  0.9869946  1.7043571
+## 3:      1           1          1    1  2     0  1.7043571  9.7422639
+## 4:      1           1          1    2  1     0  9.7422639 15.7844101
+## 5:      1           1          1    1  3     1 15.7844101 16.2160693
+## 6:      1           1          2    1  2     0  0.0000000  0.2502411</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># "Clock forward"</span>
 econmod_cf<span class="op">$</span><span class="kw">sim_disease</span>()</code></pre></div>
 <p>State occupancy probabilities at different time points are computed using <code>$sim_stateprobs()</code>. First, we simulate state probabilities for the “clock reset” model.</p>
@@ -358,17 +354,17 @@ stprobs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdoc
 </div>
 <div id="qalys" class="section level3">
 <h3 class="hasAnchor">
-<a href="#qalys" class="anchor"></a><span class="header-section-number">5.2.2</span> QALYs</h3>
+<a href="#qalys" class="anchor"></a><span class="header-section-number">4.2.2</span> QALYs</h3>
 <p>QALYs (and life-years) are simulated using <code>$sim_qalys()</code>. By default, mean QALYs are computed by treatment strategy, health state, and PSA sample (the <code>by_patient</code> option can be used to compute aggregated QALYs at the patient level). Here, we used the “clock reset” model to compute both undiscounted QALYs (<code>dr = 0</code>) and QALYs discounted at 3%.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">econmod_cr<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,.<span class="dv">03</span>))
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>qalys_)</code></pre></div>
-<pre><code>##    sample strategy_id state_id dr     qalys      lys
-## 1:      1           1        1  0 2.0675447 4.616083
-## 2:      1           1        2  0 1.2427671 1.248102
-## 3:      1           2        1  0 3.6708980 8.195794
-## 4:      1           2        2  0 1.2883166 1.293847
-## 5:      2           1        1  0 3.9212037 5.575359
-## 6:      2           1        2  0 0.3581365 1.239918</code></pre>
+<pre><code>##    sample strategy_id state_id dr    qalys      lys
+## 1:      1           1        1  0 5.763102 6.952129
+## 2:      1           1        2  0 1.486023 1.676497
+## 3:      1           2        1  0 7.001094 8.445540
+## 4:      1           2        2  0 1.165199 1.314551
+## 5:      2           1        1  0 2.444845 4.558375
+## 6:      2           1        2  0 1.144028 1.172714</code></pre>
 <p>We summarize the simulated QALYs by computing means by treatment strategy and health state across the PSA samples.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">qalys_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>qalys_[, .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(qalys)),
                                     by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span>)]
@@ -382,17 +378,17 @@ stprobs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdoc
 </div>
 <div id="costs" class="section level3">
 <h3 class="hasAnchor">
-<a href="#costs" class="anchor"></a><span class="header-section-number">5.2.3</span> Costs</h3>
+<a href="#costs" class="anchor"></a><span class="header-section-number">4.2.3</span> Costs</h3>
 <p>Costs are computed in the same way as QALYs, except that they are computed by category. We use the “clock reset” model and a 3% discount rate.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">econmod_cr<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> <span class="fl">0.03</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>costs_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id   dr category     costs
-## 1:      1           1        1 0.03     Drug 19476.531
-## 2:      1           1        2 0.03     Drug  5221.115
-## 3:      1           2        1 0.03     Drug 63325.465
-## 4:      1           2        2 0.03     Drug 10169.771
-## 5:      2           1        1 0.03     Drug 23075.759
-## 6:      2           1        2 0.03     Drug  5158.324</code></pre>
+## 1:      1           1        1 0.03     Drug 27443.964
+## 2:      1           1        2 0.03     Drug  6654.796
+## 3:      1           2        1 0.03     Drug 64660.298
+## 4:      1           2        2 0.03     Drug 10236.507
+## 5:      2           1        1 0.03     Drug 19099.221
+## 6:      2           1        2 0.03     Drug  4981.288</code></pre>
 <p>As with QALYs, we summarize costs by computing means (now by treatment strategy and category) across the PSA samples.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"scales"</span>)
 costs_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>costs_[dr <span class="op">==</span><span class="st"> </span>.<span class="dv">03</span> , .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(costs)),
@@ -408,7 +404,7 @@ costs_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>c
 </div>
 <div id="decision-analysis" class="section level2">
 <h2 class="hasAnchor">
-<a href="#decision-analysis" class="anchor"></a><span class="header-section-number">5.3</span> Decision analysis</h2>
+<a href="#decision-analysis" class="anchor"></a><span class="header-section-number">4.3</span> Decision analysis</h2>
 <p>Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The <code>$summarize()</code> method creates a <a href="../reference/ce.html">“cost-effectiveness”</a> object with mean costs and QALYs computed for each PSA sample. The <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code> can then be used for cost-effectiveness analysis as described <a href="icea.html">here</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ce_sim &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span><span class="kw">summarize</span>()
 icea_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea</a></span>(ce_sim, <span class="dt">dr_qalys =</span> .<span class="dv">03</span>, <span class="dt">dr_costs =</span> .<span class="dv">03</span>)
@@ -424,18 +420,17 @@ icea_pw_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#overview"><span class="toc-section-number">1</span> Overview</a></li>
       <li><a href="#an-example-3-state-model"><span class="toc-section-number">2</span> An example 3-state model</a></li>
-      <li><a href="#treatment-strategies-target-population-and-model-structure"><span class="toc-section-number">3</span> Treatment strategies, target population, and model structure</a></li>
       <li>
-<a href="#parameter-estimation"><span class="toc-section-number">4</span> Parameter estimation</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#multi-state-model"><span class="toc-section-number">4.1</span> Multi-state model</a></li>
-      <li><a href="#utility-and-costs"><span class="toc-section-number">4.2</span> Utility and costs</a></li>
+<a href="#parameter-estimation"><span class="toc-section-number">3</span> Parameter estimation</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#multi-state-model"><span class="toc-section-number">3.1</span> Multi-state model</a></li>
+      <li><a href="#utility-and-costs"><span class="toc-section-number">3.2</span> Utility and costs</a></li>
       </ul>
 </li>
       <li>
-<a href="#simulation"><span class="toc-section-number">5</span> Simulation</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#constructing-the-economic-model"><span class="toc-section-number">5.1</span> Constructing the economic model</a></li>
-      <li><a href="#simulating-outcomes"><span class="toc-section-number">5.2</span> Simulating outcomes</a></li>
-      <li><a href="#decision-analysis"><span class="toc-section-number">5.3</span> Decision analysis</a></li>
+<a href="#simulation"><span class="toc-section-number">4</span> Simulation</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#constructing-the-economic-model"><span class="toc-section-number">4.1</span> Constructing the economic model</a></li>
+      <li><a href="#simulating-outcomes"><span class="toc-section-number">4.2</span> Simulating outcomes</a></li>
+      <li><a href="#decision-analysis"><span class="toc-section-number">4.3</span> Decision analysis</a></li>
       </ul>
 </li>
       </ul>

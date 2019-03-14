@@ -86,7 +86,7 @@
     <div class="page-header toc-ignore">
       <h1>Partitioned survival models</h1>
             
-            <h4 class="date">2019-03-11</h4>
+            <h4 class="date">2019-03-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/psm.Rmd"><code>vignettes/psm.Rmd</code></a></small>
       <div class="hidden name"><code>psm.Rmd</code></div>
@@ -99,28 +99,20 @@
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a><span class="header-section-number">1</span> Overview</h1>
 <p>An N-state partitioned survival model (PSM) simulates the probability that a patient is in each of N distinct health states at a given point of time when treated by a particular therapy. State membership is estimated from a set of non-mutually exclusive survival curves; for an N-state model, N-1 survival curves are required.</p>
-<p>The cumulative survival function, <span class="math inline">\(S(t)_n\)</span>, represents the probability that a patient survives to health state <span class="math inline">\(n\)</span> or to a lower indexed state beyond time <span class="math inline">\(t\)</span>. The probability that a patient is in health state 1 is always just <span class="math inline">\(S(t)_1\)</span>. State membership in health states <span class="math inline">\(2,\ldots, n-1\)</span> is calculated as <span class="math inline">\(S(t)_{n} - S(t)_{n-1}\)</span>. Finally, the probability of being in the final health state <span class="math inline">\(n\)</span> (i.e., the dead state) is <span class="math inline">\(1-S(t)_{n-1}\)</span>, or one minus the overall survival curve.</p>
+<p>The cumulative survival function, <span class="math inline">\(S_n(t)\)</span>, represents the probability that a patient survives to health state <span class="math inline">\(n\)</span> or to a lower indexed state beyond time <span class="math inline">\(t\)</span>. The probability that a patient is in health state 1 is always just <span class="math inline">\(S_1(t)\)</span>. State membership in health states <span class="math inline">\(2,\ldots, n-1\)</span> is calculated as <span class="math inline">\(S_{n}(t) - S_{n-1}(t)\)</span>. Finally, the probability of being in the final health state <span class="math inline">\(n\)</span> (i.e., the dead state) is <span class="math inline">\(1-S_{n-1}(t)\)</span>, or one minus the overall survival curve.</p>
 <p>In <code>hesim</code>, an N-state PSM consists of three types of separate statistical models: a set of N-1 survival models, a model of the utility values to assign to each health state, and a set of models for costs to assign to each health state. Multiple cost models can be used to categorize costs into different categories (e.g., costs of medical care, drug costs). All models can either be fit using R or constructed with external data.</p>
-<p>Separate survival curves are predicted for each treatment strategy and patient. That is, the probability of survival given a survival model with <span class="math inline">\(L\)</span> parameters, <span class="math inline">\(\alpha_1, \ldots, \alpha_L\)</span>, for patient <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span> with treatment strategy <span class="math inline">\(k\)</span> is given by,</p>
+<p>Separate survival curves as a function of time, <span class="math inline">\(t\)</span>, are predicted for each treatment strategy <span class="math inline">\(k\)</span> and patient <span class="math inline">\(i\)</span> as a function of <span class="math inline">\(L\)</span> parameters, <span class="math inline">\(\alpha_l\)</span>, which can depend on covariates, <span class="math inline">\(x_l\)</span> (see <code><a href="../reference/params_surv.html">params_surv()</a></code> for more details),</p>
 <p><span class="math display">\[
 \begin{aligned}
-S_{ik}(t) &amp;= 1 - F(y_{ik} | \alpha_1(x_{1, ik}), \ldots, \alpha_L(x_{L, ik})),\\
-\alpha_l &amp;=  g^{-1}(x_{l,ik}^T \beta_l),
+S_{n}(t|\alpha_{1n}(x_{1n, ik}), \ldots, \alpha_{Ln}(x_{Ln, ik})).
 \end{aligned}
-\]</span></p>
-<p>where <span class="math inline">\(F(\cdot)\)</span> is the cumulative distribution function for a non-negative continuous variable, <span class="math inline">\(y\)</span>, reflecting time to an event, <span class="math inline">\(g^{-1}(\cdot)\)</span> is an inverse transformation function, <span class="math inline">\(\beta_l\)</span>, is a vector of coefficients and <span class="math inline">\(x_l\)</span> is an input vector of covariates. Likewise, we predict utility and cost values, <span class="math inline">\(v\)</span>, in health state <span class="math inline">\(h\)</span> for patient <span class="math inline">\(i\)</span> with treatment strategy <span class="math inline">\(k\)</span>,</p>
+\]</span> Quality-adjusted life-years (QALYs) and total costs associated with a given health state for a given treatment strategy and patient are calculated by integrating the “weighted” probability of survival, where weights are a function of the discount factor and predicted state values. Letting <span class="math inline">\(h\)</span> index a health state, QALYs and total costs for the <span class="math inline">\(m\)</span>th cost category are calculated as,</p>
 <p><span class="math display">\[
 \begin{aligned}
-\hat{v} &amp;= E(v_{hik} | \alpha_1(x_{1, ikl}), \ldots, \alpha_L(x_{L, hik})),\\
-\alpha_l &amp;=  g^{-1}(x_{l, hik}^T \beta_l).
+\rm{QALYs}_{hik} &amp;= \int_{0}^{T} q_{hikt} e^{-rt} p_{hik}(t)dt, \\
+\rm{Costs}_{m,hik} &amp;= \int_{0}^{T} c_{m,hikt} e^{-rt} p_{hik}(t)dt,
 \end{aligned}
-\]</span> Quality-adjusted life-years (QALYs) and total costs associated with a given health state for a given treatment strategy and patient are calculated by integrating the “weighted” probability of survival, where weights are a function of the discount factor and predicted state values. Mathematically, QALYs and total costs for the <span class="math inline">\(m\)</span>th cost category are calculated as,</p>
-<p><span class="math display">\[
-\begin{aligned}
-\rm{QALYs}_{hik} &amp;= \int_{0}^{T} q_{hik} e^{-rt} p_{hik}(t)dt, \\
-\rm{Costs}_{m,hik} &amp;= \int_{0}^{T} c_{m,hik} e^{-rt} p_{hik}(t)dt,
-\end{aligned}
-\]</span> where <span class="math inline">\(t\)</span> denotes time (typically a year), <span class="math inline">\(q\)</span> is a quality-of-life weight, <span class="math inline">\(c\)</span> represents (assuming that time is measured in years) annualized costs, <span class="math inline">\(r\)</span> is the discount rate, and <span class="math inline">\(p(t)\)</span> is the probability of being in a given health state at a given time, and QALYs and costs are calculated over <span class="math inline">\(T\)</span> time periods.</p>
+\]</span> where <span class="math inline">\(q_{hik}\)</span> is a quality-of-life weight, <span class="math inline">\(c_{m,hik}\)</span> is (assuming that time is measured in years) annualized costs, <span class="math inline">\(r\)</span> is the discount rate, and <span class="math inline">\(p_{hik}(t)\)</span> is the probability of being in a given health state at a given time, and QALYs and costs are calculated over <span class="math inline">\(T\)</span> time periods.</p>
 </div>
 <div id="an-example-4-state-psm" class="section level1">
 <h1 class="hasAnchor">
@@ -195,19 +187,15 @@ fit3 &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class
                               <span class="dt">dist =</span> <span class="st">"weibull"</span>)
 psfit_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span>(fit1, fit2, fit3)</code></pre></div>
 </div>
-<div id="utility-model" class="section level2">
+<div id="utility-and-cost-models" class="section level2">
 <h2 class="hasAnchor">
-<a href="#utility-model" class="anchor"></a><span class="header-section-number">3.2</span> Utility model</h2>
+<a href="#utility-and-cost-models" class="anchor"></a><span class="header-section-number">3.2</span> Utility and cost models</h2>
 <p>Although utility and cost models can be fit using regression models, in many cases, we won’t fit a model directly, but will use estimated mean values from published sources. In this case, we can use a <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> to store estimates. For instance, consider an example where we are only given a range of values for utility and we therefore approximate the posterior distribution of mean utility values by health state using a uniform distribution.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">utility_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="dt">tbl =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">state_id =</span> states_dt<span class="op">$</span>state_id,
                                              <span class="dt">min =</span> psm4_exdata<span class="op">$</span>utility<span class="op">$</span>lower,
                                              <span class="dt">max =</span> psm4_exdata<span class="op">$</span>utility<span class="op">$</span>upper),
                             <span class="dt">dist =</span> <span class="st">"unif"</span>,
                             <span class="dt">hesim_data =</span> hesim_dat)</code></pre></div>
-</div>
-<div id="cost-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cost-models" class="anchor"></a><span class="header-section-number">3.3</span> Cost models</h2>
 <p>Similar to utility, we will not simulate drug costs based on a statistical model but will instead use published estimates. Drug costs will only vary by treatment strategy (i.e., they do not vary by health state or across samples in the PSA).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">drugcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="dt">tbl =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">strategy_id =</span> strategies_dt<span class="op">$</span>strategy_id,
                                            <span class="dt">est =</span> psm4_exdata<span class="op">$</span>costs<span class="op">$</span>drugs<span class="op">$</span>costs),
@@ -217,23 +205,26 @@ psfit_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/f
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">medcosts_fit &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(costs <span class="op">~</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span>state_name, <span class="dt">data =</span> psm4_exdata<span class="op">$</span>costs<span class="op">$</span>medical)</code></pre></div>
 </div>
 </div>
-<div id="simulating-the-economic-model" class="section level1">
+<div id="simulation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#simulating-the-economic-model" class="anchor"></a><span class="header-section-number">4</span> Simulating the economic model</h1>
+<a href="#simulation" class="anchor"></a><span class="header-section-number">4</span> Simulation</h1>
+<div id="constructing-the-economic-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#constructing-the-economic-model" class="anchor"></a><span class="header-section-number">4.1</span> Constructing the economic model</h2>
 <p>A PSM in <code>hesim</code> is an <a href="https://cran.r-project.org/web/packages/R6/">R6</a> object of class <code>Psm</code> and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class <code>PsmCurves</code>), (2) a utility model (of class <code>StateVals</code>), and (3) a set of cost models for each cost component (a list of <code>StateVals</code> objects). Since analyses in <code>hesim</code> are, by default, based on sampled values of the parameters from their joint posterior distribution in order to facilitate probabilistic sensitivity analysis (PSA), we will specify the number of sampled parameter sets that are desired.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n_samples &lt;-<span class="st"> </span><span class="dv">100</span></code></pre></div>
-<div id="survival-models-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#survival-models-1" class="anchor"></a><span class="header-section-number">4.1</span> Survival models</h2>
+<div id="survival-models-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#survival-models-1" class="anchor"></a><span class="header-section-number">4.1.1</span> Survival models</h3>
 <p>Survival curves are simulated using <code>PsmCurves</code> objects. We can create a <code>PsmCurves</code> object using <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> as a function of our fitted Weibull models and input data describing the target population and treatment strategies.</p>
 <p>To conduct the PSA, we must sample random draws of the regression coefficients from suitable probability distribution, which can be done in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the estimation dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">surv_input_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/expand.html">expand</a></span>(hesim_dat, <span class="dt">by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
 survmods &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_PsmCurves.html">create_PsmCurves</a></span>(psfit_wei, <span class="dt">input_data =</span> surv_input_data, <span class="dt">n =</span> n_samples,
                                <span class="dt">bootstrap =</span> <span class="ot">TRUE</span>, <span class="dt">est_data =</span> surv_est_data)</code></pre></div>
 </div>
-<div id="utility-and-cost-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#utility-and-cost-models" class="anchor"></a><span class="header-section-number">4.2</span> Utility and cost models</h2>
+<div id="utility-and-cost-models-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#utility-and-cost-models-1" class="anchor"></a><span class="header-section-number">4.1.2</span> Utility and cost models</h3>
 <p>Utility and cost values are simulated using models of class <code>StateVals</code>. We can instantiate a <code>StateVals</code> object from a ’stateval_tbl` object, which creates a “mean model” that predicts mean state values for each treatment strategy, patient, and health state combination. In the utility model, utility only varies across health states and is constant within patients and treatment strategies conditional on health state.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">utilitymod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(utility_tbl, <span class="dt">n =</span> n_samples)</code></pre></div>
 <p>We take a similar approach for drug costs, in which costs only vary across treatment strategies.</p>
@@ -243,9 +234,9 @@ survmods &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cr
 medcostmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(medcosts_fit, <span class="dt">input_data =</span> medcost_data, 
                                  <span class="dt">n =</span> n_samples)</code></pre></div>
 </div>
-<div id="combining-the-statistical-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#combining-the-statistical-models" class="anchor"></a><span class="header-section-number">4.3</span> Combining the statistical models</h2>
+<div id="combining-the-statistical-models" class="section level3">
+<h3 class="hasAnchor">
+<a href="#combining-the-statistical-models" class="anchor"></a><span class="header-section-number">4.1.3</span> Combining the statistical models</h3>
 <p>The PSM model is instantiated using <code>$new()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psm &lt;-<span class="st"> </span>Psm<span class="op">$</span><span class="kw">new</span>(<span class="dt">survival_models =</span> survmods,
                <span class="dt">utility_model =</span> utilitymod,
@@ -253,12 +244,12 @@ medcostmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
                                   <span class="dt">drug =</span> drugcostmod))</code></pre></div>
 </div>
 </div>
-<div id="simulating-outcomes" class="section level1">
-<h1 class="hasAnchor">
-<a href="#simulating-outcomes" class="anchor"></a><span class="header-section-number">5</span> Simulating outcomes</h1>
-<div id="simulating-survival-curves" class="section level2">
+<div id="simulating-outcomes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#simulating-survival-curves" class="anchor"></a><span class="header-section-number">5.1</span> Simulating survival curves</h2>
+<a href="#simulating-outcomes" class="anchor"></a><span class="header-section-number">4.2</span> Simulating outcomes</h2>
+<div id="simulating-survival-curves" class="section level3">
+<h3 class="hasAnchor">
+<a href="#simulating-survival-curves" class="anchor"></a><span class="header-section-number">4.2.1</span> Simulating survival curves</h3>
 <p>Survival curves are predicted by treatment strategy and patient with the function <code>$sim_survival()</code>. The predicted curves are returned as a tidy <code>data.table</code> to facilitate plotting and stored as a field in the class named <code>survival_</code>. Below we plot the mean survival curve for patient 2 with treatment strategy 3.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Simulate</span>
 times &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dt">by =</span> .<span class="dv">1</span>)
@@ -281,9 +272,9 @@ p_data[, mean_surv_min <span class="op">:</span><span class="er">=</span><span c
 <span class="st">      </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)</code></pre></div>
 <p><img src="psm_files/figure-html/survcurves-1.png" width="672"></p>
 </div>
-<div id="simulating-health-state-probabilities" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulating-health-state-probabilities" class="anchor"></a><span class="header-section-number">5.2</span> Simulating health state probabilities</h2>
+<div id="simulating-health-state-probabilities" class="section level3">
+<h3 class="hasAnchor">
+<a href="#simulating-health-state-probabilities" class="anchor"></a><span class="header-section-number">4.2.2</span> Simulating health state probabilities</h3>
 <p>After simulating survival, we can calculate the probability of being in each of the four health states using <code>$sim_stateprobs()</code>. At a given point in time, the probability of being in state 1 is the survival probability from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. We plot these state probabilities for the first patient with the 30th randomly sampled parameter set.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Simulate</span>
 psm<span class="op">$</span><span class="kw">sim_stateprobs</span>()
@@ -302,13 +293,14 @@ stateprobs[, strategy <span class="op">:</span><span class="er">=</span><span cl
                     <span class="dt">values =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"gray92"</span>, <span class="st">"green4"</span>, <span class="st">"orange"</span>, <span class="st">"purple"</span>),
                     <span class="dt">labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Death"</span>, 
                                <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rev">rev</a></span>(hesim_dat<span class="op">$</span>states<span class="op">$</span>state_name))) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span>(<span class="dt">fill =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html">guide_legend</a></span>(<span class="dt">reverse =</span> <span class="ot">TRUE</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span>(<span class="dt">fill =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html">guide_legend</a></span>(<span class="dt">reverse =</span> <span class="ot">TRUE</span>,
+                             <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>)</code></pre></div>
 <p><img src="psm_files/figure-html/stateprobs-1.png" width="672"></p>
 </div>
-<div id="simulating-costs-and-qalys" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulating-costs-and-qalys" class="anchor"></a><span class="header-section-number">5.3</span> Simulating costs and QALYs</h2>
+<div id="simulating-costs-and-qalys" class="section level3">
+<h3 class="hasAnchor">
+<a href="#simulating-costs-and-qalys" class="anchor"></a><span class="header-section-number">4.2.3</span> Simulating costs and QALYs</h3>
 <p>Finally, we can simulate discounted costs and QALYs by numerically integrating the “weighted” probabilities in <code>$stateprobs_</code> as described above. Costs and QALYs are produced for each treatment strategy, patient, health state, and sampled parameter set.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Costs</span>
 psm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
@@ -332,6 +324,7 @@ psm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">d
 ## 6:      1           1          2        3 0.03    qalys 0.3309139</code></pre>
 </div>
 </div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -344,22 +337,13 @@ psm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">d
       <li>
 <a href="#parameter-estimation"><span class="toc-section-number">3</span> Parameter estimation</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#survival-models"><span class="toc-section-number">3.1</span> Survival models</a></li>
-      <li><a href="#utility-model"><span class="toc-section-number">3.2</span> Utility model</a></li>
-      <li><a href="#cost-models"><span class="toc-section-number">3.3</span> Cost models</a></li>
+      <li><a href="#utility-and-cost-models"><span class="toc-section-number">3.2</span> Utility and cost models</a></li>
       </ul>
 </li>
       <li>
-<a href="#simulating-the-economic-model"><span class="toc-section-number">4</span> Simulating the economic model</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#survival-models-1"><span class="toc-section-number">4.1</span> Survival models</a></li>
-      <li><a href="#utility-and-cost-models"><span class="toc-section-number">4.2</span> Utility and cost models</a></li>
-      <li><a href="#combining-the-statistical-models"><span class="toc-section-number">4.3</span> Combining the statistical models</a></li>
-      </ul>
-</li>
-      <li>
-<a href="#simulating-outcomes"><span class="toc-section-number">5</span> Simulating outcomes</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#simulating-survival-curves"><span class="toc-section-number">5.1</span> Simulating survival curves</a></li>
-      <li><a href="#simulating-health-state-probabilities"><span class="toc-section-number">5.2</span> Simulating health state probabilities</a></li>
-      <li><a href="#simulating-costs-and-qalys"><span class="toc-section-number">5.3</span> Simulating costs and QALYs</a></li>
+<a href="#simulation"><span class="toc-section-number">4</span> Simulation</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#constructing-the-economic-model"><span class="toc-section-number">4.1</span> Constructing the economic model</a></li>
+      <li><a href="#simulating-outcomes"><span class="toc-section-number">4.2</span> Simulating outcomes</a></li>
       </ul>
 </li>
       </ul>
