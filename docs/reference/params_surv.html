@@ -34,7 +34,8 @@
   
 <meta property="og:title" content="Parameters of a survival model — params_surv" />
 
-<meta property="og:description" content="Create a list containing the parameters of a single fitted parametric survival model." />
+<meta property="og:description" content="Create a list containing the parameters of a single fitted parametric or 
+flexibly parametric survival model." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -126,7 +127,8 @@
 
     <div class="ref-description">
     
-    <p>Create a list containing the parameters of a single fitted parametric survival model.</p>
+    <p>Create a list containing the parameters of a single fitted parametric or 
+flexibly parametric survival model.</p>
     
     </div>
 
@@ -161,7 +163,16 @@ a spline or fractional polynomial model is fit.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The types of distributions that can be specified are:</p><ul>
+    <p>Survival is modeled as a function of \(L\) parameters \(\alpha_l\). 
+Letting \(F(t)\) be the cumulative distribution function, survival at time \(t\)
+is given by
+$$1 - F(t | \alpha_1(x_{1}), \ldots, \alpha_L(x_{L})).$$
+The parameters are modeled as a function of covariates, \(x_l\), with an 
+inverse transformation function \(g^{-1}()\),
+$$\alpha_l =  g^{-1}(x_{l}^T \beta_l).$$
+\(g^{-1}()\) is typically \(exp()\) if a parameter is strictly positive
+and the identity function if the parameter space is unrestricted.</p>
+<p>The types of distributions that can be specified are:</p><ul>
 <li><p><code>exponential</code> or <code>exp</code> Exponential distribution. <code>coef</code>
 must contain the <code>rate</code> parameter on the log scale and the same parameterization as in 
 <code><a href='https://www.rdocumentation.org/packages/stats/topics/Exponential'>Exponential</a></code>.</p></li>

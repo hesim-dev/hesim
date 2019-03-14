@@ -23,9 +23,20 @@ in each element of \code{coefs}, which must be the same. The list may also conta
 a spline or fractional polynomial model is fit.
 }
 \description{
-Create a list containing the parameters of a single fitted parametric survival model.
+Create a list containing the parameters of a single fitted parametric or 
+flexibly parametric survival model.
 }
 \details{
+Survival is modeled as a function of \eqn{L} parameters \eqn{\alpha_l}. 
+Letting \eqn{F(t)} be the cumulative distribution function, survival at time \eqn{t}
+is given by
+\deqn{1 - F(t | \alpha_1(x_{1}), \ldots, \alpha_L(x_{L})).}
+The parameters are modeled as a function of covariates, \eqn{x_l}, with an 
+inverse transformation function \eqn{g^{-1}()},
+\deqn{\alpha_l =  g^{-1}(x_{l}^T \beta_l).}
+\eqn{g^{-1}()} is typically \eqn{exp()} if a parameter is strictly positive
+and the identity function if the parameter space is unrestricted.
+
 The types of distributions that can be specified are: 
 \itemize{
 \item{\code{exponential} or \code{exp}}{ Exponential distribution. \code{coef}
