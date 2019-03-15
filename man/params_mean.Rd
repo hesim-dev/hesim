@@ -20,6 +20,15 @@ An object of class "params_mean", which is a list containing \code{mu},
 \description{
 Create a list containing the parameters of a mean model.
 }
+\details{
+The mean model is given by,
+\deqn{y_j = \mu_j + \epsilon,}
+where \eqn{\mu_j} is the mean value for observation \eqn{j}. Predicted means
+are consequently given by \eqn{\hat{\mu}_j}, which is an estimate of
+\eqn{\mu_j} from the available data.  Random samples are obtained by sampling 
+the error term from a normal distribution,  
+\eqn{\epsilon \sim N(0, \hat{\sigma}^2)}{\epsilon ~ N(0, \hat{\sigma}^2)}.
+}
 \examples{
 params <- params_mean(mu = matrix(seq(1, 4), nrow = 2), 
                       sigma = c(0, 0))

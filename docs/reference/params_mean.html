@@ -152,6 +152,16 @@ mean. Columns denote random samples and rows denote means for different observat
 <code>sigma</code>, and <code>n_samples</code>.
  <code>n_samples</code> is equal to the number of columns in <code>mu</code>.</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The mean model is given by,
+$$y_j = \mu_j + \epsilon,$$
+where \(\mu_j\) is the mean value for observation \(j\). Predicted means
+are consequently given by \(\hat{\mu}_j\), which is an estimate of
+\(\mu_j\) from the available data.  Random samples are obtained by sampling 
+the error term from a normal distribution,  
+\(\epsilon \sim N(0, \hat{\sigma}^2)\).</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'>params_mean</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>),
@@ -177,6 +187,8 @@ mean. Columns denote random samples and rows denote means for different observat
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

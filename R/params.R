@@ -32,6 +32,13 @@ check_params_joined <- function(x, inner_class, model_list){
 #' mean. Columns denote random samples and rows denote means for different observations.
 #' @param sigma A vector of samples of the standard deviation.
 #' 
+#' @details The mean model is given by,
+#' \deqn{y_j = \mu_j + \epsilon,}
+#' where \eqn{\mu_j} is the mean value for observation \eqn{j}. Predicted means
+#' are consequently given by \eqn{\hat{\mu}_j}, which is an estimate of
+#' \eqn{\mu_j} from the available data.  Random samples are obtained by sampling 
+#' the error term from a normal distribution,  
+#' \eqn{\epsilon \sim N(0, \hat{\sigma}^2)}{\epsilon ~ N(0, \hat{\sigma}^2)}.
 #' @return An object of class "params_mean", which is a list containing \code{mu},
 #' \code{sigma}, and \code{n_samples}.
 #'  \code{n_samples} is equal to the number of columns in \code{mu}.
