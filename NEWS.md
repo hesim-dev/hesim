@@ -20,7 +20,7 @@ Disease models are constructed using the classes:
 
 Utility and cost models are constructed with the `StateVals` class. 
 
-See the [introduction](file:///Users/devin.incerti/IVI/hesim/docs/articles/intro.html) for more details.
+See the [introduction](../articles/intro.html) for more details.
 
 ## hesim 0.1.0
 The initial CRAN submission containing support for individualized cost-effectiveness analysis but not for model development.
