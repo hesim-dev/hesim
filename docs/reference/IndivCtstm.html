@@ -214,8 +214,8 @@
       as a numeric vector of length equal to the number of cost categories (e.g., <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(1, 2, Inf, 3)</a></code> for a model with 4 cost categories).</p></li>
 </ul>
     Returns an instance of self with simulated output stored in <code>costs_</code>.</p></dd>,
-    <dt><code>summarize()</code></dt><dd><p>Produce a summary measure of costs and QALYs by random sample from the PSA and treatment strategy.
-    Returns an object of summary cost-effectiveness output of class <code><a href='ce.html'>ce</a></code>.</p></dd>
+    <dt><code>summarize()</code></dt><dd><p>Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
+    See <code><a href='summarize_ce.html'>summarize_ce</a></code>.</p></dd>
     </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -224,7 +224,8 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
+
 <span class='co'># Treatment strategies, target population, and model structure</span>
 <span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),

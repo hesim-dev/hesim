@@ -134,4 +134,54 @@ surv_quantile <- function (x, probs = .5, t, surv_cols, by) {
   return(res)
 }
 
+#' Summarize costs and effectiveness
+#' 
+#' Summarize costs and quality-adjusted life-years (QALYs) given output simulated
+#' from an economic model. The summary output is used to perform 
+#' cost-effectiveness analysis with \code{\link{icea}} and \code{\link{icea_pw}}.
+#' @param costs Simulated costs by category. 
+#' @param qalys Simulated QALYs.
+#' @details If mean costs and/or QALYs have already been computed 
+#' (i.e., an average within a population), then there 
+#' must be one observation for each discount rate (\code{dr}), 
+#' PSA sample (\code{sample}), treatment strategy (\code{strategy_id}), 
+#' and health state (\code{state_id}). Alternatively, there can be column
+#' denoting a patient (\code{patient_id}), in which case outcomes will first be
+#' averaged across patients. 
+#' @return An object of class \code{\link{ce}}.
+#' @keywords internal
+summarize_ce <- function(costs, qalys) {
+  stat <- mean
+  
+  # Costs
+  if ("patient_id" %in% colnames(costs)){
+    costs_summary <- costs[, lapply(.SD, stat), by = c("category", "dr", "sample", "strategy_id", "state_id"),
+                                    .SDcols = "costs"]  
+    costs_summary <- costs_summary[, lapply(.SD, sum), by = c("category", "dr", "sample", "strategy_id"),
+                                  .SDcols = "costs"]        
+  } else{
+    costs_summary <- costs[, lapply(.SD, sum), by = c("category", "dr", "sample", "strategy_id"),
+                                    .SDcols = "costs"]
+  }
+  costs_total <- costs_summary[, .(costs = sum(costs)), by = c("dr", "sample", "strategy_id")]
+  costs_total[, category := "total"]  
+  costs_summary <- rbind(costs_summary, costs_total)
+  
+  # QALYs
+  if ("patient_id" %in% colnames(qalys)){
+    qalys_summary <- qalys[, lapply(.SD, stat), by = c("dr", "sample", "strategy_id", "state_id"),
+                                   .SDcols = "qalys"]  
+    qalys_summary <- qalys_summary[, lapply(.SD, sum), by = c("dr", "sample", "strategy_id"),
+                               .SDcols = "qalys"]
+  } else{
+    qalys_summary <- qalys[, lapply(.SD, sum), by = c("dr", "sample", "strategy_id"),
+                            .SDcols = "qalys"]
+  }      
+
+  # Combine
+  ce <- list(costs = costs_summary, qalys = qalys_summary)
+  class(ce) <- "ce"
+  return(ce)
+}
+
 

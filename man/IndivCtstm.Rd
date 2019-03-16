@@ -133,9 +133,8 @@ Note that the \code{lys} column is only computed if \code{lys = TRUE}.
   },
   
   \item{\code{summarize()}}{
-    Produce a summary measure of costs and QALYs by random sample from the PSA and treatment strategy.
-     
-     Returns an object of summary cost-effectiveness output of class \code{\link{ce}}. 
+    Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
+    See \code{\link{summarize_ce}}. 
   }    
   
 

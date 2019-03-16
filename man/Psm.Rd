@@ -79,7 +79,12 @@ using \code{sim_stateprobs}.}
       \itemize{
      \item \code{dr}: Discount rate to apply to costs. May be a vector in which case costs for each cost type are     calculated for each element in \code{dr}.
        }
-  }
+  },
+  
+  \item{\code{summarize()}}{
+    Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
+    See \code{\link{summarize_ce}}. 
+  }   
 
   \item{\code{check()}}{
  

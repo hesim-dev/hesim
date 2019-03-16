@@ -260,6 +260,11 @@ Psm <- R6::R6Class("Psm",
       setnames(costs, "value", "costs")
       self$costs_ <- costs
       invisible(self)
+    },
+    
+    summarize = function() {
+      check_summarize(self)
+      return(summarize_ce(self$costs_, self$qalys_))
     }
   )
 )
