@@ -236,4 +236,12 @@ psm$sim_qalys(dr = .03)
 head(psm$qalys_)
 ```
 
+# Decision analysis
+A cost-effectiveness analysis can be performed with the `icea()` and `icea_pw()` functions (see [here](icea.html)) after using the `$summarize()` method to create a ["cost-effectiveness"](../reference/ce.html) object with mean costs and QALYs computed for each PSA sample. 
+
+```{r}
+ce_sim <- psm$summarize()
+icea_out <- icea(ce_sim, dr_qalys = .03, dr_costs = .03)
+icea_pw_out <- icea_pw(ce_sim, comparator = 1, dr_qalys = .03, dr_costs = .03)
+```
 

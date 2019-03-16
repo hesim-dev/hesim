@@ -86,7 +86,7 @@
     <div class="page-header toc-ignore">
       <h1>Partitioned survival models</h1>
             
-            <h4 class="date">2019-03-14</h4>
+            <h4 class="date">2019-03-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/psm.Rmd"><code>vignettes/psm.Rmd</code></a></small>
       <div class="hidden name"><code>psm.Rmd</code></div>
@@ -325,6 +325,14 @@ psm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">d
 </div>
 </div>
 </div>
+<div id="decision-analysis" class="section level1">
+<h1 class="hasAnchor">
+<a href="#decision-analysis" class="anchor"></a><span class="header-section-number">5</span> Decision analysis</h1>
+<p>A cost-effectiveness analysis can be performed with the <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code> functions (see <a href="icea.html">here</a>) after using the <code>$summarize()</code> method to create a <a href="../reference/ce.html">“cost-effectiveness”</a> object with mean costs and QALYs computed for each PSA sample.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ce_sim &lt;-<span class="st"> </span>psm<span class="op">$</span><span class="kw">summarize</span>()
+icea_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea</a></span>(ce_sim, <span class="dt">dr_qalys =</span> .<span class="dv">03</span>, <span class="dt">dr_costs =</span> .<span class="dv">03</span>)
+icea_pw_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce_sim, <span class="dt">comparator =</span> <span class="dv">1</span>, <span class="dt">dr_qalys =</span> .<span class="dv">03</span>, <span class="dt">dr_costs =</span> .<span class="dv">03</span>)</code></pre></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -346,6 +354,7 @@ psm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">d
       <li><a href="#simulating-outcomes"><span class="toc-section-number">4.2</span> Simulating outcomes</a></li>
       </ul>
 </li>
+      <li><a href="#decision-analysis"><span class="toc-section-number">5</span> Decision analysis</a></li>
       </ul>
 </div>
       </div>
