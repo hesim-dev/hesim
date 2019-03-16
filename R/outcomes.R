@@ -134,6 +134,18 @@ surv_quantile <- function (x, probs = .5, t, surv_cols, by) {
   return(res)
 }
 
+check_summarize <- function(x){
+  if (is.null(x$costs_)) {
+    stop("Cannot summarize costs without first simulating 'costs_' with '$sim_costs()'.",
+           call. = FALSE)
+  }
+  
+  if (is.null(x$qalys_)) {
+    stop("Cannot summarize QALYs without first simulating 'qalys_' with '$sim_qalys()'.",
+          call. = FALSE)
+  }      
+}
+
 #' Summarize costs and effectiveness
 #' 
 #' Summarize costs and quality-adjusted life-years (QALYs) given output simulated
@@ -163,8 +175,8 @@ summarize_ce <- function(costs, qalys) {
     costs_summary <- costs[, lapply(.SD, sum), by = c("category", "dr", "sample", "strategy_id"),
                                     .SDcols = "costs"]
   }
-  costs_total <- costs_summary[, .(costs = sum(costs)), by = c("dr", "sample", "strategy_id")]
-  costs_total[, category := "total"]  
+  costs_total <- costs_summary[, list(costs = sum(costs)), by = c("dr", "sample", "strategy_id")]
+  costs_total[, ("category") := "total"]  
   costs_summary <- rbind(costs_summary, costs_total)
   
   # QALYs

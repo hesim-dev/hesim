@@ -24,7 +24,7 @@ If mean costs and/or QALYs have already been computed
 (i.e., an average within a population), then there 
 must be one observation for each discount rate (\code{dr}), 
 PSA sample (\code{sample}), treatment strategy (\code{strategy_id}), 
-and health state (\code{state_id}. Alternatively, there can be column
+and health state (\code{state_id}). Alternatively, there can be column
 denoting a patient (\code{patient_id}), in which case outcomes will first be
 averaged across patients.
 }

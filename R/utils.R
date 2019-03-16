@@ -128,21 +128,3 @@ flatten_lists <- function(x) {
   else return(unlist(c(lapply(x, flatten_lists)), recursive = FALSE))
 }
 
-
-check_summarize <- function(x){
-  if (is.null(x$costs_)) {
-    stop("Cannot summarize costs without first simulating 'costs_' with '$sim_costs()'.",
-           call. = FALSE)
-  }
-  
-  if (is.null(x$qalys_)) {
-    stop("Cannot summarize QALYs without first simulating 'qalys_' with '$sim_qalys()'.",
-          call. = FALSE)
-  }      
-}
-
-add_cost_summary_total <- function(x){
-  costs_total <- x[, .(costs = sum(costs)), by = c("dr", "sample", "strategy_id")]
-  costs_total[, category := "total"]
-  return(rbind(x, costs_total))
-}
