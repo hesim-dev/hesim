@@ -9,7 +9,7 @@ output:
 pkgdown:
   as_is: true
 vignette: >
-  %\VignetteIndexEntry{Introduction to hesim}
+  %\VignetteIndexEntry{Continuous time state transition models}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -83,27 +83,27 @@ We will begin by fitting a "clock reset" model using `flexsurvreg()`.
 ```{r, warning = FALSE, message = FALSE}
 library("flexsurv")
 n_trans <- max(tmat, na.rm = TRUE) # Number of transitions
-ggamma_fits_cr <- vector(length = n_trans, mode = "list") 
-for (i in 1:length(ggamma_fits_cr)){
-  ggamma_fits_cr[[i]] <- flexsurv::flexsurvreg(Surv(years, status) ~ factor(strategy_id), 
-                                               data = ctstm3_exdata$transitions, 
-                                               subset = (trans == i) , 
-                                               dist = "weibull") 
+wei_fits_cr <- vector(length = n_trans, mode = "list") 
+for (i in 1:length(wei_fits_cr)){
+  wei_fits_cr[[i]] <- flexsurv::flexsurvreg(Surv(years, status) ~ factor(strategy_id), 
+                                            data = ctstm3_exdata$transitions, 
+                                            subset = (trans == i) , 
+                                            dist = "weibull") 
 }
-ggamma_fits_cr <- flexsurvreg_list(ggamma_fits_cr)
+wei_fits_cr <- flexsurvreg_list(wei_fits_cr)
 ```
 
 "Clock forward" models are fit in a similar fashion by specifying both the starting (`Tstop`) and stopping (`Tstop`) times associated with each transition. 
 
 ```{r}
-ggamma_fits_cf <- vector(length = n_trans, mode = "list") 
-for (i in 1:length(ggamma_fits_cf)){
-  ggamma_fits_cf[[i]] <- flexsurv::flexsurvreg(Surv(Tstart, Tstop, status) ~ factor(strategy_id), 
-                                               data = ctstm3_exdata$transitions, 
-                                               subset = (trans == i) , 
-                                               dist = "weibull") 
+wei_fits_cf <- vector(length = n_trans, mode = "list") 
+for (i in 1:length(wei_fits_cf)){
+  wei_fits_cf[[i]] <- flexsurv::flexsurvreg(Surv(Tstart, Tstop, status) ~ factor(strategy_id), 
+                                            data = ctstm3_exdata$transitions, 
+                                            subset = (trans == i) , 
+                                            dist = "weibull") 
 }
-ggamma_fits_cf <- flexsurvreg_list(ggamma_fits_cf)
+wei_fits_cf <- flexsurvreg_list(wei_fits_cf)
 ```
 
 ## Utility and costs
@@ -155,11 +155,11 @@ head(transmod_data)
 "Clock reset" and "clock forward" transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).
 
 ```{r}
-transmod_cr <- create_IndivCtstmTrans(ggamma_fits_cr, transmod_data,
+transmod_cr <- create_IndivCtstmTrans(wei_fits_cr, transmod_data,
                                       trans_mat = tmat, n = n_samples,
                                       clock = "reset",
                                       start_age = patients$age)
-transmod_cf <- create_IndivCtstmTrans(ggamma_fits_cf, transmod_data,
+transmod_cf <- create_IndivCtstmTrans(wei_fits_cf, transmod_data,
                                       trans_mat = tmat, n = n_samples,
                                       clock = "forward",
                                       start_age = patients$age)
@@ -188,8 +188,8 @@ We then plot the predicted hazard by treatment strategy and timescale.
 ```{r predicted_hazards_plot}
 # Plot hazards
 library("ggplot2")
-haz <- rbind(predict_haz(ggamma_fits_cr, "reset"),
-             predict_haz(ggamma_fits_cf, "forward"))
+haz <- rbind(predict_haz(wei_fits_cr, "reset"),
+             predict_haz(wei_fits_cf, "forward"))
 haz[, trans_name := factor(trans,
                            levels = 1:4,
                            labels = c("Healthy-> Sick", 
