@@ -319,7 +319,8 @@ ggplot(qalys_summary[dr == .03],
        aes(x = factor(strategy_id), y = mean, fill = state_name)) + 
   geom_bar(stat = "identity") +
   scale_fill_discrete(name = "") +
-  xlab("Strategy") + ylab("Mean QALYs") 
+  xlab("Strategy") + ylab("Mean QALYs") +
+  theme_bw()
 ```
 
 ### Costs
@@ -341,7 +342,8 @@ ggplot(costs_summary,
   geom_bar(stat = "identity") +
   scale_fill_discrete(name = "Category") +
   scale_y_continuous(label = scales::dollar_format()) +
-  xlab("Strategy") + ylab("Mean costs") 
+  xlab("Strategy") + ylab("Mean costs") +
+  theme_bw()
 ```
 
 # Decision analysis
