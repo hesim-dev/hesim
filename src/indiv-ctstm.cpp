@@ -146,8 +146,8 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
                   strategy_index[i] * n_states * t.size() + 
                   state * t.size() + // need to use to when final == 1
                   j;
-      if ((t[j] >= disease_prog.time_start_[i] & t[j] < disease_prog.time_stop_[i]) ||
-          (t[j] >= disease_prog.time_stop_[i] & disease_prog.final_[i] == 1)){
+      if ((t[j] >= disease_prog.time_start_[i] && t[j] < disease_prog.time_stop_[i]) ||
+          (t[j] >= disease_prog.time_stop_[i] && disease_prog.final_[i] == 1)){
         out.prob_[index] = out.prob_[index] + 1;
       }
     } // end loop over times  

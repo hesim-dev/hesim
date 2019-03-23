@@ -806,7 +806,7 @@ public:
     if (x <= 0){
       return 1; // spline model is for time >= 0
     }
-    if (scale_ == "log_hazard" | scale_ == "log_cumhazard"){
+    if (scale_ == "log_hazard" || scale_ == "log_cumhazard"){
       return exp(-cumhazard(x));
     }
     else if (scale_ == "log_cumodds"){
