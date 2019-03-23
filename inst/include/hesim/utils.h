@@ -120,6 +120,9 @@ inline double pv(double z, double r, double t1, double t2){
 /**
  * @ingroup general
  * Generate a sequence of numbers.
+ * Generate a sequence of numbers starting at @p from and ending at @p to with a
+ * step size of @p by. Note that caution should be taken because of possible 
+ * floating point arithmetic errors.
  * @param from, to The starting and (maximal) end values of the sequence.
  * @param by Step size of the sequence. 
  * @return A sequence of numbers.
@@ -128,7 +131,16 @@ inline std::vector<double> seq(double from, double to, double by){
   if ((from < to && by < 0) || (from > to && by > 0)){
     Rcpp::stop("Wrong sign in 'by' argument.");
   } 
-  int size = int((to - from)/by) + 1;
+  // Adjustment for floating point arithmetic errors
+  int adjust = std::pow(10, std::ceil(std::log10(10/by)) - 1);
+  int from_ = adjust * from;
+  int to_ = adjust * to;
+  int by_ = adjust * by;
+  
+  
+  std::size_t size = ((to_ - from_) / by_) + 1;
+  
+  //int size = int((to - from)/by) + 1;
   std::vector<double> result(size);
   result[0] = from;
   if (size > 1){
