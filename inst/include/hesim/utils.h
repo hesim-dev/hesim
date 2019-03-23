@@ -131,16 +131,7 @@ inline std::vector<double> seq(double from, double to, double by){
   if ((from < to && by < 0) || (from > to && by > 0)){
     Rcpp::stop("Wrong sign in 'by' argument.");
   } 
-  // Adjustment for floating point arithmetic errors
-  int adjust = std::pow(10, std::ceil(std::log10(10/by)) - 1);
-  int from_ = adjust * from;
-  int to_ = adjust * to;
-  int by_ = adjust * by;
-  
-  
-  std::size_t size = ((to_ - from_) / by_) + 1;
-  
-  //int size = int((to - from)/by) + 1;
+  int size = int((to - from)/by) + 1;
   std::vector<double> result(size);
   result[0] = from;
   if (size > 1){
