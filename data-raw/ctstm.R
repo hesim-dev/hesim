@@ -12,9 +12,34 @@ ctstm3_exdata$transitions[, Tstop := (Tstop + 1)/365.25]
 ctstm3_exdata$transitions[, years := Tstop - Tstart]
 ctstm3_exdata$transitions[, strategy_id := ifelse(treat == "Placebo", 1, 2)]
 ctstm3_exdata$transitions[, treat := NULL]
+
+## Create age and gender variables
+ctstm3_exdata$transitions[, n := 1:.N, by = "id"]
+ctstm3_exdata$transitions[, max_years := max(years), by = "id"]
+pat_data <- ctstm3_exdata$transitions[n == 1]
+pat_data[, age_mean := 75 * (max_years < 1) + 
+                       65 * (max_years >= 1 & max_years < 2.5) +
+                       50 * (max_years >= 2.5 & max_years < 5.5) +
+                       40 * (max_years >= 5.5)]
+pat_data[, female_prob := .70 * (max_years < 1) + 
+                          .6 * (max_years >= 1 & max_years < 2.5) +
+                          .40 * (max_years >= 2.5 & max_years < 5.5) +
+                          .30 * (max_years >= 5.5)]
+pat_data[, age := rnorm(nrow(pat_data), age_mean, 5)]
+pat_data[, female := rbinom(nrow(pat_data), 1, female_prob)]
+ctstm3_exdata$transitions <- merge(ctstm3_exdata$transitions,
+                                   pat_data[, .(id, age, female)], 
+                                   by = "id")
+ctstm3_exdata$transitions[, age := ifelse(age >= 100, 100, age)]
+ctstm3_exdata$transitions[, age := ifelse(age <= 18, 18, age)]
+ctstm3_exdata$transitions[,  c("n", "N", "max_years") := NULL]
+pat_data <- NULL
+
+## Nice names for variables
 setnames(ctstm3_exdata$transitions, "id", "patient_id")
 setorderv(ctstm3_exdata$transitions,
-          c("strategy_id", "patient_id", "from", "to", "trans",
+          c("strategy_id", "patient_id", "age", "female",
+            "from", "to", "trans",
             "Tstart", "Tstop", "years", "status"))
 ctstm3_exdata$transitions <- data.frame(ctstm3_exdata$transitions)
 

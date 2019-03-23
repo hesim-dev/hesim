@@ -92,10 +92,13 @@ We will illustrate using the first approach, by estimating a multi-state model w
 library("flexsurv")
 mstate_data <- data.table(ctstm3_exdata$transitions)
 mstate_data[, trans := factor(trans)]
-fit_wei <- flexsurv::flexsurvreg(Surv(years, status) ~ factor(strategy_id)*trans +
-                                                    shape(trans), 
-                                                    data = mstate_data, 
-                                                    dist = "weibull")
+fit_wei <- flexsurv::flexsurvreg(Surv(years, status) ~ trans + 
+                                                       factor(strategy_id):trans +
+                                                       age:trans + 
+                                                       female: trans +
+                                                       shape(trans), 
+                                 data = mstate_data, 
+                                 dist = "weibull")
 ```
 
 ## Costs and utility
@@ -148,7 +151,7 @@ knitr::kable(tbl, row.names = FALSE)
 Since economic models in `hesim` are inherently Bayesian, we must specify the number of parameter samples we will use for the PSA before constructing the model. 
 
 ```{r}
-n_samples <- 100
+n_samples <- 1000
 ```
 
 ### Disease model

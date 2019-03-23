@@ -64,6 +64,8 @@
 #' \describe{
 #' \item{strategy_id}{Treatment strategy identification number.}
 #' \item{patient_id}{Patient identification number.}
+#' \item{age}{Patient age (in years).}
+#' \item{female}{1 if a patient is female; 0 if male.}
 #' \item{from}{Starting state.}
 #' \item{to}{Receiving state.}
 #' \item{trans}{Transition number.}

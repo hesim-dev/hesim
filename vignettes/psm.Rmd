@@ -33,8 +33,8 @@ Quality-adjusted life-years (QALYs) and total costs associated with a given heal
 
 $$
 \begin{aligned}
-\rm{QALYs}_{hik} &= \int_{0}^{T} q_{hikt} e^{-rt} p_{hik}(t)dt, \\
-\rm{Costs}_{m,hik} &= \int_{0}^{T} c_{m,hikt} e^{-rt} p_{hik}(t)dt,
+\rm{QALYs}_{hik} &= \int_{0}^{T} q_{hik}(t) e^{-rt} p_{hik}(t)dt, \\
+\rm{Costs}_{m,hik} &= \int_{0}^{T} c_{m,hik}(t) e^{-rt} p_{hik}(t)dt,
 \end{aligned}
 $$
 where $q_{hik}$ is a quality-of-life weight, $c_{m,hik}$ is (assuming that time is measured in years) annualized costs, $r$ is the discount rate, and $p_{hik}(t)$ is the probability of being in a given health state at a given time, and QALYs and costs are calculated over $T$ time periods.
