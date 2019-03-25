@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.1.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
       </span>
     </div>
 
@@ -172,12 +172,12 @@ sampling the error term from a normal distribution,
                                             <span class='kw'>Sigma</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.01</span>, <span class='fl'>.01</span>, <span class='fl'>.05</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>)),
                       <span class='no'>sigma</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/GammaDist'>rgamma</a></span>(<span class='no'>n</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>params</span>)</div><div class='output co'>#&gt; $coefs
-#&gt;           [,1]       [,2]
-#&gt; [1,] 0.6021865 0.01282422
-#&gt; [2,] 0.5450101 0.64343431
+#&gt;           [,1]      [,2]
+#&gt; [1,] 0.1759261 0.5933037
+#&gt; [2,] 0.3528055 0.5931709
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.3035642790 0.0004108663
+#&gt; [1] 0.0003353225 0.0147602060
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2

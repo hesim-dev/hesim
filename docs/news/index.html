@@ -62,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.1.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
       </span>
     </div>
 
@@ -120,14 +120,13 @@
       <small>Source: <a href='https://github.com/InnovationValueInitiative/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="hesim-0-1-0-9000" class="section level2">
+    <div id="hesim-0-2-0" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hesim-0-1-0-9000" class="anchor"></a>hesim 0.1.0.9000</h2>
-<p>The current development version of <code>hesim</code>.</p>
+<a href="#hesim-0-2-0" class="anchor"></a>hesim 0.2.0</h2>
 <div id="highlights" class="section level3">
 <h3 class="hasAnchor">
 <a href="#highlights" class="anchor"></a>Highlights</h3>
-<p><code>hesim</code> now provides a general framework for integrating statistical models with economic evaluation. Users can build a decision model by specifying a model structure, which consists of a set of statistical models for disease progression, utilities, and costs. Each statistical model is used to simulate outcomes as a function of estimated parameters and input data. N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are now supported.</p>
+<p><code>hesim</code> now provides a general framework for integrating statistical models with economic evaluation. Users build a decision model by specifying a model structure, which consists of a set of statistical models for disease progression, utilities, and costs. Each statistical model is used to simulate outcomes as a function of estimated parameters and input data. N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are now supported.</p>
 </div>
 <div id="api-changes" class="section level3">
 <h3 class="hasAnchor">
@@ -140,7 +139,7 @@
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
-<p>Economic models—which combine the disease, utility, and cost models—can be constructed with the following classes:</p>
+<p>Economic models—which combine the disease, utility, and cost models—are constructed with the following classes:</p>
 <ul>
 <li>
 <code><a href="../reference/Psm.html">Psm()</a></code> for PSMs</li>
@@ -154,14 +153,14 @@
 <li>
 <code><a href="../reference/IndivCtstmTrans.html">IndivCtstmTrans()</a></code> to simulate health state transitions with a iCTSTM</li>
 </ul>
-<p>Utility and cost models are constructed with the <code>StateVals</code> class.</p>
-<p>See the <a href="file:///Users/devin.incerti/IVI/hesim/docs/articles/intro.html">introduction</a> for more details.</p>
+<p>Utility and cost models are constructed with the <code><a href="../reference/StateVals.html">StateVals()</a></code> class.</p>
+<p>The economic models are used to simulate disease progression (<code>$sim_disease()</code>, <code>sim_stateprobs()</code>), quality-adjusted life-years (QALYs) (<code>sim_qalys()</code>), and costs (<code>sim_costs()</code>). Parameter uncertainty is propagated to model outcomes using probabilistic sensitivity analysis. Summaries of the simulated costs and QALYs are used to perform model-based cost-effectiveness analyses (CEAs) and represent decision uncertainty with <code><a href="../reference/icea.html">icea.ce()</a></code> and <code><a href="../reference/icea.html">icea_pw.ce()</a></code>.</p>
 </div>
 </div>
     <div id="hesim-0-1-0" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-0-1-0" class="anchor"></a>hesim 0.1.0</h2>
-<p>The initial CRAN submission containing support for individualized cost-effectiveness analysis but not for model development.</p>
+<p>The initial CRAN submission containing support for CEA but not for model development. Decision uncertainty is represented using cost-effectiveness planes, cost-effectiveness acceptability curves, cost-effectiveness acceptability frontiers, and the expected value of perfect information. CEAs by subgroup (i.e., individualized CEAs) are performed with <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code>.</p>
 </div>
   </div>
 
@@ -169,7 +168,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#hesim-0-1-0-9000">0.1.0.9000</a></li>
+        <li><a href="#hesim-0-2-0">0.2.0</a></li>
         <li><a href="#hesim-0-1-0">0.1.0</a></li>
       </ul>
     </div>
