@@ -123,7 +123,7 @@ medcosts_fit <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$
 
 # Simulation
 ## Constructing the economic model
-A PSM in `hesim` is an [R6](https://cran.r-project.org/web/packages/R6/) object of class `Psm` and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class `PsmCurves`), (2) a utility model (of class `StateVals`), and (3) a set of cost models for each cost component (a list of `StateVals` objects).  Since analyses in `hesim` are, by default, based on sampled values of the parameters from their joint posterior distribution in order to facilitate probabilistic sensitivity analysis (PSA), we will specify the number of sampled parameter sets that are desired. 
+A PSM in `hesim` is an [R6](https://r6.r-lib.org/index.html) object of class `Psm` and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class `PsmCurves`), (2) a utility model (of class `StateVals`), and (3) a set of cost models for each cost component (a list of `StateVals` objects).  Since analyses in `hesim` are, by default, based on sampled values of the parameters from their joint posterior distribution in order to facilitate probabilistic sensitivity analysis (PSA), we will specify the number of sampled parameter sets that are desired. 
 
 ```{r, warning = FALSE, message = FALSE}
 n_samples <- 100

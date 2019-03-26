@@ -86,7 +86,7 @@
     <div class="page-header toc-ignore">
       <h1>Partitioned survival models</h1>
             
-            <h4 class="date">2019-03-24</h4>
+            <h4 class="date">2019-03-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/psm.Rmd"><code>vignettes/psm.Rmd</code></a></small>
       <div class="hidden name"><code>psm.Rmd</code></div>
@@ -211,7 +211,7 @@ psfit_wei &lt;-<span class="st"> </span><span class="kw"><a href="../reference/f
 <div id="constructing-the-economic-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#constructing-the-economic-model" class="anchor"></a><span class="header-section-number">4.1</span> Constructing the economic model</h2>
-<p>A PSM in <code>hesim</code> is an <a href="https://cran.r-project.org/web/packages/R6/">R6</a> object of class <code>Psm</code> and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class <code>PsmCurves</code>), (2) a utility model (of class <code>StateVals</code>), and (3) a set of cost models for each cost component (a list of <code>StateVals</code> objects). Since analyses in <code>hesim</code> are, by default, based on sampled values of the parameters from their joint posterior distribution in order to facilitate probabilistic sensitivity analysis (PSA), we will specify the number of sampled parameter sets that are desired.</p>
+<p>A PSM in <code>hesim</code> is an <a href="https://r6.r-lib.org/index.html">R6</a> object of class <code>Psm</code> and comprises of three separate submodels: (1) a set of survival models for generating survival curves (of class <code>PsmCurves</code>), (2) a utility model (of class <code>StateVals</code>), and (3) a set of cost models for each cost component (a list of <code>StateVals</code> objects). Since analyses in <code>hesim</code> are, by default, based on sampled values of the parameters from their joint posterior distribution in order to facilitate probabilistic sensitivity analysis (PSA), we will specify the number of sampled parameter sets that are desired.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n_samples &lt;-<span class="st"> </span><span class="dv">100</span></code></pre></div>
 <div id="survival-models-1" class="section level3">
 <h3 class="hasAnchor">
