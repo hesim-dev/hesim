@@ -145,9 +145,8 @@
     <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_surv.html'>params_surv</a></code> or <code><a href='params_surv_list.html'>params_surv_list</a></code>.</p></dd>
     <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions in a multi-state model in the format from the <a href='https://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package. See the documentation for the argument "trans" in <a href='https://www.rdocumentation.org/packages/mstate/topics/msprep'>msprep</a>.</p></dd>
     <dt><code>start_state</code></dt><dd><p>A scalar or vector denoting the starting health state. Default is the first health state. If a vector, must be equal to the number of simulated patients.</p></dd>
-    <dt><code>start_time</code></dt><dd><p>A scalar or vector denoting the time at which to begin the simulation. Default is time 0. If a vector, must be equal to the number of simulated patients.</p></dd>
     <dt><code>clock</code></dt><dd><p>"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
-of clock-reset and clock-forward models. A clock-reset model is a semi-Markov model in which transition rates depend on time since entering a state. A clock-forward model is a Markov model in which transition rates depend on time since <code>start_time</code>. If <code>"mix"</code> is used, then <code>reset_states</code> must be specified.</p></dd>
+of clock-reset and clock-forward models. A clock-reset model is a semi-Markov model in which transition rates depend on time since entering a state. A clock-forward model is a Markov model in which transition rates depend on time since entering the initial state. If <code>"mix"</code> is used, then <code>reset_states</code> must be specified.</p></dd>
     <dt><code>reset_states</code></dt><dd><p>A vector denoting the states in which time resets. Hazard functions are always a function of elapsed time since either the start of the model or from when time was previously reset. Only used if <code>clock = "mix"</code>.</p></dd>
     <dt><code>start_age</code></dt><dd><p>A scalar or vector denoting the starting age of each patient in the simulation. Default is 38. If a vector, must be equal to the number of simulated patients.</p></dd>
     <dt><code>death_state</code></dt><dd><p>The death state in <code>trans_mat</code>. Used with <code>max_age</code> in <code>sim_disease</code> as patients transition to this state upon reaching maximum age. By default, it is set to the final absorbing state (i.e., a row in <code>trans_mat</code> with all NAs).</p></dd>
@@ -157,7 +156,7 @@ of clock-reset and clock-forward models. A clock-reset model is a semi-Markov mo
 
     
     <dl class='dl-horizontal'>
-    <dt><code>new(input_mats, params, trans_mat, start_state = 1, start_time = 0,
+    <dt><code>new(input_mats, params, trans_mat, start_state = 1,
                 start_age = 38, death_state = NULL,
                 clock = c("reset", "forward", "mix"),
                 reset_states = NULL))</code></dt><dd><p>Constructor for the class.</p></dd>
@@ -220,36 +219,36 @@ of clock-reset and clock-forward models. A clock-reset model is a semi-Markov mo
                                     <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                     <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t     hazard
-#&gt; 1:     1      1           1          1 1 0.21087494
-#&gt; 2:     1      1           1          1 2 0.21087494
-#&gt; 3:     1      1           1          1 3 0.21087494
-#&gt; 4:     2      1           1          1 1 0.05853501
-#&gt; 5:     2      1           1          1 2 0.05853501
-#&gt; 6:     2      1           1          1 3 0.05853501</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
-#&gt; 1:     1      1           1          1 1 0.21087494
-#&gt; 2:     1      1           1          1 2 0.42174988
-#&gt; 3:     1      1           1          1 3 0.63262482
-#&gt; 4:     2      1           1          1 1 0.05853501
-#&gt; 5:     2      1           1          1 2 0.11707001
-#&gt; 6:     2      1           1          1 3 0.17560502</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
-#&gt;  1:      1           1        1 5 0.6666667
+#&gt; 1:     1      1           1          1 1 0.16540081
+#&gt; 2:     1      1           1          1 2 0.16540081
+#&gt; 3:     1      1           1          1 3 0.16540081
+#&gt; 4:     2      1           1          1 1 0.03399796
+#&gt; 5:     2      1           1          1 2 0.03399796
+#&gt; 6:     2      1           1          1 3 0.03399796</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
+#&gt; 1:     1      1           1          1 1 0.16540081
+#&gt; 2:     1      1           1          1 2 0.33080162
+#&gt; 3:     1      1           1          1 3 0.49620243
+#&gt; 4:     2      1           1          1 1 0.03399796
+#&gt; 5:     2      1           1          1 2 0.06799591
+#&gt; 6:     2      1           1          1 3 0.10199387</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
+#&gt;  1:      1           1        1 5 1.0000000
 #&gt;  2:      1           1        2 5 0.0000000
-#&gt;  3:      1           1        3 5 0.3333333
-#&gt;  4:      1           2        1 5 0.3333333
+#&gt;  3:      1           1        3 5 0.0000000
+#&gt;  4:      1           2        1 5 0.0000000
 #&gt;  5:      1           2        2 5 0.3333333
-#&gt;  6:      1           2        3 5 0.3333333
-#&gt;  7:      1           3        1 5 0.3333333
-#&gt;  8:      1           3        2 5 0.0000000
-#&gt;  9:      1           3        3 5 0.6666667
-#&gt; 10:      2           1        1 5 0.0000000
-#&gt; 11:      2           1        2 5 0.3333333
+#&gt;  6:      1           2        3 5 0.6666667
+#&gt;  7:      1           3        1 5 0.6666667
+#&gt;  8:      1           3        2 5 0.3333333
+#&gt;  9:      1           3        3 5 0.0000000
+#&gt; 10:      2           1        1 5 0.3333333
+#&gt; 11:      2           1        2 5 0.0000000
 #&gt; 12:      2           1        3 5 0.6666667
-#&gt; 13:      2           2        1 5 0.3333333
-#&gt; 14:      2           2        2 5 0.0000000
+#&gt; 13:      2           2        1 5 0.0000000
+#&gt; 14:      2           2        2 5 0.3333333
 #&gt; 15:      2           2        3 5 0.6666667
-#&gt; 16:      2           3        1 5 0.6666667
-#&gt; 17:      2           3        2 5 0.0000000
-#&gt; 18:      2           3        3 5 0.3333333</div></pre>
+#&gt; 16:      2           3        1 5 0.0000000
+#&gt; 17:      2           3        2 5 1.0000000
+#&gt; 18:      2           3        3 5 0.0000000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

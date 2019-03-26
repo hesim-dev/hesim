@@ -70,7 +70,7 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
   # Simulate
   disprog <- C_ctstm_sim_disease(trans_model, trans_model$start_state - 1, 
                                  trans_model$start_age,
-                                 trans_model$start_time,
+                                 rep(0, trans_model$input_mats$n_patients), # Start time is always 0
                                  trans_model$death_state - 1, 
                                  trans_model$clock, trans_model$reset_states - 1,
                                  max_t, max_age, progress)
@@ -214,7 +214,6 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 
   public = list(
     start_state = NULL,
-    start_time = NULL,
     start_age = NULL,
     death_state = NULL,
     clock = NULL,
@@ -223,7 +222,6 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     
     initialize = function(input_mats, params, trans_mat, 
                           start_state = 1,
-                          start_time = 0,
                           start_age = 38,
                           death_state = NULL,
                           clock = c("reset", "forward", "mix"),
@@ -240,7 +238,6 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
       
       # history
       self$start_state <- private$check_history(start_state)
-      self$start_time <- private$check_history(start_time)
       self$start_age <- private$check_history(start_age)
       
       # death state

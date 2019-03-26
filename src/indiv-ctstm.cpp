@@ -224,7 +224,9 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
     double wlos_it = 0; //Weighted LOS by row and time interval
     double time_start_it = disease_prog.time_start_[i];
     double time_stop_it_max = disease_prog.time_stop_[i];
-    if (disease_prog.time_start_[i] == 0){ // If a new patient, reset time
+    if (i > 0 && 
+        (disease_prog.patient_id_[i] != disease_prog.patient_id_[i-1] ||
+         disease_prog.sample_[i] != disease_prog.sample_[i-1])){ // If a new patient, reset time
       time_index = 0;
     } 
     int t_start = time_index;
@@ -253,7 +255,7 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
       if (t < (obs_index.n_times_ - 1 && time_stop_it >= obs_index.get_time_stop())){
         time_index = t + 1; 
       }
-    } // end look over time intervals
+    } // end loop over time intervals
   } // end loop over rows
   return wlos;
 }
