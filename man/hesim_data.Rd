@@ -19,7 +19,7 @@ Other columns are variables describing the characteristics of a patient.}
 
 \item{lines}{A table of treatment lines used for each treatment strategy. Must contain the columns
 \code{strategy_id}, denoting a treatment strategy, and \code{line}, denoting a treatment line. Other 
-columns are variables describing the characteristics of a treatmnet line for a given treatment
+columns are variables describing the characteristics of a treatment line for a given treatment
 strategy. A column denoting the treatment used for a given strategy and line would often
 be specified. Not currently supported.}
 

@@ -47,7 +47,7 @@ taken to be the number required.}
 
 \item{t}{Vector of times for which restricted mean survival time is evaluated.}
 
-\item{start}{Optional left-trunctation time or times. The returned restricted
+\item{start}{Optional left-truncation time or times. The returned restricted
 mean survival will be conditional on survival up to this time.}
 
 \item{...}{Additional arguments to pass to random sampling functions.}
@@ -55,7 +55,7 @@ mean survival will be conditional on survival up to this time.}
 \value{
 \code{dweibullNMA} gives the density, \code{pweibullNMA} gives the
 distribution function, \code{qweibullNMA} gives the quantile function,
-\code{rweibullNMA} generates random deviates, \code{HweibullNMA} retuns the
+\code{rweibullNMA} generates random deviates, \code{HweibullNMA} returns the
 cumulative hazard and \code{hweibullNMA} the hazard.
 }
 \description{

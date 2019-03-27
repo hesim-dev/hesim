@@ -150,7 +150,7 @@ a given parameter.</p></td>
     </tr>
     <tr>
       <th>aux</th>
-      <td><p>Auxillary arguments used with splines or fractional polynomials. See "Details".</p></td>
+      <td><p>Auxiliary arguments used with splines or fractional polynomials. See "Details".</p></td>
     </tr>
     </table>
     
@@ -204,28 +204,28 @@ that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/
 <li><p><code>survspline</code> Survival splines. Each element of <code>coef</code> is a parameter of the
 spline model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
 to the number of knots (including the boundary knots). See below for details on the
-auxillary arguments. The parameterization is that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/Survspline'>Survspline</a></code>.</p></li>
+auxiliary arguments. The parameterization is that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/Survspline'>Survspline</a></code>.</p></li>
 <li><p><code>fracpoly</code> Fractional polynomials. Each element of <code>coef</code> is a parameter of the
 fractional polynomial model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
-to the number of powers minus 1. See below for details on the auxillary arguments 
+to the number of powers minus 1. See below for details on the auxiliary arguments 
 (i.e., <code>powers</code>).</p></li>
 </ul>
-    <p>Auxillary arguments for spline models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
+    <p>Auxiliary arguments for spline models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
 <dt><code>knots</code></dt><dd><p>A numeric vector of knots.</p></dd>
 <dt><code>scale</code></dt><dd><p>The survival outcome to be modeled
-as a spline function. Options are "log_cumhazard" for the log cummulative hazard; 
-"log_hazard" for the log hazard rate; "log_cumodds" for the log cummulative odds;
+as a spline function. Options are "log_cumhazard" for the log cumulative hazard; 
+"log_hazard" for the log hazard rate; "log_cumodds" for the log cumulative odds;
 and "inv_normal" for the inverse normal distribution function.</p></dd>
 <dt><code>timescale</code></dt><dd><p>If "log" (the default), then survival is modeled as a spline function
 of log time; if "identity", then it is modeled as a spline function of time.</p></dd>
 </dl>
-    <p>Auxillary arguments for fractional polynomial models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
+    <p>Auxiliary arguments for fractional polynomial models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
 <dt><code>powers</code></dt><dd><p>A vector of the powers of the fractional polynomial with each element
  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
 </dl>
     <p>Furthermore, when splines (with <code>scale = "log_hazard"</code>) or fractional 
 polynomials are used, numerical methods must be used to compute the cumulative 
-hazard and for random number generation. The following additional auxillary arguments
+hazard and for random number generation. The following additional auxiliary arguments
 can therefore be specified:</p><dl class='dl-horizontal'>
 <dt><code>cumhaz_method</code></dt><dd><p>Numerical method used to compute cumulative hazard 
 (i.e., to integrate the hazard function). Always used for fractional polynomials
@@ -241,8 +241,7 @@ cumulative hazard or using "sample" for random number generation.</p></dd>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='input'><span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
 <span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'>params_surv</span>(<span class='kw'>coefs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>res.t</span>[<span class='st'>"shape"</span>, <span class='st'>"est"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
                                    <span class='kw'>scale</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>res.t</span>[<span class='st'>"scale"</span>, <span class='st'>"est"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>]),
                      <span class='kw'>dist</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>dlist</span>$<span class='no'>name</span>)

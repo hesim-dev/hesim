@@ -46,7 +46,7 @@ mom_beta <- function(mean, sd){
 #' and
 #' \deqn{\alpha = \frac{\mu}{\theta}} 
 #' 
-#' The inverse of the scale parmeter, \eqn{\beta = 1/\theta}, is the rate parameter. 
+#' The inverse of the scale parameter, \eqn{\beta = 1/\theta}, is the rate parameter. 
 #' 
 #' @examples
 #' mom_gamma(mean = 10000, sd = 2000)
@@ -130,13 +130,13 @@ sr2fsweiNMA <- function(sr){
 #' @param lower.tail logical; if TRUE (default), probabilities are \eqn{P(X
 #'  \le x)}{P(X <= x)}, otherwise, \eqn{P(X > x)}{P(X > x)}.
 #' @param t Vector of times for which restricted mean survival time is evaluated.
-#' @param start Optional left-trunctation time or times. The returned restricted
+#' @param start Optional left-truncation time or times. The returned restricted
 #' mean survival will be conditional on survival up to this time.
 #' @param ... Additional arguments to pass to random sampling functions.
 #' @name weibullNMA
 #' @return \code{dweibullNMA} gives the density, \code{pweibullNMA} gives the
 #' distribution function, \code{qweibullNMA} gives the quantile function,
-#' \code{rweibullNMA} generates random deviates, \code{HweibullNMA} retuns the
+#' \code{rweibullNMA} generates random deviates, \code{HweibullNMA} returns the
 #' cumulative hazard and \code{hweibullNMA} the hazard.
 #' @seealso \code{\link{dweibull}}
 NULL

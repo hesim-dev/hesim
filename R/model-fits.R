@@ -61,7 +61,7 @@ flexsurvreg_list <- function(...){
 #'
 #' Create a partitioned survival regression object of class "partsurvfit". The object contains a list
 #' of fitted survival models fit using either \code{\link{flexsurvreg}} or \code{\link{flexsurvspline}} (i.e.,
-#' an object of class \code{\link{flexsurvreg_list}}) and the data frame used to peform the fit of each model. 
+#' an object of class \code{\link{flexsurvreg_list}}) and the data frame used to perform the fit of each model. 
 #' The same data frame must have been used for each fit.  
 #' @param object An object of class \code{\link{flexsurvreg_list}}.
 #' @param data The data frame used to fit each survival model in \code{object}.

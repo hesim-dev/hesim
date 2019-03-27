@@ -31,7 +31,7 @@ of moments estimates of the parameters \code{shape} = \eqn{\alpha > 0} and
 and
 \deqn{\alpha = \frac{\mu}{\theta}} 
 
-The inverse of the scale parmeter, \eqn{\beta = 1/\theta}, is the rate parameter.
+The inverse of the scale parameter, \eqn{\beta = 1/\theta}, is the rate parameter.
 }
 \examples{
 mom_gamma(mean = 10000, sd = 2000)

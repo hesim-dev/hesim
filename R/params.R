@@ -167,7 +167,7 @@ check.params_lm_list <- function(object){
 #' the posterior distribution of the regression coefficients used to predict
 #' a given parameter.
 #' @param dist Character vector denoting the parametric distribution. See "Details".
-#' @param aux Auxillary arguments used with splines or fractional polynomials. See "Details". 
+#' @param aux Auxiliary arguments used with splines or fractional polynomials. See "Details". 
 #' 
 #' @return An object of class "params_surv", which is a list containing \code{coefs},
 #' \code{dist}, and \code{n_samples}. \code{n_samples} is equal to the number of rows
@@ -218,25 +218,25 @@ check.params_lm_list <- function(object){
 #' \item{\code{survspline}}{ Survival splines. Each element of \code{coef} is a parameter of the
 #' spline model (i.e. \code{gamma_0}, \code{gamma_1}, \eqn{\ldots}) with length equal
 #' to the number of knots (including the boundary knots). See below for details on the
-#' auxillary arguments. The parameterization is that same as in \code{\link[flexsurv]{Survspline}}.}
+#' auxiliary arguments. The parameterization is that same as in \code{\link[flexsurv]{Survspline}}.}
 #' \item{\code{fracpoly}}{ Fractional polynomials. Each element of \code{coef} is a parameter of the
 #' fractional polynomial model (i.e. \code{gamma_0}, \code{gamma_1}, \eqn{\ldots}) with length equal
-#' to the number of powers minus 1. See below for details on the auxillary arguments 
+#' to the number of powers minus 1. See below for details on the auxiliary arguments 
 #' (i.e., \code{powers}).}
 #' }
 #' 
-#' Auxillary arguments for spline models should be specified as a list containing the elements:
+#' Auxiliary arguments for spline models should be specified as a list containing the elements:
 #' \describe{
 #' \item{\code{knots}}{A numeric vector of knots.}
 #' \item{\code{scale}}{The survival outcome to be modeled
-#' as a spline function. Options are "log_cumhazard" for the log cummulative hazard; 
-#' "log_hazard" for the log hazard rate; "log_cumodds" for the log cummulative odds;
+#' as a spline function. Options are "log_cumhazard" for the log cumulative hazard; 
+#' "log_hazard" for the log hazard rate; "log_cumodds" for the log cumulative odds;
 #' and "inv_normal" for the inverse normal distribution function.}
 #' \item{\code{timescale}}{If "log" (the default), then survival is modeled as a spline function
 #' of log time; if "identity", then it is modeled as a spline function of time.}
 #' }
 #' 
-#' Auxillary arguments for fractional polynomial models should be specified as a list containing the elements:
+#' Auxiliary arguments for fractional polynomial models should be specified as a list containing the elements:
 #' \describe{
 #' \item{\code{powers}}{ A vector of the powers of the fractional polynomial with each element
 #'  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
@@ -244,7 +244,7 @@ check.params_lm_list <- function(object){
 #' 
 #' Furthermore, when splines (with \code{scale = "log_hazard"}) or fractional 
 #' polynomials are used, numerical methods must be used to compute the cumulative 
-#' hazard and for random number generation. The following additional auxillary arguments
+#' hazard and for random number generation. The following additional auxiliary arguments
 #' can therefore be specified:
 #' \describe{
 #' \item{\code{cumhaz_method}}{Numerical method used to compute cumulative hazard 
