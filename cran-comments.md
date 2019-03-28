@@ -1,3 +1,6 @@
+## Resubmission
+This is a resubmission. In the original submission, multiple DOIs were combined in a single angled bracket. The DOIs are now contained in separate angled brackets. 
+
 ## Release summary
 This release contains major updates as outlined on the package 
 website [here](https://innovationvalueinitiative.github.io/hesim/news/index.html).
