@@ -17,12 +17,10 @@ Features of the current version include:
 
 # Installation
 ```r
+# Install from CRAN:
+install.packages("hesim")
+
 # Install the most up to date development version from GitHub:
 # install.packages("devtools")
 devtools::install_github("InnovationValueInitiative/hesim")
-
-# Install v0.1 (without economic modeling) from CRAN:
-install.packages("hesim")
-
-
 ```

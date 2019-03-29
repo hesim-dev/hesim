@@ -11,7 +11,7 @@ Description: Parameterize, simulate, and analyze health-economic simulation
   <doi:10.1002/sim.4780091106> and continuous time state transition models 
   (Siebert et al. 2012) <doi:10.1016/j.jval.2012.06.014> parameterized using 
   survival or multi-state modeling (de Wreede et al. 2011, Jackson 2015) 
-  <doi:10.18637/jss.v038.i07>, <10.18637/jss.v070.i08>. Decision uncertainty 
+  <doi:10.18637/jss.v038.i07>, <doi:10.18637/jss.v070.i08>. Decision uncertainty 
   from a cost-effectiveness analysis is quantified with standard graphical and 
   tabular summaries of a probabilistic sensitivity analysis (Claxton et al. 2005, 
   Barton et al. 2008) <doi:10.1002/hec.985>, <doi:10.1111/j.1524-4733.2008.00358.x>. 

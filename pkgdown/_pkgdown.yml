@@ -3,7 +3,7 @@ template:
     bootswatch: simplex
     
 development:
-  mode: unreleased    
+  mode: auto    
 
 reference:
   - title: "Fitted statistical models"

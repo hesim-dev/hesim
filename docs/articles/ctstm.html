@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
     <div class="page-header toc-ignore">
       <h1>Continuous time state transition models</h1>
             
-            <h4 class="date">2019-03-24</h4>
+            <h4 class="date">2019-03-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/ctstm.Rmd"><code>vignettes/ctstm.Rmd</code></a></small>
       <div class="hidden name"><code>ctstm.Rmd</code></div>
@@ -214,12 +214,12 @@ medcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference
                         <span class="dt">by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(transmod_data)</code></pre></div>
 <pre><code>##    strategy_id patient_id      age female
-## 1:           1          1 32.53202      1
-## 2:           1          2 34.06237      1
-## 3:           1          3 42.27112      0
-## 4:           1          4 36.97314      1
-## 5:           1          5 44.84475      1
-## 6:           1          6 41.68987      0</code></pre>
+## 1:           1          1 32.11333      1
+## 2:           1          2 46.02181      0
+## 3:           1          3 30.39432      1
+## 4:           1          4 43.16731      0
+## 5:           1          5 41.36625      0
+## 6:           1          6 52.62855      0</code></pre>
 <p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">transmod_cr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span>(wei_fits_cr, transmod_data,
                                       <span class="dt">trans_mat =</span> tmat, <span class="dt">n =</span> n_samples,
@@ -300,13 +300,13 @@ econmod_cf &lt;-<span class="st"> </span>IndivCtstm<span class="op">$</span><spa
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># "Clock reset"</span>
 econmod_cr<span class="op">$</span><span class="kw">sim_disease</span>()
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>disprog_)</code></pre></div>
-<pre><code>##    sample strategy_id patient_id from to final time_start time_stop
-## 1:      1           1          1    1  2     0   0.000000  3.148461
-## 2:      1           1          1    2  3     1   3.148461  3.842230
-## 3:      1           1          2    1  2     0   0.000000  0.761191
-## 4:      1           1          2    2  1     0   0.761191  2.241937
-## 5:      1           1          2    1  2     0   2.241937  2.411945
-## 6:      1           1          2    2  1     0   2.411945  3.586348</code></pre>
+<pre><code>##    sample strategy_id patient_id from to final time_start  time_stop
+## 1:      1           1          1    1  2     0  0.0000000 14.4981510
+## 2:      1           1          1    2  3     1 14.4981510 14.6072278
+## 3:      1           1          2    1  3     1  0.0000000  0.7549106
+## 4:      1           1          3    1  2     0  0.0000000  0.4662388
+## 5:      1           1          3    2  3     1  0.4662388  1.3139087
+## 6:      1           1          4    1  3     1  0.0000000  1.5481407</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># "Clock forward"</span>
 econmod_cf<span class="op">$</span><span class="kw">sim_disease</span>()</code></pre></div>
 <p>State occupancy probabilities at different time points are computed using <code>$sim_stateprobs()</code>. First, we simulate state probabilities for the “clock reset” model.</p>
@@ -359,12 +359,12 @@ stprobs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdoc
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">econmod_cr<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,.<span class="dv">03</span>))
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>qalys_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id dr    qalys      lys
-## 1:      1           1        1  0 2.283330 6.435745
-## 2:      1           1        2  0 1.425555 1.512934
-## 3:      1           2        1  0 3.339468 9.412551
-## 4:      1           2        2  0 1.215421 1.289920
-## 5:      2           1        1  0 3.416993 6.333126
-## 6:      2           1        2  0 1.527446 1.543073</code></pre>
+## 1:      1           1        1  0 5.051331 5.754382
+## 2:      1           1        2  0 1.287576 1.290771
+## 3:      1           2        1  0 5.919450 6.743327
+## 4:      1           2        2  0 1.108522 1.111273
+## 5:      2           1        1  0 5.490247 5.780722
+## 6:      2           1        2  0 1.413168 1.450806</code></pre>
 <p>We summarize the simulated QALYs by computing means by treatment strategy and health state across the PSA samples.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">qalys_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>qalys_[, .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(qalys)),
                                     by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span>)]
@@ -384,12 +384,12 @@ stprobs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdoc
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">econmod_cr<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> <span class="fl">0.03</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>costs_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id   dr category     costs
-## 1:      1           1        1 0.03     Drug 25747.229
-## 2:      1           1        2 0.03     Drug  5975.772
-## 3:      1           2        1 0.03     Drug 70729.982
-## 4:      1           2        2 0.03     Drug 10007.663
-## 5:      2           1        1 0.03     Drug 25208.039
-## 6:      2           1        2 0.03     Drug  6209.056</code></pre>
+## 1:      1           1        1 0.03     Drug 23439.521
+## 2:      1           1        2 0.03     Drug  5274.286
+## 3:      1           2        1 0.03     Drug 53735.975
+## 4:      1           2        2 0.03     Drug  8930.056
+## 5:      2           1        1 0.03     Drug 22998.912
+## 6:      2           1        2 0.03     Drug  5818.152</code></pre>
 <p>As with QALYs, we summarize costs by computing means (now by treatment strategy and category) across the PSA samples.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"scales"</span>)
 costs_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>costs_[dr <span class="op">==</span><span class="st"> </span>.<span class="dv">03</span> , .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(costs)),
