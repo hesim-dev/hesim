@@ -57,7 +57,7 @@ colnames(tmat) <- rownames(tmat) <- c("Healthy", "Sick", "Dead")
 print(tmat)
 ```
 
-In a cost-effectiveness analysis, the treatments strategies of interest and characteristics of the target population must be specified in addition to selected model structure. We will consider a simple case with two treatment strategies and a heterogeneous population of 1000 patients who differ by age and gender. The model contains 3 health states (2 of which are non-death states). 
+In a cost-effectiveness analysis, the treatments strategies of interest and characteristics of the target population must be specified in addition to the selected model structure. We will consider a simple case with two treatment strategies and a heterogeneous population of 1000 patients who differ by age and gender. The model contains 3 health states (2 of which are non-death states). 
 
 ```{r, warning = FALSE, message = FALSE}
 library("hesim")
