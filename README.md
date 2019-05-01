@@ -1,5 +1,5 @@
-[![Travis-CI Build Status](https://travis-ci.org/InnovationValueInitiative/hesim.svg?branch=master)](https://travis-ci.org/InnovationValueInitiative/hesim)
-[![Coverage Status](https://codecov.io/gh/InnovationValueInitiative/hesim/branch/master/graph/badge.svg)](https://codecov.io/gh/InnovationValueInitiative/hesim)
+[![Travis-CI Build Status](https://travis-ci.org/hesim-dev/hesim.svg?branch=master)](https://travis-ci.org/hesim-dev/hesim)
+[![Coverage Status](https://codecov.io/gh/hesim-dev/hesim/branch/master/graph/badge.svg)](https://codecov.io/gh/hesim-dev/hesim)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/hesim)](https://cran.r-project.org/package=hesim)
 
 # Overview

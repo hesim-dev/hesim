@@ -67,7 +67,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/InnovationValueInitiative/hesim">
+  <a href="https://github.com/hesim-dev/hesim">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -87,9 +87,9 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2019-03-28</h4>
+            <h4 class="date">2019-04-30</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/InnovationValueInitiative/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
 
     </div>
@@ -160,17 +160,17 @@ hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/h
 ## 
 ## $patients
 ##       patient_id      age female
-##    1:          1 47.55137      1
-##    2:          2 58.34779      0
-##    3:          3 49.08357      1
-##    4:          4 39.13230      1
-##    5:          5 45.24175      0
+##    1:          1 48.57965      1
+##    2:          2 40.43094      1
+##    3:          3 44.74265      0
+##    4:          4 43.08258      1
+##    5:          5 36.36400      1
 ##   ---                           
-##  996:        996 42.16575      0
-##  997:        997 37.87340      1
-##  998:        998 35.02747      1
-##  999:        999 31.16681      0
-## 1000:       1000 40.89762      1
+##  996:        996 42.70485      0
+##  997:        997 52.51734      1
+##  998:        998 47.88637      1
+##  999:        999 41.53609      0
+## 1000:       1000 46.02888      1
 ## 
 ## $states
 ##    state_id state_name
@@ -317,12 +317,12 @@ medcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference
                         <span class="dt">by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"transitions"</span>))
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(transmod_data)</code></pre></div>
 <pre><code>##    strategy_id patient_id transition_id      age female from to from_name
-## 1:           1          1             1 47.55137      1    1  2   Healthy
-## 2:           1          1             2 47.55137      1    1  3   Healthy
-## 3:           1          1             3 47.55137      1    2  1      Sick
-## 4:           1          1             4 47.55137      1    2  3      Sick
-## 5:           1          2             1 58.34779      0    1  2   Healthy
-## 6:           1          2             2 58.34779      0    1  3   Healthy
+## 1:           1          1             1 48.57965      1    1  2   Healthy
+## 2:           1          1             2 48.57965      1    1  3   Healthy
+## 3:           1          1             3 48.57965      1    2  1      Sick
+## 4:           1          1             4 48.57965      1    2  3      Sick
+## 5:           1          2             1 40.43094      1    1  2   Healthy
+## 6:           1          2             2 40.43094      1    1  3   Healthy
 ##    to_name trans
 ## 1:    Sick     1
 ## 2:    Dead     2
@@ -397,43 +397,43 @@ costmods &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdo
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_disease</span>()
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(ictstm<span class="op">$</span>disprog_)</code></pre></div>
 <pre><code>##    sample strategy_id patient_id from to final time_start time_stop
-## 1:      1           1          1    1  2     0  0.0000000 3.5657920
-## 2:      1           1          1    2  1     0  3.5657920 4.2406460
-## 3:      1           1          1    1  3     1  4.2406460 8.6648152
-## 4:      1           1          2    1  2     0  0.0000000 0.9952313
-## 5:      1           1          2    2  1     0  0.9952313 1.6505893
-## 6:      1           1          2    1  3     1  1.6505893 2.0086775</code></pre>
+## 1:      1           1          1    1  2     0   0.000000  2.125140
+## 2:      1           1          1    2  1     0   2.125140  2.920222
+## 3:      1           1          1    1  2     0   2.920222  3.617888
+## 4:      1           1          1    2  3     1   3.617888  5.897707
+## 5:      1           1          2    1  2     0   0.000000  5.667640
+## 6:      1           1          2    2  3     1   5.667640  8.625810</code></pre>
 <p>The disease trajectory can be summarized with <code>$sim_stateprobs()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictstm<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>))
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(ictstm<span class="op">$</span>stateprobs_)</code></pre></div>
 <pre><code>##    sample strategy_id state_id t  prob
 ## 1:      1           1        1 0 1.000
-## 2:      1           1        1 1 0.862
-## 3:      1           1        1 2 0.772
-## 4:      1           1        1 3 0.680
-## 5:      1           1        1 4 0.637
-## 6:      1           1        1 5 0.617</code></pre>
+## 2:      1           1        1 1 0.881
+## 3:      1           1        1 2 0.794
+## 4:      1           1        1 3 0.715
+## 5:      1           1        1 4 0.652
+## 6:      1           1        1 5 0.634</code></pre>
 <p>We can then compute costs and QALYs (using a discount rate of 3 percent).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># QALYs</span>
 ictstm<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(ictstm<span class="op">$</span>qalys_)</code></pre></div>
-<pre><code>##    sample strategy_id state_id   dr     qalys       lys
-## 1:      1           1        1 0.03 8.3063360  8.954145
-## 2:      1           1        2 0.03 0.9805972  1.510396
-## 3:      1           2        1 0.03 9.5038277 10.245029
-## 4:      1           2        2 0.03 0.9852565  1.517573
-## 5:      2           1        1 0.03 8.1434047 10.576035
-## 6:      2           1        2 0.03 1.9207146  2.042060</code></pre>
+<pre><code>##    sample strategy_id state_id   dr    qalys      lys
+## 1:      1           1        1 0.03 7.737047 9.397929
+## 2:      1           1        2 0.03 1.713708 1.742498
+## 3:      1           2        1 0.03 8.089994 9.826642
+## 4:      1           2        2 0.03 1.564172 1.590450
+## 5:      2           1        1 0.03 7.955290 8.848358
+## 6:      2           1        2 0.03 1.354808 1.358571</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Costs</span>
 ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> .<span class="dv">03</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(ictstm<span class="op">$</span>costs_)</code></pre></div>
-<pre><code>##    sample strategy_id state_id   dr category      costs
-## 1:      1           1        1 0.03    drugs  44770.727
-## 2:      1           1        2 0.03    drugs   7551.982
-## 3:      1           2        1 0.03    drugs 102450.291
-## 4:      1           2        2 0.03    drugs  15175.731
-## 5:      2           1        1 0.03    drugs  52880.177
-## 6:      2           1        2 0.03    drugs  10210.301</code></pre>
+<pre><code>##    sample strategy_id state_id   dr category     costs
+## 1:      1           1        1 0.03    drugs 46989.647
+## 2:      1           1        2 0.03    drugs  8712.488
+## 3:      1           2        1 0.03    drugs 98266.422
+## 4:      1           2        2 0.03    drugs 15904.500
+## 5:      2           1        1 0.03    drugs 44241.789
+## 6:      2           1        2 0.03    drugs  6792.856</code></pre>
 </div>
 </div>
 <div id="decision-analysis" class="section level1">
@@ -445,31 +445,31 @@ ictstm<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(ce)</code></pre></div>
 <pre><code>## $costs
 ##       category   dr sample strategy_id     costs
-##    1:    drugs 0.03      1           1  52322.71
-##    2:    drugs 0.03      1           2 117626.02
-##    3:    drugs 0.03      2           1  63090.48
-##    4:    drugs 0.03      2           2 113221.43
-##    5:    drugs 0.03      3           1  48851.58
+##    1:    drugs 0.03      1           1  55702.14
+##    2:    drugs 0.03      1           2 114170.92
+##    3:    drugs 0.03      2           1  51034.65
+##    4:    drugs 0.03      2           2 108804.68
+##    5:    drugs 0.03      3           1  54527.19
 ##   ---                                           
-## 5996:    total 0.03    998           2 134194.60
-## 5997:    total 0.03    999           1  64459.99
-## 5998:    total 0.03    999           2 127646.65
-## 5999:    total 0.03   1000           1  55000.68
-## 6000:    total 0.03   1000           2 119117.78
+## 5996:    total 0.03    998           2 122474.38
+## 5997:    total 0.03    999           1  57786.46
+## 5998:    total 0.03    999           2 131775.82
+## 5999:    total 0.03   1000           1  73320.80
+## 6000:    total 0.03   1000           2 122249.97
 ## 
 ## $qalys
-##         dr sample strategy_id     qalys
-##    1: 0.03      1           1  9.286933
-##    2: 0.03      1           2 10.489084
-##    3: 0.03      2           1 10.064119
-##    4: 0.03      2           2  8.959531
-##    5: 0.03      3           1  7.675990
-##   ---                                  
-## 1996: 0.03    998           2  4.294350
-## 1997: 0.03    999           1  6.076274
-## 1998: 0.03    999           2  6.373583
-## 1999: 0.03   1000           1  7.581827
-## 2000: 0.03   1000           2  8.995465
+##         dr sample strategy_id    qalys
+##    1: 0.03      1           1 9.450755
+##    2: 0.03      1           2 9.654166
+##    3: 0.03      2           1 9.310098
+##    4: 0.03      2           2 9.897197
+##    5: 0.03      3           1 8.297581
+##   ---                                 
+## 1996: 0.03    998           2 9.474529
+## 1997: 0.03    999           1 5.901085
+## 1998: 0.03    999           2 7.330060
+## 1999: 0.03   1000           1 7.694393
+## 2000: 0.03   1000           2 6.936805
 ## 
 ## attr(,"class")
 ## [1] "ce"</code></pre>

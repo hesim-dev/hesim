@@ -16,8 +16,8 @@ Description: Parameterize, simulate, and analyze health-economic simulation
   tabular summaries of a probabilistic sensitivity analysis (Claxton et al. 2005, 
   Barton et al. 2008) <doi:10.1002/hec.985>, <doi:10.1111/j.1524-4733.2008.00358.x>. 
   Simulation code written in C++ to boost performance.
-URL: https://github.com/InnovationValueInitiative/hesim
-BugReports: https://github.com/InnovationValueInitiative/hesim/issues
+URL: https://github.com/hesim-dev/hesim
+BugReports: https://github.com/hesim-dev/hesim/issues
 License: GPL-3
 LazyData: true
 LinkingTo: Rcpp,
