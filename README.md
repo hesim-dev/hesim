@@ -22,5 +22,5 @@ install.packages("hesim")
 
 # Install the most up to date development version from GitHub:
 # install.packages("devtools")
-devtools::install_github("InnovationValueInitiative/hesim")
+devtools::install_github("hesim-dev/hesim")
 ```
