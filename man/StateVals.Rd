@@ -15,12 +15,12 @@ Simulate values (i.e., utility or costs) associated with health states in a part
 
   \describe{
 
-  \item{\code{input_mats}}{Input matrices used to simulate state values by strategy, patient, and health state. Must be 
-  an object of class \code{\link{input_mats}} where each row in the matrix "X" is a unique strategy, patient, and
-  health state. "X" must be sorted by strategy, patient, and health state.}
+  \item{\code{input_mats}}{Input matrices used to simulate state values. Must be an object of class \code{\link{input_mats}} where each row in the matrix "X" is a unique strategy, patient, health state, and (optionally) time interval. "X" must be sorted by strategy, patient, health state, and (if specified) time interval.}
 
-  \item{\code{params}}{An object of class \code{\link{params_lm}}, which contains the parameters for simulating
-  state values.}
+  \item{\code{params}}{An object of class \code{\link{params_lm}} or \code{\link{params_mean}}, which contain the parameters for simulatingstate values.}
+  
+  \item{\code{max_t}}{A vector specifying the maximum duration that state values are computed for in the
+simulation once a patient has entered a (new) health state. For example, if a drug was only given for 1 year, then \code{max_t} would be set to 1 (year) and no costs would accrue after that year. The length should be equal to the number of rows in \code{input_mats}. If not specified, then \code{max_t} is implictly assumed to equal infinity. Can only be used in individual-level simulations (i.e., \code{\link{IndivCtstm}}), which are able to track time spent in each state.}
 
   }
 }
@@ -37,7 +37,7 @@ Simulate values (i.e., utility or costs) associated with health states in a part
 
     \item{\code{sim(t, type = c("predict", "random"))}}{
 
-    Simulate state values with either predicted means or random samples by treatment strategy, patient, and health state.
+    Simulate state values with either predicted means or random samples by treatment strategy, patient, health state, and (optionally) time interval.
     
     \itemize{
      \item \code{t}: A numeric vector of times. The first element must be 0.

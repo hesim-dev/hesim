@@ -41,12 +41,11 @@ private:
     std::unique_ptr<statmods::statmod> uptr(mod);
     return uptr;
   }
-  
-
                                             
 public:
   std::unique_ptr<statmods::statmod> statmod_; ///< The statistical model used
                                             ///< to simulate state values.
+  std::vector<double> max_t_; ///< Maximum duration to compute state values for.
   /** 
    * The constructor.
    * Instantiates a model for simulating state values.
@@ -54,7 +53,10 @@ public:
    * "StateVals".
    */ 
   statevals(Rcpp::Environment R_StateVals)
-    : statmod_(init_statmod_(R_StateVals)) {}  
+    : statmod_(init_statmod_(R_StateVals)) {
+  
+   max_t_ = Rcpp::as<std::vector<double> >(R_StateVals["max_t"]); 
+  }  
 
   /** 
    * Simulate value of a health state.

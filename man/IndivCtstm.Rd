@@ -115,7 +115,7 @@ Note that the \code{lys} column is only computed if \code{lys = TRUE}.
      Returns an instance of self with simulated output stored in \code{qalys_}.
   } 
   
-  \item{\code{sim_costs(dr = .03, type = c("predict", "random"), by_patient = FALSE, max_t = Inf)}}{
+  \item{\code{sim_costs(dr = .03, type = c("predict", "random"), by_patient = FALSE)}}{
     Compute simulated (mean discounted) costs using the simulation output stored in \code{disprog_} by random sample from the PSA, treatment strategy, health state, and 
     (optionally) patient.
     
@@ -124,9 +124,6 @@ Note that the \code{lys} column is only computed if \code{lys = TRUE}.
       \item \code{type}: \code{predict} for mean values or \code{random} for random samples as in \code{$sim()} in \code{\link{StateVals}}.
      \item \code{by_patient}: If \code{TRUE}, costs are computed at the patient level. If \code{FALSE}, costs are averaged across patients by
      health state.      
-      \item \code{max_t}: Maximum time duration to compute costs once a patient has entered a (new) health state. By default, equal to \code{Inf}, 
-      so that costs are computed over the entire duration that a patient is in a given health state. If time varies by each cost category, then time can also be passed
-      as a numeric vector of length equal to the number of cost categories (e.g., \code{c(1, 2, Inf, 3)} for a model with 4 cost categories).
      }
      
     Returns an instance of self with simulated output stored in \code{costs_}. 

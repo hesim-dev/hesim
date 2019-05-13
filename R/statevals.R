@@ -51,6 +51,12 @@
 #' \item{custom}{\code{sample} and \code{value}}
 #' }
 #' 
+#' In addition, \code{tbl} may optionally contain a column named \code{max_t},
+#' which is the maximum duration that state values are computed for in the
+#' simulation once a patient has entered a (new) health state. However, this
+#' can only be used for individual-level simulations. See \code{\link{StateVals}}
+#' for more details.
+#' 
 #' Note that if \code{dist = "custom"}, then \code{tbl} must include a column 
 #' named \code{sample} (an integer vector denoting a unique random draw) and
 #'  \code{value} (denoting the value of the randomly sampled parameter). In this case, there is a unique
@@ -60,8 +66,6 @@
 #' named \code{strategy_id}, \code{grp_id}, or \code{state_id},
 #'  but does not need to contain them all.
 #'  
-#'  
-#' 
 #' @return An object of class "stateval_tbl", which is a \code{data.table} of
 #' parameter values with attributes for \code{dist} and optionally 
 #' \code{strategy_id}, \code{patients}, and \code{state_id}. \code{tbl} 
@@ -406,7 +410,8 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
                               time_id = tbl$time_id,
                               time_intervals = time_intervals,
                               n_times = nrow(time_intervals)) 
-  return(StateVals$new(input_mats = input_mats, params = params))
+  return(StateVals$new(input_mats = input_mats, params = params,
+                       max_t = tbl$max_t))
 }
 
 
@@ -416,10 +421,17 @@ StateVals <- R6::R6Class("StateVals",
   public = list(
     input_mats = NULL,
     params = NULL,
+    max_t = NULL,
 
-    initialize = function(input_mats, params) {
+    initialize = function(input_mats, params, max_t = NULL) {
       self$input_mats <- input_mats
       self$params <- params
+      if (is.null(max_t)) {
+        self$max_t <- rep(Inf, length(input_mats$strategy_id))
+      } else{
+        self$max_t <- max_t 
+      }
+      
     },
     
     sim = function(t, type = c("predict", "random")){
