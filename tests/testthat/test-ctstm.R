@@ -363,42 +363,26 @@ test_that("Simulate costs and QALYs", {
   expect_equal(wlos1, qalys1$qalys)
 
   # Simulate costs
-  ## Errors
-  ### Cost models must be lists of StateVal objects
+  # Errors
+  ## Cost models must be lists of StateVal objects
   ictstm2$cost_models <- 2
   expect_error(ictstm2$sim_costs())
   ictstm2$cost_models <- list(2)
   expect_error(ictstm2$sim_costs())
   
-  ## Working
-  costs <- ictstm$sim_costs(dr = c(0, .03))$costs_
+  # Working
+  costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(Inf, 2))$costs_
   expect_true(inherits(costs, "data.table"))
+  costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(Inf, Inf))$costs_
+  expect_true(inherits(costs, "data.table"))
+  costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(1, 0))$costs_
+  expect_true(all(costs[category == "drugs", costs] == 0))
+  costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(0, 0))$costs_
+  expect_true(all(costs$costs == 0))
   
   costs <- ictstm$sim_costs(dr = c(0, .03), by_patient = TRUE)$costs_
   expect_equal(unique(costs$category), c("medical", "drugs"))
   expect_equal(unique(costs$dr), c(0, .03))
-  
-  ## Correct drug costs for strategy 1 given max_t < Inf
-  ### Simulate
-  max_t <- 1.2
-  drugcost_tbl2 <- copy(drugcost_tbl)
-  drugcost_tbl2[, max_t := c(max_t, Inf)]
-  drugcostmod2 <- create_StateVals(drugcost_tbl2)
-  ictstm2 <- ictstm$clone()
-  ictstm2$cost_models$drugs <- drugcostmod2
-  ictstm2$sim_costs(dr = 0, by_patient = TRUE)
-  
-  ### Test
-  drugcost <- drugcost_tbl2[strategy_id == 1, est]
-  expected_drugcosts <- ictstm2$disprog_[strategy_id == 1]
-  expected_drugcosts[, time := pmin(max_t, time_stop - time_start)]
-  expected_drugcosts[, cost := time * drugcost ]
-  expected_drugcosts <- expected_drugcosts[, .(costs = sum(cost)),
-                                           by = c("sample", "strategy_id",
-                                                  "patient_id", "from")]
-  sim_costs <- ictstm2$costs_[category == "drugs" & strategy_id == 1 & 
-                                costs != 0]
-  expect_equal(expected_drugcosts$costs, sim_costs$costs)
    
   # Summarize costs and QALYs
   ## By patient = TRUE

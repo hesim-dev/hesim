@@ -302,7 +302,7 @@ Rcpp::List C_psm_sim_stateprobs(Rcpp::DataFrame R_psm_survival,
  * @param R_psm An @c R object of class @c Psm
  * @param R_stateprobs State probabilities computed using an R object of class 
  * @c Psm. (This is needed in addition to @p R_psm because a modified copy of
- * @c Psm$stateprobs_ is passed to @c C++ and it''s more efficient to copy a single
+ * @c Psm$stateprobs_ is passed to @c C++ and its more efficient to copy a single
  * data member than the entire class object.)
  * @param dr Discount rate.
  * @param type "costs" for costs; "qalys" for quality-adjusted life-years.

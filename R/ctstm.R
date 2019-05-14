@@ -280,7 +280,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     disprog_idx = NULL,
     
     sim_wlos = function(stateval_list, dr, stateval_type = c("costs", "qalys"),
-                        sim_type, by_patient = FALSE,
+                        sim_type, by_patient = FALSE, max_t = Inf,
                         lys = FALSE){
      
       stateval_type <- match.arg(stateval_type)
@@ -313,6 +313,16 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
         categories <- "qalys"
       } # end if/else costs vs. qalys
       
+      
+      # Maximum time
+      if (!(length(max_t) %in% c(1, n_cats))){
+        stop("'max_t' must either equal the number of cost categories or be of length 1.",
+             call. = FALSE)
+      }
+      if (length(max_t) == 1){
+        max_t <- rep(max_t, n_cats)
+      }
+      
       # Computation
       n_dr <- length(dr)
       wlos_list <- vector(mode = "list", length = n_cats * n_dr)
@@ -323,7 +333,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        stateval_list[[i]], dr[j],
-                                       sim_type)
+                                       sim_type, max_t[i])
           self$disprog_[, wlos := C_wlos]
           if (lys){
             C_los <- C_indiv_ctstm_los(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
@@ -439,7 +449,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       invisible(self)
     },
     
-    sim_costs = function(dr = .03, type = c("predict", "random"), by_patient = FALSE){
+    sim_costs = function(dr = .03, type = c("predict", "random"), by_patient = FALSE, max_t = Inf){
       if(!is.list(self$cost_models)){
         stop("'cost_models' must be a list of objects of class 'StateVals'",
           call. = FALSE)
@@ -453,7 +463,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       }
       
       type <- match.arg(type)
-      self$costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type, by_patient)
+      self$costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type, by_patient, max_t)
       invisible(self)
     },
     

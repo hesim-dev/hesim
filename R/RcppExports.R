@@ -49,8 +49,8 @@ C_ctstm_indiv_stateprobs <- function(R_disease_prog, t, n_samples, n_strategies,
     .Call('_hesim_C_ctstm_indiv_stateprobs', PACKAGE = 'hesim', R_disease_prog, t, n_samples, n_strategies, unique_strategy_id, strategy_index, n_states, n_patients, n_lines)
 }
 
-C_indiv_ctstm_wlos <- function(R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type) {
-    .Call('_hesim_C_indiv_ctstm_wlos', PACKAGE = 'hesim', R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type)
+C_indiv_ctstm_wlos <- function(R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type, max_time) {
+    .Call('_hesim_C_indiv_ctstm_wlos', PACKAGE = 'hesim', R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type, max_time)
 }
 
 C_indiv_ctstm_los <- function(R_disease_prog, strategy_idx, patient_idx, dr) {

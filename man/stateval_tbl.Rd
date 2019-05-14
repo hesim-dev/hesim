@@ -69,12 +69,6 @@ or \code{shape} and {scale}}
 \item{custom}{\code{sample} and \code{value}}
 }
 
-In addition, \code{tbl} may optionally contain a column named \code{max_t},
-which is the maximum duration that state values are computed for in the
-simulation once a patient has entered a (new) health state. However, this
-can only be used for individual-level simulations. See \code{\link{StateVals}}
-for more details.
-
 Note that if \code{dist = "custom"}, then \code{tbl} must include a column 
 named \code{sample} (an integer vector denoting a unique random draw) and
  \code{value} (denoting the value of the randomly sampled parameter). In this case, there is a unique

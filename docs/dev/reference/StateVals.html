@@ -140,10 +140,11 @@
 
     
     <p></p><dl class='dl-horizontal'>
-    <dt><code>input_mats</code></dt><dd><p>Input matrices used to simulate state values. Must be an object of class <code><a href='input_mats.html'>input_mats</a></code> where each row in the matrix "X" is a unique strategy, patient, health state, and (optionally) time interval. "X" must be sorted by strategy, patient, health state, and (if specified) time interval.</p></dd>
-    <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_lm.html'>params_lm</a></code> or <code><a href='params_mean.html'>params_mean</a></code>, which contain the parameters for simulatingstate values.</p></dd>
-    <dt><code>max_t</code></dt><dd><p>A vector specifying the maximum duration that state values are computed for in the
-simulation once a patient has entered a (new) health state. For example, if a drug was only given for 1 year, then <code>max_t</code> would be set to 1 (year) and no costs would accrue after that year. The length should be equal to the number of rows in <code>input_mats</code>. If not specified, then <code>max_t</code> is implictly assumed to equal infinity. Can only be used in individual-level simulations (i.e., <code><a href='IndivCtstm.html'>IndivCtstm</a></code>), which are able to track time spent in each state.</p></dd>
+    <dt><code>input_mats</code></dt><dd><p>Input matrices used to simulate state values by strategy, patient, and health state. Must be 
+  an object of class <code><a href='input_mats.html'>input_mats</a></code> where each row in the matrix "X" is a unique strategy, patient, and
+  health state. "X" must be sorted by strategy, patient, and health state.</p></dd>
+    <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_lm.html'>params_lm</a></code>, which contains the parameters for simulating
+  state values.</p></dd>
     </dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -151,7 +152,7 @@ simulation once a patient has entered a (new) health state. For example, if a dr
     
     <dl class='dl-horizontal'>
     <dt><code>new(input_mats, params)</code></dt><dd><p>Constructor for the class.</p></dd>
-    <dt><code>sim(t, type = c("predict", "random"))</code></dt><dd><p>Simulate state values with either predicted means or random samples by treatment strategy, patient, health state, and (optionally) time interval.
+    <dt><code>sim(t, type = c("predict", "random"))</code></dt><dd><p>Simulate state values with either predicted means or random samples by treatment strategy, patient, and health state.
     <ul>
 <li><p><code>t</code>: A numeric vector of times. The first element must be 0.</p></li>
 <li><p><code>type</code>: <code>"predict"</code> for mean values or <code>"random"</code> for random samples.</p></li>

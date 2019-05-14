@@ -198,6 +198,8 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
  * @param R_StateVal An R object of class @c StateVal.
  * @param dr The discount rate
  * @param type @c predict for mean values or @c random for random samples.
+ * @param max_time Maximum time duration to compute costs once a patient has
+ * entered a (new) healthy state. 
  * @return A vector of weighted length of stay in each row in R_disease_prog. These
  * values are then summed by @c patient_id using @c data.table at the @c R level
  *  in the private member function @c IndivCtstm$sim_wlos. 
@@ -207,10 +209,12 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
                                        std::vector<int> strategy_idx,
                                        std::vector<int> patient_idx,
                                        Rcpp::Environment R_StateVal,
-                                       double dr, std::string type){
+                                       double dr, std::string type,
+                                       double max_time){
   hesim::ctstm::disease_prog disease_prog(R_disease_prog);
   hesim::statevals stvals(R_StateVal);
   hesim::statmods::obs_index obs_index(Rcpp::as<Rcpp::List>(R_StateVal["input_mats"]));
+  hesim::check_R_infinity(max_time);
   
   int N = disease_prog.sample_.size();
   std::vector<double> wlos(N);
@@ -237,7 +241,6 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
       }           
       
       double yhat = stvals.sim(disease_prog.sample_[i], obs, type);
-      double max_time = stvals.max_t_[obs];
       if (!std::isinf(max_time)){
         time_stop_it_max = std::min(disease_prog.time_stop_[i],
                                     disease_prog.time_start_[i] + max_time);

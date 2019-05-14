@@ -202,13 +202,16 @@
 <li><p><code>lys</code>: If <code>TRUE</code>, then life-years are computed in addition to QALYs.</p></li>
 </ul>
     Returns an instance of self with simulated output stored in <code>qalys_</code>.</p></dd>
-    <dt><code>sim_costs(dr = .03, type = c("predict", "random"), by_patient = FALSE)</code></dt><dd><p>Compute simulated (mean discounted) costs using the simulation output stored in <code>disprog_</code> by random sample from the PSA, treatment strategy, health state, and 
+    <dt><code>sim_costs(dr = .03, type = c("predict", "random"), by_patient = FALSE, max_t = Inf)</code></dt><dd><p>Compute simulated (mean discounted) costs using the simulation output stored in <code>disprog_</code> by random sample from the PSA, treatment strategy, health state, and 
     (optionally) patient.
     <ul>
 <li><p><code>dr</code>: Discount rate to apply to costs. May be a vector in which case costs are calculated for each element in <code>dr</code>.</p></li>
 <li><p><code>type</code>: <code>predict</code> for mean values or <code>random</code> for random samples as in <code>$sim()</code> in <code><a href='StateVals.html'>StateVals</a></code>.</p></li>
 <li><p><code>by_patient</code>: If <code>TRUE</code>, costs are computed at the patient level. If <code>FALSE</code>, costs are averaged across patients by
      health state.</p></li>
+<li><p><code>max_t</code>: Maximum time duration to compute costs once a patient has entered a (new) health state. By default, equal to <code>Inf</code>, 
+      so that costs are computed over the entire duration that a patient is in a given health state. If time varies by each cost category, then time can also be passed
+      as a numeric vector of length equal to the number of cost categories (e.g., <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(1, 2, Inf, 3)</a></code> for a model with 4 cost categories).</p></li>
 </ul>
     Returns an instance of self with simulated output stored in <code>costs_</code>.</p></dd>,
     <dt><code>summarize()</code></dt><dd><p>Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 

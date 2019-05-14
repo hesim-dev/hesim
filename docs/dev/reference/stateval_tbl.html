@@ -202,12 +202,7 @@ or <code>shape</code> and scale</p></dd>
 <dt>fixed</dt><dd><p><code>est</code></p></dd>
 <dt>custom</dt><dd><p><code>sample</code> and <code>value</code></p></dd>
 </dl>
-    <p>In addition, <code>tbl</code> may optionally contain a column named <code>max_t</code>,
-which is the maximum duration that state values are computed for in the
-simulation once a patient has entered a (new) health state. However, this
-can only be used for individual-level simulations. See <code><a href='StateVals.html'>StateVals</a></code>
-for more details.</p>
-<p>Note that if <code>dist = "custom"</code>, then <code>tbl</code> must include a column 
+    <p>Note that if <code>dist = "custom"</code>, then <code>tbl</code> must include a column 
 named <code>sample</code> (an integer vector denoting a unique random draw) and
  <code>value</code> (denoting the value of the randomly sampled parameter). In this case, there is a unique
 row in <code>tbl</code> for each random draw (<code>sample</code>) and
