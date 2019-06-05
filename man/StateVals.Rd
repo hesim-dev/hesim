@@ -21,7 +21,7 @@ Simulate values (i.e., utility or costs) associated with health states in a part
 
   \item{\code{params}}{An object of class \code{\link{params_lm}}, which contains the parameters for simulating
   state values.}
-
+  
   }
 }
 

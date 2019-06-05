@@ -383,6 +383,40 @@ test_that("Simulate costs and QALYs", {
   costs <- ictstm$sim_costs(dr = c(0, .03), by_patient = TRUE)$costs_
   expect_equal(unique(costs$category), c("medical", "drugs"))
   expect_equal(unique(costs$dr), c(0, .03))
+  
+  # Time-varying costs with reset
+  ## Simulate
+  drugcost_tbl_tv <- stateval_tbl(tbl = data.frame(strategy_id = rep(strategies$strategy_id, each = 2),
+                                                 time_start = c(0, 1.2, 0, 1.2),
+                                                  est = c(10000, 500, 12500, 250)),
+                                  dist = "fixed",
+                                  hesim_data = hesim_dat)
+  drugcostsmod_tv <- create_StateVals(drugcost_tbl_tv, n = n_samples, time_reset = TRUE) 
+  ictstm2$cost_models <- list(medical = medcostsmod, 
+                              drugs = drugcostsmod_tv)
+  ictstm2$sim_costs(dr = 0, by_patient = TRUE)
+  ictstm2$disprog_[, time_elapsed := time_stop - time_start]
+  
+  ## Test
+  test_tv_cost <- function(state){
+    row <- ictstm2$disprog_[from == state][1]
+    drug_costs <- drugcost_tbl_tv[strategy_id == row$strategy_id]
+    expected_costs <- 0
+    j <- 1
+    while(j <= nrow(drug_costs) & (drug_costs[j]$time_start < row$time_elapsed)){
+      time_j <- min(row$time_elapsed - drug_costs[j]$time_start, 
+                    drug_costs[j]$time_stop - drug_costs[j]$time_start)
+      expected_costs <- expected_costs + time_j * drug_costs[j, est]
+      j <- j + 1
+    }
+    expect_equal(ictstm2$costs_[category == "drugs" & sample == row$sample & 
+                                strategy_id == row$strategy_id & 
+                                patient_id == row$patient_id & 
+                                state_id == row$from]$costs,
+               expected_costs)     
+  }
+  test_tv_cost(1)
+  test_tv_cost(2)
    
   # Summarize costs and QALYs
   ## By patient = TRUE

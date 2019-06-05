@@ -377,6 +377,9 @@ sort_hesim_data <- function(data, sorted_by){
 #' infinity. 
 #' @param n_times A scalar denoting the number of time intervals. Equal to the
 #' number of rows in \code{time_intervals}.
+#' @param time_reset If \code{TRUE}, then time intervals reset each time a patient enters a new health 
+#'   state. This is relevant if, for example, costs vary over time within health states. 
+#'   If \code{FALSE} then time intervals are based on time since the start of the simulation.
 #' @param time_fun A pointer to a C++ functor that can be used to update \code{X} as a function
 #' of time in a simulation model. Not currently supported.
 #' 
@@ -420,6 +423,7 @@ input_mats <- function(X, strategy_id, n_strategies,
                        state_id = NULL, n_states = NULL,
                        transition_id = NULL, n_transitions = NULL,
                        time_id = NULL, time_intervals = NULL, n_times = NULL,
+                       time_reset = NULL,
                        time_fun = NULL){
   object <- new_input_mats(X, strategy_id, n_strategies,
                            patient_id, n_patients,
@@ -427,6 +431,7 @@ input_mats <- function(X, strategy_id, n_strategies,
                            state_id, n_states,
                            transition_id, n_transitions,
                            time_id, time_intervals, n_times,
+                           time_reset,
                            time_fun)
   check(object)
   return(object)
@@ -438,6 +443,7 @@ new_input_mats <- function(X, strategy_id, n_strategies,
                            state_id = NULL, n_states = NULL,
                            transition_id = NULL, n_transitions = NULL,
                            time_id = NULL, time_intervals = NULL, n_times = NULL,
+                           time_reset = NULL,
                            time_fun = NULL){
   stopifnot(is.matrix(X) | is.list(X) | is.null(X))
   stopifnot(is.numeric(strategy_id))
@@ -453,6 +459,7 @@ new_input_mats <- function(X, strategy_id, n_strategies,
   stopifnot(is.numeric(time_id) | is.null(time_id))
   stopifnot(is.data.table(time_intervals) | is.null(time_intervals))
   stopifnot(is.numeric(n_times) | is.null(n_times))
+  stopifnot(is.logical(time_reset) | is.null(time_reset))
   if(!is.null(time_fun)){
    if(!inherits(time_fun, "externalptr")){
      stop("If not NULL, 'time_fun' must be of class 'externalptr'.",
@@ -467,6 +474,7 @@ new_input_mats <- function(X, strategy_id, n_strategies,
                  state_id = state_id, n_states = n_states,
                  transition_id = transition_id, n_transitions = n_transitions,
                  time_id = time_id, time_intervals = time_intervals, n_times = n_times,
+                 time_reset = time_reset,
                  time_fun = time_fun)
   object[sapply(object, is.null)] <- NULL
   class(object) <- "input_mats"

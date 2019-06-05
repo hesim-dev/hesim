@@ -53,6 +53,10 @@ test_that("stateval_tbl", {
   expect_equal(ncol(mod$params$mu), 2)
   expect_true(all(mod$params$mu[c(1, 4, 7, 10), 1] == mod$params$mu[1, 1]))
   
+  ### time_reset = TRUE
+  mod <- create_StateVals(stateval_tbl, n = 2, time_reset = TRUE)
+  expect_true(mod$input_mats$time_reset)
+  
   ## Uniform distribution
   stateval_tbl <- stateval_tbl(tbl[strategy_id == 1 & grp_id == 1,
                                    .(state_id, min, max)], 

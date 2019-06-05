@@ -7,7 +7,8 @@
 input_mats(X, strategy_id, n_strategies, patient_id, n_patients,
   line = NULL, n_lines = NULL, state_id = NULL, n_states = NULL,
   transition_id = NULL, n_transitions = NULL, time_id = NULL,
-  time_intervals = NULL, n_times = NULL, time_fun = NULL)
+  time_intervals = NULL, n_times = NULL, time_reset = NULL,
+  time_fun = NULL)
 }
 \arguments{
 \item{X}{A list of input matrices for predicting the values of each parameter in a statistical model. May also be
@@ -56,6 +57,10 @@ infinity.}
 
 \item{n_times}{A scalar denoting the number of time intervals. Equal to the
 number of rows in \code{time_intervals}.}
+
+\item{time_reset}{If \code{TRUE}, then time intervals reset each time a patient enters a new health 
+state. This is relevant if, for example, costs vary over time within health states. 
+If \code{FALSE} then time intervals are based on time since the start of the simulation.}
 
 \item{time_fun}{A pointer to a C++ functor that can be used to update \code{X} as a function
 of time in a simulation model. Not currently supported.}

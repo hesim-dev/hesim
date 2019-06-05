@@ -11,7 +11,8 @@ create_StateVals(object, ...)
 \method{create_StateVals}{lm}(object, input_data = NULL, n = 1000,
   point_estimate = FALSE, ...)
 
-\method{create_StateVals}{stateval_tbl}(object, n = 1000, ...)
+\method{create_StateVals}{stateval_tbl}(object, n = 1000,
+  time_reset = FALSE, ...)
 }
 \arguments{
 \item{object}{A model object of the appropriate class.}
@@ -26,6 +27,9 @@ create_StateVals(object, ...)
 are fit using a statistical model.}
 
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
+
+\item{time_reset}{If \code{TRUE}, then time intervals reset each time a patient enters a new health 
+state. See \code{\link{input_mats}}.}
 }
 \value{
 Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.

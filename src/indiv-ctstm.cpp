@@ -219,15 +219,26 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
   int N = disease_prog.sample_.size();
   std::vector<double> wlos(N);
   int time_index = 0;
+  double time_stop_it;
 
   for (int i = 0; i < N; ++i){
     double wlos_it = 0; //Weighted LOS by row and time interval
     double time_start_it = disease_prog.time_start_[i];
-    double time_stop_it_max = disease_prog.time_stop_[i];
-    if (i > 0 && 
-        (disease_prog.patient_id_[i] != disease_prog.patient_id_[i-1] ||
-         disease_prog.sample_[i] != disease_prog.sample_[i-1])){ // If a new patient, reset time
-      time_index = 0;
+    double time_stop_i_max = disease_prog.time_stop_[i];
+    if (!std::isinf(max_time)){
+        time_stop_i_max = std::min(disease_prog.time_stop_[i],
+                                   disease_prog.time_start_[i] + max_time);
+    }
+    if (i > 0){
+      if (obs_index.time_reset_){   // If time_reset = TRUE, then reset time when a patient enters a new state
+        time_index = 0;  // In disease_prog_ each row denotes a transition to a new health state
+      }
+      else{ // Otherwise, reset time for each new patient
+        if (disease_prog.patient_id_[i] != disease_prog.patient_id_[i-1] ||
+            disease_prog.sample_[i] != disease_prog.sample_[i-1]){
+              time_index = 0;
+        }
+      }
     } 
     int t_start = time_index;
     for (int t = t_start; t < obs_index.n_times_; ++t){
@@ -236,21 +247,33 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
                           patient_idx[i],
                           disease_prog.from_[i],
                           t);  
-      if (obs_index.get_time_start() > disease_prog.time_stop_[i]){
-        break;
-      }           
       
+      // Get stopping time
+      if (obs_index.time_reset_){
+        // If time_reset == true
+        if (obs_index.get_time_start() > disease_prog.time_stop_[i] - disease_prog.time_start_[i]){
+          break;
+        }   
+        time_stop_it = std::min(disease_prog.time_start_[i] + obs_index.get_time_stop(), 
+                                time_stop_i_max);
+      }
+      else{
+        // If time_reset == false
+        if (obs_index.get_time_start() > disease_prog.time_stop_[i]){
+          break;
+        }     
+        time_stop_it = std::min(obs_index.get_time_stop(), 
+                                time_stop_i_max);
+      }
+      
+      // Compute present value
       double yhat = stvals.sim(disease_prog.sample_[i], obs, type);
-      if (!std::isinf(max_time)){
-        time_stop_it_max = std::min(disease_prog.time_stop_[i],
-                                    disease_prog.time_start_[i] + max_time);
-      } 
-      double time_stop_it = std::min(obs_index.get_time_stop(), time_stop_it_max);
       wlos_it = hesim::pv(yhat, dr,
                           time_start_it,
                           time_stop_it);
-        
       wlos[i] += wlos_it; 
+      
+      // Update starting time and time index
       time_start_it = time_stop_it;
       if (t < (obs_index.n_times_ - 1 && time_stop_it >= obs_index.get_time_stop())){
         time_index = t + 1; 

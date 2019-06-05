@@ -171,6 +171,7 @@ public:
   int n_patients_; ///< Number of unique patients.
   int n_times_; ///< Number of unique time intervals.
   int n_obs_; ///< Number of observations inclusive of strategies, lines, patients, health values, and time intervals.
+  bool time_reset_;
   
   /** 
    * The constructor.
@@ -223,6 +224,13 @@ public:
     } else{
       time_start_.push_back(0); // A single value equal to 0.
       time_stop_.push_back(INFINITY); // A single value equal to infinity.
+    }
+    
+    // Time reset
+    if (R_input_mats.containsElementNamed("time_reset")){
+      time_reset_ = Rcpp::as<bool>(R_input_mats["time_reset"]);
+    } else{
+      time_reset_ = false;
     }
     
   }

@@ -267,6 +267,8 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 #' @param n Number of random observations of the parameters to draw when parameters 
 #' are fit using a statistical model.
 #' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.
+#' @param time_reset If \code{TRUE}, then time intervals reset each time a patient enters a new health 
+#' state. See \code{\link{input_mats}}.
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
 #' @return Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
 #' @seealso \code{\link{StateVals}}
@@ -286,7 +288,7 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
 
 #' @rdname create_StateVals 
 #' @export
-create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
+create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, ...){
 
   # Parameters
   tbl <- copy(object)
@@ -405,6 +407,7 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
                               n_states = length(unique(tbl$state_id)),
                               time_id = tbl$time_id,
                               time_intervals = time_intervals,
+                              time_reset = time_reset,
                               n_times = nrow(time_intervals)) 
   return(StateVals$new(input_mats = input_mats, params = params))
 }
@@ -417,7 +420,7 @@ StateVals <- R6::R6Class("StateVals",
     input_mats = NULL,
     params = NULL,
 
-    initialize = function(input_mats, params) {
+    initialize = function(input_mats, params, time_reset = FALSE) {
       self$input_mats <- input_mats
       self$params <- params
     },
