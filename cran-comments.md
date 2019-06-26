@@ -1,10 +1,10 @@
 ## Release summary
-This release contains major updates as outlined on the package 
+This release contains a minor update as outlined on the package 
 website [here](https://innovationvalueinitiative.github.io/hesim/news/index.html).
 
 ## Test environments
-* Local OS X, R 3.5.3
-* Ubuntu 14.04 (on travis-ci), R 3.5.2
+* Local OS X, R 3.6.0
+* Ubuntu 14.04 (on travis-ci), R 3.6.0
 * win-builder (devel and release)
 
 ## R CMD check results
