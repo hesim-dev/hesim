@@ -1,6 +1,6 @@
 ## Release summary
 This release contains a minor update as outlined on the package 
-website [here](https://innovationvalueinitiative.github.io/hesim/news/index.html).
+website [here](https://hesim-dev.github.io/hesim/news/index.html).
 
 ## Test environments
 * Local OS X, R 3.6.0
