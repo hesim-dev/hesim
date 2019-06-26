@@ -141,7 +141,8 @@
   <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for stateval_tbl</span>
-<span class='fu'>create_StateVals</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>create_StateVals</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>time_reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,6 +169,11 @@ are fit using a statistical model.</p></td>
     <tr>
       <th>point_estimate</th>
       <td><p>If <code>TRUE</code>, then the point estimates are returned and and no samples are drawn.</p></td>
+    </tr>
+    <tr>
+      <th>time_reset</th>
+      <td><p>If <code>TRUE</code>, then time intervals reset each time a patient enters a new health 
+state. See <code><a href='input_mats.html'>input_mats</a></code>.</p></td>
     </tr>
     </table>
     

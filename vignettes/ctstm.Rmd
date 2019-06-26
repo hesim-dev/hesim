@@ -2,7 +2,7 @@
 title: Continuous time state transition models
 date: "`r Sys.Date()`"
 output: 
-  bookdown::html_document2:
+  html_document:
     toc: yes
     toc_depth: 2
     number_sections: TRUE

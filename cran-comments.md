@@ -1,6 +1,3 @@
-## Resubmission
-This is a resubmission. In the original submission, multiple DOIs were combined in a single angled bracket. The DOIs are now contained in separate angled brackets. 
-
 ## Release summary
 This release contains major updates as outlined on the package 
 website [here](https://innovationvalueinitiative.github.io/hesim/news/index.html).
@@ -14,9 +11,9 @@ website [here](https://innovationvalueinitiative.github.io/hesim/news/index.html
 0 ERRORs | 0 WARNINGs | 1 NOTE
 
 * checking installed package size ...
-    installed size is  6.3Mb
+    installed size is  7.2Mb
     sub-directories of 1Mb or more:
-      doc    5.0Mb
+      doc    4.6Mb
       libs   1.7Mb
       
   This is compiled code in the libs/ directory and documentation in the docs/ directory. 

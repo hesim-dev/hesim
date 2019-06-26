@@ -62,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -120,9 +120,25 @@
       <small>Source: <a href='https://github.com/hesim-dev/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="hesim-0-2-0" class="section level2">
+    <div id="hesim-021" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hesim-0-2-0" class="anchor"></a>hesim 0.2.0</h2>
+<a href="#hesim-021" class="anchor"></a>hesim 0.2.1</h2>
+<p>The <code>input_mats</code> class now contains an element <code>time_reset</code>. If <code>TRUE</code>, then time intervals reset each time a patient enters a new health state. In other words, state values can depend on time since entering a health state.</p>
+<p>To illustrate, consider an oncology application with three health states (stable disease, progressed disease, and death). In these models it is common to assume that patients begin second line treatment after disease progression. Suppose the second line treatment is a chemotherapy that patients take for 12 cycles (or approximately 1 year). Then drug costs would accrue for the first year but not afterwards.</p>
+<p>State values like this can be specified by setting <code>time_reset = TRUE</code> in <code><a href="../reference/create_StateVals.html">create_StateVals.stateval_tbl()</a></code>.</p>
+<pre><code>hesim_dat &lt;- hesim_data(strategies = data.frame(strategy_id = c(1, 2)),
+                        patients = data.frame(patient_id = seq(1, 3)),
+                        states = data.frame(state_id = c(1, 2)))
+drugcosts &lt;- stateval_tbl(tbl = data.frame(state_id = rep(c(1, 2), each = 2),
+                                           time_start = c(0, 1, 0, 1),
+                                           est = c(10000, 0, 12500, 0)),
+                                  dist = "fixed",
+                                  hesim_data = hesim_dat)  
+drugcostsmod &lt;- create_StateVals(drugcosts, time_reset = TRUE) </code></pre>
+</div>
+    <div id="hesim-020" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hesim-020" class="anchor"></a>hesim 0.2.0</h2>
 <div id="highlights" class="section level3">
 <h3 class="hasAnchor">
 <a href="#highlights" class="anchor"></a>Highlights</h3>
@@ -157,9 +173,9 @@
 <p>The economic models are used to simulate disease progression (<code>$sim_disease()</code>, <code>sim_stateprobs()</code>), quality-adjusted life-years (QALYs) (<code>sim_qalys()</code>), and costs (<code>sim_costs()</code>). Parameter uncertainty is propagated to model outcomes using probabilistic sensitivity analysis. Summaries of the simulated costs and QALYs are used to perform model-based cost-effectiveness analyses (CEAs) and represent decision uncertainty with <code><a href="../reference/icea.html">icea.ce()</a></code> and <code><a href="../reference/icea.html">icea_pw.ce()</a></code>.</p>
 </div>
 </div>
-    <div id="hesim-0-1-0" class="section level2">
+    <div id="hesim-010" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hesim-0-1-0" class="anchor"></a>hesim 0.1.0</h2>
+<a href="#hesim-010" class="anchor"></a>hesim 0.1.0</h2>
 <p>The initial CRAN submission containing support for CEA but not for model development. Decision uncertainty is represented using cost-effectiveness planes, cost-effectiveness acceptability curves, cost-effectiveness acceptability frontiers, and the expected value of perfect information. CEAs by subgroup (i.e., individualized CEAs) are performed with <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code>.</p>
 </div>
   </div>
@@ -168,8 +184,9 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#hesim-0-2-0">0.2.0</a></li>
-        <li><a href="#hesim-0-1-0">0.1.0</a></li>
+        <li><a href="#hesim-021">0.2.1</a></li>
+        <li><a href="#hesim-020">0.2.0</a></li>
+        <li><a href="#hesim-010">0.1.0</a></li>
       </ul>
     </div>
   </div>

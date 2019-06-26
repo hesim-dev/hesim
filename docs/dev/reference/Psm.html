@@ -246,18 +246,18 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
 <span class='no'>psm</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>psm</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category    costs
-#&gt; 1:      1           1          1        1 0.03  medical 21447.72
-#&gt; 2:      1           1          1        2 0.03  medical 13694.07
-#&gt; 3:      1           1          1        3 0.03  medical 12904.61
-#&gt; 4:      1           1          2        1 0.03  medical 20448.31
-#&gt; 5:      1           1          2        2 0.03  medical 13028.40
-#&gt; 6:      1           1          2        3 0.03  medical 12810.52</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category     qalys
-#&gt; 1:      1           1          1        1 0.03    qalys 0.5625958
-#&gt; 2:      1           1          1        2 0.03    qalys 0.3516686
-#&gt; 3:      1           1          1        3 0.03    qalys 0.2493623
-#&gt; 4:      1           1          2        1 0.03    qalys 0.5363804
-#&gt; 5:      1           1          2        2 0.03    qalys 0.3345741
-#&gt; 6:      1           1          2        3 0.03    qalys 0.2475442</div></pre>
+#&gt; 1:      1           1          1        1 0.03  medical 22926.58
+#&gt; 2:      1           1          1        2 0.03  medical 13773.33
+#&gt; 3:      1           1          1        3 0.03  medical 15038.67
+#&gt; 4:      1           1          2        1 0.03  medical 21886.43
+#&gt; 5:      1           1          2        2 0.03  medical 13471.73
+#&gt; 6:      1           1          2        3 0.03  medical 14342.99</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category     qalys
+#&gt; 1:      1           1          1        1 0.03    qalys 0.5366655
+#&gt; 2:      1           1          1        2 0.03    qalys 0.3598469
+#&gt; 3:      1           1          1        3 0.03    qalys 0.2662830
+#&gt; 4:      1           1          2        1 0.03    qalys 0.5123176
+#&gt; 5:      1           1          2        2 0.03    qalys 0.3519673
+#&gt; 6:      1           1          2        3 0.03    qalys 0.2539648</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

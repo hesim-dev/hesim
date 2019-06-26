@@ -69,7 +69,7 @@ object should be created using create_input_mats." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -141,7 +141,8 @@ object should be created using <code><a href='create_input_mats.html'>create_inp
     <pre class="usage"><span class='fu'>input_mats</span>(<span class='no'>X</span>, <span class='no'>strategy_id</span>, <span class='no'>n_strategies</span>, <span class='no'>patient_id</span>, <span class='no'>n_patients</span>,
   <span class='kw'>line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_lines</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>state_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>transition_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_transitions</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>time_intervals</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>time_intervals</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time_reset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -220,6 +221,12 @@ infinity.</p></td>
       <th>n_times</th>
       <td><p>A scalar denoting the number of time intervals. Equal to the
 number of rows in <code>time_intervals</code>.</p></td>
+    </tr>
+    <tr>
+      <th>time_reset</th>
+      <td><p>If <code>TRUE</code>, then time intervals reset each time a patient enters a new health 
+state. This is relevant if, for example, costs vary over time within health states. 
+If <code>FALSE</code> then time intervals are based on time since the start of the simulation.</p></td>
     </tr>
     <tr>
       <th>time_fun</th>

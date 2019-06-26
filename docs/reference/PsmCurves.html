@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -203,24 +203,24 @@
 
 <span class='co'># Summarize survival curves</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/quantile'>quantile</a></span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve    p  quantile
-#&gt; 1:      1           1          1     1 0.25 0.1861496
-#&gt; 2:      1           1          1     1 0.50 0.4485128
-#&gt; 3:      1           1          1     1 0.75 0.8970256
-#&gt; 4:      1           1          1     2 0.25 0.3574913
-#&gt; 5:      1           1          1     2 0.50 0.8613470
-#&gt; 6:      1           1          1     2 0.75 1.7226939</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve   t  survival
+#&gt; 1:      1           1          1     1 0.25 0.1787365
+#&gt; 2:      1           1          1     1 0.50 0.4306516
+#&gt; 3:      1           1          1     1 0.75 0.8613031
+#&gt; 4:      1           1          1     2 0.25 0.3576335
+#&gt; 5:      1           1          1     2 0.50 0.8616895
+#&gt; 6:      1           1          1     2 0.75 1.7233791</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve   t  survival
 #&gt; 1:      1           1          1     1 0.0 1.0000000
-#&gt; 2:      1           1          1     1 0.1 0.8568063
-#&gt; 3:      1           1          1     1 0.2 0.7341170
-#&gt; 4:      1           1          1     1 0.3 0.6289960
-#&gt; 5:      1           1          1     1 0.4 0.5389277
-#&gt; 6:      1           1          1     1 0.5 0.4617567</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve t      rmst
-#&gt; 1:      1           1          1     1 2 0.6176500
-#&gt; 2:      1           1          1     1 5 0.6467821
-#&gt; 3:      1           1          1     2 2 0.9941317
-#&gt; 4:      1           1          1     2 5 1.2204322
-#&gt; 5:      1           1          1     3 2 1.2085576
-#&gt; 6:      1           1          1     3 5 1.6908559</div><div class='input'>
+#&gt; 2:      1           1          1     1 0.1 0.8513320
+#&gt; 3:      1           1          1     1 0.2 0.7247661
+#&gt; 4:      1           1          1     1 0.3 0.6170166
+#&gt; 5:      1           1          1     1 0.4 0.5252859
+#&gt; 6:      1           1          1     1 0.5 0.4471927</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve t      rmst
+#&gt; 1:      1           1          1     1 2 0.5964516
+#&gt; 2:      1           1          1     1 5 0.6211002
+#&gt; 3:      1           1          1     2 2 0.9943679
+#&gt; 4:      1           1          1     2 5 1.2208820
+#&gt; 5:      1           1          1     3 2 1.2105347
+#&gt; 6:      1           1          1     3 5 1.6958283</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

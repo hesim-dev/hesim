@@ -32,7 +32,6 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
   std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
   transmod->set_max_x(max_t);
   std::vector<bool> absorbing = transmod->trans_mat_.absorbing_;
-  start_state = start_state; // Switch from R to C++ indexing
   int n_samples = transmod->get_n_samples();
   int n_strategies = transmod->get_n_strategies(); 
   std::vector<int> n_lines = transmod->get_n_lines();
