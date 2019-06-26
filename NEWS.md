@@ -5,7 +5,7 @@ To illustrate, consider an oncology application with three health states (stable
 
 State values like this can be specified by setting `time_reset = TRUE` in `create_StateVals.stateval_tbl()`.
 
-```
+```r
 hesim_dat <- hesim_data(strategies = data.frame(strategy_id = c(1, 2)),
                         patients = data.frame(patient_id = seq(1, 3)),
                         states = data.frame(state_id = c(1, 2)))
