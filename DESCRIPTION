@@ -23,7 +23,7 @@ LazyData: true
 LinkingTo: Rcpp,
            RcppArmadillo
 Depends:
-    R (>= 3.2.3)
+    R (>= 3.5.0)
 Imports:
     data.table,
     flexsurv,
