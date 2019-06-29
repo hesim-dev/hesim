@@ -95,8 +95,7 @@ s2 <- flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
             dist = "weibullPH")
 s1_a0 <- s1$res.t["a0", "est"]; s1_a1 <- s1$res.t["a1", "est"]
 s2_shape <- s2$res.t["shape", "est"]; s2_scale <- s2$res.t["scale", "est"]
-expect_equal(s1_a1, 
-             exp(s2_shape) - 1)
+expect_equal(s1_a1, exp(s2_shape) - 1, tolerance = .001, scale = 1)
 expect_equal(log(exp(s2_scale) * exp(s2_shape)), 
              s1_a0)
 expect_equal(s2_scale + s2_shape, # since shape is a scalar
