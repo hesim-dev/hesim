@@ -75,7 +75,7 @@ The parameters of the survival models would typically be estimated in one of two
 
 We consider an estimation dataset (`surv_est_data`) with three survival endpoints with endpoint 1 denoting the lowest indexed state, endpoint 2 the next indexed state, and endpoint 3 representing overall survival. In our example, endpoint 1 represents progression on 1st line treatment, endpoint 2 represents progression on 2nd line treatment, and endpoint 3 represents death. 
 
-Survival models in `hesim` can be fit using either `flexsurvreg` or `flexsurvspline` from the `flexsurv` package. `hesim` currently supports parametric (exponential, Weibull, Gompertz, gamma, log-logistic, lognormal, and generalized gamma), splines, and fractional polynomial survival models (see [params_surv](../reference/params_surv.html)). In this example, we fit a Weibull model to each of the three survival endpoints.
+Survival models in `hesim` can be fit using either `flexsurvreg` or `flexsurvspline` from the `flexsurv` package. `hesim` currently supports parametric (exponential, Weibull, Gompertz, gamma, log-logistic, lognormal, and generalized gamma), splines, and fractional polynomial survival models (see [params_surv](https://hesim-dev.github.io/hesim/reference/params_surv.html)). In this example, we fit a Weibull model to each of the three survival endpoints.
 
 ```{r, warning = FALSE, message = FALSE}
 library("flexsurv")
@@ -237,7 +237,7 @@ head(psm$qalys_)
 ```
 
 # Decision analysis
-A cost-effectiveness analysis can be performed with the `icea()` and `icea_pw()` functions (see [here](icea.html)) after using the `$summarize()` method to create a ["cost-effectiveness"](../reference/ce.html) object with mean costs and QALYs computed for each PSA sample. 
+A cost-effectiveness analysis can be performed with the `icea()` and `icea_pw()` functions (see [here](icea.html)) after using the `$summarize()` method to create a ["cost-effectiveness"](https://hesim-dev.github.io/hesim/reference/ce.html) object with mean costs and QALYs computed for each PSA sample. 
 
 ```{r}
 ce_sim <- psm$summarize()

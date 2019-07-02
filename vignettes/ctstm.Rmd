@@ -347,7 +347,7 @@ ggplot(costs_summary,
 ```
 
 # Decision analysis
-Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The `$summarize()` method creates a ["cost-effectiveness"](../reference/ce.html) object with mean costs and QALYs computed for each PSA sample. The `icea()` and `icea_pw()` can then be used for cost-effectiveness analysis as described [here](icea.html).
+Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The `$summarize()` method creates a ["cost-effectiveness"](https://hesim-dev.github.io/hesim/reference/ce.html) object with mean costs and QALYs computed for each PSA sample. The `icea()` and `icea_pw()` can then be used for cost-effectiveness analysis as described [here](icea.html).
 
 ```{r}
 ce_sim <- econmod_cr$summarize()
