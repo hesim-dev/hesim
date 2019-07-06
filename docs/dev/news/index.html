@@ -62,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.1.9000</span>
       </span>
     </div>
 
@@ -120,6 +120,22 @@
       <small>Source: <a href='https://github.com/hesim-dev/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="hesim-021" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hesim-021" class="anchor"></a>hesim 0.2.1</h2>
+<p>The <code>input_mats</code> class now contains an element <code>time_reset</code>. If <code>TRUE</code>, then time intervals reset each time a patient enters a new health state. In other words, state values can depend on time since entering a health state.</p>
+<p>To illustrate, consider an oncology application with three health states (stable disease, progressed disease, and death). In these models it is common to assume that patients begin second line treatment after disease progression. Suppose the second line treatment is a chemotherapy that patients take for 12 cycles (or approximately 1 year). Then drug costs would accrue for the first year but not afterwards.</p>
+<p>State values like this can be specified by setting <code>time_reset = TRUE</code> in <code><a href="../reference/create_StateVals.html">create_StateVals.stateval_tbl()</a></code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hesim_data.html">hesim_data</a></span>(<span class="dt">strategies =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">strategy_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>)),</span>
+<span id="cb1-2"><a href="#cb1-2"></a>                        <span class="dt">patients =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">patient_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">1</span>, <span class="dv">3</span>)),</span>
+<span id="cb1-3"><a href="#cb1-3"></a>                        <span class="dt">states =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">state_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>)))</span>
+<span id="cb1-4"><a href="#cb1-4"></a>drugcosts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="dt">tbl =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">state_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">each =</span> <span class="dv">2</span>),</span>
+<span id="cb1-5"><a href="#cb1-5"></a>                                           <span class="dt">time_start =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb1-6"><a href="#cb1-6"></a>                                           <span class="dt">est =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">10000</span>, <span class="dv">0</span>, <span class="dv">12500</span>, <span class="dv">0</span>)),</span>
+<span id="cb1-7"><a href="#cb1-7"></a>                                  <span class="dt">dist =</span> <span class="st">"fixed"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8"></a>                                  <span class="dt">hesim_data =</span> hesim_dat)  </span>
+<span id="cb1-9"><a href="#cb1-9"></a>drugcostsmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(drugcosts, <span class="dt">time_reset =</span> <span class="ot">TRUE</span>) </span></code></pre></div>
+</div>
     <div id="hesim-020" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-020" class="anchor"></a>hesim 0.2.0</h2>
@@ -168,6 +184,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#hesim-021">0.2.1</a></li>
         <li><a href="#hesim-020">0.2.0</a></li>
         <li><a href="#hesim-010">0.1.0</a></li>
       </ul>

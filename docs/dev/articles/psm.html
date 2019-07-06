@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.1.9000</span>
       </span>
     </div>
 
@@ -87,7 +87,7 @@
     <div class="page-header toc-ignore">
       <h1>Partitioned survival models</h1>
             
-            <h4 class="date">2019-06-21</h4>
+            <h4 class="date">2019-07-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/psm.Rmd"><code>vignettes/psm.Rmd</code></a></small>
       <div class="hidden name"><code>psm.Rmd</code></div>
@@ -171,7 +171,7 @@ S_{n}(t|\alpha_{1n}(x_{1n, ik}), \ldots, \alpha_{Ln}(x_{Ln, ik})).
 <a href="#survival-models" class="anchor"></a><span class="header-section-number">3.1</span> Survival models</h2>
 <p>The parameters of the survival models would typically be estimated in one of two ways. First, if access to patient level data from a clinical trial were available, survival models would be fit using available R packages. Second, a formal evidence synthesis—such as a network meta-analysis—might be conducted. Here, we provide an example of an analysis with trial level data.</p>
 <p>We consider an estimation dataset (<code>surv_est_data</code>) with three survival endpoints with endpoint 1 denoting the lowest indexed state, endpoint 2 the next indexed state, and endpoint 3 representing overall survival. In our example, endpoint 1 represents progression on 1st line treatment, endpoint 2 represents progression on 2nd line treatment, and endpoint 3 represents death.</p>
-<p>Survival models in <code>hesim</code> can be fit using either <code>flexsurvreg</code> or <code>flexsurvspline</code> from the <code>flexsurv</code> package. <code>hesim</code> currently supports parametric (exponential, Weibull, Gompertz, gamma, log-logistic, lognormal, and generalized gamma), splines, and fractional polynomial survival models (see <a href="file:///Users/devin.incerti/IVI/hesim/docs/reference/params_surv.html">params_surv</a>). In this example, we fit a Weibull model to each of the three survival endpoints.</p>
+<p>Survival models in <code>hesim</code> can be fit using either <code>flexsurvreg</code> or <code>flexsurvspline</code> from the <code>flexsurv</code> package. <code>hesim</code> currently supports parametric (exponential, Weibull, Gompertz, gamma, log-logistic, lognormal, and generalized gamma), splines, and fractional polynomial survival models (see <a href="https://hesim-dev.github.io/hesim/reference/params_surv.html">params_surv</a>). In this example, we fit a Weibull model to each of the three survival endpoints.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"flexsurv"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>surv_est_data &lt;-<span class="st"> </span>psm4_exdata<span class="op">$</span>survival</span>
 <span id="cb3-3"><a href="#cb3-3"></a>fit1 &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg</a></span>(<span class="kw">Surv</span>(endpoint1_time, endpoint1_status) <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>female <span class="op">+</span><span class="st"> </span></span>
@@ -329,7 +329,7 @@ S_{n}(t|\alpha_{1n}(x_{1n, ik}), \ldots, \alpha_{Ln}(x_{Ln, ik})).
 <div id="decision-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#decision-analysis" class="anchor"></a><span class="header-section-number">5</span> Decision analysis</h1>
-<p>A cost-effectiveness analysis can be performed with the <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code> functions (see <a href="icea.html">here</a>) after using the <code>$summarize()</code> method to create a <a href="../reference/ce.html">“cost-effectiveness”</a> object with mean costs and QALYs computed for each PSA sample.</p>
+<p>A cost-effectiveness analysis can be performed with the <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code> functions (see <a href="icea.html">here</a>) after using the <code>$summarize()</code> method to create a <a href="https://hesim-dev.github.io/hesim/reference/ce.html">“cost-effectiveness”</a> object with mean costs and QALYs computed for each PSA sample.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>ce_sim &lt;-<span class="st"> </span>psm<span class="op">$</span><span class="kw">summarize</span>()</span>
 <span id="cb19-2"><a href="#cb19-2"></a>icea_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea</a></span>(ce_sim, <span class="dt">dr_qalys =</span> <span class="fl">.03</span>, <span class="dt">dr_costs =</span> <span class="fl">.03</span>)</span>
 <span id="cb19-3"><a href="#cb19-3"></a>icea_pw_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce_sim, <span class="dt">comparator =</span> <span class="dv">1</span>, <span class="dt">dr_qalys =</span> <span class="fl">.03</span>, <span class="dt">dr_costs =</span> <span class="fl">.03</span>)</span></code></pre></div>
