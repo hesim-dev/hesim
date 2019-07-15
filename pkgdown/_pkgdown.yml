@@ -36,6 +36,9 @@ reference:
       - stateval_tbl
       - StateVals
       - create_StateVals
+  - title: "Discrete time state transition models"
+    contents:
+      - transprob_tbl
   - title: "Partitioned survival model"
     contents:
       - Psm
