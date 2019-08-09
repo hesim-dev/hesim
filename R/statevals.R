@@ -68,7 +68,7 @@
 #' is in the same format as described in "Details". \code{patients} is a 
 #' \code{data.table} with one column containing \code{patient_id} and 
 #' optionally a second column containing \code{grp_id}.
-#' @seealso \code{\link{create_StateVals}}
+#' @seealso \code{\link{create_StateVals}}, \code{\link{StateVals}}
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3),
@@ -144,127 +144,11 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
 #' @rdname create_StateVals 
 #' @export
 create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, ...){
-
-  # Parameters
-  tbl <- copy(object)
-  n_rows <- nrow(tbl)
-  if (attr(object, "dist") == "norm"){
-    mu <- stats::rnorm(n * n_rows, mean = tbl$mean, sd = tbl$sd)
-  } else if (attr(object, "dist") == "beta"){
-    if (all(c("shape1", "shape2") %in% colnames(tbl))){
-      mu <- stats::rbeta(n * n_rows, shape1 = tbl$shape1, shape2 = tbl$shape2)
-    } else if (all(c("mean", "se") %in% colnames(tbl))){
-      mom_params <- mom_beta(tbl$mean, tbl$se)
-      mu <- stats::rbeta(n * n_rows, shape1 = mom_params$shape1, shape2 = mom_params$shape2) 
-    } 
-  } else if (attr(object, "dist") == "gamma"){
-      if (all(c("shape", "rate") %in% colnames(tbl))){
-        mu <- stats::rgamma(n * n_rows, shape = tbl$shape, rate = tbl$rate)
-      } else if (all(c("shape", "scale") %in% colnames(tbl))){
-        mu <- stats::rgamma(n * n_rows, shape = tbl$shape, scale = tbl$scale)
-      } else if (all(c("mean", "se") %in% colnames(tbl))){
-        mom_params <- mom_gamma(tbl$mean, tbl$se)
-        mu <- stats::rgamma(n * n_rows, shape = mom_params$shape, scale = mom_params$scale) 
-      } 
-  } else if (attr(object, "dist") == "lnorm"){
-      mu <- stats::rlnorm(n * n_rows, meanlog = tbl$meanlog, sdlog = tbl$sdlog)
-  } else if (attr(object, "dist") == "unif"){
-      mu <- stats::runif(n * n_rows, min = tbl$min, max = tbl$max) 
-  } else if (attr(object, "dist") == "fixed"){
-      mu <- rep(tbl$est, times = n)
-  } else if (attr(object, "dist") == "custom"){
-      mu <- tbl$value
-  }
-  
-  if (attr(object, "dist") != "custom"){
-    mu <- matrix(mu, ncol = n, byrow = FALSE) 
-  } else {
-    setorderv(tbl, "sample") 
-    if (!is.null(n)){
-      n_samples <- length(unique(tbl$sample))
-      mu <- matrix(mu, ncol = n_samples, byrow = FALSE)
-      if (n < n_samples){
-        samples <- sample.int(n_samples, n, replace = FALSE) 
-      } else if (n > n_samples) {
-        warning("'n' is larger than the number of unique values of 'sample' in 'tbl'.")
-        samples <- sample.int(n_samples, n, replace = TRUE) 
-      }
-      if (n != n_samples){
-        mu <- mu[, samples, drop = FALSE]
-      }
-    }
-    tbl <- tbl[sample == 1] 
-  }
-  tbl[, ("row_num") := 1:.N] 
-  
-  ## Expand by strategy_id, state_id, and/or time interval
-  tbl_list <- list()
-  id_vars <- c("strategy_id", "state_id", "time_start")
-  i <- 1
-  for (var in id_vars){
-    if (is.null(tbl[[var]])){
-      if (!is.null(attr(object, var))){
-        tbl_i <- data.frame(tmp_var = attr(object, var))
-        setnames(tbl_i, "tmp_var", var)
-        tbl_list[[i]] <- tbl_i
-        i <- i + 1
-      }
-    }
-  }
-  tbl_list <- c(list(data.frame(tbl)), tbl_list)
-  tbl <- Reduce(function(...) merge(..., by = NULL), tbl_list)
-  tbl <- data.table(tbl)
-  
- ## Expand by patient
-  merge <- TRUE
-  if (is.null(tbl$grp_id)){ # If group ID is not specified
-    tbl[, ("grp_id") := 1]
-    patient_lookup <- data.table(patient_id = attr(object, "patients")$patient_id, 
-                                 grp_id = 1)
-  } else { # Else if group ID is specified
-    if (is.null(attr(object, "patients")$grp_id)) { # If the patient lookup table does not exist
-      setnames(tbl, "grp_id", "patient_id")
-      merge <- FALSE
-    } else{
-        patient_lookup <- attr(object, "patients")[, c("patient_id", "grp_id"), 
-                                                    with = FALSE] 
-    }
-  }
-  if (merge){
-    tbl <- merge(tbl, patient_lookup, by = c("grp_id"), allow.cartesian = TRUE,
-                 sort = FALSE) 
-  }
-  if (is.null(tbl[["time_start"]])){
-    setorderv(tbl, cols = c("strategy_id", "patient_id", "state_id")) 
-  } else{
-    setorderv(tbl, cols = c("strategy_id", "patient_id", "state_id", 
-                            "time_id")) 
-  }
-  mu <- mu[tbl$row_num, , drop = FALSE]
-
-  ## Create object
-  params <- new_params_mean(mu = mu, 
-                            sigma = rep(0, n),
-                            n_samples = n)
-  # Input matrices
-  if (!is.null(tbl$time_id)){
-    time_intervals <- unique(object[, c("time_id", "time_start", "time_stop")]) 
-  } else{
-    time_intervals <- NULL
-  }
-  
-  input_mats <- new_input_mats(X = NULL,
-                              strategy_id = tbl$strategy_id,
-                              n_strategies = length(unique(tbl$strategy_id)),
-                              patient_id = tbl$patient_id,
-                              n_patients = length(unique(tbl$patient_id)),
-                              state_id = tbl$state_id,
-                              n_states = length(unique(tbl$state_id)),
-                              time_id = tbl$time_id,
-                              time_intervals = time_intervals,
-                              time_reset = time_reset,
-                              n_times = nrow(time_intervals)) 
-  return(StateVals$new(input_mats = input_mats, params = params))
+  x <- CreateFromParamsTbl$new(object, n)
+  x$prep()
+  stateval <- StateVals$new(input_mats = x$input_mats, params = x$params)
+  stateval$input_mats$time_reset <- time_reset
+  return(stateval)
 }
 
 

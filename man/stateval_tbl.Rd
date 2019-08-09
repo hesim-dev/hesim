@@ -111,5 +111,5 @@ costmod <- create_StateVals(cost_tbl, n = 2)
 
 }
 \seealso{
-\code{\link{create_StateVals}}
+\code{\link{create_StateVals}}, \code{\link{StateVals}}
 }

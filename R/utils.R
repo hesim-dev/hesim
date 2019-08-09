@@ -128,11 +128,10 @@ flatten_lists <- function(x) {
   else return(unlist(c(lapply(x, flatten_lists)), recursive = FALSE))
 }
 
-# R6 class for parameter tables (i.e., stateval_tbl, transprob_tbl)
+# R6 class for parameter tables (i.e., stateval_tbl, transprob_tbl) ------------
 ParamsTbl <- R6::R6Class("ParamsTbl",
   private = list(
-    id_vars_all = c("sample", "strategy_id", "state_id", "transition_id",
-                     "grp_id", "time_start"),
+    id_vars_all = NULL,
     id_vars = NULL,
     id_vars_msg = NULL,
     cols = NULL
@@ -150,7 +149,17 @@ ParamsTbl <- R6::R6Class("ParamsTbl",
       private$cols <- colnames(tbl)
     },
     
-    add_time_intervals = function(tbl){
+    set_id_vars_all = function(){
+      if ("patient_id" %in% colnames(self$tbl)){
+        private$id_vars_all <-  c("sample", "strategy_id", "state_id", "transition_id",
+                                  "patient_id", "time_start")
+      } else {
+        private$id_vars_all <-  c("sample", "strategy_id", "state_id", "transition_id",
+                                  "grp_id", "time_start")
+      } 
+    },
+    
+    add_time_intervals = function(){
       if (!is.null(self$tbl$time_start)){
         time_intervals <- data.table(time_start = unique(self$tbl$time_start))
         time_intervals[, "time_stop" := shift(get("time_start"), type = "lead")]
@@ -213,7 +222,7 @@ ParamsTbl <- R6::R6Class("ParamsTbl",
                       "contain the column 'est'.")
           stop(msg, call. = FALSE)
         }    
-      }else if (self$dist == "dirichlet"){
+      } else if (self$dist == "dirichlet"){
         if (!all(c("alpha") %in% private$cols)){
           msg <- stop("If 'dist' = 'dirichlet', then tbl must ",
                       "contain the column 'alpha'.")
@@ -229,17 +238,27 @@ ParamsTbl <- R6::R6Class("ParamsTbl",
     },
     
     check_need_hesim_data1 = function(var){
-      if (is.null(self$tbl[[var]])){
-        name <- switch(var,
-                       "state_id" = "states",
-                       "strategy_id" = "strategies",
-                       "grp_id" = "patients")
-        if (is.null(self$hesim_data[[name]])){
-          msg <- paste0("If '", var, "' is not a column in 'tbl' ",
-                        "then 'hesim_data' must be included as an argument ",
-                        "and '",  name, "' must be an element of 'hesim_data'.")
-          stop(msg, call. = FALSE)
-        }
+      if (var %in% c("patient_id", "grp_id")){ # Patient ID or Group ID
+        if (is.null(self$tbl[["patient_id"]]) & is.null(self$tbl[["grp_id"]])){
+          if (is.null(self$hesim_data[["patients"]])){
+            msg <- paste0("If 'either 'patient_id' or 'grp_id' is not a column in 'tbl' ",
+                          "then 'hesim_data' must be included as an argument ",
+                          "and 'patients' must be an element of 'hesim_data'.")
+            stop(msg, call. = FALSE)
+          }          
+        } 
+      } else { # Other (strategy ID and state ID)
+        if (!var %in% c("grp_id", "patient_id") & is.null(self$tbl[[var]])) {
+          name <- switch(var,
+                         "state_id" = "states",
+                         "strategy_id" = "strategies")
+          if (is.null(self$hesim_data[[name]])){
+            msg <- paste0("If '", var, "' is not a column in 'tbl' ",
+                          "then 'hesim_data' must be included as an argument ",
+                          "and '",  name, "' must be an element of 'hesim_data'.")
+            stop(msg, call. = FALSE)
+          }
+        }        
       }
       invisible(self)
     },
@@ -327,6 +346,7 @@ ParamsTbl <- R6::R6Class("ParamsTbl",
       }
       
       # Check
+      self$set_id_vars_all()
       self$check_dist()
       self$check_need_sample()
       self$check_need_hesim_data(need_hesim_data_vars)
@@ -338,6 +358,225 @@ ParamsTbl <- R6::R6Class("ParamsTbl",
       self$sort()
       self$set_attributes(health_id)      
       
+    }
+  )
+)
+
+# R6 class for creating economic model component from a parameter table --------
+CreateFromParamsTbl <- R6::R6Class("CreateFromParamsTbl",
+  public = list(
+    object = NULL,
+    n = NULL, 
+    values = NULL,
+    id_tbl = NULL,
+    input_mats = NULL,
+    params = NULL,
+    n_trans = NULL, # For transprob_tbl only
+    n_states = NULL, # For transprob_tbl only
+                    
+    initialize = function(object, n){
+      self$object <- object
+      self$n <- n
+      if (inherits(self$object, "transprob_tbl")){
+        self$n_trans <- length(unique(self$object$transition_id))
+        self$n_states <- sqrt(self$n_trans)
+      }
+    },
+    
+    random = function(){
+      n_rows <- nrow(self$object)
+      if (attr(self$object, "dist") == "norm"){
+        self$values <- stats::rnorm(self$n * n_rows, 
+                                    mean = self$object$mean, sd = self$object$sd)
+      } else if (attr(self$object, "dist") == "beta"){
+        if (all(c("shape1", "shape2") %in% colnames(self$object))){
+          self$values <- stats::rbeta(self$n * n_rows, 
+                                      shape1 = self$object$shape1, 
+                                      shape2 = self$object$shape2)
+        } else if (all(c("mean", "se") %in% colnames(self$object))){
+          mom_params <- mom_beta(self$object$mean, self$object$se)
+          self$values <- stats::rbeta(self$n * n_rows, 
+                                      shape1 = mom_params$shape1, 
+                                      shape2 = mom_params$shape2) 
+        } 
+      } else if (attr(self$object, "dist") == "gamma"){
+        if (all(c("shape", "rate") %in% colnames(self$object))){
+          self$values <- stats::rgamma(self$n * n_rows, 
+                                       shape = self$object$shape, 
+                                       rate = self$object$rate)
+        } else if (all(c("shape", "scale") %in% colnames(self$object))){
+          self$values <- stats::rgamma(self$n * n_rows, 
+                                       shape = self$object$shape, 
+                                       scale = self$object$scale)
+        } else if (all(c("mean", "se") %in% colnames(self$object))){
+          mom_params <- mom_gamma(self$object$mean, self$object$se)
+          self$values <- stats::rgamma(self$n * n_rows, 
+                                       shape = mom_params$shape, 
+                                       scale = mom_params$scale) 
+        } 
+      } else if (attr(self$object, "dist") == "lnorm"){
+        self$values <- stats::rlnorm(self$n * n_rows, 
+                                     meanlog = self$object$meanlog, 
+                                     sdlog = selfdevt$object$sdlog)
+      } else if (attr(self$object, "dist") == "unif"){
+        self$values <- stats::runif(self$n * n_rows, 
+                                     min = self$object$min, 
+                                     max = self$object$max) 
+      } else if (attr(self$object, "dist") == "dirichlet"){
+        alpha <- matrix(self$object$alpha, ncol = self$n_states, byrow = TRUE)
+        self$values <- rdirichlet_mat(self$n, alpha)
+      } else if (attr(self$object, "dist") == "fixed"){
+        self$values <- rep(self$object$est, times = self$n)
+      } else if (attr(self$object, "dist") == "custom"){
+        self$values <- self$object$value
+      }      
+      invisible(self)
+    },
+    
+    transform = function(){
+      if (attr(self$object, "dist") == "dirichlet"){ # Dirichlet, only for transprob_tbl
+        self$values <- aperm(array(c(aperm(self$values, perm = c(2, 1, 3))),
+                                   dim = c(self$n_states, self$n_states, 
+                                           dim(self$values)[3] * dim(self$values)[1]/self$n_states)),
+                             perm = c(2, 1, 3))
+      } else if (attr(self$object, "dist") == "custom"){ # Custom distribution
+        setorderv(self$object, "sample") 
+        n_samples <- length(unique(self$object$sample))
+        if(inherits(self$object, "stateval_tbl")){
+          self$values <- matrix(self$values, ncol = n_samples, byrow = FALSE)
+        } else{
+          self$values <- aperm(array(self$values,
+                                     dim = c(self$n_states, self$n_states, 
+                                             nrow(self$object)/self$n_trans)),
+                               perm = c(2, 1, 3))
+        }
+        if (self$n < n_samples){
+          samples <- sample.int(n_samples, self$n, replace = FALSE) 
+        } else if (self$n > n_samples) {
+          warning("'n' is larger than the number of unique values of 'sample' in 'object'.")
+          samples <- sample.int(n_samples, self$n, replace = TRUE) 
+        }
+        if (self$n != n_samples){
+          self$values <- self$values[, samples, drop = FALSE]
+        }        
+      } else{ # All other distributions
+        if(inherits(self$object, "stateval_tbl")){
+          self$values <- matrix(self$values, ncol = self$n, byrow = FALSE) 
+        } else{
+          self$values <- aperm(array(self$values,
+                                     dim = c(self$n_states, self$n_states, 
+                                             length(self$values)/self$n_trans)),
+                               perm = c(2, 1, 3))
+        }        
+      }
+      invisible(self)
+    },
+    
+    expand = function(){
+      if (attr(self$object, "dist") == "custom"){
+        self$id_tbl <- self$object[sample == 1]
+      } else{
+        self$id_tbl <- copy(self$object)
+      }
+      if(inherits(self$object, "transprob_tbl")){
+        self$id_tbl <- self$id_tbl[transition_id == 1]
+      }          
+      self$id_tbl[, ("obs_num") := 1:.N]  
+      
+      # Expand by strategy_id and/or state_id and time interval
+      id_tbl_list <- list()
+      id_vars <- c("strategy_id", "state_id", "time_start")
+      i <- 1
+      for (var in id_vars){
+        if (is.null(self$id_tbl[[var]])){
+          if (!is.null(attr(self$object, var))){
+            id_tbl_i <- data.frame(tmp_var = attr(self$object, var))
+            setnames(id_tbl_i, "tmp_var", var)
+            id_tbl_list[[i]] <- id_tbl_i
+            i <- i + 1
+          }
+        }
+      }
+      id_tbl_list <- c(list(data.frame(self$id_tbl)), id_tbl_list)
+      self$id_tbl <- Reduce(function(...) merge(..., by = NULL), id_tbl_list)
+      self$id_tbl <- data.table(self$id_tbl)
+      
+      # Expand by patient 
+      if (is.null(self$id_tbl$patient_id)){
+        merge <- TRUE
+        if (is.null(self$id_tbl$grp_id)){ # If group ID is not specified
+          self$id_tbl[, ("grp_id") := 1]
+          patient_lookup <- data.table(patient_id = attr(self$object, "patients")$patient_id, 
+                                       grp_id = 1)
+        } else { # Else if group ID is specified
+          if (is.null(attr(self$object, "patients")$grp_id)) { # If the patient lookup table does not exist
+            setnames(self$id_tbl, "grp_id", "patient_id")
+            merge <- FALSE
+          } else{
+            patient_lookup <- attr(self$object, "patients")[, c("patient_id", "grp_id"), 
+                                                            with = FALSE] 
+          }
+        }
+        if (merge){
+          self$id_tbl <- merge(self$id_tbl, patient_lookup, by = c("grp_id"), allow.cartesian = TRUE,
+                               sort = FALSE) 
+        }  
+      }
+      
+      # Sort
+      health_id <- switch(class(self$object)[1],
+                          stateval_tbl = "state_id",
+                          transprob_tbl = "transition_id")
+      if (is.null(self$id_tbl[["time_start"]])){
+        setorderv(self$id_tbl, cols = c("strategy_id", "patient_id", health_id)) 
+      } else{
+        setorderv(self$id_tbl, cols = c("strategy_id", "patient_id", health_id, 
+                                   "time_id")) 
+      }
+      
+      # Expanded values
+      if (inherits(self$object, "stateval_tbl")){
+        self$values <- self$values[self$id_tbl$obs_num, , drop = FALSE]
+      } else{
+        self$values <- self$values[,, rep(self$id_tbl$obs_num, each = self$n)]
+      }
+      invisible(self)
+    },
+    
+    create_params = function(){
+      if (inherits(self$object, "stateval_tbl")){
+        self$params <- new_params_mean(mu = self$values, 
+                                       sigma = rep(0, self$n),
+                                       n_samples = self$n)
+      } else{
+        self$params <- self$values
+      }
+    },
+    
+    create_input_mats = function(){
+      if (!is.null(self$object$time_id)){
+        time_intervals <- unique(self$object[, c("time_id", "time_start", "time_stop")]) 
+      } else{
+        time_intervals <- NULL
+      }
+      self$input_mats <- new_input_mats(X = NULL,
+                                        strategy_id = self$id_tbl$strategy_id,
+                                        n_strategies = length(unique(self$id_tbl$strategy_id)),
+                                        patient_id = self$id_tbl$patient_id,
+                                        n_patients = length(unique(self$id_tbl$patient_id)),
+                                        state_id = self$id_tbl$state_id,
+                                        n_states = length(unique(self$id_tbl$state_id)),
+                                        time_id = self$id_tbl$time_id,
+                                        time_intervals = time_intervals,
+                                        n_times = nrow(time_intervals))
+    },
+    
+    prep = function(...){
+      self$random()
+      self$transform()
+      self$expand()
+      self$create_params()
+      self$create_input_mats()
     }
   )
 )

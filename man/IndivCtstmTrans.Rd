@@ -8,14 +8,13 @@
 IndivCtstmTrans
 }
 \description{
-Summarize health state transitions in an individual-level continuous time state transition model with parameters that were estimated using a multi-state model.
+Simulate health state transitions in an individual-level continuous time state transition model with parameters that were estimated using a multi-state model.
 
 }
 \section{Fields}{
 
 \describe{
-\item{\code{input_mats}}{Input matrices used to simulate health state transitions by treatment strategy and patient. Must be 
-  an object of class \code{\link{input_mats}}. If \code{params} is a list of models, then \code{input_mats} must contain a unique row for each treatment strategy and patient; if \code{params} is a joint model, then \code{input_mats} must contain a unique row for each treatment strategy, patient, and transition.}
+\item{\code{input_mats}}{Input matrices used to simulate health state transitions by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient. Must be an object of class \code{\link{input_mats}}. If \code{params} is a list of models, then \code{input_mats} must contain a unique row for each treatment strategy and patient; if \code{params} is a joint model, then \code{input_mats} must contain a unique row for each treatment strategy, patient, and transition.}
 
 \item{\code{params}}{An object of class \code{\link{params_surv}} or \code{\link{params_surv_list}}.}
 

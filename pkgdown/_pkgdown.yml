@@ -39,6 +39,8 @@ reference:
   - title: "Discrete time state transition models"
     contents:
       - transprob_tbl
+      - create_CohortDtstmTrans
+      - CohortDtstmTrans
   - title: "Partitioned survival model"
     contents:
       - Psm

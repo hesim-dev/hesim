@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Table to store transition probabilities — transprob_tbl • hesim</title>
+<title>Create <code>CohortDtstmTrans</code> object — create_CohortDtstmTrans • hesim</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,11 +32,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Table to store transition probabilities — transprob_tbl" />
+<meta property="og:title" content="Create <code>CohortDtstmTrans</code> object — create_CohortDtstmTrans" />
 
-<meta property="og:description" content="Create a table for storing transition probabilities for a discrete time state
-transition model stratified by treatment strategy, patient, transition, and
-(optionally) time interval." />
+<meta property="og:description" content="create_CohortDtstmTrans creates an object of class
+ CohortDtstmTrans from a transprob_tbl
+ object." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -121,93 +121,61 @@ transition model stratified by treatment strategy, patient, transition, and
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Table to store transition probabilities</h1>
+    <h1>Create <code>CohortDtstmTrans</code> object</h1>
     <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/dtstm.R'><code>R/dtstm.R</code></a></small>
-    <div class="hidden name"><code>transprob_tbl.Rd</code></div>
+    <div class="hidden name"><code>create_CohortDtstmTrans.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a table for storing transition probabilities for a discrete time state
-transition model stratified by treatment strategy, patient, transition, and
-(optionally) time interval.</p>
+    <p><code>create_CohortDtstmTrans</code> creates an object of class
+ <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> from a <code><a href='transprob_tbl.html'>transprob_tbl</a></code>
+ object.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>transprob_tbl</span>(<span class='no'>tbl</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"custom"</span>, <span class='st'>"dirichlet"</span>, <span class='st'>"fixed"</span>),
-  <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>create_CohortDtstmTrans</span>(<span class='no'>object</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for transprob_tbl</span>
+<span class='fu'>create_CohortDtstmTrans</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>start_stateprobs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tbl</th>
-      <td><p>A <code>data.frame</code> or <code>data.table</code> for storing parameter 
-values. See "Details" for specifics.</p></td>
+      <th>object</th>
+      <td><p>An object of class "transprob_tbl".</p></td>
     </tr>
     <tr>
-      <th>dist</th>
-      <td><p>Probability distribution used to sample parameters for a 
-probabilistic sensitivity analysis (PSA).</p></td>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     <tr>
-      <th>hesim_data</th>
-      <td><p>A <code><a href='hesim_data.html'>hesim_data</a></code> object. Required to specify 
-patients if not included as columns in <code>tbl</code>. Not required if <code>tbl</code> 
-includes one row for each treatment strategy, patient, and transition combination.</p></td>
+      <th>n</th>
+      <td><p>Number of random observations of the parameters to draw for the PSA 
+if the parameters have not previously been sampled. See "details".</p></td>
+    </tr>
+    <tr>
+      <th>start_stateprobs</th>
+      <td><p>Initial state probabilities. By default all patients
+are assumed to be in the first health state.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class "transprob_tbl", which is a <code>data.table</code> of
-parameter values with attributes for <code>dist</code> and optionally 
- <code>patients</code>. <code>tbl</code> is in the same format as described in "Details". 
- <code>patients</code> is a 
-<code>data.table</code> with at leat one column containing <code>patient_id</code>.</p>
+    <p>Returns an <code>R6Class</code> object of class <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>tbl</code> is a <code>data.table</code> that must contain columns for
-treatment strategies (<code>strategy_id</code>) and health state 
-transitions (<code>transition_id</code>). The number of total transitions
-must be equal to the square of number of health states. The transition
-IDs are, by default, integers starting at 1 and ordered rowwise in 
-transition matrices where each (i,j) pair denotes a transition from
-state i to state j. For example, in a model with two health states 
-transition 1 would be the transition from state 1 to itself, transition 2 would
-be the transition from state 1 to state 2, transition 3 would be the
-transition from state 2 to state 1, and transition 4 would be the transition 
-from state 2 to itself. Alternatively, transition IDs can be specified in
-<code>hesim_data</code> by including a <code>transitions</code> table. Each row is a 
-treatment strategy and transition pair.</p>
-<p>Transition probabilities may also vary by patient (<code>patient_id</code>) 
-and time intervals (<code>time_start</code>). If both of these variables are included, 
-then each row is a treatment strategy, transition, patient, and time interval pair.
-If no patient ID is specified in the table, then the patients in the simulation
-can be specified using the <code>hesim_data</code> argument and it will be assumed
-that transition probabilities are the same across patients.</p>
-<p><code>tbl</code> must also contain columns summarizing the state values for each
-row. Parameter values for a PSA can be drawn from Dirichlet distributions 
-(separate for each treatment strategy and optionally patient subgroup 
-and time interval) with <code>dist = 'dirichlet'</code>. Alternatively, 
-<code>fixed</code> can be used if estimates are known with certainty
-and <code>custom</code> can be used if transition probabilities for a PSA
- have been previously sampled from an arbitrary probability distribution.
- If <code>dist = "custom"</code>, then <code>tbl</code> must include a column 
- named <code>sample</code> (an integer vector denoting a unique random draw).
- The columns in <code>tbl</code> related to the values of the 
- transition probabilities depend on the value of <code>dist</code>. They are
- as follows:</p>
-<dl class='dl-horizontal'>
-<dt>fixed</dt><dd><p><code>est</code></p></dd>
-<dt>dirichlet</dt><dd><p><code>alpha</code></p></dd>
-<dt>custom</dt><dd><p><code>value</code></p></dd>
-</dl>
+    <p>The argument <code>n</code> is not used if the option <code>dist = "custom"</code> 
+ is used in <code><a href='transprob_tbl.html'>transprob_tbl</a></code> since the parameters have already be 
+ drawn for the PSA.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans</a></code>,  <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code></p></div>
+    <div class='dont-index'><p><code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code></p></div>
     
 
   </div>
