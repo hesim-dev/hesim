@@ -8,19 +8,17 @@
 StateVals
 }
 \description{
-Simulate values (i.e., utility or costs) associated with health states in a partitioned survival or state transition model.
+Simulate values (i.e., utility or costs) associated with health states in a state transition or partitioned survival model.
 }
 
 \section{Fields}{
 
   \describe{
-
+  \item{\code{params}}{Parameters for simulating state values. Currently supports objects of class \code{\link{params_mean}} or \code{\link{params_lm}}.}
+  
   \item{\code{input_mats}}{Input matrices used to simulate state values by strategy, patient, and health state. Must be 
   an object of class \code{\link{input_mats}} where each row in the matrix "X" is a unique strategy, patient, and
   health state. "X" must be sorted by strategy, patient, and health state.}
-
-  \item{\code{params}}{An object of class \code{\link{params_lm}}, which contains the parameters for simulating
-  state values.}
   
   }
 }
@@ -29,7 +27,7 @@ Simulate values (i.e., utility or costs) associated with health states in a part
 
 \describe{
 
-\item{\code{new(input_mats, params)}}{
+\item{\code{new(params, input_mats = NULL, time_reset = FALSE)}}{
 
   Constructor for the class.
 

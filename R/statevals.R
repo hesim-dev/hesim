@@ -138,7 +138,7 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
                                 point_estimate = FALSE, ...){
   params <- create_params(object, n, point_estimate) 
   input_mats <- create_input_mats(object, input_data)
-  return(StateVals$new(input_mats = input_mats, params = params))
+  return(StateVals$new(params = params, input_mats = input_mats))
 }
 
 #' @rdname create_StateVals 
@@ -146,7 +146,7 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
 create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, ...){
   x <- CreateFromParamsTbl$new(object, n)
   x$prep()
-  stateval <- StateVals$new(input_mats = x$input_mats, params = x$params)
+  stateval <- StateVals$new(params = x$params, input_mats = x$input_mats)
   stateval$input_mats$time_reset <- time_reset
   return(stateval)
 }
@@ -159,9 +159,9 @@ StateVals <- R6::R6Class("StateVals",
     input_mats = NULL,
     params = NULL,
 
-    initialize = function(input_mats, params, time_reset = FALSE) {
-      self$input_mats <- input_mats
+    initialize = function(params, input_mats = NULL, time_reset = FALSE) {
       self$params <- params
+      self$input_mats <- input_mats
     },
     
     sim = function(t, type = c("predict", "random")){
@@ -173,13 +173,13 @@ StateVals <- R6::R6Class("StateVals",
     },
     
     check = function(){
+      if(!inherits(self$params, c("params_mean", "params_lm"))){
+        stop("Class of 'params' is not supported. See documentation.",
+             call. = FALSE)
+      }      
       if(!inherits(self$input_mats, "input_mats")){
         stop("'input_mats' must be an object of class 'input_mats'",
             call. = FALSE)
-      }
-      if(!inherits(self$params, c("params_mean", "params_lm"))){
-          stop("Class of 'params' is not supported. See documentation.",
-               call. = FALSE)
       }
     }
   )
