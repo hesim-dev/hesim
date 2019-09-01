@@ -145,6 +145,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_cohort_dtstm_sim_stateprobs
+Rcpp::DataFrame C_cohort_dtstm_sim_stateprobs(Rcpp::Environment R_CohortDtstmTrans, std::vector<double> times, int n_samples);
+RcppExport SEXP _hesim_C_cohort_dtstm_sim_stateprobs(SEXP R_CohortDtstmTransSEXP, SEXP timesSEXP, SEXP n_samplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_CohortDtstmTrans(R_CohortDtstmTransSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type times(timesSEXP);
+    Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_cohort_dtstm_sim_stateprobs(R_CohortDtstmTrans, times, n_samples));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_ctstm_sim_disease
 Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, std::vector<int> start_state, std::vector<double> start_age, std::vector<double> start_time, int death_state, std::string clock, std::vector<int> reset_states, double max_t, double max_age, int progress);
 RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP start_timeSEXP, SEXP death_stateSEXP, SEXP clockSEXP, SEXP reset_statesSEXP, SEXP max_tSEXP, SEXP max_ageSEXP, SEXP progressSEXP) {
@@ -372,18 +385,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_test_obs_index_ids
-int C_test_obs_index_ids(Rcpp::List R_input_data, int strategy_index, int patient_index, int line_index, int health_index, std::string member);
-RcppExport SEXP _hesim_C_test_obs_index_ids(SEXP R_input_dataSEXP, SEXP strategy_indexSEXP, SEXP patient_indexSEXP, SEXP line_indexSEXP, SEXP health_indexSEXP, SEXP memberSEXP) {
+int C_test_obs_index_ids(Rcpp::List R_input_data, int strategy_index, int patient_index, int health_index, std::string member);
+RcppExport SEXP _hesim_C_test_obs_index_ids(SEXP R_input_dataSEXP, SEXP strategy_indexSEXP, SEXP patient_indexSEXP, SEXP health_indexSEXP, SEXP memberSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type R_input_data(R_input_dataSEXP);
     Rcpp::traits::input_parameter< int >::type strategy_index(strategy_indexSEXP);
     Rcpp::traits::input_parameter< int >::type patient_index(patient_indexSEXP);
-    Rcpp::traits::input_parameter< int >::type line_index(line_indexSEXP);
     Rcpp::traits::input_parameter< int >::type health_index(health_indexSEXP);
     Rcpp::traits::input_parameter< std::string >::type member(memberSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_obs_index_ids(R_input_data, strategy_index, patient_index, line_index, health_index, member));
+    rcpp_result_gen = Rcpp::wrap(C_test_obs_index_ids(R_input_data, strategy_index, patient_index, health_index, member));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -574,6 +586,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_rpwexp", (DL_FUNC) &_hesim_C_rpwexp, 3},
     {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
     {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
+    {"_hesim_C_cohort_dtstm_sim_stateprobs", (DL_FUNC) &_hesim_C_cohort_dtstm_sim_stateprobs, 3},
     {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 10},
     {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 9},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 7},
@@ -590,7 +603,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_rtruncnorm", (DL_FUNC) &_hesim_C_test_rtruncnorm, 4},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
     {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
-    {"_hesim_C_test_obs_index_ids", (DL_FUNC) &_hesim_C_test_obs_index_ids, 6},
+    {"_hesim_C_test_obs_index_ids", (DL_FUNC) &_hesim_C_test_obs_index_ids, 5},
     {"_hesim_test_quad_dnorm", (DL_FUNC) &_hesim_test_quad_dnorm, 2},
     {"_hesim_test_quad_ier1", (DL_FUNC) &_hesim_test_quad_ier1, 0},
     {"_hesim_test_quad_ier4", (DL_FUNC) &_hesim_test_quad_ier4, 0},

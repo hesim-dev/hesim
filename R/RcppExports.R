@@ -41,6 +41,10 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_C_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
+C_cohort_dtstm_sim_stateprobs <- function(R_CohortDtstmTrans, times, n_samples) {
+    .Call('_hesim_C_cohort_dtstm_sim_stateprobs', PACKAGE = 'hesim', R_CohortDtstmTrans, times, n_samples)
+}
+
 C_ctstm_sim_disease <- function(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress) {
     .Call('_hesim_C_ctstm_sim_disease', PACKAGE = 'hesim', R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress)
 }
@@ -105,8 +109,8 @@ C_test_obs_index <- function(R_input_data, strategy_index, patient_index, line_i
     .Call('_hesim_C_test_obs_index', PACKAGE = 'hesim', R_input_data, strategy_index, patient_index, line_index, health_index)
 }
 
-C_test_obs_index_ids <- function(R_input_data, strategy_index, patient_index, line_index, health_index, member) {
-    .Call('_hesim_C_test_obs_index_ids', PACKAGE = 'hesim', R_input_data, strategy_index, patient_index, line_index, health_index, member)
+C_test_obs_index_ids <- function(R_input_data, strategy_index, patient_index, health_index, member) {
+    .Call('_hesim_C_test_obs_index_ids', PACKAGE = 'hesim', R_input_data, strategy_index, patient_index, health_index, member)
 }
 
 test_quad_dnorm <- function(lower, upper) {
