@@ -25,6 +25,7 @@ check_params_joined <- function(x, inner_class, model_list){
   return(x)
 }
 
+# Means ------------------------------------------------------------------------
 #' Parameters of a mean model
 #' 
 #' Create a list containing the parameters of a mean model.
@@ -72,6 +73,7 @@ check.params_mean <- function(object){
   return(object)
 }
 
+# Linear model -----------------------------------------------------------------
 #' Parameters of a linear model
 #' 
 #' Create a list containing the parameters of a fitted linear regression model.
@@ -158,6 +160,7 @@ check.params_lm_list <- function(object){
   check_params_list(object)
 }
 
+# Survival model ---------------------------------------------------------------
 #' Parameters of a survival model
 #' 
 #' Create a list containing the parameters of a single fitted parametric or 
@@ -339,6 +342,79 @@ check.params_surv <- function(object){
   return(object)
 }
 
+# Transition probabilities -----------------------------------------------------
+#' Transition probabilities
+#' 
+#' Create a list containing predicted transition probabilities at discrete times
+#' from a statistical model. Since the transition probabilities have presumably
+#' already been predicted based on covariate values, no input data is required for
+#' simulation.
+#' 
+#' @param value  Array of predicted transition probability matrices from the posterior
+#' distribution of the underlying model. 
+#' @param ... Arguments passed to \code{\link{id_attributes}}. Each matrix in 
+#' \code{value} must be a prediction for a \code{sample}, \code{strategy_id},
+#'  \code{patient_id}, and optionally \code{time_id} combination.
+#' 
+#' 
+#' @return An object of class "params_transprobs", which is a list containing 
+#' \code{value} and the index attributes passed to \code{\link{id_attributes}}.
+#' @export
+params_transprobs <- function(value, ...){
+  check(new_params_transprobs(value, ...))
+}
+
+new_params_transprobs <- function(value, ...){
+  stopifnot(is.array(value))
+  id_args <- list(...)
+  l <- c(list(value = value), id_args)
+  class(l) <- "params_transprobs"
+  return(l)
+}
+
+#' @rdname check
+check.params_transprobs <- function(object){
+  id_args <- object[names(object)[names(object) != "value"]]
+  check(do.call("id_attributes", id_args))
+  if (is.null(object$sample)){
+    stop("'sample' cannot be NULL.")
+  }
+  if (is.null(object$n_samples)){
+    stop("'n_samples' cannot be NULL")
+  }
+  return(object)
+}
+
+# List of survival models ------------------------------------------------------
+#' Parameters of a list of survival models
+#' 
+#' Create a list containing the parameters of multiple fitted parametric survival models.
+#' @param ... Objects of class \code{\link{params_surv}}, which can be named.
+#' 
+#' @return An object of class "params_surv_list", which is a list containing \code{params_surv}
+#' objects.
+#' @examples 
+#' library("flexsurv")
+#' fit_wei <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
+#' params_wei <- create_params(fit_wei, n = 2)
+#' 
+#' fit_exp <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
+#' params_exp <- create_params(fit_exp, n = 2)
+#' 
+#' params_list <- params_surv_list(wei = params_wei, exp = params_exp)
+#' print(params_list)
+#' @export
+params_surv_list <- function(...){
+  return(check(new_params_list(..., inner_class = "params_surv", 
+                               new_class = "params_surv_list")))
+}
+
+#' @rdname check
+check.params_surv_list <- function(object){
+  check_params_list(object)
+}
+
+# Joined survival models -------------------------------------------------------
 #' Parameters of joined survival models
 #' 
 #' Create a list containing the parameters of survival models joined at specified time points. See
@@ -375,34 +451,7 @@ check.params_joined_surv <- function(object, inner_class){
   check_params_joined(object, inner_class = inner_class, model_list = FALSE)
 }
 
-#' Parameters of a list of survival models
-#' 
-#' Create a list containing the parameters of multiple fitted parametric survival models.
-#' @param ... Objects of class \code{\link{params_surv}}, which can be named.
-#' 
-#' @return An object of class "params_surv_list", which is a list containing \code{params_surv}
-#' objects.
-#' @examples 
-#' library("flexsurv")
-#' fit_wei <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
-#' params_wei <- create_params(fit_wei, n = 2)
-#' 
-#' fit_exp <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
-#' params_exp <- create_params(fit_exp, n = 2)
-#' 
-#' params_list <- params_surv_list(wei = params_wei, exp = params_exp)
-#' print(params_list)
-#' @export
-params_surv_list <- function(...){
-  return(check(new_params_list(..., inner_class = "params_surv", 
-                               new_class = "params_surv_list")))
-}
-
-#' @rdname check
-check.params_surv_list <- function(object){
-  check_params_list(object)
-}
-
+# Joined list of survival models -----------------------------------------------
 #' Parameters of joined lists of survival models
 #' 
 #' Create a list containing the parameters of multiple sets of survival models, each joined
@@ -447,6 +496,7 @@ check.params_joined_surv_list <- function(object, inner_class){
   check_params_joined(object, inner_class = inner_class, model_list = TRUE)
 }
 
+# Create parameter objects -----------------------------------------------------
 create_params_list <- function(object, n, point_estimate, inner_class, new_class){
   n_objects <- length(object)
   params_list <- vector(mode = "list", length = n_objects)
