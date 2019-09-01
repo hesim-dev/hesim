@@ -7,33 +7,26 @@
 id_attributes(strategy_id, n_strategies, patient_id, n_patients,
   state_id = NULL, n_states = NULL, transition_id = NULL,
   n_transitions = NULL, time_id = NULL, time_intervals = NULL,
-  n_times = NULL, time_reset = NULL, time_fun = NULL)
+  n_times = NULL, sample = NULL, n_samples = NULL,
+  time_reset = NULL)
 }
 \arguments{
-\item{strategy_id}{A numeric vector of integers denoting the treatment strategy represented by each row
-in \code{X}.}
+\item{strategy_id}{A numeric vector of integers denoting the treatment strategy.}
 
 \item{n_strategies}{A scalar denoting the number of unique treatment strategies.}
 
-\item{patient_id}{A numeric vector of integers denoting the patient represented by each row
-in \code{X}.}
+\item{patient_id}{A numeric vector of integers denoting the patient.}
 
 \item{n_patients}{A scalar denoting the number of unique patients.}
 
-\item{state_id}{A numeric vector of integers denoting the health state represented by each row
-in \code{X}.}
+\item{state_id}{A numeric vector of integers denoting the health state.}
 
 \item{n_states}{A scalar denoting the number of unique health states.}
 
 \item{transition_id}{A numeric vector denoting the 
-health state transition represented by each row in \code{X}. This must only be specified when
-estimating the health state transitions with a joint likelihood function. If independent
-models are fit for each transition, then separate \code{X} matrices must be specified
-for each transition. Note that this is not currently supported but
-will be supported once \code{hesim} provides support for state transition modeling.}
+health state transition. This is only used for state transition models.}
 
-\item{n_transitions}{A scalar denoting the number of unique transitions. 
-Not supported by currently available models.}
+\item{n_transitions}{A scalar denoting the number of unique transitions.}
 
 \item{time_id}{A numeric vector of integers denoting a unique time interval.}
 
@@ -47,17 +40,26 @@ infinity.}
 \item{n_times}{A scalar denoting the number of time intervals. Equal to the
 number of rows in \code{time_intervals}.}
 
+\item{sample}{A numeric vector of integer denoting the sample from the posterior
+distribution of the parameters.}
+
+\item{n_samples}{A scalar denoting the number of samples.}
+
 \item{time_reset}{If \code{TRUE}, then time intervals reset each time a patient enters a new health 
 state. This is relevant if, for example, costs vary over time within health states. 
 If \code{FALSE} then time intervals are based on time since the start of the simulation.}
 }
 \description{
-Stores metadata related to the ID variables used to index input data and prediction objects.
+Stores metadata related to the ID variables used to index \code{\link{input_mats}} 
+and transformed parameter objects.
 }
 \details{
-The sorting order should be the same as specified in \code{\link{expand.hesim_data}}; that is,
-observations must be sorted by: (i) \code{strategy_id}, (ii) \code{line}, 
-(iii) \code{patient_id}, and (iv) the health-related ID variable (either \code{state_id} or
- \code{transition_id}).
- @export
+When using the ID variables to index \code{\link{input_mats}}, sorting order should be 
+the same as specified in \code{\link{expand.hesim_data}}; that is,
+observations must be sorted by: (i) \code{strategy_id}, (ii) \code{patient_id}, 
+and (iii) the health-related ID variable (either \code{state_id} or
+ \code{transition_id}). When using ID variables to index transformed parameter 
+ objects and \code{sample} is used for indexing, then observations must be sorted by:
+ (i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id}, and
+  (iv) the health-related ID variable.
 }

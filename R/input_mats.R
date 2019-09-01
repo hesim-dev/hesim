@@ -5,7 +5,7 @@
 #' for simulating a statistical model. Consists of (i) input matrices, \code{X},
 #' (ii) ID variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
 #' the \code{X} matrices. More details are provided under "Details" below. Note that an "input_mats" 
-#' object should be created using \code{\link{create_input_mats}}. 
+#' object should typically be created using \code{\link{create_input_mats}}. 
 #' 
 #' @param X A list of input matrices for predicting the values of each parameter in a statistical model. May also be
 #' a list of lists of input matrices when a list of separate models is fit (e.g., with \link{flexsurvreg_list}).

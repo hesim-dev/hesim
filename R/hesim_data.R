@@ -311,25 +311,21 @@ sort_hesim_data <- function(data, sorted_by){
 # ID attributes ----------------------------------------------------------------
 #' Attributes for ID variables
 #' 
-#' Stores metadata related to the ID variables used to index input data and prediction objects.
+#' Stores metadata related to the ID variables used to index \code{\link{input_mats}} 
+#' and transformed parameter objects.
 #' 
-#' @param strategy_id A numeric vector of integers denoting the treatment strategy represented by each row
-#' in \code{X}.
+#' @param sample A numeric vector of integer denoting the sample from the posterior
+#' distribution of the parameters. 
+#' @param n_samples A scalar denoting the number of samples.
+#' @param strategy_id A numeric vector of integers denoting the treatment strategy.
 #' @param n_strategies A scalar denoting the number of unique treatment strategies.
-#' @param patient_id A numeric vector of integers denoting the patient represented by each row
-#' in \code{X}.
+#' @param patient_id A numeric vector of integers denoting the patient.
 #' @param n_patients A scalar denoting the number of unique patients.
-#' @param state_id A numeric vector of integers denoting the health state represented by each row
-#' in \code{X}.
+#' @param state_id A numeric vector of integers denoting the health state.
 #' @param n_states A scalar denoting the number of unique health states.
 #' @param transition_id A numeric vector denoting the 
-#' health state transition represented by each row in \code{X}. This must only be specified when
-#' estimating the health state transitions with a joint likelihood function. If independent
-#' models are fit for each transition, then separate \code{X} matrices must be specified
-#' for each transition. Note that this is not currently supported but
-#' will be supported once \code{hesim} provides support for state transition modeling.
+#' health state transition. This is only used for state transition models. 
 #' @param n_transitions A scalar denoting the number of unique transitions. 
-#' Not supported by currently available models. 
 #' @param time_id A numeric vector of integers denoting a unique time interval.
 #' @param time_intervals A \code{data.table} denotes unique time intervals. Must 
 #' contain the columns \code{time_id}, \code{time_start}, and \code{time_stop}.
@@ -343,25 +339,29 @@ sort_hesim_data <- function(data, sorted_by){
 #'   state. This is relevant if, for example, costs vary over time within health states. 
 #'   If \code{FALSE} then time intervals are based on time since the start of the simulation.
 #'  
-#' @details The sorting order should be the same as specified in \code{\link{expand.hesim_data}}; that is,
-#' observations must be sorted by: (i) \code{strategy_id}, (ii) \code{line}, 
-#' (iii) \code{patient_id}, and (iv) the health-related ID variable (either \code{state_id} or
-#'  \code{transition_id}).
-#'  @export
+#' @details When using the ID variables to index \code{\link{input_mats}}, sorting order should be 
+#' the same as specified in \code{\link{expand.hesim_data}}; that is,
+#' observations must be sorted by: (i) \code{strategy_id}, (ii) \code{patient_id}, 
+#' and (iii) the health-related ID variable (either \code{state_id} or
+#'  \code{transition_id}). When using ID variables to index transformed parameter 
+#'  objects and \code{sample} is used for indexing, then observations must be sorted by:
+#'  (i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id}, and
+#'   (iv) the health-related ID variable. 
+#' @export
 id_attributes <- function(strategy_id, n_strategies,
                           patient_id, n_patients,
                           state_id = NULL, n_states = NULL,
                           transition_id = NULL, n_transitions = NULL,
                           time_id = NULL, time_intervals = NULL, n_times = NULL,
-                          time_reset = NULL,
-                          time_fun = NULL){
+                          sample = NULL, n_samples = NULL,
+                          time_reset = NULL){
   object <- new_id_attributes(strategy_id, n_strategies,
                               patient_id, n_patients,
                               state_id, n_states,
                               transition_id, n_transitions,
                               time_id, time_intervals, n_times,
-                              time_reset,
-                              time_fun)
+                              sample, n_samples,
+                              time_reset)
   check(object)
   return(object)
 }
@@ -371,8 +371,8 @@ new_id_attributes <- function(strategy_id, n_strategies,
                               state_id = NULL, n_states = NULL,
                               transition_id = NULL, n_transitions = NULL,
                               time_id = NULL, time_intervals = NULL, n_times = NULL,
-                              time_reset = NULL,
-                              time_fun = NULL){
+                              sample = NULL, n_samples = NULL,
+                              time_reset = NULL){
   stopifnot(is.numeric(strategy_id))
   stopifnot(is.numeric(n_strategies))
   stopifnot(is.numeric(patient_id))
@@ -384,6 +384,8 @@ new_id_attributes <- function(strategy_id, n_strategies,
   stopifnot(is.numeric(time_id) | is.null(time_id))
   stopifnot(is.data.table(time_intervals) | is.null(time_intervals))
   stopifnot(is.numeric(n_times) | is.null(n_times))
+  stopifnot(is.numeric(sample) | is.null(sample))
+  stopifnot(is.numeric(n_samples) | is.null(n_samples))
   stopifnot(is.logical(time_reset) | is.null(time_reset))
   
   object <- list(strategy_id = strategy_id, n_strategies = n_strategies,
@@ -391,8 +393,8 @@ new_id_attributes <- function(strategy_id, n_strategies,
                  state_id = state_id, n_states = n_states,
                  transition_id = transition_id, n_transitions = n_transitions,
                  time_id = time_id, time_intervals = time_intervals, n_times = n_times,
-                 time_reset = time_reset,
-                 time_fun = time_fun)
+                 sample = sample, n_samples = n_samples,
+                 time_reset = time_reset)
   object[sapply(object, is.null)] <- NULL
   class(object) <- "id_attributes"
   return(object)
