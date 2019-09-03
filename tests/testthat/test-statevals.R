@@ -49,13 +49,13 @@ test_that("stateval_tbl", {
                                dist = "beta", 
                                hesim_data = hesim_dat) 
   mod <- create_StateVals(stateval_tbl, n = 2)
-  expect_equal(nrow(mod$params$mu), nrow(stateval_tbl) * 3 * 2)
-  expect_equal(ncol(mod$params$mu), 2)
-  expect_true(all(mod$params$mu[c(1, 4, 7, 10), 1] == mod$params$mu[1, 1]))
+  expect_equal(nrow(mod$params$value), nrow(stateval_tbl) * 3 * 2)
+  expect_equal(ncol(mod$params$value), 2)
+  expect_true(all(mod$params$value[c(1, 4, 7, 10), 1] == mod$params$value[1, 1]))
   
   ### time_reset = TRUE
   mod <- create_StateVals(stateval_tbl, n = 2, time_reset = TRUE)
-  expect_true(mod$input_mats$time_reset)
+  expect_true(mod$params$time_reset)
   
   ## Uniform distribution
   stateval_tbl <- stateval_tbl(tbl[strategy_id == 1 & grp_id == 1,
@@ -63,7 +63,7 @@ test_that("stateval_tbl", {
                                dist = "unif",  
                                hesim_data = hesim_dat)
   mod <- create_StateVals(stateval_tbl, n = 2)
-  expect_true(all(mod$params$mu >= .3 & mod$params$mu <= .5))
+  expect_true(all(mod$params$value >= .3 & mod$params$value <= .5))
   
   ## Normal distribution
   stateval_tbl <- stateval_tbl(tbl[strategy_id == 1 & grp_id == 1,
@@ -71,7 +71,7 @@ test_that("stateval_tbl", {
                                dist = "norm",  
                                hesim_data = hesim_dat)  
   mod <- create_StateVals(stateval_tbl, n = 2) 
-  expect_equal(nrow(mod$params$mu), 
+  expect_equal(nrow(mod$params$value), 
                nrow(stateval_tbl) * n_patients * n_strategies) 
   
   ## Custom distribution
@@ -86,23 +86,23 @@ test_that("stateval_tbl", {
   
   ### n is greater than number of samples in tbl
   expect_warning(mod <- create_StateVals(stateval_tbl, n = 3))
-  expect_equal(ncol(mod$params$mu), 3)
-  expect_true(mod$params$mu[1, 1] == tbl2[state_id == 1 & sample == 1, value] |
-              mod$params$mu[1, 1] == tbl2[state_id == 1 & sample == 2, value]) 
+  expect_equal(ncol(mod$params$value), 3)
+  expect_true(mod$params$value[1, 1] == tbl2[state_id == 1 & sample == 1, value] |
+              mod$params$value[1, 1] == tbl2[state_id == 1 & sample == 2, value]) 
   
   ### n equals number of samples in tbl
   mod <- create_StateVals(stateval_tbl, n = 2) 
-  expect_equal(ncol(mod$params$mu), 2)
-  expect_equal(nrow(mod$params$mu), 
+  expect_equal(ncol(mod$params$value), 2)
+  expect_equal(nrow(mod$params$value), 
                n_states * n_patients * n_strategies) 
-  expect_equal(mod$params$mu[5, 1],
+  expect_equal(mod$params$value[5, 1],
                tbl2[state_id == 2 & sample == 1, value])
   
   ### n is less than the number of samples in tbl
   mod <- create_StateVals(stateval_tbl, n = 1) 
-  expect_equal(ncol(mod$params$mu), 1)
-  expect_true(mod$params$mu[3, 1] == tbl2[state_id == 3 & sample == 1, value] |
-              mod$params$mu[3, 1] == tbl2[state_id == 3 & sample == 2, value]) 
+  expect_equal(ncol(mod$params$value), 1)
+  expect_true(mod$params$value[3, 1] == tbl2[state_id == 3 & sample == 1, value] |
+              mod$params$value[3, 1] == tbl2[state_id == 3 & sample == 2, value]) 
   
   # Strategy only
   stateval_tbl <- stateval_tbl(tbl[state_id == 3 & grp_id == 1,
@@ -110,9 +110,9 @@ test_that("stateval_tbl", {
                                dist = "gamma",
                                hesim_data = hesim_dat)   
   mod <- create_StateVals(stateval_tbl, n = 2)
-  expect_equal(nrow(mod$params$mu), nrow(stateval_tbl) * 3 * 3)
-  expect_equal(mod$input_mats$state_id, rep(c(1, 2, 3), 3 * 2))
-  expect_true(all(mod$params$mu[1:9, 2] == mod$params$mu[1, 2]))
+  expect_equal(nrow(mod$params$value), nrow(stateval_tbl) * 3 * 3)
+  expect_equal(mod$params$state_id, rep(c(1, 2, 3), 3 * 2))
+  expect_true(all(mod$params$value[1:9, 2] == mod$params$value[1, 2]))
   
   # Strategy, Group, and State
   ## More patients than groups
@@ -121,8 +121,8 @@ test_that("stateval_tbl", {
                                dist = "beta", 
                                hesim_data = hesim_dat)  
   mod <- create_StateVals(stateval_tbl, n = 1)
-  expect_equal(ncol(mod$params$mu), 1)
-  expect_equal(mod$input_mats$patient_id,
+  expect_equal(ncol(mod$params$value), 1)
+  expect_equal(mod$params$patient_id,
                rep(rep(patients$patient_id, each = nrow(states)), 
                    nrow(strategies)))
   
@@ -132,7 +132,7 @@ test_that("stateval_tbl", {
   stateval_tbl <- stateval_tbl(tbl, dist = "beta",
                                hesim_data = hesim_dat2)  
   mod <- create_StateVals(stateval_tbl, n = 2)
-  expect_equal(nrow(mod$params$mu),
+  expect_equal(nrow(mod$params$value),
                nrow(stateval_tbl))
   
   # State and time period
@@ -144,7 +144,7 @@ test_that("stateval_tbl", {
                                 dist = "beta",
                                hesim_data = hesim_dat)
   mod <- create_StateVals(stateval_tbl, n = 2)
-  expect_equal(nrow(mod$params$mu),
+  expect_equal(nrow(mod$params$value),
                n_states * n_strategies * n_patients * 2)
   
   # Errors

@@ -316,8 +316,9 @@ test_that("Simulate costs and QALYs", {
   
   #### dr = 0
   ictstm <- ictstm$clone(deep = TRUE)
-  ictstm$utility_model$params$mu <- matrix(1, nrow = nrow(ictstm$utility_model$params$mu),
-                                           ncol = ncol(ictstm$utility_model$params$mu))
+  ictstm$utility_model$params$value <- matrix(1, 
+                                              nrow = nrow(ictstm$utility_model$params$value),
+                                              ncol = ncol(ictstm$utility_model$params$value))
   ictstm$sim_qalys(dr = 0, by_patient = TRUE)
   qalys <- ictstm$sim_qalys(dr = 0, by_patient = TRUE)$qalys_
   

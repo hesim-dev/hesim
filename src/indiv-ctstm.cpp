@@ -130,7 +130,7 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
                                          int n_patients,
                                          int n_lines = 1){
   hesim::ctstm::disease_prog disease_prog(R_disease_prog);
-  hesim::ctstm::stateprobs_out out(n_samples * n_strategies * n_states * t.size());
+  hesim::stateprobs_out out(n_samples * n_strategies * n_states * t.size());
   
   for(int i = 0; i < disease_prog.time_start_.size(); ++i){
     for(int j = 0; j < t.size(); ++j){
@@ -212,7 +212,7 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
                                        double max_time){
   hesim::ctstm::disease_prog disease_prog(R_disease_prog);
   hesim::statevals stvals(R_StateVal);
-  hesim::statmods::obs_index obs_index(Rcpp::as<Rcpp::List>(R_StateVal["input_mats"]));
+  hesim::statmods::obs_index obs_index(hesim::statmods::get_id_object(R_StateVal));
   hesim::check_R_infinity(max_time);
   
   int N = disease_prog.sample_.size();

@@ -146,8 +146,8 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
 create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, ...){
   x <- CreateFromParamsTbl$new(object, n)
   x$prep()
-  stateval <- StateVals$new(params = x$params, input_mats = x$input_mats)
-  stateval$input_mats$time_reset <- time_reset
+  stateval <- StateVals$new(params = x$params)
+  stateval$params$time_reset <- time_reset
   return(stateval)
 }
 
@@ -173,11 +173,11 @@ StateVals <- R6::R6Class("StateVals",
     },
     
     check = function(){
-      if(!inherits(self$params, c("params_mean", "params_lm"))){
+      if(!inherits(self$params, c("tparams_mean", "params_lm"))){
         stop("Class of 'params' is not supported. See documentation.",
              call. = FALSE)
       }      
-      if(!inherits(self$input_mats, "input_mats")){
+      if(!inherits(self$input_mats, c("input_mats", "NULL"))){
         stop("'input_mats' must be an object of class 'input_mats'",
             call. = FALSE)
       }

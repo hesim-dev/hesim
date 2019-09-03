@@ -142,6 +142,19 @@ inline std::vector<double> seq(double from, double to, double by){
   return result;
 };
 
+/**
+ * @ingroup general
+ * Check if named element in a list is NULL.
+ * The named element is considered NULL if it is missing from the list
+ * or it exists in the list but has a value of NULL. 
+ * @param L The list.
+ * @param name The name of the element to check.
+ * @return true if the named element is NULL and false otherwise. 
+ */
+inline bool is_null(Rcpp::List L, const char * name){
+  return  !L.containsElementNamed(name) || Rf_isNull(L[name]);
+}
+
 } // end hesim namespace
 
 

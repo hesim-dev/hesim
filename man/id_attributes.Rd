@@ -51,7 +51,7 @@ If \code{FALSE} then time intervals are based on time since the start of the sim
 }
 \description{
 Stores metadata related to the ID variables used to index \code{\link{input_mats}} 
-and transformed parameter objects.
+and parameter objects already predicted from covariates.
 }
 \details{
 When using the ID variables to index \code{\link{input_mats}}, sorting order should be 

@@ -312,7 +312,7 @@ sort_hesim_data <- function(data, sorted_by){
 #' Attributes for ID variables
 #' 
 #' Stores metadata related to the ID variables used to index \code{\link{input_mats}} 
-#' and transformed parameter objects.
+#' and parameter objects already predicted from covariates.
 #' 
 #' @param sample A numeric vector of integer denoting the sample from the posterior
 #' distribution of the parameters. 

@@ -23,13 +23,13 @@ private:
    */   
   static std::unique_ptr<statmods::statmod> init_statmod_(Rcpp::Environment R_StateVals){
     statmods::statmod *mod;
-    Rcpp::List R_data = Rcpp::as<Rcpp::List>(R_StateVals["input_mats"]);
+    Rcpp::List R_data;
     Rcpp::List R_params = Rcpp::as<Rcpp::List>(R_StateVals["params"]);
-    if (Rf_inherits(R_params, "params_mean")){
-      statmods::params_mean params(R_params);
-      mod = new statmods::mean(params);
+    if (Rf_inherits(R_params, "tparams_mean")){
+      mod = new statmods::pred_means(R_params);
     }
     else if (Rf_inherits(R_params, "params_lm")){
+      R_data = Rcpp::as<Rcpp::List>(R_StateVals["input_mats"]);
       Rcpp::List X_list = Rcpp::as<Rcpp::List>(R_data["X"]);      
       arma::mat X = Rcpp::as<arma::mat>(X_list["mu"]);
       statmods::params_lm params(R_params);

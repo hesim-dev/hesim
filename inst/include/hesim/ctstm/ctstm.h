@@ -404,40 +404,6 @@ struct transmod_summary{
   }  
 };
 
-/***************************************************************************//** 
- * Data container for storing health state probabilities.
- ******************************************************************************/ 
-struct stateprobs_out{
-  std::vector<int> sample_; ///< A randomly sampled parameter set.
-  std::vector<int> strategy_id_; ///< A treatment strategy id.
-  std::vector<double> state_id_; ///< The health state id. 
-  std::vector<double> patient_id_; ///< The health state id. 
-  std::vector<double> t_; ///< The time. 
-  std::vector<double> prob_; ///< The health state probability. 
-  
-  /** 
-   * A default constructor.
-   * Instantiates a data container for storing simulated health state probabilities.
-   */ 
-  stateprobs_out() {};
-  
-/** 
-   * A constructor.
-   * Instantiates a data container for a predicted survival curve where all 
-   * vectors in the container are initialized to a size @c n.
-   */
-  stateprobs_out(int n) {
-    sample_.resize(n);
-    strategy_id_.resize(n);
-    state_id_.resize(n);
-    patient_id_.resize(n);
-    t_.resize(n);
-    prob_.resize(n);
-  }    
-  
-};
-
-
 } // end namespace ctstm
 
 } // end namespace hesim

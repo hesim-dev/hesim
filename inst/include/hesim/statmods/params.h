@@ -8,31 +8,6 @@ namespace hesim {
 namespace statmods {
 
 /***************************************************************************//** 
- * Parameters of a model based on means.
- ******************************************************************************/ 
-class params_mean  {
-public:
-  int sample_;
-  int n_samples_;
-  arma::mat mu_; // The mean of the distribution.
-  std::vector<double> sigma_; // The standard deviation of the error term.
-  
-  /** 
-   * The constructor.
-   * Instantiates the parameters of a means model.
-   * @param R_params_mean A parameter object used for a means only model passed from 
-   * @c R such as the "params_statevals" class. 
-   */ 
-  params_mean(Rcpp::List R_params_mean) {
-    mu_ = Rcpp::as<arma::mat>(R_params_mean["mu"]);
-    sigma_ = Rcpp::as<std::vector<double> >(R_params_mean["sigma"]);
-    sample_ = 0;
-    n_samples_ = Rcpp::as<int> (R_params_mean["n_samples"]);
-  }  
-};
-
-
-/***************************************************************************//** 
  * Parameters of a linear model.
  ******************************************************************************/ 
 class params_lm   {

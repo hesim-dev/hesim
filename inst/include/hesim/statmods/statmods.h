@@ -39,7 +39,9 @@ public:
    * from the input matrix (or matrices when there are multiple parameters).
    * @return A random draw.
    */ 
-  virtual double random(int sample, int obs) = 0;
+  virtual double random(int sample, int obs){
+    Rcpp::stop("Random method is not available with the selected model.");
+  }
   
   /** 
    * Get the number of random samples
@@ -49,38 +51,6 @@ public:
    */ 
   virtual int get_n_samples() = 0;  
 };
-
-/***************************************************************************//** 
- * A means model.
- * Prediction and random sampling from a model based on means. Random samples
- * are from a normal distribution.  
- ******************************************************************************/ 
-class mean : public statmod{
-private:
-  params_mean params_; ///< Parameters for a means model.
-  
-public:
-  /** 
-   * The constructor.
-   * Instantiates a means model.
-   */ 
-  mean(params_mean params)
-    : params_(params){
-  }  
-  
-  double predict(int sample, int obs) {
-    return params_.mu_(obs, sample);
-  }  
-  
-  double random(int sample, int obs) {
-    return R::rnorm(predict(sample, obs), params_.sigma_[sample]);
-  }  
-  
-  int get_n_samples(){
-    return params_.n_samples_;
-  }  
-};
-
 
 /***************************************************************************//** 
  * A linear model.
@@ -319,6 +289,35 @@ public:
     return params_.n_samples_;
   }
 
+};
+
+/***************************************************************************//** 
+ * Predicted means
+ * Stores predicted means from a statistical model. Based on the @c R class
+ * @c tparams_mean.
+ ******************************************************************************/ 
+class pred_means : public statmod{
+private:
+  arma::mat value_; 
+  int n_samples_;
+  
+public:
+  /** 
+   * The constructor.
+   * Instantiates a means model.
+   */ 
+  pred_means(Rcpp::List R_tparams_mean){
+    value_ = Rcpp::as<arma::mat> (R_tparams_mean["value"]);
+    n_samples_ = Rcpp::as<int>(R_tparams_mean["n_samples"]);
+  }  
+  
+  double predict(int sample, int obs) {
+    return value_(obs, sample);
+  }  
+  
+  int get_n_samples(){
+    return n_samples_;
+  }  
 };
 
 } // end namespace statmods

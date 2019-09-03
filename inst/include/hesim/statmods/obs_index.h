@@ -11,9 +11,9 @@ namespace statmods {
 /**************
 * Time function
 **************/
-inline time_fun* get_time_fun(Rcpp::List R_input_mats){
- if (R_input_mats.containsElementNamed("timefun")){
-    SEXP xp = R_input_mats["timefun"];
+inline time_fun* get_time_fun(Rcpp::List R_object){
+ if (R_object.containsElementNamed("timefun")){
+    SEXP xp = R_object["timefun"];
     if (TYPEOF(xp) == EXTPTRSXP)  {
       return Rcpp::XPtr<hesim::time_fun>(xp);
     }
@@ -23,14 +23,28 @@ inline time_fun* get_time_fun(Rcpp::List R_input_mats){
   
     // To do: allow user to pass an R function
     // else {
-    //   SEXP timefun_fcall = R_input_mats["timefun"];
-    //   SEXP timefun_env = R_input_mats["timefun_env"];
+    //   SEXP timefun_fcall = R_object["timefun"];
+    //   SEXP timefun_env = R_object["timefun_env"];
     //   timefun_ = new hesim::TimeFunR(timefun_fcall, timefun_env);
     // }
   }
   else{
     return NULL;
   }  
+}
+
+/***************************************************************************//** 
+ * Get ID object
+ * Get the @c R object containing ID attributes from an @c R statistical model
+ * class. 
+ ******************************************************************************/ 
+inline Rcpp::List get_id_object(Rcpp::Environment R_object){
+  if(R_object.exists("input_mats") && !Rf_isNull(R_object["input_mats"])){
+    return Rcpp::as<Rcpp::List>(R_object["input_mats"]); 
+  }
+  else{
+    return Rcpp::as<Rcpp::List>(R_object["params"]);
+  }
 }
 
 /***************************************************************************//** 
@@ -63,21 +77,17 @@ private:
   std::vector<int> line_vec_; ///< Vector of treatment lines.
   std::vector<int> patient_id_vec_; ///< Vector of patient IDs.
   std::vector<int> health_id_vec_; ///< Vector of health IDs.
-  
-  // Time intervals
-  std::vector<double> time_start_; ///< Vector of unique starting times.
-  std::vector<double> time_stop_; ///< Vector of unique stopping times.
                           
   /** 
    * Initialize @c n_lines_.
    * Initialize the number of treatment lines (@c n_lines_) from @c R object @c input_data.
-   * @param R_input_mats An @c R object of class "input_mats".
+   * @param R_object An @c R object containing ID attributes.
    * @param n_strategies The number of strategies based on @c n_strategies_.
    * @return None.
    */  
-  void init_n_lines_(Rcpp::List R_input_mats, int n_strategies) {
-    if(R_input_mats.containsElementNamed("n_lines")){
-      Rcpp::DataFrame n_lines_df = Rcpp::as<Rcpp::DataFrame > (R_input_mats["n_lines"]);
+  void init_n_lines_(Rcpp::List R_object, int n_strategies) {
+    if(!hesim::is_null(R_object, "n_lines")){
+      Rcpp::DataFrame n_lines_df = Rcpp::as<Rcpp::DataFrame > (R_object["n_lines"]);
       n_lines_ =  Rcpp::as<std::vector<int> > (n_lines_df["N"]);
     }
     else{
@@ -103,19 +113,19 @@ private:
  
   /** 
    * Initialize @c n_healthvals_
-   * @param R_input_mats An @c R object of class "input_mats" containing the element
+   * @param R_object An @c R object containing the element
    *                     @c n_transitions or @c n_states.
    * @return None.
    */     
-  void init_n_healthvals_(Rcpp::List R_input_mats) {
-    if(R_input_mats.containsElementNamed("n_states") && R_input_mats.containsElementNamed("n_transitions")){
+  void init_n_healthvals_(Rcpp::List R_object) {
+    if(!hesim::is_null(R_object, "n_states") && !hesim::is_null(R_object, "n_transitions")){
       Rcpp::stop("'n_states' and 'n_transitions' cannot both be specified.");
     }
-    else if (R_input_mats.containsElementNamed("n_states")){
-      n_healthvals_ = R_input_mats["n_states"];
+    else if (!hesim::is_null(R_object, "n_states")){
+      n_healthvals_ = R_object["n_states"];
     }
-    else if (R_input_mats.containsElementNamed("n_transitions")){
-      n_healthvals_ = R_input_mats["n_transitions"];
+    else if (!hesim::is_null(R_object, "n_transitions")){
+      n_healthvals_ = R_object["n_transitions"];
     } 
     else{
       n_healthvals_ = 1;
@@ -124,13 +134,13 @@ private:
   
   /** 
    * Initialize the number of time intervals.
-   * @param R_input_mats An @c R object of class "input_mats" containing the element @c n_times.
+   * @param R_object An @c R object containing the element @c n_times.
    * parameter to initialize.
    * @return None.
    */   
-  void init_n_times_(Rcpp::List R_input_mats) {
-    if (R_input_mats.containsElementNamed("n_times")){
-      n_times_ = R_input_mats["n_times"];
+  void init_n_times_(Rcpp::List R_object) {
+    if (!hesim::is_null(R_object, "n_times")){
+      n_times_ = R_object["n_times"];
     } else{
       n_times_ = 1;
     }
@@ -173,17 +183,21 @@ public:
   int n_obs_; ///< Number of observations inclusive of strategies, lines, patients, health values, and time intervals.
   bool time_reset_;
   
+  // Time intervals
+  std::vector<double> time_start_; ///< Vector of unique starting times.
+  std::vector<double> time_stop_; ///< Vector of unique stopping times.  
+  
   /** 
    * The constructor.
    * Instantiates an input data object. 
    */  
-  obs_index(Rcpp::List R_input_mats){
+  obs_index(Rcpp::List R_object){
     // Size of each dimension
-    n_strategies_ = Rcpp::as<int> (R_input_mats["n_strategies"]);
-    init_n_lines_(R_input_mats, n_strategies_);
-    n_patients_ = Rcpp::as<int> (R_input_mats["n_patients"]);
-    init_n_healthvals_(R_input_mats);
-    init_n_times_(R_input_mats);
+    n_strategies_ = Rcpp::as<int> (R_object["n_strategies"]);
+    init_n_lines_(R_object, n_strategies_);
+    n_patients_ = Rcpp::as<int> (R_object["n_patients"]);
+    init_n_healthvals_(R_object);
+    init_n_times_(R_object);
     init_n_obs_();
     
     init_cum_strategy_sizes_();
@@ -197,28 +211,28 @@ public:
     index_ = 0;
     
     // ID vectors
-    strategy_id_vec_ = Rcpp::as<std::vector<int> >(R_input_mats["strategy_id"]);
-    if (R_input_mats.containsElementNamed("line")){
-      line_vec_ = Rcpp::as<std::vector<int> >(R_input_mats["line"]);
+    strategy_id_vec_ = Rcpp::as<std::vector<int> >(R_object["strategy_id"]);
+    if (!hesim::is_null(R_object, "line")){
+      line_vec_ = Rcpp::as<std::vector<int> >(R_object["line"]);
     } 
     else{
       line_vec_ = std::vector<int>(strategy_id_vec_.size(), 0);
     }
-    patient_id_vec_ = Rcpp::as<std::vector<int> >(R_input_mats["patient_id"]);
-    if (R_input_mats.containsElementNamed("transition_id") &&
-        R_input_mats.containsElementNamed("state_id")){
+    patient_id_vec_ = Rcpp::as<std::vector<int> >(R_object["patient_id"]);
+    if (!hesim::is_null(R_object, "transition_id") &&
+        !hesim::is_null(R_object, "state_id")){
       Rcpp::stop("'transition_id' and 'state_id' cannot both be specified.");
     }
-    if (R_input_mats.containsElementNamed("transition_id")){
-     health_id_vec_ = Rcpp::as<std::vector<int> >(R_input_mats["transition_id"]); 
+    if (!hesim::is_null(R_object, "transition_id")){
+     health_id_vec_ = Rcpp::as<std::vector<int> >(R_object["transition_id"]); 
     }
-    if (R_input_mats.containsElementNamed("state_id")){
-     health_id_vec_ = Rcpp::as<std::vector<int> >(R_input_mats["state_id"]); 
+    if (!hesim::is_null(R_object, "state_id")){
+     health_id_vec_ = Rcpp::as<std::vector<int> >(R_object["state_id"]); 
     }
     
     // Time intervals
-    if (R_input_mats.containsElementNamed("time_intervals")){
-      Rcpp::DataFrame time_intervals = Rcpp::as<Rcpp::DataFrame>(R_input_mats["time_intervals"]);
+    if (!hesim::is_null(R_object, "time_intervals")){
+      Rcpp::DataFrame time_intervals = Rcpp::as<Rcpp::DataFrame>(R_object["time_intervals"]);
       time_start_ = Rcpp::as<std::vector<double> >(time_intervals["time_start"]); 
       time_stop_ = Rcpp::as<std::vector<double> >(time_intervals["time_stop"]); 
     } else{
@@ -227,14 +241,12 @@ public:
     }
     
     // Time reset
-    if (R_input_mats.containsElementNamed("time_reset")){
-      time_reset_ = Rcpp::as<bool>(R_input_mats["time_reset"]);
+    if (!hesim::is_null(R_object, "time_reset")){
+      time_reset_ = Rcpp::as<bool>(R_object["time_reset"]);
     } else{
       time_reset_ = false;
     }
-    
   }
-  
   
   /** 
    * Set the strategy index.
@@ -295,7 +307,7 @@ public:
    */    
   int get_health_id(){
     if (health_id_vec_.size() != n_obs_){
-      Rcpp::stop("The is no 'health_id' in 'input_data'.");
+      Rcpp::stop("There is no 'health_id' in 'input_data'.");
     }
     return health_id_vec_[index_];
   }
@@ -307,7 +319,7 @@ public:
     time_index_ = time_index;
     set_index();
   }  
-  
+
   /** 
    * Get the starting time given the current time index.
    */    
@@ -385,19 +397,19 @@ struct obs_ids {
   /** 
    * A constructor.
    * Instantiates the struct from an @c R model. 
-   * @param R_input_mats An @c R object of class "input_mats".
+   * @param R_object An @c R object containing ID attributes.
    */   
-  obs_ids(Rcpp::List R_input_mats) {
-    strategy_id_ = Rcpp::as<std::vector<int> >(R_input_mats["strategy_id"]);
-    if (R_input_mats.containsElementNamed("line")){
-      line_ = Rcpp::as<std::vector<int> >(R_input_mats["line"]);
+  obs_ids(Rcpp::List R_object) {
+    strategy_id_ = Rcpp::as<std::vector<int> >(R_object["strategy_id"]);
+    if (!hesim::is_null(R_object, "line")){
+      line_ = Rcpp::as<std::vector<int> >(R_object["line"]);
     }
-    patient_id_ = Rcpp::as<std::vector<int> >(R_input_mats["patient_id"]);
-    if (R_input_mats.containsElementNamed("transition_id")){
-     transition_id_ = Rcpp::as<std::vector<int> >(R_input_mats["transition_id"]); 
+    patient_id_ = Rcpp::as<std::vector<int> >(R_object["patient_id"]);
+    if (!hesim::is_null(R_object, "transition_id")){
+     transition_id_ = Rcpp::as<std::vector<int> >(R_object["transition_id"]); 
     }
-    if (R_input_mats.containsElementNamed("state_id")){
-     state_id_ = Rcpp::as<std::vector<int> >(R_input_mats["state_id"]); 
+    if (!hesim::is_null(R_object, "state_id")){
+     state_id_ = Rcpp::as<std::vector<int> >(R_object["state_id"]); 
     }
   };
   

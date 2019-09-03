@@ -1,3 +1,20 @@
+# Check ------------------------------------------------------------------------
+#' Input validation for class objects
+#' 
+#' \code{check} is a generic function for validating the inputs of class objects.
+#' @param object object to check.
+#' @param inner_class When checking a list of objects, the class of elements within
+#' the inner most list.
+#' @param ... Further arguments passed to or from other methods.
+#' 
+#' @return If validation is successful, returns the object in question; otherwise,
+#' informs the user that an error has occurred.  
+#' @keywords internal
+check <- function (object, ...) {
+  UseMethod("check")
+}
+
+# Additional utility methods ---------------------------------------------------
 #' Absorbing states
 #' 
 #' Returns a vector of absorbing states from a transition matrix.
@@ -6,21 +23,6 @@
 #' @keywords internal
 absorbing <- function(trans_mat){
   which(apply(trans_mat, 1, function(x) all(is.na(x))))
-}
-
-#' Input validation for class objects
-#' 
-#' \code{check} is a generic function for validating the inputs of class objects.
-#' @param object object to check.
-#' @param inner_class When checking a list of objects, the class of elements within
-#' the inner most list.
-#' @param ... Further arguments passed to or from other methods. Currently unused.
-#' 
-#' @return If validation is successful, returns the object in question; otherwise,
-#' informs the user that an error has occurred.  
-#' @keywords internal
-check <- function (object, ...) {
-  UseMethod("check")
 }
 
 check_dr <- function(dr){
@@ -544,12 +546,32 @@ CreateFromParamsTbl <- R6::R6Class("CreateFromParamsTbl",
     },
     
     create_params = function(){
+      if (!is.null(self$object$time_id)){
+        time_intervals <- unique(self$object[, c("time_id", "time_start", "time_stop")])
+      } else{
+        time_intervals <- NULL
+      }
+      if (is.null(self$id_tbl$state_id)){
+        n_states <- NULL
+      } else{
+        n_states <-  length(unique(self$id_tbl$state_id))
+      }
+      
       if (inherits(self$object, "stateval_tbl")){
-        self$params <- new_params_mean(mu = self$values, 
-                                       sigma = rep(0, self$n),
-                                       n_samples = self$n)
+        self$params <- new_tparams_mean(value = self$values,
+                                        n_samples = self$n,
+                                        strategy_id = self$id_tbl$strategy_id,
+                                        n_strategies = length(unique(self$id_tbl$strategy_id)),
+                                        patient_id = self$id_tbl$patient_id,
+                                        n_patients = length(unique(self$id_tbl$patient_id)),
+                                        state_id = self$id_tbl$state_id,
+                                        n_states = n_states,
+                                        time_id = self$id_tbl$time_id,
+                                        time_intervals = time_intervals,
+                                        n_times = nrow(time_intervals))
       } else{
         self$params <- self$values
+        attr(self$params, "n_samples") <- self$n
       }
     },
     
@@ -559,13 +581,18 @@ CreateFromParamsTbl <- R6::R6Class("CreateFromParamsTbl",
       } else{
         time_intervals <- NULL
       }
+      if (is.null(self$id_tbl$state_id)){
+        n_states <- NULL
+      } else{
+        n_states <-  length(unique(self$id_tbl$state_id))
+      }
       self$input_mats <- new_input_mats(X = NULL,
                                         strategy_id = self$id_tbl$strategy_id,
                                         n_strategies = length(unique(self$id_tbl$strategy_id)),
                                         patient_id = self$id_tbl$patient_id,
                                         n_patients = length(unique(self$id_tbl$patient_id)),
                                         state_id = self$id_tbl$state_id,
-                                        n_states = length(unique(self$id_tbl$state_id)),
+                                        n_states = n_states,
                                         time_id = self$id_tbl$time_id,
                                         time_intervals = time_intervals,
                                         n_times = nrow(time_intervals))

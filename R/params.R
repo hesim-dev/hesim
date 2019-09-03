@@ -1,3 +1,27 @@
+# Generic parameter object documentation ---------------------------------------
+#' Parameter object
+#' 
+#' Objects prefixed by "params_" are lists containing the parameters of a statistical model
+#' used for simulation modeling. The parameters are used to simulate outcomes
+#' as a function of covariates contained in input matrices (\code{\link{input_mats}}).
+#' 
+#' @name params
+#' @seealso \code{\link{tparams}}
+NULL
+
+#' Transformed parameter object
+#' 
+#' Objects prefixed by "tparams_" are lists containing transformed parameters used
+#' to simulate outcomes. The parameters have presumably already been transformed as a 
+#' function of input data and consequently do not need to be used alongside
+#' input matrices. In other words, transformed parameters are parameters that have
+#' already been predicted as a function of covariates. 
+#' 
+#' @name tparams
+#' @seealso \code{\link{params}}
+NULL
+
+# Helper functions -------------------------------------------------------------
 new_params_list <- function(..., inner_class, new_class){
   return(object_list(..., inner_class = inner_class,
                      new_class = new_class))
@@ -26,51 +50,54 @@ check_params_joined <- function(x, inner_class, model_list){
 }
 
 # Means ------------------------------------------------------------------------
-#' Parameters of a mean model
+#' Predicted means
 #' 
-#' Create a list containing the parameters of a mean model.
-#' @param mu  Matrix of samples from the posterior distribution of the 
+#' Create a list containing means predicted from a statistical model.
+#' @param value  Matrix of samples from the posterior distribution of the 
 #' mean. Columns denote random samples and rows denote means for different observations.
-#' @param sigma A vector of samples of the standard deviation.
-#' 
-#' @details The mean model is given by,
-#' \deqn{y_j = \mu_j + \epsilon,}
-#' where \eqn{\mu_j} is the mean value for observation \eqn{j}. Predicted means
-#' are consequently given by \eqn{\hat{\mu}_j}, which is an estimate of
-#' \eqn{\mu_j} from the available data.  Random samples are obtained by sampling 
-#' the error term from a normal distribution,  
-#' \eqn{\epsilon \sim N(0, \hat{\sigma}^2)}{\epsilon ~ N(0, \hat{\sigma}^2)}.
-#' @return An object of class "params_mean", which is a list containing \code{mu},
-#' \code{sigma}, and \code{n_samples}.
-#'  \code{n_samples} is equal to the number of columns in \code{mu}.
+#' @param ... Arguments to pass to \code{\link{id_attributes}}. Each row in
+#' \code{value} must be a prediction for a \code{strategy_id},
+#'  \code{patient_id}, \code{state_id}, and optionally \code{time_id} combination.
+#'  
+#' @return An object of class "tparams_mean", which is a list containing \code{value},
+#' \code{n_samples}, and the ID attributes passed to \code{\link{id_attributes}}.
+#'  
+#' @seealso tparams
 #' @examples 
-#' params <- params_mean(mu = matrix(seq(1, 4), nrow = 2), 
-#'                       sigma = c(0, 0))
-#' print(params)
+#' tparams_mean(value = matrix(1:8, nrow = 4),
+#'              strategy_id = rep(1:2, each = 2),
+#'              n_strategies = 2,
+#'              patient_id = rep(1, 4),
+#'              n_patients = 1,
+#'              state_id = rep(1:2, times = 2),
+#'              n_states = 2)
 #'
 #' @export
-params_mean <- function(mu, sigma = NULL){
-  stopifnot(is.matrix(mu))
-  n_samples <- ncol(mu)
-  if(is.null(sigma)) sigma <- rep(1, n_samples)
-  check(new_params_mean(mu, sigma, n_samples))
+tparams_mean <- function(value, ...){
+  stopifnot(is.matrix(value))
+  check(new_tparams_mean(value, n_samples = ncol(value), ...),
+        ...)
 }
 
-new_params_mean <- function(mu, sigma, n_samples, strategy_id, patient_id, state_id){
-  stopifnot(is.numeric(sigma))
-  stopifnot(is.numeric(n_samples))
-  l <- list(mu = mu, sigma = sigma, n_samples = n_samples)
-  class(l) <- "params_mean"
+new_tparams_mean <- function(value, n_samples, ...){
+  l <- c(list(value = value,
+              n_samples =  n_samples),
+         do.call("new_id_attributes", list(...)))
+  class(l) <- "tparams_mean"
   return(l)
 }
 
 #' @rdname check
-check.params_mean <- function(object){
-  if(object$n_samples != length(object$sigma)){
-    stop("Number of samples in 'sigma' is not equal to the number of samples in 'mu'.",
-         call. = FALSE)
+check.tparams_mean <- function(object, ...){
+  id_args <- list(...)
+  check(do.call("new_id_attributes", id_args))
+  for (v in c("strategy_id", "patient_id", "state_id")){
+    if (nrow(object$value) != length(id_args[[v]])){
+      stop("The length of each ID variable must equal the number of rows in 'value'.",
+          .call = FALSE)
+    }
   }
-  return(object)
+  return(object)  
 }
 
 # Linear model -----------------------------------------------------------------
@@ -358,7 +385,7 @@ check.params_surv <- function(object){
 #' 
 #' 
 #' @return An object of class "params_transprobs", which is a list containing 
-#' \code{value} and the index attributes passed to \code{\link{id_attributes}}.
+#' \code{value} and the ID attributes passed to \code{\link{id_attributes}}.
 #' @export
 params_transprobs <- function(value, ...){
   check(new_params_transprobs(value, ...))
@@ -366,8 +393,7 @@ params_transprobs <- function(value, ...){
 
 new_params_transprobs <- function(value, ...){
   stopifnot(is.array(value))
-  id_args <- list(...)
-  l <- c(list(value = value), id_args)
+  l <- c(list(value = value), list(...))
   class(l) <- "params_transprobs"
   return(l)
 }

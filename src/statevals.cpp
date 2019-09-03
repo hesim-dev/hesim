@@ -16,8 +16,7 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
                            std::string type){
   // Initialize
   hesim::statevals statevals(R_StateVals);
-  Rcpp::List R_input_mats = Rcpp::as<Rcpp::List>(R_StateVals["input_mats"]);
-  hesim::statmods::obs_index obs_index(R_input_mats);
+  hesim::statmods::obs_index obs_index(hesim::statmods::get_id_object(R_StateVals));
 
   // Storage
   int n_samples = statevals.statmod_->get_n_samples();
