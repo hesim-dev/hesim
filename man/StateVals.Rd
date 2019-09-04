@@ -20,6 +20,8 @@ Simulate values (i.e., utility or costs) associated with health states in a stat
   an object of class \code{\link{input_mats}} where each row in the matrix "X" is a unique strategy, patient, and
   health state. "X" must be sorted by strategy, patient, and health state.}
   
+  \item{\code{time_reset}}{If FALSE then time intervals are based on time since the start of the simulation. If TRUE, then time intervals reset each time a patient enters a new health state. This is relevant if, for example, costs vary over time within health states.}
+  
   }
 }
 

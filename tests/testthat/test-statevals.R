@@ -55,7 +55,7 @@ test_that("stateval_tbl", {
   
   ### time_reset = TRUE
   mod <- create_StateVals(stateval_tbl, n = 2, time_reset = TRUE)
-  expect_true(mod$params$time_reset)
+  expect_true(mod$time_reset)
   
   ## Uniform distribution
   stateval_tbl <- stateval_tbl(tbl[strategy_id == 1 & grp_id == 1,

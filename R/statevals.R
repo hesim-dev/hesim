@@ -146,8 +146,7 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
 create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, ...){
   x <- CreateFromParamsTbl$new(object, n)
   x$prep()
-  stateval <- StateVals$new(params = x$params)
-  stateval$params$time_reset <- time_reset
+  stateval <- StateVals$new(params = x$params, time_reset = time_reset)
   return(stateval)
 }
 
@@ -158,10 +157,12 @@ StateVals <- R6::R6Class("StateVals",
   public = list(
     input_mats = NULL,
     params = NULL,
+    time_reset = NULL,
 
     initialize = function(params, input_mats = NULL, time_reset = FALSE) {
       self$params <- params
       self$input_mats <- input_mats
+      self$time_reset = time_reset
     },
     
     sim = function(t, type = c("predict", "random")){
@@ -181,6 +182,7 @@ StateVals <- R6::R6Class("StateVals",
         stop("'input_mats' must be an object of class 'input_mats'",
             call. = FALSE)
       }
+      stopifnot(is.logical(self$time_reset))
     }
   )
 )

@@ -214,6 +214,7 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
   hesim::statevals stvals(R_StateVal);
   hesim::statmods::obs_index obs_index(hesim::statmods::get_id_object(R_StateVal));
   hesim::check_R_infinity(max_time);
+  bool time_reset = Rcpp::as<bool>(R_StateVal["time_reset"]);
   
   int N = disease_prog.sample_.size();
   std::vector<double> wlos(N);
@@ -229,7 +230,7 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
                                    disease_prog.time_start_[i] + max_time);
     }
     if (i > 0){
-      if (obs_index.time_reset_){   // If time_reset = TRUE, then reset time when a patient enters a new state
+      if (time_reset){   // If time_reset = TRUE, then reset time when a patient enters a new state
         time_index = 0;  // In disease_prog_ each row denotes a transition to a new health state
       }
       else{ // Otherwise, reset time for each new patient
@@ -248,7 +249,7 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
                           t);  
       
       // Get stopping time
-      if (obs_index.time_reset_){
+      if (time_reset){
         // If time_reset == true
         if (obs_index.get_time_start() > disease_prog.time_stop_[i] - disease_prog.time_start_[i]){
           break;

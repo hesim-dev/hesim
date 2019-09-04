@@ -335,9 +335,6 @@ sort_hesim_data <- function(data, sorted_by){
 #' infinity. 
 #' @param n_times A scalar denoting the number of time intervals. Equal to the
 #' number of rows in \code{time_intervals}.
-#' @param time_reset If \code{TRUE}, then time intervals reset each time a patient enters a new health 
-#'   state. This is relevant if, for example, costs vary over time within health states. 
-#'   If \code{FALSE} then time intervals are based on time since the start of the simulation.
 #'  
 #' @details When using the ID variables to index \code{\link{input_mats}}, sorting order should be 
 #' the same as specified in \code{\link{expand.hesim_data}}; that is,
@@ -353,15 +350,13 @@ id_attributes <- function(strategy_id, n_strategies,
                           state_id = NULL, n_states = NULL,
                           transition_id = NULL, n_transitions = NULL,
                           time_id = NULL, time_intervals = NULL, n_times = NULL,
-                          sample = NULL, n_samples = NULL,
-                          time_reset = NULL){
+                          sample = NULL, n_samples = NULL){
   object <- new_id_attributes(strategy_id, n_strategies,
                               patient_id, n_patients,
                               state_id, n_states,
                               transition_id, n_transitions,
                               time_id, time_intervals, n_times,
-                              sample, n_samples,
-                              time_reset)
+                              sample, n_samples)
   check(object)
   return(object)
 }
@@ -371,8 +366,7 @@ new_id_attributes <- function(strategy_id, n_strategies,
                               state_id = NULL, n_states = NULL,
                               transition_id = NULL, n_transitions = NULL,
                               time_id = NULL, time_intervals = NULL, n_times = NULL,
-                              sample = NULL, n_samples = NULL,
-                              time_reset = NULL){
+                              sample = NULL, n_samples = NULL){
   stopifnot(is.numeric(strategy_id))
   stopifnot(is.numeric(n_strategies))
   stopifnot(is.numeric(patient_id))
@@ -386,15 +380,13 @@ new_id_attributes <- function(strategy_id, n_strategies,
   stopifnot(is.numeric(n_times) | is.null(n_times))
   stopifnot(is.numeric(sample) | is.null(sample))
   stopifnot(is.numeric(n_samples) | is.null(n_samples))
-  stopifnot(is.logical(time_reset) | is.null(time_reset))
   
   object <- list(strategy_id = strategy_id, n_strategies = n_strategies,
                  patient_id = patient_id, n_patients = n_patients,
                  state_id = state_id, n_states = n_states,
                  transition_id = transition_id, n_transitions = n_transitions,
                  time_id = time_id, time_intervals = time_intervals, n_times = n_times,
-                 sample = sample, n_samples = n_samples,
-                 time_reset = time_reset)
+                 sample = sample, n_samples = n_samples)
   object[sapply(object, is.null)] <- NULL
   class(object) <- "id_attributes"
   return(object)
