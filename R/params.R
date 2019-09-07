@@ -387,21 +387,21 @@ check.params_surv <- function(object){
 #' @return An object of class "params_transprobs", which is a list containing 
 #' \code{value} and the ID attributes passed to \code{\link{id_attributes}}.
 #' @export
-params_transprobs <- function(value, ...){
-  check(new_params_transprobs(value, ...))
+tparams_transprobs <- function(value, ...){
+  check(new_tparams_transprobs(value, ...), ...)
 }
 
-new_params_transprobs <- function(value, ...){
+new_tparams_transprobs <- function(value, ...){
   stopifnot(is.array(value))
-  l <- c(list(value = value), list(...))
-  class(l) <- "params_transprobs"
+  l <- c(list(value = value),
+         do.call("new_id_attributes", list(...)))
+  class(l) <- "tparams_transprobs"
   return(l)
 }
 
 #' @rdname check
-check.params_transprobs <- function(object){
-  id_args <- object[names(object)[names(object) != "value"]]
-  check(do.call("id_attributes", id_args))
+check.tparams_transprobs <- function(object, ...){
+  check(do.call("new_id_attributes", list(...)))
   if (is.null(object$sample)){
     stop("'sample' cannot be NULL.")
   }

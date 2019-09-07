@@ -128,12 +128,12 @@ Psm <- R6::R6Class("Psm",
       
       # Time varying state values are not currently supported
       if (type == "qalys"){
-        if (!is.null(self$utility_model$input_mats$time_intervals)){
+        if (!is.null(get_id_object(self$utility_model)$time_intervals)){
           stop("Time varying utilities are not currently supported with PSMs.")
         }
       } else{
           for (i in 1:length(self$cost_models)){
-            if (!is.null(self$cost_models[[i]]$input_mats$time_intervals)){
+            if (!is.null(get_id_object(self$cost_models[[i]])$time_intervals)){
               stop("Time varying costs are not currently supported with PSMs.")
             } 
           }
@@ -160,7 +160,7 @@ Psm <- R6::R6Class("Psm",
       
       # Check number of states
       for (i in 1:length(statvalmods)){
-        if(self$n_states != statvalmods[[i]]$input_mats$n_states + 1){
+        if(self$n_states != get_id_object(statvalmods[[i]])$n_states + 1){
           msg <- paste0("The number of survival models must equal the number of states in '",
                         statvalmods_name, "' - 1.")
           stop(msg, call. = FALSE)
@@ -178,7 +178,7 @@ Psm <- R6::R6Class("Psm",
       } else{
         categories <- "qalys"
       } # end if/else costs vs. qalys
-
+      
       res <- data.table(C_psm_sim_wlos(self, stateprobs, dr, type, categories))
       res[, sample := sample + 1]
       return(res[])

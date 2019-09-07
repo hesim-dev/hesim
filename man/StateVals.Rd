@@ -14,7 +14,7 @@ Simulate values (i.e., utility or costs) associated with health states in a stat
 \section{Fields}{
 
   \describe{
-  \item{\code{params}}{Parameters for simulating state values. Currently supports objects of class \code{\link{params_mean}} or \code{\link{params_lm}}.}
+  \item{\code{params}}{Parameters for simulating state values. Currently supports objects of class \code{\link{tparams_mean}} or \code{\link{params_lm}}.}
   
   \item{\code{input_mats}}{Input matrices used to simulate state values by strategy, patient, and health state. Must be 
   an object of class \code{\link{input_mats}} where each row in the matrix "X" is a unique strategy, patient, and

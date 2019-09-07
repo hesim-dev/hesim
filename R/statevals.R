@@ -155,8 +155,8 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, 
 #' @export
 StateVals <- R6::R6Class("StateVals",
   public = list(
-    input_mats = NULL,
     params = NULL,
+    input_mats = NULL,
     time_reset = NULL,
 
     initialize = function(params, input_mats = NULL, time_reset = FALSE) {

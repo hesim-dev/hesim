@@ -130,6 +130,15 @@ flatten_lists <- function(x) {
   else return(unlist(c(lapply(x, flatten_lists)), recursive = FALSE))
 }
 
+# Get the object containing ID attributes
+get_id_object <- function(x){
+  if (is.null(x$input_mats)){
+    return(x$params)
+  } else{
+    return(x$input_mats)
+  }
+}
+
 # R6 class for parameter tables (i.e., stateval_tbl, transprob_tbl) ------------
 ParamsTbl <- R6::R6Class("ParamsTbl",
   private = list(
@@ -371,7 +380,6 @@ CreateFromParamsTbl <- R6::R6Class("CreateFromParamsTbl",
     n = NULL, 
     values = NULL,
     id_tbl = NULL,
-    input_mats = NULL,
     params = NULL,
     n_trans = NULL, # For transprob_tbl only
     n_states = NULL, # For transprob_tbl only
@@ -556,46 +564,37 @@ CreateFromParamsTbl <- R6::R6Class("CreateFromParamsTbl",
       } else{
         n_states <-  length(unique(self$id_tbl$state_id))
       }
+      n_strategies <- length(unique(self$id_tbl$strategy_id))
+      n_patients <- length(unique(self$id_tbl$patient_id))
+      n_times <- nrow(time_intervals)
       
       if (inherits(self$object, "stateval_tbl")){
         self$params <- new_tparams_mean(value = self$values,
                                         n_samples = self$n,
                                         strategy_id = self$id_tbl$strategy_id,
-                                        n_strategies = length(unique(self$id_tbl$strategy_id)),
+                                        n_strategies = n_strategies,
                                         patient_id = self$id_tbl$patient_id,
-                                        n_patients = length(unique(self$id_tbl$patient_id)),
+                                        n_patients = n_patients,
                                         state_id = self$id_tbl$state_id,
                                         n_states = n_states,
                                         time_id = self$id_tbl$time_id,
                                         time_intervals = time_intervals,
                                         n_times = nrow(time_intervals))
       } else{
-        self$params <- self$values
-        attr(self$params, "n_samples") <- self$n
+        self$params <- new_tparams_transprobs(value = self$values, 
+                                              sample = rep(1:self$n,
+                                                           each = dim(self$values)[3]/self$n),
+                                              n_samples = self$n,
+                                              strategy_id = rep(self$id_tbl$strategy_id, self$n),
+                                              n_strategies = n_strategies,
+                                              patient_id = rep(self$id_tbl$patient_id, self$n),
+                                              n_patients = n_patients,
+                                              state_id = rep(self$id_tbl$state_id, self$n),
+                                              n_states = n_states,
+                                              time_id = rep(self$id_tbl$time_id, self$n),
+                                              time_intervals = time_intervals,
+                                              n_times = n_times)
       }
-    },
-    
-    create_input_mats = function(){
-      if (!is.null(self$object$time_id)){
-        time_intervals <- unique(self$object[, c("time_id", "time_start", "time_stop")]) 
-      } else{
-        time_intervals <- NULL
-      }
-      if (is.null(self$id_tbl$state_id)){
-        n_states <- NULL
-      } else{
-        n_states <-  length(unique(self$id_tbl$state_id))
-      }
-      self$input_mats <- new_input_mats(X = NULL,
-                                        strategy_id = self$id_tbl$strategy_id,
-                                        n_strategies = length(unique(self$id_tbl$strategy_id)),
-                                        patient_id = self$id_tbl$patient_id,
-                                        n_patients = length(unique(self$id_tbl$patient_id)),
-                                        state_id = self$id_tbl$state_id,
-                                        n_states = n_states,
-                                        time_id = self$id_tbl$time_id,
-                                        time_intervals = time_intervals,
-                                        n_times = nrow(time_intervals))
     },
     
     prep = function(...){
@@ -603,7 +602,6 @@ CreateFromParamsTbl <- R6::R6Class("CreateFromParamsTbl",
       self$transform()
       self$expand()
       self$create_params()
-      self$create_input_mats()
     }
   )
 )

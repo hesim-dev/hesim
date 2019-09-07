@@ -71,21 +71,32 @@ transprob_tbl <- function(tbl,
 # CohortDtstmTrans -------------------------------------------------------------
 #' @export
 CohortDtstmTrans <- R6::R6Class("CohortCtstmTrans",
+
   public = list(
-    input_mats = NULL,
     params = NULL,
     start_stateprobs = NULL,
+    cycle_length = NULL,
+    stateprobs_ = NULL,
     
-    initialize = function(input_mats, params, start_stateprobs){
-      self$input_mats <- input_mats
+    initialize = function(params,
+                          start_stateprobs, 
+                          cycle_length = 1){
       self$params <- params
       self$start_stateprobs <- start_stateprobs
+      self$cycle_length <- cycle_length
     },
     
     sim_stateprobs = function(n_cycles){
-      return(2)
+      times <- seq(0, n_cycles/self$cycle_length, length.out = n_cycles + 1)
+      stprobs <- C_cohort_dtstm_sim_stateprobs(self, 
+                                               times,
+                                               self$params$n_samples)
+      stprobs <- data.table(stprobs)
+      stprobs[, sample := sample + 1]
+      stprobs[, state_id := state_id + 1]
+      self$stateprobs_ <- stprobs[]
+      invisible(self)
     }
-      
   )
 )
 
@@ -120,7 +131,7 @@ create_CohortDtstmTrans.transprob_tbl <- function(object, n = 1000,
   if (is.null(start_stateprobs)){
     start_stateprobs <- c(1, rep(0, x$n_states - 1))
   } 
-  transmod <- CohortDtstmTrans$new(input_mats = x$input_mats, params = x$params,
+  transmod <- CohortDtstmTrans$new(params = x$params,
                                    start_stateprobs = start_stateprobs)
   return(transmod)
 }

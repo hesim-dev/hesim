@@ -7,8 +7,7 @@
 id_attributes(strategy_id, n_strategies, patient_id, n_patients,
   state_id = NULL, n_states = NULL, transition_id = NULL,
   n_transitions = NULL, time_id = NULL, time_intervals = NULL,
-  n_times = NULL, sample = NULL, n_samples = NULL,
-  time_reset = NULL)
+  n_times = NULL, sample = NULL, n_samples = NULL)
 }
 \arguments{
 \item{strategy_id}{A numeric vector of integers denoting the treatment strategy.}
@@ -44,10 +43,6 @@ number of rows in \code{time_intervals}.}
 distribution of the parameters.}
 
 \item{n_samples}{A scalar denoting the number of samples.}
-
-\item{time_reset}{If \code{TRUE}, then time intervals reset each time a patient enters a new health 
-state. This is relevant if, for example, costs vary over time within health states. 
-If \code{FALSE} then time intervals are based on time since the start of the simulation.}
 }
 \description{
 Stores metadata related to the ID variables used to index \code{\link{input_mats}} 

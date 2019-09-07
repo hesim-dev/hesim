@@ -296,7 +296,7 @@ test_that("Psm$qalys", {
   los_compare(psm, type = "qalys_", dr = .05, patient_id = 2,
               strategy_id = 3)
   
-  # Time varying
+  # Time varying not currently supported
   utility_tbl2 <- data.frame(state_id = states_dt$state_id,
                              time_start = c(0, 0, 0, 2, 2, 2),
                              est = c(.90, .85, .80, .75, .65, .55))

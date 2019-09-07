@@ -3,6 +3,22 @@ library("data.table")
 rm(list = ls())
 
 # Helper functions -------------------------------------------------------------
+as_trans_mats <- function(x){
+  lapply(x, function (x) matrix(x, nrow = sqrt(length(x)),
+                                byrow = TRUE))
+}
+
+to_probs <- function(x, vector = TRUE){
+  res <- lapply(x, function (y) y/rowSums(y))
+  if (vector){
+    res <- unlist(lapply(res, t))
+  }
+  return(res)
+}
+
+n_states <- function(x) sqrt(length(x[[1]]))
+n_trans <- function(x) length(x[[1]])
+
 sim_markov_chain <- function(p, x0, times, time_stop){
   n_states <- ncol(p[, , 1])
   n_times <- length(times)
@@ -21,52 +37,39 @@ sim_markov_chain <- function(p, x0, times, time_stop){
   return(x)
 }
 
-as_trans_mats <- function(x){
-  lapply(x, function (x) matrix(x, nrow = sqrt(length(x)),
-                                byrow = TRUE))
+test_sim_stateprobs <- function(x, sample_val = 1, strategy_id_val = 1, 
+                                patient_id_val = 1){
+  # Simulations with hesim
+  stprobs1 <- x$stateprobs_[sample == sample_val &
+                              strategy_id == strategy_id_val &
+                              patient_id == patient_id_val]
+  stprobs1 <-  matrix(stprobs1$prob, nrow = length(unique(stprobs1$t)))
+  
+  # Simulate Markov chain with R function
+  index <- which(x$params$sample == sample_val &
+                   x$params$strategy_id == strategy_id_val &
+                   x$params$patient_id == patient_id_val)
+  p <- x$params$value[,, index, drop = FALSE]
+  n_states <- ncol(p[,, 1])
+  time_stop <- x$params$time_intervals$time_stop
+  if (is.null(time_stop)) time_stop <- Inf
+  stprobs2 <- sim_markov_chain(p = p,
+                               x0 = c(1, rep(0, n_states - 1)),
+                               times = unique(x$stateprobs_$t),
+                               time_stop = time_stop)
+  # Test
+  expect_equal(c(stprobs1), c(stprobs2))
 }
 
-to_probs <- function(x, vector = TRUE){
-  res <- lapply(x, function (y) y/rowSums(y))
-  if (vector){
-    res <- unlist(lapply(res, t))
+# Final rows are [0 0 ... 1]
+check_final_rows <- function(p_array){
+  final_rows <- apply(p_array, 3, function(x) x[3, ])
+  n_states <- ncol(p_array[,, 1])
+  for (i in 1:(n_states - 1)){
+    expect_true(all(final_rows[i, ] == 0))
   }
-  return(res)
+  expect_true(all(final_rows[n_states, ] == 1))
 }
-
-n_states <- function(x) sqrt(length(x[[1]]))
-n_trans <- function(x) length(x[[1]])
-
-# test_sim_stateprobs(x, sample, strategy_id){
-#   im <- x$input_mats
-#   index <- which(im$strategy_id == strategy_id)
-#   sample_env <- sample; strategy_id_env <- strategy_id
-#   if (sample %in% colnames(x)){
-#     x_i <- x[strategy_id == strategy_id_env] 
-#     stprobs1 <- y$stateprobs_[strategy_id == strategy_id_env]
-#   } else{
-#     x_i <- x[sample == sample_env & strategy_id == strategy_id_env]
-#     stprobs1 <- y$stateprobs_[sample == sample_env & strategy_id == strategy_id_env]
-#   }
-#   stprobs1 <- stprobs1[patient_id == 1]
-#   stprobs1 <- matrix(stprobs1$prob, nrow = length(unique(stprobs1$t)))
-#   p <- aperm(array(x_i$est, 
-#                    dim = c(sqrt(length(x_i$est)),
-#                            sqrt(length(x_i$est)),
-#                            1)), # Adjust so 1 = length of times intervals
-#              c(2, 1, 3))
-#   x0 <- y$start_stateprobs
-#   stprobs2 <- sim_markov_chain(p, x0 = y$start_stateprobs, 
-#                                times = unique(y$stateprobs_$t), 
-#                                time_stop = Inf) # Adjust time stop
-#   expect_equal(stprobs1, stprobs2)
-# }
-
-# p <- transmod_dirichlet$params[,, 1, drop = FALSE]
-# x0 <- c(1, rep(0, ncol(p) - 1))
-# times <- seq(0, 2, 1)
-# time_stop <- Inf
-# sim_markov_chain(p, x0, times, time_stop)
 
 # Data and parameters ----------------------------------------------------------
 n_samples <- 3
@@ -94,15 +97,15 @@ test_that("transprob_tbl", {
                                          alpha = unlist(alpha)),
                               dist = "dirichlet",
                               hesim_data = hesim_dat)
-  expect_equal(colnames(transprobs), 
+  expect_equal(colnames(transprobs),
                c("strategy_id", "transition_id", "alpha"))
-  
+
   # Forget alpha column
   expect_error(transprob_tbl(data.frame(strategy_id = rep(1:2, each = n_trans),
                                          transition_id = rep(1:9, 2)),
                               dist = "dirichlet",
                               hesim_data = hesim_dat))
-  
+
   # Incorrect number of rows
   expect_error(transprob_tbl(data.frame(strategy_id = c(rep(1, n_trans),
                                            rep(2, n_trans - 1)),
@@ -120,43 +123,50 @@ transprobs <- transprob_tbl(data.frame(strategy_id = rep(1:2, each = n_trans),
                             dist = "dirichlet",
                             hesim_data = hesim_dat)
 transmod_dirichlet <- create_CohortDtstmTrans(transprobs, n = n_samples)
-tmp <- transmod_dirichlet$sim_stateprobs(n_cycles = 2)$stateprobs_
-
-
+transmod_dirichlet$sim_stateprobs(n_cycles = 2)
 
 ## Test
-check_final_rows <- function(params){
-  final_rows <- apply(params, 3, function(x) x[3, ])
-  expect_true(all(final_rows[1, ] == 0))
-  expect_true(all(final_rows[2, ] == 0))
-  expect_true(all(final_rows[3, ] == 1))
-}
-check_final_rows(transmod_dirichlet$params)
-expect_equal(dim(transmod_dirichlet$params)[3], 
+### Final rows are [0 0 ... 1]
+check_final_rows(transmod_dirichlet$params$value)
+expect_equal(dim(transmod_dirichlet$params$value)[3],
              n_samples * n_strategies * n_patients)
 
-# CohortDtstmTrans ("Custom" distribution) ------------------------------------
+### Simulated state probabilities are correct
+test_sim_stateprobs(transmod_dirichlet)
+test_sim_stateprobs(transmod_dirichlet, sample_val = 2)
+test_sim_stateprobs(transmod_dirichlet, sample_val = 3, strategy_id_val = 2)
+
+# CohortDtstmTrans ("Custom" distribution) -------------------------------------
 # Run
-transprob_dist <- rdirichlet_mat(n = n_samples, 
+transprob_dist <- rdirichlet_mat(n = n_samples,
                                  alpha = do.call("rbind", alpha_mats))
-transprob_dist <- data.table(sample = rep(1:n_samples, 
+transprob_dist <- data.table(sample = rep(1:n_samples,
                                           each = n_trans(alpha) * 2),
                              patient_id = 1,
                              strategy_id = rep(rep(1:2, each = n_trans(alpha)),
                                                n_samples),
                              transition_id = rep(1:n_trans(alpha),
                                                  n_states(alpha) * 2),
-                             value = c(aperm(transprob_dist, 
+                             value = c(aperm(transprob_dist,
                                              perm = c(2, 1, 3))))
 transprobs <- transprob_tbl(transprob_dist,
                             dist = "custom")
 transmod_custom <- create_CohortDtstmTrans(transprobs, n = n_samples)
+transmod_custom$sim_stateprobs(n_cycles = 4)
 
 ## Test
-check_final_rows(transmod_custom$params)
-for (v in c("sample", "strategy_id", "patient_id", "transition_id")){
-  expect_true(all.equal(transmod_dirichlet[[v]], transmod_custom[[v]]))
+### Final rows are [0 0 ... 1]
+check_final_rows(transmod_custom$params$value)
+
+### ID values are correct
+for (v in c("sample", "strategy_id", "patient_id")){
+  expect_true(all.equal(transmod_dirichlet$params[[v]], 
+                        transmod_custom$params[[v]]))
 }
+
+### Simulated state probabilities are correct
+test_sim_stateprobs(transmod_custom, sample_val = 2, strategy_id_val = 2)
+test_sim_stateprobs(transmod_custom, sample_val = 3, strategy_id_val = 1)
 
 # CohortDtstmTrans (Fixed distribution) ------------------------------------
 # Run
@@ -167,10 +177,20 @@ transprobs <- transprob_tbl(data.frame(strategy_id = rep(1:n_strategies,
                             dist = "fixed",
                             hesim_data = hesim_dat)
 transmod_fixed <- create_CohortDtstmTrans(transprobs, n = n_samples)
+transmod_fixed$sim_stateprobs(n_cycles = 3)
 
 ## Test
-expect_equal(dim(transmod_fixed$params)[3],
+### Transition probability array is correct
+expect_equal(dim(transmod_fixed$params$value)[3],
              n_strategies * n_samples * n_patients)
-expect_equal(transmod_fixed$params[,, 1], to_probs(alpha_mats, FALSE)[[1]])
-expect_equal(transmod_fixed$params[,, 4], to_probs(alpha_mats, FALSE)[[2]])
+expect_equal(transmod_fixed$params$value[,, 1], to_probs(alpha_mats, FALSE)[[1]])
+expect_equal(transmod_fixed$params$value[,, 4], to_probs(alpha_mats, FALSE)[[2]])
+
+### Final rows are [0 0 ... 1]
+check_final_rows(transmod_fixed$params$value)
+
+### Simulated state probabilities are correct
+test_sim_stateprobs(transmod_fixed)
+test_sim_stateprobs(transmod_fixed, sample_val = 2)
+test_sim_stateprobs(transmod_fixed, sample_val = 3, strategy_id_val = 2)
 

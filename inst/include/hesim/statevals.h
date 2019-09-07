@@ -225,12 +225,12 @@ private:
   static statmods::obs_index init_obs_index_(Rcpp::Environment R_model, std::string type){
     if (type == "qalys"){
       Rcpp::Environment R_utility_model = Rcpp::as<Rcpp::Environment>(R_model["utility_model"]);
-      return statmods::obs_index(Rcpp::as<Rcpp::List>(R_utility_model["input_mats"]));
+      return statmods::obs_index(Rcpp::as<Rcpp::List>(hesim::statmods::get_id_object(R_utility_model)));
     }
     else if (type == "costs"){
       Rcpp::List R_cost_models = Rcpp::as<Rcpp::List>(R_model["cost_models"]);
       Rcpp::Environment R_cost_model_0 = Rcpp::as<Rcpp::Environment>(R_cost_models[0]);
-      return statmods::obs_index(Rcpp::as<Rcpp::List>(R_cost_model_0["input_mats"]));
+      return statmods::obs_index(Rcpp::as<Rcpp::List>(hesim::statmods::get_id_object(R_cost_model_0)));
     }
     else{
       Rcpp::stop("Values of 'costs' or 'qalys' can only be simulated.");
