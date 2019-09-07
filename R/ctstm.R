@@ -220,14 +220,14 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     reset_states = NULL,
     
     
-    initialize = function(input_mats, params, trans_mat, 
+    initialize = function(params, input_mats, trans_mat, 
                           start_state = 1,
                           start_age = 38,
                           death_state = NULL,
                           clock = c("reset", "forward", "mix"),
                           reset_states = NULL) {
-      self$input_mats <- input_mats
       self$params <- params
+      self$input_mats <- input_mats
       self$trans_mat <- trans_mat
       self$clock <- match.arg(clock)
       if (is.null(reset_states)){

@@ -14,10 +14,12 @@ Summarize \code{n-1} survival curves for an \code{N} state partitioned survival 
 \section{Fields}{
 
 \describe{
+
+\item{\code{params}}{An object of class \code{\link{params_surv_list}}.}
+
 \item{\code{input_mats}}{Input matrices used to predict state values by strategy and patient. Must be 
   an object of class \code{\link{input_mats}} where each row of a matrix in "X" is a unique strategy and patient. All   matrices in "X" must be sorted by strategy and patient.}
 
-\item{\code{params}}{An object of class \code{\link{params_surv_list}}.}
 
 }}
 
@@ -25,7 +27,7 @@ Summarize \code{n-1} survival curves for an \code{N} state partitioned survival 
 
 \describe{
 
-\item{\code{new(input_mats, params)}}{
+\item{\code{new(params, input_mats, )}}{
 
   Constructor for the class.
   

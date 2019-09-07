@@ -74,9 +74,9 @@ PsmCurves <- R6::R6Class("PsmCurves",
     input_mats = NULL,
     params = NULL,
 
-    initialize = function(input_mats, params) {
-      self$input_mats <- input_mats
+    initialize = function(params, input_mats) {
       self$params <- params
+      self$input_mats <- input_mats
     },
     
     hazard = function(t){
