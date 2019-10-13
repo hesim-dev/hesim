@@ -258,21 +258,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_psm_sim_wlos
-Rcpp::DataFrame C_psm_sim_wlos(Rcpp::Environment R_Psm, Rcpp::DataFrame R_stateprobs, std::vector<double> dr, std::string type, std::vector<std::string> categories);
-RcppExport SEXP _hesim_C_psm_sim_wlos(SEXP R_PsmSEXP, SEXP R_stateprobsSEXP, SEXP drSEXP, SEXP typeSEXP, SEXP categoriesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_Psm(R_PsmSEXP);
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_stateprobs(R_stateprobsSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type dr(drSEXP);
-    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    Rcpp::traits::input_parameter< std::vector<std::string> >::type categories(categoriesSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_psm_sim_wlos(R_Psm, R_stateprobs, dr, type, categories));
-    return rcpp_result_gen;
-END_RCPP
-}
 // C_statevals_sim
 Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals, std::vector<double> times, std::string type);
 RcppExport SEXP _hesim_C_statevals_sim(SEXP R_StateValsSEXP, SEXP timesSEXP, SEXP typeSEXP) {
@@ -283,6 +268,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type times(timesSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
     rcpp_result_gen = Rcpp::wrap(C_statevals_sim(R_StateVals, times, type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_sim_wlos
+Rcpp::DataFrame C_sim_wlos(Rcpp::DataFrame R_stateprobs, Rcpp::List R_statevals, std::vector<double> dr, std::vector<std::string> categories, std::vector<double> times, std::string method);
+RcppExport SEXP _hesim_C_sim_wlos(SEXP R_stateprobsSEXP, SEXP R_statevalsSEXP, SEXP drSEXP, SEXP categoriesSEXP, SEXP timesSEXP, SEXP methodSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_stateprobs(R_stateprobsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type R_statevals(R_statevalsSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type dr(drSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type categories(categoriesSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type times(timesSEXP);
+    Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_sim_wlos(R_stateprobs, R_statevals, dr, categories, times, method));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -540,6 +541,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_test_max_lt
+double C_test_max_lt(std::vector<double> v, double value);
+RcppExport SEXP _hesim_C_test_max_lt(SEXP vSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type v(vSEXP);
+    Rcpp::traits::input_parameter< double >::type value(valueSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_max_lt(v, value));
+    return rcpp_result_gen;
+END_RCPP
+}
 // test_zeroin
 double test_zeroin();
 RcppExport SEXP _hesim_test_zeroin() {
@@ -593,8 +606,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_indiv_ctstm_los", (DL_FUNC) &_hesim_C_indiv_ctstm_los, 4},
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},
     {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 6},
-    {"_hesim_C_psm_sim_wlos", (DL_FUNC) &_hesim_C_psm_sim_wlos, 5},
     {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
+    {"_hesim_C_sim_wlos", (DL_FUNC) &_hesim_C_sim_wlos, 6},
     {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
     {"_hesim_C_test_is_absorbing", (DL_FUNC) &_hesim_C_test_is_absorbing, 1},
     {"_hesim_C_test_trans_mat_trans_id", (DL_FUNC) &_hesim_C_test_trans_mat_trans_id, 2},
@@ -616,6 +629,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_C_test_pv", (DL_FUNC) &_hesim_C_test_pv, 4},
     {"_hesim_C_test_seq", (DL_FUNC) &_hesim_C_test_seq, 3},
+    {"_hesim_C_test_max_lt", (DL_FUNC) &_hesim_C_test_max_lt, 2},
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
     {"_hesim_C_rowmax_index", (DL_FUNC) &_hesim_C_rowmax_index, 1},

@@ -26,4 +26,3 @@ arma::ucolvec C_rowmax_index(arma::mat x) {
 }
 
 
-

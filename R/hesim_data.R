@@ -309,6 +309,33 @@ sort_hesim_data <- function(data, sorted_by){
 }
 
 # ID attributes ----------------------------------------------------------------
+#' Create time intervals
+#' 
+#' Create a table of time intervals given a vector of starting times for each 
+#' interval. This would typically be passed to \code{\link{id_attributes}}.
+#' 
+#' @param time_start A vector of starting times for each interval
+#' @return A \code{data.table} in the same format as \code{time_intervals} as 
+#' described in \code{\link{id_attributes}}.
+#' @seealso \code{\link{id_attributes}}
+#' @examples
+#' create_time_intervals(c(0, 3, 5))
+#' @export
+create_time_intervals <- function(time_start){
+  if (any(time_start < 0)){
+    stop("'time_start' cannot be negative")
+  }
+  time_start <- sort(time_start)
+  if (time_start[1] > 0){
+    time_start <- c(0, time_start)
+  }
+  time_intervals <- data.table(time_id = 1:length(time_start), 
+                                time_start = time_start)
+  time_intervals[, "time_stop" := shift(get("time_start"), type = "lead")]
+  time_intervals[is.na(get("time_stop")), "time_stop" := Inf]
+  return(time_intervals[, ])
+}
+
 #' Attributes for ID variables
 #' 
 #' Stores metadata related to the ID variables used to index \code{\link{input_mats}} 

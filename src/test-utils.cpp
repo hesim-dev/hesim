@@ -32,3 +32,9 @@ double C_test_pv(double z, double r, double t1, double t2){
 std::vector<double> C_test_seq(double from, double to, double by){
   return hesim::seq(from, to , by);
 }
+
+// [[Rcpp::export]]
+double C_test_max_lt(std::vector<double> v, double value){
+  auto it = hesim::max_lt(v.begin(), v.end(), value);
+  return *it;
+}

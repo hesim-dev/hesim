@@ -87,6 +87,9 @@ each table must be numeric vectors of integers." />
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -94,6 +97,11 @@ each table must be numeric vectors of integers." />
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -122,7 +130,7 @@ each table must be numeric vectors of integers." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Data for health-economic simulation modeling</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/input-data.R'><code>R/input-data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/hesim_data.R'><code>R/hesim_data.R</code></a></small>
     <div class="hidden name"><code>hesim_data.Rd</code></div>
     </div>
 
@@ -134,8 +142,8 @@ each table must be numeric vectors of integers.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>hesim_data</span>(<span class='no'>strategies</span>, <span class='no'>patients</span>, <span class='kw'>lines</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>transitions</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>hesim_data</span>(<span class='no'>strategies</span>, <span class='no'>patients</span>, <span class='kw'>states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transitions</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,14 +160,6 @@ Must contain the column <code>strategy_id</code> denoting a unique strategy. Oth
 Must contain the column <code>patient_id</code> denoting a unique patient. The 
 number of rows should be equal to the number of patients in the model.
 Other columns are variables describing the characteristics of a patient.</p></td>
-    </tr>
-    <tr>
-      <th>lines</th>
-      <td><p>A table of treatment lines used for each treatment strategy. Must contain the columns
-<code>strategy_id</code>, denoting a treatment strategy, and <code>line</code>, denoting a treatment line. Other 
-columns are variables describing the characteristics of a treatment line for a given treatment
-strategy. A column denoting the treatment used for a given strategy and line would often
-be specified. Not currently supported.</p></td>
     </tr>
     <tr>
       <th>states</th>

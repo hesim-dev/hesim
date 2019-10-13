@@ -65,3 +65,30 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
     Rcpp::_["stringsAsFactors"] = false
   );  
 }
+
+/***************************************************************************//** 
+ * @ingroup statevals
+ * Simulate weighted length of stay from simulated health state probabilities.
+ * This function is exported to @c R and used to simulate costs and utilities.
+ * @param R_stateprobs Simulated state probabilities from @c R.
+ * @param statevals A list of @c R objects of class @c StateVals.
+ * @param dr Discount rate.
+ * @param categories Categories with a given @p type. For QALYs, there is only one
+ * category ("qalys"), but for costs this could consist of different cost categories
+ * such as drug acquisition and administration costs, resource use costs, etc. 
+ * @return An @c R data frame with columns equivalent to the data members in
+ * hesim::wlos_out_out.
+ ******************************************************************************/ 
+// [[Rcpp::export]]
+Rcpp::DataFrame C_sim_wlos(Rcpp::DataFrame R_stateprobs,
+                               Rcpp::List R_statevals, 
+                               std::vector<double> dr,
+                               std::vector<std::string> categories,
+                               std::vector<double> times,
+                               std::string method = "trapz"){
+  hesim::wlos wlos(R_statevals);
+  hesim::stateprobs_out stprobs(R_stateprobs);
+  hesim::wlos_out out = wlos(stprobs, times, dr, categories, method);
+  return out.create_R_data_frame();
+}
+

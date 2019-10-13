@@ -85,6 +85,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -92,6 +95,11 @@
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -140,16 +148,16 @@
 
     
     <dl class='dl-horizontal'>
-<dt><code>input_mats</code></dt><dd><p>An object of class <code><a href='input_mats.html'>input_mats</a></code>. Since <code>params</code> currently only supports transition matrices that have already been predicted (i.e., they have been stored in <code><a href='transprob_tbl.html'>transprob_tbl</a></code>), input matrices are not needed for prediction and <code>input_mats</code> only needs to contain ID variables indexing the rows of <code>params</code>.</p></dd>
-    <dt><code>params</code></dt><dd><p>An array of transition matrices where each matrix contains the transition probabilities for a given sample from the probabilistic sensitivity analysis (PSA), treatment strategy, patient, and time interval. Must be sorted by PSA sample, treatment strategy, patient, and time interval.</p></dd>
-    <dt><code>start_stateprobs</code></dt><dd><p>A vector with length equal to the number of health states containing the probability that the cohort is in each health state at the start of the simulation. For example, if there were three states and the cohort began the simulation in state 1 then <code>start_stateprobs = c(1, 0, 0)</code>.</p></dd>
-    </dl>
+<dt><code>params</code></dt><dd><p>An object of class <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code>.</p></dd>
+    <dt><code>input_mats</code></dt><dd><p>An object of class <code><a href='input_mats.html'>input_mats</a></code>.</p></dd>
+    <dt><code>start_stateprobs</code></dt><dd><p>A vector with length equal to the number of health states containing the probability that the cohort is in each health state at the start of the simulation. For example, if there were three states and the cohort began the simulation in state 1 then <code>start_stateprobs = c(1, 0, 0)</code>. If <code>NULL</code>, then a vector with the first element equal to 1 and all remaining elements equal to 0.</p></dd>
+</dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
     <dl class='dl-horizontal'>
-    <dt><code>new(input_mats, params, start_stateprobs)</code></dt><dd><p>Constructor for the class.</p></dd>
+    <dt><code>new(params, input_mats = NULL, start_stateprobs = NULL)</code></dt><dd><p>Constructor for the class.</p></dd>
     <dt><code>sim_stateprobs(n_cycles)</code></dt><dd><p>Simulate probability of being in each health state during each model cycle.
     <ul>
 <li><p><code>n_cycles</code>: The number of model cycles to simulate the model for.</p></li>
@@ -162,27 +170,7 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>#' # Observed transitions 
-#' # Treatment strategies 1 and 2
-#' trans1 <- c(200, 300, 500,
-#'             0, 400, 100,
-#'             0, 0, 600) 
-#' trans2 <- c(300, 300, 400,
-#'             0, 550, 50,
-#'             0, 0, 450)
-#' n_trans <- length(trans1)
-
-#' # Sample transition probabilities by treatment strategy
-#' # from a dirichlet distributions
-#' transprobs <- transprob_tbl(data.frame(strategy_id = rep(1:2, each = n_trans),
-#'                                        patient_id = 1,
-#'                                        transition_id = rep(1:n_trans, 2),
-#'                                        alpha = c(trans1,trans2)),
-#'                             dist = "dirichlet",
-#'                             hesim_data = hesim_dat)
-#' print(transprobs)
-#' create_CohortDtstmTrans(transprobs, n = 3)
-#' print(transprobs$params)
+    <pre class="examples"><div class='input'># Example to come
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

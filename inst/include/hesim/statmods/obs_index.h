@@ -47,6 +47,39 @@ inline Rcpp::List get_id_object(Rcpp::Environment R_object){
   }
 }
 
+/*****************
+ * Time intervals
+ ****************/
+struct time_intervals {
+  int time_index_; ///< Time index used to select observation.
+  std::vector<double> time_start_; ///< Vector of unique starting times.
+  std::vector<double> time_stop_; ///< Vector of unique stopping times. 
+  int n_times_; ///< Number of unique time intervals.
+  
+  /** 
+   * The constructor.
+   * Instantiates a @c time_intervals object. 
+   */    
+  time_intervals(Rcpp::List R_object){
+    // Time intervals
+    if (!hesim::is_null(R_object, "time_intervals")){
+      Rcpp::DataFrame time_intervals = Rcpp::as<Rcpp::DataFrame>(R_object["time_intervals"]);
+      time_start_ = Rcpp::as<std::vector<double> >(time_intervals["time_start"]); 
+      time_stop_ = Rcpp::as<std::vector<double> >(time_intervals["time_stop"]); 
+    } else{
+      time_start_.push_back(0); // A single value equal to 0.
+      time_stop_.push_back(INFINITY); // A single value equal to infinity.
+    }
+    
+    // Number of time intervals
+    if (!hesim::is_null(R_object, "n_times")){
+      n_times_ = R_object["n_times"];
+    } else{
+      n_times_ = 1;
+    }    
+  }
+};
+
 /***************************************************************************//** 
  * Observation index
  * A class for obtaining the row index of a specfic observation contained
@@ -188,7 +221,7 @@ public:
   
   /** 
    * The constructor.
-   * Instantiates an input data object. 
+   * Instantiates an @c obs_index object. 
    */  
   obs_index(Rcpp::List R_object){
     // Size of each dimension

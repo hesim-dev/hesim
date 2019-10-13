@@ -117,74 +117,6 @@ PsmCurves <- R6::R6Class("PsmCurves",
 # Manual documentation in Psm.Rd
 #' @export
 Psm <- R6::R6Class("Psm",
-  private = list(
-    
-    sim_wlos = function(dr, type){
-      if(is.null(self$stateprobs_)){
-        stop("You must first simulate health state probabilities using '$sim_stateprobs'.",
-             call. = FALSE)
-      }
-      check_dr(dr)
-      
-      # Time varying state values are not currently supported
-      if (type == "qalys"){
-        if (!is.null(get_id_object(self$utility_model)$time_intervals)){
-          stop("Time varying utilities are not currently supported with PSMs.")
-        }
-      } else{
-          for (i in 1:length(self$cost_models)){
-            if (!is.null(get_id_object(self$cost_models[[i]])$time_intervals)){
-              stop("Time varying costs are not currently supported with PSMs.")
-            } 
-          }
-      }
-      
-      statvalmods <- switch(type,
-                           costs = self$cost_models,
-                           qalys = list(self$utility_model))
-      
-      statvalmods_name <- switch(type,
-                                costs = "cost_models",
-                                qalys = "utility_model")
-      
-      # Check number of samples
-      expected_samples <- max(self$stateprobs_$sample)
-      for (i in 1:length(statvalmods)){
-        if (statvalmods[[i]]$params$n_samples != expected_samples){
-          msg <- paste0("Number of samples in '", statvalmods_name, "' must equal to ",
-                        " the number of samples in 'survival_models', which is ",
-                         expected_samples)
-          stop(msg, call. = FALSE)
-        }
-      }
-      
-      # Check number of states
-      for (i in 1:length(statvalmods)){
-        if(self$n_states != get_id_object(statvalmods[[i]])$n_states + 1){
-          msg <- paste0("The number of survival models must equal the number of states in '",
-                        statvalmods_name, "' - 1.")
-          stop(msg, call. = FALSE)
-        }
-      } # loop over models
-      
-      stateprobs <- self$stateprobs_[state_id != self$n_states] 
-      
-      if (type == "costs"){
-        if (is.null(names(self$cost_models))){
-          categories <- paste0("Type ", seq(1, length(self$cost_models)))
-        } else{
-            categories <- names(self$cost_models)
-        } # end if/else names for cost models
-      } else{
-        categories <- "qalys"
-      } # end if/else costs vs. qalys
-      
-      res <- data.table(C_psm_sim_wlos(self, stateprobs, dr, type, categories))
-      res[, sample := sample + 1]
-      return(res[])
-    } # end sim_wlos()
-  ), # end private
-                        
   public = list(
     survival_models = NULL,
     utility_model = NULL,
@@ -238,27 +170,18 @@ Psm <- R6::R6Class("Psm",
       stateprobs[, state_id := state_id + 1]
       stateprobs[, sample := sample + 1]
       self$stateprobs_ <- stateprobs[]
+      setattr(self$stateprobs_, "class", 
+              c("stateprobs", "data.table", "data.frame"))
       invisible(self)
     },
     
-    sim_qalys = function(dr = .03){
-      self$utility_model$check()
-      qalys <- private$sim_wlos(dr, type = "qalys")
-      setnames(qalys, "value", "qalys")
-      self$qalys_ <- qalys
+    sim_qalys = function(dr = .03, method = c("trapz", "riemann_left", "riemann_right")){
+      self$qalys_ <- sim_qalys(self$stateprobs_, self$utility_model, dr, method)
       invisible(self)
     },
     
-    sim_costs = function(dr = .03){
-      if(!is.list(self$cost_models)){
-        stop("'cost_models' must be a list", call. = FALSE)
-      }
-      for (i in 1:length(self$cost_models)){
-        self$cost_models[[i]]$check()
-      }
-      costs <- private$sim_wlos(dr, type = "costs")
-      setnames(costs, "value", "costs")
-      self$costs_ <- costs
+    sim_costs = function(dr = .03, method = c("trapz", "riemann_left", "riemann_right")){
+      self$costs_ <- sim_costs(self$stateprobs_, self$cost_models, dr, method)
       invisible(self)
     },
     

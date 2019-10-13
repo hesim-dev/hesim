@@ -82,6 +82,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -89,6 +92,11 @@
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -201,9 +209,15 @@
       <tr>
         
         <td>
-          <p><code><a href="params_mean.html">params_mean()</a></code> </p>
+          <p><code><a href="params.html">params</a></code> </p>
         </td>
-        <td><p>Parameters of a mean model</p></td>
+        <td><p>Parameter object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="create_params.html">create_params()</a></code> </p>
+        </td>
+        <td><p>Create a parameter object from a fitted model</p></td>
       </tr><tr>
         
         <td>
@@ -225,9 +239,21 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="create_params.html">create_params()</a></code> </p>
+          <p><code><a href="tparams.html">tparams</a></code> </p>
         </td>
-        <td><p>Create a parameter object from a fitted model</p></td>
+        <td><p>Transformed parameter object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tparams_mean.html">tparams_mean()</a></code> </p>
+        </td>
+        <td><p>Predicted means</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tparams_transprobs.html">tparams_transprobs()</a></code> </p>
+        </td>
+        <td><p>Transition probabilities</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -297,21 +323,15 @@
       <tr>
         
         <td>
-          <p><code><a href="transprob_tbl.html">transprob_tbl()</a></code> </p>
+          <p><code><a href="CohortDtstmTrans.html">CohortDtstmTrans</a></code> </p>
         </td>
-        <td><p>Table to store transition probabilities</p></td>
+        <td><p>Transitions for a cohort discrete time state transition model</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="create_CohortDtstmTrans.html">create_CohortDtstmTrans()</a></code> </p>
         </td>
         <td><p>Create <code>CohortDtstmTrans</code> object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="CohortDtstmTrans.html">CohortDtstmTrans</a></code> </p>
-        </td>
-        <td><p>Transitions for a cohort discrete time state transition model</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -368,6 +388,26 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
+          <h2 id="section-simulation-output" class="hasAnchor"><a href="#section-simulation-output" class="anchor"></a>Simulation output</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="stateprobs.html">stateprobs</a></code> </p>
+        </td>
+        <td><p>State probability object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ce.html">ce</a></code> </p>
+        </td>
+        <td><p>A cost-effectiveness object</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
           <h2 id="section-summarize-outcomes" class="hasAnchor"><a href="#section-summarize-outcomes" class="anchor"></a>Summarize outcomes</h2>
           <p class="section-desc"></p>
         </th>
@@ -393,12 +433,6 @@
         </th>
       </tr>
       <tr>
-        
-        <td>
-          <p><code><a href="ce.html">ce</a></code> </p>
-        </td>
-        <td><p>A cost-effectiveness object</p></td>
-      </tr><tr>
         
         <td>
           <p><code><a href="icea.html">icea()</a></code> <code><a href="icea.html">icea_pw()</a></code> </p>
@@ -446,6 +480,7 @@
       <li><a href="#section-discrete-time-state-transition-models">Discrete time state transition models</a></li>
       <li><a href="#section-partitioned-survival-model">Partitioned survival model</a></li>
       <li><a href="#section-continuous-time-state-transition-models">Continuous time state transition models</a></li>
+      <li><a href="#section-simulation-output">Simulation output</a></li>
       <li><a href="#section-summarize-outcomes">Summarize outcomes</a></li>
       <li><a href="#section-cost-effectiveness-analysis">Cost-effectiveness analysis</a></li>
       <li><a href="#section-datasets">Datasets</a></li>

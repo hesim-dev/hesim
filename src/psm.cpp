@@ -293,36 +293,5 @@ Rcpp::List C_psm_sim_stateprobs(Rcpp::DataFrame R_psm_survival,
   
 }
 
-/***************************************************************************//** 
- * @ingroup psm
- * Simulate weighted length of stay from health state probabilities simulated
- * using a partitioned survival model.
- * This function is exported to @c R and used in @c Psm$sim_costs() and
- * @c Psm$sim_qalys(). 
- * @param R_psm An @c R object of class @c Psm
- * @param R_stateprobs State probabilities computed using an R object of class 
- * @c Psm. (This is needed in addition to @p R_psm because a modified copy of
- * @c Psm$stateprobs_ is passed to @c C++ and its more efficient to copy a single
- * data member than the entire class object.)
- * @param dr Discount rate.
- * @param type "costs" for costs; "qalys" for quality-adjusted life-years.
- * @param categories Categories with a given @p type. For QALYs, there is only one
- * category ("qalys"), but for costs this could consist of different cost categories
- * such as drug acquisition and administration costs, resource use costs, etc. 
- * @return An @c R data frame with columns equivalent to the data members in
- * hesim::wlos_out_out.
- ******************************************************************************/ 
-// [[Rcpp::export]]
-Rcpp::DataFrame C_psm_sim_wlos(Rcpp::Environment R_Psm, Rcpp::DataFrame R_stateprobs, 
-                              std::vector<double> dr, std::string type,
-                              std::vector<std::string> categories){
-  hesim::wlos wlos(R_Psm, type);
-  hesim::stateprobs_out stprobs(R_stateprobs);
-  std::vector<double> times = Rcpp::as<std::vector<double> > (R_Psm["t_"]);
-  hesim::wlos_out out = wlos(stprobs, times, dr, categories);
-  return out.create_R_data_frame();
-}
-
-
 
 

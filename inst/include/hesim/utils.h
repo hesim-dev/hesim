@@ -155,6 +155,27 @@ inline bool is_null(Rcpp::List L, const char * name){
   return  !L.containsElementNamed(name) || Rf_isNull(L[name]);
 }
 
+/**
+ * @ingroup general
+ * Maximum less than value.
+ * Return the maximum element in a sorted vector less than @p value. Note that
+ * the vector must be sorted from smallest to largest.
+ * @param first, last Forward iterators defining the range to examine 
+ * @param value The value that the maximum element must be less than.
+ * @return Iterator pointing to the maximum element in the vector less than
+ * @p value. 
+ */
+template <class ForwardIt, class T>
+inline ForwardIt max_lt(ForwardIt first, ForwardIt last, const T& value){
+  auto lb = lower_bound(first, last, value);
+  if (lb == first){
+    Rcpp::stop("There is no element in the vector less than 'value'");
+  } 
+  else{
+    return lb - 1;
+  }
+}
+
 } // end hesim namespace
 
 

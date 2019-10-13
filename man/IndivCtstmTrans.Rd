@@ -70,15 +70,7 @@ of clock-reset and clock-forward models. A clock-reset model is a semi-Markov mo
      \item \code{...}: Additional arguments to pass to \code{sim_disease}.
      }
      
-    Returns a \code{\link[data.table]{data.table}} with the following columns:
-    
-    \describe{
-    \item{sample}{A random sample from the PSA.}
-    \item{strategy_id}{The treatment strategy ID.}
-    \item{state_id}{The health state ID.}
-    \item{t}{The time at which a state probability is computed.}
-    \item{prob}{The probability of being in a given health state.}
-    }
+    Returns an object of class \code{\link{stateprobs}}.
   }  
 
     

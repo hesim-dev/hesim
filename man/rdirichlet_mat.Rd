@@ -4,15 +4,24 @@
 \alias{rdirichlet_mat}
 \title{Random generation for multiple Dirichlet distributions}
 \usage{
-rdirichlet_mat(n, alpha)
+rdirichlet_mat(n, alpha, output = c("array", "matrix", "data.frame",
+  "data.table"))
 }
 \arguments{
 \item{n}{Number of samples to draw.}
 
 \item{alpha}{A matrix where each row is a separate vector of shape parameters.}
+
+\item{output}{Whether output should be an array or a matrix.}
 }
 \value{
-An array of matrices where each row of each matrix is a sample from the Dirichlet distribution.
+If \code{output = "array"}, then an array of matrices is returned 
+where each row of each matrix is a sample from the Dirichlet distribution.
+If \code{output = "matrix"}, then a matrix is returned where each row contains
+all elements of the sampled matrix from the Dirichlet distribution ordered rowwise; 
+when \code{output = "data.frame"} or \code{output = "data.table"} the returned
+value is a \code{data.frame} or \code{data.table} in the same format as the
+matrix returned with \code{output = "matrix"}.
 }
 \description{
 Draw random samples from multiple Dirichlet distributions.

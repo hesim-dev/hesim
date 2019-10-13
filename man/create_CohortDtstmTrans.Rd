@@ -2,38 +2,16 @@
 % Please edit documentation in R/dtstm.R
 \name{create_CohortDtstmTrans}
 \alias{create_CohortDtstmTrans}
-\alias{create_CohortDtstmTrans.transprob_tbl}
 \title{Create \code{CohortDtstmTrans} object}
 \usage{
 create_CohortDtstmTrans(object, ...)
-
-\method{create_CohortDtstmTrans}{transprob_tbl}(object, n = 1000,
-  start_stateprobs = NULL, ...)
 }
 \arguments{
-\item{object}{An object of class "transprob_tbl".}
+\item{object}{An object of the appropriate class.}
 
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
-
-\item{n}{Number of random observations of the parameters to draw for the PSA 
-if the parameters have not previously been sampled. See "details".}
-
-\item{start_stateprobs}{Initial state probabilities. By default all patients
-are assumed to be in the first health state.}
-}
-\value{
-Returns an \code{\link{R6Class}} object of class \code{\link{CohortDtstmTrans}}.
+\item{...}{Further arguments passed to \code{CohortDtstmTrans$new()} in 
+\code{CohortDtstmTrans}.}
 }
 \description{
-\code{create_CohortDtstmTrans} creates an object of class
- \code{\link{CohortDtstmTrans}} from a \code{\link{transprob_tbl}}
- object.
-}
-\details{
-The argument \code{n} is not used if the option \code{dist = "custom"} 
- is used in \code{\link{transprob_tbl}} since the parameters have already be 
- drawn for the PSA.
-}
-\seealso{
-\code{\link{CohortDtstmTrans}}
+A generic function for creating an object of class \code{CohortDtstmTrans}.
 }

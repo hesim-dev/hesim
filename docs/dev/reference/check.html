@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Input validation for class objects — check.input_mats • hesim</title>
+<title>Input validation for class objects — check.id_attributes • hesim</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,7 +32,7 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Input validation for class objects — check.input_mats" />
+<meta property="og:title" content="Input validation for class objects — check.id_attributes" />
 
 <meta property="og:description" content="check is a generic function for validating the inputs of class objects." />
 <meta name="twitter:card" content="summary" />
@@ -85,6 +85,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -92,6 +95,11 @@
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -120,7 +128,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Input validation for class objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/input-data.R'><code>R/input-data.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/hesim_data.R'><code>R/hesim_data.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/input_mats.R'><code>R/input_mats.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, and 2 more</small>
     <div class="hidden name"><code>check.Rd</code></div>
     </div>
 
@@ -130,11 +138,14 @@
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for input_mats</span>
+    <pre class="usage"><span class='co'># S3 method for id_attributes</span>
 <span class='fu'>check</span>(<span class='no'>object</span>)
 
-<span class='co'># S3 method for params_mean</span>
+<span class='co'># S3 method for input_mats</span>
 <span class='fu'>check</span>(<span class='no'>object</span>)
+
+<span class='co'># S3 method for tparams_mean</span>
+<span class='fu'>check</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for params_lm</span>
 <span class='fu'>check</span>(<span class='no'>object</span>)
@@ -145,11 +156,14 @@
 <span class='co'># S3 method for params_surv</span>
 <span class='fu'>check</span>(<span class='no'>object</span>)
 
-<span class='co'># S3 method for params_joined_surv</span>
-<span class='fu'>check</span>(<span class='no'>object</span>, <span class='no'>inner_class</span>)
+<span class='co'># S3 method for tparams_transprobs</span>
+<span class='fu'>check</span>(<span class='no'>object</span>)
 
 <span class='co'># S3 method for params_surv_list</span>
 <span class='fu'>check</span>(<span class='no'>object</span>)
+
+<span class='co'># S3 method for params_joined_surv</span>
+<span class='fu'>check</span>(<span class='no'>object</span>, <span class='no'>inner_class</span>)
 
 <span class='co'># S3 method for params_joined_surv_list</span>
 <span class='fu'>check</span>(<span class='no'>object</span>, <span class='no'>inner_class</span>)
@@ -164,13 +178,13 @@
       <td><p>object to check.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods.</p></td>
+    </tr>
+    <tr>
       <th>inner_class</th>
       <td><p>When checking a list of objects, the class of elements within
 the inner most list.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     </table>
     

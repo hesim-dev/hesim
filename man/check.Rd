@@ -27,7 +27,7 @@
 
 \method{check}{params_surv}(object)
 
-\method{check}{tparams_transprobs}(object, ...)
+\method{check}{tparams_transprobs}(object)
 
 \method{check}{params_surv_list}(object)
 

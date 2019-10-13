@@ -31,12 +31,11 @@ by the argument \code{t} in \code{sim_curves}.}
 
 \item{\code{survival_}}{Survival curves generated using \code{sim_curves}.}
 
-\item{\code{stateprobs_}}{Health state probabilities as a function of time generated
-using \code{sim_stateprobs}.}
+\item{\code{stateprobs_}}{An object of class \code{\link{stateprobs}}.}
 
-\item{\code{costs_}}{Total (discounted) costs by type generated using \code{sim_costs}. }
+\item{\code{costs_}}{An object of class \code{costs}.}
 
-\item{\code{qalys_}}{Total (discounted) quality-adjusted life-years (QALYs) generated using \code{sim_qalys}.}
+\item{\code{qalys_}}{An object of class \code{qalys}.}
 
 }}
 
@@ -64,22 +63,17 @@ using \code{sim_stateprobs}.}
     from \code{sim_curves}. 
   }
   
-    \item{\code{sim_qalys(dr = .03)}}{
-    Simulate (discounted) QALYs over the times selected in \code{t} associated with each health state based on the state probabilities calculated using \code{sim_stateprobs}. See "Details".
-    
-      \itemize{
-     \item \code{dr}: Discount rate to apply to QALYs. May be a vector in which case QALYs are calculated for each element in \code{dr}.
-     }
-  }
+  \item{\code{sim_qalys(dr = .03, method = c("trapz", "riemann_left", "riemann_right"),
+                      lys = TRUE}}{
+Simulate QALYS using \code{\link{sim_qalys}}.
 
-  
-   \item{\code{sim_costs(dr = .03)}}{
-    Simulate (discounted) costs for each cost type over the times selected in \code{t} associated with each health state based on the state probabilities calculated using \code{sim_stateprobs}. See "Details".
-    
-      \itemize{
-     \item \code{dr}: Discount rate to apply to costs. May be a vector in which case costs for each cost type are     calculated for each element in \code{dr}.
-       }
-  },
+} 
+
+\item{\code{sim_costs(dr = .03, method = c("trapz", "riemann_left", "riemann_right")}}{
+
+Simulate costs using \code{\link{sim_costs}}.
+
+}
   
   \item{\code{summarize()}}{
     Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
@@ -93,18 +87,6 @@ using \code{sim_stateprobs}.}
 
 }
 }
-
-\section{Details}{
-Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state. 
-Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
-Mathematically, discounted costs and QALYs in health state \eqn{s} are calculated as,
-
-\deqn{\int_0^T w_h e^{-rt} P_h(t) dt },
-
-where for health state \eqn{h} and time {t}, \eqn{w_h} is the predicted cost or QALY weight, \eqn{r} is the discount rate, and \eqn{P_h(t)} is the probability of being in a given health state. The integral is calculated numerically using the composite trapezoid rule from the points in \code{t_}.
-
-}
-
 
 \examples{
 library("flexsurv")

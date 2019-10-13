@@ -35,9 +35,7 @@ Simulate outcomes from an individual-level continuous time state transition mode
 
 }
 
-\item{\code{stateprobs_}}{A \code{\link[data.table]{data.table}} of health state probabilities as a function of time simulated using \code{sim_stateprobs}. See the description of the output of \code{sim_stateprobs} in \code{\link{IndivCtstmTrans}}.
-
-}
+\item{\code{stateprobs_}}{An object of class \code{\link{stateprobs}}.}
 
 \item{\code{qalys_}}{A \code{\link[data.table]{data.table}} of quality-adjusted life-years (QALYs) simulated using \code{sim_qalys}. Columns are:
 

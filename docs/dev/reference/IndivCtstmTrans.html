@@ -85,6 +85,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -92,6 +95,11 @@
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -140,8 +148,8 @@
 
     
     <dl class='dl-horizontal'>
-<dt><code>input_mats</code></dt><dd><p>Input matrices used to simulate health state transitions by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient. Must be an object of class <code><a href='input_mats.html'>input_mats</a></code>. If <code>params</code> is a list of models, then <code>input_mats</code> must contain a unique row for each treatment strategy and patient; if <code>params</code> is a joint model, then <code>input_mats</code> must contain a unique row for each treatment strategy, patient, and transition.</p></dd>
-    <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_surv.html'>params_surv</a></code> or <code><a href='params_surv_list.html'>params_surv_list</a></code>.</p></dd>
+<dt><code>params</code></dt><dd><p>An object of class <code><a href='params_surv.html'>params_surv</a></code> or <code><a href='params_surv_list.html'>params_surv_list</a></code>.</p></dd>
+    <dt><code>input_mats</code></dt><dd><p>Input matrices used to simulate health state transitions by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient. Must be an object of class <code><a href='input_mats.html'>input_mats</a></code>. If <code>params</code> is a list of models, then <code>input_mats</code> must contain a unique row for each treatment strategy and patient; if <code>params</code> is a joint model, then <code>input_mats</code> must contain a unique row for each treatment strategy, patient, and transition.</p></dd>
     <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions in a multi-state model in the format from the <a href='https://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package. See the documentation for the argument "trans" in <a href='https://www.rdocumentation.org/packages/mstate/topics/msprep'>msprep</a>.</p></dd>
     <dt><code>start_state</code></dt><dd><p>A scalar or vector denoting the starting health state. Default is the first health state. If a vector, must be equal to the number of simulated patients.</p></dd>
     <dt><code>clock</code></dt><dd><p>"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
@@ -155,7 +163,7 @@ of clock-reset and clock-forward models. A clock-reset model is a semi-Markov mo
 
     
     <dl class='dl-horizontal'>
-    <dt><code>new(input_mats, params, trans_mat, start_state = 1,
+    <dt><code>new(params, input_mats, trans_mat, start_state = 1,
                 start_age = 38, death_state = NULL,
                 clock = c("reset", "forward", "mix"),
                 reset_states = NULL))</code></dt><dd><p>Constructor for the class.</p></dd>
@@ -172,14 +180,7 @@ of clock-reset and clock-forward models. A clock-reset model is a semi-Markov mo
 <li><p><code>t</code>: A numeric vector of times.</p></li>
 <li><p><code>...</code>: Additional arguments to pass to <code>sim_disease</code>.</p></li>
 </ul>
-    Returns a <code><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> with the following columns:
-    <dl class='dl-horizontal'>
-    <dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
-    <dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>
-    <dt>state_id</dt><dd><p>The health state ID.</p></dd>
-    <dt>t</dt><dd><p>The time at which a state probability is computed.</p></dd>
-    <dt>prob</dt><dd><p>The probability of being in a given health state.</p></dd>
-    </dl></p></dd>
+    Returns an object of class <code><a href='stateprobs.html'>stateprobs</a></code>.</p></dd>
     <dt><code><a href='check.html'>check()</a></code></dt><dd><p>Input validation for class. Checks that fields are the correct type.</p></dd>
     </dl>
     
@@ -218,36 +219,36 @@ of clock-reset and clock-forward models. A clock-reset model is a semi-Markov mo
                                     <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                     <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t     hazard
-#&gt; 1:     1      1           1          1 1 0.16540081
-#&gt; 2:     1      1           1          1 2 0.16540081
-#&gt; 3:     1      1           1          1 3 0.16540081
-#&gt; 4:     2      1           1          1 1 0.03399796
-#&gt; 5:     2      1           1          1 2 0.03399796
-#&gt; 6:     2      1           1          1 3 0.03399796</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
-#&gt; 1:     1      1           1          1 1 0.16540081
-#&gt; 2:     1      1           1          1 2 0.33080162
-#&gt; 3:     1      1           1          1 3 0.49620243
-#&gt; 4:     2      1           1          1 1 0.03399796
-#&gt; 5:     2      1           1          1 2 0.06799591
-#&gt; 6:     2      1           1          1 3 0.10199387</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
-#&gt;  1:      1           1        1 5 1.0000000
+#&gt; 1:     1      1           1          1 1 0.21087494
+#&gt; 2:     1      1           1          1 2 0.21087494
+#&gt; 3:     1      1           1          1 3 0.21087494
+#&gt; 4:     2      1           1          1 1 0.05853501
+#&gt; 5:     2      1           1          1 2 0.05853501
+#&gt; 6:     2      1           1          1 3 0.05853501</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id t  cumhazard
+#&gt; 1:     1      1           1          1 1 0.21087494
+#&gt; 2:     1      1           1          1 2 0.42174988
+#&gt; 3:     1      1           1          1 3 0.63262482
+#&gt; 4:     2      1           1          1 1 0.05853501
+#&gt; 5:     2      1           1          1 2 0.11707001
+#&gt; 6:     2      1           1          1 3 0.17560502</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id state_id t      prob
+#&gt;  1:      1           1        1 5 0.6666667
 #&gt;  2:      1           1        2 5 0.0000000
-#&gt;  3:      1           1        3 5 0.0000000
-#&gt;  4:      1           2        1 5 0.0000000
+#&gt;  3:      1           1        3 5 0.3333333
+#&gt;  4:      1           2        1 5 0.3333333
 #&gt;  5:      1           2        2 5 0.3333333
-#&gt;  6:      1           2        3 5 0.6666667
-#&gt;  7:      1           3        1 5 0.6666667
-#&gt;  8:      1           3        2 5 0.3333333
-#&gt;  9:      1           3        3 5 0.0000000
-#&gt; 10:      2           1        1 5 0.3333333
-#&gt; 11:      2           1        2 5 0.0000000
+#&gt;  6:      1           2        3 5 0.3333333
+#&gt;  7:      1           3        1 5 0.3333333
+#&gt;  8:      1           3        2 5 0.0000000
+#&gt;  9:      1           3        3 5 0.6666667
+#&gt; 10:      2           1        1 5 0.0000000
+#&gt; 11:      2           1        2 5 0.3333333
 #&gt; 12:      2           1        3 5 0.6666667
-#&gt; 13:      2           2        1 5 0.0000000
-#&gt; 14:      2           2        2 5 0.3333333
+#&gt; 13:      2           2        1 5 0.3333333
+#&gt; 14:      2           2        2 5 0.0000000
 #&gt; 15:      2           2        3 5 0.6666667
-#&gt; 16:      2           3        1 5 0.0000000
-#&gt; 17:      2           3        2 5 1.0000000
-#&gt; 18:      2           3        3 5 0.0000000</div></pre>
+#&gt; 16:      2           3        1 5 0.6666667
+#&gt; 17:      2           3        2 5 0.0000000
+#&gt; 18:      2           3        3 5 0.3333333</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

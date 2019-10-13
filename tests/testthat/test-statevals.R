@@ -2,7 +2,7 @@ context("statevals.R unit tests")
 library("data.table")
 rm(list = ls())
 
-# Simulation
+# Simulation data
 strategies <- data.table(strategy_id = c(1, 2))
 n_strategies <- nrow(strategies)
 patients <- data.table(patient_id = seq(1, 3),
@@ -18,8 +18,7 @@ hesim_dat <- hesim_data(strategies = strategies,
                         states = states)
 N <- 5
 
-# State values -----------------------------------------------------------------
-# stateval_tbl
+# stateval_tbl -----------------------------------------------------------------
 test_that("stateval_tbl", {
   n_grps <- 2
   strategy_id <- rep(strategies$strategy_id, each = n_grps * n_states)
@@ -188,6 +187,7 @@ test_that("stateval_tbl", {
                                 dist = "unif", hesim_data = hesim_dat))   
 })
 
+# StateVals$sim ----------------------------------------------------------------
 # Linear model
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
@@ -219,4 +219,97 @@ test_that("StateVals$sim", {
                       patient_id == 1 & state_id == 3 & time == 5]$value,
                tbl[state_id == 3 & time_start == 4, est])
 })
+
+# sim_wlos ---------------------------------------------------------------------
+n_samples <- 5
+
+# Helper function
+R_sim_wlos <- function(prob, stvals, times, dr = .03){
+  yvals <- exp(-dr * times) * stvals * prob
+  return(pracma::trapz(x = times, y = yvals))
+}
+
+wlos_test <- function(econmod, s, k, i, h, dr = .03){
+  costs1 <- econmod$costs_[sample == s & strategy_id == k & 
+                             patient_id == i & state_id == h]
+  stprobs1 <- econmod$stateprobs_[sample == s & strategy_id == k & 
+                                  patient_id == i & state_id == h]
+  sv_params <- econmod$cost_models[[1]]$params
+  sv_obs <- which(sv_params$strategy_id == k & sv_params$patient_id == i &
+                    sv_params$state_id == h)
+  sv <- sv_params$value[sv_obs, s]
+  if (!is.null(sv_params$time_intervals)){
+    ti <- findInterval(stprobs1$t, sv_params$time_intervals$time_stop) 
+    sv <- rep(sv, table(ti))
+  } 
+  expect_equal(costs1$costs, 
+               R_sim_wlos(stprobs1$prob, sv, stprobs1$t, dr),
+               tolerance = .001, scale = 1)
+}
+
+# Simulate state probabilities
+alpha1 <- rbind(c(200, 400, 600, 800),
+                 c(0, 500, 200, 300),
+                 c(0, 0, 500, 500),
+                 c(0, 0, 0, 1))
+alpha2 <- rbind(c(400, 400, 400, 800),
+                c(0, 600, 100, 300),
+                c(0, 0, 700, 300),
+                c(0, 0, 0, 1))
+pmat <- data.table(sample = rep(1:n_samples, each = 2),
+                   strategy_id = rep(1:2, times = 5),
+                   patient_id = 1,
+                   rdirichlet_mat(n = 5, alpha = rbind(alpha1, alpha2),
+                                  output = "data.table"))
+transmod <- CohortDtstmTrans$new(params = tparams_transprobs(pmat))
+econmod <- CohortDtstm$new(trans_model = transmod)
+econmod$sim_stateprobs(n_cycles = 5)
+
+# Simulate costs
+hesim_dat <- list(strategies = data.table(strategy_id = 1:2),
+                  patients = data.table(patient_id = 1),
+                  states = data.table(state_id = 1:3))
+stval_tbl <- stateval_tbl(data.table(state_id = 1:3,
+                                     mean = c(1701, 1774, 6948),
+                                     se = c(1701, 1774, 6948)),
+                          dist = "gamma",
+                          hesim_data = hesim_dat)
+econmod$cost_models <- list(create_StateVals(stval_tbl, n = n_samples))
+econmod$sim_costs(dr = .03)
+
+# Tests
+wlos_test(econmod, s = 1, k = 1, i = 1, h = 1, dr = .03)
+wlos_test(econmod, s = 3, k = 2, i = 1, h = 1, dr = .03)
+
+## Cannot have same discount rate twice
+expect_error(econmod$sim_costs(dr = c(.05, .05)))
+
+## Must first simulate stateprobs_
+econmod$stateprobs_ <- NULL
+expect_error(econmod$sim_costs())
+
+##  Incorrect number of PSA samples
+econmod$sim_stateprobs(n_cycles = 5)
+econmod$cost_models[[2]] <- create_StateVals(stval_tbl, n = n_samples - 1)
+expect_error(econmod$sim_costs())
+econmod$cost_models[[2]] <- NULL
+
+## Incorrect number of states
+stval_tbl2 <- stateval_tbl(data.table(state_id = 1:4,
+                                      est = rep(0, 4)),
+                           dist = "fixed",
+                           hesim_data = hesim_dat)
+econmod$cost_models <- list(create_StateVals(stval_tbl2, n = n_samples))
+expect_error(econmod$sim_costs())
+
+## Time varying state values
+stval_tbl_tv <- stateval_tbl(data.table(strategy_id = rep(hesim_dat$strategies$strategy_id,
+                                                          each = 2),
+                                        time_start = c(0, 2, 0, 2),
+                                        est = c(1000, 2, 3000, 10)),
+                             dist = "fixed",
+                             hesim_data = hesim_dat)
+econmod$cost_models <- list(create_StateVals(stval_tbl_tv, n = n_samples))
+econmod$sim_costs(dr = .03)
+wlos_test(econmod, s = 2, k = 2, i = 1, h = 2, dr = .03)
 

@@ -41,6 +41,7 @@ Suggests:
     numDeriv,
     pracma,
     rmarkdown,
+    rstan,
     scales,
     testthat,
     truncnorm

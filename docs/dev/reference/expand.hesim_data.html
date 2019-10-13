@@ -88,6 +88,9 @@ ID variables from the tables specified with the by argument).
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -95,6 +98,11 @@ ID variables from the tables specified with the by argument).
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -123,7 +131,7 @@ ID variables from the tables specified with the by argument).
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Expand hesim_data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/input-data.R'><code>R/input-data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/hesim_data.R'><code>R/hesim_data.R</code></a></small>
     <div class="hidden name"><code>expand.hesim_data.Rd</code></div>
     </div>
 
@@ -162,9 +170,9 @@ attribute containing the names of the ID variables in the data table.</p>
     <p>This function is similar to <code><a href='https://www.rdocumentation.org/packages/base/topics/expand.grid'>expand.grid</a></code>, but works for data frames or data tables. 
 Specifically, it creates a <code>data.table</code> from all combinations of the supplied tables in <code>object</code>. 
 The supplied tables are determined using the <code>by</code> argument. The resulting dataset is sorted by 
-prioritizing ID variables as follows: (i) <code>strategy_id</code>, (ii) <code>line</code>, (iii) <code>patient_id</code>,
-(iv) the health-related ID variable (either <code>state_id</code> or <code>transition_id</code>), and
-(v) the time interval (i.e., <code>time_id</code>).</p>
+prioritizing ID variables as follows: (i) <code>strategy_id</code>, (ii) <code>patient_id</code>,
+(iii) the health-related ID variable (either <code>state_id</code> or <code>transition_id</code>), and
+(iv) the time interval (i.e., <code>time_id</code>).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

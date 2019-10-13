@@ -31,3 +31,12 @@ test_that("seq", {
   expect_error(hesim:::C_test_seq(0, -3, .1))
   expect_error(hesim:::C_test_seq(0, 3, -.1))
 })
+
+# Test c++ function max_lt -----------------------------------------------------
+test_that("max_lt", {
+  expect_equal(hesim:::C_test_max_lt(seq(0, 10), 5), 4)
+  expect_equal(hesim:::C_test_max_lt(seq(0, 10), 5.1), 5)
+  expect_equal(hesim:::C_test_max_lt(seq(0, 10), Inf), 10)
+  
+  expect_error(hesim:::C_test_max_lt(seq(5, 10), 5))
+})

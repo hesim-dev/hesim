@@ -20,11 +20,14 @@ reference:
       - rdirichlet_mat
   - title: "Parameters"
     contents:
-      - params_mean
+      - params
+      - create_params
       - params_lm
       - params_surv
       - params_surv_list
-      - create_params
+      - tparams
+      - tparams_mean
+      - tparams_transprobs
   - title: "Input data"
     contents:
       - hesim_data
@@ -38,9 +41,8 @@ reference:
       - create_StateVals
   - title: "Discrete time state transition models"
     contents:
-      - transprob_tbl
-      - create_CohortDtstmTrans
       - CohortDtstmTrans
+      - create_CohortDtstmTrans
   - title: "Partitioned survival model"
     contents:
       - Psm
@@ -51,13 +53,16 @@ reference:
       - IndivCtstmTrans
       - create_IndivCtstmTrans
       - IndivCtstm
+  - title: "Simulation output"
+    contents:
+      - stateprobs
+      - ce
   - title: "Summarize outcomes"
     contents:
       - incr_effect
       - surv_quantile
   - title: "Cost-effectiveness analysis"
     contents:
-      - ce
       - icea
       - icea_pw
       - icer_tbl
@@ -73,6 +78,7 @@ articles:
   - psm
   - ctstm
   - icea
+  - dtstm-hiv
 
 navbar:
   title: hesim
@@ -83,11 +89,17 @@ navbar:
     menu:
       - text: "Introduction"
         href: articles/intro.html
+      - text: "Discrete time state transition models"
+        href: articles/dtstm.html
       - text: "Partitioned survival models"
         href: articles/psm.html
       - text: "Continuous time state transition models"
         href: articles/ctstm.html
       - text: "Individualized cost-effectiveness analysis"
         href: articles/icea.html
+      - text: "---"
+      - text: "Examples"
+      - text: "Discrete time state transition model for HIV"
+        href: articles/dtstm-hiv.html
   - text: News
     href: news/index.html

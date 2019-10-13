@@ -69,12 +69,12 @@ C_psm_sim_stateprobs <- function(R_psm_survival, n_samples, n_strategies, n_pati
     .Call('_hesim_C_psm_sim_stateprobs', PACKAGE = 'hesim', R_psm_survival, n_samples, n_strategies, n_patients, n_states, n_times)
 }
 
-C_psm_sim_wlos <- function(R_Psm, R_stateprobs, dr, type, categories) {
-    .Call('_hesim_C_psm_sim_wlos', PACKAGE = 'hesim', R_Psm, R_stateprobs, dr, type, categories)
-}
-
 C_statevals_sim <- function(R_StateVals, times, type) {
     .Call('_hesim_C_statevals_sim', PACKAGE = 'hesim', R_StateVals, times, type)
+}
+
+C_sim_wlos <- function(R_stateprobs, R_statevals, dr, categories, times, method = "trapz") {
+    .Call('_hesim_C_sim_wlos', PACKAGE = 'hesim', R_stateprobs, R_statevals, dr, categories, times, method)
 }
 
 C_test_trapz <- function(x, y) {
@@ -159,6 +159,10 @@ C_test_pv <- function(z, r, t1, t2) {
 
 C_test_seq <- function(from, to, by) {
     .Call('_hesim_C_test_seq', PACKAGE = 'hesim', from, to, by)
+}
+
+C_test_max_lt <- function(v, value) {
+    .Call('_hesim_C_test_max_lt', PACKAGE = 'hesim', v, value)
 }
 
 test_zeroin <- function() {

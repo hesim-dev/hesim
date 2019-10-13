@@ -34,7 +34,7 @@
   
 <meta property="og:title" content="Model for state values — StateVals" />
 
-<meta property="og:description" content="Simulate values (i.e., utility or costs) associated with health states in a partitioned survival or state transition model." />
+<meta property="og:description" content="Simulate values (i.e., utility or costs) associated with health states in a state transition or partitioned survival model." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -85,6 +85,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -92,6 +95,11 @@
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -126,7 +134,7 @@
 
     <div class="ref-description">
     
-    <p>Simulate values (i.e., utility or costs) associated with health states in a partitioned survival or state transition model.</p>
+    <p>Simulate values (i.e., utility or costs) associated with health states in a state transition or partitioned survival model.</p>
     
     </div>
 
@@ -140,18 +148,18 @@
 
     
     <p></p><dl class='dl-horizontal'>
+  <dt><code>params</code></dt><dd><p>Parameters for simulating state values. Currently supports objects of class <code><a href='tparams_mean.html'>tparams_mean</a></code> or <code><a href='params_lm.html'>params_lm</a></code>.</p></dd>
     <dt><code>input_mats</code></dt><dd><p>Input matrices used to simulate state values by strategy, patient, and health state. Must be 
   an object of class <code><a href='input_mats.html'>input_mats</a></code> where each row in the matrix "X" is a unique strategy, patient, and
   health state. "X" must be sorted by strategy, patient, and health state.</p></dd>
-    <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_lm.html'>params_lm</a></code>, which contains the parameters for simulating
-  state values.</p></dd>
+    <dt><code>time_reset</code></dt><dd><p>If FALSE then time intervals are based on time since the start of the simulation. If TRUE, then time intervals reset each time a patient enters a new health state. This is relevant if, for example, costs vary over time within health states.</p></dd>
     </dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
     <dl class='dl-horizontal'>
-    <dt><code>new(input_mats, params)</code></dt><dd><p>Constructor for the class.</p></dd>
+    <dt><code>new(params, input_mats = NULL, time_reset = FALSE)</code></dt><dd><p>Constructor for the class.</p></dd>
     <dt><code>sim(t, type = c("predict", "random"))</code></dt><dd><p>Simulate state values with either predicted means or random samples by treatment strategy, patient, and health state.
     <ul>
 <li><p><code>t</code>: A numeric vector of times. The first element must be 0.</p></li>

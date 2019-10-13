@@ -85,6 +85,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -92,6 +95,11 @@
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -151,10 +159,9 @@ different cost category.</p></dd>
     <dt><code>t_</code></dt><dd><p>A numeric vector of times at which survival curves were predicted. Determined
 by the argument <code>t</code> in <code>sim_curves</code>.</p></dd>
     <dt><code>survival_</code></dt><dd><p>Survival curves generated using <code>sim_curves</code>.</p></dd>
-    <dt><code>stateprobs_</code></dt><dd><p>Health state probabilities as a function of time generated
-using <code>sim_stateprobs</code>.</p></dd>
-    <dt><code>costs_</code></dt><dd><p>Total (discounted) costs by type generated using <code>sim_costs</code>.</p></dd>
-    <dt><code>qalys_</code></dt><dd><p>Total (discounted) quality-adjusted life-years (QALYs) generated using <code>sim_qalys</code>.</p></dd>
+    <dt><code>stateprobs_</code></dt><dd><p>An object of class <code><a href='stateprobs.html'>stateprobs</a></code>.</p></dd>
+    <dt><code>costs_</code></dt><dd><p>An object of class <code>costs</code>.</p></dd>
+    <dt><code>qalys_</code></dt><dd><p>An object of class <code>qalys</code>.</p></dd>
     </dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -170,26 +177,13 @@ using <code>sim_stateprobs</code>.</p></dd>
 </ul></p></dd>
     <dt><code>sim_stateprobs()</code></dt><dd><p>Simulate the probability of being in each of N health states using the survival curves generated 
     from <code>sim_curves</code>.</p></dd>
-    <dt><code>sim_qalys(dr = .03)</code></dt><dd><p>Simulate (discounted) QALYs over the times selected in <code>t</code> associated with each health state based on the state probabilities calculated using <code>sim_stateprobs</code>. See "Details".
-    <ul>
-<li><p><code>dr</code>: Discount rate to apply to QALYs. May be a vector in which case QALYs are calculated for each element in <code>dr</code>.</p></li>
-</ul></p></dd>
-    <dt><code>sim_costs(dr = .03)</code></dt><dd><p>Simulate (discounted) costs for each cost type over the times selected in <code>t</code> associated with each health state based on the state probabilities calculated using <code>sim_stateprobs</code>. See "Details".
-    <ul>
-<li><p><code>dr</code>: Discount rate to apply to costs. May be a vector in which case costs for each cost type are     calculated for each element in <code>dr</code>.</p></li>
-</ul></p></dd>,
+    <dt><code>sim_qalys(dr = .03, method = c("trapz", "riemann_left", "riemann_right"),
+                      lys = TRUE</code></dt><dd><p>Simulate QALYS using <code><a href='sim_wlos.html'>sim_qalys</a></code>.</p></dd>
+    <dt><code>sim_costs(dr = .03, method = c("trapz", "riemann_left", "riemann_right")</code></dt><dd><p>Simulate costs using <code><a href='sim_wlos.html'>sim_costs</a></code>.</p></dd>
     <dt><code>summarize()</code></dt><dd><p>Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
     See <code><a href='summarize_ce.html'>summarize_ce</a></code>.</p></dd>
     <dt><code><a href='check.html'>check()</a></code></dt><dd><p>Input validation for class. Checks that fields are the correct type.</p></dd>
     </dl>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state. 
-Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
-Mathematically, discounted costs and QALYs in health state \(s\) are calculated as,</p>
-<p>$$\int_0^T w_h e^{-rt} P_h(t) dt $$,</p>
-<p>where for health state \(h\) and time t, \(w_h\) is the predicted cost or QALY weight, \(r\) is the discount rate, and \(P_h(t)\) is the probability of being in a given health state. The integral is calculated numerically using the composite trapezoid rule from the points in <code>t_</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -244,14 +238,14 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
                <span class='kw'>cost_models</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>medical</span> <span class='kw'>=</span> <span class='no'>psm_costs_medical</span>))
 <span class='no'>psm</span>$<span class='fu'>sim_survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>.05</span>))
 <span class='no'>psm</span>$<span class='fu'>sim_stateprobs</span>()
-<span class='no'>psm</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
+<span class='no'>psm</span>$<span class='fu'><a href='sim_wlos.html'>sim_costs</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category    costs
 #&gt; 1:      1           1          1        1 0.03  medical 22926.58
 #&gt; 2:      1           1          1        2 0.03  medical 13773.33
 #&gt; 3:      1           1          1        3 0.03  medical 15038.67
 #&gt; 4:      1           1          2        1 0.03  medical 21886.43
 #&gt; 5:      1           1          2        2 0.03  medical 13471.73
-#&gt; 6:      1           1          2        3 0.03  medical 14342.99</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category     qalys
+#&gt; 6:      1           1          2        3 0.03  medical 14342.99</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='fu'><a href='sim_wlos.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category     qalys
 #&gt; 1:      1           1          1        1 0.03    qalys 0.5366655
 #&gt; 2:      1           1          1        2 0.03    qalys 0.3598469
 #&gt; 3:      1           1          1        3 0.03    qalys 0.2662830
@@ -268,8 +262,6 @@ Mathematically, discounted costs and QALYs in health state \(s\) are calculated 
       <li><a href="#fields">Fields</a></li>
 
       <li><a href="#methods">Methods</a></li>
-
-      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

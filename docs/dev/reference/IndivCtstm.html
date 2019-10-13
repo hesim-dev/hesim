@@ -85,6 +85,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -92,6 +95,11 @@
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -154,7 +162,7 @@
 <dt>time_start</dt><dd><p>The time at the start of the interval.</p></dd>
 <dt>time_stop</dt><dd><p>The time at the end of the interval.</p></dd>
 </dl></p></dd>
-    <dt><code>stateprobs_</code></dt><dd><p>A <code><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> of health state probabilities as a function of time simulated using <code>sim_stateprobs</code>. See the description of the output of <code>sim_stateprobs</code> in <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></dd>
+    <dt><code>stateprobs_</code></dt><dd><p>An object of class <code><a href='stateprobs.html'>stateprobs</a></code>.</p></dd>
     <dt><code>qalys_</code></dt><dd><p>A <code><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> of quality-adjusted life-years (QALYs) simulated using <code>sim_qalys</code>. Columns are:
     <dl class='dl-horizontal'>
 <dt>sample</dt><dd><p>A random sample from the probabilistic sensitivity analysis (PSA).</p></dd>
@@ -193,7 +201,7 @@
 <li><p><code>t</code>: A numeric vector of times.</p></li>
 </ul>
     Returns an instance of self with simulated output stored in <code>stateprobs_</code>.</p></dd>
-    <dt><code>sim_qalys(dr = .03, type = c("predict", "random"), by_patient = FALSE, lys = TRUE)</code></dt><dd><p>Compute simulated (mean discounted) QALYs using the simulation output stored in <code>disprog_</code> by random sample from the PSA, treatment strategy, health state, and (optionally) patient.
+    <dt><code><a href='sim_wlos.html'>sim_qalys(dr = .03, type = c("predict", "random"), by_patient = FALSE, lys = TRUE)</a></code></dt><dd><p>Compute simulated (mean discounted) QALYs using the simulation output stored in <code>disprog_</code> by random sample from the PSA, treatment strategy, health state, and (optionally) patient.
     <ul>
 <li><p><code>dr</code>: Discount rate to apply to QALYs. May be a vector in which case QALYs are calculated for each element in <code>dr</code>.</p></li>
 <li><p><code>type</code>: <code>predict</code> for mean values or <code>random</code> for random samples as in <code>$sim()</code> in <code><a href='StateVals.html'>StateVals</a></code>.</p></li>
@@ -202,7 +210,7 @@
 <li><p><code>lys</code>: If <code>TRUE</code>, then life-years are computed in addition to QALYs.</p></li>
 </ul>
     Returns an instance of self with simulated output stored in <code>qalys_</code>.</p></dd>
-    <dt><code>sim_costs(dr = .03, type = c("predict", "random"), by_patient = FALSE, max_t = Inf)</code></dt><dd><p>Compute simulated (mean discounted) costs using the simulation output stored in <code>disprog_</code> by random sample from the PSA, treatment strategy, health state, and 
+    <dt><code><a href='sim_wlos.html'>sim_costs(dr = .03, type = c("predict", "random"), by_patient = FALSE, max_t = Inf)</a></code></dt><dd><p>Compute simulated (mean discounted) costs using the simulation output stored in <code>disprog_</code> by random sample from the PSA, treatment strategy, health state, and 
     (optionally) patient.
     <ul>
 <li><p><code>dr</code>: Discount rate to apply to costs. May be a vector in which case costs are calculated for each element in <code>dr</code>.</p></li>
@@ -305,8 +313,8 @@
 #&gt; 3:      1           1        3 5 0.0000000
 #&gt; 4:      1           2        1 5 0.6666667
 #&gt; 5:      1           2        2 5 0.0000000
-#&gt; 6:      1           2        3 5 0.3333333</div><div class='input'><span class='no'>ictstm</span>$<span class='fu'>sim_qalys</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
-<span class='no'>ictstm</span>$<span class='fu'>sim_costs</span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
+#&gt; 6:      1           2        3 5 0.3333333</div><div class='input'><span class='no'>ictstm</span>$<span class='fu'><a href='sim_wlos.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
+<span class='no'>ictstm</span>$<span class='fu'><a href='sim_wlos.html'>sim_costs</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>ictstm</span>$<span class='fu'>summarize</span>())</div><div class='output co'>#&gt; $costs
 #&gt;     category   dr sample strategy_id     costs
 #&gt;  1:    drugs 0.03      1           1 38164.878

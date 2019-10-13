@@ -86,6 +86,9 @@ rdirichlet_mat is vectorized and written in C++ for speed." />
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -93,6 +96,11 @@ rdirichlet_mat is vectorized and written in C++ for speed." />
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -132,7 +140,8 @@ rdirichlet_mat is vectorized and written in C++ for speed." />
     
     </div>
 
-    <pre class="usage"><span class='fu'>rdirichlet_mat</span>(<span class='no'>n</span>, <span class='no'>alpha</span>)</pre>
+    <pre class="usage"><span class='fu'>rdirichlet_mat</span>(<span class='no'>n</span>, <span class='no'>alpha</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"array"</span>, <span class='st'>"matrix"</span>, <span class='st'>"data.frame"</span>,
+  <span class='st'>"data.table"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,11 +154,21 @@ rdirichlet_mat is vectorized and written in C++ for speed." />
       <th>alpha</th>
       <td><p>A matrix where each row is a separate vector of shape parameters.</p></td>
     </tr>
+    <tr>
+      <th>output</th>
+      <td><p>Whether output should be an array or a matrix.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An array of matrices where each row of each matrix is a sample from the Dirichlet distribution.</p>
+    <p>If <code>output = "array"</code>, then an array of matrices is returned 
+where each row of each matrix is a sample from the Dirichlet distribution.
+If <code>output = "matrix"</code>, then a matrix is returned where each row contains
+all elements of the sampled matrix from the Dirichlet distribution ordered rowwise; 
+when <code>output = "data.frame"</code> or <code>output = "data.table"</code> the returned
+value is a <code>data.frame</code> or <code>data.table</code> in the same format as the
+matrix returned with <code>output = "matrix"</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 

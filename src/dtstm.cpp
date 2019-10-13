@@ -2,99 +2,11 @@
 
 /***************************************************************************//** 
  * @ingroup dtstm
- * Health state probability output
- * Stores output of state probabilities simulated using a discrete time
- * state transition model
- ******************************************************************************/ 
-// struct stateprobs_out{
-//   std::vector<int> sample_; ///< The random sample of the parameters.
-//   std::vector<int> strategy_id_; ///< The treatment strategy id.
-//   std::vector<int> patient_id_; ////< The patient id.
-//   std::vector<int> t_; ////< Time.
-//   arma::mat probs_; ////Matrix of state probability vectors. 
-//   
-//   /** 
-//    * A constructor.
-//    * Instantiates an empty data container for storing output.
-//    * @param n_rows Each ID variable is initialized to have length @p n_rows.
-//    * The number of rows in  @c probs_ is equal to @p n_rows.
-//    * @param n_cols. The number of columns (i.e., health states) in @c probs_.
-//    */ 
-//   stateprobs_out(int n_rows, int n_cols) {
-//     sample_.resize(n_rows);
-//     strategy_id_.resize(n_rows);
-//     patient_id_.resize(n_rows);
-//     t_.resize(n_rows);
-//     probs_.set_size(n_rows, n_cols);
-//   }
-//   
-//   /** 
-//    * Create a list to pass to @c R.
-//    */   
-//   Rcpp::List create_R_list(){
-//     Rcpp::DataFrame id_vars = Rcpp::DataFrame::create(
-//       Rcpp::_["sample"] = sample_,
-//       Rcpp::_["strategy_id"] = strategy_id_,
-//       Rcpp::_["patient_id"] = patient_id_,
-//       Rcpp::_["t"] = t_,
-//       Rcpp::_["stringsAsFactors"] = false
-//     );
-//     
-//     return Rcpp::List::create(
-//       Rcpp::_["id_vars"] = id_vars,
-//       Rcpp::_["stateprobs"] = probs_
-//     );
-//   }
-//     
-//     /** 
-//      * Create a tidy dataframe to pass to @c R.
-//      */  
-//     Rcpp::DataFrame create_R_tidy_df(int n_times, std::vector<double> times){    
-//       int n_states = probs_.n_cols;
-//       int mat_N = sample_.size();
-//       int tidy_N = n_states * mat_N;
-//       std::vector<int> sample(tidy_N);
-//       std::vector<int> strategy_id(tidy_N);
-//       std::vector<int> patient_id(tidy_N);
-//       std::vector<int> state_id(tidy_N);
-//       std::vector<int> t(tidy_N);
-//       std::vector<double> probs(tidy_N);
-//       int old_index = 0;
-//       int current_state_id = 0;
-//       for (int i = 0; i < mat_N/n_times; ++i){
-//         for (int j = 0; j < n_times; ++j){
-//           for (int k = 0; k < n_states; ++k){
-//             sample[old_index] = sample_[i]; 
-//             strategy_id[old_index] = strategy_id_[i];
-//             patient_id[old_index] = patient_id_[i];
-//             state_id[old_index] = current_state_id;
-//             t[index] = times[j];
-//             probs[index] = probs_(old_index, k);
-//           } // End state loop
-//           ++current_state_id;
-//           ++old_index;
-//         } // End time loop
-//       } // End outer loop
-//       return Rcpp::DataFrame::create(
-//         Rcpp::_["sample"] = sample,
-//         Rcpp::_["strategy_id"] = strategy_id,
-//         Rcpp::_["patient_id"] = patient_id,
-//         Rcpp::_["state_id"] = state_id,
-//         Rcpp::_["t"] = t,
-//         Rcpp::_["probs"] = probs,
-//         Rcpp::_["stringsAsFactors"] = false
-//       );
-//     }
-//   
-// }; // end struct stateprobs_out
-
-/***************************************************************************//** 
- * @ingroup dtstm
  * Simulate Markov chain
  * Simulate Markov chain for a single patient and treatment strategy.
  * @return An armadillo matrix
  ******************************************************************************/ 
-arma::mat sim_markov_chain2(hesim::statmods::obs_index &obs_index,
+arma::mat sim_markov_chain(hesim::statmods::obs_index &obs_index,
                             int transprob_index,
                            arma::cube &transprob_mats, arma::rowvec x0,
                            int n_times, std::vector<double> times, int n_states){
@@ -172,10 +84,6 @@ Rcpp::DataFrame C_cohort_dtstm_sim_stateprobs(Rcpp::Environment R_CohortDtstmTra
                                                  transprob_index + n_time_intervals - 1);
         arma::mat probs = sim_markov_chain(p_ski, start_stateprobs,
                                            times, obs_index.time_stop_);
-        // arma::mat probs = sim_markov_chain2(obs_index, transprob_index,
-        //                                     transprob_mats,
-        //                                    start_stateprobs, n_times, times,
-        //                                    n_states);
         for (int h = 0; h < n_states; ++h){
           for (int t = 0; t < n_times; ++t){
             out.sample_[counter] = s;

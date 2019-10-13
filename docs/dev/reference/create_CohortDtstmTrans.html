@@ -34,9 +34,7 @@
   
 <meta property="og:title" content="Create <code>CohortDtstmTrans</code> object — create_CohortDtstmTrans" />
 
-<meta property="og:description" content="create_CohortDtstmTrans creates an object of class
- CohortDtstmTrans from a transprob_tbl
- object." />
+<meta property="og:description" content="A generic function for creating an object of class CohortDtstmTrans." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -87,6 +85,9 @@
       <a href="../articles/intro.html">Introduction</a>
     </li>
     <li>
+      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+    </li>
+    <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
@@ -94,6 +95,11 @@
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Examples</li>
+    <li>
+      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -128,54 +134,25 @@
 
     <div class="ref-description">
     
-    <p><code>create_CohortDtstmTrans</code> creates an object of class
- <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> from a <code><a href='transprob_tbl.html'>transprob_tbl</a></code>
- object.</p>
+    <p>A generic function for creating an object of class <code>CohortDtstmTrans</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>create_CohortDtstmTrans</span>(<span class='no'>object</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for transprob_tbl</span>
-<span class='fu'>create_CohortDtstmTrans</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>start_stateprobs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>create_CohortDtstmTrans</span>(<span class='no'>object</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>An object of class "transprob_tbl".</p></td>
+      <td><p>An object of the appropriate class.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
-    </tr>
-    <tr>
-      <th>n</th>
-      <td><p>Number of random observations of the parameters to draw for the PSA 
-if the parameters have not previously been sampled. See "details".</p></td>
-    </tr>
-    <tr>
-      <th>start_stateprobs</th>
-      <td><p>Initial state probabilities. By default all patients
-are assumed to be in the first health state.</p></td>
+      <td><p>Further arguments passed to <code>CohortDtstmTrans$new()</code> in 
+<code>CohortDtstmTrans</code>.</p></td>
     </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Returns an <code>R6Class</code> object of class <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code>.</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The argument <code>n</code> is not used if the option <code>dist = "custom"</code> 
- is used in <code><a href='transprob_tbl.html'>transprob_tbl</a></code> since the parameters have already be 
- drawn for the PSA.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code></p></div>
     
 
   </div>
@@ -183,13 +160,7 @@ are assumed to be in the first health state.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
+                </ul>
 
   </div>
 </div>

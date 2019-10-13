@@ -49,7 +49,74 @@ check_params_joined <- function(x, inner_class, model_list){
   return(x)
 }
 
-# Means ------------------------------------------------------------------------
+create_params_list <- function(object, n, point_estimate, inner_class, new_class){
+  n_objects <- length(object)
+  params_list <- vector(mode = "list", length = n_objects)
+  names(params_list) <- names(object)
+  for (i in 1:n_objects){
+    params_list[[i]] <- create_params(object[[i]], n, point_estimate)
+  }
+  return(new_params_list(params_list, inner_class = inner_class,
+                         new_class = new_class))
+}
+
+create_params_joined <- function(object, n, point_estimate, inner_class){
+  n_models <- length(object$models)
+  models <- vector(mode = "list", length = n_models)
+  names(models) <- names(object$models)
+  for (i in 1:n_models){
+    models[[i]] <- create_params(object$models[[i]], n, point_estimate)
+  }
+  return(new_params_joined(models, times = object$times, inner_class = inner_class))
+}
+
+#' Create a parameter object from a fitted model
+#' 
+#' \code{create_params} is a generic function for creating an object containing 
+#' parameters from a fitted statistical model. If \code{point_estimate = FALSE},
+#' then random samples from the posterior distribution are returned.
+#' @param object A statistical model to randomly sample parameters from.  
+#' @param n Number of random observations to draw. 
+#' @param point_estimate If TRUE, then the point estimates are returned and
+#' and no samples are drawn.
+#' @param bootstrap If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are 
+#' drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
+#' parameters are bootstrapped using \code{\link{bootstrap}}. 
+#' @param max_errors Equivalent to the \code{max_errors} argument in \code{\link{bootstrap}}. 
+#' @param ... Further arguments passed to or from other methods. Currently unused.
+#' @return An object prefixed by \code{params_}. Mapping between \code{create_params} 
+#' and the classes of the returned objects are: 
+#' \itemize{
+#' \item{\code{create_params.lm} ->}{ \code{params_lm}}
+#' \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
+#' \item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}
+#' \item{\code{create_params.partsurvfit} ->}{ \code{params_surv_list}}
+#' }
+#' @keywords internal
+#' @name create_params
+#' @examples 
+#' # create_params.lm
+#' fit <- stats::lm(costs ~ female, data = psm4_exdata$costs$medical)
+#' n <- 5
+#' params_lm <- create_params(fit, n = n)
+#' head(params_lm$coefs)
+#' head(params_lm$sigma)
+#' 
+#' # create_params.flexsurvreg
+#' library("flexsurv")
+#' fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+#'                     data = ovarian, dist = "weibull")
+#' n <- 5
+#' params_surv_wei <- create_params(fit, n = n)
+#' print(params_surv_wei$dist)
+#' head(params_surv_wei$coefs)
+#' @export
+#' @rdname create_params
+create_params <- function (object, ...) {
+  UseMethod("create_params", object)
+}
+
+# Predicted means --------------------------------------------------------------
 #' Predicted means
 #' 
 #' Create a list containing means predicted from a statistical model.
@@ -185,6 +252,32 @@ params_lm_list <- function(...){
 #' @rdname check
 check.params_lm_list <- function(object){
   check_params_list(object)
+}
+
+#' @export
+#' @rdname create_params
+create_params.lm <- function(object, n = 1000, point_estimate = FALSE, ...){
+  if (point_estimate == FALSE){
+    coefs_sim <- MASS::mvrnorm(n, stats::coef(object), stats::vcov(object))
+    if(is.vector(coefs_sim)) coefs_sim <- matrix(coefs_sim, nrow = 1)
+    return(new_params_lm(coefs = coefs_sim,
+                         sigma = rep(summary(object)$sigma, n),
+                         n_samples = n))
+  } else{
+    coefs <- matrix(stats::coef(object), nrow = 1)
+    colnames(coefs) <- names(stats::coef(object))
+    return(new_params_lm(coefs = coefs,
+                         sigma = summary(object)$sigma,
+                         n_samples = 1))
+  }
+}
+
+#' @export
+# #' @rdname create_params
+#' @keywords internal
+create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...){
+  return(create_params_list(object, n, point_estimate, 
+                            inner_class = "params_lm", new_class = "params_lm_list"))
 }
 
 # Survival model ---------------------------------------------------------------
@@ -369,30 +462,217 @@ check.params_surv <- function(object){
   return(object)
 }
 
+flexsurvreg_inds <- function(object){
+  n_pars <- length(object$dlist$pars)
+  inds <- vector(mode = "list", length = n_pars)
+  for (j in 1:n_pars){
+    parname_j <-  object$dlist$pars[j]
+    covind_j <- object$mx[[parname_j]]
+    if (length(covind_j) > 0){
+      inds[[j]] <- c(j, n_pars + covind_j)
+    } else{
+      inds[[j]] <- j
+    }
+  }
+  return(inds)
+}
+
+flexsurvreg_aux <- function(object){
+  if(object$dlist$name == "survspline"){
+    aux <- object$aux
+    if(aux$scale == "hazard") aux$scale <- "log_cumhazard"
+    if(aux$scale == "odds") aux$scale <- "log_cumodds" 
+    if(aux$scale == "normal") aux$scale <- "inv_normal" 
+  } else{
+    aux <- NULL
+  } 
+  return(aux)
+}
+
+#' @export
+#' @rdname create_params
+create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, ...){
+  if (point_estimate == FALSE){
+    sim <- flexsurv::normboot.flexsurvreg(object, B = n, raw = TRUE, 
+                                          transform = TRUE)
+    n_samples <- n
+  } else{
+    sim <- t(object$res.t[, "est", drop = FALSE])
+    n_samples <- 1
+  }
+  n_pars <- length(object$dlist$pars)
+  coefs <- vector(length = n_pars, mode = "list")
+  names(coefs) <- c(object$dlist$pars)
+  inds <- flexsurvreg_inds(object)
+  for (j in seq_along(object$dlist$pars)){
+    coefs[[j]] <- sim[, inds[[j]], drop = FALSE]
+  }
+  return(new_params_surv(dist = object$dlist$name,
+                         coefs = coefs,
+                         n_samples = n_samples,
+                         aux = flexsurvreg_aux(object)))
+}
+
 # Transition probabilities -----------------------------------------------------
 #' Transition probabilities
 #' 
-#' Create a list containing predicted transition probabilities at discrete times
-#' from a statistical model. Since the transition probabilities have presumably
+#' Create a list containing predicted transition probabilities at discrete times.
+#'  Since the transition probabilities have presumably
 #' already been predicted based on covariate values, no input data is required for
-#' simulation.
+#' simulation. The class can be instantiated from either an array, a data table, or
+#' a data frame. 
 #' 
-#' @param value  Array of predicted transition probability matrices from the posterior
-#' distribution of the underlying model. 
-#' @param ... Arguments passed to \code{\link{id_attributes}}. Each matrix in 
-#' \code{value} must be a prediction for a \code{sample}, \code{strategy_id},
+#' @param object An object of the appropriate class. 
+#' @param ... Further arguments passed to or from othr methods. Currently unused. 
+#' @param time_start The starting time of each interval indexed by the 4th 
+#' dimension of the array. This argument is not required if there is only one time 
+#' interval as \code{time_start} will equal 0 in this case. Used to construct
+#' \code{time_intervals} with \code{\link{create_time_intervals}}.
+
+#' 
+#' @details The format of \code{object} depends on its class: 
+#' \describe{
+#' \item{array}{Must be a 4D array of matrices (i.e.,
+#'  a 6D array). The dimensions of the array should be as follows: 
+#'  1st (\code{sample}), 2nd (\code{strategy_id}), 3rd (\code{patient_id}),
+#'  4th (\code{time_id}), 5th (rows of transition matrix), and
+#'  6th (columns of transition matrix). In other words, an index of
+#'  \code{[s, k, i, t]} represents the transition matrix for the \code{s}th 
+#'  sample, \code{k}th treatment strategy, \code{i}th patient, and \code{t}th
+#'  time interval.}
+#'  \item{data.table}{Must contain the folowing:
+#'  \itemize{
+#'  \item ID columns for the parameter sample (\code{sample}), 
+#'  treatment strategy (\code{strategy_id}), and patient (\code{patient_id}).
+#'  If the number of time intervals is greater than 1 it must also contain the
+#'  column \code{time_start} denoting the start of a time interval. A column 
+#'  \code{patient_wt} may also be used to denote the weight to apply to each
+#'  patient.
+#'  \item Columns for each element of the transition probability matrix. 
+#'  They should be prefixed with "probs_" and ordered rowwise. 
+#'  For example, the following columns would be used for a 2x2 transition
+#'   probabiliy matrix:
+#'  \code{probs_1} (1st row, 1st column), 
+#'  \code{probs_2} (1st row, 2nd column), 
+#'  \code{probs_3} (2nd row, 1st column), and 
+#'  \code{probs_4} (2nd row, 2nd column).
+#'  }
+#'  }
+#'  \item{data.frame}{Same as \code{data.table}.}
+#' }
+#' 
+#' @return An object of class \code{"tparams_transprobs"}, 
+#' which is a list containing \code{value} and relevant ID attributes. The element \code{value} is an 
+#' array of predicted transition probability matrices from the posterior
+#' distribution of the underlying statistical model. Each matrix in 
+#' \code{value} is a prediction for a \code{sample}, \code{strategy_id},
 #'  \code{patient_id}, and optionally \code{time_id} combination.
-#' 
-#' 
-#' @return An object of class "params_transprobs", which is a list containing 
-#' \code{value} and the ID attributes passed to \code{\link{id_attributes}}.
+#' @rdname tparams_transprobs
 #' @export
-tparams_transprobs <- function(value, ...){
+tparams_transprobs <- function(object, ...){
+  if (missing(object)){
+    stop("'object' is missing with no default.")
+  }
+  value <- UseMethod("tparams_transprobs", object)
   check(new_tparams_transprobs(value, ...), ...)
+} 
+
+#' @rdname tparams_transprobs
+#' @export
+tparams_transprobs.array <- function (object, time_start = NULL) {
+  # Checks
+  if(length(dim(object)) != 6){
+    stop("'object' must be a 4D array of matrices (i.e., a 6D array).")
+  }  
+  
+  # Reshape array
+  dims <- c(dim(object)[5], dim(object)[6], prod(dim(object)[1:4]))
+  value <- array(c(aperm(object, perm = c(5, 6, 4, 3, 2, 1))),
+                 dim = dims)
+  
+  # ID attributes
+  id_df <- expand.grid(time_id = 1:dim(object)[4],
+                       patient_id = 1:dim(object)[3],
+                       strategy_id = 1:dim(object)[2],
+                       sample = 1:dim(object)[1])
+  n_df <- list(n_samples = dim(object)[1],
+               n_strategies = dim(object)[2],
+               n_patients = dim(object)[3],
+               n_times = dim(object)[4])
+  id_args <- list()
+  for (v in colnames(id_df)){
+    id_args[[v]] <- id_df[[v]]
+  }
+  for (v in names(n_df)){
+    id_args[[v]] <- n_df[[v]]
+  }
+  if (n_df$n_times == 1 ){
+    id_args$time_intervals <- data.table(time_id = 1,
+                                         time_start = 0,
+                                         time_stop = Inf)
+  } else{
+    if (is.null(time_start)){
+      stop(paste0("'time_start' cannot be NULL if the number of time ",
+                  "intervals is greater than 1"), call. = FALSE)
+    }
+    id_args$time_intervals <- create_time_intervals(time_start)
+  }
+  
+  # Return
+  l <- c(list(value = value),
+         do.call("new_id_attributes", id_args))
+  class(l) <- "tparams_transprobs"
+  return(l)
+}
+
+#' @rdname tparams_transprobs
+#' @export
+tparams_transprobs.data.table <- function (object) {
+  # ID attributes
+  id_args <- list()
+  id_names <- c("sample", "strategy_id", "patient_id")
+  size_names <- c("n_samples", "n_strategies", "n_patients")
+  for (i in 1:length(id_names)){
+    id_args[[id_names[i]]] <- object[[id_names[i]]]
+    id_args[[size_names[i]]] <- length(unique(object[[id_names[i]]]))
+  }
+  
+  ## Time interval
+  if (!is.null(object$time_start)){
+    time_intervals <- create_time_intervals(unique(object$time_start)) 
+    pos <- match(object$time_start, time_intervals$time_start)
+    id_args[["time_id"]] <- time_intervals$time_id[pos]
+    id_args[["time_intervals"]] <- time_intervals
+    id_args[["n_times"]] <- length(time_intervals$time_id)
+  } else{
+    id_args[["time_id"]] <- rep(1, length(id_args$sample))
+    id_args[["time_intervals"]] <- data.table(time_id = 1,
+                                              time_start = 0,
+                                              time_stop = Inf)
+    id_args[["n_times"]] <- 1
+  }
+  
+  # Value
+  prob_mat <- as.matrix(object[, colnames(object)[grep("prob_", colnames(object))], 
+                               with = FALSE])
+  prob_nums <- as.numeric(sub('.*_', '', colnames(prob_mat)))
+  prob_mat <- prob_mat[, order(prob_nums)]
+  n_states <- sqrt(ncol(prob_mat))
+  value <- aperm(array(c(t(prob_mat)),
+                       dim = c(n_states, n_states, nrow(prob_mat))),
+                 c(2, 1, 3))
+  
+  # Return
+  return(do.call("new_tparams_transprobs", c(list(value = value), id_args)))
+}
+
+#' @rdname tparams_transprobs
+#' @export
+tparams_transprobs.data.frame <- function (object) {
+  return(tparams_transprobs(data.table(object)))
 }
 
 new_tparams_transprobs <- function(value, ...){
-  stopifnot(is.array(value))
   l <- c(list(value = value),
          do.call("new_id_attributes", list(...)))
   class(l) <- "tparams_transprobs"
@@ -400,15 +680,27 @@ new_tparams_transprobs <- function(value, ...){
 }
 
 #' @rdname check
-check.tparams_transprobs <- function(object, ...){
-  check(do.call("new_id_attributes", list(...)))
-  if (is.null(object$sample)){
-    stop("'sample' cannot be NULL.")
-  }
-  if (is.null(object$n_samples)){
-    stop("'n_samples' cannot be NULL")
-  }
+check.tparams_transprobs <- function(object){
+  stopifnot(is.array(object$value))
+  stopifnot(is.numeric(object$sample))
+  stopifnot(is.numeric(object$n_samples))
+  id_args <- object[names(object) != "value"]
+  check(do.call("new_id_attributes", id_args))
   return(object)
+}
+
+#' @export
+as.data.table.tparams_transprobs <- function(x){
+  probs <- matrix(c(aperm(x$value, perm = c(2, 1, 3))),
+                  nrow = dim(x$value)[3], byrow = TRUE)
+  colnames(probs) <- paste0("prob_", 1:ncol(probs)) 
+  id_dt <- as.data.table(x[c("sample", "strategy_id", "patient_id")])
+  time_dt <- x$time_intervals[match(x$time_id, x$time_intervals$time_id)]
+  x_dt <- data.table(id_dt, time_dt, probs)
+  for (v in c("n_samples", "n_strategies", "n_patients", "n_times")){
+    setattr(x_dt, v, x[[v]])
+  }
+  return(x_dt)
 }
 
 # List of survival models ------------------------------------------------------
@@ -438,6 +730,30 @@ params_surv_list <- function(...){
 #' @rdname check
 check.params_surv_list <- function(object){
   check_params_list(object)
+}
+
+#' @export
+#' @rdname create_params
+create_params.flexsurvreg_list <- function(object, n = 1000, point_estimate = FALSE, ...){
+  return(create_params_list(object, n, point_estimate, 
+                            inner_class = "params_surv", new_class = "params_surv_list"))
+}
+
+#' @export
+#' @rdname create_params
+create_params.partsurvfit <- function(object, n = 1000, point_estimate = FALSE, 
+                                      bootstrap = TRUE, max_errors = 0, ...){
+  if (point_estimate == TRUE & bootstrap == TRUE){
+    msg <- paste0("When 'point_estimate' = TRUE and 'bootstrap' = TRUE, the 'point_estimate' ",
+                  "argument is ignored and bootstrap replications are generated.")
+    warning(msg, call. = FALSE)
+  }
+  if(bootstrap){
+    res <- bootstrap(object, B = n, max_errors = max_errors)
+  } else{
+    res <- create_params(object$models, n = n, point_estimate = point_estimate)
+  }
+  return(res)
 }
 
 # Joined survival models -------------------------------------------------------
@@ -522,175 +838,6 @@ check.params_joined_surv_list <- function(object, inner_class){
   check_params_joined(object, inner_class = inner_class, model_list = TRUE)
 }
 
-# Create parameter objects -----------------------------------------------------
-create_params_list <- function(object, n, point_estimate, inner_class, new_class){
-  n_objects <- length(object)
-  params_list <- vector(mode = "list", length = n_objects)
-  names(params_list) <- names(object)
-  for (i in 1:n_objects){
-    params_list[[i]] <- create_params(object[[i]], n, point_estimate)
-  }
-  return(new_params_list(params_list, inner_class = inner_class,
-                         new_class = new_class))
-}
-
-create_params_joined <- function(object, n, point_estimate, inner_class){
-  n_models <- length(object$models)
-  models <- vector(mode = "list", length = n_models)
-  names(models) <- names(object$models)
-  for (i in 1:n_models){
-    models[[i]] <- create_params(object$models[[i]], n, point_estimate)
-  }
-  return(new_params_joined(models, times = object$times, inner_class = inner_class))
-}
-
-#' Create a parameter object from a fitted model
-#' 
-#' \code{create_params} is a generic function for creating an object containing 
-#' parameters from a fitted statistical model. If \code{point_estimate = FALSE},
-#' then random samples from the posterior distribution are returned.
-#' @param object A statistical model to randomly sample parameters from.  
-#' @param n Number of random observations to draw. 
-#' @param point_estimate If TRUE, then the point estimates are returned and
-#' and no samples are drawn.
-#' @param bootstrap If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are 
-#' drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
-#' parameters are bootstrapped using \code{\link{bootstrap}}. 
-#' @param max_errors Equivalent to the \code{max_errors} argument in \code{\link{bootstrap}}. 
-#' @param ... Further arguments passed to or from other methods. Currently unused.
-#' @return An object prefixed by \code{params_}. Mapping between \code{create_params} 
-#' and the classes of the returned objects are: 
-#' \itemize{
-#' \item{\code{create_params.lm} ->}{ \code{params_lm}}
-#' \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
-#' \item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}
-#' \item{\code{create_params.partsurvfit} ->}{ \code{params_surv_list}}
-#' }
-#' @keywords internal
-#' @name create_params
-#' @examples 
-#' # create_params.lm
-#' fit <- stats::lm(costs ~ female, data = psm4_exdata$costs$medical)
-#' n <- 5
-#' params_lm <- create_params(fit, n = n)
-#' head(params_lm$coefs)
-#' head(params_lm$sigma)
-#' 
-#' # create_params.flexsurvreg
-#' library("flexsurv")
-#' fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
-#'                     data = ovarian, dist = "weibull")
-#' n <- 5
-#' params_surv_wei <- create_params(fit, n = n)
-#' print(params_surv_wei$dist)
-#' head(params_surv_wei$coefs)
-#' @export
-#' @rdname create_params
-create_params <- function (object, ...) {
-  UseMethod("create_params", object)
-}
-
-#' @export
-#' @rdname create_params
-create_params.lm <- function(object, n = 1000, point_estimate = FALSE, ...){
-  if (point_estimate == FALSE){
-      coefs_sim <- MASS::mvrnorm(n, stats::coef(object), stats::vcov(object))
-      if(is.vector(coefs_sim)) coefs_sim <- matrix(coefs_sim, nrow = 1)
-      return(new_params_lm(coefs = coefs_sim,
-                          sigma = rep(summary(object)$sigma, n),
-                          n_samples = n))
-  } else{
-      coefs <- matrix(stats::coef(object), nrow = 1)
-      colnames(coefs) <- names(stats::coef(object))
-      return(new_params_lm(coefs = coefs,
-                          sigma = summary(object)$sigma,
-                          n_samples = 1))
-  }
-}
-
-#' @export
-# #' @rdname create_params
-#' @keywords internal
-create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...){
-  return(create_params_list(object, n, point_estimate, 
-                          inner_class = "params_lm", new_class = "params_lm_list"))
-}
-
-flexsurvreg_inds <- function(object){
-  n_pars <- length(object$dlist$pars)
-  inds <- vector(mode = "list", length = n_pars)
-  for (j in 1:n_pars){
-    parname_j <-  object$dlist$pars[j]
-    covind_j <- object$mx[[parname_j]]
-    if (length(covind_j) > 0){
-      inds[[j]] <- c(j, n_pars + covind_j)
-    } else{
-      inds[[j]] <- j
-    }
-  }
-  return(inds)
-}
-
-flexsurvreg_aux <- function(object){
-  if(object$dlist$name == "survspline"){
-    aux <- object$aux
-    if(aux$scale == "hazard") aux$scale <- "log_cumhazard"
-    if(aux$scale == "odds") aux$scale <- "log_cumodds" 
-    if(aux$scale == "normal") aux$scale <- "inv_normal" 
-  } else{
-    aux <- NULL
-  } 
-  return(aux)
-}
-
-#' @export
-#' @rdname create_params
-create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, ...){
-  if (point_estimate == FALSE){
-      sim <- flexsurv::normboot.flexsurvreg(object, B = n, raw = TRUE, 
-                                            transform = TRUE)
-      n_samples <- n
-  } else{
-      sim <- t(object$res.t[, "est", drop = FALSE])
-      n_samples <- 1
-  }
-  n_pars <- length(object$dlist$pars)
-  coefs <- vector(length = n_pars, mode = "list")
-  names(coefs) <- c(object$dlist$pars)
-  inds <- flexsurvreg_inds(object)
-  for (j in seq_along(object$dlist$pars)){
-    coefs[[j]] <- sim[, inds[[j]], drop = FALSE]
-  }
-  return(new_params_surv(dist = object$dlist$name,
-                         coefs = coefs,
-                         n_samples = n_samples,
-                         aux = flexsurvreg_aux(object)))
-}
-
-#' @export
-#' @rdname create_params
-create_params.flexsurvreg_list <- function(object, n = 1000, point_estimate = FALSE, ...){
-  return(create_params_list(object, n, point_estimate, 
-                          inner_class = "params_surv", new_class = "params_surv_list"))
-}
-
-#' @export
-#' @rdname create_params
-create_params.partsurvfit <- function(object, n = 1000, point_estimate = FALSE, 
-                                      bootstrap = TRUE, max_errors = 0, ...){
-  if (point_estimate == TRUE & bootstrap == TRUE){
-    msg <- paste0("When 'point_estimate' = TRUE and 'bootstrap' = TRUE, the 'point_estimate' ",
-                  "argument is ignored and bootstrap replications are generated.")
-    warning(msg, call. = FALSE)
-  }
-  if(bootstrap){
-    res <- bootstrap(object, B = n, max_errors = max_errors)
-  } else{
-    res <- create_params(object$models, n = n, point_estimate = point_estimate)
-  }
-  return(res)
-}
-
 #' @export
 # #' @rdname create_params
 #' @keywords internal
@@ -704,3 +851,4 @@ create_params.joined_flexsurvreg <- function(object, n = 1000, point_estimate = 
 create_params.joined_flexsurvreg_list <- function(object, n = 1000, point_estimate = FALSE, ...){
   return(create_params_joined(object, n, point_estimate, "params_surv_list"))
 }
+

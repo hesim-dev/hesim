@@ -98,6 +98,7 @@ rpwexp <- function(n, rate = 1, time = 0){
 #'
 #' @param n Number of samples to draw.
 #' @param alpha A matrix where each row is a separate vector of shape parameters.
+#' @param output Whether output should be an array or a matrix. 
 #' @name rdirichlet_mat
 #' @examples
 #' alpha <- matrix(c(100, 200, 500, 50, 70, 75), ncol = 3, nrow = 2, byrow = TRUE)
@@ -105,9 +106,17 @@ rpwexp <- function(n, rate = 1, time = 0){
 #' print(samp[, , 1:2])
 #' @details This function is particularly useful for representing the distribution of 
 #' transition probabilities in a transition matrix.
-#' @return An array of matrices where each row of each matrix is a sample from the Dirichlet distribution.
+#' @return If \code{output = "array"}, then an array of matrices is returned 
+#' where each row of each matrix is a sample from the Dirichlet distribution.
+#' If \code{output = "matrix"}, then a matrix is returned where each row contains
+#' all elements of the sampled matrix from the Dirichlet distribution ordered rowwise; 
+#' when \code{output = "data.frame"} or \code{output = "data.table"} the returned
+#' value is a \code{data.frame} or \code{data.table} in the same format as the
+#' matrix returned with \code{output = "matrix"}. 
 #' @export
-rdirichlet_mat <- function(n, alpha){
+rdirichlet_mat <- function(n, alpha, output = c("array", "matrix", "data.frame", 
+                                                "data.table")){
+  output <- match.arg(output)
   if (n <= 0){
     stop("n must be greater than 0")
   }
@@ -118,6 +127,17 @@ rdirichlet_mat <- function(n, alpha){
     alpha <- matrix(alpha, nrow = 1)
   }
   samp <- C_rdirichlet_mat(n, alpha)
+  if (output %in% c("matrix", "data.frame", "data.table")){
+    samp <- matrix(c(aperm(samp, perm = c(2, 1, 3))),
+                   ncol = dim(samp)[2] * dim(samp)[2], byrow = TRUE)
+    colnames(samp) <- paste0("prob_", 1:ncol(samp))
+  }
+  if (output == "data.frame"){
+    samp <- data.frame(samp)
+  } 
+  if (output == "data.table"){
+    samp <- data.table(samp)
+  }
   return(samp)
 }
 

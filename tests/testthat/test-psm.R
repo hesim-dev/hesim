@@ -166,8 +166,12 @@ psm_costs_medical2 <- create_StateVals(fit_costs_medical,
 psm <- Psm$new(survival_models = psm_curves,
                utility_model = psm_utility,
                cost_models = list(medical = psm_costs_medical))
-expect_error(psm$sim_survival(t = c(2, 5)))
 psm$sim_survival(t = times)
+
+# Errors in survival curves
+test_that("Errors in Psm$survival_", {
+  expect_error(psm$sim_survival(t = c(2, 5))) 
+})
 
 # State probabilities
 test_that("Psm$stateprobs", {
@@ -196,114 +200,12 @@ test_that("Psm$stateprobs", {
 })
 
 # Costs and QALYs
-R_los <- function(psm, type, type_num, dr = .03, 
-                  state_id = 1, sample = 1, strategy_id = 2,
-                  patient_id = 1){
-  if (type == "costs_"){
-    model <- psm$cost_models[[type_num]]
-  } else{
-    model <- psm$utility_model
-  }
-  dat <- model$input_mats
-  statevals <- dat$X$mu %*% t(model$params$coefs)
-  obs <- which(dat$state_id == state_id & dat$strategy_id == strategy_id &
-                 dat$patient_id == patient_id)
-  stateval <- statevals[obs, sample]
-  
-  env <- environment()
-  stateprobs <- psm$stateprobs_[state_id == env$state_id &
-                                sample == env$sample &
-                                strategy_id == env$strategy_id &
-                                patient_id == env$patient_id]
-  times <- stateprobs$t
-  yvals <- exp(-dr * times) * stateval * stateprobs$prob
-  return(pracma::trapz(x = times, y = yvals))
-}
-
-los_compare <- function(psm, type = c("costs_", "qalys_"), 
-                        type_num = NULL, dr,
-                        state_id = 1, sample = 1, strategy_id = 1,
-                  patient_id = 1){
-  type <- match.arg(type)
-  env <- environment()
-  hesim_los_dt <- psm[[type]][state_id == env$state_id &
-                                  sample == env$sample &
-                                  strategy_id == env$strategy_id &
-                                  patient_id == env$patient_id &
-                                  dr == env$dr]
-  R_los <- R_los(psm, type = type, type_num = type_num, dr = dr, 
-                 state_id = state_id, sample = sample,
-                 strategy_id = strategy_id, patient_id = patient_id)
-  expect_equal(hesim_los_dt[[gsub("_", "", type)]], R_los)
-}
-
-test_that("Psm$costs", {
+test_that("Psm: Simulate costs and QALYs", {
   psm$sim_stateprobs()$stateprobs_
   psm$sim_costs(dr = c(0, .03))
-  
-  los_compare(psm, type = "costs_", type_num = 1, dr = 0, strategy_id = 2)
-  los_compare(psm, type = "costs_", type_num = 1, dr = .03, strategy_id = 3)
-  
-  # Errors
-  ## Cannot have same discount rate twice
-  expect_error(psm$sim_costs(dr = c(.05, .05)))
-  
-  ## must first simulate state_probs
-  psm2 <- Psm$new(survival_models = psm_curves,
-                  utility_model = psm_utility,
-                  cost_models = list(medical = psm_costs_medical2))
-  psm2$sim_survival(t = times)
-  expect_error(psm2$sim_costs(dr = c(0, .03)))
-  
-  ## number of PSA samples must be consistent accross statistical models
-  psm2$sim_stateprobs()
-  expect_error(psm2$sim_costs(dr = 0))
-
-  
-  ## Incorrect number of survival models
-  fits_wei2 <- flexsurvreg_list(fits_wei[1:2])
-  psm_curves2 <- create_PsmCurves(fits_wei2, 
-                               input_data = surv_input_data, n = N,
-                               bootstrap = TRUE, est_data = surv_est_data)
-  psm2 <- Psm$new(survival_models = psm_curves2,
-                  utility_model = psm_utility,
-                  cost_models = list(medical = psm_costs_medical))
-  psm2$sim_survival(t = times)
-  psm2$sim_stateprobs()
-  expect_error(psm2$sim_costs())
-  
-  ## Time varying costs are not currently supported
-  drugcost_tbl = data.frame(strategy_id = strategies_dt$strategy_id,
-                            time_start = c(0, 0, 0, 2, 2, 2),
-                            est = c(1000, 1500, 2000, 3000, 4000, 5000)
-                            )
-  drugcost_tbl <- stateval_tbl(drugcost_tbl, dist = "fixed", hesim_data = hesim_dat)
-  psm_drugcost <- create_StateVals(drugcost_tbl, n = N)
-  psm2$cost_models <- list(medical = psm2$cost_models$medical, drug = psm_drugcost)
-  expect_error(psm2$sim_costs())
-  
-  ## Incorrect types
-  psm2 <- Psm$new(survival_models = NULL)
-  expect_error(psm2$sim_survival(t = times))
-})
-
-test_that("Psm$qalys", {
-  # Time constant
-  psm$sim_stateprobs()$stateprobs_
+  expect_true(inherits(psm$costs_, "data.table"))
   psm$sim_qalys(dr = c(0, .05))
-  
-  los_compare(psm, type = "qalys_", dr = 0, strategy_id = 2)
-  los_compare(psm, type = "qalys_", dr = .05, patient_id = 2,
-              strategy_id = 3)
-  
-  # Time varying not currently supported
-  utility_tbl2 <- data.frame(state_id = states_dt$state_id,
-                             time_start = c(0, 0, 0, 2, 2, 2),
-                             est = c(.90, .85, .80, .75, .65, .55))
-  utility_tbl2 <- stateval_tbl(utility_tbl2, dist = "fixed", hesim_data = hesim_dat)
-  psm_utility2 <- create_StateVals(utility_tbl2, n = N)
-  psm$utility_model <- psm_utility2
-  expect_error(psm$sim_qalys())
+  expect_true(inherits(psm$qalys_, "data.table"))
 })
 
 test_that("Psm - from parameter object", {

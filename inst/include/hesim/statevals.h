@@ -214,64 +214,56 @@ private:
   std::vector<statevals> statevals_; ///< A vector of models for simulating state values;
                                      ///< the vector will be of length 1 for 'qalys' and 
                                      ///< equal to the number of cost categories for 'costs'.
-  statmods::obs_index obs_index_; ///< The @c obs_index class. 
-  
   
   /** 
    * Initialize obs_index_.
    * Initialize obs_index_ from an @c R based @c hesim simulation model. 
    * @param R_model An @c R based @c hesim simulation model.
    */ 
-  static statmods::obs_index init_obs_index_(Rcpp::Environment R_model, std::string type){
-    if (type == "qalys"){
-      Rcpp::Environment R_utility_model = Rcpp::as<Rcpp::Environment>(R_model["utility_model"]);
-      return statmods::obs_index(Rcpp::as<Rcpp::List>(hesim::statmods::get_id_object(R_utility_model)));
+  static statmods::obs_index init_obs_index_(Rcpp::List R_statevals){
+    Rcpp::Environment R_statevals_0 = Rcpp::as<Rcpp::Environment>(R_statevals[0]);
+    return statmods::obs_index(Rcpp::as<Rcpp::List>(hesim::statmods::get_id_object(R_statevals[0])));    
+  }  
+  
+  /** 
+   * Initialize obs_indices_.
+   * Initialize vector of @c obs_index_ objects for each category predicted
+   * with an @c R based @c hesim simulation model. 
+   * @param R_statevals A list of @c R based @c  models for state values by
+   * category.
+   */ 
+  static std::vector<statmods::obs_index> init_obs_indices_(Rcpp::List R_statevals){
+    std::vector<statmods::obs_index> obs_index_vec;
+    for (int i = 0; i < R_statevals.size(); ++i){ 
+      Rcpp::Environment R_statevals_i = Rcpp::as<Rcpp::Environment>(R_statevals[i]);
+      obs_index_vec.push_back(statmods::obs_index(hesim::statmods::get_id_object(R_statevals_i)));
     }
-    else if (type == "costs"){
-      Rcpp::List R_cost_models = Rcpp::as<Rcpp::List>(R_model["cost_models"]);
-      Rcpp::Environment R_cost_model_0 = Rcpp::as<Rcpp::Environment>(R_cost_models[0]);
-      return statmods::obs_index(Rcpp::as<Rcpp::List>(hesim::statmods::get_id_object(R_cost_model_0)));
-    }
-    else{
-      Rcpp::stop("Values of 'costs' or 'qalys' can only be simulated.");
-    }
-  }
-
+    return obs_index_vec;
+  }    
+  
   /** 
    * Initialize statevals_.
-   * Initialize statevals_ from an @c R based @c hesim simulation model. 
-   * @param R_model An @c R based @c hesim simulation model.
+   * Initialize statevals_ from an @c R based @c hesim state value model. 
+   * @param R_statevals An @c R based @c hesim state value model.
    */   
-  static std::vector<statevals> init_statevals_(Rcpp::Environment R_model, 
-                                                std::string type){
+  static std::vector<statevals> init_statevals_(Rcpp::List R_statevals){
     std::vector<statevals> statevals_vec;
-    if (type == "qalys"){
-      Rcpp::Environment R_utility_model = Rcpp::as<Rcpp::Environment>(R_model["utility_model"]);
-      statevals stvals(R_utility_model);
+    for (int i = 0; i < R_statevals.size(); ++i){
+      Rcpp::Environment R_statevals_i = Rcpp::as<Rcpp::Environment>(R_statevals[i]);
+      statevals stvals(R_statevals_i);
       statevals_vec.push_back(std::move(stvals));
-    } 
-    else if (type == "costs"){
-      Rcpp::List R_costs_models = Rcpp::as<Rcpp::List>((R_model["cost_models"]));
-      for (int i = 0; i < R_costs_models.size(); ++i){
-        Rcpp::Environment R_cost_model_i = Rcpp::as<Rcpp::Environment>(R_costs_models[i]);
-        statevals stvals(R_cost_model_i);
-        statevals_vec.push_back(std::move(stvals));
       }
-    }
-    else{
-      Rcpp::stop("Values of 'costs' or 'qalys' can only be simulated.");
-    }
     return statevals_vec;
-  }
+  }  
   
   /** 
    * Integrate probabilities.
    * Integrate health state probabilities weighted by the discount rate and 
-   * assigned state values using the trapezoid rule (see @c math::trapz).
+   * assigned state values using the trapezoid rule (see @c math::trapz). 
+   * Predictions are made for observations (i.e., row indices) determined
+   * by @p obs_index_. 
    * @param sample A random sample of the parameters from the posterior
    * distribution.
-   * @param obs The observation (i.e., row index) for which to make a prediction
-   * from the input matrix (or matrices when there are multiple parameters).
    * @param t_first, t_last The start and end times at which health state 
    * probabilities were simulated.
    * @param stateprob_first The beginning of health state probability values.
@@ -279,30 +271,76 @@ private:
    * to health state. 
    * @return Weighted length of stay for a given parameter sample and observation.
    */ 
-  double integrate_trapz(int sample, int obs,
-                         std::vector<double>::iterator t_first, std::vector<double>::iterator t_last,
-                         std::vector<double>::iterator stateprob_first, statevals &statevals,
-                         double dr, std::string sim_type = "predict") {
-    std::vector<double> value(std::distance(t_first, t_last));
-    std::vector<double>::iterator stateprob_it = stateprob_first;
-    for (std::vector<double>::iterator t_it = t_first; t_it != t_last; ++t_it){
-      double statval = statevals.sim(sample, obs, sim_type);
-      value[t_it - t_first] = exp(-dr * *t_it) * statval * *stateprob_it;
-      ++stateprob_it;
+  double integrate(int sample, statmods::obs_index obs_index,
+                   std::vector<double> times,
+                   std::vector<double>::iterator stateprob_first, statevals &statevals,
+                   double dr, std::string method = "trapz",
+                   std::string sim_type = "predict") {
+    
+    // State values
+    std::vector<double> value(std::distance(times.begin(), times.end()));
+    auto stateprob_it = stateprob_first;
+    auto t_start = times.begin();
+    for (int t = 0 ; t < obs_index.n_times_; ++t){
+      obs_index.set_time_index(t);
+      auto t_stop = hesim::max_lt(t_start, times.end(), obs_index.get_time_stop());
+      double statval = statevals.sim(sample, obs_index(), sim_type);
+      for (auto t_it = t_start; t_it <= t_stop; ++t_it){
+        value[t_it - times.begin()] = exp(-dr * *t_it) * statval * *stateprob_it;
+        ++stateprob_it;
+      } // Loop over times within time interval
+      t_start = t_stop + 1;
+    } // Loop over time intervals
+    
+    // int time_id = 0;
+    // double stateval = statevals.sim(sample, obs_index(), sim_type);
+    // for (auto t_it = times.begin(); t_it != times.end(); ++t_it){
+    //   if (*t_it >= obs_index.get_time_stop()){
+    //     obs_index.set_time_index(time_id + 1);
+    //     stateval = statevals.sim(sample, obs_index(), sim_type);
+    //   }
+    //   value[t_it - times.begin()] = exp(-dr * *t_it) * stateval * *stateprob_it;
+    //   ++stateprob_it;
+    // }
+    
+    // for (int i = 0; i < value.size(); ++i){
+    //   Rcpp::Rcout << "value = " << value.at(i) << std::endl;
+    // }
+    
+    // Rcpp::Rcout << "times.begin() = " << *times.begin() << std::endl;
+    // Rcpp::Rcout << "times.end() - 1 = " << *(times.end() - 1) << std::endl;
+    // Rcpp::Rcout << "value.begin() = " << *value.begin() << std::endl;
+    // Rcpp::Rcout << "value.size() = " << value.size() << std::endl;
+    
+    // Integrate
+    if (method == "trapz"){
+      return math::trapz(times.begin(), times.end(), value.begin());
     }
-    return math::trapz(t_first, t_last, value.begin());
+    else if (method == "riemann_left"){
+      return math::riemann_left(times.begin(), times.end(), value.begin());
+    }
+    else if (method == "riemann_right"){
+      return math::riemann_right(times.begin(), times.end(), value.begin());
+    }
+    else{
+      Rcpp::stop("The selected integration method is not available.");
+    }
   }
                                                        
 public:
+  statmods::obs_index obs_index_; ///< The @c obs_index class. 
+  std::vector<statmods::obs_index> obs_indices_; ///< The @c obs_index class.
+  
   /** 
    * The constructor.
    * Instantiates an object for computing weighted length of stay.
    * @param R_model An @c R based @c hesim simulation model of class @c R6.
    * @param type 'costs' for costs or 'qalys' for QALYs.
    */ 
-  wlos(Rcpp::Environment R_model, std::string type)
-    : statevals_(init_statevals_(R_model, type)),
-      obs_index_(init_obs_index_(R_model, type)){
+  wlos(Rcpp::List R_statevals)
+    : statevals_(init_statevals_(R_statevals)),
+      obs_index_(init_obs_index_(R_statevals)),
+      obs_indices_(init_obs_indices_(R_statevals)){
   }
   
   /** 
@@ -318,18 +356,10 @@ public:
   wlos_out operator()(stateprobs_out stateprobs, 
                       std::vector<double> times,
                       std::vector<double> dr, 
-                      std::vector<std::string> categories) {
+                      std::vector<std::string> categories,
+                      std::string method = "trapz") {
     int N = stateprobs.prob_.size()/times.size();
     int n_samples = statevals_[0].statmod_->get_n_samples();
-    // int N_check = n_samples *
-    //               obs_index_.n_strategies_ *
-    //               obs_index_.n_patients_ *
-    //               obs_index_.n_healthvals_;
-    // if(N != N_check){
-    //  Rcpp::stop("The number of rows in 'stateprobs_'"
-    //             "must equal the product of the number of unique values of"
-    //             "'sample', 'strategy_id', 'patient_id', 'state_id', and 't'.");
-    // }
     wlos_out out(N * dr.size() * statevals_.size());
     
     int counter = 0;
@@ -338,24 +368,24 @@ public:
         int integrate_start = 0;
         double dr_j = dr[j];
         for (int s = 0; s < n_samples; ++s){ // start samples loop
-          for (int ts = 0; ts < obs_index_.n_strategies_; ++ts){ // start treatment strategies loop
-          obs_index_.set_strategy_index(ts);
-            for (int p = 0; p < obs_index_.n_patients_; ++ p){ // start patient loop
-              obs_index_.set_patient_index(p);
-              for (int h = 0; h < obs_index_.n_healthvals_; ++h){ // health state state loop
-                obs_index_.set_health_index(h);
+          for (int ts = 0; ts < obs_indices_[k].n_strategies_; ++ts){ // start treatment strategies loop
+          obs_indices_[k].set_strategy_index(ts);
+            for (int p = 0; p < obs_indices_[k].n_patients_; ++ p){ // start patient loop
+              obs_indices_[k].set_patient_index(p);
+              for (int h = 0; h < obs_indices_[k].n_healthvals_; ++h){ // health state state loop
+                obs_indices_[k].set_health_index(h);
                 
                 out.sample_[counter] = s;
-                out.strategy_id_[counter] = obs_index_.get_strategy_id();
-                out.patient_id_[counter] = obs_index_.get_patient_id();
-                out.state_id_[counter] = obs_index_.get_health_id();;
+                out.strategy_id_[counter] = obs_indices_[k].get_strategy_id();
+                out.patient_id_[counter] = obs_indices_[k].get_patient_id();
+                out.state_id_[counter] = obs_indices_[k].get_health_id();;
                 out.dr_[counter] = dr_j;
                 out.category_[counter] = categories[k];
-                out.value_[counter] = integrate_trapz(s, obs_index_(),
-                                                      times.begin(), times.end(),
-                                                      stateprobs.prob_.begin() + integrate_start,
-                                                      statevals_[k],
-                                                      dr_j);
+                out.value_[counter] = integrate(s, obs_indices_[k],
+                                                times,
+                                                stateprobs.prob_.begin() + integrate_start,
+                                                statevals_[k],
+                                                dr_j, method);
                 integrate_start = integrate_start + times.size();
                 ++counter;
               } // end health state loop
@@ -363,7 +393,7 @@ public:
           } // end strategy loop
         } // end samples loop
       } // end loop over discount rates
-    } // end loop over state value models
+    } // end loop over categories
     return out;
   }
   
