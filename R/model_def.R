@@ -494,7 +494,7 @@ uniform_rng <- function(min, max, names = NULL){
 #' values sampled with [eval_rng()] as a function of input data 
 #' (treatment strategies and patients) and time
 #' intervals. These functions are used when evaluating an object of class
-#' `model_def`` defined using [define_model()]. The transformed parameters 
+#' `model_def` defined using [define_model()]. The transformed parameters 
 #' are ultimately converted into [tparams] objects and used to simulate outcomes with an
 #' economic model.
 #' @param expr Expressions used to transform parameters. As with [define_rng()], 

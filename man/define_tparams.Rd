@@ -53,7 +53,7 @@ Transformed parameter expressions are used to transform the parameter
 values sampled with \code{\link[=eval_rng]{eval_rng()}} as a function of input data
 (treatment strategies and patients) and time
 intervals. These functions are used when evaluating an object of class
-`model_def`` defined using \code{\link[=define_model]{define_model()}}. The transformed parameters
+\code{model_def} defined using \code{\link[=define_model]{define_model()}}. The transformed parameters
 are ultimately converted into \link{tparams} objects and used to simulate outcomes with an
 economic model.
 }
