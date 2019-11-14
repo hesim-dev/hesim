@@ -1,3 +1,6 @@
+## hesim 0.2.2
+No longer use deprecated `C++` function `bind2nd()`.
+
 ## hesim 0.2.1
 The `input_mats` class now contains an element `time_reset`. If `TRUE`, then time intervals reset each time a patient enters a new health state. In other words, state values can depend on time since entering a health state.
 
