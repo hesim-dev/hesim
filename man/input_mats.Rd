@@ -16,7 +16,7 @@ a list of lists of input matrices when a list of separate models is fit (e.g., w
 Create an object of class "input_mats", which contains inputs matrices
 for simulating a statistical model. Consists of (i) input matrices, \code{X},
 (ii) ID variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
-the \code{X} matrices. More details are provided under "Details" below. Note that an "input_mats" 
+the \code{X} matrices. More details are provided under "Details" below. Note that an "input_mats"
 object should typically be created using \code{\link{create_input_mats}}.
 }
 \details{
@@ -25,10 +25,10 @@ a health-related index, \eqn{i} indexes a patient, \eqn{j} indexes a treatment l
 and \eqn{k} is a treatment strategy. A health-related index is either a health state
 (e.g., \code{state_id}) or a transition between health states (e.g., \code{transition_id}).
 In some cases, the health-related index \eqn{h} can be suppressed and separate models
-can be fit for each health index. This is, for instance, the case in a partitioned survival 
-model where separate models are fit for each survival endpoint. Likewise, models 
-can be fit without multiple treatment lines as would, again, be the case in a 
-partitioned survival analysis where sequential treatment would be incorporated by 
+can be fit for each health index. This is, for instance, the case in a partitioned survival
+model where separate models are fit for each survival endpoint. Likewise, models
+can be fit without multiple treatment lines as would, again, be the case in a
+partitioned survival analysis where sequential treatment would be incorporated by
 adding additional health states rather than by using the index \eqn{j}.
 
 The rows of the matrices in \code{X} must be sorted in a manner consistent with the ID variables as

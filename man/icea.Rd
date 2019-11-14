@@ -56,44 +56,44 @@ it is assumed that there is only one group.}
 \code{icea} returns a list containing four \code{data.table}s:
 
 \describe{
-  \item{summary}{A \code{data.table} of the mean, 2.5\% quantile, and 97.5\% 
-  quantile by strategy and group for clinical effectiveness and costs.}
-  \item{mce}{The probability that each strategy is the most effective treatment
-  for each group for the range of specified willingness to pay values. In addition,
-  the column \code{best} denotes the optimal strategy (i.e., the strategy with the
-  highest expected net monetary benefit), which can be used to plot the 
-  cost-effectiveness acceptability frontier (CEAF).}
-  \item{evpi}{The expected value of perfect information (EVPI) by group for the range
-  of specified willingness to pay values. The EVPI is computed by subtracting the expected net
-  monetary benefit given current information (i.e., the strategy with the highest
-  expected net monetary benefit) from the expected net monetary benefit given
-  perfect information.}
-   \item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of net monetary benefits
-   for the range of specified willingness to pay values.}
+\item{summary}{A \code{data.table} of the mean, 2.5\% quantile, and 97.5\%
+quantile by strategy and group for clinical effectiveness and costs.}
+\item{mce}{The probability that each strategy is the most effective treatment
+for each group for the range of specified willingness to pay values. In addition,
+the column \code{best} denotes the optimal strategy (i.e., the strategy with the
+highest expected net monetary benefit), which can be used to plot the
+cost-effectiveness acceptability frontier (CEAF).}
+\item{evpi}{The expected value of perfect information (EVPI) by group for the range
+of specified willingness to pay values. The EVPI is computed by subtracting the expected net
+monetary benefit given current information (i.e., the strategy with the highest
+expected net monetary benefit) from the expected net monetary benefit given
+perfect information.}
+\item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of net monetary benefits
+for the range of specified willingness to pay values.}
 }
 
 \code{icea_pw} also returns a list containing four data.tables:
- \describe{
-  \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\% 
-  quantile by strategy and group for clinical effectiveness and costs.}
-  \item{delta}{Incremental effectiveness and incremental cost for each simulated
-  parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
-  \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
-  group. The CEAC plots the probability that each strategy is more cost-effective than
-  the comparator for the specified willingness to pay values.}
-   \item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of
-   incremental net monetary benefits for the range of specified willingness to pay values.}
+\describe{
+\item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\%
+quantile by strategy and group for clinical effectiveness and costs.}
+\item{delta}{Incremental effectiveness and incremental cost for each simulated
+parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
+\item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
+group. The CEAC plots the probability that each strategy is more cost-effective than
+the comparator for the specified willingness to pay values.}
+\item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of
+incremental net monetary benefits for the range of specified willingness to pay values.}
 }
 }
 \description{
 Conduct individualized cost-effectiveness analysis (ICEA) given output of an economic
 model. That is, summarize a probabilistic sensitivity analysis (PSA) by subgroup.
 \itemize{
- \item \code{icea()} computes the probability that
+\item \code{icea()} computes the probability that
 each treatment is most cost-effective, output for a cost-effectiveness acceptability frontier,
 the expected value of perfect information, and the net monetary benefit for each treatment.
 \item \code{icea_pw()} conducts pairwise ICEA by comparing strategies to a comparator. Computed
-quantities include the incremental cost-effectiveness ratio, the 
+quantities include the incremental cost-effectiveness ratio, the
 incremental net monetary benefit, output for a cost-effectiveness plane,
 and output for a cost-effectiveness acceptability curve.
 }

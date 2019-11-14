@@ -8,12 +8,12 @@ hesim_data(strategies, patients, states = NULL, transitions = NULL,
   times = NULL)
 }
 \arguments{
-\item{strategies}{A table of treatment strategies. 
+\item{strategies}{A table of treatment strategies.
 Must contain the column \code{strategy_id} denoting a unique strategy. Other columns are variables
- describing the characteristics of a treatment strategy.}
+describing the characteristics of a treatment strategy.}
 
-\item{patients}{A table of patient observations. 
-Must contain the column \code{patient_id} denoting a unique patient. The 
+\item{patients}{A table of patient observations.
+Must contain the column \code{patient_id} denoting a unique patient. The
 number of rows should be equal to the number of patients in the model.
 Other columns are variables describing the characteristics of a patient.}
 
@@ -27,12 +27,12 @@ characteristics of a health state.}
 the starting health state; and \code{to} which denotes the state that will be
 transitioned to.}
 
-\item{times}{A table of time intervals. Must contain the column \code{time_start}, 
+\item{times}{A table of time intervals. Must contain the column \code{time_start},
 which denotes the starting time of times intervals defined between \code{time_start}
- and \code{time_stop}. \code{hesim_data()} automatically creates the columns
- \code{time_stop} and \code{time_id} (a vector of integers sorted by \code{time_start}).
- Time intervals are closed on the left and open on the right and the final time
-  interval is defined from \code{time_start} to infinity.}
+and \code{time_stop}. \code{hesim_data()} automatically creates the columns
+\code{time_stop} and \code{time_id} (a vector of integers sorted by \code{time_start}).
+Time intervals are closed on the left and open on the right and the final time
+interval is defined from \code{time_start} to infinity.}
 }
 \value{
 Returns an object of class "hesim_data", which is a list of data tables for
@@ -40,7 +40,7 @@ health economic simulation modeling.
 }
 \description{
 A list of tables required for health-economic simulation modeling.
-Each table must either be a \code{\link{data.frame}} or \code{\link{data.table}}. All ID variables within 
+Each table must either be a \code{\link{data.frame}} or \code{\link{data.table}}. All ID variables within
 each table must be numeric vectors of integers.
 }
 \examples{

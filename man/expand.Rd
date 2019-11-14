@@ -7,7 +7,7 @@
 expand(object, by)
 }
 \description{
-A generic function for "expanding" an object. Only used for 
+A generic function for "expanding" an object. Only used for
 \code{\link{hesim_data}} objects.
 }
 \keyword{internal}

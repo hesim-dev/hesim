@@ -88,29 +88,39 @@ rdirichlet <- function(n, alpha){
   return(x/as.vector(sm))
 }
 
-# check accuracy
-n <- 10000
-alpha <- matrix(c(100, 200, 500, 50, 70, 75), ncol = 3, nrow = 2, byrow = TRUE)
-samp1 <- rdirichlet_mat(n, alpha)
-samp2.1 <- rdirichlet(n, alpha[1, ])
-mean1 <- apply(samp1, c(1, 2), mean)
-mean2.1 <- apply(samp2.1, 2, mean)
-expect_equal(mean1[1, ], mean2.1, tolerance = .02, scale = 1)
-
-# works with vector
-expect_error(rdirichlet_mat(n = 1, alpha[1, ]), NA)
-
-# check errors
-expect_error(rdirichlet_mat(n = -1, alpha))
-expect_error(rdirichlet_mat(n = 1, array(alpha, dim = c(2, 3, 1))))
-
-# rdirichlet_mat ---------------------------------------------------------------
-n <- 10000
-m <- 2 ; s <- 1.7; q <- 1
-expect_error(hesim::fast_rgengamma(n, mu = m, sigma = c(1, 1), Q = q))
-expect_error(hesim::fast_rgengamma(n, mu = c(1, 1), sigma = s, Q = q))
-expect_error(hesim::fast_rgengamma(n, mu = m, sigma = s, Q = c(1, 5)))
-r1 <- hesim::fast_rgengamma(n, mu = m, sigma = s, Q = q)
-r2 <- flexsurv::rgengamma(n, mu = m, sigma = s, Q = q)
-expect_equal(mean(r1), mean(r2), tol = .1, size = 1)
-expect_equal(median(r1), median(r2), tol = .1, size = 1)
+test_that("rdirichlet_mat", {
+  
+  # check accuracy
+  n <- 10000
+  alpha <- matrix(c(100, 200, 500, 50, 70, 75), ncol = 3, nrow = 2, byrow = TRUE)
+  samp1 <- rdirichlet_mat(n, alpha)
+  samp2.1 <- rdirichlet(n, alpha[1, ])
+  mean1 <- apply(samp1, c(1, 2), mean)
+  mean2.1 <- apply(samp2.1, 2, mean)
+  expect_equal(mean1[1, ], mean2.1, tolerance = .02, scale = 1)
+  
+  # works with vector and 2D array
+  expect_error(rdirichlet_mat(n = 1, alpha[1, ]), NA)
+  expect_error(rdirichlet_mat(n = 1, array(1:4, dim = c(2, 2))), NA)
+  
+  # check errors
+  expect_error(rdirichlet_mat(n = -1, alpha),
+               "n must be greater than 0")
+  expect_error(rdirichlet_mat(n = 1, rbind(alpha, alpha)),
+               paste0("The number of rows of 'alpha' must be less than or ",
+                      "equal to the number of columns"))
+  expect_error(rdirichlet_mat(n = 1, c("1", "2")),
+               "alpha must be a numeric matrix or vector")
+  expect_error(rdirichlet_mat(n = 1, array(1:4, dim = c(2, 2, 1))),
+               "alpha must be a numeric matrix or vector")
+  
+  n <- 10000
+  m <- 2 ; s <- 1.7; q <- 1
+  expect_error(hesim::fast_rgengamma(n, mu = m, sigma = c(1, 1), Q = q))
+  expect_error(hesim::fast_rgengamma(n, mu = c(1, 1), sigma = s, Q = q))
+  expect_error(hesim::fast_rgengamma(n, mu = m, sigma = s, Q = c(1, 5)))
+  r1 <- hesim::fast_rgengamma(n, mu = m, sigma = s, Q = q)
+  r2 <- flexsurv::rgengamma(n, mu = m, sigma = s, Q = q)
+  expect_equal(mean(r1), mean(r2), tol = .1, size = 1)
+  expect_equal(median(r1), median(r2), tol = .1, size = 1)
+})

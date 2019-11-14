@@ -82,8 +82,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -93,13 +98,12 @@
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -168,12 +172,12 @@ objects.</p>
 <span class='no'>params_list</span> <span class='kw'>&lt;-</span> <span class='fu'>params_lm_list</span>(<span class='no'>params1</span>, <span class='no'>params2</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>params_list</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; $coefs
-#&gt;            [,1]      [,2]
-#&gt; [1,] -0.0291177 0.3268880
-#&gt; [2,]  0.6672634 0.7249889
+#&gt;           [,1]      [,2]
+#&gt; [1,] 0.4719940 0.8253012
+#&gt; [2,] 0.6050653 0.1680357
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.3332290 0.1076738
+#&gt; [1] 0.09879848 0.62310402
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2
@@ -183,12 +187,12 @@ objects.</p>
 #&gt; 
 #&gt; [[2]]
 #&gt; $coefs
-#&gt;            [,1]     [,2]
-#&gt; [1,] -0.2793113 0.829587
-#&gt; [2,]  0.7367600 1.100981
+#&gt;            [,1]      [,2]
+#&gt; [1,] 0.24324878 0.8719042
+#&gt; [2,] 0.05547808 0.0554965
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.2479514 0.5455200
+#&gt; [1] 0.06986231 0.26428549
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2

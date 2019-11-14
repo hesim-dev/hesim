@@ -16,7 +16,7 @@ second data frame contains drug cost data.}
 ctstm3_exdata
 }
 \description{
-A collection of example datasets containing health state transition, 
+A collection of example datasets containing health state transition,
 costs, and utility data for a 3-state continuous time state transition model.
 }
 \section{Transitions data}{
@@ -42,16 +42,16 @@ The data frame has the following columns:
 The cost list contains two data frames. The first data frame contains summary data on
 medical costs by health state, and contains the following columns:
 \describe{
-  \item{state_id}{The health state identification number.}
-  \item{mean}{Mean costs.}
-  \item{se}{Standard error of medical costs.}
- }
- 
+\item{state_id}{The health state identification number.}
+\item{mean}{Mean costs.}
+\item{se}{Standard error of medical costs.}
+}
+
 The second data frame contains data on the drug costs associated with each treatment strategy.
 \describe{
- \item{strategy_id}{The treatment strategy identification number.}
- \item{costs}{Annualized drug costs.}
- }
+\item{strategy_id}{The treatment strategy identification number.}
+\item{costs}{Annualized drug costs.}
+}
 }
 
 \section{Utility data}{

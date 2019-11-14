@@ -326,12 +326,7 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, 
     if (!is.null(n)){
       n_samples <- length(unique(tbl$sample))
       mu <- matrix(mu, ncol = n_samples, byrow = FALSE)
-      if (n < n_samples){
-        samples <- sample.int(n_samples, n, replace = FALSE) 
-      } else if (n > n_samples) {
-        warning("'n' is larger than the number of unique values of 'sample' in 'tbl'.")
-        samples <- sample.int(n_samples, n, replace = TRUE) 
-      }
+      samples <- sample_from_posterior(n = n, n_samples = n_samples)
       if (n != n_samples){
         mu <- mu[, samples, drop = FALSE]
       }
@@ -407,6 +402,22 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, 
   return(StateVals$new(params = tparams, time_reset = time_reset))
 }
 
+create_StateVals.eval_model <- function(object, cost = TRUE, name = NULL,
+                                        time_reset = FALSE, ...){
+  out <- if (cost) object[["costs"]][[name]] else object$utility
+  n_states <- object$n_states - 1 # The non-death states
+  id  <- object$id[[attr(out, "id_index")]]
+  out_id <- id[rep(1:nrow(id), each = n_states)]
+  if ((is.numeric(out) && length(dim(out)) <= 1) || ncol(out) == 1){
+    out_dt <- cbind(out_id, value = rep(out, each = n_states))
+  } else{
+    out_dt <- cbind(out_id, value = as.vector(t(out)))
+  }
+  out_dt[, ("state_id") := rep(1:n_states, times = nrow(id))]
+  setnames(out_dt, "patient_id", "grp_id")
+  return(create_StateVals(stateval_tbl(out_dt, dist = "custom"),
+                          n = object$n))
+}
 
 # Manual documentation in StateVals.Rd
 #' @export
@@ -510,6 +521,8 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
 #' \code{riemann_right} right for a right Riemann sum.
 #' @param lys If \code{TRUE}, then life-years are simulated in addition to 
 #' QALYs. 
+#' @return \code{sim_costs} and \code{sim_qalys} return objects of class
+#' \code{costs} and \code{qalys}, respectively. 
 #' @details 
 #' Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state. 
 #' Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
@@ -533,6 +546,8 @@ sim_qalys <- function(object, utility_model, dr, method, lys){
                     dr,
                     method)
   setnames(qalys, "value", "qalys")
+  setattr(qalys, "class", 
+          c("qalys", "data.table", "data.frame"))
   return(qalys)
 }
 
@@ -556,13 +571,60 @@ sim_costs <- function(object, cost_models, dr, method){
                      dr,
                      method)
   setnames(costs, "value", "costs")
+  setattr(costs, "class", 
+          c("costs", "data.table", "data.frame"))
   return(costs)
 }
+
+#' Costs object
+#'
+#' An object of class \code{costs} returned from methods 
+#' \code{$sim_costs()} in model classes that stores simulated costs. 
+#' 
+#' @section Components:
+#' A \code{costs} object inherits from \code{data.table} and contains
+#' the following columns:
+#' 
+#' \describe{
+#'   \item{sample}{A random sample from the PSA.}
+#'   \item{strategy_id}{The treatment strategy ID.}
+#'   \item{patient_id}{The patient ID.}
+#'   \item{state_id}{The health state ID.}
+#'   \item{dr}{The rate used to discount costs.}
+#'   \item{category}{The cost category (e.g., drug costs, medical costs, etc).}
+#'   \item{costs}{The simulated cost values.}
+#' }
+#'
+#' @name costs
+NULL
+
+#' Quality-adjusted life-years object
+#'
+#' An object of class \code{qalys} returned from methods 
+#' \code{$sim_qalys()} in model classes that stores simulated 
+#' quality-adjusted life-years (QALYs).
+#' 
+#' @section Components:
+#' A \code{qalys} object inherits from \code{data.table} and contains
+#' the following columns:
+#' 
+#' \describe{
+#'   \item{sample}{A random sample from the PSA.}
+#'   \item{strategy_id}{The treatment strategy ID.}
+#'   \item{patient_id}{The patient ID.}
+#'   \item{state_id}{The health state ID.}
+#'   \item{dr}{The rate used to discount QALYs.}
+#'   \item{category}{A single category always equal to "qalys".}
+#'   \item{costs}{The simulated values of QALYs.}
+#' }
+#'
+#' @name qalys
+NULL
 
 # State probability object -----------------------------------------------------
 #' State probability object
 #'
-#' An object of class \code{\link{stateprobs}} returned from methods 
+#' An object of class \code{stateprobs} returned from methods 
 #' \code{$sim_stateprobs()} in model classes. 
 #' 
 #' @section Components:

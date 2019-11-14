@@ -35,7 +35,7 @@
 <meta property="og:title" content="Random generation for categorical distribution — rcat" />
 
 <meta property="og:description" content="Draw random samples from a categorical distribution given a matrix of probabilities.
- rcat is vectorized and written in C++ for speed." />
+rcat is vectorized and written in C++ for speed." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -83,8 +83,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -136,7 +140,7 @@
     <div class="ref-description">
     
     <p>Draw random samples from a categorical distribution given a matrix of probabilities.
- <code>rcat</code> is vectorized and written in C++ for speed.</p>
+<code>rcat</code> is vectorized and written in C++ for speed.</p>
     
     </div>
 
@@ -151,15 +155,15 @@
     </tr>
     <tr>
       <th>prob</th>
-      <td><p>A matrix of probabilities where rows correspond to observations 
+      <td><p>A matrix of probabilities where rows correspond to observations
 and columns correspond to categories.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of random samples from the categorical distribution. The length of the sample is 
-determined by n. The numerical arguments other than n are recycled so that the number of samples is 
+    <p>A vector of random samples from the categorical distribution. The length of the sample is
+determined by n. The numerical arguments other than n are recycled so that the number of samples is
 equal to n.</p>
     
 
@@ -173,7 +177,7 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>()
 <span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.002   0.000   0.002 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/prop.table'>prop.table</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
+#&gt;   0.002   0.000   0.003 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/prop.table'>prop.table</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
 <span class='co'># rmultinom from base R </span>
@@ -182,7 +186,7 @@ equal to n.</p>
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/apply'>apply</a></span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/apply'>apply</a></span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/which'>which</a></span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.048   0.002   0.050 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/prop.table'>prop.table</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
+#&gt;   0.050   0.001   0.051 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/prop.table'>prop.table</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div></pre>
   </div>

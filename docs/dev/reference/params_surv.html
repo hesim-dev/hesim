@@ -34,7 +34,7 @@
   
 <meta property="og:title" content="Parameters of a survival model — params_surv" />
 
-<meta property="og:description" content="Create a list containing the parameters of a single fitted parametric or 
+<meta property="og:description" content="Create a list containing the parameters of a single fitted parametric or
 flexibly parametric survival model." />
 <meta name="twitter:card" content="summary" />
 
@@ -83,8 +83,13 @@ flexibly parametric survival model." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@ flexibly parametric survival model." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -135,7 +139,7 @@ flexibly parametric survival model." />
 
     <div class="ref-description">
     
-    <p>Create a list containing the parameters of a single fitted parametric or 
+    <p>Create a list containing the parameters of a single fitted parametric or
 flexibly parametric survival model.</p>
     
     </div>
@@ -147,8 +151,8 @@ flexibly parametric survival model.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>coefs</th>
-      <td><p>A list of length equal to the number of parameters in the 
-survival distribution. Each element of the list is a matrix of samples from 
+      <td><p>A list of length equal to the number of parameters in the
+survival distribution. Each element of the list is a matrix of samples from
 the posterior distribution of the regression coefficients used to predict
 a given parameter.</p></td>
     </tr>
@@ -171,40 +175,40 @@ a spline or fractional polynomial model is fit.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Survival is modeled as a function of \(L\) parameters \(\alpha_l\). 
+    <p>Survival is modeled as a function of \(L\) parameters \(\alpha_l\).
 Letting \(F(t)\) be the cumulative distribution function, survival at time \(t\)
 is given by
 $$1 - F(t | \alpha_1(x_{1}), \ldots, \alpha_L(x_{L})).$$
-The parameters are modeled as a function of covariates, \(x_l\), with an 
+The parameters are modeled as a function of covariates, \(x_l\), with an
 inverse transformation function \(g^{-1}()\),
 $$\alpha_l =  g^{-1}(x_{l}^T \beta_l).$$
 \(g^{-1}()\) is typically \(exp()\) if a parameter is strictly positive
 and the identity function if the parameter space is unrestricted.</p>
 <p>The types of distributions that can be specified are:</p><ul>
 <li><p><code>exponential</code> or <code>exp</code> Exponential distribution. <code>coef</code>
-must contain the <code>rate</code> parameter on the log scale and the same parameterization as in 
+must contain the <code>rate</code> parameter on the log scale and the same parameterization as in
 <code><a href='https://www.rdocumentation.org/packages/stats/topics/Exponential'>Exponential</a></code>.</p></li>
-<li><p><code>weibull</code> or <code>weibull.quiet</code> Weibull distribution. The first 
+<li><p><code>weibull</code> or <code>weibull.quiet</code> Weibull distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
 that same as in <code><a href='https://www.rdocumentation.org/packages/stats/topics/Weibull'>Weibull</a></code>.</p></li>
-<li><p><code>gamma</code> Gamma distribution. The first 
+<li><p><code>gamma</code> Gamma distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>rate</code> parameter (also on the log scale). The parameterization is
 that same as in <code><a href='https://www.rdocumentation.org/packages/stats/topics/GammaDist'>GammaDist</a></code>.</p></li>
-<li><p><code>lnorm</code> Lognormal distribution. The first 
+<li><p><code>lnorm</code> Lognormal distribution. The first
 element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the mean on the log scale) and the second
 element is the <code>sdlog</code> parameter (i.e., the standard deviation on the log scale). The parameterization is
 that same as in <code><a href='https://www.rdocumentation.org/packages/stats/topics/Lognormal'>Lognormal</a></code>.</p></li>
-<li><p><code>gompertz</code> Gompertz distribution. The first 
+<li><p><code>gompertz</code> Gompertz distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter and the second
 element is the <code>rate</code> parameter (on the log scale). The parameterization is
 that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/Gompertz'>Gompertz</a></code>.</p></li>
-<li><p><code>llogis</code> Log-logistic distribution. The first 
+<li><p><code>llogis</code> Log-logistic distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
 that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/Llogis'>Llogis</a></code>.</p></li>
-<li><p><code>gengamma</code> Generalized gamma distribution. The first 
+<li><p><code>gengamma</code> Generalized gamma distribution. The first
 element of <code>coef</code> is the location parameter <code>mu</code>, the second
 element is the scale parameter <code>sigma</code> (on the log scale), and the
 third element is the shape parameter <code>Q</code>. The parameterization is
@@ -215,13 +219,13 @@ to the number of knots (including the boundary knots). See below for details on 
 auxiliary arguments. The parameterization is that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/Survspline'>Survspline</a></code>.</p></li>
 <li><p><code>fracpoly</code> Fractional polynomials. Each element of <code>coef</code> is a parameter of the
 fractional polynomial model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
-to the number of powers minus 1. See below for details on the auxiliary arguments 
+to the number of powers minus 1. See below for details on the auxiliary arguments
 (i.e., <code>powers</code>).</p></li>
 </ul>
     <p>Auxiliary arguments for spline models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
 <dt><code>knots</code></dt><dd><p>A numeric vector of knots.</p></dd>
 <dt><code>scale</code></dt><dd><p>The survival outcome to be modeled
-as a spline function. Options are "log_cumhazard" for the log cumulative hazard; 
+as a spline function. Options are "log_cumhazard" for the log cumulative hazard;
 "log_hazard" for the log hazard rate; "log_cumodds" for the log cumulative odds;
 and "inv_normal" for the inverse normal distribution function.</p></dd>
 <dt><code>timescale</code></dt><dd><p>If "log" (the default), then survival is modeled as a spline function
@@ -229,21 +233,21 @@ of log time; if "identity", then it is modeled as a spline function of time.</p>
 </dl>
     <p>Auxiliary arguments for fractional polynomial models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
 <dt><code>powers</code></dt><dd><p>A vector of the powers of the fractional polynomial with each element
- chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
+chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
 </dl>
-    <p>Furthermore, when splines (with <code>scale = "log_hazard"</code>) or fractional 
-polynomials are used, numerical methods must be used to compute the cumulative 
+    <p>Furthermore, when splines (with <code>scale = "log_hazard"</code>) or fractional
+polynomials are used, numerical methods must be used to compute the cumulative
 hazard and for random number generation. The following additional auxiliary arguments
 can therefore be specified:</p><dl class='dl-horizontal'>
-<dt><code>cumhaz_method</code></dt><dd><p>Numerical method used to compute cumulative hazard 
+<dt><code>cumhaz_method</code></dt><dd><p>Numerical method used to compute cumulative hazard
 (i.e., to integrate the hazard function). Always used for fractional polynomials
 but only used for splines if <code>scale = "log_hazard"</code>.
 Options are "quad" for adaptive quadrature and "riemann" for Riemann sum.</p></dd>
- <dt><code>random_method</code></dt><dd><p>Method used to randomly draw from
- an arbitrary survival function. Options are "invcdf" for the inverse CDF and
- "sample" for randomly sampling from discrete survival probabilities.</p></dd>
- <dt><code>step</code></dt><dd><p>Step size for computation of cumulative hazard with 
-numerical integration. Only required when using "riemann" to compute the 
+<dt><code>random_method</code></dt><dd><p>Method used to randomly draw from
+an arbitrary survival function. Options are "invcdf" for the inverse CDF and
+"sample" for randomly sampling from discrete survival probabilities.</p></dd>
+<dt><code>step</code></dt><dd><p>Step size for computation of cumulative hazard with
+numerical integration. Only required when using "riemann" to compute the
 cumulative hazard or using "sample" for random number generation.</p></dd>
 </dl>
     

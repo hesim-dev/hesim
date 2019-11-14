@@ -26,7 +26,7 @@ numeric vector of times. If joining multiple sets of models, then a list of sort
 with the length of each list element equal to the number of sets of models.}
 }
 \value{
-Returns a class of the same name as the function that is a 
+Returns a class of the same name as the function that is a
 list with two variables:
 \describe{
 \item{models}{List of joined models.}
@@ -38,7 +38,7 @@ Construct classes which are used to join statistical models at specified time po
 The first model is used prior to the first time point, the second
 model is used prior to the second time point, and so on. There should be \code{N + 1}
 models and \code{N} time points. Can be used to join a single set of models (e.g., for survival analysis or for making predictions from a jointly
-estimated multi-state model) or to join multiple sets of models (e.g., predicting curves in a 
+estimated multi-state model) or to join multiple sets of models (e.g., predicting curves in a
 partitioned survival analysis).
 }
 \examples{

@@ -34,8 +34,8 @@
   
 <meta property="og:title" content="List of survival distributions — hesim_survdists" />
 
-<meta property="og:description" content="List of additional distributions for parametric survival analysis that are 
-not contained in flexsurv. Can be used to fit models with 
+<meta property="og:description" content="List of additional distributions for parametric survival analysis that are
+not contained in flexsurv. Can be used to fit models with
 flexsurvreg. Same format as flexsurv.dists in flexsurv." />
 <meta name="twitter:card" content="summary" />
 
@@ -84,8 +84,13 @@ flexsurvreg. Same format as flexsurv.dists in flexsurv." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -95,13 +100,12 @@ flexsurvreg. Same format as flexsurv.dists in flexsurv." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -136,8 +140,8 @@ flexsurvreg. Same format as flexsurv.dists in flexsurv." />
 
     <div class="ref-description">
     
-    <p>List of additional distributions for parametric survival analysis that are 
-not contained in flexsurv. Can be used to fit models with 
+    <p>List of additional distributions for parametric survival analysis that are
+not contained in flexsurv. Can be used to fit models with
 flexsurvreg. Same format as flexsurv.dists in flexsurv.</p>
     
     </div>
@@ -147,22 +151,22 @@ flexsurvreg. Same format as flexsurv.dists in flexsurv.</p>
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A list with the following elements:</p><dl class='dl-horizontal'>
-  <dt>name</dt><dd><p>Name of the probability distribution.</p></dd>
-  <dt>pars</dt><dd><p>Vector of strings naming the parameters of the distribution. 
-  These must be the same names as the arguments of the density and probability functions.</p></dd>
-  <dt>location</dt><dd><p>Name of the location parameter.</p></dd>
-  <dt>transforms</dt><dd><p>List of R functions which transform the range of values 
-  taken by each parameter onto the real line. For example, 
-  <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(log, log)</a></code> for a distribution with two positive parameters.</p></dd>
-  <dt>inv.transforms</dt><dd><p>List of R functions defining the corresponding inverse 
-  transformations. Note these must be lists, even for single parameter 
-  distributions they should be supplied as, e.g. <code>c(exp) or list(exp)</code>.</p></dd>
-  <dt>inits</dt><dd><p>A function of the observed survival times <code>t</code> (including 
-  right-censoring times, and using the halfway point for interval-censored times) 
-  which returns a vector of reasonable initial values for maximum likelihood 
-  estimation of each parameter. For example, <code>function(t){ c(1, mean(t)) }</code>
-   will always initialize the first of two parameters at 1, and the second 
-   (a scale parameter, for instance) at the mean of <code>t</code>.</p></dd>
+<dt>name</dt><dd><p>Name of the probability distribution.</p></dd>
+<dt>pars</dt><dd><p>Vector of strings naming the parameters of the distribution.
+These must be the same names as the arguments of the density and probability functions.</p></dd>
+<dt>location</dt><dd><p>Name of the location parameter.</p></dd>
+<dt>transforms</dt><dd><p>List of R functions which transform the range of values
+taken by each parameter onto the real line. For example,
+<code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(log, log)</a></code> for a distribution with two positive parameters.</p></dd>
+<dt>inv.transforms</dt><dd><p>List of R functions defining the corresponding inverse
+transformations. Note these must be lists, even for single parameter
+distributions they should be supplied as, e.g. <code>c(exp) or list(exp)</code>.</p></dd>
+<dt>inits</dt><dd><p>A function of the observed survival times <code>t</code> (including
+right-censoring times, and using the halfway point for interval-censored times)
+which returns a vector of reasonable initial values for maximum likelihood
+estimation of each parameter. For example, <code>function(t){ c(1, mean(t)) }</code>
+will always initialize the first of two parameters at 1, and the second
+(a scale parameter, for instance) at the mean of <code>t</code>.</p></dd>
 </dl>
     
 

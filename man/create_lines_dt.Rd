@@ -7,7 +7,7 @@
 create_lines_dt(strategy_list, strategy_ids = NULL)
 }
 \arguments{
-\item{strategy_list}{A list where each element is a treatment strategy 
+\item{strategy_list}{A list where each element is a treatment strategy
 consisting of a vector of treatments.}
 
 \item{strategy_ids}{A numeric vector denoting the numeric id of each strategy

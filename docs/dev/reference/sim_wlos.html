@@ -83,8 +83,13 @@ life-years (QALYs)." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@ life-years (QALYs)." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -162,14 +166,14 @@ to simulate utility.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Method used to integrate state values when computing 
+      <td><p>Method used to integrate state values when computing
 weighted length of stay. Options are <code>trapz</code> for the trapezoid rule,
-<code>riemann_left</code> left for a left Riemann sum, and  
+<code>riemann_left</code> left for a left Riemann sum, and
 <code>riemann_right</code> right for a right Riemann sum.</p></td>
     </tr>
     <tr>
       <th>lys</th>
-      <td><p>If <code>TRUE</code>, then life-years are simulated in addition to 
+      <td><p>If <code>TRUE</code>, then life-years are simulated in addition to
 QALYs.</p></td>
     </tr>
     <tr>
@@ -179,17 +183,22 @@ to simulate costs.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>sim_costs</code> and <code>sim_qalys</code> return objects of class
+<code>costs</code> and <code>qalys</code>, respectively.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state. 
-Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
+    <p>Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state.
+Weights are a function of the discount factor and the state value predicted using either the cost or QALY model.
 Mathematically, discounted costs and QALYs in health state \(s\) are calculated as,</p>
 <p>$$\int_0^T w_h e^{-rt} P_h(t) dt $$,</p>
-<p>where for health state \(h\) and time t, \(w_h\) is the predicted cost 
-or QALY weight, \(r\) is the discount rate, and \(P_h(t)\) is the 
+<p>where for health state \(h\) and time t, \(w_h\) is the predicted cost
+or QALY weight, \(r\) is the discount rate, and \(P_h(t)\) is the
 probability of being in a given health state. The integral is calculated
- numerically from the points in <code>t_</code> using the approach selected 
- using the argument <code>method</code>.</p>
+numerically from the points in <code>t_</code> using the approach selected
+using the argument <code>method</code>.</p>
     
 
   </div>
@@ -198,6 +207,8 @@ probability of being in a given health state. The integral is calculated
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
           </ul>
 

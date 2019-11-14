@@ -25,10 +25,10 @@ create_IndivCtstmTrans(object, ...)
 
 \item{...}{Further arguments passed to \code{IndivCtstmTrans$new()} in \code{\link{IndivCtstmTrans}}.}
 
-\item{input_data}{An object of class "expanded_hesim_data" returned by 
+\item{input_data}{An object of class "expanded_hesim_data" returned by
 \code{\link{expand.hesim_data}}.}
 
-\item{trans_mat}{The transition matrix describing the states and transitions in a 
+\item{trans_mat}{The transition matrix describing the states and transitions in a
 multi-state model in the format from the \link[mstate]{mstate} package. See \link{IndivCtstmTrans}.}
 
 \item{clock}{"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
@@ -38,7 +38,7 @@ of clock-reset and clock-forward models. See the field \code{clock} in \code{\li
 
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
 
-\item{reset_states}{A vector denoting the states in which time resets. See the field 
+\item{reset_states}{A vector denoting the states in which time resets. See the field
 \code{reset_states} in \code{\link{IndivCtstmTrans}}.}
 }
 \value{

@@ -257,10 +257,12 @@ alpha2 <- rbind(c(400, 400, 400, 800),
                 c(0, 0, 700, 300),
                 c(0, 0, 0, 1))
 pmat <- data.table(sample = rep(1:n_samples, each = 2),
-                   strategy_id = rep(1:2, times = 5),
-                   patient_id = 1,
-                   rdirichlet_mat(n = 5, alpha = rbind(alpha1, alpha2),
-                                  output = "data.table"))
+  strategy_id = rep(1:2, times = 5),
+  patient_id = 1,
+  rbind(
+    rdirichlet_mat(n = 5, alpha = alpha1, output = "data.table"),
+    rdirichlet_mat(n = 5, alpha = alpha2, output = "data.table"))
+)
 transmod <- CohortDtstmTrans$new(params = tparams_transprobs(pmat))
 econmod <- CohortDtstm$new(trans_model = transmod)
 econmod$sim_stateprobs(n_cycles = 5)

@@ -7,23 +7,23 @@
 summarize_ce(costs, qalys)
 }
 \arguments{
-\item{costs}{Simulated costs by category.}
+\item{costs}{Simulated costs by category (objects of class \code{\link{costs}}).}
 
-\item{qalys}{Simulated QALYs.}
+\item{qalys}{Simulated QALYs (objects of class \code{\link{qalys}})..}
 }
 \value{
 An object of class \code{\link{ce}}.
 }
 \description{
 Summarize costs and quality-adjusted life-years (QALYs) given output simulated
-from an economic model. The summary output is used to perform 
+from an economic model. The summary output is used to perform
 cost-effectiveness analysis with \code{\link{icea}} and \code{\link{icea_pw}}.
 }
 \details{
-If mean costs and/or QALYs have already been computed 
-(i.e., an average within a population), then there 
-must be one observation for each discount rate (\code{dr}), 
-PSA sample (\code{sample}), treatment strategy (\code{strategy_id}), 
+If mean costs and/or QALYs have already been computed
+(i.e., an average within a population), then there
+must be one observation for each discount rate (\code{dr}),
+PSA sample (\code{sample}), treatment strategy (\code{strategy_id}),
 and health state (\code{state_id}). Alternatively, there can be column
 denoting a patient (\code{patient_id}), in which case outcomes will first be
 averaged across patients.

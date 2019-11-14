@@ -7,8 +7,8 @@
 params_surv(coefs, dist, aux = NULL)
 }
 \arguments{
-\item{coefs}{A list of length equal to the number of parameters in the 
-survival distribution. Each element of the list is a matrix of samples from 
+\item{coefs}{A list of length equal to the number of parameters in the
+survival distribution. Each element of the list is a matrix of samples from
 the posterior distribution of the regression coefficients used to predict
 a given parameter.}
 
@@ -23,46 +23,46 @@ in each element of \code{coefs}, which must be the same. The list may also conta
 a spline or fractional polynomial model is fit.
 }
 \description{
-Create a list containing the parameters of a single fitted parametric or 
+Create a list containing the parameters of a single fitted parametric or
 flexibly parametric survival model.
 }
 \details{
-Survival is modeled as a function of \eqn{L} parameters \eqn{\alpha_l}. 
+Survival is modeled as a function of \eqn{L} parameters \eqn{\alpha_l}.
 Letting \eqn{F(t)} be the cumulative distribution function, survival at time \eqn{t}
 is given by
 \deqn{1 - F(t | \alpha_1(x_{1}), \ldots, \alpha_L(x_{L})).}
-The parameters are modeled as a function of covariates, \eqn{x_l}, with an 
+The parameters are modeled as a function of covariates, \eqn{x_l}, with an
 inverse transformation function \eqn{g^{-1}()},
 \deqn{\alpha_l =  g^{-1}(x_{l}^T \beta_l).}
 \eqn{g^{-1}()} is typically \eqn{exp()} if a parameter is strictly positive
 and the identity function if the parameter space is unrestricted.
 
-The types of distributions that can be specified are: 
+The types of distributions that can be specified are:
 \itemize{
 \item{\code{exponential} or \code{exp}}{ Exponential distribution. \code{coef}
-must contain the \code{rate} parameter on the log scale and the same parameterization as in 
+must contain the \code{rate} parameter on the log scale and the same parameterization as in
 \code{\link[stats]{Exponential}}}.
-\item{\code{weibull} or \code{weibull.quiet}}{ Weibull distribution. The first 
+\item{\code{weibull} or \code{weibull.quiet}}{ Weibull distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{scale} parameter (also on the log scale). The parameterization is
 that same as in \code{\link[stats]{Weibull}}.}
-\item{\code{gamma}}{ Gamma distribution. The first 
+\item{\code{gamma}}{ Gamma distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{rate} parameter (also on the log scale). The parameterization is
 that same as in \code{\link[stats]{GammaDist}}.}
-\item{\code{lnorm}}{ Lognormal distribution. The first 
+\item{\code{lnorm}}{ Lognormal distribution. The first
 element of \code{coef} is the \code{meanlog} parameter (i.e., the mean on the log scale) and the second
 element is the \code{sdlog} parameter (i.e., the standard deviation on the log scale). The parameterization is
 that same as in \code{\link[stats]{Lognormal}}.}
-\item{\code{gompertz}}{ Gompertz distribution. The first 
+\item{\code{gompertz}}{ Gompertz distribution. The first
 element of \code{coef} is the \code{shape} parameter and the second
 element is the \code{rate} parameter (on the log scale). The parameterization is
 that same as in \code{\link[flexsurv]{Gompertz}}.}
-\item{\code{llogis}}{ Log-logistic distribution. The first 
+\item{\code{llogis}}{ Log-logistic distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{scale} parameter (also on the log scale). The parameterization is
 that same as in \code{\link[flexsurv]{Llogis}}.}
-\item{\code{gengamma}}{ Generalized gamma distribution. The first 
+\item{\code{gengamma}}{ Generalized gamma distribution. The first
 element of \code{coef} is the location parameter \code{mu}, the second
 element is the scale parameter \code{sigma} (on the log scale), and the
 third element is the shape parameter \code{Q}. The parameterization is
@@ -73,7 +73,7 @@ to the number of knots (including the boundary knots). See below for details on 
 auxiliary arguments. The parameterization is that same as in \code{\link[flexsurv]{Survspline}}.}
 \item{\code{fracpoly}}{ Fractional polynomials. Each element of \code{coef} is a parameter of the
 fractional polynomial model (i.e. \code{gamma_0}, \code{gamma_1}, \eqn{\ldots}) with length equal
-to the number of powers minus 1. See below for details on the auxiliary arguments 
+to the number of powers minus 1. See below for details on the auxiliary arguments
 (i.e., \code{powers}).}
 }
 
@@ -81,7 +81,7 @@ Auxiliary arguments for spline models should be specified as a list containing t
 \describe{
 \item{\code{knots}}{A numeric vector of knots.}
 \item{\code{scale}}{The survival outcome to be modeled
-as a spline function. Options are "log_cumhazard" for the log cumulative hazard; 
+as a spline function. Options are "log_cumhazard" for the log cumulative hazard;
 "log_hazard" for the log hazard rate; "log_cumodds" for the log cumulative odds;
 and "inv_normal" for the inverse normal distribution function.}
 \item{\code{timescale}}{If "log" (the default), then survival is modeled as a spline function
@@ -91,23 +91,23 @@ of log time; if "identity", then it is modeled as a spline function of time.}
 Auxiliary arguments for fractional polynomial models should be specified as a list containing the elements:
 \describe{
 \item{\code{powers}}{ A vector of the powers of the fractional polynomial with each element
- chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
+chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
 }
 
-Furthermore, when splines (with \code{scale = "log_hazard"}) or fractional 
-polynomials are used, numerical methods must be used to compute the cumulative 
+Furthermore, when splines (with \code{scale = "log_hazard"}) or fractional
+polynomials are used, numerical methods must be used to compute the cumulative
 hazard and for random number generation. The following additional auxiliary arguments
 can therefore be specified:
 \describe{
-\item{\code{cumhaz_method}}{Numerical method used to compute cumulative hazard 
+\item{\code{cumhaz_method}}{Numerical method used to compute cumulative hazard
 (i.e., to integrate the hazard function). Always used for fractional polynomials
 but only used for splines if \code{scale = "log_hazard"}.
 Options are "quad" for adaptive quadrature and "riemann" for Riemann sum.}
- \item{\code{random_method}}{Method used to randomly draw from
- an arbitrary survival function. Options are "invcdf" for the inverse CDF and
- "sample" for randomly sampling from discrete survival probabilities.}
- \item{\code{step}}{Step size for computation of cumulative hazard with 
-numerical integration. Only required when using "riemann" to compute the 
+\item{\code{random_method}}{Method used to randomly draw from
+an arbitrary survival function. Options are "invcdf" for the inverse CDF and
+"sample" for randomly sampling from discrete survival probabilities.}
+\item{\code{step}}{Step size for computation of cumulative hazard with
+numerical integration. Only required when using "riemann" to compute the
 cumulative hazard or using "sample" for random number generation.}
 }
 }

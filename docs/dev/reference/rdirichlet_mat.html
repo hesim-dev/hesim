@@ -34,8 +34,8 @@
   
 <meta property="og:title" content="Random generation for multiple Dirichlet distributions — rdirichlet_mat" />
 
-<meta property="og:description" content="Draw random samples from multiple Dirichlet distributions.
-rdirichlet_mat is vectorized and written in C++ for speed." />
+<meta property="og:description" content="Draw random samples from multiple Dirichlet distributions for use in
+transition probability matrices." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -83,8 +83,13 @@ rdirichlet_mat is vectorized and written in C++ for speed." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@ rdirichlet_mat is vectorized and written in C++ for speed." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -135,8 +139,8 @@ rdirichlet_mat is vectorized and written in C++ for speed." />
 
     <div class="ref-description">
     
-    <p>Draw random samples from multiple Dirichlet distributions.
-<code>rdirichlet_mat</code> is vectorized and written in C++ for speed.</p>
+    <p>Draw random samples from multiple Dirichlet distributions for use in
+transition probability matrices.</p>
     
     </div>
 
@@ -162,18 +166,21 @@ rdirichlet_mat is vectorized and written in C++ for speed." />
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If <code>output = "array"</code>, then an array of matrices is returned 
+    <p>If <code>output = "array"</code>, then an array of matrices is returned
 where each row of each matrix is a sample from the Dirichlet distribution.
 If <code>output = "matrix"</code>, then a matrix is returned where each row contains
-all elements of the sampled matrix from the Dirichlet distribution ordered rowwise; 
+all elements of the sampled matrix from the Dirichlet distribution ordered rowwise;
 when <code>output = "data.frame"</code> or <code>output = "data.table"</code> the returned
 value is a <code>data.frame</code> or <code>data.table</code> in the same format as the
 matrix returned with <code>output = "matrix"</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is particularly useful for representing the distribution of 
-transition probabilities in a transition matrix.</p>
+    <p>This function is meant for representing the distribution of
+transition probabilities in a transition matrix. The <code>(i,j)</code> element of
+<code>alpha</code> is a transition from state <code>i</code> to state <code>j</code>. The number of rows in
+<code>alpha</code> must be less than or equal to the number of columns.
+<code>rdirichlet_mat</code> is vectorized and written in C++ for speed.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

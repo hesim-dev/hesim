@@ -34,10 +34,10 @@
   
 <meta property="og:title" content="Expand hesim_data — expand.hesim_data" />
 
-<meta property="og:description" content="Expand the data tables from an object of class hesim_data into a data table in 
-long format (one row for each combination of observations as specified with the 
+<meta property="og:description" content="Expand the data tables from an object of class hesim_data into a data table in
+long format (one row for each combination of observations as specified with the
 ID variables from the tables specified with the by argument).
- See &quot;Details&quot; for an explanation of how the expansion is done." />
+See &quot;Details&quot; for an explanation of how the expansion is done." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -85,8 +85,13 @@ ID variables from the tables specified with the by argument).
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -96,13 +101,12 @@ ID variables from the tables specified with the by argument).
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -137,10 +141,10 @@ ID variables from the tables specified with the by argument).
 
     <div class="ref-description">
     
-    <p>Expand the data tables from an object of class <code><a href='hesim_data.html'>hesim_data</a></code> into a data table in 
-long format (one row for each combination of observations as specified with the 
+    <p>Expand the data tables from an object of class <code><a href='hesim_data.html'>hesim_data</a></code> into a data table in
+long format (one row for each combination of observations as specified with the
 ID variables from the tables specified with the <code>by</code> argument).
- See "Details" for an explanation of how the expansion is done.</p>
+See "Details" for an explanation of how the expansion is done.</p>
     
     </div>
 
@@ -162,14 +166,14 @@ ID variables from the tables specified with the <code>by</code> argument).
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class "expanded_hesim_data", which is a <code>data.table</code> with an "id_vars" 
+    <p>An object of class "expanded_hesim_data", which is a <code>data.table</code> with an "id_vars"
 attribute containing the names of the ID variables in the data table.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is similar to <code><a href='https://www.rdocumentation.org/packages/base/topics/expand.grid'>expand.grid</a></code>, but works for data frames or data tables. 
-Specifically, it creates a <code>data.table</code> from all combinations of the supplied tables in <code>object</code>. 
-The supplied tables are determined using the <code>by</code> argument. The resulting dataset is sorted by 
+    <p>This function is similar to <code><a href='https://www.rdocumentation.org/packages/base/topics/expand.grid'>expand.grid</a></code>, but works for data frames or data tables.
+Specifically, it creates a <code>data.table</code> from all combinations of the supplied tables in <code>object</code>.
+The supplied tables are determined using the <code>by</code> argument. The resulting dataset is sorted by
 prioritizing ID variables as follows: (i) <code>strategy_id</code>, (ii) <code>patient_id</code>,
 (iii) the health-related ID variable (either <code>state_id</code> or <code>transition_id</code>), and
 (iv) the time interval (i.e., <code>time_id</code>).</p>

@@ -34,7 +34,7 @@
   
 <meta property="og:title" content="ICER table — icer_tbl" />
 
-<meta property="og:description" content="Generate a table of incremental cost-effectiveness ratios given output from 
+<meta property="og:description" content="Generate a table of incremental cost-effectiveness ratios given output from
 icea_pw." />
 <meta name="twitter:card" content="summary" />
 
@@ -83,8 +83,13 @@ icea_pw." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@ icea_pw." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -135,7 +139,7 @@ icea_pw." />
 
     <div class="ref-description">
     
-    <p>Generate a table of incremental cost-effectiveness ratios given output from 
+    <p>Generate a table of incremental cost-effectiveness ratios given output from
 <code><a href='icea.html'>icea_pw</a></code>.</p>
     
     </div>
@@ -157,7 +161,7 @@ icea_pw." />
     </tr>
     <tr>
       <th>cri</th>
-      <td><p>If <code>TRUE</code>, credible intervals are computed; otherwise 
+      <td><p>If <code>TRUE</code>, credible intervals are computed; otherwise
 they are not.</p></td>
     </tr>
     <tr>
@@ -188,7 +192,7 @@ each group.</p></td>
     </tr>
     <tr>
       <th>drop</th>
-      <td><p>If <code>TRUE</code>, then the result is coerced to the lowest possible dimension. 
+      <td><p>If <code>TRUE</code>, then the result is coerced to the lowest possible dimension.
 Relevant if <code>output = "matrix"</code> and there is one group, in which case a single
 matrix will be returned if <code>drop = TRUE</code> and a list of length 1 will be returned
 if <code>drop = FALSE</code>.</p></td>
@@ -199,11 +203,11 @@ if <code>drop = FALSE</code>.</p></td>
 
     <p>If <code>output = "matrix"</code>, then a list of matrices (or a matrix if
 <code>drop = TRUE</code>) reporting incremental cost-effectiveness ratios (ICERs)
-by group. Specifically, each matrix contains five rows for: (i) 
+by group. Specifically, each matrix contains five rows for: (i)
 incremental quality-adjusted life-years (QALYs), (ii) incremental costs,
-(iii) the incremental net monetary benefit (NMB), (iv) the ICER, 
+(iii) the incremental net monetary benefit (NMB), (iv) the ICER,
 and (v) a conclusion stating whether each strategy is cost-effective relative
- to a comparator. The number of columns is equal to the
+to a comparator. The number of columns is equal to the
 number of strategies (including the comparator).</p>
 <p>If <code>output = "data.table"</code>, then the results are reported as a <code>data.table</code>,
 with one row for each strategy and group combination.</p>

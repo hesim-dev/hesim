@@ -32,15 +32,15 @@ create_params(object, ...)
 \item{point_estimate}{If TRUE, then the point estimates are returned and
 and no samples are drawn.}
 
-\item{bootstrap}{If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are 
-drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
+\item{bootstrap}{If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are
+drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then
 parameters are bootstrapped using \code{\link{bootstrap}}.}
 
 \item{max_errors}{Equivalent to the \code{max_errors} argument in \code{\link{bootstrap}}.}
 }
 \value{
-An object prefixed by \code{params_}. Mapping between \code{create_params} 
-and the classes of the returned objects are: 
+An object prefixed by \code{params_}. Mapping between \code{create_params}
+and the classes of the returned objects are:
 \itemize{
 \item{\code{create_params.lm} ->}{ \code{params_lm}}
 \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
@@ -49,7 +49,7 @@ and the classes of the returned objects are:
 }
 }
 \description{
-\code{create_params} is a generic function for creating an object containing 
+\code{create_params} is a generic function for creating an object containing
 parameters from a fitted statistical model. If \code{point_estimate = FALSE},
 then random samples from the posterior distribution are returned.
 }

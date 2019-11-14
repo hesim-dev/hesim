@@ -47,8 +47,8 @@ An object of class \code{\link{input_mats}}.
 }
 \description{
 \code{create_input_mats} is a generic function for creating an object of class
-\code{\link{input_mats}}. Model matrices are typically constructed based on the 
-variables specified in the model \code{object} and the data specified in \code{data}, 
+\code{\link{input_mats}}. Model matrices are typically constructed based on the
+variables specified in the model \code{object} and the data specified in \code{data},
 although there are some cases in which \code{\link{input_mats}} can be created
 from \code{object} alone.
 }

@@ -35,7 +35,7 @@
 <meta property="og:title" content="Transition probabilities — tparams_transprobs" />
 
 <meta property="og:description" content="Create a list containing predicted transition probabilities at discrete times.
- Since the transition probabilities have presumably
+Since the transition probabilities have presumably
 already been predicted based on covariate values, no input data is required for
 simulation. The class can be instantiated from either an array, a data table, or
 a data frame." />
@@ -86,8 +86,13 @@ a data frame." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -97,13 +102,12 @@ a data frame." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -139,7 +143,7 @@ a data frame." />
     <div class="ref-description">
     
     <p>Create a list containing predicted transition probabilities at discrete times.
- Since the transition probabilities have presumably
+Since the transition probabilities have presumably
 already been predicted based on covariate values, no input data is required for
 simulation. The class can be instantiated from either an array, a data table, or
 a data frame.</p>
@@ -170,8 +174,8 @@ a data frame.</p>
     </tr>
     <tr>
       <th>time_start</th>
-      <td><p>The starting time of each interval indexed by the 4th 
-dimension of the array. This argument is not required if there is only one time 
+      <td><p>The starting time of each interval indexed by the 4th
+dimension of the array. This argument is not required if there is only one time
 interval as <code>time_start</code> will equal 0 in this case. Used to construct
 <code>time_intervals</code> with <code><a href='create_time_intervals.html'>create_time_intervals</a></code>.</p></td>
     </tr>
@@ -179,42 +183,42 @@ interval as <code>time_start</code> will equal 0 in this case. Used to construct
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>"tparams_transprobs"</code>, 
-which is a list containing <code>value</code> and relevant ID attributes. The element <code>value</code> is an 
+    <p>An object of class <code>"tparams_transprobs"</code>,
+which is a list containing <code>value</code> and relevant ID attributes. The element <code>value</code> is an
 array of predicted transition probability matrices from the posterior
-distribution of the underlying statistical model. Each matrix in 
+distribution of the underlying statistical model. Each matrix in
 <code>value</code> is a prediction for a <code>sample</code>, <code>strategy_id</code>,
- <code>patient_id</code>, and optionally <code>time_id</code> combination.</p>
+<code>patient_id</code>, and optionally <code>time_id</code> combination.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The format of <code>object</code> depends on its class:</p><dl class='dl-horizontal'>
 <dt>array</dt><dd><p>Must be a 4D array of matrices (i.e.,
- a 6D array). The dimensions of the array should be as follows: 
- 1st (<code>sample</code>), 2nd (<code>strategy_id</code>), 3rd (<code>patient_id</code>),
- 4th (<code>time_id</code>), 5th (rows of transition matrix), and
- 6th (columns of transition matrix). In other words, an index of
- <code>[s, k, i, t]</code> represents the transition matrix for the <code>s</code>th 
- sample, <code>k</code>th treatment strategy, <code>i</code>th patient, and <code>t</code>th
- time interval.</p></dd>
- <dt>data.table</dt><dd><p>Must contain the folowing:
- <ul>
-<li><p>ID columns for the parameter sample (<code>sample</code>), 
- treatment strategy (<code>strategy_id</code>), and patient (<code>patient_id</code>).
- If the number of time intervals is greater than 1 it must also contain the
- column <code>time_start</code> denoting the start of a time interval. A column 
- <code>patient_wt</code> may also be used to denote the weight to apply to each
- patient.</p></li>
-<li><p>Columns for each element of the transition probability matrix. 
- They should be prefixed with "probs_" and ordered rowwise. 
- For example, the following columns would be used for a 2x2 transition
-  probabiliy matrix:
- <code>probs_1</code> (1st row, 1st column), 
- <code>probs_2</code> (1st row, 2nd column), 
- <code>probs_3</code> (2nd row, 1st column), and 
- <code>probs_4</code> (2nd row, 2nd column).</p></li>
+a 6D array). The dimensions of the array should be as follows:
+1st (<code>sample</code>), 2nd (<code>strategy_id</code>), 3rd (<code>patient_id</code>),
+4th (<code>time_id</code>), 5th (rows of transition matrix), and
+6th (columns of transition matrix). In other words, an index of
+<code>[s, k, i, t]</code> represents the transition matrix for the <code>s</code>th
+sample, <code>k</code>th treatment strategy, <code>i</code>th patient, and <code>t</code>th
+time interval.</p></dd>
+<dt>data.table</dt><dd><p>Must contain the folowing:
+<ul>
+<li><p>ID columns for the parameter sample (<code>sample</code>),
+treatment strategy (<code>strategy_id</code>), and patient (<code>patient_id</code>).
+If the number of time intervals is greater than 1 it must also contain the
+column <code>time_start</code> denoting the start of a time interval. A column
+<code>patient_wt</code> may also be used to denote the weight to apply to each
+patient.</p></li>
+<li><p>Columns for each element of the transition probability matrix.
+They should be prefixed with "probs_" and ordered rowwise.
+For example, the following columns would be used for a 2x2 transition
+probabiliy matrix:
+<code>probs_1</code> (1st row, 1st column),
+<code>probs_2</code> (1st row, 2nd column),
+<code>probs_3</code> (2nd row, 1st column), and
+<code>probs_4</code> (2nd row, 2nd column).</p></li>
 </ul></p></dd>
- <dt>data.frame</dt><dd><p>Same as <code>data.table</code>.</p></dd>
+<dt>data.frame</dt><dd><p>Same as <code>data.table</code>.</p></dd>
 </dl>
     
 

@@ -83,8 +83,13 @@ partitioned survival model." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@ partitioned survival model." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -170,15 +174,15 @@ second data frame contains drug cost data.</p></li>
     
     <p>The cost list contains two data frames.The first data frame contains data on the
 medical costs by patient and health state, and contains the following columns:</p><dl class='dl-horizontal'>
- <dt>patient_id</dt><dd><p>An integer denoting the id of the patient.</p></dd>
-  <dt>female</dt><dd><p>An indicator variable equal to 1 if the patient is female and 0 otherwise.</p></dd>
-  <dt>state_name</dt><dd><p>A categorical variable denoting the three possible health states.</p></dd>
-  <dt>costs</dt><dd><p>Annualized medical costs.</p></dd>
- </dl>
+<dt>patient_id</dt><dd><p>An integer denoting the id of the patient.</p></dd>
+<dt>female</dt><dd><p>An indicator variable equal to 1 if the patient is female and 0 otherwise.</p></dd>
+<dt>state_name</dt><dd><p>A categorical variable denoting the three possible health states.</p></dd>
+<dt>costs</dt><dd><p>Annualized medical costs.</p></dd>
+</dl>
     <p>The second data frame contains data on the drug costs associated with each treatment strategy.</p><dl class='dl-horizontal'>
- <dt>strategy_id</dt><dd><p>The id of each treatment strategy.</p></dd>
- <dt>costs</dt><dd><p>Annualized drug costs.</p></dd>
- </dl>
+<dt>strategy_id</dt><dd><p>The id of each treatment strategy.</p></dd>
+<dt>costs</dt><dd><p>Annualized drug costs.</p></dd>
+</dl>
     
 
   </div>

@@ -16,11 +16,11 @@ A list containing the parameters \code{shape1} and \code{shape2}.
 }
 \description{
 Compute the parameters \code{shape1} and \code{shape2} of the beta distribution
-using method of moments given the mean and standard 
+using method of moments given the mean and standard
 deviation of the random variable of interest.
 }
 \details{
-If \eqn{\mu} is the mean and 
+If \eqn{\mu} is the mean and
 \eqn{\sigma} is the standard deviation of the random variable, then the method
 of moments estimates of the parameters \code{shape1} = \eqn{\alpha > 0} and
 \code{shape2} = \eqn{\beta > 0} are:

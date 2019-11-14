@@ -18,7 +18,7 @@ create_PsmCurves(object, ...)
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{input_data}{An object of class "expanded_hesim_data" returned by 
+\item{input_data}{An object of class "expanded_hesim_data" returned by
 \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
 "patients".}
 
@@ -30,7 +30,7 @@ create_PsmCurves(object, ...)
 models in \code{object} on resamples of the sample data; if FALSE, then the parameters for each survival
 model are independently draw from multivariate normal distributions.}
 
-\item{est_data}{A \code{data.table} or \code{data.frame} of estimation data 
+\item{est_data}{A \code{data.table} or \code{data.frame} of estimation data
 used to fit survival models during bootstrap replications.}
 }
 \value{

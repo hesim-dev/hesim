@@ -8,60 +8,59 @@ stateval_tbl(tbl, dist = c("norm", "beta", "gamma", "lnorm", "unif",
   "fixed", "custom"), hesim_data = NULL)
 }
 \arguments{
-\item{tbl}{A \code{data.frame} or \code{data.table} for storing parameter 
+\item{tbl}{A \code{data.frame} or \code{data.table} for storing parameter
 values. See "Details" for specifics.}
 
-\item{dist}{Probability distribution used to sample parameters for a 
+\item{dist}{Probability distribution used to sample parameters for a
 probabilistic sensitivity analysis (PSA).}
 
-\item{hesim_data}{A \code{\link{hesim_data}} object. Required to specify 
+\item{hesim_data}{A \code{\link{hesim_data}} object. Required to specify
 treatment strategies , patients,
- and/or health states not included as columns
+and/or health states not included as columns
 in \code{tbl}, or, to match patients in \code{tbl} to groups.
- Not required if \code{tbl} includes one row for each treatment strategy, patient, and
-health state combination. Patients are matched to groups by specifying both a 
+Not required if \code{tbl} includes one row for each treatment strategy, patient, and
+health state combination. Patients are matched to groups by specifying both a
 \code{patient_id} and a \code{grp_id} column in the \code{patients} table;
 if \code{hesim_data = NULL} but \code{grp_id} is included as a column
 in \code{tbl}, then each group is assumed to be a unique patient.}
 }
 \value{
 An object of class "stateval_tbl", which is a \code{data.table} of
-parameter values with attributes for \code{dist} and optionally 
-\code{strategy_id}, \code{patients}, and \code{state_id}. \code{tbl} 
-is in the same format as described in "Details". \code{patients} is a 
-\code{data.table} with one column containing \code{patient_id} and 
+parameter values with attributes for \code{dist} and optionally
+\code{strategy_id}, \code{patients}, and \code{state_id}. \code{tbl}
+is in the same format as described in "Details". \code{patients} is a
+\code{data.table} with one column containing \code{patient_id} and
 optionally a second column containing \code{grp_id}.
 }
 \description{
-Create a table for storing parameter estimates used to simulate costs or 
+Create a table for storing parameter estimates used to simulate costs or
 utility in an economic model by treatment strategy, patient, health state, and
 (optionally) time interval.
 }
 \details{
-\code{tbl} is a \code{data.table} containing columns for treatment 
+\code{tbl} is a \code{data.table} containing columns for treatment
 strategies (\code{strategy_id}), patient subgroups (\code{grp_id}),
-health states (\code{state_id}), and/or the start of time intervals 
+health states (\code{state_id}), and/or the start of time intervals
 (\code{time_start}). The table must contain at least one column
-named \code{strategy_id}, \code{grp_id}, or \code{state_id}, 
-but does not need to contain all of them. Each row denotes a unique 
+named \code{strategy_id}, \code{grp_id}, or \code{state_id},
+but does not need to contain all of them. Each row denotes a unique
 treatment strategy, patient subgroup, health state, and/or time interval pair.
 
-
 \code{tbl} must also contain columns summarizing the state values for each
-row, which depend on the probability distribution selected with \code{dist}. 
+row, which depend on the probability distribution selected with \code{dist}.
 Available distributions include the normal (\code{norm}), beta (\code{beta}),
 gamma (\code{gamma}), lognormal (\code{lnorm}), and uniform (\code{unif})
- distributions. In addition, the option \code{fixed} can be used if estimates
- are known with certainty and \code{custom} can be used if 
- parameter values for a PSA  have been previously
+distributions. In addition, the option \code{fixed} can be used if estimates
+are known with certainty and \code{custom} can be used if
+parameter values for a PSA  have been previously
 sampled from an arbitrary probability distribution.
- The columns in \code{tbl} that must be included,
- by distribution, are:
+The columns in \code{tbl} that must be included,
+by distribution, are:
 
 \describe{
 \item{norm}{\code{mean} and \code{sd}}
 \item{beta}{\code{mean} and \code{se} or \code{shape1} and \code{shape2}}
-\item{gamma}{\code{mean} and \code{se}, \code{shape} and \code{rate}, 
+\item{gamma}{\code{mean} and \code{se}, \code{shape} and \code{rate},
 or \code{shape} and {scale}}
 \item{lnorm}{\code{meanlog} or \code{sdlog}}
 \item{unif}{\code{min} and \code{max}}
@@ -69,14 +68,14 @@ or \code{shape} and {scale}}
 \item{custom}{\code{sample} and \code{value}}
 }
 
-Note that if \code{dist = "custom"}, then \code{tbl} must include a column 
+Note that if \code{dist = "custom"}, then \code{tbl} must include a column
 named \code{sample} (an integer vector denoting a unique random draw) and
- \code{value} (denoting the value of the randomly sampled parameter). In this case, there is a unique
+\code{value} (denoting the value of the randomly sampled parameter). In this case, there is a unique
 row in \code{tbl} for each random draw (\code{sample}) and
- each combination of strategies, patients, health states, and/or time intervals.
+each combination of strategies, patients, health states, and/or time intervals.
 Again, \code{tbl} must contain at least one column
 named \code{strategy_id}, \code{grp_id}, or \code{state_id},
- but does not need to contain them all.
+but does not need to contain them all.
 }
 \examples{
 strategies <- data.frame(strategy_id = c(1, 2))

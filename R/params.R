@@ -514,6 +514,7 @@ create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, 
 }
 
 # Transition probabilities -----------------------------------------------------
+
 #' Transition probabilities
 #' 
 #' Create a list containing predicted transition probabilities at discrete times.
@@ -576,6 +577,23 @@ tparams_transprobs <- function(object, ...){
   value <- UseMethod("tparams_transprobs", object)
   check(new_tparams_transprobs(value, ...), ...)
 } 
+
+new_tparams_transprobs <- function(value, ...){
+  l <- c(list(value = value),
+         do.call("new_id_attributes", list(...)))
+  class(l) <- "tparams_transprobs"
+  return(l)
+}
+
+#' @rdname check
+check.tparams_transprobs <- function(object){
+  stopifnot(is.array(object$value))
+  stopifnot(is.numeric(object$sample))
+  stopifnot(is.numeric(object$n_samples))
+  id_args <- object[names(object) != "value"]
+  check(do.call("new_id_attributes", id_args))
+  return(object)
+}
 
 #' @rdname tparams_transprobs
 #' @export
@@ -672,23 +690,6 @@ tparams_transprobs.data.frame <- function (object) {
   return(tparams_transprobs(data.table(object)))
 }
 
-new_tparams_transprobs <- function(value, ...){
-  l <- c(list(value = value),
-         do.call("new_id_attributes", list(...)))
-  class(l) <- "tparams_transprobs"
-  return(l)
-}
-
-#' @rdname check
-check.tparams_transprobs <- function(object){
-  stopifnot(is.array(object$value))
-  stopifnot(is.numeric(object$sample))
-  stopifnot(is.numeric(object$n_samples))
-  id_args <- object[names(object) != "value"]
-  check(do.call("new_id_attributes", id_args))
-  return(object)
-}
-
 #' @export
 as.data.table.tparams_transprobs <- function(x){
   probs <- matrix(c(aperm(x$value, perm = c(2, 1, 3))),
@@ -701,6 +702,12 @@ as.data.table.tparams_transprobs <- function(x){
     setattr(x_dt, v, x[[v]])
   }
   return(x_dt)
+}
+
+tparams_transprobs.eval_model <- function(object){
+  setnames(object$tpmatrix, paste0("prob_", 1:ncol(object$tpmatrix)))
+  id_index <- attr(object$tpmatrix, "id_index")
+  return(tparams_transprobs(cbind(object$id[[id_index]], object$tpmatrix)))
 }
 
 # List of survival models ------------------------------------------------------

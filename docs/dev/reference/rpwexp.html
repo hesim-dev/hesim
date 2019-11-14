@@ -35,7 +35,7 @@
 <meta property="og:title" content="Random generation for piecewise exponential distribution — rpwexp" />
 
 <meta property="og:description" content="Draw random samples from an exponential distribution with piecewise rates.
- rpwexp is vectorized and written in C++ for speed." />
+rpwexp is vectorized and written in C++ for speed." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -83,8 +83,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -136,7 +140,7 @@
     <div class="ref-description">
     
     <p>Draw random samples from an exponential distribution with piecewise rates.
- <code>rpwexp</code> is vectorized and written in C++ for speed.</p>
+<code>rpwexp</code> is vectorized and written in C++ for speed.</p>
     
     </div>
 
@@ -151,7 +155,7 @@
     </tr>
     <tr>
       <th>rate</th>
-      <td><p>A matrix of rates where rows correspond to observations 
+      <td><p>A matrix of rates where rows correspond to observations
 and columns correspond to rates during specified time intervals.</p></td>
     </tr>
     <tr>
@@ -163,8 +167,8 @@ times at which the rate changes</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of random samples from the piecewise exponential distribution. The length of the sample is 
-determined by n. The numerical arguments other than n are recycled so that the number of samples is 
+    <p>A vector of random samples from the piecewise exponential distribution. The length of the sample is
+determined by n. The numerical arguments other than n are recycled so that the number of samples is
 equal to n.</p>
     
 
@@ -177,7 +181,7 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>()
 <span class='no'>samp</span> <span class='kw'>&lt;-</span> <span class='fu'>rpwexp</span>(<span class='no'>n</span>, <span class='no'>ratemat</span>, <span class='no'>t</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.007   0.001   0.008 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>samp</span>)</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;   0.008   0.001   0.008 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>samp</span>)</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #&gt;  0.0000  0.4793  1.1517  1.6597  2.3021 14.4929 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

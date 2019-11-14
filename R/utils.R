@@ -14,6 +14,22 @@ check <- function (object, ...) {
   UseMethod("check")
 }
 
+check_is_class <- function(object, class, name = NULL){
+  if (is.null(name)){
+    name <- class
+  }
+  if (!inherits(object, class)){
+    stop(paste0("'", name, "' must be of class '", class, "'"),
+         call. = FALSE)
+  }  
+}
+
+check_scalar <- function(x, name){
+  if(!(is.atomic(x) && length(x) == 1L)){
+    stop(paste0(name, " must be a scalar."))
+  }
+}
+
 # Additional utility methods ---------------------------------------------------
 #' Absorbing states
 #' 
@@ -50,7 +66,7 @@ create_object_list <- function(...){
 check_object_list <- function(x, inner_class){
   for (i in 1:length(x)){
     if(!inherits(x[[i]], inner_class)){
-      msg <- paste0("Each element in ... must be of class '", inner_class, "'")
+      msg <- paste0("Each element in list must be of class '", inner_class, "'")
       stop(msg, call. = FALSE)
     }
   } 
@@ -146,3 +162,29 @@ get_id_name <- function(x){
     return("input_mats")
   }
 }
+
+# Sample from a posterior distribution
+sample_from_posterior <- function(n, n_samples){
+  if (n < n_samples){
+    return(sample.int(n_samples, n, replace = FALSE))
+  } else if (n > n_samples) {
+    warning(paste0("The number of requested draws for the probabilistic ",
+                   "sensitivity analysis (PSA), 'n', is larger than the number ",
+                   "of previously sampled values from the probability ",
+                   "distribution of interest. Samples for the PSA have ",
+                   "consequently been drawn with replacement."),
+            call. = FALSE)
+    return(sample.int(n_samples, n, replace = TRUE))
+  } else{
+    return(1:n)
+  }
+}
+
+is_whole_number <- function(x, tol = .Machine$double.eps^0.5) {
+  abs(x - round(x)) < tol
+}
+
+is_1d_vector <- function(x){
+  is.atomic(x) && length(dim(x)) <= 1
+}
+

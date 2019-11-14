@@ -15,21 +15,24 @@ rdirichlet_mat(n, alpha, output = c("array", "matrix", "data.frame",
 \item{output}{Whether output should be an array or a matrix.}
 }
 \value{
-If \code{output = "array"}, then an array of matrices is returned 
+If \code{output = "array"}, then an array of matrices is returned
 where each row of each matrix is a sample from the Dirichlet distribution.
 If \code{output = "matrix"}, then a matrix is returned where each row contains
-all elements of the sampled matrix from the Dirichlet distribution ordered rowwise; 
+all elements of the sampled matrix from the Dirichlet distribution ordered rowwise;
 when \code{output = "data.frame"} or \code{output = "data.table"} the returned
 value is a \code{data.frame} or \code{data.table} in the same format as the
 matrix returned with \code{output = "matrix"}.
 }
 \description{
-Draw random samples from multiple Dirichlet distributions.
-\code{rdirichlet_mat} is vectorized and written in C++ for speed.
+Draw random samples from multiple Dirichlet distributions for use in
+transition probability matrices.
 }
 \details{
-This function is particularly useful for representing the distribution of 
-transition probabilities in a transition matrix.
+This function is meant for representing the distribution of
+transition probabilities in a transition matrix. The \code{(i,j)} element of
+\code{alpha} is a transition from state \code{i} to state \code{j}. The number of rows in
+\code{alpha} must be less than or equal to the number of columns.
+\code{rdirichlet_mat} is vectorized and written in C++ for speed.
 }
 \examples{
 alpha <- matrix(c(100, 200, 500, 50, 70, 75), ncol = 3, nrow = 2, byrow = TRUE)

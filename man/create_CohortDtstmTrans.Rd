@@ -9,7 +9,7 @@ create_CohortDtstmTrans(object, ...)
 \arguments{
 \item{object}{An object of the appropriate class.}
 
-\item{...}{Further arguments passed to \code{CohortDtstmTrans$new()} in 
+\item{...}{Further arguments passed to \code{CohortDtstmTrans$new()} in
 \code{CohortDtstmTrans}.}
 }
 \description{

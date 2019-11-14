@@ -19,16 +19,16 @@ create_StateVals(object, ...)
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{input_data}{An object of class "expanded_hesim_data" returned by 
+\item{input_data}{An object of class "expanded_hesim_data" returned by
 \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies",
 "patients", and "states".}
 
-\item{n}{Number of random observations of the parameters to draw when parameters 
+\item{n}{Number of random observations of the parameters to draw when parameters
 are fit using a statistical model.}
 
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
 
-\item{time_reset}{If \code{TRUE}, then time intervals reset each time a patient enters a new health 
+\item{time_reset}{If \code{TRUE}, then time intervals reset each time a patient enters a new health
 state. See \code{\link{input_mats}}.}
 }
 \value{
@@ -36,8 +36,8 @@ Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
 }
 \description{
 \code{create_StateVals} is a generic function for creating an object of class
- \code{\link{StateVals}} from a fitted statistical model or a \code{\link{stateval_tbl}}
- object.
+\code{\link{StateVals}} from a fitted statistical model or a \code{\link{stateval_tbl}}
+object.
 }
 \seealso{
 \code{\link{StateVals}}

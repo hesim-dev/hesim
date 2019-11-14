@@ -10,11 +10,11 @@ create_time_intervals(time_start)
 \item{time_start}{A vector of starting times for each interval}
 }
 \value{
-A \code{data.table} in the same format as \code{time_intervals} as 
+A \code{data.table} in the same format as \code{time_intervals} as
 described in \code{\link{id_attributes}}.
 }
 \description{
-Create a table of time intervals given a vector of starting times for each 
+Create a table of time intervals given a vector of starting times for each
 interval. This would typically be passed to \code{\link{id_attributes}}.
 }
 \examples{

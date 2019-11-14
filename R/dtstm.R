@@ -1,19 +1,3 @@
-# Transition probability matrix class ------------------------------------------
-#' @export
-`[.transprob_matrix` <- function(x, i, j, ...) {
-  n_rows <- n_cols <- sqrt(length(x))
-  index <- (i - 1) * n_cols + j
-  y <- as.vector(x)
-  return(y[index])
-}
-#' @examples 
-#' p <- 1:4
-#' attr(p, "class") <- "transprob_matrix"
-#' p[1, 1]
-#' p[1, 2]
-#' p[2, 1]
-#' p[2, 2]
-
 # CohortDtstmTrans -------------------------------------------------------------
 #' @export
 CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
@@ -58,7 +42,6 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
   )
 )
 
-# create_CohortDtstmTrans ------------------------------------------------------
 #' Create \code{CohortDtstmTrans} object
 #' 
 #' A generic function for creating an object of class \code{CohortDtstmTrans}.
@@ -112,3 +95,58 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
     }
   )
 )
+
+#' Create \code{CohortDtstm} object
+#' 
+#' A generic function for creating an object of class [CohortDtstm].
+#' @param object An object of the appropriate class. 
+#' @param input_data 	An object of class [expanded_hesim_data][expand.hesim_data()].
+#' @param ... Further arguments passed to `CohortDtstmTrans$new()` in 
+#' [CohortDtstmTrans]. 
+#'  
+#' @export
+create_CohortDtstm <- function(object, ...){
+  UseMethod("create_CohortDtstm", object)
+} 
+
+#' @export
+#' @rdname create_CohortDtstm
+create_CohortDtstm.model_def <- function(object, input_data, ...){
+  model_inputs <- eval_model(object, input_data)
+  
+  # Individual models
+  ## Transition model
+  if (is.null(model_inputs$tpmatrix)){
+    trans_model <- NULL
+  } else{
+    tparams <- tparams_transprobs(model_inputs)
+    trans_model <- CohortDtstmTrans$new(params = tparams, ...) 
+  }
+  
+  ## Utility model
+  if (is.null(model_inputs$utility)){
+    utility_model <- NULL
+  } else{
+    utility_model <- create_StateVals(model_inputs, cost = FALSE) 
+  }
+  
+  ## Cost models
+  n_cost_models <- length(model_inputs$cost)
+  if (n_cost_models > 0){
+   cost_models <- vector(mode = "list", length = length(model_inputs$cost))
+   names(cost_models) <- names(model_inputs$cost)
+   for (i in 1:n_cost_models){
+     cost_models[[i]] <- create_StateVals(model_inputs, name = names(cost_models)[i])
+   }
+  } else{
+    cost_models <- NULL
+  }
+  
+  # Combine
+  econ_model <- CohortDtstm$new(trans_model = trans_model,
+                                utility_model = utility_model,
+                                cost_models = cost_models)
+  
+  
+  return(econ_model)
+}

@@ -34,7 +34,7 @@
   
 <meta property="og:title" content="Attributes for ID variables — id_attributes" />
 
-<meta property="og:description" content="Stores metadata related to the ID variables used to index input_mats 
+<meta property="og:description" content="Stores metadata related to the ID variables used to index input_mats
 and parameter objects already predicted from covariates." />
 <meta name="twitter:card" content="summary" />
 
@@ -83,8 +83,13 @@ and parameter objects already predicted from covariates." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@ and parameter objects already predicted from covariates." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -135,7 +139,7 @@ and parameter objects already predicted from covariates." />
 
     <div class="ref-description">
     
-    <p>Stores metadata related to the ID variables used to index <code><a href='input_mats.html'>input_mats</a></code> 
+    <p>Stores metadata related to the ID variables used to index <code><a href='input_mats.html'>input_mats</a></code>
 and parameter objects already predicted from covariates.</p>
     
     </div>
@@ -174,7 +178,7 @@ and parameter objects already predicted from covariates.</p>
     </tr>
     <tr>
       <th>transition_id</th>
-      <td><p>A numeric vector denoting the 
+      <td><p>A numeric vector denoting the
 health state transition. This is only used for state transition models.</p></td>
     </tr>
     <tr>
@@ -187,11 +191,11 @@ health state transition. This is only used for state transition models.</p></td>
     </tr>
     <tr>
       <th>time_intervals</th>
-      <td><p>A <code>data.table</code> denotes unique time intervals. Must 
+      <td><p>A <code>data.table</code> denotes unique time intervals. Must
 contain the columns <code>time_id</code>, <code>time_start</code>, and <code>time_stop</code>.
 <code>time_start</code> is the starting time of an interval and <code>time_stop</code> is
 the stopping time of an interval. Time intervals are closed on the left and
-open on the right, and in the final interval, <code>time_stop</code> is equal to 
+open on the right, and in the final interval, <code>time_stop</code> is equal to
 infinity.</p></td>
     </tr>
     <tr>
@@ -212,14 +216,14 @@ distribution of the parameters.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>When using the ID variables to index <code><a href='input_mats.html'>input_mats</a></code>, sorting order should be 
+    <p>When using the ID variables to index <code><a href='input_mats.html'>input_mats</a></code>, sorting order should be
 the same as specified in <code><a href='expand.hesim_data.html'>expand.hesim_data</a></code>; that is,
-observations must be sorted by: (i) <code>strategy_id</code>, (ii) <code>patient_id</code>, 
+observations must be sorted by: (i) <code>strategy_id</code>, (ii) <code>patient_id</code>,
 and (iii) the health-related ID variable (either <code>state_id</code> or
- <code>transition_id</code>). When using ID variables to index transformed parameter 
- objects and <code>sample</code> is used for indexing, then observations must be sorted by:
- (i) <code>sample</code>, (ii) <code>strategy_id</code>, (iii) <code>patient_id</code>, and
-  (iv) the health-related ID variable.</p>
+<code>transition_id</code>). When using ID variables to index transformed parameter
+objects and <code>sample</code> is used for indexing, then observations must be sorted by:
+(i) <code>sample</code>, (ii) <code>strategy_id</code>, (iii) <code>patient_id</code>, and
+(iv) the health-related ID variable.</p>
     
 
   </div>

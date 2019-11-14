@@ -35,7 +35,7 @@
 <meta property="og:title" content="Summarize costs and effectiveness — summarize_ce" />
 
 <meta property="og:description" content="Summarize costs and quality-adjusted life-years (QALYs) given output simulated
-from an economic model. The summary output is used to perform 
+from an economic model. The summary output is used to perform
 cost-effectiveness analysis with icea and icea_pw." />
 <meta name="twitter:card" content="summary" />
 
@@ -84,8 +84,13 @@ cost-effectiveness analysis with icea and icea_pw." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -95,13 +100,12 @@ cost-effectiveness analysis with icea and icea_pw." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -137,7 +141,7 @@ cost-effectiveness analysis with icea and icea_pw." />
     <div class="ref-description">
     
     <p>Summarize costs and quality-adjusted life-years (QALYs) given output simulated
-from an economic model. The summary output is used to perform 
+from an economic model. The summary output is used to perform
 cost-effectiveness analysis with <code><a href='icea.html'>icea</a></code> and <code><a href='icea.html'>icea_pw</a></code>.</p>
     
     </div>
@@ -149,11 +153,11 @@ cost-effectiveness analysis with <code><a href='icea.html'>icea</a></code> and <
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>costs</th>
-      <td><p>Simulated costs by category.</p></td>
+      <td><p>Simulated costs by category (objects of class <code><a href='costs.html'>costs</a></code>).</p></td>
     </tr>
     <tr>
       <th>qalys</th>
-      <td><p>Simulated QALYs.</p></td>
+      <td><p>Simulated QALYs (objects of class <code><a href='qalys.html'>qalys</a></code>)..</p></td>
     </tr>
     </table>
     
@@ -163,10 +167,10 @@ cost-effectiveness analysis with <code><a href='icea.html'>icea</a></code> and <
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If mean costs and/or QALYs have already been computed 
-(i.e., an average within a population), then there 
-must be one observation for each discount rate (<code>dr</code>), 
-PSA sample (<code>sample</code>), treatment strategy (<code>strategy_id</code>), 
+    <p>If mean costs and/or QALYs have already been computed
+(i.e., an average within a population), then there
+must be one observation for each discount rate (<code>dr</code>),
+PSA sample (<code>sample</code>), treatment strategy (<code>strategy_id</code>),
 and health state (<code>state_id</code>). Alternatively, there can be column
 denoting a patient (<code>patient_id</code>), in which case outcomes will first be
 averaged across patients.</p>

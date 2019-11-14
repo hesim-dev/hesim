@@ -35,7 +35,7 @@
 <meta property="og:title" content="Data for health-economic simulation modeling — hesim_data" />
 
 <meta property="og:description" content="A list of tables required for health-economic simulation modeling.
-Each table must either be a data.frame or data.table. All ID variables within 
+Each table must either be a data.frame or data.table. All ID variables within
 each table must be numeric vectors of integers." />
 <meta name="twitter:card" content="summary" />
 
@@ -84,8 +84,13 @@ each table must be numeric vectors of integers." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -95,13 +100,12 @@ each table must be numeric vectors of integers." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -137,7 +141,7 @@ each table must be numeric vectors of integers." />
     <div class="ref-description">
     
     <p>A list of tables required for health-economic simulation modeling.
-Each table must either be a <code><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>data.table</code>. All ID variables within 
+Each table must either be a <code><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></code> or <code>data.table</code>. All ID variables within
 each table must be numeric vectors of integers.</p>
     
     </div>
@@ -150,14 +154,14 @@ each table must be numeric vectors of integers.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>strategies</th>
-      <td><p>A table of treatment strategies. 
+      <td><p>A table of treatment strategies.
 Must contain the column <code>strategy_id</code> denoting a unique strategy. Other columns are variables
- describing the characteristics of a treatment strategy.</p></td>
+describing the characteristics of a treatment strategy.</p></td>
     </tr>
     <tr>
       <th>patients</th>
-      <td><p>A table of patient observations. 
-Must contain the column <code>patient_id</code> denoting a unique patient. The 
+      <td><p>A table of patient observations.
+Must contain the column <code>patient_id</code> denoting a unique patient. The
 number of rows should be equal to the number of patients in the model.
 Other columns are variables describing the characteristics of a patient.</p></td>
     </tr>
@@ -177,12 +181,12 @@ transitioned to.</p></td>
     </tr>
     <tr>
       <th>times</th>
-      <td><p>A table of time intervals. Must contain the column <code>time_start</code>, 
+      <td><p>A table of time intervals. Must contain the column <code>time_start</code>,
 which denotes the starting time of times intervals defined between <code>time_start</code>
- and <code>time_stop</code>. <code>hesim_data()</code> automatically creates the columns
- <code>time_stop</code> and <code>time_id</code> (a vector of integers sorted by <code>time_start</code>).
- Time intervals are closed on the left and open on the right and the final time
-  interval is defined from <code>time_start</code> to infinity.</p></td>
+and <code>time_stop</code>. <code>hesim_data()</code> automatically creates the columns
+<code>time_stop</code> and <code>time_id</code> (a vector of integers sorted by <code>time_start</code>).
+Time intervals are closed on the left and open on the right and the final time
+interval is defined from <code>time_start</code> to infinity.</p></td>
     </tr>
     </table>
     

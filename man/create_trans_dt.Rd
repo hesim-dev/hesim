@@ -7,7 +7,7 @@
 create_trans_dt(trans_mat)
 }
 \arguments{
-\item{trans_mat}{A transition matrix in the format from the \link[mstate]{mstate} package. 
+\item{trans_mat}{A transition matrix in the format from the \link[mstate]{mstate} package.
 See \link{IndivCtstmTrans}.}
 }
 \value{
@@ -19,7 +19,7 @@ Returns a \code{\link{data.table}} in tidy format with three columns
 }
 }
 \description{
-Create a data table of health state transitions from a transition matrix describing 
+Create a data table of health state transitions from a transition matrix describing
 the states and transitions in a multi-state model suitable for use with \link{hesim_data}.
 }
 \examples{

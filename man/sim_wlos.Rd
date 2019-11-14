@@ -18,31 +18,35 @@ to simulate utility.}
 
 \item{dr}{Discount rate.}
 
-\item{method}{Method used to integrate state values when computing 
+\item{method}{Method used to integrate state values when computing
 weighted length of stay. Options are \code{trapz} for the trapezoid rule,
-\code{riemann_left} left for a left Riemann sum, and  
+\code{riemann_left} left for a left Riemann sum, and
 \code{riemann_right} right for a right Riemann sum.}
 
-\item{lys}{If \code{TRUE}, then life-years are simulated in addition to 
+\item{lys}{If \code{TRUE}, then life-years are simulated in addition to
 QALYs.}
 
 \item{cost_models}{A list of objects of class \code{\link{StateVals}} used
 to simulate costs.}
+}
+\value{
+\code{sim_costs} and \code{sim_qalys} return objects of class
+\code{costs} and \code{qalys}, respectively.
 }
 \description{
 Simulate weighted length of stay in order to compute costs and quality-adjusted
 life-years (QALYs).
 }
 \details{
-Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state. 
-Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
+Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state.
+Weights are a function of the discount factor and the state value predicted using either the cost or QALY model.
 Mathematically, discounted costs and QALYs in health state \eqn{s} are calculated as,
 
 \deqn{\int_0^T w_h e^{-rt} P_h(t) dt },
 
-where for health state \eqn{h} and time {t}, \eqn{w_h} is the predicted cost 
-or QALY weight, \eqn{r} is the discount rate, and \eqn{P_h(t)} is the 
+where for health state \eqn{h} and time {t}, \eqn{w_h} is the predicted cost
+or QALY weight, \eqn{r} is the discount rate, and \eqn{P_h(t)} is the
 probability of being in a given health state. The integral is calculated
- numerically from the points in \code{t_} using the approach selected 
- using the argument \code{method}.
+numerically from the points in \code{t_} using the approach selected
+using the argument \code{method}.
 }

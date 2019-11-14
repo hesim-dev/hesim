@@ -9,17 +9,17 @@ rcat(n, prob)
 \arguments{
 \item{n}{Number of random observations to draw.}
 
-\item{prob}{A matrix of probabilities where rows correspond to observations 
+\item{prob}{A matrix of probabilities where rows correspond to observations
 and columns correspond to categories.}
 }
 \value{
-A vector of random samples from the categorical distribution. The length of the sample is 
-determined by n. The numerical arguments other than n are recycled so that the number of samples is 
+A vector of random samples from the categorical distribution. The length of the sample is
+determined by n. The numerical arguments other than n are recycled so that the number of samples is
 equal to n.
 }
 \description{
 Draw random samples from a categorical distribution given a matrix of probabilities.
- \code{rcat} is vectorized and written in C++ for speed.
+\code{rcat} is vectorized and written in C++ for speed.
 }
 \examples{
 p <- c(.2, .5, .3)

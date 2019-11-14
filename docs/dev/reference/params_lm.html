@@ -82,8 +82,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -93,13 +98,12 @@
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -145,13 +149,13 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>coefs</th>
-      <td><p>Matrix of samples from the posterior distribution of the 
+      <td><p>Matrix of samples from the posterior distribution of the
 regression coefficients.</p></td>
     </tr>
     <tr>
       <th>sigma</th>
-      <td><p>A vector of samples of the standard error of the regression model. 
-Must only be specified if the model is used to randomly simulate values 
+      <td><p>A vector of samples of the standard error of the regression model.
+Must only be specified if the model is used to randomly simulate values
 (rather than to predict means).</p></td>
     </tr>
     </table>
@@ -165,11 +169,11 @@ in <code>coefs</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Fitted linear models are used to predict values, \(y\),
- as a function of covariates, \(x\),
+as a function of covariates, \(x\),
 $$y = x^T\beta + \epsilon.$$
 Predicted means are given by \(x^T\hat{\beta}\) where \(\hat{\beta}\)
-is the vector of estimated regression coefficients. Random samples are obtained by 
-sampling the error term from a normal distribution, 
+is the vector of estimated regression coefficients. Random samples are obtained by
+sampling the error term from a normal distribution,
 \(\epsilon \sim N(0, \hat{\sigma}^2)\).</p>
     
 
@@ -181,11 +185,11 @@ sampling the error term from a normal distribution,
                       <span class='no'>sigma</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/GammaDist'>rgamma</a></span>(<span class='no'>n</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>params</span>)</div><div class='output co'>#&gt; $coefs
 #&gt;           [,1]      [,2]
-#&gt; [1,] 0.3731079 0.5771039
-#&gt; [2,] 0.6574268 0.9524617
+#&gt; [1,] 0.5621129 0.6106921
+#&gt; [2,] 0.5216558 0.4033876
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.10306939 0.00953951
+#&gt; [1] 2.943386e-01 1.565248e-06
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2

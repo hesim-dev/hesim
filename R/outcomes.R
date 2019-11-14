@@ -151,8 +151,8 @@ check_summarize <- function(x){
 #' Summarize costs and quality-adjusted life-years (QALYs) given output simulated
 #' from an economic model. The summary output is used to perform 
 #' cost-effectiveness analysis with \code{\link{icea}} and \code{\link{icea_pw}}.
-#' @param costs Simulated costs by category. 
-#' @param qalys Simulated QALYs.
+#' @param costs Simulated costs by category (objects of class \code{\link{costs}}). 
+#' @param qalys Simulated QALYs (objects of class \code{\link{qalys}})..
 #' @details If mean costs and/or QALYs have already been computed 
 #' (i.e., an average within a population), then there 
 #' must be one observation for each discount rate (\code{dr}), 

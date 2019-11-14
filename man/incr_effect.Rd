@@ -26,12 +26,12 @@ it is assumed that there is only one group.}
 \item{outcomes}{Name of columns to compute incremental changes for.}
 }
 \value{
-A \code{data.table} containing the differences in the values of each variable 
-specified in outcomes between each treatment strategy and the 
+A \code{data.table} containing the differences in the values of each variable
+specified in outcomes between each treatment strategy and the
 comparator.
 }
 \description{
-Computes incremental effect for all treatment strategies 
+Computes incremental effect for all treatment strategies
 on outcome variables from a probabilistic sensitivity analysis relative to a comparator.
 }
 \examples{

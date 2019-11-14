@@ -9,7 +9,7 @@ fast_rgengamma(n, mu = 0, sigma = 1, Q)
 \arguments{
 \item{n}{Number of random observations to draw.}
 
-\item{mu}{Vector of location parameters. 
+\item{mu}{Vector of location parameters.
 and columns correspond to rates during specified time intervals.}
 
 \item{sigma}{Vector of scale parameters as described in \code{flexsurv}.}
@@ -17,12 +17,12 @@ and columns correspond to rates during specified time intervals.}
 \item{Q}{Vector of shape parameters.}
 }
 \value{
-A vector of random samples from the generalized gamma distribution. The length of the sample is 
-determined by n. The numerical arguments other than n are recycled so that the number of samples is 
+A vector of random samples from the generalized gamma distribution. The length of the sample is
+determined by n. The numerical arguments other than n are recycled so that the number of samples is
 equal to n.
 }
 \description{
-Draw random samples from a generalized gamma distribution using the 
+Draw random samples from a generalized gamma distribution using the
 parameterization from \code{flexsurv}. Written in C++
 for speed. Equivalent to \code{flexsurv::rgengamma}.
 }

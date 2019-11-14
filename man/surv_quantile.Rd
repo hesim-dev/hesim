@@ -13,13 +13,13 @@ surv_quantile(x, probs = 0.5, t, surv_cols, by)
 
 \item{t}{A character scalar of the name of the time column.}
 
-\item{surv_cols}{A character vector of the names of columns containing 
+\item{surv_cols}{A character vector of the names of columns containing
 survival curves.}
 
 \item{by}{A character vector of the names of columns to group by.}
 }
 \value{
-A \code{data.table} of quantiles of each survival curve in 
+A \code{data.table} of quantiles of each survival curve in
 \code{surv_cols} by each group in \code{by}.
 }
 \description{

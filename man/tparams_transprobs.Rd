@@ -20,55 +20,55 @@ tparams_transprobs(object, ...)
 
 \item{...}{Further arguments passed to or from othr methods. Currently unused.}
 
-\item{time_start}{The starting time of each interval indexed by the 4th 
-dimension of the array. This argument is not required if there is only one time 
+\item{time_start}{The starting time of each interval indexed by the 4th
+dimension of the array. This argument is not required if there is only one time
 interval as \code{time_start} will equal 0 in this case. Used to construct
 \code{time_intervals} with \code{\link{create_time_intervals}}.}
 }
 \value{
-An object of class \code{"tparams_transprobs"}, 
-which is a list containing \code{value} and relevant ID attributes. The element \code{value} is an 
+An object of class \code{"tparams_transprobs"},
+which is a list containing \code{value} and relevant ID attributes. The element \code{value} is an
 array of predicted transition probability matrices from the posterior
-distribution of the underlying statistical model. Each matrix in 
+distribution of the underlying statistical model. Each matrix in
 \code{value} is a prediction for a \code{sample}, \code{strategy_id},
- \code{patient_id}, and optionally \code{time_id} combination.
+\code{patient_id}, and optionally \code{time_id} combination.
 }
 \description{
 Create a list containing predicted transition probabilities at discrete times.
- Since the transition probabilities have presumably
+Since the transition probabilities have presumably
 already been predicted based on covariate values, no input data is required for
 simulation. The class can be instantiated from either an array, a data table, or
 a data frame.
 }
 \details{
-The format of \code{object} depends on its class: 
+The format of \code{object} depends on its class:
 \describe{
 \item{array}{Must be a 4D array of matrices (i.e.,
- a 6D array). The dimensions of the array should be as follows: 
- 1st (\code{sample}), 2nd (\code{strategy_id}), 3rd (\code{patient_id}),
- 4th (\code{time_id}), 5th (rows of transition matrix), and
- 6th (columns of transition matrix). In other words, an index of
- \code{[s, k, i, t]} represents the transition matrix for the \code{s}th 
- sample, \code{k}th treatment strategy, \code{i}th patient, and \code{t}th
- time interval.}
- \item{data.table}{Must contain the folowing:
- \itemize{
- \item ID columns for the parameter sample (\code{sample}), 
- treatment strategy (\code{strategy_id}), and patient (\code{patient_id}).
- If the number of time intervals is greater than 1 it must also contain the
- column \code{time_start} denoting the start of a time interval. A column 
- \code{patient_wt} may also be used to denote the weight to apply to each
- patient.
- \item Columns for each element of the transition probability matrix. 
- They should be prefixed with "probs_" and ordered rowwise. 
- For example, the following columns would be used for a 2x2 transition
-  probabiliy matrix:
- \code{probs_1} (1st row, 1st column), 
- \code{probs_2} (1st row, 2nd column), 
- \code{probs_3} (2nd row, 1st column), and 
- \code{probs_4} (2nd row, 2nd column).
- }
- }
- \item{data.frame}{Same as \code{data.table}.}
+a 6D array). The dimensions of the array should be as follows:
+1st (\code{sample}), 2nd (\code{strategy_id}), 3rd (\code{patient_id}),
+4th (\code{time_id}), 5th (rows of transition matrix), and
+6th (columns of transition matrix). In other words, an index of
+\code{[s, k, i, t]} represents the transition matrix for the \code{s}th
+sample, \code{k}th treatment strategy, \code{i}th patient, and \code{t}th
+time interval.}
+\item{data.table}{Must contain the folowing:
+\itemize{
+\item ID columns for the parameter sample (\code{sample}),
+treatment strategy (\code{strategy_id}), and patient (\code{patient_id}).
+If the number of time intervals is greater than 1 it must also contain the
+column \code{time_start} denoting the start of a time interval. A column
+\code{patient_wt} may also be used to denote the weight to apply to each
+patient.
+\item Columns for each element of the transition probability matrix.
+They should be prefixed with "probs_" and ordered rowwise.
+For example, the following columns would be used for a 2x2 transition
+probabiliy matrix:
+\code{probs_1} (1st row, 1st column),
+\code{probs_2} (1st row, 2nd column),
+\code{probs_3} (2nd row, 1st column), and
+\code{probs_4} (2nd row, 2nd column).
+}
+}
+\item{data.frame}{Same as \code{data.table}.}
 }
 }

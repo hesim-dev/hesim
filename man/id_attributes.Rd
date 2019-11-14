@@ -22,18 +22,18 @@ id_attributes(strategy_id, n_strategies, patient_id, n_patients,
 
 \item{n_states}{A scalar denoting the number of unique health states.}
 
-\item{transition_id}{A numeric vector denoting the 
+\item{transition_id}{A numeric vector denoting the
 health state transition. This is only used for state transition models.}
 
 \item{n_transitions}{A scalar denoting the number of unique transitions.}
 
 \item{time_id}{A numeric vector of integers denoting a unique time interval.}
 
-\item{time_intervals}{A \code{data.table} denotes unique time intervals. Must 
+\item{time_intervals}{A \code{data.table} denotes unique time intervals. Must
 contain the columns \code{time_id}, \code{time_start}, and \code{time_stop}.
 \code{time_start} is the starting time of an interval and \code{time_stop} is
 the stopping time of an interval. Time intervals are closed on the left and
-open on the right, and in the final interval, \code{time_stop} is equal to 
+open on the right, and in the final interval, \code{time_stop} is equal to
 infinity.}
 
 \item{n_times}{A scalar denoting the number of time intervals. Equal to the
@@ -45,16 +45,16 @@ distribution of the parameters.}
 \item{n_samples}{A scalar denoting the number of samples.}
 }
 \description{
-Stores metadata related to the ID variables used to index \code{\link{input_mats}} 
+Stores metadata related to the ID variables used to index \code{\link{input_mats}}
 and parameter objects already predicted from covariates.
 }
 \details{
-When using the ID variables to index \code{\link{input_mats}}, sorting order should be 
+When using the ID variables to index \code{\link{input_mats}}, sorting order should be
 the same as specified in \code{\link{expand.hesim_data}}; that is,
-observations must be sorted by: (i) \code{strategy_id}, (ii) \code{patient_id}, 
+observations must be sorted by: (i) \code{strategy_id}, (ii) \code{patient_id},
 and (iii) the health-related ID variable (either \code{state_id} or
- \code{transition_id}). When using ID variables to index transformed parameter 
- objects and \code{sample} is used for indexing, then observations must be sorted by:
- (i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id}, and
-  (iv) the health-related ID variable.
+\code{transition_id}). When using ID variables to index transformed parameter
+objects and \code{sample} is used for indexing, then observations must be sorted by:
+(i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id}, and
+(iv) the health-related ID variable.
 }

@@ -58,8 +58,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/intro.html">Introduction</a>
+      <a href="articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -69,13 +74,12 @@
     <li>
       <a href="articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider">
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider">
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -106,14 +110,15 @@
 <div id="overview" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1></div>
-<p><code>hesim</code> is an R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. The package currently supports N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (CTSTMs), as well as summarizing the output of probabilistic sensitivity analysis (PSA). It is designed for high performance simulation modeling and heavily utilizes <code>Rcpp</code> and <code>data.table</code>. <code>hesim</code> is being actively developed and subsequent versions will provide support for cohort-level state transition models.</p>
-<p>Features of the current version include:</p>
+<p><code>hesim</code> is a modular and computationally efficient R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. The package supports cohort discrete time state transition models (DTSTMs), N-state partitioned survival models (PSMs), and individual-level continuous time state transition models (CTSTMs), encompassing both Markov (time-homogeneous and time-inhomogeneous) and semi-Markov processes. It heavily utilizes <code>Rcpp</code> and <code>data.table</code>, making individual-patient simulation, probabilistic sensitivity analysis (PSA), and incorporation of patient heterogeneity fast.</p>
+<p>Features of the current version can be summarized as follows:</p>
 <ul>
-<li>N-state PSMs and individual-level CTSTMs</li>
-<li>Modeling patient heterogeneity</li>
+<li>Cohort DTSTMs, N-state PSMs, and individual-level CTSTMs that encompass Markov and semi-Markov processes</li>
+<li>Options to build models via mathematical expressions using nonstandard evaluation or directly from fitted statistical models</li>
 <li>Parameter estimates from either an R based model or from an external source</li>
-<li>Sampling parameters of a statistical model fit with R using Monte Carlo methods or bootstrapping</li>
+<li>Convenience functions for sampling model parameters from parametric distributions or via bootstrapping</li>
 <li>Parameter uncertainty propagated with PSA</li>
+<li>Modeling patient heterogeneity</li>
 <li>Performing cost-effectiveness analyses and representing decision uncertainty from PSAs</li>
 <li>Simulation code written in <code>C++</code> to boost performance</li>
 </ul>

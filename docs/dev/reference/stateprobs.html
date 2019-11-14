@@ -34,7 +34,7 @@
   
 <meta property="og:title" content="State probability object — stateprobs" />
 
-<meta property="og:description" content="An object of class stateprobs returned from methods 
+<meta property="og:description" content="An object of class stateprobs returned from methods
 $sim_stateprobs() in model classes." />
 <meta name="twitter:card" content="summary" />
 
@@ -83,8 +83,13 @@ $sim_stateprobs() in model classes." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@ $sim_stateprobs() in model classes." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -135,7 +139,7 @@ $sim_stateprobs() in model classes." />
 
     <div class="ref-description">
     
-    <p>An object of class <code>stateprobs</code> returned from methods 
+    <p>An object of class <code>stateprobs</code> returned from methods
 <code>$sim_stateprobs()</code> in model classes.</p>
     
     </div>
@@ -147,12 +151,12 @@ $sim_stateprobs() in model classes." />
     <p>A <code>stateprobs</code> object inherits from <code>data.table</code> and contains
 the following columns:</p>
 <dl class='dl-horizontal'>
-  <dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
-  <dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>
-  <dt>patient_id</dt><dd><p>The patient ID.</p></dd>
-  <dt>state_id</dt><dd><p>The health state ID.</p></dd>
-  <dt>t</dt><dd><p>The time at which a state probability is computed.</p></dd>
-  <dt>prob</dt><dd><p>The probability of being in a given health state.</p></dd>
+<dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
+<dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>
+<dt>patient_id</dt><dd><p>The patient ID.</p></dd>
+<dt>state_id</dt><dd><p>The health state ID.</p></dd>
+<dt>t</dt><dd><p>The time at which a state probability is computed.</p></dd>
+<dt>prob</dt><dd><p>The probability of being in a given health state.</p></dd>
 </dl>
     <p>When simulating individual-level models, the <code>patient_id</code> column is
 not included as state probabilities are computed by averaging across patients.</p>

@@ -34,7 +34,7 @@
   
 <meta property="og:title" content="Create a parameter object from a fitted model — create_params" />
 
-<meta property="og:description" content="create_params is a generic function for creating an object containing 
+<meta property="og:description" content="create_params is a generic function for creating an object containing
 parameters from a fitted statistical model. If point_estimate = FALSE,
 then random samples from the posterior distribution are returned." />
 <meta name="twitter:card" content="summary" />
@@ -84,8 +84,13 @@ then random samples from the posterior distribution are returned." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -95,13 +100,12 @@ then random samples from the posterior distribution are returned." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -136,7 +140,7 @@ then random samples from the posterior distribution are returned." />
 
     <div class="ref-description">
     
-    <p><code>create_params</code> is a generic function for creating an object containing 
+    <p><code>create_params</code> is a generic function for creating an object containing
 parameters from a fitted statistical model. If <code>point_estimate = FALSE</code>,
 then random samples from the posterior distribution are returned.</p>
     
@@ -182,8 +186,8 @@ and no samples are drawn.</p></td>
     </tr>
     <tr>
       <th>bootstrap</th>
-      <td><p>If <code>bootstrap</code> is FALSE or not specified, then <code>n</code> parameter sets are 
-drawn by sampling from a multivariate normal distribution. If <code>bootstrap</code> is TRUE, then 
+      <td><p>If <code>bootstrap</code> is FALSE or not specified, then <code>n</code> parameter sets are
+drawn by sampling from a multivariate normal distribution. If <code>bootstrap</code> is TRUE, then
 parameters are bootstrapped using <code><a href='bootstrap.html'>bootstrap</a></code>.</p></td>
     </tr>
     <tr>
@@ -194,7 +198,7 @@ parameters are bootstrapped using <code><a href='bootstrap.html'>bootstrap</a></
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object prefixed by <code>params_</code>. Mapping between <code>create_params</code> 
+    <p>An object prefixed by <code>params_</code>. Mapping between <code>create_params</code>
 and the classes of the returned objects are:</p><ul>
 <li><p><code>create_params.lm</code> -&gt; <code>params_lm</code></p></li>
 <li><p><code>create_params.flexsurvreg</code> -&gt; <code>params_surv</code></p></li>

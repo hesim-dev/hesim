@@ -83,8 +83,13 @@ at specified time points. See joined for more details." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -94,13 +99,12 @@ at specified time points. See joined for more details." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -159,7 +163,7 @@ to the number of sets of models.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class "params_joined_surv_list", which is a list containing two elements:</p><dl class='dl-horizontal'>
-<dt>models</dt><dd><p>A list of <code><a href='params_surv_list.html'>params_surv_list</a></code>, each containing code<a href='params_surv.html'>params_surv</a> 
+<dt>models</dt><dd><p>A list of <code><a href='params_surv_list.html'>params_surv_list</a></code>, each containing code<a href='params_surv.html'>params_surv</a>
 objects to be joined.</p></dd>
 <dt>times</dt><dd><p>Equivalent to the argument <code>times</code>.</p></dd>
 </dl>
@@ -190,8 +194,8 @@ objects to be joined.</p></dd>
 #&gt; $coefs
 #&gt; $coefs$rate
 #&gt;           rate
-#&gt; [1,] -6.937318
-#&gt; [2,] -7.494966
+#&gt; [1,] -7.416860
+#&gt; [2,] -6.753397
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -206,14 +210,14 @@ objects to be joined.</p></dd>
 #&gt; [[2]]
 #&gt; $coefs
 #&gt; $coefs$shape
-#&gt;           shape
-#&gt; [1,] -0.3444579
-#&gt; [2,]  0.2861824
+#&gt;             shape
+#&gt; [1,]  0.005405668
+#&gt; [2,] -0.312214484
 #&gt; 
 #&gt; $coefs$scale
 #&gt;         scale
-#&gt; [1,] 7.266289
-#&gt; [2,] 6.928428
+#&gt; [1,] 7.558856
+#&gt; [2,] 7.397026
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -233,8 +237,8 @@ objects to be joined.</p></dd>
 #&gt; $coefs
 #&gt; $coefs$rate
 #&gt;           rate
-#&gt; [1,] -6.937318
-#&gt; [2,] -7.494966
+#&gt; [1,] -7.416860
+#&gt; [2,] -6.753397
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -250,13 +254,13 @@ objects to be joined.</p></dd>
 #&gt; $coefs
 #&gt; $coefs$meanlog
 #&gt;       meanlog
-#&gt; [1,] 6.791645
-#&gt; [2,] 7.431594
+#&gt; [1,] 6.112076
+#&gt; [2,] 7.106420
 #&gt; 
 #&gt; $coefs$sdlog
-#&gt;          sdlog
-#&gt; [1,] 0.2705199
-#&gt; [2,] 0.5021063
+#&gt;           sdlog
+#&gt; [1,] -0.4473843
+#&gt; [2,]  0.4387691
 #&gt; 
 #&gt; 
 #&gt; $dist

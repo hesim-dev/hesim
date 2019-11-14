@@ -8,8 +8,8 @@ development:
 reference:
   - title: "Fitted statistical models"
     contents:
-      - formula_list
       - flexsurvreg_list
+      - partsurvfit
   - title: "Probability distributions"
     contents:
       - mom_beta
@@ -21,7 +21,6 @@ reference:
   - title: "Parameters"
     contents:
       - params
-      - create_params
       - params_lm
       - params_surv
       - params_surv_list
@@ -33,7 +32,15 @@ reference:
       - hesim_data
       - expand.hesim_data
       - create_trans_dt
-      - create_input_mats
+      - input_mats
+  - title: "Model definition"
+    contents:
+      - tpmatrix
+      - tpmatrix_names
+      - rng_distributions
+      - define_rng
+      - define_tparams
+      - define_model
   - title: "Health state values"
     contents:
       - stateval_tbl
@@ -42,6 +49,7 @@ reference:
   - title: "Discrete time state transition models"
     contents:
       - CohortDtstmTrans
+      - create_CohortDtstm
       - create_CohortDtstmTrans
   - title: "Partitioned survival model"
     contents:
@@ -56,6 +64,8 @@ reference:
   - title: "Simulation output"
     contents:
       - stateprobs
+      - costs
+      - qalys
       - ce
   - title: "Summarize outcomes"
     contents:
@@ -75,10 +85,10 @@ articles:
 - title: "Using hesim"
   contents:
   - intro
+  - getting-started
   - psm
   - ctstm
   - icea
-  - dtstm-hiv
 
 navbar:
   title: hesim
@@ -87,19 +97,23 @@ navbar:
     href: reference/index.html
   - text: "Articles"
     menu:
-      - text: "Introduction"
+      - text: "Introduction to hesim"
         href: articles/intro.html
+      - text: "Getting started with a Markov cohort model"
+        href: articles/getting-started.html
+      - text: "---"
+      - text: "Economic models"
       - text: "Discrete time state transition models"
         href: articles/dtstm.html
       - text: "Partitioned survival models"
         href: articles/psm.html
       - text: "Continuous time state transition models"
         href: articles/ctstm.html
+      - text: "---"
+      - text: "Additional examples"
+      - text: "---"
+      - text: "Decision analysis"
       - text: "Individualized cost-effectiveness analysis"
         href: articles/icea.html
-      - text: "---"
-      - text: "Examples"
-      - text: "Discrete time state transition model for HIV"
-        href: articles/dtstm-hiv.html
   - text: News
     href: news/index.html

@@ -14,7 +14,7 @@ Returns an object of class "formula_list".
 }
 \description{
 Create an object of class "formula_list". The object can be created from either
- multiple objects of class \code{\link{formula}} or from another "formula_list" object.
+multiple objects of class \code{\link{formula}} or from another "formula_list" object.
 }
 \examples{
 # Create from "formula" objects

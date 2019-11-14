@@ -79,8 +79,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic models</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -90,13 +95,12 @@
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Additional examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Examples</li>
-    <li>
-      <a href="../articles/dtstm-hiv.html">Discrete time state transition model for HIV</a>
     </li>
   </ul>
 </li>
@@ -145,15 +149,15 @@
       <tr>
         
         <td>
-          <p><code><a href="formula_list.html">formula_list()</a></code> </p>
-        </td>
-        <td><p>List of <code>formula</code> objects</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="flexsurvreg_list.html">flexsurvreg_list()</a></code> </p>
         </td>
         <td><p>List of <code>flexsurvreg</code> objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="partsurvfit.html">partsurvfit()</a></code> </p>
+        </td>
+        <td><p>Partitioned survival regression object</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -212,12 +216,6 @@
           <p><code><a href="params.html">params</a></code> </p>
         </td>
         <td><p>Parameter object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_params.html">create_params()</a></code> </p>
-        </td>
-        <td><p>Create a parameter object from a fitted model</p></td>
       </tr><tr>
         
         <td>
@@ -283,9 +281,53 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="create_input_mats.html">create_input_mats()</a></code> </p>
+          <p><code><a href="input_mats.html">input_mats()</a></code> </p>
         </td>
-        <td><p>Create input matrices</p></td>
+        <td><p>Input matrices for a statistical model</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-model-definition" class="hasAnchor"><a href="#section-model-definition" class="anchor"></a>Model definition</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="tpmatrix.html">tpmatrix()</a></code> </p>
+        </td>
+        <td><p>Transition probability matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tpmatrix_names.html">tpmatrix_names()</a></code> </p>
+        </td>
+        <td><p>Names for elements of a transition probability matrix.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rng_distributions.html">beta_rng()</a></code> <code><a href="rng_distributions.html">dirichlet_rng()</a></code> <code><a href="rng_distributions.html">fixed()</a></code> <code><a href="rng_distributions.html">custom()</a></code> <code><a href="rng_distributions.html">gamma_rng()</a></code> <code><a href="rng_distributions.html">lognormal_rng()</a></code> <code><a href="rng_distributions.html">multi_normal_rng()</a></code> <code><a href="rng_distributions.html">normal_rng()</a></code> <code><a href="rng_distributions.html">uniform_rng()</a></code> </p>
+        </td>
+        <td><p>Random number generation distributions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="define_rng.html">define_rng()</a></code> <code><a href="define_rng.html">eval_rng()</a></code> </p>
+        </td>
+        <td><p>Define and evaluate random number generation expressions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="define_tparams.html">define_tparams()</a></code> <code><a href="define_tparams.html">eval_tparams()</a></code> </p>
+        </td>
+        <td><p>Define and evaluate transformed parameter expressions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="define_model.html">define_model()</a></code> <code><a href="define_model.html">eval_model()</a></code> </p>
+        </td>
+        <td><p>Define and evaluate model expression</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -326,6 +368,12 @@
           <p><code><a href="CohortDtstmTrans.html">CohortDtstmTrans</a></code> </p>
         </td>
         <td><p>Transitions for a cohort discrete time state transition model</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="create_CohortDtstm.html">create_CohortDtstm()</a></code> </p>
+        </td>
+        <td><p>Create <code>CohortDtstm</code> object</p></td>
       </tr><tr>
         
         <td>
@@ -398,6 +446,18 @@
           <p><code><a href="stateprobs.html">stateprobs</a></code> </p>
         </td>
         <td><p>State probability object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="costs.html">costs</a></code> </p>
+        </td>
+        <td><p>Costs object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="qalys.html">qalys</a></code> </p>
+        </td>
+        <td><p>Quality-adjusted life-years object</p></td>
       </tr><tr>
         
         <td>
@@ -476,6 +536,7 @@
       <li><a href="#section-probability-distributions">Probability distributions</a></li>
       <li><a href="#section-parameters">Parameters</a></li>
       <li><a href="#section-input-data">Input data</a></li>
+      <li><a href="#section-model-definition">Model definition</a></li>
       <li><a href="#section-health-state-values">Health state values</a></li>
       <li><a href="#section-discrete-time-state-transition-models">Discrete time state transition models</a></li>
       <li><a href="#section-partitioned-survival-model">Partitioned survival model</a></li>
