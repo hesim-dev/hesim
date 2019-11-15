@@ -2,7 +2,7 @@
 This release contains a minor update to address an email from Professor Brian Ripley that the `auto_ptr`, `bind1st`, `bind2nd`, `mem_fun_ref`, and `ptr_fun` are now deprecated in`C++` and should be removed from `R` packages. `hesim` contained a function that used `bind2nd`, but it is now replaced with an alternative implementation.
 
 ## Test environments
-* Local OS X, R 3.6.0
+* Local OS X, R 3.6.1
 * Ubuntu 16.04 (on travis-ci), R 3.6.1
 * win-builder (devel and release)
 
