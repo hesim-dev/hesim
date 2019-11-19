@@ -34,10 +34,9 @@
   
 <meta property="og:title" content="Expand hesim_data — expand.hesim_data" />
 
-<meta property="og:description" content="Expand the data tables from an object of class hesim_data into a data table in
-long format (one row for each combination of observations as specified with the
-ID variables from the tables specified with the by argument).
-See &quot;Details&quot; for an explanation of how the expansion is done." />
+<meta property="og:description" content="Create a data table in long format from all combinations of specified tables
+from an object of class hesim_data and optionally time intervals. See &quot;Details&quot; for
+an explanation of how the expansion is done." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -141,42 +140,47 @@ See &quot;Details&quot; for an explanation of how the expansion is done." />
 
     <div class="ref-description">
     
-    <p>Expand the data tables from an object of class <code><a href='hesim_data.html'>hesim_data</a></code> into a data table in
-long format (one row for each combination of observations as specified with the
-ID variables from the tables specified with the <code>by</code> argument).
-See "Details" for an explanation of how the expansion is done.</p>
+    <p>Create a data table in long format from all combinations of specified tables
+from an object of class <a href='hesim_data.html'>hesim_data</a> and optionally time intervals. See "Details" for
+an explanation of how the expansion is done.</p>
     
     </div>
 
     <pre class="usage"><span class='co'># S3 method for hesim_data</span>
-<span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>object</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))</pre>
+<span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>object</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>),
+  <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>An object of class <code><a href='hesim_data.html'>hesim_data</a></code>.</p></td>
+      <td><p>An object of class <code>hesim_data</code>.</p></td>
     </tr>
     <tr>
       <th>by</th>
-      <td><p>A character vector of the names of the data tables in <code><a href='hesim_data.html'>hesim_data</a></code> to expand by.</p></td>
+      <td><p>A character vector of the names of the data tables in <code>hesim_data</code> to expand by.</p></td>
+    </tr>
+    <tr>
+      <th>times</th>
+      <td><p>A numeric vector of distinct times denoting the start of time intervals.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class "expanded_hesim_data", which is a <code>data.table</code> with an "id_vars"
+    <p>An object of class <code>expanded_hesim_data</code>, which is a <code>data.table</code> with an "id_vars"
 attribute containing the names of the ID variables in the data table.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is similar to <code><a href='https://www.rdocumentation.org/packages/base/topics/expand.grid'>expand.grid</a></code>, but works for data frames or data tables.
-Specifically, it creates a <code>data.table</code> from all combinations of the supplied tables in <code>object</code>.
+    <p>This function is similar to <code><a href='https://www.rdocumentation.org/packages/base/topics/expand.grid'>expand.grid()</a></code>, but works for data frames or data tables.
+Specifically, it creates a <code>data.table</code> from all combinations of the supplied tables in <code>object</code>
+and optionally the start of times intervals in <code>times</code>.
 The supplied tables are determined using the <code>by</code> argument. The resulting dataset is sorted by
 prioritizing ID variables as follows: (i) <code>strategy_id</code>, (ii) <code>patient_id</code>,
-(iii) the health-related ID variable (either <code>state_id</code> or <code>transition_id</code>), and
-(iv) the time interval (i.e., <code>time_id</code>).</p>
+(iii) the health-related ID variable (either <code>state_id</code> or <code>transition_id</code>, and
+(iv) the time intervals from <code>times</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -194,7 +198,26 @@ prioritizing ID variables as follows: (i) <code>strategy_id</code>, (ii) <code>p
 #&gt; 3:           1          3  75   Male
 #&gt; 4:           2          1  65 Female
 #&gt; 5:           2          2  50 Female
-#&gt; 6:           2          3  75   Male</div></pre>
+#&gt; 6:           2          3  75   Male</div><div class='input'><span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>),
+       <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>10</span>))</div><div class='output co'>#&gt;     strategy_id patient_id age gender time_id time_start time_stop
+#&gt;  1:           1          1  65 Female       1          0         2
+#&gt;  2:           1          1  65 Female       2          2        10
+#&gt;  3:           1          1  65 Female       3         10       Inf
+#&gt;  4:           1          2  50 Female       1          0         2
+#&gt;  5:           1          2  50 Female       2          2        10
+#&gt;  6:           1          2  50 Female       3         10       Inf
+#&gt;  7:           1          3  75   Male       1          0         2
+#&gt;  8:           1          3  75   Male       2          2        10
+#&gt;  9:           1          3  75   Male       3         10       Inf
+#&gt; 10:           2          1  65 Female       1          0         2
+#&gt; 11:           2          1  65 Female       2          2        10
+#&gt; 12:           2          1  65 Female       3         10       Inf
+#&gt; 13:           2          2  50 Female       1          0         2
+#&gt; 14:           2          2  50 Female       2          2        10
+#&gt; 15:           2          2  50 Female       3         10       Inf
+#&gt; 16:           2          3  75   Male       1          0         2
+#&gt; 17:           2          3  75   Male       2          2        10
+#&gt; 18:           2          3  75   Male       3         10       Inf</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

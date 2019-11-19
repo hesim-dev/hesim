@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Transition probabilities — tparams_transprobs • hesim</title>
+<title>Time intervals — time_intervals • hesim</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,13 +32,10 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Transition probabilities — tparams_transprobs" />
+<meta property="og:title" content="Time intervals — time_intervals" />
 
-<meta property="og:description" content="Create a list containing predicted transition probabilities at discrete times.
-Since the transition probabilities have presumably
-already been predicted based on covariate values, no input data is required for
-simulation. The class can be instantiated from either an array, a data table, or
-a data frame." />
+<meta property="og:description" content="Create a table of time intervals given a vector of starting times for each
+interval. This would typically be passed to id_attributes." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -135,93 +132,44 @@ a data frame." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Transition probabilities</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a></small>
-    <div class="hidden name"><code>tparams_transprobs.Rd</code></div>
+    <h1>Time intervals</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/hesim_data.R'><code>R/hesim_data.R</code></a></small>
+    <div class="hidden name"><code>time_intervals.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a list containing predicted transition probabilities at discrete times.
-Since the transition probabilities have presumably
-already been predicted based on covariate values, no input data is required for
-simulation. The class can be instantiated from either an array, a data table, or
-a data frame.</p>
+    <p>Create a table of time intervals given a vector of starting times for each
+interval. This would typically be passed to <a href='id_attributes.html'>id_attributes</a>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for array</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='kw'>time_start</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
-<span class='co'># S3 method for data.table</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)</pre>
+    <pre class="usage"><span class='fu'>time_intervals</span>(<span class='no'>time_start</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>An object of the appropriate class.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to or from othr methods. Currently unused.</p></td>
-    </tr>
-    <tr>
       <th>time_start</th>
-      <td><p>The starting time of each interval indexed by the 4th
-dimension of the array. This argument is not required if there is only one time
-interval as <code>time_start</code> will equal 0 in this case. Used to construct
-<code>time_intervals</code> with <code><a href='time_intervals.html'>time_intervals</a></code>.</p></td>
+      <td><p>A vector of starting times for each interval</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>"tparams_transprobs"</code>,
-which is a list containing <code>value</code> and relevant ID attributes. The element <code>value</code> is an
-array of predicted transition probability matrices from the posterior
-distribution of the underlying statistical model. Each matrix in
-<code>value</code> is a prediction for a <code>sample</code>, <code>strategy_id</code>,
-<code>patient_id</code>, and optionally <code>time_id</code> combination.</p>
+    <p>A <code>data.table</code> in the same format as <code>time_intervals</code> as
+described in <a href='id_attributes.html'>id_attributes</a>.</p>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>The format of <code>object</code> depends on its class:</p><dl class='dl-horizontal'>
-<dt>array</dt><dd><p>Must be a 4D array of matrices (i.e.,
-a 6D array). The dimensions of the array should be as follows:
-1st (<code>sample</code>), 2nd (<code>strategy_id</code>), 3rd (<code>patient_id</code>),
-4th (<code>time_id</code>), 5th (rows of transition matrix), and
-6th (columns of transition matrix). In other words, an index of
-<code>[s, k, i, t]</code> represents the transition matrix for the <code>s</code>th
-sample, <code>k</code>th treatment strategy, <code>i</code>th patient, and <code>t</code>th
-time interval.</p></dd>
-<dt>data.table</dt><dd><p>Must contain the folowing:
-<ul>
-<li><p>ID columns for the parameter sample (<code>sample</code>),
-treatment strategy (<code>strategy_id</code>), and patient (<code>patient_id</code>).
-If the number of time intervals is greater than 1 it must also contain the
-column <code>time_start</code> denoting the start of a time interval. A column
-<code>patient_wt</code> may also be used to denote the weight to apply to each
-patient.</p></li>
-<li><p>Columns for each element of the transition probability matrix.
-They should be prefixed with "probs_" and ordered rowwise.
-For example, the following columns would be used for a 2x2 transition
-probabiliy matrix:
-<code>probs_1</code> (1st row, 1st column),
-<code>probs_2</code> (1st row, 2nd column),
-<code>probs_3</code> (2nd row, 1st column), and
-<code>probs_4</code> (2nd row, 2nd column).</p></li>
-</ul></p></dd>
-<dt>data.frame</dt><dd><p>Same as <code>data.table</code>.</p></dd>
-</dl>
+    <div class='dont-index'><p><a href='id_attributes.html'>id_attributes</a></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>time_intervals</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>5</span>))</div><div class='output co'>#&gt;    time_id time_start time_stop
+#&gt; 1:       1          0         3
+#&gt; 2:       2          3         5
+#&gt; 3:       3          5       Inf</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -230,8 +178,10 @@ probabiliy matrix:
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#details">Details</a></li>
-          </ul>
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
