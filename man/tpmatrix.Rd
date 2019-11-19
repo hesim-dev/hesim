@@ -7,24 +7,22 @@
 tpmatrix(...)
 }
 \arguments{
-\item{...}{Named values of expressions defining elements of the matrix The parameter
+\item{...}{Named values of expressions defining elements of the matrix. The parameter
 values of the matrix elements should refer to parameters defined using
 \code{\link[=define_rng]{define_rng()}} or \code{\link[=define_tparams]{define_tparams()}}.}
 }
 \value{
-Returns a \link{data.table} where each column is an element of the
-transition probability matrix with elements ordered rowwise. There is one
-row for each combination of parameter samples, treatment strategies, patients,
-and (if specified) time intervals.
+Returns a \code{data.table} where each column is an element of the
+transition probability matrix with elements ordered rowwise.
 }
 \description{
-\code{tpmatrix()} both define and evaluate a transition probability matrix in which
+\code{tpmatrix()} both defines and evaluates a transition probability matrix in which
 elements are expressions. This function is used within \code{define_tparams()} to
-create a transition probability matrix that is ultimately used for simulation modeling.
+create a transition probability matrix used for simulation modeling.
 }
 \details{
-The matrix is filled rowwise so that each row sums to 1. It is evaluated
-in the environment used by \code{\link[=eval_tparams]{eval_tparams()}}, meaning that any objects available
+The matrix is filled rowwise, meaning that each row should sum to 1. It is evaluated
+in the environment used by \code{\link[=eval_tparams]{eval_tparams()}} so that any objects available
 within \code{\link[=define_tparams]{define_tparams()}} can be used by \code{tpmatrix()}. The complementary probability
 equal to 1 minus the sum of the probabilities of all other rows can be
 conveniently referred to as \code{C}.

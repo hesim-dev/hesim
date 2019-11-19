@@ -213,12 +213,12 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>costs</span> ~ <span class='no'>female</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>psm4_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>)
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params_lm</span> <span class='kw'>&lt;-</span> <span class='fu'>create_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt;      (Intercept)    female
-#&gt; [1,]    32854.05 1305.9017
-#&gt; [2,]    31637.66 2554.5058
-#&gt; [3,]    31105.35  659.2022
-#&gt; [4,]    33760.10 2059.9307
-#&gt; [5,]    31828.68 1601.3897</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt;      (Intercept)     female
+#&gt; [1,]    34803.36  -499.5416
+#&gt; [2,]    29363.74  2755.9642
+#&gt; [3,]    32458.87  1044.5180
+#&gt; [4,]    29391.53  2773.7777
+#&gt; [5,]    32508.56 -1012.3516</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># create_params.flexsurvreg</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
@@ -226,20 +226,20 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params_surv_wei</span> <span class='kw'>&lt;-</span> <span class='fu'>create_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>params_surv_wei</span>$<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>params_surv_wei</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; $shape
-#&gt;           shape
-#&gt; [1,]  0.1601773
-#&gt; [2,] -0.4105413
-#&gt; [3,] -0.2323527
-#&gt; [4,]  0.0533142
-#&gt; [5,] -0.1131416
+#&gt;             shape
+#&gt; [1,]  0.186793484
+#&gt; [2,]  0.121963793
+#&gt; [3,]  0.235734225
+#&gt; [4,]  0.019700279
+#&gt; [5,] -0.006764301
 #&gt; 
 #&gt; $scale
 #&gt;         scale
-#&gt; [1,] 7.367877
-#&gt; [2,] 7.777375
-#&gt; [3,] 7.597618
-#&gt; [4,] 6.904363
-#&gt; [5,] 7.696416
+#&gt; [1,] 7.340558
+#&gt; [2,] 6.919050
+#&gt; [3,] 7.239873
+#&gt; [4,] 7.047567
+#&gt; [5,] 7.139236
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

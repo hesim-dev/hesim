@@ -338,8 +338,8 @@ create_time_intervals <- function(time_start){
 
 #' Attributes for ID variables
 #' 
-#' Stores metadata related to the ID variables used to index \code{\link{input_mats}} 
-#' and parameter objects already predicted from covariates.
+#' Stores metadata related to the ID variables used to index [input_mats()] 
+#' and [transformed parameter objects][tparams] already predicted from covariates.
 #' 
 #' @param sample A numeric vector of integer denoting the sample from the posterior
 #' distribution of the parameters. 

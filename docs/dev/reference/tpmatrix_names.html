@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Names for elements of a transition probability matrix. — tpmatrix_names • hesim</title>
+<title>Names for elements of a transition probability matrix — tpmatrix_names • hesim</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,11 +32,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Names for elements of a transition probability matrix. — tpmatrix_names" />
+<meta property="og:title" content="Names for elements of a transition probability matrix — tpmatrix_names" />
 
 <meta property="og:description" content="Create names for all elements of a transition probability matrix given
 names for the health states. This is useful for flattening a transition
-probability matrix into a vector and naming the resulting vector.
+probability matrix (rowwise) into a vector and naming the resulting vector.
 The name of an element of the flattened vector representing a transition from
 the ith state to the jth state is of the form
 paste0(prefix, state_i, sep, state_j)." />
@@ -136,7 +136,7 @@ paste0(prefix, state_i, sep, state_j)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Names for elements of a transition probability matrix.</h1>
+    <h1>Names for elements of a transition probability matrix</h1>
     <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/model_def.R'><code>R/model_def.R</code></a></small>
     <div class="hidden name"><code>tpmatrix_names.Rd</code></div>
     </div>
@@ -145,7 +145,7 @@ paste0(prefix, state_i, sep, state_j)." />
     
     <p>Create names for all elements of a transition probability matrix given
 names for the health states. This is useful for flattening a transition
-probability matrix into a vector and naming the resulting vector.
+probability matrix (rowwise) into a vector and naming the resulting vector.
 The name of an element of the flattened vector representing a transition from
 the ith state to the jth state is of the form
 <code><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0(prefix, state_i, sep, state_j)</a></code>.</p>
@@ -168,16 +168,15 @@ transition matrix.</p></td>
     </tr>
     <tr>
       <th>sep</th>
-      <td><p>A character string to separate the terms describing the transitions
-between state <code>i</code> and state <code>j</code>.</p></td>
+      <td><p>A character string to separate the terms representing
+state <code>i</code> and state <code>j</code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A character vector containing a name for each element of the transition
-probability matrix encompassing all possible transition. The matrix is flattened
-into a vector rowwise.</p>
+probability matrix encompassing all possible transitions.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

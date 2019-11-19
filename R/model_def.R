@@ -9,11 +9,11 @@ transform_dots <- function(dots, data){
 }
 
 # Transition probability matrix ------------------------------------------------
-#' Names for elements of a transition probability matrix.
+#' Names for elements of a transition probability matrix
 #' 
 #' Create names for all elements of a transition probability matrix given
 #' names for the health states. This is useful for flattening a transition
-#' probability matrix into a vector and naming the resulting vector. 
+#' probability matrix (rowwise) into a vector and naming the resulting vector. 
 #' The name of an element of the flattened vector representing a transition from
 #' the ith state to the jth state is of the form 
 #' `paste0(prefix, state_i, sep, state_j)`.
@@ -21,16 +21,15 @@ transform_dots <- function(dots, data){
 #' @param states A character vector of the names of health states in the 
 #' transition matrix.
 #' @param prefix A prefix that precedes the described transitions between states.
-#' @param sep A character string to separate the terms describing the transitions
-#' between state `i` and state `j`.
+#' @param sep A character string to separate the terms representing
+#' state `i` and state `j`.
 #' @examples 
 #' tpmatrix_names(LETTERS[1:4])
 #' tpmatrix_names(LETTERS[1:4], prefix = "")
 #' tpmatrix_names(LETTERS[1:4], prefix = "", sep = ".")
 #' 
 #' @return A character vector containing a name for each element of the transition
-#' probability matrix encompassing all possible transition. The matrix is flattened
-#' into a vector rowwise.
+#' probability matrix encompassing all possible transitions. 
 #' 
 #' @export
 tpmatrix_names <- function(states, prefix = "p_", sep = "_"){
@@ -84,24 +83,22 @@ replace_C <- function(x, complement){
 
 #' Transition probability matrix
 #' 
-#' `tpmatrix()` both define and evaluate a transition probability matrix in which 
+#' `tpmatrix()` both defines and evaluates a transition probability matrix in which 
 #' elements are expressions. This function is used within `define_tparams()` to 
-#' create a transition probability matrix that is ultimately used for simulation modeling. 
+#' create a transition probability matrix used for simulation modeling. 
 #' 
-#' @param ... Named values of expressions defining elements of the matrix The parameter 
+#' @param ... Named values of expressions defining elements of the matrix. The parameter 
 #' values of the matrix elements should refer to parameters defined using
 #' [define_rng()] or [define_tparams()].
 #' 
-#' @details The matrix is filled rowwise so that each row sums to 1. It is evaluated
-#' in the environment used by [eval_tparams()], meaning that any objects available
+#' @details The matrix is filled rowwise, meaning that each row should sum to 1. It is evaluated
+#' in the environment used by [eval_tparams()] so that any objects available
 #' within [define_tparams()] can be used by `tpmatrix()`. The complementary probability
 #' equal to 1 minus the sum of the probabilities of all other rows can be 
 #' conveniently referred to as `C`. 
 #' 
-#' @return Returns a [data.table] where each column is an element of the 
-#' transition probability matrix with elements ordered rowwise. There is one
-#' row for each combination of parameter samples, treatment strategies, patients,
-#' and (if specified) time intervals.  
+#' @return Returns a `data.table` where each column is an element of the 
+#' transition probability matrix with elements ordered rowwise. 
 #' 
 #' @examples 
 #' p <- c(.7, .6)
@@ -127,33 +124,32 @@ tpmatrix <- function(...){
 #' an object of class `model_def` defined using [define_model()].
 #' 
 #' @param expr An expression used to randomly draw variates for each parameter of
-#' interest in the model. [Braces][base::Paren] would typically be used so that the result
+#' interest in the model. [Braces][base::Paren] should be used so that the result
 #' of the last expression within the braces is evaluated. The expression must
-#'  return a list where each element is either a vector or matrix. The length of 
-#'  the vector and number of rows in the matrix must either be 1 or `n`.
+#'  return a list where each element is either a `vector`, `matrix`, `data.frame`,
+#'  or `data.table`. The length of 
+#'  the `vector` and number of rows in the `matrix`/`data.frame`/`data.table`,
+#'   must either be 1 or `n`.
 #' @param n Number of samples of the parameters to draw.
 #' @param ... Additional arguments to pass to the environment used to evaluate
 #' `expr`.
 #' 
 #' @details \code{hesim} contains a number of random number generation functions
-#' that return parameter samples in convenient formats for health economic modeling
+#' that return parameter samples in convenient formats
 #' and do not require the number of samples, `n`, as arguments 
 #' (see [rng_distributions]). The random number generation expressions
 #' are evaluated using `eval_rng()` and used within `expr`
-#' in `define_rng()`.
+#' in `define_rng()`. If multivariate object is returned by `eval_rng()`,
+#' then the rows are random samples and columns are 
+#' distinct parameters (e.g., costs for each health state, elements of a 
+#' transition probability matrix).  
 #' 
 #' @return `define_rng()` returns an object of class `rng_def`,
 #'  which is a list containing the unevaluated random number generation
 #'   expressions passed  to `expr`, `n`, and any additional arguments passed to 
-#'   `...` . `eval_rng()` evaluates the `rng_def` object and, as mentioned in
-#'   the description of the `expr` argument above, must be a list 
-#'   (with each element a vector or matrix) containing 
-#'   random samples of each of the defined parameters. 
-#'   If an element is a matrix, then rows are random samples and columns are 
-#'   distinct parameters (e.g., costs for each health state, elements of a 
-#'   transition probability matrix).
+#'   `...` . `eval_rng()` evaluates the `rng_def` object and should return a list. 
 #' 
-#' @seealso [rng_distributions], [define_model()]
+#' @seealso [rng_distributions], [define_model()], [define_tparams()]
 #' @examples  
 #' params <- list(
 #'   alpha = matrix(c(75, 25, 33, 67), byrow = TRUE, ncol = 2),
@@ -175,7 +171,7 @@ tpmatrix <- function(...){
 #'                        sd = aecost_mean,
 #'                        names = aecost_colnames)
 #'   )
-#'   }, n = 2, aecost_colnames = c("A", "B", "C")) # Add aecost_colnames to environment
+#' }, n = 2, aecost_colnames = c("A", "B", "C")) # Add aecost_colnames to environment
 #' eval_rng(x = rng_def, params)
 #' @export
 define_rng <- function(expr, n = 1, ...){
@@ -214,8 +210,8 @@ check_eval_rng <- function(object){
 
 #' @param x An object of class `rng_def` created with `define_rng()`.
 #' @param params A list containing the values of parameters for random number 
-#' generation. Each element of the list should either be a scalar, a vector, or 
-#' matrix/data frame/data table.
+#' generation. Each element of the list should either be a`vector`,
+#'  `matrix`, `data.frame`, or `data.table`
 #' @export
 #' @rdname define_rng
 eval_rng <- function(x, params = NULL){
@@ -284,19 +280,18 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
 
 #' Random number generation distributions
 #' 
-#' Probability distributions for random number generation. These functions
-#' are not exported and are meant for use with [define_rng()] and consequently
-#' assume that the number of samples to draw, `n`, is defined in the parent
-#' environment. The sample values are either stored in a vector if there is a 
-#' single random variable or a [data.table] if there are multiple random variables.
+#' A collection of functions for randomly generating deviates from probability
+#' distributions with [define_rng()]. 
 #' @param mean,sd Mean and standard deviation of the random variable.
 #' @param names Names for columns if an object with multiple columns is returned 
 #' by the function. 
 #' @param ... Additional arguments to pass to underlying random number generation
 #' functions. See "details". 
 #' 
-#' @details
-#' Convenience random number generation functions include:
+#' @details These functions are not exported and are meant for use with
+#' [define_rng()]. They consequently assume that the number of samples to draw, `n`,
+#' is defined in the parent environment. Convenience random number generation 
+#' functions include:
 #' \describe{
 #' \item{`beta_rng()`}{The parameters of the beta distribution are derived using
 #' the methods of moments with [mom_beta()] and beta variates are generated with
@@ -327,19 +322,21 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
 #' }
 #' 
 #' @return
-#' Functions either return a vector of length `n` or `n` by `k` `data.table`.
-#' A `data.table` is returned if each parameter of a given distribution is specified 
-#' as a vector with length greater than 1; otherwise, if each parameter is a scalar, 
-#' then a vector is returned. In the `data.table` case, `k` is
-#' equal to the length of the parameter vectors entered as  arguments. For example, 
-#' if the probability distribution contained `mean` as an argument and `mean` were 
+#' Functions either return a vector of length `n` or an `n` by `k` `data.table`.
+#'  Multivariate distributions always return a `data.table`. If a 
+#' univariate distribution is used, then a `data.table` is returned if each 
+#' parameter is specified as a vector with length greater than 1; otherwise, if
+#'parameters are scalars, then a vector is returned. In the `data.table` case,
+#'  `k` is equal to the length of the parameter vectors 
+#' entered as  arguments. For example, if the probability distribution contained
+#'  `mean` as an argument and `mean` were 
 #' of length 3, then an `n` by 3 matrix would be returned. The length of all 
 #' parameter vectors must be the same. For instance, if the vector `mean` 
 #' were of length 3 then all additional parameters (e.g., `sd`)
 #' must also be of length 3.
 #' 
-#' If a `data.table` is returned, its column names are set according to the following
-#' hierarchy:
+#' If a `data.table` is returned by a distribution, then its column names are set
+#'  according to the following hierarchy:
 #' \enumerate{
 #'   \item With the `names` argument if it is not `NULL`
 #'   \item With the names of the parameter vectors if they are named vectors. If there
@@ -353,7 +350,7 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
 #' 
 #' 
 #' @name rng_distributions
-#' @seealso [define_rng()], [eval_rng()]
+#' @seealso [define_rng()]
 NULL
 
 #' @name rng_distributions
@@ -403,15 +400,15 @@ fixed <- function(est, names = NULL){
   }
 }
 
-#' @param x A numeric vector or matrix containing random samples of the 
-#' variable of interest from a suitable probabilitiy distribution. This would 
+#' @param x A numeric `vector`, `matrix`, `data.frame`, or `data.table` containing 
+#' random samples of the variable of interest from a suitable probabilitiy distribution. This would 
 #' typically be a posterior distribution from a Bayesian analysis. 
 #' @rdname rng_distributions
 custom <- function(x, names = NULL){
   stopifnot(is.numeric(x))
   n_dims <- length(dim(x)) 
   if (n_dims > 2){
-    stop("'x' must either be a vector or a matrix.")
+    stop("'x' must either be a vector, matrix, data.frame. or data.table.")
   }
   if (n_dims < 2){
     x <- matrix(x, ncol = 1)
@@ -447,7 +444,7 @@ gamma_rng <- function(mean, sd, names = NULL){
 #' @param meanlog,sdlog Mean and standard deviation of the distribution on the 
 #' log scale.
 #' @rdname rng_distributions
-lognormal_rng <- function(meanlog, sdlog){
+lognormal_rng <- function(meanlog, sdlog, names = NULL){
   return(uv_rng(n = parent.frame()$n, 
                 params = list(meanlog, sdlog),
                 rng_fun = "rlnorm",
@@ -498,7 +495,7 @@ uniform_rng <- function(min, max, names = NULL){
 #' are ultimately converted into [tparams] objects and used to simulate outcomes with an
 #' economic model.
 #' @param expr Expressions used to transform parameters. As with [define_rng()], 
-#' [braces][base::Paren] would typically be used so that the result
+#' [braces][base::Paren] should be used so that the result
 #' of the last expression within the braces is evaluated. The expression 
 #' must return a named list with the following possible elements:
 #' * *tpmatrix*: The transition probability matrix used to simulate transition
@@ -507,7 +504,7 @@ uniform_rng <- function(min, max, names = NULL){
 #' * *utility*: The utility values to attach to states and used to simulate
 #' quality-adjusted life-years in the economic model. Either a vector (in
 #' which case utility is the same in each health state) or a
-#'  `data.table`/`data.frame`/`matrix`` with a column for each (non-death)
+#'  `data.table`/`data.frame`/`matrix` with a column for each (non-death)
 #'  health state.
 #'  * *costs*:  A named list of costs for each category used to simulate
 #'  costs in the economic model. Each element of the
@@ -518,19 +515,19 @@ uniform_rng <- function(min, max, names = NULL){
 #' `expr`.
 #' 
 #' @details `define_tparams()` is evaluted when creating economic models as a 
-#' function of `model_def` objects created with [define_model()]. Operations 
+#' function of `model_def` objects defined with [define_model()]. Operations 
 #' are "vectorized" in the sense that they are performed for each unique combination
 #' of `input_data` and `params`. `expr` is evaluated in an environment including
 #' each variable from `input_data`, all elements of `rng_params`, and a variable
 #' `time` containing the values from `times`. The `time` variable can be used
-#' to create models where parameters vary as a function of time.
+#' to create models where parameters vary as a function of time. 
+#' `eval_tparams()` is not exported and is only meant for use within [eval_model()].
 #' 
 #' @return [define_tparams()] returns an object of class `tparams_def`,
 #'  which is a list containing the unevaluated "transformation" expressions
 #'  passed  to `expr`, `times`, and any additional arguments passed to 
 #'   `...` . [eval_tparams()] evaluates the `tparams_def` object 
-#'  and returns a list of transformed parameter objects; however, note that
-#'   `eval_tparams()` is not exported and is only meant for use within [eval_model()].. 
+#'  and should return a list of transformed parameter objects.
 #' @seealso [define_model()], [define_rng()]
 #' @export
 define_tparams <- function(expr, times = NULL, ...){
@@ -565,9 +562,12 @@ eval_tparams <- function(x, input_data, rng_params){
 # Model definition -------------------------------------------------------------
 #' Define and evaluate model expression
 #' 
-#' A model expression is used to create an economic model as a function of 
-#' `input_data`, where model inputs are generated by evaluating the unevaluated expressions
-#'  with `eval_model()`.
+#' A model expression is defined by specifying random number generation functions 
+#' for a probabilistic sensitivity analysis and transformations of the sampled 
+#' parameters as a function of `input_data`. The unevaluated expressions
+#' are evaluated with `eval_model()` and used to generate the model inputs needed to 
+#' create an economic model.
+#' 
 #' @param tparams_def A [tparams_def][define_tparams()] object or a list of 
 #' [tparams_def][define_tparams()] objects. A list might be considered if time intervals
 #' specified with the `times` argument in [define_tparams()] vary across parameters. 
@@ -584,8 +584,12 @@ eval_tparams <- function(x, input_data, rng_params){
 #' in the transition probability matrix; otherwise it must be specified as an argument.
 #'  
 #' @details `eval_model()` evaluates the expressions in an object of class
-#'  `model_def` returned by `define_model()` and is, in turn, used within factory 
-#'  functions used to instantiate economic models (e.g., with [create_CohortDtstm()]).
+#'  `model_def` returned by `define_model()` and is, in turn, used within 
+#'  functions that instantiate economic models (e.g., [create_CohortDtstm()]).
+#'  The direct output of `eval_model()` can also be useful for understanding and debugging 
+#'  model definitions, but it is not used directly for simulation.
+#'  
+#'  
 #'  A `model_def` object would typically be defined in four steps by specifying:
 #'  1. *Data* (`input_data`) of class [expanded_hesim_data][expand.hesim_data()] 
 #'  consisting of the treatment strategies and patient population
@@ -594,7 +598,7 @@ eval_tparams <- function(x, input_data, rng_params){
 #'  sample values of the parameters from suitable probability distributions for probabilistic
 #'   sensitivity analysis 
 #'  4. *Transformed parameter* ([define_tparams()]) expressions that transform
-#'   the parameter estimates into values used for simulation.
+#'   the parameter estimates into values used for simulation
 #'  
 #'  Step 2 can be omitted if underlying parameter values are defined in steps 3.
 #'  The output of step 4 is used to instantiate the economic model (or a portion 
@@ -603,14 +607,11 @@ eval_tparams <- function(x, input_data, rng_params){
 #' 
 #' @return `define_model()` returns an object of class `model_def`, 
 #' which is a list containing the arguments to the function. `eval_model()` returns
-#' a list containing the [ID][id_attributes()] variables used for the simulation
-#' denoting parameter samples, treatment strategies, patient cohorts, and time
+#' a list containing [ID][id_attributes()] variables
+#' identifying parameter samples, treatment strategies, patient cohorts, and time
 #' intervals; the values of parameters of the transition probability matrix, 
 #' utilities, and/or cost categories; the number of health states; and the number
-#' of random number generation samples for the PSA. The output of `eval_model()`
-#' can be useful for understanding how model definitions work, but it cannot be 
-#' used directly for simulation; `eval_model()` is more usefully called within factory
-#' functions that instantiate economic models.
+#' of random number generation samples for the PSA. 
 #' 
 #' @examples 
 #' 
@@ -722,7 +723,8 @@ split_params <- function(params, params_names, params_class){
 }
 
 #' @param x An object of class `model_def` created with `define_model()`.
-#' @param input_data An object of class [expanded_hesim_data][expand.hesim_data()]. 
+#' @param input_data An object of class [expanded_hesim_data][expand.hesim_data()] 
+#' expaned by patients and treatment strategies. 
 #' @rdname define_model
 #' @export
 eval_model <- function(x, input_data){

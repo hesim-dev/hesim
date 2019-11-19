@@ -34,9 +34,9 @@
   
 <meta property="og:title" content="Transition probability matrix — tpmatrix" />
 
-<meta property="og:description" content="tpmatrix() both define and evaluate a transition probability matrix in which
+<meta property="og:description" content="tpmatrix() both defines and evaluates a transition probability matrix in which
 elements are expressions. This function is used within define_tparams() to
-create a transition probability matrix that is ultimately used for simulation modeling." />
+create a transition probability matrix used for simulation modeling." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -140,9 +140,9 @@ create a transition probability matrix that is ultimately used for simulation mo
 
     <div class="ref-description">
     
-    <p><code>tpmatrix()</code> both define and evaluate a transition probability matrix in which
+    <p><code>tpmatrix()</code> both defines and evaluates a transition probability matrix in which
 elements are expressions. This function is used within <code><a href='define_tparams.html'>define_tparams()</a></code> to
-create a transition probability matrix that is ultimately used for simulation modeling.</p>
+create a transition probability matrix used for simulation modeling.</p>
     
     </div>
 
@@ -153,7 +153,7 @@ create a transition probability matrix that is ultimately used for simulation mo
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>Named values of expressions defining elements of the matrix The parameter
+      <td><p>Named values of expressions defining elements of the matrix. The parameter
 values of the matrix elements should refer to parameters defined using
 <code><a href='define_rng.html'>define_rng()</a></code> or <code><a href='define_tparams.html'>define_tparams()</a></code>.</p></td>
     </tr>
@@ -161,15 +161,13 @@ values of the matrix elements should refer to parameters defined using
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a data.table where each column is an element of the
-transition probability matrix with elements ordered rowwise. There is one
-row for each combination of parameter samples, treatment strategies, patients,
-and (if specified) time intervals.</p>
+    <p>Returns a <code>data.table</code> where each column is an element of the
+transition probability matrix with elements ordered rowwise.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The matrix is filled rowwise so that each row sums to 1. It is evaluated
-in the environment used by <code><a href='define_tparams.html'>eval_tparams()</a></code>, meaning that any objects available
+    <p>The matrix is filled rowwise, meaning that each row should sum to 1. It is evaluated
+in the environment used by <code><a href='define_tparams.html'>eval_tparams()</a></code> so that any objects available
 within <code><a href='define_tparams.html'>define_tparams()</a></code> can be used by <code>tpmatrix()</code>. The complementary probability
 equal to 1 minus the sum of the probabilities of all other rows can be
 conveniently referred to as <code>C</code>.</p>

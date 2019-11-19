@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_def.R
 \name{tpmatrix_names}
 \alias{tpmatrix_names}
-\title{Names for elements of a transition probability matrix.}
+\title{Names for elements of a transition probability matrix}
 \usage{
 tpmatrix_names(states, prefix = "p_", sep = "_")
 }
@@ -12,18 +12,17 @@ transition matrix.}
 
 \item{prefix}{A prefix that precedes the described transitions between states.}
 
-\item{sep}{A character string to separate the terms describing the transitions
-between state \code{i} and state \code{j}.}
+\item{sep}{A character string to separate the terms representing
+state \code{i} and state \code{j}.}
 }
 \value{
 A character vector containing a name for each element of the transition
-probability matrix encompassing all possible transition. The matrix is flattened
-into a vector rowwise.
+probability matrix encompassing all possible transitions.
 }
 \description{
 Create names for all elements of a transition probability matrix given
 names for the health states. This is useful for flattening a transition
-probability matrix into a vector and naming the resulting vector.
+probability matrix (rowwise) into a vector and naming the resulting vector.
 The name of an element of the flattened vector representing a transition from
 the ith state to the jth state is of the form
 \code{paste0(prefix, state_i, sep, state_j)}.

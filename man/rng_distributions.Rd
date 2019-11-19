@@ -23,7 +23,7 @@ custom(x, names = NULL)
 
 gamma_rng(mean, sd, names = NULL)
 
-lognormal_rng(meanlog, sdlog)
+lognormal_rng(meanlog, sdlog, names = NULL)
 
 multi_normal_rng(mu, Sigma, names = NULL, ...)
 
@@ -41,8 +41,8 @@ by the function.}
 
 \item{est}{A vector of estimates of the variable of interest.}
 
-\item{x}{A numeric vector or matrix containing random samples of the
-variable of interest from a suitable probabilitiy distribution. This would
+\item{x}{A numeric \code{vector}, \code{matrix}, \code{data.frame}, or \code{data.table} containing
+random samples of the variable of interest from a suitable probabilitiy distribution. This would
 typically be a posterior distribution from a Bayesian analysis.}
 
 \item{meanlog, sdlog}{Mean and standard deviation of the distribution on the
@@ -58,19 +58,21 @@ functions. See "details".}
 \item{min, max}{Lower and upper limits of the distribution. Must be finite.}
 }
 \value{
-Functions either return a vector of length \code{n} or \code{n} by \code{k} \code{data.table}.
-A \code{data.table} is returned if each parameter of a given distribution is specified
-as a vector with length greater than 1; otherwise, if each parameter is a scalar,
-then a vector is returned. In the \code{data.table} case, \code{k} is
-equal to the length of the parameter vectors entered as  arguments. For example,
-if the probability distribution contained \code{mean} as an argument and \code{mean} were
+Functions either return a vector of length \code{n} or an \code{n} by \code{k} \code{data.table}.
+Multivariate distributions always return a \code{data.table}. If a
+univariate distribution is used, then a \code{data.table} is returned if each
+parameter is specified as a vector with length greater than 1; otherwise, if
+parameters are scalars, then a vector is returned. In the \code{data.table} case,
+\code{k} is equal to the length of the parameter vectors
+entered as  arguments. For example, if the probability distribution contained
+\code{mean} as an argument and \code{mean} were
 of length 3, then an \code{n} by 3 matrix would be returned. The length of all
 parameter vectors must be the same. For instance, if the vector \code{mean}
 were of length 3 then all additional parameters (e.g., \code{sd})
 must also be of length 3.
 
-If a \code{data.table} is returned, its column names are set according to the following
-hierarchy:
+If a \code{data.table} is returned by a distribution, then its column names are set
+according to the following hierarchy:
 \enumerate{
 \item With the \code{names} argument if it is not \code{NULL}
 \item With the names of the parameter vectors if they are named vectors. If there
@@ -83,14 +85,14 @@ named parameter vectors.
 }
 }
 \description{
-Probability distributions for random number generation. These functions
-are not exported and are meant for use with \code{\link[=define_rng]{define_rng()}} and consequently
-assume that the number of samples to draw, \code{n}, is defined in the parent
-environment. The sample values are either stored in a vector if there is a
-single random variable or a \link{data.table} if there are multiple random variables.
+A collection of functions for randomly generating deviates from probability
+distributions with \code{\link[=define_rng]{define_rng()}}.
 }
 \details{
-Convenience random number generation functions include:
+These functions are not exported and are meant for use with
+\code{\link[=define_rng]{define_rng()}}. They consequently assume that the number of samples to draw, \code{n},
+is defined in the parent environment. Convenience random number generation
+functions include:
 \describe{
 \item{\code{beta_rng()}}{The parameters of the beta distribution are derived using
 the methods of moments with \code{\link[=mom_beta]{mom_beta()}} and beta variates are generated with
@@ -121,5 +123,5 @@ with \code{\link[stats:rgamma]{stats::rgamma()}}.}
 }
 }
 \seealso{
-\code{\link[=define_rng]{define_rng()}}, \code{\link[=eval_rng]{eval_rng()}}
+\code{\link[=define_rng]{define_rng()}}
 }

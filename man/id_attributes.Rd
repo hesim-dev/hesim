@@ -45,8 +45,8 @@ distribution of the parameters.}
 \item{n_samples}{A scalar denoting the number of samples.}
 }
 \description{
-Stores metadata related to the ID variables used to index \code{\link{input_mats}}
-and parameter objects already predicted from covariates.
+Stores metadata related to the ID variables used to index \code{\link[=input_mats]{input_mats()}}
+and \link[=tparams]{transformed parameter objects} already predicted from covariates.
 }
 \details{
 When using the ID variables to index \code{\link{input_mats}}, sorting order should be

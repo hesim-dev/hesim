@@ -11,7 +11,7 @@ eval_tparams(x, input_data, rng_params)
 }
 \arguments{
 \item{expr}{Expressions used to transform parameters. As with \code{\link[=define_rng]{define_rng()}},
-\link[base:Paren]{braces} would typically be used so that the result
+\link[base:Paren]{braces} should be used so that the result
 of the last expression within the braces is evaluated. The expression
 must return a named list with the following possible elements:
 \itemize{
@@ -21,7 +21,7 @@ probabilities in the economic model. Typically the output of
 \item \emph{utility}: The utility values to attach to states and used to simulate
 quality-adjusted life-years in the economic model. Either a vector (in
 which case utility is the same in each health state) or a
-\code{data.table}/\code{data.frame}/`matrix`` with a column for each (non-death)
+\code{data.table}/\code{data.frame}/\code{matrix} with a column for each (non-death)
 health state.
 \item \emph{costs}:  A named list of costs for each category used to simulate
 costs in the economic model. Each element of the
@@ -45,8 +45,7 @@ in \code{\link[=eval_model]{eval_model()}}) expanded by the distinct times in \c
 which is a list containing the unevaluated "transformation" expressions
 passed  to \code{expr}, \code{times}, and any additional arguments passed to
 \code{...} . \code{\link[=eval_tparams]{eval_tparams()}} evaluates the \code{tparams_def} object
-and returns a list of transformed parameter objects; however, note that
-\code{eval_tparams()} is not exported and is only meant for use within \code{\link[=eval_model]{eval_model()}}..
+and should return a list of transformed parameter objects.
 }
 \description{
 Transformed parameter expressions are used to transform the parameter
@@ -59,12 +58,13 @@ economic model.
 }
 \details{
 \code{define_tparams()} is evaluted when creating economic models as a
-function of \code{model_def} objects created with \code{\link[=define_model]{define_model()}}. Operations
+function of \code{model_def} objects defined with \code{\link[=define_model]{define_model()}}. Operations
 are "vectorized" in the sense that they are performed for each unique combination
 of \code{input_data} and \code{params}. \code{expr} is evaluated in an environment including
 each variable from \code{input_data}, all elements of \code{rng_params}, and a variable
 \code{time} containing the values from \code{times}. The \code{time} variable can be used
 to create models where parameters vary as a function of time.
+\code{eval_tparams()} is not exported and is only meant for use within \code{\link[=eval_model]{eval_model()}}.
 }
 \seealso{
 \code{\link[=define_model]{define_model()}}, \code{\link[=define_rng]{define_rng()}}

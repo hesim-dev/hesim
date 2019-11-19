@@ -158,10 +158,12 @@ an object of class <code>model_def</code> defined using <code><a href='define_mo
     <tr>
       <th>expr</th>
       <td><p>An expression used to randomly draw variates for each parameter of
-interest in the model. <a href='https://www.rdocumentation.org/packages/base/topics/Paren'>Braces</a> would typically be used so that the result
+interest in the model. <a href='https://www.rdocumentation.org/packages/base/topics/Paren'>Braces</a> should be used so that the result
 of the last expression within the braces is evaluated. The expression must
-return a list where each element is either a vector or matrix. The length of
-the vector and number of rows in the matrix must either be 1 or <code>n</code>.</p></td>
+return a list where each element is either a <code>vector</code>, <code>matrix</code>, <code>data.frame</code>,
+or <code>data.table</code>. The length of
+the <code>vector</code> and number of rows in the <code>matrix</code>/<code>data.frame</code>/<code>data.table</code>,
+must either be 1 or <code>n</code>.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -179,8 +181,8 @@ the vector and number of rows in the matrix must either be 1 or <code>n</code>.<
     <tr>
       <th>params</th>
       <td><p>A list containing the values of parameters for random number
-generation. Each element of the list should either be a scalar, a vector, or
-matrix/data frame/data table.</p></td>
+generation. Each element of the list should either be a<code>vector</code>,
+<code>matrix</code>, <code>data.frame</code>, or <code>data.table</code></p></td>
     </tr>
     </table>
     
@@ -189,26 +191,23 @@ matrix/data frame/data table.</p></td>
     <p><code>define_rng()</code> returns an object of class <code>rng_def</code>,
 which is a list containing the unevaluated random number generation
 expressions passed  to <code>expr</code>, <code>n</code>, and any additional arguments passed to
-<code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and, as mentioned in
-the description of the <code>expr</code> argument above, must be a list
-(with each element a vector or matrix) containing
-random samples of each of the defined parameters.
-If an element is a matrix, then rows are random samples and columns are
-distinct parameters (e.g., costs for each health state, elements of a
-transition probability matrix).</p>
+<code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and should return a list.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>hesim</code> contains a number of random number generation functions
-that return parameter samples in convenient formats for health economic modeling
+that return parameter samples in convenient formats
 and do not require the number of samples, <code>n</code>, as arguments
 (see <a href='rng_distributions.html'>rng_distributions</a>). The random number generation expressions
 are evaluated using <code>eval_rng()</code> and used within <code>expr</code>
-in <code>define_rng()</code>.</p>
+in <code>define_rng()</code>. If multivariate object is returned by <code>eval_rng()</code>,
+then the rows are random samples and columns are
+distinct parameters (e.g., costs for each health state, elements of a
+transition probability matrix).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='rng_distributions.html'>rng_distributions</a>, <code><a href='define_model.html'>define_model()</a></code></p></div>
+    <div class='dont-index'><p><a href='rng_distributions.html'>rng_distributions</a>, <code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -233,16 +232,16 @@ in <code>define_rng()</code>.</p>
                        <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>aecost_mean</span>,
                        <span class='kw'>names</span> <span class='kw'>=</span> <span class='no'>aecost_colnames</span>)
   )
-  }, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>aecost_colnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>)) <span class='co'># Add aecost_colnames to environment</span>
+}, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>aecost_colnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>)) <span class='co'># Add aecost_colnames to environment</span>
 <span class='fu'>eval_rng</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>rng_def</span>, <span class='no'>params</span>)</div><div class='output co'>#&gt; $p
 #&gt;        s1_s1     s1_s2     s2_s1     s2_s2
-#&gt; 1: 0.7507937 0.2492063 0.3648586 0.6351414
-#&gt; 2: 0.7418004 0.2581996 0.3873456 0.6126544
+#&gt; 1: 0.7638685 0.2361315 0.4481535 0.5518465
+#&gt; 2: 0.8640754 0.1359246 0.3607864 0.6392136
 #&gt; 
 #&gt; $inptcost
-#&gt;           A         B        C
-#&gt; 1: 388.2749 1644.7198 609.2273
-#&gt; 2: 349.8291  477.3336 184.9680
+#&gt;           A         B         C
+#&gt; 1: 760.4367 2301.4096 3033.0027
+#&gt; 2: 426.0781   70.8088  561.6436
 #&gt; 
 #&gt; $outptcost
 #&gt;      [,1] [,2] [,3]
@@ -250,9 +249,9 @@ in <code>define_rng()</code>.</p>
 #&gt; [2,]  400  700  700
 #&gt; 
 #&gt; $aecost
-#&gt;           A         B        C
-#&gt; 1: 593.5141 384.97319 257.5921
-#&gt; 2: 329.5565  40.11976 736.3256
+#&gt;              A        B        C
+#&gt; 1:    2.325403 249.7941 2300.687
+#&gt; 2: 1069.650481 189.1178 1629.614
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

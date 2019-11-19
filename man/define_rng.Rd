@@ -11,10 +11,12 @@ eval_rng(x, params = NULL)
 }
 \arguments{
 \item{expr}{An expression used to randomly draw variates for each parameter of
-interest in the model. \link[base:Paren]{Braces} would typically be used so that the result
+interest in the model. \link[base:Paren]{Braces} should be used so that the result
 of the last expression within the braces is evaluated. The expression must
-return a list where each element is either a vector or matrix. The length of
-the vector and number of rows in the matrix must either be 1 or \code{n}.}
+return a list where each element is either a \code{vector}, \code{matrix}, \code{data.frame},
+or \code{data.table}. The length of
+the \code{vector} and number of rows in the \code{matrix}/\code{data.frame}/\code{data.table},
+must either be 1 or \code{n}.}
 
 \item{n}{Number of samples of the parameters to draw.}
 
@@ -24,20 +26,14 @@ the vector and number of rows in the matrix must either be 1 or \code{n}.}
 \item{x}{An object of class \code{rng_def} created with \code{define_rng()}.}
 
 \item{params}{A list containing the values of parameters for random number
-generation. Each element of the list should either be a scalar, a vector, or
-matrix/data frame/data table.}
+generation. Each element of the list should either be a\code{vector},
+\code{matrix}, \code{data.frame}, or \code{data.table}}
 }
 \value{
 \code{define_rng()} returns an object of class \code{rng_def},
 which is a list containing the unevaluated random number generation
 expressions passed  to \code{expr}, \code{n}, and any additional arguments passed to
-\code{...} . \code{eval_rng()} evaluates the \code{rng_def} object and, as mentioned in
-the description of the \code{expr} argument above, must be a list
-(with each element a vector or matrix) containing
-random samples of each of the defined parameters.
-If an element is a matrix, then rows are random samples and columns are
-distinct parameters (e.g., costs for each health state, elements of a
-transition probability matrix).
+\code{...} . \code{eval_rng()} evaluates the \code{rng_def} object and should return a list.
 }
 \description{
 Random number generation expressions are used to
@@ -47,11 +43,14 @@ an object of class \code{model_def} defined using \code{\link[=define_model]{def
 }
 \details{
 \code{hesim} contains a number of random number generation functions
-that return parameter samples in convenient formats for health economic modeling
+that return parameter samples in convenient formats
 and do not require the number of samples, \code{n}, as arguments
 (see \link{rng_distributions}). The random number generation expressions
 are evaluated using \code{eval_rng()} and used within \code{expr}
-in \code{define_rng()}.
+in \code{define_rng()}. If multivariate object is returned by \code{eval_rng()},
+then the rows are random samples and columns are
+distinct parameters (e.g., costs for each health state, elements of a
+transition probability matrix).
 }
 \examples{
  
@@ -75,9 +74,9 @@ rng_def <- define_rng({
                        sd = aecost_mean,
                        names = aecost_colnames)
   )
-  }, n = 2, aecost_colnames = c("A", "B", "C")) # Add aecost_colnames to environment
+}, n = 2, aecost_colnames = c("A", "B", "C")) # Add aecost_colnames to environment
 eval_rng(x = rng_def, params)
 }
 \seealso{
-\link{rng_distributions}, \code{\link[=define_model]{define_model()}}
+\link{rng_distributions}, \code{\link[=define_model]{define_model()}}, \code{\link[=define_tparams]{define_tparams()}}
 }
