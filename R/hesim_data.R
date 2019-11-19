@@ -81,62 +81,50 @@ create_trans_dt <- function(trans_mat){
 #' Data for health-economic simulation modeling
 #' 
 #' A list of tables required for health-economic simulation modeling.
-#' Each table must either be a \code{\link{data.frame}} or \code{\link{data.table}}. All ID variables within 
+#' Each table must either be a `data.frame` or `data.table`. All ID variables within 
 #' each table must be numeric vectors of integers. 
 #' @param strategies A table of treatment strategies. 
-#' Must contain the column \code{strategy_id} denoting a unique strategy. Other columns are variables
+#' Must contain the column `strategy_id` denoting a unique strategy. Other columns are variables
 #'  describing the characteristics of a treatment strategy. 
 #' @param patients A table of patient observations. 
-#' Must contain the column \code{patient_id} denoting a unique patient. The 
+#' Must contain the column `patient_id` denoting a unique patient. The 
 #' number of rows should be equal to the number of patients in the model.
 #' Other columns are variables describing the characteristics of a patient.
 #' @param states A table of health states. Must contain the column
-#' \code{state_id}, which denotes a unique health state. The number of rows should
+#' `state_id`, which denotes a unique health state. The number of rows should
 #' be equal to the number of health states in the model. Other columns can describe the
 #' characteristics of a health state.
 #' @param transitions A table of health state transitions. Must contain the column
-#' \code{transition_id}, which denotes a unique transition; \code{from}, which denotes
-#' the starting health state; and \code{to} which denotes the state that will be
+#' `transition_id`, which denotes a unique transition; `from`, which denotes
+#' the starting health state; and `to` which denotes the state that will be
 #' transitioned to.
-#' @param times A table of time intervals. Must contain the column \code{time_start}, 
-#' which denotes the starting time of times intervals defined between \code{time_start}
-#'  and \code{time_stop}. \code{hesim_data()} automatically creates the columns
-#'  \code{time_stop} and \code{time_id} (a vector of integers sorted by \code{time_start}).
-#'  Time intervals are closed on the left and open on the right and the final time
-#'   interval is defined from \code{time_start} to infinity.
-#' @return Returns an object of class "hesim_data", which is a list of data tables for
+#' @return Returns an object of class `hesim_data`, which is a list of data tables for
 #' health economic simulation modeling.
-#' @seealso \code{\link{expand.hesim_data}}
+#' @seealso [expand.hesim_data()]
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
 #'                           gender = c("Female", "Female", "Male"))
 #' states <- data.frame(state_id =  seq(1, 3),
 #'                         state_var = c(2, 1, 9))
-#' times <- data.frame(time_id = c(1, 2, 3),
-#'                     time_start = c(0, 4, 9),
-#'                     time_stop = c(4, 9, Inf))
 #' hesim_dat <- hesim_data(strategies = strategies,
 #'                          patients = patients,
-#'                          states = states,
-#'                          times = times)
+#'                          states = states)
 #' @export
 hesim_data <- function(strategies, patients, states = NULL,
-                       transitions = NULL, times = NULL){
+                       transitions = NULL){
   object <- new_hesim_data(strategies = strategies, patients = patients,
-                           states = states, transitions = transitions,
-                           times = times)
+                           states = states, transitions = transitions)
   return(check(object))
 }
 
 new_hesim_data <- function(strategies, patients, states = NULL,
-                           transitions = NULL, times = NULL){
+                           transitions = NULL){
   data <- list()
   data$strategies <- strategies 
   data$patients <- patients
   data$states <- states
   data$transitions <- transitions
-  data$times <- times
   class(data) <- c("hesim_data")
   return(data)
 }
@@ -180,26 +168,6 @@ check.hesim_data <- function(x){
     }
   }
   
-  # Times
-  if (!is.null(x$times)){
-    check_hesim_data_type(x$times, "times")
-    
-    ## time_start    
-    if (!"time_start" %in% colnames(x$times)){
-      stop("'times' must contain the column 'time_start'.",
-           call. = FALSE)
-    }
-    
-    ## time_stop
-    time_stop <- shift(x$times$time_start, type = "lead")
-    time_stop[is.na(time_stop)] <- Inf
-    x$times$time_stop <- time_stop
-    
-    ## time_id
-    x$times$time_id <- 1:nrow(x$times)
-    x$times <- setcolorder(x$times, c("time_id", "time_start", "time_stop"))
-  }
-  
   return(x)
 }
 
@@ -213,28 +181,30 @@ check_hesim_data_type <- function(tbl, tbl_name){
 #' Expand object
 #' 
 #' A generic function for "expanding" an object. Only used for 
-#' \code{\link{hesim_data}} objects.
+#' `hesim_data` objects with [expand.hesim_data()].
 #' @export
 #' @keywords internal
-expand <- function(object, by){
+#' @seealso [expand.hesim_data()]
+expand <- function(object, by, times){
   UseMethod("expand", object)
 }
 
 #' Expand hesim_data
 #' 
-#' Expand the data tables from an object of class \code{\link{hesim_data}} into a data table in 
-#' long format (one row for each combination of observations as specified with the 
-#' ID variables from the tables specified with the \code{by} argument).
-#'  See "Details" for an explanation of how the expansion is done.
-#' @param object An object of class \code{\link{hesim_data}}.
-#' @param by A character vector of the names of the data tables in \code{\link{hesim_data}} to expand by.
-#' @details This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables. 
-#' Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{object}. 
-#' The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by 
-#' prioritizing ID variables as follows: (i) \code{strategy_id}, (ii) \code{patient_id},
-#' (iii) the health-related ID variable (either \code{state_id} or \code{transition_id}), and
-#' (iv) the time interval (i.e., \code{time_id}).
-#' @return An object of class "expanded_hesim_data", which is a \code{data.table} with an "id_vars" 
+#' Create a data table in long format from all combinations of specified tables 
+#' from an object of class [hesim_data] and optionally time intervals. See "Details" for 
+#' an explanation of how the expansion is done.
+#' @param object An object of class `hesim_data`.
+#' @param by A character vector of the names of the data tables in `hesim_data` to expand by.
+#' @param times A numeric vector of distinct times denoting the start of time intervals. 
+#' @details This function is similar to [expand.grid()], but works for data frames or data tables. 
+#' Specifically, it creates a `data.table` from all combinations of the supplied tables in `object`
+#' and optionally the start of times intervals in `times`. 
+#' The supplied tables are determined using the `by` argument. The resulting dataset is sorted by 
+#' prioritizing ID variables as follows: (i) `strategy_id`, (ii) `patient_id`,
+#' (iii) the health-related ID variable (either `state_id` or `transition_id`, and
+#' (iv) the time intervals from `times`.
+#' @return An object of class `expanded_hesim_data`, which is a `data.table` with an "id_vars" 
 #' attribute containing the names of the ID variables in the data table.
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
@@ -246,17 +216,26 @@ expand <- function(object, by){
 #'                         patients = patients,
 #'                         states = states)
 #' expand(hesim_dat, by = c("strategies", "patients"))
+#' expand(hesim_dat, by = c("strategies", "patients"),
+#'        times = c(0, 2, 10))
 #' @export
-expand.hesim_data <- function(object, by = c("strategies", "patients")){
+expand.hesim_data <- function(object, by = c("strategies", "patients"),
+                              times = NULL){
   if ("transitions" %in% by & "states" %in% by){
     stop("Cannot expand by both 'transitions' and 'states'.", call. = FALSE)
   }
-  if (!all(by %in% names(hesim_data_sorting_map()))){
+  allowed_tables <- names(hesim_data_sorting_map()[
+      !names(hesim_data_sorting_map()) == "times"
+    ])
+  if (!all(by %in% allowed_tables)){
     stop("One of the elements specified in 'by' is not a table in 'hesim_data'.",
          call. = FALSE)
   }
   sorted_by <- hesim_data_sorted_by(by)
   tbl_list <- object[sorted_by]
+  if (!is.null(times)){
+    tbl_list <- c(tbl_list, list(times = time_intervals(times)))
+  }
   for (i in 1:length(tbl_list)){
     if (is.null(tbl_list[[i]])){
       stop("Cannot merge a NULL data table.")
@@ -309,19 +288,20 @@ sort_hesim_data <- function(data, sorted_by){
 }
 
 # ID attributes ----------------------------------------------------------------
-#' Create time intervals
+#' Time intervals
 #' 
 #' Create a table of time intervals given a vector of starting times for each 
-#' interval. This would typically be passed to \code{\link{id_attributes}}.
+#' interval. This would typically be passed to [id_attributes].
 #' 
 #' @param time_start A vector of starting times for each interval
-#' @return A \code{data.table} in the same format as \code{time_intervals} as 
-#' described in \code{\link{id_attributes}}.
-#' @seealso \code{\link{id_attributes}}
+#' @return A `data.table` in the same format as `time_intervals` as 
+#' described in [id_attributes].
+#' @seealso [id_attributes]
+#' @keywords internal
 #' @examples
-#' create_time_intervals(c(0, 3, 5))
+#' time_intervals(c(0, 3, 5))
 #' @export
-create_time_intervals <- function(time_start){
+time_intervals <- function(time_start){
   if (any(time_start < 0)){
     stop("'time_start' cannot be negative")
   }

@@ -13,12 +13,10 @@ states_dt <- data.frame(state_id =  seq(1, 3),
 trans_dt <- data.frame(transition_id = seq(1, 4),
                        from = c(1, 1, 2, 2),
                        to = c(2, 3, 1, 3))
-times_dt <- data.frame(time_start = c(0, 4, 9))
 hesim_dat <- hesim_data(strategies = strategies_dt,
                         patients = patients_dt,
                         states = states_dt,
-                        transitions = trans_dt,
-                        times = times_dt)
+                        transitions = trans_dt)
 
 # create_lines_dt --------------------------------------------------------------
 test_that("create_lines_dt", {
@@ -95,9 +93,10 @@ test_that("hesim_data", {
   expect_equal(attributes(expanded_dt)$id_vars, attributes(expanded_dt2)$id_vars)
   expect_equal(attributes(expanded_dt)$id_vars, c("strategy_id", "patient_id"))
   
-  expanded_dt <- expand(hesim_dat, by = c("strategies", "patients", "times"))
+  expanded_dt <- expand(hesim_dat, by = c("strategies", "patients"),
+                        times = c(0, 2, 4))
   expect_equal(nrow(expanded_dt), 
-               nrow(strategies_dt) * nrow(patients_dt) * nrow(times_dt))
+               nrow(strategies_dt) * nrow(patients_dt) * 3)
   
   
   # errors

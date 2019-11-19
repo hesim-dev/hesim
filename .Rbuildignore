@@ -11,3 +11,4 @@
 doxyfile
 DoxygenLayout.xml
 .covrignore
+^CRAN-RELEASE$

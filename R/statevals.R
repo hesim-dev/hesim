@@ -111,7 +111,7 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   
   # Time intervals in the correct format
   if (!is.null(tbl2$time_start)){
-    time_intervals <- create_time_intervals(unique(tbl2$time_start)) 
+    time_intervals <- time_intervals(unique(tbl2$time_start)) 
     pos <- match(tbl2$time_start, time_intervals$time_start)
     tbl2[, "time_id" := time_intervals$time_id[pos]]
     tbl2[, "time_stop" := time_intervals$time_stop[pos]]

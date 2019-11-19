@@ -12,12 +12,10 @@ states_dt <- data.frame(state_id =  seq(1, 3),
 trans_dt <- data.frame(transition_id = seq(1, 4),
                        from = c(1, 1, 2, 2),
                        to = c(2, 3, 1, 3))
-times_dt <- data.frame(time_start = c(0, 4, 15))
 hesim_dat <- hesim_data(strategies = strategies_dt,
                         patients = patients_dt,
                         states = states_dt,
-                        transitions = trans_dt,
-                        times = times_dt)
+                        transitions = trans_dt)
 
 # obs_index --------------------------------------------------------------------
 test_that("obs_index", {

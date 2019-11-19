@@ -4,8 +4,7 @@
 \alias{hesim_data}
 \title{Data for health-economic simulation modeling}
 \usage{
-hesim_data(strategies, patients, states = NULL, transitions = NULL,
-  times = NULL)
+hesim_data(strategies, patients, states = NULL, transitions = NULL)
 }
 \arguments{
 \item{strategies}{A table of treatment strategies.
@@ -26,21 +25,14 @@ characteristics of a health state.}
 \code{transition_id}, which denotes a unique transition; \code{from}, which denotes
 the starting health state; and \code{to} which denotes the state that will be
 transitioned to.}
-
-\item{times}{A table of time intervals. Must contain the column \code{time_start},
-which denotes the starting time of times intervals defined between \code{time_start}
-and \code{time_stop}. \code{hesim_data()} automatically creates the columns
-\code{time_stop} and \code{time_id} (a vector of integers sorted by \code{time_start}).
-Time intervals are closed on the left and open on the right and the final time
-interval is defined from \code{time_start} to infinity.}
 }
 \value{
-Returns an object of class "hesim_data", which is a list of data tables for
+Returns an object of class \code{hesim_data}, which is a list of data tables for
 health economic simulation modeling.
 }
 \description{
 A list of tables required for health-economic simulation modeling.
-Each table must either be a \code{\link{data.frame}} or \code{\link{data.table}}. All ID variables within
+Each table must either be a \code{data.frame} or \code{data.table}. All ID variables within
 each table must be numeric vectors of integers.
 }
 \examples{
@@ -49,14 +41,10 @@ patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
                           gender = c("Female", "Female", "Male"))
 states <- data.frame(state_id =  seq(1, 3),
                         state_var = c(2, 1, 9))
-times <- data.frame(time_id = c(1, 2, 3),
-                    time_start = c(0, 4, 9),
-                    time_stop = c(4, 9, Inf))
 hesim_dat <- hesim_data(strategies = strategies,
                          patients = patients,
-                         states = states,
-                         times = times)
+                         states = states)
 }
 \seealso{
-\code{\link{expand.hesim_data}}
+\code{\link[=expand.hesim_data]{expand.hesim_data()}}
 }

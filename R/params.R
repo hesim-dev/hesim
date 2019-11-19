@@ -528,7 +528,7 @@ create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, 
 #' @param time_start The starting time of each interval indexed by the 4th 
 #' dimension of the array. This argument is not required if there is only one time 
 #' interval as \code{time_start} will equal 0 in this case. Used to construct
-#' \code{time_intervals} with \code{\link{create_time_intervals}}.
+#' \code{time_intervals} with \code{\link{time_intervals}}.
 
 #' 
 #' @details The format of \code{object} depends on its class: 
@@ -633,7 +633,7 @@ tparams_transprobs.array <- function (object, time_start = NULL) {
       stop(paste0("'time_start' cannot be NULL if the number of time ",
                   "intervals is greater than 1"), call. = FALSE)
     }
-    id_args$time_intervals <- create_time_intervals(time_start)
+    id_args$time_intervals <- time_intervals(time_start)
   }
   
   # Return
@@ -657,7 +657,7 @@ tparams_transprobs.data.table <- function (object) {
   
   ## Time interval
   if (!is.null(object$time_start)){
-    time_intervals <- create_time_intervals(unique(object$time_start)) 
+    time_intervals <- time_intervals(unique(object$time_start)) 
     pos <- match(object$time_start, time_intervals$time_start)
     id_args[["time_id"]] <- time_intervals$time_id[pos]
     id_args[["time_intervals"]] <- time_intervals

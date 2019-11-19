@@ -23,7 +23,7 @@ tparams_transprobs(object, ...)
 \item{time_start}{The starting time of each interval indexed by the 4th
 dimension of the array. This argument is not required if there is only one time
 interval as \code{time_start} will equal 0 in this case. Used to construct
-\code{time_intervals} with \code{\link{create_time_intervals}}.}
+\code{time_intervals} with \code{\link{time_intervals}}.}
 }
 \value{
 An object of class \code{"tparams_transprobs"},

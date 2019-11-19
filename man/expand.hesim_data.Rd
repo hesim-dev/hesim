@@ -4,30 +4,33 @@
 \alias{expand.hesim_data}
 \title{Expand hesim_data}
 \usage{
-\method{expand}{hesim_data}(object, by = c("strategies", "patients"))
+\method{expand}{hesim_data}(object, by = c("strategies", "patients"),
+  times = NULL)
 }
 \arguments{
-\item{object}{An object of class \code{\link{hesim_data}}.}
+\item{object}{An object of class \code{hesim_data}.}
 
-\item{by}{A character vector of the names of the data tables in \code{\link{hesim_data}} to expand by.}
+\item{by}{A character vector of the names of the data tables in \code{hesim_data} to expand by.}
+
+\item{times}{A numeric vector of distinct times denoting the start of time intervals.}
 }
 \value{
-An object of class "expanded_hesim_data", which is a \code{data.table} with an "id_vars"
+An object of class \code{expanded_hesim_data}, which is a \code{data.table} with an "id_vars"
 attribute containing the names of the ID variables in the data table.
 }
 \description{
-Expand the data tables from an object of class \code{\link{hesim_data}} into a data table in
-long format (one row for each combination of observations as specified with the
-ID variables from the tables specified with the \code{by} argument).
-See "Details" for an explanation of how the expansion is done.
+Create a data table in long format from all combinations of specified tables
+from an object of class \link{hesim_data} and optionally time intervals. See "Details" for
+an explanation of how the expansion is done.
 }
 \details{
-This function is similar to \code{\link{expand.grid}}, but works for data frames or data tables.
-Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{object}.
+This function is similar to \code{\link[=expand.grid]{expand.grid()}}, but works for data frames or data tables.
+Specifically, it creates a \code{data.table} from all combinations of the supplied tables in \code{object}
+and optionally the start of times intervals in \code{times}.
 The supplied tables are determined using the \code{by} argument. The resulting dataset is sorted by
 prioritizing ID variables as follows: (i) \code{strategy_id}, (ii) \code{patient_id},
-(iii) the health-related ID variable (either \code{state_id} or \code{transition_id}), and
-(iv) the time interval (i.e., \code{time_id}).
+(iii) the health-related ID variable (either \code{state_id} or \code{transition_id}, and
+(iv) the time intervals from \code{times}.
 }
 \examples{
 strategies <- data.frame(strategy_id = c(1, 2))
@@ -39,4 +42,6 @@ hesim_dat <- hesim_data(strategies = strategies,
                         patients = patients,
                         states = states)
 expand(hesim_dat, by = c("strategies", "patients"))
+expand(hesim_dat, by = c("strategies", "patients"),
+       times = c(0, 2, 10))
 }

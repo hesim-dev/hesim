@@ -4,10 +4,13 @@
 \alias{expand}
 \title{Expand object}
 \usage{
-expand(object, by)
+expand(object, by, times)
 }
 \description{
 A generic function for "expanding" an object. Only used for
-\code{\link{hesim_data}} objects.
+\code{hesim_data} objects with \code{\link[=expand.hesim_data]{expand.hesim_data()}}.
+}
+\seealso{
+\code{\link[=expand.hesim_data]{expand.hesim_data()}}
 }
 \keyword{internal}
