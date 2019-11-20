@@ -91,7 +91,7 @@ tprob_array[, , 2, 2, 2, ] <- tprob_array[, , 1, 2, 1, ]
 tprob_array <- aperm(tprob_array, perm = c(6:3, 1, 2))
 
 # tparams_transprobs.array -----------------------------------------------------
-params_tprob <- tparams_transprobs(tprob_array, time_start = time_start)
+params_tprob <- tparams_transprobs(tprob_array, times = time_start)
 params_tprob_t1 <- tparams_transprobs(tprob_array[,,,1,,, drop = FALSE])
 
 test_that("tparams_transprobs requires time stop" , {

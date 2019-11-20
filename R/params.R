@@ -524,50 +524,54 @@ create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, 
 #' a data frame. 
 #' 
 #' @param object An object of the appropriate class. 
-#' @param ... Further arguments passed to or from othr methods. Currently unused. 
-#' @param time_start The starting time of each interval indexed by the 4th 
-#' dimension of the array. This argument is not required if there is only one time 
-#' interval as \code{time_start} will equal 0 in this case. Used to construct
-#' \code{time_intervals} with \code{\link{time_intervals}}.
+#' @param ... Further arguments passed to or from other methods. Currently unused. 
+#' @param times A numeric vector of distinct times denoting the start of time intervals
+#' indexed by the 4th dimension of the array. This argument is not required if there is only one time 
+#' interval as `times` will equal 0 in this case. 
 
 #' 
-#' @details The format of \code{object} depends on its class: 
+#' @details The format of `object` depends on its class: 
 #' \describe{
 #' \item{array}{Must be a 4D array of matrices (i.e.,
-#'  a 6D array). The dimensions of the array should be as follows: 
-#'  1st (\code{sample}), 2nd (\code{strategy_id}), 3rd (\code{patient_id}),
-#'  4th (\code{time_id}), 5th (rows of transition matrix), and
+#'  a 6D array). The dimensions of the array should be indexed as follows: 
+#'  1st (`sample`), 2nd (`strategy_id`), 3rd (`patient_id`),
+#'  4th (`time_id`), 5th (rows of transition matrix), and
 #'  6th (columns of transition matrix). In other words, an index of
-#'  \code{[s, k, i, t]} represents the transition matrix for the \code{s}th 
-#'  sample, \code{k}th treatment strategy, \code{i}th patient, and \code{t}th
+#'  `[s, k, i, t]` represents the transition matrix for the `s`th 
+#'  sample, `k`th treatment strategy, `i`th patient, and `t`th
 #'  time interval.}
 #'  \item{data.table}{Must contain the folowing:
 #'  \itemize{
-#'  \item ID columns for the parameter sample (\code{sample}), 
-#'  treatment strategy (\code{strategy_id}), and patient (\code{patient_id}).
+#'  \item ID columns for the parameter sample (`sample`), 
+#'  treatment strategy (`strategy_id`), and patient (`patient_id`).
 #'  If the number of time intervals is greater than 1 it must also contain the
-#'  column \code{time_start} denoting the start of a time interval. A column 
-#'  \code{patient_wt} may also be used to denote the weight to apply to each
+#'  column `time_start` denoting the start of a time interval. A column 
+#'  `patient_wt` may also be used to denote the weight to apply to each
 #'  patient.
 #'  \item Columns for each element of the transition probability matrix. 
 #'  They should be prefixed with "probs_" and ordered rowwise. 
 #'  For example, the following columns would be used for a 2x2 transition
 #'   probabiliy matrix:
-#'  \code{probs_1} (1st row, 1st column), 
-#'  \code{probs_2} (1st row, 2nd column), 
-#'  \code{probs_3} (2nd row, 1st column), and 
-#'  \code{probs_4} (2nd row, 2nd column).
+#'  `probs_1` (1st row, 1st column), 
+#'  `probs_2` (1st row, 2nd column), 
+#'  `probs_3` (2nd row, 1st column), and 
+#'  `probs_4` (2nd row, 2nd column).
 #'  }
 #'  }
 #'  \item{data.frame}{Same as \code{data.table}.}
 #' }
 #' 
-#' @return An object of class \code{"tparams_transprobs"}, 
-#' which is a list containing \code{value} and relevant ID attributes. The element \code{value} is an 
+#' A `tparams_transprobs` object is also instantiated when creating a
+#' cohort discrete time state transition model using [define_model()].
+#' 
+#' @return An object of class `tparams_transprobs`, 
+#' which is a list containing `value` and relevant ID attributes. The element `value` is an 
 #' array of predicted transition probability matrices from the posterior
 #' distribution of the underlying statistical model. Each matrix in 
-#' \code{value} is a prediction for a \code{sample}, \code{strategy_id},
-#'  \code{patient_id}, and optionally \code{time_id} combination.
+#' `value` is a prediction for a `sample`, `strategy_id`,
+#'  `patient_id`, and optionally `time_id` combination.
+#'
+#' @seealso  [define_model()], [create_CohortDtstm()]
 #' @rdname tparams_transprobs
 #' @export
 tparams_transprobs <- function(object, ...){
@@ -597,7 +601,7 @@ check.tparams_transprobs <- function(object){
 
 #' @rdname tparams_transprobs
 #' @export
-tparams_transprobs.array <- function (object, time_start = NULL) {
+tparams_transprobs.array <- function (object, times = NULL) {
   # Checks
   if(length(dim(object)) != 6){
     stop("'object' must be a 4D array of matrices (i.e., a 6D array).")
@@ -629,11 +633,11 @@ tparams_transprobs.array <- function (object, time_start = NULL) {
                                          time_start = 0,
                                          time_stop = Inf)
   } else{
-    if (is.null(time_start)){
-      stop(paste0("'time_start' cannot be NULL if the number of time ",
+    if (is.null(times)){
+      stop(paste0("'times' cannot be NULL if the number of time ",
                   "intervals is greater than 1"), call. = FALSE)
     }
-    id_args$time_intervals <- time_intervals(time_start)
+    id_args$time_intervals <- time_intervals(times)
   }
   
   # Return

@@ -9,7 +9,7 @@
 \usage{
 tparams_transprobs(object, ...)
 
-\method{tparams_transprobs}{array}(object, time_start = NULL)
+\method{tparams_transprobs}{array}(object, times = NULL)
 
 \method{tparams_transprobs}{data.table}(object)
 
@@ -18,15 +18,14 @@ tparams_transprobs(object, ...)
 \arguments{
 \item{object}{An object of the appropriate class.}
 
-\item{...}{Further arguments passed to or from othr methods. Currently unused.}
+\item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{time_start}{The starting time of each interval indexed by the 4th
-dimension of the array. This argument is not required if there is only one time
-interval as \code{time_start} will equal 0 in this case. Used to construct
-\code{time_intervals} with \code{\link{time_intervals}}.}
+\item{times}{A numeric vector of distinct times denoting the start of time intervals
+indexed by the 4th dimension of the array. This argument is not required if there is only one time
+interval as \code{times} will equal 0 in this case.}
 }
 \value{
-An object of class \code{"tparams_transprobs"},
+An object of class \code{tparams_transprobs},
 which is a list containing \code{value} and relevant ID attributes. The element \code{value} is an
 array of predicted transition probability matrices from the posterior
 distribution of the underlying statistical model. Each matrix in
@@ -44,7 +43,7 @@ a data frame.
 The format of \code{object} depends on its class:
 \describe{
 \item{array}{Must be a 4D array of matrices (i.e.,
-a 6D array). The dimensions of the array should be as follows:
+a 6D array). The dimensions of the array should be indexed as follows:
 1st (\code{sample}), 2nd (\code{strategy_id}), 3rd (\code{patient_id}),
 4th (\code{time_id}), 5th (rows of transition matrix), and
 6th (columns of transition matrix). In other words, an index of
@@ -71,4 +70,10 @@ probabiliy matrix:
 }
 \item{data.frame}{Same as \code{data.table}.}
 }
+
+A \code{tparams_transprobs} object is also instantiated when creating a
+cohort discrete time state transition model using \code{\link[=define_model]{define_model()}}.
+}
+\seealso{
+\code{\link[=define_model]{define_model()}}, \code{\link[=create_CohortDtstm]{create_CohortDtstm()}}
 }
