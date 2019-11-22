@@ -7,17 +7,17 @@
 summarize_ce(costs, qalys)
 }
 \arguments{
-\item{costs}{Simulated costs by category (objects of class \code{\link{costs}}).}
+\item{costs}{Simulated costs by category (objects of class \link{costs}).}
 
-\item{qalys}{Simulated QALYs (objects of class \code{\link{qalys}})..}
+\item{qalys}{Simulated QALYs (objects of class \link{qalys}).}
 }
 \value{
-An object of class \code{\link{ce}}.
+An object of class \link{ce}.
 }
 \description{
 Summarize costs and quality-adjusted life-years (QALYs) given output simulated
 from an economic model. The summary output is used to perform
-cost-effectiveness analysis with \code{\link{icea}} and \code{\link{icea_pw}}.
+cost-effectiveness analysis with \code{\link[=icea]{icea()}} and \code{\link[=icea_pw]{icea_pw()}}.
 }
 \details{
 If mean costs and/or QALYs have already been computed
@@ -26,6 +26,8 @@ must be one observation for each discount rate (\code{dr}),
 PSA sample (\code{sample}), treatment strategy (\code{strategy_id}),
 and health state (\code{state_id}). Alternatively, there can be column
 denoting a patient (\code{patient_id}), in which case outcomes will first be
-averaged across patients.
+averaged across patients. A \code{grp_id} column can also be used so that
+outcomes are computed for each subgroup; otherwise it is assumed that
+there is only one subgroup.
 }
 \keyword{internal}

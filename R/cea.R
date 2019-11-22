@@ -238,10 +238,10 @@ icea_pw.default <- function(x, k = seq(0, 200000, 500), comparator,
 icea.ce <- function(x, k = seq(0, 200000, 500), dr_qalys, dr_costs, ...){
   category <- dr <- NULL
   sim <- cbind(x$costs[category == "total" & dr == dr_costs,
-                       c("sample", "strategy_id", "costs")],
+                       c("sample", "strategy_id", "grp_id", "costs")],
                x$qalys[dr == dr_qalys, "qalys", with = FALSE])
   res <- icea(sim, k = k, sample = "sample", strategy = "strategy_id",
-              e = "qalys", c = "costs")
+              grp = "grp_id", e = "qalys", c = "costs")
   return(res)
 }
 
@@ -250,10 +250,10 @@ icea.ce <- function(x, k = seq(0, 200000, 500), dr_qalys, dr_costs, ...){
 icea_pw.ce <- function(x, k = seq(0, 200000, 500), comparator, dr_qalys, dr_costs, ...){
   category <- dr <- NULL
   sim <- cbind(x$costs[category == "total" & dr == dr_costs,
-                       c("sample", "strategy_id", "costs")],
+                       c("sample", "strategy_id", "grp_id", "costs")],
                x$qalys[dr == dr_qalys, "qalys", with = FALSE])
   res <- icea_pw(sim, k = k, comparator = comparator, sample = "sample",
-                 strategy = "strategy_id",
+                 strategy = "strategy_id", grp = "grp_id",
                  e = "qalys", c = "costs")
   return(res)
 }

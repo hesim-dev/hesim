@@ -153,7 +153,7 @@ a data frame.</p>
     <pre class="usage"><span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for array</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='kw'>time_start</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='co'># S3 method for data.table</span>
 <span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)
@@ -170,20 +170,19 @@ a data frame.</p>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments passed to or from othr methods. Currently unused.</p></td>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     <tr>
-      <th>time_start</th>
-      <td><p>The starting time of each interval indexed by the 4th
-dimension of the array. This argument is not required if there is only one time
-interval as <code>time_start</code> will equal 0 in this case. Used to construct
-<code>time_intervals</code> with <code><a href='time_intervals.html'>time_intervals</a></code>.</p></td>
+      <th>times</th>
+      <td><p>A numeric vector of distinct times denoting the start of time intervals
+indexed by the 4th dimension of the array. This argument is not required if there is only one time
+interval as <code>times</code> will equal 0 in this case.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>"tparams_transprobs"</code>,
+    <p>An object of class <code>tparams_transprobs</code>,
 which is a list containing <code>value</code> and relevant ID attributes. The element <code>value</code> is an
 array of predicted transition probability matrices from the posterior
 distribution of the underlying statistical model. Each matrix in
@@ -194,7 +193,7 @@ distribution of the underlying statistical model. Each matrix in
 
     <p>The format of <code>object</code> depends on its class:</p><dl class='dl-horizontal'>
 <dt>array</dt><dd><p>Must be a 4D array of matrices (i.e.,
-a 6D array). The dimensions of the array should be as follows:
+a 6D array). The dimensions of the array should be indexed as follows:
 1st (<code>sample</code>), 2nd (<code>strategy_id</code>), 3rd (<code>patient_id</code>),
 4th (<code>time_id</code>), 5th (rows of transition matrix), and
 6th (columns of transition matrix). In other words, an index of
@@ -220,6 +219,12 @@ probabiliy matrix:
 </ul></p></dd>
 <dt>data.frame</dt><dd><p>Same as <code>data.table</code>.</p></dd>
 </dl>
+    <p>A <code>tparams_transprobs</code> object is also instantiated when creating a
+cohort discrete time state transition model using <code><a href='define_model.html'>define_model()</a></code>.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='create_CohortDtstm.html'>create_CohortDtstm()</a></code></p></div>
     
 
   </div>
@@ -231,6 +236,8 @@ probabiliy matrix:
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

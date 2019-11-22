@@ -36,7 +36,7 @@
 
 <meta property="og:description" content="Summarize costs and quality-adjusted life-years (QALYs) given output simulated
 from an economic model. The summary output is used to perform
-cost-effectiveness analysis with icea and icea_pw." />
+cost-effectiveness analysis with icea() and icea_pw()." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -142,7 +142,7 @@ cost-effectiveness analysis with icea and icea_pw." />
     
     <p>Summarize costs and quality-adjusted life-years (QALYs) given output simulated
 from an economic model. The summary output is used to perform
-cost-effectiveness analysis with <code><a href='icea.html'>icea</a></code> and <code><a href='icea.html'>icea_pw</a></code>.</p>
+cost-effectiveness analysis with <code><a href='icea.html'>icea()</a></code> and <code><a href='icea.html'>icea_pw()</a></code>.</p>
     
     </div>
 
@@ -153,17 +153,17 @@ cost-effectiveness analysis with <code><a href='icea.html'>icea</a></code> and <
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>costs</th>
-      <td><p>Simulated costs by category (objects of class <code><a href='costs.html'>costs</a></code>).</p></td>
+      <td><p>Simulated costs by category (objects of class <a href='costs.html'>costs</a>).</p></td>
     </tr>
     <tr>
       <th>qalys</th>
-      <td><p>Simulated QALYs (objects of class <code><a href='qalys.html'>qalys</a></code>)..</p></td>
+      <td><p>Simulated QALYs (objects of class <a href='qalys.html'>qalys</a>).</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code><a href='ce.html'>ce</a></code>.</p>
+    <p>An object of class <a href='ce.html'>ce</a>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -173,7 +173,9 @@ must be one observation for each discount rate (<code>dr</code>),
 PSA sample (<code>sample</code>), treatment strategy (<code>strategy_id</code>),
 and health state (<code>state_id</code>). Alternatively, there can be column
 denoting a patient (<code>patient_id</code>), in which case outcomes will first be
-averaged across patients.</p>
+averaged across patients. A <code>grp_id</code> column can also be used so that
+outcomes are computed for each subgroup; otherwise it is assumed that
+there is only one subgroup.</p>
     
 
   </div>
