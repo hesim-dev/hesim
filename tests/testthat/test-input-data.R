@@ -299,7 +299,7 @@ test_that("create_input_mats.flexsurv", {
   expect_equal(input_mats$state_id, dat$state_id)
   expect_equal(input_mats$patient_id, dat$patient_id)
   expect_equal(class(input_mats$X), "list")
-  expect_equal(class(input_mats$X[[1]]), "matrix")
+  expect_true(inherits(input_mats$X[[1]], "matrix"))
   expect_equal(length(input_mats$X), 3)
   expect_equal(ncol(input_mats$X$mu), 3)
   expect_equal(ncol(input_mats$X$sigma), 3)
@@ -315,8 +315,7 @@ dat <- expand(hesim_dat)
 
 test_that("create_input_mats.flexsurv_list", {
   input_mats <- create_input_mats(flexsurvreg_list1, dat)  
-  
-  expect_equal(class(input_mats$X$wei$shape), "matrix")
+  expect_true(inherits(input_mats$X$wei$shape, "matrix"))
 })
 
 fit2_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1 + age, 
@@ -334,7 +333,7 @@ test_that("create_input_mats.joined_flexsurv_list", {
   input_mats <- create_input_mats(joined_flexsurvreg_list, dat)  
   
   expect_equal(input_mats$state_id, dat$state_id)
-  expect_equal(class(input_mats$X[[1]]$wei$shape), "matrix")
+  expect_true(inherits(input_mats$X[[1]]$wei$shape, "matrix"))
 })
 
 test_that("create_input_mats.params_surv", {
