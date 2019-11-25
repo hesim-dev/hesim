@@ -376,9 +376,13 @@ test_that("Simulate costs and QALYs", {
   costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(Inf, Inf))$costs_
   expect_true(inherits(costs, "data.table"))
   costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(1, 0))$costs_
-  expect_true(all(costs[category == "drugs", costs] == 0))
+  expect_equal(costs[category == "drugs", costs], 
+              rep(0, nrow(costs[category == "drugs"])),
+              tolerance = .001, scale = 1)
   costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(0, 0))$costs_
-  expect_true(all(costs$costs == 0))
+  expect_equal(costs$costs, 
+               rep(0, length(costs$costs)),
+               tolerance = .001, scale = 1)
   
   costs <- ictstm$sim_costs(dr = c(0, .03), by_patient = TRUE)$costs_
   expect_equal(unique(costs$category), c("medical", "drugs"))

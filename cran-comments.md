@@ -1,9 +1,11 @@
 ## Resubmission
-This is the second resubmission. 
+This is the third resubmission. 
 
 In the first resubmission I deleted line 1687 ( `--epstab`) and replaced any reference to `epstab` by the same with an index decremented by 1. This was due to a warning on the Debian machine: ` ../inst/include/hesim/Rbase/integrate.h:1687:5: warning: array subscript -1 is outside array bounds of 'double [52]' [-Warray-bounds]`.  
 
-In this resubmission, I modified unit tests that failed during my first resubmission (also on the Debian machine).
+In the second resubmission, I modified unit tests that failed during my first resubmission (also on the Debian machine).
+
+In the third, resubmission I removed the CRAN-RELEASE file which generated a NOTE during the checks during the second resubmission. 
 
 ## Release summary
 This release contains a minor update to address an email from Professor Brian Ripley that the `auto_ptr`, `bind1st`, `bind2nd`, `mem_fun_ref`, and `ptr_fun` are now deprecated in`C++` and should be removed from `R` packages. `hesim` contained a function that used `bind2nd`, but it is now replaced with an alternative implementation.
