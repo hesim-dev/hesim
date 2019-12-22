@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Parameters of a linear model — params_lm • hesim</title>
+<title>An <code>R6</code> base class for continuous time state transition models — CtstmTrans • hesim</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,9 +32,10 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Parameters of a linear model — params_lm" />
+<meta property="og:title" content="An <code>R6</code> base class for continuous time state transition models — CtstmTrans" />
 
-<meta property="og:description" content="Create a list containing the parameters of a fitted linear regression model." />
+<meta property="og:description" content="A non-exported base class for continuous time state transition models containing methods
+that can be used to summarize fitted multi-state models." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -131,84 +132,87 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Parameters of a linear model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a></small>
-    <div class="hidden name"><code>params_lm.Rd</code></div>
+    <h1>An <code>R6</code> base class for continuous time state transition models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/ctstm.R'><code>R/ctstm.R</code></a></small>
+    <div class="hidden name"><code>CtstmTrans.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a list containing the parameters of a fitted linear regression model.</p>
+    <p>A non-exported base class for continuous time state transition models containing methods
+that can be used to summarize fitted multi-state models.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>params_lm</span>(<span class='no'>coefs</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>coefs</th>
-      <td><p>Matrix of samples from the posterior distribution of the
-regression coefficients.</p></td>
-    </tr>
-    <tr>
-      <th>sigma</th>
-      <td><p>A vector of samples of the standard error of the regression model.
-Must only be specified if the model is used to randomly simulate values
-(rather than to predict means).</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An object of class "params_lm", which is a list containing <code>coefs</code>,
-<code>sigma</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the number of rows
-in <code>coefs</code>.</p>
+    <p>An <a href='https://www.rdocumentation.org/packages/R6/topics/R6Class'>R6::R6Class</a> object.</p>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Fitted linear models are used to predict values, \(y\),
-as a function of covariates, \(x\),
-$$y = x^T\beta + \epsilon.$$
-Predicted means are given by \(x^T\hat{\beta}\) where \(\hat{\beta}\)
-is the vector of estimated regression coefficients. Random samples are obtained by
-sampling the error term from a normal distribution,
-\(\epsilon \sim N(0, \hat{\sigma}^2)\).</p>
+    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></p></div>
+    
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+
+    <h3>Public methods</h3>
+    <ul>
+<li><p><a href='#method-hazard'><code>CtstmTrans$hazard()</code></a></p></li>
+<li><p><a href='#method-cumhazard'><code>CtstmTrans$cumhazard()</code></a></p></li>
+<li><p><a href='#method-clone'><code>CtstmTrans$clone()</code></a></p></li>
+</ul>
+<p><hr>
+<a id="method-hazard"></a></p><h3>Method <code>hazard()</code></h3>
+    Predict the hazard functions for each health state transition.
+<h3>Usage</h3>
+    <div class="r"><pre>CtstmTrans$hazard(t)</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
+</dl>
+</div>
+    <h3>Returns</h3>
+    A <code>data.table</code> with columns <code>trans</code> (the transition number),
+<code>sample</code>, <code>strategy_id</code>, <code>grp_id</code>, <code>t</code>, and <code>hazard</code>.
+    <p><hr>
+<a id="method-cumhazard"></a></p><h3>Method <code>cumhazard()</code></h3>
+    Predict the cumulative hazard functions for each health state transition.
+<h3>Usage</h3>
+    <div class="r"><pre>CtstmTrans$cumhazard(t)</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
+</dl>
+</div>
+    <h3>Returns</h3>
+    A <code>data.table</code> with columns <code>trans</code>,
+<code>sample</code>, <code>strategy_id</code>, <code>grp_id</code>, <code>t</code>, and <code>hazard</code>.
+    <p><hr>
+<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
+    The objects of this class are cloneable with this method.
+<h3>Usage</h3>
+    <div class="r"><pre>CtstmTrans$clone(deep = FALSE)</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+</dl>
+</div>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"MASS"</span>)
-<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span>
-<span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'>params_lm</span>(<span class='kw'>coefs</span> <span class='kw'>=</span> <span class='kw pkg'>MASS</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/MASS/topics/mvrnorm'>mvrnorm</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.6</span>),
-                                            <span class='kw'>Sigma</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.01</span>, <span class='fl'>.01</span>, <span class='fl'>.05</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>)),
-                      <span class='no'>sigma</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/GammaDist'>rgamma</a></span>(<span class='no'>n</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>params</span>)</div><div class='output co'>#&gt; $coefs
-#&gt;            [,1]      [,2]
-#&gt; [1,]  0.3622448 0.4317725
-#&gt; [2,] -0.1128970 0.5324841
-#&gt; 
-#&gt; $sigma
-#&gt; [1] 0.02239179 0.02902681
-#&gt; 
-#&gt; $n_samples
-#&gt; [1] 2
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "params_lm"</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
+      <li><a href="#format">Format</a></li>
 
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+      <li><a href="#see-also">See also</a></li>
+
+      <li><a href="#methods">Methods</a></li>
+          </ul>
 
   </div>
 </div>

@@ -49,8 +49,9 @@ reference:
   - title: "Discrete time state transition models"
     contents:
       - CohortDtstmTrans
-      - create_CohortDtstm
       - create_CohortDtstmTrans
+      - create_CohortDtstm
+      - CohortDtstm
   - title: "Partitioned survival model"
     contents:
       - Psm

@@ -4,10 +4,23 @@
 \alias{id_attributes}
 \title{Attributes for ID variables}
 \usage{
-id_attributes(strategy_id, n_strategies, patient_id, n_patients,
-  state_id = NULL, n_states = NULL, transition_id = NULL,
-  n_transitions = NULL, time_id = NULL, time_intervals = NULL,
-  n_times = NULL, sample = NULL, n_samples = NULL)
+id_attributes(
+  strategy_id,
+  n_strategies,
+  patient_id,
+  n_patients,
+  state_id = NULL,
+  n_states = NULL,
+  transition_id = NULL,
+  n_transitions = NULL,
+  time_id = NULL,
+  time_intervals = NULL,
+  n_times = NULL,
+  sample = NULL,
+  n_samples = NULL,
+  grp_id = NULL,
+  patient_wt = NULL
+)
 }
 \arguments{
 \item{strategy_id}{A numeric vector of integers denoting the treatment strategy.}
@@ -29,7 +42,7 @@ health state transition. This is only used for state transition models.}
 
 \item{time_id}{A numeric vector of integers denoting a unique time interval.}
 
-\item{time_intervals}{A \code{data.table} denotes unique time intervals. Must
+\item{time_intervals}{A \code{data.table} denoting unique time intervals. Must
 contain the columns \code{time_id}, \code{time_start}, and \code{time_stop}.
 \code{time_start} is the starting time of an interval and \code{time_stop} is
 the stopping time of an interval. Time intervals are closed on the left and
@@ -43,18 +56,25 @@ number of rows in \code{time_intervals}.}
 distribution of the parameters.}
 
 \item{n_samples}{A scalar denoting the number of samples.}
+
+\item{grp_id}{An optional numeric vector of integers denoting the subgroup.}
+
+\item{patient_wt}{An optional numeric vector denoting the weight to apply to each patient
+within a subgroup.}
 }
 \description{
-Stores metadata related to the ID variables used to index \code{\link[=input_mats]{input_mats()}}
+Stores metadata related to the ID variables used to index \link{input_mats}
 and \link[=tparams]{transformed parameter objects} already predicted from covariates.
 }
 \details{
-When using the ID variables to index \code{\link{input_mats}}, sorting order should be
-the same as specified in \code{\link{expand.hesim_data}}; that is,
+When using the ID variables to index \link{input_mats}, sorting order should be
+the same as specified in \code{\link[=expand.hesim_data]{expand.hesim_data()}}; that is,
 observations must be sorted by: (i) \code{strategy_id}, (ii) \code{patient_id},
 and (iii) the health-related ID variable (either \code{state_id} or
 \code{transition_id}). When using ID variables to index transformed parameter
 objects and \code{sample} is used for indexing, then observations must be sorted by:
 (i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id}, and
 (iv) the health-related ID variable.
+
+@seealso \code{\link[=hesim_data]{hesim_data()}},\code{\link[=expand.hesim_data]{expand.hesim_data()}}, \link{input_mats}
 }

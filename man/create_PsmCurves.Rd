@@ -8,8 +8,15 @@
 \usage{
 create_PsmCurves(object, ...)
 
-\method{create_PsmCurves}{flexsurvreg_list}(object, input_data, n = 1000,
-  point_estimate = FALSE, bootstrap = FALSE, est_data = NULL, ...)
+\method{create_PsmCurves}{flexsurvreg_list}(
+  object,
+  input_data,
+  n = 1000,
+  point_estimate = FALSE,
+  bootstrap = FALSE,
+  est_data = NULL,
+  ...
+)
 
 \method{create_PsmCurves}{params_surv_list}(object, input_data, ...)
 }

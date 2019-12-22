@@ -378,8 +378,9 @@ inline std::unique_ptr<transmod> transmod::create(Rcpp::Environment R_CtstmTrans
 struct transmod_summary{
   std::vector<int> trans_; ///< The health state transition.
   std::vector<int> sample_; ///< A randomly sampled parameter set.
-  std::vector<int> strategy_id_; ///< A treatment strategy id.
-  std::vector<int> patient_id_; ///< A patient id.
+  std::vector<int> strategy_id_; ///< The treatment strategy ID.
+  std::vector<int> patient_id_; ///< The patient ID.
+  std::vector<int> grp_id_; ///< The subgroup ID.
   std::vector<double> t_; ///< The time. 
   std::vector<double> value_; ///< The summarized value (hazard or cumulative hazard).
   
@@ -399,6 +400,7 @@ struct transmod_summary{
     sample_.resize(n);
     strategy_id_.resize(n);
     patient_id_.resize(n);
+    grp_id_.resize(n);
     t_.resize(n);
     value_.resize(n);
   }  

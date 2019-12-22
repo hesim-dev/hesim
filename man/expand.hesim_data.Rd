@@ -4,8 +4,7 @@
 \alias{expand.hesim_data}
 \title{Expand hesim_data}
 \usage{
-\method{expand}{hesim_data}(object, by = c("strategies", "patients"),
-  times = NULL)
+\method{expand}{hesim_data}(object, by = c("strategies", "patients"), times = NULL)
 }
 \arguments{
 \item{object}{An object of class \code{hesim_data}.}

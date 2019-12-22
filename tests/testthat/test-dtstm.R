@@ -94,8 +94,20 @@ tprob_array <- aperm(tprob_array, perm = c(6:3, 1, 2))
 params_tprob <- tparams_transprobs(tprob_array, times = time_start)
 params_tprob_t1 <- tparams_transprobs(tprob_array[,,,1,,, drop = FALSE])
 
-test_that("tparams_transprobs requires time stop" , {
-  expect_error(tparams_transprobs(tprob_array))
+test_that("Extra arguments with tparams_transprobs.array" , {
+  expect_equal(tparams_transprobs(tprob_array, times = time_start, grp_id = 1)$grp_id,
+               rep(1, prod(dim(tprob_array)[1:4])))
+  expect_equal(tparams_transprobs(tprob_array, times = time_start, patient_wt = 1)$patient_wt,
+               rep(1, prod(dim(tprob_array)[1:4])))
+  expect_error(tparams_transprobs(tprob_array),
+               paste0("'times' cannot be NULL if the number of time intervals ",
+                      "is greater than 1"))
+  expect_error(tparams_transprobs(tprob_array, times = time_start, 
+                                  grp_id = rep(1, 3)),
+                paste0("The length of 'grp_id' must be equal to the 3rd dimension of the ",
+                       "array (i.e., the number of patients)."),
+               fixed = TRUE)
+  
 })
 
 test_that("tparams_transprobs returns array of matrices" , {
@@ -139,6 +151,10 @@ test_that("CohortDtstmTrans$new automatically set 'start_stateprobs ",{
   tmp <- CohortDtstmTrans$new(params = params_tprob,
                               start_stateprobs = c(1, 0, 0))
   expect_equal(transmod$start_stateprobs, tmp$start_stateprobs)   
+})
+
+test_that("CohortDtstmTrans$sim_stateprobs() has correct grp_id ",{
+  expect_true(all(econmod$stateprobs_$grp_id == 1))
 })
                  
 test_that("CohortDtstmTrans$sim_stateprobs() is correct ",{

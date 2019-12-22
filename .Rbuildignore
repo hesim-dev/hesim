@@ -12,3 +12,4 @@ doxyfile
 DoxygenLayout.xml
 .covrignore
 ^CRAN-RELEASE$
+man-roxygen

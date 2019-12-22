@@ -1,4 +1,10 @@
 # CohortDtstmTrans -------------------------------------------------------------
+#' Transitions for a cohort discrete time state transition model
+#'
+#' @description
+#' Simulate health state transitions in a cohort discrete time state transition model.
+#' @format An [R6::R6Class] object.
+#' @seealso [create_CohortDtstmTrans()], [CohortDtstm]
 #' @export
 CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
   private = list(
@@ -10,11 +16,32 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
   ),                             
 
   public = list(
+    #' @field params Parameters for simulating health state transitions. Currently
+    #' supports objects of class [tparams_transprobs].
     params = NULL,
+    
+    #' @field input_mats An object of class [input_mats].
     input_mats = NULL,
+    
+    #' @field start_stateprobs A vector with length equal to the number of
+    #' health states containing the probability that the cohort is in each health
+    #' state at the start of the simulation. For example, 
+    #' if there were three states and the cohort began the simulation in state 1,
+    #' then `start_stateprobs = c(1, 0, 0)`. If `NULL``, then a vector with the
+    #' first element equal to 1 and all remaining elements equal to 0.
     start_stateprobs = NULL,
+    
+    #' @field cycle_length The length of a model cycle in terms of years.
+    #' The default is `1` meaning that model cycles are 1 year long.
     cycle_length = NULL,
     
+    #' @description
+    #' Create a new `CohortDtstmTrans` object.
+    #' @param params The `params` field.
+    #' @param input_mats The `input_mats` field.
+    #' @param start_stateprobs The `start_stateprobs` field.
+    #' @param cycle_length The `cycle_length` field.
+    #' @return A new `CohortDtstmTrans` object.
     initialize = function(params,
                           input_mats = NULL,
                           start_stateprobs = NULL, 
@@ -29,6 +56,10 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
       self$cycle_length <- cycle_length
     },
     
+    #' @description
+    #' Simulate probability of being in each health state during each model cycle. 
+    #' @param n_cycles The number of model cycles to simulate the model for.
+    #' @return An object of class [stateprobs].
     sim_stateprobs = function(n_cycles){
       times <- seq(0, n_cycles/self$cycle_length, length.out = n_cycles + 1)
       stprobs <- C_cohort_dtstm_sim_stateprobs(self, 
@@ -37,6 +68,7 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
       stprobs <- data.table(stprobs)
       stprobs[, sample := sample + 1]
       stprobs[, state_id := state_id + 1]
+      check_patient_wt(self, stprobs)
       return(stprobs[])
     }
   )
@@ -55,21 +87,54 @@ create_CohortDtstmTrans <- function(object, ...){
 } 
 
 # CohortDtstm ------------------------------------------------------------------
+#' Cohort discrete time state transition model
+#'
+#' @description
+#' Simulate outcomes from a cohort discrete time state transition model.
+#' @format An [R6::R6Class] object.
+#' @seealso [CohortDtstmTrans], [create_CohortDtstmTrans()]
 #' @export
 CohortDtstm <- R6::R6Class("CohortDtstm",
   public = list(
+    #' @field trans_model The model for health state transitions. Must be an object 
+    #' of class [CohortDtstmTrans]. 
     trans_model = NULL,
+    
+    #' @field utility_model The model for health state utility. Must be an object of
+    #' class [StateVals].
     utility_model = NULL,
+    
+    #' @field cost_models The models used to predict costs by health state. 
+    #' Must be a list of objects of class [StateVals], where each element of the 
+    #' list represents a different cost category.
     cost_models = NULL,
+    
+    #' @field stateprobs_ An object of class [stateprobs] simulated using `$sim_stateprobs()`.
     stateprobs_ = NULL,
+    
+    #' @field qalys_ An object of class [qalys] simulated using `$sim_qalys()`.
     qalys_ = NULL,
+    
+    #' @field costs_ An object of class [costs] simulated using `$sim_costs()`.
     costs_ = NULL,
+    
+    #' @description
+    #' Create a new `CohortDtstm` object.
+    #' @param trans_model The `trans_model` field.
+    #' @param utility_model The `utility_model` field.
+    #' @param cost_models The `cost_models` field.
+    #' @return A new `CohortDtstm` object.
     initialize = function(trans_model = NULL, utility_model = NULL, cost_models = NULL) {
       self$trans_model <- trans_model
       self$utility_model = utility_model
       self$cost_models = cost_models
     },
     
+    #' @description
+    #' Simulate health state probabilities using `CohortCtstmTrans$sim_stateprobs()`.
+    #' @param n_cycles The number of model cycles to simulate the model for.
+    #' @return An instance of `self` with simulated output of class [stateprobs] 
+    #' stored in `stateprobs_`.
     sim_stateprobs = function(n_cycles){
       self$stateprobs_ <- self$trans_model$sim_stateprobs(n_cycles)
       setattr(self$stateprobs_, "class", 
@@ -77,18 +142,36 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
       invisible(self)
     },
     
+    #' @description
+    #' Simulate quality-adjusted life-years (QALYs) using [sim_qalys()].
+    #' @param dr Discount rate.
+    #' @param method Method used to integrate state values when computing (QALYs).
+    #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
+    #' @return An instance of `self` with simulated output of class [qalys] stored
+    #' in `qalys_`.
     sim_qalys = function(dr = .03,
-                         method = c("trapz", "riemann_left", "riemann_right")){
-      self$qalys_ <- sim_qalys(self$stateprobs_, self$utility_model, dr, method)
+                         method = c("trapz", "riemann_left", "riemann_right"),
+                         lys = FALSE){
+      self$qalys_ <- sim_qalys(self$stateprobs_, self$utility_model, dr, method,
+                               lys)
       invisible(self)
     },
     
+    #' @description
+    #' Simulate costs using [sim_costs()].
+    #' @param dr Discount rate.
+    #' @param method Method used to integrate state values when computing costs.
+    #' @return An instance of `self` with simulated output of class [costs] stored
+    #' in `costs_`.
     sim_costs = function(dr = .03, 
                          method = c("trapz", "riemann_left", "riemann_right")){
       self$costs_ <- sim_costs(self$stateprobs_, self$cost_models, dr, method)
       invisible(self)
     },
-    
+
+    #' @description
+    #' Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
+    #' See [summarize_ce()].        
     summarize = function() {
       check_summarize(self)
       return(summarize_ce(self$costs_, self$qalys_))

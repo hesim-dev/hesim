@@ -8,7 +8,7 @@ namespace hesim {
 
 namespace statmods {
 
-/**************
+/************** 
 * Time function
 **************/
 inline time_fun* get_time_fun(Rcpp::List R_object){
@@ -110,6 +110,8 @@ private:
   std::vector<int> line_vec_; ///< Vector of treatment lines.
   std::vector<int> patient_id_vec_; ///< Vector of patient IDs.
   std::vector<int> health_id_vec_; ///< Vector of health IDs.
+  std::vector<int> grp_id_vec_; ///<Vector of subgroup IDs.
+  std::vector<double> patient_wt_vec_; ///<Vector of patient weights.
                           
   /** 
    * Initialize @c n_lines_.
@@ -271,7 +273,17 @@ public:
       time_start_.push_back(0); // A single value equal to 0.
       time_stop_.push_back(INFINITY); // A single value equal to infinity.
     }
-  }
+    
+    // Group ID and patient weights
+    if (!hesim::is_null(R_object, "grp_id")){
+      grp_id_vec_ = Rcpp::as<std::vector<int> >(R_object["grp_id"]); 
+    }
+    if (!hesim::is_null(R_object, "patient_wt")){
+      patient_wt_vec_ = Rcpp::as<std::vector<double> >(R_object["patient_wt"]); 
+    } else{
+      patient_wt_vec_.resize(grp_id_vec_.size(), 1.0);
+    }
+  } // End of constructor
   
   /** 
    * Set the strategy index.
@@ -318,6 +330,20 @@ public:
   int get_patient_id(){
     return patient_id_vec_[index_];
   }  
+  
+  /** 
+   * Get the group ID given the current indices
+   */    
+  int get_grp_id(){
+    return grp_id_vec_[index_];
+  }   
+  
+  /** 
+   * Get the patient weight given the current indices
+   */    
+  int get_patient_wt(){
+    return patient_wt_vec_[index_];
+  }    
 
   /** 
    * Set the health index.
@@ -406,39 +432,6 @@ inline obs_index create_obs_index(Rcpp::Environment R_model){
   obs_index obs_index(R_data);
   return obs_index;
 }
-
-/***************************************************************************//** 
- * Observation identifiers.
- * Contains @c strategy_id, @c line, @c patient_id, @c state_id, 
- * and @c transition_id from the @c R @c input_data class.
- ******************************************************************************/ 
-struct obs_ids {
-  std::vector<int> strategy_id_;
-  std::vector<int> line_;
-  std::vector<int> patient_id_;
-  std::vector<int> state_id_;
-  std::vector<int> transition_id_;
-  
-  /** 
-   * A constructor.
-   * Instantiates the struct from an @c R model. 
-   * @param R_object An @c R object containing ID attributes.
-   */   
-  obs_ids(Rcpp::List R_object) {
-    strategy_id_ = Rcpp::as<std::vector<int> >(R_object["strategy_id"]);
-    if (!hesim::is_null(R_object, "line")){
-      line_ = Rcpp::as<std::vector<int> >(R_object["line"]);
-    }
-    patient_id_ = Rcpp::as<std::vector<int> >(R_object["patient_id"]);
-    if (!hesim::is_null(R_object, "transition_id")){
-     transition_id_ = Rcpp::as<std::vector<int> >(R_object["transition_id"]); 
-    }
-    if (!hesim::is_null(R_object, "state_id")){
-     state_id_ = Rcpp::as<std::vector<int> >(R_object["state_id"]); 
-    }
-  };
-  
-};
 
 } // end namespace statmods
 

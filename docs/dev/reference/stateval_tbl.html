@@ -146,8 +146,12 @@ utility in an economic model by treatment strategy, patient, health state, and
     
     </div>
 
-    <pre class="usage"><span class='fu'>stateval_tbl</span>(<span class='no'>tbl</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"norm"</span>, <span class='st'>"beta"</span>, <span class='st'>"gamma"</span>, <span class='st'>"lnorm"</span>, <span class='st'>"unif"</span>,
-  <span class='st'>"fixed"</span>, <span class='st'>"custom"</span>), <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>stateval_tbl</span>(
+  <span class='no'>tbl</span>,
+  <span class='kw'>dist</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"norm"</span>, <span class='st'>"beta"</span>, <span class='st'>"gamma"</span>, <span class='st'>"lnorm"</span>, <span class='st'>"unif"</span>, <span class='st'>"fixed"</span>, <span class='st'>"custom"</span>),
+  <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>grp_var</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,15 +168,17 @@ probabilistic sensitivity analysis (PSA).</p></td>
     </tr>
     <tr>
       <th>hesim_data</th>
-      <td><p>A <code><a href='hesim_data.html'>hesim_data</a></code> object. Required to specify
+      <td><p>A <a href='hesim_data.html'>hesim_data</a> object. Required to specify
 treatment strategies , patients,
 and/or health states not included as columns
 in <code>tbl</code>, or, to match patients in <code>tbl</code> to groups.
 Not required if <code>tbl</code> includes one row for each treatment strategy, patient, and
 health state combination. Patients are matched to groups by specifying both a
-<code>patient_id</code> and a <code>grp_id</code> column in the <code>patients</code> table;
-if <code>hesim_data = NULL</code> but <code>grp_id</code> is included as a column
-in <code>tbl</code>, then each group is assumed to be a unique patient.</p></td>
+<code>patient_id</code> and a <code>grp_var</code> column in the <code>patients</code> table.</p></td>
+    </tr>
+    <tr>
+      <th>grp_var</th>
+      <td><p>The name of the variable used to group patients.</p></td>
     </tr>
     </table>
     
@@ -180,20 +186,23 @@ in <code>tbl</code>, then each group is assumed to be a unique patient.</p></td>
 
     <p>An object of class "stateval_tbl", which is a <code>data.table</code> of
 parameter values with attributes for <code>dist</code> and optionally
-<code>strategy_id</code>, <code>patients</code>, and <code>state_id</code>. <code>tbl</code>
+<code>strategy_id</code>, <code>patients</code>, <code>state_id</code>, and <code>grp_var</code>. <code>tbl</code>
 is in the same format as described in "Details". <code>patients</code> is a
 <code>data.table</code> with one column containing <code>patient_id</code> and
-optionally a second column containing <code>grp_id</code>.</p>
+optionally a second column containing <code>grp_var</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>tbl</code> is a <code>data.table</code> containing columns for treatment
-strategies (<code>strategy_id</code>), patient subgroups (<code>grp_id</code>),
+strategies (<code>strategy_id</code>), patients (<code>patient_id</code>),
 health states (<code>state_id</code>), and/or the start of time intervals
 (<code>time_start</code>). The table must contain at least one column
-named <code>strategy_id</code>, <code>grp_id</code>, or <code>state_id</code>,
+named <code>strategy_id</code>, <code>patient_id</code>, or <code>state_id</code>,
 but does not need to contain all of them. Each row denotes a unique
-treatment strategy, patient subgroup, health state, and/or time interval pair.</p>
+treatment strategy, patient, health state, and/or time interval pair.
+<code>tbl</code> may also contain a column with the name specified in <code>grp_var</code>
+(rather than <code>patient_id</code>) so that state values are assigned to
+groups of patients.</p>
 <p><code>tbl</code> must also contain columns summarizing the state values for each
 row, which depend on the probability distribution selected with <code>dist</code>.
 Available distributions include the normal (<code>norm</code>), beta (<code>beta</code>),
@@ -208,7 +217,7 @@ by distribution, are:</p>
 <dt>norm</dt><dd><p><code>mean</code> and <code>sd</code></p></dd>
 <dt>beta</dt><dd><p><code>mean</code> and <code>se</code> or <code>shape1</code> and <code>shape2</code></p></dd>
 <dt>gamma</dt><dd><p><code>mean</code> and <code>se</code>, <code>shape</code> and <code>rate</code>,
-or <code>shape</code> and scale</p></dd>
+or <code>shape</code> and <code>scale</code></p></dd>
 <dt>lnorm</dt><dd><p><code>meanlog</code> or <code>sdlog</code></p></dd>
 <dt>unif</dt><dd><p><code>min</code> and <code>max</code></p></dd>
 <dt>fixed</dt><dd><p><code>est</code></p></dd>
@@ -216,22 +225,22 @@ or <code>shape</code> and scale</p></dd>
 </dl>
     <p>Note that if <code>dist = "custom"</code>, then <code>tbl</code> must include a column
 named <code>sample</code> (an integer vector denoting a unique random draw) and
-<code>value</code> (denoting the value of the randomly sampled parameter). In this case, there is a unique
-row in <code>tbl</code> for each random draw (<code>sample</code>) and
+<code>value</code> (denoting the value of the randomly sampled parameter). In this case,
+there is a unique row in <code>tbl</code> for each random draw (<code>sample</code>) and
 each combination of strategies, patients, health states, and/or time intervals.
 Again, <code>tbl</code> must contain at least one column
-named <code>strategy_id</code>, <code>grp_id</code>, or <code>state_id</code>,
+named <code>strategy_id</code>, <code>patient_id</code> (or <code>grp_var</code>), or <code>state_id</code>,
 but does not need to contain them all.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='create_StateVals.html'>create_StateVals</a></code>, <code><a href='StateVals.html'>StateVals</a></code></p></div>
+    <div class='dont-index'><p><a href='create_StateVals.html'>create_StateVals</a>, <a href='StateVals.html'>StateVals</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
-                       <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
+                       <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
                        <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
                        <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
 <span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
@@ -241,16 +250,17 @@ but does not need to contain them all.</p>
 
 <span class='co'># Utility varies by health state and patient group</span>
 <span class='no'>utility_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'>stateval_tbl</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='no'>states</span>$<span class='no'>state_id</span>, <span class='fl'>2</span>),
-                                       <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>)), <span class='kw'>each</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>states</span>)),
+                                       <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>)), <span class='kw'>each</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>states</span>)),
                                        <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.8</span>, <span class='fl'>.7</span>, <span class='fl'>.75</span>, <span class='fl'>.55</span>),
                                        <span class='kw'>se</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.18</span>, <span class='fl'>.12</span>, <span class='fl'>.10</span>, <span class='fl'>.06</span>)),
                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"beta"</span>,
-                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>utility_tbl</span>)</div><div class='output co'>#&gt;    grp_id state_id mean   se
-#&gt; 1:      1        1 0.80 0.18
-#&gt; 2:      1        2 0.70 0.12
-#&gt; 3:      2        1 0.75 0.10
-#&gt; 4:      2        2 0.55 0.06</div><div class='input'><span class='no'>utilmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>utility_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>,
+                            <span class='kw'>grp_var</span> <span class='kw'>=</span> <span class='st'>"grp"</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>utility_tbl</span>)</div><div class='output co'>#&gt;    grp state_id mean   se
+#&gt; 1:   1        1 0.80 0.18
+#&gt; 2:   1        2 0.70 0.12
+#&gt; 3:   2        1 0.75 0.10
+#&gt; 4:   2        2 0.55 0.06</div><div class='input'><span class='no'>utilmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>utility_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 
 <span class='co'># Costs vary by treatment strategy</span>
 <span class='no'>cost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'>stateval_tbl</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='no'>strategies</span>$<span class='no'>strategy_id</span>,

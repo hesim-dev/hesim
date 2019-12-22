@@ -132,7 +132,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>N-state partitioned survival model</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/psm.R'><code>R/psm.R</code></a></small>
     <div class="hidden name"><code>Psm.Rd</code></div>
     </div>
 
@@ -142,52 +142,138 @@
     
     </div>
 
-    <pre class="usage"><span class='no'>Psm</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object.</p>
+    <p>An <a href='https://www.rdocumentation.org/packages/R6/topics/R6Class'>R6::R6Class</a> object.</p>
     
-    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
+    <div class='dont-index'><p><a href='PsmCurves.html'>PsmCurves</a>, <code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code></p></div>
     
-    <dl class='dl-horizontal'>
+    <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
+
+    <p><div class="r6-fields"></p><dl class='dl-horizontal'>
 <dt><code>survival_models</code></dt><dd><p>The survival models used to predict survival curves. Must be
-an object of class <code><a href='PsmCurves.html'>PsmCurves</a></code>.</p></dd>
-    <dt><code>utility_model</code></dt><dd><p>The model used to predict utility by health state. Must be
-an object of class <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
-    <dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state. Must be a list of
-objects of class <code><a href='StateVals.html'>StateVals</a></code>, where each element of the list represents a 
-different cost category.</p></dd>
+an object of class <a href='PsmCurves.html'>PsmCurves</a>.</p></dd>
+    <dt><code>utility_model</code></dt><dd><p>The model for health state utility. Must be an object of
+class <a href='StateVals.html'>StateVals</a>.</p></dd>
+    <dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state.
+Must be a list of objects of class <a href='StateVals.html'>StateVals</a>, where each element of the
+list represents a different cost category.</p></dd>
     <dt><code>n_states</code></dt><dd><p>Number of states in the partitioned survival model.</p></dd>
     <dt><code>t_</code></dt><dd><p>A numeric vector of times at which survival curves were predicted. Determined
-by the argument <code>t</code> in <code>sim_curves</code>.</p></dd>
-    <dt><code>survival_</code></dt><dd><p>Survival curves generated using <code>sim_curves</code>.</p></dd>
-    <dt><code>stateprobs_</code></dt><dd><p>An object of class <code><a href='stateprobs.html'>stateprobs</a></code>.</p></dd>
-    <dt><code>costs_</code></dt><dd><p>An object of class <code>costs</code>.</p></dd>
-    <dt><code>qalys_</code></dt><dd><p>An object of class <code>qalys</code>.</p></dd>
-    </dl>
+by the argument <code>t</code> in <code>$sim_curves()</code>.</p></dd>
+    <dt><code>survival_</code></dt><dd><p>Survival curves simulated using <code>sim_curves()</code>.</p></dd>
+    <dt><code>stateprobs_</code></dt><dd><p>An object of class <a href='stateprobs.html'>stateprobs</a> simulated using <code>$sim_stateprobs()</code>.</p></dd>
+    <dt><code>qalys_</code></dt><dd><p>An object of class <a href='qalys.html'>qalys</a> simulated using <code>$sim_qalys()</code>.</p></dd>
+    <dt><code>costs_</code></dt><dd><p>An object of class <a href='costs.html'>costs</a> simulated using <code>$sim_costs()</code>.</p></dd>
+</dl><p></div></p>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
-    
-    <dl class='dl-horizontal'>
-    <dt><code>new(survival_models, utility_model = NULL, cost_models = NULL)</code></dt><dd><p>Constructor for the class. Note that the number of health states, <code>n_states</code>, is set equal to the number of survival
-  models plus one.</p></dd>
-    <dt><code>sim_survival(t)</code></dt><dd><p>Simulate survival curves as a function of time. Equivalent to the member function
-    <code>survival</code> in <code><a href='PsmCurves.html'>PsmCurves</a></code>.
+    <h3>Public methods</h3>
     <ul>
-<li><p><code>t</code>: A numeric vector of times. The first element must be 0.</p></li>
-</ul></p></dd>
-    <dt><code>sim_stateprobs()</code></dt><dd><p>Simulate the probability of being in each of N health states using the survival curves generated 
-    from <code>sim_curves</code>.</p></dd>
-    <dt><code>sim_qalys(dr = .03, method = c("trapz", "riemann_left", "riemann_right"),
-                      lys = TRUE</code></dt><dd><p>Simulate QALYS using <code><a href='sim_wlos.html'>sim_qalys</a></code>.</p></dd>
-    <dt><code>sim_costs(dr = .03, method = c("trapz", "riemann_left", "riemann_right")</code></dt><dd><p>Simulate costs using <code><a href='sim_wlos.html'>sim_costs</a></code>.</p></dd>
-    <dt><code>summarize()</code></dt><dd><p>Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
-    See <code><a href='summarize_ce.html'>summarize_ce</a></code>.</p></dd>
-    <dt><code><a href='check.html'>check()</a></code></dt><dd><p>Input validation for class. Checks that fields are the correct type.</p></dd>
-    </dl>
+<li><p><a href='#method-new'><code>Psm$new()</code></a></p></li>
+<li><p><a href='#method-sim_survival'><code>Psm$sim_survival()</code></a></p></li>
+<li><p><a href='#method-sim_stateprobs'><code>Psm$sim_stateprobs()</code></a></p></li>
+<li><p><a href='#method-sim_qalys'><code>Psm$sim_qalys()</code></a></p></li>
+<li><p><a href='#method-sim_costs'><code>Psm$sim_costs()</code></a></p></li>
+<li><p><a href='#method-summarize'><code>Psm$summarize()</code></a></p></li>
+<li><p><a href='#method-clone'><code>Psm$clone()</code></a></p></li>
+</ul>
+<p><hr>
+<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
+    Create a new <code>Psm</code> object.
+<h3>Usage</h3>
+    <div class="r"><pre>Psm$new(survival_models, utility_model = NULL, cost_models = NULL)</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>survival_models</code></dt><dd><p>The <code>survival_models</code> field.</p></dd>
+    <dt><code>utility_model</code></dt><dd><p>The <code>utility_model</code> field.</p></dd>
+    <dt><code>cost_models</code></dt><dd><p>The <code>cost_models</code> field.</p></dd>
+</dl>
+</div>
+    <h3>Details</h3>
+    <code>n_states</code> is set equal to the number of survival models plus one.
+    <h3>Returns</h3>
+    A new <code>Psm</code> object.
+    <p><hr>
+<a id="method-sim_survival"></a></p><h3>Method <code>sim_survival()</code></h3>
+    Simulate survival curves as a function of time using <code>PsmCurves$sim_survival()</code>.
+<h3>Usage</h3>
+    <div class="r"><pre>Psm$sim_survival(t)</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>t</code></dt><dd><p>A numeric vector of times. The first element must be <code>0</code>.</p></dd>
+</dl>
+</div>
+    <h3>Returns</h3>
+    An instance of <code>self</code> with simulated output from <code>PsmCurves$sim_survival()</code>
+stored in <code>stateprobs_</code>.
+    <p><hr>
+<a id="method-sim_stateprobs"></a></p><h3>Method <code>sim_stateprobs()</code></h3>
+    Simulate health state probabilities from <code>survival_</code> using a partitioned
+survival analysis.
+<h3>Usage</h3>
+    <div class="r"><pre>Psm$sim_stateprobs()</pre></div>
+    <h3>Returns</h3>
+    An instance of <code>self</code> with simulated output of class <a href='stateprobs.html'>stateprobs</a>
+stored in <code>stateprobs_</code>.
+    <p><hr>
+<a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_qalys()</a></code></h3>
+    Simulate quality-adjusted life-years (QALYs) using <code><a href='sim_wlos.html'>sim_qalys()</a></code>.
+<h3>Usage</h3>
+    <div class="r"><pre>Psm$sim_qalys(
+  dr = 0.03,
+  method = c("trapz", "riemann_left", "riemann_right"),
+  lys = FALSE
+)</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
+    <dt><code>method</code></dt><dd><p>Method used to integrate state values when computing (QALYs).</p></dd>
+    <dt><code>lys</code></dt><dd><p>If <code>TRUE</code>, then life-years are simulated in addition to QALYs.</p></dd>
+</dl>
+</div>
+    <h3>Returns</h3>
+    An instance of <code>self</code> with simulated output of class <a href='qalys.html'>qalys</a> stored
+in <code>qalys_</code>.
+    <p><hr>
+<a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_costs()</a></code></h3>
+    Simulate costs using <code><a href='sim_wlos.html'>sim_costs()</a></code>.
+<h3>Usage</h3>
+    <div class="r"><pre>Psm$sim_costs(dr = 0.03, method = c("trapz", "riemann_left", "riemann_right"))</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
+    <dt><code>method</code></dt><dd><p>Method used to integrate state values when computing costs.</p></dd>
+</dl>
+</div>
+    <h3>Returns</h3>
+    An instance of <code>self</code> with simulated output of class <a href='costs.html'>costs</a> stored
+in <code>costs_</code>.
+    <p><hr>
+<a id="method-summarize"></a></p><h3>Method <code>summarize()</code></h3>
+    Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
+See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
+<h3>Usage</h3>
+    <div class="r"><pre>Psm$summarize()</pre></div>
+    <p><hr>
+<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
+    The objects of this class are cloneable with this method.
+<h3>Usage</h3>
+    <div class="r"><pre>Psm$clone(deep = FALSE)</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+</dl>
+</div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -196,10 +282,10 @@ by the argument <code>t</code> in <code>sim_curves</code>.</p></dd>
 <span class='co'># Simulation data</span>
 <span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
-                          <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
-                          <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
+                       <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
+                       <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
 <span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span>  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
-                        <span class='kw'>state_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"state"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)))
+                     <span class='kw'>state_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"state"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)))
 <span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
                         <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,
                         <span class='kw'>states</span> <span class='kw'>=</span> <span class='no'>states</span>)
@@ -243,19 +329,20 @@ by the argument <code>t</code> in <code>sim_curves</code>.</p></dd>
 <span class='no'>psm</span>$<span class='fu'>sim_survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>.05</span>))
 <span class='no'>psm</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>psm</span>$<span class='fu'><a href='sim_wlos.html'>sim_costs</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category    costs
-#&gt; 1:      1           1          1        1 0.03  medical 21365.27
-#&gt; 2:      1           1          1        2 0.03  medical 15117.94
-#&gt; 3:      1           1          1        3 0.03  medical 14998.14
-#&gt; 4:      1           1          2        1 0.03  medical 20364.66
-#&gt; 5:      1           1          2        2 0.03  medical 14654.84
-#&gt; 6:      1           1          2        3 0.03  medical 14497.49</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='fu'><a href='sim_wlos.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id state_id   dr category     qalys
-#&gt; 1:      1           1          1        1 0.03    qalys 0.5669485
-#&gt; 2:      1           1          1        2 0.03    qalys 0.4256148
-#&gt; 3:      1           1          1        3 0.03    qalys 0.2854562
-#&gt; 4:      1           1          2        1 0.03    qalys 0.5403964
-#&gt; 5:      1           1          2        2 0.03    qalys 0.4125772
-#&gt; 6:      1           1          2        3 0.03    qalys 0.2759276</div></pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr category    costs
+#&gt; 1:      1           1          1      1        1 0.03  medical 21365.27
+#&gt; 2:      1           1          1      1        2 0.03  medical 15117.94
+#&gt; 3:      1           1          1      1        3 0.03  medical 14998.14
+#&gt; 4:      1           1          2      1        1 0.03  medical 20364.66
+#&gt; 5:      1           1          2      1        2 0.03  medical 14654.84
+#&gt; 6:      1           1          2      1        3 0.03  medical 14497.49</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm</span>$<span class='fu'><a href='sim_wlos.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr category     qalys
+#&gt; 1:      1           1          1      1        1 0.03    qalys 0.5669485
+#&gt; 2:      1           1          1      1        2 0.03    qalys 0.4256148
+#&gt; 3:      1           1          1      1        3 0.03    qalys 0.2854562
+#&gt; 4:      1           1          2      1        1 0.03    qalys 0.5403964
+#&gt; 5:      1           1          2      1        2 0.03    qalys 0.4125772
+#&gt; 6:      1           1          2      1        3 0.03    qalys 0.2759276</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -263,7 +350,9 @@ by the argument <code>t</code> in <code>sim_curves</code>.</p></dd>
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#fields">Fields</a></li>
+      <li><a href="#see-also">See also</a></li>
+
+      <li><a href="#public-fields">Public fields</a></li>
 
       <li><a href="#methods">Methods</a></li>
       

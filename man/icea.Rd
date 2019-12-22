@@ -13,16 +13,23 @@ icea(x, ...)
 
 icea_pw(x, ...)
 
-\method{icea}{default}(x, k = seq(0, 2e+05, 500), sample, strategy,
-  grp = NULL, e, c, ...)
+\method{icea}{default}(x, k = seq(0, 2e+05, 500), sample, strategy, grp = NULL, e, c, ...)
 
-\method{icea_pw}{default}(x, k = seq(0, 2e+05, 500), comparator, sample,
-  strategy, grp = NULL, e, c, ...)
+\method{icea_pw}{default}(
+  x,
+  k = seq(0, 2e+05, 500),
+  comparator,
+  sample,
+  strategy,
+  grp = NULL,
+  e,
+  c,
+  ...
+)
 
 \method{icea}{ce}(x, k = seq(0, 2e+05, 500), dr_qalys, dr_costs, ...)
 
-\method{icea_pw}{ce}(x, k = seq(0, 2e+05, 500), comparator, dr_qalys,
-  dr_costs, ...)
+\method{icea_pw}{ce}(x, k = seq(0, 2e+05, 500), comparator, dr_qalys, dr_costs, ...)
 }
 \arguments{
 \item{x}{An object of simulation output characterizing the probability distribution
@@ -56,7 +63,7 @@ it is assumed that there is only one group.}
 \code{icea} returns a list containing four \code{data.table}s:
 
 \describe{
-\item{summary}{A \code{data.table} of the mean, 2.5\% quantile, and 97.5\%
+\item{summary}{A \code{data.table} of the mean, 2.5\\% quantile, and 97.5\\%
 quantile by strategy and group for clinical effectiveness and costs.}
 \item{mce}{The probability that each strategy is the most effective treatment
 for each group for the range of specified willingness to pay values. In addition,
@@ -68,20 +75,20 @@ of specified willingness to pay values. The EVPI is computed by subtracting the 
 monetary benefit given current information (i.e., the strategy with the highest
 expected net monetary benefit) from the expected net monetary benefit given
 perfect information.}
-\item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of net monetary benefits
+\item{nmb}{The mean, 2.5\\% quantile, and 97.5\\% quantile of net monetary benefits
 for the range of specified willingness to pay values.}
 }
 
 \code{icea_pw} also returns a list containing four data.tables:
 \describe{
-\item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\%
+\item{summary}{A data.table of the mean, 2.5\\% quantile, and 97.5\\%
 quantile by strategy and group for clinical effectiveness and costs.}
 \item{delta}{Incremental effectiveness and incremental cost for each simulated
 parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
 \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
 group. The CEAC plots the probability that each strategy is more cost-effective than
 the comparator for the specified willingness to pay values.}
-\item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of
+\item{inmb}{The mean, 2.5\\% quantile, and 97.5\\% quantile of
 incremental net monetary benefits for the range of specified willingness to pay values.}
 }
 }

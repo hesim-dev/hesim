@@ -127,9 +127,10 @@ public:
  ******************************************************************************/ 
 struct disease_prog {
   std::vector<int> sample_; ///< A randomly sampled parameter set.
-  std::vector<int> strategy_id_; ///< The strategy id.
+  std::vector<int> strategy_id_; ///< The strategy ID.
   std::vector<int> line_; ///< The line of treatment.
-  std::vector<int> patient_id_; ///< The patient id.
+  std::vector<int> patient_id_; ///< The patient ID.
+  std::vector<int> grp_id_; ///< The subgroup ID.
   std::vector<int> from_; ///< The state transitioned from.
   std::vector<int> to_; ///< The state transitioned to.
   std::vector<int> final_; ///< Equal to 1 if it is the final period for a given 

@@ -153,7 +153,7 @@ a data frame.</p>
     <pre class="usage"><span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for array</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>patient_wt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='co'># S3 method for data.table</span>
 <span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)
@@ -174,9 +174,19 @@ a data frame.</p>
     </tr>
     <tr>
       <th>times</th>
-      <td><p>A numeric vector of distinct times denoting the start of time intervals
+      <td><p>An optional numeric vector of distinct times denoting the start of time intervals
 indexed by the 4th dimension of the array. This argument is not required if there is only one time
 interval as <code>times</code> will equal 0 in this case.</p></td>
+    </tr>
+    <tr>
+      <th>grp_id</th>
+      <td><p>An optional numeric vector of integers denoting the subgroups. Must
+be the same length as the 3rd dimension of the array.</p></td>
+    </tr>
+    <tr>
+      <th>patient_wt</th>
+      <td><p>An optional numer vector denoting the weight to apply to each
+patient within a subgroup. Must be the same length as the 3rd dimension of the array.</p></td>
     </tr>
     </table>
     

@@ -86,9 +86,14 @@ create_trans_dt <- function(trans_mat){
 #' @param strategies A table of treatment strategies. 
 #' Must contain the column `strategy_id` denoting a unique strategy. Other columns are variables
 #'  describing the characteristics of a treatment strategy. 
-#' @param patients A table of patient observations. 
+#' @param patients A table of patients. 
 #' Must contain the column `patient_id` denoting a unique patient. The 
-#' number of rows should be equal to the number of patients in the model.
+#' number of rows should be equal to the number of patients in the model. The table
+#' may also include columns for `grp_id` for subgroups and `patient_wt` specifying
+#' the weight to apply to each patient (within a subgroup). If `grp_id` is
+#' `NULL`, then it is assumed that there is only 1 subgroup. If `patient_wt` is
+#' `NULL`. then each patient is given the same weight. Weights
+#' within subgroups are normalized to sum to one.
 #' Other columns are variables describing the characteristics of a patient.
 #' @param states A table of health states. Must contain the column
 #' `state_id`, which denotes a unique health state. The number of rows should
@@ -104,7 +109,7 @@ create_trans_dt <- function(trans_mat){
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
-#'                           gender = c("Female", "Female", "Male"))
+#'                        gender = c("Female", "Female", "Male"))
 #' states <- data.frame(state_id =  seq(1, 3),
 #'                         state_var = c(2, 1, 9))
 #' hesim_dat <- hesim_data(strategies = strategies,
@@ -318,12 +323,9 @@ time_intervals <- function(time_start){
 
 #' Attributes for ID variables
 #' 
-#' Stores metadata related to the ID variables used to index [input_mats()] 
+#' Stores metadata related to the ID variables used to index [input_mats] 
 #' and [transformed parameter objects][tparams] already predicted from covariates.
 #' 
-#' @param sample A numeric vector of integer denoting the sample from the posterior
-#' distribution of the parameters. 
-#' @param n_samples A scalar denoting the number of samples.
 #' @param strategy_id A numeric vector of integers denoting the treatment strategy.
 #' @param n_strategies A scalar denoting the number of unique treatment strategies.
 #' @param patient_id A numeric vector of integers denoting the patient.
@@ -334,36 +336,46 @@ time_intervals <- function(time_start){
 #' health state transition. This is only used for state transition models. 
 #' @param n_transitions A scalar denoting the number of unique transitions. 
 #' @param time_id A numeric vector of integers denoting a unique time interval.
-#' @param time_intervals A \code{data.table} denotes unique time intervals. Must 
-#' contain the columns \code{time_id}, \code{time_start}, and \code{time_stop}.
-#' \code{time_start} is the starting time of an interval and \code{time_stop} is
+#' @param time_intervals A `data.table` denoting unique time intervals. Must 
+#' contain the columns `time_id`, `time_start`, and `time_stop`.
+#' `time_start` is the starting time of an interval and `time_stop` is
 #' the stopping time of an interval. Time intervals are closed on the left and
-#' open on the right, and in the final interval, \code{time_stop} is equal to 
+#' open on the right, and in the final interval, `time_stop` is equal to 
 #' infinity. 
 #' @param n_times A scalar denoting the number of time intervals. Equal to the
-#' number of rows in \code{time_intervals}.
+#' number of rows in `time_intervals`.
+#' @param sample A numeric vector of integer denoting the sample from the posterior
+#' distribution of the parameters. 
+#' @param n_samples A scalar denoting the number of samples.
+#' @param grp_id An optional numeric vector of integers denoting the subgroup. 
+#' @param patient_wt An optional numeric vector denoting the weight to apply to each patient
+#' within a subgroup. 
 #'  
-#' @details When using the ID variables to index \code{\link{input_mats}}, sorting order should be 
-#' the same as specified in \code{\link{expand.hesim_data}}; that is,
-#' observations must be sorted by: (i) \code{strategy_id}, (ii) \code{patient_id}, 
-#' and (iii) the health-related ID variable (either \code{state_id} or
-#'  \code{transition_id}). When using ID variables to index transformed parameter 
-#'  objects and \code{sample} is used for indexing, then observations must be sorted by:
-#'  (i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id}, and
+#' @details When using the ID variables to index [input_mats], sorting order should be 
+#' the same as specified in [expand.hesim_data()]; that is,
+#' observations must be sorted by: (i) `strategy_id`, (ii) `patient_id`, 
+#' and (iii) the health-related ID variable (either `state_id` or
+#'  `transition_id`). When using ID variables to index transformed parameter 
+#'  objects and `sample` is used for indexing, then observations must be sorted by:
+#'  (i) `sample`, (ii) `strategy_id`, (iii) `patient_id`, and
 #'   (iv) the health-related ID variable. 
+#'   
+#'   @seealso [hesim_data()],[expand.hesim_data()], [input_mats]
 #' @export
 id_attributes <- function(strategy_id, n_strategies,
                           patient_id, n_patients,
                           state_id = NULL, n_states = NULL,
                           transition_id = NULL, n_transitions = NULL,
                           time_id = NULL, time_intervals = NULL, n_times = NULL,
-                          sample = NULL, n_samples = NULL){
+                          sample = NULL, n_samples = NULL,
+                          grp_id = NULL, patient_wt = NULL){
   object <- new_id_attributes(strategy_id, n_strategies,
                               patient_id, n_patients,
                               state_id, n_states,
                               transition_id, n_transitions,
                               time_id, time_intervals, n_times,
-                              sample, n_samples)
+                              sample, n_samples,
+                              grp_id, patient_wt)
   check(object)
   return(object)
 }
@@ -373,7 +385,8 @@ new_id_attributes <- function(strategy_id, n_strategies,
                               state_id = NULL, n_states = NULL,
                               transition_id = NULL, n_transitions = NULL,
                               time_id = NULL, time_intervals = NULL, n_times = NULL,
-                              sample = NULL, n_samples = NULL){
+                              sample = NULL, n_samples = NULL,
+                              grp_id = NULL, patient_wt = NULL){
   stopifnot(is.numeric(strategy_id))
   stopifnot(is.numeric(n_strategies))
   stopifnot(is.numeric(patient_id))
@@ -387,13 +400,17 @@ new_id_attributes <- function(strategy_id, n_strategies,
   stopifnot(is.numeric(n_times) | is.null(n_times))
   stopifnot(is.numeric(sample) | is.null(sample))
   stopifnot(is.numeric(n_samples) | is.null(n_samples))
+  stopifnot(is.numeric(grp_id) | is.null(grp_id))
+  stopifnot(is.numeric(patient_wt) | is.null(patient_wt))
+  if (is.null(grp_id)) grp_id <- rep(1, length(patient_id))
   
   object <- list(strategy_id = strategy_id, n_strategies = n_strategies,
                  patient_id = patient_id, n_patients = n_patients,
                  state_id = state_id, n_states = n_states,
                  transition_id = transition_id, n_transitions = n_transitions,
                  time_id = time_id, time_intervals = time_intervals, n_times = n_times,
-                 sample = sample, n_samples = n_samples)
+                 sample = sample, n_samples = n_samples,
+                 grp_id = grp_id, patient_wt = patient_wt)
   object[sapply(object, is.null)] <- NULL
   class(object) <- "id_attributes"
   return(object)

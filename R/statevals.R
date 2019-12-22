@@ -5,74 +5,74 @@
 #' utility in an economic model by treatment strategy, patient, health state, and
 #' (optionally) time interval. 
 #' 
-#' @param tbl A \code{data.frame} or \code{data.table} for storing parameter 
+#' @param tbl A `data.frame` or `data.table` for storing parameter 
 #' values. See "Details" for specifics. 
 #' @param dist Probability distribution used to sample parameters for a 
 #' probabilistic sensitivity analysis (PSA). 
-#' @param hesim_data A \code{\link{hesim_data}} object. Required to specify 
+#' @param hesim_data A [hesim_data] object. Required to specify 
 #' treatment strategies , patients,
 #'  and/or health states not included as columns
-#' in \code{tbl}, or, to match patients in \code{tbl} to groups.
-#'  Not required if \code{tbl} includes one row for each treatment strategy, patient, and
+#' in `tbl`, or, to match patients in `tbl` to groups.
+#'  Not required if `tbl` includes one row for each treatment strategy, patient, and
 #' health state combination. Patients are matched to groups by specifying both a 
-#' \code{patient_id} and a \code{grp_id} column in the \code{patients} table;
-#' if \code{hesim_data = NULL} but \code{grp_id} is included as a column
-#' in \code{tbl}, then each group is assumed to be a unique patient. 
+#' `patient_id` and a `grp_var` column in the `patients` table.
+#' @param grp_var The name of the variable used to group patients.
 #' 
 #' @details 
-#' \code{tbl} is a \code{data.table} containing columns for treatment 
-#' strategies (\code{strategy_id}), patient subgroups (\code{grp_id}),
-#' health states (\code{state_id}), and/or the start of time intervals 
-#' (\code{time_start}). The table must contain at least one column
-#' named \code{strategy_id}, \code{grp_id}, or \code{state_id}, 
+#' `tbl` is a `data.table` containing columns for treatment 
+#' strategies (`strategy_id`), patients (`patient_id`),
+#' health states (`state_id`), and/or the start of time intervals 
+#' (`time_start`). The table must contain at least one column
+#' named `strategy_id`, `patient_id`, or `state_id`, 
 #' but does not need to contain all of them. Each row denotes a unique 
-#' treatment strategy, patient subgroup, health state, and/or time interval pair.
+#' treatment strategy, patient, health state, and/or time interval pair.
+#' `tbl` may also contain a column with the name specified in `grp_var` 
+#' (rather than `patient_id`) so that state values are assigned to 
+#' groups of patients.
 #' 
-#' 
-#' \code{tbl} must also contain columns summarizing the state values for each
-#' row, which depend on the probability distribution selected with \code{dist}. 
-#' Available distributions include the normal (\code{norm}), beta (\code{beta}),
-#' gamma (\code{gamma}), lognormal (\code{lnorm}), and uniform (\code{unif})
-#'  distributions. In addition, the option \code{fixed} can be used if estimates
-#'  are known with certainty and \code{custom} can be used if 
+#' `tbl` must also contain columns summarizing the state values for each
+#' row, which depend on the probability distribution selected with `dist`. 
+#' Available distributions include the normal (`norm`), beta (`beta`),
+#' gamma (`gamma`), lognormal (`lnorm`), and uniform (`unif`)
+#'  distributions. In addition, the option `fixed` can be used if estimates
+#'  are known with certainty and `custom` can be used if 
 #'  parameter values for a PSA  have been previously
 #' sampled from an arbitrary probability distribution.
-#'  The columns in \code{tbl} that must be included,
+#'  The columns in `tbl` that must be included,
 #'  by distribution, are:
 #' 
 #' \describe{
-#' \item{norm}{\code{mean} and \code{sd}}
-#' \item{beta}{\code{mean} and \code{se} or \code{shape1} and \code{shape2}}
-#' \item{gamma}{\code{mean} and \code{se}, \code{shape} and \code{rate}, 
-#' or \code{shape} and {scale}}
-#' \item{lnorm}{\code{meanlog} or \code{sdlog}}
-#' \item{unif}{\code{min} and \code{max}}
-#' \item{fixed}{\code{est}}
-#' \item{custom}{\code{sample} and \code{value}}
+#' \item{norm}{`mean` and `sd`}
+#' \item{beta}{`mean` and `se` or `shape1` and `shape2`}
+#' \item{gamma}{`mean` and `se`, `shape` and `rate`, 
+#' or `shape` and `scale`}
+#' \item{lnorm}{`meanlog` or `sdlog`}
+#' \item{unif}{`min` and `max`}
+#' \item{fixed}{`est`}
+#' \item{custom}{`sample` and `value`}
 #' }
 #' 
-#' Note that if \code{dist = "custom"}, then \code{tbl} must include a column 
-#' named \code{sample} (an integer vector denoting a unique random draw) and
-#'  \code{value} (denoting the value of the randomly sampled parameter). In this case, there is a unique
-#' row in \code{tbl} for each random draw (\code{sample}) and
+#' Note that if `dist = "custom"`, then `tbl` must include a column 
+#' named `sample` (an integer vector denoting a unique random draw) and
+#'  `value` (denoting the value of the randomly sampled parameter). In this case, 
+#'  there is a unique row in `tbl` for each random draw (`sample`) and
 #'  each combination of strategies, patients, health states, and/or time intervals.
-#' Again, \code{tbl} must contain at least one column
-#' named \code{strategy_id}, \code{grp_id}, or \code{state_id},
+#' Again, `tbl` must contain at least one column
+#' named `strategy_id`, `patient_id` (or `grp_var`), or `state_id`,
 #'  but does not need to contain them all.
 #'  
 #'  
-#' 
-#' @return An object of class "stateval_tbl", which is a \code{data.table} of
-#' parameter values with attributes for \code{dist} and optionally 
-#' \code{strategy_id}, \code{patients}, and \code{state_id}. \code{tbl} 
-#' is in the same format as described in "Details". \code{patients} is a 
-#' \code{data.table} with one column containing \code{patient_id} and 
-#' optionally a second column containing \code{grp_id}.
-#' @seealso \code{\link{create_StateVals}}, \code{\link{StateVals}}
+#' @return An object of class "stateval_tbl", which is a `data.table` of
+#' parameter values with attributes for `dist` and optionally 
+#' `strategy_id`, `patients`, `state_id`, and `grp_var`. `tbl` 
+#' is in the same format as described in "Details". `patients` is a 
+#' `data.table` with one column containing `patient_id` and 
+#' optionally a second column containing `grp_var`.
+#' @seealso [create_StateVals], [StateVals]
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3),
-#'                        grp_id = c(1, 1, 2),
+#'                        grp = c(1, 1, 2),
 #'                        age = c(45, 50, 60),
 #'                        female = c(0, 0, 1))
 #' states <- data.frame(state_id = c(1, 2))
@@ -82,11 +82,12 @@
 #'
 #' # Utility varies by health state and patient group
 #' utility_tbl <- stateval_tbl(data.frame(state_id = rep(states$state_id, 2),
-#'                                        grp_id = rep(rep(c(1, 2)), each = nrow(states)), 
+#'                                        grp = rep(rep(c(1, 2)), each = nrow(states)), 
 #'                                        mean = c(.8, .7, .75, .55),
 #'                                        se = c(.18, .12, .10, .06)),
 #'                             dist = "beta",
-#'                             hesim_data = hesim_dat)
+#'                             hesim_data = hesim_dat,
+#'                             grp_var = "grp")
 #' print(utility_tbl)
 #' utilmod <- create_StateVals(utility_tbl, n = 2)
 #'
@@ -103,7 +104,8 @@
 #' @export
 stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma", 
                                        "lnorm", "unif", "fixed", "custom"),
-                         hesim_data = NULL){
+                         hesim_data = NULL,
+                         grp_var = NULL){
   dist <- match.arg(dist)
   tbl <- data.table(tbl)
   tbl2 <- copy(tbl)
@@ -124,9 +126,9 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
       name <- switch(var,
                      "state_id" = "states",
                      "strategy_id" = "strategies",
-                     "grp_id" = "patients")
+                     "patient_id" = "patients")
       if (is.null(hesim_data[[name]])){
-        msg <- paste0("If '", var, "' is not a column in 'tbl' ",
+        msg <- paste0("If '", var, "' is not a column in 'tbl', ",
                       "then 'hesim_data' must be included as an argument ",
                       "and '",  name, "' must be an element of 'hesim_data'.")
         stop(msg, call. = FALSE)
@@ -135,7 +137,18 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   }
   check_column("state_id")
   check_column("strategy_id")
-  check_column("grp_id")
+  check_column("patient_id")
+  
+  ### Additional logic for patients
+  if (is.null(tbl2[["patient_id"]])){
+    if (is.null(hesim_data[["patients"]][["patient_id"]]) & 
+        (is.null(grp_var) || is.null(tbl2[[grp_var]]))){
+      stop(paste0("If 'patient_id' is not included as a column in `tbl`, ",
+                  "then both 'patient_id' and 'grp_var' cannot be missing from the ",
+                  " 'patients' element of hesim_data"),
+           call. = FALSE)
+    }
+  }
   
   ## Need sample
   if (dist != "custom") {
@@ -192,12 +205,14 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
       stop(msg, call. = FALSE)
     }  
   }
-  
+
   ## Unique rows
-  id_vars_all <- c("sample", "strategy_id", "state_id", "grp_id", "time_start")  
+  id_vars_all <- c("sample", "strategy_id", "state_id", "patient_id", grp_var, "time_start")  
   id_vars <- id_vars_all[which(id_vars_all %in% colnames(tbl2))]
   if (length(id_vars) == 1){
     id_vars_msg <- id_vars
+  } else if (length(id_vars) == 2){
+    id_vars_msg <- paste0(id_vars[1], " and ", id_vars[2])
   } else{
     id_vars_msg <- paste0(paste(id_vars[1:length(id_vars) - 1], collapse = ", "),
                           ", and ", id_vars[length(id_vars)])
@@ -211,7 +226,7 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   
   ## Number of rows
   size <- function(var){
-    if (is.null(tbl2[[var]])){
+    if (is.null(var) || is.null(tbl2[[var]])){
       n <- 1
     } else{
       n <- length(unique(tbl2[[var]]))
@@ -221,23 +236,22 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   expected_n_samples <- size("sample")
   expected_n_strategies <- size("strategy_id")
   expected_n_states <- size("state_id")
-  expected_n_grps <- size("grp_id")
+  expected_n_patients <- size("patient_id")
+  if (!is.null(tbl2[["patient_id"]])){
+    expected_n_grps <- expected_n_patients
+  } else{
+    expected_n_grps <- size(grp_var)
+  }
   expected_n_times <- size("time_start")
   expected_n <- expected_n_samples * expected_n_strategies * expected_n_states * expected_n_grps * expected_n_times
   if (nrow(tbl2) != expected_n) {
-    if (length(id_vars) == 1){
-      stop(paste0("The number of rows in 'tbl' should equal ", expected_n, 
-                  " which is the number of unique values of ",
-                  id_vars_msg, " in 'tbl'")) 
-    } else{
-      stop(paste0("The number of rows in 'tbl' should equal ", expected_n, 
-                  " which is the product of the number of unique values of ",
-                  id_vars_msg, " in 'tbl'")) 
-    }
+    stop(paste0("The number of rows in 'tbl' should equal ", expected_n, 
+                " which is the number of unique values of ",
+                id_vars_msg, " in 'tbl'"))
   }
   
   # Nice sorting
-  id_cols <- c("sample", "strategy_id", "patient_id", "grp_id", "state_id", "time_id",
+  id_cols <- c("sample", "strategy_id", "patient_id", grp_var, "state_id", "time_id",
                "time_start", "time_stop") 
   pos <- which(id_cols %in% colnames(tbl2))
   setcolorder(tbl2, id_cols[pos])
@@ -248,6 +262,7 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   setattr(tbl2, "strategy_id", hesim_data$strategies$strategy_id)
   setattr(tbl2, "patients", data.table(hesim_data$patients))
   setattr(tbl2, "state_id", hesim_data$states$state_id)
+  setattr(tbl2, "grp_var", grp_var)
   return(tbl2)
 }
 
@@ -355,24 +370,19 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, 
   tbl <- data.table(tbl)
   
   ## By patient
-  merge <- TRUE
-  if (is.null(tbl$grp_id)){ # If group ID is not specified
-    tbl[, ("grp_id") := 1]
-    patient_lookup <- data.table(patient_id = attr(object, "patients")$patient_id, 
-                                 grp_id = 1)
-  } else { # Else if group ID is specified
-    if (is.null(attr(object, "patients")$grp_id)) { # If the patient lookup table does not exist
-      setnames(tbl, "grp_id", "patient_id")
-      merge <- FALSE
-    } else{
-      patient_lookup <- attr(object, "patients")[, c("patient_id", "grp_id"), 
-                                                 with = FALSE] 
+  grp_var <- attr(object, "grp_var")
+  patients <- copy(attr(object, "patients"))
+  if (is.null(tbl[["patient_id"]])){
+    if (is.null(grp_var)){
+      grp_var <- "grp"
+      tbl[, ("grp") := 1]
+      patients$grp <- 1
     }
+    tbl <- merge(tbl, patients, by = grp_var, 
+                 allow.cartesian = TRUE, sort = FALSE) 
   }
-  if (merge){
-    tbl <- merge(tbl, patient_lookup, by = c("grp_id"), allow.cartesian = TRUE,
-                 sort = FALSE) 
-  }
+  
+  # Sorting
   if (is.null(tbl[["time_start"]])){
     setorderv(tbl, cols = c("strategy_id", "patient_id", "state_id")) 
   } else{
@@ -414,25 +424,51 @@ create_StateVals.eval_model <- function(object, cost = TRUE, name = NULL,
     out_dt <- cbind(out_id, value = as.vector(t(out)))
   }
   out_dt[, ("state_id") := rep(1:n_states, times = nrow(id))]
-  setnames(out_dt, "patient_id", "grp_id")
   return(create_StateVals(stateval_tbl(out_dt, dist = "custom"),
                           n = object$n))
 }
 
-# Manual documentation in StateVals.Rd
+#' Model for state values
+#' 
+#' @description
+#' Simulate values (i.e., utility or costs) associated with health states in a 
+#' state transition or partitioned survival model. 
 #' @export
 StateVals <- R6::R6Class("StateVals",
   public = list(
+    #' @field params Parameters for simulating state values. Currently supports
+    #'  objects of class [tparams_mean] or [params_lm].   
     params = NULL,
+    
+    #' @field input_mats  An object of class [input_mats]. Only used for
+    #' [params_lm] objects. 
     input_mats = NULL,
+    
+    #' @field time_reset If `FALSE` then time intervals are based on time since
+    #'  the start of the simulation. If `TRUE`, then time intervals reset each 
+    #'  time a patient enters a new health state. This is relevant if, for example, 
+    #'  costs vary over time within health states.
     time_reset = NULL,
 
+    #' @description
+    #' Create a new `StateVals` object.
+    #' @param params The `params` field.
+    #' @param input_mats The `input_mats` field.
+    #' @param time_reset The `time_reset` field.
+    #' @return A new `StateVals` object.
     initialize = function(params, input_mats = NULL, time_reset = FALSE) {
       self$params <- params
       self$input_mats <- input_mats
       self$time_reset = time_reset
     },
     
+    #' @description
+    #' Simulate state values with either predicted means or random samples by
+    #'  treatment strategy, patient, health state, and time `t`.
+    #' @param t A numeric vector of times. 
+    #' @param type  `"predict"` for mean values or `"random"` for random samples. 
+    #' @return A `data.table` of simulated state values with columns for `sample`,
+    #' `strategy_id`, `patient_id`, `state_id`, `time`, and `value`.  
     sim = function(t, type = c("predict", "random")){
       type <- match.arg(type)
       self$check()
@@ -441,6 +477,8 @@ StateVals <- R6::R6Class("StateVals",
       return(res[])
     },
     
+    #' @description
+    #' Input validation for class. Checks that fields are the correct type. 
     check = function(){
       if(!inherits(self$params, c("tparams_mean", "params_lm"))){
         stop("Class of 'params' is not supported. See documentation.",
@@ -501,6 +539,7 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
                                unique(object$t),
                                method))
   res[, sample := sample + 1]
+  if (!"patient_wt" %in% colnames(object)) res[, ("patient_wt") := NULL]
   return(res[])
 } 
 
@@ -578,11 +617,11 @@ sim_costs <- function(object, cost_models, dr, method){
 
 #' Costs object
 #'
-#' An object of class \code{costs} returned from methods 
-#' \code{$sim_costs()} in model classes that stores simulated costs. 
+#' An object of class `costs` returned from methods 
+#' `$sim_costs()` in model classes that store simulated costs. 
 #' 
 #' @section Components:
-#' A \code{costs} object inherits from \code{data.table} and contains
+#' A `costs` object inherits from `data.table` and contains
 #' the following columns:
 #' 
 #' \describe{
@@ -600,12 +639,12 @@ NULL
 
 #' Quality-adjusted life-years object
 #'
-#' An object of class \code{qalys} returned from methods 
-#' \code{$sim_qalys()} in model classes that stores simulated 
+#' An object of class `qalys` returned from methods 
+#' `$sim_qalys()` in model classes that store simulated 
 #' quality-adjusted life-years (QALYs).
 #' 
 #' @section Components:
-#' A \code{qalys} object inherits from \code{data.table} and contains
+#' A `qalys` object inherits from `data.table` and contains
 #' the following columns:
 #' 
 #' \describe{
@@ -615,9 +654,10 @@ NULL
 #'   \item{state_id}{The health state ID.}
 #'   \item{dr}{The rate used to discount QALYs.}
 #'   \item{category}{A single category always equal to "qalys".}
-#'   \item{costs}{The simulated values of QALYs.}
+#'   \item{qalys}{The simulated values of QALYs.}
 #' }
-#'
+#' If the argument `lys = TRUE`, then the `data.table` also contains a column
+#' `lys` containing simulated life-years.
 #' @name qalys
 NULL
 

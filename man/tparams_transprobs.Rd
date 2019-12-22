@@ -9,7 +9,7 @@
 \usage{
 tparams_transprobs(object, ...)
 
-\method{tparams_transprobs}{array}(object, times = NULL)
+\method{tparams_transprobs}{array}(object, times = NULL, grp_id = NULL, patient_wt = NULL)
 
 \method{tparams_transprobs}{data.table}(object)
 
@@ -20,9 +20,15 @@ tparams_transprobs(object, ...)
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{times}{A numeric vector of distinct times denoting the start of time intervals
+\item{times}{An optional numeric vector of distinct times denoting the start of time intervals
 indexed by the 4th dimension of the array. This argument is not required if there is only one time
 interval as \code{times} will equal 0 in this case.}
+
+\item{grp_id}{An optional numeric vector of integers denoting the subgroups. Must
+be the same length as the 3rd dimension of the array.}
+
+\item{patient_wt}{An optional numer vector denoting the weight to apply to each
+patient within a subgroup. Must be the same length as the 3rd dimension of the array.}
 }
 \value{
 An object of class \code{tparams_transprobs},
@@ -47,7 +53,7 @@ a 6D array). The dimensions of the array should be indexed as follows:
 1st (\code{sample}), 2nd (\code{strategy_id}), 3rd (\code{patient_id}),
 4th (\code{time_id}), 5th (rows of transition matrix), and
 6th (columns of transition matrix). In other words, an index of
-\code{[s, k, i, t]} represents the transition matrix for the \code{s}th
+\verb{[s, k, i, t]} represents the transition matrix for the \code{s}th
 sample, \code{k}th treatment strategy, \code{i}th patient, and \code{t}th
 time interval.}
 \item{data.table}{Must contain the folowing:

@@ -103,6 +103,9 @@ stprob_fun <- function(time){
                                               n_strategies = 2, 
                                               unique_strategy_id = unique(strategy_id),
                                               strategy_index = c(rep(0, 5), rep(1, 4), rep(0, 2), rep(1, 2)),
+                                              n_grps = 1,
+                                              unique_grp_id = 1,
+                                              grp_index = rep(0, 13),
                                               n_states = 3,
                                               n_patients = 2))
 }

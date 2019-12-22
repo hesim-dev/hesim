@@ -5,7 +5,7 @@
 \title{Costs object}
 \description{
 An object of class \code{costs} returned from methods
-\code{$sim_costs()} in model classes that stores simulated costs.
+\verb{$sim_costs()} in model classes that store simulated costs.
 }
 \section{Components}{
 

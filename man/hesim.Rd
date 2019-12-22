@@ -3,7 +3,6 @@
 \docType{package}
 \name{hesim}
 \alias{hesim}
-\alias{hesim-package}
 \title{hesim: an R package for high performance health-economic simulation modeling}
 \description{
 hesim: an R package for high performance health-economic simulation modeling

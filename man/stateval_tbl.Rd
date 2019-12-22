@@ -4,8 +4,12 @@
 \alias{stateval_tbl}
 \title{Table to store state value parameters}
 \usage{
-stateval_tbl(tbl, dist = c("norm", "beta", "gamma", "lnorm", "unif",
-  "fixed", "custom"), hesim_data = NULL)
+stateval_tbl(
+  tbl,
+  dist = c("norm", "beta", "gamma", "lnorm", "unif", "fixed", "custom"),
+  hesim_data = NULL,
+  grp_var = NULL
+)
 }
 \arguments{
 \item{tbl}{A \code{data.frame} or \code{data.table} for storing parameter
@@ -14,23 +18,23 @@ values. See "Details" for specifics.}
 \item{dist}{Probability distribution used to sample parameters for a
 probabilistic sensitivity analysis (PSA).}
 
-\item{hesim_data}{A \code{\link{hesim_data}} object. Required to specify
+\item{hesim_data}{A \link{hesim_data} object. Required to specify
 treatment strategies , patients,
 and/or health states not included as columns
 in \code{tbl}, or, to match patients in \code{tbl} to groups.
 Not required if \code{tbl} includes one row for each treatment strategy, patient, and
 health state combination. Patients are matched to groups by specifying both a
-\code{patient_id} and a \code{grp_id} column in the \code{patients} table;
-if \code{hesim_data = NULL} but \code{grp_id} is included as a column
-in \code{tbl}, then each group is assumed to be a unique patient.}
+\code{patient_id} and a \code{grp_var} column in the \code{patients} table.}
+
+\item{grp_var}{The name of the variable used to group patients.}
 }
 \value{
 An object of class "stateval_tbl", which is a \code{data.table} of
 parameter values with attributes for \code{dist} and optionally
-\code{strategy_id}, \code{patients}, and \code{state_id}. \code{tbl}
+\code{strategy_id}, \code{patients}, \code{state_id}, and \code{grp_var}. \code{tbl}
 is in the same format as described in "Details". \code{patients} is a
 \code{data.table} with one column containing \code{patient_id} and
-optionally a second column containing \code{grp_id}.
+optionally a second column containing \code{grp_var}.
 }
 \description{
 Create a table for storing parameter estimates used to simulate costs or
@@ -39,12 +43,15 @@ utility in an economic model by treatment strategy, patient, health state, and
 }
 \details{
 \code{tbl} is a \code{data.table} containing columns for treatment
-strategies (\code{strategy_id}), patient subgroups (\code{grp_id}),
+strategies (\code{strategy_id}), patients (\code{patient_id}),
 health states (\code{state_id}), and/or the start of time intervals
 (\code{time_start}). The table must contain at least one column
-named \code{strategy_id}, \code{grp_id}, or \code{state_id},
+named \code{strategy_id}, \code{patient_id}, or \code{state_id},
 but does not need to contain all of them. Each row denotes a unique
-treatment strategy, patient subgroup, health state, and/or time interval pair.
+treatment strategy, patient, health state, and/or time interval pair.
+\code{tbl} may also contain a column with the name specified in \code{grp_var}
+(rather than \code{patient_id}) so that state values are assigned to
+groups of patients.
 
 \code{tbl} must also contain columns summarizing the state values for each
 row, which depend on the probability distribution selected with \code{dist}.
@@ -61,7 +68,7 @@ by distribution, are:
 \item{norm}{\code{mean} and \code{sd}}
 \item{beta}{\code{mean} and \code{se} or \code{shape1} and \code{shape2}}
 \item{gamma}{\code{mean} and \code{se}, \code{shape} and \code{rate},
-or \code{shape} and {scale}}
+or \code{shape} and \code{scale}}
 \item{lnorm}{\code{meanlog} or \code{sdlog}}
 \item{unif}{\code{min} and \code{max}}
 \item{fixed}{\code{est}}
@@ -70,17 +77,17 @@ or \code{shape} and {scale}}
 
 Note that if \code{dist = "custom"}, then \code{tbl} must include a column
 named \code{sample} (an integer vector denoting a unique random draw) and
-\code{value} (denoting the value of the randomly sampled parameter). In this case, there is a unique
-row in \code{tbl} for each random draw (\code{sample}) and
+\code{value} (denoting the value of the randomly sampled parameter). In this case,
+there is a unique row in \code{tbl} for each random draw (\code{sample}) and
 each combination of strategies, patients, health states, and/or time intervals.
 Again, \code{tbl} must contain at least one column
-named \code{strategy_id}, \code{grp_id}, or \code{state_id},
+named \code{strategy_id}, \code{patient_id} (or \code{grp_var}), or \code{state_id},
 but does not need to contain them all.
 }
 \examples{
 strategies <- data.frame(strategy_id = c(1, 2))
 patients <- data.frame(patient_id = seq(1, 3),
-                       grp_id = c(1, 1, 2),
+                       grp = c(1, 1, 2),
                        age = c(45, 50, 60),
                        female = c(0, 0, 1))
 states <- data.frame(state_id = c(1, 2))
@@ -90,11 +97,12 @@ hesim_dat <- hesim_data(strategies = strategies,
 
 # Utility varies by health state and patient group
 utility_tbl <- stateval_tbl(data.frame(state_id = rep(states$state_id, 2),
-                                       grp_id = rep(rep(c(1, 2)), each = nrow(states)), 
+                                       grp = rep(rep(c(1, 2)), each = nrow(states)), 
                                        mean = c(.8, .7, .75, .55),
                                        se = c(.18, .12, .10, .06)),
                             dist = "beta",
-                            hesim_data = hesim_dat)
+                            hesim_data = hesim_dat,
+                            grp_var = "grp")
 print(utility_tbl)
 utilmod <- create_StateVals(utility_tbl, n = 2)
 
@@ -110,5 +118,5 @@ costmod <- create_StateVals(cost_tbl, n = 2)
 
 }
 \seealso{
-\code{\link{create_StateVals}}, \code{\link{StateVals}}
+\link{create_StateVals}, \link{StateVals}
 }

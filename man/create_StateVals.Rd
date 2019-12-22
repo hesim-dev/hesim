@@ -8,11 +8,15 @@
 \usage{
 create_StateVals(object, ...)
 
-\method{create_StateVals}{lm}(object, input_data = NULL, n = 1000,
-  point_estimate = FALSE, ...)
+\method{create_StateVals}{lm}(
+  object,
+  input_data = NULL,
+  n = 1000,
+  point_estimate = FALSE,
+  ...
+)
 
-\method{create_StateVals}{stateval_tbl}(object, n = 1000,
-  time_reset = FALSE, ...)
+\method{create_StateVals}{stateval_tbl}(object, n = 1000, time_reset = FALSE, ...)
 }
 \arguments{
 \item{object}{A model object of the appropriate class.}

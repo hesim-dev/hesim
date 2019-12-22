@@ -146,7 +146,7 @@ cost-effectiveness analysis with <code><a href='icea.html'>icea()</a></code> and
     
     </div>
 
-    <pre class="usage"><span class='fu'>summarize_ce</span>(<span class='no'>costs</span>, <span class='no'>qalys</span>)</pre>
+    <pre class="usage"><span class='fu'>summarize_ce</span>(<span class='no'>costs</span>, <span class='no'>qalys</span>, <span class='kw'>by_grp</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,6 +158,11 @@ cost-effectiveness analysis with <code><a href='icea.html'>icea()</a></code> and
     <tr>
       <th>qalys</th>
       <td><p>Simulated QALYs (objects of class <a href='qalys.html'>qalys</a>).</p></td>
+    </tr>
+    <tr>
+      <th>by_grp</th>
+      <td><p>If <code>TRUE</code>, then costs and QALYs are computed by subgroup. If
+<code>FALSE</code>, then costs and QALYs are aggregated across all patients (and subgroups).</p></td>
     </tr>
     </table>
     
@@ -174,7 +179,7 @@ PSA sample (<code>sample</code>), treatment strategy (<code>strategy_id</code>),
 and health state (<code>state_id</code>). Alternatively, there can be column
 denoting a patient (<code>patient_id</code>), in which case outcomes will first be
 averaged across patients. A <code>grp_id</code> column can also be used so that
-outcomes are computed for each subgroup; otherwise it is assumed that
+outcomes are computed for each subgroup (if <code>by_grp = TRUE</code>); otherwise it is assumed that
 there is only one subgroup.</p>
     
 

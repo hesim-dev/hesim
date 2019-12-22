@@ -49,21 +49,8 @@ input_mats <- function(X, ...){
 
 new_input_mats <- function(X, ...){
   stopifnot(is.matrix(X) | is.list(X) | is.null(X))
-  id_args <- list(...)
-  object <- list(X = X,
-                 strategy_id = id_args$strategy_id, 
-                 n_strategies = id_args$n_strategies,
-                 patient_id = id_args$patient_id,
-                 n_patients = id_args$n_patients,
-                 state_id = id_args$state_id, 
-                 n_states = id_args$n_states,
-                 transition_id = id_args$transition_id, 
-                 n_transitions = id_args$n_transitions,
-                 time_id = id_args$time_id, 
-                 time_intervals = id_args$time_intervals, 
-                 n_times = id_args$n_times,
-                 time_reset = id_args$time_reset,
-                 time_fun = id_args$time_fun)
+  object <- c(list(X = X),
+                   do.call("new_id_attributes", list(...)))
   object[sapply(object, is.null)] <- NULL
   class(object) <- "input_mats"
   return(object)
@@ -123,12 +110,7 @@ get_input_mats_id_vars <- function(data){
   id_vars <- attributes(data)$id_vars
   for (i in 1:length(id_vars)){
     res[[id_vars[i]]] <- data[[id_vars[i]]]
-    if (id_vars[i] != "line"){
-       res[[map[id_vars[i]]]] <- length(unique(data[[id_vars[i]]]))
-    } else{
-      n_lines <- data[, .N, by = c("strategy_id", "line")][, .N, by = "strategy_id"]
-      res[[map[id_vars[i]]]] <- n_lines
-    }
+    res[[map[id_vars[i]]]] <- length(unique(data[[id_vars[i]]]))
   }
   return(res)
 }

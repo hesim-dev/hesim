@@ -103,8 +103,10 @@ public:
 struct surv_summary{
   std::vector<int> curve_; ///< The survival curve. 
   std::vector<int> sample_; ///< A randomly sampled parameter set.
-  std::vector<int> strategy_id_; ///< A treatment strategy id.
-  std::vector<int> patient_id_; ///< A patient id.
+  std::vector<int> strategy_id_; ///< The treatment strategy ID.
+  std::vector<int> patient_id_; ///< The patient ID.
+  std::vector<int> grp_id_; ///< The subgroup ID.
+  std::vector<double> patient_wt_; ///< Weights given to patients.
   std::vector<double> x_; ///< Values at which to summarize the survival curves 
                          ///< (hazard, cumulative hazard, survival, restricted mean survival time, and 
                          ///< quantiles). Either a vector of quantiles (i.e., times) or a vector of 
@@ -133,6 +135,8 @@ struct surv_summary{
     sample_.resize(n);
     strategy_id_.resize(n);
     patient_id_.resize(n);
+    grp_id_.resize(n);
+    patient_wt_.resize(n);
     x_.resize(n);
     value_.resize(n);
   }
@@ -147,6 +151,13 @@ struct surv_summary{
     sample_ = Rcpp::as<std::vector<int> >(R_psm_survival["sample"]);
     strategy_id_ = Rcpp::as<std::vector<int> >(R_psm_survival["strategy_id"]);
     patient_id_ = Rcpp::as<std::vector<int> >(R_psm_survival["patient_id"]);
+    grp_id_ = Rcpp::as<std::vector<int> >(R_psm_survival["grp_id"]);
+    if (!hesim::is_null(R_psm_survival, "patient_wt")){
+      patient_wt_ = Rcpp::as<std::vector<double> >(R_psm_survival["patient_wt"]);
+    } 
+    else{
+      patient_wt_.resize(patient_id_.size(), 1.0);
+    }
     x_ = Rcpp::as<std::vector<double> >(R_psm_survival["t"]);
     value_ = Rcpp::as<std::vector<double> >(R_psm_survival["survival"]);
 
@@ -156,7 +167,6 @@ struct surv_summary{
   }  
   
 };
-
 
 } // end psm namespace
 

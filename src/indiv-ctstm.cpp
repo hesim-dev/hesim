@@ -77,6 +77,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
               disease_prog.strategy_id_.push_back(transmod->obs_index_.get_strategy_id());
               disease_prog.line_.push_back(transmod->obs_index_.get_line());
               disease_prog.patient_id_.push_back(transmod->obs_index_.get_patient_id());
+              disease_prog.grp_id_.push_back(transmod->obs_index_.get_grp_id());
               disease_prog.from_.push_back(from_state);
               disease_prog.to_.push_back(patient.state_);
               disease_prog.time_start_.push_back(time_start);
@@ -100,6 +101,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
     Rcpp::_["strategy_id"] = disease_prog.strategy_id_,
     Rcpp::_["line"] = disease_prog.line_,
     Rcpp::_["patient_id"] = disease_prog.patient_id_,
+    Rcpp::_["grp_id"] = disease_prog.grp_id_,
     Rcpp::_["from"] = disease_prog.from_,
     Rcpp::_["to"] = disease_prog.to_,
     Rcpp::_["final"] = disease_prog.final_,
@@ -126,11 +128,13 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
                                          int n_strategies, 
                                          std::vector<int> unique_strategy_id,
                                          std::vector<int> strategy_index,
+                                         int n_grps,
+                                         std::vector<int> unique_grp_id,
+                                         std::vector<int> grp_index,
                                          int n_states, 
-                                         int n_patients,
-                                         int n_lines = 1){
+                                         int n_patients){
   hesim::ctstm::disease_prog disease_prog(R_disease_prog);
-  hesim::stateprobs_out out(n_samples * n_strategies * n_states * t.size());
+  hesim::stateprobs_out out(n_samples * n_strategies * n_grps * n_states * t.size());
   
   for(int i = 0; i < disease_prog.time_start_.size(); ++i){
     for(int j = 0; j < t.size(); ++j){
@@ -141,8 +145,9 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
       else{
         state = disease_prog.from_[i];
       }
-      int index = disease_prog.sample_[i] * n_strategies * n_states * t.size() +
-                  strategy_index[i] * n_states * t.size() + 
+      int index = disease_prog.sample_[i] * n_strategies * n_grps * n_states * t.size() +
+                  strategy_index[i] * n_grps * n_states * t.size() + 
+                  grp_index[i] * n_states * t.size() + 
                   state * t.size() + // need to use to when final == 1
                   j;
       if ((t[j] >= disease_prog.time_start_[i] && t[j] < disease_prog.time_stop_[i]) ||
@@ -153,24 +158,26 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
   } // end loop over disease progression data frame 
   
   // Convert sum to proportion
-  int N = n_patients * n_lines;
   for (int i = 0; i < out.prob_.size(); ++i){
-    out.prob_[i] = out.prob_[i]/N;
+    out.prob_[i] = out.prob_[i]/n_patients;
   }
   
   // Add identifiers
   int index = 0;
   for (int s = 0; s < n_samples; ++s){
     for (int k = 0; k < n_strategies; ++k){
-      for (int h = 0; h < n_states; ++h){
-        for (int r = 0; r < t.size(); ++r){
-          out.sample_[index] = s;
-          out.strategy_id_[index] = unique_strategy_id[k];
-          out.state_id_[index] = h;
-          out.t_[index] = t[r];
-          ++index;
-        } // end time loop
-      } // end state loop
+      for (int g = 0; g < n_grps; ++g){
+        for (int h = 0; h < n_states; ++h){
+          for (int r = 0; r < t.size(); ++r){
+            out.sample_[index] = s;
+            out.strategy_id_[index] = unique_strategy_id[k];
+            out.grp_id_[index] = unique_grp_id[g];
+            out.state_id_[index] = h;
+            out.t_[index] = t[r];
+            ++index;
+          } // end time loop
+        } // end state loop
+      } // end subgroup loop
     } // end strategy loop
   } // end sample loop
   
@@ -178,6 +185,7 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
   Rcpp::DataFrame out_df = Rcpp::DataFrame::create(
     Rcpp::_["sample"] = out.sample_,
     Rcpp::_["strategy_id"] = out.strategy_id_,
+    Rcpp::_["grp_id"] = out.grp_id_,
     Rcpp::_["state_id"] = out.state_id_,
     Rcpp::_["t"] = out.t_,
     Rcpp::_["prob"] = out.prob_,

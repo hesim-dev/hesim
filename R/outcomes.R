@@ -153,6 +153,8 @@ check_summarize <- function(x){
 #' cost-effectiveness analysis with [icea()] and [icea_pw()].
 #' @param costs Simulated costs by category (objects of class [costs]). 
 #' @param qalys Simulated QALYs (objects of class [qalys]).
+#' @param by_grp If `TRUE`, then costs and QALYs are computed by subgroup. If
+#' `FALSE`, then costs and QALYs are aggregated across all patients (and subgroups).
 #' @details If mean costs and/or QALYs have already been computed 
 #' (i.e., an average within a population), then there 
 #' must be one observation for each discount rate (`dr`), 
@@ -160,19 +162,20 @@ check_summarize <- function(x){
 #' and health state (`state_id`). Alternatively, there can be column
 #' denoting a patient (`patient_id`), in which case outcomes will first be
 #' averaged across patients. A `grp_id` column can also be used so that
-#'  outcomes are computed for each subgroup; otherwise it is assumed that 
-#'  there is only one subgroup.
+#' outcomes are computed for each subgroup (if `by_grp = TRUE`); otherwise it is assumed that 
+#' there is only one subgroup.
 #' @return An object of class [ce].
-#' @keywords internal
-summarize_ce <- function(costs, qalys) {
-  summarize_wlos <- function(x, costs = TRUE){
+summarize_ce <- function(costs, qalys, by_grp = FALSE) {
+  by_cols <- c("dr", "sample", "strategy_id")
+  if (by_grp) by_cols <- c(by_cols, "grp_id")
+  
+  summarize_wlos <- function(x, costs = TRUE, by_grp, by_cols){
     # Create grp ID column if missing
-    if (!"grp_id" %in% colnames(x)){
+    if (by_grp == TRUE & !"grp_id" %in% colnames(x)){
       x[, ("grp_id") := 1]
     }
 
     # Some differences between cost and QALY output
-    by_cols <- c("dr", "sample", "strategy_id", "grp_id")
     if (costs) {
       by_cols <- c("category", by_cols)
       sd_cols <- "costs"
@@ -185,7 +188,7 @@ summarize_ce <- function(costs, qalys) {
     if ("patient_id" %in% colnames(x)){ # Mean across patients
       x_summary <- x[, lapply(.SD, sum), by = by_cols0, .SDcols = sd_cols] 
       if ("patient_wt" %in% colnames(x)){ # Weighted mean
-        x_summary <- x[, lapply(.SD, weighted.mean, w = patient_wt),
+        x_summary <- x[, lapply(.SD, stats::weighted.mean, w = "patient_wt"),
                        by = by_cols, .SDcols = sd_cols]
       } else{ # Non-weighted mean
         x_summary <- x[, lapply(.SD, mean), by = by_cols, .SDcols = sd_cols]
@@ -198,17 +201,20 @@ summarize_ce <- function(costs, qalys) {
   }
   
   # QALYs
-  qalys_summary <- summarize_wlos(qalys, costs = FALSE)
+  qalys_summary <- summarize_wlos(qalys, costs = FALSE, by_grp, by_cols)
   
   # Costs
-  costs_summary <- summarize_wlos(costs, costs = TRUE)
-  costs_total <- costs_summary[, list(costs = sum(costs)), by = c("dr", "sample",
-                                                                  "strategy_id", "grp_id")]
+  costs_summary <- summarize_wlos(costs, costs = TRUE, by_grp, by_cols)
+  costs_total <- costs_summary[, list(costs = sum(costs)), by = by_cols]
   costs_total[, ("category") := "total"]  
   costs_summary <- rbind(costs_summary, costs_total)
   
   # Combine
   ce <- list(costs = costs_summary, qalys = qalys_summary)
+  if (by_grp == FALSE){
+    ce[["costs"]][, ("grp_id") := 1]
+    ce[["qalys"]][, ("grp_id") := 1]
+  }
   class(ce) <- "ce"
   return(ce)
 }

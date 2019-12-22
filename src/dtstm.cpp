@@ -89,6 +89,8 @@ Rcpp::DataFrame C_cohort_dtstm_sim_stateprobs(Rcpp::Environment R_CohortDtstmTra
             out.sample_[counter] = s;
             out.strategy_id_[counter] = obs_index.get_strategy_id();
             out.patient_id_[counter] = obs_index.get_patient_id();
+            out.grp_id_[counter] = obs_index.get_grp_id();
+            out.patient_wt_[counter] = obs_index.get_patient_wt();
             out.state_id_[counter] = h;
             out.t_[counter] = times[t];
             out.prob_[counter] = probs(t, h);

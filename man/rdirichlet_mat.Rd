@@ -4,8 +4,11 @@
 \alias{rdirichlet_mat}
 \title{Random generation for multiple Dirichlet distributions}
 \usage{
-rdirichlet_mat(n, alpha, output = c("array", "matrix", "data.frame",
-  "data.table"))
+rdirichlet_mat(
+  n,
+  alpha,
+  output = c("array", "matrix", "data.frame", "data.table")
+)
 }
 \arguments{
 \item{n}{Number of samples to draw.}
@@ -29,7 +32,7 @@ transition probability matrices.
 }
 \details{
 This function is meant for representing the distribution of
-transition probabilities in a transition matrix. The \code{(i,j)} element of
+transition probabilities in a transition matrix. The \verb{(i,j)} element of
 \code{alpha} is a transition from state \code{i} to state \code{j}. The number of rows in
 \code{alpha} must be less than or equal to the number of columns.
 \code{rdirichlet_mat} is vectorized and written in C++ for speed.

@@ -47,6 +47,7 @@ Rcpp::DataFrame C_ctstm_summary(Rcpp::Environment R_CtstmTrans,
               out.sample_[counter] = s;
               out.strategy_id_[counter] = transmod->obs_index_.get_strategy_id();
               out.patient_id_[counter] = transmod->obs_index_.get_patient_id();
+              out.grp_id_[counter] = transmod->obs_index_.get_grp_id();
               out.t_[counter] = t[l];
               out.value_[counter] = res_vec[l];
               ++counter;
@@ -65,6 +66,7 @@ Rcpp::DataFrame C_ctstm_summary(Rcpp::Environment R_CtstmTrans,
     Rcpp::_["sample"] = out.sample_,
     Rcpp::_["strategy_id"] = out.strategy_id_,
     Rcpp::_["patient_id"] = out.patient_id_,
+    Rcpp::_["grp_id"] = out.grp_id_,
     Rcpp::_["t"] = out.t_,
     Rcpp::_["value"] = out.value_,
     Rcpp::_["stringsAsFactors"] = false

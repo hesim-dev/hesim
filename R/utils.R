@@ -188,3 +188,10 @@ is_1d_vector <- function(x){
   is.atomic(x) && length(dim(x)) <= 1
 }
 
+check_patient_wt <- function(object, result){
+  if (is.null(get_id_object(object)[["patient_wt"]])) {
+    result[, ("patient_wt") := NULL]
+  }
+}
+
+

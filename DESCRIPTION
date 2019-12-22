@@ -46,5 +46,5 @@ Suggests:
     truncnorm
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
 SystemRequirements: C++11

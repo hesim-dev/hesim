@@ -525,10 +525,13 @@ create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, 
 #' 
 #' @param object An object of the appropriate class. 
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
-#' @param times A numeric vector of distinct times denoting the start of time intervals
+#' @param times An optional numeric vector of distinct times denoting the start of time intervals
 #' indexed by the 4th dimension of the array. This argument is not required if there is only one time 
 #' interval as `times` will equal 0 in this case. 
-
+#' @param grp_id An optional numeric vector of integers denoting the subgroups. Must
+#' be the same length as the 3rd dimension of the array.
+#' @param patient_wt An optional numer vector denoting the weight to apply to each 
+#' patient within a subgroup. Must be the same length as the 3rd dimension of the array.
 #' 
 #' @details The format of `object` depends on its class: 
 #' \describe{
@@ -601,7 +604,8 @@ check.tparams_transprobs <- function(object){
 
 #' @rdname tparams_transprobs
 #' @export
-tparams_transprobs.array <- function (object, times = NULL) {
+tparams_transprobs.array <- function (object, times = NULL, 
+                                      grp_id = NULL, patient_wt = NULL) {
   # Checks
   if(length(dim(object)) != 6){
     stop("'object' must be a 4D array of matrices (i.e., a 6D array).")
@@ -613,10 +617,28 @@ tparams_transprobs.array <- function (object, times = NULL) {
                  dim = dims)
   
   # ID attributes
+  n_patients <- 1:dim(object)[3]
   id_df <- expand.grid(time_id = 1:dim(object)[4],
-                       patient_id = 1:dim(object)[3],
+                       patient_id = n_patients,
                        strategy_id = 1:dim(object)[2],
                        sample = 1:dim(object)[1])
+  if (!is.null(grp_id) | !is.null(patient_wt)){
+    check_var <- function(x, name){
+      if (!is.null(x) & !length(x) %in% c(1, n_patients)){
+        stop(paste0("The length of '", name, "' must be equal to the 3rd dimension ",
+                    "of the array (i.e., the number of patients)."),
+             call. = FALSE)
+      }
+    }
+    check_var(grp_id, "grp_id")
+    check_var(patient_wt, "patient_wt")
+    tmp_dt <- data.table(patient_id = 1:dim(object)[3],
+                         grp_id = grp_id,
+                         patient_wt = patient_wt)
+    id_df <- cbind(id_df, 
+                   tmp_dt[match(id_df$patient_id, tmp_dt$patient_id),
+                          list(grp_id, patient_wt)])
+  }
   n_df <- list(n_samples = dim(object)[1],
                n_strategies = dim(object)[2],
                n_patients = dim(object)[3],
@@ -673,6 +695,10 @@ tparams_transprobs.data.table <- function (object) {
                                               time_stop = Inf)
     id_args[["n_times"]] <- 1
   }
+  
+  # Group ID and patient weight
+  id_args[["grp_id"]] <- object[["grp_id"]]
+  id_args[["patient_wt"]] <- object[["patient_wt"]]
   
   # Value
   prob_mat <- as.matrix(object[, colnames(object)[grep("prob_", colnames(object))], 

@@ -4,9 +4,18 @@
 \alias{icer_tbl}
 \title{ICER table}
 \usage{
-icer_tbl(x, k = 50000, cri = TRUE, prob = 0.95, digits_qalys = 2,
-  digits_costs = 0, output = c("matrix", "data.table"),
-  rownames = NULL, colnames = NULL, drop = TRUE)
+icer_tbl(
+  x,
+  k = 50000,
+  cri = TRUE,
+  prob = 0.95,
+  digits_qalys = 2,
+  digits_costs = 0,
+  output = c("matrix", "data.table"),
+  rownames = NULL,
+  colnames = NULL,
+  drop = TRUE
+)
 }
 \arguments{
 \item{x}{An object of class "icea_pw" returned by \code{\link{icea_pw}}.}

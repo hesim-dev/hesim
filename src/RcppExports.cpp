@@ -179,8 +179,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_ctstm_indiv_stateprobs
-Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog, std::vector<double> t, int n_samples, int n_strategies, std::vector<int> unique_strategy_id, std::vector<int> strategy_index, int n_states, int n_patients, int n_lines);
-RcppExport SEXP _hesim_C_ctstm_indiv_stateprobs(SEXP R_disease_progSEXP, SEXP tSEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP unique_strategy_idSEXP, SEXP strategy_indexSEXP, SEXP n_statesSEXP, SEXP n_patientsSEXP, SEXP n_linesSEXP) {
+Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog, std::vector<double> t, int n_samples, int n_strategies, std::vector<int> unique_strategy_id, std::vector<int> strategy_index, int n_grps, std::vector<int> unique_grp_id, std::vector<int> grp_index, int n_states, int n_patients);
+RcppExport SEXP _hesim_C_ctstm_indiv_stateprobs(SEXP R_disease_progSEXP, SEXP tSEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP unique_strategy_idSEXP, SEXP strategy_indexSEXP, SEXP n_grpsSEXP, SEXP unique_grp_idSEXP, SEXP grp_indexSEXP, SEXP n_statesSEXP, SEXP n_patientsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -190,10 +190,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type n_strategies(n_strategiesSEXP);
     Rcpp::traits::input_parameter< std::vector<int> >::type unique_strategy_id(unique_strategy_idSEXP);
     Rcpp::traits::input_parameter< std::vector<int> >::type strategy_index(strategy_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type n_grps(n_grpsSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type unique_grp_id(unique_grp_idSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type grp_index(grp_indexSEXP);
     Rcpp::traits::input_parameter< int >::type n_states(n_statesSEXP);
     Rcpp::traits::input_parameter< int >::type n_patients(n_patientsSEXP);
-    Rcpp::traits::input_parameter< int >::type n_lines(n_linesSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_ctstm_indiv_stateprobs(R_disease_prog, t, n_samples, n_strategies, unique_strategy_id, strategy_index, n_states, n_patients, n_lines));
+    rcpp_result_gen = Rcpp::wrap(C_ctstm_indiv_stateprobs(R_disease_prog, t, n_samples, n_strategies, unique_strategy_id, strategy_index, n_grps, unique_grp_id, grp_index, n_states, n_patients));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -601,7 +603,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
     {"_hesim_C_cohort_dtstm_sim_stateprobs", (DL_FUNC) &_hesim_C_cohort_dtstm_sim_stateprobs, 3},
     {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 10},
-    {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 9},
+    {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 11},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 7},
     {"_hesim_C_indiv_ctstm_los", (DL_FUNC) &_hesim_C_indiv_ctstm_los, 4},
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},

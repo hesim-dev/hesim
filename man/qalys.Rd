@@ -5,7 +5,7 @@
 \title{Quality-adjusted life-years object}
 \description{
 An object of class \code{qalys} returned from methods
-\code{$sim_qalys()} in model classes that stores simulated
+\verb{$sim_qalys()} in model classes that store simulated
 quality-adjusted life-years (QALYs).
 }
 \section{Components}{
@@ -20,7 +20,9 @@ the following columns:
 \item{state_id}{The health state ID.}
 \item{dr}{The rate used to discount QALYs.}
 \item{category}{A single category always equal to "qalys".}
-\item{costs}{The simulated values of QALYs.}
+\item{qalys}{The simulated values of QALYs.}
 }
+If the argument \code{lys = TRUE}, then the \code{data.table} also contains a column
+\code{lys} containing simulated life-years.
 }
 

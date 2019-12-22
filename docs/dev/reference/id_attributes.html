@@ -34,7 +34,7 @@
   
 <meta property="og:title" content="Attributes for ID variables — id_attributes" />
 
-<meta property="og:description" content="Stores metadata related to the ID variables used to index input_mats()
+<meta property="og:description" content="Stores metadata related to the ID variables used to index input_mats
 and transformed parameter objects already predicted from covariates." />
 <meta name="twitter:card" content="summary" />
 
@@ -139,15 +139,28 @@ and transformed parameter objects already predicted from covariates." />
 
     <div class="ref-description">
     
-    <p>Stores metadata related to the ID variables used to index <code><a href='input_mats.html'>input_mats()</a></code>
+    <p>Stores metadata related to the ID variables used to index <a href='input_mats.html'>input_mats</a>
 and <a href='tparams.html'>transformed parameter objects</a> already predicted from covariates.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>id_attributes</span>(<span class='no'>strategy_id</span>, <span class='no'>n_strategies</span>, <span class='no'>patient_id</span>, <span class='no'>n_patients</span>,
-  <span class='kw'>state_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transition_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>n_transitions</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time_intervals</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>n_times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sample</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_samples</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>id_attributes</span>(
+  <span class='no'>strategy_id</span>,
+  <span class='no'>n_strategies</span>,
+  <span class='no'>patient_id</span>,
+  <span class='no'>n_patients</span>,
+  <span class='kw'>state_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>n_states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>transition_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>n_transitions</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time_intervals</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>n_times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>sample</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>n_samples</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>patient_wt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,7 +204,7 @@ health state transition. This is only used for state transition models.</p></td>
     </tr>
     <tr>
       <th>time_intervals</th>
-      <td><p>A <code>data.table</code> denotes unique time intervals. Must
+      <td><p>A <code>data.table</code> denoting unique time intervals. Must
 contain the columns <code>time_id</code>, <code>time_start</code>, and <code>time_stop</code>.
 <code>time_start</code> is the starting time of an interval and <code>time_stop</code> is
 the stopping time of an interval. Time intervals are closed on the left and
@@ -212,18 +225,28 @@ distribution of the parameters.</p></td>
       <th>n_samples</th>
       <td><p>A scalar denoting the number of samples.</p></td>
     </tr>
+    <tr>
+      <th>grp_id</th>
+      <td><p>An optional numeric vector of integers denoting the subgroup.</p></td>
+    </tr>
+    <tr>
+      <th>patient_wt</th>
+      <td><p>An optional numeric vector denoting the weight to apply to each patient
+within a subgroup.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>When using the ID variables to index <code><a href='input_mats.html'>input_mats</a></code>, sorting order should be
-the same as specified in <code><a href='expand.hesim_data.html'>expand.hesim_data</a></code>; that is,
+    <p>When using the ID variables to index <a href='input_mats.html'>input_mats</a>, sorting order should be
+the same as specified in <code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>; that is,
 observations must be sorted by: (i) <code>strategy_id</code>, (ii) <code>patient_id</code>,
 and (iii) the health-related ID variable (either <code>state_id</code> or
 <code>transition_id</code>). When using ID variables to index transformed parameter
 objects and <code>sample</code> is used for indexing, then observations must be sorted by:
 (i) <code>sample</code>, (ii) <code>strategy_id</code>, (iii) <code>patient_id</code>, and
 (iv) the health-related ID variable.</p>
+<p>@seealso <code><a href='hesim_data.html'>hesim_data()</a></code>,<code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>, <a href='input_mats.html'>input_mats</a></p>
     
 
   </div>

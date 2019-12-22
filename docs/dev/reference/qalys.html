@@ -35,7 +35,7 @@
 <meta property="og:title" content="Quality-adjusted life-years object — qalys" />
 
 <meta property="og:description" content="An object of class qalys returned from methods
-$sim_qalys() in model classes that stores simulated
+$sim_qalys() in model classes that store simulated
 quality-adjusted life-years (QALYs)." />
 <meta name="twitter:card" content="summary" />
 
@@ -141,7 +141,7 @@ quality-adjusted life-years (QALYs)." />
     <div class="ref-description">
     
     <p>An object of class <code>qalys</code> returned from methods
-<code>$sim_qalys()</code> in model classes that stores simulated
+<code>$sim_qalys()</code> in model classes that store simulated
 quality-adjusted life-years (QALYs).</p>
     
     </div>
@@ -159,8 +159,9 @@ the following columns:</p>
 <dt>state_id</dt><dd><p>The health state ID.</p></dd>
 <dt>dr</dt><dd><p>The rate used to discount QALYs.</p></dd>
 <dt>category</dt><dd><p>A single category always equal to "qalys".</p></dd>
-<dt>costs</dt><dd><p>The simulated values of QALYs.</p></dd>
-</dl>
+<dt>qalys</dt><dd><p>The simulated values of QALYs.</p></dd>
+</dl><p>If the argument <code>lys = TRUE</code>, then the <code>data.table</code> also contains a column
+<code>lys</code> containing simulated life-years.</p>
     
 
   </div>

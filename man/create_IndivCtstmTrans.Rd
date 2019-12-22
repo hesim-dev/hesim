@@ -9,16 +9,34 @@
 \usage{
 create_IndivCtstmTrans(object, ...)
 
-\method{create_IndivCtstmTrans}{flexsurvreg_list}(object, input_data,
-  trans_mat, clock = c("reset", "forward"), n = 1000,
-  point_estimate = FALSE, ...)
+\method{create_IndivCtstmTrans}{flexsurvreg_list}(
+  object,
+  input_data,
+  trans_mat,
+  clock = c("reset", "forward"),
+  n = 1000,
+  point_estimate = FALSE,
+  ...
+)
 
-\method{create_IndivCtstmTrans}{flexsurvreg}(object, input_data, trans_mat,
-  clock = c("reset", "forward"), n = 1000, point_estimate = FALSE,
-  ...)
+\method{create_IndivCtstmTrans}{flexsurvreg}(
+  object,
+  input_data,
+  trans_mat,
+  clock = c("reset", "forward"),
+  n = 1000,
+  point_estimate = FALSE,
+  ...
+)
 
-\method{create_IndivCtstmTrans}{params_surv}(object, input_data, trans_mat,
-  clock = c("reset", "forward", "mix"), reset_states = NULL, ...)
+\method{create_IndivCtstmTrans}{params_surv}(
+  object,
+  input_data,
+  trans_mat,
+  clock = c("reset", "forward", "mix"),
+  reset_states = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{A fitted survival model or the parameters of a survival model.}

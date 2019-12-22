@@ -86,10 +86,12 @@ public:
  * Contains output of health state probability computations.
  ******************************************************************************/ 
 struct stateprobs_out{
-  std::vector<int> state_id_; ///< The health state id.
+  std::vector<int> state_id_; ///< The health state ID.
   std::vector<int> sample_; ///< The random sample of the parameters.
-  std::vector<int> strategy_id_; ///< The treatment strategy id.
-  std::vector<int> patient_id_; ////< The patient id.
+  std::vector<int> strategy_id_; ///< The treatment strategy ID.
+  std::vector<int> patient_id_; ////< The patient ID.
+  std::vector<int> grp_id_; ///< The subgroup ID.
+  std::vector<double> patient_wt_; ///< Weights given to patients.
   std::vector<double> t_; ///< Time.
   std::vector<double> prob_; ///< A health state probability.
   
@@ -111,6 +113,8 @@ struct stateprobs_out{
     sample_.resize(n);
     strategy_id_.resize(n);
     patient_id_.resize(n);
+    grp_id_.resize(n);
+    patient_wt_.resize(n);
     t_.resize(n);
     prob_.resize(n);    
   }
@@ -126,6 +130,13 @@ struct stateprobs_out{
     sample_ = Rcpp::as<std::vector<int> >(R_stateprobs["sample"]);
     strategy_id_ = Rcpp::as<std::vector<int> >(R_stateprobs["strategy_id"]);
     patient_id_ = Rcpp::as<std::vector<int> >(R_stateprobs["patient_id"]);
+    grp_id_ = Rcpp::as<std::vector<int> >(R_stateprobs["grp_id"]);
+    if (!hesim::is_null(R_stateprobs, "patient_wt")){
+      patient_wt_ = Rcpp::as<std::vector<double> >(R_stateprobs["patient_wt"]);
+    } 
+    else{
+      patient_wt_.resize(patient_id_.size(), 1.0);
+    }
     t_ = Rcpp::as<std::vector<double> >(R_stateprobs["t"]);
     prob_ = Rcpp::as<std::vector<double> >(R_stateprobs["prob"]);
   
@@ -134,6 +145,7 @@ struct stateprobs_out{
     add_constant(sample_, -1);
     add_constant(strategy_id_, -1);
     add_constant(patient_id_, -1);
+    add_constant(grp_id_, -1);
   }
   
   /** 
@@ -144,6 +156,8 @@ struct stateprobs_out{
       Rcpp::_["sample"] = sample_,
       Rcpp::_["strategy_id"] = strategy_id_,
       Rcpp::_["patient_id"] = patient_id_,
+      Rcpp::_["grp_id"] = grp_id_,
+      Rcpp::_["patient_wt"] = patient_wt_,
       Rcpp::_["state_id"] = state_id_,
       Rcpp::_["t"] = t_,
       Rcpp::_["prob"] = prob_,
@@ -159,10 +173,12 @@ struct stateprobs_out{
  * Contains output of weighted health state length of stay computations.
  ******************************************************************************/ 
 struct wlos_out {
-  std::vector<int> state_id_; ///< The health state id.
+  std::vector<int> state_id_; ///< The health state ID.
   std::vector<int> sample_; ///< The random sample of the parameters.
-  std::vector<int> strategy_id_; ///< The treatment strategy id.
-  std::vector<int> patient_id_; ////< The patient id.
+  std::vector<int> strategy_id_; ///< The treatment strategy ID.
+  std::vector<int> patient_id_; ////< The patient ID.
+  std::vector<int> grp_id_; ////< The subgroup ID.
+  std::vector<double> patient_wt_; ///< Weights given to patients.
   std::vector<double> dr_; ///< The discount rate.
   std::vector<std::string> category_; ///< For costs, the name of the cost category; 
                                      ///<for QALYs, simply 'qalys'.
@@ -178,6 +194,8 @@ struct wlos_out {
     sample_.resize(n);
     strategy_id_.resize(n);
     patient_id_.resize(n);
+    grp_id_.resize(n);
+    patient_wt_.resize(n);
     dr_.resize(n);
     category_.resize(n);
     value_.resize(n);
@@ -191,6 +209,8 @@ struct wlos_out {
       Rcpp::_["sample"] = sample_,
       Rcpp::_["strategy_id"] = strategy_id_,
       Rcpp::_["patient_id"] = patient_id_,
+      Rcpp::_["grp_id"] = grp_id_,
+      Rcpp::_["patient_wt"] = patient_wt_,
       Rcpp::_["state_id"] = state_id_,
       Rcpp::_["dr"] = dr_,
       Rcpp::_["category"] = category_,
@@ -378,6 +398,8 @@ public:
                 out.sample_[counter] = s;
                 out.strategy_id_[counter] = obs_indices_[k].get_strategy_id();
                 out.patient_id_[counter] = obs_indices_[k].get_patient_id();
+                out.grp_id_[counter] = obs_indices_[k].get_grp_id();
+                out.patient_wt_[counter] = obs_indices_[k].get_patient_wt();
                 out.state_id_[counter] = obs_indices_[k].get_health_id();;
                 out.dr_[counter] = dr_j;
                 out.category_[counter] = categories[k];
