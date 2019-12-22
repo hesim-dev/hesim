@@ -1684,29 +1684,29 @@ inline void rdqelg(int *n, double *epstab, double *
 /* ***first executable statement  dqelg */
     /* Parameter adjustments */
     --res3la;
-    --epstab;
+   // --epstab;
 
     /* Function Body */
     epmach = DBL_EPSILON;
     oflow = DBL_MAX;
     ++(*nres);
     *abserr = oflow;
-    *result = epstab[*n];
+    *result = epstab[*n - 1];
     if (*n < 3) {
 	goto L100;
     }
     limexp = 50;
-    epstab[*n + 2] = epstab[*n];
+    epstab[*n + 2 - 1] = epstab[*n - 1];
     newelm = (*n - 1) / 2;
-    epstab[*n] = oflow;
+    epstab[*n - 1] = oflow;
     num = *n;
     k1 = *n;
     for (i__ = 1; i__ <= newelm; ++i__) {
 	k2 = k1 - 1;
 	k3 = k1 - 2;
-	res = epstab[k1 + 2];
-	e0 = epstab[k3];
-	e1 = epstab[k2];
+	res = epstab[k1 + 2 - 1];
+	e0 = epstab[k3 - 1];
+	e1 = epstab[k2 - 1];
 	e2 = res;
 	e1abs = fabs(e1);
 	delta2 = e2 - e1;
@@ -1724,8 +1724,8 @@ inline void rdqelg(int *n, double *epstab, double *
 	    goto L100;	/* ***jump out of do-loop */
 	}
 
-	e3 = epstab[k1];
-	epstab[k1] = e1;
+	e3 = epstab[k1 - 1];
+	epstab[k1 - 1] = e1;
 	delta1 = e1 - e3;
 	err1 = fabs(delta1);
 	tol1 = R::fmax2(e1abs, fabs(e3)) * epmach;
@@ -1752,7 +1752,7 @@ inline void rdqelg(int *n, double *epstab, double *
 L30:/* compute a new element and eventually adjust the value of result. */
 
 	res = e1 + 1. / ss;
-	epstab[k1] = res;
+	epstab[k1 - 1] = res;
 	k1 += -2;
 	errA = err2 + fabs(res - e2) + err3;
 	if (errA <= *abserr) {
@@ -1772,13 +1772,13 @@ L50:
     ie = newelm + 1;
     for (i__ = 1; i__ <= ie; ++i__) {
 	ib2 = ib + 2;
-	epstab[ib] = epstab[ib2];
+	epstab[ib - 1] = epstab[ib2 - 1];
 	ib = ib2;
     }
     if (num != *n) {
 	indx = num - *n + 1;
 	for (i__ = 1; i__ <= *n; ++i__) {
-	    epstab[i__] = epstab[indx];
+	    epstab[i__ - 1] = epstab[indx - 1];
 	    ++indx;
 	}
     }

@@ -74,8 +74,10 @@ inline void unique(std::vector<T> &v){
  */
 template <typename T>
 inline void add_constant(std::vector<T> &v, double value){
-  std::transform(v.begin(), v.end(), v.begin(),
-                 std::bind2nd(std::plus<double>(), value)); 
+  auto func = [value](T& d){ 
+    return d+=value;
+  };  
+  std::for_each(v.begin(), v.end(), func);
 }
 
 /**

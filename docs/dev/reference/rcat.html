@@ -66,7 +66,7 @@ rcat is vectorized and written in C++ for speed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.1.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
       </span>
     </div>
 
@@ -177,7 +177,7 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>()
 <span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.002   0.000   0.002 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/prop.table'>prop.table</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
+#&gt;   0.006   0.000   0.007 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/prop.table'>prop.table</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/table'>table</a></span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
 <span class='co'># rmultinom from base R </span>

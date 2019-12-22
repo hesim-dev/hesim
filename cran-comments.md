@@ -1,17 +1,18 @@
 ## Resubmission
-This is the second resubmission. 
+This is the third resubmission. 
 
-In the first resubmission, two issues were fixed. First, it was noted that there was an error in one of the package tests on a "noLD" platform. This was due to a rounding error and corrected by adding tolerance to the problematic test. The updated package was checked using R-Hub builder on a platform with long doubles disabled and returned no errors. Second, there was an incorrect local URL in the `psm.Rmd` vignette, which was corrected. 
+In the first resubmission I deleted line 1687 ( `--epstab`) and replaced any reference to `epstab` by the same with an index decremented by 1. This was due to a warning on the Debian machine: ` ../inst/include/hesim/Rbase/integrate.h:1687:5: warning: array subscript -1 is outside array bounds of 'double [52]' [-Warray-bounds]`.  
 
-Following the first resubmission, it was also noted that there were incorrect links to a "reference" directory that did not exist within the package. These have been fixed so that they are valid links. 
+In the second resubmission, I modified unit tests that failed during my first resubmission (also on the Debian machine).
+
+In the third, resubmission I removed the CRAN-RELEASE file which generated a NOTE during the checks during the second resubmission. 
 
 ## Release summary
-This release contains a minor update as outlined on the package 
-website [here](https://hesim-dev.github.io/hesim/news/index.html).
+This release contains a minor update to address an email from Professor Brian Ripley that the `auto_ptr`, `bind1st`, `bind2nd`, `mem_fun_ref`, and `ptr_fun` are now deprecated in`C++` and should be removed from `R` packages. `hesim` contained a function that used `bind2nd`, but it is now replaced with an alternative implementation.
 
 ## Test environments
-* Local OS X, R 3.6.0
-* Ubuntu 14.04 (on travis-ci), R 3.6.0
+* Local OS X, R 3.6.1
+* Ubuntu 16.04 (on travis-ci), R 3.6.1
 * win-builder (devel and release)
 
 ## R CMD check results

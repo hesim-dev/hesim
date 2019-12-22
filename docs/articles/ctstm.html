@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
     <div class="page-header toc-ignore">
       <h1>Continuous time state transition models</h1>
             
-            <h4 class="date">2019-07-01</h4>
+            <h4 class="date">2019-11-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/ctstm.Rmd"><code>vignettes/ctstm.Rmd</code></a></small>
       <div class="hidden name"><code>ctstm.Rmd</code></div>
@@ -214,12 +214,12 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <span id="cb10-2"><a href="#cb10-2"></a>                        <span class="dt">by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))</span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(transmod_data)</span></code></pre></div>
 <pre><code>##    strategy_id patient_id      age female
-## 1:           1          1 25.23180      1
-## 2:           1          2 43.90158      0
-## 3:           1          3 39.60841      0
-## 4:           1          4 51.95736      0
-## 5:           1          5 45.81387      1
-## 6:           1          6 38.12804      0</code></pre>
+## 1:           1          1 54.92246      1
+## 2:           1          2 49.80812      1
+## 3:           1          3 48.32210      1
+## 4:           1          4 54.93988      0
+## 5:           1          5 40.64548      1
+## 6:           1          6 53.08067      0</code></pre>
 <p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>transmod_cr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span>(wei_fits_cr, transmod_data,</span>
 <span id="cb12-2"><a href="#cb12-2"></a>                                      <span class="dt">trans_mat =</span> tmat, <span class="dt">n =</span> n_samples,</span>
@@ -245,27 +245,22 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <span id="cb13-13"><a href="#cb13-13"></a>}</span></code></pre></div>
 <p>We then plot the predicted hazard by treatment strategy and timescale.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Plot hazards</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"ggplot2"</span>)</span></code></pre></div>
-<pre><code>## Registered S3 methods overwritten by 'ggplot2':
-##   method         from 
-##   [.quosures     rlang
-##   c.quosures     rlang
-##   print.quosures rlang</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>haz &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/rbindlist">rbind</a></span>(<span class="kw">predict_haz</span>(wei_fits_cr, <span class="st">"reset"</span>),</span>
-<span id="cb16-2"><a href="#cb16-2"></a>             <span class="kw">predict_haz</span>(wei_fits_cf, <span class="st">"forward"</span>))</span>
-<span id="cb16-3"><a href="#cb16-3"></a>haz[, trans_name <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(trans,</span>
-<span id="cb16-4"><a href="#cb16-4"></a>                           <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,</span>
-<span id="cb16-5"><a href="#cb16-5"></a>                           <span class="dt">labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Healthy-&gt; Sick"</span>, </span>
-<span id="cb16-6"><a href="#cb16-6"></a>                                      <span class="st">"Healthy -&gt; Dead"</span>,</span>
-<span id="cb16-7"><a href="#cb16-7"></a>                                      <span class="st">"Sick -&gt; Healthy"</span>,</span>
-<span id="cb16-8"><a href="#cb16-8"></a>                                      <span class="st">"Sick -&gt; Dead"</span>))]</span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(haz[t <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>], </span>
-<span id="cb16-10"><a href="#cb16-10"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> t, <span class="dt">y =</span> hazard, <span class="dt">col =</span> clock, <span class="dt">linetype =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id))) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb16-11"><a href="#cb16-11"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb16-12"><a href="#cb16-12"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span>trans_name) <span class="op">+</span></span>
-<span id="cb16-13"><a href="#cb16-13"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Years"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Hazard"</span>) <span class="op">+</span></span>
-<span id="cb16-14"><a href="#cb16-14"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_linetype.html">scale_linetype_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Strategy"</span>) <span class="op">+</span></span>
-<span id="cb16-15"><a href="#cb16-15"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Clock"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>haz &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/rbindlist">rbind</a></span>(<span class="kw">predict_haz</span>(wei_fits_cr, <span class="st">"reset"</span>),</span>
+<span id="cb14-4"><a href="#cb14-4"></a>             <span class="kw">predict_haz</span>(wei_fits_cf, <span class="st">"forward"</span>))</span>
+<span id="cb14-5"><a href="#cb14-5"></a>haz[, trans_name <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(trans,</span>
+<span id="cb14-6"><a href="#cb14-6"></a>                           <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,</span>
+<span id="cb14-7"><a href="#cb14-7"></a>                           <span class="dt">labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Healthy-&gt; Sick"</span>, </span>
+<span id="cb14-8"><a href="#cb14-8"></a>                                      <span class="st">"Healthy -&gt; Dead"</span>,</span>
+<span id="cb14-9"><a href="#cb14-9"></a>                                      <span class="st">"Sick -&gt; Healthy"</span>,</span>
+<span id="cb14-10"><a href="#cb14-10"></a>                                      <span class="st">"Sick -&gt; Dead"</span>))]</span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(haz[t <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>], </span>
+<span id="cb14-12"><a href="#cb14-12"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> t, <span class="dt">y =</span> hazard, <span class="dt">col =</span> clock, <span class="dt">linetype =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id))) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span>trans_name) <span class="op">+</span></span>
+<span id="cb14-15"><a href="#cb14-15"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Years"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Hazard"</span>) <span class="op">+</span></span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_linetype.html">scale_linetype_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Strategy"</span>) <span class="op">+</span></span>
+<span id="cb14-17"><a href="#cb14-17"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Clock"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
 <p><img src="ctstm_files/figure-html/predicted_hazards_plot-1.png" width="672"></p>
 <p>While the hazards from the healthy state are similar between the “clock forward” and “clock reset” approaches, they differ significantly in the sick state. Treatment effects (i.e., the hazard ratios between treatment strategies 1 and 2) are also largest in the sick state.</p>
 <p>Additional analyses should be conducted as well. For instance, the hazards for treatment strategy 1 (the reference treatment strategy) could be assessed by comparing the Weibull model’s predictions with predictions from non-parametric (i.e., the Kaplan-Meier estimator) or semi-parametric (i.e., Cox) models. This can be performed using <code>mstate</code>, which can predict cumulative hazards and state probabilities in non-parametric and semi-parametric models. Furthermore, the Weibull model’s proportional hazards assumption should be tested using standard techniques such as plots of log time vs. the log cumulative hazard, inclusion of time-dependent covariates, and tests of the Schoenfeld residuals.</p>
@@ -274,25 +269,25 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <h3 class="hasAnchor">
 <a href="#utility-and-cost-models" class="anchor"></a><span class="header-section-number">4.1.2</span> Utility and cost models</h3>
 <p>Mean only models (see <code><a href="../reference/params_mean.html">params_mean()</a></code>) can be created directly from the utility and cost tables using since they do not include covariates and therefore do not require input data.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Utility</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a>utilitymod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(utility_tbl, <span class="dt">n =</span> n_samples)</span>
-<span id="cb17-3"><a href="#cb17-3"></a></span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="co"># Costs</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>drugcostmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(drugcost_tbl, <span class="dt">n =</span> n_samples)</span>
-<span id="cb17-6"><a href="#cb17-6"></a>medcostmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(medcost_tbl, <span class="dt">n =</span> n_samples)</span>
-<span id="cb17-7"><a href="#cb17-7"></a>costmods &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">Drug =</span> drugcostmod,</span>
-<span id="cb17-8"><a href="#cb17-8"></a>                 <span class="dt">Medical =</span> medcostmod)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Utility</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>utilitymod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(utility_tbl, <span class="dt">n =</span> n_samples)</span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co"># Costs</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>drugcostmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(drugcost_tbl, <span class="dt">n =</span> n_samples)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>medcostmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(medcost_tbl, <span class="dt">n =</span> n_samples)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>costmods &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">Drug =</span> drugcostmod,</span>
+<span id="cb15-8"><a href="#cb15-8"></a>                 <span class="dt">Medical =</span> medcostmod)</span></code></pre></div>
 </div>
 <div id="combining-the-disease-progression-cost-and-utility-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#combining-the-disease-progression-cost-and-utility-models" class="anchor"></a><span class="header-section-number">4.1.3</span> Combining the disease progression, cost, and utility models</h3>
 <p>Now that the necessary transition, utility,and cost models have been created, we combine them to create separate economic models based on the “clock reset” and “clock forward” transition models, respectively.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>econmod_cr &lt;-<span class="st"> </span>IndivCtstm<span class="op">$</span><span class="kw">new</span>(<span class="dt">trans_model =</span> transmod_cr,</span>
-<span id="cb18-2"><a href="#cb18-2"></a>                             <span class="dt">utility_model =</span> utilitymod,</span>
-<span id="cb18-3"><a href="#cb18-3"></a>                             <span class="dt">cost_models =</span> costmods)</span>
-<span id="cb18-4"><a href="#cb18-4"></a>econmod_cf &lt;-<span class="st"> </span>IndivCtstm<span class="op">$</span><span class="kw">new</span>(<span class="dt">trans_model =</span> transmod_cf,</span>
-<span id="cb18-5"><a href="#cb18-5"></a>                             <span class="dt">utility_model =</span> utilitymod,</span>
-<span id="cb18-6"><a href="#cb18-6"></a>                             <span class="dt">cost_models =</span> costmods)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>econmod_cr &lt;-<span class="st"> </span>IndivCtstm<span class="op">$</span><span class="kw">new</span>(<span class="dt">trans_model =</span> transmod_cr,</span>
+<span id="cb16-2"><a href="#cb16-2"></a>                             <span class="dt">utility_model =</span> utilitymod,</span>
+<span id="cb16-3"><a href="#cb16-3"></a>                             <span class="dt">cost_models =</span> costmods)</span>
+<span id="cb16-4"><a href="#cb16-4"></a>econmod_cf &lt;-<span class="st"> </span>IndivCtstm<span class="op">$</span><span class="kw">new</span>(<span class="dt">trans_model =</span> transmod_cf,</span>
+<span id="cb16-5"><a href="#cb16-5"></a>                             <span class="dt">utility_model =</span> utilitymod,</span>
+<span id="cb16-6"><a href="#cb16-6"></a>                             <span class="dt">cost_models =</span> costmods)</span></code></pre></div>
 </div>
 </div>
 <div id="simulating-outcomes" class="section level2">
@@ -302,58 +297,58 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <h3 class="hasAnchor">
 <a href="#disease-progression" class="anchor"></a><span class="header-section-number">4.2.1</span> Disease progression</h3>
 <p>Disease progression can be simulated using the <code>$sim_disease()</code> method. In the individual-level simulation, unique trajectories through the multi-state model are simulated for each patient, treatment strategy, and PSA sample. Patients transition <code>from</code> an old health state that was entered at time <code>time_start</code> <code>to</code> a new health state at time <code>time_stop</code>.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># "Clock reset"</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>econmod_cr<span class="op">$</span><span class="kw">sim_disease</span>()</span>
-<span id="cb19-3"><a href="#cb19-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>disprog_)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># "Clock reset"</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>econmod_cr<span class="op">$</span><span class="kw">sim_disease</span>()</span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>disprog_)</span></code></pre></div>
 <pre><code>##    sample strategy_id patient_id from to final time_start time_stop
-## 1:      1           1          1    1  2     0   0.000000 1.0291345
-## 2:      1           1          1    2  3     1   1.029135 6.3478413
-## 3:      1           1          2    1  3     1   0.000000 4.1999090
-## 4:      1           1          3    1  3     1   0.000000 0.2143922
-## 5:      1           1          4    1  2     0   0.000000 1.4682744
-## 6:      1           1          4    2  1     0   1.468274 1.6410123</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># "Clock forward"</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a>econmod_cf<span class="op">$</span><span class="kw">sim_disease</span>()</span></code></pre></div>
+## 1:      1           1          1    1  2     0  0.0000000 1.4895532
+## 2:      1           1          1    2  1     0  1.4895532 1.6402854
+## 3:      1           1          1    1  2     0  1.6402854 3.8252635
+## 4:      1           1          1    2  3     1  3.8252635 5.6507085
+## 5:      1           1          2    1  2     0  0.0000000 0.6728958
+## 6:      1           1          2    2  3     1  0.6728958 1.1339876</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># "Clock forward"</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>econmod_cf<span class="op">$</span><span class="kw">sim_disease</span>()</span></code></pre></div>
 <p>State occupancy probabilities at different time points are computed using <code>$sim_stateprobs()</code>. First, we simulate state probabilities for the “clock reset” model.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>econmod_cr<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>, <span class="dv">20</span> , <span class="dv">1</span><span class="op">/</span><span class="dv">12</span>)) </span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>econmod_cr<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>, <span class="dv">20</span> , <span class="dv">1</span><span class="op">/</span><span class="dv">12</span>)) </span></code></pre></div>
 <p>We can then compare state probabilities between the competing treatment strategies.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Short funtion add create state name variable to data.tabale</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a>add_state_name &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
-<span id="cb23-3"><a href="#cb23-3"></a>  x[, state_name <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(state_id,</span>
-<span id="cb23-4"><a href="#cb23-4"></a>                           <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(tmat),</span>
-<span id="cb23-5"><a href="#cb23-5"></a>                           <span class="dt">labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(tmat))] </span>
-<span id="cb23-6"><a href="#cb23-6"></a>}</span>
-<span id="cb23-7"><a href="#cb23-7"></a></span>
-<span id="cb23-8"><a href="#cb23-8"></a><span class="co"># Short function to create state probability "dataset" for plotting</span></span>
-<span id="cb23-9"><a href="#cb23-9"></a>summarize_stprobs &lt;-<span class="st"> </span><span class="cf">function</span>(stateprobs){</span>
-<span id="cb23-10"><a href="#cb23-10"></a>  x &lt;-<span class="st"> </span>stateprobs[, .(<span class="dt">prob_mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(prob)),</span>
-<span id="cb23-11"><a href="#cb23-11"></a>                  by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"t"</span>)]</span>
-<span id="cb23-12"><a href="#cb23-12"></a>  <span class="kw">add_state_name</span>(x)</span>
-<span id="cb23-13"><a href="#cb23-13"></a>}</span>
-<span id="cb23-14"><a href="#cb23-14"></a></span>
-<span id="cb23-15"><a href="#cb23-15"></a><span class="co"># Plot of state probabilities</span></span>
-<span id="cb23-16"><a href="#cb23-16"></a>stprobs_cr &lt;-<span class="st"> </span><span class="kw">summarize_stprobs</span>(econmod_cr<span class="op">$</span>stateprobs_)</span>
-<span id="cb23-17"><a href="#cb23-17"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(stprobs_cr, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> t, <span class="dt">y =</span> prob_mean, <span class="dt">col =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id))) <span class="op">+</span></span>
-<span id="cb23-18"><a href="#cb23-18"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span>state_name) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb23-19"><a href="#cb23-19"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Years"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability in health state"</span>) <span class="op">+</span></span>
-<span id="cb23-20"><a href="#cb23-20"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Strategy"</span>) <span class="op">+</span></span>
-<span id="cb23-21"><a href="#cb23-21"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span></span>
-<span id="cb23-22"><a href="#cb23-22"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Short funtion add create state name variable to data.tabale</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>add_state_name &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
+<span id="cb21-3"><a href="#cb21-3"></a>  x[, state_name <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(state_id,</span>
+<span id="cb21-4"><a href="#cb21-4"></a>                           <span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(tmat),</span>
+<span id="cb21-5"><a href="#cb21-5"></a>                           <span class="dt">labels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(tmat))] </span>
+<span id="cb21-6"><a href="#cb21-6"></a>}</span>
+<span id="cb21-7"><a href="#cb21-7"></a></span>
+<span id="cb21-8"><a href="#cb21-8"></a><span class="co"># Short function to create state probability "dataset" for plotting</span></span>
+<span id="cb21-9"><a href="#cb21-9"></a>summarize_stprobs &lt;-<span class="st"> </span><span class="cf">function</span>(stateprobs){</span>
+<span id="cb21-10"><a href="#cb21-10"></a>  x &lt;-<span class="st"> </span>stateprobs[, .(<span class="dt">prob_mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(prob)),</span>
+<span id="cb21-11"><a href="#cb21-11"></a>                  by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"t"</span>)]</span>
+<span id="cb21-12"><a href="#cb21-12"></a>  <span class="kw">add_state_name</span>(x)</span>
+<span id="cb21-13"><a href="#cb21-13"></a>}</span>
+<span id="cb21-14"><a href="#cb21-14"></a></span>
+<span id="cb21-15"><a href="#cb21-15"></a><span class="co"># Plot of state probabilities</span></span>
+<span id="cb21-16"><a href="#cb21-16"></a>stprobs_cr &lt;-<span class="st"> </span><span class="kw">summarize_stprobs</span>(econmod_cr<span class="op">$</span>stateprobs_)</span>
+<span id="cb21-17"><a href="#cb21-17"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(stprobs_cr, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> t, <span class="dt">y =</span> prob_mean, <span class="dt">col =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id))) <span class="op">+</span></span>
+<span id="cb21-18"><a href="#cb21-18"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span>state_name) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb21-19"><a href="#cb21-19"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Years"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability in health state"</span>) <span class="op">+</span></span>
+<span id="cb21-20"><a href="#cb21-20"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Strategy"</span>) <span class="op">+</span></span>
+<span id="cb21-21"><a href="#cb21-21"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span></span>
+<span id="cb21-22"><a href="#cb21-22"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
 <p><img src="ctstm_files/figure-html/stprobs_by_strategy_plot-1.png" width="672"></p>
 <p>Next, we compare the state probabilities from the “clock reset” and “clock forward” models.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>econmod_cf<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>, <span class="dv">20</span> , <span class="dv">1</span><span class="op">/</span><span class="dv">12</span>)) </span>
-<span id="cb24-2"><a href="#cb24-2"></a>stprobs_cf &lt;-<span class="st"> </span><span class="kw">summarize_stprobs</span>(econmod_cf<span class="op">$</span>stateprobs_)</span>
-<span id="cb24-3"><a href="#cb24-3"></a></span>
-<span id="cb24-4"><a href="#cb24-4"></a><span class="co"># Compare "clock forward" and "clock reset" cases</span></span>
-<span id="cb24-5"><a href="#cb24-5"></a>stprobs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/rbindlist">rbind</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(stprobs_cf, <span class="dt">clock =</span> <span class="st">"Forward"</span>),</span>
-<span id="cb24-6"><a href="#cb24-6"></a>                 <span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(stprobs_cr, <span class="dt">clock =</span> <span class="st">"Reset"</span>))</span>
-<span id="cb24-7"><a href="#cb24-7"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(stprobs[strategy_id <span class="op">==</span><span class="st"> </span><span class="dv">1</span>], </span>
-<span id="cb24-8"><a href="#cb24-8"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> t, <span class="dt">y =</span> prob_mean, <span class="dt">col =</span> clock)) <span class="op">+</span></span>
-<span id="cb24-9"><a href="#cb24-9"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span>state_name) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb24-10"><a href="#cb24-10"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Years"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability in health state"</span>) <span class="op">+</span></span>
-<span id="cb24-11"><a href="#cb24-11"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Clock"</span>) <span class="op">+</span></span>
-<span id="cb24-12"><a href="#cb24-12"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span></span>
-<span id="cb24-13"><a href="#cb24-13"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>econmod_cf<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>, <span class="dv">20</span> , <span class="dv">1</span><span class="op">/</span><span class="dv">12</span>)) </span>
+<span id="cb22-2"><a href="#cb22-2"></a>stprobs_cf &lt;-<span class="st"> </span><span class="kw">summarize_stprobs</span>(econmod_cf<span class="op">$</span>stateprobs_)</span>
+<span id="cb22-3"><a href="#cb22-3"></a></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="co"># Compare "clock forward" and "clock reset" cases</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a>stprobs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/rbindlist">rbind</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(stprobs_cf, <span class="dt">clock =</span> <span class="st">"Forward"</span>),</span>
+<span id="cb22-6"><a href="#cb22-6"></a>                 <span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(stprobs_cr, <span class="dt">clock =</span> <span class="st">"Reset"</span>))</span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(stprobs[strategy_id <span class="op">==</span><span class="st"> </span><span class="dv">1</span>], </span>
+<span id="cb22-8"><a href="#cb22-8"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> t, <span class="dt">y =</span> prob_mean, <span class="dt">col =</span> clock)) <span class="op">+</span></span>
+<span id="cb22-9"><a href="#cb22-9"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span>state_name) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb22-10"><a href="#cb22-10"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Years"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability in health state"</span>) <span class="op">+</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Clock"</span>) <span class="op">+</span></span>
+<span id="cb22-12"><a href="#cb22-12"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span></span>
+<span id="cb22-13"><a href="#cb22-13"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
 <p><img src="ctstm_files/figure-html/stprobs_by_timescale_plot-1.png" width="672"></p>
 <p>The probabilities are generally quite similar, implying that the choice of timescale has a small impact on the results. This is not unexpected given that patients spend considerably more time in the healthy state and the predicted hazard rates are very similar in the healthy state.</p>
 </div>
@@ -361,51 +356,51 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <h3 class="hasAnchor">
 <a href="#qalys" class="anchor"></a><span class="header-section-number">4.2.2</span> QALYs</h3>
 <p>QALYs (and life-years) are simulated using <code>$sim_qalys()</code>. By default, mean QALYs are computed by treatment strategy, health state, and PSA sample (the <code>by_patient</code> option can be used to compute aggregated QALYs at the patient level). Here, we used the “clock reset” model to compute both undiscounted QALYs (<code>dr = 0</code>) and QALYs discounted at 3%.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>econmod_cr<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,.<span class="dv">03</span>))</span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>qalys_)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>econmod_cr<span class="op">$</span><span class="kw">sim_qalys</span>(<span class="dt">dr =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,.<span class="dv">03</span>))</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>qalys_)</span></code></pre></div>
 <pre><code>##    sample strategy_id state_id dr     qalys      lys
-## 1:      1           1        1  0 3.2320541 7.482911
-## 2:      1           1        2  0 0.5590484 1.445154
-## 3:      1           2        1  0 3.6215944 8.384782
-## 4:      1           2        2  0 0.4811626 1.243817
-## 5:      2           1        1  0 3.8180763 5.744700
-## 6:      2           1        2  0 1.3636947 1.386749</code></pre>
+## 1:      1           1        1  0 3.5826621 6.301982
+## 2:      1           1        2  0 1.0250221 1.363889
+## 3:      1           2        1  0 4.7631374 8.378464
+## 4:      1           2        2  0 0.8135966 1.082567
+## 5:      2           1        1  0 2.6628802 6.159269
+## 6:      2           1        2  0 1.5629986 1.565255</code></pre>
 <p>We summarize the simulated QALYs by computing means by treatment strategy and health state across the PSA samples.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>qalys_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>qalys_[, .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(qalys)),</span>
-<span id="cb27-2"><a href="#cb27-2"></a>                                    by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span>)]</span>
-<span id="cb27-3"><a href="#cb27-3"></a><span class="kw">add_state_name</span>(qalys_summary)</span>
-<span id="cb27-4"><a href="#cb27-4"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(qalys_summary[dr <span class="op">==</span><span class="st"> </span><span class="fl">.03</span>],</span>
-<span id="cb27-5"><a href="#cb27-5"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id), <span class="dt">y =</span> mean, <span class="dt">fill =</span> state_name)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb27-6"><a href="#cb27-6"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span>(<span class="dt">stat =</span> <span class="st">"identity"</span>) <span class="op">+</span></span>
-<span id="cb27-7"><a href="#cb27-7"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_fill_discrete</a></span>(<span class="dt">name =</span> <span class="st">""</span>) <span class="op">+</span></span>
-<span id="cb27-8"><a href="#cb27-8"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Strategy"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Mean QALYs"</span>) <span class="op">+</span></span>
-<span id="cb27-9"><a href="#cb27-9"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>qalys_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>qalys_[, .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(qalys)),</span>
+<span id="cb25-2"><a href="#cb25-2"></a>                                    by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span>)]</span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="kw">add_state_name</span>(qalys_summary)</span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(qalys_summary[dr <span class="op">==</span><span class="st"> </span><span class="fl">.03</span>],</span>
+<span id="cb25-5"><a href="#cb25-5"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id), <span class="dt">y =</span> mean, <span class="dt">fill =</span> state_name)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb25-6"><a href="#cb25-6"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span>(<span class="dt">stat =</span> <span class="st">"identity"</span>) <span class="op">+</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_fill_discrete</a></span>(<span class="dt">name =</span> <span class="st">""</span>) <span class="op">+</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Strategy"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Mean QALYs"</span>) <span class="op">+</span></span>
+<span id="cb25-9"><a href="#cb25-9"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
 <p><img src="ctstm_files/figure-html/qalys_plot-1.png" width="672"></p>
 </div>
 <div id="costs" class="section level3">
 <h3 class="hasAnchor">
 <a href="#costs" class="anchor"></a><span class="header-section-number">4.2.3</span> Costs</h3>
 <p>Costs are computed in the same way as QALYs, except that they are computed by category. We use the “clock reset” model and a 3% discount rate.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>econmod_cr<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> <span class="fl">0.03</span>)</span>
-<span id="cb28-2"><a href="#cb28-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>costs_)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>econmod_cr<span class="op">$</span><span class="kw">sim_costs</span>(<span class="dt">dr =</span> <span class="fl">0.03</span>)</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>costs_)</span></code></pre></div>
 <pre><code>##    sample strategy_id state_id   dr category     costs
-## 1:      1           1        1 0.03     Drug 28898.278
-## 2:      1           1        2 0.03     Drug  5660.795
-## 3:      1           2        1 0.03     Drug 63918.216
-## 4:      1           2        2 0.03     Drug  9707.357
-## 5:      2           1        1 0.03     Drug 23189.995
-## 6:      2           1        2 0.03     Drug  5521.021</code></pre>
+## 1:      1           1        1 0.03     Drug 24801.038
+## 2:      1           1        2 0.03     Drug  5387.899
+## 3:      1           2        1 0.03     Drug 63360.186
+## 4:      1           2        2 0.03     Drug  8436.742
+## 5:      2           1        1 0.03     Drug 24319.141
+## 6:      2           1        2 0.03     Drug  6228.492</code></pre>
 <p>As with QALYs, we summarize costs by computing means (now by treatment strategy and category) across the PSA samples.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"scales"</span>)</span>
-<span id="cb30-2"><a href="#cb30-2"></a>costs_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>costs_[dr <span class="op">==</span><span class="st"> </span><span class="fl">.03</span> , .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(costs)),</span>
-<span id="cb30-3"><a href="#cb30-3"></a>                                   by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"category"</span>)]</span>
-<span id="cb30-4"><a href="#cb30-4"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(costs_summary,</span>
-<span id="cb30-5"><a href="#cb30-5"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id), <span class="dt">y =</span> mean, <span class="dt">fill =</span> category)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb30-6"><a href="#cb30-6"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span>(<span class="dt">stat =</span> <span class="st">"identity"</span>) <span class="op">+</span></span>
-<span id="cb30-7"><a href="#cb30-7"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_fill_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Category"</span>) <span class="op">+</span></span>
-<span id="cb30-8"><a href="#cb30-8"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span>(<span class="dt">label =</span> scales<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/scales/topics/dollar_format">dollar_format</a></span>()) <span class="op">+</span></span>
-<span id="cb30-9"><a href="#cb30-9"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Strategy"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Mean costs"</span>) <span class="op">+</span></span>
-<span id="cb30-10"><a href="#cb30-10"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"scales"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2"></a>costs_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>costs_[dr <span class="op">==</span><span class="st"> </span><span class="fl">.03</span> , .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(costs)),</span>
+<span id="cb28-3"><a href="#cb28-3"></a>                                   by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"category"</span>)]</span>
+<span id="cb28-4"><a href="#cb28-4"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(costs_summary,</span>
+<span id="cb28-5"><a href="#cb28-5"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id), <span class="dt">y =</span> mean, <span class="dt">fill =</span> category)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb28-6"><a href="#cb28-6"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span>(<span class="dt">stat =</span> <span class="st">"identity"</span>) <span class="op">+</span></span>
+<span id="cb28-7"><a href="#cb28-7"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_fill_discrete</a></span>(<span class="dt">name =</span> <span class="st">"Category"</span>) <span class="op">+</span></span>
+<span id="cb28-8"><a href="#cb28-8"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span>(<span class="dt">label =</span> scales<span class="op">::</span><span class="kw"><a href="https://scales.r-lib.org//reference/dollar_format.html">dollar_format</a></span>()) <span class="op">+</span></span>
+<span id="cb28-9"><a href="#cb28-9"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Strategy"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Mean costs"</span>) <span class="op">+</span></span>
+<span id="cb28-10"><a href="#cb28-10"></a><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
 <p><img src="ctstm_files/figure-html/costs_plot-1.png" width="672"></p>
 </div>
 </div>
@@ -414,9 +409,9 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <h1 class="hasAnchor">
 <a href="#decision-analysis" class="anchor"></a><span class="header-section-number">5</span> Decision analysis</h1>
 <p>Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The <code>$summarize()</code> method creates a <a href="https://hesim-dev.github.io/hesim/reference/ce.html">“cost-effectiveness”</a> object with mean costs and QALYs computed for each PSA sample. The <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code> can then be used for cost-effectiveness analysis as described <a href="icea.html">here</a>.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>ce_sim &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span><span class="kw">summarize</span>()</span>
-<span id="cb31-2"><a href="#cb31-2"></a>icea_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea</a></span>(ce_sim, <span class="dt">dr_qalys =</span> <span class="fl">.03</span>, <span class="dt">dr_costs =</span> <span class="fl">.03</span>)</span>
-<span id="cb31-3"><a href="#cb31-3"></a>icea_pw_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce_sim, <span class="dt">comparator =</span> <span class="dv">1</span>, <span class="dt">dr_qalys =</span> <span class="fl">.03</span>, <span class="dt">dr_costs =</span> <span class="fl">.03</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>ce_sim &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span><span class="kw">summarize</span>()</span>
+<span id="cb29-2"><a href="#cb29-2"></a>icea_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea</a></span>(ce_sim, <span class="dt">dr_qalys =</span> <span class="fl">.03</span>, <span class="dt">dr_costs =</span> <span class="fl">.03</span>)</span>
+<span id="cb29-3"><a href="#cb29-3"></a>icea_pw_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce_sim, <span class="dt">comparator =</span> <span class="dv">1</span>, <span class="dt">dr_qalys =</span> <span class="fl">.03</span>, <span class="dt">dr_costs =</span> <span class="fl">.03</span>)</span></code></pre></div>
 </div>
   </div>
 

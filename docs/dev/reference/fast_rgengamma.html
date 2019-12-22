@@ -67,7 +67,7 @@ for speed. Equivalent to flexsurv::rgengamma." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.1.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
       </span>
     </div>
 
@@ -183,11 +183,11 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>()
 <span class='no'>r1</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.002   0.000   0.001 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>()
+#&gt;   0.004   0.000   0.002 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>()
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/GenGamma'>rgengamma</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/proc.time'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.003   0.000   0.003 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+#&gt;   0.004   0.000   0.002 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 #&gt;   0.0000   0.6979   3.5891  10.0519  11.4759 139.7566 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>r2</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 #&gt;   0.0000   0.8895   3.6512  10.9570  11.9477 296.0166 </div><div class='input'>
 </div></pre>
