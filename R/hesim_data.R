@@ -2,13 +2,13 @@
 
 #' Create a data table of treatment lines
 #' 
-#' Convert a list of treatment lines for multiple treatment strategies to a \code{\link{data.table}}
-#' suitable for use with \link{hesim_data}.
+#' Convert a list of treatment lines for multiple treatment strategies to a 
+#' `data.table`.
 #' @param strategy_list A list where each element is a treatment strategy 
 #' consisting of a vector of treatments. 
 #' @param strategy_ids A numeric vector denoting the numeric id of each strategy
 #' in \code{strategy_list}.
-#' @return Returns a \code{\link{data.table}} in tidy format with three columns
+#' @return Returns a `data.table` in tidy format with three columns:
 #' \describe{
 #' \item{strategy_id}{Treatment strategy ids.}
 #' \item{line}{Line of therapy.}

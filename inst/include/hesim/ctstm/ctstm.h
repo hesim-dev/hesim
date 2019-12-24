@@ -157,13 +157,6 @@ public:
   }
   
   /** 
-   * Return the number of modeled treatment lines.
-   */    
-  std::vector<int> get_n_lines() const {
-    return obs_index_.n_lines_;
-  }
-  
-  /** 
    * Return the number of modeled patients.
    */     
   int get_n_patients() const {

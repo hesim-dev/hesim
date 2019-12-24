@@ -7,32 +7,28 @@
 input_mats(X, ...)
 }
 \arguments{
-\item{X}{A list of input matrices for predicting the values of each parameter in a statistical model. May also be
-a list of lists of input matrices when a list of separate models is fit (e.g., with \link{flexsurvreg_list}).}
+\item{X}{A list of input matrices for predicting the values of each parameter
+in a statistical model. May also be a list of lists of input matrices when a
+list of separate models is fit (e.g., with \code{\link[=flexsurvreg_list]{flexsurvreg_list()}}).}
 
-\item{...}{Arguments to pass to \code{\link{id_attributes}}.}
+\item{...}{Arguments to pass to \code{\link[=id_attributes]{id_attributes()}}.}
 }
 \description{
-Create an object of class "input_mats", which contains inputs matrices
-for simulating a statistical model. Consists of (i) input matrices, \code{X},
-(ii) ID variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
-the \code{X} matrices. More details are provided under "Details" below. Note that an "input_mats"
-object should typically be created using \code{\link{create_input_mats}}.
+Create an object of class \code{input_mats}, which contains inputs matrices
+for simulating a statistical model. Consists of (i) input matrices, \code{X}, and
+(ii) \link[=id_attributes]{metadata} used to index each matrix in \code{X}.
+More details are provided under "Details" below.
 }
 \details{
-Each row of each matrix \code{X} is an input vector, \eqn{x_{hijk}}, where \eqn{h} denotes
-a health-related index, \eqn{i} indexes a patient, \eqn{j} indexes a treatment line,
-and \eqn{k} is a treatment strategy. A health-related index is either a health state
-(e.g., \code{state_id}) or a transition between health states (e.g., \code{transition_id}).
+Each row of each matrix \code{X} is an input vector, \eqn{x_{hik}}, where \eqn{h} denotes
+a health-related index, \eqn{i} indexes a patient, and \eqn{k} is a treatment strategy.
+A health-related index is either a health state
+(e.g., \code{state_id} or a transition between health states (e.g., \code{transition_id}).
 In some cases, the health-related index \eqn{h} can be suppressed and separate models
-can be fit for each health index. This is, for instance, the case in a partitioned survival
-model where separate models are fit for each survival endpoint. Likewise, models
-can be fit without multiple treatment lines as would, again, be the case in a
-partitioned survival analysis where sequential treatment would be incorporated by
-adding additional health states rather than by using the index \eqn{j}.
+can be fit for each health index. This is, for instance, the case in a \link[=Psm]{partitioned survival model} where separate models are fit for each survival endpoint.
 
 The rows of the matrices in \code{X} must be sorted in a manner consistent with the ID variables as
-described in \code{\link{id_attributes}}.
+described in \code{\link[=id_attributes]{id_attributes()}}.
 }
 \examples{
 strategies <- data.frame(strategy_id = c(1, 2))
@@ -52,5 +48,5 @@ input_mats <- input_mats(X = list(mu = model.matrix(~ age, dat)),
 print(input_mats)
 }
 \seealso{
-\code{\link{create_input_mats}}
+\code{\link[=create_input_mats]{create_input_mats()}}
 }

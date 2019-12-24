@@ -1,28 +1,25 @@
 # input_mats class -------------------------------------------------------------
 #' Input matrices for a statistical model
 #' 
-#' Create an object of class "input_mats", which contains inputs matrices
-#' for simulating a statistical model. Consists of (i) input matrices, \code{X},
-#' (ii) ID variables indexing the rows of each matrix in \code{X}, and (iii) the dimensions of
-#' the \code{X} matrices. More details are provided under "Details" below. Note that an "input_mats" 
-#' object should typically be created using \code{\link{create_input_mats}}. 
+#' Create an object of class `input_mats`, which contains inputs matrices
+#' for simulating a statistical model. Consists of (i) input matrices, `X`, and 
+#' (ii) [metadata][id_attributes()] used to index each matrix in `X`. 
+#' More details are provided under "Details" below. 
 #' 
-#' @param X A list of input matrices for predicting the values of each parameter in a statistical model. May also be
-#' a list of lists of input matrices when a list of separate models is fit (e.g., with \link{flexsurvreg_list}).
-#' @param ... Arguments to pass to \code{\link{id_attributes}}.
-#' @details Each row of each matrix \code{X} is an input vector, \eqn{x_{hijk}}, where \eqn{h} denotes
-#' a health-related index, \eqn{i} indexes a patient, \eqn{j} indexes a treatment line,
-#' and \eqn{k} is a treatment strategy. A health-related index is either a health state
-#' (e.g., \code{state_id}) or a transition between health states (e.g., \code{transition_id}).
+#' @param X A list of input matrices for predicting the values of each parameter 
+#' in a statistical model. May also be a list of lists of input matrices when a 
+#' list of separate models is fit (e.g., with [flexsurvreg_list()]).
+#' @param ... Arguments to pass to [id_attributes()].
+#' @details Each row of each matrix `X` is an input vector, \eqn{x_{hik}}, where \eqn{h} denotes
+#' a health-related index, \eqn{i} indexes a patient, and \eqn{k} is a treatment strategy. 
+#' A health-related index is either a health state
+#' (e.g., `state_id` or a transition between health states (e.g., `transition_id`).
 #' In some cases, the health-related index \eqn{h} can be suppressed and separate models
-#' can be fit for each health index. This is, for instance, the case in a partitioned survival 
-#' model where separate models are fit for each survival endpoint. Likewise, models 
-#' can be fit without multiple treatment lines as would, again, be the case in a 
-#' partitioned survival analysis where sequential treatment would be incorporated by 
-#' adding additional health states rather than by using the index \eqn{j}.
+#' can be fit for each health index. This is, for instance, the case in a [partitioned survival 
+#' model][Psm] where separate models are fit for each survival endpoint. 
 #' 
 #' The rows of the matrices in \code{X} must be sorted in a manner consistent with the ID variables as
-#' described in \code{\link{id_attributes}}.
+#' described in [id_attributes()].
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3), 
@@ -39,7 +36,7 @@
 #'                          patient_id = dat$patient_id,
 #'                         n_patients = length(unique(dat$patient_id)))
 #' print(input_mats)
-#' @seealso \code{\link{create_input_mats}}
+#' @seealso [create_input_mats()]
 #' @export
 input_mats <- function(X, ...){
   object <- new_input_mats(X, ...)
@@ -75,9 +72,9 @@ check.input_mats <- function(object){
   }
   
   # Check that rows in X are consistent with ID variables
-  id_vars <- c("strategy_id", "patient_id", "line", "state_id", "transition_id",
+  id_vars <- c("strategy_id", "patient_id", "state_id", "transition_id",
                "time_id")
-  id_vars_n <- c("n_strategies", "n_patients", "n_lines", "n_states", "n_transitions",
+  id_vars_n <- c("n_strategies", "n_patients", "n_states", "n_transitions",
                  "n_times")
   for (i in 1:length(id_vars)){
     if (!is.null(object[[id_vars[i]]])){
@@ -98,7 +95,6 @@ check.input_mats <- function(object){
 size_id_map <- function(){
   c(strategy_id = "n_strategies", 
     patient_id = "n_patients",
-    line = "n_lines",
     state_id = "n_states",
     transition_id = "n_transitions",
     time_id = "n_times")

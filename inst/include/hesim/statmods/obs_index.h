@@ -93,59 +93,17 @@ private:
   
   // Other current indices
   int strategy_index_; ///< Strategy index used to select observation.
-  int line_index_; ///< Line index used to select observation.
   int patient_index_; ///< Patient index used to select observation.
   int health_index_; ///< Health index used to select observation. 
   int time_index_; ///< Time index used to select observation.
   
-  std::vector<int> cum_strategy_sizes_; ///< Cumulative number of observations for first @c n-1 strategies
-                                        ///< where @c n is the total number of strategies. First element is
-                                        ///< equal to 0. Used to get row index since that number of rows
-                                        ///< varies by treatment strategy.
-  int cum_strategy_size_; ///< Cumulative size of selected @c stategy_id_; that is, @c stategy_id_
-                          ///< is used to select an element from @c cum_strategy_sizes_.  
-  
   // Vector of IDs
   std::vector<int> strategy_id_vec_; ///< Vector of strategy IDs.
-  std::vector<int> line_vec_; ///< Vector of treatment lines.
   std::vector<int> patient_id_vec_; ///< Vector of patient IDs.
   std::vector<int> health_id_vec_; ///< Vector of health IDs.
   std::vector<int> grp_id_vec_; ///<Vector of subgroup IDs.
   std::vector<double> patient_wt_vec_; ///<Vector of patient weights.
-                          
-  /** 
-   * Initialize @c n_lines_.
-   * Initialize the number of treatment lines (@c n_lines_) from @c R object @c input_data.
-   * @param R_object An @c R object containing ID attributes.
-   * @param n_strategies The number of strategies based on @c n_strategies_.
-   * @return None.
-   */  
-  void init_n_lines_(Rcpp::List R_object, int n_strategies) {
-    if(!hesim::is_null(R_object, "n_lines")){
-      Rcpp::DataFrame n_lines_df = Rcpp::as<Rcpp::DataFrame > (R_object["n_lines"]);
-      n_lines_ =  Rcpp::as<std::vector<int> > (n_lines_df["N"]);
-    }
-    else{
-      std::vector<int> n_lines(n_strategies, 1);
-      n_lines_ = n_lines;
-    }    
-  }
-  
-  /** 
-   * Initialize @c cum_strategy_sizes_
-   * @param[out] cum_strategy_sizes_ The private member @c cum_strategy_sizes_.
-   * @return None.
-   */    
-  void init_cum_strategy_sizes_() {
-    cum_strategy_sizes_.reserve(n_strategies_);
-    int cum_size = 0;
-    cum_strategy_sizes_.push_back(cum_size);
-    for (int i = 0; i < n_strategies_ - 1; ++i){
-      cum_size += n_lines_.at(i) * n_patients_ * n_healthvals_ * n_times_; 
-      cum_strategy_sizes_.push_back(cum_size);
-    }
-  }
- 
+                        
   /** 
    * Initialize @c n_healthvals_
    * @param R_object An @c R object containing the element
@@ -189,33 +147,31 @@ private:
   void init_n_obs_() {
     n_obs_ = 0;
     for (int i = 0; i <n_strategies_; ++i){
-      n_obs_ += n_lines_[i] * n_healthvals_ * n_patients_ * n_times_;
+      n_obs_ += n_healthvals_ * n_patients_ * n_times_;
     }
   }
   
   /** 
    * Set the observation index 
    * Set the observation index given current values of strategy_index_,
-   * line_index_, patient_index_, and health_index_.
+   * patient_index_, and health_index_.
    * @return None.
    */     
   void set_index(){
-    int strategy_row = line_index_ * n_patients_ * n_healthvals_ * n_times_ +
-                       patient_index_ * n_healthvals_ * n_times_ +
-                       health_index_ * n_times_ +
-                       time_index_;
-    index_ = strategy_row + cum_strategy_size_;
+    index_ = strategy_index_ * n_patients_ * n_healthvals_ * n_times_ +
+             patient_index_ * n_healthvals_ * n_times_ +
+             health_index_ * n_times_ +
+             time_index_;
   }  
   
 public:
   
   // Size of each dimension
   int n_strategies_; ///< Number of treatment strategies.
-  std::vector<int> n_lines_; ///< Number of treatment lines for each treatment strategy.
   int n_healthvals_; ///< Number of unique health values (i.e., states, transitions).
   int n_patients_; ///< Number of unique patients.
   int n_times_; ///< Number of unique time intervals.
-  int n_obs_; ///< Number of observations inclusive of strategies, lines, patients, health values, and time intervals.
+  int n_obs_; ///< Number of observations inclusive of strategies, patients, health values, and time intervals.
   
   // Time intervals
   std::vector<double> time_start_; ///< Vector of unique starting times.
@@ -228,17 +184,13 @@ public:
   obs_index(Rcpp::List R_object){
     // Size of each dimension
     n_strategies_ = Rcpp::as<int> (R_object["n_strategies"]);
-    init_n_lines_(R_object, n_strategies_);
     n_patients_ = Rcpp::as<int> (R_object["n_patients"]);
     init_n_healthvals_(R_object);
     init_n_times_(R_object);
     init_n_obs_();
     
-    init_cum_strategy_sizes_();
-    
     // Current index
     strategy_index_ = 0;
-    line_index_ = 0;
     patient_index_ = 0;
     health_index_ = 0;
     time_index_ = 0;
@@ -246,12 +198,6 @@ public:
     
     // ID vectors
     strategy_id_vec_ = Rcpp::as<std::vector<int> >(R_object["strategy_id"]);
-    if (!hesim::is_null(R_object, "line")){
-      line_vec_ = Rcpp::as<std::vector<int> >(R_object["line"]);
-    } 
-    else{
-      line_vec_ = std::vector<int>(strategy_id_vec_.size(), 0);
-    }
     patient_id_vec_ = Rcpp::as<std::vector<int> >(R_object["patient_id"]);
     if (!hesim::is_null(R_object, "transition_id") &&
         !hesim::is_null(R_object, "state_id")){
@@ -290,7 +236,6 @@ public:
    */    
   void set_strategy_index(int strategy_index) {
     strategy_index_ = strategy_index;
-    cum_strategy_size_ = cum_strategy_sizes_.at(strategy_index_);
     set_index();
   }
   
@@ -300,22 +245,7 @@ public:
   int get_strategy_id(){
     return strategy_id_vec_[index_];
   }
-  
-  /** 
-   * Set the treatment line index.
-   */      
-  void set_line_index(int line_index) {
-    line_index_ = line_index;
-    set_index();
-  }
-  
- /** 
-   * Get the treatment line given the current indices
-   */    
-  int get_line(){
-    return line_vec_[index_];
-  }
-  
+
   /** 
    * Set the patient index.
    */   
@@ -387,8 +317,8 @@ public:
   
   /** 
    * The observation index.
-   * Computes the row index of a matrix sorted by strategy_index_, line,
-   * patient_id, and line based on the current member variable.
+   * Returns the curren row index of a matrix given the current strategy_index_,
+   * patient_index_, health_index_, and time_index_.
    * @return The index.
    */ 
   int operator()() const {
@@ -397,25 +327,22 @@ public:
   
   /** 
    * The observation index.
-   * Computes the row index of a matrix sorted by strategy_index_, line_,
+   * Computes the row index of a matrix sorted by strategy_id_,
    * patient_id, health_id, and time_start based on values pass to the function; member
    * variables are updated based on these values. Updates the values of 
-   * strategy_index_, line_index_, patient_index_, health_index_, time_index_, and index_. 
+   * strategy_index_, patient_index_, health_index_, time_index_, and index_. 
    * @param strategy_index The strategy index.
-   * @param line_index The treatment line index.
    * @param patient_index The patient index.
    * @param health_index The health index.
    * @param time_index The time index.
    * @return The index.
    */ 
-  int operator()(int strategy_index, int line_index, int patient_index, int health_index,
+  int operator()(int strategy_index, int patient_index, int health_index,
                  int time_index = 0) {
     strategy_index_ = strategy_index;
-    line_index_ = line_index;
     patient_index_ = patient_index;
     health_index_ = health_index;
     time_index_ = time_index;
-    cum_strategy_size_ = cum_strategy_sizes_.at(strategy_index_);
     set_index();
     return index_;  
   }  

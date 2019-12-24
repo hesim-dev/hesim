@@ -71,7 +71,7 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
 # IndivCtstmTrans --------------------------------------------------------------
 indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
                                     progress = NULL){
-  sample <- from <- to <- line <- NULL # to avoid no visible bindings CRAN warning
+  sample <- from <- to <- NULL # to avoid no visible bindings CRAN warning
   if (any(trans_model$start_age > max_age)){
     stop("Starting ages in the simulation must be less than maximum age.",
          call. = FALSE)
@@ -91,7 +91,6 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
   disprog[, sample := sample + 1]
   disprog[, from := from + 1]
   disprog[, to := to + 1]
-  disprog[, line := NULL] # to do after incorporating treatment lines: case where there are multiple treatment lines
   return(disprog[, ])
 }
 

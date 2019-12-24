@@ -373,17 +373,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_test_obs_index
-int C_test_obs_index(Rcpp::List R_input_data, int strategy_index, int patient_index, int line_index, int health_index);
-RcppExport SEXP _hesim_C_test_obs_index(SEXP R_input_dataSEXP, SEXP strategy_indexSEXP, SEXP patient_indexSEXP, SEXP line_indexSEXP, SEXP health_indexSEXP) {
+int C_test_obs_index(Rcpp::List R_input_data, int strategy_index, int patient_index, int health_index);
+RcppExport SEXP _hesim_C_test_obs_index(SEXP R_input_dataSEXP, SEXP strategy_indexSEXP, SEXP patient_indexSEXP, SEXP health_indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type R_input_data(R_input_dataSEXP);
     Rcpp::traits::input_parameter< int >::type strategy_index(strategy_indexSEXP);
     Rcpp::traits::input_parameter< int >::type patient_index(patient_indexSEXP);
-    Rcpp::traits::input_parameter< int >::type line_index(line_indexSEXP);
     Rcpp::traits::input_parameter< int >::type health_index(health_indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_obs_index(R_input_data, strategy_index, patient_index, line_index, health_index));
+    rcpp_result_gen = Rcpp::wrap(C_test_obs_index(R_input_data, strategy_index, patient_index, health_index));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -617,7 +616,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_trans_mat_n_trans", (DL_FUNC) &_hesim_C_test_trans_mat_n_trans, 1},
     {"_hesim_C_test_rtruncnorm", (DL_FUNC) &_hesim_C_test_rtruncnorm, 4},
     {"_hesim_C_test_xptr_test_time_fun", (DL_FUNC) &_hesim_C_test_xptr_test_time_fun, 1},
-    {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 5},
+    {"_hesim_C_test_obs_index", (DL_FUNC) &_hesim_C_test_obs_index, 4},
     {"_hesim_C_test_obs_index_ids", (DL_FUNC) &_hesim_C_test_obs_index_ids, 5},
     {"_hesim_test_quad_dnorm", (DL_FUNC) &_hesim_test_quad_dnorm, 2},
     {"_hesim_test_quad_ier1", (DL_FUNC) &_hesim_test_quad_ier1, 0},

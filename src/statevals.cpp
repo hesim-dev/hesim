@@ -37,7 +37,7 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
         for (int h = 0; h < obs_index.n_healthvals_; ++h){
           int time_index = 0;
           for (int t = 0; t < times.size(); ++t){
-            int obs = obs_index(k, 0, i, h, time_index);
+            int obs = obs_index(k, i, h, time_index);
             strategy_id_vec[index] = obs_index.get_strategy_id();
             sample_vec[index] = s;
             state_id_vec[index] = obs_index.get_health_id();

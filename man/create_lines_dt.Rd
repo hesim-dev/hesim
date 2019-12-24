@@ -14,7 +14,7 @@ consisting of a vector of treatments.}
 in \code{strategy_list}.}
 }
 \value{
-Returns a \code{\link{data.table}} in tidy format with three columns
+Returns a \code{data.table} in tidy format with three columns:
 \describe{
 \item{strategy_id}{Treatment strategy ids.}
 \item{line}{Line of therapy.}
@@ -22,8 +22,8 @@ Returns a \code{\link{data.table}} in tidy format with three columns
 }
 }
 \description{
-Convert a list of treatment lines for multiple treatment strategies to a \code{\link{data.table}}
-suitable for use with \link{hesim_data}.
+Convert a list of treatment lines for multiple treatment strategies to a
+\code{data.table}.
 }
 \examples{
 strategies <- list(c(1, 2, 3),

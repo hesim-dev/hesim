@@ -30,28 +30,15 @@ SEXP C_test_xptr_test_time_fun(Rcpp::List L) {
 int C_test_obs_index(Rcpp::List R_input_data,
                  int strategy_index,
                  int patient_index,
-                 int line_index = -1,
                  int health_index = -1){
   hesim::statmods::obs_index obs_index(R_input_data);
-  if (line_index == -1 && health_index == -1){
+  if (health_index == -1){
     obs_index.set_strategy_index(strategy_index);
     obs_index.set_patient_index(patient_index);
     return obs_index();  
-  }
-  else if (line_index == -1){
-    obs_index.set_strategy_index(strategy_index);
-    obs_index.set_patient_index(patient_index);
-    obs_index.set_health_index(health_index);
-    return obs_index();  
-  }
-  else if (health_index == -1){
-    obs_index.set_strategy_index(strategy_index);
-    obs_index.set_patient_index(patient_index);
-    obs_index.set_line_index(line_index);
-    return obs_index();
   }
   else{
-   return obs_index(strategy_index, line_index, patient_index, health_index);
+   return obs_index(strategy_index, patient_index, health_index);
   }
 }
 
