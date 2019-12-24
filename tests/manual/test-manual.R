@@ -112,7 +112,7 @@ sim_stprobs_hesim <- function(fit, n_patients, t_grid,
   stprobs[, state := factor(state_id,
                                    levels = 1:3,
                                    labels = paste0("State ", 1:3))]
-  stprobs[, c("sample", "strategy_id", "state_id") := NULL]
+  stprobs[, c("sample", "strategy_id", "state_id", "grp_id") := NULL]
   stprobs[, lab := "hesim"]
   setnames(stprobs, "t", "time")
   return(stprobs)

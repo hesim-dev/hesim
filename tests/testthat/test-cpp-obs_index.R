@@ -35,7 +35,7 @@ get_R_rowvec <- function(obs){
 test_obs_index <- function(strategy_idx, patient_idx, state_idx){
   R_index <- which(X$strategy_id == strategy_idx & X$patient_id == patient_idx & 
                      X$state_id == state_idx)
-  C_index <- hesim:::C_test_obs_index(X, strategy_index= strategy_idx - 1,
+  C_index <- hesim:::C_test_obs_index(X, strategy_index = strategy_idx - 1,
                                      patient_index = patient_idx - 1,
                                      health_index = state_idx - 1)
   expect_equal(R_index - 1, C_index)
