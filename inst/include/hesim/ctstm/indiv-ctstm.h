@@ -128,7 +128,6 @@ public:
 struct disease_prog {
   std::vector<int> sample_; ///< A randomly sampled parameter set.
   std::vector<int> strategy_id_; ///< The strategy ID.
-  std::vector<int> line_; ///< The line of treatment.
   std::vector<int> patient_id_; ///< The patient ID.
   std::vector<int> grp_id_; ///< The subgroup ID.
   std::vector<int> from_; ///< The state transitioned from.
@@ -150,13 +149,6 @@ struct disease_prog {
   disease_prog(Rcpp::DataFrame R_disease_prog) {
     sample_ = Rcpp::as<std::vector<int> >(R_disease_prog["sample"]);
     strategy_id_ = Rcpp::as<std::vector<int> >(R_disease_prog["strategy_id"]);
-    if(R_disease_prog.containsElementNamed("line")){
-     line_ = Rcpp::as<std::vector<int> >(R_disease_prog["line"]); 
-     add_constant(line_, -1);  
-    }
-    else{
-      line_ = std::vector<int>(sample_.size(), 0);
-    }
     patient_id_ = Rcpp::as<std::vector<int> >(R_disease_prog["patient_id"]);
     from_ = Rcpp::as<std::vector<int> >(R_disease_prog["from"]);
     to_ = Rcpp::as<std::vector<int> >(R_disease_prog["to"]);
@@ -178,7 +170,6 @@ struct disease_prog {
   void reserve(int n) {
     sample_.reserve(n);
     strategy_id_.reserve(n);
-    line_.reserve(n);
     patient_id_.reserve(n);
     from_.reserve(n);
     to_.reserve(n);
