@@ -54,7 +54,7 @@ expanded_hesim_dat <- expand(hesim_dat, by = c("strategies", "patients",
 f <- formula_list(~ age)
 X <- create_input_mats(f, expanded_hesim_dat)
 
-test_obs_index <- function(strategy_idx, line_idx, patient_idx, transition_idx){
+test_obs_index <- function(strategy_idx, patient_idx, transition_idx){
   R_index <- which(X$strategy_id == strategy_idx & X$patient_id == patient_idx & 
                      X$transition_id == transition_idx)
   C_index <- hesim:::C_test_obs_index(X, strategy_index = strategy_idx - 1,
@@ -113,7 +113,6 @@ test_obs_id <- function(strategy_idx, patient_idx, health_idx, member){
   expect_equal(R_id, C_id)
 }
 test_obs_id(strategy_idx = 2, patient_idx = 3, health_idx = 2, "strategy_id")
-expect_error(test_obs_id(strategy_idx = 2, patient_idx = 3, health_idx = 2, "line"))
 test_obs_id(strategy_idx = 2, patient_idx = 3, health_idx = 2, "patient_id")
 test_obs_id(strategy_idx = 1, patient_idx = 2, health_idx = 2, "patient_id")
 test_obs_id(strategy_idx = 1, patient_idx = 2, health_idx = 1, "state_id")

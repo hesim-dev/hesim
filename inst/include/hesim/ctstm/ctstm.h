@@ -190,8 +190,8 @@ public:
   /** 
    * Summarize the survival model for a given health state transition.
    * The summary is conditional on the randomly sampled parameter set,
-   * the health state transition, the treatment strategy, line, and patient. The
-   * member obs_index_ should be updated by treatment strategy, line, and patient
+   * the health state transition, the treatment strategy, and patient. The
+   * member obs_index_ should be updated by treatment strategy, and patient
    * before calling summary. 
    * @param trans A health state transition identification number.
    * @param sample A random sample of the parameters from the posterior
