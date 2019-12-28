@@ -11,8 +11,8 @@ namespace psm {
 ****************/
 // Base case
 surv_mods::surv_mods(Rcpp::Environment R_PsmCurves)
-  : obs_index_(Rcpp::as<Rcpp::List>(R_PsmCurves["input_mats"])){
-  Rcpp::Environment R_input_mats = Rcpp::as<Rcpp::Environment > (R_PsmCurves["input_mats"]);
+  : obs_index_(Rcpp::as<Rcpp::List>(R_PsmCurves["input_data"])){
+  Rcpp::Environment R_input_mats = Rcpp::as<Rcpp::Environment > (R_PsmCurves["input_data"]);
   strategy_id_ = Rcpp::as<std::vector<int> >(R_input_mats["strategy_id"]);
   patient_id_ = Rcpp::as<std::vector<int> >(R_input_mats["patient_id"]);
 }
@@ -36,7 +36,7 @@ std::unique_ptr<surv_mods> surv_mods::create(Rcpp::Environment R_PsmCurves){
 surv_list::surv_list(Rcpp::Environment R_PsmCurves)
   : surv_mods(R_PsmCurves),
     params_(Rcpp::as<Rcpp::List>(R_PsmCurves["params"])){
-    Rcpp::List R_input_mats = Rcpp::as<Rcpp::List > (R_PsmCurves["input_mats"]);
+    Rcpp::List R_input_mats = Rcpp::as<Rcpp::List > (R_PsmCurves["input_data"]);
     X_ = Rcpp::as<vecmats_2d>(R_input_mats["X"]);
 }
 
@@ -298,6 +298,3 @@ Rcpp::List C_psm_sim_stateprobs(Rcpp::DataFrame R_psm_survival,
   ));    
   
 }
-
-
-

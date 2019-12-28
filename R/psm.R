@@ -33,14 +33,14 @@ create_PsmCurves.flexsurvreg_list <- function(object, input_data, n = 1000, poin
   psfit <- partsurvfit(object, est_data)
   input_mats <- create_input_mats(psfit, input_data, id_vars = c("strategy_id", "patient_id"))
   params <- create_params(psfit, n = n, point_estimate = point_estimate, bootstrap = bootstrap)
-  return(PsmCurves$new(input_mats = input_mats, params = params))
+  return(PsmCurves$new(input_data = input_mats, params = params))
 }
 
 #' @export
 #' @rdname create_PsmCurves
 create_PsmCurves.params_surv_list <- function(object, input_data, ...){
   input_mats <- create_input_mats(object, input_data)
-  return(PsmCurves$new(input_mats = input_mats, params = object))
+  return(PsmCurves$new(input_data = input_mats, params = object))
 }
 
 
@@ -111,18 +111,18 @@ PsmCurves <- R6::R6Class("PsmCurves",
     #' @field params An object of class [params_surv_list].
     params = NULL,
     
-    #' @field input_mats An object of class [input_mats]. Each row in `X` must
+    #' @field input_data An object of class [input_mats]. Each row in `X` must
     #' be a unique treatment strategy and patient.
-    input_mats = NULL,
+    input_data = NULL,
 
     #' @description
     #' Create a new `PsmCurves` object.
     #' @param params The `params` field.
-    #' @param input_mats The `input_mats` field.
+    #' @param input_data The `input_data` field.
     #' @return A new `PsmCurves` object.
-    initialize = function(params, input_mats) {
+    initialize = function(params, input_data) {
       self$params <- params
-      self$input_mats <- input_mats
+      self$input_data <- input_data
     },
 
     #' @description
@@ -175,8 +175,8 @@ PsmCurves <- R6::R6Class("PsmCurves",
     #' @description
     #' Input validation for class. Checks that fields are the correct type.     
     check = function(){
-      if(!inherits(self$input_mats, "input_mats")){
-        stop("'input_mats' must be an object of class 'input_mats'",
+      if(!inherits(self$input_data, "input_mats")){
+        stop("'input_data' must be an object of class 'input_mats'",
             call. = FALSE)
       }
       if(!inherits(self$params, c("params_surv_list", 
@@ -331,8 +331,8 @@ Psm <- R6::R6Class("Psm",
       }
       res <- C_psm_sim_stateprobs(self$survival_,
                                   n_samples = self$survival_models$params[[1]]$n_samples,
-                                  n_strategies = self$survival_models$input_mats$n_strategies,
-                                  n_patients = self$survival_models$input_mats$n_patients,
+                                  n_strategies = self$survival_models$input_data$n_strategies,
+                                  n_patients = self$survival_models$input_data$n_patients,
                                   n_states = self$n_states,
                                   n_times = length(self$t_))
       prop_cross <- res$n_crossings/nrow(res$stateprobs)

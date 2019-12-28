@@ -29,7 +29,7 @@ private:
       mod = new statmods::pred_means(R_params);
     }
     else if (Rf_inherits(R_params, "params_lm")){
-      R_data = Rcpp::as<Rcpp::List>(R_StateVals["input_mats"]);
+      R_data = Rcpp::as<Rcpp::List>(R_StateVals["input_data"]);
       Rcpp::List X_list = Rcpp::as<Rcpp::List>(R_data["X"]);      
       arma::mat X = Rcpp::as<arma::mat>(X_list["mu"]);
       statmods::params_lm params(R_params);

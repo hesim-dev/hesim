@@ -52,13 +52,13 @@ transmod$sim_stateprobs(t = c(0, 5, 10))[t == 5]
 \describe{
 \item{\code{params}}{An object of class \link{params_surv} or \link{params_surv_list}.}
 
-\item{\code{input_mats}}{Input matrices used to simulate health state transitions
+\item{\code{input_data}}{Input data used to simulate health state transitions
 by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
 Must be an object of class \link{input_mats}. If \code{params} contains parameters from
-a list of models (i.e., of class \link{params_surv_list}), then \code{input_mats}
+a list of models (i.e., of class \link{params_surv_list}), then \code{input_data}
 must contain a unique row for each treatment strategy
 and patient; if \code{params} contains parameters from a joint model
-(i.e., of class \link{params_surv}), then \code{input_mats} must contain a unique
+(i.e., of class \link{params_surv}), then \code{input_data} must contain a unique
 row for each treatment strategy, patient, and transition.}
 
 \item{\code{trans_mat}}{A transition matrix describing the states and transitions
@@ -113,7 +113,7 @@ Create a new \code{IndivCtstmTrans} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IndivCtstmTrans$new(
   params,
-  input_mats,
+  input_data,
   trans_mat,
   start_state = 1,
   start_age = 38,
@@ -128,7 +128,7 @@ Create a new \code{IndivCtstmTrans} object.
 \describe{
 \item{\code{params}}{The \code{params} field.}
 
-\item{\code{input_mats}}{The \code{input_mats} field.}
+\item{\code{input_data}}{The \code{input_data} field.}
 
 \item{\code{trans_mat}}{The \code{trans_mat} field.}
 

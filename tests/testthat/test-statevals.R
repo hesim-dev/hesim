@@ -229,7 +229,7 @@ costvals_medical$sim(t = c(1, 2, 3), type = "predict")
 
 test_that("StateVals$sim", {
   # Time constant state values 
-  expect_equal(c(costvals_medical$input_mats$X$mu %*% t(costvals_medical$params$coefs)),
+  expect_equal(c(costvals_medical$input_data$X$mu %*% t(costvals_medical$params$coefs)),
               costvals_medical$sim(t = 2, type = "predict")$value)
   
   ## data must be of class 'input_mats'

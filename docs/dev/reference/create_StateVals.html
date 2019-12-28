@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create <code>StateVals</code> object — create_StateVals • hesim</title>
+<title>Create a <code>StateVals</code> object — create_StateVals • hesim</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,9 +32,9 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Create <code>StateVals</code> object — create_StateVals" />
+<meta property="og:title" content="Create a <code>StateVals</code> object — create_StateVals" />
 
-<meta property="og:description" content="create_StateVals is a generic function for creating an object of class
+<meta property="og:description" content="create_StateVals() is a generic function for creating an object of class
 StateVals from a fitted statistical model or a stateval_tbl
 object." />
 <meta name="twitter:card" content="summary" />
@@ -133,15 +133,15 @@ object." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create <code>StateVals</code> object</h1>
+    <h1>Create a <code>StateVals</code> object</h1>
     <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/statevals.R'><code>R/statevals.R</code></a></small>
     <div class="hidden name"><code>create_StateVals.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>create_StateVals</code> is a generic function for creating an object of class
-<code><a href='StateVals.html'>StateVals</a></code> from a fitted statistical model or a <code><a href='stateval_tbl.html'>stateval_tbl</a></code>
+    <p><code>create_StateVals()</code> is a generic function for creating an object of class
+<a href='StateVals.html'>StateVals</a> from a fitted statistical model or a <a href='stateval_tbl.html'>stateval_tbl</a>
 object.</p>
     
     </div>
@@ -173,9 +173,8 @@ object.</p>
     </tr>
     <tr>
       <th>input_data</th>
-      <td><p>An object of class "expanded_hesim_data" returned by
-<code><a href='expand.hesim_data.html'>expand.hesim_data</a></code>. Must be expanded by the data tables "strategies",
-"patients", and "states".</p></td>
+      <td><p>An object of class <a href='expand.hesim_data.html'>expanded_hesim_data</a>.
+Must be expanded by treatment strategies, patients, and health states.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -189,17 +188,17 @@ are fit using a statistical model.</p></td>
     <tr>
       <th>time_reset</th>
       <td><p>If <code>TRUE</code>, then time intervals reset each time a patient enters a new health
-state. See <code><a href='input_mats.html'>input_mats</a></code>.</p></td>
+state. See <a href='StateVals.html'>StateVals</a>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns an <code>R6Class</code> object of class <code><a href='StateVals.html'>StateVals</a></code>.</p>
+    <p>A <a href='StateVals.html'>StateVals</a> object.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='StateVals.html'>StateVals</a></code></p></div>
+    <div class='dont-index'><p><a href='StateVals.html'>StateVals</a>, <a href='stateval_tbl.html'>stateval_tbl</a></p></div>
     
 
   </div>

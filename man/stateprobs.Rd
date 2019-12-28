@@ -5,11 +5,11 @@
 \title{State probability object}
 \description{
 An object of class \code{stateprobs} returned from methods
-\code{$sim_stateprobs()} in model classes.
+\verb{$sim_stateprobs()} in model classes.
 }
 \section{Components}{
 
-A \code{\link{stateprobs}} object inherits from \code{data.table} and contains
+A \code{stateprobs} object inherits from \code{data.table} and contains
 the following columns:
 
 \describe{

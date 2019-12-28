@@ -47,7 +47,7 @@ head(psm_curves$rmst(t = c(2, 5)))
 \describe{
 \item{\code{params}}{An object of class \link{params_surv_list}.}
 
-\item{\code{input_mats}}{An object of class \link{input_mats}. Each row in \code{X} must
+\item{\code{input_data}}{An object of class \link{input_mats}. Each row in \code{X} must
 be a unique treatment strategy and patient.}
 }
 \if{html}{\out{</div>}}
@@ -70,7 +70,7 @@ be a unique treatment strategy and patient.}
 \subsection{Method \code{new()}}{
 Create a new \code{PsmCurves} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PsmCurves$new(params, input_mats)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PsmCurves$new(params, input_data)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -78,7 +78,7 @@ Create a new \code{PsmCurves} object.
 \describe{
 \item{\code{params}}{The \code{params} field.}
 
-\item{\code{input_mats}}{The \code{input_mats} field.}
+\item{\code{input_data}}{The \code{input_data} field.}
 }
 \if{html}{\out{</div>}}
 }

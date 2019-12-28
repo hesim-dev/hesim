@@ -9,8 +9,8 @@
 CtstmTrans <- R6::R6Class("CtstmTrans",
   private = list(
     check_base = function(){
-      if(!inherits(self$input_mats, "input_mats")){
-        stop("'input_mats' must be an object of class 'input_mats'",
+      if(!inherits(self$input_data, "input_mats")){
+        stop("'input_data' must be an object of class 'input_mats'",
             call. = FALSE)
       }
       if(!inherits(self$params, c("params_surv", 
@@ -83,7 +83,7 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
   # Simulate
   disprog <- C_ctstm_sim_disease(trans_model, trans_model$start_state - 1, 
                                  trans_model$start_age,
-                                 rep(0, trans_model$input_mats$n_patients), # Start time is always 0
+                                 rep(0, trans_model$input_data$n_patients), # Start time is always 0
                                  trans_model$death_state - 1, 
                                  trans_model$clock, trans_model$reset_states - 1,
                                  max_t, max_age, progress)
@@ -120,15 +120,15 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
   ## Dimensions of simulation
   n_grps <- length(unique(disprog$grp_id))
   n_states <- nrow(trans_model$trans_mat)
-  n_strategies <- trans_model$input_mats$n_strategies
-  n_patients <- trans_model$input_mats$n_patients
+  n_strategies <- trans_model$input_data$n_strategies
+  n_patients <- trans_model$input_data$n_patients
   if (inherits(trans_model$params, "params_surv_list")){
     n_samples <- trans_model$params[[1]]$n_samples
   } else{
     n_samples <- trans_model$params$n_samples
   }
-  unique_strategy_id <- unique(trans_model$input_mats$strategy_id)
-  unique_grp_id <- unique(trans_model$input_mats$grp_id)
+  unique_strategy_id <- unique(trans_model$input_data$strategy_id)
+  unique_grp_id <- unique(trans_model$input_data$grp_id)
   
   ## Computation
   stprobs <- C_ctstm_indiv_stateprobs(disprog, 
@@ -182,7 +182,7 @@ create_IndivCtstmTrans.flexsurvreg_list <- function(object, input_data, trans_ma
                                                     n = 1000, point_estimate = FALSE, ...){
   input_mats <- create_input_mats(object, input_data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat,
+  return(IndivCtstmTrans$new(input_data = input_mats, params = params, trans_mat = trans_mat,
                              clock = match.arg(clock), ...))
 }
 
@@ -192,7 +192,7 @@ create_IndivCtstmTrans.flexsurvreg <- function(object, input_data, trans_mat, cl
                                                n = 1000, point_estimate = FALSE, ...){
   input_mats <- create_input_mats(object, input_data)
   params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(input_mats = input_mats, params = params, trans_mat = trans_mat, 
+  return(IndivCtstmTrans$new(input_data = input_mats, params = params, trans_mat = trans_mat, 
                              clock = match.arg(clock), ...))
 }
 
@@ -202,7 +202,7 @@ create_IndivCtstmTrans.params_surv <- function(object, input_data, trans_mat,
                                                clock = c("reset", "forward", "mix"),
                                                reset_states = NULL,...){
   input_mats <- create_input_mats(object, input_data)
-  return(IndivCtstmTrans$new(input_mats = input_mats, params = object, trans_mat = trans_mat,
+  return(IndivCtstmTrans$new(input_data = input_mats, params = object, trans_mat = trans_mat,
                              clock = match.arg(clock), reset_states = reset_states, ...))
 }
 
@@ -253,13 +253,13 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     
     check_history = function(field){
       field_name <- deparse(substitute(field))
-      if (length(field) !=1 & length(field) != self$input_mats$n_patients){
+      if (length(field) !=1 & length(field) != self$input_data$n_patients){
         stop(paste0("The length of '", field_name, "' must either be 1 or the number ",
                           "of simulated patients."),
                  call. = FALSE)        
       }
       if (length(field) == 1){
-        field <- rep(field, self$input_mats$n_patients)
+        field <- rep(field, self$input_data$n_patients)
       }
       return(field)
     }
@@ -269,15 +269,15 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     #' @field params An object of class [params_surv] or [params_surv_list].
     params = NULL,
     
-    #' @field input_mats Input matrices used to simulate health state transitions 
+    #' @field input_data Input data used to simulate health state transitions 
     #' by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
     #' Must be an object of class [input_mats]. If `params` contains parameters from
-    #' a list of models (i.e., of class [params_surv_list]), then `input_mats` 
+    #' a list of models (i.e., of class [params_surv_list]), then `input_data` 
     #' must contain a unique row for each treatment strategy
     #' and patient; if `params` contains parameters from a joint model 
-    #' (i.e., of class [params_surv]), then `input_mats` must contain a unique
+    #' (i.e., of class [params_surv]), then `input_data` must contain a unique
     #' row for each treatment strategy, patient, and transition.
-    input_mats = NULL,
+    input_data = NULL,
     
     #' @field trans_mat A transition matrix describing the states and transitions 
     #' in a multi-state model in the format from the [mstate][mstate::mstate] package. 
@@ -314,7 +314,7 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     #' @description
     #' Create a new `IndivCtstmTrans` object.
     #' @param params The `params` field.
-    #' @param input_mats The `input_mats` field.
+    #' @param input_data The `input_data` field.
     #' @param trans_mat The `trans_mat` field.
     #' @param start_state The `start_state` field.
     #' @param start_age The `start_age` field.
@@ -322,14 +322,14 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     #' @param clock The `clock` field.
     #' @param reset_states The `reset_states` field.
     #' @return A new `IndivCtstmTrans` object.    
-    initialize = function(params, input_mats, trans_mat, 
+    initialize = function(params, input_data, trans_mat, 
                           start_state = 1,
                           start_age = 38,
                           death_state = NULL,
                           clock = c("reset", "forward", "mix"),
                           reset_states = NULL) {
       self$params <- params
-      self$input_mats <- input_mats
+      self$input_data <- input_data
       self$trans_mat <- trans_mat
       self$clock <- match.arg(clock)
       if (is.null(reset_states)){
@@ -477,7 +477,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                                               unique = TRUE)]
           } else{
             by_cols <- c("sample", "strategy_id", "grp_id", "from")
-            n_patients <- self$trans_model$input_mats$n_patients
+            n_patients <- self$trans_model$input_data$n_patients
             wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]

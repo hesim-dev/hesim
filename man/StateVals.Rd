@@ -13,7 +13,7 @@ state transition or partitioned survival model.
 \item{\code{params}}{Parameters for simulating state values. Currently supports
 objects of class \link{tparams_mean} or \link{params_lm}.}
 
-\item{\code{input_mats}}{An object of class \link{input_mats}. Only used for
+\item{\code{input_data}}{An object of class \link{input_mats}. Only used for
 \link{params_lm} objects.}
 
 \item{\code{time_reset}}{If \code{FALSE} then time intervals are based on time since
@@ -37,7 +37,7 @@ costs vary over time within health states.}
 \subsection{Method \code{new()}}{
 Create a new \code{StateVals} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StateVals$new(params, input_mats = NULL, time_reset = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StateVals$new(params, input_data = NULL, time_reset = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -45,7 +45,7 @@ Create a new \code{StateVals} object.
 \describe{
 \item{\code{params}}{The \code{params} field.}
 
-\item{\code{input_mats}}{The \code{input_mats} field.}
+\item{\code{input_data}}{The \code{input_data} field.}
 
 \item{\code{time_reset}}{The \code{time_reset} field.}
 }

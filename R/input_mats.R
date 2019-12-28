@@ -18,7 +18,7 @@
 #' can be fit for each health index. This is, for instance, the case in a [partitioned survival 
 #' model][Psm] where separate models are fit for each survival endpoint. 
 #' 
-#' The rows of the matrices in \code{X} must be sorted in a manner consistent with the ID variables as
+#' The rows of the matrices in `X` must be sorted in a manner consistent with the ID variables as
 #' described in [id_attributes()].
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))

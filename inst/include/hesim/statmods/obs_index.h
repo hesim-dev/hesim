@@ -39,8 +39,8 @@ inline time_fun* get_time_fun(Rcpp::List R_object){
  * class. 
  ******************************************************************************/ 
 inline Rcpp::List get_id_object(Rcpp::Environment R_object){
-  if(R_object.exists("input_mats") && !Rf_isNull(R_object["input_mats"])){
-    return Rcpp::as<Rcpp::List>(R_object["input_mats"]); 
+  if(R_object.exists("input_data") && !Rf_isNull(R_object["input_data"])){
+    return Rcpp::as<Rcpp::List>(R_object["input_data"]); 
   }
   else{
     return Rcpp::as<Rcpp::List>(R_object["params"]);

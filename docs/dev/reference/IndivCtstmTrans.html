@@ -161,13 +161,13 @@ transition model with parameters that were estimated using a multi-state model.<
 
     <p><div class="r6-fields"></p><dl class='dl-horizontal'>
 <dt><code>params</code></dt><dd><p>An object of class <a href='params_surv.html'>params_surv</a> or <a href='params_surv_list.html'>params_surv_list</a>.</p></dd>
-    <dt><code>input_mats</code></dt><dd><p>Input matrices used to simulate health state transitions
+    <dt><code>input_data</code></dt><dd><p>Input data used to simulate health state transitions
 by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
 Must be an object of class <a href='input_mats.html'>input_mats</a>. If <code>params</code> contains parameters from
-a list of models (i.e., of class <a href='params_surv_list.html'>params_surv_list</a>), then <code>input_mats</code>
+a list of models (i.e., of class <a href='params_surv_list.html'>params_surv_list</a>), then <code>input_data</code>
 must contain a unique row for each treatment strategy
 and patient; if <code>params</code> contains parameters from a joint model
-(i.e., of class <a href='params_surv.html'>params_surv</a>), then <code>input_mats</code> must contain a unique
+(i.e., of class <a href='params_surv.html'>params_surv</a>), then <code>input_data</code> must contain a unique
 row for each treatment strategy, patient, and transition.</p></dd>
     <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
 in a multi-state model in the format from the <a href='https://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package.
@@ -212,7 +212,7 @@ start of the model or from when time was previously reset. Only used if
 <h3>Usage</h3>
     <div class="r"><pre>IndivCtstmTrans$new(
   params,
-  input_mats,
+  input_data,
   trans_mat,
   start_state = 1,
   start_age = 38,
@@ -224,7 +224,7 @@ start of the model or from when time was previously reset. Only used if
     <div class="arguments">
 <dl class='dl-horizontal'>
 <dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
-    <dt><code>input_mats</code></dt><dd><p>The <code>input_mats</code> field.</p></dd>
+    <dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
     <dt><code>trans_mat</code></dt><dd><p>The <code>trans_mat</code> field.</p></dd>
     <dt><code>start_state</code></dt><dd><p>The <code>start_state</code> field.</p></dd>
     <dt><code>start_age</code></dt><dd><p>The <code>start_age</code> field.</p></dd>

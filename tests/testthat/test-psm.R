@@ -55,7 +55,7 @@ test_that("create_PsmCurves", {
                                  bootstrap = TRUE, est_data = surv_est_data)
   expect_true(inherits(psm_curves, "PsmCurves"))
   expect_true(inherits(psm_curves$params, "params_surv_list"))
-  expect_equal(as.numeric(psm_curves$input_mats$X[[1]]$scale[, "age"]), 
+  expect_equal(as.numeric(psm_curves$input_data$X[[1]]$scale[, "age"]), 
               surv_input_data$age)
   
   ## errors
@@ -126,7 +126,7 @@ test_that("PsmCurves", {
   # Quantiles
   psm_curves <- create_PsmCurves(fits_exp, input_data = surv_input_data, n = N,
                                  bootstrap = TRUE, est_data = surv_est_data)
-  X <- psm_curves$input_mats$X$curves1$rate[1, , drop = FALSE]
+  X <- psm_curves$input_data$X$curves1$rate[1, , drop = FALSE]
   beta <- psm_curves$params$curves1$coefs$rate[1, , drop = FALSE]
   rate_hat <- X %*% t(beta)
   
@@ -147,7 +147,7 @@ psm_X <- create_input_mats(formula_list(mu = formula(~1)),
                                      expand(hesim_dat, 
                                      by = c("strategies", "patients", "states")),
                                      id_vars = c("strategy_id", "patient_id", "state_id"))
-psm_utility <- StateVals$new(input_mats = psm_X,
+psm_utility <- StateVals$new(input_data = psm_X,
                              params = params_lm(coef = runif(N, .6, .8)))
 
 

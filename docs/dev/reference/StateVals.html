@@ -150,7 +150,7 @@ state transition or partitioned survival model.</p>
     <p><div class="r6-fields"></p><dl class='dl-horizontal'>
 <dt><code>params</code></dt><dd><p>Parameters for simulating state values. Currently supports
 objects of class <a href='tparams_mean.html'>tparams_mean</a> or <a href='params_lm.html'>params_lm</a>.</p></dd>
-    <dt><code>input_mats</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>. Only used for
+    <dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>. Only used for
 <a href='params_lm.html'>params_lm</a> objects.</p></dd>
     <dt><code>time_reset</code></dt><dd><p>If <code>FALSE</code> then time intervals are based on time since
 the start of the simulation. If <code>TRUE</code>, then time intervals reset each
@@ -171,12 +171,12 @@ costs vary over time within health states.</p></dd>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
     Create a new <code>StateVals</code> object.
 <h3>Usage</h3>
-    <div class="r"><pre>StateVals$new(params, input_mats = NULL, time_reset = FALSE)</pre></div>
+    <div class="r"><pre>StateVals$new(params, input_data = NULL, time_reset = FALSE)</pre></div>
     <h3>Arguments</h3>
     <div class="arguments">
 <dl class='dl-horizontal'>
 <dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
-    <dt><code>input_mats</code></dt><dd><p>The <code>input_mats</code> field.</p></dd>
+    <dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
     <dt><code>time_reset</code></dt><dd><p>The <code>time_reset</code> field.</p></dd>
 </dl>
 </div>

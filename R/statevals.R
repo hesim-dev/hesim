@@ -267,23 +267,22 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 }
 
 # StateVals --------------------------------------------------------------------
-#' Create \code{StateVals} object
+#' Create a `StateVals` object
 #' 
-#' \code{create_StateVals} is a generic function for creating an object of class
-#'  \code{\link{StateVals}} from a fitted statistical model or a \code{\link{stateval_tbl}}
+#' `create_StateVals()` is a generic function for creating an object of class
+#'  [StateVals] from a fitted statistical model or a [stateval_tbl]
 #'  object. 
 #' @param object A model object of the appropriate class.
-#' @param input_data An object of class "expanded_hesim_data" returned by 
-#' \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies",
-#' "patients", and "states".
+#' @param input_data An object of class [expanded_hesim_data][expand.hesim_data()].
+#' Must be expanded by treatment strategies, patients, and health states.
 #' @param n Number of random observations of the parameters to draw when parameters 
 #' are fit using a statistical model.
-#' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.
-#' @param time_reset If \code{TRUE}, then time intervals reset each time a patient enters a new health 
-#' state. See \code{\link{input_mats}}.
+#' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
+#' @param time_reset If `TRUE`, then time intervals reset each time a patient enters a new health 
+#' state. See [StateVals].
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
-#' @return Returns an \code{\link{R6Class}} object of class \code{\link{StateVals}}.
-#' @seealso \code{\link{StateVals}}
+#' @return A [StateVals] object.
+#' @seealso [StateVals], [stateval_tbl]
 #' @export
 create_StateVals <- function(object, ...){
   UseMethod("create_StateVals", object)
@@ -295,7 +294,7 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
                                 point_estimate = FALSE, ...){
   params <- create_params(object, n, point_estimate) 
   input_mats <- create_input_mats(object, input_data)
-  return(StateVals$new(params = params, input_mats = input_mats))
+  return(StateVals$new(params = params, input_data = input_mats))
 }
 
 #' @rdname create_StateVals 
@@ -440,9 +439,9 @@ StateVals <- R6::R6Class("StateVals",
     #'  objects of class [tparams_mean] or [params_lm].   
     params = NULL,
     
-    #' @field input_mats  An object of class [input_mats]. Only used for
-    #' [params_lm] objects. 
-    input_mats = NULL,
+    #' @field input_data  An object of class [input_mats]. Only used for
+    #' [params_lm] objects.
+    input_data = NULL,
     
     #' @field time_reset If `FALSE` then time intervals are based on time since
     #'  the start of the simulation. If `TRUE`, then time intervals reset each 
@@ -453,12 +452,12 @@ StateVals <- R6::R6Class("StateVals",
     #' @description
     #' Create a new `StateVals` object.
     #' @param params The `params` field.
-    #' @param input_mats The `input_mats` field.
+    #' @param input_data The `input_data` field.
     #' @param time_reset The `time_reset` field.
     #' @return A new `StateVals` object.
-    initialize = function(params, input_mats = NULL, time_reset = FALSE) {
+    initialize = function(params, input_data = NULL, time_reset = FALSE) {
       self$params <- params
-      self$input_mats <- input_mats
+      self$input_data <- input_data
       self$time_reset = time_reset
     },
     
@@ -484,8 +483,8 @@ StateVals <- R6::R6Class("StateVals",
         stop("Class of 'params' is not supported. See documentation.",
              call. = FALSE)
       }      
-      if(!inherits(self$input_mats, c("input_mats", "NULL"))){
-        stop("'input_mats' must be an object of class 'input_mats'",
+      if(!inherits(self$input_data, c("input_mats", "NULL"))){
+        stop("'input_data' must be an object of class 'input_mats'",
             call. = FALSE)
       }
       stopifnot(is.logical(self$time_reset))
@@ -548,20 +547,20 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
 #' Simulate weighted length of stay in order to compute costs and quality-adjusted
 #' life-years (QALYs). 
 #' 
-#' @param object Objects of class \code{\link{stateprobs}} or \code{disprog}. 
-#' @param utility_model A single object of class \code{\link{StateVals}} used
+#' @param object A [stateprobs] object.
+#' @param utility_model A single object of class [StateVals] used
 #' to simulate utility.
-#' @param cost_models A list of objects of class \code{\link{StateVals}} used
+#' @param cost_models A list of objects of class [StateVals] used
 #' to simulate costs.
 #' @param dr Discount rate. 
 #' @param method Method used to integrate state values when computing 
-#' weighted length of stay. Options are \code{trapz} for the trapezoid rule,
-#' \code{riemann_left} left for a left Riemann sum, and  
-#' \code{riemann_right} right for a right Riemann sum.
-#' @param lys If \code{TRUE}, then life-years are simulated in addition to 
+#' weighted length of stay. Options are `trapz` for the trapezoid rule,
+#' `riemann_left` left for a left Riemann sum, and  
+#' `riemann_right` right for a right Riemann sum.
+#' @param lys If `TRUE`, then life-years are simulated in addition to 
 #' QALYs. 
-#' @return \code{sim_costs} and \code{sim_qalys} return objects of class
-#' \code{costs} and \code{qalys}, respectively. 
+#' @return [sim_costs()] and [sim_qalys()] return objects of class
+#' [costs] and [qalys], respectively. 
 #' @details 
 #' Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state. 
 #' Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
@@ -572,8 +571,8 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
 #' where for health state \eqn{h} and time {t}, \eqn{w_h} is the predicted cost 
 #' or QALY weight, \eqn{r} is the discount rate, and \eqn{P_h(t)} is the 
 #' probability of being in a given health state. The integral is calculated
-#'  numerically from the points in \code{t_} using the approach selected 
-#'  using the argument \code{method}.
+#'  numerically from the points in `t_` using the approach selected 
+#'  using the argument `method`.
 #'
 #' @export
 #' @name sim_wlos
@@ -664,11 +663,11 @@ NULL
 # State probability object -----------------------------------------------------
 #' State probability object
 #'
-#' An object of class \code{stateprobs} returned from methods 
-#' \code{$sim_stateprobs()} in model classes. 
+#' An object of class `stateprobs` returned from methods 
+#' `$sim_stateprobs()` in model classes. 
 #' 
 #' @section Components:
-#' A \code{\link{stateprobs}} object inherits from \code{data.table} and contains
+#' A `stateprobs` object inherits from `data.table` and contains
 #' the following columns:
 #' 
 #' \describe{
@@ -680,7 +679,7 @@ NULL
 #'   \item{prob}{The probability of being in a given health state.}
 #' }
 #' 
-#' When simulating individual-level models, the \code{patient_id} column is
+#' When simulating individual-level models, the `patient_id` column is
 #' not included as state probabilities are computed by averaging across patients.
 #'
 #'    

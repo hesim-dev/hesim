@@ -11,9 +11,9 @@ sim_qalys(object, utility_model, dr, method, lys)
 sim_costs(object, cost_models, dr, method)
 }
 \arguments{
-\item{object}{Objects of class \code{\link{stateprobs}} or \code{disprog}.}
+\item{object}{A \link{stateprobs} object.}
 
-\item{utility_model}{A single object of class \code{\link{StateVals}} used
+\item{utility_model}{A single object of class \link{StateVals} used
 to simulate utility.}
 
 \item{dr}{Discount rate.}
@@ -26,12 +26,12 @@ weighted length of stay. Options are \code{trapz} for the trapezoid rule,
 \item{lys}{If \code{TRUE}, then life-years are simulated in addition to
 QALYs.}
 
-\item{cost_models}{A list of objects of class \code{\link{StateVals}} used
+\item{cost_models}{A list of objects of class \link{StateVals} used
 to simulate costs.}
 }
 \value{
-\code{sim_costs} and \code{sim_qalys} return objects of class
-\code{costs} and \code{qalys}, respectively.
+\code{\link[=sim_costs]{sim_costs()}} and \code{\link[=sim_qalys]{sim_qalys()}} return objects of class
+\link{costs} and \link{qalys}, respectively.
 }
 \description{
 Simulate weighted length of stay in order to compute costs and quality-adjusted

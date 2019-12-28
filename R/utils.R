@@ -148,18 +148,18 @@ flatten_lists <- function(x) {
 
 # Get the object containing ID attributes
 get_id_object <- function(x){
-  if (is.null(x$input_mats)){
+  if (is.null(x$input_data)){
     return(x$params)
   } else{
-    return(x$input_mats)
+    return(x$input_data)
   }
 }
 
 get_id_name <- function(x){
-  if (is.null(x$input_mats)){
+  if (is.null(x$input_data)){
     return("params")
   } else{
-    return("input_mats")
+    return("input_data")
   }
 }
 
