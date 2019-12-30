@@ -686,15 +686,17 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     },
     
     #' @description
-    #' Simulate quality-adjusted life-years (QALYs) using [sim_qalys()].
+    #' Simulate quality-adjusted life-years (QALYs) as a function of `disprog_` and
+    #' `utility_model`. See 
+    #' the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
     #' @param dr Discount rate.
     #' @param type `"predict"` for mean values or `"random"` for random samples 
     #' as in `$sim()` in [StateVals].
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
     #' @param by_patient If `TRUE`, then QALYs are computed at the patient level.
     #'  If `FALSE`, then QALYs are averaged across patients by health state.
-    #' @return An instance of `self` with simulated output stored
-    #' in `qalys_`.    
+    #' @return An instance of `self` with simulated output of
+    #' class [qalys] stored in `qalys_`.    
     sim_qalys = function(dr = .03, type = c("predict", "random"),
                          lys = TRUE,
                          by_patient = FALSE){
@@ -709,7 +711,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     },
     
     #' @description
-    #' Simulate costs using [sim_costs()].
+    #' Simulate costs as a function of `disprog_` and `cost_models`. 
+    #' See the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
     #' @param dr Discount rate.
     #' @param type `"predict"` for mean values or `"random"` for random samples 
     #' as in `$sim()` in [StateVals].
@@ -721,8 +724,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     #'   a given health state. If time varies by each cost category, then time 
     #'   can also be passed as a numeric vector of length equal to the number of 
     #'   cost categories (e.g., `c(1, 2, Inf, 3)` for a model with four cost categories).
-    #' @return An instance of `self` with simulated output stored
-    #' in `costs_`.    
+    #' @return An instance of `self` with simulated output of class [costs]
+    #' stored in `costs_`.    
     sim_costs = function(dr = .03, type = c("predict", "random"), by_patient = FALSE, max_t = Inf){
       if(!is.list(self$cost_models)){
         stop("'cost_models' must be a list of objects of class 'StateVals'",

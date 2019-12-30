@@ -214,7 +214,9 @@ stored in \code{stateprobs_}.
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_qalys"></a>}}
 \subsection{Method \code{sim_qalys()}}{
-Simulate quality-adjusted life-years (QALYs) using \code{\link[=sim_qalys]{sim_qalys()}}.
+Simulate quality-adjusted life-years (QALYs) as a function of \code{disprog_} and
+\code{utility_model}. See
+the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$sim_qalys(
   dr = 0.03,
@@ -240,14 +242,15 @@ If \code{FALSE}, then QALYs are averaged across patients by health state.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An instance of \code{self} with simulated output stored
-in \code{qalys_}.
+An instance of \code{self} with simulated output of
+class \link{qalys} stored in \code{qalys_}.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_costs"></a>}}
 \subsection{Method \code{sim_costs()}}{
-Simulate costs using \code{\link[=sim_costs]{sim_costs()}}.
+Simulate costs as a function of \code{disprog_} and \code{cost_models}.
+See the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$sim_costs(
   dr = 0.03,
@@ -278,8 +281,8 @@ cost categories (e.g., \code{c(1, 2, Inf, 3)} for a model with four cost categor
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An instance of \code{self} with simulated output stored
-in \code{costs_}.
+An instance of \code{self} with simulated output of class \link{costs}
+stored in \code{costs_}.
 }
 }
 \if{html}{\out{<hr>}}

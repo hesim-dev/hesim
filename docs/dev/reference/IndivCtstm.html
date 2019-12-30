@@ -253,7 +253,9 @@ simulation output stored in <code>disprog</code>.
 stored in <code>stateprobs_</code>.
     <p><hr>
 <a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_qalys()</a></code></h3>
-    Simulate quality-adjusted life-years (QALYs) using <code><a href='sim_wlos.html'>sim_qalys()</a></code>.
+    Simulate quality-adjusted life-years (QALYs) as a function of <code>disprog_</code> and
+<code>utility_model</code>. See
+the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
 <h3>Usage</h3>
     <div class="r"><pre>IndivCtstm$sim_qalys(
   dr = 0.03,
@@ -273,11 +275,12 @@ If <code>FALSE</code>, then QALYs are averaged across patients by health state.<
 </dl>
 </div>
     <h3>Returns</h3>
-    An instance of <code>self</code> with simulated output stored
-in <code>qalys_</code>.
+    An instance of <code>self</code> with simulated output of
+class <a href='qalys.html'>qalys</a> stored in <code>qalys_</code>.
     <p><hr>
 <a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_costs()</a></code></h3>
-    Simulate costs using <code><a href='sim_wlos.html'>sim_costs()</a></code>.
+    Simulate costs as a function of <code>disprog_</code> and <code>cost_models</code>.
+See the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
 <h3>Usage</h3>
     <div class="r"><pre>IndivCtstm$sim_costs(
   dr = 0.03,
@@ -302,8 +305,8 @@ cost categories (e.g., <code><a href='https://www.rdocumentation.org/packages/ba
 </dl>
 </div>
     <h3>Returns</h3>
-    An instance of <code>self</code> with simulated output stored
-in <code>costs_</code>.
+    An instance of <code>self</code> with simulated output of class <a href='costs.html'>costs</a>
+stored in <code>costs_</code>.
     <p><hr>
 <a id="method-summarize"></a></p><h3>Method <code>summarize()</code></h3>
     Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
@@ -324,7 +327,8 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
+
 <span class='co'># Treatment strategies, target population, and model structure</span>
 <span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),

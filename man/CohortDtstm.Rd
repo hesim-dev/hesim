@@ -88,7 +88,9 @@ stored in \code{stateprobs_}.
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_qalys"></a>}}
 \subsection{Method \code{sim_qalys()}}{
-Simulate quality-adjusted life-years (QALYs) using \code{\link[=sim_qalys]{sim_qalys()}}.
+Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_} and
+\code{utility_model}. See
+the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$sim_qalys(
   dr = 0.03,
@@ -116,7 +118,8 @@ in \code{qalys_}.
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_costs"></a>}}
 \subsection{Method \code{sim_costs()}}{
-Simulate costs using \code{\link[=sim_costs]{sim_costs()}}.
+Simulate costs as a function of \code{stateprobs_} and \code{cost_models}.
+See the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$sim_costs(
   dr = 0.03,

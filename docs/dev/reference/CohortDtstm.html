@@ -210,7 +210,9 @@ list represents a different cost category.</p></dd>
 stored in <code>stateprobs_</code>.
     <p><hr>
 <a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_qalys()</a></code></h3>
-    Simulate quality-adjusted life-years (QALYs) using <code><a href='sim_wlos.html'>sim_qalys()</a></code>.
+    Simulate quality-adjusted life-years (QALYs) as a function of <code>stateprobs_</code> and
+<code>utility_model</code>. See
+the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
 <h3>Usage</h3>
     <div class="r"><pre>CohortDtstm$sim_qalys(
   dr = 0.03,
@@ -230,7 +232,8 @@ stored in <code>stateprobs_</code>.
 in <code>qalys_</code>.
     <p><hr>
 <a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_costs()</a></code></h3>
-    Simulate costs using <code><a href='sim_wlos.html'>sim_costs()</a></code>.
+    Simulate costs as a function of <code>stateprobs_</code> and <code>cost_models</code>.
+See the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
 <h3>Usage</h3>
     <div class="r"><pre>CohortDtstm$sim_costs(
   dr = 0.03,
