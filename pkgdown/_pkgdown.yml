@@ -103,18 +103,19 @@ navbar:
       - text: "Getting started with a Markov cohort model"
         href: articles/getting-started.html
       - text: "---"
-      - text: "Economic models"
+      - text: "Economic modeling"
       - text: "Discrete time state transition models"
         href: articles/dtstm.html
       - text: "Partitioned survival models"
         href: articles/psm.html
       - text: "Continuous time state transition models"
         href: articles/ctstm.html
-      - text: "---"
-      - text: "Additional examples"
+      - text: "Simulating costs and QALYs"
+        href: articles/wlos.html          
       - text: "---"
       - text: "Decision analysis"
       - text: "Individualized cost-effectiveness analysis"
         href: articles/icea.html
+      - text: "---"
   - text: News
     href: news/index.html

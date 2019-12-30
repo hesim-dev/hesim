@@ -25,11 +25,6 @@ double composite(InputIt x_first, InputIt x_last, InputIt y_first, Func rule){
   InputIt y_it = y_first;
   for (InputIt x_it = x_first; x_it != (x_last - 1); ++x_it){
     area += rule(*x_it, *(x_it + 1), *y_it, *(y_it + 1));
-    // Rcpp::Rcout << "*x_it = " << *x_it << std::endl;
-    // Rcpp::Rcout << "*(x_it + 1) = " << *(x_it + 1) << std::endl;
-    // Rcpp::Rcout << "*(y_it) = " << *y_it << std::endl;
-    // Rcpp::Rcout << "*(y_it + 1) = " << *(y_it + 1) << std::endl;
-    // Rcpp::Rcout << "area = " << area << std::endl;
     ++y_it;
   }
   return area;

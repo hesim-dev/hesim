@@ -89,7 +89,7 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic models</li>
+    <li class="dropdown-header">Economic modeling</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -99,13 +99,15 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Additional examples</li>
+    <li>
+      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
+    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -205,12 +207,12 @@ comparator.</p>
 <span class='no'>ie</span> <span class='kw'>&lt;-</span> <span class='fu'>incr_effect</span>(<span class='no'>sim</span>, <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>, <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>,
                         <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"c"</span>, <span class='st'>"e"</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>ie</span>)</div><div class='output co'>#&gt;    sample   strategy     grp       ic       ie
-#&gt; 1:      1 Strategy 2 Group 1 59103.69 2.659323
-#&gt; 2:      1 Strategy 2 Group 2 52394.45 3.342881
-#&gt; 3:      2 Strategy 2 Group 1 68100.80 2.310771
-#&gt; 4:      2 Strategy 2 Group 2 55812.15 2.532933
-#&gt; 5:      3 Strategy 2 Group 1 61391.17 2.966019
-#&gt; 6:      3 Strategy 2 Group 2 77064.61 3.500959</div></pre>
+#&gt; 1:      1 Strategy 2 Group 1 63831.15 3.476656
+#&gt; 2:      1 Strategy 2 Group 2 59055.85 3.622316
+#&gt; 3:      2 Strategy 2 Group 1 64599.53 2.619967
+#&gt; 4:      2 Strategy 2 Group 2 70694.37 1.590811
+#&gt; 5:      3 Strategy 2 Group 1 60374.98 2.737488
+#&gt; 6:      3 Strategy 2 Group 2 53910.75 1.511767</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

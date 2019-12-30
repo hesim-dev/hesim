@@ -34,7 +34,8 @@ to simulate costs.}
 \link{costs} and \link{qalys}, respectively.
 }
 \description{
-Simulate weighted length of stay in order to compute costs and quality-adjusted
+Simulate weighted length of stay as a function of simulated state occupancy
+probabilities in order to compute costs and quality-adjusted
 life-years (QALYs).
 }
 \details{
@@ -50,3 +51,4 @@ probability of being in a given health state. The integral is calculated
 numerically from the points in \code{t_} using the approach selected
 using the argument \code{method}.
 }
+\keyword{internal}

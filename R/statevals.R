@@ -544,7 +544,8 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
 
 #' Weighted length of stay
 #' 
-#' Simulate weighted length of stay in order to compute costs and quality-adjusted
+#' Simulate weighted length of stay as a function of simulated state occupancy
+#' probabilities in order to compute costs and quality-adjusted
 #' life-years (QALYs). 
 #' 
 #' @param object A [stateprobs] object.
@@ -559,6 +560,7 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
 #' `riemann_right` right for a right Riemann sum.
 #' @param lys If `TRUE`, then life-years are simulated in addition to 
 #' QALYs. 
+#' @keywords internal
 #' @return [sim_costs()] and [sim_qalys()] return objects of class
 #' [costs] and [qalys], respectively. 
 #' @details 

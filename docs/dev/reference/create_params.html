@@ -90,7 +90,7 @@ then random samples from the posterior distribution are returned." />
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic models</li>
+    <li class="dropdown-header">Economic modeling</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -100,13 +100,15 @@ then random samples from the posterior distribution are returned." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Additional examples</li>
+    <li>
+      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
+    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -217,11 +219,11 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params_lm</span> <span class='kw'>&lt;-</span> <span class='fu'>create_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt;      (Intercept)   female
-#&gt; [1,]    30111.04 4727.236
-#&gt; [2,]    31994.73 2847.926
-#&gt; [3,]    31377.39 1725.132
-#&gt; [4,]    29252.17 1299.832
-#&gt; [5,]    32663.60 1000.746</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
+#&gt; [1,]    32761.07 2112.856
+#&gt; [2,]    31978.29 1657.416
+#&gt; [3,]    31132.95 2240.247
+#&gt; [4,]    32416.11 1275.786
+#&gt; [5,]    32837.26 4451.391</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># create_params.flexsurvreg</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
@@ -230,19 +232,19 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>params_surv_wei</span> <span class='kw'>&lt;-</span> <span class='fu'>create_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>params_surv_wei</span>$<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>params_surv_wei</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; $shape
 #&gt;            shape
-#&gt; [1,]  0.25939932
-#&gt; [2,]  0.09555216
-#&gt; [3,] -0.29841920
-#&gt; [4,]  0.35227629
-#&gt; [5,] -0.24223073
+#&gt; [1,]  0.17911774
+#&gt; [2,]  0.08766623
+#&gt; [3,] -0.07870946
+#&gt; [4,]  0.12934316
+#&gt; [5,]  0.31742128
 #&gt; 
 #&gt; $scale
 #&gt;         scale
-#&gt; [1,] 6.832120
-#&gt; [2,] 6.967783
-#&gt; [3,] 7.041920
-#&gt; [4,] 7.442467
-#&gt; [5,] 7.410533
+#&gt; [1,] 7.491555
+#&gt; [2,] 7.175176
+#&gt; [3,] 7.474414
+#&gt; [4,] 6.977438
+#&gt; [5,] 7.160341
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

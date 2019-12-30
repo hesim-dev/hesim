@@ -1,0 +1,54 @@
+---
+title: Simulating costs and quality-adjusted life-years
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 2
+    number_sections: TRUE
+pkgdown:
+  as_is: true
+vignette: >
+  %\VignetteIndexEntry{Simulating costs and QALYs}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Overview
+Before performing a decision analysis, (discounted) costs and quality-adjusted life-years (QALYs) must be simulated. In cohort models, they are simulated as a function of previously simulated state occupancy probabilities. In individual-level models, they are simulated as a function of simulated trajectories characterizing disease progression. In `hesim`, the discrete time state transition and partitioned survival models are cohort models and the continuous time state transition model is an individual-level model.
+
+# Cohort Models
+Costs and QALYs in cohort models are computed by integrating the "weighted" probability of being in each state. Weights are a function of the discount factor and state values (e.g., annualized costs and utility) predicted using either the cost or utility model. Mathematically, for a time horizon $T$, discounted costs and QALYs in health state $h$ are computed as,
+
+$$
+\int_0^{T} z_h(t) e^{-rt} P_h(t) dt,
+$$
+
+where $z_h(t)$ is the predicted cost or utility value at time $t$, $r$ is the discount rate, and $P_h(t)$ is the probability of being in a given health state. Note that the state values, $z_h(t)$, can depend on time since the start of the model but not on time since entering a new health state.   
+
+## Integration methods
+Three types of approaches are currently available for numerical integration given values of state probabilities at distinct discrete times.
+
+* **Left Riemann sum**: The function is approximated by its value at the left most point (i.e., start) of each time interval.
+* **Right Riemann sum**: The function is approximated by its value at the right most point (i.e., end) of each time interval.
+* **Trapezoid rule**: The function is approximated by the average of its values at the left and right endpoints. Specifically, for an interval [$t_1$, $t_2$] with value $y_1$ at the left endpoint and $y_2$ at the right endpoint, the function is approximated as $\frac{t_2 - t_1}{2}(y_1 + y_2)$.
+
+The Riemann sum rules approximate the area under the curve using rectangles in each time interval whiles the trapezoid rule approximates the area under the curve using a trapezoid. In general, the left Riemann sum will underestimate costs and QALYs whereas the right Riemann sum will overestimate them. 
+
+# Individual-level models
+In individual-level models, costs and QALYs are computed using the continuous time present value given a flow of state values, which change as patients transition between health states or as costs vary as a function of time. The state values can be partitioned into $M$ time intervals indexed by $m = 1,\ldots, M$ where interval $m$ contains times $t$ such that $t_m\leq t \leq t_{m+1}$ and values for state $h$ are equal to $z_{hm}$ during interval $m$. $z_{hm}$ will equal zero during time intervals in which a patient is not in state $h$. Discounted costs and QALYs for health state $h$ are then given by,  
+
+$$
+\sum_{m = 1}^M \int_{t_m}^{t_m+1} z_{hm}e^{-rt}dt = \sum_{m = 1}^M z_{hm} \left(\frac{e^{-r{t_{m}}} - e^{-r{t_{m+1}}}}{r}\right),
+$$
+
+where $r > 0$ is the discount rate. If $r = 0$, then the present value simplifies to $\sum_{m = 1}^M z_{hm}(t_{m+1} - t_{m})$. 
+
+Note that while state values in cohort models can depend on time since the start of the model, state values in individual-level models can depend on either time since the start of the model or time since entering the most recent health state. Individual-level models consequently not only afford more flexibility than cohort models when simulating disease progression, but when simulating costs and/or QALYs as well.
+
+
+
+
+
+
+

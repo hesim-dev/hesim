@@ -92,7 +92,7 @@ create an economic model." />
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic models</li>
+    <li class="dropdown-header">Economic modeling</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -102,13 +102,15 @@ create an economic model." />
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Additional examples</li>
+    <li>
+      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
+    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -296,16 +298,16 @@ utilities, and/or costs.</p>
 #&gt; 
 #&gt; 
 #&gt; $tpmatrix
-#&gt;        s1_s1     s1_s2      s1_s3       s1_s4 s2_s1     s2_s2     s2_s3
-#&gt; 1: 0.7024860 0.2110088 0.07663966 0.009865529     0 0.6100935 0.3798528
-#&gt; 2: 0.8301819 0.1204418 0.04374517 0.005631149     0 0.7774451 0.2168163
-#&gt; 3: 0.7206176 0.2021922 0.07109717 0.006093041     0 0.5729775 0.4140067
-#&gt; 4: 0.8429614 0.1136506 0.03996314 0.003424848     0 0.7599741 0.2327098
+#&gt;        s1_s1      s1_s2      s1_s3       s1_s4 s2_s1     s2_s2     s2_s3
+#&gt; 1: 0.7268101 0.19442450 0.06471782 0.014047611     0 0.6028085 0.3911359
+#&gt; 2: 0.8906267 0.07783907 0.02591018 0.005624049     0 0.8409819 0.1565937
+#&gt; 3: 0.7351642 0.18437772 0.06866600 0.011792080     0 0.5873485 0.4016351
+#&gt; 4: 0.8745787 0.08731786 0.03251894 0.005584510     0 0.8045759 0.1902069
 #&gt;          s2_s4 s3_s1 s3_s2     s3_s3     s3_s4 s4_s1 s4_s2 s4_s3 s4_s4
-#&gt; 1: 0.010053715     0     0 0.7667689 0.2332311     0     0     0     1
-#&gt; 2: 0.005738563     0     0 0.8668740 0.1331260     0     0     0     1
-#&gt; 3: 0.013015787     0     0 0.7378633 0.2621367     0     0     0     1
-#&gt; 4: 0.007316068     0     0 0.8526551 0.1473449     0     0     0     1
+#&gt; 1: 0.006055519     0     0 0.7496222 0.2503778     0     0     0     1
+#&gt; 2: 0.002424365     0     0 0.8997597 0.1002403     0     0     0     1
+#&gt; 3: 0.011016407     0     0 0.7771731 0.2228269     0     0     0     1
+#&gt; 4: 0.005217166     0     0 0.8944733 0.1055267     0     0     0     1
 #&gt; 
 #&gt; $utility
 #&gt; [1] 1 1 1 1
@@ -319,11 +321,11 @@ utilities, and/or costs.</p>
 #&gt; [1] 1
 #&gt; 
 #&gt; $costs$medical
-#&gt;            A         B         C
-#&gt; 1:  895.6127  341.9321  6087.905
-#&gt; 2:  895.6127  341.9321  6087.905
-#&gt; 3: 1358.2256 2644.3176 19080.692
-#&gt; 4: 1358.2256 2644.3176 19080.692
+#&gt;            A         B        C
+#&gt; 1: 2026.8388  3160.886 10739.12
+#&gt; 2: 2026.8388  3160.886 10739.12
+#&gt; 3:  702.0553 11787.506 20889.12
+#&gt; 4:  702.0553 11787.506 20889.12
 #&gt; 
 #&gt; 
 #&gt; $n_states

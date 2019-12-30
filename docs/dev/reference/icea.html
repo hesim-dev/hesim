@@ -97,7 +97,7 @@ and output for a cost-effectiveness acceptability curve.
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic models</li>
+    <li class="dropdown-header">Economic modeling</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -107,13 +107,15 @@ and output for a cost-effectiveness acceptability curve.
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Additional examples</li>
+    <li>
+      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
+    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -295,35 +297,35 @@ incremental net monetary benefits for the range of specified willingness to pay 
 <span class='co'># in each group with a willingness to pay of 20,000</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"data.table"</span>)
 <span class='no'>icea</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp best prob
-#&gt; 1: 20000 Strategy 1 Group 1    0 0.44
-#&gt; 2: 20000 Strategy 2 Group 1    1 0.56
-#&gt; 3: 20000 Strategy 1 Group 2    0 0.47
-#&gt; 4: 20000 Strategy 2 Group 2    1 0.53</div><div class='input'>
+#&gt; 1: 20000 Strategy 1 Group 1    0 0.52
+#&gt; 2: 20000 Strategy 2 Group 1    1 0.48
+#&gt; 3: 20000 Strategy 1 Group 2    0 0.50
+#&gt; 4: 20000 Strategy 2 Group 2    1 0.50</div><div class='input'>
 <span class='co'># icea_pw</span>
 <span class='no'>icea_pw</span> <span class='kw'>&lt;-</span>  <span class='fu'>icea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
                     <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
                      <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>icea_pw</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k   strategy     grp prob
-#&gt; 1: 20000 Strategy 2 Group 1 0.56
-#&gt; 2: 20000 Strategy 2 Group 2 0.53
-#&gt; 3: 20500 Strategy 2 Group 1 0.61
-#&gt; 4: 20500 Strategy 2 Group 2 0.57
-#&gt; 5: 21000 Strategy 2 Group 1 0.64
-#&gt; 6: 21000 Strategy 2 Group 2 0.60</div><div class='input'><span class='fu'><a href='icer_tbl.html'>icer_tbl</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; $`Group 1`
+#&gt; 1: 20000 Strategy 2 Group 1 0.48
+#&gt; 2: 20000 Strategy 2 Group 2 0.50
+#&gt; 3: 20500 Strategy 2 Group 1 0.49
+#&gt; 4: 20500 Strategy 2 Group 2 0.54
+#&gt; 5: 21000 Strategy 2 Group 1 0.53
+#&gt; 6: 21000 Strategy 2 Group 2 0.58</div><div class='input'><span class='fu'><a href='icer_tbl.html'>icer_tbl</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; $`Group 1`
 #&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "3.03 (1.98, 4.14)"       
-#&gt; Incremental costs "-"        "59,164 (47,739, 70,188)" 
-#&gt; Incremental NMB   "-"        "92,234 (37,274, 150,303)"
-#&gt; ICER              "-"        "19,539"                  
+#&gt; Incremental QALYs "-"        "2.95 (1.88, 4.10)"       
+#&gt; Incremental costs "-"        "58,638 (48,814, 69,158)" 
+#&gt; Incremental NMB   "-"        "88,992 (32,940, 147,966)"
+#&gt; ICER              "-"        "19,860"                  
 #&gt; Conclusion        "-"        "Cost-effective"          
 #&gt; 
 #&gt; $`Group 2`
 #&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "3.02 (2.14, 4.06)"       
-#&gt; Incremental costs "-"        "60,049 (50,964, 73,014)" 
-#&gt; Incremental NMB   "-"        "91,172 (39,806, 140,905)"
-#&gt; ICER              "-"        "19,855"                  
+#&gt; Incremental QALYs "-"        "3.07 (1.89, 4.16)"       
+#&gt; Incremental costs "-"        "60,445 (50,014, 72,823)" 
+#&gt; Incremental NMB   "-"        "93,210 (36,283, 152,664)"
+#&gt; ICER              "-"        "19,669"                  
 #&gt; Conclusion        "-"        "Cost-effective"          
 #&gt; </div></pre>
   </div>

@@ -55,7 +55,7 @@
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Economic models</li>
+    <li class="dropdown-header">Economic modeling</li>
     <li>
       <a href="../articles/dtstm.html">Discrete time state transition models</a>
     </li>
@@ -65,13 +65,15 @@
     <li>
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
-    <li class="divider">
-    <li class="dropdown-header">Additional examples</li>
+    <li>
+      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
+    <li class="divider">
   </ul>
 </li>
 <li>
@@ -99,7 +101,7 @@
     <div class="page-header toc-ignore">
       <h1>Getting started with a Markov cohort model</h1>
             
-            <h4 class="date">2019-12-26</h4>
+            <h4 class="date">2019-12-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/getting-started.Rmd"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="hidden name"><code>getting-started.Rmd</code></div>
@@ -296,15 +298,15 @@
 <span id="cb14-2"><a href="#cb14-2"></a>wtp &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>, <span class="dv">25000</span>, <span class="dv">500</span>)</span>
 <span id="cb14-3"><a href="#cb14-3"></a>icea_pw_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce_sim, <span class="dt">comparator =</span> <span class="dv">1</span>, <span class="dt">dr_qalys =</span> <span class="dv">0</span>, <span class="dt">dr_costs =</span> <span class="fl">.06</span>,</span>
 <span id="cb14-4"><a href="#cb14-4"></a>                       <span class="dt">k =</span> wtp)</span></code></pre></div>
-<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,185, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
+<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,194, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(icea_pw_out)</span></code></pre></div>
 <pre><code>##                   1   2                       
-## Incremental QALYs "-" "0.31 (0.19, 0.41)"     
-## Incremental costs "-" "1,923 (960, 3,151)"    
-## Incremental NMB   "-" "13,622 (7,270, 18,652)"
-## ICER              "-" "6,185"                 
+## Incremental QALYs "-" "0.31 (0.18, 0.41)"     
+## Incremental costs "-" "1,930 (974, 3,275)"    
+## Incremental NMB   "-" "13,649 (7,525, 18,556)"
+## ICER              "-" "6,194"                 
 ## Conclusion        "-" "Cost-effective"</code></pre>
-<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.948 and approaches 1 at slightly higher WTP values.</p>
+<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.952 and approaches 1 at slightly higher WTP values.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(icea_pw_out<span class="op">$</span>ceac, </span>
 <span id="cb17-2"><a href="#cb17-2"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, </span>
 <span id="cb17-3"><a href="#cb17-3"></a>           <span class="dt">col =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id, <span class="dt">labels =</span> strategies<span class="op">$</span>strategy_name[<span class="op">-</span><span class="dv">1</span>]))) <span class="op">+</span></span>
