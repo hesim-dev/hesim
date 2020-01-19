@@ -195,7 +195,7 @@ params <- list(
 ```
 
 ## Random number generation
-As noted above, *omrPTHR*, *omrRTHR*, and *rrr* are drawn from beta distributions whith $\alpha$ and $\beta$ (i.e. `shape1` and `shape2`) specified. Similarly, utility is drawn from a beta distribution, but `shape1` and `shape2` are derived from the mean and standard error using the method of moments. The mortality rate and the cost of the prostheses are assumed to be known with certainty. The medical costs associated with health states are drawn from a gamma distribution, for which, like utility, the underlying parameters are derived from the mean and standard error using the method of moments. Finally, the parameters of the Weibull survival model are drawn from a multivariate normal distribution using the point estimates and the variance-covariance matrix. 1,000 samples will be drawn for the PSA. 
+As noted above, *omrPTHR*, *omrRTHR*, and *rrr* are drawn from beta distributions whith $\alpha$ and $\beta$ (i.e. `shape1` and `shape2`) specified. Similarly, utility is drawn from a beta distribution, but `shape1` and `shape2` are derived from the mean and standard error using the method of moments. The mortality rate and the cost of the prostheses are assumed to be known with certainty. The medical costs associated with health states are drawn from a gamma distribution, for which, like utility, the underlying parameters are derived from the mean and standard error using the method of moments. Finally, the parameters of the Weibull survival model are drawn from a multivariate normal distribution using the point estimates and the variance-covariance matrix. 500 samples will be drawn for the PSA. 
 
 ```{r}
 rng_def <- define_rng({
@@ -211,7 +211,7 @@ rng_def <- define_rng({
     c_Standard = c_Standard,
     c_NP1 = c_NP1
   )
-}, n = 1000)
+}, n = 500)
 ```
 
 ## Transformed parameters
@@ -367,7 +367,7 @@ $$
 \begin{align}
 tp(t_u) &= \frac{1 - S(t)}{S(t-u)} \\
 &= \frac{1 - exp\{-H(t)\}}{exp\{-H(t-u)\}} \\
-&= 1 - exp\{-H(t-u) - H(t)\},
+&= 1 - exp\{H(t-u) - H(t)\},
 \end{align}
 $$
 

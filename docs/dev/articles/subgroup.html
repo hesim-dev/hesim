@@ -104,7 +104,7 @@
     <div class="page-header toc-ignore">
       <h1>Subgroup analyses</h1>
             
-            <h4 class="date">2020-01-18</h4>
+            <h4 class="date">2020-01-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/subgroup.Rmd"><code>vignettes/subgroup.Rmd</code></a></small>
       <div class="hidden name"><code>subgroup.Rmd</code></div>
@@ -405,7 +405,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <div id="random-number-generation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#random-number-generation" class="anchor"></a><span class="header-section-number">2.3</span> Random number generation</h2>
-<p>As noted above, <em>omrPTHR</em>, <em>omrRTHR</em>, and <em>rrr</em> are drawn from beta distributions whith <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> (i.e. <code>shape1</code> and <code>shape2</code>) specified. Similarly, utility is drawn from a beta distribution, but <code>shape1</code> and <code>shape2</code> are derived from the mean and standard error using the method of moments. The mortality rate and the cost of the prostheses are assumed to be known with certainty. The medical costs associated with health states are drawn from a gamma distribution, for which, like utility, the underlying parameters are derived from the mean and standard error using the method of moments. Finally, the parameters of the Weibull survival model are drawn from a multivariate normal distribution using the point estimates and the variance-covariance matrix. 1,000 samples will be drawn for the PSA.</p>
+<p>As noted above, <em>omrPTHR</em>, <em>omrRTHR</em>, and <em>rrr</em> are drawn from beta distributions whith <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> (i.e. <code>shape1</code> and <code>shape2</code>) specified. Similarly, utility is drawn from a beta distribution, but <code>shape1</code> and <code>shape2</code> are derived from the mean and standard error using the method of moments. The mortality rate and the cost of the prostheses are assumed to be known with certainty. The medical costs associated with health states are drawn from a gamma distribution, for which, like utility, the underlying parameters are derived from the mean and standard error using the method of moments. Finally, the parameters of the Weibull survival model are drawn from a multivariate normal distribution using the point estimates and the variance-covariance matrix. 500 samples will be drawn for the PSA.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>rng_def &lt;-<span class="st"> </span><span class="kw"><a href="../reference/define_rng.html">define_rng</a></span>({</span>
 <span id="cb12-2"><a href="#cb12-2"></a>  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>( </span>
 <span id="cb12-3"><a href="#cb12-3"></a>    <span class="dt">omrPTHR =</span> <span class="kw"><a href="../reference/rng_distributions.html">beta_rng</a></span>(<span class="dt">shape1 =</span> omrPTHR_shape1, <span class="dt">shape2 =</span> omrPTHR_shape2),</span>
@@ -419,7 +419,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span id="cb12-11"><a href="#cb12-11"></a>    <span class="dt">c_Standard =</span> c_Standard,</span>
 <span id="cb12-12"><a href="#cb12-12"></a>    <span class="dt">c_NP1 =</span> c_NP1</span>
 <span id="cb12-13"><a href="#cb12-13"></a>  )</span>
-<span id="cb12-14"><a href="#cb12-14"></a>}, <span class="dt">n =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<span id="cb12-14"><a href="#cb12-14"></a>}, <span class="dt">n =</span> <span class="dv">500</span>)</span></code></pre></div>
 </div>
 <div id="transformed-parameters" class="section level2">
 <h2 class="hasAnchor">
@@ -525,38 +525,38 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span id="cb18-7"><a href="#cb18-7"></a>              .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(qalys)),</span>
 <span id="cb18-8"><a href="#cb18-8"></a>                by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</span></code></pre></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.60750
-## 2:           2      2 14.65154</code></pre>
+## 1:           1      2 14.67414
+## 2:           2      2 14.71791</code></pre>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>ce_sim<span class="op">$</span>costs[grp_id <span class="op">==</span><span class="st"> </span><span class="dv">2</span> <span class="op">&amp;</span><span class="st"> </span>category <span class="op">==</span><span class="st"> "total"</span>, </span>
 <span id="cb20-2"><a href="#cb20-2"></a>            .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(costs)),</span>
 <span id="cb20-3"><a href="#cb20-3"></a>              by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</span></code></pre></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 512.1091
-## 2:           2      2 612.0980</code></pre>
+## 1:           1      2 508.5855
+## 2:           2      2 612.0908</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(icea_pw_out, <span class="dt">output =</span> <span class="st">"data.table"</span>)</span></code></pre></div>
-<pre><code>##     strategy_id grp_id            iqalys         icosts
-##  1:           2      1 0.07 (0.03, 0.13)  67 (-49, 138)
-##  2:           2      2 0.04 (0.02, 0.08)  100 (15, 152)
-##  3:           2      3 0.03 (0.01, 0.05)  126 (65, 162)
-##  4:           2      4 0.02 (0.01, 0.03) 145 (104, 170)
-##  5:           2      5 0.01 (0.00, 0.02) 159 (131, 176)
-##  6:           2      6 0.11 (0.04, 0.20) -29 (-235, 96)
-##  7:           2      7 0.07 (0.03, 0.12) 34 (-117, 123)
-##  8:           2      8 0.04 (0.02, 0.07)  82 (-26, 144)
-##  9:           2      9 0.02 (0.01, 0.04)  116 (45, 159)
-## 10:           2     10 0.01 (0.01, 0.02)  141 (94, 169)
+<pre><code>##     strategy_id grp_id            iqalys          icosts
+##  1:           2      1 0.07 (0.03, 0.13)   72 (-34, 143)
+##  2:           2      2 0.04 (0.02, 0.08)   104 (28, 155)
+##  3:           2      3 0.03 (0.01, 0.05)   128 (72, 164)
+##  4:           2      4 0.02 (0.01, 0.03)  147 (106, 171)
+##  5:           2      5 0.01 (0.00, 0.02)  161 (133, 176)
+##  6:           2      6 0.11 (0.04, 0.20) -22 (-227, 108)
+##  7:           2      7 0.07 (0.03, 0.12)  39 (-115, 131)
+##  8:           2      8 0.04 (0.02, 0.07)   85 (-22, 148)
+##  9:           2      9 0.02 (0.01, 0.04)   119 (47, 161)
+## 10:           2     10 0.01 (0.01, 0.02)   143 (95, 171)
 ##                      inmb      icer     conclusion
-##  1:  3,489 (1,157, 6,600)       939 Cost-effective
-##  2:    2,102 (672, 3,948)     2,270 Cost-effective
-##  3:    1,191 (348, 2,350)     4,779 Cost-effective
-##  4:      615 (132, 1,299)     9,557 Cost-effective
-##  5:         269 (-8, 666)    18,582 Cost-effective
-##  6: 5,649 (2,066, 10,263) Dominates Cost-effective
-##  7:  3,383 (1,204, 6,221)       493 Cost-effective
-##  8:    1,925 (667, 3,618)     2,033 Cost-effective
-##  9:    1,028 (327, 2,005)     5,084 Cost-effective
-## 10:       499 (99, 1,051)    11,016 Cost-effective</code></pre>
+##  1:  3,471 (1,245, 6,232)     1,010 Cost-effective
+##  2:    2,085 (730, 3,905)     2,365 Cost-effective
+##  3:    1,177 (371, 2,313)     4,917 Cost-effective
+##  4:      605 (141, 1,306)     9,780 Cost-effective
+##  5:         263 (-2, 681)    18,970 Cost-effective
+##  6: 5,678 (2,131, 10,169) Dominates Cost-effective
+##  7:  3,393 (1,246, 6,120)       563 Cost-effective
+##  8:    1,926 (675, 3,538)     2,116 Cost-effective
+##  9:    1,025 (319, 1,962)     5,190 Cost-effective
+## 10:       496 (97, 1,051)    11,167 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -568,9 +568,9 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span id="cb24-4"><a href="#cb24-4"></a><span class="kw"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(icea_pw_out)</span></code></pre></div>
 <pre><code>##                   1   2                   
 ## Incremental QALYs "-" "0.03 (0.01, 0.05)" 
-## Incremental costs "-" "118 (51, 159)"     
-## Incremental NMB   "-" "1,306 (401, 2,537)"
-## ICER              "-" "4,138"             
+## Incremental costs "-" "120 (54, 162)"     
+## Incremental NMB   "-" "1,299 (432, 2,451)"
+## ICER              "-" "4,243"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>
@@ -582,7 +582,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 \begin{align}
 tp(t_u) &amp;= \frac{1 - S(t)}{S(t-u)} \\
 &amp;= \frac{1 - exp\{-H(t)\}}{exp\{-H(t-u)\}} \\
-&amp;= 1 - exp\{-H(t-u) - H(t)\},
+&amp;= 1 - exp\{H(t-u) - H(t)\},
 \end{align}
 \]</span></p>
 <p>where <span class="math inline">\(H(t)\)</span> is the cumulative hazard function.</p>
