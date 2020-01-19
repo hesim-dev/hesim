@@ -100,6 +100,9 @@ state transition or partitioned survival model." />
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
     <li>
+      <a href="../articles/subgroup.html">Subgroup analyses</a>
+    </li>
+    <li>
       <a href="../articles/wlos.html">Simulating costs and QALYs</a>
     </li>
     <li class="divider"></li>
@@ -154,10 +157,20 @@ state transition or partitioned survival model.</p>
 objects of class <a href='tparams_mean.html'>tparams_mean</a> or <a href='params_lm.html'>params_lm</a>.</p></dd>
     <dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>. Only used for
 <a href='params_lm.html'>params_lm</a> objects.</p></dd>
+    <dt><code>method</code></dt><dd><p>The method used to simulate costs and
+quality-adjusted life-years (QALYs) as a function of state values.
+If <code>wlos</code>, then costs and QALYs are
+simulated by weighting state values by the length of stay in a health
+state. If <code>starting</code>, then state values represent a one-time value
+that occurs when a patient enters a health state. When <code>starting</code> is
+used in a cohort model, the state values only accrue at time 0;
+in contrast, in an individual-level model, state values
+accrue each time a patient enters a new state and discounted based on
+time of entrance into that state.</p></dd>
     <dt><code>time_reset</code></dt><dd><p>If <code>FALSE</code> then time intervals are based on time since
 the start of the simulation. If <code>TRUE</code>, then time intervals reset each
 time a patient enters a new health state. This is relevant if, for example,
-costs vary over time within health states.</p></dd>
+costs vary over time within health states. Only used if <code>method = wlos</code>.</p></dd>
 </dl><p></div></p>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -173,12 +186,18 @@ costs vary over time within health states.</p></dd>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
     Create a new <code>StateVals</code> object.
 <h3>Usage</h3>
-    <div class="r"><pre>StateVals$new(params, input_data = NULL, time_reset = FALSE)</pre></div>
+    <div class="r"><pre>StateVals$new(
+  params,
+  input_data = NULL,
+  method = c("wlos", "starting"),
+  time_reset = FALSE
+)</pre></div>
     <h3>Arguments</h3>
     <div class="arguments">
 <dl class='dl-horizontal'>
 <dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
     <dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
+    <dt><code>method</code></dt><dd><p>The <code>method</code> field.</p></dd>
     <dt><code>time_reset</code></dt><dd><p>The <code>time_reset</code> field.</p></dd>
 </dl>
 </div>

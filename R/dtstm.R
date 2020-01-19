@@ -147,14 +147,14 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
     #' `utility_model`. See 
     #' the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
     #' @param dr Discount rate.
-    #' @param method Method used to integrate state values when computing (QALYs).
+    #' @param integrate_method Method used to integrate state values when computing (QALYs).
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
     #' @return An instance of `self` with simulated output of class [qalys] stored
     #' in `qalys_`.
     sim_qalys = function(dr = .03,
-                         method = c("trapz", "riemann_left", "riemann_right"),
+                         integrate_method = c("trapz", "riemann_left", "riemann_right"),
                          lys = FALSE){
-      self$qalys_ <- sim_qalys(self$stateprobs_, self$utility_model, dr, method,
+      self$qalys_ <- sim_qalys(self$stateprobs_, self$utility_model, dr, integrate_method,
                                lys)
       invisible(self)
     },
@@ -163,21 +163,23 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
     #' Simulate costs as a function of `stateprobs_` and `cost_models`. 
     #' See the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
     #' @param dr Discount rate.
-    #' @param method Method used to integrate state values when computing costs.
+    #' @param integrate_method Method used to integrate state values when computing costs.
     #' @return An instance of `self` with simulated output of class [costs] stored
     #' in `costs_`.
     sim_costs = function(dr = .03, 
-                         method = c("trapz", "riemann_left", "riemann_right")){
-      self$costs_ <- sim_costs(self$stateprobs_, self$cost_models, dr, method)
+                         integrate_method = c("trapz", "riemann_left", "riemann_right")){
+      self$costs_ <- sim_costs(self$stateprobs_, self$cost_models, dr, integrate_method)
       invisible(self)
     },
 
     #' @description
     #' Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
-    #' See [summarize_ce()].        
-    summarize = function() {
+    #' See [summarize_ce()].    
+    #' @param by_grp If `TRUE`, then costs and QALYs are computed by subgroup. If
+    #' `FALSE`, then costs and QALYs are aggregated across all patients (and subgroups).    
+    summarize = function(by_grp = FALSE) {
       check_summarize(self)
-      return(summarize_ce(self$costs_, self$qalys_))
+      return(summarize_ce(self$costs_, self$qalys_, by_grp))
     }
   )
 )
@@ -187,6 +189,10 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
 #' A generic function for creating an object of class [CohortDtstm].
 #' @param object An object of the appropriate class. 
 #' @param input_data 	An object of class [expanded_hesim_data][expand.hesim_data()].
+#' @param cost_args A list of futher arguments passed to `StateVals$new()` in 
+#' [StateVals] when initiating cost models.
+#' @param utility_args A list of further arguments passed to `StateVals$new()` in
+#' [StateVals] when initiating the utility model.
 #' @param ... Further arguments passed to `CohortDtstmTrans$new()` in 
 #' [CohortDtstmTrans]. 
 #'  
@@ -197,7 +203,8 @@ create_CohortDtstm <- function(object, ...){
 
 #' @export
 #' @rdname create_CohortDtstm
-create_CohortDtstm.model_def <- function(object, input_data, ...){
+create_CohortDtstm.model_def <- function(object, input_data, cost_args = NULL,
+                                         utility_args = NULL, ...){
   model_inputs <- eval_model(object, input_data)
   
   # Individual models
@@ -213,7 +220,9 @@ create_CohortDtstm.model_def <- function(object, input_data, ...){
   if (is.null(model_inputs$utility)){
     utility_model <- NULL
   } else{
-    utility_model <- create_StateVals(model_inputs, cost = FALSE) 
+    utility_model <- create_StateVals(model_inputs, 
+                                      cost = FALSE,
+                                      init_args = utility_args)
   }
   
   ## Cost models
@@ -222,7 +231,9 @@ create_CohortDtstm.model_def <- function(object, input_data, ...){
    cost_models <- vector(mode = "list", length = length(model_inputs$cost))
    names(cost_models) <- names(model_inputs$cost)
    for (i in 1:n_cost_models){
-     cost_models[[i]] <- create_StateVals(model_inputs, name = names(cost_models)[i])
+     cost_models[[i]] <- create_StateVals(model_inputs, 
+                                          name = names(cost_models)[i],
+                                          init_args = cost_args[[i]]) 
    }
   } else{
     cost_models <- NULL

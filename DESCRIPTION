@@ -35,6 +35,7 @@ Imports:
 Suggests:
     covr,
     ggplot2,
+    kableExtra,
     knitr,
     mstate,
     msm,

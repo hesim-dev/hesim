@@ -278,9 +278,7 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 #' @param n Number of random observations of the parameters to draw when parameters 
 #' are fit using a statistical model.
 #' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
-#' @param time_reset If `TRUE`, then time intervals reset each time a patient enters a new health 
-#' state. See [StateVals].
-#' @param ... Further arguments passed to or from other methods. Currently unused. 
+#' @param ... Further arguments (`time_reset` and `method`) passed to [StateVals$new()][StateVals].
 #' @return A [StateVals] object.
 #' @seealso [StateVals], [stateval_tbl]
 #' @export
@@ -294,12 +292,12 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
                                 point_estimate = FALSE, ...){
   params <- create_params(object, n, point_estimate) 
   input_mats <- create_input_mats(object, input_data)
-  return(StateVals$new(params = params, input_data = input_mats))
+  return(StateVals$new(params = params, input_data = input_mats, ...))
 }
 
 #' @rdname create_StateVals 
 #' @export
-create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, ...){
+create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
   
   # Random number generation
   tbl <- copy(object)
@@ -407,24 +405,29 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, time_reset = FALSE, 
                               n_states = length(unique(tbl$state_id)),
                               time_id = tbl$time_id,
                               time_intervals = time_intervals,
-                              n_times = nrow(time_intervals)) 
-  return(StateVals$new(params = tparams, time_reset = time_reset))
+                              n_times = nrow(time_intervals),
+                              grp_id = tbl$grp_id,
+                              patient_wt = tbl$patient_wt) 
+  return(StateVals$new(params = tparams, ...))
 }
 
 create_StateVals.eval_model <- function(object, cost = TRUE, name = NULL,
-                                        time_reset = FALSE, ...){
+                                        init_args = NULL){
   out <- if (cost) object[["costs"]][[name]] else object$utility
   n_states <- object$n_states - 1 # The non-death states
   id  <- object$id[[attr(out, "id_index")]]
   out_id <- id[rep(1:nrow(id), each = n_states)]
+  # if (cost) browser()
   if ((is.numeric(out) && length(dim(out)) <= 1) || ncol(out) == 1){
     out_dt <- cbind(out_id, value = rep(out, each = n_states))
   } else{
     out_dt <- cbind(out_id, value = as.vector(t(out)))
   }
   out_dt[, ("state_id") := rep(1:n_states, times = nrow(id))]
-  return(create_StateVals(stateval_tbl(out_dt, dist = "custom"),
-                          n = object$n))
+  return(do.call("create_StateVals", 
+                 args = c(list(object = stateval_tbl(out_dt, dist = "custom"),
+                               n = object$n),
+                           init_args)))
 }
 
 #' Model for state values
@@ -443,22 +446,38 @@ StateVals <- R6::R6Class("StateVals",
     #' [params_lm] objects.
     input_data = NULL,
     
+    #' @field method The method used to simulate costs and 
+    #' quality-adjusted life-years (QALYs) as a function of state values.
+    #'  If `wlos`, then costs and QALYs are
+    #' simulated by weighting state values by the length of stay in a health
+    #' state. If `starting`, then state values represent a one-time value
+    #' that occurs when a patient enters a health state. When `starting` is 
+    #' used in a cohort model, the state values only accrue at time 0; 
+    #' in contrast, in an individual-level model, state values
+    #' accrue each time a patient enters a new state and discounted based on
+    #' time of entrance into that state. 
+    method = NULL,
+    
     #' @field time_reset If `FALSE` then time intervals are based on time since
     #'  the start of the simulation. If `TRUE`, then time intervals reset each 
     #'  time a patient enters a new health state. This is relevant if, for example, 
-    #'  costs vary over time within health states.
-    time_reset = NULL,
+    #'  costs vary over time within health states. Only used if `method = wlos`.
+    time_reset = NULL,    
 
     #' @description
     #' Create a new `StateVals` object.
     #' @param params The `params` field.
     #' @param input_data The `input_data` field.
+    #' @param method The `method` field.
     #' @param time_reset The `time_reset` field.
     #' @return A new `StateVals` object.
-    initialize = function(params, input_data = NULL, time_reset = FALSE) {
+    initialize = function(params, input_data = NULL,
+                          method = c("wlos", "starting"),
+                          time_reset = FALSE) {
       self$params <- params
       self$input_data <- input_data
-      self$time_reset = time_reset
+      self$method <- match.arg(method)
+      self$time_reset <- time_reset
     },
     
     #' @description
@@ -492,14 +511,14 @@ StateVals <- R6::R6Class("StateVals",
   )
 )
 
-# Weighted length of stay ------------------------------------------------------
-sim_wlos <- function (object, ...) {
-  UseMethod("sim_wlos", object)
+# Expected values --------------------------------------------------------------
+sim_ev <- function (object, ...) {
+  UseMethod("sim_ev", object)
 }
 
-sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
-                                method = c("trapz", "riemann_left", "riemann_right")){
-  method <- match.arg(method)
+sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
+                              integrate_method = c("trapz", "riemann_left", "riemann_right")){
+  integrate_method <- match.arg(integrate_method)
   state_id <- NULL
   
   # Checks
@@ -514,6 +533,7 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
   
   # The state value models
   expected_samples <- max(object$sample)
+  method <- rep(NA, length(statevalmods))
   for (i in 1:length(statevalmods)){
     ## Number of samples
     if (statevalmods[[i]]$params$n_samples != expected_samples){
@@ -533,20 +553,20 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
   }
   
   # Simulate
-  res <- data.table(C_sim_wlos(object[state_id != max(state_id)],
-                               statevalmods, dr, categories,
-                               unique(object$t),
-                               method))
+  res <- data.table(C_sim_ev(object[state_id != max(state_id)],
+                             statevalmods,
+                             dr, categories,
+                             unique(object$t),
+                             integrate_method))
   res[, sample := sample + 1]
   if (!"patient_wt" %in% colnames(object)) res[, ("patient_wt") := NULL]
   return(res[])
 } 
 
-#' Weighted length of stay
+#' Expected values
 #' 
-#' Simulate weighted length of stay as a function of simulated state occupancy
-#' probabilities in order to compute costs and quality-adjusted
-#' life-years (QALYs). 
+#' Simulate costs and quality-adjusted life-years (QALYs) as a function of
+#' simulated state occupancy probabilities. 
 #' 
 #' @param object A [stateprobs] object.
 #' @param utility_model A single object of class [StateVals] used
@@ -554,7 +574,7 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
 #' @param cost_models A list of objects of class [StateVals] used
 #' to simulate costs.
 #' @param dr Discount rate. 
-#' @param method Method used to integrate state values when computing 
+#' @param integrate_method Method used to integrate state values when computing 
 #' weighted length of stay. Options are `trapz` for the trapezoid rule,
 #' `riemann_left` left for a left Riemann sum, and  
 #' `riemann_right` right for a right Riemann sum.
@@ -564,27 +584,17 @@ sim_wlos.stateprobs <- function(object, statevalmods, categories, dr = .03,
 #' @return [sim_costs()] and [sim_qalys()] return objects of class
 #' [costs] and [qalys], respectively. 
 #' @details 
-#' Discounted costs and QALYs are calculated by integrating the "weighted" probability of being in each state. 
-#' Weights are a function of the discount factor and the state value predicted using either the cost or QALY model. 
-#' Mathematically, discounted costs and QALYs in health state \eqn{s} are calculated as,
-#'
-#'\deqn{\int_0^T w_h e^{-rt} P_h(t) dt },
-#'
-#' where for health state \eqn{h} and time {t}, \eqn{w_h} is the predicted cost 
-#' or QALY weight, \eqn{r} is the discount rate, and \eqn{P_h(t)} is the 
-#' probability of being in a given health state. The integral is calculated
-#'  numerically from the points in `t_` using the approach selected 
-#'  using the argument `method`.
+#' See the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
 #'
 #' @export
-#' @name sim_wlos
+#' @name sim_ev
 sim_qalys <- function(object, utility_model, dr, method, lys){
   utility_model$check()
-  qalys <- sim_wlos(object,
-                    list(utility_model),
-                    "qalys",
-                    dr,
-                    method)
+  qalys <- sim_ev(object,
+                  list(utility_model),
+                  "qalys",
+                  dr,
+                  method)
   setnames(qalys, "value", "qalys")
   setattr(qalys, "class", 
           c("qalys", "data.table", "data.frame"))
@@ -592,7 +602,7 @@ sim_qalys <- function(object, utility_model, dr, method, lys){
 }
 
 #' @export
-#' @rdname sim_wlos
+#' @rdname sim_ev
 sim_costs <- function(object, cost_models, dr, method){
   if(!is.list(cost_models)){
     stop("'cost_models' must be a list", call. = FALSE)
@@ -601,15 +611,15 @@ sim_costs <- function(object, cost_models, dr, method){
     cost_models[[i]]$check()
   }
   if (is.null(names(cost_models))){
-    categories <- paste0("Type ", seq(1, length(cost_models)))
+    categories <- paste0("Category ", seq(1, length(cost_models)))
   } else{
     categories <- names(cost_models)
   }   
-  costs <- sim_wlos(object,
-                     cost_models,
-                     categories,
-                     dr,
-                     method)
+  costs <- sim_ev(object,
+                  cost_models,
+                   categories,
+                   dr,
+                  method)
   setnames(costs, "value", "costs")
   setattr(costs, "class", 
           c("costs", "data.table", "data.frame"))

@@ -271,7 +271,7 @@ public:
   /** 
    * Get the patient weight given the current indices
    */    
-  int get_patient_wt(){
+  double get_patient_wt(){
     return patient_wt_vec_[index_];
   }    
 

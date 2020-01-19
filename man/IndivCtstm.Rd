@@ -291,9 +291,17 @@ stored in \code{costs_}.
 Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See \code{\link[=summarize_ce]{summarize_ce()}}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$summarize()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$summarize(by_grp = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{by_grp}}{If \code{TRUE}, then costs and QALYs are computed by subgroup. If
+\code{FALSE}, then costs and QALYs are aggregated across all patients (and subgroups).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

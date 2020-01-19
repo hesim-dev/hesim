@@ -26,7 +26,7 @@ must either be 1 or \code{n}.}
 \item{x}{An object of class \code{rng_def} created with \code{define_rng()}.}
 
 \item{params}{A list containing the values of parameters for random number
-generation. Each element of the list should either be a\code{vector},
+generation. Each element of the list should either be a \code{vector},
 \code{matrix}, \code{data.frame}, or \code{data.table}}
 }
 \value{

@@ -310,10 +310,7 @@ time_intervals <- function(time_start){
   if (any(time_start < 0)){
     stop("'time_start' cannot be negative")
   }
-  time_start <- sort(time_start)
-  if (time_start[1] > 0){
-    time_start <- c(0, time_start)
-  }
+  time_start <- sort(as.numeric(time_start)) 
   time_intervals <- data.table(time_id = 1:length(time_start), 
                                 time_start = time_start)
   time_intervals[, "time_stop" := shift(get("time_start"), type = "lead")]

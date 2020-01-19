@@ -99,6 +99,9 @@
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
     <li>
+      <a href="../articles/subgroup.html">Subgroup analyses</a>
+    </li>
+    <li>
       <a href="../articles/wlos.html">Simulating costs and QALYs</a>
     </li>
     <li class="divider"></li>
@@ -147,7 +150,13 @@
     <pre class="usage"><span class='fu'>create_CohortDtstm</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for model_def</span>
-<span class='fu'>create_CohortDtstm</span>(<span class='no'>object</span>, <span class='no'>input_data</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>create_CohortDtstm</span>(
+  <span class='no'>object</span>,
+  <span class='no'>input_data</span>,
+  <span class='kw'>cost_args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>utility_args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,6 +173,16 @@
     <tr>
       <th>input_data</th>
       <td><p>An object of class <a href='expand.hesim_data.html'>expanded_hesim_data</a>.</p></td>
+    </tr>
+    <tr>
+      <th>cost_args</th>
+      <td><p>A list of futher arguments passed to <code>StateVals$new()</code> in
+<a href='StateVals.html'>StateVals</a> when initiating cost models.</p></td>
+    </tr>
+    <tr>
+      <th>utility_args</th>
+      <td><p>A list of further arguments passed to <code>StateVals$new()</code> in
+<a href='StateVals.html'>StateVals</a> when initiating the utility model.</p></td>
     </tr>
     </table>
     

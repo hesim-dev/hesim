@@ -94,7 +94,7 @@ the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} fo
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$sim_qalys(
   dr = 0.03,
-  method = c("trapz", "riemann_left", "riemann_right"),
+  integrate_method = c("trapz", "riemann_left", "riemann_right"),
   lys = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -104,7 +104,7 @@ the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} fo
 \describe{
 \item{\code{dr}}{Discount rate.}
 
-\item{\code{method}}{Method used to integrate state values when computing (QALYs).}
+\item{\code{integrate_method}}{Method used to integrate state values when computing (QALYs).}
 
 \item{\code{lys}}{If \code{TRUE}, then life-years are simulated in addition to QALYs.}
 }
@@ -123,7 +123,7 @@ See the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$sim_costs(
   dr = 0.03,
-  method = c("trapz", "riemann_left", "riemann_right")
+  integrate_method = c("trapz", "riemann_left", "riemann_right")
 )}\if{html}{\out{</div>}}
 }
 
@@ -132,7 +132,7 @@ See the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette
 \describe{
 \item{\code{dr}}{Discount rate.}
 
-\item{\code{method}}{Method used to integrate state values when computing costs.}
+\item{\code{integrate_method}}{Method used to integrate state values when computing costs.}
 }
 \if{html}{\out{</div>}}
 }
@@ -147,9 +147,17 @@ in \code{costs_}.
 Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See \code{\link[=summarize_ce]{summarize_ce()}}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$summarize()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$summarize(by_grp = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{by_grp}}{If \code{TRUE}, then costs and QALYs are computed by subgroup. If
+\code{FALSE}, then costs and QALYs are aggregated across all patients (and subgroups).}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

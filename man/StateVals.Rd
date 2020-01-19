@@ -16,10 +16,21 @@ objects of class \link{tparams_mean} or \link{params_lm}.}
 \item{\code{input_data}}{An object of class \link{input_mats}. Only used for
 \link{params_lm} objects.}
 
+\item{\code{method}}{The method used to simulate costs and
+quality-adjusted life-years (QALYs) as a function of state values.
+If \code{wlos}, then costs and QALYs are
+simulated by weighting state values by the length of stay in a health
+state. If \code{starting}, then state values represent a one-time value
+that occurs when a patient enters a health state. When \code{starting} is
+used in a cohort model, the state values only accrue at time 0;
+in contrast, in an individual-level model, state values
+accrue each time a patient enters a new state and discounted based on
+time of entrance into that state.}
+
 \item{\code{time_reset}}{If \code{FALSE} then time intervals are based on time since
 the start of the simulation. If \code{TRUE}, then time intervals reset each
 time a patient enters a new health state. This is relevant if, for example,
-costs vary over time within health states.}
+costs vary over time within health states. Only used if \code{method = wlos}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -37,7 +48,12 @@ costs vary over time within health states.}
 \subsection{Method \code{new()}}{
 Create a new \code{StateVals} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StateVals$new(params, input_data = NULL, time_reset = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StateVals$new(
+  params,
+  input_data = NULL,
+  method = c("wlos", "starting"),
+  time_reset = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -46,6 +62,8 @@ Create a new \code{StateVals} object.
 \item{\code{params}}{The \code{params} field.}
 
 \item{\code{input_data}}{The \code{input_data} field.}
+
+\item{\code{method}}{The \code{method} field.}
 
 \item{\code{time_reset}}{The \code{time_reset} field.}
 }

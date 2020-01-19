@@ -210,7 +210,7 @@ check_eval_rng <- function(object){
 
 #' @param x An object of class `rng_def` created with `define_rng()`.
 #' @param params A list containing the values of parameters for random number 
-#' generation. Each element of the list should either be a`vector`,
+#' generation. Each element of the list should either be a `vector`,
 #'  `matrix`, `data.frame`, or `data.table`
 #' @export
 #' @rdname define_rng
@@ -241,6 +241,29 @@ rng_colnames <- function(old_names, params, new_names = NULL){
   return(new_names)
 }
 
+mom_fun_rng <- function(rng_fun, mom_fun, mean, sd){
+  which_fixed <- which(sd == 0)
+  which_rng <- which(sd != 0)
+  n <- parent.frame()$n
+  if (length(which_rng) > 0){
+    rng_params <- do.call(mom_fun, list(mean[which_rng], sd[which_rng]))
+    x <- do.call(rng_fun, c(list(n = n * length(which_rng)),
+                            rng_params))
+  }
+  if (length(which_fixed) > 0){ # Use fixed() when sd == 0
+    x_fixed <- rep(mean[which_fixed], length = n * length(which_fixed))
+    if (length(which_rng) > 0){ # Combine fixed() and rng()
+      x <- cbind(matrix(x, byrow = TRUE, nrow = n),
+                 matrix(x_fixed, byrow = TRUE, nrow = n))
+      x <- x[, order(c(which_rng, which_fixed))]
+      x <- c(t(x))
+    } else{ # Only used fixed()
+      x <- x_fixed
+    }
+  }
+  return(x)
+}
+
 #' Generate variates for univariate distributions
 #' @keywords internal
 uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
@@ -254,11 +277,10 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
   
   # Random number generation
   if (!is.null(mom_fun)){
-    rng_params <- do.call(mom_fun, params)
+    x <- mom_fun_rng(rng_fun, mom_fun, params[[1]], params[[2]])
   } else{
-    rng_params <- params
+    x <- do.call(rng_fun, c(list(n = n * k), params))
   }
-  x <- do.call(rng_fun, c(list(n = n * k), rng_params))
   
   ## If k > 1 convert to matrix
   if (k > 1){
@@ -293,8 +315,9 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
 #' is defined in the parent environment. Convenience random number generation 
 #' functions include:
 #' \describe{
-#' \item{`beta_rng()`}{The parameters of the beta distribution are derived using
-#' the methods of moments with [mom_beta()] and beta variates are generated with
+#' \item{`beta_rng()`}{If `mean` and `sd` are both not `NULL`, then
+#'  parameters of the beta distribution are derived using
+#' the methods of moments with [mom_beta()]. Beta variates are generated with
 #'  [stats::rbeta()].}
 #' \item{`custom()`}{Use previously sampled values from a custom probability distribution.
 #' There are three possibilities: (i) if `n` is equal to the number previously 
@@ -353,12 +376,22 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
 #' @seealso [define_rng()]
 NULL
 
+#' @param shape1,shape2 Non-negative parameters of the Beta distribution.
 #' @name rng_distributions
-beta_rng <- function(mean, sd, names = NULL){
-  return(uv_rng(n = parent.frame()$n, 
-                params = list(mean, sd),
-                rng_fun = "rbeta",
-                names = names))
+beta_rng <- function(shape1 = 1, shape2 = 1,
+                     mean = NULL, sd = NULL, names = NULL){
+  if (!is.null(mean) & !is.null(sd)){
+    return(uv_rng(n = parent.frame()$n, 
+                  params = list(mean, sd) ,
+                  rng_fun = "rbeta",
+                  mom_fun = "mom_beta",
+                  names = names))  
+  } else{
+    return(uv_rng(n = parent.frame()$n, 
+                  params = list(shape1, shape2) ,
+                  rng_fun = "rbeta",
+                  names = names)) 
+  }
 }
 
 #' @param alpha A matrix where each row is a separate vector of shape parameters.
@@ -784,8 +817,11 @@ eval_model <- function(x, input_data){
     
     ## Return
     setnames(data, "time", "time_start")
-    return(list(id = data[, c("sample", "strategy_id", "patient_id", "time_start"),
-                          with = FALSE],
+    id_dt <- data[, c("sample", "strategy_id", "patient_id", "time_start"),
+                  with = FALSE]
+    if (!is.null(data[["grp_id"]])) id_dt[, ("grp_id") := data[["grp_id"]]]
+    if (!is.null(data[["patient_wt"]])) id_dt[, ("patient_wt") := data[["patient_wt"]]]
+    return(list(id = id_dt,
                 tpmatrix = tparams[["tpmatrix"]],
                 utility = tparams[["utility"]],
                 costs = tparams[["costs"]]))

@@ -73,8 +73,8 @@ C_statevals_sim <- function(R_StateVals, times, type) {
     .Call('_hesim_C_statevals_sim', PACKAGE = 'hesim', R_StateVals, times, type)
 }
 
-C_sim_wlos <- function(R_stateprobs, R_statevals, dr, categories, times, method = "trapz") {
-    .Call('_hesim_C_sim_wlos', PACKAGE = 'hesim', R_stateprobs, R_statevals, dr, categories, times, method)
+C_sim_ev <- function(R_stateprobs, R_statevals, dr, categories, times, method = "trapz") {
+    .Call('_hesim_C_sim_ev', PACKAGE = 'hesim', R_stateprobs, R_statevals, dr, categories, times, method)
 }
 
 C_test_trapz <- function(x, y) {

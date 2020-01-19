@@ -35,7 +35,7 @@ arma::mat sim_markov_chain(const arma::cube &p,
   x.row(0) = x0;
   for (int t = 1; t < n_times; ++t){
     // Match transition probability matrix to time period
-    if (times[t] > time_stop[time_interval]){
+    if (times[t] >= time_stop[time_interval]){
       ++time_interval; 
       p_t = p.slice(time_interval);
     }

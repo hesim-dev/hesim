@@ -101,6 +101,9 @@ cost-effectiveness analysis with icea() and icea_pw()." />
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
     <li>
+      <a href="../articles/subgroup.html">Subgroup analyses</a>
+    </li>
+    <li>
       <a href="../articles/wlos.html">Simulating costs and QALYs</a>
     </li>
     <li class="divider"></li>
@@ -178,7 +181,7 @@ cost-effectiveness analysis with <code><a href='icea.html'>icea()</a></code> and
 (i.e., an average within a population), then there
 must be one observation for each discount rate (<code>dr</code>),
 PSA sample (<code>sample</code>), treatment strategy (<code>strategy_id</code>),
-and health state (<code>state_id</code>). Alternatively, there can be column
+and health state (<code>state_id</code>). Alternatively, there can be a column
 denoting a patient (<code>patient_id</code>), in which case outcomes will first be
 averaged across patients. A <code>grp_id</code> column can also be used so that
 outcomes are computed for each subgroup (if <code>by_grp = TRUE</code>); otherwise it is assumed that

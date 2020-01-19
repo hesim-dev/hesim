@@ -100,6 +100,9 @@ distributions with define_rng()." />
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
     <li>
+      <a href="../articles/subgroup.html">Subgroup analyses</a>
+    </li>
+    <li>
       <a href="../articles/wlos.html">Simulating costs and QALYs</a>
     </li>
     <li class="divider"></li>
@@ -146,7 +149,7 @@ distributions with <code><a href='define_rng.html'>define_rng()</a></code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>beta_rng</span>(<span class='no'>mean</span>, <span class='no'>sd</span>, <span class='kw'>names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>beta_rng</span>(<span class='kw'>shape1</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>shape2</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>dirichlet_rng</span>(<span class='no'>alpha</span>, <span class='kw'>names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
@@ -167,6 +170,10 @@ distributions with <code><a href='define_rng.html'>define_rng()</a></code>.</p>
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>shape1, shape2</th>
+      <td><p>Non-negative parameters of the Beta distribution.</p></td>
+    </tr>
     <tr>
       <th>mean, sd</th>
       <td><p>Mean and standard deviation of the random variable.</p></td>
@@ -245,8 +252,9 @@ named parameter vectors.</p></li>
 <code><a href='define_rng.html'>define_rng()</a></code>. They consequently assume that the number of samples to draw, <code>n</code>,
 is defined in the parent environment. Convenience random number generation
 functions include:</p><dl class='dl-horizontal'>
-<dt><code>beta_rng()</code></dt><dd><p>The parameters of the beta distribution are derived using
-the methods of moments with <code><a href='mom_beta.html'>mom_beta()</a></code> and beta variates are generated with
+<dt><code>beta_rng()</code></dt><dd><p>If <code>mean</code> and <code>sd</code> are both not <code>NULL</code>, then
+parameters of the beta distribution are derived using
+the methods of moments with <code><a href='mom_beta.html'>mom_beta()</a></code>. Beta variates are generated with
 <code><a href='https://www.rdocumentation.org/packages/stats/topics/Beta'>stats::rbeta()</a></code>.</p></dd>
 <dt><code>custom()</code></dt><dd><p>Use previously sampled values from a custom probability distribution.
 There are three possibilities: (i) if <code>n</code> is equal to the number previously

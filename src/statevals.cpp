@@ -80,15 +80,15 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
  * hesim::wlos_out_out.
  ******************************************************************************/ 
 // [[Rcpp::export]]
-Rcpp::DataFrame C_sim_wlos(Rcpp::DataFrame R_stateprobs,
-                               Rcpp::List R_statevals, 
-                               std::vector<double> dr,
-                               std::vector<std::string> categories,
-                               std::vector<double> times,
-                               std::string method = "trapz"){
-  hesim::wlos wlos(R_statevals);
+Rcpp::DataFrame C_sim_ev(Rcpp::DataFrame R_stateprobs,
+                         Rcpp::List R_statevals, 
+                         std::vector<double> dr,
+                         std::vector<std::string> categories,
+                         std::vector<double> times,
+                         std::string method = "trapz"){
+  hesim::ev ev(R_statevals);
   hesim::stateprobs_out stprobs(R_stateprobs);
-  hesim::wlos_out out = wlos(stprobs, times, dr, categories, method);
+  hesim::ev_out out = ev(stprobs, times, dr, categories, method);
   return out.create_R_data_frame();
 }
 

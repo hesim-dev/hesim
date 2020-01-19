@@ -746,9 +746,11 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     #' @description
     #' Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
     #' See [summarize_ce()].    
-    summarize = function() {
+    #' @param by_grp If `TRUE`, then costs and QALYs are computed by subgroup. If
+    #' `FALSE`, then costs and QALYs are aggregated across all patients (and subgroups).
+    summarize = function(by_grp = FALSE) {
       check_summarize(self)
-      summarize_ce(self$costs_, self$qalys_)
+      summarize_ce(self$costs_, self$qalys_, by_grp)
     }
     
   ) # end public

@@ -7,7 +7,13 @@
 \usage{
 create_CohortDtstm(object, ...)
 
-\method{create_CohortDtstm}{model_def}(object, input_data, ...)
+\method{create_CohortDtstm}{model_def}(
+  object,
+  input_data,
+  cost_args = NULL,
+  utility_args = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{An object of the appropriate class.}
@@ -16,6 +22,12 @@ create_CohortDtstm(object, ...)
 \link{CohortDtstmTrans}.}
 
 \item{input_data}{An object of class \link[=expand.hesim_data]{expanded_hesim_data}.}
+
+\item{cost_args}{A list of futher arguments passed to \code{StateVals$new()} in
+\link{StateVals} when initiating cost models.}
+
+\item{utility_args}{A list of further arguments passed to \code{StateVals$new()} in
+\link{StateVals} when initiating the utility model.}
 }
 \description{
 A generic function for creating an object of class \link{CohortDtstm}.

@@ -99,6 +99,9 @@
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
     <li>
+      <a href="../articles/subgroup.html">Subgroup analyses</a>
+    </li>
+    <li>
       <a href="../articles/wlos.html">Simulating costs and QALYs</a>
     </li>
     <li class="divider"></li>
@@ -209,21 +212,21 @@ list represents a different cost category.</p></dd>
     An instance of <code>self</code> with simulated output of class <a href='stateprobs.html'>stateprobs</a>
 stored in <code>stateprobs_</code>.
     <p><hr>
-<a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_qalys()</a></code></h3>
+<a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
     Simulate quality-adjusted life-years (QALYs) as a function of <code>stateprobs_</code> and
 <code>utility_model</code>. See
 the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
 <h3>Usage</h3>
     <div class="r"><pre>CohortDtstm$sim_qalys(
   dr = 0.03,
-  method = c("trapz", "riemann_left", "riemann_right"),
+  integrate_method = c("trapz", "riemann_left", "riemann_right"),
   lys = FALSE
 )</pre></div>
     <h3>Arguments</h3>
     <div class="arguments">
 <dl class='dl-horizontal'>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
-    <dt><code>method</code></dt><dd><p>Method used to integrate state values when computing (QALYs).</p></dd>
+    <dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing (QALYs).</p></dd>
     <dt><code>lys</code></dt><dd><p>If <code>TRUE</code>, then life-years are simulated in addition to QALYs.</p></dd>
 </dl>
 </div>
@@ -231,19 +234,19 @@ the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette<
     An instance of <code>self</code> with simulated output of class <a href='qalys.html'>qalys</a> stored
 in <code>qalys_</code>.
     <p><hr>
-<a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_costs()</a></code></h3>
+<a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_ev.html'>sim_costs()</a></code></h3>
     Simulate costs as a function of <code>stateprobs_</code> and <code>cost_models</code>.
 See the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
 <h3>Usage</h3>
     <div class="r"><pre>CohortDtstm$sim_costs(
   dr = 0.03,
-  method = c("trapz", "riemann_left", "riemann_right")
+  integrate_method = c("trapz", "riemann_left", "riemann_right")
 )</pre></div>
     <h3>Arguments</h3>
     <div class="arguments">
 <dl class='dl-horizontal'>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
-    <dt><code>method</code></dt><dd><p>Method used to integrate state values when computing costs.</p></dd>
+    <dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing costs.</p></dd>
 </dl>
 </div>
     <h3>Returns</h3>
@@ -254,7 +257,14 @@ in <code>costs_</code>.
     Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
 <h3>Usage</h3>
-    <div class="r"><pre>CohortDtstm$summarize()</pre></div>
+    <div class="r"><pre>CohortDtstm$summarize(by_grp = FALSE)</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>by_grp</code></dt><dd><p>If <code>TRUE</code>, then costs and QALYs are computed by subgroup. If
+<code>FALSE</code>, then costs and QALYs are aggregated across all patients (and subgroups).</p></dd>
+</dl>
+</div>
     <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
     The objects of this class are cloneable with this method.

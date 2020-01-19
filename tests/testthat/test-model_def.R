@@ -27,7 +27,8 @@ params <- list(
 )
 
 rng_def <- define_rng({
-  beta_mean <- c(500, 800, 1000)
+  beta_mean <- c(.2, .8, 0)
+  beta_sd <- c(0, .1, 0)
   list( 
     dir1 = dirichlet_rng(alpha), 
     dir2 = dirichlet_rng(unname(alpha)),
@@ -35,8 +36,8 @@ rng_def <- define_rng({
     gamma = gamma_rng(mean = gamma_mean,
                   sd = gamma_mean), 
     beta = beta_rng(mean = beta_mean,
-                   sd = beta_mean,
-                  names = beta_colnames),
+                   sd = beta_sd,
+                   names = beta_colnames),
     unif_vec = uniform_rng(min = unif_min, max = unif_max),
     unif_dt = uniform_rng(min = c(2, 3), max = c(4, 5)),
     normal = normal_rng(mean = normal_mean,
@@ -56,7 +57,7 @@ rng <- eval_rng(x = rng_def, params)
 test_that( "eval_rng() runs without error", {
   expect_true(inherits(rng, "list"))
 })
-
+ 
 test_that( "eval_rng has correct number of samples", {
   n <- sapply(rng, function (z) if (length(dim(z)) < 2) length(z) else nrow(z))
   expect_true(all(n == rng_def$n))
@@ -76,6 +77,13 @@ test_that( "uv_rng() produces correct random variates for each column", {
 test_that( "uv_rng() produces correct vector or data.table", {
   expect_true(inherits(rng$unif_vec, "numeric"))
   expect_true(inherits(rng$unif_dt, "data.table"))
+})
+
+test_that( "mom_fun_rng produces fixed samples is sd == 0", {
+  expect_true(all(rng$beta$A == .2))
+  expect_true(all(rng$beta$C == 0))
+  expect_equal(which(colnames(rng$beta) == "A"), 1)
+  expect_equal(which(colnames(rng$beta) == "C"), 3)
 })
 
 test_that( "fixed() produces vector or data.table", {

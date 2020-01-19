@@ -273,9 +273,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_sim_wlos
-Rcpp::DataFrame C_sim_wlos(Rcpp::DataFrame R_stateprobs, Rcpp::List R_statevals, std::vector<double> dr, std::vector<std::string> categories, std::vector<double> times, std::string method);
-RcppExport SEXP _hesim_C_sim_wlos(SEXP R_stateprobsSEXP, SEXP R_statevalsSEXP, SEXP drSEXP, SEXP categoriesSEXP, SEXP timesSEXP, SEXP methodSEXP) {
+// C_sim_ev
+Rcpp::DataFrame C_sim_ev(Rcpp::DataFrame R_stateprobs, Rcpp::List R_statevals, std::vector<double> dr, std::vector<std::string> categories, std::vector<double> times, std::string method);
+RcppExport SEXP _hesim_C_sim_ev(SEXP R_stateprobsSEXP, SEXP R_statevalsSEXP, SEXP drSEXP, SEXP categoriesSEXP, SEXP timesSEXP, SEXP methodSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -285,7 +285,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<std::string> >::type categories(categoriesSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type times(timesSEXP);
     Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_sim_wlos(R_stateprobs, R_statevals, dr, categories, times, method));
+    rcpp_result_gen = Rcpp::wrap(C_sim_ev(R_stateprobs, R_statevals, dr, categories, times, method));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -608,7 +608,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},
     {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 6},
     {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
-    {"_hesim_C_sim_wlos", (DL_FUNC) &_hesim_C_sim_wlos, 6},
+    {"_hesim_C_sim_ev", (DL_FUNC) &_hesim_C_sim_ev, 6},
     {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
     {"_hesim_C_test_is_absorbing", (DL_FUNC) &_hesim_C_test_is_absorbing, 1},
     {"_hesim_C_test_trans_mat_trans_id", (DL_FUNC) &_hesim_C_test_trans_mat_trans_id, 2},

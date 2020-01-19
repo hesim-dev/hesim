@@ -159,13 +159,14 @@ check_summarize <- function(x){
 #' (i.e., an average within a population), then there 
 #' must be one observation for each discount rate (`dr`), 
 #' PSA sample (`sample`), treatment strategy (`strategy_id`), 
-#' and health state (`state_id`). Alternatively, there can be column
+#' and health state (`state_id`). Alternatively, there can be a column
 #' denoting a patient (`patient_id`), in which case outcomes will first be
 #' averaged across patients. A `grp_id` column can also be used so that
 #' outcomes are computed for each subgroup (if `by_grp = TRUE`); otherwise it is assumed that 
 #' there is only one subgroup.
 #' @return An object of class [ce].
 summarize_ce <- function(costs, qalys, by_grp = FALSE) {
+  patient_wt <- NULL
   by_cols <- c("dr", "sample", "strategy_id")
   if (by_grp) by_cols <- c(by_cols, "grp_id")
   
@@ -183,15 +184,16 @@ summarize_ce <- function(costs, qalys, by_grp = FALSE) {
       sd_cols <- "qalys"
     }
     by_cols0 <- c(by_cols, "patient_id")
+    if("patient_wt" %in% colnames(x)) by_cols0 <- c(by_cols0, "patient_wt")
   
     # Summarize
     if ("patient_id" %in% colnames(x)){ # Mean across patients
       x_summary <- x[, lapply(.SD, sum), by = by_cols0, .SDcols = sd_cols] 
       if ("patient_wt" %in% colnames(x)){ # Weighted mean
-        x_summary <- x[, lapply(.SD, stats::weighted.mean, w = "patient_wt"),
+        x_summary <- x_summary[, lapply(.SD, stats::weighted.mean, w = patient_wt),
                        by = by_cols, .SDcols = sd_cols]
       } else{ # Non-weighted mean
-        x_summary <- x[, lapply(.SD, mean), by = by_cols, .SDcols = sd_cols]
+        x_summary <- x_summary[, lapply(.SD, mean), by = by_cols, .SDcols = sd_cols]
       }
       
     } else{ # Mean already computed by health state, so sum across health states

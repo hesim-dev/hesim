@@ -110,6 +110,8 @@ navbar:
         href: articles/psm.html
       - text: "Continuous time state transition models"
         href: articles/ctstm.html
+      - text: "Subgroup analyses"
+        href: articles/subgroup.html  
       - text: "Simulating costs and QALYs"
         href: articles/wlos.html          
       - text: "---"

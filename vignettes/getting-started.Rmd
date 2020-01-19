@@ -71,7 +71,7 @@ Treatment effects are defined in terms of the relative risk, which is assumed to
 
 The cost-effectiveness analysis is based on life-years, meaning that each health state is assigned a utility value of 1. The costs of zidovudine and lamivudine are \$2,278 and \$2,086.50, respectively. Medical costs are split into direct medical and community medical costs.
 
-Tbe parameter estimates are stored in a list.
+The parameter estimates are stored in a list.
 
 ```{r}
 params <- list(
@@ -187,11 +187,11 @@ ggplot(stateprob_summary, aes(x = t, y = prob_mean)) +
 ```
 
 ## Costs and QALYs
-Costs and quality-adjusted life-years (QALYs) are computed by integrating the previously simulated state probabilities. To maintain consistency with Chancellor et al., we approximate the integral with a right Riemann sum, which is simply a sum of costs and QALYs measured at the right endpoint of each interval (e.g., costs between model cycle 0 and 1 are measured at model cycle 1).
+Costs and quality-adjusted life-years (QALYs) are computed by integrating the previously simulated state probabilities. To maintain consistency with Chancellor et al., we approximate the integral with a right Riemann sum, which is simply a sum of costs and QALYs measured at the right endpoint of each interval (e.g., costs during model cycle 1 are measured at time 1 (rather than at say, time 0)).
 
 ```{r simStateVals}
-econmod$sim_qalys(dr = 0, method = "riemann_right")
-econmod$sim_costs(dr = 0.06, method = "riemann_right")
+econmod$sim_qalys(dr = 0, integrate_method = "riemann_right")
+econmod$sim_costs(dr = 0.06, integrate_method = "riemann_right")
 ```
 
 # Decision analysis

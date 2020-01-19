@@ -356,13 +356,13 @@ Psm <- R6::R6Class("Psm",
     #' `utility_model`. See 
     #' the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
     #' @param dr Discount rate.
-    #' @param method Method used to integrate state values when computing (QALYs).
+    #' @param integrate_method Method used to integrate state values when computing (QALYs).
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
     #' @return An instance of `self` with simulated output of class [qalys] stored
     #' in `qalys_`.    
-    sim_qalys = function(dr = .03, method = c("trapz", "riemann_left", "riemann_right"),
+    sim_qalys = function(dr = .03, integrate_method = c("trapz", "riemann_left", "riemann_right"),
                          lys = FALSE){
-      self$qalys_ <- sim_qalys(self$stateprobs_, self$utility_model, dr, method)
+      self$qalys_ <- sim_qalys(self$stateprobs_, self$utility_model, dr, integrate_method)
       invisible(self)
     },
     
@@ -370,11 +370,11 @@ Psm <- R6::R6Class("Psm",
     #' Simulate costs as a function of `stateprobs_` and `cost_models`. 
     #' See the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
     #' @param dr Discount rate.
-    #' @param method Method used to integrate state values when computing costs.
+    #' @param integrate_method Method used to integrate state values when computing costs.
     #' @return An instance of `self` with simulated output of class [costs] stored
     #' in `costs_`.    
-    sim_costs = function(dr = .03, method = c("trapz", "riemann_left", "riemann_right")){
-      self$costs_ <- sim_costs(self$stateprobs_, self$cost_models, dr, method)
+    sim_costs = function(dr = .03, integrate_method = c("trapz", "riemann_left", "riemann_right")){
+      self$costs_ <- sim_costs(self$stateprobs_, self$cost_models, dr, integrate_method)
       invisible(self)
     },
     

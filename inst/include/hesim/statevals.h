@@ -47,6 +47,9 @@ private:
 public:
   std::unique_ptr<statmods::statmod> statmod_; ///< The statistical model used
                                             ///< to simulate state values.
+  std::string method_; ///<The method used to sim ulate costs and quality-adjusted 
+                       ///< life-years. See the @c R StateVals class.
+                                            
   /** 
    * The constructor.
    * Instantiates a model for simulating state values.
@@ -54,7 +57,9 @@ public:
    * "StateVals".
    */ 
   statevals(Rcpp::Environment R_StateVals)
-    : statmod_(init_statmod_(R_StateVals)) {}  
+    : statmod_(init_statmod_(R_StateVals)) {
+    method_ = Rcpp::as<std::string>(R_StateVals["method"]);
+  }  
 
   /** 
    * Simulate value of a health state.
@@ -172,7 +177,7 @@ struct stateprobs_out{
  * Weighted health state length of stay output.
  * Contains output of weighted health state length of stay computations.
  ******************************************************************************/ 
-struct wlos_out {
+struct ev_out {
   std::vector<int> state_id_; ///< The health state ID.
   std::vector<int> sample_; ///< The random sample of the parameters.
   std::vector<int> strategy_id_; ///< The treatment strategy ID.
@@ -189,7 +194,7 @@ struct wlos_out {
    * Instantiates a data container for storing output.
    * @param n Each member variable is initialized to have length @p n.
    */ 
-  wlos_out(int n){
+  ev_out(int n){
     state_id_.resize(n);
     sample_.resize(n);
     strategy_id_.resize(n);
@@ -229,7 +234,7 @@ struct wlos_out {
  * that health state weighted by a discount rate @c dr and a state value assigned
  * to each health state from time @c0 to time @c T.
  ******************************************************************************/ 
-class wlos {
+class ev {
 private:
   std::vector<statevals> statevals_; ///< A vector of models for simulating state values;
                                      ///< the vector will be of length 1 for 'qalys' and 
@@ -263,7 +268,7 @@ private:
   
   /** 
    * Initialize statevals_.
-   * Initialize statevals_ from an @c R based @c hesim state value model. 
+   * Initialize statevals_ from an @c R based @c hesim state value model.  
    * @param R_statevals An @c R based @c hesim state value model.
    */   
   static std::vector<statevals> init_statevals_(Rcpp::List R_statevals){
@@ -277,7 +282,7 @@ private:
   }  
   
   /** 
-   * Integrate probabilities.
+   * Weighted length of stay.
    * Integrate health state probabilities weighted by the discount rate and 
    * assigned state values using the trapezoid rule (see @c math::trapz). 
    * Predictions are made for observations (i.e., row indices) determined
@@ -291,11 +296,12 @@ private:
    * to health state. 
    * @return Weighted length of stay for a given parameter sample and observation.
    */ 
-  double integrate(int sample, statmods::obs_index obs_index,
-                   std::vector<double> times,
-                   std::vector<double>::iterator stateprob_first, statevals &statevals,
-                   double dr, std::string method = "trapz",
-                   std::string sim_type = "predict") {
+  double sim_wlos(int sample, statmods::obs_index obs_index,
+                  std::vector<double> times,
+                  std::vector<double>::iterator stateprob_first, 
+                  statevals &statevals,
+                  double dr, std::string method = "trapz",
+                  std::string sim_type = "predict") {
     
     // State values
     std::vector<double> value(std::distance(times.begin(), times.end()));
@@ -312,26 +318,6 @@ private:
       t_start = t_stop + 1;
     } // Loop over time intervals
     
-    // int time_id = 0;
-    // double stateval = statevals.sim(sample, obs_index(), sim_type);
-    // for (auto t_it = times.begin(); t_it != times.end(); ++t_it){
-    //   if (*t_it >= obs_index.get_time_stop()){
-    //     obs_index.set_time_index(time_id + 1);
-    //     stateval = statevals.sim(sample, obs_index(), sim_type);
-    //   }
-    //   value[t_it - times.begin()] = exp(-dr * *t_it) * stateval * *stateprob_it;
-    //   ++stateprob_it;
-    // }
-    
-    // for (int i = 0; i < value.size(); ++i){
-    //   Rcpp::Rcout << "value = " << value.at(i) << std::endl;
-    // }
-    
-    // Rcpp::Rcout << "times.begin() = " << *times.begin() << std::endl;
-    // Rcpp::Rcout << "times.end() - 1 = " << *(times.end() - 1) << std::endl;
-    // Rcpp::Rcout << "value.begin() = " << *value.begin() << std::endl;
-    // Rcpp::Rcout << "value.size() = " << value.size() << std::endl;
-    
     // Integrate
     if (method == "trapz"){
       return math::trapz(times.begin(), times.end(), value.begin());
@@ -346,6 +332,15 @@ private:
       Rcpp::stop("The selected integration method is not available.");
     }
   }
+  
+  double sim_starting(int sample, statmods::obs_index obs_index,
+                      double &stateprob_start,
+                      statevals &statevals,
+                      std::string sim_type = "predict") {
+    obs_index.set_time_index(0);
+    double stval = statevals.sim(sample, obs_index(), sim_type);
+    return stval * stateprob_start;
+  }
                                                        
 public:
   statmods::obs_index obs_index_; ///< The @c obs_index class. 
@@ -357,15 +352,16 @@ public:
    * @param R_model An @c R based @c hesim simulation model of class @c R6.
    * @param type 'costs' for costs or 'qalys' for QALYs.
    */ 
-  wlos(Rcpp::List R_statevals)
+  ev(Rcpp::List R_statevals)
     : statevals_(init_statevals_(R_statevals)),
       obs_index_(init_obs_index_(R_statevals)),
       obs_indices_(init_obs_indices_(R_statevals)){
   }
   
   /** 
-   * Compute weighted length of stay.
-   * Compute weighted length of stay given health state probabilities 
+   * Simulate expected values.
+   * Simulate costs and quality-adjusted life-years (QALYs) as a function
+   * of simulated state occupancy probabilities.
    * previously simulated at distinct times.
    * @param stateprobs
    * @param times
@@ -373,14 +369,14 @@ public:
    * @param categories
    * @return 
    */   
-  wlos_out operator()(stateprobs_out stateprobs, 
+  ev_out operator()(stateprobs_out stateprobs, 
                       std::vector<double> times,
                       std::vector<double> dr, 
                       std::vector<std::string> categories,
-                      std::string method = "trapz") {
+                      std::string integrate_method = "trapz") {
     int N = stateprobs.prob_.size()/times.size();
     int n_samples = statevals_[0].statmod_->get_n_samples();
-    wlos_out out(N * dr.size() * statevals_.size());
+    ev_out out(N * dr.size() * statevals_.size());
     
     int counter = 0;
     for (int k = 0; k < statevals_.size(); ++k){ // start category loop
@@ -403,11 +399,18 @@ public:
                 out.state_id_[counter] = obs_indices_[k].get_health_id();;
                 out.dr_[counter] = dr_j;
                 out.category_[counter] = categories[k];
-                out.value_[counter] = integrate(s, obs_indices_[k],
-                                                times,
-                                                stateprobs.prob_.begin() + integrate_start,
-                                                statevals_[k],
-                                                dr_j, method);
+                if (statevals_[k].method_ == "wlos"){
+                  out.value_[counter] = sim_wlos(s, obs_indices_[k],
+                                                    times,
+                                                    stateprobs.prob_.begin() + integrate_start,
+                                                    statevals_[k],
+                                                    dr_j, integrate_method);
+                } 
+                else{
+                  out.value_[counter] = sim_starting(s, obs_indices_[k],
+                                                     stateprobs.prob_[integrate_start],
+                                                     statevals_[k]);
+                }
                 integrate_start = integrate_start + times.size();
                 ++counter;
               } // end health state loop
@@ -419,7 +422,7 @@ public:
     return out;
   }
   
-}; // end class wlos
+}; // end class ev
 
 
 } // end namespace hesim

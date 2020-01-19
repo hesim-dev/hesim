@@ -66,6 +66,9 @@
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
     <li>
+      <a href="../articles/subgroup.html">Subgroup analyses</a>
+    </li>
+    <li>
       <a href="../articles/wlos.html">Simulating costs and QALYs</a>
     </li>
     <li class="divider">
@@ -101,7 +104,7 @@
     <div class="page-header toc-ignore">
       <h1>Getting started with a Markov cohort model</h1>
             
-            <h4 class="date">2019-12-30</h4>
+            <h4 class="date">2020-01-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/getting-started.Rmd"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="hidden name"><code>getting-started.Rmd</code></div>
@@ -180,7 +183,7 @@
 <p>The transition probabilities from state <span class="math inline">\(r\)</span> to each of the 4 states (State A, State B, State C, and State D) can be modeled using Dirichlet distributions, which are parameterized by a vector of concentration parameters <span class="math inline">\(\alpha = (\alpha_{r1}, \alpha_{r2}, \alpha_{r3}, \alpha_{r4})\)</span>. The Dirichlet distribution is particularly useful for modeling uncertainty in the transition probabilities because it is a conjugate prior for the multinomial distribution. The posterior distribution of <span class="math inline">\(\alpha\)</span> consequently follows a Dirichlet distribution which can be thought of as the “effective sample size” for each transition (see Appendix).</p>
 <p>Treatment effects are defined in terms of the relative risk, which is assumed to reduce the probability of all transitions to a more severe health state by an equal amount. We work with the log relative risk since it is approximately normally distributed. The estimated relative risk of disease progression is 0.509 (95% CI 0.365 to 0.710). We can then calculate the mean and standard error on the log scale.</p>
 <p>The cost-effectiveness analysis is based on life-years, meaning that each health state is assigned a utility value of 1. The costs of zidovudine and lamivudine are $2,278 and $2,086.50, respectively. Medical costs are split into direct medical and community medical costs.</p>
-<p>Tbe parameter estimates are stored in a list.</p>
+<p>The parameter estimates are stored in a list.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>params &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">alpha_mono =</span> trans_mono, </span>
 <span id="cb7-3"><a href="#cb7-3"></a>  <span class="dt">lrr_mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log</a></span>(.<span class="dv">509</span>), </span>
@@ -256,7 +259,7 @@
 <div id="simulation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#simulation" class="anchor"></a><span class="header-section-number">3</span> Simulation</h1>
-<p>A economic model (of class <code>CohortDtstm</code>) can be created from a defined model (of class <code>model_def</code>) and data using the generic function <code><a href="../reference/create_CohortDtstm.html">create_CohortDtstm()</a></code>. The economic model is an <code>R6</code> object consisting of a transition model (<code>trans_model</code>) for simulating transition probabilities with <code>sim_stateprobs()</code>, a utility model for simulating quality-adjusted life-years with <code><a href="../reference/sim_wlos.html">sim_qalys()</a></code>, and a set of cost models (for each cost category) for simulating costs with <code><a href="../reference/sim_wlos.html">sim_costs()</a></code>.</p>
+<p>A economic model (of class <code>CohortDtstm</code>) can be created from a defined model (of class <code>model_def</code>) and data using the generic function <code><a href="../reference/create_CohortDtstm.html">create_CohortDtstm()</a></code>. The economic model is an <code>R6</code> object consisting of a transition model (<code>trans_model</code>) for simulating transition probabilities with <code>sim_stateprobs()</code>, a utility model for simulating quality-adjusted life-years with <code><a href="../reference/sim_ev.html">sim_qalys()</a></code>, and a set of cost models (for each cost category) for simulating costs with <code><a href="../reference/sim_ev.html">sim_costs()</a></code>.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>econmod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_CohortDtstm.html">create_CohortDtstm</a></span>(mod_def, data)</span></code></pre></div>
 <div id="health-state-probabilities" class="section level2">
 <h2 class="hasAnchor">
@@ -285,9 +288,9 @@
 <div id="costs-and-qalys" class="section level2">
 <h2 class="hasAnchor">
 <a href="#costs-and-qalys" class="anchor"></a><span class="header-section-number">3.2</span> Costs and QALYs</h2>
-<p>Costs and quality-adjusted life-years (QALYs) are computed by integrating the previously simulated state probabilities. To maintain consistency with Chancellor et al., we approximate the integral with a right Riemann sum, which is simply a sum of costs and QALYs measured at the right endpoint of each interval (e.g., costs between model cycle 0 and 1 are measured at model cycle 1).</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>econmod<span class="op">$</span><span class="kw"><a href="../reference/sim_wlos.html">sim_qalys</a></span>(<span class="dt">dr =</span> <span class="dv">0</span>, <span class="dt">method =</span> <span class="st">"riemann_right"</span>)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>econmod<span class="op">$</span><span class="kw"><a href="../reference/sim_wlos.html">sim_costs</a></span>(<span class="dt">dr =</span> <span class="fl">0.06</span>, <span class="dt">method =</span> <span class="st">"riemann_right"</span>)</span></code></pre></div>
+<p>Costs and quality-adjusted life-years (QALYs) are computed by integrating the previously simulated state probabilities. To maintain consistency with Chancellor et al., we approximate the integral with a right Riemann sum, which is simply a sum of costs and QALYs measured at the right endpoint of each interval (e.g., costs during model cycle 1 are measured at time 1 (rather than at say, time 0)).</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>econmod<span class="op">$</span><span class="kw"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="dt">dr =</span> <span class="dv">0</span>, <span class="dt">integrate_method =</span> <span class="st">"riemann_right"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a>econmod<span class="op">$</span><span class="kw"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="dt">dr =</span> <span class="fl">0.06</span>, <span class="dt">integrate_method =</span> <span class="st">"riemann_right"</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="decision-analysis" class="section level1">
@@ -298,15 +301,15 @@
 <span id="cb14-2"><a href="#cb14-2"></a>wtp &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>, <span class="dv">25000</span>, <span class="dv">500</span>)</span>
 <span id="cb14-3"><a href="#cb14-3"></a>icea_pw_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce_sim, <span class="dt">comparator =</span> <span class="dv">1</span>, <span class="dt">dr_qalys =</span> <span class="dv">0</span>, <span class="dt">dr_costs =</span> <span class="fl">.06</span>,</span>
 <span id="cb14-4"><a href="#cb14-4"></a>                       <span class="dt">k =</span> wtp)</span></code></pre></div>
-<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,194, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
+<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,235, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(icea_pw_out)</span></code></pre></div>
-<pre><code>##                   1   2                       
-## Incremental QALYs "-" "0.31 (0.18, 0.41)"     
-## Incremental costs "-" "1,930 (974, 3,275)"    
-## Incremental NMB   "-" "13,649 (7,525, 18,556)"
-## ICER              "-" "6,194"                 
+<pre><code>##                   1   2                        
+## Incremental QALYs "-" "0.93 (0.58, 1.22)"      
+## Incremental costs "-" "5,790 (3,055, 10,121)"  
+## Incremental NMB   "-" "40,638 (23,792, 55,011)"
+## ICER              "-" "6,235"                  
 ## Conclusion        "-" "Cost-effective"</code></pre>
-<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.952 and approaches 1 at slightly higher WTP values.</p>
+<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.951 and approaches 1 at slightly higher WTP values.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(icea_pw_out<span class="op">$</span>ceac, </span>
 <span id="cb17-2"><a href="#cb17-2"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, </span>
 <span id="cb17-3"><a href="#cb17-3"></a>           <span class="dt">col =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id, <span class="dt">labels =</span> strategies<span class="op">$</span>strategy_name[<span class="op">-</span><span class="dv">1</span>]))) <span class="op">+</span></span>

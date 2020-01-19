@@ -177,7 +177,7 @@ the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} fo
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Psm$sim_qalys(
   dr = 0.03,
-  method = c("trapz", "riemann_left", "riemann_right"),
+  integrate_method = c("trapz", "riemann_left", "riemann_right"),
   lys = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -187,7 +187,7 @@ the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} fo
 \describe{
 \item{\code{dr}}{Discount rate.}
 
-\item{\code{method}}{Method used to integrate state values when computing (QALYs).}
+\item{\code{integrate_method}}{Method used to integrate state values when computing (QALYs).}
 
 \item{\code{lys}}{If \code{TRUE}, then life-years are simulated in addition to QALYs.}
 }
@@ -204,7 +204,10 @@ in \code{qalys_}.
 Simulate costs as a function of \code{stateprobs_} and \code{cost_models}.
 See the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Psm$sim_costs(dr = 0.03, method = c("trapz", "riemann_left", "riemann_right"))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Psm$sim_costs(
+  dr = 0.03,
+  integrate_method = c("trapz", "riemann_left", "riemann_right")
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -212,7 +215,7 @@ See the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette
 \describe{
 \item{\code{dr}}{Discount rate.}
 
-\item{\code{method}}{Method used to integrate state values when computing costs.}
+\item{\code{integrate_method}}{Method used to integrate state values when computing costs.}
 }
 \if{html}{\out{</div>}}
 }

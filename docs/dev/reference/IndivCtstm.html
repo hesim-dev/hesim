@@ -103,6 +103,9 @@ IndivCtstmTrans." />
       <a href="../articles/ctstm.html">Continuous time state transition models</a>
     </li>
     <li>
+      <a href="../articles/subgroup.html">Subgroup analyses</a>
+    </li>
+    <li>
       <a href="../articles/wlos.html">Simulating costs and QALYs</a>
     </li>
     <li class="divider"></li>
@@ -252,7 +255,7 @@ simulation output stored in <code>disprog</code>.
     An instance of <code>self</code> with simulated output of class <a href='stateprobs.html'>stateprobs</a>
 stored in <code>stateprobs_</code>.
     <p><hr>
-<a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_qalys()</a></code></h3>
+<a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
     Simulate quality-adjusted life-years (QALYs) as a function of <code>disprog_</code> and
 <code>utility_model</code>. See
 the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
@@ -278,7 +281,7 @@ If <code>FALSE</code>, then QALYs are averaged across patients by health state.<
     An instance of <code>self</code> with simulated output of
 class <a href='qalys.html'>qalys</a> stored in <code>qalys_</code>.
     <p><hr>
-<a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_wlos.html'>sim_costs()</a></code></h3>
+<a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_ev.html'>sim_costs()</a></code></h3>
     Simulate costs as a function of <code>disprog_</code> and <code>cost_models</code>.
 See the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
 <h3>Usage</h3>
@@ -312,7 +315,14 @@ stored in <code>costs_</code>.
     Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
 <h3>Usage</h3>
-    <div class="r"><pre>IndivCtstm$summarize()</pre></div>
+    <div class="r"><pre>IndivCtstm$summarize(by_grp = FALSE)</pre></div>
+    <h3>Arguments</h3>
+    <div class="arguments">
+<dl class='dl-horizontal'>
+<dt><code>by_grp</code></dt><dd><p>If <code>TRUE</code>, then costs and QALYs are computed by subgroup. If
+<code>FALSE</code>, then costs and QALYs are aggregated across all patients (and subgroups).</p></dd>
+</dl>
+</div>
     <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
     The objects of this class are cloneable with this method.
@@ -327,8 +337,7 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
-
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='input'>
 <span class='co'># Treatment strategies, target population, and model structure</span>
 <span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
@@ -409,8 +418,8 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
 #&gt; 3:      1           1      1        3 5 0.0000000
 #&gt; 4:      1           2      1        1 5 0.6666667
 #&gt; 5:      1           2      1        2 5 0.0000000
-#&gt; 6:      1           2      1        3 5 0.3333333</div><div class='input'><span class='no'>ictstm</span>$<span class='fu'><a href='sim_wlos.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
-<span class='no'>ictstm</span>$<span class='fu'><a href='sim_wlos.html'>sim_costs</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
+#&gt; 6:      1           2      1        3 5 0.3333333</div><div class='input'><span class='no'>ictstm</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
+<span class='no'>ictstm</span>$<span class='fu'><a href='sim_ev.html'>sim_costs</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>ictstm</span>$<span class='fu'>summarize</span>())</div><div class='output co'>#&gt; $costs
 #&gt;     category   dr sample strategy_id     costs grp_id
 #&gt;  1:    drugs 0.03      1           1 38164.878      1

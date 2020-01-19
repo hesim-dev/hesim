@@ -13,7 +13,7 @@
 \alias{uniform_rng}
 \title{Random number generation distributions}
 \usage{
-beta_rng(mean, sd, names = NULL)
+beta_rng(shape1 = 1, shape2 = 1, mean = NULL, sd = NULL, names = NULL)
 
 dirichlet_rng(alpha, names = NULL)
 
@@ -32,6 +32,8 @@ normal_rng(mean, sd, names = NULL)
 uniform_rng(min, max, names = NULL)
 }
 \arguments{
+\item{shape1, shape2}{Non-negative parameters of the Beta distribution.}
+
 \item{mean, sd}{Mean and standard deviation of the random variable.}
 
 \item{names}{Names for columns if an object with multiple columns is returned
@@ -94,8 +96,9 @@ These functions are not exported and are meant for use with
 is defined in the parent environment. Convenience random number generation
 functions include:
 \describe{
-\item{\code{beta_rng()}}{The parameters of the beta distribution are derived using
-the methods of moments with \code{\link[=mom_beta]{mom_beta()}} and beta variates are generated with
+\item{\code{beta_rng()}}{If \code{mean} and \code{sd} are both not \code{NULL}, then
+parameters of the beta distribution are derived using
+the methods of moments with \code{\link[=mom_beta]{mom_beta()}}. Beta variates are generated with
 \code{\link[stats:rbeta]{stats::rbeta()}}.}
 \item{\code{custom()}}{Use previously sampled values from a custom probability distribution.
 There are three possibilities: (i) if \code{n} is equal to the number previously

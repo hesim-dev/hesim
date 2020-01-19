@@ -16,12 +16,12 @@ create_StateVals(object, ...)
   ...
 )
 
-\method{create_StateVals}{stateval_tbl}(object, n = 1000, time_reset = FALSE, ...)
+\method{create_StateVals}{stateval_tbl}(object, n = 1000, ...)
 }
 \arguments{
 \item{object}{A model object of the appropriate class.}
 
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
+\item{...}{Further arguments (\code{time_reset} and \code{method}) passed to \link[=StateVals]{StateVals$new()}.}
 
 \item{input_data}{An object of class \link[=expand.hesim_data]{expanded_hesim_data}.
 Must be expanded by treatment strategies, patients, and health states.}
@@ -30,9 +30,6 @@ Must be expanded by treatment strategies, patients, and health states.}
 are fit using a statistical model.}
 
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
-
-\item{time_reset}{If \code{TRUE}, then time intervals reset each time a patient enters a new health
-state. See \link{StateVals}.}
 }
 \value{
 A \link{StateVals} object.
