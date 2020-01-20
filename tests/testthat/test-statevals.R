@@ -252,7 +252,7 @@ test_that("StateVals$sim", {
                tbl[state_id == 3 & time_start == 4, est])
 })
 
-# sim_wlos ---------------------------------------------------------------------
+# sim_ev -----------------------------------------------------------------------
 n_samples <- 5
 
 # Helper function
@@ -347,3 +347,32 @@ econmod$cost_models <- list(create_StateVals(stval_tbl_tv, n = n_samples))
 econmod$sim_costs(dr = .03)
 wlos_test(econmod, s = 2, k = 2, i = 1, h = 2, dr = .03)
 
+## Using method = "starting" option
+stval_tbl_starting <- stateval_tbl(data.table(strategy_id = hesim_dat$strategies$strategy_id,
+                                              est = c(1000, 2000)),
+                                   dist = "fixed",
+                                   hesim_data = hesim_dat)
+econmod$cost_models <- list(create_StateVals(stval_tbl_starting, n = n_samples,
+                                             method = "starting"))
+expect_equal(econmod$cost_models[[1]]$method, "starting")
+
+### With all costs in first health state
+econmod$sim_costs()
+costs <- dcast(econmod$costs_, sample + strategy_id + patient_id + grp_id +
+                 dr + category ~ state_id, value.var = "costs")
+expect_true(all(costs[strategy_id == 1][["1"]] == 1000))
+expect_true(all(costs[strategy_id == 2][["1"]] == 2000))
+expect_true(all(costs[["2"]] == 0))
+expect_true(all(costs[["3"]] == 0))
+
+### With costs in 2 health states
+econmod$trans_model$start_stateprobs <- c(.5, .5, 0, 0)
+econmod$sim_stateprobs(n_cycles = 5)
+econmod$sim_costs()
+costs <- dcast(econmod$costs_, sample + strategy_id + patient_id + grp_id +
+                 dr + category ~ state_id, value.var = "costs")
+expect_true(all(costs[strategy_id == 1][["1"]] == 1000 * .5))
+expect_true(all(costs[strategy_id == 1][["2"]] == 1000 * .5))
+expect_true(all(costs[strategy_id == 2][["1"]] == 2000 * .5))
+expect_true(all(costs[strategy_id == 2][["2"]] == 2000 * .5))
+expect_true(all(costs[["3"]] == 0))
