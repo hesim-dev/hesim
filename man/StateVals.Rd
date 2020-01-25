@@ -24,7 +24,7 @@ state. If \code{starting}, then state values represent a one-time value
 that occurs when a patient enters a health state. When \code{starting} is
 used in a cohort model, the state values only accrue at time 0;
 in contrast, in an individual-level model, state values
-accrue each time a patient enters a new state and discounted based on
+accrue each time a patient enters a new state and are discounted based on
 time of entrance into that state.}
 
 \item{\code{time_reset}}{If \code{FALSE} then time intervals are based on time since

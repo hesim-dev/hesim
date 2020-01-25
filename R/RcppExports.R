@@ -57,6 +57,10 @@ C_indiv_ctstm_wlos <- function(R_disease_prog, strategy_idx, patient_idx, R_Stat
     .Call('_hesim_C_indiv_ctstm_wlos', PACKAGE = 'hesim', R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type, max_time)
 }
 
+C_indiv_ctstm_starting <- function(R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type) {
+    .Call('_hesim_C_indiv_ctstm_starting', PACKAGE = 'hesim', R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type)
+}
+
 C_indiv_ctstm_los <- function(R_disease_prog, strategy_idx, patient_idx, dr) {
     .Call('_hesim_C_indiv_ctstm_los', PACKAGE = 'hesim', R_disease_prog, strategy_idx, patient_idx, dr)
 }

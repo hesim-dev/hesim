@@ -283,6 +283,63 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
 
 /***************************************************************************//** 
  * @ingroup ctstm
+ * One-time expected values.
+ * Simulate expected values in an individual patient simulation based on one-time 
+ * state values that occur when a patient enters a health state. Values 
+ * accrue each time a patient enters a new state and are discounted based on time 
+ * of entrance into that state. 
+ * @param R_disease_prog An R object of simulating disease progression generated
+ * using C_ctstm_sim_disease.
+ * @param strategy_idx The strategy index starting at 0.
+ * @param patient_idx The patient index starting at 0.
+ * @param R_StateVal An R object of class @c StateVal.
+ * @param dr The discount rate.
+ * @param type @c predict for mean values or @c random for random samples.
+ * @return A vector of weighted length of stay in each row in R_disease_prog. These
+ * values are then summed by @c patient_id using @c data.table at the @c R level
+ *  in the private member function @c IndivCtstm$sim_wlos. 
+ ******************************************************************************/ 
+// [[Rcpp::export]]
+std::vector<double> C_indiv_ctstm_starting(Rcpp::DataFrame R_disease_prog,
+                                           std::vector<int> strategy_idx,
+                                           std::vector<int> patient_idx,
+                                           Rcpp::Environment R_StateVal,
+                                           double dr, std::string type
+                                           ){
+  hesim::ctstm::disease_prog disease_prog(R_disease_prog);
+  bool time_reset = Rcpp::as<bool>(R_StateVal["time_reset"]);
+  hesim::statmods::obs_index obs_index(hesim::statmods::get_id_object(R_StateVal));
+  hesim::statevals stvals(R_StateVal);
+  
+  int N = disease_prog.sample_.size();
+  std::vector<double> out(N);
+  int time_index = 0;
+  for (int i = 0; i < N; ++i){
+    double time = disease_prog.time_start_[i];
+    obs_index.set_strategy_index(strategy_idx[i]);
+    obs_index.set_patient_index(patient_idx[i]);
+    obs_index.set_health_index(disease_prog.from_[i]);
+    obs_index.set_time_index(0);
+    
+    if (!time_reset){
+      if (i > 0 & 
+          disease_prog.patient_id_[i] != disease_prog.patient_id_[i-1] ||
+          disease_prog.sample_[i] != disease_prog.sample_[i-1]){
+          time_index = 0;
+      }
+      while (obs_index.get_time_stop() < time){
+        ++time_index;
+        obs_index.set_time_index(time_index);
+      }
+    }
+    double yhat = stvals.sim(disease_prog.sample_[i], obs_index(), type);
+    out[i] = exp(-dr * time) * yhat;
+  }
+  return out;
+}
+
+/***************************************************************************//** 
+ * @ingroup ctstm
  * Simulate length of stay given simulated disease progression 
  * (i.e., a path through a multi-state model) from an individual-level model. 
  * @param R_disease_prog An R object of simulating disease progression generated

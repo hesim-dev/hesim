@@ -454,7 +454,7 @@ StateVals <- R6::R6Class("StateVals",
     #' that occurs when a patient enters a health state. When `starting` is 
     #' used in a cohort model, the state values only accrue at time 0; 
     #' in contrast, in an individual-level model, state values
-    #' accrue each time a patient enters a new state and discounted based on
+    #' accrue each time a patient enters a new state and are discounted based on
     #' time of entrance into that state. 
     method = NULL,
     

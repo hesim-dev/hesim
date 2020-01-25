@@ -361,20 +361,17 @@ test_that("Simulate costs and QALYs", {
       wlos1[i] <- 0
     }
   }
-  # print(wlos1)
-  # print(qalys1)
-  # print(disprog1)
   expect_equal(wlos1, qalys1$qalys)
 
   # Simulate costs
-  # Errors
-  ## Cost models must be lists of StateVal objects
+  ## Errors
+  ### Cost models must be lists of StateVal objects
   ictstm2$cost_models <- 2
   expect_error(ictstm2$sim_costs())
   ictstm2$cost_models <- list(2)
   expect_error(ictstm2$sim_costs())
   
-  # Working
+  ## Working
   costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(Inf, 2))$costs_
   expect_true(inherits(costs, "data.table"))
   costs <- ictstm$sim_costs(dr = c(0, .03), max_t = c(Inf, Inf))$costs_
@@ -392,8 +389,8 @@ test_that("Simulate costs and QALYs", {
   expect_equal(unique(costs$category), c("medical", "drugs"))
   expect_equal(unique(costs$dr), c(0, .03))
   
-  # Time-varying costs with reset
-  ## Simulate
+  ## Time-varying costs with reset
+  ### Simulate
   drugcost_tbl_tv <- stateval_tbl(tbl = data.frame(strategy_id = rep(strategies$strategy_id, each = 2),
                                                  time_start = c(0, 1.2, 0, 1.2),
                                                   est = c(10000, 500, 12500, 250)),
@@ -405,7 +402,7 @@ test_that("Simulate costs and QALYs", {
   ictstm2$sim_costs(dr = 0, by_patient = TRUE)
   ictstm2$disprog_[, time_elapsed := time_stop - time_start]
   
-  ## Test
+  ### Test
   test_tv_cost <- function(state){
     row <- ictstm2$disprog_[from == state][1]
     drug_costs <- drugcost_tbl_tv[strategy_id == row$strategy_id]
@@ -425,6 +422,54 @@ test_that("Simulate costs and QALYs", {
   }
   test_tv_cost(1)
   test_tv_cost(2)
+  
+  ## Using method = "starting"
+  drugcost_tbl_tv2 <- stateval_tbl(tbl = data.frame(strategy_id = rep(strategies$strategy_id, 
+                                                                      each = 3),
+                                                   time_start = c(0, 1.2, 4, 
+                                                                  0, 1.2, 4),
+                                                   est = c(10000, 500, 0, 
+                                                           12500, 250, 0)),
+                                  dist = "fixed",
+                                  hesim_data = hesim_dat)
+  drugcostsmod_tv2 <- create_StateVals(drugcost_tbl_tv2, n = n_samples, 
+                                       time_reset = FALSE, method = "starting") 
+  ictstm2$cost_models$drugs <- drugcostsmod_tv2
+  ictstm2$sim_costs(dr = .03, by_patient = TRUE)
+  
+  test_starting <- function(model){
+    cost_params <- model$cost_models$drugs$params 
+    n_obs <- nrow(cost_params$value)
+    n_samples <- ncol(cost_params$value)
+    cost_tbl <- data.table(value = c(cost_params$value),
+                           sample = rep(1:n_samples, 
+                                        each = n_obs),
+                           strategy_id = rep(cost_params$strategy_id,
+                                             times = n_samples),
+                           patient_id = rep(cost_params$patient_id,
+                                            times = n_samples),
+                           time_id = rep(cost_params$time_id,
+                                         times = n_samples),
+                           from = rep(cost_params$state_id,
+                                      times = n_samples))
+    new_disprog <- copy(model$disprog_)
+    new_disprog[, time_id := findInterval(time_start, 
+                                          cost_params$time_intervals$time_start)]
+    new_disprog <- merge(new_disprog, cost_tbl,
+                         by = c("sample", "strategy_id", "patient_id", "from",
+                                "time_id"))
+    new_disprog[, R_cost := exp(-.03 * time_start) * value]
+    setnames(new_disprog, "from", "state_id")
+    R_costs <- new_disprog[, .(R_costs = sum(R_cost)), 
+                           by  = c("sample", "strategy_id", "patient_id", "state_id")]
+    model_costs <- model$costs_[category == "drugs"]
+    costs <- merge(model_costs, R_costs, 
+                   by = c("sample", "strategy_id", "patient_id", "state_id"),
+                   all.x = TRUE)
+    costs[is.na(R_costs), R_costs := 0]
+    expect_equal(costs$costs, costs$R_costs)
+  }
+  test_starting(ictstm2)
    
   # Summarize costs and QALYs
   ## By patient = TRUE

@@ -216,6 +216,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_indiv_ctstm_starting
+std::vector<double> C_indiv_ctstm_starting(Rcpp::DataFrame R_disease_prog, std::vector<int> strategy_idx, std::vector<int> patient_idx, Rcpp::Environment R_StateVal, double dr, std::string type);
+RcppExport SEXP _hesim_C_indiv_ctstm_starting(SEXP R_disease_progSEXP, SEXP strategy_idxSEXP, SEXP patient_idxSEXP, SEXP R_StateValSEXP, SEXP drSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_disease_prog(R_disease_progSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type strategy_idx(strategy_idxSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type patient_idx(patient_idxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_StateVal(R_StateValSEXP);
+    Rcpp::traits::input_parameter< double >::type dr(drSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_indiv_ctstm_starting(R_disease_prog, strategy_idx, patient_idx, R_StateVal, dr, type));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_indiv_ctstm_los
 std::vector<double> C_indiv_ctstm_los(Rcpp::DataFrame R_disease_prog, std::vector<int> strategy_idx, std::vector<int> patient_idx, double dr);
 RcppExport SEXP _hesim_C_indiv_ctstm_los(SEXP R_disease_progSEXP, SEXP strategy_idxSEXP, SEXP patient_idxSEXP, SEXP drSEXP) {
@@ -604,6 +620,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 10},
     {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 11},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 7},
+    {"_hesim_C_indiv_ctstm_starting", (DL_FUNC) &_hesim_C_indiv_ctstm_starting, 6},
     {"_hesim_C_indiv_ctstm_los", (DL_FUNC) &_hesim_C_indiv_ctstm_los, 4},
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},
     {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 6},

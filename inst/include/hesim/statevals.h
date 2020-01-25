@@ -286,14 +286,18 @@ private:
    * Integrate health state probabilities weighted by the discount rate and 
    * assigned state values using the trapezoid rule (see @c math::trapz). 
    * Predictions are made for observations (i.e., row indices) determined
-   * by @p obs_index_. 
+   * by @p obs_index. 
    * @param sample A random sample of the parameters from the posterior
    * distribution.
-   * @param t_first, t_last The start and end times at which health state 
-   * probabilities were simulated.
+   * @param obs_index An object of class @c obs_index denoting the observation
+   * index.
+   * @param times Times at which state probabilities were computed. 
    * @param stateprob_first The beginning of health state probability values.
    * @param statevals A statistical model used to simulate the state values to assign
    * to health state. 
+   * @param dr The discount rate. 
+   * @param method The method used to integrate state values. 
+   * @param sim_type "predict" for mean values or "random" for random samples.
    * @return Weighted length of stay for a given parameter sample and observation.
    */ 
   double sim_wlos(int sample, statmods::obs_index obs_index,
@@ -332,7 +336,22 @@ private:
       Rcpp::stop("The selected integration method is not available.");
     }
   }
-  
+
+  /** 
+   * One-time expected values.
+   * Simulate expected values in a cohort model based on one-time state values
+   * that occur when a patient enters a health state. Values only accrue at 
+   * time 0.
+   * @param sample A random sample of the parameters from the posterior
+   * distribution.
+   * @param obs_index An object of class @c obs_index denoting the observation
+   * index.
+   * @param stateprob_first The beginning of health state probability values.
+   * @param statevals A statistical model used to simulate the state values to assign
+   * to health state. 
+   * @param sim_type "predict" for mean values or "random" for random samples.
+   * @return Weighted length of stay for a given parameter sample and observation.
+   */   
   double sim_starting(int sample, statmods::obs_index obs_index,
                       double &stateprob_start,
                       statevals &statevals,

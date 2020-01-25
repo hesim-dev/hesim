@@ -477,9 +477,9 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     .costs_ = NULL,
     disprog_idx = NULL,
     
-    sim_wlos = function(stateval_list, dr, stateval_type = c("costs", "qalys"),
-                        sim_type, by_patient = FALSE, max_t = Inf,
-                        lys = FALSE){
+    sim_ev = function(stateval_list, dr, stateval_type = c("costs", "qalys"),
+                      sim_type, by_patient = FALSE, max_t = Inf,
+                      lys = FALSE){
      
       stateval_type <- match.arg(stateval_type)
       if(is.null(self$disprog_)){
@@ -523,70 +523,80 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       
       # Computation
       n_dr <- length(dr)
-      wlos_list <- vector(mode = "list", length = n_cats * n_dr)
+      ev_list <- vector(mode = "list", length = n_cats * n_dr)
       counter <- 1
       for (i in 1:n_cats){
         for (j in 1:n_dr){
-          C_wlos <- C_indiv_ctstm_wlos(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
+          if (stateval_list[[i]]$method == "wlos"){
+            C_ev <- C_indiv_ctstm_wlos(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        stateval_list[[i]], dr[j],
                                        sim_type, max_t[i])
-          self$disprog_[, wlos := C_wlos]
+          } else if (stateval_list[[i]]$method == "starting"){
+            C_ev <- C_indiv_ctstm_starting(self$disprog_, 
+                                           private$disprog_idx$strategy_idx,
+                                           private$disprog_idx$patient_idx,
+                                           stateval_list[[i]], dr[j],
+                                           sim_type)
+          } else{
+            stop("The 'StateVals' 'method' must either be 'wlos' or 'starting'.")
+          }
+          self$disprog_[, ev := C_ev]
           if (lys){
             C_los <- C_indiv_ctstm_los(self$disprog_, # Note: C++ re-indexing done at C level for disprog_
                                        private$disprog_idx$strategy_idx,
                                        private$disprog_idx$patient_idx,
                                        dr[j])
             self$disprog_[, lys := C_los]
-            sdcols <- c("wlos", "lys")
+            sdcols <- c("ev", "lys")
           } else{
-            sdcols <- "wlos"
+            sdcols <- "ev"
           }
           if (by_patient == TRUE){
             by_cols <- c("sample", "strategy_id", "patient_id", "grp_id", "from")
-            wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
+            ev_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]
-            setkeyv(wlos_list[[counter]], by_cols)
+            setkeyv(ev_list[[counter]], by_cols)
             # Pad missing health states within sample/strategy pairs with  NA's
-            wlos_list[[counter]] <- wlos_list[[counter]][CJ(sample, strategy_id, patient_id, grp_id, from,
+            ev_list[[counter]] <- ev_list[[counter]][CJ(sample, strategy_id, patient_id, grp_id, from,
                                                               unique = TRUE)]
           } else{
             by_cols <- c("sample", "strategy_id", "grp_id", "from")
             n_patients <- self$trans_model$input_data$n_patients
-            wlos_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
+            ev_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]
-            wlos_list[[counter]][, wlos := wlos/n_patients]
-            if(lys) wlos_list[[counter]][, lys := lys/n_patients]
+            ev_list[[counter]][, ev := ev/n_patients]
+            if(lys) ev_list[[counter]][, lys := lys/n_patients]
             # Pad missing health states within sample/strategy pairs with NA's
-            setkeyv(wlos_list[[counter]], by_cols)
-            wlos_list[[counter]] <- wlos_list[[counter]][CJ(sample, strategy_id, grp_id, from,
+            setkeyv(ev_list[[counter]], by_cols)
+            ev_list[[counter]] <- ev_list[[counter]][CJ(sample, strategy_id, grp_id, from,
                                                             unique = TRUE)]
           }
-          wlos_list[[counter]][, "dr" := dr[j]]
-          wlos_list[[counter]][, "category" := categories[i]]
-          self$disprog_[, "wlos" := NULL]
-          wlos_list[[counter]][, wlos := ifelse(is.na(wlos), 0, wlos)] # Replace padded NA's with 0's
+          ev_list[[counter]][, "dr" := dr[j]]
+          ev_list[[counter]][, "category" := categories[i]]
+          self$disprog_[, "ev" := NULL]
+          ev_list[[counter]][, ev := ifelse(is.na(ev), 0, ev)] # Replace padded NA's with 0's
           if (lys){
             self$disprog_[, "lys" := NULL]
-            wlos_list[[counter]][, lys := ifelse(is.na(lys), 0, lys)] # Replace padded NA's with 0's
+            ev_list[[counter]][, lys := ifelse(is.na(lys), 0, lys)] # Replace padded NA's with 0's
           }
           counter <- counter + 1
         }
       }
-      wlos_dt <- rbindlist(wlos_list)
-      setcolorder(wlos_dt, c(by_cols, "dr", "category", sdcols))
-      setnames(wlos_dt, "from", "state_id")
+      ev_dt <- rbindlist(ev_list)
+      setcolorder(ev_dt, c(by_cols, "dr", "category", sdcols))
+      setnames(ev_dt, "from", "state_id")
       if (stateval_type == "costs"){
-        setnames(wlos_dt, "wlos", "costs")
+        setnames(ev_dt, "ev", "costs")
       } else{
-        setnames(wlos_dt, "wlos", "qalys")
-        wlos_dt[, category := NULL]
+        setnames(ev_dt, "ev", "qalys")
+        ev_dt[, category := NULL]
       }
-      return(wlos_dt[,])
-     } # end sim_wlos
+      return(ev_dt[,])
+     } # end sim_ev
 
   ), # end private  
                                                   
@@ -705,8 +715,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
           call. = FALSE)
       }
       type <- match.arg(type)
-      self$qalys_ <- private$sim_wlos(list(self$utility_model), dr, "qalys", type, by_patient,
-                                          lys = lys)
+      self$qalys_ <- private$sim_ev(list(self$utility_model), dr, "qalys", type, by_patient,
+                                    lys = lys)
       invisible(self)
     },
     
@@ -739,7 +749,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
         }
       }
       type <- match.arg(type)
-      self$costs_ <- private$sim_wlos(self$cost_models, dr, "costs", type, by_patient, max_t)
+      self$costs_ <- private$sim_ev(self$cost_models, dr, "costs", type, by_patient, max_t)
       invisible(self)
     },
     
