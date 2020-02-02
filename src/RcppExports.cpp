@@ -146,15 +146,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_cohort_dtstm_sim_stateprobs
-Rcpp::DataFrame C_cohort_dtstm_sim_stateprobs(Rcpp::Environment R_CohortDtstmTrans, std::vector<double> times, int n_samples);
-RcppExport SEXP _hesim_C_cohort_dtstm_sim_stateprobs(SEXP R_CohortDtstmTransSEXP, SEXP timesSEXP, SEXP n_samplesSEXP) {
+Rcpp::DataFrame C_cohort_dtstm_sim_stateprobs(Rcpp::Environment R_CohortDtstmTrans, std::vector<double> times);
+RcppExport SEXP _hesim_C_cohort_dtstm_sim_stateprobs(SEXP R_CohortDtstmTransSEXP, SEXP timesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::Environment >::type R_CohortDtstmTrans(R_CohortDtstmTransSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type times(timesSEXP);
-    Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_cohort_dtstm_sim_stateprobs(R_CohortDtstmTrans, times, n_samples));
+    rcpp_result_gen = Rcpp::wrap(C_cohort_dtstm_sim_stateprobs(R_CohortDtstmTrans, times));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -616,7 +615,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_rpwexp", (DL_FUNC) &_hesim_C_rpwexp, 3},
     {"_hesim_C_rcat", (DL_FUNC) &_hesim_C_rcat, 2},
     {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
-    {"_hesim_C_cohort_dtstm_sim_stateprobs", (DL_FUNC) &_hesim_C_cohort_dtstm_sim_stateprobs, 3},
+    {"_hesim_C_cohort_dtstm_sim_stateprobs", (DL_FUNC) &_hesim_C_cohort_dtstm_sim_stateprobs, 2},
     {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 10},
     {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 11},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 7},

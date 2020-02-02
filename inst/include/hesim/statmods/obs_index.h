@@ -299,7 +299,14 @@ public:
   void set_time_index(int time_index) {
     time_index_ = time_index;
     set_index();
-  }  
+  } 
+  
+  /** 
+   * Get the time index.
+   */     
+  int get_time_index() {
+    return time_index_;
+  }    
 
   /** 
    * Get the starting time given the current time index.

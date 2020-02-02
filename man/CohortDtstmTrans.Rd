@@ -22,7 +22,7 @@ supports objects of class \link{tparams_transprobs}.}
 health states containing the probability that the cohort is in each health
 state at the start of the simulation. For example,
 if there were three states and the cohort began the simulation in state 1,
-then \code{start_stateprobs = c(1, 0, 0)}. If `NULL``, then a vector with the
+then \code{start_stateprobs = c(1, 0, 0)}. If \code{NULL}, then a vector with the
 first element equal to 1 and all remaining elements equal to 0.}
 
 \item{\code{cycle_length}}{The length of a model cycle in terms of years.

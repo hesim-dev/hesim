@@ -27,7 +27,7 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     #' health states containing the probability that the cohort is in each health
     #' state at the start of the simulation. For example, 
     #' if there were three states and the cohort began the simulation in state 1,
-    #' then `start_stateprobs = c(1, 0, 0)`. If `NULL``, then a vector with the
+    #' then `start_stateprobs = c(1, 0, 0)`. If `NULL`, then a vector with the
     #' first element equal to 1 and all remaining elements equal to 0.
     start_stateprobs = NULL,
     
@@ -62,9 +62,7 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     #' @return An object of class [stateprobs].
     sim_stateprobs = function(n_cycles){
       times <- seq(0, n_cycles/self$cycle_length, length.out = n_cycles + 1)
-      stprobs <- C_cohort_dtstm_sim_stateprobs(self, 
-                                               times,
-                                               self$params$n_samples)
+      stprobs <- C_cohort_dtstm_sim_stateprobs(self, times)
       stprobs <- data.table(stprobs)
       stprobs[, sample := sample + 1]
       stprobs[, state_id := state_id + 1]
