@@ -83,10 +83,10 @@ tprob_array[, , 1, 2, 1, ] <- rdirichlet_mat(n_samples, make_alpha(tprob, .9))
 tprob_array[, , 1, 2, 2, ] <- rdirichlet_mat(n_samples, make_alpha(tprob, .9))
 
 # Time ID = 2
-tprob_array[, , 2, 1, 1, ] <- tprob_array[, , 1, 1, 1, ] 
-tprob_array[, , 2, 1, 2, ] <- tprob_array[, , 1, 1, 1, ] 
-tprob_array[, , 2, 2, 1, ] <- tprob_array[, , 1, 2, 1, ]
-tprob_array[, , 2, 2, 2, ] <- tprob_array[, , 1, 2, 1, ]
+tprob_array[, , 2, 1, 1, ] <- rdirichlet_mat(n_samples, make_alpha(tprob, .6))
+tprob_array[, , 2, 1, 2, ] <- rdirichlet_mat(n_samples, make_alpha(tprob, .4))
+tprob_array[, , 2, 2, 1, ] <- rdirichlet_mat(n_samples, make_alpha(tprob, .5))
+tprob_array[, , 2, 2, 2, ] <- rdirichlet_mat(n_samples, make_alpha(tprob, .5))
 
 tprob_array <- aperm(tprob_array, perm = c(6:3, 1, 2))
 
