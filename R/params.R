@@ -586,6 +586,7 @@ tparams_transprobs <- function(object, ...){
 } 
 
 new_tparams_transprobs <- function(value, ...){
+  C_normalize_transprobs(value)
   l <- c(list(value = value),
          do.call("new_id_attributes", list(...)))
   class(l) <- "tparams_transprobs"
@@ -663,10 +664,7 @@ tparams_transprobs.array <- function (object, times = NULL,
   }
   
   # Return
-  l <- c(list(value = value),
-         do.call("new_id_attributes", id_args))
-  class(l) <- "tparams_transprobs"
-  return(l)
+  return(do.call("new_tparams_transprobs", c(list(value = value), id_args)))
 }
 
 #' @rdname tparams_transprobs

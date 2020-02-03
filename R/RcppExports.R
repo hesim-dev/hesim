@@ -41,6 +41,10 @@ C_rdirichlet_mat <- function(n, alpha) {
     .Call('_hesim_C_rdirichlet_mat', PACKAGE = 'hesim', n, alpha)
 }
 
+C_normalize_transprobs <- function(value) {
+    invisible(.Call('_hesim_C_normalize_transprobs', PACKAGE = 'hesim', value))
+}
+
 C_cohort_dtstm_sim_stateprobs <- function(R_CohortDtstmTrans, times) {
     .Call('_hesim_C_cohort_dtstm_sim_stateprobs', PACKAGE = 'hesim', R_CohortDtstmTrans, times)
 }

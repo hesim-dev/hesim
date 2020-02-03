@@ -3,6 +3,25 @@
 
 /***************************************************************************//** 
  * @ingroup dtstm
+ * Normalized transition probabilities.
+ * Normalize transition probabilities so that the probabilities of each row
+ * sum to 1
+ * @@param value the (possibly) unnormalized transition probabilities.
+ ******************************************************************************/ 
+// [[Rcpp::export]]
+void C_normalize_transprobs(arma::cube &value){
+  int n_slices = value.n_slices;
+  int n_states = value.slice(0).n_rows;
+  for (int i = 0; i < n_slices; ++i){
+    for (int j = 0; j < n_states; ++j){
+      double sum_probs = arma::sum(value.slice(i).row(j));
+      value.slice(i).row(j) = value.slice(i).row(j)/sum_probs;
+    }
+  }
+}
+
+/***************************************************************************//** 
+ * @ingroup dtstm
  * Simulate health state probabilities with a cohort discrete time state 
  * transition model
  * This function is exported to @c R and used in @c CohortDtstm$sim_stateprobs().

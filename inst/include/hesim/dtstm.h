@@ -59,8 +59,8 @@ private:
   int n_obs_; ///< The number of treatment strategy, patient, and time interval
             ///< observations.
   arma::cube value_; ///< An array of transition probability matrices.
-public:
   
+public:
   /** 
    * The constructor.
    * Instantiates the object.
