@@ -85,25 +85,24 @@ and transformed parameter objects already predicted from covariates." />
     <li>
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Markov cohort models</li>
     <li>
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Economic modeling</li>
     <li>
-      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li>
+      <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Continuous time state transition models</a>
-    </li>
-    <li>
-      <a href="../articles/subgroup.html">Subgroup analyses</a>
-    </li>
-    <li>
-      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+      <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Decision analysis</li>
@@ -212,9 +211,10 @@ health state transition. This is only used for state transition models.</p></td>
       <td><p>A <code>data.table</code> denoting unique time intervals. Must
 contain the columns <code>time_id</code>, <code>time_start</code>, and <code>time_stop</code>.
 <code>time_start</code> is the starting time of an interval and <code>time_stop</code> is
-the stopping time of an interval. Time intervals are closed on the left and
-open on the right, and in the final interval, <code>time_stop</code> is equal to
-infinity.</p></td>
+the stopping time of an interval. Following the <a href='https://www.rdocumentation.org/packages/survival/topics/tmerge'>survival</a> package,
+time intervals are closed on the right and
+open on the left (except in the final interval where <code>time_stop</code> is equal to
+infinity).</p></td>
     </tr>
     <tr>
       <th>n_times</th>

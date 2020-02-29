@@ -8,6 +8,7 @@
 \alias{check.params_lm}
 \alias{check.params_lm_list}
 \alias{check.params_surv}
+\alias{check.params_mlogit}
 \alias{check.tparams_transprobs}
 \alias{check.params_surv_list}
 \alias{check.params_joined_surv}
@@ -26,6 +27,8 @@
 \method{check}{params_lm_list}(object)
 
 \method{check}{params_surv}(object)
+
+\method{check}{params_mlogit}(object)
 
 \method{check}{tparams_transprobs}(object)
 

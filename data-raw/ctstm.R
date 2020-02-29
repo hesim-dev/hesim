@@ -1,4 +1,4 @@
-# Data for a 3-state continuous time state transition models
+# Data for a 3-state continuous time state transition model
 rm(list = ls())
 ctstm3_exdata <- list()
 

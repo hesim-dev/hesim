@@ -8,8 +8,8 @@ params_surv(coefs, dist, aux = NULL)
 }
 \arguments{
 \item{coefs}{A list of length equal to the number of parameters in the
-survival distribution. Each element of the list is a matrix of samples from
-the posterior distribution of the regression coefficients used to predict
+survival distribution. Each element of the list is a matrix of samples
+of the regression coefficients under sampling uncertainty used to predict
 a given parameter.}
 
 \item{dist}{Character vector denoting the parametric distribution. See "Details".}

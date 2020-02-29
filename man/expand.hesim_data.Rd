@@ -11,11 +11,13 @@
 
 \item{by}{A character vector of the names of the data tables in \code{hesim_data} to expand by.}
 
-\item{times}{A numeric vector of distinct times denoting the start of time intervals.}
+\item{times}{Either a numeric vector of distinct times denoting the start of time intervals or
+q \link{time_intervals} object.}
 }
 \value{
 An object of class \code{expanded_hesim_data}, which is a \code{data.table} with an "id_vars"
-attribute containing the names of the ID variables in the data table.
+attribute containing the names of the ID variables in the data table and, if \code{times} is
+not \code{NULL}, a \code{time_intervals} object derived from \code{times}.
 }
 \description{
 Create a data table in long format from all combinations of specified tables

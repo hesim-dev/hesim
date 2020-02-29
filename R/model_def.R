@@ -564,7 +564,7 @@ uniform_rng <- function(min, max, names = NULL){
 #' @seealso [define_model()], [define_rng()]
 #' @export
 define_tparams <- function(expr, times = NULL, ...){
-  if (is.null(times)) times <- 0
+ if (is.null(times)) times <- 0
   x <- c(list(expr = substitute(expr), times = times), list(...))
   class(x) <- "tparams_def"
   return(x)

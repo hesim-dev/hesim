@@ -7,14 +7,13 @@
 flexsurvreg_list(...)
 }
 \arguments{
-\item{...}{Objects of class \code{\link{flexsurvreg}}, which can be named.}
+\item{...}{Objects of class \link[flexsurv:flexsurvreg]{flexsurvreg}, which can be named.}
 }
 \value{
-Returns an object of class "flexsurvreg_list".
+An object of class \code{flexsurvreg_list}.
 }
 \description{
-Return an object of class "flexsurvreg_list" from multiple objects of class
-\code{\link{flexsurvreg}}.
+Combine \link[flexsurv:flexsurvreg]{flexsurvreg} into a list.
 }
 \examples{
  library("flexsurv")

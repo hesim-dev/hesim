@@ -1,10 +1,11 @@
-#' List of \code{formula} objects 
+#' List of `formula` objects 
 #'
-#' Create an object of class "formula_list". The object can be created from either
-#'  multiple objects of class \code{\link{formula}} or from another "formula_list" object.
+#' Combine [formula][stats::formula] or [formula_list] object into a 
+#' [formula_list] object.
 #'
-#' @param ... Objects of class \code{\link{formula}}, which can be named.
-#' @return Returns an object of class "formula_list".
+#' @param ... Objects of class [formula][stats::formula], which can be named.
+#' @return An object of class `formula_list`.
+#' @keywords internal
 #' @examples 
 #' # Create from "formula" objects
 #' flist_wei <- formula_list(shape = formula(~ 1), scale = formula(~ x))
@@ -23,12 +24,11 @@ formula_list <- function(...){
   } 
 }
 
-#' List of \code{lm} objects 
+#' List of `lm` objects 
 #'
-#' Return an object of class "lm_list" multiple objects of class
-#' \code{\link{lm}}.
-#' @param ... Objects of class \code{\link{lm}}, which can be named.
-#' @return Returns an object of class "lm_list".
+#' Combine [lm][stats::lm] objects into a list
+#' @param ... Objects of class [lm][stats::lm], which can be named.
+#' @return Returns an object of class `lm_list`.
 #' @keywords internal
 #' @export
 #' @examples 
@@ -40,12 +40,11 @@ lm_list <- function(...){
   return(object_list(..., inner_class = "lm", new_class = "lm_list"))
 }
 
-#' List of \code{flexsurvreg} objects 
+#' List of `flexsurvreg` objects 
 #'
-#' Return an object of class "flexsurvreg_list" from multiple objects of class
-#' \code{\link{flexsurvreg}}.
-#' @param ... Objects of class \code{\link{flexsurvreg}}, which can be named.
-#' @return Returns an object of class "flexsurvreg_list".
+#' Combine [flexsurvreg][flexsurv::flexsurvreg] into a list.
+#' @param ... Objects of class [flexsurvreg][flexsurv::flexsurvreg], which can be named.
+#' @return An object of class `flexsurvreg_list`.
 #' @examples 
 #'  library("flexsurv")
 #'  fit1 <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
@@ -55,6 +54,27 @@ lm_list <- function(...){
 #' @export
 flexsurvreg_list <- function(...){
   return(object_list(..., inner_class = "flexsurvreg", new_class = "flexsurvreg_list"))
+}
+
+#' List of `multinom` objects 
+#'
+#' Combine `multinom` objects into a list.
+#' @param ... Objects of class [multinom][nnet::multinom], which can be named.
+#' @return  An object of class `multinom_list`.
+#' @examples 
+#'  library("nnet")
+#'  dat_healthy <- multinom3_exdata$transitions[state_from == "Healthy"]
+#'  fit_healthy <- multinom(state_to ~ strategy_name + female + age_cat + year_cat, 
+#'                           data = dat_healthy)
+#'  dat_sick <- multinom3_exdata$transitions[state_from == "Sick"]
+#'  dat_sick$state_to <- droplevels(dat_sick$state_to)
+#'  fit_sick <- multinom(state_to ~ strategy_name + female + age_cat + year_cat, 
+#'                       data = dat_sick)
+#'  fits <- multinom_list(healthy = fit_healthy, sick = fit_sick)
+#'  class(fits)
+#' @export
+multinom_list <- function(...){
+  return(object_list(..., inner_class = "multinom", new_class = "multinom_list"))
 }
 
 #' Partitioned survival regression object

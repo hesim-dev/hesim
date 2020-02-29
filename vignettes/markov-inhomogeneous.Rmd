@@ -1,5 +1,5 @@
 ---
-title: Subgroup analyses
+title: Time inhomogeneous Markov cohort models
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -9,13 +9,13 @@ output:
 pkgdown:
   as_is: true
 vignette: >
-  %\VignetteIndexEntry{Subgroup analyses}
+  %\VignetteIndexEntry{Time inhomogeneous Markov cohort models}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
 # Overview
-We will illustrate a subgroup analysis by replicating the total hip replacement (THR) example from the [*Decision Modeling for Health Economic Evaluation*](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook. The analysis compares two treatment strategies, a "standard" prosthesis and a "new" prosthesis. A probabilistic sensitivity analysis (PSA) will be used to quantify parameter uncertainty.  
+We will illustrate a time inhomogeneous Markov cohort model by replicating the total hip replacement (THR) example from the [*Decision Modeling for Health Economic Evaluation*](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook. The analysis compares two treatment strategies, a "standard" prosthesis and a "new" prosthesis. A probabilistic sensitivity analysis (PSA) will be used to quantify parameter uncertainty.  
 
 The model consists 5 health states: (i) primary THR, (ii) successful primary, (iii) revision THR, (iv) successful revision, and (v) death. 
 
@@ -201,7 +201,7 @@ As noted above, *omrPTHR*, *omrRTHR*, and *rrr* are drawn from beta distribution
 rng_def <- define_rng({
   list( 
     omrPTHR = beta_rng(shape1 = omrPTHR_shape1, shape2 = omrPTHR_shape2),
-    rr = multi_normal_rng(mu = rr_coef, Sigma = rr_vcov),
+    rr_coef = multi_normal_rng(mu = rr_coef, Sigma = rr_vcov),
     mr_male = fixed(mr$male, names = mr$age_lower),
     mr_female = fixed(mr$female, names = mr$age_lower),
     omrRTHR = beta_rng(shape1 = omrRTHR_shape1, shape2 = omrRTHR_shape2),
@@ -224,8 +224,9 @@ transitions_def <- define_tparams({
   # Regression for revision risk
   male <- ifelse(gender == "Female", 0, 1)
   np1 <- ifelse(strategy_name == "Standard prosthesis", 0, 1)
-  scale <- exp(rr$cons + rr$age * age + rr$male * male + rr$np1 * np1)
-  shape <- exp(rr$lngamma)
+  scale <- exp(rr_coef$cons + rr_coef$age * age + rr_coef$male * male + 
+                 rr_coef$np1 * np1)
+  shape <- exp(rr_coef$lngamma)
   rr <- 1 - exp(scale * ((time - 1)^shape - time^shape))
     
   # Mortality rate

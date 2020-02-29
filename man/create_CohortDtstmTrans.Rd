@@ -2,9 +2,19 @@
 % Please edit documentation in R/dtstm.R
 \name{create_CohortDtstmTrans}
 \alias{create_CohortDtstmTrans}
+\alias{create_CohortDtstmTrans.multinom_list}
 \title{Create \code{CohortDtstmTrans} object}
 \usage{
 create_CohortDtstmTrans(object, ...)
+
+\method{create_CohortDtstmTrans}{multinom_list}(
+  object,
+  input_data,
+  trans_mat,
+  n = 1000,
+  point_estimate = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{An object of the appropriate class.}

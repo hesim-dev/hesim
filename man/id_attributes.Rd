@@ -45,9 +45,10 @@ health state transition. This is only used for state transition models.}
 \item{time_intervals}{A \code{data.table} denoting unique time intervals. Must
 contain the columns \code{time_id}, \code{time_start}, and \code{time_stop}.
 \code{time_start} is the starting time of an interval and \code{time_stop} is
-the stopping time of an interval. Time intervals are closed on the left and
-open on the right, and in the final interval, \code{time_stop} is equal to
-infinity.}
+the stopping time of an interval. Following the \link[survival:tmerge]{survival} package,
+time intervals are closed on the right and
+open on the left (except in the final interval where \code{time_stop} is equal to
+infinity).}
 
 \item{n_times}{A scalar denoting the number of time intervals. Equal to the
 number of rows in \code{time_intervals}.}

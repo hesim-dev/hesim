@@ -34,8 +34,8 @@
   
 <meta property="og:title" content="List of <code>formula</code> objects — formula_list" />
 
-<meta property="og:description" content="Create an object of class &quot;formula_list&quot;. The object can be created from either
-multiple objects of class formula or from another &quot;formula_list&quot; object." />
+<meta property="og:description" content="Combine formula or formula_list object into a
+formula_list object." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -85,25 +85,24 @@ multiple objects of class formula or from another &quot;formula_list&quot; objec
     <li>
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Markov cohort models</li>
     <li>
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Economic modeling</li>
     <li>
-      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li>
+      <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Continuous time state transition models</a>
-    </li>
-    <li>
-      <a href="../articles/subgroup.html">Subgroup analyses</a>
-    </li>
-    <li>
-      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+      <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Decision analysis</li>
@@ -144,8 +143,8 @@ multiple objects of class formula or from another &quot;formula_list&quot; objec
 
     <div class="ref-description">
     
-    <p>Create an object of class "formula_list". The object can be created from either
-multiple objects of class <code><a href='https://www.rdocumentation.org/packages/stats/topics/formula'>formula</a></code> or from another "formula_list" object.</p>
+    <p>Combine <a href='https://www.rdocumentation.org/packages/stats/topics/formula'>formula</a> or formula_list object into a
+formula_list object.</p>
     
     </div>
 
@@ -156,13 +155,13 @@ multiple objects of class <code><a href='https://www.rdocumentation.org/packages
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>Objects of class <code><a href='https://www.rdocumentation.org/packages/stats/topics/formula'>formula</a></code>, which can be named.</p></td>
+      <td><p>Objects of class <a href='https://www.rdocumentation.org/packages/stats/topics/formula'>formula</a>, which can be named.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns an object of class "formula_list".</p>
+    <p>An object of class <code>formula_list</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

@@ -11,5 +11,5 @@ input matrices. In other words, transformed parameters are parameters that have
 already been predicted as a function of covariates.
 }
 \seealso{
-\code{\link{params}}
+\link{params}
 }

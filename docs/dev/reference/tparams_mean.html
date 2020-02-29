@@ -84,25 +84,24 @@
     <li>
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Markov cohort models</li>
     <li>
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Economic modeling</li>
     <li>
-      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li>
+      <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Continuous time state transition models</a>
-    </li>
-    <li>
-      <a href="../articles/subgroup.html">Subgroup analyses</a>
-    </li>
-    <li>
-      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+      <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Decision analysis</li>
@@ -154,12 +153,12 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>value</th>
-      <td><p>Matrix of samples from the posterior distribution of the
+      <td><p>Matrix of samples from the distribution of the
 mean. Columns denote random samples and rows denote means for different observations.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments to pass to <code><a href='id_attributes.html'>id_attributes</a></code>. Each row in
+      <td><p>Arguments to pass to <a href='id_attributes.html'>id_attributes</a>. Each row in
 <code>value</code> must be a prediction for a <code>strategy_id</code>,
 <code>patient_id</code>, <code>state_id</code>, and optionally <code>time_id</code> combination.</p></td>
     </tr>
@@ -167,12 +166,12 @@ mean. Columns denote random samples and rows denote means for different observat
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class "tparams_mean", which is a list containing <code>value</code>,
-<code>n_samples</code>, and the ID attributes passed to <code><a href='id_attributes.html'>id_attributes</a></code>.</p>
+    <p>An object of class <code>tparams_mean</code>, which is a list containing <code>value</code>,
+<code>n_samples</code>, and the ID attributes passed to <a href='id_attributes.html'>id_attributes</a>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>tparams</p></div>
+    <div class='dont-index'><p><a href='tparams.html'>tparams</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

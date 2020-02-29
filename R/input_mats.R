@@ -103,20 +103,25 @@ size_id_map <- function(){
 get_input_mats_id_vars <- function(data){
   map <- size_id_map()
   res <- list() 
-  id_vars <- attributes(data)$id_vars
+  id_vars <- attr(data, "id_vars")
   for (i in 1:length(id_vars)){
     res[[id_vars[i]]] <- data[[id_vars[i]]]
     res[[map[id_vars[i]]]] <- length(unique(data[[id_vars[i]]]))
+    if (id_vars[[i]] == "time_id"){
+      res[["time_intervals"]] <- attr(data, "time_intervals")
+    }
   }
+  if ("grp_id" %in% colnames(data)) res[["grp_id"]] <- data[["grp_id"]]
+  if ("patient_wt" %in% colnames(data)) res[["patient_wt"]] <- data[["patient_wt"]]
   return(res)
 }
 
-#' Check data argument for \code{create_input_mats} 
+#' Check data argument for `create_input_mats`
 #' 
-#' Check that data argument for \code{create_input_mats} exists and that it is
+#' Check that data argument for `create_input_mats` exists and that it is
 #' of the correct type. 
 #' @param data An object of class "expanded_hesim_data" returned by the function
-#'  \code{\link{expand.hesim_data}}. 
+#'  [expand.hesim_data]. 
 #' @return If all tests passed, returns nothing; otherwise, throws an exception.
 check_edata <- function(data){
   if (!inherits(data, "expanded_hesim_data")){
@@ -350,6 +355,38 @@ create_input_mats.params_surv_list <- function(object, input_data, ...){
     X_list_2d[[i]] <- create_input_mats.params_surv_X(object[[i]], input_data)
   }
   args <- c(list(X = X_list_2d),
+            get_input_mats_id_vars(input_data))
+  return(do.call("new_input_mats", args))
+}
+
+create_input_mats_multinom_X <- function(object, input_data, ...){
+  check_edata(input_data)
+  terms <- get_terms(object)
+  m <- model.frame(terms, input_data, na.action = na.omit,
+                   xlev = object$xlevels)
+  if (!is.null(cl <- attr(terms, "dataClasses")))
+    .checkMFClasses(cl, m)
+  return(model.matrix(terms, m, contrasts = object$contrasts))
+}
+
+#' @export 
+#' @rdname create_input_mats
+create_input_mats.multinom <- function(object, input_data, ...){
+  X <- create_input_mats_multinom_X(object, input_data, ...)
+  args <- c(list(X = X ),
+            get_input_mats_id_vars(input_data))
+  return(do.call("new_input_mats", args))
+}
+
+#' @export 
+#' @rdname create_input_mats
+create_input_mats.multinom_list <- function(object, input_data, ...){
+  X_list <- vector(mode = "list", length = length(object))
+  names(X_list) <- names(object)
+  for (i in 1:length(object)){
+    X_list[[i]] <- create_input_mats_multinom_X(object[[i]], input_data, ...)
+  }
+  args <- c(list(X = X_list),
             get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }

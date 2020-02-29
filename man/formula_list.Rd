@@ -7,14 +7,14 @@
 formula_list(...)
 }
 \arguments{
-\item{...}{Objects of class \code{\link{formula}}, which can be named.}
+\item{...}{Objects of class \link[stats:formula]{formula}, which can be named.}
 }
 \value{
-Returns an object of class "formula_list".
+An object of class \code{formula_list}.
 }
 \description{
-Create an object of class "formula_list". The object can be created from either
-multiple objects of class \code{\link{formula}} or from another "formula_list" object.
+Combine \link[stats:formula]{formula} or \link{formula_list} object into a
+\link{formula_list} object.
 }
 \examples{
 # Create from "formula" objects
@@ -26,3 +26,4 @@ flist <- formula_list(exponential = formula_list(rate = formula(~1)),
                               weibull = flist_wei)
 
 }
+\keyword{internal}

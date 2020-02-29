@@ -1,5 +1,6 @@
 context("dtstm.R unit tests")
 library("data.table")
+library("nnet")
 rm(list = ls())
 
 # Helper functions -------------------------------------------------------------
@@ -162,3 +163,41 @@ test_that("CohortDtstmTrans$sim_stateprobs() is correct ",{
 })
 
 # Simulate model (from nnet object) --------------------------------------------
+# Fit
+transitions <- data.table(multinom3_exdata$transitions)
+dat_healthy <- transitions[state_from == "Healthy"]
+fit_healthy <- multinom(state_to ~ strategy_name + female + age_cat + year_cat, 
+                        data = dat_healthy)
+dat_sick <- droplevels(transitions[state_from == "Sick"])
+fit_sick <- multinom(state_to ~ strategy_name + female + age_cat + year_cat, 
+                     data = dat_sick)
+create_params(fit_healthy)
+
+# Input data
+hesim_dat <- hesim_data(
+  patients = transitions[year == 1, .(patient_id, age_cat, female)],
+  strategies = unique(transitions[year == 1, .(strategy_id, strategy_name)]
+                      )[order(strategy_id)]
+)
+tintervals <- time_intervals(unique(transitions[, .(year_cat)])
+                             [, time_start := c(0, 2, 6)])
+input_dat <- expand(hesim_dat, times = tintervals)
+tmat <- rbind(
+  c(0, 1, 2),
+  c(NA, 0, 3),
+  c(NA, NA, NA)
+)
+
+test_that("create_CohortDtstmTrans ",{
+  transmod <- create_CohortDtstmTrans(multinom_list(healthy = fit_healthy,
+                                                    sick = fit_sick), 
+                                      trans_mat = tmat,
+                                      input_data = input_dat)
+})
+
+
+
+# predict_multinom(fit_healthy, newdata = data.frame(strategy_name = "Intervention",
+#                                                    female = 1,
+#                                                    age_cat = "Age >= 60",
+#                                                    year_cat = "Year < 3"))

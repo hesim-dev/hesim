@@ -11,6 +11,8 @@
 \alias{create_input_mats.params_lm}
 \alias{create_input_mats.params_surv}
 \alias{create_input_mats.params_surv_list}
+\alias{create_input_mats.multinom}
+\alias{create_input_mats.multinom_list}
 \title{Create input matrices}
 \usage{
 create_input_mats(object, ...)
@@ -32,6 +34,10 @@ create_input_mats(object, ...)
 \method{create_input_mats}{params_surv}(object, input_data, ...)
 
 \method{create_input_mats}{params_surv_list}(object, input_data, ...)
+
+\method{create_input_mats}{multinom}(object, input_data, ...)
+
+\method{create_input_mats}{multinom_list}(object, input_data, ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class.}

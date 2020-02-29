@@ -39,6 +39,7 @@ Suggests:
     knitr,
     mstate,
     msm,
+    nnet,
     numDeriv,
     pracma,
     rmarkdown,

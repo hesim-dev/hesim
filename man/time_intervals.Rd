@@ -7,10 +7,12 @@
 time_intervals(time_start)
 }
 \arguments{
-\item{time_start}{A vector of starting times for each interval}
+\item{time_start}{Either a vector of starting times for each interval or a
+\code{data.frame} with at least one column named \code{time_start}.}
 }
 \value{
-A \code{data.table} in the same format as \code{time_intervals} as
+An object of class \code{time_intervals} that inherits from
+\code{data.table} in the same format as \code{time_intervals} as
 described in \link{id_attributes}.
 }
 \description{
@@ -19,8 +21,10 @@ interval. This would typically be passed to \link{id_attributes}.
 }
 \examples{
 time_intervals(c(0, 3, 5))
+time_intervals(data.frame(time_start = c(0, 3, 5),
+                          time_cat = c("Time <= 3", "Time <= 5", 
+                                       "Time > 5")))
 }
 \seealso{
 \link{id_attributes}
 }
-\keyword{internal}

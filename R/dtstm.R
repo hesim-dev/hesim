@@ -9,8 +9,10 @@
 CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
   private = list(
     get_n_states = function(){
-      if (is.null(self$input_mats)){
+      if (is.null(self$input_data)){
         return(ncol(self$params$value[,,1]))
+      } else{
+        return(nrow(self$trans_mat))
       }
     }
   ),                             
@@ -20,8 +22,15 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     #' supports objects of class [tparams_transprobs].
     params = NULL,
     
-    #' @field input_mats An object of class [input_mats].
-    input_mats = NULL,
+    #' @field input_data An object of class [input_mats].
+    input_data = NULL,
+    
+    #' @field trans_mat A transition matrix describing the states and transitions
+    #' in a discrete-time multi-state model. The format should be the same as 
+    #' in [IndivCtstmTrans]. Transitions that are not possible should be `NA` and
+    #' the reference categories for each row (e.g., from a multinomial logistic 
+    #' regression) should be `0`.
+    trans_mat = NULL,
     
     #' @field start_stateprobs A vector with length equal to the number of
     #' health states containing the probability that the cohort is in each health
@@ -38,16 +47,22 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     #' @description
     #' Create a new `CohortDtstmTrans` object.
     #' @param params The `params` field.
-    #' @param input_mats The `input_mats` field.
+    #' @param input_data The `input_data` field.
+    #' @param trans_mat The `trans_mat` field.
     #' @param start_stateprobs The `start_stateprobs` field.
     #' @param cycle_length The `cycle_length` field.
     #' @return A new `CohortDtstmTrans` object.
     initialize = function(params,
-                          input_mats = NULL,
+                          input_data = NULL,
+                          trans_mat = NULL,
                           start_stateprobs = NULL, 
                           cycle_length = 1){
       self$params <- params
-      self$input_mats <- input_mats
+      self$input_data <- input_data
+      self$trans_mat <- trans_mat
+      if (!is.null(input_data) & is.null(trans_mat)){
+        stop("If 'input_data' is not NULL, then 'trans_mat' cannot be NULL")
+      }
       if (!is.null(start_stateprobs)){
         self$start_stateprobs <- start_stateprobs
       } else{
@@ -83,6 +98,18 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
 create_CohortDtstmTrans <- function(object, ...){
   UseMethod("create_CohortDtstmTrans", object)
 } 
+
+#' @export
+#' @rdname create_CohortDtstmTrans
+create_CohortDtstmTrans.multinom_list <- function(object, input_data,
+                                                  trans_mat,
+                                                  n = 1000, point_estimate = FALSE,
+                                                  ...){
+  input_mats <- create_input_mats(object, input_data)
+  params <- create_params(object, n = n, point_estimate = point_estimate)
+  return(CohortDtstmTrans$new(params = params, input_data = input_mats, 
+                              trans_mat = trans_mat, ...))
+}
 
 # CohortDtstm ------------------------------------------------------------------
 #' Cohort discrete time state transition model
@@ -245,3 +272,4 @@ create_CohortDtstm.model_def <- function(object, input_data, cost_args = NULL,
   
   return(econ_model)
 }
+

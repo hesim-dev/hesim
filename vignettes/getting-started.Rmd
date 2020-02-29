@@ -123,8 +123,7 @@ Parameters may depend on time (since the start of the model) by using the packag
 tparams_def <- define_tparams({
   ## The treatment effect (relative risk) is transformed so that it varies by 
   ## strategies and only applies for the first 2 years (Monotherapy is 
-  ## the reference strategy). Time intervals are closed on the left
-  ## and open on the right so we use strict equality.  
+  ## the reference strategy). 
   rr <- ifelse(strategy_name == "Monotherapy" | time > 2, 1, rr_comb)
   
   list(
@@ -142,7 +141,7 @@ tparams_def <- define_tparams({
         direct_medical = c_dmed
     )
   )
-}, times = c(0, 2.01))
+}, times = c(0, 2))
 ```
 
 ## The model

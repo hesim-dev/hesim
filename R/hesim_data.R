@@ -201,7 +201,8 @@ expand <- function(object, by, times){
 #' an explanation of how the expansion is done.
 #' @param object An object of class `hesim_data`.
 #' @param by A character vector of the names of the data tables in `hesim_data` to expand by.
-#' @param times A numeric vector of distinct times denoting the start of time intervals. 
+#' @param times Either a numeric vector of distinct times denoting the start of time intervals or
+#' q [time_intervals] object. 
 #' @details This function is similar to [expand.grid()], but works for data frames or data tables. 
 #' Specifically, it creates a `data.table` from all combinations of the supplied tables in `object`
 #' and optionally the start of times intervals in `times`. 
@@ -210,7 +211,8 @@ expand <- function(object, by, times){
 #' (iii) the health-related ID variable (either `state_id` or `transition_id`, and
 #' (iv) the time intervals from `times`.
 #' @return An object of class `expanded_hesim_data`, which is a `data.table` with an "id_vars" 
-#' attribute containing the names of the ID variables in the data table.
+#' attribute containing the names of the ID variables in the data table and, if `times` is 
+#' not `NULL`, a `time_intervals` object derived from `times`.
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
@@ -239,7 +241,13 @@ expand.hesim_data <- function(object, by = c("strategies", "patients"),
   sorted_by <- hesim_data_sorted_by(by)
   tbl_list <- object[sorted_by]
   if (!is.null(times)){
-    tbl_list <- c(tbl_list, list(times = time_intervals(times)))
+    if (inherits(times, "time_intervals")){
+      tintervals <- times
+    } else{
+      tintervals <- time_intervals(times)
+    }
+    sorted_by <- hesim_data_sorted_by(c(by, "times"))
+    tbl_list <- c(tbl_list, list(times = tintervals))
   }
   for (i in 1:length(tbl_list)){
     if (is.null(tbl_list[[i]])){
@@ -254,6 +262,7 @@ expand.hesim_data <- function(object, by = c("strategies", "patients"),
   nonid_cols <- colnames(dat)[!colnames(dat) %in% id_cols]
   dat <- dat[, c(id_cols, nonid_cols), with = FALSE]
   setattr(dat, "id_vars", unname(id_cols))
+  if (!is.null(times))  setattr(dat, "time_intervals", tintervals)
   setattr(dat, "class", c("expanded_hesim_data", "data.table", "data.frame"))
   return(dat)
 }
@@ -298,23 +307,39 @@ sort_hesim_data <- function(data, sorted_by){
 #' Create a table of time intervals given a vector of starting times for each 
 #' interval. This would typically be passed to [id_attributes].
 #' 
-#' @param time_start A vector of starting times for each interval
-#' @return A `data.table` in the same format as `time_intervals` as 
+#' @param time_start Either a vector of starting times for each interval or a
+#'  `data.frame` with at least one column named `time_start`.
+#' @return An object of class `time_intervals` that inherits from
+#'  `data.table` in the same format as `time_intervals` as 
 #' described in [id_attributes].
 #' @seealso [id_attributes]
-#' @keywords internal
 #' @examples
 #' time_intervals(c(0, 3, 5))
+#' time_intervals(data.frame(time_start = c(0, 3, 5),
+#'                           time_cat = c("Time <= 3", "Time <= 5", 
+#'                                        "Time > 5")))
 #' @export
 time_intervals <- function(time_start){
-  if (any(time_start < 0)){
+  if (inherits(time_start, "data.frame")){
+      if (!"time_start" %in% colnames(time_start)){
+        stop(paste0("If 'time_start' is a data frame, then 'time_start' ",
+                    "must contain a column named 'time_start'."))
+      }
+      time_start <- data.table(time_start)
+      time_start[, time_start := as.numeric(time_start)]
+      setorderv(time_start, "time_start")
+      time_intervals <- data.table(time_id = 1:nrow(time_start), 
+                                   time_start)
+    } else{
+      time_intervals <- data.table(time_id = 1:length(time_start), 
+                                   time_start = sort(as.numeric(time_start)))
+    }
+  if (any(time_intervals[["time_start"]] < 0)){
     stop("'time_start' cannot be negative")
   }
-  time_start <- sort(as.numeric(time_start)) 
-  time_intervals <- data.table(time_id = 1:length(time_start), 
-                                time_start = time_start)
   time_intervals[, "time_stop" := shift(get("time_start"), type = "lead")]
   time_intervals[is.na(get("time_stop")), "time_stop" := Inf]
+  setattr(time_intervals, "class", c("time_intervals", "data.table", "data.frame"))
   return(time_intervals[, ])
 }
 
@@ -336,9 +361,10 @@ time_intervals <- function(time_start){
 #' @param time_intervals A `data.table` denoting unique time intervals. Must 
 #' contain the columns `time_id`, `time_start`, and `time_stop`.
 #' `time_start` is the starting time of an interval and `time_stop` is
-#' the stopping time of an interval. Time intervals are closed on the left and
-#' open on the right, and in the final interval, `time_stop` is equal to 
-#' infinity. 
+#' the stopping time of an interval. Following the [survival][survival::tmerge] package,
+#' time intervals are closed on the right and
+#' open on the left (except in the final interval where `time_stop` is equal to 
+#' infinity). 
 #' @param n_times A scalar denoting the number of time intervals. Equal to the
 #' number of rows in `time_intervals`.
 #' @param sample A numeric vector of integer denoting the sample from the posterior
@@ -427,7 +453,7 @@ check.id_attributes <- function(object){
                       "' does not equal '", id_vars_n[i], "'.")
         stop(msg, call. = FALSE)
       } 
-    } # end loop of id.vars
+    } # end loop of id_vars
   }
   
   # Check if id variables are sorted properly 

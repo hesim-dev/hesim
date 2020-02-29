@@ -7,16 +7,16 @@
 tparams_mean(value, ...)
 }
 \arguments{
-\item{value}{Matrix of samples from the posterior distribution of the
+\item{value}{Matrix of samples from the distribution of the
 mean. Columns denote random samples and rows denote means for different observations.}
 
-\item{...}{Arguments to pass to \code{\link{id_attributes}}. Each row in
+\item{...}{Arguments to pass to \link{id_attributes}. Each row in
 \code{value} must be a prediction for a \code{strategy_id},
 \code{patient_id}, \code{state_id}, and optionally \code{time_id} combination.}
 }
 \value{
-An object of class "tparams_mean", which is a list containing \code{value},
-\code{n_samples}, and the ID attributes passed to \code{\link{id_attributes}}.
+An object of class \code{tparams_mean}, which is a list containing \code{value},
+\code{n_samples}, and the ID attributes passed to \link{id_attributes}.
 }
 \description{
 Create a list containing means predicted from a statistical model.
@@ -32,5 +32,5 @@ tparams_mean(value = matrix(1:8, nrow = 4),
 
 }
 \seealso{
-tparams
+\link{tparams}
 }

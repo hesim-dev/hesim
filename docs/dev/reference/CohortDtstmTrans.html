@@ -84,25 +84,24 @@
     <li>
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Markov cohort models</li>
     <li>
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Economic modeling</li>
     <li>
-      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li>
+      <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Continuous time state transition models</a>
-    </li>
-    <li>
-      <a href="../articles/subgroup.html">Subgroup analyses</a>
-    </li>
-    <li>
-      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+      <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Decision analysis</li>
@@ -161,12 +160,17 @@
     <p><div class="r6-fields"></p><dl class='dl-horizontal'>
 <dt><code>params</code></dt><dd><p>Parameters for simulating health state transitions. Currently
 supports objects of class <a href='tparams_transprobs.html'>tparams_transprobs</a>.</p></dd>
-    <dt><code>input_mats</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>.</p></dd>
+    <dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>.</p></dd>
+    <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
+in a discrete-time multi-state model. The format should be the same as
+in <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>. Transitions that are not possible should be <code>NA</code> and
+the reference categories for each row (e.g., from a multinomial logistic
+regression) should be <code>0</code>.</p></dd>
     <dt><code>start_stateprobs</code></dt><dd><p>A vector with length equal to the number of
 health states containing the probability that the cohort is in each health
 state at the start of the simulation. For example,
 if there were three states and the cohort began the simulation in state 1,
-then <code>start_stateprobs = c(1, 0, 0)</code>. If `NULL``, then a vector with the
+then <code>start_stateprobs = c(1, 0, 0)</code>. If <code>NULL</code>, then a vector with the
 first element equal to 1 and all remaining elements equal to 0.</p></dd>
     <dt><code>cycle_length</code></dt><dd><p>The length of a model cycle in terms of years.
 The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd>
@@ -186,7 +190,8 @@ The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd
 <h3>Usage</h3>
     <div class="r"><pre>CohortDtstmTrans$new(
   params,
-  input_mats = NULL,
+  input_data = NULL,
+  trans_mat = NULL,
   start_stateprobs = NULL,
   cycle_length = 1
 )</pre></div>
@@ -194,7 +199,8 @@ The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd
     <div class="arguments">
 <dl class='dl-horizontal'>
 <dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
-    <dt><code>input_mats</code></dt><dd><p>The <code>input_mats</code> field.</p></dd>
+    <dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
+    <dt><code>trans_mat</code></dt><dd><p>The <code>trans_mat</code> field.</p></dd>
     <dt><code>start_stateprobs</code></dt><dd><p>The <code>start_stateprobs</code> field.</p></dd>
     <dt><code>cycle_length</code></dt><dd><p>The <code>cycle_length</code> field.</p></dd>
 </dl>

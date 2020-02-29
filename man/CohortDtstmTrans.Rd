@@ -16,7 +16,13 @@ Simulate health state transitions in a cohort discrete time state transition mod
 \item{\code{params}}{Parameters for simulating health state transitions. Currently
 supports objects of class \link{tparams_transprobs}.}
 
-\item{\code{input_mats}}{An object of class \link{input_mats}.}
+\item{\code{input_data}}{An object of class \link{input_mats}.}
+
+\item{\code{trans_mat}}{A transition matrix describing the states and transitions
+in a discrete-time multi-state model. The format should be the same as
+in \link{IndivCtstmTrans}. Transitions that are not possible should be \code{NA} and
+the reference categories for each row (e.g., from a multinomial logistic
+regression) should be \code{0}.}
 
 \item{\code{start_stateprobs}}{A vector with length equal to the number of
 health states containing the probability that the cohort is in each health
@@ -45,7 +51,8 @@ Create a new \code{CohortDtstmTrans} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstmTrans$new(
   params,
-  input_mats = NULL,
+  input_data = NULL,
+  trans_mat = NULL,
   start_stateprobs = NULL,
   cycle_length = 1
 )}\if{html}{\out{</div>}}
@@ -56,7 +63,9 @@ Create a new \code{CohortDtstmTrans} object.
 \describe{
 \item{\code{params}}{The \code{params} field.}
 
-\item{\code{input_mats}}{The \code{input_mats} field.}
+\item{\code{input_data}}{The \code{input_data} field.}
+
+\item{\code{trans_mat}}{The \code{trans_mat} field.}
 
 \item{\code{start_stateprobs}}{The \code{start_stateprobs} field.}
 

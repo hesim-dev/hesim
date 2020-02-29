@@ -7,7 +7,7 @@
 \format{A list containing the following elements:
 \itemize{
 \item{transitions}{ A data frame containing the times at which patient transitions between health states based
-on the dataset \link[mstate]{prothr} from the \code{mstate} package.}
+on the \link[mstate:prothr]{prothr} dataset from the \link[mstate:mstate]{mstate} package.}
 \item{costs}{ A list of data frames. The first data frame contains summary medical cost estimates and the
 second data frame contains drug cost data.}
 \item{utility}{ A data frame of summary utility estimates.}
@@ -39,18 +39,19 @@ The data frame has the following columns:
 
 \section{Cost data}{
 
-The cost list contains two data frames. The first data frame contains summary data on
+The cost list contains two data frames. The first data frame contains
+data on the drug costs associated with each treatment strategy.
+\describe{
+\item{strategy_id}{The treatment strategy identification number.}
+\item{costs}{Annualized drug costs.}
+}
+
+The second data frame contains summary data on
 medical costs by health state, and contains the following columns:
 \describe{
 \item{state_id}{The health state identification number.}
 \item{mean}{Mean costs.}
 \item{se}{Standard error of medical costs.}
-}
-
-The second data frame contains data on the drug costs associated with each treatment strategy.
-\describe{
-\item{strategy_id}{The treatment strategy identification number.}
-\item{costs}{Annualized drug costs.}
 }
 }
 
@@ -59,8 +60,8 @@ The second data frame contains data on the drug costs associated with each treat
 The data frame has the following columns:
 \describe{
 \item{state_id}{The health state identification number.}
-\item{mean}{Mean costs.}
-\item{se}{Standard error.}
+\item{mean}{Mean utility}
+\item{se}{Standard error of utility}
 }
 }
 

@@ -22,6 +22,7 @@ reference:
     contents:
       - params
       - params_lm
+      - params_mlogit
       - params_surv
       - params_surv_list
       - tparams
@@ -32,6 +33,7 @@ reference:
       - hesim_data
       - expand.hesim_data
       - create_trans_dt
+      - time_intervals
       - input_mats
   - title: "Model definition"
     contents:
@@ -87,6 +89,8 @@ articles:
   contents:
   - intro
   - getting-started
+  - markov-inhomogeneous
+  - mlogit
   - psm
   - ctstm
   - icea
@@ -100,22 +104,22 @@ navbar:
     menu:
       - text: "Introduction to hesim"
         href: articles/intro.html
+      - text: "---"
+      - text: "Markov cohort models"
       - text: "Getting started with a Markov cohort model"
         href: articles/getting-started.html
-      - text: "---"
-      - text: "Economic modeling"
-      - text: "Discrete time state transition models"
-        href: articles/dtstm.html
+      - text: "Time inhomogeneous Markov cohort model"
+        href: articles/markov-inhomogeneous.html
+      - text: "---"      
+      - text: "Statistical models of disease progression"
+      - text: "Markov models with multinomial logistic regression"
+        href: articles/mlogit.html
       - text: "Partitioned survival models"
         href: articles/psm.html
-      - text: "Continuous time state transition models"
+      - text: "Markov and semi-Markov multi-state models"
         href: articles/ctstm.html
-      - text: "Subgroup analyses"
-        href: articles/subgroup.html  
-      - text: "Simulating costs and QALYs"
-        href: articles/wlos.html          
       - text: "---"
-      - text: "Decision analysis"
+      - text: "Decision analysis"    
       - text: "Individualized cost-effectiveness analysis"
         href: articles/icea.html
       - text: "---"

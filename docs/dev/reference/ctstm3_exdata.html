@@ -85,25 +85,24 @@ costs, and utility data for a 3-state continuous time state transition model." /
     <li>
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Markov cohort models</li>
     <li>
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Economic modeling</li>
     <li>
-      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li>
+      <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Continuous time state transition models</a>
-    </li>
-    <li>
-      <a href="../articles/subgroup.html">Subgroup analyses</a>
-    </li>
-    <li>
-      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+      <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Decision analysis</li>
@@ -155,7 +154,7 @@ costs, and utility data for a 3-state continuous time state transition model.</p
 
     <p>A list containing the following elements:</p><ul>
 <li><p>transitions A data frame containing the times at which patient transitions between health states based
-on the dataset <a href='https://www.rdocumentation.org/packages/mstate/topics/prothr'>prothr</a> from the <code>mstate</code> package.</p></li>
+on the <a href='https://www.rdocumentation.org/packages/mstate/topics/prothr'>prothr</a> dataset from the <a href='https://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package.</p></li>
 <li><p>costs A list of data frames. The first data frame contains summary medical cost estimates and the
 second data frame contains drug cost data.</p></li>
 <li><p>utility A data frame of summary utility estimates.</p></li>
@@ -181,15 +180,16 @@ second data frame contains drug cost data.</p></li>
     <h2 class="hasAnchor" id="cost-data"><a class="anchor" href="#cost-data"></a>Cost data</h2>
 
     
-    <p>The cost list contains two data frames. The first data frame contains summary data on
+    <p>The cost list contains two data frames. The first data frame contains
+data on the drug costs associated with each treatment strategy.</p><dl class='dl-horizontal'>
+<dt>strategy_id</dt><dd><p>The treatment strategy identification number.</p></dd>
+<dt>costs</dt><dd><p>Annualized drug costs.</p></dd>
+</dl>
+    <p>The second data frame contains summary data on
 medical costs by health state, and contains the following columns:</p><dl class='dl-horizontal'>
 <dt>state_id</dt><dd><p>The health state identification number.</p></dd>
 <dt>mean</dt><dd><p>Mean costs.</p></dd>
 <dt>se</dt><dd><p>Standard error of medical costs.</p></dd>
-</dl>
-    <p>The second data frame contains data on the drug costs associated with each treatment strategy.</p><dl class='dl-horizontal'>
-<dt>strategy_id</dt><dd><p>The treatment strategy identification number.</p></dd>
-<dt>costs</dt><dd><p>Annualized drug costs.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="utility-data"><a class="anchor" href="#utility-data"></a>Utility data</h2>
@@ -197,8 +197,8 @@ medical costs by health state, and contains the following columns:</p><dl class=
     
     <p>The data frame has the following columns:</p><dl class='dl-horizontal'>
 <dt>state_id</dt><dd><p>The health state identification number.</p></dd>
-<dt>mean</dt><dd><p>Mean costs.</p></dd>
-<dt>se</dt><dd><p>Standard error.</p></dd>
+<dt>mean</dt><dd><p>Mean utility</p></dd>
+<dt>se</dt><dd><p>Standard error of utility</p></dd>
 </dl>
     
 

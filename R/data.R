@@ -127,8 +127,8 @@
 #' (ii) age at least 40 and less than 60, and (iii) age at least 60.}
 #' \item{female}{1 if a patient is female; 0 if male.}
 #' \item{year}{The year since the start of data collection with the first year equal to 1.}
-#' \item{from}{Starting state.}
-#' \item{to}{Receiving state.}
+#' \item{state_from}{State making a transition from.}
+#' \item{state_to}{State making a transition to.}
 #' \item{year_cat}{Factor variable for year with 3 categories: (i) year 3 and below, (ii)
 #' year between 3 and 6, and (iii) year 7 and above.}
 #' }

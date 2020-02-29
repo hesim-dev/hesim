@@ -137,7 +137,7 @@ medcost_tbl <- stateval_tbl(data.table(state_id = states$state_id,
 # Simulation
 
 ## Constructing the economic model
-The economic model consists of a model for disease progression and models for assigning utility and cost values to health states. Since we are performing a PSA, we must specify the number of times to sample the parameters.
+As in any `hesim` model, the economic model consists of a model for disease progression and models for assigning utility and cost values to health states. In this example, we will use 1000 samples of the parameters for the probabilistic sensitivity analysis (PSA).
 
 ```{r}
 n_samples <- 1000
@@ -210,7 +210,7 @@ While the hazards from the healthy state are similar between the "clock forward"
 Additional analyses should be conducted as well. For instance, the hazards for treatment strategy 1 (the reference treatment strategy) could be assessed by comparing the Weibull model's predictions with predictions from non-parametric (i.e., the Kaplan-Meier estimator) or semi-parametric (i.e., Cox) models. This can be performed using `mstate`, which can predict cumulative hazards and state probabilities in non-parametric and semi-parametric models. Furthermore, the Weibull model's proportional hazards assumption should be tested using standard techniques such as plots of log time vs. the log cumulative hazard, inclusion of time-dependent covariates, and tests of the Schoenfeld residuals. 
 
 ### Utility and cost models
-Mean only models (see `params_mean()`) can be created directly from the utility and cost tables using since they do not include covariates and therefore do not require input data. 
+Models based on predicted means (see `tparams_mean()`) can be created directly from the utility and cost tables using since they do not include covariates and therefore do not require input data. 
 
 ```{r}
 # Utility
@@ -224,7 +224,7 @@ costmods <- list(Drug = drugcostmod,
 ```
 
 ### Combining the disease progression, cost, and utility models
-Now that the necessary transition, utility,and cost models have been created, we combine them to create separate economic models based on the "clock reset" and "clock forward" transition models, respectively. 
+Now that the necessary transition, utility, and cost models have been created, we combine them to create separate economic models based on the "clock reset" and "clock forward" transition models, respectively. 
 
 ```{r}
 econmod_cr <- IndivCtstm$new(trans_model = transmod_cr,

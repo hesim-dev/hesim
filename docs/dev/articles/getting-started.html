@@ -51,25 +51,24 @@
 <li>
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
+    <li class="divider">
+    <li class="dropdown-header">Markov cohort models</li>
     <li>
       <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
     </li>
-    <li class="divider">
-    <li class="dropdown-header">Economic modeling</li>
     <li>
-      <a href="../articles/dtstm.html">Discrete time state transition models</a>
+      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li>
+      <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Continuous time state transition models</a>
-    </li>
-    <li>
-      <a href="../articles/subgroup.html">Subgroup analyses</a>
-    </li>
-    <li>
-      <a href="../articles/wlos.html">Simulating costs and QALYs</a>
+      <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider">
     <li class="dropdown-header">Decision analysis</li>
@@ -104,7 +103,7 @@
     <div class="page-header toc-ignore">
       <h1>Getting started with a Markov cohort model</h1>
             
-            <h4 class="date">2020-02-01</h4>
+            <h4 class="date">2020-02-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/getting-started.Rmd"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="hidden name"><code>getting-started.Rmd</code></div>
@@ -226,26 +225,25 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>tparams_def &lt;-<span class="st"> </span><span class="kw"><a href="../reference/define_tparams.html">define_tparams</a></span>({</span>
 <span id="cb9-2"><a href="#cb9-2"></a>  <span class="co">## The treatment effect (relative risk) is transformed so that it varies by </span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>  <span class="co">## strategies and only applies for the first 2 years (Monotherapy is </span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="co">## the reference strategy). Time intervals are closed on the left</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="co">## and open on the right so we use strict equality.  </span></span>
-<span id="cb9-6"><a href="#cb9-6"></a>  rr &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ifelse">ifelse</a></span>(strategy_name <span class="op">==</span><span class="st"> "Monotherapy"</span> <span class="op">|</span><span class="st"> </span>time <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span>, rr_comb)</span>
-<span id="cb9-7"><a href="#cb9-7"></a>  </span>
-<span id="cb9-8"><a href="#cb9-8"></a>  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</span>
-<span id="cb9-9"><a href="#cb9-9"></a>    <span class="dt">tpmatrix =</span> <span class="kw"><a href="../reference/tpmatrix.html">tpmatrix</a></span>(</span>
-<span id="cb9-10"><a href="#cb9-10"></a>      C, p_mono<span class="op">$</span>A_B <span class="op">*</span><span class="st"> </span>rr, p_mono<span class="op">$</span>A_C <span class="op">*</span><span class="st"> </span>rr, p_mono<span class="op">$</span>A_D <span class="op">*</span><span class="st"> </span>rr,</span>
-<span id="cb9-11"><a href="#cb9-11"></a>      <span class="dv">0</span>, C, p_mono<span class="op">$</span>B_C <span class="op">*</span><span class="st"> </span>rr, p_mono<span class="op">$</span>B_D <span class="op">*</span><span class="st"> </span>rr,</span>
-<span id="cb9-12"><a href="#cb9-12"></a>      <span class="dv">0</span>, <span class="dv">0</span>, C, p_mono<span class="op">$</span>C_D <span class="op">*</span><span class="st"> </span>rr,</span>
-<span id="cb9-13"><a href="#cb9-13"></a>      <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a>    ),</span>
-<span id="cb9-15"><a href="#cb9-15"></a>    <span class="dt">utility =</span> u,</span>
-<span id="cb9-16"><a href="#cb9-16"></a>    <span class="dt">costs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</span>
-<span id="cb9-17"><a href="#cb9-17"></a>        <span class="dt">drug =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ifelse">ifelse</a></span>(strategy_name <span class="op">==</span><span class="st"> "Monotherapy"</span> <span class="op">|</span><span class="st"> </span>time <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span>,</span>
-<span id="cb9-18"><a href="#cb9-18"></a>                    c_zido, c_zido <span class="op">+</span><span class="st"> </span>c_lam),</span>
-<span id="cb9-19"><a href="#cb9-19"></a>        <span class="dt">community_medical =</span> c_cmed,</span>
-<span id="cb9-20"><a href="#cb9-20"></a>        <span class="dt">direct_medical =</span> c_dmed</span>
-<span id="cb9-21"><a href="#cb9-21"></a>    )</span>
-<span id="cb9-22"><a href="#cb9-22"></a>  )</span>
-<span id="cb9-23"><a href="#cb9-23"></a>}, <span class="dt">times =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="fl">2.01</span>))</span></code></pre></div>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="co">## the reference strategy). </span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>  rr &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ifelse">ifelse</a></span>(strategy_name <span class="op">==</span><span class="st"> "Monotherapy"</span> <span class="op">|</span><span class="st"> </span>time <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">1</span>, rr_comb)</span>
+<span id="cb9-6"><a href="#cb9-6"></a>  </span>
+<span id="cb9-7"><a href="#cb9-7"></a>  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</span>
+<span id="cb9-8"><a href="#cb9-8"></a>    <span class="dt">tpmatrix =</span> <span class="kw"><a href="../reference/tpmatrix.html">tpmatrix</a></span>(</span>
+<span id="cb9-9"><a href="#cb9-9"></a>      C, p_mono<span class="op">$</span>A_B <span class="op">*</span><span class="st"> </span>rr, p_mono<span class="op">$</span>A_C <span class="op">*</span><span class="st"> </span>rr, p_mono<span class="op">$</span>A_D <span class="op">*</span><span class="st"> </span>rr,</span>
+<span id="cb9-10"><a href="#cb9-10"></a>      <span class="dv">0</span>, C, p_mono<span class="op">$</span>B_C <span class="op">*</span><span class="st"> </span>rr, p_mono<span class="op">$</span>B_D <span class="op">*</span><span class="st"> </span>rr,</span>
+<span id="cb9-11"><a href="#cb9-11"></a>      <span class="dv">0</span>, <span class="dv">0</span>, C, p_mono<span class="op">$</span>C_D <span class="op">*</span><span class="st"> </span>rr,</span>
+<span id="cb9-12"><a href="#cb9-12"></a>      <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a>    ),</span>
+<span id="cb9-14"><a href="#cb9-14"></a>    <span class="dt">utility =</span> u,</span>
+<span id="cb9-15"><a href="#cb9-15"></a>    <span class="dt">costs =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</span>
+<span id="cb9-16"><a href="#cb9-16"></a>        <span class="dt">drug =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ifelse">ifelse</a></span>(strategy_name <span class="op">==</span><span class="st"> "Monotherapy"</span> <span class="op">|</span><span class="st"> </span>time <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span>,</span>
+<span id="cb9-17"><a href="#cb9-17"></a>                    c_zido, c_zido <span class="op">+</span><span class="st"> </span>c_lam),</span>
+<span id="cb9-18"><a href="#cb9-18"></a>        <span class="dt">community_medical =</span> c_cmed,</span>
+<span id="cb9-19"><a href="#cb9-19"></a>        <span class="dt">direct_medical =</span> c_dmed</span>
+<span id="cb9-20"><a href="#cb9-20"></a>    )</span>
+<span id="cb9-21"><a href="#cb9-21"></a>  )</span>
+<span id="cb9-22"><a href="#cb9-22"></a>}, <span class="dt">times =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="dv">2</span>))</span></code></pre></div>
 </div>
 <div id="the-model" class="section level2">
 <h2 class="hasAnchor">
@@ -301,15 +299,15 @@
 <span id="cb14-2"><a href="#cb14-2"></a>wtp &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>, <span class="dv">25000</span>, <span class="dv">500</span>)</span>
 <span id="cb14-3"><a href="#cb14-3"></a>icea_pw_out &lt;-<span class="st"> </span><span class="kw"><a href="../reference/icea.html">icea_pw</a></span>(ce_sim, <span class="dt">comparator =</span> <span class="dv">1</span>, <span class="dt">dr_qalys =</span> <span class="dv">0</span>, <span class="dt">dr_costs =</span> <span class="fl">.06</span>,</span>
 <span id="cb14-4"><a href="#cb14-4"></a>                       <span class="dt">k =</span> wtp)</span></code></pre></div>
-<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,323, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
+<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $5,801, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(icea_pw_out)</span></code></pre></div>
-<pre><code>##                   1   2                        
-## Incremental QALYs "-" "0.93 (0.57, 1.22)"      
-## Incremental costs "-" "5,866 (2,972, 9,832)"   
-## Incremental NMB   "-" "40,524 (23,659, 54,794)"
-## ICER              "-" "6,323"                  
+<pre><code>##                   1   2                           
+## Incremental QALYs "-" "5.86 (2.80, 8.16)"         
+## Incremental costs "-" "33,982 (22,987, 47,225)"   
+## Incremental NMB   "-" "258,925 (116,364, 371,083)"
+## ICER              "-" "5,801"                     
 ## Conclusion        "-" "Cost-effective"</code></pre>
-<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.95 and approaches 1 at slightly higher WTP values.</p>
+<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.985 and approaches 1 at slightly higher WTP values.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(icea_pw_out<span class="op">$</span>ceac, </span>
 <span id="cb17-2"><a href="#cb17-2"></a>       <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> k, <span class="dt">y =</span> prob, </span>
 <span id="cb17-3"><a href="#cb17-3"></a>           <span class="dt">col =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id, <span class="dt">labels =</span> strategies<span class="op">$</span>strategy_name[<span class="op">-</span><span class="dv">1</span>]))) <span class="op">+</span></span>

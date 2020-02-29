@@ -8,7 +8,7 @@ check_edata(data)
 }
 \arguments{
 \item{data}{An object of class "expanded_hesim_data" returned by the function
-\code{\link{expand.hesim_data}}.}
+\link{expand.hesim_data}.}
 }
 \value{
 If all tests passed, returns nothing; otherwise, throws an exception.

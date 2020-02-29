@@ -33,7 +33,7 @@ patient within a subgroup. Must be the same length as the 3rd dimension of the a
 \value{
 An object of class \code{tparams_transprobs},
 which is a list containing \code{value} and relevant ID attributes. The element \code{value} is an
-array of predicted transition probability matrices from the posterior
+array of predicted transition probability matrices from the probability
 distribution of the underlying statistical model. Each matrix in
 \code{value} is a prediction for a \code{sample}, \code{strategy_id},
 \code{patient_id}, and optionally \code{time_id} combination.

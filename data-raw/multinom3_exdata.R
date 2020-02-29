@@ -110,12 +110,12 @@ sim_mlogit <- function(n = 10000){
     
     # Store data
     sim[[t]] <- data.table(data, 
-                           from = from_state, 
-                           to = to_states)
+                           state_from = from_state, 
+                           state_to = to_states)
     
     # Update variables for next loop iteration
-    alive <- which(sim[[t]]$to != "Dead")
-    from_state <- sim[[t]]$to[alive]
+    alive <- which(sim[[t]]$state_to != "Dead")
+    from_state <- sim[[t]]$state_to[alive]
   }
   sim <- rbindlist(sim)
   
@@ -123,7 +123,7 @@ sim_mlogit <- function(n = 10000){
   return(sim)
 }
 transitions <- sim_mlogit()
-transitions[year == 1, .N, by = "to"]
+transitions[year == 1, .N, by = "state_to"]
 transitions[, c("year3to6", "year7plus") := NULL]
 transitions[, year_cat := factor(
   x =  1 * (year >= 3 & year <= 6) +
@@ -138,7 +138,7 @@ costs <- list()
 # Drugs
 costs$drugs <- data.frame(strategy_id = c(1, 2),
                           strategy_name = strategy_names,
-                          costs = c(2000, 5000))
+                          est = c(2000, 5000))
 
 # Medical
 costs$medical <- data.frame(state_id = c(1, 2),
@@ -152,7 +152,7 @@ utility <- data.frame(state_id = c(1, 2),
                       se = sqrt(c(.03, .04)))
 
 # Save -------------------------------------------------------------------------
-multinom3_exdata <- list(transitions = transitions,
+multinom3_exdata <- list(transitions = data.frame(transitions),
                        costs = costs, 
                        utility = utility)
 save(multinom3_exdata, file = "../data/multinom3_exdata.rda", compress = "bzip2")

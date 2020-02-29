@@ -3,10 +3,10 @@
 #' 
 #' Objects prefixed by "params_" are lists containing the parameters of a statistical model
 #' used for simulation modeling. The parameters are used to simulate outcomes
-#' as a function of covariates contained in input matrices (\code{\link{input_mats}}).
+#' as a function of covariates contained in input matrices ([input_mats]).
 #' 
 #' @name params
-#' @seealso \code{\link{tparams}}
+#' @seealso [tparams]
 NULL
 
 #' Transformed parameter object
@@ -18,7 +18,7 @@ NULL
 #' already been predicted as a function of covariates. 
 #' 
 #' @name tparams
-#' @seealso \code{\link{params}}
+#' @seealso [params]
 NULL
 
 # Helper functions -------------------------------------------------------------
@@ -49,12 +49,13 @@ check_params_joined <- function(x, inner_class, model_list){
   return(x)
 }
 
-create_params_list <- function(object, n, point_estimate, inner_class, new_class){
+create_params_list <- function(object, n, point_estimate, inner_class, new_class,
+                               ...){
   n_objects <- length(object)
   params_list <- vector(mode = "list", length = n_objects)
   names(params_list) <- names(object)
   for (i in 1:n_objects){
-    params_list[[i]] <- create_params(object[[i]], n, point_estimate)
+    params_list[[i]] <- create_params(object[[i]], n, point_estimate, ...)
   }
   return(new_params_list(params_list, inner_class = inner_class,
                          new_class = new_class))
@@ -72,27 +73,28 @@ create_params_joined <- function(object, n, point_estimate, inner_class){
 
 #' Create a parameter object from a fitted model
 #' 
-#' \code{create_params} is a generic function for creating an object containing 
-#' parameters from a fitted statistical model. If \code{point_estimate = FALSE},
-#' then random samples from the posterior distribution are returned.
+#' `create_params` is a generic function for creating an object containing 
+#' parameters from a fitted statistical model. If `point_estimate = FALSE`,
+#' then random samples from suitable probability distributions are returned.
 #' @param object A statistical model to randomly sample parameters from.  
 #' @param n Number of random observations to draw. 
 #' @param point_estimate If TRUE, then the point estimates are returned and
 #' and no samples are drawn.
-#' @param bootstrap If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are 
-#' drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then 
-#' parameters are bootstrapped using \code{\link{bootstrap}}. 
-#' @param max_errors Equivalent to the \code{max_errors} argument in \code{\link{bootstrap}}. 
+#' @param bootstrap If `bootstrap` is `FALSE` or not specified, then `n` parameter sets are 
+#' drawn by sampling from a multivariate normal distribution. If `bootstrap` is `TRUE`, then 
+#' parameters are bootstrapped using [bootstrap]. 
+#' @param max_errors Equivalent to the `max_errors` argument in [bootstrap]. 
 #' @param ... Further arguments passed to or from other methods. Currently unused.
-#' @return An object prefixed by \code{params_}. Mapping between \code{create_params} 
+#' @return An object prefixed by `params_`. Mapping between `create_params` 
 #' and the classes of the returned objects are: 
 #' \itemize{
-#' \item{\code{create_params.lm} ->}{ \code{params_lm}}
-#' \item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
-#' \item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}
-#' \item{\code{create_params.partsurvfit} ->}{ \code{params_surv_list}}
+#' \item{`create_params.lm` ->}{ [params_lm]}
+#' \item{`create_params.multinom` ->}{ [params_mlogit]}
+#' \item{`create_params.multinom_list` ->}{ [params_mlogit_list]}
+#' \item{`create_params.flexsurvreg` ->}{ [params_surv]}
+#' \item{`create_params.flexsurvreg_list` ->}{ [params_surv_list]}
+#' \item{`create_params.partsurvfit` ->}{ [params_surv_list]}
 #' }
-#' @keywords internal
 #' @name create_params
 #' @examples 
 #' # create_params.lm
@@ -120,16 +122,16 @@ create_params <- function (object, ...) {
 #' Predicted means
 #' 
 #' Create a list containing means predicted from a statistical model.
-#' @param value  Matrix of samples from the posterior distribution of the 
+#' @param value  Matrix of samples from the distribution of the 
 #' mean. Columns denote random samples and rows denote means for different observations.
-#' @param ... Arguments to pass to \code{\link{id_attributes}}. Each row in
-#' \code{value} must be a prediction for a \code{strategy_id},
-#'  \code{patient_id}, \code{state_id}, and optionally \code{time_id} combination.
+#' @param ... Arguments to pass to [id_attributes]. Each row in
+#' `value` must be a prediction for a `strategy_id`,
+#'  `patient_id`, `state_id`, and optionally `time_id` combination.
 #'  
-#' @return An object of class "tparams_mean", which is a list containing \code{value},
-#' \code{n_samples}, and the ID attributes passed to \code{\link{id_attributes}}.
+#' @return An object of class `tparams_mean`, which is a list containing `value`,
+#' `n_samples`, and the ID attributes passed to [id_attributes].
 #'  
-#' @seealso tparams
+#' @seealso [tparams]
 #' @examples 
 #' tparams_mean(value = matrix(1:8, nrow = 4),
 #'              strategy_id = rep(1:2, each = 2),
@@ -171,8 +173,7 @@ check.tparams_mean <- function(object, ...){
 #' Parameters of a linear model
 #' 
 #' Create a list containing the parameters of a fitted linear regression model.
-#' @param coefs  Matrix of samples from the posterior distribution of the 
-#' regression coefficients.
+#' @param coefs  Matrix of samples of the coefficients under sampling uncertainty.
 #' @param sigma A vector of samples of the standard error of the regression model. 
 #' Must only be specified if the model is used to randomly simulate values 
 #' (rather than to predict means).
@@ -286,8 +287,8 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #' Create a list containing the parameters of a single fitted parametric or 
 #' flexibly parametric survival model.
 #' @param coefs A list of length equal to the number of parameters in the 
-#' survival distribution. Each element of the list is a matrix of samples from 
-#' the posterior distribution of the regression coefficients used to predict
+#' survival distribution. Each element of the list is a matrix of samples
+#'  of the regression coefficients under sampling uncertainty used to predict
 #' a given parameter.
 #' @param dist Character vector denoting the parametric distribution. See "Details".
 #' @param aux Auxiliary arguments used with splines or fractional polynomials. See "Details". 
@@ -391,11 +392,8 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #' print(params)
 #' @export
 params_surv <- function(coefs, dist, aux = NULL){
-  stopifnot(is.list(coefs))
-  if (!is.matrix(coefs[[1]])){
-    stop("'coefs' must be a list of matrices.", call. = FALSE)
-  }
-  n_samples <- nrow(coefs[[1]])
+  coefs <- matlist(coefs)
+  n_samples <- get_n_samples(coefs)
   check(new_params_surv(coefs, dist, n_samples, aux))
 }
 
@@ -449,16 +447,7 @@ check.params_surv <- function(object){
   if (list_depth(object$coefs) !=1 | length(object$dist) !=1){
     stop("'coefs' must only contain one survival model.", call. = FALSE)
   }
-  matrix_bool <- unlist(lapply(object$coefs, is.matrix))
-  if(sum(!matrix_bool) > 0){
-    stop("'coefs' must be a list of matrices.",
-         call. = FALSE)
-  }
-  coefs_nrows <- unlist(lapply(object$coefs, nrow))
-  if(!all(object$n_samples == coefs_nrows)){
-    stop("Number of rows in all 'coefs' matrices must be equal.",
-         call. = FALSE)
-  } 
+  check(object$coefs)
   return(object)
 }
 
@@ -511,6 +500,124 @@ create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, 
                          coefs = coefs,
                          n_samples = n_samples,
                          aux = flexsurvreg_aux(object)))
+}
+
+# Multinomial logit model ------------------------------------------------------
+#' Parameters of a multinomial logit model
+#' 
+#' Store the parameters of a fitted multinomial logistic 
+#' regression model. The model is used to predict probabilities of \eqn{K} 
+#' classes.
+#' @param coefs  A 3D array of stacked matrices. The number of matrices (i.e.,
+#' the number of slices in the cube) should be equal to \eqn{K-1}. Each 
+#' matrix is contains samples of the regression coefficients under sampling uncertainty
+#' corresponding to a particular class. Rows index parameter samples and 
+#'  columns index coefficients.
+#' 
+#' @details Multinomial logit models are used to predict the probability of 
+#' membership for subject \eqn{i} in each of \eqn{K} classes as a function of covariates:
+#' \deqn{Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}}
+#' @return An object of class `params_mlogit`, which is a list containing `coefs`
+#' and `n_samples`, where `n_samples` is equal to the number of rows
+#' in each element of `coefs`.
+#' @examples 
+#' params <- params_mlogit(coefs = array(
+#'   c(matrix(c(intercept = 0, treatment = log(.75)), nrow = 1),
+#'     matrix(c(intercept = 0, treatment = log(.8)), nrow = 1)),
+#'   dim = c(1, 2, 2)
+#' )) 
+#' @export
+params_mlogit <- function(coefs){
+  n_samples <- get_n_samples(coefs)
+  return(check(new_params_mlogit(coefs, n_samples)))
+}
+
+new_params_mlogit <- function(coefs, n_samples){
+  stopifnot(is.numeric(n_samples))
+  res <- list(coefs = coefs, n_samples = n_samples)
+  class(res) <- "params_mlogit"
+  return(res)
+}
+
+#' @rdname check
+check.params_mlogit <- function(object){
+  check(object$coefs)
+  return(object)
+}
+
+#' Parameters of a list of multinomial logit models
+#' 
+#' Create a list containing the parameters of multiple fitted multinomial logit models.
+#' @param ... Objects of class [params_mlogit], which can be named.
+#' 
+#' @return An object of class `params_mlogit_list`, which is a list containing 
+#' [params_mlogit] objects.
+#' @export
+params_mlogit_list <- function(...){
+  return(check(new_params_list(..., inner_class = "params_mlogit", 
+                               new_class = "params_mlogit_list")))
+}
+
+create_coef_multinom <- function(object, n = 1000, point_estimate = FALSE, ...){
+  # Extract/simulate coefficients
+  coefs <- c(t(stats::coef(object)))
+  if (point_estimate == FALSE){
+    coefs_sim <- MASS::mvrnorm(n = n, 
+                               mu = coefs,
+                               Sigma = stats::vcov(object))
+    if (n == 1) coefs_sim <- matrix(coefs_sim, nrow = 1)
+  } else{
+    coefs_sim <- matrix(coefs, nrow = 1)
+  }
+  coefs_est <- coef(object) # The point estimate
+  if (is_1d_vector(coefs_est)){
+    coefs_est <- matrix(coefs_est, nrow = 1)
+    colnames(coefs_est) <- names(coef(object))
+  } 
+  
+  # Store coefficients in array
+  p <- ncol(coefs_est)
+  K <- nrow(coefs_est)
+  coefs_sim_array <- array(NA, dim = c(nrow(coefs_sim), p, K))
+  start_col <- 1
+  end_col <- p
+  for (j in 1:K){
+    coefs_sim_array[, , j] <- coefs_sim[, start_col:end_col, drop = FALSE]
+    start_col <- end_col + 1
+    end_col <- end_col + p
+  } 
+  
+  # Array dimension names
+  class_names <- NULL
+  if(length(object$lev)) class_names < object$lev[-1L]
+  if(length(object$lab)) class_names <- object$lab[-1L]
+  dimnames(coefs_sim_array) <- list(NULL,
+                                    colnames(coefs_est),
+                                    class_names)
+  
+  # Return
+  return(coefs_sim_array)
+}
+
+#' @export
+#' @rdname create_params
+create_params.multinom <- function(object, n = 1000, point_estimate = FALSE, ...){
+  coefs <- create_coef_multinom(object, n, point_estimate, ...)
+  if (point_estimate){
+    n_samples <- 1
+  } else{
+    n_samples <- n
+  }
+  return(new_params_mlogit(coefs = coefs,
+                          n_samples = n_samples))
+}
+
+#' @export
+#' @rdname create_params
+create_params.multinom_list <- function(object, n = 1000, point_estimate = FALSE, ...){
+  return(create_params_list(object, n, point_estimate, 
+                            inner_class = "params_mlogit", new_class = "params_mlogit_list",
+                            ...))
 }
 
 # Transition probabilities -----------------------------------------------------
@@ -569,7 +676,7 @@ create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, 
 #' 
 #' @return An object of class `tparams_transprobs`, 
 #' which is a list containing `value` and relevant ID attributes. The element `value` is an 
-#' array of predicted transition probability matrices from the posterior
+#' array of predicted transition probability matrices from the probability
 #' distribution of the underlying statistical model. Each matrix in 
 #' `value` is a prediction for a `sample`, `strategy_id`,
 #'  `patient_id`, and optionally `time_id` combination.
@@ -652,9 +759,7 @@ tparams_transprobs.array <- function (object, times = NULL,
     id_args[[v]] <- n_df[[v]]
   }
   if (n_df$n_times == 1 ){
-    id_args$time_intervals <- data.table(time_id = 1,
-                                         time_start = 0,
-                                         time_stop = Inf)
+    id_args$time_intervals <- time_intervals(0)
   } else{
     if (is.null(times)){
       stop(paste0("'times' cannot be NULL if the number of time ",

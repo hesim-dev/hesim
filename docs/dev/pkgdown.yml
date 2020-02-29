@@ -6,7 +6,8 @@ articles:
   getting-started: getting-started.html
   icea: icea.html
   intro: intro.html
+  markov-inhomogeneous: markov-inhomogeneous.html
+  mlogit: mlogit.html
   psm: psm.html
-  subgroup: subgroup.html
   wlos: wlos.html
 

@@ -7,8 +7,7 @@
 params_lm(coefs, sigma = NULL)
 }
 \arguments{
-\item{coefs}{Matrix of samples from the posterior distribution of the
-regression coefficients.}
+\item{coefs}{Matrix of samples of the coefficients under sampling uncertainty.}
 
 \item{sigma}{A vector of samples of the standard error of the regression model.
 Must only be specified if the model is used to randomly simulate values

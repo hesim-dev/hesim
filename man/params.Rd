@@ -6,8 +6,8 @@
 \description{
 Objects prefixed by "params_" are lists containing the parameters of a statistical model
 used for simulation modeling. The parameters are used to simulate outcomes
-as a function of covariates contained in input matrices (\code{\link{input_mats}}).
+as a function of covariates contained in input matrices (\link{input_mats}).
 }
 \seealso{
-\code{\link{tparams}}
+\link{tparams}
 }

@@ -4,6 +4,8 @@
 \alias{create_params}
 \alias{create_params.lm}
 \alias{create_params.flexsurvreg}
+\alias{create_params.multinom}
+\alias{create_params.multinom_list}
 \alias{create_params.flexsurvreg_list}
 \alias{create_params.partsurvfit}
 \title{Create a parameter object from a fitted model}
@@ -13,6 +15,10 @@ create_params(object, ...)
 \method{create_params}{lm}(object, n = 1000, point_estimate = FALSE, ...)
 
 \method{create_params}{flexsurvreg}(object, n = 1000, point_estimate = FALSE, ...)
+
+\method{create_params}{multinom}(object, n = 1000, point_estimate = FALSE, ...)
+
+\method{create_params}{multinom_list}(object, n = 1000, point_estimate = FALSE, ...)
 
 \method{create_params}{flexsurvreg_list}(object, n = 1000, point_estimate = FALSE, ...)
 
@@ -35,26 +41,28 @@ create_params(object, ...)
 \item{point_estimate}{If TRUE, then the point estimates are returned and
 and no samples are drawn.}
 
-\item{bootstrap}{If \code{bootstrap} is FALSE or not specified, then \code{n} parameter sets are
-drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is TRUE, then
-parameters are bootstrapped using \code{\link{bootstrap}}.}
+\item{bootstrap}{If \code{bootstrap} is \code{FALSE} or not specified, then \code{n} parameter sets are
+drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is \code{TRUE}, then
+parameters are bootstrapped using \link{bootstrap}.}
 
-\item{max_errors}{Equivalent to the \code{max_errors} argument in \code{\link{bootstrap}}.}
+\item{max_errors}{Equivalent to the \code{max_errors} argument in \link{bootstrap}.}
 }
 \value{
 An object prefixed by \code{params_}. Mapping between \code{create_params}
 and the classes of the returned objects are:
 \itemize{
-\item{\code{create_params.lm} ->}{ \code{params_lm}}
-\item{\code{create_params.flexsurvreg} ->}{ \code{params_surv}}
-\item{\code{create_params.flexsurvreg_list} ->}{ \code{params_surv_list}}
-\item{\code{create_params.partsurvfit} ->}{ \code{params_surv_list}}
+\item{\code{create_params.lm} ->}{ \link{params_lm}}
+\item{\code{create_params.multinom} ->}{ \link{params_mlogit}}
+\item{\code{create_params.multinom_list} ->}{ \link{params_mlogit_list}}
+\item{\code{create_params.flexsurvreg} ->}{ \link{params_surv}}
+\item{\code{create_params.flexsurvreg_list} ->}{ \link{params_surv_list}}
+\item{\code{create_params.partsurvfit} ->}{ \link{params_surv_list}}
 }
 }
 \description{
 \code{create_params} is a generic function for creating an object containing
 parameters from a fitted statistical model. If \code{point_estimate = FALSE},
-then random samples from the posterior distribution are returned.
+then random samples from suitable probability distributions are returned.
 }
 \examples{
 # create_params.lm
@@ -73,4 +81,3 @@ params_surv_wei <- create_params(fit, n = n)
 print(params_surv_wei$dist)
 head(params_surv_wei$coefs)
 }
-\keyword{internal}

@@ -178,6 +178,126 @@ inline ForwardIt max_lt(ForwardIt first, ForwardIt last, const T& value){
   }
 }
 
+/***************************************************************************//** 
+ * Transition matrix.
+ * A class for summarizing possible health state transitions in a multi-state 
+ * model. 
+ ******************************************************************************/
+class trans_mat {
+private:
+  std::vector<std::vector<int> > trans_id_; ///< A vector of vectors. The outer vector 
+  ///< denotes the starting state and each inner 
+  ///< vector denotes the transition id
+  ///< (indexed from 1 to patient::n_trans_)
+  ///< corresponding to the possible transitions
+  ///< from that state.
+  
+  std::vector<std::vector<int> > to_; ///< A vector of vectors. The outer vector
+  ///< denotes the starting state and each inner
+  ///< vector denotes a state that can be 
+  ///< transitioned to.
+  
+  /** 
+   * Count the number of non missing elements in the matrix. 
+   * The number of non missing elements is equal to the number of 
+   * possible transitions. 
+   * @param m The same transition matrix as in the constructor.
+   */                                          
+  int count_non_nan(arma::mat m){
+    int sum_non_nan = 0;
+    for (int i = 0; i < m.n_rows; ++i){
+      for (int j = 0; j < m.n_cols; ++j){
+        if (!std::isnan(m(i, j))){
+          ++sum_non_nan;
+        }
+      } // end loop over columns
+    } // end loop over rows
+    return sum_non_nan;
+  }
+  
+  /** 
+   * Determine whether each health state is absorbing.
+   * @param trans A vector of vectors of the same format as trans_mat::trans_id_. Should
+   * only be called after trans_ has been initialized. 
+   */     
+  std::vector<bool> is_absorbing(std::vector<std::vector<int> > trans){
+    std::vector<bool> absorbing(trans.size());
+    for (int i = 0; i < trans.size(); ++i){
+      if(trans[i].size() > 0){
+        absorbing[i] = false;
+      }
+      else {
+        absorbing[i] = true;
+      }
+    } // end loop over states
+    return absorbing;
+  }
+  
+public:
+  int n_trans_; ///< The total number of possible transitions.
+  int n_states_; ///< The number of total health states.
+  std::vector<bool> absorbing_; ///< A vector indicating whether each state is absorbing.
+  ///< A state is absorbing if a row in the transition matrix
+  ///< has all NAs. 
+  
+  /** 
+   * The constructor.
+   * @param m A matrix of integers indicating allowed transitions in a multi-state model
+   *  in the format from the @c R package @c mstate. See
+   * the argument "trans" in @c msprep in the @c mstate documentation.
+   * @param R_index If TRUE, then transition ids in the matrix are assumed to be from R, 
+   * and re-indexed to start from 0 (rather than 1).
+   */                                       
+  trans_mat(arma::mat m, bool R_index = true) {
+    // Initialize n_trans_ and n_states_
+    n_trans_ = count_non_nan(m);
+    n_states_ = m.n_rows;
+    
+    // Initialize trans_ and to_
+    for (int i = 0; i < m.n_rows; ++i){
+      arma::rowvec m_row = m.row(i);
+      std::vector<int> trans_i;
+      std::vector<int> to_i;
+      for (int j = 0; j < m_row.n_elem; ++j){
+        if(!std::isnan(m_row(j))){
+          if (R_index){
+            trans_i.push_back(m_row(j) - 1); 
+          }
+          else{
+            trans_i.push_back(m_row(j)); 
+          }
+          to_i.push_back(j);
+        }
+      } // end loop over columns
+      to_.push_back(to_i);
+      trans_id_.push_back(trans_i);
+    } // end loop over rows
+    
+    // Initialize absorbing_
+    absorbing_ = is_absorbing(trans_id_);
+  }
+  
+  /** 
+   * Return transition number ids. 
+   * @param from_state The state to transition from.
+   * @reurn A vector of the transitions numbers from the specified health state.
+   */   
+  std::vector<int> trans_id(int from_state) {
+    return trans_id_[from_state];
+  }
+  
+  /** 
+   * Return states that can be transitioned to. 
+   * @param from_state The state to transition from.
+   * @return A vector of the transition states that can be transitioned to 
+   * from the specified health state.
+   */   
+  std::vector<int> to(int from_state) {
+    return to_[from_state];
+  }  
+  
+};
+
 } // end hesim namespace
 
 

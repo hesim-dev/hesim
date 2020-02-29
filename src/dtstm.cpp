@@ -77,7 +77,3 @@ Rcpp::DataFrame C_cohort_dtstm_sim_stateprobs(Rcpp::Environment R_CohortDtstmTra
   return(out.create_R_data_frame());    
 }
 
-
-
-
-

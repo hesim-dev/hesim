@@ -194,6 +194,30 @@ public:
   }
 };
 
+/***************************************************************************//** 
+ * Parameters of a multinomial logit model.
+ ******************************************************************************/ 
+class params_mlogit  {
+public:
+  int sample_;
+  int n_samples_; ///< Number of random samples of the parameters.
+  arma::cube coefs_; ///< Coefficients in the same format as @c coefs element in the
+                     ///< @c R class "params_mlogit".
+  
+  /** 
+   * The constructor.
+   * Instantiates the parameters of a multinomial logit model.
+   * @param R_params_mlogit An object of class "params_mlogit" passed from the @c hesim
+   * @c R package. 
+   */ 
+  params_mlogit(Rcpp::List R_params_mlogit) {
+    coefs_ = Rcpp::as<arma::cube>(R_params_mlogit["coefs"]);
+    sample_ = 0;
+    n_samples_ = Rcpp::as<int> (R_params_mlogit["n_samples"]);
+  }
+};
+
+
 } // end namespace statmods
 
 } // end namespace hesim
