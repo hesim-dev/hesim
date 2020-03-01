@@ -4,10 +4,10 @@
 \alias{time_intervals}
 \title{Time intervals}
 \usage{
-time_intervals(time_start)
+time_intervals(times)
 }
 \arguments{
-\item{time_start}{Either a vector of starting times for each interval or a
+\item{times}{Either a vector of times for each interval or a
 \code{data.frame} with at least one column named \code{time_start}.}
 }
 \value{
@@ -22,7 +22,7 @@ interval. This would typically be passed to \link{id_attributes}.
 \examples{
 time_intervals(c(0, 3, 5))
 time_intervals(data.frame(time_start = c(0, 3, 5),
-                          time_cat = c("Time <= 3", "Time <= 5", 
+                          time_cat = c("Time <= 3", "3 < Time <= 5", 
                                        "Time > 5")))
 }
 \seealso{

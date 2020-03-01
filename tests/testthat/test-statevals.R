@@ -271,7 +271,8 @@ wlos_test <- function(econmod, s, k, i, h, dr = .03){
                     sv_params$state_id == h)
   sv <- sv_params$value[sv_obs, s]
   if (!is.null(sv_params$time_intervals)){
-    ti <- findInterval(stprobs1$t, sv_params$time_intervals$time_stop) 
+    ti <- findInterval(stprobs1$t, sv_params$time_intervals$time_stop,
+                       left.open = TRUE) 
     sv <- rep(sv, table(ti))
   } 
   expect_equal(costs1$costs, 

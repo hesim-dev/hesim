@@ -307,7 +307,7 @@ sort_hesim_data <- function(data, sorted_by){
 #' Create a table of time intervals given a vector of starting times for each 
 #' interval. This would typically be passed to [id_attributes].
 #' 
-#' @param time_start Either a vector of starting times for each interval or a
+#' @param times Either a vector of times for each interval or a
 #'  `data.frame` with at least one column named `time_start`.
 #' @return An object of class `time_intervals` that inherits from
 #'  `data.table` in the same format as `time_intervals` as 
@@ -316,27 +316,34 @@ sort_hesim_data <- function(data, sorted_by){
 #' @examples
 #' time_intervals(c(0, 3, 5))
 #' time_intervals(data.frame(time_start = c(0, 3, 5),
-#'                           time_cat = c("Time <= 3", "Time <= 5", 
+#'                           time_cat = c("Time <= 3", "3 < Time <= 5", 
 #'                                        "Time > 5")))
 #' @export
-time_intervals <- function(time_start){
-  if (inherits(time_start, "data.frame")){
-      if (!"time_start" %in% colnames(time_start)){
-        stop(paste0("If 'time_start' is a data frame, then 'time_start' ",
+time_intervals <- function(times){
+  if (inherits(times, "data.frame")){
+      if (!"time_start" %in% colnames(times)){
+        stop(paste0("If 'time_start' is a data frame, then 'times' ",
                     "must contain a column named 'time_start'."))
       }
-      time_start <- data.table(time_start)
-      time_start[, time_start := as.numeric(time_start)]
-      setorderv(time_start, "time_start")
-      time_intervals <- data.table(time_id = 1:nrow(time_start), 
-                                   time_start)
+      times <- data.table(times)
+      if (!any(times[["time_start"]] <= 0)){
+        stop(paste0("If 'times' is a data.frame, then the column ", 
+                    "'time_start' must contain at least one value <= 0"))
+      }
+      if (any(is.infinite(times[["time_start"]]))){
+        stop(paste0("If 'times' is a data.frame, then the column ", 
+                    "'time_start' cannot contain a value equal to 'Inf'."))
+      }
+      times[, time_start := as.numeric(time_start)]
+      setorderv(times, "time_start")
+      time_intervals <- data.table(time_id = 1:nrow(times), 
+                                   times)
     } else{
-      time_intervals <- data.table(time_id = 1:length(time_start), 
-                                   time_start = sort(as.numeric(time_start)))
+      times <- times[!is.infinite(times)]
+      if (!any(times <= 0)) times <- c(0, times)
+      time_intervals <- data.table(time_id = 1:length(times), 
+                                   time_start = sort(as.numeric(times)))
     }
-  if (any(time_intervals[["time_start"]] < 0)){
-    stop("'time_start' cannot be negative")
-  }
   time_intervals[, "time_stop" := shift(get("time_start"), type = "lead")]
   time_intervals[is.na(get("time_stop")), "time_stop" := Inf]
   setattr(time_intervals, "class", c("time_intervals", "data.table", "data.frame"))

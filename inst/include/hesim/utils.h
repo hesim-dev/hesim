@@ -169,13 +169,8 @@ inline bool is_null(Rcpp::List L, const char * name){
  */
 template <class ForwardIt, class T>
 inline ForwardIt max_lt(ForwardIt first, ForwardIt last, const T& value){
-  auto lb = lower_bound(first, last, value);
-  if (lb == first){
-    Rcpp::stop("There is no element in the vector less than 'value'");
-  } 
-  else{
-    return lb;
-  }
+  auto ub = std::upper_bound(first, last, value);
+  return ub - 1;
 }
 
 /***************************************************************************//** 

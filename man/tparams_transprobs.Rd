@@ -61,7 +61,7 @@ time interval.}
 \item ID columns for the parameter sample (\code{sample}),
 treatment strategy (\code{strategy_id}), and patient (\code{patient_id}).
 If the number of time intervals is greater than 1 it must also contain the
-column \code{time_start} denoting the start of a time interval. A column
+column \code{time_start} denoting the starting time of a time interval. A column
 \code{patient_wt} may also be used to denote the weight to apply to each
 patient.
 \item Columns for each element of the transition probability matrix.

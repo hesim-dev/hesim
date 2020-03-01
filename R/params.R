@@ -655,7 +655,7 @@ create_params.multinom_list <- function(object, n = 1000, point_estimate = FALSE
 #'  \item ID columns for the parameter sample (`sample`), 
 #'  treatment strategy (`strategy_id`), and patient (`patient_id`).
 #'  If the number of time intervals is greater than 1 it must also contain the
-#'  column `time_start` denoting the start of a time interval. A column 
+#'  column `time_start` denoting the starting time of a time interval. A column 
 #'  `patient_wt` may also be used to denote the weight to apply to each
 #'  patient.
 #'  \item Columns for each element of the transition probability matrix. 
@@ -785,9 +785,9 @@ tparams_transprobs.data.table <- function (object) {
   }
   
   ## Time interval
-  if (!is.null(object$time_start)){
-    time_intervals <- time_intervals(unique(object$time_start)) 
-    pos <- match(object$time_start, time_intervals$time_start)
+  if (!is.null(object[["time_start"]])){
+    time_intervals <- time_intervals(unique(object[["time_start"]])) 
+    pos <- match(object[["time_start"]], time_intervals$time_start)
     id_args[["time_id"]] <- time_intervals$time_id[pos]
     id_args[["time_intervals"]] <- time_intervals
     id_args[["n_times"]] <- length(time_intervals$time_id)

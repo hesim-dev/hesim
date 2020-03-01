@@ -273,7 +273,7 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
       
       // Update starting time and time index
       time_start_it = time_stop_it;
-      if (t < (obs_index.n_times_ - 1 && time_stop_it >= obs_index.get_time_stop())){
+      if (t < (obs_index.n_times_ - 1) && time_stop_it >= obs_index.get_time_stop()){
         time_index = t + 1; 
       }
     } // end loop over time intervals

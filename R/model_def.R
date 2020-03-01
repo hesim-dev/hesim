@@ -761,6 +761,7 @@ split_params <- function(params, params_names, params_class){
 #' @rdname define_model
 #' @export
 eval_model <- function(x, input_data){
+  time <- time_start <- NULL
   data <- data.table(input_data)
   
   # Step 1: RNG for parameters
@@ -815,12 +816,20 @@ eval_model <- function(x, input_data){
     ## Evaluate parameters
     tparams <- eval_tparams(tparams_def, data, params)
     
-    ## Return
-    setnames(data, "time", "time_start")
-    id_dt <- data[, c("sample", "strategy_id", "patient_id", "time_start"),
+    ## ID variables
+    id_dt <- data[, c("sample", "strategy_id", "patient_id", "time"),
                   with = FALSE]
+    
+    ### Starting time of time intervals
+    id_dt[, ("time_start") := shift(time), 
+          by = c("sample", "strategy_id", "patient_id")]
+    id_dt[is.na(time_start), time_start := 0]
+    
+    ### Other ID variables
     if (!is.null(data[["grp_id"]])) id_dt[, ("grp_id") := data[["grp_id"]]]
     if (!is.null(data[["patient_wt"]])) id_dt[, ("patient_wt") := data[["patient_wt"]]]
+    
+    ## Return
     return(list(id = id_dt,
                 tpmatrix = tparams[["tpmatrix"]],
                 utility = tparams[["utility"]],

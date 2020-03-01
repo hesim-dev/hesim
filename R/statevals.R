@@ -417,7 +417,6 @@ create_StateVals.eval_model <- function(object, cost = TRUE, name = NULL,
   n_states <- object$n_states - 1 # The non-death states
   id  <- object$id[[attr(out, "id_index")]]
   out_id <- id[rep(1:nrow(id), each = n_states)]
-  # if (cost) browser()
   if ((is.numeric(out) && length(dim(out)) <= 1) || ncol(out) == 1){
     out_dt <- cbind(out_id, value = rep(out, each = n_states))
   } else{

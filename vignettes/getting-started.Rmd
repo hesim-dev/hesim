@@ -141,7 +141,7 @@ tparams_def <- define_tparams({
         direct_medical = c_dmed
     )
   )
-}, times = c(0, 2))
+}, times = c(2, Inf))
 ```
 
 ## The model
