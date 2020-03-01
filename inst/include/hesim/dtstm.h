@@ -47,7 +47,7 @@ public:
   virtual arma::mat tpmatrix(int s, double time) = 0;
   
   void set_time_index(double time){
-    while (time >= obs_index_.get_time_stop()){
+    while (time > obs_index_.get_time_stop()){
       obs_index_.set_time_index(obs_index_.get_time_index() + 1);
     }
   };
