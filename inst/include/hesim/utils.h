@@ -159,13 +159,13 @@ inline bool is_null(Rcpp::List L, const char * name){
 
 /**
  * @ingroup general
- * Maximum less than value.
- * Return the maximum element in a sorted vector less than @p value. Note that
+ * Maximum less than or equal to value.
+ * Return the maximum element in a sorted vector less than or equal to @p value. Note that
  * the vector must be sorted from smallest to largest.
  * @param first, last Forward iterators defining the range to examine 
  * @param value The value that the maximum element must be less than.
  * @return Iterator pointing to the maximum element in the vector less than
- * @p value. 
+ * or equal to @p value. 
  */
 template <class ForwardIt, class T>
 inline ForwardIt max_lt(ForwardIt first, ForwardIt last, const T& value){
@@ -174,7 +174,7 @@ inline ForwardIt max_lt(ForwardIt first, ForwardIt last, const T& value){
     Rcpp::stop("There is no element in the vector less than 'value'");
   } 
   else{
-    return lb - 1;
+    return lb;
   }
 }
 
