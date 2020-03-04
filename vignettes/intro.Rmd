@@ -16,19 +16,20 @@ bibliography: references.bib
 ---
 
 # Overview
-`hesim` is an R package for health-economic simulation modeling that is naturally integrated with statistical modeling and provides support for decision analysis. 
-
-As shown in the table below, N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are currently supported. The PSM is a cohort-level model that simulates representative cohorts of patients with similar characteristics while the iCTSTM simulates individual patients probabilistically using random number generation. The models are implemented as [R6](https://r6.r-lib.org/index.html) classes and have methods for simulating disease progression, costs, and QALYs. We expect to add  cohort-level state transition models in the near future.  
+`hesim` supports three types of health-economic models: (i) cohort discrete time state transition models (cDTSTMs), (ii) N-state partitioned survival models (PSMs), and (iii) individual-level continuous time state transition models (iCTSTMs). cDTSTMs are Markov cohort models and can be time-homogeneous or time-inhomogeneous. iCTSTMs are individual-level simulations that can encompass both Markov and semi-Markov processes. All models are implemented as [R6](https://r6.r-lib.org/index.html) classes and have methods for simulating disease progression, costs, and QALYs.
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
-psm <- c("N-state partitioned survival model (PSM)", "[Psm](https://hesim-dev.github.io/hesim/reference/Psm.html)")
-ictstm <- c("Individual-level continuous time state transition model (iCTSTM)", "[IndivCtstm](https://hesim-dev.github.io/hesim/reference/IndivCtstm.html)")
-tbl <- rbind(psm, ictstm)
+library("kableExtra")
+psm <- c("N-state partitioned survival model (PSM)", "`hesim::Psm`")
+cdtstm <- c("Cohort discrete time state transition model (cDTSTM)", "`hesim::CohortDtstm`")
+ictstm <- c("Individual-level continuous time state transition model (iCTSTM)", "`hesim::IndivCtstm`")
+tbl <- rbind(psm, cdtstm, ictstm)
 colnames(tbl) <- c("Economic model", "R6 class")
-knitr::kable(tbl, row.names = FALSE)
+knitr::kable(tbl, row.names = FALSE)  %>% # Pipe imported from kableExtra
+  kableExtra::kable_styling()
 ```
 
-An economic model is constructed by combining statistical models for disease progression, costs, and utilities. As shown in the figure, a typical analysis proceeds in a 3-step process as follows:
+Economic models can, in general, be created in two ways: first, with mathematical expressions using non-standard evaluation (note that this is currently only available for cDTSTMs), and, second, from specific statistical models. Each economic model consists of statistical models of disease progression, costs, and utilities. As shown in the figure, a typical analysis proceeds in a 3-step process:
 
 <br>
 ```{r, out.width = "600px", echo = FALSE}
@@ -45,7 +46,6 @@ The entire analysis is inherently Bayesian, as uncertainty in the parameters fro
 
 # Treatment strategies, target population, and model structure
 Before beginning an analysis, it is necessary to define the treatment strategies of interest, the target population, and the model structure. This can be done in `hesim` by creating a `hesim_data` object with the function `hesim_data()`. Let's consider an example where we use an iCTSTM to evaluate two competing treatment strategies. We will consider a model with three health states (*healthy*, *sick*, and *dead*) with four transitions (*healthy -> sick*, *sick -> healthy*, *healthy -> dead*, and *sick -> dead*). Since we are using an individual-level model, we must simulate a target population that is sufficiently large so that uncertainty reflects uncertainty in the model parameters, rather than variability across simulated individuals. 
-
 
 ```{r warning = FALSE, message = FALSE}
 library("hesim")
@@ -72,21 +72,41 @@ print(hesim_dat)
 
 # Parameterization
 ## Disease progression
-As shown in the table below, the statistical model used to parameterize the disease model component of an economic model varies by the type of economic model. For example, a set of *N-1* independent survival models are used to parameterize an *N*-state partitioned survival model, while multi-state models are used to parameterize an iCTSTM. 
+As shown in the table below, the statistical model used to parameterize the disease model component of an economic model varies by the type of economic model. For example, multinomial logistic regressions can be used to parameterize a cDTSTM, a set of *N-1* independent survival models are used to parameterize an *N*-state partitioned survival model, and multi-state models can be used to parameterize an iCTSTM. 
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
-psm <- c("[Psm](https://hesim-dev.github.io/hesim/reference/Psm.html)", "Independent survival models", "[params_surv_list](https://hesim-dev.github.io/hesim/reference/params_surv_list.html)", "[hesim::flexsurvreg_list](https://hesim-dev.github.io/hesim/reference/flexsurvreg_list.html)")
-ictstm <- c("[IndivCtstm](https://hesim-dev.github.io/hesim/reference/IndivCtstm.html)", "Multi-state model", "[params_surv](https://hesim-dev.github.io/hesim/reference/params_surv.html) or [params_surv_list](https://hesim-dev.github.io/hesim/reference/params_surv_list.html)", "[flexsurv::flexsurvreg](https://www.rdocumentation.org/packages/flexsurv/versions/1.0.0/topics/flexsurvreg) or [hesim::flexsurvreg_list](https://hesim-dev.github.io/hesim/reference/flexsurvreg_list.html)")
-tbl <- rbind(psm, ictstm)
-colnames(tbl) <- c("Economic model (R6 class)", "Statistical model", "Parameter object", "Model fit object")
-knitr::kable(tbl, row.names = FALSE)
+tbl <- rbind(
+  c("`hesim::CohortDtstm`",
+    "Custom", 
+    "`hesim::tparams_transprobs`", 
+    "`hesim::define_model()`"),
+  c("`hesim::CohortDtstm`", 
+    "Multinomial logistic regressions",
+    "`hesim::params_mlogit_list`",
+    "`hesim::multinom_list`"),
+  c("`hesim::Psm`", 
+    "Independent survival models", 
+    "`hesim::params_surv_list`", 
+    "`hesim::flexsurvreg_list`"),
+  c("`hesim::IndivCtstm`", 
+    "Multi-state model (joint likelihood)", 
+    "`hesim::params_surv`", 
+    "`flexsurv::flexsurvreg`"),
+  c("`hesim::IndivCtstm`", 
+    "Multi-state model (transition-specific)", 
+    "`hesim::params_surv_list`", 
+    "`hesim::flexsurvreg_list`")  
+)
+colnames(tbl) <- c("Economic model (R6 class)", "Statistical model(s)", 
+                   "Parameter object(s)", "Model fit object(s)")
+knitr::kable(tbl, row.names = FALSE) %>%
+  kableExtra::kable_styling() %>%
+  kableExtra::collapse_rows(columns = 1, valign = "top")
 ```
 
-The easiest way to parameterize a disease model is by fitting a statistical model using `R`. For example, survival models for PSMs and multi-state models for iCTSTMs can be fit using `flexsurvreg()`. A multi-state model can either be fit as a single model with a joint likelihood (a `flexsurvreg` object) or as a list of transition-specific models (a `flexsurvreg_list` object) (see [Section 6 from the flexsurv vignette](https://CRAN.R-project.org/package=flexsurv/vignettes/flexsurv.pdf) for details). Likewise, a list of survival models for a PSM are stored as a `flexsurvreg_list` object.
+Disease models can either be fit from an explicit statistical model or through mathematical expressions. In the first case, the easiest way to parameterize a disease model is by fitting a statistical model using `R`. For example, survival models and multi-state models can be fit using `flexsurv::flexsurvreg()` while multinomial logistic regressions can be fit with `nnet::multinom()`. In other cases, the disease models will not be fit directly with `R`, but the estimates of a disease model can be directly stored in parameter (`hesim::params`) or transformed parameter (`hesim::tparams`) objects. In the second case, an entire model (encompassing disease progression, costs, and utility) can be defined in terms of mathematical expressions with `hesim::define_model()`.
 
-In other cases, the disease models will not be fit directly with R (for instance, when performing a network meta-analysis). In these cases, the estimates of a disease model can be directly stored in objects prefixed by "params_". When a single survival model or a multi-state model with a joint likelihood is fit, parameters are stored in `params_surv` objects; when multiple independent survival or multi-state models with transition specific fits are used, parameters are stored in `params_surv_list` objects.
-
-We will illustrate using the first approach, by estimating a multi-state model with a joint likelihood using `flexsurvreg()`.
+We will illustrate an example of a statistical model of disease progression fit with `R` by estimating a multi-state model with a joint likelihood using `flexsurv::flexsurvreg()`.
 
 ```{r, message = FALSE, warning = FALSE}
 library("flexsurv")
@@ -102,17 +122,18 @@ fit_wei <- flexsurv::flexsurvreg(Surv(years, status) ~ trans +
 ```
 
 ## Costs and utility
-`hesim` currently supports two types of models for modeling costs and utilities: mean (i.e., intercept-only) models and linear models.
+Costs and utilities can currently either be modeled using a linear model or using predicted means. The latter is an example of a transformed parameter object since the predicted means are parameters that are presumably a function of the underlying parameters of a statistical model and possibly input data.
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
-means <- c("Mean model", "[params_mean](https://hesim-dev.github.io/hesim/reference/params_mean.html)", "[stateval_tbl](https://hesim-dev.github.io/hesim/reference/stateval_tbl.html)")
-lm <- c("Linear model", "[params_lm](https://hesim-dev.github.io/hesim/reference/params_lm.html)", "[stats::lm](https://www.rdocumentation.org/packages/stats/versions/3.5.1/topics/lm)")
+means <- c("Predicted means", "`hesim::tparams_mean`", "`hesim::stateval_tbl`")
+lm <- c("Linear model", "`hesim::params_lm`", "`stats::lm`")
 tbl <- rbind(means, lm)
 colnames(tbl) <- c("Statistical model", "Parameter object", "Model fit object")
-knitr::kable(tbl, row.names = FALSE)
+knitr::kable(tbl, row.names = FALSE) %>%
+  kableExtra::kable_styling()
 ```
 
-Linear models can be fit using `lm()`. Mean models are most easily constructed from a `stateval_tbl` object, which is a special object used to assign values to health states. The table allows users to specify mean values that can vary across health states, treatment strategies, patients, and/or time intervals. State values can be specified either as moments (i.e., mean and standard error) or parameters (e.g., shape and scale of gamma distribution) of a probability distribution, or by pre-simulating values from a suitable probability distribution. Here we will use `stateval_tbl` objects for utility and two cost categories (drug and medical).
+Linear models are fit using `stats::lm()`. Predicted means are most easily constructed from a `hesim::stateval_tbl` object, which is a special object used to assign values to health states. The table allows users to specify mean values that can vary across health states, treatment strategies, patients, and/or time intervals. State values can be specified either as moments (i.e., mean and standard error) or parameters (e.g., shape and scale of gamma distribution) of a probability distribution, or by pre-simulating values from a suitable probability distribution. Here we will use `hesim::stateval_tbl` objects for utility and two cost categories (drug and medical).
 
 ```{r}
 # Utility
@@ -136,16 +157,19 @@ medcost_tbl <- stateval_tbl(data.table(state_id = states$state_id,
  
 # Simulation
 ## Constructing an economic model
-An economic model consists of a disease model, a utility model, and a set of cost models for each cost category. The utility and cost models are always `StateVals` objects, whereas the disease models vary by economic model. In a PSM, the disease model is a `PsmCurves` object used to simulate survival curves. The disease model in an iCTSTM simulated health states transitions and is a `IndivCtstmTrans` object.
+An economic model consists of a disease model, a utility model, and a set of cost models for each cost category. The utility and cost models are always `hesim::StateVals` objects, whereas the disease models vary by economic model. The disease model is used to simulate survival curves in a Psm and health state transitions in a cDTSTM and iCTSTM.
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
-psm <- c("[Psm](https://hesim-dev.github.io/hesim/reference/Psm.html)", "[PsmCurves](https://hesim-dev.github.io/hesim/reference/PsmCurves.html)",
-         "[StateVals](https://hesim-dev.github.io/hesim/reference/StateVals.html)", "[StateVals](https://hesim-dev.github.io/hesim/reference/StateVals.html)")
-ictstm <- c("[IndivCtstm](https://hesim-dev.github.io/hesim/reference/IndivCtstm.html)", "[IndivCtstmTrans](https://hesim-dev.github.io/hesim/reference/IndivCtstmTrans.html)",
-         "[StateVals](https://hesim-dev.github.io/hesim/reference/StateVals.html)", "[StateVals](https://hesim-dev.github.io/hesim/reference/StateVals.html)")
-tbl <- rbind(psm, ictstm)
+dtstm <- c("`hesim::CohortDtstm`", "`hesim::CohortDtstmTrans`",
+         "`hesim::StateVals`", "`hesim::StateVals`")
+psm <- c("`hesim::Psm`", "`hesim::PsmCurves`",
+         "`hesim::StateVals`", "`hesim::StateVals`")
+ictstm <- c("`hesim::IndivCtstm`", "`hesim::IndivCtstmTrans`",
+         "`hesim::StateVals`", "`hesim::StateVals`")
+tbl <- rbind(dtstm, psm, ictstm)
 colnames(tbl) <- c("Economic model", "Disease model", "Utility model", "Cost model(s)")
-knitr::kable(tbl, row.names = FALSE)
+knitr::kable(tbl, row.names = FALSE) %>%
+  kableExtra::kable_styling()
 ```
 
 Since economic models in `hesim` are inherently Bayesian, we must specify the number of parameter samples we will use for the PSA before constructing the model. 
@@ -157,7 +181,7 @@ n_samples <- 1000
 ### Disease model
 Models are constructed as a function of parameters (or model fits) and in regression models, input data. The input data must be objects of class `expanded_hesim_data`, which are [data tables](https://github.com/Rdatatable/data.table/wiki) containing the covariates for the statistical model. In our multi-state model, each row is a unique treatment strategy, patient, and health-state transition. The ID variables (`strategy_id`, `patient_id`, and `transition_id`) are stored as attributes of the dataset.
 
-An "expanded_hesim_data" object can be created directly or by expanding an object of class "hesim_data" using `expand.hesim_data()`. Here, we will use the latter approach,
+An `expanded_hesim_data` object can be created directly or by expanding an object of class `hesim_data` using `expand.hesim_data()`. Here, we will use the latter approach,
 
 ```{r warning = FALSE, message = FALSE}
 transmod_data <- expand(hesim_dat, 
@@ -175,7 +199,7 @@ class(transmod)
 ```
 
 ### Cost and utility models
-Since we did not use a regression model for costs or utilities, we do not need to specific input data. Instead, we can construct the cost and utility models directly from the `stateval_tbl` objects. 
+Since we are using predicted means for costs and utilities, we do not need to specify input data. Instead, we can construct the cost and utility models directly from the `stateval_tbl` objects. 
 
 ```{r}
 # Utility
@@ -198,20 +222,21 @@ ictstm <- IndivCtstm$new(trans_model = transmod,
 ```
 
 ## Simulating outcomes
-Each economic model contains methods (i.e., functions) for simulating disease progression, costs, and QALYs. These methods are summarized in the table below.
+Each economic model contains methods (i.e., functions) for simulating disease progression, costs, and QALYs. These methods are listed in the table below.
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
-psm_methods <- c("[Psm](https://hesim-dev.github.io/hesim/reference/Psm.html)", "$sim_survival() and $sim_stateprobs()", "$sim_qalys()", "$sim_costs()")
-ictstm_methods <- c("[IndivCtstm](https://hesim-dev.github.io/hesim/reference/IndivCtstm.html)", "$sim_disease() and $sim_stateprobs()", "$sim_qalys()", "$sim_costs()")
-tbl <- rbind(psm_methods, ictstm_methods)
+cdtstm_methods <- c("`hesim::CohortDtstm`", "$sim_stateprobs()", "$sim_qalys()", "$sim_costs()")
+psm_methods <- c("`hesim::Psm`", "$sim_survival() and $sim_stateprobs()", "$sim_qalys()", "$sim_costs()")
+ictstm_methods <- c("`hesim::IndivCtstm`", "$sim_disease() and $sim_stateprobs()", "$sim_qalys()", "$sim_costs()")
+tbl <- rbind(cdtstm_methods, psm_methods, ictstm_methods)
 colnames(tbl) <- c("Economic model (R6 class)", "Disease progression", "QALYs", "Costs")
-knitr::kable(tbl, row.names = FALSE)
+knitr::kable(tbl, row.names = FALSE) %>%
+  kableExtra::kable_styling()
 ```
 
-More specifically, the methods for each economic model can be summarized as follows:
+Although all models simulate state probabilities, they do so in different ways. The cDTSTM uses discrete time Markov chains, the PSM calculates differences in probabilities from simulated survival curves, and the iCTSTM aggregates individual trajectories simulated using random number generation. The individual-level simulation is advantageous because it can be used for semi-Markov processes where transition rates depend on time since entering a health state (rather than time since the start of the model). 
 
-* **PSM**: `$sim_survival()` simulates survival curves and `$sim_stateprobs()` computed health state probabilities as a function of time based on those survival curves. `$sim_costs()` and `$sim_qalys()` compute simulated costs and QALYs based on the values assigned to states from the cost and utility models and the expected time spent in each state.
-* **iCTSTM**: `$sim_disease()` uses random number generation to simulate a disease trajectory and `$sim_stateprobs` summarize that trajectory by computing the probability patients in the target population are in each health state as a function of time. `$sim_costs()` and `$sim_qalys()` compute simulated costs and QALYs for each simulated patient based on the times at which they enter health states.
+In the cohort models, costs and QALYs are computed as a function of the state probabilities wheras in individiual-level models they are based on the simulated individual trajectories. Like the disease model, the individual-level simulation is more flexible because costs and QALYs can depend on time since entering the health state.
 
 We illustrate with the iCTSTM. First we simulate disease progression for each patient.
 

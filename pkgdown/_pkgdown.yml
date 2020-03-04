@@ -93,6 +93,7 @@ articles:
   - mlogit
   - psm
   - ctstm
+  - expected-values
   - icea
 
 navbar:
@@ -119,7 +120,9 @@ navbar:
       - text: "Markov and semi-Markov multi-state models"
         href: articles/ctstm.html
       - text: "---"
-      - text: "Decision analysis"    
+      - text: "Economic analysis"  
+      - text: "Simulating costs and quality-adjusted life-years"
+        href: articles/expected-values.html
       - text: "Individualized cost-effectiveness analysis"
         href: articles/icea.html
       - text: "---"

@@ -71,7 +71,10 @@
       <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Decision analysis</li>
+    <li class="dropdown-header">Economic analysis</li>
+    <li>
+      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
+    </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
@@ -103,7 +106,7 @@
     <div class="page-header toc-ignore">
       <h1>Continuous time state transition models</h1>
             
-            <h4 class="date">2020-02-29</h4>
+            <h4 class="date">2020-03-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/ctstm.Rmd"><code>vignettes/ctstm.Rmd</code></a></small>
       <div class="hidden name"><code>ctstm.Rmd</code></div>
@@ -231,12 +234,12 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <span id="cb10-2"><a href="#cb10-2"></a>                        <span class="dt">by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))</span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(transmod_data)</span></code></pre></div>
 <pre><code>##    strategy_id patient_id      age female
-## 1:           1          1 45.97870      1
-## 2:           1          2 29.35015      0
-## 3:           1          3 34.64224      1
-## 4:           1          4 42.68522      0
-## 5:           1          5 55.36833      0
-## 6:           1          6 55.15499      0</code></pre>
+## 1:           1          1 40.76043      0
+## 2:           1          2 42.30461      0
+## 3:           1          3 49.81431      1
+## 4:           1          4 34.49579      0
+## 5:           1          5 42.25282      0
+## 6:           1          6 42.03449      1</code></pre>
 <p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>transmod_cr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span>(wei_fits_cr, transmod_data,</span>
 <span id="cb12-2"><a href="#cb12-2"></a>                                      <span class="dt">trans_mat =</span> tmat, <span class="dt">n =</span> n_samples,</span>
@@ -317,20 +320,13 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># "Clock reset"</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a>econmod_cr<span class="op">$</span><span class="kw">sim_disease</span>()</span>
 <span id="cb17-3"><a href="#cb17-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>disprog_)</span></code></pre></div>
-<pre><code>##    sample strategy_id patient_id grp_id from to final  time_start
-## 1:      1           1          1      1    1  2     0 0.000000000
-## 2:      1           1          1      1    2  1     0 0.009818937
-## 3:      1           1          1      1    1  3     1 1.568504151
-## 4:      1           1          2      1    1  3     1 0.000000000
-## 5:      1           1          3      1    1  2     0 0.000000000
-## 6:      1           1          3      1    2  1     0 0.230424900
-##      time_stop
-## 1: 0.009818937
-## 2: 1.568504151
-## 3: 6.007830055
-## 4: 3.358847961
-## 5: 0.230424900
-## 6: 0.487105927</code></pre>
+<pre><code>##    sample strategy_id patient_id grp_id from to final time_start time_stop
+## 1:      1           1          1      1    1  2     0   0.000000 13.245915
+## 2:      1           1          1      1    2  1     0  13.245915 13.252137
+## 3:      1           1          1      1    1  3     1  13.252137 13.301960
+## 4:      1           1          2      1    1  3     1   0.000000  2.364699
+## 5:      1           1          3      1    1  2     0   0.000000  2.291351
+## 6:      1           1          3      1    2  1     0   2.291351  3.720696</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># "Clock forward"</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a>econmod_cf<span class="op">$</span><span class="kw">sim_disease</span>()</span></code></pre></div>
 <p>State occupancy probabilities at different time points are computed using <code>$sim_stateprobs()</code>. First, we simulate state probabilities for the “clock reset” model.</p>
@@ -382,13 +378,13 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <p>QALYs (and life-years) are simulated using <code>$sim_qalys()</code>. By default, mean QALYs are computed by treatment strategy, health state, and PSA sample (the <code>by_patient</code> option can be used to compute aggregated QALYs at the patient level). Here, we used the “clock reset” model to compute both undiscounted QALYs (<code>dr = 0</code>) and QALYs discounted at 3%.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>econmod_cr<span class="op">$</span><span class="kw"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="dt">dr =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,.<span class="dv">03</span>))</span>
 <span id="cb23-2"><a href="#cb23-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>qalys_)</span></code></pre></div>
-<pre><code>##    sample strategy_id grp_id state_id dr     qalys       lys
-## 1:      1           1      1        1  0 4.3635193 5.7612334
-## 2:      1           1      1        2  0 0.8189958 1.3759844
-## 3:      1           2      1        1  0 5.5110470 7.2763349
-## 4:      1           2      1        2  0 0.4939701 0.8299129
-## 5:      2           1      1        1  0 5.7623185 6.2228129
-## 6:      2           1      1        2  0 1.6178852 1.6298270</code></pre>
+<pre><code>##    sample strategy_id grp_id state_id dr     qalys      lys
+## 1:      1           1      1        1  0 3.5476150 5.724245
+## 2:      1           1      1        2  0 1.1995079 1.321736
+## 3:      1           2      1        1  0 4.9339187 7.961111
+## 4:      1           2      1        2  0 0.9565109 1.053978
+## 5:      2           1      1        1  0 3.4010731 6.464436
+## 6:      2           1      1        2  0 1.0488770 1.052203</code></pre>
 <p>We summarize the simulated QALYs by computing means by treatment strategy and health state across the PSA samples.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>qalys_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>qalys_[, .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(qalys)),</span>
 <span id="cb25-2"><a href="#cb25-2"></a>                                    by =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span>)]</span>
@@ -408,12 +404,12 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>econmod_cr<span class="op">$</span><span class="kw"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="dt">dr =</span> <span class="fl">0.03</span>)</span>
 <span id="cb26-2"><a href="#cb26-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(econmod_cr<span class="op">$</span>costs_)</span></code></pre></div>
 <pre><code>##    sample strategy_id grp_id state_id   dr category     costs
-## 1:      1           1      1        1 0.03     Drug 23335.212
-## 2:      1           1      1        2 0.03     Drug  5663.690
-## 3:      1           2      1        1 0.03     Drug 57812.184
-## 4:      1           2      1        2 0.03     Drug  6724.284
-## 5:      2           1      1        1 0.03     Drug 24672.447
-## 6:      2           1      1        2 0.03     Drug  6458.301</code></pre>
+## 1:      1           1      1        1 0.03     Drug 23172.002
+## 2:      1           1      1        2 0.03     Drug  5465.248
+## 3:      1           2      1        1 0.03     Drug 61225.966
+## 4:      1           2      1        2 0.03     Drug  8217.222
+## 5:      2           1      1        1 0.03     Drug 25967.396
+## 6:      2           1      1        2 0.03     Drug  4155.538</code></pre>
 <p>As with QALYs, we summarize costs by computing means (now by treatment strategy and category) across the PSA samples.</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"scales"</span>)</span>
 <span id="cb28-2"><a href="#cb28-2"></a>costs_summary &lt;-<span class="st"> </span>econmod_cr<span class="op">$</span>costs_[dr <span class="op">==</span><span class="st"> </span><span class="fl">.03</span> , .(<span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(costs)),</span>

@@ -108,7 +108,10 @@ create an economic model." />
       <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Decision analysis</li>
+    <li class="dropdown-header">Economic analysis</li>
+    <li>
+      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
+    </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
@@ -292,11 +295,11 @@ utilities, and/or costs.</p>
 <span class='co'># This can be useful for understanding the output of a model expression</span>
 <span class='fu'>eval_model</span>(<span class='no'>model_def</span>, <span class='no'>data</span>)</div><div class='output co'>#&gt; $id
 #&gt; $id[[1]]
-#&gt;    sample strategy_id patient_id time_start
-#&gt; 1:      1           1          1          0
-#&gt; 2:      1           2          1          0
-#&gt; 3:      2           1          1          0
-#&gt; 4:      2           2          1          0
+#&gt;    sample strategy_id patient_id time time_start
+#&gt; 1:      1           1          1    0          0
+#&gt; 2:      1           2          1    0          0
+#&gt; 3:      2           1          1    0          0
+#&gt; 4:      2           2          1    0          0
 #&gt; 
 #&gt; 
 #&gt; $tpmatrix

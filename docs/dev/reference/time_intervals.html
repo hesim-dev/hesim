@@ -105,7 +105,10 @@ interval. This would typically be passed to id_attributes." />
       <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Decision analysis</li>
+    <li class="dropdown-header">Economic analysis</li>
+    <li>
+      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
+    </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
@@ -148,14 +151,14 @@ interval. This would typically be passed to <a href='id_attributes.html'>id_attr
     
     </div>
 
-    <pre class="usage"><span class='fu'>time_intervals</span>(<span class='no'>time_start</span>)</pre>
+    <pre class="usage"><span class='fu'>time_intervals</span>(<span class='no'>times</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>time_start</th>
-      <td><p>Either a vector of starting times for each interval or a
+      <th>times</th>
+      <td><p>Either a vector of times for each interval or a
 <code>data.frame</code> with at least one column named <code>time_start</code>.</p></td>
     </tr>
     </table>
@@ -176,11 +179,11 @@ described in <a href='id_attributes.html'>id_attributes</a>.</p>
 #&gt; 1:       1          0         3
 #&gt; 2:       2          3         5
 #&gt; 3:       3          5       Inf</div><div class='input'><span class='fu'>time_intervals</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>time_start</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>5</span>),
-                          <span class='kw'>time_cat</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Time &lt;= 3"</span>, <span class='st'>"Time &lt;= 5"</span>,
-                                       <span class='st'>"Time &gt; 5"</span>)))</div><div class='output co'>#&gt;    time_id time_start  time_cat time_stop
-#&gt; 1:       1          0 Time &lt;= 3         3
-#&gt; 2:       2          3 Time &lt;= 5         5
-#&gt; 3:       3          5  Time &gt; 5       Inf</div></pre>
+                          <span class='kw'>time_cat</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Time &lt;= 3"</span>, <span class='st'>"3 &lt; Time &lt;= 5"</span>,
+                                       <span class='st'>"Time &gt; 5"</span>)))</div><div class='output co'>#&gt;    time_id time_start      time_cat time_stop
+#&gt; 1:       1          0     Time &lt;= 3         3
+#&gt; 2:       2          3 3 &lt; Time &lt;= 5         5
+#&gt; 3:       3          5      Time &gt; 5       Inf</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

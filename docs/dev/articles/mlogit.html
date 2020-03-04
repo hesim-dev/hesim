@@ -71,7 +71,10 @@
       <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Decision analysis</li>
+    <li class="dropdown-header">Economic analysis</li>
+    <li>
+      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
+    </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
@@ -103,7 +106,7 @@
     <div class="page-header toc-ignore">
       <h1>Markov models with multinomial logistic regression</h1>
             
-            <h4 class="date">2020-02-29</h4>
+            <h4 class="date">2020-03-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/mlogit.Rmd"><code>vignettes/mlogit.Rmd</code></a></small>
       <div class="hidden name"><code>mlogit.Rmd</code></div>
@@ -166,12 +169,12 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 <span id="cb5-4"><a href="#cb5-4"></a>  , grp_id <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>n_patients]</span>
 <span id="cb5-5"><a href="#cb5-5"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(patients)</span></code></pre></div>
 <pre><code>##    patient_id      age female grp_id
-## 1:        459 27.32360      1      1
-## 2:       2171 82.83354      1      2
-## 3:       8179 71.04158      0      3
-## 4:       1838 34.13270      1      4
-## 5:       8781 74.05979      0      5
-## 6:       7210 39.92672      0      6</code></pre>
+## 1:       1091 80.50759      1      1
+## 2:       2237 37.04089      1      2
+## 3:       8349 45.15489      1      3
+## 4:       1048 50.14583      0      4
+## 5:        646 50.54774      0      5
+## 6:       4549 58.62046      1      6</code></pre>
 <p>To perform the cost-effectiveness analysis, each patient is simulated twice, once with the reference treatment and once with the intervention. The non-death states use for simulating costs and quality-adjusted life-years (QALYs) are the healthy and sick states.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>hesim_dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/hesim_data.html">hesim_data</a></span>(</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">patients =</span> patients,</span>
