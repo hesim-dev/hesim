@@ -409,7 +409,7 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #'               c(3, NA, 4),
 #'               c(NA, NA, NA))
 #' fits <- vector(length = max(tmat, na.rm = TRUE), mode = "list")
-#' surv_dat <- data.frame(ctstm3_exdata$transitions)
+#' surv_dat <- data.frame(mstate3_exdata$transitions)
 #' for (i in 1:length(fits)){
 #'   fits[[i]] <- flexsurvreg(Surv(years, status) ~ factor(strategy_id), 
 #'                            data = surv_dat,
@@ -420,18 +420,18 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #'
 #' ## Utility
 #' utility_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
-#'                                        mean = ctstm3_exdata$utility$mean,
-#'                                        se = ctstm3_exdata$utility$se),
+#'                                        mean = mstate3_exdata$utility$mean,
+#'                                        se = mstate3_exdata$utility$se),
 #'                             dist = "beta",
 #'                             hesim_data = hesim_dat)
 #' ## Costs
 #' drugcost_tbl <- stateval_tbl(data.frame(strategy_id = strategies$strategy_id,
-#'                                         est = ctstm3_exdata$costs$drugs$costs),
+#'                                         est = mstate3_exdata$costs$drugs$costs),
 #'                              dist = "fixed",
 #'                              hesim_data = hesim_dat) 
 #' medcost_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
-#'                                        mean = ctstm3_exdata$costs$medical$mean,
-#'                                        se = ctstm3_exdata$costs$medical$se),
+#'                                        mean = mstate3_exdata$costs$medical$mean,
+#'                                        se = mstate3_exdata$costs$medical$se),
 #'                             dist = "gamma",
 #'                             hesim_data = hesim_dat)  
 #'

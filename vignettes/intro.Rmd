@@ -110,7 +110,7 @@ We will illustrate an example of a statistical model of disease progression fit 
 
 ```{r, message = FALSE, warning = FALSE}
 library("flexsurv")
-mstate_data <- data.table(ctstm3_exdata$transitions)
+mstate_data <- data.table(mstate3_exdata$transitions)
 mstate_data[, trans := factor(trans)]
 fit_wei <- flexsurv::flexsurvreg(Surv(years, status) ~ trans + 
                                                        factor(strategy_id):trans +
@@ -138,19 +138,19 @@ Linear models are fit using `stats::lm()`. Predicted means are most easily const
 ```{r}
 # Utility
 utility_tbl <- stateval_tbl(data.table(state_id = states$state_id,
-                                       mean = ctstm3_exdata$utility$mean,
-                                       se = ctstm3_exdata$utility$se),
+                                       mean = mstate3_exdata$utility$mean,
+                                       se = mstate3_exdata$utility$se),
                             dist = "beta",
                             hesim_data = hesim_dat)
 
 # Costs
 drugcost_tbl <- stateval_tbl(data.table(strategy_id = strategies$strategy_id,
-                                       est = ctstm3_exdata$costs$drugs$costs),
+                                       est = mstate3_exdata$costs$drugs$costs),
                             dist = "fixed",
                             hesim_data = hesim_dat) 
 medcost_tbl <- stateval_tbl(data.table(state_id = states$state_id,
-                                       mean = ctstm3_exdata$costs$medical$mean,
-                                       se = ctstm3_exdata$costs$medical$se),
+                                       mean = mstate3_exdata$costs$medical$mean,
+                                       se = mstate3_exdata$costs$medical$se),
                             dist = "gamma",
                             hesim_data = hesim_dat)  
 ```
