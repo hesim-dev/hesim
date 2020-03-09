@@ -126,7 +126,7 @@ medcost_tbl <- stateval_tbl(ctstm3_exdata$costs$medical,
 The economic model consists of a model for disease progression and models for assigning utility and cost values to health states. Since we are performing a PSA, we must specify the number of times to sample the parameters.
 
 ```{r}
-n_samples <- 1000
+n_samples <- 100
 ```
 
 ## Constructing the economic model
