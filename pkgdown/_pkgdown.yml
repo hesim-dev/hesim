@@ -82,7 +82,7 @@ reference:
       - icer_tbl
   - title: "Datasets"
     contents:
-    - ctstm3_exdata
+    - mstate3_exdata
     - multinom3_exdata
     - psm4_exdata
 

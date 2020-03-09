@@ -43,11 +43,11 @@
 #'  }
 "psm4_exdata"
 
-#' Example data for a 3-state continuous time state transition model
+#' Example data for multi-state model
 #'
-#' A collection of example datasets containing health state transition, 
-#' costs, and utility data for a 3-state continuous time state transition model.
-#'
+#' Example multi-state data for parameterizing a continuous time state
+#' transition model. Costs and utility 
+#' are also included to facilitate cost-effectiveness analysis. 
 #' @format 
 #' A list containing the following elements:
 #' \itemize{
@@ -70,7 +70,7 @@
 #' \item{trans}{Transition number.}
 #' \item{Tstart}{Starting time.}
 #' \item{Tstop}{Transition time.}
-#' \item{years}{Elapsed years between \code{Tstart} and \code{Tstop}.}
+#' \item{years}{Elapsed years between `Tstart` and `Tstop`.}
 #' \item{status}{Status variable; 1=transition, 0=censored.}
 #' }
 #' 
@@ -98,7 +98,7 @@
 #' \item{se}{Standard error of utility}
 #' }
 #' 
-"ctstm3_exdata"
+"mstate3_exdata"
 
 #' Example data for multinomial model
 #'
