@@ -101,7 +101,7 @@
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
+      <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -165,10 +165,13 @@
 supports objects of class <a href='tparams_transprobs.html'>tparams_transprobs</a>.</p></dd>
     <dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>.</p></dd>
     <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
-in a discrete-time multi-state model. The format should be the same as
-in <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>. Transitions that are not possible should be <code>NA</code> and
-the reference categories for each row (e.g., from a multinomial logistic
-regression) should be <code>0</code>.</p></dd>
+in a discrete-time multi-state model. Only required if the model is
+parameterized using multinomial logistic regression. The <code>(i,j)</code> element
+represents a transition from state <code>i</code> to state <code>j</code>. Each possible transition
+from row <code>i</code> should be based on a separate multinomial logistic regression
+and ordered from <code>0</code> to <code>K - 1</code> where <code>K</code> is the number of
+possible transitions. Transitions that are not possible should be <code>NA</code>.
+and the reference category for each row should be <code>0</code>.</p></dd>
     <dt><code>start_stateprobs</code></dt><dd><p>A vector with length equal to the number of
 health states containing the probability that the cohort is in each health
 state at the start of the simulation. For example,

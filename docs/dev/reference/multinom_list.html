@@ -101,7 +101,7 @@
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
+      <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -167,9 +167,25 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"nnet"</span>)
- <span class='no'>dat_healthy</span> <span class='kw'>&lt;-</span> <span class='no'>multinom3_exdata</span>$<span class='no'>transitions</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Healthy"</span>]</div><div class='output co'>#&gt; <span class='error'>Error in `[.data.frame`(multinom3_exdata$transitions, state_from == "Healthy"): object 'state_from' not found</span></div><div class='input'> <span class='no'>fit_healthy</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nnet/topics/multinom'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age_cat</span> + <span class='no'>year_cat</span>,
-                          <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat_healthy</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is.data.frame(data): object 'dat_healthy' not found</span></div><div class='input'> <span class='no'>dat_sick</span> <span class='kw'>&lt;-</span> <span class='no'>multinom3_exdata</span>$<span class='no'>transitions</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Sick"</span>]</div><div class='output co'>#&gt; <span class='error'>Error in `[.data.frame`(multinom3_exdata$transitions, state_from == "Sick"): object 'state_from' not found</span></div><div class='input'> <span class='no'>dat_sick</span>$<span class='no'>state_to</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/droplevels'>droplevels</a></span>(<span class='no'>dat_sick</span>$<span class='no'>state_to</span>)</div><div class='output co'>#&gt; <span class='error'>Error in droplevels(dat_sick$state_to): object 'dat_sick' not found</span></div><div class='input'> <span class='no'>fit_sick</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nnet/topics/multinom'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age_cat</span> + <span class='no'>year_cat</span>,
-                      <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat_sick</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is.data.frame(data): object 'dat_sick' not found</span></div><div class='input'> <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'>multinom_list</span>(<span class='kw'>healthy</span> <span class='kw'>=</span> <span class='no'>fit_healthy</span>, <span class='kw'>sick</span> <span class='kw'>=</span> <span class='no'>fit_sick</span>)</div><div class='output co'>#&gt; <span class='error'>Error in create_object_list(...): object 'fit_healthy' not found</span></div><div class='input'> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>fits</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'fits' not found</span></div></pre>
+ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"data.table"</span>)
+ <span class='no'>trans_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>transitions</span>)
+ <span class='no'>dat_healthy</span> <span class='kw'>&lt;-</span> <span class='no'>trans_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Healthy"</span>]
+ <span class='no'>fit_healthy</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nnet/topics/multinom'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age_cat</span> + <span class='no'>year_cat</span>,
+                          <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat_healthy</span>)</div><div class='output co'>#&gt; # weights:  24 (14 variable)
+#&gt; initial  value 18461.080899 
+#&gt; iter  10 value 18166.573671
+#&gt; final  value 18139.640776 
+#&gt; converged</div><div class='input'> <span class='no'>dat_sick</span> <span class='kw'>&lt;-</span> <span class='no'>trans_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Sick"</span>]
+ <span class='no'>dat_sick</span>$<span class='no'>state_to</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/droplevels'>droplevels</a></span>(<span class='no'>dat_sick</span>$<span class='no'>state_to</span>)
+ <span class='no'>fit_sick</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nnet/topics/multinom'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age_cat</span> + <span class='no'>year_cat</span>,
+                      <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat_sick</span>)</div><div class='output co'>#&gt; # weights:  8 (7 variable)
+#&gt; initial  value 6800.466988 
+#&gt; iter  10 value 6733.594702
+#&gt; iter  10 value 6733.594663
+#&gt; iter  10 value 6733.594663
+#&gt; final  value 6733.594663 
+#&gt; converged</div><div class='input'> <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'>multinom_list</span>(<span class='kw'>healthy</span> <span class='kw'>=</span> <span class='no'>fit_healthy</span>, <span class='kw'>sick</span> <span class='kw'>=</span> <span class='no'>fit_sick</span>)
+ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>fits</span>)</div><div class='output co'>#&gt; [1] "multinom_list"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

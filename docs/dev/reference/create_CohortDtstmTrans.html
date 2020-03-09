@@ -101,7 +101,7 @@
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Markov and semi-Markov multi-state models</a>
+      <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -172,6 +172,24 @@
       <th>...</th>
       <td><p>Further arguments passed to <code>CohortDtstmTrans$new()</code> in
 <code>CohortDtstmTrans</code>.</p></td>
+    </tr>
+    <tr>
+      <th>input_data</th>
+      <td><p>An object of class <code>expanded_hesim_data</code> returned by
+<code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>trans_mat</th>
+      <td><p>A transition matrix describing the states and transitions
+in a discrete-time multi-state model. See <a href='CohortDtstmTrans.html'>CohortDtstmTrans</a>.</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>Number of random observations of the parameters to draw.</p></td>
+    </tr>
+    <tr>
+      <th>point_estimate</th>
+      <td><p>If <code>TRUE</code>, then the point estimates are returned and and no samples are drawn.</p></td>
     </tr>
     </table>
     

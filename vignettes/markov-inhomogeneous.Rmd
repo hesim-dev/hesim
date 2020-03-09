@@ -20,7 +20,7 @@ We will illustrate a time inhomogeneous Markov cohort model by replicating the t
 The model consists 5 health states: (i) primary THR, (ii) successful primary, (iii) revision THR, (iv) successful revision, and (v) death. 
 
 ```{r, out.width = "700px", echo = FALSE}
-knitr::include_graphics("subgroup.png")
+knitr::include_graphics("markov-inhomogeneous.png")
 ```
 
 The model is time-inhomogeneous because (i) the prosthesis survival time is modeled using a Weibull survival model so that the probability of failure is time-varying and (ii) background mortality rates increase as patients age. 

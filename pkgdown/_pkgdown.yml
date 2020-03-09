@@ -92,7 +92,7 @@ articles:
   - markov-inhomogeneous
   - mlogit
   - psm
-  - ctstm
+  - mstate
   - expected-values
   - icea
 
@@ -118,7 +118,7 @@ navbar:
       - text: "Partitioned survival models"
         href: articles/psm.html
       - text: "Markov and semi-Markov multi-state models"
-        href: articles/ctstm.html
+        href: articles/mstate.html
       - text: "---"
       - text: "Economic analysis"  
       - text: "Simulating costs and quality-adjusted life-years"

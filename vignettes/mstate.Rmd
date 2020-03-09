@@ -1,5 +1,5 @@
 ---
-title: Continuous time state transition models
+title: Markov and semi-Markov multi-state models
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -9,7 +9,7 @@ output:
 pkgdown:
   as_is: true
 vignette: >
-  %\VignetteIndexEntry{Continuous time state transition models}
+  %\VignetteIndexEntry{Markov and semi-Markov multi-state models}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

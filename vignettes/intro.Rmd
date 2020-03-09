@@ -97,8 +97,8 @@ tbl <- rbind(
     "`hesim::params_surv_list`", 
     "`hesim::flexsurvreg_list`")  
 )
-colnames(tbl) <- c("Economic model (R6 class)", "Statistical model(s)", 
-                   "Parameter object(s)", "Model fit object(s)")
+colnames(tbl) <- c("Economic model (R6 class)", "Statistical model", 
+                   "Parameter object", "Model fit object")
 knitr::kable(tbl, row.names = FALSE) %>%
   kableExtra::kable_styling() %>%
   kableExtra::collapse_rows(columns = 1, valign = "top")
