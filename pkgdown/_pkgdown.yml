@@ -9,6 +9,7 @@ reference:
   - title: "Fitted statistical models"
     contents:
       - flexsurvreg_list
+      - multinom_list
       - partsurvfit
   - title: "Probability distributions"
     contents:
@@ -81,8 +82,9 @@ reference:
       - icer_tbl
   - title: "Datasets"
     contents:
-    - psm4_exdata
     - ctstm3_exdata
+    - multinom3_exdata
+    - psm4_exdata
 
 articles:
 - title: "Using hesim"
