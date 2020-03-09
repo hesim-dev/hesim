@@ -362,11 +362,11 @@ create_input_mats.params_surv_list <- function(object, input_data, ...){
 create_input_mats_multinom_X <- function(object, input_data, ...){
   check_edata(input_data)
   terms <- get_terms(object)
-  m <- model.frame(terms, input_data, na.action = na.omit,
-                   xlev = object$xlevels)
+  m <- stats::model.frame(terms, input_data, na.action = stats::na.omit,
+                           xlev = object$xlevels)
   if (!is.null(cl <- attr(terms, "dataClasses")))
-    .checkMFClasses(cl, m)
-  return(model.matrix(terms, m, contrasts = object$contrasts))
+    stats::.checkMFClasses(cl, m)
+  return(stats::model.matrix(terms, m, contrasts = object$contrasts))
 }
 
 #' @export 

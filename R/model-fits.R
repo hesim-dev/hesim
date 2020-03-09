@@ -63,10 +63,12 @@ flexsurvreg_list <- function(...){
 #' @return  An object of class `multinom_list`.
 #' @examples 
 #'  library("nnet")
-#'  dat_healthy <- multinom3_exdata$transitions[state_from == "Healthy"]
+#'  library("data.table")
+#'  trans_data <- data.table(multinom3_exdata$transitions)
+#'  dat_healthy <- trans_data[state_from == "Healthy"]
 #'  fit_healthy <- multinom(state_to ~ strategy_name + female + age_cat + year_cat, 
 #'                           data = dat_healthy)
-#'  dat_sick <- multinom3_exdata$transitions[state_from == "Sick"]
+#'  dat_sick <- trans_data[state_from == "Sick"]
 #'  dat_sick$state_to <- droplevels(dat_sick$state_to)
 #'  fit_sick <- multinom(state_to ~ strategy_name + female + age_cat + year_cat, 
 #'                       data = dat_sick)

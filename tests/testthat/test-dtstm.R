@@ -164,40 +164,156 @@ test_that("CohortDtstmTrans$sim_stateprobs() is correct ",{
 
 # Simulate model (from nnet object) --------------------------------------------
 # Fit
-transitions <- data.table(multinom3_exdata$transitions)
-dat_healthy <- transitions[state_from == "Healthy"]
-fit_healthy <- multinom(state_to ~ strategy_name + female + age_cat + year_cat, 
-                        data = dat_healthy)
-dat_sick <- droplevels(transitions[state_from == "Sick"])
-fit_sick <- multinom(state_to ~ strategy_name + female + age_cat + year_cat, 
-                     data = dat_sick)
-create_params(fit_healthy)
+transitions_data <- data.table(multinom3_exdata$transitions)
+data_healthy <- transitions_data[state_from == "Healthy"]
+fit_healthy <- multinom(state_to ~ strategy_name + female + age + year_cat,
+                        data = data_healthy, trace = FALSE)
+data_sick <- droplevels(transitions_data[state_from == "Sick"])
+fit_sick <- multinom(state_to ~ strategy_name + female + age + year_cat,
+                     data = data_sick, trace = FALSE)
 
-# Input data
+# Construct model
+## Setup
+n_patients <- 100
+patients <- transitions_data[year == 1, .(patient_id, age, female)][
+  sample.int(nrow(transitions_data[year == 1]), n_patients)][
+    , grp_id := 1:n_patients]
 hesim_dat <- hesim_data(
-  patients = transitions[year == 1, .(patient_id, age_cat, female)],
-  strategies = unique(transitions[year == 1, .(strategy_id, strategy_name)]
-                      )[order(strategy_id)]
-)
-tintervals <- time_intervals(unique(transitions[, .(year_cat)])
-                             [, time_start := c(0, 2, 6)])
-input_dat <- expand(hesim_dat, times = tintervals)
-tmat <- rbind(
-  c(0, 1, 2),
-  c(NA, 0, 3),
-  c(NA, NA, NA)
+  patients = patients,
+  strategies = data.table(strategy_id = 1:2,
+                          strategy_name = c("Reference", "Intervention")),
+  states = data.table(state_id = c(1, 2),
+                      state_name = c("Healthy", "Sick")) # Non-death health states
 )
 
-test_that("create_CohortDtstmTrans ",{
-  transmod <- create_CohortDtstmTrans(multinom_list(healthy = fit_healthy,
-                                                    sick = fit_sick), 
-                                      trans_mat = tmat,
-                                      input_data = input_dat)
+## The model
+n_samples <- 10
+tmat <- rbind(c(0, 1, 2),
+              c(NA, 0, 1),
+              c(NA, NA, NA))
+transfits <- multinom_list(healthy = fit_healthy, sick = fit_sick)
+tintervals <- time_intervals(unique(transitions_data[, .(year_cat)])
+                             [, time_start := c(0, 2, 6)])
+transmod_data <- expand(hesim_dat, times = tintervals)
+transmod <- create_CohortDtstmTrans(transfits,
+                                    input_data = transmod_data,
+                                    trans_mat = tmat,
+                                    n = n_samples,
+                                    point_estimate = TRUE)
+
+
+test_that(paste0("create_CohortDtstmTrans$sim_stateprobs() is consistent with ",
+                 "predict.multinom()"), {
+  hesim_probs <- transmod$sim_stateprobs(n_cycles = 1)[t == 1]
+  hesim_probs[, state_id := factor(state_id, labels = c("Healthy", "Sick", "Dead"))]
+  hesim_probs <- dcast(hesim_probs, 
+                       strategy_id + patient_id ~ state_id,
+                       value.var = "prob")          
+  multinom_probs <- predict(fit_healthy, newdata = transmod_data[time_id == 1],
+                           type = "prob")
+  rownames(multinom_probs) <- NULL
+  expect_equal(multinom_probs,
+               as.matrix(hesim_probs[, c("Healthy", "Sick", "Dead")]))
+})
+    
+test_that(paste0("create_CohortDtstmTrans$sim_stateprobs() with mulinom() objects"), {
+  tpmatrix_multinom <- function(fits, data, patid){
+    newdata <- data[patient_id == patid]
+    n_times <- length(unique(transmod_data$time_id))
+    tpmatrix1 <- tpmatrix2 <- array(NA, dim = c(3, 3, n_times))
+    for (j in 1:n_times){
+      probs_healthy <- predict(fits$healthy, newdata[time_id == j], type = "probs")
+      probs_sick <- predict(fits$sick, newdata[time_id == j], type = "probs")
+      tpmatrix1[, , j] <- rbind(probs_healthy[1, ],
+                                c(0, 1 - probs_sick[1], probs_sick[1]),
+                                c(0, 0, 1))
+      tpmatrix2[, , j] <- rbind(probs_healthy[2, ],
+                                c(0, 1 - probs_sick[2], probs_sick[2]),
+                                c(0, 0, 1))
+    }
+    return(list(p_ref = tpmatrix1,
+                p_int = tpmatrix2))  
+  } 
+  times <- 0:10
+  patid <- sample(unique(transmod_data$patient_id), 1)
+  p <- tpmatrix_multinom(transfits, transmod_data, patid = patid)
+  stprobs_ref <- sim_markov_chain(p = p$p_ref,
+                                  x0 = c(1, 0, 0),
+                                  times = times,
+                                  time_stop = unique(transmod_data$time_stop))
+  stprobs_int <- sim_markov_chain(p = p$p_int,
+                                  x0 = c(1, 0, 0),
+                                  times = times,
+                                  time_stop = unique(transmod_data$time_stop))
+  
+  hesim_stprobs <- transmod$sim_stateprobs(n_cycles = max(times))[patient_id == patid]
+  hesim_stprobs <- dcast(hesim_stprobs, 
+                         strategy_id + patient_id + t~ state_id,
+                         value.var = "prob") 
+  test_equal <- function(R_stprobs, hesim_stprobs, strat_id){
+    hesim_stprobs <- as.matrix(hesim_stprobs[strategy_id == strat_id][,
+                                  c("1", "2", "3"), with = FALSE])
+    colnames(hesim_stprobs) <- NULL
+    rownames(hesim_stprobs) <- times
+    expect_equal(hesim_stprobs, R_stprobs)
+  }
+  test_equal(stprobs_ref, hesim_stprobs, strat_id = 1)
+  test_equal(stprobs_int, hesim_stprobs, strat_id = 2)
 })
 
+# Create model from a model_def object -----------------------------------------
+test_that(paste0("Use define_model() to create CohortDtstmTrans object"), {
+  hesim_dat <- hesim_data(
+    strategies = data.table(strategy_id = 1:2,
+                            strategy_name = c("Monotherapy", "Combination therapy")),
+    patients = data.table(patient_id = 1)
+  )
+  data <- expand(hesim_dat)
+  
+  # Define the model
+  rng_def <- define_rng({
+    alpha <- matrix(c(1251, 350, 116, 17,
+                      0, 731, 512, 15,
+                      0, 0, 1312, 437,
+                      0, 0, 0, 469),
+                    nrow = 4, byrow = TRUE)
+    rownames(alpha) <- colnames(alpha) <- c("A", "B", "C", "D")
+    lrr_mean <- log(.509)
+    lrr_se <- (log(.710) - log(.365))/(2 * qnorm(.975))
+    list(
+      p_mono = dirichlet_rng(alpha),
+      rr_comb = lognormal_rng(lrr_mean, lrr_se),
+      u = 1,
+      c_zido = 2278,
+      c_lam = 2086.50,
+      c_med = gamma_rng(mean = c(A = 2756, B = 3052, C = 9007),
+                        sd = c(A = 2756, B = 3052, C = 9007))
+    )
+  }, n = 2)
+  
+  tparams_def <- define_tparams({
+    rr = ifelse(strategy_name == "Monotherapy", 1, rr_comb)
+    list(
+      tpmatrix = tpmatrix(
+        C, p_mono$A_B * rr, p_mono$A_C * rr, p_mono$A_D * rr,
+        0, C, p_mono$B_C * rr, p_mono$B_D * rr,
+        0, 0, C, p_mono$C_D * rr,
+        0, 0, 0, 1),
+      utility = u,
+      costs = list(
+        drug = ifelse(strategy_name == "Monotherapy",
+                      c_zido, c_zido + c_lam),
+        medical = c_med
+      ) 
+    )
+  })
+  
+  model_def <- define_model(
+    tparams_def = tparams_def,
+    rng_def = rng_def)
+  econmod <- create_CohortDtstm(model_def, data)
+  
+  # Test
+  expect_true(inherits(econmod, "CohortDtstm"))
+})
 
-
-# predict_multinom(fit_healthy, newdata = data.frame(strategy_name = "Intervention",
-#                                                    female = 1,
-#                                                    age_cat = "Age >= 60",
-#                                                    year_cat = "Year < 3"))

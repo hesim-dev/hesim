@@ -569,10 +569,10 @@ create_coef_multinom <- function(object, n = 1000, point_estimate = FALSE, ...){
   } else{
     coefs_sim <- matrix(coefs, nrow = 1)
   }
-  coefs_est <- coef(object) # The point estimate
+  coefs_est <- stats::coef(object) # The point estimate
   if (is_1d_vector(coefs_est)){
     coefs_est <- matrix(coefs_est, nrow = 1)
-    colnames(coefs_est) <- names(coef(object))
+    colnames(coefs_est) <- names(stats::coef(object))
   } 
   
   # Store coefficients in array

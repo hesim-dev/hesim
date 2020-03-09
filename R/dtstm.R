@@ -26,10 +26,13 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     input_data = NULL,
     
     #' @field trans_mat A transition matrix describing the states and transitions
-    #' in a discrete-time multi-state model. The format should be the same as 
-    #' in [IndivCtstmTrans]. Transitions that are not possible should be `NA` and
-    #' the reference categories for each row (e.g., from a multinomial logistic 
-    #' regression) should be `0`.
+    #' in a discrete-time multi-state model. Only required if the model is 
+    #' parameterized using multinomial logistic regression. The `(i,j)` element 
+    #' represents a transition from state `i` to state `j`. Each possible transition 
+    #' from row `i` should be based on a separate multinomial logistic regression
+    #' and ordered from `0` to `K - 1` where `K` is the number of 
+    #' possible transitions. Transitions that are not possible should be `NA`.
+    #' and the reference category for each row should be `0`.
     trans_mat = NULL,
     
     #' @field start_stateprobs A vector with length equal to the number of
@@ -89,11 +92,16 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
 
 #' Create \code{CohortDtstmTrans} object
 #' 
-#' A generic function for creating an object of class \code{CohortDtstmTrans}.
+#' A generic function for creating an object of class `CohortDtstmTrans`.
 #' @param object An object of the appropriate class. 
-#' @param ... Further arguments passed to \code{CohortDtstmTrans$new()} in 
+#' @param ... Further arguments passed to `CohortDtstmTrans$new()` in 
 #' \code{CohortDtstmTrans}.
-#'  
+#' @param input_data An object of class `expanded_hesim_data` returned by 
+#' [expand.hesim_data()]
+#' @param trans_mat A transition matrix describing the states and transitions 
+#' in a discrete-time multi-state model. See [CohortDtstmTrans].
+#' @param n Number of random observations of the parameters to draw.
+#' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
 #' @export
 create_CohortDtstmTrans <- function(object, ...){
   UseMethod("create_CohortDtstmTrans", object)

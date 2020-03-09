@@ -334,7 +334,7 @@ time_intervals <- function(times){
         stop(paste0("If 'times' is a data.frame, then the column ", 
                     "'time_start' cannot contain a value equal to 'Inf'."))
       }
-      times[, time_start := as.numeric(time_start)]
+      times[, ("time_start") := as.numeric(get("time_start"))]
       setorderv(times, "time_start")
       time_intervals <- data.table(time_id = 1:nrow(times), 
                                    times)
@@ -344,7 +344,7 @@ time_intervals <- function(times){
       time_intervals <- data.table(time_id = 1:length(times), 
                                    time_start = sort(as.numeric(times)))
     }
-  time_intervals[, "time_stop" := shift(get("time_start"), type = "lead")]
+  time_intervals[, ("time_stop") := shift(get("time_start"), type = "lead")]
   time_intervals[is.na(get("time_stop")), "time_stop" := Inf]
   setattr(time_intervals, "class", c("time_intervals", "data.table", "data.frame"))
   return(time_intervals[, ])

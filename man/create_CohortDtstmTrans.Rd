@@ -21,6 +21,16 @@ create_CohortDtstmTrans(object, ...)
 
 \item{...}{Further arguments passed to \code{CohortDtstmTrans$new()} in
 \code{CohortDtstmTrans}.}
+
+\item{input_data}{An object of class \code{expanded_hesim_data} returned by
+\code{\link[=expand.hesim_data]{expand.hesim_data()}}}
+
+\item{trans_mat}{A transition matrix describing the states and transitions
+in a discrete-time multi-state model. See \link{CohortDtstmTrans}.}
+
+\item{n}{Number of random observations of the parameters to draw.}
+
+\item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
 }
 \description{
 A generic function for creating an object of class \code{CohortDtstmTrans}.

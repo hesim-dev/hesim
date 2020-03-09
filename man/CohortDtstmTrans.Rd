@@ -19,10 +19,13 @@ supports objects of class \link{tparams_transprobs}.}
 \item{\code{input_data}}{An object of class \link{input_mats}.}
 
 \item{\code{trans_mat}}{A transition matrix describing the states and transitions
-in a discrete-time multi-state model. The format should be the same as
-in \link{IndivCtstmTrans}. Transitions that are not possible should be \code{NA} and
-the reference categories for each row (e.g., from a multinomial logistic
-regression) should be \code{0}.}
+in a discrete-time multi-state model. Only required if the model is
+parameterized using multinomial logistic regression. The \verb{(i,j)} element
+represents a transition from state \code{i} to state \code{j}. Each possible transition
+from row \code{i} should be based on a separate multinomial logistic regression
+and ordered from \code{0} to \code{K - 1} where \code{K} is the number of
+possible transitions. Transitions that are not possible should be \code{NA}.
+and the reference category for each row should be \code{0}.}
 
 \item{\code{start_stateprobs}}{A vector with length equal to the number of
 health states containing the probability that the cohort is in each health
