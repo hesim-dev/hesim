@@ -43,7 +43,7 @@
 #'  }
 "psm4_exdata"
 
-#' Example data for multi-state model
+#' Example data for a 3-state multi-state model
 #'
 #' Example multi-state data for parameterizing a continuous time state
 #' transition model. Costs and utility 
@@ -100,7 +100,7 @@
 #' 
 "mstate3_exdata"
 
-#' Example data for multinomial model
+#' Example data for a 3-state multinomial model
 #'
 #' Example discrete time health state transitions data simulated using 
 #' multinomial logistic regression. Costs and utility 

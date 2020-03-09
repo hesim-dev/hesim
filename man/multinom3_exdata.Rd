@@ -3,7 +3,7 @@
 \docType{data}
 \name{multinom3_exdata}
 \alias{multinom3_exdata}
-\title{Example data for multinomial model}
+\title{Example data for a 3-state multinomial model}
 \format{A list containing the following elements:
 \itemize{
 \item{transitions}{ A data frame containing patient transitions between health

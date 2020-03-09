@@ -3,7 +3,7 @@
 \docType{data}
 \name{mstate3_exdata}
 \alias{mstate3_exdata}
-\title{Example data for multi-state model}
+\title{Example data for a 3-state multi-state model}
 \format{A list containing the following elements:
 \itemize{
 \item{transitions}{ A data frame containing the times at which patient transitions between health states based

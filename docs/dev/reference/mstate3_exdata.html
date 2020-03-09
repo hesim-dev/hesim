@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Example data for a 3-state multinomial model — multinom3_exdata • hesim</title>
+<title>Example data for a 3-state multi-state model — mstate3_exdata • hesim</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,10 +32,10 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Example data for a 3-state multinomial model — multinom3_exdata" />
+<meta property="og:title" content="Example data for a 3-state multi-state model — mstate3_exdata" />
 
-<meta property="og:description" content="Example discrete time health state transitions data simulated using
-multinomial logistic regression. Costs and utility
+<meta property="og:description" content="Example multi-state data for parameterizing a continuous time state
+transition model. Costs and utility
 are also included to facilitate cost-effectiveness analysis." />
 <meta name="twitter:card" content="summary" />
 
@@ -140,28 +140,28 @@ are also included to facilitate cost-effectiveness analysis." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Example data for a 3-state multinomial model</h1>
+    <h1>Example data for a 3-state multi-state model</h1>
     <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>multinom3_exdata.Rd</code></div>
+    <div class="hidden name"><code>mstate3_exdata.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Example discrete time health state transitions data simulated using
-multinomial logistic regression. Costs and utility
+    <p>Example multi-state data for parameterizing a continuous time state
+transition model. Costs and utility
 are also included to facilitate cost-effectiveness analysis.</p>
     
     </div>
 
-    <pre class="usage"><span class='no'>multinom3_exdata</span></pre>
+    <pre class="usage"><span class='no'>mstate3_exdata</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A list containing the following elements:</p><ul>
-<li><p>transitions A data frame containing patient transitions between health
-states at discrete time intervals (i.e., on a yearly basis).</p></li>
-<li><p>costs A list of data frames. The first data frame contains
-drug cost data and the second contains summary medical cost estimates.</p></li>
+<li><p>transitions A data frame containing the times at which patient transitions between health states based
+on the <a href='https://www.rdocumentation.org/packages/mstate/topics/prothr'>prothr</a> dataset from the <a href='https://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package.</p></li>
+<li><p>costs A list of data frames. The first data frame contains summary medical cost estimates and the
+second data frame contains drug cost data.</p></li>
 <li><p>utility A data frame of summary utility estimates.</p></li>
 </ul>
     
@@ -169,18 +169,17 @@ drug cost data and the second contains summary medical cost estimates.</p></li>
 
     
     <p>The data frame has the following columns:</p><dl class='dl-horizontal'>
-<dt>patient_id</dt><dd><p>Patient identification number.</p></dd>
 <dt>strategy_id</dt><dd><p>Treatment strategy identification number.</p></dd>
-<dt>strategy_name</dt><dd><p>Treatment strategy name.</p></dd>
+<dt>patient_id</dt><dd><p>Patient identification number.</p></dd>
 <dt>age</dt><dd><p>Patient age (in years).</p></dd>
-<dt>age_cat</dt><dd><p>A factor variable with 3 age groups: (i) age less than 40,
-(ii) age at least 40 and less than 60, and (iii) age at least 60.</p></dd>
 <dt>female</dt><dd><p>1 if a patient is female; 0 if male.</p></dd>
-<dt>year</dt><dd><p>The year since the start of data collection with the first year equal to 1.</p></dd>
-<dt>state_from</dt><dd><p>State making a transition from.</p></dd>
-<dt>state_to</dt><dd><p>State making a transition to.</p></dd>
-<dt>year_cat</dt><dd><p>Factor variable for year with 3 categories: (i) year 3 and below, (ii)
-year between 3 and 6, and (iii) year 7 and above.</p></dd>
+<dt>from</dt><dd><p>Starting state.</p></dd>
+<dt>to</dt><dd><p>Receiving state.</p></dd>
+<dt>trans</dt><dd><p>Transition number.</p></dd>
+<dt>Tstart</dt><dd><p>Starting time.</p></dd>
+<dt>Tstop</dt><dd><p>Transition time.</p></dd>
+<dt>years</dt><dd><p>Elapsed years between <code>Tstart</code> and <code>Tstop</code>.</p></dd>
+<dt>status</dt><dd><p>Status variable; 1=transition, 0=censored.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="cost-data"><a class="anchor" href="#cost-data"></a>Cost data</h2>
@@ -189,14 +188,12 @@ year between 3 and 6, and (iii) year 7 and above.</p></dd>
     <p>The cost list contains two data frames. The first data frame contains
 data on the drug costs associated with each treatment strategy.</p><dl class='dl-horizontal'>
 <dt>strategy_id</dt><dd><p>The treatment strategy identification number.</p></dd>
-<dt>strategy_name</dt><dd><p>The treatment strategy name.</p></dd>
 <dt>costs</dt><dd><p>Annualized drug costs.</p></dd>
 </dl>
     <p>The second data frame contains summary data on
 medical costs by health state, and contains the following columns:</p><dl class='dl-horizontal'>
 <dt>state_id</dt><dd><p>The health state identification number.</p></dd>
-<dt>state_name</dt><dd><p>The name of the health state.</p></dd>
-<dt>mean</dt><dd><p>Mean medical costs.</p></dd>
+<dt>mean</dt><dd><p>Mean costs.</p></dd>
 <dt>se</dt><dd><p>Standard error of medical costs.</p></dd>
 </dl>
     
@@ -205,9 +202,8 @@ medical costs by health state, and contains the following columns:</p><dl class=
     
     <p>The data frame has the following columns:</p><dl class='dl-horizontal'>
 <dt>state_id</dt><dd><p>The health state identification number.</p></dd>
-<dt>state_name</dt><dd><p>The name of the health state.</p></dd>
 <dt>mean</dt><dd><p>Mean utility</p></dd>
-<dt>se</dt><dd><p>Standard error of utility.</p></dd>
+<dt>se</dt><dd><p>Standard error of utility</p></dd>
 </dl>
     
 

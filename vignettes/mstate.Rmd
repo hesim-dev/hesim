@@ -86,7 +86,7 @@ n_trans <- max(tmat, na.rm = TRUE) # Number of transitions
 wei_fits_cr <- vector(length = n_trans, mode = "list") 
 for (i in 1:length(wei_fits_cr)){
   wei_fits_cr[[i]] <- flexsurv::flexsurvreg(Surv(years, status) ~ factor(strategy_id), 
-                                            data = ctstm3_exdata$transitions, 
+                                            data = mstate3_exdata$transitions, 
                                             subset = (trans == i) , 
                                             dist = "weibull") 
 }
@@ -99,7 +99,7 @@ wei_fits_cr <- flexsurvreg_list(wei_fits_cr)
 wei_fits_cf <- vector(length = n_trans, mode = "list") 
 for (i in 1:length(wei_fits_cf)){
   wei_fits_cf[[i]] <- flexsurv::flexsurvreg(Surv(Tstart, Tstop, status) ~ factor(strategy_id), 
-                                            data = ctstm3_exdata$transitions, 
+                                            data = mstate3_exdata$transitions, 
                                             subset = (trans == i) , 
                                             dist = "weibull") 
 }
@@ -111,8 +111,8 @@ The most straightforward way to assign utility and cost values to health states 
 
 ```{r}
 utility_tbl <- stateval_tbl(data.table(state_id = states$state_id,
-                                       mean = ctstm3_exdata$utility$mean,
-                                       se = ctstm3_exdata$utility$se),
+                                       mean = mstate3_exdata$utility$mean,
+                                       se = mstate3_exdata$utility$se),
                             dist = "beta",
                             hesim_data = hesim_dat)
 head(utility_tbl)
@@ -123,12 +123,12 @@ Drug and medical costs can be specified in a similar fashion. Drug costs are ass
 
 ```{r}
 drugcost_tbl <- stateval_tbl(data.table(strategy_id = strategies$strategy_id,
-                                       est = ctstm3_exdata$costs$drugs$costs),
+                                       est = mstate3_exdata$costs$drugs$costs),
                             dist = "fixed",
                             hesim_data = hesim_dat) 
 medcost_tbl <- stateval_tbl(data.table(state_id = states$state_id,
-                                       mean = ctstm3_exdata$costs$medical$mean,
-                                       se = ctstm3_exdata$costs$medical$se),
+                                       mean = mstate3_exdata$costs$medical$mean,
+                                       se = mstate3_exdata$costs$medical$se),
                             dist = "gamma",
                             hesim_data = hesim_dat)  
 ```
