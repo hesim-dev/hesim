@@ -117,7 +117,7 @@ head(utility_tbl)
 drugcost_tbl <- stateval_tbl(multinom3_exdata$costs$drugs,
                             dist = "fixed",
                             hesim_data = hesim_dat) 
-medcost_tbl <- stateval_tbl(ctstm3_exdata$costs$medical,
+medcost_tbl <- stateval_tbl(multinom3_exdata$costs$medical,
                             dist = "gamma",
                             hesim_data = hesim_dat)  
 ```
