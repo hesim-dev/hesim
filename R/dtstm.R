@@ -8,6 +8,23 @@
 #' @export
 CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
   private = list(
+    .start_stateprobs = NULL,
+    
+    set_start_stateprobs = function(x){
+      if (any(x < 0)){
+        stop("All elements of 'state_stateprobs' must be non-negative.")
+      }
+      if (any(is.infinite(x))){
+        stop("Elements of 'state_stateprobs' cannot be infinite.")
+      }
+      if (all(x == 0)) {
+        x_len <- length(x)
+        private$.start_stateprobs <- rep(1/x_len, x_len)
+      } else{
+        private$.start_stateprobs <- x/sum(x)
+      }
+    },
+    
     get_n_states = function(){
       if (is.null(self$input_data)){
         return(ncol(self$params$value[,,1]))
@@ -15,7 +32,21 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
         return(nrow(self$trans_mat))
       }
     }
-  ),                             
+  ),        
+  
+  active = list(
+    #' @field start_stateprobs A non-negative vector with length equal to the number of
+    #' health states containing the probability that the cohort is in each health
+    #' state at the start of the simulation. For example, 
+    #' if there were three states and the cohort began the simulation in state 1,
+    #' then `start_stateprobs = c(1, 0, 0)`. Automatically normalized to sum to 1.
+    #' If `NULL`, then a vector with the first element equal to 1 and 
+    #' all remaining elements equal to 0.
+    start_stateprobs = function(x) {
+      if (missing(x)) return(private$.start_stateprobs)
+      private$set_start_stateprobs(x)
+    }
+  ),
 
   public = list(
     #' @field params Parameters for simulating health state transitions. Currently
@@ -34,14 +65,6 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     #' possible transitions. Transitions that are not possible should be `NA`.
     #' and the reference category for each row should be `0`.
     trans_mat = NULL,
-    
-    #' @field start_stateprobs A vector with length equal to the number of
-    #' health states containing the probability that the cohort is in each health
-    #' state at the start of the simulation. For example, 
-    #' if there were three states and the cohort began the simulation in state 1,
-    #' then `start_stateprobs = c(1, 0, 0)`. If `NULL`, then a vector with the
-    #' first element equal to 1 and all remaining elements equal to 0.
-    start_stateprobs = NULL,
     
     #' @field cycle_length The length of a model cycle in terms of years.
     #' The default is `1` meaning that model cycles are 1 year long.
@@ -67,7 +90,7 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
         stop("If 'input_data' is not NULL, then 'trans_mat' cannot be NULL")
       }
       if (!is.null(start_stateprobs)){
-        self$start_stateprobs <- start_stateprobs
+        private$set_start_stateprobs(start_stateprobs)
       } else{
         self$start_stateprobs <- c(1, rep(0, private$get_n_states() - 1))
       }
@@ -164,7 +187,7 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
     },
     
     #' @description
-    #' Simulate health state probabilities using `CohortCtstmTrans$sim_stateprobs()`.
+    #' Simulate health state probabilities using `CohortDtstmTrans$sim_stateprobs()`.
     #' @param n_cycles The number of model cycles to simulate the model for.
     #' @return An instance of `self` with simulated output of class [stateprobs] 
     #' stored in `stateprobs_`.

@@ -142,17 +142,40 @@ test_that(paste0("tparams_transprobs returns the same values with ",
                tparams_transprobs(tprob_dt[time_id == 1]))                
 })
 
-# Simulate model (from tparams object) -----------------------------------------
+# Initialize CohortDtstmTrans object -------------------------------------------
 transmod <- CohortDtstmTrans$new(params = params_tprob)
-econmod <- CohortDtstm$new(trans_model = transmod)
 
-econmod$sim_stateprobs(n_cycles = 3)
-
-test_that("CohortDtstmTrans$new automatically set 'start_stateprobs ",{
-  tmp <- CohortDtstmTrans$new(params = params_tprob,
-                              start_stateprobs = c(1, 0, 0))
-  expect_equal(transmod$start_stateprobs, tmp$start_stateprobs)   
+test_that("CohortDtstmTrans$new automatically set 'start_stateprobs' ",{
+  expect_equal(transmod$start_stateprobs, c(1, 0, 0))   
 })
+
+test_that("CohortDtstmTrans$new 'start_stateprobs' normalizes to 1 ",{
+  # Positive values
+  v <- c(5, 5, 10, 10)
+  tmp <- CohortDtstmTrans$new(params = params_tprob,
+                              start_stateprobs = v)
+  expect_equal(tmp$start_stateprobs, v/sum(v))
+  tmp$start_stateprobs <- c(0, 0)
+  expect_equal(tmp$start_stateprobs, c(1/2, 1/2))
+  
+  # All zeros
+  tmp <- CohortDtstmTrans$new(params = params_tprob,
+                              start_stateprobs = c(0, 0))
+  expect_equal(tmp$start_stateprobs, c(1/2, 1/2))
+})
+
+test_that("CohortDtstmTrans$new 'start_stateprobs' exceptions ",{
+  expect_error(CohortDtstmTrans$new(params = params_tprob, 
+                                    start_stateprobs = c(Inf, 1)),
+               "Elements of 'state_stateprobs' cannot be infinite.")
+  expect_error(CohortDtstmTrans$new(params = params_tprob, 
+                                    start_stateprobs = c(0, -1)),
+               "All elements of 'state_stateprobs' must be non-negative.")
+})
+
+# Simulate model (from tparams object) -----------------------------------------
+econmod <- CohortDtstm$new(trans_model = transmod)
+econmod$sim_stateprobs(n_cycles = 3)
 
 test_that("CohortDtstmTrans$sim_stateprobs() has correct grp_id ",{
   expect_true(all(econmod$stateprobs_$grp_id == 1))

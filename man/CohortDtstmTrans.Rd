@@ -27,15 +27,21 @@ and ordered from \code{0} to \code{K - 1} where \code{K} is the number of
 possible transitions. Transitions that are not possible should be \code{NA}.
 and the reference category for each row should be \code{0}.}
 
-\item{\code{start_stateprobs}}{A vector with length equal to the number of
+\item{\code{cycle_length}}{The length of a model cycle in terms of years.
+The default is \code{1} meaning that model cycles are 1 year long.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{start_stateprobs}}{A non-negative vector with length equal to the number of
 health states containing the probability that the cohort is in each health
 state at the start of the simulation. For example,
 if there were three states and the cohort began the simulation in state 1,
-then \code{start_stateprobs = c(1, 0, 0)}. If \code{NULL}, then a vector with the
-first element equal to 1 and all remaining elements equal to 0.}
-
-\item{\code{cycle_length}}{The length of a model cycle in terms of years.
-The default is \code{1} meaning that model cycles are 1 year long.}
+then \code{start_stateprobs = c(1, 0, 0)}. Automatically normalized to sum to 1.
+If \code{NULL}, then a vector with the first element equal to 1 and
+all remaining elements equal to 0.}
 }
 \if{html}{\out{</div>}}
 }

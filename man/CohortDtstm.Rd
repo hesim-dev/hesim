@@ -68,7 +68,7 @@ A new \code{CohortDtstm} object.
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_stateprobs"></a>}}
 \subsection{Method \code{sim_stateprobs()}}{
-Simulate health state probabilities using \code{CohortCtstmTrans$sim_stateprobs()}.
+Simulate health state probabilities using \code{CohortDtstmTrans$sim_stateprobs()}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$sim_stateprobs(n_cycles)}\if{html}{\out{</div>}}
 }
