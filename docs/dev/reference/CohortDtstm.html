@@ -217,8 +217,7 @@ stored in <code>stateprobs_</code>.
     <p><hr>
 <a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
     Simulate quality-adjusted life-years (QALYs) as a function of <code>stateprobs_</code> and
-<code>utility_model</code>. See
-the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
+<code>utility_model</code>. See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.
 <h3>Usage</h3>
     <div class="r"><pre>CohortDtstm$sim_qalys(
   dr = 0.03,
@@ -239,7 +238,7 @@ in <code>qalys_</code>.
     <p><hr>
 <a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_ev.html'>sim_costs()</a></code></h3>
     Simulate costs as a function of <code>stateprobs_</code> and <code>cost_models</code>.
-See the <a href='https://hesim-dev.github.io/hesim/dev/articles/wlos.html'>vignette</a> for details.
+See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.
 <h3>Usage</h3>
     <div class="r"><pre>CohortDtstm$sim_costs(
   dr = 0.03,
@@ -284,7 +283,7 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"data.table"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"nnet"</span>)
-<span class='no'>transitions_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>transitions</span>)
+<span class='no'>transitions_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>transitions</span>)
 
 <span class='co'># Treatment strategies, target population, and model structure</span>
 <span class='no'>n_patients</span> <span class='kw'>&lt;-</span> <span class='fl'>4</span>
@@ -293,12 +292,12 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
    , <span class='no'>grp_id</span> <span class='kw'>:=</span> <span class='fl'>1</span>:<span class='no'>n_patients</span>]
 <span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(
   <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,
-  <span class='kw'>strategies</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+  <span class='kw'>strategies</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
                           <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Reference"</span>, <span class='st'>"Intervention"</span>)),
-  <span class='kw'>states</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+  <span class='kw'>states</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
                       <span class='kw'>state_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Healthy"</span>, <span class='st'>"Sick"</span>)) <span class='co'># Non-death health states</span>
 )
-<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/rbindlist'>rbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
+<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
               <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>0</span>, <span class='fl'>1</span>),
               <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
 

@@ -38,6 +38,6 @@ Simulate costs and quality-adjusted life-years (QALYs) as a function of
 simulated state occupancy probabilities.
 }
 \details{
-See the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
+See \code{vignette("expected-values")} for details.
 }
 \keyword{internal}

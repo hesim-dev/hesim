@@ -172,8 +172,7 @@ stored in \code{stateprobs_}.
 \if{html}{\out{<a id="method-sim_qalys"></a>}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_} and
-\code{utility_model}. See
-the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
+\code{utility_model}. See \code{vignette("expected-values")} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Psm$sim_qalys(
   dr = 0.03,
@@ -202,7 +201,7 @@ in \code{qalys_}.
 \if{html}{\out{<a id="method-sim_costs"></a>}}
 \subsection{Method \code{sim_costs()}}{
 Simulate costs as a function of \code{stateprobs_} and \code{cost_models}.
-See the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
+See \code{vignette("expected-values")} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Psm$sim_costs(
   dr = 0.03,

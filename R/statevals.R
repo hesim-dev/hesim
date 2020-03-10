@@ -583,9 +583,8 @@ sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
 #' @return [sim_costs()] and [sim_qalys()] return objects of class
 #' [costs] and [qalys], respectively. 
 #' @details 
-#' See the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
+#' See `vignette("expected-values")` for details.
 #'
-#' @export
 #' @name sim_ev
 sim_qalys <- function(object, utility_model, dr, method, lys){
   utility_model$check()
@@ -600,7 +599,6 @@ sim_qalys <- function(object, utility_model, dr, method, lys){
   return(qalys)
 }
 
-#' @export
 #' @rdname sim_ev
 sim_costs <- function(object, cost_models, dr, method){
   if(!is.list(cost_models)){

@@ -697,8 +697,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     
     #' @description
     #' Simulate quality-adjusted life-years (QALYs) as a function of `disprog_` and
-    #' `utility_model`. See 
-    #' the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
+    #' `utility_model`. See `vignette("expected-values")` for details.
     #' @param dr Discount rate.
     #' @param type `"predict"` for mean values or `"random"` for random samples 
     #' as in `$sim()` in [StateVals].
@@ -722,7 +721,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     
     #' @description
     #' Simulate costs as a function of `disprog_` and `cost_models`. 
-    #' See the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
+    #' See `vignette("expected-values")` for details.
     #' @param dr Discount rate.
     #' @param type `"predict"` for mean values or `"random"` for random samples 
     #' as in `$sim()` in [StateVals].

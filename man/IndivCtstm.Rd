@@ -215,8 +215,7 @@ stored in \code{stateprobs_}.
 \if{html}{\out{<a id="method-sim_qalys"></a>}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{disprog_} and
-\code{utility_model}. See
-the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
+\code{utility_model}. See \code{vignette("expected-values")} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$sim_qalys(
   dr = 0.03,
@@ -250,7 +249,7 @@ class \link{qalys} stored in \code{qalys_}.
 \if{html}{\out{<a id="method-sim_costs"></a>}}
 \subsection{Method \code{sim_costs()}}{
 Simulate costs as a function of \code{disprog_} and \code{cost_models}.
-See the \href{https://hesim-dev.github.io/hesim/dev/articles/wlos.html}{vignette} for details.
+See \code{vignette("expected-values")} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$sim_costs(
   dr = 0.03,

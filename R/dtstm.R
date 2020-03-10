@@ -278,8 +278,7 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
     
     #' @description
     #' Simulate quality-adjusted life-years (QALYs) as a function of `stateprobs_` and
-    #' `utility_model`. See 
-    #' the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
+    #' `utility_model`. See `vignette("expected-values")` for details.
     #' @param dr Discount rate.
     #' @param integrate_method Method used to integrate state values when computing (QALYs).
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
@@ -295,7 +294,7 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
     
     #' @description
     #' Simulate costs as a function of `stateprobs_` and `cost_models`. 
-    #' See the [vignette](https://hesim-dev.github.io/hesim/dev/articles/wlos.html) for details.
+    #' See `vignette("expected-values")` for details.
     #' @param dr Discount rate.
     #' @param integrate_method Method used to integrate state values when computing costs.
     #' @return An instance of `self` with simulated output of class [costs] stored
