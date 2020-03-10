@@ -156,7 +156,8 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a>, <code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='create_CohortDtstm.html'>create_CohortDtstm()</a></code>, <a href='CohortDtstmTrans.html'>CohortDtstmTrans</a>,
+<code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans()</a></code></p></div>
     
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
@@ -201,7 +202,7 @@ list represents a different cost category.</p></dd>
     A new <code>CohortDtstm</code> object.
     <p><hr>
 <a id="method-sim_stateprobs"></a></p><h3>Method <code>sim_stateprobs()</code></h3>
-    Simulate health state probabilities using <code>CohortCtstmTrans$sim_stateprobs()</code>.
+    Simulate health state probabilities using <code>CohortDtstmTrans$sim_stateprobs()</code>.
 <h3>Usage</h3>
     <div class="r"><pre>CohortDtstm$sim_stateprobs(n_cycles)</pre></div>
     <h3>Arguments</h3>
@@ -280,6 +281,218 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
 </div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"data.table"</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"nnet"</span>)
+<span class='no'>transitions_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>transitions</span>)
+
+<span class='co'># Treatment strategies, target population, and model structure</span>
+<span class='no'>n_patients</span> <span class='kw'>&lt;-</span> <span class='fl'>4</span>
+<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='no'>transitions_data</span>[<span class='no'>year</span> <span class='kw'>==</span> <span class='fl'>1</span>, <span class='fu'>.</span>(<span class='no'>patient_id</span>, <span class='no'>age</span>, <span class='no'>female</span>)][
+ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample.int</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>transitions_data</span>[<span class='no'>year</span> <span class='kw'>==</span> <span class='fl'>1</span>]), <span class='no'>n_patients</span>))][
+   , <span class='no'>grp_id</span> <span class='kw'>:=</span> <span class='fl'>1</span>:<span class='no'>n_patients</span>]
+<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(
+  <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,
+  <span class='kw'>strategies</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+                          <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Reference"</span>, <span class='st'>"Intervention"</span>)),
+  <span class='kw'>states</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+                      <span class='kw'>state_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Healthy"</span>, <span class='st'>"Sick"</span>)) <span class='co'># Non-death health states</span>
+)
+<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/rbindlist'>rbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
+              <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>0</span>, <span class='fl'>1</span>),
+              <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
+
+<span class='co'># Parameter estimation</span>
+<span class='co'>## Multinomial logistic regression</span>
+<span class='no'>data_healthy</span> <span class='kw'>&lt;-</span> <span class='no'>transitions_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Healthy"</span>]
+<span class='no'>fit_healthy</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nnet/topics/multinom'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age</span>,
+                        <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data_healthy</span>, <span class='kw'>trace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>data_sick</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/droplevels'>droplevels</a></span>(<span class='no'>transitions_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Sick"</span>])
+<span class='no'>fit_sick</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nnet/topics/multinom'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age</span>,
+                     <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data_sick</span>, <span class='kw'>trace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>transfits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='multinom_list.html'>multinom_list</a></span>(<span class='kw'>healthy</span> <span class='kw'>=</span> <span class='no'>fit_healthy</span>, <span class='kw'>sick</span> <span class='kw'>=</span> <span class='no'>fit_sick</span>)
+
+<span class='co'>## Utility</span>
+<span class='no'>utility_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>utility</span>,
+                            <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"beta"</span>,
+                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
+
+<span class='co'>## Costs</span>
+<span class='no'>drugcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>costs</span>$<span class='no'>drugs</span>,
+                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
+                             <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
+<span class='no'>medcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>,
+                            <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"gamma"</span>,
+                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
+
+<span class='co'># Economic model</span>
+<span class='no'>n_samples</span> <span class='kw'>&lt;-</span> <span class='fl'>3</span>
+
+<span class='co'>## Construct model</span>
+<span class='co'>### Transitions</span>
+<span class='no'>transmod_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>)
+<span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans</a></span>(<span class='no'>transfits</span>,
+                                    <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='no'>transmod_data</span>,
+                                    <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
+                                    <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>,
+                                    <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='co'>### Utility</span>
+<span class='no'>utilitymod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>utility_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
+
+<span class='co'>### Costs</span>
+<span class='no'>drugcostmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>drugcost_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
+<span class='no'>medcostmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>medcost_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
+<span class='no'>costmods</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>Drug</span> <span class='kw'>=</span> <span class='no'>drugcostmod</span>,
+                 <span class='kw'>Medical</span> <span class='kw'>=</span> <span class='no'>medcostmod</span>)
+
+<span class='co'>### Combine</span>
+<span class='no'>econmod</span> <span class='kw'>&lt;-</span> <span class='no'>CohortDtstm</span>$<span class='fu'>new</span>(<span class='kw'>trans_model</span> <span class='kw'>=</span> <span class='no'>transmod</span>,
+                           <span class='kw'>utility_model</span> <span class='kw'>=</span> <span class='no'>utilitymod</span>,
+                           <span class='kw'>cost_models</span> <span class='kw'>=</span> <span class='no'>costmods</span>)
+
+<span class='co'>## Simulate outcomes</span>
+<span class='no'>econmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>n_cycles</span> <span class='kw'>=</span> <span class='fl'>20</span>)
+<span class='no'>econmod</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
+<span class='no'>econmod</span>$<span class='fu'><a href='sim_ev.html'>sim_costs</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
+<span class='no'>econmod</span>$<span class='fu'>summarize</span>()</div><div class='output co'>#&gt; $costs
+#&gt;     category   dr sample strategy_id     costs grp_id
+#&gt;  1:     Drug 0.03      1           1  3755.059      1
+#&gt;  2:     Drug 0.03      1           2 10407.712      1
+#&gt;  3:     Drug 0.03      2           1  3866.673      1
+#&gt;  4:     Drug 0.03      2           2 10380.370      1
+#&gt;  5:     Drug 0.03      3           1  3857.659      1
+#&gt;  6:     Drug 0.03      3           2 10656.812      1
+#&gt;  7:  Medical 0.03      1           1  4369.837      1
+#&gt;  8:  Medical 0.03      1           2  4916.838      1
+#&gt;  9:  Medical 0.03      2           1  4461.001      1
+#&gt; 10:  Medical 0.03      2           2  4898.309      1
+#&gt; 11:  Medical 0.03      3           1  4436.859      1
+#&gt; 12:  Medical 0.03      3           2  4985.520      1
+#&gt; 13:    total 0.03      1           1  8124.896      1
+#&gt; 14:    total 0.03      1           2 15324.550      1
+#&gt; 15:    total 0.03      2           1  8327.674      1
+#&gt; 16:    total 0.03      2           2 15278.679      1
+#&gt; 17:    total 0.03      3           1  8294.518      1
+#&gt; 18:    total 0.03      3           2 15642.332      1
+#&gt; 
+#&gt; $qalys
+#&gt;      dr sample strategy_id    qalys grp_id
+#&gt; 1: 0.03      1           1 1.609056      1
+#&gt; 2: 0.03      1           2 1.795590      1
+#&gt; 3: 0.03      2           1 1.720567      1
+#&gt; 4: 0.03      2           2 1.862527      1
+#&gt; 5: 0.03      3           1 1.634413      1
+#&gt; 6: 0.03      3           2 1.823913      1
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "ce"</div><div class='input'><span class='no'>econmod</span>$<span class='fu'>summarize</span>(<span class='kw'>by_grp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; $costs
+#&gt;     category   dr sample strategy_id grp_id     costs
+#&gt;  1:     Drug 0.03      1           1      1  3204.808
+#&gt;  2:     Drug 0.03      1           1      2  4520.140
+#&gt;  3:     Drug 0.03      1           1      3  3841.830
+#&gt;  4:     Drug 0.03      1           1      4  3453.459
+#&gt;  5:     Drug 0.03      1           2      1  8760.761
+#&gt;  6:     Drug 0.03      1           2      2 12700.582
+#&gt;  7:     Drug 0.03      1           2      3 10657.367
+#&gt;  8:     Drug 0.03      1           2      4  9512.139
+#&gt;  9:     Drug 0.03      2           1      1  3350.944
+#&gt; 10:     Drug 0.03      2           1      2  4590.430
+#&gt; 11:     Drug 0.03      2           1      3  3923.935
+#&gt; 12:     Drug 0.03      2           1      4  3601.386
+#&gt; 13:     Drug 0.03      2           2      1  8878.986
+#&gt; 14:     Drug 0.03      2           2      2 12490.930
+#&gt; 15:     Drug 0.03      2           2      3 10532.352
+#&gt; 16:     Drug 0.03      2           2      4  9619.212
+#&gt; 17:     Drug 0.03      3           1      1  3321.574
+#&gt; 18:     Drug 0.03      3           1      2  4590.881
+#&gt; 19:     Drug 0.03      3           1      3  3957.257
+#&gt; 20:     Drug 0.03      3           1      4  3560.924
+#&gt; 21:     Drug 0.03      3           2      1  9056.857
+#&gt; 22:     Drug 0.03      3           2      2 12847.193
+#&gt; 23:     Drug 0.03      3           2      3 10947.037
+#&gt; 24:     Drug 0.03      3           2      4  9776.159
+#&gt; 25:  Medical 0.03      1           1      1  3745.103
+#&gt; 26:  Medical 0.03      1           1      2  5247.860
+#&gt; 27:  Medical 0.03      1           1      3  4446.936
+#&gt; 28:  Medical 0.03      1           1      4  4039.449
+#&gt; 29:  Medical 0.03      1           2      1  4148.056
+#&gt; 30:  Medical 0.03      1           2      2  5998.254
+#&gt; 31:  Medical 0.03      1           2      3  5007.632
+#&gt; 32:  Medical 0.03      1           2      4  4513.408
+#&gt; 33:  Medical 0.03      2           1      1  3888.448
+#&gt; 34:  Medical 0.03      2           1      2  5269.681
+#&gt; 35:  Medical 0.03      2           1      3  4506.194
+#&gt; 36:  Medical 0.03      2           1      4  4179.680
+#&gt; 37:  Medical 0.03      2           2      1  4210.850
+#&gt; 38:  Medical 0.03      2           2      2  5870.963
+#&gt; 39:  Medical 0.03      2           2      3  4945.831
+#&gt; 40:  Medical 0.03      2           2      4  4565.591
+#&gt; 41:  Medical 0.03      3           1      1  3843.504
+#&gt; 42:  Medical 0.03      3           1      2  5255.145
+#&gt; 43:  Medical 0.03      3           1      3  4530.152
+#&gt; 44:  Medical 0.03      3           1      4  4118.634
+#&gt; 45:  Medical 0.03      3           2      1  4256.178
+#&gt; 46:  Medical 0.03      3           2      2  5992.152
+#&gt; 47:  Medical 0.03      3           2      3  5096.951
+#&gt; 48:  Medical 0.03      3           2      4  4596.798
+#&gt; 49:    total 0.03      1           1      1  6949.911
+#&gt; 50:    total 0.03      1           1      2  9768.000
+#&gt; 51:    total 0.03      1           1      3  8288.766
+#&gt; 52:    total 0.03      1           1      4  7492.908
+#&gt; 53:    total 0.03      1           2      1 12908.817
+#&gt; 54:    total 0.03      1           2      2 18698.835
+#&gt; 55:    total 0.03      1           2      3 15664.999
+#&gt; 56:    total 0.03      1           2      4 14025.547
+#&gt; 57:    total 0.03      2           1      1  7239.391
+#&gt; 58:    total 0.03      2           1      2  9860.111
+#&gt; 59:    total 0.03      2           1      3  8430.129
+#&gt; 60:    total 0.03      2           1      4  7781.066
+#&gt; 61:    total 0.03      2           2      1 13089.836
+#&gt; 62:    total 0.03      2           2      2 18361.893
+#&gt; 63:    total 0.03      2           2      3 15478.183
+#&gt; 64:    total 0.03      2           2      4 14184.803
+#&gt; 65:    total 0.03      3           1      1  7165.078
+#&gt; 66:    total 0.03      3           1      2  9846.026
+#&gt; 67:    total 0.03      3           1      3  8487.409
+#&gt; 68:    total 0.03      3           1      4  7679.558
+#&gt; 69:    total 0.03      3           2      1 13313.035
+#&gt; 70:    total 0.03      3           2      2 18839.346
+#&gt; 71:    total 0.03      3           2      3 16043.988
+#&gt; 72:    total 0.03      3           2      4 14372.957
+#&gt;     category   dr sample strategy_id grp_id     costs
+#&gt; 
+#&gt; $qalys
+#&gt;       dr sample strategy_id grp_id    qalys
+#&gt;  1: 0.03      1           1      1 1.375800
+#&gt;  2: 0.03      1           1      2 1.934901
+#&gt;  3: 0.03      1           1      3 1.642369
+#&gt;  4: 0.03      1           1      4 1.483155
+#&gt;  5: 0.03      1           2      1 1.512953
+#&gt;  6: 0.03      1           2      2 2.190878
+#&gt;  7: 0.03      1           2      3 1.834263
+#&gt;  8: 0.03      1           2      4 1.644267
+#&gt;  9: 0.03      2           1      1 1.494186
+#&gt; 10: 0.03      2           1      2 2.038979
+#&gt; 11: 0.03      2           1      3 1.743161
+#&gt; 12: 0.03      2           1      4 1.605944
+#&gt; 13: 0.03      2           2      1 1.596044
+#&gt; 14: 0.03      2           2      2 2.238000
+#&gt; 15: 0.03      2           2      3 1.886450
+#&gt; 16: 0.03      2           2      4 1.729614
+#&gt; 17: 0.03      3           1      1 1.412300
+#&gt; 18: 0.03      3           1      2 1.939659
+#&gt; 19: 0.03      3           1      3 1.672018
+#&gt; 20: 0.03      3           1      4 1.513674
+#&gt; 21: 0.03      3           2      1 1.554219
+#&gt; 22: 0.03      3           2      2 2.194891
+#&gt; 23: 0.03      3           2      3 1.868326
+#&gt; 24: 0.03      3           2      4 1.678216
+#&gt;       dr sample strategy_id grp_id    qalys
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "ce"</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -292,7 +505,9 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
       <li><a href="#public-fields">Public fields</a></li>
 
       <li><a href="#methods">Methods</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

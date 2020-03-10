@@ -13,8 +13,8 @@ Simulate health state transitions in a cohort discrete time state transition mod
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{params}}{Parameters for simulating health state transitions. Currently
-supports objects of class \link{tparams_transprobs}.}
+\item{\code{params}}{Parameters for simulating health state transitions.
+Supports objects of class \link{tparams_transprobs} or \link{params_mlogit}.}
 
 \item{\code{input_data}}{An object of class \link{input_mats}.}
 

@@ -161,8 +161,8 @@
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl class='dl-horizontal'>
-<dt><code>params</code></dt><dd><p>Parameters for simulating health state transitions. Currently
-supports objects of class <a href='tparams_transprobs.html'>tparams_transprobs</a>.</p></dd>
+<dt><code>params</code></dt><dd><p>Parameters for simulating health state transitions.
+Supports objects of class <a href='tparams_transprobs.html'>tparams_transprobs</a> or <a href='params_mlogit.html'>params_mlogit</a>.</p></dd>
     <dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>.</p></dd>
     <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
 in a discrete-time multi-state model. Only required if the model is
@@ -172,14 +172,20 @@ from row <code>i</code> should be based on a separate multinomial logistic regre
 and ordered from <code>0</code> to <code>K - 1</code> where <code>K</code> is the number of
 possible transitions. Transitions that are not possible should be <code>NA</code>.
 and the reference category for each row should be <code>0</code>.</p></dd>
-    <dt><code>start_stateprobs</code></dt><dd><p>A vector with length equal to the number of
+    <dt><code>cycle_length</code></dt><dd><p>The length of a model cycle in terms of years.
+The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd>
+</dl><p></div></p>
+    
+    <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
+
+    <p><div class="r6-active-bindings"></p><dl class='dl-horizontal'>
+<dt><code>start_stateprobs</code></dt><dd><p>A non-negative vector with length equal to the number of
 health states containing the probability that the cohort is in each health
 state at the start of the simulation. For example,
 if there were three states and the cohort began the simulation in state 1,
-then <code>start_stateprobs = c(1, 0, 0)</code>. If <code>NULL</code>, then a vector with the
-first element equal to 1 and all remaining elements equal to 0.</p></dd>
-    <dt><code>cycle_length</code></dt><dd><p>The length of a model cycle in terms of years.
-The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd>
+then <code>start_stateprobs = c(1, 0, 0)</code>. Automatically normalized to sum to 1.
+If <code>NULL</code>, then a vector with the first element equal to 1 and
+all remaining elements equal to 0.</p></dd>
 </dl><p></div></p>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -249,6 +255,8 @@ The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd
       <li><a href="#see-also">See also</a></li>
 
       <li><a href="#public-fields">Public fields</a></li>
+
+      <li><a href="#active-bindings">Active bindings</a></li>
 
       <li><a href="#methods">Methods</a></li>
           </ul>

@@ -339,7 +339,8 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
+
 <span class='co'># Treatment strategies, target population, and model structure</span>
 <span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
@@ -356,7 +357,7 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
               <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>NA</span>, <span class='fl'>4</span>),
               <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
 <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/vector'>vector</a></span>(<span class='kw'>length</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Extremes'>max</a></span>(<span class='no'>tmat</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"list"</span>)
-<span class='no'>surv_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='no'>ctstm3_exdata</span>$<span class='no'>transitions</span>)
+<span class='no'>surv_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='no'>mstate3_exdata</span>$<span class='no'>transitions</span>)
 <span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>fits</span>)){
   <span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>years</span>, <span class='no'>status</span>) ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='no'>strategy_id</span>),
                            <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>surv_dat</span>,
@@ -367,18 +368,18 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
 
 <span class='co'>## Utility</span>
 <span class='no'>utility_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='no'>states</span>$<span class='no'>state_id</span>,
-                                       <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>ctstm3_exdata</span>$<span class='no'>utility</span>$<span class='no'>mean</span>,
-                                       <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>ctstm3_exdata</span>$<span class='no'>utility</span>$<span class='no'>se</span>),
+                                       <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>utility</span>$<span class='no'>mean</span>,
+                                       <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>utility</span>$<span class='no'>se</span>),
                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"beta"</span>,
                             <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
 <span class='co'>## Costs</span>
 <span class='no'>drugcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='no'>strategies</span>$<span class='no'>strategy_id</span>,
-                                        <span class='kw'>est</span> <span class='kw'>=</span> <span class='no'>ctstm3_exdata</span>$<span class='no'>costs</span>$<span class='no'>drugs</span>$<span class='no'>costs</span>),
+                                        <span class='kw'>est</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>costs</span>$<span class='no'>drugs</span>$<span class='no'>costs</span>),
                              <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
                              <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
 <span class='no'>medcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='no'>states</span>$<span class='no'>state_id</span>,
-                                       <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>ctstm3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>$<span class='no'>mean</span>,
-                                       <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>ctstm3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>$<span class='no'>se</span>),
+                                       <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>$<span class='no'>mean</span>,
+                                       <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>$<span class='no'>se</span>),
                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"gamma"</span>,
                             <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
 

@@ -7,8 +7,87 @@
 \description{
 Simulate outcomes from a cohort discrete time state transition model.
 }
+\examples{
+library("data.table")
+library("nnet")
+transitions_data <- data.table(multinom3_exdata$transitions)
+
+# Treatment strategies, target population, and model structure
+n_patients <- 4
+patients <- transitions_data[year == 1, .(patient_id, age, female)][
+ sort(sample.int(nrow(transitions_data[year == 1]), n_patients))][
+   , grp_id := 1:n_patients]
+hesim_dat <- hesim_data(
+  patients = patients,
+  strategies = data.table(strategy_id = 1:2,
+                          strategy_name = c("Reference", "Intervention")),
+  states = data.table(state_id = c(1, 2),
+                      state_name = c("Healthy", "Sick")) # Non-death health states
+)
+tmat <- rbind(c(0, 1, 2),
+              c(NA, 0, 1),
+              c(NA, NA, NA))
+
+# Parameter estimation
+## Multinomial logistic regression
+data_healthy <- transitions_data[state_from == "Healthy"]
+fit_healthy <- multinom(state_to ~ strategy_name + female + age,
+                        data = data_healthy, trace = FALSE)
+data_sick <- droplevels(transitions_data[state_from == "Sick"])
+fit_sick <- multinom(state_to ~ strategy_name + female + age,
+                     data = data_sick, trace = FALSE)
+transfits <- multinom_list(healthy = fit_healthy, sick = fit_sick)
+
+## Utility
+utility_tbl <- stateval_tbl(multinom3_exdata$utility,
+                            dist = "beta",
+                            hesim_data = hesim_dat)
+
+## Costs
+drugcost_tbl <- stateval_tbl(multinom3_exdata$costs$drugs,
+                             dist = "fixed",
+                             hesim_data = hesim_dat) 
+medcost_tbl <- stateval_tbl(multinom3_exdata$costs$medical,
+                            dist = "gamma",
+                            hesim_data = hesim_dat)  
+
+# Economic model
+n_samples <- 3
+
+## Construct model
+### Transitions
+transmod_data <- expand(hesim_dat)
+transmod <- create_CohortDtstmTrans(transfits,
+                                    input_data = transmod_data,
+                                    trans_mat = tmat,
+                                    n = n_samples,
+                                    point_estimate = FALSE)
+
+### Utility
+utilitymod <- create_StateVals(utility_tbl, n = n_samples)
+
+### Costs
+drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples)
+medcostmod <- create_StateVals(medcost_tbl, n = n_samples)
+costmods <- list(Drug = drugcostmod,
+                 Medical = medcostmod)
+
+### Combine
+econmod <- CohortDtstm$new(trans_model = transmod,
+                           utility_model = utilitymod,
+                           cost_models = costmods)
+
+## Simulate outcomes
+econmod$sim_stateprobs(n_cycles = 20)
+econmod$sim_qalys(dr = .03)
+econmod$sim_costs(dr = .03)
+econmod$summarize()
+econmod$summarize(by_grp = TRUE)
+
+}
 \seealso{
-\link{CohortDtstmTrans}, \code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}}
+\code{\link[=create_CohortDtstm]{create_CohortDtstm()}}, \link{CohortDtstmTrans},
+\code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

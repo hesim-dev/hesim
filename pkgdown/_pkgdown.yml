@@ -24,6 +24,7 @@ reference:
       - params
       - params_lm
       - params_mlogit
+      - params_mlogit_list
       - params_surv
       - params_surv_list
       - tparams
@@ -49,18 +50,18 @@ reference:
       - stateval_tbl
       - StateVals
       - create_StateVals
-  - title: "Discrete time state transition models"
+  - title: "Discrete time state transition model"
     contents:
       - CohortDtstmTrans
       - create_CohortDtstmTrans
-      - create_CohortDtstm
       - CohortDtstm
+      - create_CohortDtstm
   - title: "Partitioned survival model"
     contents:
       - Psm
       - PsmCurves
       - create_PsmCurves
-  - title: "Continuous time state transition models"
+  - title: "Continuous time state transition model"
     contents:
       - IndivCtstmTrans
       - create_IndivCtstmTrans
