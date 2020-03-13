@@ -18,15 +18,6 @@ Supports objects of class \link{tparams_transprobs} or \link{params_mlogit}.}
 
 \item{\code{input_data}}{An object of class \link{input_mats}.}
 
-\item{\code{trans_mat}}{A transition matrix describing the states and transitions
-in a discrete-time multi-state model. Only required if the model is
-parameterized using multinomial logistic regression. The \verb{(i,j)} element
-represents a transition from state \code{i} to state \code{j}. Each possible transition
-from row \code{i} should be based on a separate multinomial logistic regression
-and ordered from \code{0} to \code{K - 1} where \code{K} is the number of
-possible transitions. Transitions that are not possible should be \code{NA}.
-and the reference category for each row should be \code{0}.}
-
 \item{\code{cycle_length}}{The length of a model cycle in terms of years.
 The default is \code{1} meaning that model cycles are 1 year long.}
 }
@@ -42,6 +33,15 @@ if there were three states and the cohort began the simulation in state 1,
 then \code{start_stateprobs = c(1, 0, 0)}. Automatically normalized to sum to 1.
 If \code{NULL}, then a vector with the first element equal to 1 and
 all remaining elements equal to 0.}
+
+\item{\code{trans_mat}}{A transition matrix describing the states and transitions
+in a discrete-time multi-state model. Only required if the model is
+parameterized using multinomial logistic regression. The \verb{(i,j)} element
+represents a transition from state \code{i} to state \code{j}. Each possible transition
+from row \code{i} should be based on a separate multinomial logistic regression
+and ordered from \code{0} to \code{K - 1} where \code{K} is the number of
+possible transitions. Transitions that are not possible should be \code{NA}.
+and the reference category for each row should be \code{0}.}
 }
 \if{html}{\out{</div>}}
 }

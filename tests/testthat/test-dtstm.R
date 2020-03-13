@@ -173,6 +173,32 @@ test_that("CohortDtstmTrans$new 'start_stateprobs' exceptions ",{
                "All elements of 'state_stateprobs' must be non-negative.")
 })
 
+test_that("CohortDtstmTrans 'trans_mat' must be a matrix of the correct form ",{
+  msg_matrix <- "'trans_mat' must be a matrix"
+  msg_form <- paste0("'trans_mat' is not of the correct form. Each row should ",
+                     "contain integers from 0 to K - 1 where K is the number ", 
+                     "of possible transitions (i.e., non-NA elements)")
+  
+  # Exceptions with $new()
+  expect_error(CohortDtstmTrans$new(params = params_tprob, trans_mat = 1),
+               msg_matrix)
+  tmat_bad <- rbind(c(0, 0),
+                    c(0, 0))
+  expect_error(CohortDtstmTrans$new(params = params_tprob, trans_mat = tmat_bad),
+              msg_form, fixed = TRUE)
+  
+  # Correct
+  tmat_good <- rbind(c(0, 1, 2),
+                     c(NA, 0, 1),
+                     c(NA, NA, NA))
+  tmp <- CohortDtstmTrans$new(params = params_tprob, trans_mat = tmat_good)
+  expect_equal(tmp$trans_mat, tmat_good)
+  
+  # Active binding errors
+  expect_error(tmp$trans_mat <- 1, msg_matrix)
+  expect_error(tmp$trans_mat <- tmat_bad, msg_form, fixed = TRUE)
+})
+
 # Simulate model (from tparams object) -----------------------------------------
 econmod <- CohortDtstm$new(trans_model = transmod)
 econmod$sim_stateprobs(n_cycles = 3)
@@ -238,7 +264,7 @@ test_that(paste0("create_CohortDtstmTrans$sim_stateprobs() is consistent with ",
   expect_equal(multinom_probs,
                as.matrix(hesim_probs[, c("Healthy", "Sick", "Dead")]))
 })
-    
+     
 test_that(paste0("create_CohortDtstmTrans$sim_stateprobs() with mulinom() objects"), {
   tpmatrix_multinom <- function(fits, data, patid){
     newdata <- data[patient_id == patid]

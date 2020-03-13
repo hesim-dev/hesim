@@ -9,6 +9,7 @@
 CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
   private = list(
     .start_stateprobs = NULL,
+    .trans_mat = NULL,
     
     set_start_stateprobs = function(x){
       if (any(x < 0)){
@@ -22,6 +23,29 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
         private$.start_stateprobs <- rep(1/x_len, x_len)
       } else{
         private$.start_stateprobs <- x/sum(x)
+      }
+    },
+    
+    set_trans_mat = function(x){
+      if (is.null(x)){
+        private$.trans_mat <- x
+      } else{
+        if (!is.matrix(x)){
+          stop("'trans_mat' must be a matrix.")
+        }
+        K <- ncol(x)
+        for (i in 1:K) {
+          NA_count <- sum(is.na(x[i, ]))
+          max_value <- ifelse(NA_count, NA, K - 1 - NA_count)
+          if (!is.na(max_value)){
+            if (!all(x[i, ] == 0:max_value)){
+              stop(paste0("'trans_mat' is not of the correct form. Each row should ",
+                          "contain integers from 0 to K - 1 where K is the number of ",
+                          "possible transitions (i.e., non-NA elements)"))
+            }
+          } 
+        }
+        private$.trans_mat <- x
       }
     },
     
@@ -45,6 +69,19 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     start_stateprobs = function(x) {
       if (missing(x)) return(private$.start_stateprobs)
       private$set_start_stateprobs(x)
+    },
+    
+    #' @field trans_mat A transition matrix describing the states and transitions
+    #' in a discrete-time multi-state model. Only required if the model is 
+    #' parameterized using multinomial logistic regression. The `(i,j)` element 
+    #' represents a transition from state `i` to state `j`. Each possible transition 
+    #' from row `i` should be based on a separate multinomial logistic regression
+    #' and ordered from `0` to `K - 1` where `K` is the number of 
+    #' possible transitions. Transitions that are not possible should be `NA`.
+    #' and the reference category for each row should be `0`.    
+    trans_mat = function(x){
+      if(missing(x)) return(private$.trans_mat)
+      private$set_trans_mat(x)
     }
   ),
 
@@ -55,16 +92,6 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     
     #' @field input_data An object of class [input_mats].
     input_data = NULL,
-    
-    #' @field trans_mat A transition matrix describing the states and transitions
-    #' in a discrete-time multi-state model. Only required if the model is 
-    #' parameterized using multinomial logistic regression. The `(i,j)` element 
-    #' represents a transition from state `i` to state `j`. Each possible transition 
-    #' from row `i` should be based on a separate multinomial logistic regression
-    #' and ordered from `0` to `K - 1` where `K` is the number of 
-    #' possible transitions. Transitions that are not possible should be `NA`.
-    #' and the reference category for each row should be `0`.
-    trans_mat = NULL,
     
     #' @field cycle_length The length of a model cycle in terms of years.
     #' The default is `1` meaning that model cycles are 1 year long.
@@ -85,7 +112,7 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
                           cycle_length = 1){
       self$params <- params
       self$input_data <- input_data
-      self$trans_mat <- trans_mat
+      private$set_trans_mat(trans_mat)
       if (!is.null(input_data) & is.null(trans_mat)){
         stop("If 'input_data' is not NULL, then 'trans_mat' cannot be NULL")
       }
