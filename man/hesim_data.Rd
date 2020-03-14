@@ -4,8 +4,14 @@
 \alias{hesim_data}
 \title{Data for health-economic simulation modeling}
 \usage{
-hesim_data(strategies, patients, lines = NULL, states = NULL,
-  transitions = NULL, times = NULL)
+hesim_data(
+  strategies,
+  patients,
+  lines = NULL,
+  states = NULL,
+  transitions = NULL,
+  times = NULL
+)
 }
 \arguments{
 \item{strategies}{A table of treatment strategies. 

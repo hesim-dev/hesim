@@ -132,7 +132,6 @@ sr2fsweiNMA <- function(sr){
 #' @param t Vector of times for which restricted mean survival time is evaluated.
 #' @param start Optional left-truncation time or times. The returned restricted
 #' mean survival will be conditional on survival up to this time.
-#' @param ... Additional arguments to pass to random sampling functions.
 #' @name weibullNMA
 #' @return \code{dweibullNMA} gives the density, \code{pweibullNMA} gives the
 #' distribution function, \code{qweibullNMA} gives the quantile function,

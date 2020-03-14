@@ -4,11 +4,24 @@
 \alias{input_mats}
 \title{Input matrices for a statistical model}
 \usage{
-input_mats(X, strategy_id, n_strategies, patient_id, n_patients,
-  line = NULL, n_lines = NULL, state_id = NULL, n_states = NULL,
-  transition_id = NULL, n_transitions = NULL, time_id = NULL,
-  time_intervals = NULL, n_times = NULL, time_reset = NULL,
-  time_fun = NULL)
+input_mats(
+  X,
+  strategy_id,
+  n_strategies,
+  patient_id,
+  n_patients,
+  line = NULL,
+  n_lines = NULL,
+  state_id = NULL,
+  n_states = NULL,
+  transition_id = NULL,
+  n_transitions = NULL,
+  time_id = NULL,
+  time_intervals = NULL,
+  n_times = NULL,
+  time_reset = NULL,
+  time_fun = NULL
+)
 }
 \arguments{
 \item{X}{A list of input matrices for predicting the values of each parameter in a statistical model. May also be

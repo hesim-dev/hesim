@@ -10,17 +10,20 @@
 \usage{
 create_params(object, ...)
 
-\method{create_params}{lm}(object, n = 1000, point_estimate = FALSE,
-  ...)
+\method{create_params}{lm}(object, n = 1000, point_estimate = FALSE, ...)
 
-\method{create_params}{flexsurvreg}(object, n = 1000,
-  point_estimate = FALSE, ...)
+\method{create_params}{flexsurvreg}(object, n = 1000, point_estimate = FALSE, ...)
 
-\method{create_params}{flexsurvreg_list}(object, n = 1000,
-  point_estimate = FALSE, ...)
+\method{create_params}{flexsurvreg_list}(object, n = 1000, point_estimate = FALSE, ...)
 
-\method{create_params}{partsurvfit}(object, n = 1000,
-  point_estimate = FALSE, bootstrap = TRUE, max_errors = 0, ...)
+\method{create_params}{partsurvfit}(
+  object,
+  n = 1000,
+  point_estimate = FALSE,
+  bootstrap = TRUE,
+  max_errors = 0,
+  ...
+)
 }
 \arguments{
 \item{object}{A statistical model to randomly sample parameters from.}

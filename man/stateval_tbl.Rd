@@ -4,8 +4,11 @@
 \alias{stateval_tbl}
 \title{Table to store state value parameters}
 \usage{
-stateval_tbl(tbl, dist = c("norm", "beta", "gamma", "lnorm", "unif",
-  "fixed", "custom"), hesim_data = NULL)
+stateval_tbl(
+  tbl,
+  dist = c("norm", "beta", "gamma", "lnorm", "unif", "fixed", "custom"),
+  hesim_data = NULL
+)
 }
 \arguments{
 \item{tbl}{A \code{data.frame} or \code{data.table} for storing parameter 
