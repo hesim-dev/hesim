@@ -1,3 +1,6 @@
+## hesim 0.2.3
+Remove a documented `...` that was not used in `weibullNMA()`.
+
 ## hesim 0.2.2
 No longer use deprecated `C++` function `bind2nd()`.
 

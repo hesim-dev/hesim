@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -143,7 +143,7 @@
 <dt><code>trans_model</code></dt><dd><p>Model for health state transitions. Must be an object of class <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></dd>
     <dt><code>utility_model</code></dt><dd><p>The model used to predict utility by health state. Must be an object of class <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
     <dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state. Must be a list of objects of class <code><a href='StateVals.html'>StateVals</a></code>, where each element of the list represents a different cost category.</p></dd>
-    <dt><code>disprog_</code></dt><dd><p>A <code><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> simulated using <code>sim_disease</code> containing the following columns:
+    <dt><code>disprog_</code></dt><dd><p>A <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> simulated using <code>sim_disease</code> containing the following columns:
     <dl class='dl-horizontal'>
 <dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
 <dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>
@@ -154,8 +154,8 @@
 <dt>time_start</dt><dd><p>The time at the start of the interval.</p></dd>
 <dt>time_stop</dt><dd><p>The time at the end of the interval.</p></dd>
 </dl></p></dd>
-    <dt><code>stateprobs_</code></dt><dd><p>A <code><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> of health state probabilities as a function of time simulated using <code>sim_stateprobs</code>. See the description of the output of <code>sim_stateprobs</code> in <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></dd>
-    <dt><code>qalys_</code></dt><dd><p>A <code><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> of quality-adjusted life-years (QALYs) simulated using <code>sim_qalys</code>. Columns are:
+    <dt><code>stateprobs_</code></dt><dd><p>A <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> of health state probabilities as a function of time simulated using <code>sim_stateprobs</code>. See the description of the output of <code>sim_stateprobs</code> in <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></dd>
+    <dt><code>qalys_</code></dt><dd><p>A <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> of quality-adjusted life-years (QALYs) simulated using <code>sim_qalys</code>. Columns are:
     <dl class='dl-horizontal'>
 <dt>sample</dt><dd><p>A random sample from the probabilistic sensitivity analysis (PSA).</p></dd>
 <dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>
@@ -165,7 +165,7 @@
 <dt>lys</dt><dd><p>Simulated life-years.</p></dd>
 </dl>
     Note that the <code>lys</code> column is only computed if <code>lys = TRUE</code>.</p></dd>
-    <dt><code>costs_</code></dt><dd><p>A <code><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></code> of costs by category simulated using <code>sim_costs</code>. Columns are:
+    <dt><code>costs_</code></dt><dd><p>A <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> of costs by category simulated using <code>sim_costs</code>. Columns are:
     <dl class='dl-horizontal'>
 <dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
 <dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>

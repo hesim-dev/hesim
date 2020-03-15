@@ -74,7 +74,7 @@ and output for a cost-effectiveness acceptability curve.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -153,19 +153,26 @@ and output for a cost-effectiveness acceptability curve.</p></li>
 <span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>icea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>sample</span>, <span class='no'>strategy</span>,
-  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>e</span>, <span class='no'>c</span>, <span class='no'>...</span>)
+<span class='fu'>icea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>sample</span>, <span class='no'>strategy</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>e</span>, <span class='no'>c</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>comparator</span>, <span class='no'>sample</span>,
-  <span class='no'>strategy</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>e</span>, <span class='no'>c</span>, <span class='no'>...</span>)
+<span class='fu'>icea_pw</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>),
+  <span class='no'>comparator</span>,
+  <span class='no'>sample</span>,
+  <span class='no'>strategy</span>,
+  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>e</span>,
+  <span class='no'>c</span>,
+  <span class='no'>...</span>
+)
 
 <span class='co'># S3 method for ce</span>
 <span class='fu'>icea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>dr_qalys</span>, <span class='no'>dr_costs</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for ce</span>
-<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>comparator</span>, <span class='no'>dr_qalys</span>,
-  <span class='no'>dr_costs</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>comparator</span>, <span class='no'>dr_qalys</span>, <span class='no'>dr_costs</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

@@ -1,10 +1,12 @@
 Package: hesim
 Type: Package
 Title: Health-Economic Simulation Modeling and Decision Analysis
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", role = c("aut", "cre")),
-    person("Jeroen P.", "Jansen", role = "aut")
+    person("Jeroen P.", "Jansen", role = "aut"),
+    person(given = "R Core Team", role = "ctb",
+    comment="hesim uses some slightly modified C functions from base R")
     )
 Description: Parameterize, simulate, and analyze health-economic simulation 
   models. Supports N-state partitioned survival models (Glasziou et al. 1990)
