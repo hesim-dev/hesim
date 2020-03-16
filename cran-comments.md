@@ -4,7 +4,7 @@ This release contains a minor update to address an email from Kurt Hornik to fix
 ## Test environments
 * Local OS X, R 3.6.3
 * Ubuntu 16.04 (on travis-ci), R 3.6.2
-* win-builder (devel and release)
+* R-hub builder
 
 ## R CMD check results
 0 ERRORs | 0 WARNINGs | 1 NOTE
