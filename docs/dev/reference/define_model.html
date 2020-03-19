@@ -69,7 +69,7 @@ create an economic model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.3.9000</span>
       </span>
     </div>
 
@@ -242,9 +242,9 @@ utilities, and/or costs.</p>
     <pre class="examples"><div class='input'>
 <span class='co'># Data</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"data.table"</span>)
-<span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
+<span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
                          <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Monotherapy"</span>, <span class='st'>"Combination therapy"</span>))
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
                        <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>)
 <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>)
@@ -271,7 +271,7 @@ utilities, and/or costs.</p>
 }, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 
 <span class='no'>tparams_def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='define_tparams.html'>define_tparams</a></span>({
-  <span class='no'>rr</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>strategy_name</span> <span class='kw'>==</span> <span class='st'>"Monotherapy"</span>, <span class='fl'>1</span>, <span class='no'>rr_comb</span>)
+  <span class='no'>rr</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span>(<span class='no'>strategy_name</span> <span class='kw'>==</span> <span class='st'>"Monotherapy"</span>, <span class='fl'>1</span>, <span class='no'>rr_comb</span>)
   <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(
     <span class='kw'>tpmatrix</span> <span class='kw'>=</span> <span class='fu'><a href='tpmatrix.html'>tpmatrix</a></span>(
       <span class='no'>C</span>, <span class='no'>p_mono</span>$<span class='no'>A_B</span> * <span class='no'>rr</span>, <span class='no'>p_mono</span>$<span class='no'>A_C</span> * <span class='no'>rr</span>, <span class='no'>p_mono</span>$<span class='no'>A_D</span> * <span class='no'>rr</span>,
@@ -280,7 +280,7 @@ utilities, and/or costs.</p>
       <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>),
     <span class='kw'>utility</span> <span class='kw'>=</span> <span class='no'>u</span>,
     <span class='kw'>costs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(
-      <span class='kw'>drug</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>strategy_name</span> <span class='kw'>==</span> <span class='st'>"Monotherapy"</span>,
+      <span class='kw'>drug</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span>(<span class='no'>strategy_name</span> <span class='kw'>==</span> <span class='st'>"Monotherapy"</span>,
                     <span class='no'>c_zido</span>, <span class='no'>c_zido</span> + <span class='no'>c_lam</span>),
       <span class='kw'>medical</span> <span class='kw'>=</span> <span class='no'>c_med</span>
     )
@@ -304,15 +304,15 @@ utilities, and/or costs.</p>
 #&gt; 
 #&gt; $tpmatrix
 #&gt;        s1_s1      s1_s2      s1_s3       s1_s4 s2_s1     s2_s2     s2_s3
-#&gt; 1: 0.7268101 0.19442450 0.06471782 0.014047611     0 0.6028085 0.3911359
-#&gt; 2: 0.8906267 0.07783907 0.02591018 0.005624049     0 0.8409819 0.1565937
-#&gt; 3: 0.7351642 0.18437772 0.06866600 0.011792080     0 0.5873485 0.4016351
-#&gt; 4: 0.8745787 0.08731786 0.03251894 0.005584510     0 0.8045759 0.1902069
+#&gt; 1: 0.7003560 0.20656394 0.08062025 0.012459847     0 0.5744352 0.4112925
+#&gt; 2: 0.8517514 0.10219732 0.03988679 0.006164498     0 0.7894522 0.2034866
+#&gt; 3: 0.6961992 0.21960668 0.07431412 0.009879994     0 0.5712030 0.4182734
+#&gt; 4: 0.8653078 0.09736414 0.03294768 0.004380364     0 0.8098899 0.1854444
 #&gt;          s2_s4 s3_s1 s3_s2     s3_s3     s3_s4 s4_s1 s4_s2 s4_s3 s4_s4
-#&gt; 1: 0.006055519     0     0 0.7496222 0.2503778     0     0     0     1
-#&gt; 2: 0.002424365     0     0 0.8997597 0.1002403     0     0     0     1
-#&gt; 3: 0.011016407     0     0 0.7771731 0.2228269     0     0     0     1
-#&gt; 4: 0.005217166     0     0 0.8944733 0.1055267     0     0     0     1
+#&gt; 1: 0.014272341     0     0 0.7332638 0.2667362     0     0     0     1
+#&gt; 2: 0.007061228     0     0 0.8680325 0.1319675     0     0     0     1
+#&gt; 3: 0.010523605     0     0 0.7436586 0.2563414     0     0     0     1
+#&gt; 4: 0.004665713     0     0 0.8863493 0.1136507     0     0     0     1
 #&gt; 
 #&gt; $utility
 #&gt; [1] 1 1 1 1
@@ -326,11 +326,11 @@ utilities, and/or costs.</p>
 #&gt; [1] 1
 #&gt; 
 #&gt; $costs$medical
-#&gt;            A         B        C
-#&gt; 1: 2026.8388  3160.886 10739.12
-#&gt; 2: 2026.8388  3160.886 10739.12
-#&gt; 3:  702.0553 11787.506 20889.12
-#&gt; 4:  702.0553 11787.506 20889.12
+#&gt;           A        B         C
+#&gt; 1: 2022.271 282.2611 10691.563
+#&gt; 2: 2022.271 282.2611 10691.563
+#&gt; 3: 1326.233 786.1712  5936.631
+#&gt; 4: 1326.233 786.1712  5936.631
 #&gt; 
 #&gt; 
 #&gt; $n_states

@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.3.9000</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@
       <h1>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2020-03-08</h4>
+            <h4 class="date">2020-03-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -174,14 +174,14 @@ Individual-level continuous time state transition model (iCTSTM)
 <p>Before beginning an analysis, it is necessary to define the treatment strategies of interest, the target population, and the model structure. This can be done in <code>hesim</code> by creating a <code>hesim_data</code> object with the function <code><a href="../reference/hesim_data.html">hesim_data()</a></code>. Let’s consider an example where we use an iCTSTM to evaluate two competing treatment strategies. We will consider a model with three health states (<em>healthy</em>, <em>sick</em>, and <em>dead</em>) with four transitions (<em>healthy -&gt; sick</em>, <em>sick -&gt; healthy</em>, <em>healthy -&gt; dead</em>, and <em>sick -&gt; dead</em>). Since we are using an individual-level model, we must simulate a target population that is sufficiently large so that uncertainty reflects uncertainty in the model parameters, rather than variability across simulated individuals.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"hesim"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"data.table"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>strategies &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">strategy_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb1-3"><a href="#cb1-3"></a>strategies &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="dt">strategy_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb1-4"><a href="#cb1-4"></a>n_patients &lt;-<span class="st"> </span><span class="dv">1000</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>patients &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">patient_id =</span> <span class="dv">1</span><span class="op">:</span>n_patients,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>patients &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="dt">patient_id =</span> <span class="dv">1</span><span class="op">:</span>n_patients,</span>
 <span id="cb1-6"><a href="#cb1-6"></a>                          <span class="dt">age =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(n_patients, <span class="dt">mean =</span> <span class="dv">45</span>, <span class="dt">sd =</span> <span class="dv">7</span>),</span>
 <span id="cb1-7"><a href="#cb1-7"></a>                          <span class="dt">female =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Binomial">rbinom</a></span>(n_patients, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">prob =</span> <span class="fl">.51</span>))</span>
-<span id="cb1-8"><a href="#cb1-8"></a>states &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">state_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb1-8"><a href="#cb1-8"></a>states &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="dt">state_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
 <span id="cb1-9"><a href="#cb1-9"></a>                     <span class="dt">state_name =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Healthy"</span>, <span class="st">"Sick"</span>)) <span class="co"># Non-death health states</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a>tmat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/rbindlist">rbind</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="ot">NA</span>, <span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb1-10"><a href="#cb1-10"></a>tmat &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="ot">NA</span>, <span class="dv">1</span>, <span class="dv">2</span>),</span>
 <span id="cb1-11"><a href="#cb1-11"></a>              <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">4</span>),</span>
 <span id="cb1-12"><a href="#cb1-12"></a>              <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>))</span>
 <span id="cb1-13"><a href="#cb1-13"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(tmat) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(tmat) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Healthy"</span>, <span class="st">"Sick"</span>, <span class="st">"Dead"</span>)</span>
@@ -199,17 +199,17 @@ Individual-level continuous time state transition model (iCTSTM)
 ## 
 ## $patients
 ##       patient_id      age female
-##    1:          1 40.28067      1
-##    2:          2 48.09711      1
-##    3:          3 35.23541      1
-##    4:          4 41.44403      1
-##    5:          5 45.52459      1
+##    1:          1 42.71132      0
+##    2:          2 43.34381      0
+##    3:          3 30.05943      0
+##    4:          4 42.62731      1
+##    5:          5 47.59256      0
 ##   ---                           
-##  996:        996 41.36511      1
-##  997:        997 43.96101      1
-##  998:        998 56.29249      0
-##  999:        999 56.32596      1
-## 1000:       1000 40.10561      0
+##  996:        996 45.53655      1
+##  997:        997 44.73630      1
+##  998:        998 42.56618      0
+##  999:        999 44.61603      0
+## 1000:       1000 46.10505      1
 ## 
 ## $states
 ##    state_id state_name
@@ -318,7 +318,7 @@ Multi-state model (transition-specific)
 <p>Disease models can either be fit from an explicit statistical model or through mathematical expressions. In the first case, the easiest way to parameterize a disease model is by fitting a statistical model using <code>R</code>. For example, survival models and multi-state models can be fit using <code><a href="https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurv::flexsurvreg()</a></code> while multinomial logistic regressions can be fit with <code><a href="https://www.rdocumentation.org/packages/nnet/topics/multinom">nnet::multinom()</a></code>. In other cases, the disease models will not be fit directly with <code>R</code>, but the estimates of a disease model can be directly stored in parameter (<code><a href="../reference/params.html">hesim::params</a></code>) or transformed parameter (<code><a href="../reference/tparams.html">hesim::tparams</a></code>) objects. In the second case, an entire model (encompassing disease progression, costs, and utility) can be defined in terms of mathematical expressions with <code><a href="../reference/define_model.html">hesim::define_model()</a></code>.</p>
 <p>We will illustrate an example of a statistical model of disease progression fit with <code>R</code> by estimating a multi-state model with a joint likelihood using <code><a href="https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurv::flexsurvreg()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"flexsurv"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a>mstate_data &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(mstate3_exdata<span class="op">$</span>transitions)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>mstate_data &lt;-<span class="st"> </span><span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(mstate3_exdata<span class="op">$</span>transitions)</span>
 <span id="cb3-3"><a href="#cb3-3"></a>mstate_data[, trans <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(trans)]</span>
 <span id="cb3-4"><a href="#cb3-4"></a>fit_wei &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg">flexsurvreg</a></span>(<span class="kw">Surv</span>(years, status) <span class="op">~</span><span class="st"> </span>trans <span class="op">+</span><span class="st"> </span></span>
 <span id="cb3-5"><a href="#cb3-5"></a><span class="st">                                                       </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(strategy_id)<span class="op">:</span>trans <span class="op">+</span></span>
@@ -371,18 +371,18 @@ Linear model
 </table>
 <p>Linear models are fit using <code><a href="https://www.rdocumentation.org/packages/stats/topics/lm">stats::lm()</a></code>. Predicted means are most easily constructed from a <code><a href="../reference/stateval_tbl.html">hesim::stateval_tbl</a></code> object, which is a special object used to assign values to health states. The table allows users to specify mean values that can vary across health states, treatment strategies, patients, and/or time intervals. State values can be specified either as moments (i.e., mean and standard error) or parameters (e.g., shape and scale of gamma distribution) of a probability distribution, or by pre-simulating values from a suitable probability distribution. Here we will use <code><a href="../reference/stateval_tbl.html">hesim::stateval_tbl</a></code> objects for utility and two cost categories (drug and medical).</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Utility</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>utility_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">state_id =</span> states<span class="op">$</span>state_id,</span>
+<span id="cb4-2"><a href="#cb4-2"></a>utility_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="dt">state_id =</span> states<span class="op">$</span>state_id,</span>
 <span id="cb4-3"><a href="#cb4-3"></a>                                       <span class="dt">mean =</span> mstate3_exdata<span class="op">$</span>utility<span class="op">$</span>mean,</span>
 <span id="cb4-4"><a href="#cb4-4"></a>                                       <span class="dt">se =</span> mstate3_exdata<span class="op">$</span>utility<span class="op">$</span>se),</span>
 <span id="cb4-5"><a href="#cb4-5"></a>                            <span class="dt">dist =</span> <span class="st">"beta"</span>,</span>
 <span id="cb4-6"><a href="#cb4-6"></a>                            <span class="dt">hesim_data =</span> hesim_dat)</span>
 <span id="cb4-7"><a href="#cb4-7"></a></span>
 <span id="cb4-8"><a href="#cb4-8"></a><span class="co"># Costs</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>drugcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">strategy_id =</span> strategies<span class="op">$</span>strategy_id,</span>
+<span id="cb4-9"><a href="#cb4-9"></a>drugcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="dt">strategy_id =</span> strategies<span class="op">$</span>strategy_id,</span>
 <span id="cb4-10"><a href="#cb4-10"></a>                                       <span class="dt">est =</span> mstate3_exdata<span class="op">$</span>costs<span class="op">$</span>drugs<span class="op">$</span>costs),</span>
 <span id="cb4-11"><a href="#cb4-11"></a>                            <span class="dt">dist =</span> <span class="st">"fixed"</span>,</span>
 <span id="cb4-12"><a href="#cb4-12"></a>                            <span class="dt">hesim_data =</span> hesim_dat) </span>
-<span id="cb4-13"><a href="#cb4-13"></a>medcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/data.table">data.table</a></span>(<span class="dt">state_id =</span> states<span class="op">$</span>state_id,</span>
+<span id="cb4-13"><a href="#cb4-13"></a>medcost_tbl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="dt">state_id =</span> states<span class="op">$</span>state_id,</span>
 <span id="cb4-14"><a href="#cb4-14"></a>                                       <span class="dt">mean =</span> mstate3_exdata<span class="op">$</span>costs<span class="op">$</span>medical<span class="op">$</span>mean,</span>
 <span id="cb4-15"><a href="#cb4-15"></a>                                       <span class="dt">se =</span> mstate3_exdata<span class="op">$</span>costs<span class="op">$</span>medical<span class="op">$</span>se),</span>
 <span id="cb4-16"><a href="#cb4-16"></a>                            <span class="dt">dist =</span> <span class="st">"gamma"</span>,</span>
@@ -467,12 +467,12 @@ Cost model(s)
 <span id="cb6-2"><a href="#cb6-2"></a>                        <span class="dt">by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"transitions"</span>))</span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(transmod_data)</span></code></pre></div>
 <pre><code>##    strategy_id patient_id transition_id      age female from to from_name
-## 1:           1          1             1 40.28067      1    1  2   Healthy
-## 2:           1          1             2 40.28067      1    1  3   Healthy
-## 3:           1          1             3 40.28067      1    2  1      Sick
-## 4:           1          1             4 40.28067      1    2  3      Sick
-## 5:           1          2             1 48.09711      1    1  2   Healthy
-## 6:           1          2             2 48.09711      1    1  3   Healthy
+## 1:           1          1             1 42.71132      0    1  2   Healthy
+## 2:           1          1             2 42.71132      0    1  3   Healthy
+## 3:           1          1             3 42.71132      0    2  1      Sick
+## 4:           1          1             4 42.71132      0    2  3      Sick
+## 5:           1          2             1 43.34381      0    1  2   Healthy
+## 6:           1          2             2 43.34381      0    1  3   Healthy
 ##    to_name trans
 ## 1:    Sick     1
 ## 2:    Dead     2
@@ -580,43 +580,43 @@ $sim_costs()
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>ictstm<span class="op">$</span><span class="kw">sim_disease</span>()</span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(ictstm<span class="op">$</span>disprog_)</span></code></pre></div>
 <pre><code>##    sample strategy_id patient_id grp_id from to final time_start time_stop
-## 1:      1           1          1      1    1  3     1   0.000000 13.886559
-## 2:      1           1          2      1    1  2     0   0.000000  2.457967
-## 3:      1           1          2      1    2  1     0   2.457967  2.874922
-## 4:      1           1          2      1    1  2     0   2.874922  5.359380
-## 5:      1           1          2      1    2  1     0   5.359380  5.461666
-## 6:      1           1          2      1    1  2     0   5.461666  7.149314</code></pre>
+## 1:      1           1          1      1    1  2     0   0.000000  1.037285
+## 2:      1           1          1      1    2  1     0   1.037285  1.355420
+## 3:      1           1          1      1    1  3     1   1.355420  7.498336
+## 4:      1           1          2      1    1  2     0   0.000000  7.438108
+## 5:      1           1          2      1    2  1     0   7.438108  8.389836
+## 6:      1           1          2      1    1  2     0   8.389836 10.152969</code></pre>
 <p>The disease trajectory can be summarized with <code>$sim_stateprobs()</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>ictstm<span class="op">$</span><span class="kw">sim_stateprobs</span>(<span class="dt">t =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>))</span>
 <span id="cb16-2"><a href="#cb16-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(ictstm<span class="op">$</span>stateprobs_)</span></code></pre></div>
 <pre><code>##    sample strategy_id grp_id state_id t  prob
 ## 1:      1           1      1        1 0 1.000
-## 2:      1           1      1        1 1 0.867
-## 3:      1           1      1        1 2 0.794
-## 4:      1           1      1        1 3 0.711
-## 5:      1           1      1        1 4 0.675
-## 6:      1           1      1        1 5 0.609</code></pre>
+## 2:      1           1      1        1 1 0.870
+## 3:      1           1      1        1 2 0.777
+## 4:      1           1      1        1 3 0.690
+## 5:      1           1      1        1 4 0.650
+## 6:      1           1      1        1 5 0.598</code></pre>
 <p>We can then compute costs and QALYs (using a discount rate of 3 percent).</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># QALYs</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a>ictstm<span class="op">$</span><span class="kw"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="dt">dr =</span> <span class="fl">.03</span>)</span>
 <span id="cb18-3"><a href="#cb18-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(ictstm<span class="op">$</span>qalys_)</span></code></pre></div>
-<pre><code>##    sample strategy_id grp_id state_id   dr    qalys      lys
-## 1:      1           1      1        1 0.03 4.058282 9.220242
-## 2:      1           1      1        2 0.03 1.568368 1.568416
-## 3:      1           2      1        1 0.03 3.826450 8.693529
-## 4:      1           2      1        2 0.03 1.348586 1.348627
-## 5:      2           1      1        1 0.03 4.679780 9.544911
-## 6:      2           1      1        2 0.03 1.981412 1.981511</code></pre>
+<pre><code>##    sample strategy_id grp_id state_id   dr    qalys       lys
+## 1:      1           1      1        1 0.03 2.446838  8.660739
+## 2:      1           1      1        2 0.03 1.637749  1.637770
+## 3:      1           2      1        1 0.03 2.980451 10.549498
+## 4:      1           2      1        2 0.03 1.282044  1.282060
+## 5:      2           1      1        1 0.03 6.946665  9.062082
+## 6:      2           1      1        2 0.03 1.710225  1.827004</code></pre>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Costs</span></span>
 <span id="cb20-2"><a href="#cb20-2"></a>ictstm<span class="op">$</span><span class="kw"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="dt">dr =</span> <span class="fl">.03</span>)</span>
 <span id="cb20-3"><a href="#cb20-3"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(ictstm<span class="op">$</span>costs_)</span></code></pre></div>
-<pre><code>##    sample strategy_id grp_id state_id   dr category     costs
-## 1:      1           1      1        1 0.03    drugs 46101.210
-## 2:      1           1      1        2 0.03    drugs  7842.078
-## 3:      1           2      1        1 0.03    drugs 86935.293
-## 4:      1           2      1        2 0.03    drugs 13486.271
-## 5:      2           1      1        1 0.03    drugs 47724.555
-## 6:      2           1      1        2 0.03    drugs  9907.555</code></pre>
+<pre><code>##    sample strategy_id grp_id state_id   dr category      costs
+## 1:      1           1      1        1 0.03    drugs  43303.697
+## 2:      1           1      1        2 0.03    drugs   8188.849
+## 3:      1           2      1        1 0.03    drugs 105494.980
+## 4:      1           2      1        2 0.03    drugs  12820.600
+## 5:      2           1      1        1 0.03    drugs  45310.409
+## 6:      2           1      1        2 0.03    drugs   9135.018</code></pre>
 </div>
 </div>
 <div id="decision-analysis" class="section level1">
@@ -628,31 +628,31 @@ $sim_costs()
 <span id="cb22-2"><a href="#cb22-2"></a><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(ce)</span></code></pre></div>
 <pre><code>## $costs
 ##       category   dr sample strategy_id     costs grp_id
-##    1:    drugs 0.03      1           1  53943.29      1
-##    2:    drugs 0.03      1           2 100421.56      1
-##    3:    drugs 0.03      2           1  57632.11      1
-##    4:    drugs 0.03      2           2 118964.12      1
-##    5:    drugs 0.03      3           1  52624.09      1
+##    1:    drugs 0.03      1           1  51492.55      1
+##    2:    drugs 0.03      1           2 118315.58      1
+##    3:    drugs 0.03      2           1  54445.43      1
+##    4:    drugs 0.03      2           2 103011.29      1
+##    5:    drugs 0.03      3           1  50871.46      1
 ##   ---                                                  
-## 5996:    total 0.03    998           2 112553.46      1
-## 5997:    total 0.03    999           1  71945.10      1
-## 5998:    total 0.03    999           2 112757.48      1
-## 5999:    total 0.03   1000           1  61873.18      1
-## 6000:    total 0.03   1000           2 112746.63      1
+## 5996:    total 0.03    998           2 126999.82      1
+## 5997:    total 0.03    999           1  75237.87      1
+## 5998:    total 0.03    999           2 124171.68      1
+## 5999:    total 0.03   1000           1  58110.73      1
+## 6000:    total 0.03   1000           2 109932.02      1
 ## 
 ## $qalys
 ##         dr sample strategy_id    qalys grp_id
-##    1: 0.03      1           1 5.626650      1
-##    2: 0.03      1           2 5.175036      1
-##    3: 0.03      2           1 6.661192      1
-##    4: 0.03      2           2 6.512560      1
-##    5: 0.03      3           1 6.560432      1
+##    1: 0.03      1           1 4.084587      1
+##    2: 0.03      1           2 4.262495      1
+##    3: 0.03      2           1 8.656890      1
+##    4: 0.03      2           2 8.089863      1
+##    5: 0.03      3           1 5.720848      1
 ##   ---                                        
-## 1996: 0.03    998           2 7.955253      1
-## 1997: 0.03    999           1 8.780685      1
-## 1998: 0.03    999           2 7.481328      1
-## 1999: 0.03   1000           1 4.538649      1
-## 2000: 0.03   1000           2 4.550219      1
+## 1996: 0.03    998           2 7.050979      1
+## 1997: 0.03    999           1 6.004064      1
+## 1998: 0.03    999           2 5.444412      1
+## 1999: 0.03   1000           1 7.055677      1
+## 2000: 0.03   1000           2 7.271639      1
 ## 
 ## attr(,"class")
 ## [1] "ce"</code></pre>

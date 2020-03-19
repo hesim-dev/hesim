@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.3.9000</span>
       </span>
     </div>
 
@@ -168,7 +168,7 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"nnet"</span>)
  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"data.table"</span>)
- <span class='no'>trans_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/data.table/topics/data.table'>data.table</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>transitions</span>)
+ <span class='no'>trans_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>transitions</span>)
  <span class='no'>dat_healthy</span> <span class='kw'>&lt;-</span> <span class='no'>trans_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Healthy"</span>]
  <span class='no'>fit_healthy</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nnet/topics/multinom'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age_cat</span> + <span class='no'>year_cat</span>,
                           <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat_healthy</span>)</div><div class='output co'>#&gt; # weights:  24 (14 variable)

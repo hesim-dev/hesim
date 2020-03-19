@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.3.9000</span>
       </span>
     </div>
 
@@ -164,14 +164,6 @@
 <dt><code>params</code></dt><dd><p>Parameters for simulating health state transitions.
 Supports objects of class <a href='tparams_transprobs.html'>tparams_transprobs</a> or <a href='params_mlogit.html'>params_mlogit</a>.</p></dd>
     <dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>.</p></dd>
-    <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
-in a discrete-time multi-state model. Only required if the model is
-parameterized using multinomial logistic regression. The <code>(i,j)</code> element
-represents a transition from state <code>i</code> to state <code>j</code>. Each possible transition
-from row <code>i</code> should be based on a separate multinomial logistic regression
-and ordered from <code>0</code> to <code>K - 1</code> where <code>K</code> is the number of
-possible transitions. Transitions that are not possible should be <code>NA</code>.
-and the reference category for each row should be <code>0</code>.</p></dd>
     <dt><code>cycle_length</code></dt><dd><p>The length of a model cycle in terms of years.
 The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd>
 </dl><p></div></p>
@@ -186,6 +178,14 @@ if there were three states and the cohort began the simulation in state 1,
 then <code>start_stateprobs = c(1, 0, 0)</code>. Automatically normalized to sum to 1.
 If <code>NULL</code>, then a vector with the first element equal to 1 and
 all remaining elements equal to 0.</p></dd>
+    <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
+in a discrete-time multi-state model. Only required if the model is
+parameterized using multinomial logistic regression. The <code>(i,j)</code> element
+represents a transition from state <code>i</code> to state <code>j</code>. Each possible transition
+from row <code>i</code> should be based on a separate multinomial logistic regression
+and ordered from <code>0</code> to <code>K - 1</code> where <code>K</code> is the number of
+possible transitions. Transitions that are not possible should be <code>NA</code>.
+and the reference category for each row should be <code>0</code>.</p></dd>
 </dl><p></div></p>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
