@@ -49,8 +49,6 @@ taken to be the number required.}
 
 \item{start}{Optional left-truncation time or times. The returned restricted
 mean survival will be conditional on survival up to this time.}
-
-\item{...}{Additional arguments to pass to random sampling functions.}
 }
 \value{
 \code{dweibullNMA} gives the density, \code{pweibullNMA} gives the

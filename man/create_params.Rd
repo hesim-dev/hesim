@@ -22,6 +22,8 @@ create_params(object, ...)
 
 \method{create_params}{flexsurvreg_list}(object, n = 1000, point_estimate = FALSE, ...)
 
+\method{create_params}{flexsurvreg_list}(object, n = 1000, point_estimate = FALSE, ...)
+
 \method{create_params}{partsurvfit}(
   object,
   n = 1000,

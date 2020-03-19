@@ -134,7 +134,7 @@ Survival curves are simulated using `PsmCurves` objects. We can create a `PsmCur
 
 To conduct the PSA, we must sample random draws of the regression coefficients from suitable probability distribution, which can be done in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, `create_PsmCurves()` consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the estimation dataset.  
 
-```{r, warning = FALSE, message = FALSE, cache = TRUE}
+```{r, warning = FALSE, message = FALSE}
 surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
 survmods <- create_PsmCurves(psfit_wei, input_data = surv_input_data, n = n_samples,
                                bootstrap = TRUE, est_data = surv_est_data)
