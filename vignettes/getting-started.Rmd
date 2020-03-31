@@ -117,7 +117,7 @@ An important helper function is `tpmatrix()`, which allows users to define trans
 
 The only costs in the model that vary across treatment strategies (rather than just states) are drug costs. The monotherapy treatment strategy include the cost of zidovudine only whereas the combination therapy includes the costs of both zidovudine and lamivudine.
 
-Parameters may depend on time (since the start of the model) by using the package defined `time` variable. The `time` variable corresponds to the starting time of time intervals, which are specified using the `times` argument in `define_tparams()`. Since patients are only assumed to use lamivudine for two years, `rr_comb` and the costs of lamivudine are not applied beyond year 2.
+Parameters may depend on time (since the start of the model) by using the package defined `time` variable. The `time` variable corresponds to the stopping time of time intervals, which are specified using the `times` argument in `define_tparams()`. Since patients are only assumed to use lamivudine for two years, `rr_comb` and the costs of lamivudine are not applied beyond year 2.
 
 ```{r}
 tparams_def <- define_tparams({
