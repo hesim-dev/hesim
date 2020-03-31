@@ -1,7 +1,6 @@
 # ifndef HESIM_STATS_SURVFUNS_H
 # define HESIM_STATS_SURVFUNS_H
 
-#include <hesim/Rbase/sample.h>
 #include <hesim/math/quad.h>
 #include <hesim/math/riemann.h>
 #include <hesim/utils.h>
@@ -52,6 +51,16 @@ inline double integrate_hazard_riemann(Dist dist, double t){
   }
 };
 
+}
+
+/***************************************************************************//**
+ * Random number generation for the bernoulli distribution.
+ * @param n Number of samples.
+ * @param p Probability of success.
+ * @return A random sample from the bernoulli distribution.
+ ******************************************************************************/ 
+inline int rbernoulli(double p){
+  return R::runif(0, 1) > (1 - p);
 }
 
 /***************************************************************************//** 
@@ -131,7 +140,7 @@ inline double rmst(Dist dist, double t, double r = 0){
  * Randomly draw a single observation from a survival distribution given 
  * discrete cumulative hazard curves or survival curves.
  * @param time Times at which estimates were computed. 
- * @param est Estimates of the cumulative hazard or survival curves.
+ * @param cumhaz Estimates of the cumulative hazard.
  * @param type Is the estimate a cumulative hazard curve (@c "cumhazard") or
  * a survival curve (@c "surv").
  * @param time_inf Determines whether the survival time of infinity be simulated. 
@@ -140,38 +149,23 @@ inline double rmst(Dist dist, double t, double r = 0){
  * individuals are assumed to only survive to the final time period in @p time.
  * @return A random sample from the survival distribution.
  ******************************************************************************/ 
-inline double surv_sample(std::vector<double> &time, std::vector<double> est,
-                   std::string type = "cumhazard", bool time_inf = true){
-
-  auto diff = [](std::vector<double> x){
-    std::vector<double> x_diff(x.size());
-    x_diff[0] = 0;
-    for (int i = 1; i < x.size(); ++i){
-      x_diff[i] = x[i] - x[i - 1];
+inline double surv_sample(std::vector<double> &time, std::vector<double> cumhaz,
+                          bool time_inf = true){
+  
+  double died = 0;
+  int i = 1;
+  unsigned int n_times = time.size();
+  while(died == 0 & i < n_times){
+    double prob = 1 - exp(cumhaz[i - 1] - cumhaz[i]);
+    died = rbernoulli(prob);
+    if (died == 1){
+      return time[i];
+    } 
+    else{
+      ++i; 
     }
-    return x_diff;
-  };
-  
-  std::vector<double> cdf(est.size());
-  if (type == "cumhazard"){
-    for (int i = 0; i < est.size(); ++i) cdf[i] = 1 - exp(-est[i]);
-  } 
-  else if (type == "surv"){
-    for (int i = 0; i < est.size(); ++i) cdf[i] = 1 - est[i];
   }
-  else{
-    Rcpp::stop("'type' must either be 'cumhazard' or 'surv'.");
-  }
-  
-  arma::vec prob = diff(cdf);
-  if (time_inf){
-    int prob_size = prob.size();
-    prob.resize(prob_size + 1);
-    prob(prob_size) = 1 - cdf[cdf.size() - 1]; // Survival probability at last time point
-    time.push_back(INFINITY); 
-  }
-  int size = 1;
-  return Rbase::sample(time, size, false, prob)[0];
+  return INFINITY;
 }
 
 /***************************************************************************//** 
@@ -227,7 +221,7 @@ inline double surv_sample(Dist dist, double lower = 0, double upper = INFINITY,
   if (std::isinf(upper)){
     time_inf = true;
   }
-  return surv_sample(time, cumhazard, "cumhazard", time_inf);
+  return surv_sample(time, cumhazard, time_inf);
 }
 
 } // End namespace stats

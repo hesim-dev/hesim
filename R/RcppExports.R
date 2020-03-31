@@ -149,8 +149,8 @@ C_test_rtrunc_repeat <- function(lower, upper) {
     .Call('_hesim_C_test_rtrunc_repeat', PACKAGE = 'hesim', lower, upper)
 }
 
-C_test_rsurv <- function(time, est, type = "surv", time_inf = TRUE) {
-    .Call('_hesim_C_test_rsurv', PACKAGE = 'hesim', time, est, type, time_inf)
+C_test_rsurv <- function(time, cumhaz, time_inf = TRUE) {
+    .Call('_hesim_C_test_rsurv', PACKAGE = 'hesim', time, cumhaz, time_inf)
 }
 
 C_test_add_constant_int <- function(v, value) {

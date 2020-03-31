@@ -14,7 +14,7 @@ tmat <- rbind(c(NA, 1, 2),
               c(NA, NA, NA))
 
 # Fit survival models
-fit_data <- data.table(ctstm3_exdata$transitions)
+fit_data <- data.table(mstate3_exdata$transitions)
 fit_data[, trans := factor(trans)]
 
 fit_models <- function(clock = c("reset", "forward")){
@@ -247,7 +247,9 @@ compute_surv <- function(step, lower, upper, hazfun){
     cumhaz[i] <- (step * do.call("hazfun", list(time[i]))) + cumhaz[i - 1]
   }
   surv <- exp(-cumhaz)
-  dat <- data.frame(time = time, surv = surv, lab = "Analytical") 
+  dat <- data.frame(time = time, surv = surv,
+                    cumhaz = cumhaz,
+                    lab = "Analytical") 
   return(dat)
 }
 
@@ -274,7 +276,7 @@ dat2 <- compute_surv(step = step, lower = lower, upper = upper,
                      hazfun = fp$hazard)
 
 ## Compare
-dat <- rbind(dat1, dat2)
+dat <- rbind(dat1, dat2[, c("time", "surv", "lab")])
 ggplot(dat, aes(x = time, y = surv, col = lab)) + geom_line()
 
 # Test #2 = truncated exponential distribution
@@ -290,8 +292,8 @@ r1 <- replicate(1000, exp$trandom(lower, upper))
 surv_df <- compute_surv(step = step, lower = lower, upper = upper,
                         hazfun = exp$hazard)
 r2 <- replicate(1000,
-                hesim:::C_test_rsurv(time = surv_df$time, est = surv_df$surv, 
-                           type = "surv", time_inf = FALSE))
+                hesim:::C_test_rsurv(time = surv_df$time, cumhaz = surv_df$cumhaz, 
+                                     time_inf = FALSE))
 
 ## Compare
 time <- seq(lower, upper, step)

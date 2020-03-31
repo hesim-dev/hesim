@@ -503,16 +503,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_test_rsurv
-double C_test_rsurv(std::vector<double> time, std::vector<double> est, std::string type, bool time_inf);
-RcppExport SEXP _hesim_C_test_rsurv(SEXP timeSEXP, SEXP estSEXP, SEXP typeSEXP, SEXP time_infSEXP) {
+double C_test_rsurv(std::vector<double> time, std::vector<double> cumhaz, bool time_inf);
+RcppExport SEXP _hesim_C_test_rsurv(SEXP timeSEXP, SEXP cumhazSEXP, SEXP time_infSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type est(estSEXP);
-    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type cumhaz(cumhazSEXP);
     Rcpp::traits::input_parameter< bool >::type time_inf(time_infSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_test_rsurv(time, est, type, time_inf));
+    rcpp_result_gen = Rcpp::wrap(C_test_rsurv(time, cumhaz, time_inf));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -652,7 +651,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_test_riemann_x2", (DL_FUNC) &_hesim_test_riemann_x2, 1},
     {"_hesim_test_cum_riemann_x2", (DL_FUNC) &_hesim_test_cum_riemann_x2, 1},
     {"_hesim_C_test_rtrunc_repeat", (DL_FUNC) &_hesim_C_test_rtrunc_repeat, 2},
-    {"_hesim_C_test_rsurv", (DL_FUNC) &_hesim_C_test_rsurv, 4},
+    {"_hesim_C_test_rsurv", (DL_FUNC) &_hesim_C_test_rsurv, 3},
     {"_hesim_C_test_add_constant_int", (DL_FUNC) &_hesim_C_test_add_constant_int, 2},
     {"_hesim_C_test_add_constant_double", (DL_FUNC) &_hesim_C_test_add_constant_double, 2},
     {"_hesim_C_test_pv", (DL_FUNC) &_hesim_C_test_pv, 4},
