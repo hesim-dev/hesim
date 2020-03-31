@@ -141,8 +141,6 @@ inline double rmst(Dist dist, double t, double r = 0){
  * discrete cumulative hazard curves or survival curves.
  * @param time Times at which estimates were computed. 
  * @param cumhaz Estimates of the cumulative hazard.
- * @param type Is the estimate a cumulative hazard curve (@c "cumhazard") or
- * a survival curve (@c "surv").
  * @param time_inf Determines whether the survival time of infinity be simulated. 
  * If true, then the probability of surviving to time INFINITY is assumed to equal 
  * the probability of surviving beyond the final time period in @p time; otherwise,
