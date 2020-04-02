@@ -566,7 +566,7 @@ test_that("IndivCtstm - fracpoly", {
   expect_true(is.data.table(sim_disprog(params_fp)))
   
   ## Sample and riemann
-  params_fp$aux$random_method <- "sample"
+  params_fp$aux$random_method <- "discrete"
   expect_true(is.data.table(sim_disprog(params_fp)))
   
   ## Sample and quadrature
@@ -576,7 +576,7 @@ test_that("IndivCtstm - fracpoly", {
   # Errors
   ## Need step size
   ### (1)
-  fp_args$aux$random_method <- "sample"
+  fp_args$aux$random_method <- "discrete"
   expect_error(do.call("params_surv", fp_args))
   
   ### (2)
@@ -603,10 +603,14 @@ test_that("IndivCtstm - survspline", {
   expect_equal(params_spline$aux$random_method, "invcdf")
   expect_equal(params_spline$aux$cumhaz_method, "quad")
   
+  # Warnings
+  spline_args$aux$random_method <- "sample"
+  expect_warning(do.call("params_surv", spline_args))
+  
   # Errors
   ## Need step size
   ### (1)
-  spline_args$aux$random_method <- "sample"
+  spline_args$aux$random_method <- "discrete"
   expect_error(do.call("params_surv", spline_args))
   
   ### (2)

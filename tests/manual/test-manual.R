@@ -165,7 +165,7 @@ fp_params$dist <- "fracpoly"
 fp_params$aux <- list(powers = c(0, 0),
                       cumhaz_method = "riemann", 
                       step = 1/12,
-                      random_method = "sample")
+                      random_method = "discrete")
 names(fp_params$coefs) <- c("gamma0", "gamma1")
 colnames(fp_params$coefs$gamma0)[1] <- "gamma0"
 colnames(fp_params$coefs$gamma1)[1] <- "gamma1"
@@ -258,7 +258,7 @@ FracPoly <- module$fracpoly
 gamma = c(-1.2, -.567, 1.15)
 powers = c(1, 0)
 fp <- new(FracPoly, gamma = gamma, powers = powers,
-          cumhaz_method = "riemann", step = 1/12, random_method = "sample")
+          cumhaz_method = "riemann", step = 1/12, random_method = "discrete")
 fp$max_x_ <- 40
 lower <- 0
 upper <- fp$max_x_

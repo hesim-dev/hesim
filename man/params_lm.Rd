@@ -14,7 +14,7 @@ Must only be specified if the model is used to randomly simulate values
 (rather than to predict means).}
 }
 \value{
-An object of class "params_lm", which is a list containing \code{coefs},
+An object of class \code{params_lm}, which is a list containing \code{coefs},
 \code{sigma}, and \code{n_samples}. \code{n_samples} is equal to the number of rows
 in \code{coefs}.
 }

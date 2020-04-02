@@ -17,9 +17,8 @@ a given parameter.}
 \item{aux}{Auxiliary arguments used with splines or fractional polynomials. See "Details".}
 }
 \value{
-An object of class "params_surv", which is a list containing \code{coefs},
-\code{dist}, and \code{n_samples}. \code{n_samples} is equal to the number of rows
-in each element of \code{coefs}, which must be the same. The list may also contain \code{aux} if
+An object of class \code{params_surv}, which is a list containing \code{coefs},
+\code{dist}, and \code{n_samples. }n_samples\verb{is equal to the number of rows in each element of}coefs\verb{, which must be the same. The list may also contain }aux` if
 a spline or fractional polynomial model is fit.
 }
 \description{
@@ -41,36 +40,36 @@ The types of distributions that can be specified are:
 \itemize{
 \item{\code{exponential} or \code{exp}}{ Exponential distribution. \code{coef}
 must contain the \code{rate} parameter on the log scale and the same parameterization as in
-\code{\link[stats]{Exponential}}}.
+\link[stats:Exponential]{stats::Exponential}}.
 \item{\code{weibull} or \code{weibull.quiet}}{ Weibull distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{scale} parameter (also on the log scale). The parameterization is
-that same as in \code{\link[stats]{Weibull}}.}
+that same as in \link[stats:Weibull]{stats::Weibull}.}
 \item{\code{gamma}}{ Gamma distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{rate} parameter (also on the log scale). The parameterization is
-that same as in \code{\link[stats]{GammaDist}}.}
+that same as in \link[stats:GammaDist]{stats::GammaDist}.}
 \item{\code{lnorm}}{ Lognormal distribution. The first
 element of \code{coef} is the \code{meanlog} parameter (i.e., the mean on the log scale) and the second
 element is the \code{sdlog} parameter (i.e., the standard deviation on the log scale). The parameterization is
-that same as in \code{\link[stats]{Lognormal}}.}
+that same as in \link[stats:Lognormal]{stats::Lognormal}.}
 \item{\code{gompertz}}{ Gompertz distribution. The first
 element of \code{coef} is the \code{shape} parameter and the second
 element is the \code{rate} parameter (on the log scale). The parameterization is
-that same as in \code{\link[flexsurv]{Gompertz}}.}
+that same as in \link[flexsurv:Gompertz]{flexsurv::Gompertz}.}
 \item{\code{llogis}}{ Log-logistic distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{scale} parameter (also on the log scale). The parameterization is
-that same as in \code{\link[flexsurv]{Llogis}}.}
+that same as in \link[flexsurv:Llogis]{flexsurv::Llogis}.}
 \item{\code{gengamma}}{ Generalized gamma distribution. The first
 element of \code{coef} is the location parameter \code{mu}, the second
 element is the scale parameter \code{sigma} (on the log scale), and the
 third element is the shape parameter \code{Q}. The parameterization is
-that same as in \code{\link[flexsurv]{GenGamma}}.}
+that same as in \link[flexsurv:GenGamma]{flexsurv::GenGamma}.}
 \item{\code{survspline}}{ Survival splines. Each element of \code{coef} is a parameter of the
 spline model (i.e. \code{gamma_0}, \code{gamma_1}, \eqn{\ldots}) with length equal
 to the number of knots (including the boundary knots). See below for details on the
-auxiliary arguments. The parameterization is that same as in \code{\link[flexsurv]{Survspline}}.}
+auxiliary arguments. The parameterization is that same as in \link[flexsurv:Survspline]{flexsurv::Survspline}.}
 \item{\code{fracpoly}}{ Fractional polynomials. Each element of \code{coef} is a parameter of the
 fractional polynomial model (i.e. \code{gamma_0}, \code{gamma_1}, \eqn{\ldots}) with length equal
 to the number of powers minus 1. See below for details on the auxiliary arguments
@@ -81,11 +80,11 @@ Auxiliary arguments for spline models should be specified as a list containing t
 \describe{
 \item{\code{knots}}{A numeric vector of knots.}
 \item{\code{scale}}{The survival outcome to be modeled
-as a spline function. Options are "log_cumhazard" for the log cumulative hazard;
-"log_hazard" for the log hazard rate; "log_cumodds" for the log cumulative odds;
-and "inv_normal" for the inverse normal distribution function.}
-\item{\code{timescale}}{If "log" (the default), then survival is modeled as a spline function
-of log time; if "identity", then it is modeled as a spline function of time.}
+as a spline function. Options are \code{"log_cumhazard"} for the log cumulative hazard;
+\code{"log_hazard"} for the log hazard rate; \code{"log_cumodds"} for the log cumulative odds;
+and \code{"inv_normal"} for the inverse normal distribution function.}
+\item{\code{timescale}}{If \code{"log"} (the default), then survival is modeled as a spline function
+of log time; if \code{"identity"}, then it is modeled as a spline function of time.}
 }
 
 Auxiliary arguments for fractional polynomial models should be specified as a list containing the elements:
@@ -105,7 +104,7 @@ but only used for splines if \code{scale = "log_hazard"}.
 Options are "quad" for adaptive quadrature and "riemann" for Riemann sum.}
 \item{\code{random_method}}{Method used to randomly draw from
 an arbitrary survival function. Options are "invcdf" for the inverse CDF and
-"sample" for randomly sampling from discrete survival probabilities.}
+"bernoulli" for randomly sampling from discrete survival probabilities.}
 \item{\code{step}}{Step size for computation of cumulative hazard with
 numerical integration. Only required when using "riemann" to compute the
 cumulative hazard or using "sample" for random number generation.}

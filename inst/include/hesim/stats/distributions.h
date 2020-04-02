@@ -121,11 +121,11 @@ inline double random_numeric(const stats::distribution * dist,
   if (random_method == "invcdf"){
     return dist->quantile(R::runif(0, 1));
   }
-  else if (random_method == "sample") {
+  else if (random_method == "discrete") {
     return surv_sample(dist, 0, INFINITY, dist->max_x_);
   }
   else{
-    Rcpp::stop("'random_method' must be either 'invcdf' or 'sample'.");
+    Rcpp::stop("'random_method' must be either 'invcdf' or 'discrete'.");
   }
 }
 
