@@ -543,7 +543,7 @@ uniform_rng <- function(min, max, names = NULL){
 #'  costs in the economic model. Each element of the
 #'  list must be in the same format as `utility`.
 #'     
-#' @param times Distinct times denoting the start of time intervals.
+#' @param times Distinct times denoting the stopping time of time intervals.
 #' @param ... Additional arguments to pass to the environment used to evaluate
 #' `expr`.
 #' 

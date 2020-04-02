@@ -101,13 +101,14 @@ can therefore be specified:
 \item{\code{cumhaz_method}}{Numerical method used to compute cumulative hazard
 (i.e., to integrate the hazard function). Always used for fractional polynomials
 but only used for splines if \code{scale = "log_hazard"}.
-Options are "quad" for adaptive quadrature and "riemann" for Riemann sum.}
+Options are \code{"quad"} for adaptive quadrature and \code{"riemann"} for Riemann sum.}
 \item{\code{random_method}}{Method used to randomly draw from
-an arbitrary survival function. Options are "invcdf" for the inverse CDF and
-"bernoulli" for randomly sampling from discrete survival probabilities.}
+an arbitrary survival function. Options are \code{"invcdf"} for the inverse CDF and
+\code{"discrete"} for a discrete time approximation that randomly samples
+events from a bernoulli distribution at discrete times.}
 \item{\code{step}}{Step size for computation of cumulative hazard with
-numerical integration. Only required when using "riemann" to compute the
-cumulative hazard or using "sample" for random number generation.}
+numerical integration. Only required when using \code{"riemann"} to compute the
+cumulative hazard or using \code{"discrete"} for random number generation.}
 }
 }
 \examples{

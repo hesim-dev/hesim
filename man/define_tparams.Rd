@@ -28,7 +28,7 @@ costs in the economic model. Each element of the
 list must be in the same format as \code{utility}.
 }}
 
-\item{times}{Distinct times denoting the start of time intervals.}
+\item{times}{Distinct times denoting the stopping time of time intervals.}
 
 \item{...}{Additional arguments to pass to the environment used to evaluate
 \code{expr}.}
