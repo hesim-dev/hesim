@@ -125,15 +125,24 @@ fit_wei <- flexsurv::flexsurvreg(Surv(years, status) ~ trans +
 Costs and utilities can currently either be modeled using a linear model or using predicted means. The latter is an example of a transformed parameter object since the predicted means are parameters that are presumably a function of the underlying parameters of a statistical model and possibly input data.
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
-means <- c("Predicted means", "`hesim::tparams_mean`", "`hesim::stateval_tbl`")
-lm <- c("Linear model", "`hesim::params_lm`", "`stats::lm`")
-tbl <- rbind(means, lm)
+tbl <- rbind(
+  c("Predicted means", 
+    "`hesim::tparams_mean`", 
+    "`hesim::stateval_tbl`"),
+  c("Predicted means", 
+    "`hesim::tparams_mean`", 
+    "`hesim::define_model()`"),
+  c("Linear model", 
+    "`hesim::params_lm`", 
+    "`stats::lm`")
+)
 colnames(tbl) <- c("Statistical model", "Parameter object", "Model fit object")
 knitr::kable(tbl, row.names = FALSE) %>%
-  kableExtra::kable_styling()
+  kableExtra::kable_styling() %>%
+    kableExtra::collapse_rows(columns = 1, valign = "top")
 ```
 
-Linear models are fit using `stats::lm()`. Predicted means are most easily constructed from a `hesim::stateval_tbl` object, which is a special object used to assign values to health states. The table allows users to specify mean values that can vary across health states, treatment strategies, patients, and/or time intervals. State values can be specified either as moments (i.e., mean and standard error) or parameters (e.g., shape and scale of gamma distribution) of a probability distribution, or by pre-simulating values from a suitable probability distribution. Here we will use `hesim::stateval_tbl` objects for utility and two cost categories (drug and medical).
+Linear models are fit using `stats::lm()`. Predicted means can be constructed from a `hesim::stateval_tbl` object or as a part of a model defined in term of mathematical expressions with `define_model()`. The former is a special object used to assign values to health states that can vary across treatment strategies, patients, and/or time intervals. State values can be specified either as moments (i.e., mean and standard error) or parameters (e.g., shape and scale of gamma distribution) of a probability distribution, or by pre-simulating values from a suitable probability distribution. Here we will use `hesim::stateval_tbl` objects for utility and two cost categories (drug and medical).
 
 ```{r}
 # Utility
@@ -157,7 +166,7 @@ medcost_tbl <- stateval_tbl(data.table(state_id = states$state_id,
  
 # Simulation
 ## Constructing an economic model
-An economic model consists of a disease model, a utility model, and a set of cost models for each cost category. The utility and cost models are always `hesim::StateVals` objects, whereas the disease models vary by economic model. The disease model is used to simulate survival curves in a Psm and health state transitions in a cDTSTM and iCTSTM.
+An economic model consists of a disease model, a utility model, and a set of cost models for each cost category. The utility and cost models are always `hesim::StateVals` objects, whereas the disease models vary by economic model. The disease model is used to simulate survival curves in a PSM and health state transitions in a cDTSTM and iCTSTM.
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
 dtstm <- c("`hesim::CohortDtstm`", "`hesim::CohortDtstmTrans`",
