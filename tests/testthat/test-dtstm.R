@@ -310,6 +310,19 @@ test_that(paste0("create_CohortDtstmTrans$sim_stateprobs() with mulinom() object
   test_equal(stprobs_int, hesim_stprobs, strat_id = 2)
 })
 
+test_that(paste0("create_CohortDtstmTrans does not support offset term ", 
+                 "with mulinom() objects"), {
+  m <- matrix(c(1, 100, 1), nrow = nrow(data_healthy), ncol = 3, byrow = TRUE)
+  fit_healthy2 <- multinom(state_to ~ offset(m) + strategy_name + female + age +
+                             year_cat,
+                          data = data_healthy, trace = FALSE)  
+  transfits2 <- multinom_list(healthy = fit_healthy2, sick = fit_sick)
+  expect_error(create_CohortDtstmTrans(transfits2,
+                                       input_data = transmod_data,
+                                       trans_mat = tmat),
+               "An offset is not supported")
+})
+
 # Create model from a model_def object -----------------------------------------
 test_that(paste0("Use define_model() to create CohortDtstmTrans object"), {
   hesim_dat <- hesim_data(

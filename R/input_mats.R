@@ -362,6 +362,9 @@ create_input_mats.params_surv_list <- function(object, input_data, ...){
 create_input_mats_multinom_X <- function(object, input_data, ...){
   check_edata(input_data)
   terms <- get_terms(object)
+  if (!is.null(attr(terms(object), "offset"))){
+    stop("An offset is not supported.", call. = FALSE)
+  }
   m <- stats::model.frame(terms, input_data, na.action = stats::na.omit,
                            xlev = object$xlevels)
   if (!is.null(cl <- attr(terms, "dataClasses")))
