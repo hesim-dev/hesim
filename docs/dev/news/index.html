@@ -139,6 +139,36 @@
       <small>Source: <a href='https://github.com/hesim-dev/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="hesim-030" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hesim-030" class="anchor"></a>hesim 0.3.0</h2>
+<div id="highlights" class="section level3">
+<h3 class="hasAnchor">
+<a href="#highlights" class="anchor"></a>Highlights</h3>
+<p><code>hesim</code> now supports discrete time state transition models via <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> objects. Users can build a model by either fitting multinomial logistic regressions with <code><a href="https://www.rdocumentation.org/packages/nnet/topics/multinom">nnet::multinom()</a></code> or with a mathematical expression using <code><a href="../reference/define_model.html">define_model()</a></code>. Furthermore, <code>$summarize()</code> methods now have a <code>by_grp</code> option to facilitate subgroup analyses.</p>
+</div>
+<div id="new-features" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h3>
+<ul>
+<li><p>The <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> class simulates cohort discrete time state transition models (cDTSTM). State transitions in a cDTSTM are simulated using the <code><a href="../reference/CohortDtstmTrans.html">hesim::CohortDtstmTrans</a></code> class, which can be constructed from a <code><a href="../reference/multinom_list.html">multinom_list()</a></code> object or using <code><a href="../reference/define_model.html">define_model()</a></code>.</p></li>
+<li><p><code>$summarize()</code> methods now have a <code>by_grp = "TRUE"</code> option to facilitate subgroup analyses. If <code>by_grp = "FALSE"</code>, then estimates are aggregated across groups. A new <code>patient_wt</code> argument in the <code>patients</code> table of <code><a href="../reference/hesim_data.html">hesim_data()</a></code> can be used to weight groups during the aggregation.</p></li>
+<li><p><code><a href="../reference/tparams.html">hesim::tparams</a></code> objects can now be used to store transformed parameters used to simulate outcomes such as means (i.e., <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) that have already been predicted as a function of covariates.</p></li>
+<li><p>General cumulative hazard functions can now be simulated using a discrete time approximation where the probability of an event during each time period is simulated from a Bernoulli distribution. This is more efficient than the previous method based on a <code>C++</code> version of the <code><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample()</a></code> function. See the <code>random_method = "discrete"</code> option in <code><a href="../reference/params_surv.html">params_surv()</a></code>.</p></li>
+<li><p><code><a href="../reference/rdirichlet_mat.html">rdirichlet_mat()</a></code> has a new argument <code>output</code> so that multiple object types can be returned.</p></li>
+</ul>
+</div>
+<div id="api-changes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#api-changes" class="anchor"></a>API changes</h3>
+<ul>
+<li><p>The auxiliary argument <code>random_method = "sample"</code> in <code><a href="../reference/params_surv.html">params_surv()</a></code> is deprecated and <code>random_method = "discrete"</code> should be used instead.</p></li>
+<li><p><code>stateval_tbl</code> now contains a <code>grp_var</code> column used to assign state values to “groups” of patients. This is distinct from <code>grp_id</code> in <code><a href="../reference/hesim_data.html">hesim_data()</a></code>, which is used to define groups for subgroup analyses.</p></li>
+<li><p>The public field <code>input_mats</code> has been renamed <code>input_data</code> in <code>R6</code> classes for disease progression and state values. This is a more generic name and will allow for potential feature enhancements in which <code>input_data</code> is a data frame rather than a matrix.</p></li>
+<li><p><code><a href="../reference/rdirichlet_mat.html">rdirichlet_mat()</a></code> has been modified to better facilitate sampling from transition matrices within the context of <code><a href="../reference/define_model.html">define_model()</a></code> and <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code>. One implication is that the number of rows in <code>alpha</code> must now be less than or equal to the number of columns and that the number of columns can be greater than the number of rows.</p></li>
+</ul>
+</div>
+</div>
     <div id="hesim-023" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-023" class="anchor"></a>hesim 0.2.3</h2>
@@ -168,38 +198,38 @@
     <div id="hesim-020" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-020" class="anchor"></a>hesim 0.2.0</h2>
-<div id="highlights" class="section level3">
+<div id="highlights-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#highlights" class="anchor"></a>Highlights</h3>
+<a href="#highlights-1" class="anchor"></a>Highlights</h3>
 <p><code>hesim</code> now provides a general framework for integrating statistical models with economic evaluation. Users build a decision model by specifying a model structure, which consists of a set of statistical models for disease progression, utilities, and costs. Each statistical model is used to simulate outcomes as a function of estimated parameters and input data. N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are now supported.</p>
 </div>
-<div id="api-changes" class="section level3">
+<div id="new-features-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#api-changes" class="anchor"></a>API changes</h3>
-<ul>
-<li>The argument <code>sim</code> was renamed <code>sample</code> in <code><a href="../reference/icea.html">icea()</a></code>, <code><a href="../reference/icea.html">icea_pw()</a></code>, and <code><a href="../reference/incr_effect.html">incr_effect()</a></code>.</li>
-<li>Custom functions and variables are no longer supported in <code>icea</code> and <code><a href="../reference/icea.html">icea_pw()</a></code>.</li>
-</ul>
-</div>
-<div id="new-features" class="section level3">
-<h3 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New features</h3>
+<a href="#new-features-1" class="anchor"></a>New features</h3>
 <p>Economic models—which combine the disease, utility, and cost models—are constructed with the following classes:</p>
 <ul>
 <li>
-<code><a href="../reference/Psm.html">Psm()</a></code> for PSMs</li>
+<code><a href="../reference/Psm.html">hesim::Psm()</a></code> for PSMs</li>
 <li>
-<code><a href="../reference/IndivCtstm.html">IndivCtstm()</a></code> for iCTSTMs</li>
+<code><a href="../reference/IndivCtstm.html">hesim::IndivCtstm()</a></code> for iCTSTMs</li>
 </ul>
 <p>Disease models are constructed using the classes:</p>
 <ul>
 <li>
-<code><a href="../reference/PsmCurves.html">PsmCurves()</a></code> to simulate survival curves for each endpoint of interest</li>
+<code><a href="../reference/PsmCurves.html">hesim::PsmCurves</a></code> to simulate survival curves for each endpoint of interest</li>
 <li>
-<code><a href="../reference/IndivCtstmTrans.html">IndivCtstmTrans()</a></code> to simulate health state transitions with a iCTSTM</li>
+<code><a href="../reference/IndivCtstmTrans.html">hesim::IndivCtstmTrans</a></code> to simulate health state transitions with a iCTSTM</li>
 </ul>
-<p>Utility and cost models are constructed with the <code><a href="../reference/StateVals.html">StateVals()</a></code> class.</p>
-<p>The economic models are used to simulate disease progression (<code>$sim_disease()</code>, <code>sim_stateprobs()</code>), quality-adjusted life-years (QALYs) (<code><a href="../reference/sim_ev.html">sim_qalys()</a></code>), and costs (<code><a href="../reference/sim_ev.html">sim_costs()</a></code>). Parameter uncertainty is propagated to model outcomes using probabilistic sensitivity analysis. Summaries of the simulated costs and QALYs are used to perform model-based cost-effectiveness analyses (CEAs) and represent decision uncertainty with <code><a href="../reference/icea.html">icea.ce()</a></code> and <code><a href="../reference/icea.html">icea_pw.ce()</a></code>.</p>
+<p>Utility and cost models are constructed with the <code><a href="../reference/StateVals.html">hesim::StateVals</a></code> class.</p>
+<p>The economic models are used to simulate disease progression (<code>$sim_disease()</code>, <code>$sim_stateprobs()</code>), quality-adjusted life-years (QALYs) (<code>$sim_qalys()</code>), and costs (<code>$sim_costs()</code>). Parameter uncertainty is propagated to model outcomes using probabilistic sensitivity analysis. Summaries of the simulated costs and QALYs are used to perform model-based cost-effectiveness analyses (CEAs) and represent decision uncertainty with <code><a href="../reference/icea.html">icea.ce()</a></code> and <code><a href="../reference/icea.html">icea_pw.ce()</a></code>.</p>
+</div>
+<div id="api-changes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#api-changes-1" class="anchor"></a>API changes</h3>
+<ul>
+<li>The argument <code>sim</code> was renamed <code>sample</code> in <code><a href="../reference/icea.html">icea()</a></code>, <code><a href="../reference/icea.html">icea_pw()</a></code>, and <code><a href="../reference/incr_effect.html">incr_effect()</a></code>.</li>
+<li>Custom functions and variables are no longer supported in <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code>.</li>
+</ul>
 </div>
 </div>
     <div id="hesim-010" class="section level2">
@@ -213,6 +243,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#hesim-030">0.3.0</a></li>
         <li><a href="#hesim-023">0.2.3</a></li>
         <li><a href="#hesim-022">0.2.2</a></li>
         <li><a href="#hesim-021">0.2.1</a></li>
