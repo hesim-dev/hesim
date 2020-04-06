@@ -170,7 +170,8 @@ transition probability matrices.</p>
     </tr>
     <tr>
       <th>output</th>
-      <td><p>Whether output should be an array or a matrix.</p></td>
+      <td><p>The class of the object returned by the function. Either an
+<code>array</code>, <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code>.</p></td>
     </tr>
     </table>
     
@@ -178,19 +179,18 @@ transition probability matrices.</p>
 
     <p>If <code>output = "array"</code>, then an array of matrices is returned
 where each row of each matrix is a sample from the Dirichlet distribution.
-If <code>output = "matrix"</code>, then a matrix is returned where each row contains
-all elements of the sampled matrix from the Dirichlet distribution ordered rowwise;
-when <code>output = "data.frame"</code> or <code>output = "data.table"</code> the returned
-value is a <code>data.frame</code> or <code>data.table</code> in the same format as the
-matrix returned with <code>output = "matrix"</code>.</p>
+If <code>output</code> results in a two dimensional object (i.e., a <code>matrix</code>,
+<code>data.frame</code>, or <code>data.table</code>, then each row contains
+all elements of the sampled matrix from the Dirichlet distribution
+ordered rowwise; that is, each matrix is flattened. In these cases,
+the number of rows must be less than or equal to the number of columns.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function is meant for representing the distribution of
 transition probabilities in a transition matrix. The <code>(i,j)</code> element of
-<code>alpha</code> is a transition from state <code>i</code> to state <code>j</code>. The number of rows in
-<code>alpha</code> must be less than or equal to the number of columns.
-<code>rdirichlet_mat</code> is vectorized and written in C++ for speed.</p>
+<code>alpha</code> is a transition from state <code>i</code> to state <code>j</code>. It is vectorized and
+written in <code>C++</code> for speed.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -199,14 +199,14 @@ transition probabilities in a transition matrix. The <code>(i,j)</code> element 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>samp</span>[, , <span class='fl'>1</span>:<span class='fl'>2</span>])</div><div class='output co'>#&gt; , , 1
 #&gt; 
 #&gt;           [,1]      [,2]      [,3]
-#&gt; [1,] 0.1131831 0.2561972 0.6306197
-#&gt; [2,] 0.2636402 0.3881489 0.3482110
+#&gt; [1,] 0.1115835 0.2406710 0.6477455
+#&gt; [2,] 0.2901469 0.3272964 0.3825567
 #&gt; 
 #&gt; , , 2
 #&gt; 
 #&gt;           [,1]      [,2]      [,3]
-#&gt; [1,] 0.1426024 0.2262479 0.6311497
-#&gt; [2,] 0.2976925 0.3570395 0.3452680
+#&gt; [1,] 0.1120900 0.2532513 0.6346587
+#&gt; [2,] 0.2143633 0.4081164 0.3775203
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
