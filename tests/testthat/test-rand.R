@@ -106,7 +106,7 @@ test_that("rdirichlet_mat", {
   # check errors
   expect_error(rdirichlet_mat(n = -1, alpha),
                "n must be greater than 0")
-  expect_error(rdirichlet_mat(n = 1, rbind(alpha, alpha)),
+  expect_error(rdirichlet_mat(n = 1, rbind(alpha, alpha), output = "data.frame"),
                paste0("The number of rows of 'alpha' must be less than or ",
                       "equal to the number of columns"))
   expect_error(rdirichlet_mat(n = 1, c("1", "2")),
