@@ -16,8 +16,8 @@ An object of class \code{time_intervals} that inherits from
 described in \link{id_attributes}.
 }
 \description{
-Create a table of time intervals given a vector of starting times for each
-interval. This would typically be passed to \link{id_attributes}.
+Create a table of time intervals given a vector or data frame of unique times.
+This would typically be passed to \link{id_attributes}.
 }
 \examples{
 time_intervals(c(0, 3, 5))

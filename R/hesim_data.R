@@ -304,8 +304,8 @@ sort_hesim_data <- function(data, sorted_by){
 # ID attributes ----------------------------------------------------------------
 #' Time intervals
 #' 
-#' Create a table of time intervals given a vector of starting times for each 
-#' interval. This would typically be passed to [id_attributes].
+#' Create a table of time intervals given a vector or data frame of unique times.
+#' This would typically be passed to [id_attributes].
 #' 
 #' @param times Either a vector of times for each interval or a
 #'  `data.frame` with at least one column named `time_start`.
@@ -340,6 +340,7 @@ time_intervals <- function(times){
                                    times)
     } else{
       times <- times[!is.infinite(times)]
+      times <- times[times >= 0]
       if (!any(times <= 0)) times <- c(0, times)
       time_intervals <- data.table(time_id = 1:length(times), 
                                    time_start = sort(as.numeric(times)))

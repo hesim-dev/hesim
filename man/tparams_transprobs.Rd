@@ -20,9 +20,10 @@ tparams_transprobs(object, ...)
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{times}{An optional numeric vector of distinct times denoting the start of time intervals
-indexed by the 4th dimension of the array. This argument is not required if there is only one time
-interval as \code{times} will equal 0 in this case.}
+\item{times}{An optional numeric vector of distinct times to pass to
+\link{time_intervals} representing time intervals indexed by the 4th dimension of
+the array. May either be the start or the end of intervals.
+This argument is not required if there is only one time interval.}
 
 \item{grp_id}{An optional numeric vector of integers denoting the subgroups. Must
 be the same length as the 3rd dimension of the array.}

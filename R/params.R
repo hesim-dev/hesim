@@ -638,9 +638,10 @@ create_params.multinom_list <- function(object, n = 1000, point_estimate = FALSE
 #' 
 #' @param object An object of the appropriate class. 
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
-#' @param times An optional numeric vector of distinct times denoting the start of time intervals
-#' indexed by the 4th dimension of the array. This argument is not required if there is only one time 
-#' interval as `times` will equal 0 in this case. 
+#' @param times An optional numeric vector of distinct times to pass to
+#'  [time_intervals] representing time intervals indexed by the 4th dimension of 
+#'  the array. May either be the start or the end of intervals. 
+#'  This argument is not required if there is only one time interval.
 #' @param grp_id An optional numeric vector of integers denoting the subgroups. Must
 #' be the same length as the 3rd dimension of the array.
 #' @param patient_wt An optional numer vector denoting the weight to apply to each 
