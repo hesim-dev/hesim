@@ -8,16 +8,20 @@ Authors@R: c(
     person(given = "R Core Team", role = "ctb",
     comment="hesim uses some slightly modified C functions from base R")
     )
-Description: Parameterize, simulate, and analyze health-economic simulation 
-  models. Supports N-state partitioned survival models (Glasziou et al. 1990)
-  <doi:10.1002/sim.4780091106> and continuous time state transition models 
-  (Siebert et al. 2012) <doi:10.1016/j.jval.2012.06.014> parameterized using 
-  survival or multi-state modeling (de Wreede et al. 2011, Jackson 2015) 
-  <doi:10.18637/jss.v038.i07>, <doi:10.18637/jss.v070.i08>. Decision uncertainty 
-  from a cost-effectiveness analysis is quantified with standard graphical and 
-  tabular summaries of a probabilistic sensitivity analysis (Claxton et al. 2005, 
-  Barton et al. 2008) <doi:10.1002/hec.985>, <doi:10.1111/j.1524-4733.2008.00358.x>. 
-  Simulation code written in C++ to boost performance.
+Description: hesim is a modular and computationally efficient R package for  
+  parameterizing, simulating, and analyzing health-economic simulation 
+  models. The package supports cohort discrete time state transition models 
+  (Briggs et al. 1998) <doi:10.2165/00019053-199813040-00003>,
+  N-state partitioned survival models (Glasziou et al. 1990)
+  <doi:10.1002/sim.4780091106>, and individual-level continuous 
+  time state transition models (Siebert et al. 2012) <doi:10.1016/j.jval.2012.06.014>,
+  encompassing both Markov (time-homogeneous and time-inhomogeneous) and 
+  semi-Markov processes. Decision uncertainty from a cost-effectiveness analysis is 
+  quantified with standard graphical and tabular summaries of a probabilistic 
+  sensitivity analysis (Claxton et al. 2005, Barton et al. 2008) <doi:10.1002/hec.985>, 
+  <doi:10.1111/j.1524-4733.2008.00358.x>. It heavily utilizes C++ and data.table, 
+  making individual-patient simulation, probabilistic sensitivity analysis, 
+  and incorporation of patient heterogeneity fast.
 URL: https://github.com/hesim-dev/hesim
 BugReports: https://github.com/hesim-dev/hesim/issues
 License: GPL-3
