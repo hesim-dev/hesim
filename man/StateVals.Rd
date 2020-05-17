@@ -45,6 +45,7 @@ costs vary over time within health states. Only used if \code{method = wlos}.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{StateVals} object.
 \subsection{Usage}{
@@ -75,6 +76,7 @@ A new \code{StateVals} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim"></a>}}
+\if{latex}{\out{\hypertarget{method-sim}{}}}
 \subsection{Method \code{sim()}}{
 Simulate state values with either predicted means or random samples by
 treatment strategy, patient, health state, and time \code{t}.
@@ -98,6 +100,7 @@ A \code{data.table} of simulated state values with columns for \code{sample},
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check"></a>}}
+\if{latex}{\out{\hypertarget{method-check}{}}}
 \subsection{Method \code{check()}}{
 Input validation for class. Checks that fields are the correct type.
 \subsection{Usage}{
@@ -107,6 +110,7 @@ Input validation for class. Checks that fields are the correct type.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

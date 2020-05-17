@@ -57,7 +57,7 @@ are ultimately converted into \link{tparams} objects and used to simulate outcom
 economic model.
 }
 \details{
-\code{define_tparams()} is evaluted when creating economic models as a
+\code{define_tparams()} is evaluated when creating economic models as a
 function of \code{model_def} objects defined with \code{\link[=define_model]{define_model()}}. Operations
 are "vectorized" in the sense that they are performed for each unique combination
 of \code{input_data} and \code{params}. \code{expr} is evaluated in an environment including

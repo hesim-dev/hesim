@@ -245,7 +245,7 @@ knitr::kable(tbl, row.names = FALSE) %>%
 
 Although all models simulate state probabilities, they do so in different ways. The cDTSTM uses discrete time Markov chains, the PSM calculates differences in probabilities from simulated survival curves, and the iCTSTM aggregates individual trajectories simulated using random number generation. The individual-level simulation is advantageous because it can be used for semi-Markov processes where transition rates depend on time since entering a health state (rather than time since the start of the model). 
 
-In the cohort models, costs and QALYs are computed as a function of the state probabilities wheras in individiual-level models they are based on the simulated individual trajectories. Like the disease model, the individual-level simulation is more flexible because costs and QALYs can depend on time since entering the health state.
+In the cohort models, costs and QALYs are computed as a function of the state probabilities whereas in individual-level models they are based on the simulated individual trajectories. Like the disease model, the individual-level simulation is more flexible because costs and QALYs can depend on time since entering the health state.
 
 We illustrate with the iCTSTM. First we simulate disease progression for each patient.
 

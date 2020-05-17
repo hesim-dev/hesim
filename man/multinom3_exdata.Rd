@@ -4,14 +4,16 @@
 \name{multinom3_exdata}
 \alias{multinom3_exdata}
 \title{Example data for a 3-state multinomial model}
-\format{A list containing the following elements:
+\format{
+A list containing the following elements:
 \itemize{
 \item{transitions}{ A data frame containing patient transitions between health
 states at discrete time intervals (i.e., on a yearly basis).}
 \item{costs}{ A list of data frames. The first data frame contains
 drug cost data and the second contains summary medical cost estimates.}
 \item{utility}{ A data frame of summary utility estimates.}
-}}
+}
+}
 \usage{
 multinom3_exdata
 }

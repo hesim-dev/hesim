@@ -378,26 +378,26 @@ format_cri <- function(est, lower, upper, costs = TRUE, digits){
 #' ICER table
 #'
 #' Generate a table of incremental cost-effectiveness ratios given output from 
-#' \code{\link{icea_pw}}.
+#' [icea_pw()].
 #'
-#' @param x An object of class "icea_pw" returned by \code{\link{icea_pw}}.
+#' @param x An object of class `icea_pw` returned by [icea_pw()].
 #' @param k Willingness to pay.
-#' @param cri If \code{TRUE}, credible intervals are computed; otherwise 
+#' @param cri If `TRUE`, credible intervals are computed; otherwise 
 #' they are not.
-#' @param prob A numeric scalar in the interval \code{(0,1)} giving the credible interval.
+#' @param prob A numeric scalar in the interval `(0,1)` giving the credible interval.
 #' Default is 0.95 for a 95 percent credible interval. 
 #' @param digits_qalys Number of digits to use to report QALYs.
 #' @param digits_costs Number of digits to use to report costs.
-#' @param output Should output be a \code{data.table} or a list of matrices for
+#' @param output Should output be a `data.table` or a list of matrices for
 #' each group.
-#' @param rownames Row names for matrices when \code{output = "matrix"}.
-#' @param colnames Column names for matrices when \code{output = "matrix"}.
-#' @param drop If \code{TRUE}, then the result is coerced to the lowest possible dimension. 
-#' Relevant if \code{output = "matrix"} and there is one group, in which case a single
-#' matrix will be returned if \code{drop = TRUE} and a list of length 1 will be returned
-#' if \code{drop = FALSE}.
-#' @seealso \code{\link{icea_pw}}
-#' @return If \code{output = "matrix"}, then a list of matrices (or a matrix if
+#' @param rownames Row names for matrices when `output = "matrix"`.
+#' @param colnames Column names for matrices when `output = "matrix"`.
+#' @param drop If `TRUE`, then the result is coerced to the lowest possible dimension. 
+#' Relevant if `output = "matrix"` and there is one group, in which case a single
+#' matrix will be returned if `drop = TRUE` and a list of length 1 will be returned
+#' if `drop = FALSE`.
+#' @seealso [icea_pw()]
+#' @return If `output = "matrix"`, then a list of matrices (or a matrix if
 #' \code{drop = TRUE}) reporting incremental cost-effectiveness ratios (ICERs)
 #' by group. Specifically, each matrix contains five rows for: (i) 
 #' incremental quality-adjusted life-years (QALYs), (ii) incremental costs,
@@ -406,7 +406,7 @@ format_cri <- function(est, lower, upper, costs = TRUE, digits){
 #'  to a comparator. The number of columns is equal to the
 #' number of strategies (including the comparator).
 #' 
-#' If \code{output = "data.table"}, then the results are reported as a \code{data.table},
+#' If `output = "data.table"`, then the results are reported as a `data.table`,
 #' with one row for each strategy and group combination.
 #' @export
 icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95, 

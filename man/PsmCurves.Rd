@@ -3,7 +3,9 @@
 \name{PsmCurves}
 \alias{PsmCurves}
 \title{Partitioned survival curves}
-\format{An \link[R6:R6Class]{R6::R6Class} object.}
+\format{
+An \link[R6:R6Class]{R6::R6Class} object.
+}
 \description{
 Summarize \code{n-1} survival curves for an \code{N} state partitioned survival model.
 }
@@ -67,6 +69,7 @@ be a unique treatment strategy and patient.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{PsmCurves} object.
 \subsection{Usage}{
@@ -88,6 +91,7 @@ A new \code{PsmCurves} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-hazard"></a>}}
+\if{latex}{\out{\hypertarget{method-hazard}{}}}
 \subsection{Method \code{hazard()}}{
 Predict the hazard function for each survival curve as a function of time.
 \subsection{Usage}{
@@ -108,6 +112,7 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-cumhazard"></a>}}
+\if{latex}{\out{\hypertarget{method-cumhazard}{}}}
 \subsection{Method \code{cumhazard()}}{
 Predict the cumulative hazard function for each survival curve as a function of time.
 \subsection{Usage}{
@@ -128,6 +133,7 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-survival"></a>}}
+\if{latex}{\out{\hypertarget{method-survival}{}}}
 \subsection{Method \code{survival()}}{
 Predict the cumulative hazard function for each survival curve as a function of time.
 \subsection{Usage}{
@@ -148,6 +154,7 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-rmst"></a>}}
+\if{latex}{\out{\hypertarget{method-rmst}{}}}
 \subsection{Method \code{rmst()}}{
 Predict the restricted mean survival time up until time points \code{t}
 for each survival curve.
@@ -171,6 +178,7 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-quantile"></a>}}
+\if{latex}{\out{\hypertarget{method-quantile}{}}}
 \subsection{Method \code{quantile()}}{
 Predict quantiles of the survival distribution for each survival curve.
 \subsection{Usage}{
@@ -191,6 +199,7 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check"></a>}}
+\if{latex}{\out{\hypertarget{method-check}{}}}
 \subsection{Method \code{check()}}{
 Input validation for class. Checks that fields are the correct type.
 \subsection{Usage}{
@@ -200,6 +209,7 @@ Input validation for class. Checks that fields are the correct type.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

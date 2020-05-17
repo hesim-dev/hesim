@@ -76,6 +76,7 @@ and (iii) the health-related ID variable (either \code{state_id} or
 objects and \code{sample} is used for indexing, then observations must be sorted by:
 (i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id}, and
 (iv) the health-related ID variable.
-
-@seealso \code{\link[=hesim_data]{hesim_data()}},\code{\link[=expand.hesim_data]{expand.hesim_data()}}, \link{input_mats}
+}
+\seealso{
+\code{\link[=hesim_data]{hesim_data()}},\code{\link[=expand.hesim_data]{expand.hesim_data()}}, \link{input_mats}
 }

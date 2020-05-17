@@ -306,36 +306,36 @@ simulating trajectories through a multi-state model with
                                    <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                    <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t     hazard
-#&gt; 1:     1      1           1          1      1 1 0.17340092
-#&gt; 2:     1      1           1          1      1 2 0.17340092
-#&gt; 3:     1      1           1          1      1 3 0.17340092
-#&gt; 4:     2      1           1          1      1 1 0.05617766
-#&gt; 5:     2      1           1          1      1 2 0.05617766
-#&gt; 6:     2      1           1          1      1 3 0.05617766</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t  cumhazard
-#&gt; 1:     1      1           1          1      1 1 0.17340092
-#&gt; 2:     1      1           1          1      1 2 0.34680185
-#&gt; 3:     1      1           1          1      1 3 0.52020277
-#&gt; 4:     2      1           1          1      1 1 0.05617766
-#&gt; 5:     2      1           1          1      1 2 0.11235533
-#&gt; 6:     2      1           1          1      1 3 0.16853299</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id grp_id state_id t      prob
-#&gt;  1:      1           1      1        1 5 0.0000000
-#&gt;  2:      1           1      1        2 5 0.3333333
-#&gt;  3:      1           1      1        3 5 0.6666667
-#&gt;  4:      1           2      1        1 5 0.0000000
+#&gt; 1:     1      1           1          1      1 1 0.21087494
+#&gt; 2:     1      1           1          1      1 2 0.21087494
+#&gt; 3:     1      1           1          1      1 3 0.21087494
+#&gt; 4:     2      1           1          1      1 1 0.05853501
+#&gt; 5:     2      1           1          1      1 2 0.05853501
+#&gt; 6:     2      1           1          1      1 3 0.05853501</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t  cumhazard
+#&gt; 1:     1      1           1          1      1 1 0.21087494
+#&gt; 2:     1      1           1          1      1 2 0.42174988
+#&gt; 3:     1      1           1          1      1 3 0.63262482
+#&gt; 4:     2      1           1          1      1 1 0.05853501
+#&gt; 5:     2      1           1          1      1 2 0.11707001
+#&gt; 6:     2      1           1          1      1 3 0.17560502</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id grp_id state_id t      prob
+#&gt;  1:      1           1      1        1 5 0.6666667
+#&gt;  2:      1           1      1        2 5 0.0000000
+#&gt;  3:      1           1      1        3 5 0.3333333
+#&gt;  4:      1           2      1        1 5 0.3333333
 #&gt;  5:      1           2      1        2 5 0.3333333
-#&gt;  6:      1           2      1        3 5 0.6666667
-#&gt;  7:      1           3      1        1 5 0.0000000
-#&gt;  8:      1           3      1        2 5 0.3333333
+#&gt;  6:      1           2      1        3 5 0.3333333
+#&gt;  7:      1           3      1        1 5 0.3333333
+#&gt;  8:      1           3      1        2 5 0.0000000
 #&gt;  9:      1           3      1        3 5 0.6666667
 #&gt; 10:      2           1      1        1 5 0.0000000
 #&gt; 11:      2           1      1        2 5 0.3333333
 #&gt; 12:      2           1      1        3 5 0.6666667
-#&gt; 13:      2           2      1        1 5 0.6666667
+#&gt; 13:      2           2      1        1 5 0.3333333
 #&gt; 14:      2           2      1        2 5 0.0000000
-#&gt; 15:      2           2      1        3 5 0.3333333
-#&gt; 16:      2           3      1        1 5 0.3333333
+#&gt; 15:      2           2      1        3 5 0.6666667
+#&gt; 16:      2           3      1        1 5 0.6666667
 #&gt; 17:      2           3      1        2 5 0.0000000
-#&gt; 18:      2           3      1        3 5 0.6666667</div></pre>
+#&gt; 18:      2           3      1        3 5 0.3333333</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

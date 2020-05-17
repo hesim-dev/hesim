@@ -3,7 +3,9 @@
 \name{IndivCtstm}
 \alias{IndivCtstm}
 \title{Individual-level continuous time state transition model}
-\format{An \link[R6:R6Class]{R6::R6Class} object.}
+\format{
+An \link[R6:R6Class]{R6::R6Class} object.
+}
 \description{
 Simulate outcomes from an individual-level continuous time state transition
 model (CTSTM) from a fitted multi-state model. The class supports "clock-reset"
@@ -140,6 +142,7 @@ state during the simulation and 0 otherwise.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{IndivCtstm} object.
 \subsection{Usage}{
@@ -163,6 +166,7 @@ A new \code{IndivCtstm} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_disease"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_disease}{}}}
 \subsection{Method \code{sim_disease()}}{
 Simulate disease progression (i.e., individual trajectories through a multi-state
 model using an individual patient simulation).
@@ -192,6 +196,7 @@ An instance of self with simulated output stored in \code{disprog_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_stateprobs"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
 Simulate health state probabilities as a function of time using the
 simulation output stored in \code{disprog}.
@@ -213,6 +218,7 @@ stored in \code{stateprobs_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_qalys"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{disprog_} and
 \code{utility_model}. See \code{vignette("expected-values")} for details.
@@ -247,6 +253,7 @@ class \link{qalys} stored in \code{qalys_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_costs"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_costs}{}}}
 \subsection{Method \code{sim_costs()}}{
 Simulate costs as a function of \code{disprog_} and \code{cost_models}.
 See \code{vignette("expected-values")} for details.
@@ -286,6 +293,7 @@ stored in \code{costs_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-summarize"></a>}}
+\if{latex}{\out{\hypertarget{method-summarize}{}}}
 \subsection{Method \code{summarize()}}{
 Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See \code{\link[=summarize_ce]{summarize_ce()}}.
@@ -304,6 +312,7 @@ See \code{\link[=summarize_ce]{summarize_ce()}}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

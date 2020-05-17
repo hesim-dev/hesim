@@ -3,7 +3,9 @@
 \name{CohortDtstm}
 \alias{CohortDtstm}
 \title{Cohort discrete time state transition model}
-\format{An \link[R6:R6Class]{R6::R6Class} object.}
+\format{
+An \link[R6:R6Class]{R6::R6Class} object.
+}
 \description{
 Simulate outcomes from a cohort discrete time state transition model.
 }
@@ -123,6 +125,7 @@ list represents a different cost category.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{CohortDtstm} object.
 \subsection{Usage}{
@@ -146,6 +149,7 @@ A new \code{CohortDtstm} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_stateprobs"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
 Simulate health state probabilities using \code{CohortDtstmTrans$sim_stateprobs()}.
 \subsection{Usage}{
@@ -166,6 +170,7 @@ stored in \code{stateprobs_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_qalys"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_} and
 \code{utility_model}. See \code{vignette("expected-values")} for details.
@@ -195,6 +200,7 @@ in \code{qalys_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_costs"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_costs}{}}}
 \subsection{Method \code{sim_costs()}}{
 Simulate costs as a function of \code{stateprobs_} and \code{cost_models}.
 See \code{vignette("expected-values")} for details.
@@ -221,6 +227,7 @@ in \code{costs_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-summarize"></a>}}
+\if{latex}{\out{\hypertarget{method-summarize}{}}}
 \subsection{Method \code{summarize()}}{
 Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See \code{\link[=summarize_ce]{summarize_ce()}}.
@@ -239,6 +246,7 @@ See \code{\link[=summarize_ce]{summarize_ce()}}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

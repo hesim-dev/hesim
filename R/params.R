@@ -657,7 +657,7 @@ create_params.multinom_list <- function(object, n = 1000, point_estimate = FALSE
 #'  `[s, k, i, t]` represents the transition matrix for the `s`th 
 #'  sample, `k`th treatment strategy, `i`th patient, and `t`th
 #'  time interval.}
-#'  \item{data.table}{Must contain the folowing:
+#'  \item{data.table}{Must contain the following:
 #'  \itemize{
 #'  \item ID columns for the parameter sample (`sample`), 
 #'  treatment strategy (`strategy_id`), and patient (`patient_id`).
@@ -668,7 +668,7 @@ create_params.multinom_list <- function(object, n = 1000, point_estimate = FALSE
 #'  \item Columns for each element of the transition probability matrix. 
 #'  They should be prefixed with "probs_" and ordered rowwise. 
 #'  For example, the following columns would be used for a 2x2 transition
-#'   probabiliy matrix:
+#'   probability matrix:
 #'  `probs_1` (1st row, 1st column), 
 #'  `probs_2` (1st row, 2nd column), 
 #'  `probs_3` (2nd row, 1st column), and 

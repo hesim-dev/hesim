@@ -44,7 +44,7 @@ by the function.}
 \item{est}{A vector of estimates of the variable of interest.}
 
 \item{x}{A numeric \code{vector}, \code{matrix}, \code{data.frame}, or \code{data.table} containing
-random samples of the variable of interest from a suitable probabilitiy distribution. This would
+random samples of the variable of interest from a suitable probability distribution. This would
 typically be a posterior distribution from a Bayesian analysis.}
 
 \item{meanlog, sdlog}{Mean and standard deviation of the distribution on the

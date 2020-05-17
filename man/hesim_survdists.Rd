@@ -4,7 +4,8 @@
 \name{hesim_survdists}
 \alias{hesim_survdists}
 \title{List of survival distributions}
-\format{A list with the following elements:
+\format{
+A list with the following elements:
 \describe{
 \item{name}{Name of the probability distribution.}
 \item{pars}{Vector of strings naming the parameters of the distribution.
@@ -22,7 +23,8 @@ which returns a vector of reasonable initial values for maximum likelihood
 estimation of each parameter. For example, \code{function(t){ c(1, mean(t)) }}
 will always initialize the first of two parameters at 1, and the second
 (a scale parameter, for instance) at the mean of \code{t}.}
-}}
+}
+}
 \usage{
 hesim_survdists
 }

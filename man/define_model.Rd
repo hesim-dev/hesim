@@ -31,7 +31,7 @@ in the transition probability matrix; otherwise it must be specified as an argum
 \item{x}{An object of class \code{model_def} created with \code{define_model()}.}
 
 \item{input_data}{An object of class \link[=expand.hesim_data]{expanded_hesim_data}
-expaned by patients and treatment strategies.}
+expanded by patients and treatment strategies.}
 }
 \value{
 \code{define_model()} returns an object of class \code{model_def},

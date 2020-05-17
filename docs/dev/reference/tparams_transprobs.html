@@ -218,7 +218,7 @@ a 6D array). The dimensions of the array should be indexed as follows:
 <code>[s, k, i, t]</code> represents the transition matrix for the <code>s</code>th
 sample, <code>k</code>th treatment strategy, <code>i</code>th patient, and <code>t</code>th
 time interval.</p></dd>
-<dt>data.table</dt><dd><p>Must contain the folowing:
+<dt>data.table</dt><dd><p>Must contain the following:
 <ul>
 <li><p>ID columns for the parameter sample (<code>sample</code>),
 treatment strategy (<code>strategy_id</code>), and patient (<code>patient_id</code>).
@@ -229,7 +229,7 @@ patient.</p></li>
 <li><p>Columns for each element of the transition probability matrix.
 They should be prefixed with "probs_" and ordered rowwise.
 For example, the following columns would be used for a 2x2 transition
-probabiliy matrix:
+probability matrix:
 <code>probs_1</code> (1st row, 1st column),
 <code>probs_2</code> (1st row, 2nd column),
 <code>probs_3</code> (2nd row, 1st column), and

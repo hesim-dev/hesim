@@ -3,11 +3,13 @@
 \name{ce}
 \alias{ce}
 \title{A cost-effectiveness object}
-\format{A list containing two elements:
+\format{
+A list containing two elements:
 \itemize{
 \item{costs}{ Total (discounted) costs by category.}
 \item{qalys}{ (Discounted) quality-adjusted life-years.}
-}}
+}
+}
 \description{
 An object that summarizes simulated measures of clinical effectiveness and costs from a simulation model for use in a cost-effectiveness analysis.
 }

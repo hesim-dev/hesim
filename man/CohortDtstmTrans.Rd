@@ -3,7 +3,9 @@
 \name{CohortDtstmTrans}
 \alias{CohortDtstmTrans}
 \title{Transitions for a cohort discrete time state transition model}
-\format{An \link[R6:R6Class]{R6::R6Class} object.}
+\format{
+An \link[R6:R6Class]{R6::R6Class} object.
+}
 \description{
 Simulate health state transitions in a cohort discrete time state transition model.
 }
@@ -55,6 +57,7 @@ and the reference category for each row should be \code{0}.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{CohortDtstmTrans} object.
 \subsection{Usage}{
@@ -88,6 +91,7 @@ A new \code{CohortDtstmTrans} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_stateprobs"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
 Simulate probability of being in each health state during each model cycle.
 \subsection{Usage}{
@@ -107,6 +111,7 @@ An object of class \link{stateprobs}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

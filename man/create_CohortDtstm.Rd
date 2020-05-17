@@ -23,7 +23,7 @@ create_CohortDtstm(object, ...)
 
 \item{input_data}{An object of class \link[=expand.hesim_data]{expanded_hesim_data}.}
 
-\item{cost_args}{A list of futher arguments passed to \code{StateVals$new()} in
+\item{cost_args}{A list of further arguments passed to \code{StateVals$new()} in
 \link{StateVals} when initiating cost models.}
 
 \item{utility_args}{A list of further arguments passed to \code{StateVals$new()} in

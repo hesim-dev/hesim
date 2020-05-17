@@ -391,7 +391,7 @@ time_intervals <- function(times){
 #'  (i) `sample`, (ii) `strategy_id`, (iii) `patient_id`, and
 #'   (iv) the health-related ID variable. 
 #'   
-#'   @seealso [hesim_data()],[expand.hesim_data()], [input_mats]
+#' @seealso [hesim_data()],[expand.hesim_data()], [input_mats]
 #' @export
 id_attributes <- function(strategy_id, n_strategies,
                           patient_id, n_patients,

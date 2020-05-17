@@ -1,7 +1,7 @@
 Package: hesim
 Type: Package
 Title: Health-Economic Simulation Modeling and Decision Analysis
-Version: 0.2.3.9000
+Version: 0.3.0
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", role = c("aut", "cre")),
     person("Jeroen P.", "Jansen", role = "aut"),
@@ -19,8 +19,8 @@ Description: A modular and computationally efficient R package for
   semi-Markov processes. Decision uncertainty from a cost-effectiveness analysis is 
   quantified with standard graphical and tabular summaries of a probabilistic 
   sensitivity analysis (Claxton et al. 2005, Barton et al. 2008) <doi:10.1002/hec.985>, 
-  <doi:10.1111/j.1524-4733.2008.00358.x>. It heavily utilizes C++ and data.table, 
-  making individual-patient simulation, probabilistic sensitivity analysis, 
+  <doi:10.1111/j.1524-4733.2008.00358.x>. Use of C++ and data.table
+  make individual-patient simulation, probabilistic sensitivity analysis, 
   and incorporation of patient heterogeneity fast.
 URL: https://github.com/hesim-dev/hesim
 BugReports: https://github.com/hesim-dev/hesim/issues
@@ -54,5 +54,5 @@ Suggests:
     truncnorm
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.1
+RoxygenNote: 7.1.0
 SystemRequirements: C++11

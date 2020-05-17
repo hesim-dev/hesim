@@ -349,7 +349,7 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
 #' A generic function for creating an object of class [CohortDtstm].
 #' @param object An object of the appropriate class. 
 #' @param input_data 	An object of class [expanded_hesim_data][expand.hesim_data()].
-#' @param cost_args A list of futher arguments passed to `StateVals$new()` in 
+#' @param cost_args A list of further arguments passed to `StateVals$new()` in 
 #' [StateVals] when initiating cost models.
 #' @param utility_args A list of further arguments passed to `StateVals$new()` in
 #' [StateVals] when initiating the utility model.

@@ -3,7 +3,9 @@
 \name{CtstmTrans}
 \alias{CtstmTrans}
 \title{An \code{R6} base class for continuous time state transition models}
-\format{An \link[R6:R6Class]{R6::R6Class} object.}
+\format{
+An \link[R6:R6Class]{R6::R6Class} object.
+}
 \description{
 A non-exported base class for continuous time state transition models containing methods
 that can be used to summarize fitted multi-state models.
@@ -21,6 +23,7 @@ that can be used to summarize fitted multi-state models.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-hazard"></a>}}
+\if{latex}{\out{\hypertarget{method-hazard}{}}}
 \subsection{Method \code{hazard()}}{
 Predict the hazard functions for each health state transition.
 \subsection{Usage}{
@@ -41,6 +44,7 @@ A \code{data.table} with columns \code{trans} (the transition number),
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-cumhazard"></a>}}
+\if{latex}{\out{\hypertarget{method-cumhazard}{}}}
 \subsection{Method \code{cumhazard()}}{
 Predict the cumulative hazard functions for each health state transition.
 \subsection{Usage}{
@@ -61,6 +65,7 @@ A \code{data.table} with columns \code{trans},
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

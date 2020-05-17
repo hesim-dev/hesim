@@ -92,7 +92,7 @@ To perform a PSA, it is necessary to draw samples of the parameters from suitabl
 
 As noted above, we draw the transition probabilities with monotherapy from a dirichlet distribution and the relative risk (of a transition to a worse state with combination therapy relative to monotherapy) from a lognormal distribution. Drug costs and utility are assumed to be fixed while medical costs are drawn from gamma distributions.
 
-Sampled parameters values are stored in a list, meaning that samples for each parameter can be stored as either a vector or matrix. For instance, we sample medical costs for each (non-death) health state from gamma distributions and they a stored in a matrix (one row for each sample and one column for each health state). Likewise, the parameters of each cell in the transition probability matrix are store in a matrix, with parameters of the matrix ordered rowwise across the columns. On the other hand, samples of the relatve risk are stored in a vector. 
+Sampled parameters values are stored in a list, meaning that samples for each parameter can be stored as either a vector or matrix. For instance, we sample medical costs for each (non-death) health state from gamma distributions and they a stored in a matrix (one row for each sample and one column for each health state). Likewise, the parameters of each cell in the transition probability matrix are store in a matrix, with parameters of the matrix ordered rowwise across the columns. On the other hand, samples of the relative risk are stored in a vector. 
 
 ```{r}
 rng_def <- define_rng({
@@ -111,7 +111,7 @@ rng_def <- define_rng({
 ```
 
 ## Transformed parameters
-The next step is to "transform" the parameters for use in the economic model using `define_tparams()`. This typically involves modeling them as a function of the treatment strategies and patient (i.e.,  the `data`). To maximzie computational efficiency, all operations are vectorized across the rows in the data. Parameters not include in a transformed parameter function are assumed constant across patients and treatment strategies.
+The next step is to "transform" the parameters for use in the economic model using `define_tparams()`. This typically involves modeling them as a function of the treatment strategies and patient (i.e.,  the `data`). To maximize computational efficiency, all operations are vectorized across the rows in the data. Parameters not include in a transformed parameter function are assumed constant across patients and treatment strategies.
 
 An important helper function is `tpmatrix()`, which allows users to define transition matrices as a function of other parameters. In this example "vectorized" transition probabilities are defined in terms of the transition matrix for monotherapy (`p_mono`) and the relative risk (`rr`). The relative risk is simply 1 for monotherapy (since the corresponding transition matrix is just `p_mono`) and equal to `rr_comb` for combination therapy. 
 

@@ -434,7 +434,7 @@ fixed <- function(est, names = NULL){
 }
 
 #' @param x A numeric `vector`, `matrix`, `data.frame`, or `data.table` containing 
-#' random samples of the variable of interest from a suitable probabilitiy distribution. This would 
+#' random samples of the variable of interest from a suitable probability distribution. This would 
 #' typically be a posterior distribution from a Bayesian analysis. 
 #' @rdname rng_distributions
 custom <- function(x, names = NULL){
@@ -547,7 +547,7 @@ uniform_rng <- function(min, max, names = NULL){
 #' @param ... Additional arguments to pass to the environment used to evaluate
 #' `expr`.
 #' 
-#' @details `define_tparams()` is evaluted when creating economic models as a 
+#' @details `define_tparams()` is evaluated when creating economic models as a 
 #' function of `model_def` objects defined with [define_model()]. Operations 
 #' are "vectorized" in the sense that they are performed for each unique combination
 #' of `input_data` and `params`. `expr` is evaluated in an environment including
@@ -757,7 +757,7 @@ split_params <- function(params, params_names, params_class){
 
 #' @param x An object of class `model_def` created with `define_model()`.
 #' @param input_data An object of class [expanded_hesim_data][expand.hesim_data()] 
-#' expaned by patients and treatment strategies. 
+#' expanded by patients and treatment strategies. 
 #' @rdname define_model
 #' @export
 eval_model <- function(x, input_data){

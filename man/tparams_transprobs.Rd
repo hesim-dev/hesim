@@ -57,7 +57,7 @@ a 6D array). The dimensions of the array should be indexed as follows:
 \verb{[s, k, i, t]} represents the transition matrix for the \code{s}th
 sample, \code{k}th treatment strategy, \code{i}th patient, and \code{t}th
 time interval.}
-\item{data.table}{Must contain the folowing:
+\item{data.table}{Must contain the following:
 \itemize{
 \item ID columns for the parameter sample (\code{sample}),
 treatment strategy (\code{strategy_id}), and patient (\code{patient_id}).
@@ -68,7 +68,7 @@ patient.
 \item Columns for each element of the transition probability matrix.
 They should be prefixed with "probs_" and ordered rowwise.
 For example, the following columns would be used for a 2x2 transition
-probabiliy matrix:
+probability matrix:
 \code{probs_1} (1st row, 1st column),
 \code{probs_2} (1st row, 2nd column),
 \code{probs_3} (2nd row, 1st column), and

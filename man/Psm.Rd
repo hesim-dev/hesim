@@ -3,7 +3,9 @@
 \name{Psm}
 \alias{Psm}
 \title{N-state partitioned survival model}
-\format{An \link[R6:R6Class]{R6::R6Class} object.}
+\format{
+An \link[R6:R6Class]{R6::R6Class} object.
+}
 \description{
 Simulate outcomes from an N-state partitioned survival model.
 }
@@ -109,6 +111,7 @@ by the argument \code{t} in \verb{$sim_curves()}.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{Psm} object.
 \subsection{Usage}{
@@ -136,6 +139,7 @@ A new \code{Psm} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_survival"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_survival}{}}}
 \subsection{Method \code{sim_survival()}}{
 Simulate survival curves as a function of time using \code{PsmCurves$sim_survival()}.
 \subsection{Usage}{
@@ -156,6 +160,7 @@ stored in \code{stateprobs_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_stateprobs"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
 Simulate health state probabilities from \code{survival_} using a partitioned
 survival analysis.
@@ -170,6 +175,7 @@ stored in \code{stateprobs_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_qalys"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_} and
 \code{utility_model}. See \code{vignette("expected-values")} for details.
@@ -199,6 +205,7 @@ in \code{qalys_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_costs"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_costs}{}}}
 \subsection{Method \code{sim_costs()}}{
 Simulate costs as a function of \code{stateprobs_} and \code{cost_models}.
 See \code{vignette("expected-values")} for details.
@@ -225,6 +232,7 @@ in \code{costs_}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-summarize"></a>}}
+\if{latex}{\out{\hypertarget{method-summarize}{}}}
 \subsection{Method \code{summarize()}}{
 Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See \code{\link[=summarize_ce]{summarize_ce()}}.
@@ -235,6 +243,7 @@ See \code{\link[=summarize_ce]{summarize_ce()}}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

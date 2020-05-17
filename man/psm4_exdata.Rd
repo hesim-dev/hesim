@@ -4,12 +4,14 @@
 \name{psm4_exdata}
 \alias{psm4_exdata}
 \title{Example data for a 4-state partitioned survival model}
-\format{A list containing the following elements:
+\format{
+A list containing the following elements:
 \itemize{
 \item{Survival}{ A data frame containing patient information and time to 3 separate survival endpoints.}
 \item{Costs}{A list of data frames. The first data frame contains medical cost data and the
 second data frame contains drug cost data.}
-}}
+}
+}
 \usage{
 psm4_exdata
 }

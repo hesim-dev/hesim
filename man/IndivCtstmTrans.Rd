@@ -3,7 +3,9 @@
 \name{IndivCtstmTrans}
 \alias{IndivCtstmTrans}
 \title{Transitions for an individual-level continuous time state transition model}
-\format{An \link[R6:R6Class]{R6::R6Class} object.}
+\format{
+An \link[R6:R6Class]{R6::R6Class} object.
+}
 \description{
 Simulate health state transitions in an individual-level continuous time state
 transition model with parameters that were estimated using a multi-state model.
@@ -108,6 +110,7 @@ start of the model or from when time was previously reset. Only used if
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{IndivCtstmTrans} object.
 \subsection{Usage}{
@@ -150,6 +153,7 @@ A new \code{IndivCtstmTrans} object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_stateprobs"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
 Simulate health state probabilities at distinct times by first
 simulating trajectories through a multi-state model with
@@ -173,6 +177,7 @@ An object of class \link{stateprobs}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check"></a>}}
+\if{latex}{\out{\hypertarget{method-check}{}}}
 \subsection{Method \code{check()}}{
 Input validation for class. Checks that fields are the correct type.
 \subsection{Usage}{
@@ -182,6 +187,7 @@ Input validation for class. Checks that fields are the correct type.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
