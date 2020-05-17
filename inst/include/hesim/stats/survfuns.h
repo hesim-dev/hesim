@@ -153,7 +153,7 @@ inline double surv_sample(std::vector<double> &time, std::vector<double> cumhaz,
   double died = 0;
   int i = 1;
   unsigned int n_times = time.size();
-  while(died == 0 & i < n_times){
+  while(died == 0 && i < n_times){
     double prob = 1 - exp(cumhaz[i - 1] - cumhaz[i]);
     died = rbernoulli(prob);
     if (died == 1){

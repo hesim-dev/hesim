@@ -322,7 +322,7 @@ std::vector<double> C_indiv_ctstm_starting(Rcpp::DataFrame R_disease_prog,
     obs_index.set_time_index(0);
     
     if (!time_reset){
-      if (i > 0 & 
+      if (i > 0 && 
           disease_prog.patient_id_[i] != disease_prog.patient_id_[i-1] ||
           disease_prog.sample_[i] != disease_prog.sample_[i-1]){
           time_index = 0;

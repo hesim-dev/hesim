@@ -155,7 +155,7 @@ public:
   
   arma::mat tpmatrix(int s, double time){
     set_time_index(time);
-    if (obs_index_() != current_obs_index_ | obs_index_() == 0){
+    if (obs_index_() != current_obs_index_ || obs_index_() == 0){
       current_obs_index_ = obs_index_();
       for (int i = 0; i < mlogit_list_.size(); ++i){
         if (!absorbing_[i]){

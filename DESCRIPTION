@@ -8,7 +8,7 @@ Authors@R: c(
     person(given = "R Core Team", role = "ctb",
     comment="hesim uses some slightly modified C functions from base R")
     )
-Description: hesim is a modular and computationally efficient R package for  
+Description: A modular and computationally efficient R package for  
   parameterizing, simulating, and analyzing health-economic simulation 
   models. The package supports cohort discrete time state transition models 
   (Briggs et al. 1998) <doi:10.2165/00019053-199813040-00003>,

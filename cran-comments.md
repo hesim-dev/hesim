@@ -1,5 +1,6 @@
 ## Release summary
-This release contains a minor update to address an email from Kurt Hornik to fix a warning about  'Documented arguments not in \\usage' in the r-devel checks from recent bug fix (PR#16223).
+This release contains a number of new features as described on the package 
+website [here](https://hesim-dev.github.io/hesim/dev/news/index.html).
 
 ## Test environments
 * Local OS X, R 3.6.3
