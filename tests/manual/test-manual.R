@@ -3,6 +3,7 @@ library("mstate")
 library("data.table")
 library("Rcpp")
 library("ggplot2")
+library("hesim")
 # setwd("tests/manual") # tests should be run of this directory
 source("../testthat/helpers.R")
 rm(list = ls())
