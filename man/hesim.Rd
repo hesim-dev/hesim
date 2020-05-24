@@ -3,4 +3,7 @@
 \docType{package}
 \name{hesim}
 \alias{hesim}
-\title{hesim: an R package for high performance health-economic simulation modeling}
+\title{\code{hesim}: Health-Economic Simulation Modeling and Decision Analysis}
+\description{
+To learn more about \code{hesim} visit the \href{https://hesim-dev.github.io/hesim/}{website}.
+}
