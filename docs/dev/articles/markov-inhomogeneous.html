@@ -11,8 +11,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Time inhomogeneous Markov cohort models">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Time inhomogeneous Markov cohort models">
 <meta property="og:description" content="hesim">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -530,38 +529,38 @@ S(t) = \exp(-\lambda t^\gamma) \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.62877
-## 2:           2      2 14.67197</code></pre>
+## 1:           1      2 14.59540
+## 2:           2      2 14.63966</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 509.6116
-## 2:           2      2 612.4894</code></pre>
+## 1:           1      2 512.7853
+## 2:           2      2 613.3771</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
-<pre><code>##     strategy_id grp_id            iqalys         icosts                 inmb
-##  1:           2      1 0.07 (0.02, 0.12)  71 (-36, 139) 3,423 (1,087, 6,247)
-##  2:           2      2 0.04 (0.02, 0.08)  103 (27, 152)   2,057 (644, 3,846)
-##  3:           2      3 0.03 (0.01, 0.05)  128 (74, 163)   1,161 (317, 2,207)
-##  4:           2      4 0.01 (0.01, 0.03) 147 (110, 170)     596 (108, 1,244)
-##  5:           2      5 0.01 (0.00, 0.02) 160 (136, 176)       258 (-21, 646)
-##  6:           2      6 0.11 (0.04, 0.20) -24 (-212, 98) 5,609 (1,924, 9,923)
-##  7:           2      7 0.07 (0.02, 0.12)  37 (-99, 125) 3,354 (1,099, 6,069)
-##  8:           2      8 0.04 (0.01, 0.07)  84 (-17, 145)   1,905 (602, 3,499)
-##  9:           2      9 0.02 (0.01, 0.04)  118 (45, 159)   1,014 (290, 1,972)
-## 10:           2     10 0.01 (0.00, 0.02)  142 (94, 169)      490 (81, 1,051)
+<pre><code>##     strategy_id grp_id            iqalys         icosts                  inmb
+##  1:           2      1 0.07 (0.03, 0.13)  68 (-39, 138)  3,509 (1,169, 6,714)
+##  2:           2      2 0.04 (0.02, 0.08)  101 (22, 152)    2,112 (687, 4,119)
+##  3:           2      3 0.03 (0.01, 0.05)  126 (71, 162)    1,195 (354, 2,382)
+##  4:           2      4 0.02 (0.01, 0.03) 146 (107, 170)      616 (124, 1,290)
+##  5:           2      5 0.01 (0.00, 0.02) 160 (133, 176)        270 (-11, 653)
+##  6:           2      6 0.11 (0.04, 0.21) -27 (-227, 99) 5,689 (2,047, 10,571)
+##  7:           2      7 0.07 (0.03, 0.13) 35 (-109, 125)  3,405 (1,216, 6,358)
+##  8:           2      8 0.04 (0.02, 0.07)  83 (-21, 144)    1,936 (681, 3,695)
+##  9:           2      9 0.02 (0.01, 0.04)  117 (46, 159)    1,032 (323, 2,067)
+## 10:           2     10 0.01 (0.01, 0.02)  142 (93, 169)       501 (92, 1,097)
 ##          icer     conclusion
-##  1:     1,011 Cost-effective
-##  2:     2,381 Cost-effective
-##  3:     4,963 Cost-effective
-##  4:     9,882 Cost-effective
-##  5:    19,178 Cost-effective
+##  1:       944 Cost-effective
+##  2:     2,273 Cost-effective
+##  3:     4,779 Cost-effective
+##  4:     9,559 Cost-effective
+##  5:    18,593 Cost-effective
 ##  6: Dominates Cost-effective
-##  7:       551 Cost-effective
-##  8:     2,118 Cost-effective
-##  9:     5,222 Cost-effective
-## 10:    11,257 Cost-effective</code></pre>
+##  7:       508 Cost-effective
+##  8:     2,045 Cost-effective
+##  9:     5,093 Cost-effective
+## 10:    11,024 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -573,9 +572,9 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                   
 ## Incremental QALYs "-" "0.03 (0.01, 0.05)" 
-## Incremental costs "-" "120 (56, 160)"     
-## Incremental NMB   "-" "1,282 (367, 2,419)"
-## ICER              "-" "4,277"             
+## Incremental costs "-" "118 (55, 159)"     
+## Incremental NMB   "-" "1,312 (404, 2,577)"
+## ICER              "-" "4,139"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>
