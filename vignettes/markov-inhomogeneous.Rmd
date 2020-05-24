@@ -299,7 +299,7 @@ econmod$sim_stateprobs(n_cycles = 60)
 
 The expected number of patients per 1,000 in each health state is plotted below. The counts in the plot are for `patient_id = 2`, a 60 year old female as in the original textbook example. Since a PSA was performed both mean values and 95 percent credible intervals can be displayed. Patients are more likely to have a revision with a standard prosthesis than with the new prosthesis.
 
-```{r simStateprobsPlot, echo = FALSE}
+```{r simStateprobsPlot, echo = FALSE, fig.width = 7, fig.height = 4}
 library("ggplot2")
 theme_set(theme_bw())
 stateprob_summary <- econmod$stateprobs_[patient_id == 2, 

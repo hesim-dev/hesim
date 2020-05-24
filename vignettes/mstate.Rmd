@@ -185,7 +185,7 @@ predict_haz <- function(fits, clock){
 
 We then plot the predicted hazard by treatment strategy and timescale.
 
-```{r predicted_hazards_plot}
+```{r predicted_hazards_plot, fig.width = 7, fig.height = 4}
 # Plot hazards
 library("ggplot2")
 haz <- rbind(predict_haz(wei_fits_cr, "reset"),
@@ -256,7 +256,7 @@ econmod_cr$sim_stateprobs(t = seq(0, 20 , 1/12))
 
 We can then compare state probabilities between the competing treatment strategies. 
 
-```{r stprobs_by_strategy_plot}
+```{r stprobs_by_strategy_plot, fig.width = 7, fig.height = 4}
 # Short funtion add create state name variable to data.tabale
 add_state_name <- function(x){
   x[, state_name := factor(state_id,
@@ -283,7 +283,7 @@ ggplot(stprobs_cr, aes(x = t, y = prob_mean, col = factor(strategy_id))) +
 
 Next, we compare the state probabilities from the "clock reset" and "clock forward" models. 
 
-```{r stprobs_by_timescale_plot}
+```{r stprobs_by_timescale_plot, fig.width = 7, fig.height = 4}
 econmod_cf$sim_stateprobs(t = seq(0, 20 , 1/12)) 
 stprobs_cf <- summarize_stprobs(econmod_cf$stateprobs_)
 
@@ -311,7 +311,7 @@ head(econmod_cr$qalys_)
 
 We summarize the simulated QALYs by computing means by treatment strategy and health state across the PSA samples.
 
-```{r qalys_plot}
+```{r qalys_plot, fig.width = 6, fig.height = 4}
 qalys_summary <- econmod_cr$qalys_[, .(mean = mean(qalys)),
                                     by = c("strategy_id", "state_id", "dr")]
 add_state_name(qalys_summary)
@@ -333,7 +333,7 @@ head(econmod_cr$costs_)
 
 As with QALYs, we summarize costs by computing means (now by treatment strategy and category) across the PSA samples.
 
-```{r costs_plot}
+```{r costs_plot, fig.width = 6, fig.height = 4}
 library("scales")
 costs_summary <- econmod_cr$costs_[dr == .03 , .(mean = mean(costs)),
                                    by = c("strategy_id", "category")]

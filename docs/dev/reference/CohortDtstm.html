@@ -8,21 +8,29 @@
 
 <title>Cohort discrete time state transition model — CohortDtstm • hesim</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,10 +40,10 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Cohort discrete time state transition model — CohortDtstm" />
 
+<meta property="og:title" content="Cohort discrete time state transition model — CohortDtstm" />
 <meta property="og:description" content="Simulate outcomes from a cohort discrete time state transition model." />
-<meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
@@ -49,9 +57,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -118,11 +127,10 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hesim-dev/hesim">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/hesim-dev/hesim/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -133,6 +141,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -144,40 +153,44 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Simulate outcomes from a cohort discrete time state transition model.</p>
-    
     </div>
 
-        
+
+
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An <a href='https://www.rdocumentation.org/packages/R6/topics/R6Class'>R6::R6Class</a> object.</p>
-    
+    <p>An <a href='https://rdrr.io/pkg/R6/man/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='create_CohortDtstm.html'>create_CohortDtstm()</a></code>, <a href='CohortDtstmTrans.html'>CohortDtstmTrans</a>,
 <code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans()</a></code></p></div>
-    
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p><div class="r6-fields"></p><dl class='dl-horizontal'>
+    <p><div class="r6-fields"></p><dl'>
 <dt><code>trans_model</code></dt><dd><p>The model for health state transitions. Must be an object
 of class <a href='CohortDtstmTrans.html'>CohortDtstmTrans</a>.</p></dd>
-    <dt><code>utility_model</code></dt><dd><p>The model for health state utility. Must be an object of
+
+<dt><code>utility_model</code></dt><dd><p>The model for health state utility. Must be an object of
 class <a href='StateVals.html'>StateVals</a>.</p></dd>
-    <dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state.
+
+<dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state.
 Must be a list of objects of class <a href='StateVals.html'>StateVals</a>, where each element of the
 list represents a different cost category.</p></dd>
-    <dt><code>stateprobs_</code></dt><dd><p>An object of class <a href='stateprobs.html'>stateprobs</a> simulated using <code>$sim_stateprobs()</code>.</p></dd>
-    <dt><code>qalys_</code></dt><dd><p>An object of class <a href='qalys.html'>qalys</a> simulated using <code>$sim_qalys()</code>.</p></dd>
-    <dt><code>costs_</code></dt><dd><p>An object of class <a href='costs.html'>costs</a> simulated using <code>$sim_costs()</code>.</p></dd>
+
+<dt><code>stateprobs_</code></dt><dd><p>An object of class <a href='stateprobs.html'>stateprobs</a> simulated using <code>$sim_stateprobs()</code>.</p></dd>
+
+<dt><code>qalys_</code></dt><dd><p>An object of class <a href='qalys.html'>qalys</a> simulated using <code>$sim_qalys()</code>.</p></dd>
+
+<dt><code>costs_</code></dt><dd><p>An object of class <a href='costs.html'>costs</a> simulated using <code>$sim_costs()</code>.</p></dd>
+
 </dl><p></div></p>
-    
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
-    <h3>Public methods</h3>
-    <ul>
+    
+<h3>Public methods</h3>
+
+<ul>
 <li><p><a href='#method-new'><code>CohortDtstm$new()</code></a></p></li>
 <li><p><a href='#method-sim_stateprobs'><code>CohortDtstm$sim_stateprobs()</code></a></p></li>
 <li><p><a href='#method-sim_qalys'><code>CohortDtstm$sim_qalys()</code></a></p></li>
@@ -187,126 +200,127 @@ list represents a different cost category.</p></dd>
 </ul>
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-    Create a new <code>CohortDtstm</code> object.
-<h3>Usage</h3>
-    <div class="r"><pre>CohortDtstm$new(trans_model = NULL, utility_model = NULL, cost_models = NULL)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Create a new <code>CohortDtstm</code> object.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>CohortDtstm</span>$<span class='fu'>new</span>(<span class='kw'>trans_model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>utility_model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cost_models</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>trans_model</code></dt><dd><p>The <code>trans_model</code> field.</p></dd>
-    <dt><code>utility_model</code></dt><dd><p>The <code>utility_model</code> field.</p></dd>
-    <dt><code>cost_models</code></dt><dd><p>The <code>cost_models</code> field.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    A new <code>CohortDtstm</code> object.
-    <p><hr>
+
+<dt><code>utility_model</code></dt><dd><p>The <code>utility_model</code> field.</p></dd>
+
+<dt><code>cost_models</code></dt><dd><p>The <code>cost_models</code> field.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A new <code>CohortDtstm</code> object.</p>
+<p><hr>
 <a id="method-sim_stateprobs"></a></p><h3>Method <code>sim_stateprobs()</code></h3>
-    Simulate health state probabilities using <code>CohortDtstmTrans$sim_stateprobs()</code>.
-<h3>Usage</h3>
-    <div class="r"><pre>CohortDtstm$sim_stateprobs(n_cycles)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Simulate health state probabilities using <code>CohortDtstmTrans$sim_stateprobs()</code>.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>CohortDtstm</span>$<span class='fu'>sim_stateprobs</span>(<span class='no'>n_cycles</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>n_cycles</code></dt><dd><p>The number of model cycles to simulate the model for.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    An instance of <code>self</code> with simulated output of class <a href='stateprobs.html'>stateprobs</a>
-stored in <code>stateprobs_</code>.
-    <p><hr>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>An instance of <code>self</code> with simulated output of class <a href='stateprobs.html'>stateprobs</a>
+stored in <code>stateprobs_</code>.</p>
+<p><hr>
 <a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
-    Simulate quality-adjusted life-years (QALYs) as a function of <code>stateprobs_</code> and
-<code>utility_model</code>. See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.
-<h3>Usage</h3>
-    <div class="r"><pre>CohortDtstm$sim_qalys(
-  dr = 0.03,
-  integrate_method = c("trapz", "riemann_left", "riemann_right"),
-  lys = FALSE
-)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Simulate quality-adjusted life-years (QALYs) as a function of <code>stateprobs_</code> and
+<code>utility_model</code>. See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>CohortDtstm</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(
+  <span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>0.03</span>,
+  <span class='kw'>integrate_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span>),
+  <span class='kw'>lys</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
-    <dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing (QALYs).</p></dd>
-    <dt><code>lys</code></dt><dd><p>If <code>TRUE</code>, then life-years are simulated in addition to QALYs.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    An instance of <code>self</code> with simulated output of class <a href='qalys.html'>qalys</a> stored
-in <code>qalys_</code>.
-    <p><hr>
+
+<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing (QALYs).</p></dd>
+
+<dt><code>lys</code></dt><dd><p>If <code>TRUE</code>, then life-years are simulated in addition to QALYs.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>An instance of <code>self</code> with simulated output of class <a href='qalys.html'>qalys</a> stored
+in <code>qalys_</code>.</p>
+<p><hr>
 <a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_ev.html'>sim_costs()</a></code></h3>
-    Simulate costs as a function of <code>stateprobs_</code> and <code>cost_models</code>.
-See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.
-<h3>Usage</h3>
-    <div class="r"><pre>CohortDtstm$sim_costs(
-  dr = 0.03,
-  integrate_method = c("trapz", "riemann_left", "riemann_right")
-)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Simulate costs as a function of <code>stateprobs_</code> and <code>cost_models</code>.
+See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>CohortDtstm</span>$<span class='fu'><a href='sim_ev.html'>sim_costs</a></span>(
+  <span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>0.03</span>,
+  <span class='kw'>integrate_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span>)
+)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
-    <dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing costs.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    An instance of <code>self</code> with simulated output of class <a href='costs.html'>costs</a> stored
-in <code>costs_</code>.
-    <p><hr>
+
+<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing costs.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>An instance of <code>self</code> with simulated output of class <a href='costs.html'>costs</a> stored
+in <code>costs_</code>.</p>
+<p><hr>
 <a id="method-summarize"></a></p><h3>Method <code>summarize()</code></h3>
-    Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
-See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
-<h3>Usage</h3>
-    <div class="r"><pre>CohortDtstm$summarize(by_grp = FALSE)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
+See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>CohortDtstm</span>$<span class='fu'>summarize</span>(<span class='kw'>by_grp</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>by_grp</code></dt><dd><p>If <code>TRUE</code>, then costs and QALYs are computed by subgroup. If
 <code>FALSE</code>, then costs and QALYs are aggregated across all patients (and subgroups).</p></dd>
-</dl>
-</div>
-    <p><hr>
+
+</dl><p></div></p>
+<p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-    The objects of this class are cloneable with this method.
-<h3>Usage</h3>
-    <div class="r"><pre>CohortDtstm$clone(deep = FALSE)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>CohortDtstm</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
-</dl>
-</div>
-    
+
+</dl><p></div></p>
+
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"data.table"</span>)</div><div class='output co'>#&gt; <span class='message'>data.table 1.12.8 using 2 threads (see ?getDTthreads).  Latest news: r-datatable.com</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"nnet"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"data.table"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"nnet"</span>)
 <span class='no'>transitions_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>transitions</span>)
 
 <span class='co'># Treatment strategies, target population, and model structure</span>
 <span class='no'>n_patients</span> <span class='kw'>&lt;-</span> <span class='fl'>4</span>
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='no'>transitions_data</span>[<span class='no'>year</span> <span class='kw'>==</span> <span class='fl'>1</span>, <span class='fu'>.</span>(<span class='no'>patient_id</span>, <span class='no'>age</span>, <span class='no'>female</span>)][
- <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample.int</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>transitions_data</span>[<span class='no'>year</span> <span class='kw'>==</span> <span class='fl'>1</span>]), <span class='no'>n_patients</span>))][
+ <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample.int</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>transitions_data</span>[<span class='no'>year</span> <span class='kw'>==</span> <span class='fl'>1</span>]), <span class='no'>n_patients</span>))][
    , <span class='no'>grp_id</span> <span class='kw'>:=</span> <span class='fl'>1</span>:<span class='no'>n_patients</span>]
 <span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(
   <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,
   <span class='kw'>strategies</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-                          <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Reference"</span>, <span class='st'>"Intervention"</span>)),
-  <span class='kw'>states</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
-                      <span class='kw'>state_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Healthy"</span>, <span class='st'>"Sick"</span>)) <span class='co'># Non-death health states</span>
+                          <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Reference"</span>, <span class='st'>"Intervention"</span>)),
+  <span class='kw'>states</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+                      <span class='kw'>state_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Healthy"</span>, <span class='st'>"Sick"</span>)) <span class='co'># Non-death health states</span>
 )
-<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
-              <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>0</span>, <span class='fl'>1</span>),
-              <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
+<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>0</span>, <span class='fl'>1</span>),
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
 
 <span class='co'># Parameter estimation</span>
 <span class='co'>## Multinomial logistic regression</span>
 <span class='no'>data_healthy</span> <span class='kw'>&lt;-</span> <span class='no'>transitions_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Healthy"</span>]
-<span class='no'>fit_healthy</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nnet/topics/multinom'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age</span>,
+<span class='no'>fit_healthy</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nnet/man/multinom.html'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age</span>,
                         <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data_healthy</span>, <span class='kw'>trace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>data_sick</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/droplevels'>droplevels</a></span>(<span class='no'>transitions_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Sick"</span>])
-<span class='no'>fit_sick</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nnet/topics/multinom'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age</span>,
+<span class='no'>data_sick</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span>(<span class='no'>transitions_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Sick"</span>])
+<span class='no'>fit_sick</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nnet/man/multinom.html'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age</span>,
                      <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data_sick</span>, <span class='kw'>trace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='no'>transfits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='multinom_list.html'>multinom_list</a></span>(<span class='kw'>healthy</span> <span class='kw'>=</span> <span class='no'>fit_healthy</span>, <span class='kw'>sick</span> <span class='kw'>=</span> <span class='no'>fit_sick</span>)
 
@@ -341,7 +355,7 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
 <span class='co'>### Costs</span>
 <span class='no'>drugcostmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>drugcost_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
 <span class='no'>medcostmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>medcost_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
-<span class='no'>costmods</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>Drug</span> <span class='kw'>=</span> <span class='no'>drugcostmod</span>,
+<span class='no'>costmods</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>Drug</span> <span class='kw'>=</span> <span class='no'>drugcostmod</span>,
                  <span class='kw'>Medical</span> <span class='kw'>=</span> <span class='no'>medcostmod</span>)
 
 <span class='co'>### Combine</span>
@@ -492,23 +506,13 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
 #&gt; [1] "ce"</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#format">Format</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-
-      <li><a href="#public-fields">Public fields</a></li>
-
-      <li><a href="#methods">Methods</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -516,13 +520,16 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

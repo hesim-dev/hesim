@@ -8,21 +8,29 @@
 
 <title>Transitions for a cohort discrete time state transition model — CohortDtstmTrans • hesim</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,10 +40,10 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Transitions for a cohort discrete time state transition model — CohortDtstmTrans" />
 
+<meta property="og:title" content="Transitions for a cohort discrete time state transition model — CohortDtstmTrans" />
 <meta property="og:description" content="Simulate health state transitions in a cohort discrete time state transition model." />
-<meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
@@ -49,9 +57,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -118,11 +127,10 @@
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hesim-dev/hesim">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/hesim-dev/hesim/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -133,6 +141,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -144,33 +153,32 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Simulate health state transitions in a cohort discrete time state transition model.</p>
-    
     </div>
 
-        
+
+
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An <a href='https://www.rdocumentation.org/packages/R6/topics/R6Class'>R6::R6Class</a> object.</p>
-    
+    <p>An <a href='https://rdrr.io/pkg/R6/man/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans()</a></code>, <a href='CohortDtstm.html'>CohortDtstm</a></p></div>
-    
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p><div class="r6-fields"></p><dl class='dl-horizontal'>
+    <p><div class="r6-fields"></p><dl'>
 <dt><code>params</code></dt><dd><p>Parameters for simulating health state transitions.
 Supports objects of class <a href='tparams_transprobs.html'>tparams_transprobs</a> or <a href='params_mlogit.html'>params_mlogit</a>.</p></dd>
-    <dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>.</p></dd>
-    <dt><code>cycle_length</code></dt><dd><p>The length of a model cycle in terms of years.
+
+<dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>.</p></dd>
+
+<dt><code>cycle_length</code></dt><dd><p>The length of a model cycle in terms of years.
 The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd>
+
 </dl><p></div></p>
-    
     <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
 
-    <p><div class="r6-active-bindings"></p><dl class='dl-horizontal'>
+    <p><div class="r6-active-bindings"></p><dl'>
 <dt><code>start_stateprobs</code></dt><dd><p>A non-negative vector with length equal to the number of
 health states containing the probability that the cohort is in each health
 state at the start of the simulation. For example,
@@ -178,7 +186,8 @@ if there were three states and the cohort began the simulation in state 1,
 then <code>start_stateprobs = c(1, 0, 0)</code>. Automatically normalized to sum to 1.
 If <code>NULL</code>, then a vector with the first element equal to 1 and
 all remaining elements equal to 0.</p></dd>
-    <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
+
+<dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
 in a discrete-time multi-state model. Only required if the model is
 parameterized using multinomial logistic regression. The <code>(i,j)</code> element
 represents a transition from state <code>i</code> to state <code>j</code>. Each possible transition
@@ -186,83 +195,77 @@ from row <code>i</code> should be based on a separate multinomial logistic regre
 and ordered from <code>0</code> to <code>K - 1</code> where <code>K</code> is the number of
 possible transitions. Transitions that are not possible should be <code>NA</code>.
 and the reference category for each row should be <code>0</code>.</p></dd>
+
 </dl><p></div></p>
-    
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
-    <h3>Public methods</h3>
-    <ul>
+    
+<h3>Public methods</h3>
+
+<ul>
 <li><p><a href='#method-new'><code>CohortDtstmTrans$new()</code></a></p></li>
 <li><p><a href='#method-sim_stateprobs'><code>CohortDtstmTrans$sim_stateprobs()</code></a></p></li>
 <li><p><a href='#method-clone'><code>CohortDtstmTrans$clone()</code></a></p></li>
 </ul>
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-    Create a new <code>CohortDtstmTrans</code> object.
-<h3>Usage</h3>
-    <div class="r"><pre>CohortDtstmTrans$new(
-  params,
-  input_data = NULL,
-  trans_mat = NULL,
-  start_stateprobs = NULL,
-  cycle_length = 1
-)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Create a new <code>CohortDtstmTrans</code> object.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>CohortDtstmTrans</span>$<span class='fu'>new</span>(
+  <span class='no'>params</span>,
+  <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>start_stateprobs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cycle_length</span> <span class='kw'>=</span> <span class='fl'>1</span>
+)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
-    <dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
-    <dt><code>trans_mat</code></dt><dd><p>The <code>trans_mat</code> field.</p></dd>
-    <dt><code>start_stateprobs</code></dt><dd><p>The <code>start_stateprobs</code> field.</p></dd>
-    <dt><code>cycle_length</code></dt><dd><p>The <code>cycle_length</code> field.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    A new <code>CohortDtstmTrans</code> object.
-    <p><hr>
+
+<dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
+
+<dt><code>trans_mat</code></dt><dd><p>The <code>trans_mat</code> field.</p></dd>
+
+<dt><code>start_stateprobs</code></dt><dd><p>The <code>start_stateprobs</code> field.</p></dd>
+
+<dt><code>cycle_length</code></dt><dd><p>The <code>cycle_length</code> field.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A new <code>CohortDtstmTrans</code> object.</p>
+<p><hr>
 <a id="method-sim_stateprobs"></a></p><h3>Method <code>sim_stateprobs()</code></h3>
-    Simulate probability of being in each health state during each model cycle.
-<h3>Usage</h3>
-    <div class="r"><pre>CohortDtstmTrans$sim_stateprobs(n_cycles)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Simulate probability of being in each health state during each model cycle.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>CohortDtstmTrans</span>$<span class='fu'>sim_stateprobs</span>(<span class='no'>n_cycles</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>n_cycles</code></dt><dd><p>The number of model cycles to simulate the model for.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    An object of class <a href='stateprobs.html'>stateprobs</a>.
-    <p><hr>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>An object of class <a href='stateprobs.html'>stateprobs</a>.</p>
+<p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-    The objects of this class are cloneable with this method.
-<h3>Usage</h3>
-    <div class="r"><pre>CohortDtstmTrans$clone(deep = FALSE)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>CohortDtstmTrans</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
-</dl>
-</div>
-    
+
+</dl><p></div></p>
+
+
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#format">Format</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-
-      <li><a href="#public-fields">Public fields</a></li>
-
-      <li><a href="#active-bindings">Active bindings</a></li>
-
-      <li><a href="#methods">Methods</a></li>
-          </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -270,13 +273,16 @@ and the reference category for each row should be <code>0</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

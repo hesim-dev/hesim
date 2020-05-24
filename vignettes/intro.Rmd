@@ -292,7 +292,7 @@ icea_pw <- icea_pw(ce, dr_qalys = .03, dr_costs = .03, comparator = 1)
 
 For instance, we might want to plot a cost-effectiveness acceptability curve (CEAC) displaying the probability that treatment strategy 2 is more cost-effective than treatment strategy 1 at a given willingness to pay for a QALY.
 
-```{r ceac_plot, warning = FALSE, message = FALSE}
+```{r ceac_plot, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 library("ggplot2")
 ggplot2::ggplot(icea_pw$ceac, aes(x = k, y = prob, col = factor(strategy_id))) +
   geom_line() + xlab("Willingness to pay") +

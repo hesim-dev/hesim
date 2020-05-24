@@ -175,7 +175,7 @@ psm <- Psm$new(survival_models = survmods,
 ### Simulating survival curves
 Survival curves are predicted by treatment strategy and patient with the function `$sim_survival()`. The predicted curves are returned as a tidy `data.table` to facilitate plotting and stored as a field in the class named `survival_`. Below we plot the mean survival curve for patient 2 with treatment strategy 3. 
 
-```{r survcurves, warning = FALSE, message = FALSE}
+```{r survcurves, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 # Simulate
 times <- seq(0, 10, by = .1)
 psm$sim_survival(t = times)
@@ -200,7 +200,7 @@ ggplot(p_data, aes(x = t, y = mean_surv, fill = curve)) +
 ### Simulating health state probabilities 
 After simulating survival, we can calculate the probability of being in each of the four health states using `$sim_stateprobs()`. At a given point in time, the probability of being in state 1 is the survival probability from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. We plot these state probabilities for the first patient with the 30th randomly sampled parameter set.
 
-```{r stateprobs, warning = FALSE, message = FALSE}
+```{r stateprobs, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 # Simulate
 psm$sim_stateprobs()
 

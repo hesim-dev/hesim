@@ -8,21 +8,29 @@
 
 <title>Individualized cost-effectiveness analysis — icea • hesim</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,8 +40,8 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Individualized cost-effectiveness analysis — icea" />
 
+<meta property="og:title" content="Individualized cost-effectiveness analysis — icea" />
 <meta property="og:description" content="Conduct individualized cost-effectiveness analysis (ICEA) given output of an economic
 model. That is, summarize a probabilistic sensitivity analysis (PSA) by subgroup.
 icea() computes the probability that
@@ -43,8 +51,9 @@ icea_pw() conducts pairwise ICEA by comparing strategies to a comparator. Comput
 quantities include the incremental cost-effectiveness ratio, the
 incremental net monetary benefit, output for a cost-effectiveness plane,
 and output for a cost-effectiveness acceptability curve.
+
 " />
-<meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
@@ -58,9 +67,10 @@ and output for a cost-effectiveness acceptability curve.
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -127,11 +137,10 @@ and output for a cost-effectiveness acceptability curve.
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hesim-dev/hesim">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/hesim-dev/hesim/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -142,6 +151,7 @@ and output for a cost-effectiveness acceptability curve.
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -153,7 +163,6 @@ and output for a cost-effectiveness acceptability curve.
     </div>
 
     <div class="ref-description">
-    
     <p>Conduct individualized cost-effectiveness analysis (ICEA) given output of an economic
 model. That is, summarize a probabilistic sensitivity analysis (PSA) by subgroup.</p><ul>
 <li><p><code>icea()</code> computes the probability that
@@ -164,7 +173,7 @@ quantities include the incremental cost-effectiveness ratio, the
 incremental net monetary benefit, output for a cost-effectiveness plane,
 and output for a cost-effectiveness acceptability curve.</p></li>
 </ul>
-    
+
     </div>
 
     <pre class="usage"><span class='fu'>icea</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -172,12 +181,12 @@ and output for a cost-effectiveness acceptability curve.</p></li>
 <span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>icea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>sample</span>, <span class='no'>strategy</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>e</span>, <span class='no'>c</span>, <span class='no'>...</span>)
+<span class='fu'>icea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>sample</span>, <span class='no'>strategy</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>e</span>, <span class='no'>c</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for default</span>
 <span class='fu'>icea_pw</span>(
   <span class='no'>x</span>,
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>),
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>),
   <span class='no'>comparator</span>,
   <span class='no'>sample</span>,
   <span class='no'>strategy</span>,
@@ -188,11 +197,11 @@ and output for a cost-effectiveness acceptability curve.</p></li>
 )
 
 <span class='co'># S3 method for ce</span>
-<span class='fu'>icea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>dr_qalys</span>, <span class='no'>dr_costs</span>, <span class='no'>...</span>)
+<span class='fu'>icea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>dr_qalys</span>, <span class='no'>dr_costs</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for ce</span>
-<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>comparator</span>, <span class='no'>dr_qalys</span>, <span class='no'>dr_costs</span>, <span class='no'>...</span>)</pre>
-    
+<span class='fu'>icea_pw</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>comparator</span>, <span class='no'>dr_qalys</span>, <span class='no'>dr_costs</span>, <span class='no'>...</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -246,11 +255,11 @@ it is assumed that there is only one group.</p></td>
       <td><p>Discount rate for costs.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>icea</code> returns a list containing four <code>data.table</code>s:</p>
-<dl class='dl-horizontal'>
+<dl'>
 <dt>summary</dt><dd><p>A <code>data.table</code> of the mean, 2.5\<!-- % quantile, and 97.5\\% -->
 quantile by strategy and group for clinical effectiveness and costs.</p></dd>
 <dt>mce</dt><dd><p>The probability that each strategy is the most effective treatment
@@ -265,9 +274,10 @@ expected net monetary benefit) from the expected net monetary benefit given
 perfect information.</p></dd>
 <dt>nmb</dt><dd><p>The mean, 2.5\<!-- % quantile, and 97.5\\% quantile of net monetary benefits -->
 for the range of specified willingness to pay values.</p></dd>
+
 </dl>
 
-<p><code>icea_pw</code> also returns a list containing four data.tables:</p><dl class='dl-horizontal'>
+<p><code>icea_pw</code> also returns a list containing four data.tables:</p><dl'>
 <dt>summary</dt><dd><p>A data.table of the mean, 2.5\<!-- % quantile, and 97.5\\% -->
 quantile by strategy and group for clinical effectiveness and costs.</p></dd>
 <dt>delta</dt><dd><p>Incremental effectiveness and incremental cost for each simulated
@@ -277,41 +287,41 @@ group. The CEAC plots the probability that each strategy is more cost-effective 
 the comparator for the specified willingness to pay values.</p></dd>
 <dt>inmb</dt><dd><p>The mean, 2.5\<!-- % quantile, and 97.5\\% quantile of -->
 incremental net monetary benefits for the range of specified willingness to pay values.</p></dd>
+
 </dl>
 
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># simulation output</span>
 <span class='no'>n_samples</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>
-<span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='no'>n_samples</span>), <span class='fl'>4</span>),
-                  <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Lognormal'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Lognormal'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>),
-                        <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Lognormal'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Lognormal'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>)),
-                  <span class='kw'>e</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>8</span>, <span class='fl'>.2</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span>),
-                        <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.6</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span>)),
-                  <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='st'>"Strategy "</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>)),
+<span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='no'>n_samples</span>), <span class='fl'>4</span>),
+                  <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>),
+                        <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>)),
+                  <span class='kw'>e</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>8</span>, <span class='fl'>.2</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span>),
+                        <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.6</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span>)),
+                  <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"Strategy "</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>)),
                                  <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n_samples</span> * <span class='fl'>2</span>),
-                  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Group 1"</span>, <span class='st'>"Group 2"</span>),
+                  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Group 1"</span>, <span class='st'>"Group 2"</span>),
                             <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n_samples</span>), <span class='fl'>2</span>)
 )
 
 <span class='co'># icea</span>
-<span class='no'>icea</span> <span class='kw'>&lt;-</span> <span class='fu'>icea</span>(<span class='no'>sim</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
+<span class='no'>icea</span> <span class='kw'>&lt;-</span> <span class='fu'>icea</span>(<span class='no'>sim</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
              <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>icea</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'><span class='co'># The probability that each strategy is the most cost-effective </span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>icea</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'><span class='co'># The probability that each strategy is the most cost-effective </span>
 <span class='co'># in each group with a willingness to pay of 20,000</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"data.table"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"data.table"</span>)
 <span class='no'>icea</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp best prob
 #&gt; 1: 20000 Strategy 1 Group 1    0 0.47
 #&gt; 2: 20000 Strategy 2 Group 1    1 0.53
 #&gt; 3: 20000 Strategy 1 Group 2    1 0.55
 #&gt; 4: 20000 Strategy 2 Group 2    0 0.45</div><div class='input'>
 <span class='co'># icea_pw</span>
-<span class='no'>icea_pw</span> <span class='kw'>&lt;-</span>  <span class='fu'>icea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
+<span class='no'>icea_pw</span> <span class='kw'>&lt;-</span>  <span class='fu'>icea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
                     <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
                      <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>icea_pw</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k   strategy     grp prob
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>icea_pw</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k   strategy     grp prob
 #&gt; 1: 20000 Strategy 2 Group 1 0.53
 #&gt; 2: 20000 Strategy 2 Group 2 0.45
 #&gt; 3: 20500 Strategy 2 Group 1 0.63
@@ -334,18 +344,13 @@ incremental net monetary benefits for the range of specified willingness to pay 
 #&gt; Conclusion        "-"        "Cost-effective"          
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -353,13 +358,16 @@ incremental net monetary benefits for the range of specified willingness to pay 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

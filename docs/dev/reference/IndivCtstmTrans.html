@@ -8,21 +8,29 @@
 
 <title>Transitions for an individual-level continuous time state transition model — IndivCtstmTrans • hesim</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,11 +40,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Transitions for an individual-level continuous time state transition model — IndivCtstmTrans" />
 
+<meta property="og:title" content="Transitions for an individual-level continuous time state transition model — IndivCtstmTrans" />
 <meta property="og:description" content="Simulate health state transitions in an individual-level continuous time state
 transition model with parameters that were estimated using a multi-state model." />
-<meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
@@ -50,9 +58,10 @@ transition model with parameters that were estimated using a multi-state model."
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -119,11 +128,10 @@ transition model with parameters that were estimated using a multi-state model."
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hesim-dev/hesim">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/hesim-dev/hesim/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -134,6 +142,7 @@ transition model with parameters that were estimated using a multi-state model."
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -145,30 +154,27 @@ transition model with parameters that were estimated using a multi-state model."
     </div>
 
     <div class="ref-description">
-    
     <p>Simulate health state transitions in an individual-level continuous time state
 transition model with parameters that were estimated using a multi-state model.</p>
-    
     </div>
 
-        
+
+
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An <a href='https://www.rdocumentation.org/packages/R6/topics/R6Class'>R6::R6Class</a> object.</p>
-    
+    <p>An <a href='https://rdrr.io/pkg/R6/man/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <a href='IndivCtstm.html'>IndivCtstm</a></p></div>
-    
     <h2 class="hasAnchor" id="super-class"><a class="anchor" href="#super-class"></a>Super class</h2>
 
     <p><code><a href='CtstmTrans.html'>hesim::CtstmTrans</a></code> -&gt; <code>IndivCtstmTrans</code></p>
-    
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p><div class="r6-fields"></p><dl class='dl-horizontal'>
+    <p><div class="r6-fields"></p><dl'>
 <dt><code>params</code></dt><dd><p>An object of class <a href='params_surv.html'>params_surv</a> or <a href='params_surv_list.html'>params_surv_list</a>.</p></dd>
-    <dt><code>input_data</code></dt><dd><p>Input data used to simulate health state transitions
+
+<dt><code>input_data</code></dt><dd><p>Input data used to simulate health state transitions
 by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
 Must be an object of class <a href='input_mats.html'>input_mats</a>. If <code>params</code> contains parameters from
 a list of models (i.e., of class <a href='params_surv_list.html'>params_surv_list</a>), then <code>input_data</code>
@@ -176,32 +182,40 @@ must contain a unique row for each treatment strategy
 and patient; if <code>params</code> contains parameters from a joint model
 (i.e., of class <a href='params_surv.html'>params_surv</a>), then <code>input_data</code> must contain a unique
 row for each treatment strategy, patient, and transition.</p></dd>
-    <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
-in a multi-state model in the format from the <a href='https://www.rdocumentation.org/packages/mstate/topics/mstate-package'>mstate</a> package.
-See the documentation for the argument <code>"trans"</code> in <a href='https://www.rdocumentation.org/packages/mstate/topics/msprep'>mstate::msprep</a>.</p></dd>
-    <dt><code>start_state</code></dt><dd><p>A scalar or vector denoting the starting health state.
+
+<dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
+in a multi-state model in the format from the <a href='https://rdrr.io/pkg/mstate/man/mstate-package.html'>mstate</a> package.
+See the documentation for the argument <code>"trans"</code> in <a href='https://rdrr.io/pkg/mstate/man/msprep.html'>mstate::msprep</a>.</p></dd>
+
+<dt><code>start_state</code></dt><dd><p>A scalar or vector denoting the starting health state.
 Default is the first health state. If a vector, must be equal to the number of simulated patients.</p></dd>
-    <dt><code>start_age</code></dt><dd><p>A scalar or vector denoting the starting age of each patient
+
+<dt><code>start_age</code></dt><dd><p>A scalar or vector denoting the starting age of each patient
 in the simulation. Default is 38. If a vector, must be equal to the number of simulated patients.</p></dd>
-    <dt><code>death_state</code></dt><dd><p>The death state in <code>trans_mat</code>. Used with <code>max_age</code>
+
+<dt><code>death_state</code></dt><dd><p>The death state in <code>trans_mat</code>. Used with <code>max_age</code>
 in <code>sim_disease</code> as patients transition to this state upon reaching maximum age.
 By default, it is set to the final absorbing state (i.e., a row in <code>trans_mat</code> with all NAs).</p></dd>
-    <dt><code>clock</code></dt><dd><p>"reset" for a clock-reset model, "forward" for a clock-forward model,
+
+<dt><code>clock</code></dt><dd><p>"reset" for a clock-reset model, "forward" for a clock-forward model,
 and "mix" for a mixture of clock-reset and clock-forward models. A clock-reset model
 is a semi-Markov model in which transition rates depend on time since entering a state.
 A clock-forward model is a Markov model in which transition rates depend on time
 since entering the initial state. If <code>"mix"</code> is used, then
 <code>reset_states</code> must be specified.</p></dd>
-    <dt><code>reset_states</code></dt><dd><p>A vector denoting the states in which time resets.
+
+<dt><code>reset_states</code></dt><dd><p>A vector denoting the states in which time resets.
 Hazard functions are always a function of elapsed time since either the
 start of the model or from when time was previously reset. Only used if
 <code>clock = "mix"</code>.</p></dd>
+
 </dl><p></div></p>
-    
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
-    <h3>Public methods</h3>
-    <ul>
+    
+<h3>Public methods</h3>
+
+<ul>
 <li><p><a href='#method-new'><code>IndivCtstmTrans$new()</code></a></p></li>
 <li><p><a href='#method-sim_stateprobs'><code>IndivCtstmTrans$sim_stateprobs()</code></a></p></li>
 <li><p><a href='#method-check'><code>IndivCtstmTrans$check()</code></a></p></li>
@@ -213,85 +227,92 @@ start of the model or from when time was previously reset. Only used if
 <li><p><span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="hazard"><a href='../../hesim/html/CtstmTrans.html#method-hazard'><code>hesim::CtstmTrans$hazard()</code></a></span></p></li>
 </ul>
 </details>
-    <hr>
+
+<hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-    Create a new <code>IndivCtstmTrans</code> object.
-<h3>Usage</h3>
-    <div class="r"><pre>IndivCtstmTrans$new(
-  params,
-  input_data,
-  trans_mat,
-  start_state = 1,
-  start_age = 38,
-  death_state = NULL,
-  clock = c("reset", "forward", "mix"),
-  reset_states = NULL
-)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Create a new <code>IndivCtstmTrans</code> object.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>IndivCtstmTrans</span>$<span class='fu'>new</span>(
+  <span class='no'>params</span>,
+  <span class='no'>input_data</span>,
+  <span class='no'>trans_mat</span>,
+  <span class='kw'>start_state</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>start_age</span> <span class='kw'>=</span> <span class='fl'>38</span>,
+  <span class='kw'>death_state</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>clock</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"reset"</span>, <span class='st'>"forward"</span>, <span class='st'>"mix"</span>),
+  <span class='kw'>reset_states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
-    <dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
-    <dt><code>trans_mat</code></dt><dd><p>The <code>trans_mat</code> field.</p></dd>
-    <dt><code>start_state</code></dt><dd><p>The <code>start_state</code> field.</p></dd>
-    <dt><code>start_age</code></dt><dd><p>The <code>start_age</code> field.</p></dd>
-    <dt><code>death_state</code></dt><dd><p>The <code>death_state</code> field.</p></dd>
-    <dt><code>clock</code></dt><dd><p>The <code>clock</code> field.</p></dd>
-    <dt><code>reset_states</code></dt><dd><p>The <code>reset_states</code> field.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    A new <code>IndivCtstmTrans</code> object.
-    <p><hr>
+
+<dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
+
+<dt><code>trans_mat</code></dt><dd><p>The <code>trans_mat</code> field.</p></dd>
+
+<dt><code>start_state</code></dt><dd><p>The <code>start_state</code> field.</p></dd>
+
+<dt><code>start_age</code></dt><dd><p>The <code>start_age</code> field.</p></dd>
+
+<dt><code>death_state</code></dt><dd><p>The <code>death_state</code> field.</p></dd>
+
+<dt><code>clock</code></dt><dd><p>The <code>clock</code> field.</p></dd>
+
+<dt><code>reset_states</code></dt><dd><p>The <code>reset_states</code> field.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A new <code>IndivCtstmTrans</code> object.</p>
+<p><hr>
 <a id="method-sim_stateprobs"></a></p><h3>Method <code>sim_stateprobs()</code></h3>
-    Simulate health state probabilities at distinct times by first
+<p>Simulate health state probabilities at distinct times by first
 simulating trajectories through a multi-state model with
-<code>IndivCtstm$sim_disease()</code>.
-<h3>Usage</h3>
-    <div class="r"><pre>IndivCtstmTrans$sim_stateprobs(t, ...)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<code>IndivCtstm$sim_disease()</code>.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>IndivCtstmTrans</span>$<span class='fu'>sim_stateprobs</span>(<span class='no'>t</span>, <span class='no'>...</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
-    <dt><code>...</code></dt><dd><p>Additional arguments to pass to <code>IndivCtstm$sim_disease()</code>.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    An object of class <a href='stateprobs.html'>stateprobs</a>.
-    <p><hr>
+
+<dt><code>...</code></dt><dd><p>Additional arguments to pass to <code>IndivCtstm$sim_disease()</code>.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>An object of class <a href='stateprobs.html'>stateprobs</a>.</p>
+<p><hr>
 <a id="method-check"></a></p><h3>Method <code><a href='check.html'>check()</a></code></h3>
-    Input validation for class. Checks that fields are the correct type.
-<h3>Usage</h3>
-    <div class="r"><pre>IndivCtstmTrans$check()</pre></div>
-    <p><hr>
+<p>Input validation for class. Checks that fields are the correct type.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>IndivCtstmTrans</span>$<span class='fu'><a href='check.html'>check</a></span>()</pre><p></div></p>
+
+<p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-    The objects of this class are cloneable with this method.
-<h3>Usage</h3>
-    <div class="r"><pre>IndivCtstmTrans$clone(deep = FALSE)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>IndivCtstmTrans</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
-</dl>
-</div>
-    
+
+</dl><p></div></p>
+
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"flexsurv"</span>)
 
 <span class='co'># Simulation data</span>
-<span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
-                       <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
-                       <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
+<span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
+<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
+                       <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
+                       <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
 
 <span class='co'># Multi-state model with transition specific models</span>
-<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
-              <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>3</span>),
-              <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
-<span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/vector'>vector</a></span>(<span class='kw'>length</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Extremes'>max</a></span>(<span class='no'>tmat</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"list"</span>)
-<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>fits</span>)){
-  <span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>years</span>, <span class='no'>status</span>) ~ <span class='fl'>1</span>,
+<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>3</span>),
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
+<span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span>(<span class='kw'>length</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='no'>tmat</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"list"</span>)
+<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>fits</span>)){
+  <span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>years</span>, <span class='no'>status</span>) ~ <span class='fl'>1</span>,
                            <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bosms3</span>[<span class='no'>bosms3</span>$<span class='no'>trans</span> <span class='kw'>==</span> <span class='no'>i</span>, ],
                            <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
 }
@@ -305,57 +326,45 @@ simulating trajectories through a multi-state model with
                                    <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
                                    <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                    <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t     hazard
-#&gt; 1:     1      1           1          1      1 1 0.21087494
-#&gt; 2:     1      1           1          1      1 2 0.21087494
-#&gt; 3:     1      1           1          1      1 3 0.21087494
-#&gt; 4:     2      1           1          1      1 1 0.05853501
-#&gt; 5:     2      1           1          1      1 2 0.05853501
-#&gt; 6:     2      1           1          1      1 3 0.05853501</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t  cumhazard
-#&gt; 1:     1      1           1          1      1 1 0.21087494
-#&gt; 2:     1      1           1          1      1 2 0.42174988
-#&gt; 3:     1      1           1          1      1 3 0.63262482
-#&gt; 4:     2      1           1          1      1 1 0.05853501
-#&gt; 5:     2      1           1          1      1 2 0.11707001
-#&gt; 6:     2      1           1          1      1 3 0.17560502</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id grp_id state_id t      prob
-#&gt;  1:      1           1      1        1 5 0.6666667
-#&gt;  2:      1           1      1        2 5 0.0000000
-#&gt;  3:      1           1      1        3 5 0.3333333
-#&gt;  4:      1           2      1        1 5 0.3333333
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/hazard.html'>hazard</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t     hazard
+#&gt; 1:     1      1           1          1      1 1 0.17340092
+#&gt; 2:     1      1           1          1      1 2 0.17340092
+#&gt; 3:     1      1           1          1      1 3 0.17340092
+#&gt; 4:     2      1           1          1      1 1 0.05617766
+#&gt; 5:     2      1           1          1      1 2 0.05617766
+#&gt; 6:     2      1           1          1      1 3 0.05617766</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t  cumhazard
+#&gt; 1:     1      1           1          1      1 1 0.17340092
+#&gt; 2:     1      1           1          1      1 2 0.34680185
+#&gt; 3:     1      1           1          1      1 3 0.52020277
+#&gt; 4:     2      1           1          1      1 1 0.05617766
+#&gt; 5:     2      1           1          1      1 2 0.11235533
+#&gt; 6:     2      1           1          1      1 3 0.16853299</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id grp_id state_id t      prob
+#&gt;  1:      1           1      1        1 5 0.0000000
+#&gt;  2:      1           1      1        2 5 0.3333333
+#&gt;  3:      1           1      1        3 5 0.6666667
+#&gt;  4:      1           2      1        1 5 0.0000000
 #&gt;  5:      1           2      1        2 5 0.3333333
-#&gt;  6:      1           2      1        3 5 0.3333333
-#&gt;  7:      1           3      1        1 5 0.3333333
-#&gt;  8:      1           3      1        2 5 0.0000000
+#&gt;  6:      1           2      1        3 5 0.6666667
+#&gt;  7:      1           3      1        1 5 0.0000000
+#&gt;  8:      1           3      1        2 5 0.3333333
 #&gt;  9:      1           3      1        3 5 0.6666667
 #&gt; 10:      2           1      1        1 5 0.0000000
 #&gt; 11:      2           1      1        2 5 0.3333333
 #&gt; 12:      2           1      1        3 5 0.6666667
-#&gt; 13:      2           2      1        1 5 0.3333333
+#&gt; 13:      2           2      1        1 5 0.6666667
 #&gt; 14:      2           2      1        2 5 0.0000000
-#&gt; 15:      2           2      1        3 5 0.6666667
-#&gt; 16:      2           3      1        1 5 0.6666667
+#&gt; 15:      2           2      1        3 5 0.3333333
+#&gt; 16:      2           3      1        1 5 0.3333333
 #&gt; 17:      2           3      1        2 5 0.0000000
-#&gt; 18:      2           3      1        3 5 0.3333333</div></pre>
+#&gt; 18:      2           3      1        3 5 0.6666667</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#format">Format</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-
-      <li><a href="#super-class">Super class</a></li>
-
-      <li><a href="#public-fields">Public fields</a></li>
-
-      <li><a href="#methods">Methods</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -363,13 +372,16 @@ simulating trajectories through a multi-state model with
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

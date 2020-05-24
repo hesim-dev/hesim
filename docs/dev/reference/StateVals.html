@@ -8,21 +8,29 @@
 
 <title>Model for state values — StateVals • hesim</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,11 +40,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Model for state values — StateVals" />
 
+<meta property="og:title" content="Model for state values — StateVals" />
 <meta property="og:description" content="Simulate values (i.e., utility or costs) associated with health states in a
 state transition or partitioned survival model." />
-<meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
@@ -50,9 +58,10 @@ state transition or partitioned survival model." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -119,11 +128,10 @@ state transition or partitioned survival model." />
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hesim-dev/hesim">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/hesim-dev/hesim/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -134,6 +142,7 @@ state transition or partitioned survival model." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -145,21 +154,22 @@ state transition or partitioned survival model." />
     </div>
 
     <div class="ref-description">
-    
     <p>Simulate values (i.e., utility or costs) associated with health states in a
 state transition or partitioned survival model.</p>
-    
     </div>
 
-        
+
+
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p><div class="r6-fields"></p><dl class='dl-horizontal'>
+    <p><div class="r6-fields"></p><dl'>
 <dt><code>params</code></dt><dd><p>Parameters for simulating state values. Currently supports
 objects of class <a href='tparams_mean.html'>tparams_mean</a> or <a href='params_lm.html'>params_lm</a>.</p></dd>
-    <dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>. Only used for
+
+<dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>. Only used for
 <a href='params_lm.html'>params_lm</a> objects.</p></dd>
-    <dt><code>method</code></dt><dd><p>The method used to simulate costs and
+
+<dt><code>method</code></dt><dd><p>The method used to simulate costs and
 quality-adjusted life-years (QALYs) as a function of state values.
 If <code>wlos</code>, then costs and QALYs are
 simulated by weighting state values by the length of stay in a health
@@ -169,16 +179,19 @@ used in a cohort model, the state values only accrue at time 0;
 in contrast, in an individual-level model, state values
 accrue each time a patient enters a new state and are discounted based on
 time of entrance into that state.</p></dd>
-    <dt><code>time_reset</code></dt><dd><p>If <code>FALSE</code> then time intervals are based on time since
+
+<dt><code>time_reset</code></dt><dd><p>If <code>FALSE</code> then time intervals are based on time since
 the start of the simulation. If <code>TRUE</code>, then time intervals reset each
 time a patient enters a new health state. This is relevant if, for example,
 costs vary over time within health states. Only used if <code>method = wlos</code>.</p></dd>
+
 </dl><p></div></p>
-    
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
-    <h3>Public methods</h3>
-    <ul>
+    
+<h3>Public methods</h3>
+
+<ul>
 <li><p><a href='#method-new'><code>StateVals$new()</code></a></p></li>
 <li><p><a href='#method-sim'><code>StateVals$sim()</code></a></p></li>
 <li><p><a href='#method-check'><code>StateVals$check()</code></a></p></li>
@@ -186,71 +199,69 @@ costs vary over time within health states. Only used if <code>method = wlos</cod
 </ul>
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-    Create a new <code>StateVals</code> object.
-<h3>Usage</h3>
-    <div class="r"><pre>StateVals$new(
-  params,
-  input_data = NULL,
-  method = c("wlos", "starting"),
-  time_reset = FALSE
-)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Create a new <code>StateVals</code> object.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>StateVals</span>$<span class='fu'>new</span>(
+  <span class='no'>params</span>,
+  <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"wlos"</span>, <span class='st'>"starting"</span>),
+  <span class='kw'>time_reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
-    <dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
-    <dt><code>method</code></dt><dd><p>The <code>method</code> field.</p></dd>
-    <dt><code>time_reset</code></dt><dd><p>The <code>time_reset</code> field.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    A new <code>StateVals</code> object.
-    <p><hr>
+
+<dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
+
+<dt><code>method</code></dt><dd><p>The <code>method</code> field.</p></dd>
+
+<dt><code>time_reset</code></dt><dd><p>The <code>time_reset</code> field.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A new <code>StateVals</code> object.</p>
+<p><hr>
 <a id="method-sim"></a></p><h3>Method <code>sim()</code></h3>
-    Simulate state values with either predicted means or random samples by
-treatment strategy, patient, health state, and time <code>t</code>.
-<h3>Usage</h3>
-    <div class="r"><pre>StateVals$sim(t, type = c("predict", "random"))</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>Simulate state values with either predicted means or random samples by
+treatment strategy, patient, health state, and time <code>t</code>.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>StateVals</span>$<span class='fu'>sim</span>(<span class='no'>t</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"predict"</span>, <span class='st'>"random"</span>))</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
-    <dt><code>type</code></dt><dd><p><code>"predict"</code> for mean values or <code>"random"</code> for random samples.</p></dd>
-</dl>
-</div>
-    <h3>Returns</h3>
-    A <code>data.table</code> of simulated state values with columns for <code>sample</code>,
-<code>strategy_id</code>, <code>patient_id</code>, <code>state_id</code>, <code>time</code>, and <code>value</code>.
-    <p><hr>
+
+<dt><code>type</code></dt><dd><p><code>"predict"</code> for mean values or <code>"random"</code> for random samples.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A <code>data.table</code> of simulated state values with columns for <code>sample</code>,
+<code>strategy_id</code>, <code>patient_id</code>, <code>state_id</code>, <code>time</code>, and <code>value</code>.</p>
+<p><hr>
 <a id="method-check"></a></p><h3>Method <code><a href='check.html'>check()</a></code></h3>
-    Input validation for class. Checks that fields are the correct type.
-<h3>Usage</h3>
-    <div class="r"><pre>StateVals$check()</pre></div>
-    <p><hr>
+<p>Input validation for class. Checks that fields are the correct type.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>StateVals</span>$<span class='fu'><a href='check.html'>check</a></span>()</pre><p></div></p>
+
+<p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-    The objects of this class are cloneable with this method.
-<h3>Usage</h3>
-    <div class="r"><pre>StateVals$clone(deep = FALSE)</pre></div>
-    <h3>Arguments</h3>
-    <div class="arguments">
-<dl class='dl-horizontal'>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>StateVals</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
-</dl>
-</div>
-    
+
+</dl><p></div></p>
+
+
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#public-fields">Public fields</a></li>
-
-      <li><a href="#methods">Methods</a></li>
-          </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -258,13 +269,16 @@ treatment strategy, patient, health state, and time <code>t</code>.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

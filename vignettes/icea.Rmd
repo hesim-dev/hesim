@@ -165,7 +165,7 @@ print(mce)
 
 In this example, treatments 1, 2, and 3 have the highest NMBs a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `icea` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
 
-```{r mce_plot, warning = FALSE, message = FALSE}
+```{r mce_plot, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 library("ggplot2")
 library("scales")
 theme_set(theme_minimal())
@@ -183,7 +183,7 @@ One drawback of the previous plot is that the probability of being cost-effectiv
 
 A CEAF curve can be easily created by using the `best` column to subset to the treatment strategy with the highest expected NMB for each willingness to pay value and group. 
 
-```{r ceaf_plot}
+```{r ceaf_plot, fig.width = 6, fig.height = 4}
 ggplot2::ggplot(icea$mce[best == 1], aes(x = k, y = prob, col = strategy)) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
@@ -222,7 +222,7 @@ print(enmbpi - enmbci)
 
 The `icea` function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal strategy changes.
 
-```{r evpi_plot}
+```{r evpi_plot, fig.width = 6, fig.height = 4}
 ggplot2::ggplot(icea$evpi, aes(x = k, y = evpi)) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Expected value of perfect information") +
@@ -240,7 +240,7 @@ totEVPI &= \sum_{g=1}^{G} w_g EVPI_g,
 $$
 where $w_g \in (0, 1)$ is a weight denoting that proportion of the population represented by subgroup $g$ and $\sum_{g=1}^{G} w_g = 1$.
 
-```{r totevpi}
+```{r totevpi, fig.width = 6, fig.height = 4}
 w_dt <- data.table(grp = paste0("Group ", seq(1, 2)), w = c(0.25, .75))
 evpi <- icea$evpi
 evpi <- merge(evpi, w_dt, by = "grp")
@@ -274,7 +274,7 @@ The cost-effectiveness plane plots the incremental effectiveness of a treatment 
 
 Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `icea_pw` function, which, for each sampled parameter set and treatment strategy, estimates differences in costs, effectiveness, and any other variables specified in `custom_vars`relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above it are not. 
 
-```{r ceplane_plot}
+```{r ceplane_plot, fig.width = 6, fig.height = 4}
 head(icea_pw$delta)
 ylim <- max(icea_pw$delta[, ic]) * 1.1
 xlim <- ceiling(max(icea_pw$delta[, ie]) * 1.1)
@@ -293,7 +293,7 @@ The cost-effectiveness acceptability curve (CEAC) is similar to the MCE plot. Th
 
 The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of $k$. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(icea_pw$ceac[strategy == "Strategy 3" & prob > .5 & grp ==  "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of $k$, although this probability is larger for Strategy 2 than Strategy 3 when $k$ is smaller.
 
-```{r ceac_plot}
+```{r ceac_plot, fig.width = 6, fig.height = 4}
 ggplot2::ggplot(icea_pw$ceac, aes(x = k, y = prob, col = factor(strategy))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +

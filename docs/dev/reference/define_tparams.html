@@ -8,21 +8,29 @@
 
 <title>Define and evaluate transformed parameter expressions — define_tparams • hesim</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,8 +40,8 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Define and evaluate transformed parameter expressions — define_tparams" />
 
+<meta property="og:title" content="Define and evaluate transformed parameter expressions — define_tparams" />
 <meta property="og:description" content="Transformed parameter expressions are used to transform the parameter
 values sampled with eval_rng() as a function of input data
 (treatment strategies and patients) and time
@@ -41,7 +49,7 @@ intervals. These functions are used when evaluating an object of class
 model_def defined using define_model(). The transformed parameters
 are ultimately converted into tparams objects and used to simulate outcomes with an
 economic model." />
-<meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
@@ -55,9 +63,10 @@ economic model." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -124,11 +133,10 @@ economic model." />
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hesim-dev/hesim">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/hesim-dev/hesim/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -139,6 +147,7 @@ economic model." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -150,7 +159,6 @@ economic model." />
     </div>
 
     <div class="ref-description">
-    
     <p>Transformed parameter expressions are used to transform the parameter
 values sampled with <code><a href='define_rng.html'>eval_rng()</a></code> as a function of input data
 (treatment strategies and patients) and time
@@ -158,20 +166,19 @@ intervals. These functions are used when evaluating an object of class
 <code>model_def</code> defined using <code><a href='define_model.html'>define_model()</a></code>. The transformed parameters
 are ultimately converted into <a href='tparams.html'>tparams</a> objects and used to simulate outcomes with an
 economic model.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>define_tparams</span>(<span class='no'>expr</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='fu'>eval_tparams</span>(<span class='no'>x</span>, <span class='no'>input_data</span>, <span class='no'>rng_params</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>expr</th>
       <td><p>Expressions used to transform parameters. As with <code><a href='define_rng.html'>define_rng()</a></code>,
-<a href='https://www.rdocumentation.org/packages/base/topics/Paren'>braces</a> should be used so that the result
+<a href='https://rdrr.io/r/base/Paren.html'>braces</a> should be used so that the result
 of the last expression within the braces is evaluated. The expression
 must return a named list with the following possible elements:</p><ul>
 <li><p><em>tpmatrix</em>: The transition probability matrix used to simulate transition
@@ -210,7 +217,7 @@ in <code><a href='define_model.html'>eval_model()</a></code>) expanded by the di
       <td><p>Random samples of the parameters returned by <code><a href='define_rng.html'>eval_rng()</a></code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>define_tparams()</code> returns an object of class <code>tparams_def</code>,
@@ -218,7 +225,6 @@ which is a list containing the unevaluated "transformation" expressions
 passed  to <code>expr</code>, <code>times</code>, and any additional arguments passed to
 <code>...</code> . <code>eval_tparams()</code> evaluates the <code>tparams_def</code> object
 and should return a list of transformed parameter objects.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>define_tparams()</code> is evaluated when creating economic models as a
@@ -229,27 +235,18 @@ each variable from <code>input_data</code>, all elements of <code>rng_params</co
 <code>time</code> containing the values from <code>times</code>. The <code>time</code> variable can be used
 to create models where parameters vary as a function of time.
 <code>eval_tparams()</code> is not exported and is only meant for use within <code><a href='define_model.html'>eval_model()</a></code>.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_rng.html'>define_rng()</a></code></p></div>
-    
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -257,13 +254,16 @@ to create models where parameters vary as a function of time.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

@@ -8,21 +8,29 @@
 
 <title>Define and evaluate random number generation expressions — define_rng • hesim</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,13 +40,13 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Define and evaluate random number generation expressions — define_rng" />
 
+<meta property="og:title" content="Define and evaluate random number generation expressions — define_rng" />
 <meta property="og:description" content="Random number generation expressions are used to
 randomly sample model parameters from suitable distributions for probabilistic
 sensitivity analysis. These functions are typically used when evaluating
 an object of class model_def defined using define_model()." />
-<meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
@@ -52,9 +60,10 @@ an object of class model_def defined using define_model()." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -121,11 +130,10 @@ an object of class model_def defined using define_model()." />
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hesim-dev/hesim">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/hesim-dev/hesim/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -136,6 +144,7 @@ an object of class model_def defined using define_model()." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -147,25 +156,23 @@ an object of class model_def defined using define_model()." />
     </div>
 
     <div class="ref-description">
-    
     <p>Random number generation expressions are used to
 randomly sample model parameters from suitable distributions for probabilistic
 sensitivity analysis. These functions are typically used when evaluating
 an object of class <code>model_def</code> defined using <code><a href='define_model.html'>define_model()</a></code>.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>define_rng</span>(<span class='no'>expr</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>)
 
 <span class='fu'>eval_rng</span>(<span class='no'>x</span>, <span class='kw'>params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>expr</th>
       <td><p>An expression used to randomly draw variates for each parameter of
-interest in the model. <a href='https://www.rdocumentation.org/packages/base/topics/Paren'>Braces</a> should be used so that the result
+interest in the model. <a href='https://rdrr.io/r/base/Paren.html'>Braces</a> should be used so that the result
 of the last expression within the braces is evaluated. The expression must
 return a list where each element is either a <code>vector</code>, <code>matrix</code>, <code>data.frame</code>,
 or <code>data.table</code>. The length of
@@ -192,14 +199,13 @@ generation. Each element of the list should either be a <code>vector</code>,
 <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>define_rng()</code> returns an object of class <code>rng_def</code>,
 which is a list containing the unevaluated random number generation
 expressions passed  to <code>expr</code>, <code>n</code>, and any additional arguments passed to
 <code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and should return a list.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>hesim</code> contains a number of random number generation functions
@@ -211,25 +217,23 @@ in <code>define_rng()</code>. If multivariate object is returned by <code>eval_r
 then the rows are random samples and columns are
 distinct parameters (e.g., costs for each health state, elements of a
 transition probability matrix).</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='rng_distributions.html'>rng_distributions</a>, <code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>75</span>, <span class='fl'>25</span>, <span class='fl'>33</span>, <span class='fl'>67</span>), <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-  <span class='kw'>inptcost_mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='kw'>A</span> <span class='kw'>=</span> <span class='fl'>900</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>1500</span>, <span class='kw'>C</span> <span class='kw'>=</span> <span class='fl'>2000</span>),
-  <span class='kw'>outptcost_mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>300</span>, <span class='fl'>600</span>, <span class='fl'>800</span>,
+<span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>75</span>, <span class='fl'>25</span>, <span class='fl'>33</span>, <span class='fl'>67</span>), <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>),
+  <span class='kw'>inptcost_mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>A</span> <span class='kw'>=</span> <span class='fl'>900</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>1500</span>, <span class='kw'>C</span> <span class='kw'>=</span> <span class='fl'>2000</span>),
+  <span class='kw'>outptcost_mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>300</span>, <span class='fl'>600</span>, <span class='fl'>800</span>,
                             <span class='fl'>400</span>, <span class='fl'>700</span>, <span class='fl'>700</span>),
                            <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 )
 <span class='no'>rng_def</span> <span class='kw'>&lt;-</span> <span class='fu'>define_rng</span>({
-  <span class='no'>aecost_mean</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>500</span>, <span class='fl'>800</span>, <span class='fl'>1000</span>) <span class='co'># Local object not </span>
+  <span class='no'>aecost_mean</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>500</span>, <span class='fl'>800</span>, <span class='fl'>1000</span>) <span class='co'># Local object not </span>
                                    <span class='co'># not returned by eval_rng()</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>( <span class='co'># Sampled values of parameters returned by eval_rng()</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>( <span class='co'># Sampled values of parameters returned by eval_rng()</span>
     <span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'><a href='rng_distributions.html'>dirichlet_rng</a></span>(<span class='no'>alpha</span>), <span class='co'># Default column names</span>
     <span class='kw'>inptcost</span> <span class='kw'>=</span> <span class='fu'><a href='rng_distributions.html'>gamma_rng</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>inptcost_mean</span>, <span class='co'># Column names based on </span>
                          <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>inptcost_mean</span>),  <span class='co'># named vector</span>
@@ -239,7 +243,7 @@ transition probability matrix).</p>
                        <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>aecost_mean</span>,
                        <span class='kw'>names</span> <span class='kw'>=</span> <span class='no'>aecost_colnames</span>)
   )
-}, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>aecost_colnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>)) <span class='co'># Add aecost_colnames to environment</span>
+}, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>aecost_colnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>)) <span class='co'># Add aecost_colnames to environment</span>
 <span class='fu'>eval_rng</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>rng_def</span>, <span class='no'>params</span>)</div><div class='output co'>#&gt; $p
 #&gt;        s1_s1     s1_s2     s2_s1     s2_s2
 #&gt; 1: 0.7330803 0.2669197 0.3250276 0.6749724
@@ -261,22 +265,13 @@ transition probability matrix).</p>
 #&gt; 2: 2208.7228 736.8902  119.4825
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -284,13 +279,16 @@ transition probability matrix).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

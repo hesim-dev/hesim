@@ -170,7 +170,7 @@ econmod <- CohortDtstm$new(trans_model = transmod,
 ### Disease progression
 We simulate state probabilities over 20 years with 1-year model cycles. Means and 95% credible intervals from the PSA are used to summarize the probability of being in each of the 3 states over the model's time horizon.
 
-```{r stateprobs}
+```{r stateprobs, fig.width = 7, fig.height = 4}
 econmod$sim_stateprobs(n_cycles = 20)
 
 # Plot
@@ -208,7 +208,7 @@ icea_pw_out <- icea_pw(ce_sim, comparator = 1, dr_qalys = .03, dr_costs = .03)
 
 Since we modeled the health state transitions as a function of covariates, transition rates vary by patient characteristics. The impact of gender and the (nonlinear) impact of age on transitions have a similar effect on the incremental cost-effectiveness ratio (ICER). The ICERs were lower for females and tended to rise with age, suggesting that the "Intervention" was more effective for patients with a lower baseline risk.
 
-```{r icerHeterogeneity}
+```{r icerHeterogeneity, fig.width = 7, fig.height = 4}
 icers <- merge(icea_pw_out$summary,
                hesim_dat$patients[, .(grp_id, age, female)],
                by = "grp_id")

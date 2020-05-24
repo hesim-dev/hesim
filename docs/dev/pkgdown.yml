@@ -1,5 +1,5 @@
 pandoc: 2.7.3
-pkgdown: 1.3.0
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   expected-values: expected-values.html
@@ -10,4 +10,5 @@ articles:
   mlogit: mlogit.html
   mstate: mstate.html
   psm: psm.html
+last_built: 2020-05-24T22:04Z
 
