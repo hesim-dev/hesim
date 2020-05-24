@@ -14,3 +14,4 @@ DoxygenLayout.xml
 ^CRAN-RELEASE$
 ^doc$
 ^Meta$
+^tests/manual$
