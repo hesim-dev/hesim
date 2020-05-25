@@ -2,12 +2,12 @@
 title: Partitioned survival models
 date: "`r Sys.Date()`"
 output: 
-  html_document:
+  html_vignette:
     toc: yes
     toc_depth: 2
     number_sections: TRUE
 pkgdown:
-  as_is: true
+  as_is: false
 vignette: >
   %\VignetteIndexEntry{Partitioned survival models}
   %\VignetteEngine{knitr::rmarkdown}

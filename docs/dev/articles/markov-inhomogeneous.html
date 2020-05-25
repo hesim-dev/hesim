@@ -118,7 +118,7 @@
     
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
-<a href="#overview" class="anchor"></a><span class="header-section-number">1</span> Overview</h1>
+<a href="#overview" class="anchor"></a>Overview</h1>
 <p>We will illustrate a time inhomogeneous Markov cohort model by replicating the total hip replacement (THR) example from the <a href="https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation"><em>Decision Modeling for Health Economic Evaluation</em></a> textbook. The analysis compares two treatment strategies, a “standard” prosthesis and a “new” prosthesis. A probabilistic sensitivity analysis (PSA) will be used to quantify parameter uncertainty.</p>
 <p>The model consists 5 health states: (i) primary THR, (ii) successful primary, (iii) revision THR, (iv) successful revision, and (v) death.</p>
 <p><img src="markov-inhomogeneous.png" width="700px"></p>
@@ -126,10 +126,10 @@
 </div>
 <div id="define-the-model" class="section level1">
 <h1 class="hasAnchor">
-<a href="#define-the-model" class="anchor"></a><span class="header-section-number">2</span> Define the model</h1>
+<a href="#define-the-model" class="anchor"></a>Define the model</h1>
 <div id="data" class="section level2">
 <h2 class="hasAnchor">
-<a href="#data" class="anchor"></a><span class="header-section-number">2.1</span> Data</h2>
+<a href="#data" class="anchor"></a>Data</h2>
 <p>We set up the model for two treatment strategies and 10 subgroups defined by age and sex.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"hesim"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"data.table"</span>)
@@ -185,10 +185,10 @@
 </div>
 <div id="parameters" class="section level2">
 <h2 class="hasAnchor">
-<a href="#parameters" class="anchor"></a><span class="header-section-number">2.2</span> Parameters</h2>
+<a href="#parameters" class="anchor"></a>Parameters</h2>
 <div id="transition-probabilities" class="section level3">
 <h3 class="hasAnchor">
-<a href="#transition-probabilities" class="anchor"></a><span class="header-section-number">2.2.1</span> Transition probabilities</h3>
+<a href="#transition-probabilities" class="anchor"></a>Transition probabilities</h3>
 <p>Transition probabilities from state <span class="math inline">\(i\)</span> (rows) to state <span class="math inline">\(j\)</span> (columns) are determined using the parameters shown in the table below:</p>
 <ul>
 <li>
@@ -359,18 +359,18 @@ S(t) = \exp(-\lambda t^\gamma) \\
 </div>
 <div id="utility" class="section level3">
 <h3 class="hasAnchor">
-<a href="#utility" class="anchor"></a><span class="header-section-number">2.2.2</span> Utility</h3>
+<a href="#utility" class="anchor"></a>Utility</h3>
 <p>The mean (standard error) of utility was estimated to be 0.85 (0.03), 0.30 (0.03), and 0.75 (0.04) in the successful primary, revision, and successful revision health states, respectively.</p>
 </div>
 <div id="costs" class="section level3">
 <h3 class="hasAnchor">
-<a href="#costs" class="anchor"></a><span class="header-section-number">2.2.3</span> Costs</h3>
+<a href="#costs" class="anchor"></a>Costs</h3>
 <p>The largest costs are the cost of the prostheses themselves. The standard prosthesis costs <span class="math inline">\(£394\)</span> while the new prosthesis costs <span class="math inline">\(£579\)</span>. Both are assumed to be known with certainty.</p>
 <p>The model assumes that there are no ongoing medical costs. The only remaining cost is therefore the cost of the revision procedure, which was estimated to have a mean of <span class="math inline">\(£5,294\)</span> and standard error of <span class="math inline">\(£1,487\)</span>.</p>
 </div>
 <div id="combining-all-parameters" class="section level3">
 <h3 class="hasAnchor">
-<a href="#combining-all-parameters" class="anchor"></a><span class="header-section-number">2.2.4</span> Combining all parameters</h3>
+<a href="#combining-all-parameters" class="anchor"></a>Combining all parameters</h3>
 <p>All underlying parameter estimates are stored in a list.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
   <span class="co"># Transition probabilities</span>
@@ -407,7 +407,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 </div>
 <div id="random-number-generation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#random-number-generation" class="anchor"></a><span class="header-section-number">2.3</span> Random number generation</h2>
+<a href="#random-number-generation" class="anchor"></a>Random number generation</h2>
 <p>As noted above, <em>omrPTHR</em>, <em>omrRTHR</em>, and <em>rrr</em> are drawn from beta distributions with <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> (i.e. <code>shape1</code> and <code>shape2</code>) specified. Similarly, utility is drawn from a beta distribution, but <code>shape1</code> and <code>shape2</code> are derived from the mean and standard error using the method of moments. The mortality rate and the cost of the prostheses are assumed to be known with certainty. The medical costs associated with health states are drawn from a gamma distribution, for which, like utility, the underlying parameters are derived from the mean and standard error using the method of moments. Finally, the parameters of the Weibull survival model are drawn from a multivariate normal distribution using the point estimates and the variance-covariance matrix. 500 samples will be drawn for the PSA.</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">rng_def</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/define_rng.html">define_rng</a></span>({
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
@@ -426,7 +426,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 </div>
 <div id="transformed-parameters" class="section level2">
 <h2 class="hasAnchor">
-<a href="#transformed-parameters" class="anchor"></a><span class="header-section-number">2.4</span> Transformed parameters</h2>
+<a href="#transformed-parameters" class="anchor"></a>Transformed parameters</h2>
 <p>The sampled parameter values are “transformed” as a function of the input data. When evaluating the <code><a href="../reference/define_tparams.html">define_tparams()</a></code> expression, operations are vectorized and performed for each combination of the sampled parameters, input data, and time periods. The model will be simulated for 60 model cycles (i.e., 60 years) so we will create 60 time intervals of length 1.</p>
 <p>Separate transformation functions are used for the transition model and the cost/utility models. This is done for computational efficiency since only the transition model depends on cycle time. In the transition model, the revision rate (<em>rr</em>) depends on the scale and the shape parameters, which, in turn, depend on the sampled values of the parameters from the Weibull model. The mortality rate depends on gender and a patient’s age during each model cycle.</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">transitions_def</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/define_tparams.html">define_tparams</a></span>({
@@ -479,7 +479,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 </div>
 <div id="the-model" class="section level2">
 <h2 class="hasAnchor">
-<a href="#the-model" class="anchor"></a><span class="header-section-number">2.5</span> The model</h2>
+<a href="#the-model" class="anchor"></a>The model</h2>
 <p>The model is defined by specifying parameter estimates, a random number generation expression for the PSA, and the transformed parameter expressions.</p>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">mod_def</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/define_model.html">define_model</a></span>(<span class="kw">tparams_def</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">transitions_def</span>,
                                            <span class="no">statevals_def</span>),
@@ -489,7 +489,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 </div>
 <div id="simulation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#simulation" class="anchor"></a><span class="header-section-number">3</span> Simulation</h1>
+<a href="#simulation" class="anchor"></a>Simulation</h1>
 <p>The economic model is created from the input data and the defined model. Arguments for instantiating the cost models (a list of objects of class <code>StateVals</code>) can be specified with a named list containing the values of arguments to pass to <code>StateVals$new()</code>. In this case, we note that the model for the cost of the prostheses is based on one-time costs accrued at the start of the model (with no discounting); conversely, medical costs accrue by weighting state values by time spent in the health states (in the current model simply the cost of revision over 1 year).</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">cost_args</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
   <span class="kw">prosthesis</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">method</span> <span class="kw">=</span> <span class="st">"starting"</span>),
@@ -499,7 +499,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
                               <span class="kw">cost_args</span> <span class="kw">=</span> <span class="no">cost_args</span>)</pre></body></html></div>
 <div id="health-state-probabilities" class="section level2">
 <h2 class="hasAnchor">
-<a href="#health-state-probabilities" class="anchor"></a><span class="header-section-number">3.1</span> Health state probabilities</h2>
+<a href="#health-state-probabilities" class="anchor"></a>Health state probabilities</h2>
 <p>Health state probabilities are simulated for 60 model cycles.</p>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">econmod</span>$<span class="fu">sim_stateprobs</span>(<span class="kw">n_cycles</span> <span class="kw">=</span> <span class="fl">60</span>)</pre></body></html></div>
 <p>The expected number of patients per 1,000 in each health state is plotted below. The counts in the plot are for <code>patient_id = 2</code>, a 60 year old female as in the original textbook example. Since a PSA was performed both mean values and 95 percent credible intervals can be displayed. Patients are more likely to have a revision with a standard prosthesis than with the new prosthesis.</p>
@@ -507,7 +507,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 </div>
 <div id="costs-and-qalys" class="section level2">
 <h2 class="hasAnchor">
-<a href="#costs-and-qalys" class="anchor"></a><span class="header-section-number">3.2</span> Costs and QALYs</h2>
+<a href="#costs-and-qalys" class="anchor"></a>Costs and QALYs</h2>
 <p>To again be consistent with the textbook example, QALYs and costs are simulated with discount rates of .015 and 0.06, respectively. QALYs and costs (when <code>method = "wlos"</code>) are computed with a right Riemann sum, meaning that they are measured at the right endpoint of each model cycle.</p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">econmod</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">.015</span>, <span class="kw">integrate_method</span> <span class="kw">=</span> <span class="st">"riemann_right"</span>)
 <span class="no">econmod</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">.06</span>, <span class="kw">integrate_method</span> <span class="kw">=</span> <span class="st">"riemann_right"</span>)</pre></body></html></div>
@@ -515,10 +515,10 @@ S(t) = \exp(-\lambda t^\gamma) \\
 </div>
 <div id="decision-analysis" class="section level1">
 <h1 class="hasAnchor">
-<a href="#decision-analysis" class="anchor"></a><span class="header-section-number">4</span> Decision analysis</h1>
+<a href="#decision-analysis" class="anchor"></a>Decision analysis</h1>
 <div id="subgroup-analysis" class="section level2">
 <h2 class="hasAnchor">
-<a href="#subgroup-analysis" class="anchor"></a><span class="header-section-number">4.1</span> Subgroup analysis</h2>
+<a href="#subgroup-analysis" class="anchor"></a>Subgroup analysis</h2>
 <p>Subgroup analyses can be performed with <code>$sim_summarize()</code> using the <code>by_grp = TRUE</code> option. Cost-effectiveness analyses are then performed for each subgroup (<code>grp_id</code>) from input data. We will begin by reporting results for the 60-year old female, which are consistent with those from the textbook.</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">ce_sim</span> <span class="kw">&lt;-</span> <span class="no">econmod</span>$<span class="fu">summarize</span>(<span class="kw">by_grp</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="no">wtp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span>)
@@ -529,58 +529,58 @@ S(t) = \exp(-\lambda t^\gamma) \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.59540
-## 2:           2      2 14.63966</code></pre>
+## 1:           1      2 14.64224
+## 2:           2      2 14.68669</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 512.7853
-## 2:           2      2 613.3771</code></pre>
+## 1:           1      2 511.5992
+## 2:           2      2 612.0490</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
-<pre><code>##     strategy_id grp_id            iqalys         icosts                  inmb
-##  1:           2      1 0.07 (0.03, 0.13)  68 (-39, 138)  3,509 (1,169, 6,714)
-##  2:           2      2 0.04 (0.02, 0.08)  101 (22, 152)    2,112 (687, 4,119)
-##  3:           2      3 0.03 (0.01, 0.05)  126 (71, 162)    1,195 (354, 2,382)
-##  4:           2      4 0.02 (0.01, 0.03) 146 (107, 170)      616 (124, 1,290)
-##  5:           2      5 0.01 (0.00, 0.02) 160 (133, 176)        270 (-11, 653)
-##  6:           2      6 0.11 (0.04, 0.21) -27 (-227, 99) 5,689 (2,047, 10,571)
-##  7:           2      7 0.07 (0.03, 0.13) 35 (-109, 125)  3,405 (1,216, 6,358)
-##  8:           2      8 0.04 (0.02, 0.07)  83 (-21, 144)    1,936 (681, 3,695)
-##  9:           2      9 0.02 (0.01, 0.04)  117 (46, 159)    1,032 (323, 2,067)
-## 10:           2     10 0.01 (0.01, 0.02)  142 (93, 169)       501 (92, 1,097)
+<pre><code>##     strategy_id grp_id            iqalys          icosts                  inmb
+##  1:           2      1 0.07 (0.03, 0.14)   68 (-36, 142)  3,520 (1,218, 6,924)
+##  2:           2      2 0.04 (0.02, 0.09)   100 (22, 154)    2,122 (711, 4,351)
+##  3:           2      3 0.03 (0.01, 0.05)   126 (70, 164)    1,203 (358, 2,569)
+##  4:           2      4 0.02 (0.01, 0.03)  145 (106, 171)      622 (131, 1,456)
+##  5:           2      5 0.01 (0.00, 0.02)  159 (133, 176)         274 (-9, 756)
+##  6:           2      6 0.11 (0.05, 0.21) -29 (-218, 100) 5,718 (2,278, 10,428)
+##  7:           2      7 0.07 (0.03, 0.13)  34 (-104, 125)  3,427 (1,322, 6,336)
+##  8:           2      8 0.04 (0.02, 0.08)   82 (-17, 144)    1,951 (722, 3,772)
+##  9:           2      9 0.02 (0.01, 0.05)   116 (47, 159)    1,044 (354, 2,173)
+## 10:           2     10 0.01 (0.01, 0.03)   141 (96, 169)      508 (114, 1,180)
 ##          icer     conclusion
-##  1:       944 Cost-effective
-##  2:     2,273 Cost-effective
-##  3:     4,779 Cost-effective
-##  4:     9,559 Cost-effective
-##  5:    18,593 Cost-effective
+##  1:       942 Cost-effective
+##  2:     2,260 Cost-effective
+##  3:     4,744 Cost-effective
+##  4:     9,477 Cost-effective
+##  5:    18,412 Cost-effective
 ##  6: Dominates Cost-effective
-##  7:       508 Cost-effective
-##  8:     2,045 Cost-effective
-##  9:     5,093 Cost-effective
-## 10:    11,024 Cost-effective</code></pre>
+##  7:       488 Cost-effective
+##  8:     2,005 Cost-effective
+##  9:     5,012 Cost-effective
+## 10:    10,860 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
-<a href="#overall" class="anchor"></a><span class="header-section-number">4.2</span> Overall</h2>
+<a href="#overall" class="anchor"></a>Overall</h2>
 <p>Estimates aggregated across all patients can also be computed with <code>$sim_summarize()</code> by using <code>by_grp = FALSE</code>. In this case, overall costs and QALYs are a weighted average (using the column <code>patient_wt</code>) of costs and QALYs for each patient in the input data.</p>
 <div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">ce_sim</span> <span class="kw">&lt;-</span> <span class="no">econmod</span>$<span class="fu">summarize</span>(<span class="kw">by_grp</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="no">icea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/icea.html">icea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">.015</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.06</span>,
                        <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                   
-## Incremental QALYs "-" "0.03 (0.01, 0.05)" 
-## Incremental costs "-" "118 (55, 159)"     
-## Incremental NMB   "-" "1,312 (404, 2,577)"
-## ICER              "-" "4,139"             
+## Incremental QALYs "-" "0.03 (0.01, 0.06)" 
+## Incremental costs "-" "118 (57, 159)"     
+## Incremental NMB   "-" "1,322 (433, 2,746)"
+## ICER              "-" "4,098"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>
 <div id="appendix-transition-probabilities-from-a-weibull-survival-model" class="section level1">
 <h1 class="hasAnchor">
-<a href="#appendix-transition-probabilities-from-a-weibull-survival-model" class="anchor"></a><span class="header-section-number">5</span> Appendix: Transition probabilities from a Weibull survival model</h1>
+<a href="#appendix-transition-probabilities-from-a-weibull-survival-model" class="anchor"></a>Appendix: Transition probabilities from a Weibull survival model</h1>
 <p>In general, the transition probability of an event given a model cycle is the probability a patient has an event during the cycle conditional on not having an event up until that cycle. That is, given a survivor function, <span class="math inline">\(S(t)\)</span> and a cycle of length <span class="math inline">\(u\)</span>, the transition probability, <span class="math inline">\(tp(t_u)\)</span> of an event is,</p>
 <p><span class="math display">\[
 \begin{align}

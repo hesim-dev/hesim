@@ -2,12 +2,12 @@
 title: Markov models with multinomial logistic regression  
 date: "`r Sys.Date()`"
 output: 
-  html_document:
+  html_vignette:
     toc: yes
     toc_depth: 2
     number_sections: TRUE
 pkgdown:
-  as_is: true
+  as_is: false
 vignette: >
   %\VignetteIndexEntry{Markov models with multinomial logistic regression}
   %\VignetteEngine{knitr::rmarkdown}

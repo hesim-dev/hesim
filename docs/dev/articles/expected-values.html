@@ -118,12 +118,12 @@
     
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
-<a href="#overview" class="anchor"></a><span class="header-section-number">1</span> Overview</h1>
+<a href="#overview" class="anchor"></a>Overview</h1>
 <p>Before performing a decision analysis, (discounted) costs and quality-adjusted life-years (QALYs) must be simulated. In cohort models, they are simulated as a function of previously simulated state occupancy probabilities. In individual-level models, they are simulated as a function of simulated trajectories characterizing disease progression. In <code>hesim</code>, the discrete time state transition and partitioned survival models are cohort models and the continuous time state transition model is an individual-level model.</p>
 </div>
 <div id="cohort-models" class="section level1">
 <h1 class="hasAnchor">
-<a href="#cohort-models" class="anchor"></a><span class="header-section-number">2</span> Cohort Models</h1>
+<a href="#cohort-models" class="anchor"></a>Cohort Models</h1>
 <p>Costs and QALYs in cohort models are computed by integrating the “weighted” probability of being in each state. Weights are a function of the discount factor and state values (e.g., annualized costs and utility) predicted using either the cost or utility model. Mathematically, for a time horizon <span class="math inline">\(T\)</span>, discounted costs and QALYs in health state <span class="math inline">\(h\)</span> are computed as,</p>
 <p><span class="math display">\[
 \int_0^{T} z_h(t) e^{-rt} P_h(t) dt,
@@ -131,7 +131,7 @@
 <p>where <span class="math inline">\(z_h(t)\)</span> is the predicted cost or utility value at time <span class="math inline">\(t\)</span>, <span class="math inline">\(r\)</span> is the discount rate, and <span class="math inline">\(P_h(t)\)</span> is the probability of being in a given health state. Note that the state values, <span class="math inline">\(z_h(t)\)</span>, can depend on time since the start of the model but not on time since entering a new health state.</p>
 <div id="integration-methods" class="section level2">
 <h2 class="hasAnchor">
-<a href="#integration-methods" class="anchor"></a><span class="header-section-number">2.1</span> Integration methods</h2>
+<a href="#integration-methods" class="anchor"></a>Integration methods</h2>
 <p>Three types of approaches are currently available for numerical integration given values of state probabilities at distinct discrete times.</p>
 <ul>
 <li>
@@ -146,7 +146,7 @@
 </div>
 <div id="individual-level-models" class="section level1">
 <h1 class="hasAnchor">
-<a href="#individual-level-models" class="anchor"></a><span class="header-section-number">3</span> Individual-level models</h1>
+<a href="#individual-level-models" class="anchor"></a>Individual-level models</h1>
 <p>In individual-level models, costs and QALYs are computed using the continuous time present value given a flow of state values, which change as patients transition between health states or as costs vary as a function of time. The state values can be partitioned into <span class="math inline">\(M\)</span> time intervals indexed by <span class="math inline">\(m = 1,\ldots, M\)</span> where interval <span class="math inline">\(m\)</span> contains times <span class="math inline">\(t\)</span> such that <span class="math inline">\(t_m\leq t \leq t_{m+1}\)</span> and values for state <span class="math inline">\(h\)</span> are equal to <span class="math inline">\(z_{hm}\)</span> during interval <span class="math inline">\(m\)</span>. <span class="math inline">\(z_{hm}\)</span> will equal zero during time intervals in which a patient is not in state <span class="math inline">\(h\)</span>. Discounted costs and QALYs for health state <span class="math inline">\(h\)</span> are then given by,</p>
 <p><span class="math display">\[
 \sum_{m = 1}^M \int_{t_m}^{t_m+1} z_{hm}e^{-rt}dt = \sum_{m = 1}^M z_{hm} \left(\frac{e^{-r{t_{m}}} - e^{-r{t_{m+1}}}}{r}\right),

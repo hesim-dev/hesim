@@ -118,7 +118,7 @@
     
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
-<a href="#overview" class="anchor"></a><span class="header-section-number">1</span> Overview</h1>
+<a href="#overview" class="anchor"></a>Overview</h1>
 <p>When discrete time data is collected at evenly spaced intervals, cohort discrete time state transition models (cDTSTMs)—often referred to as Markov cohort models—can be parameterized using multinomial logistic regression. Separate multinomial logit model are estimated for each health state and predict the probability of transitioning from that state to all other states. Mathematically, the probability of a transition from state <span class="math inline">\(r\)</span> at model cycle <span class="math inline">\(t\)</span> to state <span class="math inline">\(s\)</span> at model cycle <span class="math inline">\(t+1\)</span> is given by,</p>
 <p><span class="math display">\[
 Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{rh}}}
@@ -126,7 +126,7 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 </div>
 <div id="an-example-3-state-model" class="section level1">
 <h1 class="hasAnchor">
-<a href="#an-example-3-state-model" class="anchor"></a><span class="header-section-number">2</span> An example 3-state model</h1>
+<a href="#an-example-3-state-model" class="anchor"></a>An example 3-state model</h1>
 <p>We illustrate by considering an illness-death model with 3 generic health states: (1) Healthy, (2) Sick, and (3) Dead. We will assume that patients can only transition to a more severe health state:</p>
 <ol style="list-style-type: decimal">
 <li>Healthy to Sick</li>
@@ -170,12 +170,12 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
   , <span class="no">grp_id</span> <span class="kw">:=</span> <span class="fl">1</span>:<span class="no">n_patients</span>]
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">patients</span>)</pre></body></html></div>
 <pre><code>##    patient_id      age female grp_id
-## 1:       6117 18.00648      1      1
-## 2:       4984 23.21169      1      2
-## 3:       3772 89.05579      0      3
-## 4:       3439 62.74642      1      4
-## 5:       3111 23.28988      0      5
-## 6:       7877 87.83001      0      6</code></pre>
+## 1:       1743 25.30684      1      1
+## 2:       3222 31.51690      0      2
+## 3:       4601 76.18749      0      3
+## 4:       6795 26.23798      0      4
+## 5:       2160 21.04452      0      5
+## 6:       7842 22.87409      0      6</code></pre>
 <p>To perform the cost-effectiveness analysis, each patient is simulated twice, once with the reference treatment and once with the intervention. The non-death states use for simulating costs and quality-adjusted life-years (QALYs) are the healthy and sick states.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">hesim_dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span>(
   <span class="kw">patients</span> <span class="kw">=</span> <span class="no">patients</span>,
@@ -187,10 +187,10 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 </div>
 <div id="parameter-estimation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#parameter-estimation" class="anchor"></a><span class="header-section-number">3</span> Parameter estimation</h1>
+<a href="#parameter-estimation" class="anchor"></a>Parameter estimation</h1>
 <div id="multinomial-logit-model-for-transition-probabilities" class="section level2">
 <h2 class="hasAnchor">
-<a href="#multinomial-logit-model-for-transition-probabilities" class="anchor"></a><span class="header-section-number">3.1</span> Multinomial logit model for transition probabilities</h2>
+<a href="#multinomial-logit-model-for-transition-probabilities" class="anchor"></a>Multinomial logit model for transition probabilities</h2>
 <p><code>hesim</code> can simulate cDTSTMs with transition probabilities fit via multinomial logistic regression with the <code>nnet</code> package. The probability of a health state transition is modeled as a function of the treatment strategy, patient age, and gender. The nonlinear impact of age is modeled using a natural spline with <code><a href="https://rdrr.io/r/splines/ns.html">splines::ns()</a></code>. In addition, time period indicator variables (<code>year_cat</code>) are included so that transition probabilities can change over time, which makes the Markov model time inhomogeneous.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"nnet"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"splines"</span>)
@@ -211,7 +211,7 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 </div>
 <div id="utility-and-costs" class="section level2">
 <h2 class="hasAnchor">
-<a href="#utility-and-costs" class="anchor"></a><span class="header-section-number">3.2</span> Utility and costs</h2>
+<a href="#utility-and-costs" class="anchor"></a>Utility and costs</h2>
 <p>As in the <a href="getting-started.html">“getting started”</a> and <a href="markov-inhomogeneous.html">“time inhomogeneous”</a> vignettes on Markov cohort modeling, utility and costs models could be generated using mathematical expressions with <code><a href="../reference/define_model.html">define_model()</a></code>. However, in this case it is simpler and more direct (and thus more computationally efficient) to use the <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> functionality. Separate tables are created for utility, drug costs, and medical costs.</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">utility_tbl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="no">multinom3_exdata</span>$<span class="no">utility</span>,
                             <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"beta"</span>,
@@ -230,15 +230,15 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 </div>
 <div id="simulation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#simulation" class="anchor"></a><span class="header-section-number">4</span> Simulation</h1>
+<a href="#simulation" class="anchor"></a>Simulation</h1>
 <p>The economic model consists of a model for disease progression and models for assigning utility and cost values to health states. Since we are performing a PSA, we must specify the number of times to sample the parameters.</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">n_samples</span> <span class="kw">&lt;-</span> <span class="fl">100</span></pre></body></html></div>
 <div id="constructing-the-economic-model" class="section level2">
 <h2 class="hasAnchor">
-<a href="#constructing-the-economic-model" class="anchor"></a><span class="header-section-number">4.1</span> Constructing the economic model</h2>
+<a href="#constructing-the-economic-model" class="anchor"></a>Constructing the economic model</h2>
 <div id="disease-model" class="section level3">
 <h3 class="hasAnchor">
-<a href="#disease-model" class="anchor"></a><span class="header-section-number">4.1.1</span> Disease model</h3>
+<a href="#disease-model" class="anchor"></a>Disease model</h3>
 <p>The disease model can be easily constructed from our fitted multinomial logistic regression models and input data. The input data has one observation for each treatment strategy and patient. In addition, since we included time period dummies, we separate the covariates into distinct time intervals in order to make the model time inhomogeneous.</p>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">tintervals</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/time_intervals.html">time_intervals</a></span>(<span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/duplicated.html">unique</a></span>(<span class="no">transitions_data</span>[, <span class="fu">.</span>(<span class="no">year_cat</span>)])
                              [, <span class="no">time_start</span> <span class="kw">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">6</span>)])
@@ -251,7 +251,7 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 </div>
 <div id="utility-and-cost-models" class="section level3">
 <h3 class="hasAnchor">
-<a href="#utility-and-cost-models" class="anchor"></a><span class="header-section-number">4.1.2</span> Utility and cost models</h3>
+<a href="#utility-and-cost-models" class="anchor"></a>Utility and cost models</h3>
 <p>The utility and cost models can be created directly from the utility and cost tables since they do not include covariates. That is, unlike the disease model which explicitly models the transition probabilities as a function of covariates, they are based solely on predicted means (see <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) and therefore do not require input data.</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="co"># Utility</span>
 <span class="no">utilitymod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">utility_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>)
@@ -264,7 +264,7 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 </div>
 <div id="combining-the-disease-progression-cost-and-utility-models" class="section level3">
 <h3 class="hasAnchor">
-<a href="#combining-the-disease-progression-cost-and-utility-models" class="anchor"></a><span class="header-section-number">4.1.3</span> Combining the disease progression, cost, and utility models</h3>
+<a href="#combining-the-disease-progression-cost-and-utility-models" class="anchor"></a>Combining the disease progression, cost, and utility models</h3>
 <p>The transition, utility, and cost models are combined to create the cDTSTM.</p>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">econmod</span> <span class="kw">&lt;-</span> <span class="no">CohortDtstm</span>$<span class="fu">new</span>(<span class="kw">trans_model</span> <span class="kw">=</span> <span class="no">transmod</span>,
                            <span class="kw">utility_model</span> <span class="kw">=</span> <span class="no">utilitymod</span>,
@@ -273,10 +273,10 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 </div>
 <div id="simulating-outcomes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#simulating-outcomes" class="anchor"></a><span class="header-section-number">4.2</span> Simulating outcomes</h2>
+<a href="#simulating-outcomes" class="anchor"></a>Simulating outcomes</h2>
 <div id="disease-progression" class="section level3">
 <h3 class="hasAnchor">
-<a href="#disease-progression" class="anchor"></a><span class="header-section-number">4.2.1</span> Disease progression</h3>
+<a href="#disease-progression" class="anchor"></a>Disease progression</h3>
 <p>We simulate state probabilities over 20 years with 1-year model cycles. Means and 95% credible intervals from the PSA are used to summarize the probability of being in each of the 3 states over the model’s time horizon.</p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">econmod</span>$<span class="fu">sim_stateprobs</span>(<span class="kw">n_cycles</span> <span class="kw">=</span> <span class="fl">20</span>)
 
@@ -300,7 +300,7 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 </div>
 <div id="costs-and-qalys" class="section level3">
 <h3 class="hasAnchor">
-<a href="#costs-and-qalys" class="anchor"></a><span class="header-section-number">4.2.2</span> Costs and QALYs</h3>
+<a href="#costs-and-qalys" class="anchor"></a>Costs and QALYs</h3>
 <p>After simulating the health state transitions, costs and QALYs are simulated in a straightforward manner. As is typical, we use a 3 percent discount rate.</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">econmod</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">.03</span>)
 <span class="no">econmod</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">.03</span>)</pre></body></html></div>
@@ -309,7 +309,7 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 </div>
 <div id="decision-analysis" class="section level1">
 <h1 class="hasAnchor">
-<a href="#decision-analysis" class="anchor"></a><span class="header-section-number">5</span> Decision analysis</h1>
+<a href="#decision-analysis" class="anchor"></a>Decision analysis</h1>
 <p>Now that costs and QALYs have been simulated with the PSA, a decision analysis can be performed. We will focus on the pairwise comparison between the “Intervention” and the “Reference” treatment.</p>
 <div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">ce_sim</span> <span class="kw">&lt;-</span> <span class="no">econmod</span>$<span class="fu">summarize</span>(<span class="kw">by_grp</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="no">icea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/icea.html">icea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">.03</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.03</span>)</pre></body></html></div>

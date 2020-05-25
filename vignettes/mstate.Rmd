@@ -2,12 +2,12 @@
 title: Markov and semi-Markov multi-state models
 date: "`r Sys.Date()`"
 output: 
-  html_document:
+  html_vignette:
     toc: yes
     toc_depth: 2
     number_sections: TRUE
 pkgdown:
-  as_is: true
+  as_is: false
 vignette: >
   %\VignetteIndexEntry{Markov and semi-Markov multi-state models}
   %\VignetteEngine{knitr::rmarkdown}
