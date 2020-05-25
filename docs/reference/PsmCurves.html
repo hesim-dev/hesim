@@ -8,21 +8,29 @@
 
 <title>Partitioned survival curves — PsmCurves • hesim</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,12 +38,10 @@
 
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
-<meta property="og:title" content="Partitioned survival curves — PsmCurves" />
 
+<meta property="og:title" content="Partitioned survival curves — PsmCurves" />
 <meta property="og:description" content="Summarize n-1 survival curves for an N state partitioned survival model." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -49,9 +55,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -65,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -82,28 +89,46 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Markov cohort models</li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li>
+      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li>
+      <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Continuous time state transition models</a>
+      <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic analysis</li>
+    <li>
+      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
+    <li class="divider"></li>
   </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hesim-dev/hesim">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/hesim-dev/hesim/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -114,130 +139,208 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Partitioned survival curves</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/psm.R'><code>R/psm.R</code></a></small>
     <div class="hidden name"><code>PsmCurves.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
     <p>Summarize <code>n-1</code> survival curves for an <code>N</code> state partitioned survival model.</p>
-    
     </div>
 
-    <pre class="usage"><span class='no'>PsmCurves</span></pre>
-        
+
+
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>R6Class</code> object.</p>
-    
-    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
+    <p>An <a href='https://rdrr.io/pkg/R6/man/R6Class.html'>R6::R6Class</a> object.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    
-    <dl class='dl-horizontal'>
-<dt><code>input_mats</code></dt><dd><p>Input matrices used to predict state values by strategy and patient. Must be 
-  an object of class <code><a href='input_mats.html'>input_mats</a></code> where each row of a matrix in "X" is a unique strategy and patient. All   matrices in "X" must be sorted by strategy and patient.</p></dd>
-    <dt><code>params</code></dt><dd><p>An object of class <code><a href='params_surv_list.html'>params_surv_list</a></code>.</p></dd>
-    </dl>
-    
+    <div class='dont-index'><p><a href='Psm.html'>Psm</a>, <code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code></p></div>
+    <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
+
+    <p><div class="r6-fields"></p><dl'>
+<dt><code>params</code></dt><dd><p>An object of class <a href='params_surv_list.html'>params_surv_list</a>.</p></dd>
+
+<dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>. Each row in <code>X</code> must
+be a unique treatment strategy and patient.</p></dd>
+
+</dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-    <dl class='dl-horizontal'>
-    <dt><code>new(input_mats, params)</code></dt><dd><p>Constructor for the class.</p></dd>
-    <dt><code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/hazard'>hazard(t)</a></code></dt><dd><p>Predict the hazard function as a function of time.
-    <ul>
-<li><p><code>t</code>: A numeric vector of times.</p></li>
-</ul></p></dd>
-    <dt><code>cumhazard(t)</code></dt><dd><p>Predict the cumulative hazard function as a function of time.
-    <ul>
-<li><p><code>t</code>: A numeric vector of times.</p></li>
-</ul></p></dd>
-    <dt><code>survival(t)</code></dt><dd><p>Predict the survival function as a function of time.
-    <ul>
-<li><p><code>t</code>: A numeric vector of times.</p></li>
-</ul></p></dd>
-    <dt><code>rmst(t, dr = 0)</code></dt><dd><p>Predict (discounted) restricted mean survival time.
-    <ul>
-<li><p><code>t</code>: A numeric vector of times.</p></li>
-<li><p><code>dr</code>: Discount rate.</p></li>
-</ul></p></dd>
-    <dt><code><a href='https://www.rdocumentation.org/packages/stats/topics/quantile'>quantile(p)</a></code></dt><dd><p>Predict quantiles of the survival distributions.
-    <ul>
-<li><p><code>p</code>: A numeric vector of probabilities for calculating quantiles.</p></li>
-</ul></p></dd>
-    <dt><code><a href='check.html'>check()</a></code></dt><dd><p>Input validation for class. Checks that fields are the correct type.</p></dd>
-    </dl>
-    
+<h3>Public methods</h3>
+
+<ul>
+<li><p><a href='#method-new'><code>PsmCurves$new()</code></a></p></li>
+<li><p><a href='#method-hazard'><code>PsmCurves$hazard()</code></a></p></li>
+<li><p><a href='#method-cumhazard'><code>PsmCurves$cumhazard()</code></a></p></li>
+<li><p><a href='#method-survival'><code>PsmCurves$survival()</code></a></p></li>
+<li><p><a href='#method-rmst'><code>PsmCurves$rmst()</code></a></p></li>
+<li><p><a href='#method-quantile'><code>PsmCurves$quantile()</code></a></p></li>
+<li><p><a href='#method-check'><code>PsmCurves$check()</code></a></p></li>
+<li><p><a href='#method-clone'><code>PsmCurves$clone()</code></a></p></li>
+</ul>
+<p><hr>
+<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
+<p>Create a new <code>PsmCurves</code> object.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>PsmCurves</span>$<span class='fu'>new</span>(<span class='no'>params</span>, <span class='no'>input_data</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
+
+<dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A new <code>PsmCurves</code> object.</p>
+<p><hr>
+<a id="method-hazard"></a></p><h3>Method <code><a href='https://rdrr.io/pkg/flexsurv/man/hazard.html'>hazard()</a></code></h3>
+<p>Predict the hazard function for each survival curve as a function of time.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>PsmCurves</span>$<span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/hazard.html'>hazard</a></span>(<span class='no'>t</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A <code>data.table</code> with columns <code>sample</code>, <code>strategy_id</code>,
+<code>patient_id</code>, <code>grp_id</code>, <code>curve</code> (the curve number), <code>t</code>, and <code>hazard</code>.</p>
+<p><hr>
+<a id="method-cumhazard"></a></p><h3>Method <code>cumhazard()</code></h3>
+<p>Predict the cumulative hazard function for each survival curve as a function of time.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>PsmCurves</span>$<span class='fu'>cumhazard</span>(<span class='no'>t</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A <code>data.table</code> with columns <code>sample</code>, <code>strategy_id</code>,
+<code>patient_id</code>, <code>grp_id</code>, <code>curve</code>, <code>t</code>, and <code>cumhazard</code>.</p>
+<p><hr>
+<a id="method-survival"></a></p><h3>Method <code>survival()</code></h3>
+<p>Predict the cumulative hazard function for each survival curve as a function of time.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>PsmCurves</span>$<span class='fu'>survival</span>(<span class='no'>t</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A <code>data.table</code> with columns <code>sample</code>, <code>strategy_id</code>,
+<code>patient_id</code>, <code>grp_id</code>, <code>curve</code>, <code>t</code>, and <code>survival</code>.</p>
+<p><hr>
+<a id="method-rmst"></a></p><h3>Method <code>rmst()</code></h3>
+<p>Predict the restricted mean survival time up until time points <code>t</code>
+for each survival curve.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>PsmCurves</span>$<span class='fu'>rmst</span>(<span class='no'>t</span>, <span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
+
+<dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A <code>data.table</code> with columns <code>sample</code>, <code>strategy_id</code>,
+<code>patient_id</code>, <code>grp_id</code>, <code>curve</code>, <code>t</code>, and <code>rmst</code>.</p>
+<p><hr>
+<a id="method-quantile"></a></p><h3>Method <code><a href='https://rdrr.io/r/stats/quantile.html'>quantile()</a></code></h3>
+<p>Predict quantiles of the survival distribution for each survival curve.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>PsmCurves</span>$<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>p</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>p</code></dt><dd><p>A numeric vector of probabilities for computing quantiles.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A <code>data.table</code> with columns <code>sample</code>, <code>strategy_id</code>,
+<code>patient_id</code>, <code>grp_id</code>, <code>curve</code>, <code>p</code> and <code>quantile</code>.</p>
+<p><hr>
+<a id="method-check"></a></p><h3>Method <code><a href='check.html'>check()</a></code></h3>
+<p>Input validation for class. Checks that fields are the correct type.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>PsmCurves</span>$<span class='fu'><a href='check.html'>check</a></span>()</pre><p></div></p>
+
+<p><hr>
+<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>PsmCurves</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+
+</dl><p></div></p>
+
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"flexsurv"</span>)
 
 <span class='co'># Simulation data</span>
-<span class='no'>dt_strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
-<span class='no'>dt_patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
-                          <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
-                          <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
+<span class='no'>dt_strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>))
+<span class='no'>dt_patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
+                          <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
+                          <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
 <span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>dt_strategies</span>,
                         <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>dt_patients</span>)
 
 <span class='co'># Fit survival models</span>
 <span class='no'>surv_est_data</span> <span class='kw'>&lt;-</span> <span class='no'>psm4_exdata</span>$<span class='no'>survival</span>
-<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>endpoint1_time</span>, <span class='no'>endpoint1_status</span>) ~ <span class='no'>age</span>,
+<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>endpoint1_time</span>, <span class='no'>endpoint1_status</span>) ~ <span class='no'>age</span>,
                               <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>surv_est_data</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
-<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>endpoint2_time</span>, <span class='no'>endpoint2_status</span>) ~ <span class='no'>age</span>,
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>endpoint2_time</span>, <span class='no'>endpoint2_status</span>) ~ <span class='no'>age</span>,
                               <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>surv_est_data</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
-<span class='no'>fit3</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>endpoint3_time</span>, <span class='no'>endpoint3_status</span>) ~ <span class='no'>age</span>,
+<span class='no'>fit3</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>endpoint3_time</span>, <span class='no'>endpoint3_status</span>) ~ <span class='no'>age</span>,
                               <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>surv_est_data</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
 <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span>(<span class='no'>fit1</span>, <span class='no'>fit2</span>, <span class='no'>fit3</span>)
 
 <span class='co'># Form PsmCurves</span>
-<span class='no'>surv_input_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
+<span class='no'>surv_input_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
 <span class='no'>psm_curves</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_PsmCurves.html'>create_PsmCurves</a></span>(<span class='no'>fits</span>, <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='no'>surv_input_data</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-                                <span class='kw'>bootstrap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>est_data</span> <span class='kw'>=</span> <span class='no'>surv_est_data</span>)
+                               <span class='kw'>bootstrap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>est_data</span> <span class='kw'>=</span> <span class='no'>surv_est_data</span>)
 
 <span class='co'># Summarize survival curves</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/quantile'>quantile</a></span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve    p  quantile
-#&gt; 1:      1           1          1     1 0.25 0.1787365
-#&gt; 2:      1           1          1     1 0.50 0.4306516
-#&gt; 3:      1           1          1     1 0.75 0.8613031
-#&gt; 4:      1           1          1     2 0.25 0.3576335
-#&gt; 5:      1           1          1     2 0.50 0.8616895
-#&gt; 6:      1           1          1     2 0.75 1.7233791</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve   t  survival
-#&gt; 1:      1           1          1     1 0.0 1.0000000
-#&gt; 2:      1           1          1     1 0.1 0.8513320
-#&gt; 3:      1           1          1     1 0.2 0.7247661
-#&gt; 4:      1           1          1     1 0.3 0.6170166
-#&gt; 5:      1           1          1     1 0.4 0.5252859
-#&gt; 6:      1           1          1     1 0.5 0.4471927</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id curve t      rmst
-#&gt; 1:      1           1          1     1 2 0.5964516
-#&gt; 2:      1           1          1     1 5 0.6211002
-#&gt; 3:      1           1          1     2 2 0.9943679
-#&gt; 4:      1           1          1     2 5 1.2208820
-#&gt; 5:      1           1          1     3 2 1.2105347
-#&gt; 6:      1           1          1     3 5 1.6958283</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve    p  quantile
+#&gt; 1:      1           1          1      1     1 0.25 0.1788825
+#&gt; 2:      1           1          1      1     1 0.50 0.4310032
+#&gt; 3:      1           1          1      1     1 0.75 0.8620065
+#&gt; 4:      1           1          1      1     2 0.25 0.3628697
+#&gt; 5:      1           1          1      1     2 0.50 0.8743058
+#&gt; 6:      1           1          1      1     2 0.75 1.7486117</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'>survival</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>.1</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve   t  survival
+#&gt; 1:      1           1          1      1     1 0.0 1.0000000
+#&gt; 2:      1           1          1      1     1 0.1 0.8514438
+#&gt; 3:      1           1          1      1     1 0.2 0.7249565
+#&gt; 4:      1           1          1      1     1 0.3 0.6172597
+#&gt; 5:      1           1          1      1     1 0.4 0.5255619
+#&gt; 6:      1           1          1      1     1 0.5 0.4474864</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>psm_curves</span>$<span class='fu'>rmst</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>5</span>)))</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve t      rmst
+#&gt; 1:      1           1          1      1     1 2 0.5968732
+#&gt; 2:      1           1          1      1     1 5 0.6216060
+#&gt; 3:      1           1          1      1     2 2 1.0029980
+#&gt; 4:      1           1          1      1     2 5 1.2374070
+#&gt; 5:      1           1          1      1     3 2 1.2065710
+#&gt; 6:      1           1          1      1     3 5 1.6858722</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#format">Format</a></li>
-
-      <li><a href="#fields">Fields</a></li>
-
-      <li><a href="#methods">Methods</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -245,13 +348,16 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

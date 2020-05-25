@@ -8,21 +8,29 @@
 
 <title>Parameters of a survival model — params_surv • hesim</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,13 +38,11 @@
 
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
-<meta property="og:title" content="Parameters of a survival model — params_surv" />
 
-<meta property="og:description" content="Create a list containing the parameters of a single fitted parametric or 
+<meta property="og:title" content="Parameters of a survival model — params_surv" />
+<meta property="og:description" content="Create a list containing the parameters of a single fitted parametric or
 flexibly parametric survival model." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -50,9 +56,10 @@ flexibly parametric survival model." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -66,7 +73,7 @@ flexibly parametric survival model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -83,28 +90,46 @@ flexibly parametric survival model." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/intro.html">Introduction</a>
+      <a href="../articles/intro.html">Introduction to hesim</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Markov cohort models</li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+    </li>
+    <li>
+      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li>
+      <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li>
       <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li>
-      <a href="../articles/ctstm.html">Continuous time state transition models</a>
+      <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Economic analysis</li>
+    <li>
+      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
       <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
     </li>
+    <li class="divider"></li>
   </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hesim-dev/hesim">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/hesim-dev/hesim/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -115,6 +140,7 @@ flexibly parametric survival model." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -126,22 +152,20 @@ flexibly parametric survival model." />
     </div>
 
     <div class="ref-description">
-    
-    <p>Create a list containing the parameters of a single fitted parametric or 
+    <p>Create a list containing the parameters of a single fitted parametric or
 flexibly parametric survival model.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>params_surv</span>(<span class='no'>coefs</span>, <span class='no'>dist</span>, <span class='kw'>aux</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>coefs</th>
-      <td><p>A list of length equal to the number of parameters in the 
-survival distribution. Each element of the list is a matrix of samples from 
-the posterior distribution of the regression coefficients used to predict
+      <td><p>A list of length equal to the number of parameters in the
+survival distribution. Each element of the list is a matrix of samples
+of the regression coefficients under sampling uncertainty used to predict
 a given parameter.</p></td>
     </tr>
     <tr>
@@ -153,108 +177,115 @@ a given parameter.</p></td>
       <td><p>Auxiliary arguments used with splines or fractional polynomials. See "Details".</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class "params_surv", which is a list containing <code>coefs</code>,
-<code>dist</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the number of rows
-in each element of <code>coefs</code>, which must be the same. The list may also contain <code>aux</code> if
+    <p>An object of class <code>params_surv</code>, which is a list containing <code>coefs</code>,
+<code>dist</code>, and <code>n_samples. </code>n_samples<code>is equal to the number of rows in each element of</code>coefs<code>, which must be the same. The list may also contain </code>aux` if
 a spline or fractional polynomial model is fit.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Survival is modeled as a function of \(L\) parameters \(\alpha_l\). 
+    <p>Survival is modeled as a function of \(L\) parameters \(\alpha_l\).
 Letting \(F(t)\) be the cumulative distribution function, survival at time \(t\)
 is given by
 $$1 - F(t | \alpha_1(x_{1}), \ldots, \alpha_L(x_{L})).$$
-The parameters are modeled as a function of covariates, \(x_l\), with an 
+The parameters are modeled as a function of covariates, \(x_l\), with an
 inverse transformation function \(g^{-1}()\),
 $$\alpha_l =  g^{-1}(x_{l}^T \beta_l).$$
 \(g^{-1}()\) is typically \(exp()\) if a parameter is strictly positive
 and the identity function if the parameter space is unrestricted.</p>
 <p>The types of distributions that can be specified are:</p><ul>
 <li><p><code>exponential</code> or <code>exp</code> Exponential distribution. <code>coef</code>
-must contain the <code>rate</code> parameter on the log scale and the same parameterization as in 
-<code><a href='https://www.rdocumentation.org/packages/stats/topics/Exponential'>Exponential</a></code>.</p></li>
-<li><p><code>weibull</code> or <code>weibull.quiet</code> Weibull distribution. The first 
+must contain the <code>rate</code> parameter on the log scale and the same parameterization as in
+<a href='https://rdrr.io/r/stats/Exponential.html'>stats::Exponential</a>.</p></li>
+<li><p><code>weibull</code> or <code>weibull.quiet</code> Weibull distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
-that same as in <code><a href='https://www.rdocumentation.org/packages/stats/topics/Weibull'>Weibull</a></code>.</p></li>
-<li><p><code>gamma</code> Gamma distribution. The first 
+that same as in <a href='https://rdrr.io/r/stats/Weibull.html'>stats::Weibull</a>.</p></li>
+<li><p><code>gamma</code> Gamma distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>rate</code> parameter (also on the log scale). The parameterization is
-that same as in <code><a href='https://www.rdocumentation.org/packages/stats/topics/GammaDist'>GammaDist</a></code>.</p></li>
-<li><p><code>lnorm</code> Lognormal distribution. The first 
+that same as in <a href='https://rdrr.io/r/stats/GammaDist.html'>stats::GammaDist</a>.</p></li>
+<li><p><code>lnorm</code> Lognormal distribution. The first
 element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the mean on the log scale) and the second
 element is the <code>sdlog</code> parameter (i.e., the standard deviation on the log scale). The parameterization is
-that same as in <code><a href='https://www.rdocumentation.org/packages/stats/topics/Lognormal'>Lognormal</a></code>.</p></li>
-<li><p><code>gompertz</code> Gompertz distribution. The first 
+that same as in <a href='https://rdrr.io/r/stats/Lognormal.html'>stats::Lognormal</a>.</p></li>
+<li><p><code>gompertz</code> Gompertz distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter and the second
 element is the <code>rate</code> parameter (on the log scale). The parameterization is
-that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/Gompertz'>Gompertz</a></code>.</p></li>
-<li><p><code>llogis</code> Log-logistic distribution. The first 
+that same as in <a href='https://rdrr.io/pkg/flexsurv/man/Gompertz.html'>flexsurv::Gompertz</a>.</p></li>
+<li><p><code>llogis</code> Log-logistic distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
-that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/Llogis'>Llogis</a></code>.</p></li>
-<li><p><code>gengamma</code> Generalized gamma distribution. The first 
+that same as in <a href='https://rdrr.io/pkg/flexsurv/man/Llogis.html'>flexsurv::Llogis</a>.</p></li>
+<li><p><code>gengamma</code> Generalized gamma distribution. The first
 element of <code>coef</code> is the location parameter <code>mu</code>, the second
 element is the scale parameter <code>sigma</code> (on the log scale), and the
 third element is the shape parameter <code>Q</code>. The parameterization is
-that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/GenGamma'>GenGamma</a></code>.</p></li>
+that same as in <a href='https://rdrr.io/pkg/flexsurv/man/GenGamma.html'>flexsurv::GenGamma</a>.</p></li>
 <li><p><code>survspline</code> Survival splines. Each element of <code>coef</code> is a parameter of the
 spline model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
 to the number of knots (including the boundary knots). See below for details on the
-auxiliary arguments. The parameterization is that same as in <code><a href='https://www.rdocumentation.org/packages/flexsurv/topics/Survspline'>Survspline</a></code>.</p></li>
+auxiliary arguments. The parameterization is that same as in <a href='https://rdrr.io/pkg/flexsurv/man/Survspline.html'>flexsurv::Survspline</a>.</p></li>
 <li><p><code>fracpoly</code> Fractional polynomials. Each element of <code>coef</code> is a parameter of the
 fractional polynomial model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
-to the number of powers minus 1. See below for details on the auxiliary arguments 
+to the number of powers minus 1. See below for details on the auxiliary arguments
 (i.e., <code>powers</code>).</p></li>
 </ul>
-    <p>Auxiliary arguments for spline models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
+
+<p>Auxiliary arguments for spline models should be specified as a list containing the elements:</p><dl'>
 <dt><code>knots</code></dt><dd><p>A numeric vector of knots.</p></dd>
 <dt><code>scale</code></dt><dd><p>The survival outcome to be modeled
-as a spline function. Options are "log_cumhazard" for the log cumulative hazard; 
-"log_hazard" for the log hazard rate; "log_cumodds" for the log cumulative odds;
-and "inv_normal" for the inverse normal distribution function.</p></dd>
-<dt><code>timescale</code></dt><dd><p>If "log" (the default), then survival is modeled as a spline function
-of log time; if "identity", then it is modeled as a spline function of time.</p></dd>
+as a spline function. Options are <code>"log_cumhazard"</code> for the log cumulative hazard;
+<code>"log_hazard"</code> for the log hazard rate; <code>"log_cumodds"</code> for the log cumulative odds;
+and <code>"inv_normal"</code> for the inverse normal distribution function.</p></dd>
+<dt><code>timescale</code></dt><dd><p>If <code>"log"</code> (the default), then survival is modeled as a spline function
+of log time; if <code>"identity"</code>, then it is modeled as a spline function of time.</p></dd>
+
 </dl>
-    <p>Auxiliary arguments for fractional polynomial models should be specified as a list containing the elements:</p><dl class='dl-horizontal'>
+
+<p>Auxiliary arguments for fractional polynomial models should be specified as a list containing the elements:</p><dl'>
 <dt><code>powers</code></dt><dd><p>A vector of the powers of the fractional polynomial with each element
- chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
+chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
+
 </dl>
-    <p>Furthermore, when splines (with <code>scale = "log_hazard"</code>) or fractional 
-polynomials are used, numerical methods must be used to compute the cumulative 
+
+<p>Furthermore, when splines (with <code>scale = "log_hazard"</code>) or fractional
+polynomials are used, numerical methods must be used to compute the cumulative
 hazard and for random number generation. The following additional auxiliary arguments
-can therefore be specified:</p><dl class='dl-horizontal'>
-<dt><code>cumhaz_method</code></dt><dd><p>Numerical method used to compute cumulative hazard 
+can therefore be specified:</p><dl'>
+<dt><code>cumhaz_method</code></dt><dd><p>Numerical method used to compute cumulative hazard
 (i.e., to integrate the hazard function). Always used for fractional polynomials
 but only used for splines if <code>scale = "log_hazard"</code>.
-Options are "quad" for adaptive quadrature and "riemann" for Riemann sum.</p></dd>
- <dt><code>random_method</code></dt><dd><p>Method used to randomly draw from
- an arbitrary survival function. Options are "invcdf" for the inverse CDF and
- "sample" for randomly sampling from discrete survival probabilities.</p></dd>
- <dt><code>step</code></dt><dd><p>Step size for computation of cumulative hazard with 
-numerical integration. Only required when using "riemann" to compute the 
-cumulative hazard or using "sample" for random number generation.</p></dd>
+Options are <code>"quad"</code> for adaptive quadrature and <code>"riemann"</code> for Riemann sum.</p></dd>
+<dt><code>random_method</code></dt><dd><p>Method used to randomly draw from
+an arbitrary survival function. Options are <code>"invcdf"</code> for the inverse CDF and
+<code>"discrete"</code> for a discrete time approximation that randomly samples
+events from a bernoulli distribution at discrete times.</p></dd>
+<dt><code>step</code></dt><dd><p>Step size for computation of cumulative hazard with
+numerical integration. Only required when using <code>"riemann"</code> to compute the
+cumulative hazard or using <code>"discrete"</code> for random number generation.</p></dd>
+
 </dl>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='st'>"flexsurv"</span>)
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/flexsurv/topics/flexsurvreg'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
-<span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'>params_surv</span>(<span class='kw'>coefs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>res.t</span>[<span class='st'>"shape"</span>, <span class='st'>"est"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"flexsurv"</span>)
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
+<span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'>params_surv</span>(<span class='kw'>coefs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>res.t</span>[<span class='st'>"shape"</span>, <span class='st'>"est"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
                                    <span class='kw'>scale</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>res.t</span>[<span class='st'>"scale"</span>, <span class='st'>"est"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>]),
                      <span class='kw'>dist</span> <span class='kw'>=</span> <span class='no'>fit</span>$<span class='no'>dlist</span>$<span class='no'>name</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>params</span>)</div><div class='output co'>#&gt; $coefs
-#&gt; $coefs$shape
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>params</span>)</div><div class='output co'>#&gt; $coefs
+#&gt; $shape
 #&gt;             est
 #&gt; shape 0.1026105
 #&gt; 
-#&gt; $coefs$scale
+#&gt; $scale
 #&gt;            est
 #&gt; scale 7.111038
 #&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "matlist"
 #&gt; 
 #&gt; $dist
 #&gt; [1] "weibull.quiet"
@@ -265,20 +296,13 @@ cumulative hazard or using "sample" for random number generation.</p></dd>
 #&gt; attr(,"class")
 #&gt; [1] "params_surv"</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -286,13 +310,16 @@ cumulative hazard or using "sample" for random number generation.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
