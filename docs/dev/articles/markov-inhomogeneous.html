@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 class="date">2020-05-24</h4>
+            <h4 class="date">2020-05-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous.Rmd"><code>vignettes/markov-inhomogeneous.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous.Rmd</code></div>
@@ -529,38 +529,38 @@ S(t) = \exp(-\lambda t^\gamma) \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.64224
-## 2:           2      2 14.68669</code></pre>
+## 1:           1      2 14.64511
+## 2:           2      2 14.68879</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 511.5992
-## 2:           2      2 612.0490</code></pre>
+## 1:           1      2 512.8321
+## 2:           2      2 612.8766</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
-<pre><code>##     strategy_id grp_id            iqalys          icosts                  inmb
-##  1:           2      1 0.07 (0.03, 0.14)   68 (-36, 142)  3,520 (1,218, 6,924)
-##  2:           2      2 0.04 (0.02, 0.09)   100 (22, 154)    2,122 (711, 4,351)
-##  3:           2      3 0.03 (0.01, 0.05)   126 (70, 164)    1,203 (358, 2,569)
-##  4:           2      4 0.02 (0.01, 0.03)  145 (106, 171)      622 (131, 1,456)
-##  5:           2      5 0.01 (0.00, 0.02)  159 (133, 176)         274 (-9, 756)
-##  6:           2      6 0.11 (0.05, 0.21) -29 (-218, 100) 5,718 (2,278, 10,428)
-##  7:           2      7 0.07 (0.03, 0.13)  34 (-104, 125)  3,427 (1,322, 6,336)
-##  8:           2      8 0.04 (0.02, 0.08)   82 (-17, 144)    1,951 (722, 3,772)
-##  9:           2      9 0.02 (0.01, 0.05)   116 (47, 159)    1,044 (354, 2,173)
-## 10:           2     10 0.01 (0.01, 0.03)   141 (96, 169)      508 (114, 1,180)
+<pre><code>##     strategy_id grp_id            iqalys         icosts                  inmb
+##  1:           2      1 0.07 (0.02, 0.13)  67 (-46, 138)  3,464 (1,133, 6,691)
+##  2:           2      2 0.04 (0.02, 0.08)  100 (13, 153)    2,084 (648, 4,094)
+##  3:           2      3 0.03 (0.01, 0.05)  126 (66, 163)    1,178 (333, 2,475)
+##  4:           2      4 0.02 (0.01, 0.03) 145 (106, 171)      606 (121, 1,413)
+##  5:           2      5 0.01 (0.00, 0.02) 159 (132, 176)        264 (-10, 752)
+##  6:           2      6 0.11 (0.04, 0.22) -32 (-235, 95) 5,678 (1,921, 11,142)
+##  7:           2      7 0.07 (0.02, 0.13) 32 (-114, 123)  3,398 (1,121, 6,808)
+##  8:           2      8 0.04 (0.01, 0.08)  80 (-21, 143)    1,931 (613, 4,002)
+##  9:           2      9 0.02 (0.01, 0.05)  116 (48, 159)    1,030 (285, 2,303)
+## 10:           2     10 0.01 (0.00, 0.03)  141 (96, 168)       500 (86, 1,247)
 ##          icer     conclusion
-##  1:       942 Cost-effective
-##  2:     2,260 Cost-effective
-##  3:     4,744 Cost-effective
-##  4:     9,477 Cost-effective
-##  5:    18,412 Cost-effective
+##  1:       945 Cost-effective
+##  2:     2,290 Cost-effective
+##  3:     4,829 Cost-effective
+##  4:     9,671 Cost-effective
+##  5:    18,827 Cost-effective
 ##  6: Dominates Cost-effective
-##  7:       488 Cost-effective
-##  8:     2,005 Cost-effective
-##  9:     5,012 Cost-effective
-## 10:    10,860 Cost-effective</code></pre>
+##  7:       462 Cost-effective
+##  8:     1,996 Cost-effective
+##  9:     5,046 Cost-effective
+## 10:    10,988 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -572,9 +572,9 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                   
 ## Incremental QALYs "-" "0.03 (0.01, 0.06)" 
-## Incremental costs "-" "118 (57, 159)"     
-## Incremental NMB   "-" "1,322 (433, 2,746)"
-## ICER              "-" "4,098"             
+## Incremental costs "-" "118 (52, 159)"     
+## Incremental NMB   "-" "1,301 (379, 2,703)"
+## ICER              "-" "4,143"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>

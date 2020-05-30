@@ -1,5 +1,5 @@
 ## hesim 0.3.1
-This version fixes a small bug in the `C++` code identified with the CRAN package checks.
+Fixes a small bug in the `C++` code identified with the CRAN package checks.
 
 ## hesim 0.3.0
 ### Highlights
