@@ -1,3 +1,6 @@
+## hesim 0.3.1
+This version fixes a small bug in the `C++` code identified with the CRAN package checks.
+
 ## hesim 0.3.0
 ### Highlights
 `hesim` now supports discrete time state transition models via `hesim::CohortDtstm` objects. Users can build a model by either fitting multinomial logistic regressions with `nnet::multinom()` or with a mathematical expression using `define_model()`. Furthermore, `$summarize()` methods now have a `by_grp` option to facilitate subgroup analyses. 

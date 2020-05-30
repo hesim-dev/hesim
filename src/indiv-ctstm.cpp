@@ -314,7 +314,7 @@ std::vector<double> C_indiv_ctstm_starting(Rcpp::DataFrame R_disease_prog,
   int N = disease_prog.sample_.size();
   std::vector<double> out(N);
   int time_index = 0;
-  for (int i = 0; i < N; ++i){
+  for (unsigned int i = 0; i < N; ++i){
     double time = disease_prog.time_start_[i];
     obs_index.set_strategy_index(strategy_idx[i]);
     obs_index.set_patient_index(patient_idx[i]);
@@ -323,8 +323,8 @@ std::vector<double> C_indiv_ctstm_starting(Rcpp::DataFrame R_disease_prog,
     
     if (!time_reset){
       if (i > 0 && 
-          disease_prog.patient_id_[i] != disease_prog.patient_id_[i-1] ||
-          disease_prog.sample_[i] != disease_prog.sample_[i-1]){
+          (disease_prog.patient_id_[i] != disease_prog.patient_id_[i-1] ||
+          disease_prog.sample_[i] != disease_prog.sample_[i-1])){
           time_index = 0;
       }
       while (obs_index.get_time_stop() < time){
