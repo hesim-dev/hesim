@@ -52,20 +52,25 @@
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Partitioned survival models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
-    </li>
-    <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/psm.html">A 4-state partitioned survival model</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov Cohort model</a>
+    </li>
+    <li>
+      <a href="../articles/markov-inhomogeneous.html">A time inhomogeneous Markov cohort model</a>
+    </li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider">
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/ips.html">Individual patient simulation</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
@@ -235,12 +240,12 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
                         <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_data</span>)</pre></body></html></div>
 <pre><code>##    strategy_id patient_id      age female
-## 1:           1          1 52.09296      1
-## 2:           1          2 44.60941      1
-## 3:           1          3 53.99992      0
-## 4:           1          4 53.52036      0
-## 5:           1          5 41.54386      1
-## 6:           1          6 45.12027      0</code></pre>
+## 1:           1          1 50.38027      1
+## 2:           1          2 58.41706      1
+## 3:           1          3 50.77146      1
+## 4:           1          4 39.75592      1
+## 5:           1          5 55.68591      1
+## 6:           1          6 54.65420      0</code></pre>
 <p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">transmod_cr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span>(<span class="no">wei_fits_cr</span>, <span class="no">transmod_data</span>,
                                       <span class="kw">trans_mat</span> <span class="kw">=</span> <span class="no">tmat</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>,
@@ -321,13 +326,13 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="co"># "Clock reset"</span>
 <span class="no">econmod_cr</span>$<span class="fu">sim_disease</span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod_cr</span>$<span class="no">disprog_</span>)</pre></body></html></div>
-<pre><code>##    sample strategy_id patient_id grp_id from to final time_start time_stop
-## 1:      1           1          1      1    1  2     0   0.000000  1.087591
-## 2:      1           1          1      1    2  1     0   1.087591  1.760590
-## 3:      1           1          1      1    1  3     1   1.760590  2.372465
-## 4:      1           1          2      1    1  2     0   0.000000  0.638658
-## 5:      1           1          2      1    2  1     0   0.638658  1.733865
-## 6:      1           1          2      1    1  2     0   1.733865  8.564899</code></pre>
+<pre><code>##    sample strategy_id patient_id grp_id from to final time_start  time_stop
+## 1:      1           1          1      1    1  2     0  0.0000000  0.4681272
+## 2:      1           1          1      1    2  3     1  0.4681272  0.5369334
+## 3:      1           1          2      1    1  2     0  0.0000000 12.0678611
+## 4:      1           1          2      1    2  1     0 12.0678611 12.6483400
+## 5:      1           1          2      1    1  3     1 12.6483400 17.0134162
+## 6:      1           1          3      1    1  3     1  0.0000000  0.6280673</code></pre>
 <div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="co"># "Clock forward"</span>
 <span class="no">econmod_cf</span>$<span class="fu">sim_disease</span>()</pre></body></html></div>
 <p>State occupancy probabilities at different time points are computed using <code>$sim_stateprobs()</code>. First, we simulate state probabilities for the “clock reset” model.</p>
@@ -379,13 +384,13 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <p>QALYs (and life-years) are simulated using <code>$sim_qalys()</code>. By default, mean QALYs are computed by treatment strategy, health state, and PSA sample (the <code>by_patient</code> option can be used to compute aggregated QALYs at the patient level). Here, we used the “clock reset” model to compute both undiscounted QALYs (<code>dr = 0</code>) and QALYs discounted at 3%.</p>
 <div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">econmod_cr</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">.03</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod_cr</span>$<span class="no">qalys_</span>)</pre></body></html></div>
-<pre><code>##    sample strategy_id grp_id state_id dr     qalys       lys
-## 1:      1           1      1        1  0 2.9866158 6.2108315
-## 2:      1           1      1        2  0 1.4407699 1.4427968
-## 3:      1           2      1        1  0 4.0488516 8.4198090
-## 4:      1           2      1        2  0 0.9981082 0.9995123
-## 5:      2           1      1        1  0 4.7597738 6.6346878
-## 6:      2           1      1        2  0 0.3892459 1.6344189</code></pre>
+<pre><code>##    sample strategy_id grp_id state_id dr    qalys      lys
+## 1:      1           1      1        1  0 1.818973 5.437904
+## 2:      1           1      1        2  0 1.518140 1.595835
+## 3:      1           2      1        1  0 2.812882 8.409240
+## 4:      1           2      1        2  0 1.300959 1.367539
+## 5:      2           1      1        1  0 2.997677 5.786572
+## 6:      2           1      1        2  0 1.595551 1.607034</code></pre>
 <p>We summarize the simulated QALYs by computing means by treatment strategy and health state across the PSA samples.</p>
 <div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">qalys_summary</span> <span class="kw">&lt;-</span> <span class="no">econmod_cr</span>$<span class="no">qalys_</span>[, <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                                     <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span>)]
@@ -405,12 +410,12 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">econmod_cr</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">0.03</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod_cr</span>$<span class="no">costs_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id grp_id state_id   dr category     costs
-## 1:      1           1      1        1 0.03     Drug 25349.593
-## 2:      1           1      1        2 0.03     Drug  5747.583
-## 3:      1           2      1        1 0.03     Drug 65525.658
-## 4:      1           2      1        2 0.03     Drug  7625.031
-## 5:      2           1      1        1 0.03     Drug 25914.766
-## 6:      2           1      1        2 0.03     Drug  6423.508</code></pre>
+## 1:      1           1      1        1 0.03     Drug 21957.305
+## 2:      1           1      1        2 0.03     Drug  6523.328
+## 3:      1           2      1        1 0.03     Drug 63662.421
+## 4:      1           2      1        2 0.03     Drug 10516.778
+## 5:      2           1      1        1 0.03     Drug 23207.431
+## 6:      2           1      1        2 0.03     Drug  6389.130</code></pre>
 <p>As with QALYs, we summarize costs by computing means (now by treatment strategy and category) across the PSA samples.</p>
 <div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"scales"</span>)
 <span class="no">costs_summary</span> <span class="kw">&lt;-</span> <span class="no">econmod_cr</span>$<span class="no">costs_</span>[<span class="no">dr</span> <span class="kw">==</span> <span class="fl">.03</span> , <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),

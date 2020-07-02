@@ -109,17 +109,21 @@ navbar:
       - text: "Introduction to hesim"
         href: articles/intro.html
       - text: "---"
-      - text: "Markov cohort models"
-      - text: "Getting started with a Markov cohort model"
+      - text: "Partitioned survival models"
+      - text: "A 4-state partitioned survival model"
+        href: articles/psm.html
+      - text: "---"  
+      - text: "Cohort discrete time state transition models"
+      - text: "Getting started with a Markov Cohort model"
         href: articles/getting-started.html
-      - text: "Time inhomogeneous Markov cohort model"
+      - text: "A time inhomogeneous Markov cohort model"
         href: articles/markov-inhomogeneous.html
-      - text: "---"      
-      - text: "Statistical models of disease progression"
       - text: "Markov models with multinomial logistic regression"
         href: articles/mlogit.html
-      - text: "Partitioned survival models"
-        href: articles/psm.html
+      - text: "---"     
+      - text: "Individual continuous time state transition models"
+      - text: "Individual patient simulation"
+        href: articles/ips.html
       - text: "Markov and semi-Markov multi-state models"
         href: articles/mstate.html
       - text: "---"

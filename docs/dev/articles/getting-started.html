@@ -52,20 +52,25 @@
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Partitioned survival models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
-    </li>
-    <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/psm.html">A 4-state partitioned survival model</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Statistical models of disease progression</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started with a Markov Cohort model</a>
+    </li>
+    <li>
+      <a href="../articles/markov-inhomogeneous.html">A time inhomogeneous Markov cohort model</a>
+    </li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider">
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/ips.html">Individual patient simulation</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
@@ -303,15 +308,15 @@
 <span class="no">wtp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span>)
 <span class="no">icea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/icea.html">icea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.06</span>,
                        <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)</pre></body></html></div>
-<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,247, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
+<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,337, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                        
-## Incremental QALYs "-" "0.93 (0.57, 1.24)"      
-## Incremental costs "-" "5,817 (3,008, 9,578)"   
-## Incremental NMB   "-" "40,735 (23,003, 55,792)"
-## ICER              "-" "6,247"                  
+## Incremental QALYs "-" "0.93 (0.56, 1.21)"      
+## Incremental costs "-" "5,897 (2,816, 9,888)"   
+## Incremental NMB   "-" "40,633 (22,724, 54,327)"
+## ICER              "-" "6,337"                  
 ## Conclusion        "-" "Cost-effective"</code></pre>
-<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.948 and approaches 1 at slightly higher WTP values.</p>
+<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.947 and approaches 1 at slightly higher WTP values.</p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">icea_pw_out</span>$<span class="no">ceac</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">k</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">prob</span>,
            <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">strategy_id</span>, <span class="kw">labels</span> <span class="kw">=</span> <span class="no">strategies</span>$<span class="no">strategy_name</span>[-<span class="fl">1</span>]))) +

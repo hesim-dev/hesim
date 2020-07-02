@@ -1,0 +1,16 @@
+---
+title: Individual patient simulation
+date: "`r Sys.Date()`"
+output: 
+  html_vignette:
+    toc: yes
+    toc_depth: 2
+    number_sections: TRUE 
+pkgdown:
+  as_is: false
+vignette: >
+  %\VignetteIndexEntry{Individual patient simulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
