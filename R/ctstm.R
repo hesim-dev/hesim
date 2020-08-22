@@ -68,6 +68,33 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
   )
 )
 
+# Disease progression object ---------------------------------------------------
+#' Disease progression object
+#'
+#' An object of class `disprog` returned from methods 
+#' `$sim_disease()` in model classes. It contains simulated trajectories 
+#' through a multi-state model.  
+#' 
+#' @section Components:
+#' A `disprog` object inherits from `data.table` and contains
+#' the following columns:
+#' 
+#' \describe{
+#' \item{sample}{A random sample from the PSA.}
+#' \item{strategy_id}{The treatment strategy ID.}
+#' \item{patient_id}{The patient ID.}
+#' \item{from}{The health state ID transitioned from.}
+#' \item{to}{The health state ID transitioned to.}
+#' \item{final}{An indicator equal to 1 if a patient is in their final health
+#' state during the simulation and 0 otherwise.}
+#' \item{time_start}{The time at the start of the interval.}
+#' \item{time_stop}{The time at the end of the interval.}
+#' }
+#'
+#' @seealso [IndivCtstm], [IndivCtstmTrans]
+#' @name disprog
+NULL
+
 # IndivCtstmTrans --------------------------------------------------------------
 indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
                                     progress = NULL){
@@ -91,6 +118,8 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
   disprog[, sample := sample + 1]
   disprog[, from := from + 1]
   disprog[, to := to + 1]
+  setattr(disprog, "class", 
+          c("disprog", "data.table", "data.frame"))
   return(disprog[, ])
 }
 
@@ -243,7 +272,14 @@ create_IndivCtstmTrans.params_surv <- function(object, input_data, trans_mat,
 #'                                    point_estimate = FALSE)       
 #' head(transmod$hazard(c(1, 2, 3)))
 #' head(transmod$cumhazard(c(1, 2, 3)))
+#' 
+#' ## Simulate disease progression and state probabilities together
 #' transmod$sim_stateprobs(t = c(0, 5, 10))[t == 5]
+#' 
+#' ## Simulate disease progression and state probabilities separately
+#' disprog <- transmod$sim_disease(max_t = 10)
+#' transmod$sim_stateprobs(t = c(0, 5, 10), disprog = disprog)[t == 5]
+#' 
 #' @seealso [create_IndivCtstmTrans()], [IndivCtstm]
 #' @export
 IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
@@ -355,18 +391,43 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
         self$death_state <- absorbing_states[length(absorbing_states)]
       }
     },
+    
+    #' @description
+    #' Simulate disease progression (i.e., individual trajectories through a 
+    #' multi-state model using an individual patient simulation).
+    #' @param max_t A scalar or vector denoting the length of time to simulate the model.
+    #'  If a vector, must be equal to the number of simulated patients.
+    #' @param max_age A scalar or vector denoting the maximum age to simulate 
+    #' each patient until. If a vector, must be equal to the number of simulated patients.
+    #' @param progress An integer, specifying the PSA iteration (i.e., sample) that 
+    #' should be printed every progress PSA iterations. For example, if progress = 2,
+    #' then every second PSA iteration is printed. Default is NULL, in which case
+    #'  no output is printed.
+    #' @return An object of class [disprog].  
+    sim_disease = function(max_t = 100, max_age = 100, progress = NULL){
+      self$check()
+      disprog <- indiv_ctstm_sim_disease(self,
+                                         max_t = max_t,
+                                         max_age = max_age,
+                                         progress = progress)
+      return(disprog)
+    },
 
     #' @description
-    #' Simulate health state probabilities at distinct times by first 
-    #' simulating trajectories through a multi-state model with 
-    #' `IndivCtstm$sim_disease()`.
+    #' Simulate health state probabilities from a [disprog] object.
     #' @param t A numeric vector of times.
-    #' @param ... Additional arguments to pass to `IndivCtstm$sim_disease()`.
+    #' @param disprog A [disprog] object. If
+    #' `NULL`, then this will be simulated prior to computing state probabilities
+    #' using `IndivCtstm$sim_disease()`.
+    #' @param ... Additional arguments to pass to `IndivCtstm$sim_disease()` if
+    #' `disprog = NULL`.
     #' @return An object of class [stateprobs].  
-    sim_stateprobs = function(t, ...){
+    sim_stateprobs = function(t, disprog = NULL, ...){
       self$check()
-      args <- c(trans_model = self, list(...))
-      disprog <- do.call("indiv_ctstm_sim_disease", args)
+      if (is.null(disprog)){
+        args <- c(trans_model = self, list(...))
+        disprog <- do.call("indiv_ctstm_sim_disease", args)
+      }
       return(indiv_ctstm_sim_stateprobs(disprog, self, t))
     },
     
@@ -614,16 +675,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     #' list represents a different cost category.    
     cost_models = NULL,
     
-    #' @field disprog_ A `data.table` simulated using `$sim_disease()` containing the following columns:
-    #' * `sample`: A random sample from the PSA.
-    #' * `strategy_id`: The treatment strategy ID.
-    #' * `patient_id`: The patient ID.
-    #' * `from`: The health state ID transitioned from.
-    #' * `to`: The health state ID transitioned to.
-    #' * `final`: An indicator equal to 1 if a patient is in their final health
-    #' state during the simulation and 0 otherwise.
-    #' * `time_start`: The time at the start of the interval.
-    #' * `time_stop`: The time at the end of the interval.
+    #' @field disprog_ An object of class [disprog].
     disprog_ = NULL,
     
     #' @field stateprobs_ An object of class [stateprobs] simulated using `$sim_stateprobs()`.    
@@ -649,7 +701,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     
     #' @description
     #' Simulate disease progression (i.e., individual trajectories through a multi-state
-    #' model using an individual patient simulation).
+    #' model) using `IndivCtstmTrans$sim_disease()`.
     #' @param max_t  A scalar or vector denoting the length of time to simulate the model. 
     #' If a vector, must be equal to the number of simulated patients. 
     #' @param max_age A scalar or vector denoting the maximum age to simulate each patient until.
@@ -664,16 +716,13 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
         stop("'trans_model' must be an object of class 'IndivCtstmTrans'",
           call. = FALSE)
       }
-      self$trans_model$check()
-      
       self$qalys_ <- NULL
       self$costs_ <- NULL
       self$stateprobs_ <- NULL
       private$disprog_idx <- NULL
-      self$disprog_ <- indiv_ctstm_sim_disease(self$trans_model,
-                                               max_t = max_t,
-                                               max_age = max_age,
-                                               progress = progress)
+      self$disprog_ <- self$trans_model$sim_disease(max_t = max_t,
+                                                    max_age = max_age,
+                                                    progress = progress)
       self$stateprobs_ <- NULL
       invisible(self)
     },
@@ -681,7 +730,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     #' @description
     #' Simulate health state probabilities as a function of time using the 
     #' simulation output stored in `disprog`.
-    #' @param t TA numeric vector of times.
+    #' @param t A numeric vector of times.
     #' @return An instance of `self` with simulated output of class [stateprobs] 
     #' stored in `stateprobs_`.    
     sim_stateprobs = function(t){

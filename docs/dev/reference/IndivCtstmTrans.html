@@ -220,6 +220,7 @@ start of the model or from when time was previously reset. Only used if
 
 <ul>
 <li><p><a href='#method-new'><code>IndivCtstmTrans$new()</code></a></p></li>
+<li><p><a href='#method-sim_disease'><code>IndivCtstmTrans$sim_disease()</code></a></p></li>
 <li><p><a href='#method-sim_stateprobs'><code>IndivCtstmTrans$sim_stateprobs()</code></a></p></li>
 <li><p><a href='#method-check'><code>IndivCtstmTrans$check()</code></a></p></li>
 <li><p><a href='#method-clone'><code>IndivCtstmTrans$clone()</code></a></p></li>
@@ -267,17 +268,42 @@ start of the model or from when time was previously reset. Only used if
 <h3>Returns</h3>
 <p>A new <code>IndivCtstmTrans</code> object.</p>
 <p><hr>
+<a id="method-sim_disease"></a></p><h3>Method <code>sim_disease()</code></h3>
+<p>Simulate disease progression (i.e., individual trajectories through a
+multi-state model using an individual patient simulation).</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>IndivCtstmTrans</span>$<span class='fu'>sim_disease</span>(<span class='kw'>max_t</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>max_age</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>max_t</code></dt><dd><p>A scalar or vector denoting the length of time to simulate the model.
+If a vector, must be equal to the number of simulated patients.</p></dd>
+
+<dt><code>max_age</code></dt><dd><p>A scalar or vector denoting the maximum age to simulate
+each patient until. If a vector, must be equal to the number of simulated patients.</p></dd>
+
+<dt><code>progress</code></dt><dd><p>An integer, specifying the PSA iteration (i.e., sample) that
+should be printed every progress PSA iterations. For example, if progress = 2,
+then every second PSA iteration is printed. Default is NULL, in which case
+no output is printed.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>An object of class <a href='disprog.html'>disprog</a>.</p>
+<p><hr>
 <a id="method-sim_stateprobs"></a></p><h3>Method <code>sim_stateprobs()</code></h3>
-<p>Simulate health state probabilities at distinct times by first
-simulating trajectories through a multi-state model with
-<code>IndivCtstm$sim_disease()</code>.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>IndivCtstmTrans</span>$<span class='fu'>sim_stateprobs</span>(<span class='no'>t</span>, <span class='no'>...</span>)</pre><p></div></p>
+<p>Simulate health state probabilities from a <a href='disprog.html'>disprog</a> object.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='no'>IndivCtstmTrans</span>$<span class='fu'>sim_stateprobs</span>(<span class='no'>t</span>, <span class='kw'>disprog</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl'>
 <dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
 
-<dt><code>...</code></dt><dd><p>Additional arguments to pass to <code>IndivCtstm$sim_disease()</code>.</p></dd>
+<dt><code>disprog</code></dt><dd><p>A <a href='disprog.html'>disprog</a> object. If
+<code>NULL</code>, then this will be simulated prior to computing state probabilities
+using <code>IndivCtstm$sim_disease()</code>.</p></dd>
+
+<dt><code>...</code></dt><dd><p>Additional arguments to pass to <code>IndivCtstm$sim_disease()</code> if
+<code>disprog = NULL</code>.</p></dd>
 
 </dl><p></div></p>
 <h3>Returns</h3>
@@ -330,36 +356,60 @@ simulating trajectories through a multi-state model with
                                    <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
                                    <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/hazard.html'>hazard</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t     hazard
-#&gt; 1:     1      1           1          1      1 1 0.17340092
-#&gt; 2:     1      1           1          1      1 2 0.17340092
-#&gt; 3:     1      1           1          1      1 3 0.17340092
-#&gt; 4:     2      1           1          1      1 1 0.05617766
-#&gt; 5:     2      1           1          1      1 2 0.05617766
-#&gt; 6:     2      1           1          1      1 3 0.05617766</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t  cumhazard
-#&gt; 1:     1      1           1          1      1 1 0.17340092
-#&gt; 2:     1      1           1          1      1 2 0.34680185
-#&gt; 3:     1      1           1          1      1 3 0.52020277
-#&gt; 4:     2      1           1          1      1 1 0.05617766
-#&gt; 5:     2      1           1          1      1 2 0.11235533
-#&gt; 6:     2      1           1          1      1 3 0.16853299</div><div class='input'><span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id grp_id state_id t      prob
-#&gt;  1:      1           1      1        1 5 0.0000000
-#&gt;  2:      1           1      1        2 5 0.3333333
-#&gt;  3:      1           1      1        3 5 0.6666667
+#&gt; 1:     1      1           1          1      1 1 0.16540081
+#&gt; 2:     1      1           1          1      1 2 0.16540081
+#&gt; 3:     1      1           1          1      1 3 0.16540081
+#&gt; 4:     2      1           1          1      1 1 0.03399796
+#&gt; 5:     2      1           1          1      1 2 0.03399796
+#&gt; 6:     2      1           1          1      1 3 0.03399796</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'>cumhazard</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t  cumhazard
+#&gt; 1:     1      1           1          1      1 1 0.16540081
+#&gt; 2:     1      1           1          1      1 2 0.33080162
+#&gt; 3:     1      1           1          1      1 3 0.49620243
+#&gt; 4:     2      1           1          1      1 1 0.03399796
+#&gt; 5:     2      1           1          1      1 2 0.06799591
+#&gt; 6:     2      1           1          1      1 3 0.10199387</div><div class='input'>
+<span class='co'>## Simulate disease progression and state probabilities together</span>
+<span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id grp_id state_id t      prob
+#&gt;  1:      1           1      1        1 5 1.0000000
+#&gt;  2:      1           1      1        2 5 0.0000000
+#&gt;  3:      1           1      1        3 5 0.0000000
 #&gt;  4:      1           2      1        1 5 0.0000000
 #&gt;  5:      1           2      1        2 5 0.3333333
 #&gt;  6:      1           2      1        3 5 0.6666667
-#&gt;  7:      1           3      1        1 5 0.0000000
+#&gt;  7:      1           3      1        1 5 0.6666667
 #&gt;  8:      1           3      1        2 5 0.3333333
-#&gt;  9:      1           3      1        3 5 0.6666667
-#&gt; 10:      2           1      1        1 5 0.0000000
-#&gt; 11:      2           1      1        2 5 0.3333333
+#&gt;  9:      1           3      1        3 5 0.0000000
+#&gt; 10:      2           1      1        1 5 0.3333333
+#&gt; 11:      2           1      1        2 5 0.0000000
 #&gt; 12:      2           1      1        3 5 0.6666667
+#&gt; 13:      2           2      1        1 5 0.0000000
+#&gt; 14:      2           2      1        2 5 0.3333333
+#&gt; 15:      2           2      1        3 5 0.6666667
+#&gt; 16:      2           3      1        1 5 0.0000000
+#&gt; 17:      2           3      1        2 5 1.0000000
+#&gt; 18:      2           3      1        3 5 0.0000000</div><div class='input'>
+<span class='co'>## Simulate disease progression and state probabilities separately</span>
+<span class='no'>disprog</span> <span class='kw'>&lt;-</span> <span class='no'>transmod</span>$<span class='fu'>sim_disease</span>(<span class='kw'>max_t</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='no'>transmod</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>), <span class='kw'>disprog</span> <span class='kw'>=</span> <span class='no'>disprog</span>)[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>]</div><div class='output co'>#&gt;     sample strategy_id grp_id state_id t      prob
+#&gt;  1:      1           1      1        1 5 0.0000000
+#&gt;  2:      1           1      1        2 5 0.0000000
+#&gt;  3:      1           1      1        3 5 1.0000000
+#&gt;  4:      1           2      1        1 5 0.3333333
+#&gt;  5:      1           2      1        2 5 0.0000000
+#&gt;  6:      1           2      1        3 5 0.6666667
+#&gt;  7:      1           3      1        1 5 0.3333333
+#&gt;  8:      1           3      1        2 5 0.0000000
+#&gt;  9:      1           3      1        3 5 0.6666667
+#&gt; 10:      2           1      1        1 5 0.3333333
+#&gt; 11:      2           1      1        2 5 0.3333333
+#&gt; 12:      2           1      1        3 5 0.3333333
 #&gt; 13:      2           2      1        1 5 0.6666667
 #&gt; 14:      2           2      1        2 5 0.0000000
 #&gt; 15:      2           2      1        3 5 0.3333333
-#&gt; 16:      2           3      1        1 5 0.3333333
+#&gt; 16:      2           3      1        1 5 0.0000000
 #&gt; 17:      2           3      1        2 5 0.0000000
-#&gt; 18:      2           3      1        3 5 0.6666667</div></pre>
+#&gt; 18:      2           3      1        3 5 1.0000000</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

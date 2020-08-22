@@ -107,18 +107,7 @@ class \link{StateVals}.}
 Must be a list of objects of class \link{StateVals}, where each element of the
 list represents a different cost category.}
 
-\item{\code{disprog_}}{A \code{data.table} simulated using \verb{$sim_disease()} containing the following columns:
-\itemize{
-\item \code{sample}: A random sample from the PSA.
-\item \code{strategy_id}: The treatment strategy ID.
-\item \code{patient_id}: The patient ID.
-\item \code{from}: The health state ID transitioned from.
-\item \code{to}: The health state ID transitioned to.
-\item \code{final}: An indicator equal to 1 if a patient is in their final health
-state during the simulation and 0 otherwise.
-\item \code{time_start}: The time at the start of the interval.
-\item \code{time_stop}: The time at the end of the interval.
-}}
+\item{\code{disprog_}}{An object of class \link{disprog}.}
 
 \item{\code{stateprobs_}}{An object of class \link{stateprobs} simulated using \verb{$sim_stateprobs()}.}
 
@@ -169,7 +158,7 @@ A new \code{IndivCtstm} object.
 \if{latex}{\out{\hypertarget{method-sim_disease}{}}}
 \subsection{Method \code{sim_disease()}}{
 Simulate disease progression (i.e., individual trajectories through a multi-state
-model using an individual patient simulation).
+model) using \code{IndivCtstmTrans$sim_disease()}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$sim_disease(max_t = 100, max_age = 100, progress = NULL)}\if{html}{\out{</div>}}
 }
@@ -207,7 +196,7 @@ simulation output stored in \code{disprog}.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{t}}{TA numeric vector of times.}
+\item{\code{t}}{A numeric vector of times.}
 }
 \if{html}{\out{</div>}}
 }

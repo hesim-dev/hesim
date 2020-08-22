@@ -41,7 +41,14 @@ transmod <- create_IndivCtstmTrans(fits, input_data = fits_data,
                                    point_estimate = FALSE)       
 head(transmod$hazard(c(1, 2, 3)))
 head(transmod$cumhazard(c(1, 2, 3)))
+
+## Simulate disease progression and state probabilities together
 transmod$sim_stateprobs(t = c(0, 5, 10))[t == 5]
+
+## Simulate disease progression and state probabilities separately
+disprog <- transmod$sim_disease(max_t = 10)
+transmod$sim_stateprobs(t = c(0, 5, 10), disprog = disprog)[t == 5]
+
 }
 \seealso{
 \code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}, \link{IndivCtstm}
@@ -95,6 +102,7 @@ start of the model or from when time was previously reset. Only used if
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{IndivCtstmTrans$new()}}
+\item \href{#method-sim_disease}{\code{IndivCtstmTrans$sim_disease()}}
 \item \href{#method-sim_stateprobs}{\code{IndivCtstmTrans$sim_stateprobs()}}
 \item \href{#method-check}{\code{IndivCtstmTrans$check()}}
 \item \href{#method-clone}{\code{IndivCtstmTrans$clone()}}
@@ -152,14 +160,42 @@ A new \code{IndivCtstmTrans} object.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-sim_disease"></a>}}
+\if{latex}{\out{\hypertarget{method-sim_disease}{}}}
+\subsection{Method \code{sim_disease()}}{
+Simulate disease progression (i.e., individual trajectories through a
+multi-state model using an individual patient simulation).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{IndivCtstmTrans$sim_disease(max_t = 100, max_age = 100, progress = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{max_t}}{A scalar or vector denoting the length of time to simulate the model.
+If a vector, must be equal to the number of simulated patients.}
+
+\item{\code{max_age}}{A scalar or vector denoting the maximum age to simulate
+each patient until. If a vector, must be equal to the number of simulated patients.}
+
+\item{\code{progress}}{An integer, specifying the PSA iteration (i.e., sample) that
+should be printed every progress PSA iterations. For example, if progress = 2,
+then every second PSA iteration is printed. Default is NULL, in which case
+no output is printed.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+An object of class \link{disprog}.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sim_stateprobs"></a>}}
 \if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
-Simulate health state probabilities at distinct times by first
-simulating trajectories through a multi-state model with
-\code{IndivCtstm$sim_disease()}.
+Simulate health state probabilities from a \link{disprog} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{IndivCtstmTrans$sim_stateprobs(t, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{IndivCtstmTrans$sim_stateprobs(t, disprog = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -167,7 +203,12 @@ simulating trajectories through a multi-state model with
 \describe{
 \item{\code{t}}{A numeric vector of times.}
 
-\item{\code{...}}{Additional arguments to pass to \code{IndivCtstm$sim_disease()}.}
+\item{\code{disprog}}{A \link{disprog} object. If
+\code{NULL}, then this will be simulated prior to computing state probabilities
+using \code{IndivCtstm$sim_disease()}.}
+
+\item{\code{...}}{Additional arguments to pass to \code{IndivCtstm$sim_disease()} if
+\code{disprog = NULL}.}
 }
 \if{html}{\out{</div>}}
 }

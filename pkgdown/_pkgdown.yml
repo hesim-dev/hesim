@@ -68,6 +68,7 @@ reference:
       - IndivCtstm
   - title: "Simulation output"
     contents:
+      - disprog
       - stateprobs
       - costs
       - qalys
