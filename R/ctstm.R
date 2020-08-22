@@ -178,6 +178,8 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
   stprobs[, "state_id" := get("state_id") + 1]
   
   # Return
+  setattr(stprobs, "class", 
+          c("stateprobs", "data.table", "data.frame"))
   return(stprobs[])      
 }
 

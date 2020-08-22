@@ -135,6 +135,8 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
       stprobs[, sample := sample + 1]
       stprobs[, state_id := state_id + 1]
       check_patient_wt(self, stprobs)
+      setattr(stprobs, "class", 
+              c("stateprobs", "data.table", "data.frame"))
       return(stprobs[])
     }
   )
