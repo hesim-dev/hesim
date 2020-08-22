@@ -1,7 +1,7 @@
 ## hesim 0.3.1.9999
 ### New features
 
-* Disease progression (i.e., a trajectory through a multi-state model) can now be simulated using thr `sim_disease()` method of the `hesim::IndivCtstmTrans` class.
+* Disease progression (i.e., a trajectory through a multi-state model) can now be simulated using the `sim_disease()` method of the `hesim::IndivCtstmTrans` class.
 
 ## hesim 0.3.1
 Fixes a small bug in the `C++` code identified with the CRAN package checks.
