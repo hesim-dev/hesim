@@ -15,6 +15,76 @@ namespace hesim{
  */
 namespace stats{
 
+/***************************************************************************//**
+ * Random number generation for the piecewise exponential distribution.
+ * @param rate Vector of rates with each element denoting a unique time
+ * period.
+ * @param time Vector of times of the same length as @p rate giving the times
+ * at which the rate changes.
+ * @return A random sample from the piecewise exponential distribution.
+ ******************************************************************************/ 
+template <class T>
+inline double rpwexp (const T &rate, const std::vector<double> &time) {
+  int n_times = time.size();
+  double out = 0.0;
+  for (int t = 0; t < n_times; ++t){
+    double rexp_t = R::rexp(1/rate[t]);
+    out = time[t] + rexp_t;
+    if (t < (n_times - 1)){
+      if (out < time[t + 1]){
+        break;
+      }
+    }
+  }
+  return out;
+}
+
+/***************************************************************************//**
+ * Random number generation for the categorical distribution.
+ * @param probs A vector of length @c K specifying the probability of each of the 
+ * @c K categories. Internally normalized to sum to 1.
+ * @return A random sample from the categorical distribution.
+ ******************************************************************************/ 
+inline int rcat(arma::rowvec probs) {
+  int k = probs.n_elem;
+  double probs_sum = accu(probs);
+  probs = probs/probs_sum;
+  Rcpp::IntegerVector ans(k);
+  rmultinom(1, probs.begin(), k, ans.begin());
+  int max = which_max(ans);
+  return(max);
+}
+
+/***************************************************************************//**
+ * Random number generation for the truncated normal distribution.
+ * @param mean Mean of the distribution.
+ * @param sd Standard deviation of the distribution.
+ * @param lower Lower bound.
+ * @param Upper bound
+ * @return A random sample from the truncated normal distribution.
+ ******************************************************************************/ 
+inline double rtruncnorm(double mean, double sd, double lower, double upper){
+  double  sample;
+  sample = R::rnorm(mean, sd);
+  while(sample < lower || sample > upper){
+    sample = R::rnorm(mean, sd);
+  }
+  return sample;
+}
+
+/***************************************************************************//**
+ * Random number generation for the Dirichlet distribution.
+ * @param alpha Vector of concentration parameters.
+ * @return A random sample from the Dirichlet distribution.
+ ******************************************************************************/ 
+inline arma::rowvec rdirichlet(arma::rowvec alpha){
+  int alpha_len = alpha.size();
+  arma::rowvec x(alpha_len);
+  for (int i = 0; i < alpha_len; ++i){
+    x(i) = R::rgamma(alpha(i), 1);
+  }
+  return x/arma::sum(x);
+}
 
 /***************************************************************************//** 
  * An abstract base class for probability distributions.
@@ -48,41 +118,53 @@ public:
    * @param x Quantile of the distribution.
    * @return. The density evaluated at @p x.
    */   
-  virtual double pdf(double x) const = 0;
+  virtual double pdf(double x) const {
+    Rcpp::stop("There is no probability density function for the selected distribution.");
+  }
 
   /** 
    * Cumulative density function.
    * @param x Quantile of the distribution.
    * @return The distribution function evaluated at @p x.
    */     
-  virtual double cdf(double x) const = 0;
+  virtual double cdf(double x) const {
+    Rcpp::stop("There is no cumulative density function for the selected distribution.");
+  }
   
   /** 
    * Quantile function.
    * @param p A probability to calculate a quantile for.
    * @return The quantile evaluated at @p p.
    */      
-  virtual double quantile(double p) const = 0;
+  virtual double quantile(double p) const {
+    Rcpp::stop("There is no quantile function for the selected distribution.");
+  }
   
   /** 
    * Hazard function.
    * @param x Quantile of the distribution.
    * @return The hazard rate evaluated at @p x.
    */    
-  virtual double hazard(double x) const {return 0.0;}
+  virtual double hazard(double x) const {
+    Rcpp::stop("There is no hazard function for the selected distribution.");
+  }
   
   /** 
    * Cumulative hazard function.
    * @param x Quantile of the distribution.
    * @return The cumulative hazard evaluated at @p x. 
    */   
-  virtual double cumhazard(double x) const {return 0.0;}
+  virtual double cumhazard(double x) const {
+    Rcpp::stop("There is no cumulative hazard function for the selected distribution.");
+  }
   
   /** 
    * Random number generator.
    * @return A random sample from the probability distribution.
    */     
-  virtual double random() const = 0;
+  virtual double random() const {
+    Rcpp::stop("There is no random number generation function for the selected distribution.");
+  }
   
   /**
    * Random number generator for a truncated distribution.
@@ -220,6 +302,87 @@ public:
 }; // end class exponential
 
 /***************************************************************************//**
+ * The piecewise exponential distribution.
+ ******************************************************************************/ 
+class piecewise_exponential : public distribution {
+private: 
+  std::vector<double> rate_; ///< rate parameter at each time
+  std::vector<double> time_; ///<A vector equal to the number of elements in rate
+                             /// giving the times at which the rate changes
+  
+public:
+  /** 
+   * The constructor.
+   * Instantiates an exponential distribution with a given rate parameter.
+   */ 
+  piecewise_exponential(std::vector<double> rate, std::vector<double> time){
+    rate_ = rate;
+    time_ = time;
+  }
+  
+  void set_params(std::vector<double> params) {
+    std::transform(params.begin(), params.end(), rate_.begin(), 
+                   [](double x) { return std::exp(x); });
+  }
+  
+  double random() const {
+    return rpwexp(rate_, time_);
+  }
+  
+  double trandom2(double lower, double upper) const {
+    // Make new time and rate parameters
+    // by concatenating the lower bound to times
+    // and removing all times prior to the lower bound
+    int j = 0;
+    while(lower >= time_[j]) {
+      ++j;
+    }
+    j = j - 1;
+    std::vector<double> rate2(rate_.begin() + j, rate_.end());
+    int n_times = rate2.size();
+    std::vector<double> time2(n_times);
+    time2[0] = lower;
+    for (int t = 1; t < n_times; ++ t){
+      time2[t] = time_[j + t];
+    }
+    
+    // Random number generation
+    double out = rpwexp(rate2, time2);
+    return std::min(out, upper);
+  }
+  
+  double trandom(double lower, double upper) const {
+    if (upper != INFINITY){
+      Rcpp::stop("hesim does not currently support sampling from a piecewise exponential distribution truncated from above.");
+    }
+    // Get index of time corresponding to lower
+    int n_times = time_.size();
+    int j = 0;
+    while(lower >= time_[j] && j < n_times) {
+      ++j;
+    }
+    j = j - 1;
+    
+    // Simulation algorithm
+    double out = 0.0;
+    for (int t = j; t < n_times; ++t){
+      double rexp_t = R::rexp(1/rate_[t]);
+      if (t == j){
+        out = lower + rexp_t;
+      } 
+      else{
+        out = time_[t] + rexp_t;
+      }
+      if ((t < (n_times - 1)) && (out < time_[t + 1])){
+        break;
+      }
+    }
+    return out;
+  }
+  
+}; // end class exponential
+
+/***************************************************************************//**
  * The Weibull distribution.
  * Uses the same parameterization as in the @c R package @c stats.
  ******************************************************************************/ 
@@ -271,6 +434,68 @@ public:
     return rtrunc(this, lower, upper, "invcdf");
   }  
 }; // end class weibull
+
+/***************************************************************************//**
+ * The Weibull proportional hazards distribution.
+ * Uses the same parameterization as @c WeibullPH in the @c R package @c
+ * flexsurv.
+ ******************************************************************************/ 
+class weibull_ph : public distribution {
+private:
+  weibull wei_; ///< A member of class @link weibull.
+  
+  /** 
+   * Create an @link weibull object from a Weibull distribution with a
+   * proportional hazards parameterization.
+   */ 
+  weibull create_from_ph(double shape, double scale){
+    double scale_aft = pow(scale, -1/shape);
+    return weibull(shape, scale_aft);
+  }
+  
+public:
+  /** 
+   * The constructor.
+   * Instantiates a Weibull distribution with proportional hazards parameterization
+   * (shape parameter @p a and scale parameter @p m).
+   */  
+  weibull_ph(double shape, double scale)
+    : wei_(create_from_ph(shape, scale)) {
+  }
+  
+  void set_params(std::vector<double> params) {
+    wei_ = create_from_ph(exp(params[0]), exp(params[1]));
+  }
+  
+  double pdf(double x) const {
+    return wei_.pdf(x);
+  }
+  
+  double cdf(double x) const {
+    return wei_.cdf(x);
+  }
+  
+  double quantile(double p) const {
+    return wei_.quantile(p);
+  }
+  
+  double hazard(double x) const {
+    return wei_.hazard(x);
+  }
+  
+  double cumhazard(double x) const {
+    return wei_.cumhazard(x);
+  }
+  
+  double random() const {
+    return wei_.random();
+  }
+  
+  double trandom(double lower, double upper) const   {
+    return rtrunc(this, lower, upper, "invcdf");
+  }
+  
+}; // end class weibull_nma
 
 /***************************************************************************//**
  * The Weibull distribution parameterized for network meta-analysis.
@@ -1009,74 +1234,52 @@ public:
 };
 
 /***************************************************************************//**
- * Random number generation for the categorical distribution.
- * @param probs A vector of length @c K specifying the probability of each of the 
- * @c K categories. Internally normalized to sum to 1.
- * @return A random sample from the categorical distribution.
+ * A point mass (fixed) distribution.
  ******************************************************************************/ 
-inline int rcat(arma::rowvec probs) {
-  int k = probs.n_elem;
-  double probs_sum = accu(probs);
-  probs = probs/probs_sum;
-  Rcpp::IntegerVector ans(k);
-  rmultinom(1, probs.begin(), k, ans.begin());
-  int max = which_max(ans);
-  return(max);
-}
-
-/***************************************************************************//**
- * Random number generation for the truncated normal distribution.
- * @param mean Mean of the distribution.
- * @param sd Standard deviation of the distribution.
- * @param lower Lower bound.
- * @param Upper bound
- * @return A random sample from the truncated normal distribution.
- ******************************************************************************/ 
-inline double rtruncnorm(double mean, double sd, double lower, double upper){
-  double  sample;
-  sample = R::rnorm(mean, sd);
-  while(sample < lower || sample > upper){
-      sample = R::rnorm(mean, sd);
+class point_mass : public distribution {
+private: 
+  double est_; ///< Parameter estimate
+  
+public:
+  /** 
+   * The constructor.
+   * Instantiates an exponential distribution with a given rate parameter.
+   */ 
+  point_mass(double est){
+    est_ = est;
   }
-  return sample;
-}
-
-/***************************************************************************//**
- * Random number generation for the piecewise exponential distribution.
- * @param rate Vector of rates with each element denoting a unique time
- * period.
- * @param time Vector of times of the same length as @p rate giving the times
- * at which the rate changes.
- * @return A random sample from the piecewise exponential distribution.
- ******************************************************************************/ 
-inline double rpwexp (arma::rowvec rate, arma::rowvec time) {
-  int T = rate.n_elem;
-  double surv = 0.0;
-  for (int t = 0; t < T; ++t){
-      double rexp_t = R::rexp(1/rate(t));
-      surv = time(t) + rexp_t;
-      if (t < (T - 1)){
-          if (surv < time(t + 1)){
-              break;
-          }
-      }
+  
+  void set_params(std::vector<double> params) {
+    est_ = params[0];
   }
-  return surv;
-}
-
-/***************************************************************************//**
- * Random number generation for the Dirichlet distribution.
- * @param alpha Vector of concentration parameters.
- * @return A random sample from the Dirichlet distribution.
- ******************************************************************************/ 
-inline arma::rowvec rdirichlet(arma::rowvec alpha){
-  int alpha_len = alpha.size();
-  arma::rowvec x(alpha_len);
-  for (int i = 0; i < alpha_len; ++i){
-      x(i) = R::rgamma(alpha(i), 1);
+  
+  double pdf(double x) const {
+    if (x == est_){
+      return 1.0;
+    } 
+    else{
+      return 0.0;
+    }
   }
-  return x/arma::sum(x);
-}
+  
+  double cdf(double x) const {
+    if (x < est_ ){
+      return 0.0;
+    }
+    else{
+      return 1.0;
+    }
+  }
+  
+  double random() const {
+    return est_;
+  }
+  
+  double trandom(double lower, double upper) const {
+    return lower + std::min(est_, upper - lower);
+  }
+  
+}; // end class point_mass
 
 } //end namespace stats
 

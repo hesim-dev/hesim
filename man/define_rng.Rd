@@ -7,7 +7,7 @@
 \usage{
 define_rng(expr, n = 1, ...)
 
-eval_rng(x, params = NULL)
+eval_rng(x, params = NULL, check = FALSE)
 }
 \arguments{
 \item{expr}{An expression used to randomly draw variates for each parameter of
@@ -28,6 +28,11 @@ must either be 1 or \code{n}.}
 \item{params}{A list containing the values of parameters for random number
 generation. Each element of the list should either be a \code{vector},
 \code{matrix}, \code{data.frame}, or \code{data.table}}
+
+\item{check}{Whether to check the returned output so that (i) it returns a list
+and (ii) each element has the correct length or number of rows. Default is \code{FALSE},
+meaning that any output can be returned. This is always \code{TRUE} when used inside
+\code{\link[=define_model]{define_model()}}.}
 }
 \value{
 \code{define_rng()} returns an object of class \code{rng_def},

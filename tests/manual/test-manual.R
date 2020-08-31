@@ -5,7 +5,6 @@ library("Rcpp")
 library("ggplot2")
 library("hesim")
 # setwd("tests/manual") # tests should be run of this directory
-source("../testthat/helpers.R")
 rm(list = ls())
 
 # State probabilities: hesim vs. mstate ----------------------------------------
@@ -306,3 +305,55 @@ dat1 <- data.frame(time = time, surv = esurv1, lab = "Empirical CDF")
 dat2 <- data.frame(time = time, surv = esurv2, lab = "Empirical hazard")
 dat <- rbind(dat1, dat2)
 ggplot(dat, aes(x = time, y = surv, col = lab)) + geom_line() 
+
+# Random number generation for piecewise exponential distributions -------------
+module <- Rcpp::Module('distributions', PACKAGE = "hesim")
+PwExp <- module$piecewise_exponential
+rate <- c(0.5, 0.8, 1.2, 1.5)
+time <- c(0, 5, 10, 15)
+pwexp <- new(PwExp, rate = rate, time = time)
+pwexp$trandom(lower = 17, upper = Inf)
+
+# Compare approaches for sampling
+compare_trandom <- function(lower, n = 1000){
+  # Rejection sampling
+  r1 <- rpwexp(n * 10, rate = rate, time = time)
+  r1 <- r1[r1 >= lower]
+  
+  # hesim
+  r2 <- replicate(n, pwexp$trandom(lower = lower, upper = Inf))
+  
+  # Compare
+  summary <- 
+  p_df <- data.frame(x = c(r1, r2),
+                     method = rep(c("Rejection", "hesim"), 
+                                  times = c(length(r1), length(r2))))
+  p <- ggplot(p_df, aes(x = x, col = method)) +
+    geom_density() +
+    geom_vline(xintercept = lower, linetype = "dashed", col = "red") +
+    scale_x_continuous(breaks = seq(floor(min(p_df$x)), ceiling(max(p_df$x)), 
+                                    by = 1)) +
+    scale_colour_discrete("") +
+    ylab("Density")
+
+  return(list(r1 = r1, r2 = r2,
+              p = p,
+              n_r1 = length(r1),
+              summary = rbind(r1 = summary(r1), r2 = summary(r2))
+  ))
+}  
+comp <- list(`Lower = 3` = compare_trandom(lower = 3, n = 100000),
+             `Lower = 8` = compare_trandom(lower = 8, n = 100000))
+
+## Plot results
+pdf("figs/pwexp_trandom_comp.pdf")
+for (i in 1:length(comp)){
+  print(comp[[i]]$p + labs(title = names(comp)[[i]]))
+}
+dev.off()
+
+
+
+
+
+

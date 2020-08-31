@@ -127,8 +127,11 @@ private:
     else if (dist_name == "weibull.quiet" || dist_name == "weibull"){
       d = new stats::weibull(1, 1);
     }
+    else if (dist_name == "weibullPH"){
+      d = new stats::weibull_ph(1, 1);
+    }
     else if (dist_name == "weibullNMA"){
-      d = new stats::weibull_nma(0, 0); // equivalent to shape = 1, scale = 1 wih weibull
+      d = new stats::weibull_nma(0, 0); // equivalent to shape = 1, scale = 1 with weibull
     }
     else if (dist_name == "gamma"){
       d = new stats::gamma(1, 1);
@@ -163,6 +166,15 @@ private:
                               params_surv.fracpoly_aux_.cumhaz_method_,
                               params_surv.fracpoly_aux_.step_,
                               params_surv.fracpoly_aux_.random_method_);
+    }
+    else if (dist_name == "pwexp"){
+      int n_times = params_surv.pwexp_aux_.time_.size();
+      std::vector<double> rate(n_times + 1, 0.0);
+      d = new stats::piecewise_exponential(rate,
+                                           params_surv.pwexp_aux_.time_);
+    }
+    else if (dist_name == "fixed"){
+      d = new stats::point_mass(1);
     }
     else{
         Rcpp::stop("The selected distribution is not available.");

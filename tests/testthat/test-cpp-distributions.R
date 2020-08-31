@@ -43,7 +43,50 @@ test_that("exponential", {
   expect_true(all(r <= 5))
 })
 
-# Weibull distribution ---------------------------------------------------------
+# Piecewise exponential distribution -------------------------------------------
+test_that("pwexp", {
+  PwExp <- module$piecewise_exponential
+  rate <- c(.8, 1.2, 4)
+  time <- c(0, 5, 9)
+  pwexp <- new(PwExp, rate = rate, time = time)
+  
+  # pdf
+  expect_error(pwexp$pdf(3))
+  
+  # cdf
+  expect_error(pwexp$cdf(3)) 
+  
+  # quantile
+  expect_error(exp$quantile(.025))
+  
+  # hazard
+  expect_error(exp$hazard(1))
+  
+  # cumhazard
+  expect_error(exp$cumhazard(4))
+  
+  # random
+  set.seed(101)
+  r1 <- pwexp$random()
+  set.seed(101)
+  r2 <- rpwexp(1, rate = rate, time = time)
+  expect_equal(r1, r2)
+  
+  # Truncated random
+  expect_error(
+    pwexp$trandom(1, 5),
+    paste0("hesim does not currently support sampling from a piecewise ", 
+           "exponential distribution truncated from above.")
+  )
+  
+  r <- replicate(10, pwexp$trandom(7, Inf))
+  expect_true(all(r >= 7))
+  
+  r <- replicate(10, pwexp$trandom(max(time) + 1, Inf))
+  expect_true(all(r >= max(time) + 1))
+})
+
+# Weibull distribution (AFT) ---------------------------------------------------
 test_that("weibull", {
   Weibull <- module$weibull
   sh <- 2; sc <- 1.2
@@ -80,6 +123,45 @@ test_that("weibull", {
   r <- replicate(10, wei$trandom(0, 1))
   expect_true(all(r >= 0))
   expect_true(all(r <= 1))  
+})
+
+# Weibull distribution (PH) ----------------------------------------------------
+test_that("weibull_ph", {
+  WeibullPH <- module$weibull_ph
+  a <- exp(0.36); m <- exp(-5)
+  wei <- new(WeibullPH, shape = a, scale = m)
+  
+  # pdf
+  expect_equal(wei$pdf(4), 
+               flexsurv::dweibullPH(4, shape = a, scale = m))   
+  
+  # cdf
+  expect_equal(wei$cdf(4), 
+               flexsurv::pweibullPH(4, shape = a, scale = m))   
+  
+  # quantile
+  expect_equal(wei$quantile(.7), 
+               flexsurv::qweibullPH(.7, shape = a, scale = m))     
+  
+  # hazard
+  expect_equal(wei$hazard(2), 
+               flexsurv::hweibullPH(2, shape = a, scale = m))     
+  
+  # cumhazard
+  expect_equal(wei$cumhazard(2), 
+               flexsurv::HweibullPH(2, shape = a, scale = m))       
+  
+  # random
+  set.seed(101)
+  r1 <- wei$random()
+  set.seed(101)
+  r2 <- rweibullPH(1, shape = a, scale = m)
+  expect_equal(r1, r2)
+  
+  # Truncated random
+  r <- replicate(10, wei$trandom(2, 11))
+  expect_true(all(r >= 2))
+  expect_true(all(r <= 11))  
 })
 
 # Weibull distribution for NMA -------------------------------------------------
@@ -616,6 +698,39 @@ test_that("FracPoly", {
                hweibullNMA(3, a0 = a0, a1 = a1))
   expect_equal(fp$cdf(4), 
                pweibullNMA(4, a0 = a0, a1 = a1))
+})
+
+# Point mass (fixed) distribution ----------------------------------------------
+test_that("fixed", {
+  PointMass <- module$point_mass
+  est <- 3
+  pm <- new(PointMass, est = est)
+  
+  # pdf
+  expect_equal(pm$pdf(est), 1)
+  expect_equal(pm$pdf(est - 1), 0)
+  
+  # cdf
+  expect_equal(pm$cdf(est), 1) 
+  expect_equal(pm$cdf(est - 1), 0) 
+  expect_equal(pm$cdf(est + 1), 1) 
+  
+  # quantile
+  expect_error(pm$quantile(.025))
+  
+  # hazard
+  expect_error(pm$hazard(1))
+  
+  # cumhazard
+  expect_error(pm$cumhazard(4))
+  
+  # random
+  expect_equal(pm$random(), est)
+  
+  # Truncated random
+  expect_equal(pm$trandom(1, Inf), est + 1)
+  expect_equal(pm$trandom(1, 2), 2)
+  expect_equal(pm$trandom(5, Inf), est + 5)
 })
 
 # Truncated normal distribution ------------------------------------------------

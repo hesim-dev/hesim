@@ -112,7 +112,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 class="date">2020-07-02</h4>
+            <h4 class="date">2020-08-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous.Rmd"><code>vignettes/markov-inhomogeneous.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous.Rmd</code></div>
@@ -534,38 +534,38 @@ S(t) = \exp(-\lambda t^\gamma) \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.61590
-## 2:           2      2 14.66042</code></pre>
+## 1:           1      2 14.65474
+## 2:           2      2 14.69922</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 510.2250
-## 2:           2      2 611.4089</code></pre>
+## 1:           1      2 510.9371
+## 2:           2      2 611.8586</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
 <pre><code>##     strategy_id grp_id            iqalys         icosts                  inmb
-##  1:           2      1 0.07 (0.03, 0.13)  68 (-32, 136)  3,540 (1,452, 6,559)
-##  2:           2      2 0.04 (0.02, 0.08)  101 (26, 150)    2,125 (837, 3,978)
-##  3:           2      3 0.03 (0.01, 0.05)  127 (74, 161)    1,199 (419, 2,272)
-##  4:           2      4 0.02 (0.01, 0.03) 146 (109, 169)      616 (163, 1,254)
-##  5:           2      5 0.01 (0.00, 0.02) 160 (135, 175)         268 (13, 617)
-##  6:           2      6 0.11 (0.05, 0.20) -27 (-231, 95) 5,749 (2,512, 10,051)
-##  7:           2      7 0.07 (0.03, 0.12) 35 (-107, 123)  3,431 (1,465, 6,112)
-##  8:           2      8 0.04 (0.02, 0.07)  83 (-18, 144)    1,945 (785, 3,492)
-##  9:           2      9 0.02 (0.01, 0.04)  117 (49, 158)    1,034 (372, 1,933)
-## 10:           2     10 0.01 (0.01, 0.02)  142 (96, 167)      500 (132, 1,025)
+##  1:           2      1 0.07 (0.03, 0.13)  68 (-46, 134)  3,528 (1,249, 6,402)
+##  2:           2      2 0.04 (0.02, 0.08)  101 (19, 149)    2,123 (721, 3,899)
+##  3:           2      3 0.03 (0.01, 0.05)  127 (70, 161)    1,202 (353, 2,249)
+##  4:           2      4 0.02 (0.01, 0.03) 146 (107, 169)      620 (131, 1,265)
+##  5:           2      5 0.01 (0.00, 0.02) 160 (133, 175)         272 (-5, 663)
+##  6:           2      6 0.11 (0.04, 0.20) -29 (-236, 98) 5,751 (2,127, 10,134)
+##  7:           2      7 0.07 (0.03, 0.12) 34 (-112, 123)  3,442 (1,258, 6,112)
+##  8:           2      8 0.04 (0.02, 0.07)  82 (-19, 143)    1,957 (665, 3,520)
+##  9:           2      9 0.02 (0.01, 0.04)  117 (51, 158)    1,045 (323, 1,980)
+## 10:           2     10 0.01 (0.01, 0.02)  141 (96, 168)      508 (104, 1,074)
 ##          icer     conclusion
-##  1:       945 Cost-effective
-##  2:     2,273 Cost-effective
-##  3:     4,783 Cost-effective
-##  4:     9,582 Cost-effective
-##  5:    18,674 Cost-effective
+##  1:       946 Cost-effective
+##  2:     2,269 Cost-effective
+##  3:     4,764 Cost-effective
+##  4:     9,521 Cost-effective
+##  5:    18,512 Cost-effective
 ##  6: Dominates Cost-effective
-##  7:       506 Cost-effective
-##  8:     2,042 Cost-effective
-##  9:     5,097 Cost-effective
-## 10:    11,057 Cost-effective</code></pre>
+##  7:       489 Cost-effective
+##  8:     2,008 Cost-effective
+##  9:     5,019 Cost-effective
+## 10:    10,881 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -577,20 +577,20 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                   
 ## Incremental QALYs "-" "0.03 (0.01, 0.05)" 
-## Incremental costs "-" "119 (58, 157)"     
-## Incremental NMB   "-" "1,318 (495, 2,432)"
-## ICER              "-" "4,135"             
+## Incremental costs "-" "118 (57, 157)"     
+## Incremental NMB   "-" "1,323 (425, 2,444)"
+## ICER              "-" "4,105"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>
 <div id="appendix-transition-probabilities-from-a-weibull-survival-model" class="section level1">
 <h1 class="hasAnchor">
 <a href="#appendix-transition-probabilities-from-a-weibull-survival-model" class="anchor"></a>Appendix: Transition probabilities from a Weibull survival model</h1>
-<p>In general, the transition probability of an event given a model cycle is the probability a patient has an event during the cycle conditional on not having an event up until that cycle. That is, given a survivor function, <span class="math inline">\(S(t)\)</span> and a cycle of length <span class="math inline">\(u\)</span>, the transition probability, <span class="math inline">\(tp(t_u)\)</span> of an event is,</p>
+<p>In general, the transition probability of an event for a given model cycle is one minus the probability a patient does not have an event during the cycle conditional on not having an event up until that cycle. That is, given a survivor function, <span class="math inline">\(S(t)\)</span> and a cycle of length <span class="math inline">\(u\)</span>, the transition probability, <span class="math inline">\(tp(t_u)\)</span> of an event is,</p>
 <p><span class="math display">\[
 \begin{align}
-tp(t_u) &amp;= \frac{1 - S(t)}{S(t-u)} \\
-&amp;= \frac{1 - exp\{-H(t)\}}{exp\{-H(t-u)\}} \\
+tp(t_u) &amp;= 1 - \frac{S(t)}{S(t-u)} \\
+&amp;= 1 - \frac{exp\{-H(t)\}}{exp\{-H(t-u)\}} \\
 &amp;= 1 - exp\{H(t-u) - H(t)\},
 \end{align}
 \]</span></p>

@@ -1,0 +1,1 @@
+This directory runs tests that take a relatively long time---typically simulations---and must therefore be run manually. Thy can be run with `testthat::test_dir("tests/manual")`. Figures ares saved to the `figs` directory.

@@ -362,12 +362,12 @@ icer_tbl(icea_pw_out)
 ```
 
 # Appendix: Transition probabilities from a Weibull survival model
-In general, the transition probability of an event given a model cycle is the probability a patient has an event during the cycle conditional on not having an event up until that cycle. That is, given a survivor function, $S(t)$ and a cycle of length $u$, the transition probability, $tp(t_u)$ of an event is,
+In general, the transition probability of an event for a given model cycle is one minus the probability a patient does not have an event during the cycle conditional on not having an event up until that cycle. That is, given a survivor function, $S(t)$ and a cycle of length $u$, the transition probability, $tp(t_u)$ of an event is,
 
 $$
 \begin{align}
-tp(t_u) &= \frac{1 - S(t)}{S(t-u)} \\
-&= \frac{1 - exp\{-H(t)\}}{exp\{-H(t-u)\}} \\
+tp(t_u) &= 1 - \frac{S(t)}{S(t-u)} \\
+&= 1 - \frac{exp\{-H(t)\}}{exp\{-H(t-u)\}} \\
 &= 1 - exp\{H(t-u) - H(t)\},
 \end{align}
 $$

@@ -212,11 +212,15 @@ check_eval_rng <- function(object){
 #' @param params A list containing the values of parameters for random number 
 #' generation. Each element of the list should either be a `vector`,
 #'  `matrix`, `data.frame`, or `data.table`
+#' @param check Whether to check the returned output so that (i) it returns a list
+#' and (ii) each element has the correct length or number of rows. Default is `FALSE`,
+#' meaning that any output can be returned. This is always `TRUE` when used inside
+#' [define_model()]. 
 #' @export
 #' @rdname define_rng
-eval_rng <- function(x, params = NULL){
+eval_rng <- function(x, params = NULL, check = FALSE){
   x <- eval(x$expr, envir = c(x[-1], params)) # -1 is the position of "expr"
-  check_eval_rng(x)
+  if (check) check_eval_rng(x)
   return(x)
 }
 
@@ -765,7 +769,7 @@ eval_model <- function(x, input_data){
   data <- data.table(input_data)
   
   # Step 1: RNG for parameters
-  params <- eval_rng(x$rng_def, x$params)
+  params <- eval_rng(x$rng_def, x$params, check = TRUE)
   params_len <- lapply(params, function (z) if (is_1d_vector(z)) 1 else ncol(z))
   params_class <- lapply(params, class)
   if(any(!unlist(params_class) %in% c("integer", "numeric", "matrix",

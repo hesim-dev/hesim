@@ -289,14 +289,16 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #' @param coefs A list of length equal to the number of parameters in the 
 #' survival distribution. Each element of the list is a matrix of samples
 #'  of the regression coefficients under sampling uncertainty used to predict
-#' a given parameter.
+#' a given parameter. All parameters are expressed on the real line (e.g.,
+#' after log transformation if they are defined as positive). 
 #' @param dist Character vector denoting the parametric distribution. See "Details".
 #' @param aux Auxiliary arguments used with splines or fractional polynomials. See "Details". 
 #' 
 #' @return An object of class `params_surv`, which is a list containing `coefs`,
 #' `dist`, and `n_samples. `n_samples` is equal to the number of rows
-#' in each element of `coefs`, which must be the same. The list may also contain `aux` if
-#' a spline or fractional polynomial model is fit. 
+#' in each element of `coefs`, which must be the same. The list may also contain
+#'  `aux` if a spline, fractional polynomial, or piecewise exponential model is 
+#'  used. 
 #' 
 #' @details 
 #' Survival is modeled as a function of \eqn{L} parameters \eqn{\alpha_l}. 
@@ -314,39 +316,65 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #' \item{`exponential` or `exp`}{ Exponential distribution. `coef`
 #' must contain the `rate` parameter on the log scale and the same parameterization as in 
 #' [stats::Exponential]}.
+#' 
 #' \item{`weibull` or `weibull.quiet`}{ Weibull distribution. The first 
 #' element of `coef` is the `shape` parameter (on the log scale) and the second
 #' element is the `scale` parameter (also on the log scale). The parameterization is
 #' that same as in [stats::Weibull].}
+#' 
+#' \item{`weibullPH`}{ Weibull distribution with a proportional hazards 
+#' parameterization. The first element of `coef` is the `shape` parameter 
+#' (on the log scale) and the second element is the `scale` parameter 
+#' (also on the log scale). The parameterization is
+#' that same as in [flexsurv::WeibullPH].}
+#' 
 #' \item{`gamma`}{ Gamma distribution. The first 
 #' element of `coef` is the `shape` parameter (on the log scale) and the second
 #' element is the `rate` parameter (also on the log scale). The parameterization is
 #' that same as in [stats::GammaDist].}
+#' 
 #' \item{`lnorm`}{ Lognormal distribution. The first 
-#' element of `coef` is the `meanlog` parameter (i.e., the mean on the log scale) and the second
-#' element is the `sdlog` parameter (i.e., the standard deviation on the log scale). The parameterization is
-#' that same as in [stats::Lognormal].}
+#' element of `coef` is the `meanlog` parameter (i.e., the mean of survival on 
+#' the log scale) and the second element is the `sdlog` parameter (i.e.,
+#'  the standard deviation of survival on the log scale). The parameterization is
+#' that same as in [stats::Lognormal]. The coefficients predicting the `meanlog` 
+#' parameter are untransformed wheras the coefficients predicting the `sdlog` 
+#' parameter are defined on the log scale.}
+#' 
 #' \item{`gompertz`}{ Gompertz distribution. The first 
 #' element of `coef` is the `shape` parameter and the second
 #' element is the `rate` parameter (on the log scale). The parameterization is
 #' that same as in [flexsurv::Gompertz].}
+#' 
 #' \item{`llogis`}{ Log-logistic distribution. The first 
 #' element of `coef` is the `shape` parameter (on the log scale) and the second
 #' element is the `scale` parameter (also on the log scale). The parameterization is
 #' that same as in [flexsurv::Llogis].}
+#' 
 #' \item{`gengamma`}{ Generalized gamma distribution. The first 
 #' element of `coef` is the location parameter `mu`, the second
 #' element is the scale parameter `sigma` (on the log scale), and the
 #' third element is the shape parameter `Q`. The parameterization is
 #' that same as in [flexsurv::GenGamma].}
+#' 
 #' \item{`survspline`}{ Survival splines. Each element of `coef` is a parameter of the
 #' spline model (i.e. `gamma_0`, `gamma_1`, \eqn{\ldots}) with length equal
 #' to the number of knots (including the boundary knots). See below for details on the
 #' auxiliary arguments. The parameterization is that same as in [flexsurv::Survspline].}
+#' 
 #' \item{`fracpoly`}{ Fractional polynomials. Each element of `coef` is a parameter of the
 #' fractional polynomial model (i.e. `gamma_0`, `gamma_1`, \eqn{\ldots}) with length equal
 #' to the number of powers minus 1. See below for details on the auxiliary arguments 
 #' (i.e., `powers`).}
+#' 
+#' \item{`pwexp`}{ Piecewise exponential distribution. Each element of `coef` is 
+#' rate parameter for a distinct time interval. The times at which the rates 
+#' change should be specified with the auxiliary argument `time` (see below
+#' for more details)}. 
+#' 
+#' \item{`fixed`}{ A fixed survival time. Can be used for "non-random" number 
+#' generation. `coef` should contain a single parameter, `est`, of the fixed
+#' survival times.}
 #' }
 #' 
 #' Auxiliary arguments for spline models should be specified as a list containing the elements:
@@ -364,6 +392,13 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #' \describe{
 #' \item{`powers`}{ A vector of the powers of the fractional polynomial with each element
 #'  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
+#' }
+#' 
+#' #' Auxiliary arguments for pieceise exponential models should be specified as 
+#' a list containing the element:
+#' \describe{
+#' \item{`time`}{ A vector equal to the number of rate parameters giving the 
+#' times at which the rate changes.}
 #' }
 #' 
 #' Furthermore, when splines (with `scale = "log_hazard"`) or fractional 
@@ -406,25 +441,27 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
     res[["aux"]] <- aux
     
     # RNG 
-    if (is.null(aux$random_method)){
-      res[["aux"]]$random_method <- "invcdf"
-    } else{
-      if (aux$random_method == "sample"){
-        warning("'random_method' = 'sample' is deprecated. Use 'discrete' instead.")
-        aux$random_method <- "discrete"
+    if (dist %in% c("survspline", "fracpoly")){
+      if (is.null(aux$random_method)){
+        res[["aux"]]$random_method <- "invcdf"
+      } else{
+        if (aux$random_method == "sample"){
+          warning("'random_method' = 'sample' is deprecated. Use 'discrete' instead.")
+          aux$random_method <- "discrete"
+        }
       }
-    }
-
-    # Cumulative hazard default
-    if (is.null(aux$cumhaz_method)){
-      if (dist == "survspline"){
-        if (aux$scale == "log_hazard"){
+      
+      # Cumulative hazard default
+      if (is.null(aux$cumhaz_method)){
+        if (dist == "survspline"){
+          if (aux$scale == "log_hazard"){
+            res[["aux"]]$cumhaz_method <- "quad"
+          }
+        } else {
           res[["aux"]]$cumhaz_method <- "quad"
         }
-      } else {
-         res[["aux"]]$cumhaz_method <- "quad"
       }
-    }
+    } # End RNG for fractional polynomials and survival splines
     
     # Step size warning
     check_step <- function(aux){
@@ -442,6 +479,18 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
     if (dist == "fracpoly"){
       check_step(res[["aux"]])
     }
+    
+    # Piecewise exponential
+    if (dist == "pwexp"){
+      if (!is_1d_vector(aux$time)){
+        stop("`time` must be a 1-dimensional vector", call. = FALSE)
+      }
+      if (length(aux$time) != length(coefs)){
+        stop("The length of 'time' must equal the length of 'coefs'.", 
+             call. = FALSE)
+      }
+    }
+    
   } # End if statement for aux
   res[["n_samples"]] <- n_samples
   class(res) <- "params_surv"

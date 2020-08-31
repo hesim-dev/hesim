@@ -237,6 +237,16 @@ create_IndivCtstmTrans.params_surv <- function(object, input_data, trans_mat,
                              clock = match.arg(clock), reset_states = reset_states, ...))
 }
 
+#' @export
+#' @rdname create_IndivCtstmTrans
+create_IndivCtstmTrans.params_surv_list <- function(object, input_data, trans_mat, 
+                                                    clock = c("reset", "forward", "mix"),
+                                                    reset_states = NULL,...){
+  input_mats <- create_input_mats(object, input_data)
+  return(IndivCtstmTrans$new(input_data = input_mats, params = object, trans_mat = trans_mat,
+                             clock = match.arg(clock), reset_states = reset_states, ...))
+}
+
 #' Transitions for an individual-level continuous time state transition model
 #'
 #' @description

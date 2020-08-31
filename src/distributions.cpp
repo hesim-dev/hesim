@@ -32,14 +32,16 @@ std::vector<double> C_rgengamma(int n, std::vector<double> mu,
  * used in the @c R function @c rpwexp.
  ******************************************************************************/ 
 // [[Rcpp::export]]
-std::vector<double> C_rpwexp(int n, arma::mat rate, arma::rowvec time) {
+std::vector<double> C_rpwexp(int n, arma::mat rate, std::vector<double> time) {
   int b = rate.n_rows;
-  std::vector<double> surv;
-  surv.reserve(n);
+  std::vector<double> out;
+  out.reserve(n);
+  
   for (int i = 0; i < n; ++i){
-      surv.push_back(hesim::stats::rpwexp(rate.row(i % b), time));
+    arma::rowvec rate_i = rate.row(i % b);
+    out.push_back(hesim::stats::rpwexp(rate_i, time));
   }
-  return surv;
+  return out;
 }
 
 /***************************************************************************//**
@@ -103,6 +105,13 @@ RCPP_MODULE(distributions){
     .method("random", &hesim::stats::exponential::random)
     .method("trandom", &hesim::stats::exponential::trandom)
   ;
+  
+  Rcpp::class_<hesim::stats::piecewise_exponential>("piecewise_exponential")
+    .derives<hesim::stats::distribution>("distribution")
+    .constructor<std::vector<double>, std::vector<double>>()
+    .method("random", &hesim::stats::piecewise_exponential::random)
+    .method("trandom", &hesim::stats::piecewise_exponential::trandom)
+  ;
 
   Rcpp::class_<hesim::stats::weibull>("weibull")
     .derives<hesim::stats::distribution>("distribution")
@@ -114,6 +123,18 @@ RCPP_MODULE(distributions){
     .method("cumhazard", &hesim::stats::weibull::cumhazard)
     .method("random", &hesim::stats::weibull::random)
     .method("trandom", &hesim::stats::weibull::trandom)
+  ;
+  
+  Rcpp::class_<hesim::stats::weibull_ph>("weibull_ph")
+    .derives<hesim::stats::distribution>("distribution")
+    .constructor<double, double>()
+    .method("pdf", &hesim::stats::weibull_ph::pdf)
+    .method("cdf", &hesim::stats::weibull_ph::cdf)
+    .method("quantile", &hesim::stats::weibull_ph::quantile)
+    .method("hazard", &hesim::stats::weibull_ph::hazard)
+    .method("cumhazard", &hesim::stats::weibull_ph::cumhazard)
+    .method("random", &hesim::stats::weibull_ph::random)
+    .method("trandom", &hesim::stats::weibull_ph::trandom)
   ;
   
   Rcpp::class_<hesim::stats::weibull_nma>("weibull_nma")
@@ -216,4 +237,13 @@ RCPP_MODULE(distributions){
     .method("random", &hesim::stats::fracpoly::random)
     .method("trandom", &hesim::stats::fracpoly::trandom)
   ;
+
+   Rcpp::class_<hesim::stats::point_mass>("point_mass")
+     .derives<hesim::stats::distribution>("distribution")
+     .constructor<double>()
+     .method("pdf", &hesim::stats::point_mass::pdf)
+     .method("cdf", &hesim::stats::point_mass::cdf)
+     .method("random", &hesim::stats::point_mass::random)
+     .method("trandom", &hesim::stats::point_mass::trandom)
+   ;  
 }

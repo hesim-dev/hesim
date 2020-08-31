@@ -240,7 +240,7 @@ check.matlist <- function(coefs){
 }
 
 check.array <- function(coefs){
-  # 'coefs' must be a 3D array (and this has been cheked in get_n_samples())
+  # 'coefs' must be a 3D array (and this has been checked in get_n_samples())
   
   # There are currently no other checks
 }

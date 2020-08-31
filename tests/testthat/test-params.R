@@ -62,10 +62,21 @@ test_that("create_params.lm_list", {
 
 # Survival model ---------------------------------------------------------------
 test_that("params_surv", {
+  ## exponential
   pars_surv <- params_surv(coefs = list(matrix(c(1, 2, 3, 4), nrow = 2)),
                             dist = "exponential")
   expect_equal(pars_surv$n_samples, 2)
   expect_true(inherits(pars_surv, "params_surv"))
+  
+  ## piecewise exponential
+  pars_surv <- params_surv(coefs = list(matrix(.8),
+                                        matrix(.9)),
+                           aux = list(time = c(1, 2)),
+                           dist = "pwexp")
+  expect_equal(pars_surv$dist, "pwexp")
+  expect_equal(pars_surv$aux$time, c(1, 2))
+  
+  ## weibull
   pars_surv <- params_surv(coefs = list(p1 = matrix(c(1, 2, 3, 4), nrow = 2),
                                         p2 = matrix(c(5, 6, 7, 8), nrow = 2)),
                             dist = "weibull")
@@ -81,6 +92,11 @@ test_that("params_surv", {
   expect_error(params_surv(coefs = list(matrix(c(1, 2), nrow = 1),
                                         matrix(c(1, 2, 3, 4), nrow = 2)),
                             dist = "weibull"))
+  expect_error(params_surv(coefs = list(matrix(.8),
+                                        matrix(.9)),
+                           aux = list(time = c(1)),
+                           dist = "pwexp"),
+               "The length of 'time' must equal the length of 'coefs'.")
 })
 
 test_that("create_params.flexsurv", {

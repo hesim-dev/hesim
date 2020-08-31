@@ -15,22 +15,7 @@ vignette: >
 ---
 
 # Overview
-Continuous time state transition models (CTSTMs) simulate trajectories for patients between mutually exclusive health states. These models can be parameterized using multi-state models, which are generalizations of survival models with more than two states. Transitions between health states $r$ and $s$ for patient $i$ with treatment $k$ at time $t$ are governed by hazard functions, $\lambda_{rs}(t|x_{ik})$, that can depend on covariates $x_{ik}$. 
-
-Different assumptions can be made about the time scales used to determine the hazards. In a "clock forward" (i.e., Markov) model, time $t$ refers to time since entering the initial health state. Conversely, in a "clock reset" (i.e., semi-Markov) model, time $t$ refers to time since entering the current state $r$, meaning that time resets to 0 each time a patient enters a new state. 
-
-While state occupancy probabilities in "clock forward"  models can be estimated analytically using the [Aalen-Johansen](https://www.jstor.org/stable/pdf/4615704.pdf) estimator, state occupancy probabilities in "clock reset" models can only be computed in a general fashion using individual patient simulation. `hesim` provides support for individual-level CTSTMs (iCTSTMs) which can simulate either "clock forward" or "clock reset" models. 
-
-Discounted costs and quality-adjusted life-years (QALYs) are computed using the continuous time present value of a flow of state values---$q_{hik}(t)$ for utility and $c_{m, hik}(t)$ for the $m$th cost category---that depend on the health state of a patient on a given treatment strategy at a particular point in time. Discounted QALYs and costs given a model starting at time $0$ with a time horizon of $T$ are then given by,
-
-$$
-\begin{aligned}
-QALYs_{hik} &= \int_{0}^{T} q_{hik}(t)e^{-rt}dt, \\ 
-Costs_{m, hik} &= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
-\end{aligned}
-$$
-
-where $r$ is the discount rate. 
+The [individual patient simulation (IPS) vignette](ips.html) shows how to simulate a continuous times state transition model (CTSTM) and perform a cost-effectiveness analysis (CEA). The model was parameterized using a variety of disparate data sources and parameter estimates. However, in an ideal scenario, a CTSTM can be fully parameterized by estimating a single statistical model. In this example, we demonstrate by fitting a multi-state model---a generalization of a survival model with more than two states---using patient-level data.
 
 # An example 3-state model
 The reversible illness-death model is a commonly used state transition model (see figure below) with 3 health states and 4 transitions. In this example, we will use 3 generic health states: (1) Healthy, (2) Sick, and (3) Dead. The following 4 transitions are possible.
@@ -210,7 +195,7 @@ While the hazards from the healthy state are similar between the "clock forward"
 Additional analyses should be conducted as well. For instance, the hazards for treatment strategy 1 (the reference treatment strategy) could be assessed by comparing the Weibull model's predictions with predictions from non-parametric (i.e., the Kaplan-Meier estimator) or semi-parametric (i.e., Cox) models. This can be performed using `mstate`, which can predict cumulative hazards and state probabilities in non-parametric and semi-parametric models. Furthermore, the Weibull model's proportional hazards assumption should be tested using standard techniques such as plots of log time vs. the log cumulative hazard, inclusion of time-dependent covariates, and tests of the Schoenfeld residuals. 
 
 ### Utility and cost models
-Models based on predicted means (see `tparams_mean()`) can be created directly from the utility and cost tables using since they do not include covariates and therefore do not require input data. 
+Cost and utility models can be easily created from the `stateval_tbl()` output above. Note that these models are based on predicted means (see `tparams_mean()`) and do depend on covariates.
 
 ```{r}
 # Utility

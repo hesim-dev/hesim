@@ -5,6 +5,7 @@
 \alias{create_IndivCtstmTrans.flexsurvreg_list}
 \alias{create_IndivCtstmTrans.flexsurvreg}
 \alias{create_IndivCtstmTrans.params_surv}
+\alias{create_IndivCtstmTrans.params_surv_list}
 \title{Create \code{IndivCtstmTrans} object}
 \usage{
 create_IndivCtstmTrans(object, ...)
@@ -30,6 +31,15 @@ create_IndivCtstmTrans(object, ...)
 )
 
 \method{create_IndivCtstmTrans}{params_surv}(
+  object,
+  input_data,
+  trans_mat,
+  clock = c("reset", "forward", "mix"),
+  reset_states = NULL,
+  ...
+)
+
+\method{create_IndivCtstmTrans}{params_surv_list}(
   object,
   input_data,
   trans_mat,

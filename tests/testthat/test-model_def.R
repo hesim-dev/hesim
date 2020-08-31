@@ -149,7 +149,7 @@ test_that( "define_rng() must return a list", {
   rng_def <- define_rng({
     data.frame(2)
   })
-  expect_error(eval_rng(rng_def),
+  expect_error(eval_rng(rng_def, check = TRUE),
                "define_rng() must return a list", fixed = TRUE)
 })
 
@@ -161,7 +161,7 @@ test_that( "define_rng() has incorrect number of samples", {
       y = c(1, 2)
     )
   }, n = 3)
-  expect_error(eval_rng(rng_def),
+  expect_error(eval_rng(rng_def, check = TRUE),
                paste0("The number of samples produced by define_rng() must be ",
                "equal to n unless a scalar (of length 1) is returned."), 
                fixed = TRUE)

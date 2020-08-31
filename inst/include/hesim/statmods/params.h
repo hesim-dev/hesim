@@ -41,6 +41,28 @@ public:
 namespace detail {
 
 /***************************************************************************//** 
+ * Auxiliary parameters for a piecewise exponential survival distribution.
+ * See stats::piecewise_exponential for description of the member variables.
+ ******************************************************************************/ 
+struct piecewise_exponential_aux{
+  std::vector<double> time_;
+  
+  /** 
+   * The constructor.
+   * Instantiates the auxiliary parameters of a piecewise exponential survival model.
+   * @param R_params_surv An object of class "params_surv" passed from the @c hesim
+   * @c R package. 
+   */ 
+  piecewise_exponential_aux(Rcpp::List R_params_surv) {
+    std::string dist_name = Rcpp::as<std::string>(R_params_surv["dist"]);
+    if (dist_name == "pwexp"){
+      Rcpp::List aux = Rcpp::as<Rcpp::List> (R_params_surv["aux"]);
+      time_ = Rcpp::as<std::vector<double> > (aux["time"]);
+    } // End if for pwexp
+  }
+};
+
+/***************************************************************************//** 
  * Auxiliary parameters for a spline survival model.
  * See stats::survspline for description of the member variables.
  ******************************************************************************/ 
@@ -129,6 +151,7 @@ public:
                          ///< probability distribution.
   detail::survspline_aux spline_aux_; ///< Auxiliary parameters for a spline survival model. 
   detail::fracpoly_aux fracpoly_aux_; ///< Auxiliary parameters for a fractional polynomial survival model.
+  detail::piecewise_exponential_aux pwexp_aux_; ///< Auxiliary parameters for a piecewise exponential survival model.
   
   /** 
    * The constructor.
@@ -137,7 +160,8 @@ public:
    * @c R package. 
    */ 
   params_surv(Rcpp::List R_params_surv)
-    : spline_aux_(R_params_surv), fracpoly_aux_(R_params_surv) {
+    : spline_aux_(R_params_surv), fracpoly_aux_(R_params_surv),
+      pwexp_aux_(R_params_surv){
     coefs_ = hesim::detail::list_to_vec<vecmats, arma::mat>(R_params_surv["coefs"]);
     dist_name_ = Rcpp::as<std::string>(R_params_surv["dist"]);
     sample_ = 0;

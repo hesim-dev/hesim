@@ -109,14 +109,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_rpwexp
-std::vector<double> C_rpwexp(int n, arma::mat rate, arma::rowvec time);
+std::vector<double> C_rpwexp(int n, arma::mat rate, std::vector<double> time);
 RcppExport SEXP _hesim_C_rpwexp(SEXP nSEXP, SEXP rateSEXP, SEXP timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type rate(rateSEXP);
-    Rcpp::traits::input_parameter< arma::rowvec >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type time(timeSEXP);
     rcpp_result_gen = Rcpp::wrap(C_rpwexp(n, rate, time));
     return rcpp_result_gen;
 END_RCPP

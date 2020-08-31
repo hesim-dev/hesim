@@ -308,8 +308,8 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
     if (all(c("shape1", "shape2") %in% colnames(tbl))){
       mu <- stats::rbeta(n * n_rows, shape1 = tbl$shape1, shape2 = tbl$shape2)
     } else if (all(c("mean", "se") %in% colnames(tbl))){
-      mom_params <- mom_beta(tbl$mean, tbl$se)
-      mu <- stats::rbeta(n * n_rows, shape1 = mom_params$shape1, shape2 = mom_params$shape2) 
+      mu <- mom_fun_rng(rng_fun = "rbeta", mom_fun = "mom_beta",
+                        mean = tbl$mean, sd = tbl$se)
     } 
   } else if (attr(object, "dist") == "gamma"){
     if (all(c("shape", "rate") %in% colnames(tbl))){
@@ -317,8 +317,8 @@ create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
     } else if (all(c("shape", "scale") %in% colnames(tbl))){
       mu <- stats::rgamma(n * n_rows, shape = tbl$shape, scale = tbl$scale)
     } else if (all(c("mean", "se") %in% colnames(tbl))){
-      mom_params <- mom_gamma(tbl$mean, tbl$se)
-      mu <- stats::rgamma(n * n_rows, shape = mom_params$shape, scale = mom_params$scale) 
+      mu <- mom_fun_rng(rng_fun = "rgamma", mom_fun = "mom_gamma",
+                        mean = tbl$mean, sd = tbl$se)
     } 
   } else if (attr(object, "dist") == "lnorm"){
     mu <- stats::rlnorm(n * n_rows, meanlog = tbl$meanlog, sdlog = tbl$sdlog)
