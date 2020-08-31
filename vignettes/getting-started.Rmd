@@ -9,7 +9,7 @@ output:
 pkgdown:
   as_is: false
 vignette: >
-  %\VignetteIndexEntry{Getting started with a Markov Cohort Model}
+  %\VignetteIndexEntry{Getting started with a Markov cohort model}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

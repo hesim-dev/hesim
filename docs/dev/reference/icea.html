@@ -315,35 +315,35 @@ incremental net monetary benefits for the range of specified willingness to pay 
 <span class='co'># in each group with a willingness to pay of 20,000</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"data.table"</span>)
 <span class='no'>icea</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp best prob
-#&gt; 1: 20000 Strategy 1 Group 1    0 0.47
-#&gt; 2: 20000 Strategy 2 Group 1    1 0.53
-#&gt; 3: 20000 Strategy 1 Group 2    1 0.55
-#&gt; 4: 20000 Strategy 2 Group 2    0 0.45</div><div class='input'>
+#&gt; 1: 20000 Strategy 1 Group 1    0 0.48
+#&gt; 2: 20000 Strategy 2 Group 1    1 0.52
+#&gt; 3: 20000 Strategy 1 Group 2    1 0.57
+#&gt; 4: 20000 Strategy 2 Group 2    0 0.43</div><div class='input'>
 <span class='co'># icea_pw</span>
 <span class='no'>icea_pw</span> <span class='kw'>&lt;-</span>  <span class='fu'>icea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
                     <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
                      <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>icea_pw</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k   strategy     grp prob
-#&gt; 1: 20000 Strategy 2 Group 1 0.53
-#&gt; 2: 20000 Strategy 2 Group 2 0.45
-#&gt; 3: 20500 Strategy 2 Group 1 0.63
-#&gt; 4: 20500 Strategy 2 Group 2 0.49
-#&gt; 5: 21000 Strategy 2 Group 1 0.68
-#&gt; 6: 21000 Strategy 2 Group 2 0.57</div><div class='input'><span class='fu'><a href='icer_tbl.html'>icer_tbl</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; $`Group 1`
+#&gt; 1: 20000 Strategy 2 Group 1 0.52
+#&gt; 2: 20000 Strategy 2 Group 2 0.43
+#&gt; 3: 20500 Strategy 2 Group 1 0.61
+#&gt; 4: 20500 Strategy 2 Group 2 0.48
+#&gt; 5: 21000 Strategy 2 Group 1 0.65
+#&gt; 6: 21000 Strategy 2 Group 2 0.52</div><div class='input'><span class='fu'><a href='icer_tbl.html'>icer_tbl</a></span>(<span class='no'>icea_pw</span>)</div><div class='output co'>#&gt; $`Group 1`
 #&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "3.10 (1.59, 4.23)"       
-#&gt; Incremental costs "-"        "60,071 (49,644, 72,671)" 
-#&gt; Incremental NMB   "-"        "94,708 (26,763, 152,056)"
-#&gt; ICER              "-"        "19,405"                  
+#&gt; Incremental QALYs "-"        "3.05 (1.57, 4.22)"       
+#&gt; Incremental costs "-"        "60,362 (50,981, 72,524)" 
+#&gt; Incremental NMB   "-"        "92,274 (20,068, 149,920)"
+#&gt; ICER              "-"        "19,773"                  
 #&gt; Conclusion        "-"        "Cost-effective"          
 #&gt; 
 #&gt; $`Group 2`
 #&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "2.96 (1.82, 3.86)"       
-#&gt; Incremental costs "-"        "60,563 (50,026, 71,975)" 
-#&gt; Incremental NMB   "-"        "87,279 (31,241, 135,557)"
-#&gt; ICER              "-"        "20,482"                  
+#&gt; Incremental QALYs "-"        "2.94 (1.87, 4.05)"       
+#&gt; Incremental costs "-"        "60,306 (48,458, 71,315)" 
+#&gt; Incremental NMB   "-"        "86,451 (32,278, 146,288)"
+#&gt; ICER              "-"        "20,546"                  
 #&gt; Conclusion        "-"        "Cost-effective"          
 #&gt; </div></pre>
   </div>

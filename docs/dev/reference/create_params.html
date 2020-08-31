@@ -241,11 +241,11 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params_lm</span> <span class='kw'>&lt;-</span> <span class='fu'>create_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt;      (Intercept)    female
-#&gt; [1,]    32241.56 1362.5530
-#&gt; [2,]    33182.47 -464.0904
-#&gt; [3,]    29893.62 5229.2240
-#&gt; [4,]    27190.07 4162.7643
-#&gt; [5,]    31854.01  322.2505</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
+#&gt; [1,]    32279.09 1865.7589
+#&gt; [2,]    31086.38 1173.2098
+#&gt; [3,]    32538.09  351.1697
+#&gt; [4,]    32483.99 2083.3384
+#&gt; [5,]    32965.85 -342.0663</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>params_lm</span>$<span class='no'>sigma</span>)</div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># create_params.flexsurvreg</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
@@ -253,20 +253,20 @@ and the classes of the returned objects are:</p><ul>
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>5</span>
 <span class='no'>params_surv_wei</span> <span class='kw'>&lt;-</span> <span class='fu'>create_params</span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>params_surv_wei</span>$<span class='no'>dist</span>)</div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>params_surv_wei</span>$<span class='no'>coefs</span>)</div><div class='output co'>#&gt; $shape
-#&gt;           shape
-#&gt; [1,] 0.53510124
-#&gt; [2,] 0.19730657
-#&gt; [3,] 0.28343027
-#&gt; [4,] 0.07687391
-#&gt; [5,] 0.38388145
+#&gt;            shape
+#&gt; [1,]  0.21562037
+#&gt; [2,]  0.57715076
+#&gt; [3,] -0.26779919
+#&gt; [4,]  0.03540606
+#&gt; [5,]  0.16595635
 #&gt; 
 #&gt; $scale
 #&gt;         scale
-#&gt; [1,] 6.918687
-#&gt; [2,] 6.999763
-#&gt; [3,] 6.835843
-#&gt; [4,] 6.983513
-#&gt; [5,] 7.148762
+#&gt; [1,] 6.821600
+#&gt; [2,] 6.836510
+#&gt; [3,] 7.124538
+#&gt; [4,] 6.968693
+#&gt; [5,] 7.313283
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

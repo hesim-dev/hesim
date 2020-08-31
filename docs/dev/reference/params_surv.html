@@ -171,7 +171,8 @@ flexibly parametric survival model.</p>
       <td><p>A list of length equal to the number of parameters in the
 survival distribution. Each element of the list is a matrix of samples
 of the regression coefficients under sampling uncertainty used to predict
-a given parameter.</p></td>
+a given parameter. All parameters are expressed on the real line (e.g.,
+after log transformation if they are defined as positive).</p></td>
     </tr>
     <tr>
       <th>dist</th>
@@ -186,8 +187,8 @@ a given parameter.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>params_surv</code>, which is a list containing <code>coefs</code>,
-<code>dist</code>, and <code>n_samples. </code>n_samples<code>is equal to the number of rows in each element of</code>coefs<code>, which must be the same. The list may also contain </code>aux` if
-a spline or fractional polynomial model is fit.</p>
+<code>dist</code>, and <code>n_samples. </code>n_samples<code>is equal to the number of rows in each element of</code>coefs<code>, which must be the same. The list may also contain </code>aux` if a spline, fractional polynomial, or piecewise exponential model is
+used.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Survival is modeled as a function of \(L\) parameters \(\alpha_l\).
@@ -207,14 +208,22 @@ must contain the <code>rate</code> parameter on the log scale and the same param
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
 that same as in <a href='https://rdrr.io/r/stats/Weibull.html'>stats::Weibull</a>.</p></li>
+<li><p><code>weibullPH</code> Weibull distribution with a proportional hazards
+parameterization. The first element of <code>coef</code> is the <code>shape</code> parameter
+(on the log scale) and the second element is the <code>scale</code> parameter
+(also on the log scale). The parameterization is
+that same as in <a href='https://rdrr.io/pkg/flexsurv/man/WeibullPH.html'>flexsurv::WeibullPH</a>.</p></li>
 <li><p><code>gamma</code> Gamma distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>rate</code> parameter (also on the log scale). The parameterization is
 that same as in <a href='https://rdrr.io/r/stats/GammaDist.html'>stats::GammaDist</a>.</p></li>
 <li><p><code>lnorm</code> Lognormal distribution. The first
-element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the mean on the log scale) and the second
-element is the <code>sdlog</code> parameter (i.e., the standard deviation on the log scale). The parameterization is
-that same as in <a href='https://rdrr.io/r/stats/Lognormal.html'>stats::Lognormal</a>.</p></li>
+element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the mean of survival on
+the log scale) and the second element is the <code>sdlog</code> parameter (i.e.,
+the standard deviation of survival on the log scale). The parameterization is
+that same as in <a href='https://rdrr.io/r/stats/Lognormal.html'>stats::Lognormal</a>. The coefficients predicting the <code>meanlog</code>
+parameter are untransformed wheras the coefficients predicting the <code>sdlog</code>
+parameter are defined on the log scale.</p></li>
 <li><p><code>gompertz</code> Gompertz distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter and the second
 element is the <code>rate</code> parameter (on the log scale). The parameterization is
@@ -236,6 +245,13 @@ auxiliary arguments. The parameterization is that same as in <a href='https://rd
 fractional polynomial model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
 to the number of powers minus 1. See below for details on the auxiliary arguments
 (i.e., <code>powers</code>).</p></li>
+<li><p><code>pwexp</code> Piecewise exponential distribution. Each element of <code>coef</code> is
+rate parameter for a distinct time interval. The times at which the rates
+change should be specified with the auxiliary argument <code>time</code> (see below
+for more details).</p></li>
+<li><p><code>fixed</code> A fixed survival time. Can be used for "non-random" number
+generation. <code>coef</code> should contain a single parameter, <code>est</code>, of the fixed
+survival times.</p></li>
 </ul>
 
 <p>Auxiliary arguments for spline models should be specified as a list containing the elements:</p><dl'>
@@ -252,6 +268,13 @@ of log time; if <code>"identity"</code>, then it is modeled as a spline function
 <p>Auxiliary arguments for fractional polynomial models should be specified as a list containing the elements:</p><dl'>
 <dt><code>powers</code></dt><dd><p>A vector of the powers of the fractional polynomial with each element
 chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
+
+</dl>
+
+<p>#' Auxiliary arguments for pieceise exponential models should be specified as
+a list containing the element:</p><dl'>
+<dt><code>time</code></dt><dd><p>A vector equal to the number of rate parameters giving the
+times at which the rate changes.</p></dd>
 
 </dl>
 

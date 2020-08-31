@@ -230,12 +230,12 @@
                         <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_data</span>)</pre></body></html></div>
 <pre><code>##    strategy_id patient_id      age female
-## 1:           1          1 50.17614      0
-## 2:           1          2 46.36916      1
-## 3:           1          3 48.80768      0
-## 4:           1          4 45.99596      0
-## 5:           1          5 39.35051      0
-## 6:           1          6 54.17419      1</code></pre>
+## 1:           1          1 44.13283      1
+## 2:           1          2 46.50095      1
+## 3:           1          3 38.90083      0
+## 4:           1          4 57.05402      0
+## 5:           1          5 51.36153      1
+## 6:           1          6 40.23378      0</code></pre>
 <p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">transmod_cr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span>(<span class="no">wei_fits_cr</span>, <span class="no">transmod_data</span>,
                                       <span class="kw">trans_mat</span> <span class="kw">=</span> <span class="no">tmat</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>,
@@ -316,13 +316,13 @@
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="co"># "Clock reset"</span>
 <span class="no">econmod_cr</span>$<span class="fu">sim_disease</span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod_cr</span>$<span class="no">disprog_</span>)</pre></body></html></div>
-<pre><code>##    sample strategy_id patient_id grp_id from to final time_start time_stop
-## 1:      1           1          1      1    1  2     0  0.0000000 0.2853189
-## 2:      1           1          1      1    2  1     0  0.2853189 0.3628133
-## 3:      1           1          1      1    1  2     0  0.3628133 0.4351738
-## 4:      1           1          1      1    2  1     0  0.4351738 0.4728361
-## 5:      1           1          1      1    1  2     0  0.4728361 1.3589221
-## 6:      1           1          1      1    2  3     1  1.3589221 1.9065164</code></pre>
+<pre><code>##    sample strategy_id patient_id grp_id from to final time_start  time_stop
+## 1:      1           1          1      1    1  2     0   0.000000 10.2537902
+## 2:      1           1          1      1    2  1     0  10.253790 12.5563110
+## 3:      1           1          1      1    1  3     1  12.556311 17.4733761
+## 4:      1           1          2      1    1  3     1   0.000000  0.7201893
+## 5:      1           1          3      1    1  2     0   0.000000  1.8552732
+## 6:      1           1          3      1    2  1     0   1.855273  2.9786306</code></pre>
 <div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="co"># "Clock forward"</span>
 <span class="no">econmod_cf</span>$<span class="fu">sim_disease</span>()</pre></body></html></div>
 <p>State occupancy probabilities at different time points are computed using <code>$sim_stateprobs()</code>. First, we simulate state probabilities for the “clock reset” model.</p>
@@ -374,13 +374,13 @@
 <p>QALYs (and life-years) are simulated using <code>$sim_qalys()</code>. By default, mean QALYs are computed by treatment strategy, health state, and PSA sample (the <code>by_patient</code> option can be used to compute aggregated QALYs at the patient level). Here, we used the “clock reset” model to compute both undiscounted QALYs (<code>dr = 0</code>) and QALYs discounted at 3%.</p>
 <div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">econmod_cr</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">.03</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod_cr</span>$<span class="no">qalys_</span>)</pre></body></html></div>
-<pre><code>##    sample strategy_id grp_id state_id dr     qalys      lys
-## 1:      1           1      1        1  0 3.9822257 5.012575
-## 2:      1           1      1        2  0 1.2620323 1.443773
-## 3:      1           2      1        1  0 6.3658533 8.012936
-## 4:      1           2      1        2  0 0.9403798 1.075800
-## 5:      2           1      1        1  0 3.0046446 5.525317
-## 6:      2           1      1        2  0 1.5297591 1.529893</code></pre>
+<pre><code>##    sample strategy_id grp_id state_id dr     qalys       lys
+## 1:      1           1      1        1  0 4.6671355 5.8892190
+## 2:      1           1      1        2  0 1.1636985 1.5070476
+## 3:      1           2      1        1  0 7.0577115 8.9057643
+## 4:      1           2      1        2  0 0.7113844 0.9212783
+## 5:      2           1      1        1  0 5.2827406 6.5724718
+## 6:      2           1      1        2  0 1.6196263 1.6196264</code></pre>
 <p>We summarize the simulated QALYs by computing means by treatment strategy and health state across the PSA samples.</p>
 <div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">qalys_summary</span> <span class="kw">&lt;-</span> <span class="no">econmod_cr</span>$<span class="no">qalys_</span>[, <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                                     <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span>)]
@@ -400,12 +400,12 @@
 <div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">econmod_cr</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">0.03</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod_cr</span>$<span class="no">costs_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id grp_id state_id   dr category     costs
-## 1:      1           1      1        1 0.03     Drug 20875.854
-## 2:      1           1      1        2 0.03     Drug  5996.888
-## 3:      1           2      1        1 0.03     Drug 61773.992
-## 4:      1           2      1        2 0.03     Drug  8622.973
-## 5:      2           1      1        1 0.03     Drug 22295.338
-## 6:      2           1      1        2 0.03     Drug  6201.386</code></pre>
+## 1:      1           1      1        1 0.03     Drug 24069.130
+## 2:      1           1      1        2 0.03     Drug  6069.131
+## 3:      1           2      1        1 0.03     Drug 68612.495
+## 4:      1           2      1        2 0.03     Drug  7127.929
+## 5:      2           1      1        1 0.03     Drug 26060.004
+## 6:      2           1      1        2 0.03     Drug  6432.191</code></pre>
 <p>As with QALYs, we summarize costs by computing means (now by treatment strategy and category) across the PSA samples.</p>
 <div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"scales"</span>)
 <span class="no">costs_summary</span> <span class="kw">&lt;-</span> <span class="no">econmod_cr</span>$<span class="no">costs_</span>[<span class="no">dr</span> <span class="kw">==</span> <span class="fl">.03</span> , <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),

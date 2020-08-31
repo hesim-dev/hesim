@@ -9,7 +9,7 @@ output:
 pkgdown:
   as_is: false
 vignette: >
-  %\VignetteIndexEntry{Simulating costs and QALYs}
+  %\VignetteIndexEntry{Simulating costs and quality-adjusted life-years}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

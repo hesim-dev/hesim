@@ -193,7 +193,7 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>()
 <span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.002   0.000   0.002 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
+#&gt;   0.004   0.000   0.004 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
 <span class='co'># rmultinom from base R </span>
@@ -202,7 +202,7 @@ equal to n.</p>
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.045   0.001   0.047 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
+#&gt;   0.072   0.002   0.104 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div></pre>
   </div>
