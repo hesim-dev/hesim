@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Getting started with a Markov cohort model • hesim</title>
+<title>Simple Markov cohort model • hesim</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Getting started with a Markov cohort model">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Simple Markov cohort model">
 <meta property="og:description" content="hesim">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -52,17 +52,12 @@
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Partitioned survival models</li>
-    <li>
-      <a href="../articles/psm.html">A 4-state partitioned survival model</a>
-    </li>
-    <li class="divider">
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">A time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
@@ -70,10 +65,15 @@
     <li class="divider">
     <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/ips.html">Individual patient simulation</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Partitioned survival models</li>
+    <li>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li class="divider">
     <li class="dropdown-header">Economic analysis</li>
@@ -81,9 +81,8 @@
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider">
   </ul>
 </li>
 <li>
@@ -110,12 +109,12 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Getting started with a Markov cohort model</h1>
+      <h1 data-toc-skip>Simple Markov cohort model</h1>
             
-            <h4 class="date">2020-08-30</h4>
+            <h4 class="date">2020-09-16</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/getting-started.Rmd"><code>vignettes/getting-started.Rmd</code></a></small>
-      <div class="hidden name"><code>getting-started.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-cohort.Rmd"><code>vignettes/markov-cohort.Rmd</code></a></small>
+      <div class="hidden name"><code>markov-cohort.Rmd</code></div>
 
     </div>
 
@@ -135,9 +134,9 @@
 <li>
 <em>Transformed parameter</em> expressions that transform the parameter estimates into values used for simulation</li>
 </ol>
-<p>We illustrate by replicating the HIV model developed by <a href="https://link.springer.com/article/10.2165/00019053-199712010-00006">Chancellor et al.</a> and used for didactic purposes in the <a href="https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation"><em>Decision Modeling for Health Economic Evaluation</em></a> textbook. The analysis compares two treatment strategies, zidovudine monotherapy and zidovudine + lamivudine combination therapy. The model is time-inhomogeneous because patients are assumed to only use lamivudine for 2 years before switching back to monotherapy.</p>
+<p>We illustrate by replicating the HIV model developed by <a href="https://link.springer.com/article/10.2165/00019053-199712010-00006">Chancellor et al.</a> and used for didactic purposes in the <a href="https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation"><em>Decision Modeling for Health Economic Evaluation</em></a> textbook. The analysis compares two treatment strategies, zidovudine monotherapy and zidovudine + lamivudine combination therapy. While the model is technically time-inhomogeneous because patients are assumed to only use lamivudine for 2 years before switching back to monotherapy, transition probabilities only change once so it could be considered (mostly) homogeneous.</p>
 <p>The model consists 4 health states. Ordered from worst to best to worst, they are: State A (CD4 cells &gt; 200 and &lt; 500 cells/mm3), State B (CD4 &lt; 200 cells/mm3), State C (AIDS), and State D (death). The model assumes that patients can transition to any state that is more severe (i.e., progress) but cannot transition back to a more severe state.</p>
-<p><img src="getting-started.png" width="700px"></p>
+<p><img src="markov-cohort.png" width="700px"></p>
 </div>
 <div id="define-the-model" class="section level1">
 <h1 class="hasAnchor">
@@ -290,7 +289,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(~<span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">state_id</span>, <span class="kw">labels</span> <span class="kw">=</span> <span class="no">LETTERS</span>[<span class="fl">1</span>:<span class="fl">4</span>])) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Year"</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_fill_discrete</a></span>(<span class="st">"Strategy"</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span>(<span class="st">"Strategy"</span>)</pre></body></html></div>
-<p><img src="getting-started_files/figure-html/simStateprobs-1.png" width="672"></p>
+<p><img src="markov-cohort_files/figure-html/simStateprobs-1.png" width="672"></p>
 </div>
 <div id="costs-and-qalys" class="section level2">
 <h2 class="hasAnchor">
@@ -308,15 +307,15 @@
 <span class="no">wtp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span>)
 <span class="no">icea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/icea.html">icea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.06</span>,
                        <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)</pre></body></html></div>
-<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,327, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
+<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,267, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                        
-## Incremental QALYs "-" "0.92 (0.55, 1.24)"      
-## Incremental costs "-" "5,804 (2,718, 10,066)"  
-## Incremental NMB   "-" "40,061 (22,056, 55,471)"
-## ICER              "-" "6,327"                  
+## Incremental QALYs "-" "0.94 (0.60, 1.23)"      
+## Incremental costs "-" "5,871 (2,857, 10,072)"  
+## Incremental NMB   "-" "40,966 (24,743, 55,358)"
+## ICER              "-" "6,267"                  
 ## Conclusion        "-" "Cost-effective"</code></pre>
-<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.929 and approaches 1 at slightly higher WTP values.</p>
+<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.95 and approaches 1 at slightly higher WTP values.</p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">icea_pw_out</span>$<span class="no">ceac</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">k</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">prob</span>,
            <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">strategy_id</span>, <span class="kw">labels</span> <span class="kw">=</span> <span class="no">strategies</span>$<span class="no">strategy_name</span>[-<span class="fl">1</span>]))) +
@@ -324,7 +323,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability cost-effective"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">wtp</span>), <span class="fl">5000</span>), <span class="kw">label</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_colour_discrete</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"Strategy"</span>)</pre></body></html></div>
-<p><img src="getting-started_files/figure-html/ceac-1.png" width="576"></p>
+<p><img src="markov-cohort_files/figure-html/ceac-1.png" width="576"></p>
 </div>
 <div id="appendix-dirichlet-distribution" class="section level1">
 <h1 class="hasAnchor">

@@ -92,13 +92,14 @@ articles:
 - title: "Using hesim"
   contents:
   - intro
-  - getting-started
-  - markov-inhomogeneous
+  - markov-cohort
+  - markov-inhomogeneous-cohort
   - mlogit
-  - psm
+  - markov-inhomogeneous-indiv
   - mstate
+  - psm
   - expected-values
-  - icea
+  - cea
 
 navbar:
   title: hesim
@@ -110,29 +111,28 @@ navbar:
       - text: "Introduction to hesim"
         href: articles/intro.html
       - text: "---"
-      - text: "Partitioned survival models"
-      - text: "A 4-state partitioned survival model"
-        href: articles/psm.html
-      - text: "---"  
       - text: "Cohort discrete time state transition models"
-      - text: "Getting started with a Markov Cohort model"
-        href: articles/getting-started.html
-      - text: "A time inhomogeneous Markov cohort model"
-        href: articles/markov-inhomogeneous.html
+      - text: "Simple Markov Cohort model"
+        href: articles/markov-cohort.html
+      - text: "Time inhomogeneous Markov cohort models"
+        href: articles/markov-inhomogeneous-cohort.html
       - text: "Markov models with multinomial logistic regression"
         href: articles/mlogit.html
       - text: "---"     
       - text: "Individual continuous time state transition models"
-      - text: "Individual patient simulation"
-        href: articles/ips.html
+      - text: "Time inhomogeneous Markov individual-level models"
+        href: articles/markov-inhomogeneous-indiv.html
       - text: "Markov and semi-Markov multi-state models"
         href: articles/mstate.html
+      - text: "---"
+      - text: "Partitioned survival models"
+      - text: "Partitioned survival models"
+        href: articles/psm.html
       - text: "---"
       - text: "Economic analysis"  
       - text: "Simulating costs and quality-adjusted life-years"
         href: articles/expected-values.html
-      - text: "Individualized cost-effectiveness analysis"
-        href: articles/icea.html
-      - text: "---"
+      - text: "Cost-effectiveness analysis"
+        href: articles/cea.html
   - text: News
     href: news/index.html

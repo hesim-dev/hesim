@@ -1,5 +1,5 @@
 ---
-title: Individual patient simulation
+title: Time inhomogeneous Markov individual-level models
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
@@ -9,7 +9,7 @@ output:
 pkgdown:
   as_is: false
 vignette: >
-  %\VignetteIndexEntry{Individual patient simulation}
+  %\VignetteIndexEntry{Time inhomogeneous Markov individual-level models}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -503,6 +503,4 @@ ce_sim2$qalys[, .(mean = mean(qalys)),
 ce_sim2$costs[category == "total",
             .(mean = mean(costs)),
               by = c("strategy_id")]
-```
-
 ```

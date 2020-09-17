@@ -1,5 +1,5 @@
 ---
-title: Individualized cost-effectiveness analysis (iCEA)
+title: Cost-effectiveness analysis
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
@@ -9,7 +9,7 @@ output:
 pkgdown:
   as_is: false
 vignette: >
-  %\VignetteIndexEntry{Individualized cost-effectiveness analysis (iCEA)}
+  %\VignetteIndexEntry{Cost-effectiveness analysis}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 bibliography: references.bib
@@ -58,7 +58,7 @@ Equivalently, treatment $1$ is preferred to treatment $0$ in subgroup $g$ if the
 
 $$
 \begin{aligned}
-k > \frac{c_{g1} - c_{s0}}{e_{g1} - e_{g0}} = ICER_g.
+k > \frac{c_{g1} - c_{g0}}{e_{g1} - e_{g0}} = ICER_g.
 \end{aligned}
 $$
 
@@ -112,7 +112,7 @@ ce <- data.table(sample = rep(seq(n_samples), length(e)),
 head(ce)
 ```
 
-For any given willingness to pay $k$, expected NMBs can be calculated by strategy, subgroup, and simulation number. For example, with $k=150,000$, a reasonable estimate of the value of a life-year in the United States, Strategy 2 provides the highest expected NMBs in subgroup 2 while Strategy 3 provides the highest expected NMBs in subgroup 2.
+For any given willingness to pay $k$, expected NMBs can be calculated by strategy, subgroup, and parameter sample For example, with $k=150,000$, a reasonable estimate of the value of a life-year in the United States, Strategy 2 provides the highest expected NMBs in subgroup 2 while Strategy 3 provides the highest expected NMBs in subgroup 2.
 
 ```{r enmb_example}
 ce <- ce[, nmb := 150000 * qalys - cost]
@@ -132,7 +132,7 @@ icea <-  icea(ce, k = seq(0, ktop, 500), sample = "sample", strategy = "strategy
                  grp = "grp", e = "qalys", c = "cost")
 ```
 
-The most important input in `icea` is the `data.table` object (`x`) containing columns for simulation number (`sim`), treatment strategy (`strategy`), subgroup (`grp`), clinical effectiveness (`e`), and costs (`c`). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is $k$, which is a range of willingness to pay values to use for estimating NMBs. 
+The most important input in `icea` is the `data.table` object (`x`) containing columns for the parameter sample (`sample`), treatment strategy (`strategy`), subgroup (`grp`), clinical effectiveness (`e`), and costs (`c`). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is $k$, which is a range of willingness to pay values to use for estimating NMBs. 
 
 Likewise, we can use `icea_pw` to summarize the PSA when directly comparing the two treatment strategies (Strategy 2 and Strategy 3) to the comparator (Strategy 1). 
 
@@ -179,7 +179,7 @@ ggplot2::ggplot(icea$mce, aes(x = k, y = prob, col = factor(strategy))) +
 In group 1, Strategy 2 provides the greatest NMBs with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Strategy 3 provides the greatest NMBs with a higher probability than Strategy 2. 
 
 ## Cost-effectiveness acceptability frontier (CEAF)
-One drawback of the previous plot is that the probability of being cost-effective cannot be used to determine the optimal treatment option. Instead, if a decision-makers objective is to maximize health gain, then decisions should be based on the expected net monetary benefit [@barton2008optimal]. The cost-effectiveness acceptability frontier (CEAF), which plots the probability that the optimal treatment strategy (i.e., the strategy with the highest expected NMB) is cost-effective, is appropriate in this context. 
+One drawback of the previous plot is that the probability of being cost-effective cannot be used to determine the optimal treatment option. Instead, if a decision-makers objective is to maximize health gain, then decisions should be based on the expected NMB [@barton2008optimal]. The cost-effectiveness acceptability frontier (CEAF), which plots the probability that the optimal treatment strategy (i.e., the strategy with the highest expected NMB) is cost-effective, is appropriate in this context. 
 
 A CEAF curve can be easily created by using the `best` column to subset to the treatment strategy with the highest expected NMB for each willingness to pay value and group. 
 
@@ -193,7 +193,7 @@ ggplot2::ggplot(icea$mce[best == 1], aes(x = k, y = prob, col = strategy)) +
 
 
 ## Value of perfect information
-One draw back of the previous measure is that it ignores the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected NMB is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected NMB given perfect information and the maximum expected NMB given current information. In other words, we calculate the NMB for the optimal treatment strategy for each random draw of the parameters and compare that to the NMB for the treatment strategy that is optimal when averaging across all parameters. Mathematically, the EVPI for subgroup $g$ is, 
+A limitation of the prior measures are that they ignore the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected NMB is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected NMB given perfect information and the maximum expected NMB given current information. In other words, we calculate the NMB for the optimal treatment strategy for each random draw of the parameters and compare that to the NMB for the treatment strategy that is optimal when averaging across all parameters. The EVPI for subgroup $g$ is, 
 
 $$
 \begin{aligned}
@@ -220,7 +220,7 @@ print(enmbci)
 print(enmbpi - enmbci)
 ```
 
-The `icea` function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal strategy changes.
+The `icea()` function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal strategy changes.
 
 ```{r evpi_plot, fig.width = 6, fig.height = 4}
 ggplot2::ggplot(icea$evpi, aes(x = k, y = evpi)) +
@@ -272,7 +272,7 @@ ce[, .(median_cost = median(cost), median_qalys = median(qalys)),
 ## Cost-effectiveness plane
 The cost-effectiveness plane plots the incremental effectiveness of a treatment strategy (relative to a comparator) against the incremental cost of the treatment strategy. The plot is useful because it demonstrates both the uncertainty and the magnitude of the estimates. Each point on the plot is from a particular random draw from the PSA.  
 
-Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `icea_pw` function, which, for each sampled parameter set and treatment strategy, estimates differences in costs, effectiveness, and any other variables specified in `custom_vars`relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above it are not. 
+Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `icea_pw` function, which, for each sampled parameter set and treatment strategy, estimates differences in costs and QALYs relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above it are not. 
 
 ```{r ceplane_plot, fig.width = 6, fig.height = 4}
 head(icea_pw$delta)

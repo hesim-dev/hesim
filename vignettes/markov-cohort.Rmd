@@ -1,5 +1,5 @@
 ---
-title: Getting started with a Markov cohort model
+title: Simple Markov cohort model
 date: "`r Sys.Date()`"
 output: 
   html_vignette:
@@ -9,7 +9,7 @@ output:
 pkgdown:
   as_is: false
 vignette: >
-  %\VignetteIndexEntry{Getting started with a Markov cohort model}
+  %\VignetteIndexEntry{Simple Markov cohort model}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -22,12 +22,12 @@ The simplest models in `hesim` are cohort discrete time state transitions models
 3. *Random number generation* expressions that randomly generate probability distributions for the parameters for probabilistic sensitivity analysis (PSA)
 4. *Transformed parameter* expressions that transform the parameter estimates into values used for simulation
 
-We illustrate by replicating the HIV model developed by [Chancellor et al.](https://link.springer.com/article/10.2165/00019053-199712010-00006) and used for didactic purposes in the [*Decision Modeling for Health Economic Evaluation*](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook. The analysis compares two treatment strategies, zidovudine monotherapy and zidovudine + lamivudine combination therapy. The model is time-inhomogeneous because patients are assumed to only use lamivudine for 2 years before switching back to monotherapy. 
+We illustrate by replicating the HIV model developed by [Chancellor et al.](https://link.springer.com/article/10.2165/00019053-199712010-00006) and used for didactic purposes in the [*Decision Modeling for Health Economic Evaluation*](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook. The analysis compares two treatment strategies, zidovudine monotherapy and zidovudine + lamivudine combination therapy. While the model is technically time-inhomogeneous because patients are assumed to only use lamivudine for 2 years before switching back to monotherapy, transition probabilities only change once so it could be considered (mostly) homogeneous. 
 
 The model consists 4 health states. Ordered from worst to best to worst, they are: State A (CD4 cells > 200 and < 500 cells/mm3), State B (CD4 < 200 cells/mm3), State C (AIDS), and State D (death). The model assumes that patients can transition to any state that is more severe (i.e., progress) but cannot transition back to a more severe state.
 
 ```{r, out.width = "700px", echo = FALSE}
-knitr::include_graphics("getting-started.png")
+knitr::include_graphics("markov-cohort.png")
 ```
 
 # Define the model

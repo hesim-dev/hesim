@@ -104,7 +104,7 @@ head(utility_tbl)
 
 ```
 
-Drug and medical costs can be specified in a similar fashion. Drug costs are assumed to known with certainty and vary by treatment strategy whereas medical costs are assumed to vary by health state and to follow a gamma distribution. 
+Drug and medical costs can be specified in a similar fashion. Drug costs are assumed to be known with certainty and vary by treatment strategy whereas medical costs are assumed to vary by health state and to follow a gamma distribution. 
 
 ```{r}
 drugcost_tbl <- stateval_tbl(data.table(strategy_id = strategies$strategy_id,

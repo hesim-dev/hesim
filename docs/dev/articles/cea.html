@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Individualized cost-effectiveness analysis (iCEA) • hesim</title>
+<title>Cost-effectiveness analysis • hesim</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Individualized cost-effectiveness analysis (iCEA)">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Cost-effectiveness analysis">
 <meta property="og:description" content="hesim">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -52,17 +52,12 @@
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Partitioned survival models</li>
-    <li>
-      <a href="../articles/psm.html">A 4-state partitioned survival model</a>
-    </li>
-    <li class="divider">
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">A time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
@@ -70,10 +65,15 @@
     <li class="divider">
     <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/ips.html">Individual patient simulation</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Partitioned survival models</li>
+    <li>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li class="divider">
     <li class="dropdown-header">Economic analysis</li>
@@ -81,9 +81,8 @@
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider">
   </ul>
 </li>
 <li>
@@ -110,12 +109,12 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Individualized cost-effectiveness analysis (iCEA)</h1>
+      <h1 data-toc-skip>Cost-effectiveness analysis</h1>
             
-            <h4 class="date">2020-08-30</h4>
+            <h4 class="date">2020-09-16</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/icea.Rmd"><code>vignettes/icea.Rmd</code></a></small>
-      <div class="hidden name"><code>icea.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/cea.Rmd"><code>vignettes/cea.Rmd</code></a></small>
+      <div class="hidden name"><code>cea.Rmd</code></div>
 
     </div>
 
@@ -161,7 +160,7 @@ INMB_g(\theta) = NMB_g(j = 1, \theta) - NMB_g(j = 0, \theta).
 \]</span> Equivalently, treatment <span class="math inline">\(1\)</span> is preferred to treatment <span class="math inline">\(0\)</span> in subgroup <span class="math inline">\(g\)</span> if the incremental cost-effectiveness ratio (ICER) is greater than the willingness to pay threshold <span class="math inline">\(k\)</span>,</p>
 <p><span class="math display">\[
 \begin{aligned}
-k &gt; \frac{c_{g1} - c_{s0}}{e_{g1} - e_{g0}} = ICER_g.
+k &gt; \frac{c_{g1} - c_{g0}}{e_{g1} - e_{g0}} = ICER_g.
 \end{aligned}
 \]</span></p>
 </div>
@@ -216,7 +215,7 @@ c_{gj} &amp;= [c_{gj}^1, c_{gj}^2, \dots, c_{gj}^n].
 ## 4:      4 Strategy 1 Group 1 7.423647 8.155250
 ## 5:      5 Strategy 1 Group 1 7.063846 8.292916
 ## 6:      6 Strategy 1 Group 1 7.234418 8.066187</code></pre>
-<p>For any given willingness to pay <span class="math inline">\(k\)</span>, expected NMBs can be calculated by strategy, subgroup, and simulation number. For example, with <span class="math inline">\(k=150,000\)</span>, a reasonable estimate of the value of a life-year in the United States, Strategy 2 provides the highest expected NMBs in subgroup 2 while Strategy 3 provides the highest expected NMBs in subgroup 2.</p>
+<p>For any given willingness to pay <span class="math inline">\(k\)</span>, expected NMBs can be calculated by strategy, subgroup, and parameter sample For example, with <span class="math inline">\(k=150,000\)</span>, a reasonable estimate of the value of a life-year in the United States, Strategy 2 provides the highest expected NMBs in subgroup 2 while Strategy 3 provides the highest expected NMBs in subgroup 2.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">ce</span> <span class="kw">&lt;-</span> <span class="no">ce</span>[, <span class="no">nmb</span> <span class="kw">:=</span> <span class="fl">150000</span> * <span class="no">qalys</span> - <span class="no">cost</span>]
 <span class="no">enmb</span> <span class="kw">&lt;-</span> <span class="no">ce</span>[, <span class="fu">.</span>(<span class="kw">enmb</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">nmb</span>)), <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy"</span>, <span class="st">"grp"</span>)]
 <span class="no">enmb</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html">dcast</a></span>(<span class="no">enmb</span>, <span class="no">strategy</span> ~ <span class="no">grp</span>, <span class="kw">value.var</span> <span class="kw">=</span> <span class="st">"enmb"</span>)
@@ -231,7 +230,7 @@ c_{gj} &amp;= [c_{gj}^1, c_{gj}^2, \dots, c_{gj}^n].
 <span class="no">ktop</span> <span class="kw">&lt;-</span> <span class="fl">200000</span>
 <span class="no">icea</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="../reference/icea.html">icea</a></span>(<span class="no">ce</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="no">ktop</span>, <span class="fl">500</span>), <span class="kw">sample</span> <span class="kw">=</span> <span class="st">"sample"</span>, <span class="kw">strategy</span> <span class="kw">=</span> <span class="st">"strategy"</span>,
                  <span class="kw">grp</span> <span class="kw">=</span> <span class="st">"grp"</span>, <span class="kw">e</span> <span class="kw">=</span> <span class="st">"qalys"</span>, <span class="kw">c</span> <span class="kw">=</span> <span class="st">"cost"</span>)</pre></body></html></div>
-<p>The most important input in <code>icea</code> is the <code>data.table</code> object (<code>x</code>) containing columns for simulation number (<code>sim</code>), treatment strategy (<code>strategy</code>), subgroup (<code>grp</code>), clinical effectiveness (<code>e</code>), and costs (<code>c</code>). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is <span class="math inline">\(k\)</span>, which is a range of willingness to pay values to use for estimating NMBs.</p>
+<p>The most important input in <code>icea</code> is the <code>data.table</code> object (<code>x</code>) containing columns for the parameter sample (<code>sample</code>), treatment strategy (<code>strategy</code>), subgroup (<code>grp</code>), clinical effectiveness (<code>e</code>), and costs (<code>c</code>). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is <span class="math inline">\(k\)</span>, which is a range of willingness to pay values to use for estimating NMBs.</p>
 <p>Likewise, we can use <code>icea_pw</code> to summarize the PSA when directly comparing the two treatment strategies (Strategy 2 and Strategy 3) to the comparator (Strategy 1).</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">icea_pw</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="../reference/icea.html">icea_pw</a></span>(<span class="no">ce</span>,  <span class="kw">k</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="no">ktop</span>, <span class="fl">500</span>), <span class="kw">comparator</span> <span class="kw">=</span> <span class="st">"Strategy 1"</span>,
                        <span class="kw">sample</span> <span class="kw">=</span> <span class="st">"sample"</span>, <span class="kw">strategy</span> <span class="kw">=</span> <span class="st">"strategy"</span>, <span class="kw">grp</span> <span class="kw">=</span> <span class="st">"grp"</span>,
@@ -452,25 +451,25 @@ maxj
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability most cost-effective"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="no">ktop</span>, <span class="fl">100000</span>), <span class="kw">label</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_colour_discrete</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"Strategy"</span>)</pre></body></html></div>
-<p><img src="icea_files/figure-html/mce_plot-1.png" width="576"></p>
+<p><img src="cea_files/figure-html/mce_plot-1.png" width="576"></p>
 <p>In group 1, Strategy 2 provides the greatest NMBs with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Strategy 3 provides the greatest NMBs with a higher probability than Strategy 2.</p>
 </div>
 <div id="cost-effectiveness-acceptability-frontier-ceaf" class="section level2">
 <h2 class="hasAnchor">
 <a href="#cost-effectiveness-acceptability-frontier-ceaf" class="anchor"></a>Cost-effectiveness acceptability frontier (CEAF)</h2>
-<p>One drawback of the previous plot is that the probability of being cost-effective cannot be used to determine the optimal treatment option. Instead, if a decision-makers objective is to maximize health gain, then decisions should be based on the expected net monetary benefit <span class="citation">(Barton, Briggs, and Fenwick 2008)</span>. The cost-effectiveness acceptability frontier (CEAF), which plots the probability that the optimal treatment strategy (i.e., the strategy with the highest expected NMB) is cost-effective, is appropriate in this context.</p>
+<p>One drawback of the previous plot is that the probability of being cost-effective cannot be used to determine the optimal treatment option. Instead, if a decision-makers objective is to maximize health gain, then decisions should be based on the expected NMB <span class="citation">(Barton, Briggs, and Fenwick 2008)</span>. The cost-effectiveness acceptability frontier (CEAF), which plots the probability that the optimal treatment strategy (i.e., the strategy with the highest expected NMB) is cost-effective, is appropriate in this context.</p>
 <p>A CEAF curve can be easily created by using the <code>best</code> column to subset to the treatment strategy with the highest expected NMB for each willingness to pay value and group.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="kw pkg">ggplot2</span><span class="kw ns">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">icea</span>$<span class="no">mce</span>[<span class="no">best</span> <span class="kw">==</span> <span class="fl">1</span>], <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">k</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">prob</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="no">strategy</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(~<span class="no">grp</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Willingness to pay"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability most cost-effective"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="no">ktop</span>, <span class="fl">100000</span>), <span class="kw">label</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_colour_discrete</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"Strategy"</span>)</pre></body></html></div>
-<p><img src="icea_files/figure-html/ceaf_plot-1.png" width="576"></p>
+<p><img src="cea_files/figure-html/ceaf_plot-1.png" width="576"></p>
 </div>
 <div id="value-of-perfect-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#value-of-perfect-information" class="anchor"></a>Value of perfect information</h2>
-<p>One draw back of the previous measure is that it ignores the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected NMB is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected NMB given perfect information and the maximum expected NMB given current information. In other words, we calculate the NMB for the optimal treatment strategy for each random draw of the parameters and compare that to the NMB for the treatment strategy that is optimal when averaging across all parameters. Mathematically, the EVPI for subgroup <span class="math inline">\(g\)</span> is,</p>
+<p>A limitation of the prior measures are that they ignore the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected NMB is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected NMB given perfect information and the maximum expected NMB given current information. In other words, we calculate the NMB for the optimal treatment strategy for each random draw of the parameters and compare that to the NMB for the treatment strategy that is optimal when averaging across all parameters. The EVPI for subgroup <span class="math inline">\(g\)</span> is,</p>
 <p><span class="math display">\[
 \begin{aligned}
 EVPI_g &amp;= E_\theta \left[max_j NMB_g(j, \theta)\right] - max_j E_\theta \left [ NMB_g(j, \theta)\right]. \\
@@ -747,14 +746,14 @@ nmbci
 <pre><code>## [1] 1537018</code></pre>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">enmbpi</span> - <span class="no">enmbci</span>)</pre></body></html></div>
 <pre><code>## [1] 28695</code></pre>
-<p>The <code>icea</code> function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values <span class="math inline">\(k\)</span>. A plot by group of the the EVPI for different values of <span class="math inline">\(k\)</span> is shown below. The kinks in the plot represent values of <span class="math inline">\(k\)</span> where the optimal strategy changes.</p>
+<p>The <code><a href="../reference/icea.html">icea()</a></code> function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values <span class="math inline">\(k\)</span>. A plot by group of the the EVPI for different values of <span class="math inline">\(k\)</span> is shown below. The kinks in the plot represent values of <span class="math inline">\(k\)</span> where the optimal strategy changes.</p>
 <div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="kw pkg">ggplot2</span><span class="kw ns">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">icea</span>$<span class="no">evpi</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">k</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">evpi</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(~<span class="no">grp</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Willingness to pay"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Expected value of perfect information"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="no">ktop</span>, <span class="fl">100000</span>), <span class="kw">label</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>)</pre></body></html></div>
-<p><img src="icea_files/figure-html/evpi_plot-1.png" width="576"></p>
+<p><img src="cea_files/figure-html/evpi_plot-1.png" width="576"></p>
 <p>We might also be interested in aggregating across subgroups. In particular, the total EVPI can be calculated as a weighted average of the group specific EVPIs,</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -772,7 +771,7 @@ totEVPI &amp;= \sum_{g=1}^{G} w_g EVPI_g,
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="no">ktop</span>, <span class="fl">100000</span>), <span class="kw">label</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>)</pre></body></html></div>
-<p><img src="icea_files/figure-html/totevpi-1.png" width="576"></p>
+<p><img src="cea_files/figure-html/totevpi-1.png" width="576"></p>
 </div>
 <div id="distribution-of-health-and-cost-outcomes" class="section level2">
 <h2 class="hasAnchor">
@@ -808,7 +807,7 @@ totEVPI &amp;= \sum_{g=1}^{G} w_g EVPI_g,
 <h2 class="hasAnchor">
 <a href="#cost-effectiveness-plane" class="anchor"></a>Cost-effectiveness plane</h2>
 <p>The cost-effectiveness plane plots the incremental effectiveness of a treatment strategy (relative to a comparator) against the incremental cost of the treatment strategy. The plot is useful because it demonstrates both the uncertainty and the magnitude of the estimates. Each point on the plot is from a particular random draw from the PSA.</p>
-<p>Data for plotting a cost-effectiveness plane comes from the <code>delta</code> output generated from the <code>icea_pw</code> function, which, for each sampled parameter set and treatment strategy, estimates differences in costs, effectiveness, and any other variables specified in <code>custom_vars</code>relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are cost-effective while those above it are not.</p>
+<p>Data for plotting a cost-effectiveness plane comes from the <code>delta</code> output generated from the <code>icea_pw</code> function, which, for each sampled parameter set and treatment strategy, estimates differences in costs and QALYs relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are cost-effective while those above it are not.</p>
 <div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">icea_pw</span>$<span class="no">delta</span>)</pre></body></html></div>
 <pre><code>##    sample   strategy     grp       ie       ic
 ## 1:      1 Strategy 2 Group 1 1.497467 57687.97
@@ -827,7 +826,7 @@ totEVPI &amp;= \sum_{g=1}^{G} w_g EVPI_g,
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_colour_discrete</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"Strategy"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span>(<span class="kw">slope</span> <span class="kw">=</span> <span class="fl">150000</span>, <span class="kw">linetype</span> <span class="kw">=</span> <span class="st">"dashed"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span>(<span class="kw">yintercept</span> <span class="kw">=</span> <span class="fl">0</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span>(<span class="kw">xintercept</span> <span class="kw">=</span> <span class="fl">0</span>)</pre></body></html></div>
-<p><img src="icea_files/figure-html/ceplane_plot-1.png" width="576"></p>
+<p><img src="cea_files/figure-html/ceplane_plot-1.png" width="576"></p>
 </div>
 <div id="cost-effectiveness-acceptability-curve-ceac" class="section level2">
 <h2 class="hasAnchor">
@@ -839,7 +838,7 @@ totEVPI &amp;= \sum_{g=1}^{G} w_g EVPI_g,
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability most cost-effective"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="no">ktop</span>, <span class="fl">100000</span>), <span class="kw">label</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_colour_discrete</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">"Strategy"</span>)</pre></body></html></div>
-<p><img src="icea_files/figure-html/ceac_plot-1.png" width="576"></p>
+<p><img src="cea_files/figure-html/ceac_plot-1.png" width="576"></p>
 </div>
 <div id="credible-intervals-for-incremental-costs-and-effectiveness" class="section level2">
 <h2 class="hasAnchor">

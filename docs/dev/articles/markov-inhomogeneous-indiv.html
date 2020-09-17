@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Individual patient simulation • hesim</title>
+<title>Time inhomogeneous Markov individual-level models • hesim</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Individual patient simulation">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Time inhomogeneous Markov individual-level models">
 <meta property="og:description" content="hesim">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -52,17 +52,12 @@
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Partitioned survival models</li>
-    <li>
-      <a href="../articles/psm.html">A 4-state partitioned survival model</a>
-    </li>
-    <li class="divider">
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">A time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
@@ -70,10 +65,15 @@
     <li class="divider">
     <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/ips.html">Individual patient simulation</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Partitioned survival models</li>
+    <li>
+      <a href="../articles/psm.html">Partitioned survival models</a>
     </li>
     <li class="divider">
     <li class="dropdown-header">Economic analysis</li>
@@ -81,9 +81,8 @@
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider">
   </ul>
 </li>
 <li>
@@ -107,15 +106,15 @@
 
       
 
-      </header><script src="ips_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
+      </header><script src="markov-inhomogeneous-indiv_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Individual patient simulation</h1>
+      <h1 data-toc-skip>Time inhomogeneous Markov individual-level models</h1>
             
-            <h4 class="date">2020-08-30</h4>
+            <h4 class="date">2020-09-16</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/ips.Rmd"><code>vignettes/ips.Rmd</code></a></small>
-      <div class="hidden name"><code>ips.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-indiv.Rmd"><code>vignettes/markov-inhomogeneous-indiv.Rmd</code></a></small>
+      <div class="hidden name"><code>markov-inhomogeneous-indiv.Rmd</code></div>
 
     </div>
 
@@ -512,20 +511,20 @@ NA
 <p>To get a better understanding of the output, lets take a look at a few of the sampled coefficient matrices.</p>
 <div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_coef</span>$<span class="no">log_omrPTHR</span>)</pre></body></html></div>
 <pre><code>##           cons
-## [1,] -4.263530
-## [2,] -3.766587
-## [3,] -4.626506
-## [4,] -4.667850
-## [5,] -3.467272
-## [6,] -3.218061</code></pre>
+## [1,] -4.226543
+## [2,] -4.015336
+## [3,] -4.551269
+## [4,] -3.636901
+## [5,] -5.049906
+## [6,] -3.106925</code></pre>
 <div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_coef</span>$<span class="no">rr_scale</span>)</pre></body></html></div>
 <pre><code>##           cons         age      male        np1
-## [1,] -5.494525 -0.03625058 0.5092621 -1.1142151
-## [2,] -5.380409 -0.03169916 0.5501486 -1.2940208
-## [3,] -5.824803 -0.03315558 0.8766900 -1.5981794
-## [4,] -5.663087 -0.03465420 0.6684797 -1.7403703
-## [5,] -5.643366 -0.03825297 0.8920899 -0.6689827
-## [6,] -5.519089 -0.03100049 0.8523289 -1.3668359</code></pre>
+## [1,] -5.361735 -0.03961584 0.7237739 -1.8184689
+## [2,] -5.275218 -0.03683581 0.5072742 -1.3285186
+## [3,] -5.891070 -0.03195960 0.8930655 -1.4362733
+## [4,] -5.662530 -0.03567466 0.7491065 -0.7784137
+## [5,] -4.961388 -0.04788235 0.6764639 -1.1401274
+## [6,] -5.594337 -0.03496541 0.8014735 -1.6099476</code></pre>
 <p>In addition to the coefficients, a complete parameterization of a transition model requires specification of the survival distributions and potentially auxiliary information (e.g., the times at which rates change in a piecewise exponential model). The parameters are stored in a <code>params_surv_list</code> object, which is a list of <code>params_surv</code> objects.</p>
 <div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">transmod_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/params_surv_list.html">params_surv_list</a></span>(
   <span class="co"># 1. Primary THR:Successful primary (1:2)</span>
@@ -611,18 +610,18 @@ NA
 <span class="no">econmod</span>$<span class="fu">sim_disease</span>(<span class="kw">max_t</span> <span class="kw">=</span> <span class="fl">60</span>, <span class="kw">max_age</span> <span class="kw">=</span> <span class="fl">120</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>() - <span class="no">ptm</span></pre></body></html></div>
 <pre><code>##    user  system elapsed 
-##   2.665   0.181   3.116</code></pre>
+##   2.524   0.142   2.692</code></pre>
 <div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod</span>$<span class="no">disprog_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id patient_id grp_id from to final time_start  time_stop
 ## 1:      1           1          1      1    1  2     0  0.0000000  0.6931472
-## 2:      1           1          1      1    2  5     1  0.6931472 31.4118961
+## 2:      1           1          1      1    2  5     1  0.6931472 32.3519943
 ## 3:      1           1          2      1    1  2     0  0.0000000  0.6931472
-## 4:      1           1          2      1    2  5     1  0.6931472 38.1113982
+## 4:      1           1          2      1    2  5     1  0.6931472 20.0260544
 ## 5:      1           1          3      1    1  2     0  0.0000000  0.6931472
-## 6:      1           1          3      1    2  5     1  0.6931472 19.8323062</code></pre>
+## 6:      1           1          3      1    2  5     1  0.6931472 15.3088994</code></pre>
 <p>The simulated patient trajectories can be summarized by computing the probability of being in each health state over time (by averaging across the simulated patients). Here, we will compute state occupancy probabilities at yearly intervals. They are generally quite similar to those in the cohort model.</p>
 <div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="no">econmod</span>$<span class="fu">sim_stateprobs</span>(<span class="kw">t</span> <span class="kw">=</span> <span class="fl">0</span>:<span class="fl">60</span>)</pre></body></html></div>
-<p><img src="ips_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p><img src="markov-inhomogeneous-indiv_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
 </div>
 <div id="costs-and-qalys" class="section level3">
 <h3 class="hasAnchor">
@@ -635,14 +634,14 @@ NA
 <span class="no">ce_sim</span>$<span class="no">qalys</span>[, <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id     mean
-## 1:           1 15.18977
-## 2:           2 15.22864</code></pre>
+## 1:           1 15.22372
+## 2:           2 15.26917</code></pre>
 <div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id     mean
-## 1:           1 517.6881
-## 2:           2 612.9081</code></pre>
+## 1:           1 517.0256
+## 2:           2 613.1799</code></pre>
 </div>
 </div>
 </div>
@@ -654,12 +653,11 @@ NA
                        <span class="kw">k</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span>))
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                        
-## Incremental QALYs "-" "0.04 (-0.52, 0.62)"     
-## Incremental costs "-" "95 (-19, 163)"          
-## Incremental NMB   "-" "1,848 (-26,062, 30,997)"
-## ICER              "-" "2,450"                  
+## Incremental QALYs "-" "0.05 (-0.52, 0.58)"     
+## Incremental costs "-" "96 (-23, 164)"          
+## Incremental NMB   "-" "2,177 (-26,269, 28,994)"
+## ICER              "-" "2,115"                  
 ## Conclusion        "-" "Cost-effective"</code></pre>
-<p>```</p>
 </div>
   </div>
 
