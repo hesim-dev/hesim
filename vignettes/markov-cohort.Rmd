@@ -104,8 +104,8 @@ In most statistical models, the underlying parameters are "transformed" into mor
 We will use the transformed parameter approach here by using `define_tparams()` to define `tparams` objects as a function of the underlying parameters and input data (treatment strategies and patients). We generate the input data using `hesim::expand()`.
 
 ```{r}
-data <- expand(hesim_dat, by = c("strategies", "patients"))
-head(data)
+input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+head(input_data)
 ```
 
 Operations in a `define_tparams()` block are performed using the columns from the input data and a list of parameters . To maximize computational efficiency, all operations are vectorized across the rows in the data and PSA samples. Parameters not included in a transformed parameter function are assumed constant across patients and treatment strategies. A list must be returned with elements for the transition probability matrix, costs, and utilities. 
@@ -155,7 +155,7 @@ mod_def <- define_model(tparams_def = tparams_def,
 A economic model (of class `CohortDtstm`) can be created from the defined model and input data using the generic function `create_CohortDtstm()`. The economic model is an `R6` object consisting of a transition model (`trans_model`) for simulating transition probabilities with `sim_stateprobs()`, a utility model for simulating quality-adjusted life-years with `sim_qalys()`, and a set of cost models (for each cost category) for simulating costs with `sim_costs()`. 
 
 ```{r econmod}
-econmod <- create_CohortDtstm(mod_def, data)
+econmod <- create_CohortDtstm(mod_def, input_data)
 ```
 
 ## Simulating outcomes
