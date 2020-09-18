@@ -25,8 +25,7 @@ knitr::include_graphics("markov-inhomogeneous.png")
 
 The model is time-inhomogeneous because (i) the prosthesis survival time is modeled using a Weibull survival model so that the probability of failure is time-varying and (ii) background mortality rates increase as patients age. 
 
-# Define the model
-## Data
+# Model setup
 We set up the model for two treatment strategies and 10 subgroups defined by age and sex.
 
 ```{r, warning = FALSE, message = FALSE}
@@ -53,14 +52,8 @@ hesim_dat <- hesim_data(strategies = strategies,
 print(hesim_dat)
 ```
 
-The model will be simulated for each treatment strategy and patient combination. Data containing treatment strategy and patient characteristics can be generated using `expand()`. 
-
-```{r}
-data <- expand(hesim_dat, by = c("strategies", "patients"))
-head(data)
-```
-
-## Parameters
+# Model parameters
+## Estimates from the literature
 ### Transition probabilities
 Transition probabilities from state $i$ (rows) to state $j$ (columns) are determined using the parameters shown in the table below:
 
@@ -215,7 +208,14 @@ rng_def <- define_rng({
 ```
 
 ## Transformed parameters
-The sampled parameter values are "transformed" as a function of the input data. When evaluating the `define_tparams()` expression, operations are vectorized and performed for each combination of the sampled parameters, input data, and time periods. The model will be simulated for 60 model cycles (i.e., 60 years) so we will create 60 time intervals of length 1.
+The sampled parameter values are "transformed" as a function of input data, which consists of all treatment strategy and patient combinations. 
+
+```{r}
+input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+head(input_data)
+```
+
+When evaluating the `define_tparams()` expression, operations are vectorized and performed for each combination of the sampled parameters, input data, and time periods. The model will be simulated for 60 model cycles (i.e., 60 years) so we will create 60 time intervals of length 1.
 
 Separate transformation functions are used for the transition model and the cost/utility models. This is done for computational efficiency since only the transition model depends on cycle time. In the transition model, the revision rate (*rr*) depends on the scale and the shape parameters, which, in turn, depend on the sampled values of the parameters from the Weibull model. The mortality rate depends on gender and a patient's age during each model cycle. 
 
@@ -247,11 +247,11 @@ transitions_def <- define_tparams({
   
   list(
     tpmatrix = tpmatrix(
-      0, C, 0, 0, omrPTHR,
-      0, C, rr, 0, mr,
-      0, 0, 0, C, omrRTHR + mr,
+      0, C, 0,   0, omrPTHR,
+      0, C, rr,  0, mr,
+      0, 0, 0,   C, omrRTHR + mr,
       0, 0, rrr, C, mr,
-      0, 0, 0, 0, 1)
+      0, 0, 0,   0, 1)
   )
 }, times = 1:60)
 
@@ -262,15 +262,16 @@ statevals_def <- define_tparams({
   list(
     utility = u,
     costs = list(
-            prosthesis = c_prosthesis,
+      prosthesis = c_prosthesis,
       medical = c_med
     )
   )
 })
 ```
 
-## The model
-The model is defined by specifying parameter estimates, a random number generation expression for the PSA, and the transformed parameter expressions.
+# Simulation
+## Constructing the economic model
+The economic model is defined by specifying parameter estimates, a random number generation expression for the PSA, and the transformed parameter expressions.
 
 ```{r}
 mod_def <- define_model(tparams_def = list(transitions_def, 
@@ -279,18 +280,18 @@ mod_def <- define_model(tparams_def = list(transitions_def,
                         params = params)
 ```
 
-# Simulation
-The economic model is created from the input data and the defined model. Arguments for instantiating the cost models (a list of objects of class `StateVals`) can be specified with a named list containing the values of arguments to pass to `StateVals$new()`. In this case, we note that the model for the cost of the prostheses is based on one-time costs accrued at the start of the model (with no discounting); conversely, medical costs accrue by weighting state values by time spent in the health states (in the current model simply the cost of revision over 1 year).    
+The economic model is then created from the input data and the defined model. Arguments for instantiating the cost models (a list of objects of class `StateVals`) can be specified with a named list containing the values of arguments to pass to `StateVals$new()`. In this case, we note that the model for the cost of the prostheses is based on one-time costs accrued at the start of the model (with no discounting); conversely, medical costs accrue by weighting state values by time spent in the health states (in the current model simply the cost of revision over 1 year).    
 
 ```{r econmod}
 cost_args <- list(
   prosthesis = list(method = "starting"),
   medical = list(method = "wlos")
 )
-econmod <- create_CohortDtstm(mod_def, data,
+econmod <- create_CohortDtstm(mod_def, input_data,
                               cost_args = cost_args)
 ```
 
+## Simulating outcomes
 ## Health state probabilities
 Health state probabilities are simulated for 60 model cycles. 
 ```{r simStateprobs}
