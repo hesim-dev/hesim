@@ -111,7 +111,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 class="date">2020-09-17</h4>
+            <h4 class="date">2020-09-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-cohort.Rmd"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
@@ -530,59 +530,59 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <p>Subgroup analyses can be performed with <code>$sim_summarize()</code> using the <code>by_grp = TRUE</code> option. Cost-effectiveness analyses are then performed for each subgroup (<code>grp_id</code>) from input data. We will begin by reporting results for the 60-year old female, which are consistent with those from the textbook.</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">ce_sim</span> <span class="kw">&lt;-</span> <span class="no">econmod</span>$<span class="fu">summarize</span>(<span class="kw">by_grp</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="no">wtp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span>)
-<span class="no">icea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/icea.html">icea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">0.015</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.06</span>,
-                       <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)
+<span class="no">cea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">0.015</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.06</span>,
+                     <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)
 
 <span class="no">ce_sim</span>$<span class="no">qalys</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span>,
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.64846
-## 2:           2      2 14.69346</code></pre>
+## 1:           1      2 14.63086
+## 2:           2      2 14.67489</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 511.1028
-## 2:           2      2 610.7210</code></pre>
+## 1:           1      2 512.6973
+## 2:           2      2 612.1759</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
-<pre><code>##     strategy_id grp_id            iqalys          icosts                  inmb
-##  1:           2      1 0.07 (0.03, 0.13)   66 (-43, 140)  3,576 (1,423, 6,451)
-##  2:           2      2 0.05 (0.02, 0.08)   100 (20, 154)    2,151 (824, 3,938)
-##  3:           2      3 0.03 (0.01, 0.05)   126 (71, 164)    1,217 (435, 2,324)
-##  4:           2      4 0.02 (0.01, 0.03)  145 (107, 171)      628 (178, 1,280)
-##  5:           2      5 0.01 (0.00, 0.02)  159 (133, 176)         276 (19, 655)
-##  6:           2      6 0.12 (0.05, 0.21) -33 (-219, 101) 5,869 (2,504, 10,621)
-##  7:           2      7 0.07 (0.03, 0.12)  31 (-103, 128)  3,509 (1,464, 6,227)
-##  8:           2      8 0.04 (0.02, 0.07)   80 (-16, 147)    1,994 (782, 3,589)
-##  9:           2      9 0.02 (0.01, 0.04)   115 (52, 160)    1,064 (383, 2,002)
-## 10:           2     10 0.01 (0.01, 0.02)   141 (98, 169)      517 (135, 1,048)
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
+<pre><code>##     strategy_id grp_id            iqalys         icosts                  inmb
+##  1:           2      1 0.07 (0.03, 0.13)  66 (-29, 139)  3,490 (1,268, 6,342)
+##  2:           2      2 0.04 (0.02, 0.08)   99 (30, 151)    2,102 (743, 3,895)
+##  3:           2      3 0.03 (0.01, 0.05)  126 (75, 162)    1,190 (377, 2,259)
+##  4:           2      4 0.02 (0.01, 0.03) 145 (110, 169)      614 (143, 1,274)
+##  5:           2      5 0.01 (0.00, 0.02) 159 (135, 175)          269 (2, 656)
+##  6:           2      6 0.11 (0.04, 0.20) -32 (-216, 94) 5,699 (2,079, 10,137)
+##  7:           2      7 0.07 (0.03, 0.12) 32 (-104, 122)  3,415 (1,229, 6,272)
+##  8:           2      8 0.04 (0.02, 0.07)  80 (-15, 142)    1,944 (645, 3,647)
+##  9:           2      9 0.02 (0.01, 0.04)  116 (50, 157)    1,039 (308, 2,046)
+## 10:           2     10 0.01 (0.00, 0.02)  141 (98, 168)       506 (89, 1,112)
 ##          icer     conclusion
-##  1:       909 Cost-effective
-##  2:     2,213 Cost-effective
-##  3:     4,680 Cost-effective
-##  4:     9,393 Cost-effective
-##  5:    18,316 Cost-effective
+##  1:       928 Cost-effective
+##  2:     2,260 Cost-effective
+##  3:     4,771 Cost-effective
+##  4:     9,555 Cost-effective
+##  5:    18,591 Cost-effective
 ##  6: Dominates Cost-effective
-##  7:       441 Cost-effective
-##  8:     1,930 Cost-effective
-##  9:     4,895 Cost-effective
-## 10:    10,684 Cost-effective</code></pre>
+##  7:       458 Cost-effective
+##  8:     1,982 Cost-effective
+##  9:     5,004 Cost-effective
+## 10:    10,883 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overall" class="anchor"></a>Overall</h2>
 <p>Estimates aggregated across all patients can also be computed with <code>$sim_summarize()</code> by using <code>by_grp = FALSE</code>. In this case, overall costs and QALYs are a weighted average (using the column <code>patient_wt</code>) of costs and QALYs for each patient in the input data.</p>
 <div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">ce_sim</span> <span class="kw">&lt;-</span> <span class="no">econmod</span>$<span class="fu">summarize</span>(<span class="kw">by_grp</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="no">icea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/icea.html">icea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">.015</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.06</span>,
-                       <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)
-<span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">icea_pw_out</span>)</pre></body></html></div>
+<span class="no">cea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">.015</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.06</span>,
+                     <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)
+<span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                   
 ## Incremental QALYs "-" "0.03 (0.01, 0.05)" 
-## Incremental costs "-" "117 (58, 161)"     
-## Incremental NMB   "-" "1,344 (518, 2,487)"
-## ICER              "-" "4,013"             
+## Incremental costs "-" "117 (59, 157)"     
+## Incremental NMB   "-" "1,312 (429, 2,460)"
+## ICER              "-" "4,103"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>

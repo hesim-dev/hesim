@@ -18,7 +18,7 @@ icer_tbl(
 )
 }
 \arguments{
-\item{x}{An object of class \code{icea_pw} returned by \code{\link[=icea_pw]{icea_pw()}}.}
+\item{x}{An object of class \code{cea_pw} returned by \code{\link[=cea_pw]{cea_pw()}}.}
 
 \item{k}{Willingness to pay.}
 
@@ -59,8 +59,8 @@ with one row for each strategy and group combination.
 }
 \description{
 Generate a table of incremental cost-effectiveness ratios given output from
-\code{\link[=icea_pw]{icea_pw()}}.
+\code{\link[=cea_pw]{cea_pw()}}.
 }
 \seealso{
-\code{\link[=icea_pw]{icea_pw()}}
+\code{\link[=cea_pw]{cea_pw()}}
 }

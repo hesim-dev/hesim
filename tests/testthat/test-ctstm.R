@@ -492,14 +492,14 @@ test_that("Simulate costs and QALYs", {
   expect_error(ictstm$summarize(), NA)
   
   # Cost-effectiveness analysis
-  icea <- icea(ce_summary, dr_costs = 0, dr_qalys = 0)
-  expect_true("mce" %in% names(icea))
-  icea <- icea(ce_summary, dr_qalys = 0, dr_costs = .03)
-  expect_true("mce" %in% names(icea))
+  cea <- cea(ce_summary, dr_costs = 0, dr_qalys = 0)
+  expect_true("mce" %in% names(cea))
+  cea <- cea(ce_summary, dr_qalys = 0, dr_costs = .03)
+  expect_true("mce" %in% names(cea))
   
-  icea_pw <- icea_pw(ce_summary, comparator = 1, 
-                     dr_costs = 0, dr_qalys = 0)
-  expect_true("ceac" %in% names(icea_pw))
+  cea_pw <- cea_pw(ce_summary, comparator = 1, 
+                   dr_costs = 0, dr_qalys = 0)
+  expect_true("ceac" %in% names(cea_pw))
 })
 
 ## With a joint survival model

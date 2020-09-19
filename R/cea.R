@@ -1,3 +1,15 @@
+#' @export
+icea <- function(x, ...) {
+  .Deprecated("cea")
+  UseMethod("cea")
+}
+
+#' @export
+icea_pw <- function(x, ...) {
+  .Deprecated("cea_pw")
+  UseMethod("cea_pw")
+}
+
 #'  A cost-effectiveness object
 #'
 #' An object that summarizes simulated measures of clinical effectiveness and costs from a simulation model for use in a cost-effectiveness analysis.
@@ -34,15 +46,16 @@
 #' @name ce
 NULL
 
-#' Individualized cost-effectiveness analysis
+#' Cost-effectiveness analysis
 #'
-#' Conduct individualized cost-effectiveness analysis (ICEA) given output of an economic
-#' model; that is, summarize a probabilistic sensitivity analysis (PSA) by subgroup.
+#' Conduct cost-effectiveness analysis (CEA) given output of an economic
+#' model; that is, summarize a probabilistic sensitivity analysis (PSA), possibly
+#' by subgroup.
 #' \itemize{
-#'  \item [icea()] computes the probability that
+#'  \item [cea()] computes the probability that
 #' each treatment is most cost-effective, output for a cost-effectiveness acceptability frontier,
 #' the expected value of perfect information, and the net monetary benefit for each treatment.
-#' \item [icea_pw()] conducts pairwise ICEA by comparing strategies to a comparator. Computed
+#' \item [cea_pw()] conducts pairwise CEA by comparing strategies to a comparator. Computed
 #' quantities include the incremental cost-effectiveness ratio, the 
 #' incremental net monetary benefit, output for a cost-effectiveness plane,
 #' and output for a cost-effectiveness acceptability curve.
@@ -63,7 +76,7 @@ NULL
 #' @param e Character name of column from `x` denoting clinical effectiveness.
 #' @param c Character name of column from `x` denoting costs.
 #' @param ... Further arguments passed to or from other methods. Currently unused.
-#' @return [icea()] returns a list of four `data.table` elements.
+#' @return [cea()] returns a list of four `data.table` elements.
 #' 
 #' \describe{
 #'   \item{summary}{A `data.table` of the mean, 2.5% quantile, and 97.5% 
@@ -82,7 +95,7 @@ NULL
 #'    for the range of specified willingness to pay values.}
 #' }
 #' 
-#' \code{icea_pw} also returns a list of four `data.table` elements:
+#' \code{cea_pw} also returns a list of four `data.table` elements:
 #'  \describe{
 #'   \item{summary}{A data.table of the mean, 2.5% quantile, and 97.5% 
 #'   quantile by strategy and group for clinical effectiveness and costs.}
@@ -94,7 +107,7 @@ NULL
 #'    \item{inmb}{The mean, 2.5% quantile, and 97.5% quantile of
 #'    incremental net monetary benefits for the range of specified willingness to pay values.}
 #' }
-#' @name icea
+#' @name cea
 #' @examples
 #' # simulation output
 #' n_samples <- 100
@@ -109,32 +122,32 @@ NULL
 #'                             each = n_samples), 2)
 #')
 #'
-#' # icea
-#' icea <- icea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
+#' # cea
+#' cea <- cea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
 #'              grp = "grp", e = "e", c = "c")
-#' names(icea)
+#' names(cea)
 #' # The probability that each strategy is the most cost-effective 
 #' # in each group with a willingness to pay of 20,000
 #' library("data.table")
-#' icea$mce[k == 20000]
+#' cea$mce[k == 20000]
 #' 
-#' # icea_pw
-#' icea_pw <-  icea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
+#' # cea_pw
+#' cea_pw <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
 #'                     sample = "sample", strategy = "strategy", grp = "grp",
 #'                      e = "e", c = "c")
-#' names(icea_pw)
+#' names(cea_pw)
 #' # cost-effectiveness acceptability curve
-#' head(icea_pw$ceac[k >= 20000])
-#' icer_tbl(icea_pw)
+#' head(cea_pw$ceac[k >= 20000])
+#' icer_tbl(cea_pw)
 #' @export
-icea <- function(x, ...) {
-  UseMethod("icea")
+cea <- function(x, ...) {
+  UseMethod("cea")
 }
 
 #' @export
-#' @rdname icea
-icea_pw <- function(x, ...) {
-  UseMethod("icea_pw")
+#' @rdname cea
+cea_pw <- function(x, ...) {
+  UseMethod("cea_pw")
 }
 
 check_grp <- function(x, grp){
@@ -149,8 +162,8 @@ check_grp <- function(x, grp){
 }
 
 #' @export
-#' @rdname icea
-icea.default <- function(x, k = seq(0, 200000, 500), sample, strategy, 
+#' @rdname cea
+cea.default <- function(x, k = seq(0, 200000, 500), sample, strategy, 
                          grp = NULL, e, c, ...){
   if (!is.data.table(x)){
     x <- data.table(x)
@@ -176,15 +189,15 @@ icea.default <- function(x, k = seq(0, 200000, 500), sample, strategy,
              paste0("c", c("_mean", "_lower", "_upper")))
 )
   l <- list(summary = summary_table, mce = mce, evpi = evpi, nmb = nmb)
-  class(l) <- "icea"
+  class(l) <- "cea"
   attr(l, "strategy") <- strategy
   attr(l, "grp") <- grp  
   return(l)
 }
 
 #' @export
-#' @rdname icea
-icea_pw.default <- function(x, k = seq(0, 200000, 500), comparator, 
+#' @rdname cea
+cea_pw.default <- function(x, k = seq(0, 200000, 500), comparator, 
                             sample, strategy, 
                             grp = NULL, e, c, ...){
   if (!is.data.table(x)){
@@ -218,7 +231,7 @@ icea_pw.default <- function(x, k = seq(0, 200000, 500), comparator,
   inmb <- inmb_summary(delta, k, strategy, grp, e = "ie", c = "ic")
   summary_table <- cea_table(delta, strategy, grp, e = "ie", c = "ic", icer = TRUE)
   l <- list(summary = summary_table, delta = delta, ceac = ceac, inmb = inmb)
-  class(l) <- "icea_pw"
+  class(l) <- "cea_pw"
   attr(l, "strategy") <- strategy
   attr(l, "grp") <- grp
   attr(l, "comparator") <- comparator
@@ -232,27 +245,27 @@ icea_pw.default <- function(x, k = seq(0, 200000, 500), comparator,
 }
 
 #' @export
-#' @rdname icea
+#' @rdname cea
 #' @param dr_qalys Discount rate for quality-adjusted life-years (QALYs).
 #' @param dr_costs Discount rate for costs.
-icea.ce <- function(x, k = seq(0, 200000, 500), dr_qalys, dr_costs, ...){
+cea.ce <- function(x, k = seq(0, 200000, 500), dr_qalys, dr_costs, ...){
   category <- dr <- NULL
   sim <- cbind(x$costs[category == "total" & dr == dr_costs,
                        c("sample", "strategy_id", "grp_id", "costs")],
                x$qalys[dr == dr_qalys, "qalys", with = FALSE])
-  res <- icea(sim, k = k, sample = "sample", strategy = "strategy_id",
+  res <- cea(sim, k = k, sample = "sample", strategy = "strategy_id",
               grp = "grp_id", e = "qalys", c = "costs")
   return(res)
 }
 
 #' @export
-#' @rdname icea
-icea_pw.ce <- function(x, k = seq(0, 200000, 500), comparator, dr_qalys, dr_costs, ...){
+#' @rdname cea
+cea_pw.ce <- function(x, k = seq(0, 200000, 500), comparator, dr_qalys, dr_costs, ...){
   category <- dr <- NULL
   sim <- cbind(x$costs[category == "total" & dr == dr_costs,
                        c("sample", "strategy_id", "grp_id", "costs")],
                x$qalys[dr == dr_qalys, "qalys", with = FALSE])
-  res <- icea_pw(sim, k = k, comparator = comparator, sample = "sample",
+  res <- cea_pw(sim, k = k, comparator = comparator, sample = "sample",
                  strategy = "strategy_id", grp = "grp_id",
                  e = "qalys", c = "costs")
   return(res)
@@ -378,9 +391,9 @@ format_cri <- function(est, lower, upper, costs = TRUE, digits){
 #' ICER table
 #'
 #' Generate a table of incremental cost-effectiveness ratios given output from 
-#' [icea_pw()].
+#' [cea_pw()].
 #'
-#' @param x An object of class `icea_pw` returned by [icea_pw()].
+#' @param x An object of class `cea_pw` returned by [cea_pw()].
 #' @param k Willingness to pay.
 #' @param cri If `TRUE`, credible intervals are computed; otherwise 
 #' they are not.
@@ -396,7 +409,7 @@ format_cri <- function(est, lower, upper, costs = TRUE, digits){
 #' Relevant if `output = "matrix"` and there is one group, in which case a single
 #' matrix will be returned if `drop = TRUE` and a list of length 1 will be returned
 #' if `drop = FALSE`.
-#' @seealso [icea_pw()]
+#' @seealso [cea_pw()]
 #' @return If `output = "matrix"`, then a list of matrices (or a matrix if
 #' \code{drop = TRUE}) reporting incremental cost-effectiveness ratios (ICERs)
 #' by group. Specifically, each matrix contains five rows for: (i) 
@@ -414,8 +427,8 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
                      digits_costs = 0, output = c("matrix", "data.table"),
                      rownames = NULL, colnames = NULL,
                      drop = TRUE){
-  if (!inherits(x, "icea_pw")){
-    stop("'x' must be an object of class 'icea_pw'",
+  if (!inherits(x, "cea_pw")){
+    stop("'x' must be an object of class 'cea_pw'",
          call. = FALSE)
   }
   if (prob > 1 | prob < 0){

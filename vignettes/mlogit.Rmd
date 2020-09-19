@@ -203,13 +203,13 @@ Now that costs and QALYs have been simulated with the PSA, a decision analysis c
 
 ```{r}
 ce_sim <- econmod$summarize(by_grp = TRUE)
-icea_pw_out <- icea_pw(ce_sim, comparator = 1, dr_qalys = .03, dr_costs = .03)
+cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = .03, dr_costs = .03)
 ```
 
 Since we modeled the health state transitions as a function of covariates, transition rates vary by patient characteristics. The impact of gender and the (nonlinear) impact of age on transitions have a similar effect on the incremental cost-effectiveness ratio (ICER). The ICERs were lower for females and tended to rise with age, suggesting that the "Intervention" was more effective for patients with a lower baseline risk.
 
 ```{r icerHeterogeneity, fig.width = 7, fig.height = 4}
-icers <- merge(icea_pw_out$summary,
+icers <- merge(cea_pw_out$summary,
                hesim_dat$patients[, .(grp_id, age, female)],
                by = "grp_id")
 icers[, gender := factor(female, 

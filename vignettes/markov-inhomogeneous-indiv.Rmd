@@ -433,12 +433,12 @@ ce_sim$costs[category == "total",
 ```
 
 # Decision analysis
-Since we performed a PSA, decision uncertainty could be formally quantified. Since we cover that in [other vignettes](icea.html), we will simply compute the incremental cost-effectiveness ratio (ICER) here. 
+Since we performed a PSA, decision uncertainty could be formally quantified. Since we cover that in [other vignettes](cea.html), we will simply compute the incremental cost-effectiveness ratio (ICER) here. 
 
 ```{r}
-icea_pw_out <- icea_pw(ce_sim, comparator = 1, dr_qalys = 0.015, dr_costs = .06,
-                       k = seq(0, 25000, 500))
-icer_tbl(icea_pw_out)
+cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = 0.015, dr_costs = .06,
+                     k = seq(0, 25000, 500))
+icer_tbl(cea_pw_out)
 ```
 
 ```{r, eval = FALSE, echo = FALSE}

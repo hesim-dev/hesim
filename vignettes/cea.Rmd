@@ -16,21 +16,20 @@ bibliography: references.bib
 ---
 
 # Overview 
-Individualized cost-effectiveness analysis (iCEA) evaluates the cost-effectiveness of treatments at the individual (or subgroup) level. This has two major implications:
-
-* Optimal treatments will vary across patients.
-* Treatments will be more cost-effective for some patients than others.
-
-The `hesim` package help facilitate iCEA by providing a number of functions for analyzing subgroup level health and cost outcomes from simulation models that quantify parameter uncertainty using probabilistic sensitivity analysis (PSA). These functions take simulation output and generate measures commonly used for technology assessment including:
+`hesim` provides functions for using simulated costs and quality-adjusted life-years (QALYs) from a probabilistic sensitivity analysis (PSA) for decision-analysis in a cost-effectiveness framework, including representing decision uncertainty and conducting value of information analysis. Common metrics that can be produced include the following:
 
 * net monetary benefits (NMBs).
 * incremental cost-effectiveness ratios (ICERs).
+* cost-effectiveness planes planes.
 * cost-effectiveness acceptability curves (CEACs).
+* cost-effectiveness acceptability frontiers (CEAFs).
 * the expected value of perfect information (EVPI).
 
-The rest of this document provides an overview of iCEA and how it can be conducted using `hesim`. The perspective is Bayesian in nature in that it is concerned with estimating the entire distribution of outcomes rather than just expected values [@baio2012bayesian; @baio2015probabilistic]. It also stresses that both optimal treatments and the cost-effectiveness of those treatments vary across individuals [@basu2007value; @espinoza2014value].
+Cost-effectiveness analysis (CEA) can be performed for a single target population of interest or used to perform subgroup analysis, which is sometimes referred to as individualized CEA (iCEA). 
 
-# Net monetary benefits
+The rest of this article provides an overview of CEA and how it can be conducted using `hesim`. The perspective is Bayesian in nature in that it is concerned with estimating the entire distribution of outcomes rather than just expected values [@baio2012bayesian; @baio2015probabilistic]. It also shows how an iCEA can be performed so that both optimal treatments and the cost-effectiveness of those treatments vary across individuals [@basu2007value; @espinoza2014value].
+
+# Framework
 Decision analysis provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Decisions are typically made using a net benefit approach grounded in expected utility theory. The optimal treatment strategy is the one that maximizes expected NMBs where expected NMBs are calculated by averaging over the patient population and uncertain parameters $\theta$. For a given subgroup $g$ and parameter set $\theta$, NMBs are computed as the difference between the monetized health gains from an intervention less costs, or,
 
 $$
@@ -58,15 +57,15 @@ Equivalently, treatment $1$ is preferred to treatment $0$ in subgroup $g$ if the
 
 $$
 \begin{aligned}
-k > \frac{c_{g1} - c_{g0}}{e_{g1} - e_{g0}} = ICER_g.
+k > \frac{E_\theta [c_{g1} - c_{g0}]}{E_\theta [e_{g1} - e_{g0}]} = ICER_g.
 \end{aligned}
 $$
 
 
 # Probabilistic sensitivity analysis
-Expected NMBs are expected values and ignore parameter uncertainty. This implies that NMBs are uncertain and that optimal treatment strategies may be selected incorrectly. This uncertainty can be quantified using PSA, which uses Bayesian and quasi-Bayesian techniques to estimate the distribution of NMBs given the distribution of the parameters for each treatment strategy
+Expected NMBs are expected values, which implies that NMBs are uncertain and that optimal treatment strategies may be selected incorrectly. This uncertainty can be quantified using PSA, which uses Bayesian and quasi-Bayesian techniques to estimate the distribution of NMBs given the distribution of the parameters for each treatment strategy
 
-Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest cases), the distribution of $\theta$ is approximated by simulating the parameters from their joint posterior distribution and calculating relevant quantities of interest as a function of the simulated parameters. For each treatment strategy and subgroup, PSA therefore produces $n$ random draws from the posterior distribution of clinical effectiveness and costs,
+Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest cases), the distribution of $\theta$ is typically approximated by simulating the parameters from suitable probability distribution and calculating relevant quantities of interest as a function of the simulated parameters. For each treatment strategy and subgroup, PSA therefore produces $n$ random draws from the distribution of clinical effectiveness and costs,
 
 $$
 \begin{aligned}
@@ -75,7 +74,7 @@ c_{gj} &= [c_{gj}^1, c_{gj}^2, \dots, c_{gj}^n].
 \end{aligned}
 $$
 
-Below we simulate costs and QALYs for three treatment strategies and two subgroups (in a real world analysis, this output would be derived from a detailed health-economic simulation model). Strategy 1 is the current standard of care; it is the cheapest therapy, but also the least efficacious. Strategies 2 and 3 are equally costly, but Strategy 2 is more effective in subgroup 1 while Strategy 3 is more effective in subgroup 2. 
+Below we simulate costs and QALYs for three treatment strategies and two subgroups (in a real world analysis, this output would be derived from economic models like those supported by `hesim`). Strategy 1 is the current standard of care; it is the cheapest therapy, but also the least efficacious. Strategies 2 and 3 are equally costly, but Strategy 2 is more effective in subgroup 1 while Strategy 3 is more effective in subgroup 2. 
 
 ```{r ce_output, warning = FALSE, message = FALSE}
 set.seed(131)
@@ -112,6 +111,7 @@ ce <- data.table(sample = rep(seq(n_samples), length(e)),
 head(ce)
 ```
 
+# Decision analysis
 For any given willingness to pay $k$, expected NMBs can be calculated by strategy, subgroup, and parameter sample For example, with $k=150,000$, a reasonable estimate of the value of a life-year in the United States, Strategy 2 provides the highest expected NMBs in subgroup 2 while Strategy 3 provides the highest expected NMBs in subgroup 2.
 
 ```{r enmb_example}
@@ -121,34 +121,79 @@ enmb <- dcast(enmb, strategy ~ grp, value.var = "enmb")
 print(enmb)
 ```
 
-A number of measures have been proposed in the health economics literature to summarize the PSA. Below we describe the most common measures, which can be calculated using the functions `icea` and `icea_pw`. The `icea` function summarizes results by taking into account each treatment strategy in the analysis, while the function `icea_pw` summarizes "pairwise" results in which each treatment is compared to a comparator. 
+A number of measures have been proposed in the health economics literature to summarize the PSA. Below we describe the most common measures, which can be calculated using the functions `cea` and `cea_pw`. The `cea` function summarizes results by taking into account each treatment strategy in the analysis, while the function `cea_pw` summarizes "pairwise" results in which each treatment is compared to a comparator.
 
-We can use the  `icea` function to summarize results from our `data.table` object of simulated output for a range of willingness to pay values,
+`cea` and `cea_pw` are generic functions that can be used to summarize results from a `data.table` containing simulated costs and QALYs or from a `hesim::ce` object produced from the `$summarize()` method of an economic model. In this example we use a `data.table` object. 
 
-```{r icea, warning = FALSE, message = FALSE}
+```{r cea, warning = FALSE, message = FALSE}
 library("hesim")
 ktop <- 200000
-icea <-  icea(ce, k = seq(0, ktop, 500), sample = "sample", strategy = "strategy",
-                 grp = "grp", e = "qalys", c = "cost")
+cea <-  cea(ce, k = seq(0, ktop, 500), sample = "sample", strategy = "strategy",
+            grp = "grp", e = "qalys", c = "cost")
 ```
 
-The most important input in `icea` is the `data.table` object (`x`) containing columns for the parameter sample (`sample`), treatment strategy (`strategy`), subgroup (`grp`), clinical effectiveness (`e`), and costs (`c`). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is $k$, which is a range of willingness to pay values to use for estimating NMBs. 
+The first argument is a `data.table` that contains columns for the parameter sample (`sample`), treatment strategy (`strategy`), subgroup (`grp`), clinical effectiveness (`e`), and costs (`c`). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is $k$, which is a range of willingness to pay values to use for estimating NMBs. 
 
-Likewise, we can use `icea_pw` to summarize the PSA when directly comparing the two treatment strategies (Strategy 2 and Strategy 3) to the comparator (Strategy 1). 
+Likewise, we can use `cea_pw` to summarize the PSA when directly comparing the two treatment strategies (Strategy 2 and Strategy 3) to the comparator (Strategy 1). 
 
-```{r icea_pw}
-icea_pw <-  icea_pw(ce,  k = seq(0, ktop, 500), comparator = "Strategy 1",
-                       sample = "sample", strategy = "strategy", grp = "grp",
-                    e = "qalys", c = "cost")
+```{r cea_pw}
+cea_pw <-  cea_pw(ce,  k = seq(0, ktop, 500), comparator = "Strategy 1",
+                  sample = "sample", strategy = "strategy", grp = "grp",
+                  e = "qalys", c = "cost")
 ```
 
-The same inputs are used as in `icea` except users must specify the name of the comparator strategy.
+The same inputs are used as in `cea` except users must specify the name of the comparator strategy.
 
-## Probability most cost-effective 
+## Distribution of health and cost outcomes
+`cea` produces means, 2.5\% quantiles, and 97.5\% quantiles for costs and efficacy. 
+
+```{r cea_summary}
+print(cea$summary)
+```
+
+Other summary statistics can be computed using R packages such as `data.table`.
+
+```{r cea_custom}
+ce[, .(median_cost = median(cost), median_qalys = median(qalys)),
+   by = c("strategy", "grp")]
+```
+
+Similarly, `cea_pw` produces means, 2.5\% quantiles, and 97.5\% quantiles for incremental costs and incremental efficacy. The table also contains the ICER, which is equal to expected incremental costs divided by the measure of expected incremental efficacy.  
+
+```{r icer}
+print(cea_pw$summary)
+```
+
+## Cost-effectiveness plane
+The cost-effectiveness plane plots the incremental effectiveness of a treatment strategy (relative to a comparator) against the incremental cost of the treatment strategy. The plot is useful because it demonstrates both the uncertainty and the magnitude of the estimates. Each point on the plot is from a particular random draw from the PSA.  
+
+Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `cea_pw` function, which, for each sampled parameter set and treatment strategy, estimates differences in costs and QALYs relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above it are not. 
+
+```{r ceplane_plot, fig.width = 6, fig.height = 4}
+library("ggplot2")
+library("scales")
+
+head(cea_pw$delta)
+ylim <- max(cea_pw$delta[, ic]) * 1.1
+xlim <- ceiling(max(cea_pw$delta[, ie]) * 1.1)
+ggplot(cea_pw$delta, aes(x = ie, y = ic, col = factor(strategy))) + 
+  geom_jitter(size = .5) + facet_wrap(~grp) + 
+  xlab("Incremental QALYs") + ylab("Incremental cost") +
+  scale_y_continuous(label = scales::dollar, limits = c(-ylim, ylim)) +
+  scale_x_continuous(limits = c(-xlim, xlim), breaks = seq(-6, 6, 2)) +
+  theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy") +
+  geom_abline(slope = 150000, linetype = "dashed") +
+  geom_hline(yintercept = 0) + geom_vline(xintercept = 0)
+```
+
+## Cost-effectiveness acceptability curves (CEAC)
+
+### Simultaneous comparison 
 A useful summary measure for quantifying uncertainty is the probability that each treatment strategy is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each strategy has the highest NMB. For example, consider a random sample of 10 draws from the PSA simulation output and suppose $k$ is again equal to $150,000$. 
 
 ```{r mce_example_setup, echo = -1, warning = FALSE, message = FALSE}
 library("knitr")
+
 random_rows <- sample(1:n_samples, 10)
 nmb_dt <- dcast(ce[sample %in% random_rows & grp == "Group 2"], 
                 sample ~ strategy, value.var = "nmb")
@@ -163,13 +208,11 @@ mce <- prop.table(table(nmb_dt$maxj))
 print(mce)
 ```
 
-In this example, treatments 1, 2, and 3 have the highest NMBs a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `icea` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
+In this example, treatments 1, 2, and 3 have the highest NMBs a fraction `r mce[1]`, `r mce[2]`, and `r mce[3]` of the time respectively. The `cea` function performs this same calculations for a range of values of $k$ and all `nsims` random draws of the simulation output. The output is a tidy `data.table` which facilitates plotting with `ggplot`.
 
 ```{r mce_plot, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
-library("ggplot2")
-library("scales")
 theme_set(theme_minimal())
-ggplot(icea$mce, aes(x = k, y = prob, col = factor(strategy))) +
+ggplot(cea$mce, aes(x = k, y = prob, col = factor(strategy))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
@@ -178,19 +221,32 @@ ggplot(icea$mce, aes(x = k, y = prob, col = factor(strategy))) +
 
 In group 1, Strategy 2 provides the greatest NMBs with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Strategy 3 provides the greatest NMBs with a higher probability than Strategy 2. 
 
-## Cost-effectiveness acceptability frontier (CEAF)
-One drawback of the previous plot is that the probability of being cost-effective cannot be used to determine the optimal treatment option. Instead, if a decision-makers objective is to maximize health gain, then decisions should be based on the expected NMB [@barton2008optimal]. The cost-effectiveness acceptability frontier (CEAF), which plots the probability that the optimal treatment strategy (i.e., the strategy with the highest expected NMB) is cost-effective, is appropriate in this context. 
+### Pairwise comparison
+It is also possible to compare each strategy to a single comparator (instead of considering all strategies simultaneously). Output to produce such a plot is generated from the `cea_pw` function.
 
-A CEAF curve can be easily created by using the `best` column to subset to the treatment strategy with the highest expected NMB for each willingness to pay value and group. 
+The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of $k$. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(cea_pw$ceac[strategy == "Strategy 3" & prob > .5 & grp ==  "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of $k$, although this probability is larger for Strategy 2 than Strategy 3 when $k$ is smaller.
 
-```{r ceaf_plot, fig.width = 6, fig.height = 4}
-ggplot(icea$mce[best == 1], aes(x = k, y = prob, col = strategy)) +
+```{r ceac_plot, fig.width = 6, fig.height = 4}
+ggplot(cea_pw$ceac, aes(x = k, y = prob, col = factor(strategy))) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
   theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy")
 ```
 
+## Cost-effectiveness acceptability frontier (CEAF)
+One drawback of a CEAC is that the probability of being cost-effective cannot be used to determine the optimal treatment option. Instead, if a decision-makers objective is to maximize health gain, then decisions should be based on the expected NMB [@barton2008optimal]. The cost-effectiveness acceptability frontier (CEAF), which plots the probability that the optimal treatment strategy (i.e., the strategy with the highest expected NMB) is cost-effective, is appropriate in this context. 
+
+A CEAF curve can be easily created by using the `best` column to subset to the treatment strategy with the highest expected NMB for each willingness to pay value and group. 
+
+```{r ceaf_plot, fig.width = 6, fig.height = 4}
+
+ggplot(cea$mce[best == 1], aes(x = k, y = prob, col = strategy)) +
+  geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
+  ylab("Probability most cost-effective") +
+  scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
+  theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy")
+```
 
 ## Value of perfect information
 A limitation of the prior measures are that they ignore the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected NMB is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected NMB given perfect information and the maximum expected NMB given current information. In other words, we calculate the NMB for the optimal treatment strategy for each random draw of the parameters and compare that to the NMB for the treatment strategy that is optimal when averaging across all parameters. The EVPI for subgroup $g$ is, 
@@ -220,10 +276,10 @@ print(enmbci)
 print(enmbpi - enmbci)
 ```
 
-The `icea()` function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal strategy changes.
+The `cea()` function performs this same calculation across all simulation draws from the PSA and for a number of values of willingness to pay values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal strategy changes.
 
 ```{r evpi_plot, fig.width = 6, fig.height = 4}
-ggplot(icea$evpi, aes(x = k, y = evpi)) +
+ggplot(cea$evpi, aes(x = k, y = evpi)) +
   geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
   ylab("Expected value of perfect information") +
   scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
@@ -242,7 +298,7 @@ where $w_g \in (0, 1)$ is a weight denoting that proportion of the population re
 
 ```{r totevpi, fig.width = 6, fig.height = 4}
 w_dt <- data.table(grp = paste0("Group ", seq(1, 2)), w = c(0.25, .75))
-evpi <- icea$evpi
+evpi <- cea$evpi
 evpi <- merge(evpi, w_dt, by = "grp")
 totevpi <- evpi[,lapply(.SD, weighted.mean, w = w),
                 by = "k", .SDcols = c("evpi")]
@@ -253,62 +309,6 @@ ggplot(totevpi, aes(x = k, y = evpi)) +
   scale_y_continuous(label = scales::dollar) +
   theme(legend.position = "bottom") 
 ```
-
-
-## Distribution of health and cost outcomes
-`icea` produces means, 2.5\% quantiles, and 97.5\% quantiles for costs and efficacy. 
-
-```{r icea_summary}
-print(icea$summary)
-```
-
-Other summary statistics can be computed using R packages such as `data.table`.
-
-```{r icea_custom}
-ce[, .(median_cost = median(cost), median_qalys = median(qalys)),
-   by = c("strategy", "grp")]
-```
-
-## Cost-effectiveness plane
-The cost-effectiveness plane plots the incremental effectiveness of a treatment strategy (relative to a comparator) against the incremental cost of the treatment strategy. The plot is useful because it demonstrates both the uncertainty and the magnitude of the estimates. Each point on the plot is from a particular random draw from the PSA.  
-
-Data for plotting a cost-effectiveness plane comes from the `delta` output generated from the `icea_pw` function, which, for each sampled parameter set and treatment strategy, estimates differences in costs and QALYs relative to the comparator. The dotted line in the plot is the willingness to pay line, with slope equal to the value of $k$. For a given $k$, points below the line are cost-effective while those above it are not. 
-
-```{r ceplane_plot, fig.width = 6, fig.height = 4}
-head(icea_pw$delta)
-ylim <- max(icea_pw$delta[, ic]) * 1.1
-xlim <- ceiling(max(icea_pw$delta[, ie]) * 1.1)
-ggplot(icea_pw$delta, aes(x = ie, y = ic, col = factor(strategy))) + 
-  geom_jitter(size = .5) + facet_wrap(~grp) + 
-  xlab("Incremental QALYs") + ylab("Incremental cost") +
-  scale_y_continuous(label = dollar, limits = c(-ylim, ylim)) +
-  scale_x_continuous(limits = c(-xlim, xlim), breaks = seq(-6, 6, 2)) +
-  theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy") +
-  geom_abline(slope = 150000, linetype = "dashed") +
-  geom_hline(yintercept = 0) + geom_vline(xintercept = 0)
-```
-
-## Cost-effectiveness acceptability curve (CEAC)
-The cost-effectiveness acceptability curve (CEAC) is similar to the MCE plot. The difference is that the CEAC compares each strategy to a single comparator whereas the MCE plot considers all strategies simultaneously. Output to produce a CEAC is generated from the `icea_pw` function.
-
-The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of $k$. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(icea_pw$ceac[strategy == "Strategy 3" & prob > .5 & grp ==  "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of $k$, although this probability is larger for Strategy 2 than Strategy 3 when $k$ is smaller.
-
-```{r ceac_plot, fig.width = 6, fig.height = 4}
-ggplot(icea_pw$ceac, aes(x = k, y = prob, col = factor(strategy))) +
-  geom_line() + facet_wrap(~grp) + xlab("Willingness to pay") +
-  ylab("Probability most cost-effective") +
-  scale_x_continuous(breaks = seq(0, ktop, 100000), label = scales::dollar) +
-  theme(legend.position = "bottom") + scale_colour_discrete(name = "Strategy")
-```
-
-## Credible intervals for incremental costs and effectiveness
-Similar to the `icea` function, `icea_pw` produces means, 2.5\% quantiles, and 97.5\% quantiles for incremental costs and incremental efficacy. The table also contains the ICER, which is equal to expected incremental costs divided by the measure of expected incremental efficacy.  
-
-```{r icer}
-print(icea_pw$summary)
-```
-
-Again similar to the `icea` function, the user can also estimate incremental effects for outcome variables not included in the summary table.
 
 # Value of individualized care
 The previous analyses allow NMBs and optimal treatment decisions to vary by subgroup. In contrast, most CEAs estimate the treatment, $j^{*}$, that is optimal when averaging NMBs over the entire population. In particular, if the population is broken up into $G$ distinct subgroups, the optimal treatment is given by,

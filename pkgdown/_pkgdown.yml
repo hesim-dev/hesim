@@ -79,8 +79,8 @@ reference:
       - surv_quantile
   - title: "Cost-effectiveness analysis"
     contents:
-      - icea
-      - icea_pw
+      - cea
+      - cea_pw
       - icer_tbl
   - title: "Datasets"
     contents:

@@ -332,11 +332,11 @@ econmod$sim_costs(dr = .06, integrate_method = "riemann_right")
 ## Subgroup analysis
 Subgroup analyses can be performed with `$sim_summarize()` using the `by_grp = TRUE` option. Cost-effectiveness analyses are then performed for each subgroup (`grp_id`) from input data. We will begin by reporting results for the 60-year old female, which are consistent with those from the textbook.
 
-```{r icea}
+```{r cea}
 ce_sim <- econmod$summarize(by_grp = TRUE)
 wtp <- seq(0, 25000, 500)
-icea_pw_out <- icea_pw(ce_sim, comparator = 1, dr_qalys = 0.015, dr_costs = .06,
-                       k = wtp)
+cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = 0.015, dr_costs = .06,
+                     k = wtp)
 
 ce_sim$qalys[grp_id == 2, 
               .(mean = mean(qalys)),
@@ -349,7 +349,7 @@ ce_sim$costs[grp_id == 2 & category == "total",
 We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (*rr*) depends on covariates. 
 
 ```{r icerSubgroup}
-icer_tbl(icea_pw_out, output = "data.table")
+icer_tbl(cea_pw_out, output = "data.table")
 ```
 
 ## Overall
@@ -357,9 +357,9 @@ Estimates aggregated across all patients can also be computed with `$sim_summari
 
 ```{r icerOverall}
 ce_sim <- econmod$summarize(by_grp = FALSE)
-icea_pw_out <- icea_pw(ce_sim, comparator = 1, dr_qalys = .015, dr_costs = .06,
-                       k = wtp)
-icer_tbl(icea_pw_out)
+cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = .015, dr_costs = .06,
+                     k = wtp)
+icer_tbl(cea_pw_out)
 ```
 
 # Appendix: Transition probabilities from a Weibull survival model
