@@ -283,7 +283,7 @@ ce <- ictstm$summarize()
 print(ce)
 ```
 
-The functions `cea()` and `cea_pw`, which perform individualized cost-effectiveness analysis and incremental individualized cost-effectiveness analysis, respectively, can be used. 
+The functions `cea()` and `cea_pw`, which perform cost-effectiveness analysis and incremental cost-effectiveness analysis, respectively, can be used. 
 
 ```{r}
 cea <- cea(ce, dr_qalys = .03, dr_costs = .03)
