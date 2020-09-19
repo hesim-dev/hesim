@@ -127,8 +127,8 @@ navbar:
       - text: "Markov and semi-Markov multi-state models"
         href: articles/mstate.html
       - text: "---"
-      - text: "Partitioned survival models"
-      - text: "Partitioned survival models"
+      - text: "Partitioned survival analysis"
+      - text: "N-state partitioned survival models"
         href: articles/psm.html
       - text: "---"
       - text: "Economic analysis"  

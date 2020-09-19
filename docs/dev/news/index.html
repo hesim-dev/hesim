@@ -110,9 +110,9 @@
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Partitioned survival models</li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -250,21 +250,21 @@
 <code><a href="../reference/IndivCtstmTrans.html">hesim::IndivCtstmTrans</a></code> to simulate health state transitions with a iCTSTM</li>
 </ul>
 <p>Utility and cost models are constructed with the <code><a href="../reference/StateVals.html">hesim::StateVals</a></code> class.</p>
-<p>The economic models are used to simulate disease progression (<code>$sim_disease()</code>, <code>$sim_stateprobs()</code>), quality-adjusted life-years (QALYs) (<code>$sim_qalys()</code>), and costs (<code>$sim_costs()</code>). Parameter uncertainty is propagated to model outcomes using probabilistic sensitivity analysis. Summaries of the simulated costs and QALYs are used to perform model-based cost-effectiveness analyses (CEAs) and represent decision uncertainty with <code><a href="../reference/icea.html">icea.ce()</a></code> and <code><a href="../reference/icea.html">icea_pw.ce()</a></code>.</p>
+<p>The economic models are used to simulate disease progression (<code>$sim_disease()</code>, <code>$sim_stateprobs()</code>), quality-adjusted life-years (QALYs) (<code>$sim_qalys()</code>), and costs (<code>$sim_costs()</code>). Parameter uncertainty is propagated to model outcomes using probabilistic sensitivity analysis. Summaries of the simulated costs and QALYs are used to perform model-based cost-effectiveness analyses (CEAs) and represent decision uncertainty with <code>icea.ce()</code> and <code>icea_pw.ce()</code>.</p>
 </div>
 <div id="api-changes-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#api-changes-1" class="anchor"></a>API changes</h3>
 <ul>
-<li>The argument <code>sim</code> was renamed <code>sample</code> in <code><a href="../reference/icea.html">icea()</a></code>, <code><a href="../reference/icea.html">icea_pw()</a></code>, and <code><a href="../reference/incr_effect.html">incr_effect()</a></code>.</li>
-<li>Custom functions and variables are no longer supported in <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code>.</li>
+<li>The argument <code>sim</code> was renamed <code>sample</code> in <code>icea()</code>, <code>icea_pw()</code>, and <code><a href="../reference/incr_effect.html">incr_effect()</a></code>.</li>
+<li>Custom functions and variables are no longer supported in <code>icea()</code> and <code>icea_pw()</code>.</li>
 </ul>
 </div>
 </div>
     <div id="hesim-010" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-010" class="anchor"></a>hesim 0.1.0</h2>
-<p>The initial CRAN submission containing support for CEA but not for model development. Decision uncertainty is represented using cost-effectiveness planes, cost-effectiveness acceptability curves, cost-effectiveness acceptability frontiers, and the expected value of perfect information. CEAs by subgroup (i.e., individualized CEAs) are performed with <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code>.</p>
+<p>The initial CRAN submission containing support for CEA but not for model development. Decision uncertainty is represented using cost-effectiveness planes, cost-effectiveness acceptability curves, cost-effectiveness acceptability frontiers, and the expected value of perfect information. CEAs by subgroup (i.e., individualized CEAs) are performed with <code>icea()</code> and <code>icea_pw()</code>.</p>
 </div>
   </div>
 

@@ -111,9 +111,9 @@
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Partitioned survival models</li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -197,12 +197,12 @@ sampling the error term from a normal distribution,
                                             <span class='kw'>Sigma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.01</span>, <span class='fl'>.01</span>, <span class='fl'>.05</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>)),
                       <span class='no'>sigma</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span>(<span class='no'>n</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>params</span>)</div><div class='output co'>#&gt; $coefs
-#&gt;            [,1]      [,2]
-#&gt; [1,] 0.41999673 0.4469187
-#&gt; [2,] 0.04445252 0.2376784
+#&gt;           [,1]      [,2]
+#&gt; [1,] 0.7720871 0.5877962
+#&gt; [2,] 0.2756526 0.6044950
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.02163710 0.09189745
+#&gt; [1] 0.02553744 0.01590983
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2

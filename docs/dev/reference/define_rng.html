@@ -114,9 +114,9 @@ an object of class model_def defined using define_model()." />
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Partitioned survival models</li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -255,13 +255,13 @@ transition probability matrix).</p>
 }, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>aecost_colnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>)) <span class='co'># Add aecost_colnames to environment</span>
 <span class='fu'>eval_rng</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>rng_def</span>, <span class='no'>params</span>)</div><div class='output co'>#&gt; $p
 #&gt;        s1_s1     s1_s2     s2_s1     s2_s2
-#&gt; 1: 0.7531519 0.2468481 0.2882674 0.7117326
-#&gt; 2: 0.7046542 0.2953458 0.2626748 0.7373252
+#&gt; 1: 0.7585336 0.2414664 0.3693639 0.6306361
+#&gt; 2: 0.7179212 0.2820788 0.3656385 0.6343615
 #&gt; 
 #&gt; $inptcost
-#&gt;            A        B         C
-#&gt; 1: 2219.3416 4792.323 2738.5422
-#&gt; 2:  128.2275  553.198  923.4143
+#&gt;            A        B        C
+#&gt; 1:  76.97165 3033.211 5068.454
+#&gt; 2: 266.62723 1789.356 2136.372
 #&gt; 
 #&gt; $outptcost
 #&gt;      [,1] [,2] [,3]
@@ -269,9 +269,9 @@ transition probability matrix).</p>
 #&gt; [2,]  400  700  700
 #&gt; 
 #&gt; $aecost
-#&gt;           A         B         C
-#&gt; 1: 309.4428  189.9597 1165.0582
-#&gt; 2: 530.4122 1895.0711  505.8584
+#&gt;            A         B           C
+#&gt; 1:  53.56667 4433.1612 3088.623581
+#&gt; 2: 650.55634  502.0913    4.181195
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
