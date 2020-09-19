@@ -22,7 +22,7 @@ Description: A modular and computationally efficient R package for
   <doi:10.1111/j.1524-4733.2008.00358.x>. Use of C++ and data.table
   make individual-patient simulation, probabilistic sensitivity analysis, 
   and incorporation of patient heterogeneity fast.
-URL: https://github.com/hesim-dev/hesim
+URL: https://hesim-dev.github.io/hesim, https://github.com/hesim-dev/hesim
 BugReports: https://github.com/hesim-dev/hesim/issues
 License: GPL-3
 LazyData: true

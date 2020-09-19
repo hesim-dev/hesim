@@ -1,3 +1,5 @@
+url: https://hesim-dev.github.io/hesim
+
 template:
   params:
     bootswatch: simplex
