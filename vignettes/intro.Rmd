@@ -274,7 +274,7 @@ head(ictstm$costs_)
 ```
 
 # Decision analysis
-Once output has been simulated with an economic model, a decision analysis can be performed. Cost-effectiveness analyses can be performed using other R packages such as [BCEA](https://sites.google.com/a/statistica.it/gianluca/bcea) or directly with `hesim` as described in more detail [here](icea.html). `hesim` does not currently provide support for MCDA. 
+Once output has been simulated with an economic model, a decision analysis can be performed. Cost-effectiveness analyses can be performed using other R packages such as [BCEA](https://sites.google.com/a/statistica.it/gianluca/bcea) or directly with `hesim` as described in more detail [here](cea.html). `hesim` does not currently provide support for MCDA. 
 
 To perform a CEA, simulated costs and QALYs can be summarized to create a `ce` object, which contains mean costs and QALYs for each sample from the PSA by treatment strategy.
 
@@ -283,18 +283,18 @@ ce <- ictstm$summarize()
 print(ce)
 ```
 
-The functions `icea()` and `icea_pw`, which perform individualized cost-effectiveness analysis and incremental individualized cost-effectiveness analysis, respectively, can be used. 
+The functions `cea()` and `cea_pw`, which perform individualized cost-effectiveness analysis and incremental individualized cost-effectiveness analysis, respectively, can be used. 
 
 ```{r}
-icea <- icea(ce, dr_qalys = .03, dr_costs = .03)
-icea_pw <- icea_pw(ce, dr_qalys = .03, dr_costs = .03, comparator = 1)
+cea <- cea(ce, dr_qalys = .03, dr_costs = .03)
+cea_pw <- cea_pw(ce, dr_qalys = .03, dr_costs = .03, comparator = 1)
 ```
 
 For instance, we might want to plot a cost-effectiveness acceptability curve (CEAC) displaying the probability that treatment strategy 2 is more cost-effective than treatment strategy 1 at a given willingness to pay for a QALY.
 
 ```{r ceac_plot, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 library("ggplot2")
-ggplot2::ggplot(icea_pw$ceac, aes(x = k, y = prob, col = factor(strategy_id))) +
+ggplot(cea_pw$ceac, aes(x = k, y = prob, col = factor(strategy_id))) +
   geom_line() + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, 200000, 100000), label = scales::dollar) +

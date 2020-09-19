@@ -112,7 +112,7 @@
       <h1 data-toc-skip>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2020-09-16</h4>
+            <h4 class="date">2020-09-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -204,17 +204,17 @@ Individual-level continuous time state transition model (iCTSTM)
 ## 
 ## $patients
 ##       patient_id      age female
-##    1:          1 35.89558      0
-##    2:          2 48.28975      1
-##    3:          3 53.94118      1
-##    4:          4 46.72075      1
-##    5:          5 41.43244      1
+##    1:          1 44.26849      0
+##    2:          2 50.36781      1
+##    3:          3 49.83139      1
+##    4:          4 48.30783      1
+##    5:          5 41.94228      0
 ##   ---                           
-##  996:        996 47.53105      1
-##  997:        997 50.77584      0
-##  998:        998 40.46753      1
-##  999:        999 42.26013      1
-## 1000:       1000 39.09294      1
+##  996:        996 50.03492      0
+##  997:        997 52.65689      1
+##  998:        998 42.22996      0
+##  999:        999 40.15365      1
+## 1000:       1000 38.87612      0
 ## 
 ## $states
 ##    state_id state_name
@@ -480,12 +480,12 @@ Cost model(s)
                         <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"transitions"</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_data</span>)</pre></body></html></div>
 <pre><code>##    strategy_id patient_id transition_id      age female from to from_name
-## 1:           1          1             1 35.89558      0    1  2   Healthy
-## 2:           1          1             2 35.89558      0    1  3   Healthy
-## 3:           1          1             3 35.89558      0    2  1      Sick
-## 4:           1          1             4 35.89558      0    2  3      Sick
-## 5:           1          2             1 48.28975      1    1  2   Healthy
-## 6:           1          2             2 48.28975      1    1  3   Healthy
+## 1:           1          1             1 44.26849      0    1  2   Healthy
+## 2:           1          1             2 44.26849      0    1  3   Healthy
+## 3:           1          1             3 44.26849      0    2  1      Sick
+## 4:           1          1             4 44.26849      0    2  3      Sick
+## 5:           1          2             1 50.36781      1    1  2   Healthy
+## 6:           1          2             2 50.36781      1    1  3   Healthy
 ##    to_name trans
 ## 1:    Sick     1
 ## 2:    Dead     2
@@ -592,89 +592,89 @@ $sim_costs()
 <p>We illustrate with the iCTSTM. First we simulate disease progression for each patient.</p>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">ictstm</span>$<span class="fu">sim_disease</span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">ictstm</span>$<span class="no">disprog_</span>)</pre></body></html></div>
-<pre><code>##    sample strategy_id patient_id grp_id from to final time_start time_stop
-## 1:      1           1          1      1    1  2     0   0.000000  8.301372
-## 2:      1           1          1      1    2  1     0   8.301372  8.631691
-## 3:      1           1          1      1    1  3     1   8.631691 20.233681
-## 4:      1           1          2      1    1  2     0   0.000000  3.609151
-## 5:      1           1          2      1    2  1     0   3.609151 12.894752
-## 6:      1           1          2      1    1  3     1  12.894752 16.308082</code></pre>
+<pre><code>##    sample strategy_id patient_id grp_id from to final time_start  time_stop
+## 1:      1           1          1      1    1  2     0  0.0000000  6.2243742
+## 2:      1           1          1      1    2  3     1  6.2243742 10.1577200
+## 3:      1           1          2      1    1  2     0  0.0000000  0.3749086
+## 4:      1           1          2      1    2  1     0  0.3749086  3.5313569
+## 5:      1           1          2      1    1  2     0  3.5313569  3.6525107
+## 6:      1           1          2      1    2  1     0  3.6525107  4.1585122</code></pre>
 <p>The disease trajectory can be summarized with <code>$sim_stateprobs()</code>.</p>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">ictstm</span>$<span class="fu">sim_stateprobs</span>(<span class="kw">t</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>:<span class="fl">10</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">ictstm</span>$<span class="no">stateprobs_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id grp_id state_id t  prob
 ## 1:      1           1      1        1 0 1.000
-## 2:      1           1      1        1 1 0.837
-## 3:      1           1      1        1 2 0.734
-## 4:      1           1      1        1 3 0.658
-## 5:      1           1      1        1 4 0.596
-## 6:      1           1      1        1 5 0.553</code></pre>
+## 2:      1           1      1        1 1 0.864
+## 3:      1           1      1        1 2 0.741
+## 4:      1           1      1        1 3 0.661
+## 5:      1           1      1        1 4 0.587
+## 6:      1           1      1        1 5 0.529</code></pre>
 <p>We can then compute costs and QALYs (using a discount rate of 3 percent).</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="co"># QALYs</span>
 <span class="no">ictstm</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">.03</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">ictstm</span>$<span class="no">qalys_</span>)</pre></body></html></div>
-<pre><code>##    sample strategy_id grp_id state_id   dr     qalys       lys
-## 1:      1           1      1        1 0.03 7.0336498 8.2286792
-## 2:      1           1      1        2 0.03 1.7161797 1.8123387
-## 3:      1           2      1        1 0.03 6.9692623 8.1533522
-## 4:      1           2      1        2 0.03 0.9005584 0.9510174
-## 5:      2           1      1        1 0.03 6.1601748 9.1825338
-## 6:      2           1      1        2 0.03 1.8448341 2.0326476</code></pre>
+<pre><code>##    sample strategy_id grp_id state_id   dr    qalys      lys
+## 1:      1           1      1        1 0.03 4.511986 7.654131
+## 2:      1           1      1        2 0.03 1.327581 1.557094
+## 3:      1           2      1        1 0.03 5.033307 8.538500
+## 4:      1           2      1        2 0.03 1.000137 1.173041
+## 5:      2           1      1        1 0.03 5.392822 8.198494
+## 6:      2           1      1        2 0.03 1.872053 1.929139</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="co"># Costs</span>
 <span class="no">ictstm</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">.03</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">ictstm</span>$<span class="no">costs_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id grp_id state_id   dr category     costs
-## 1:      1           1      1        1 0.03    drugs 41143.396
-## 2:      1           1      1        2 0.03    drugs  9061.693
-## 3:      1           2      1        1 0.03    drugs 81533.522
-## 4:      1           2      1        2 0.03    drugs  9510.174
-## 5:      2           1      1        1 0.03    drugs 45912.669
-## 6:      2           1      1        2 0.03    drugs 10163.238</code></pre>
+## 1:      1           1      1        1 0.03    drugs 38270.655
+## 2:      1           1      1        2 0.03    drugs  7785.468
+## 3:      1           2      1        1 0.03    drugs 85385.000
+## 4:      1           2      1        2 0.03    drugs 11730.405
+## 5:      2           1      1        1 0.03    drugs 40992.471
+## 6:      2           1      1        2 0.03    drugs  9645.695</code></pre>
 </div>
 </div>
 <div id="decision-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#decision-analysis" class="anchor"></a>Decision analysis</h1>
-<p>Once output has been simulated with an economic model, a decision analysis can be performed. Cost-effectiveness analyses can be performed using other R packages such as <a href="https://sites.google.com/a/statistica.it/gianluca/bcea">BCEA</a> or directly with <code>hesim</code> as described in more detail <a href="icea.html">here</a>. <code>hesim</code> does not currently provide support for MCDA.</p>
+<p>Once output has been simulated with an economic model, a decision analysis can be performed. Cost-effectiveness analyses can be performed using other R packages such as <a href="https://sites.google.com/a/statistica.it/gianluca/bcea">BCEA</a> or directly with <code>hesim</code> as described in more detail <a href="cea.html">here</a>. <code>hesim</code> does not currently provide support for MCDA.</p>
 <p>To perform a CEA, simulated costs and QALYs can be summarized to create a <code>ce</code> object, which contains mean costs and QALYs for each sample from the PSA by treatment strategy.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">ce</span> <span class="kw">&lt;-</span> <span class="no">ictstm</span>$<span class="fu">summarize</span>()
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">ce</span>)</pre></body></html></div>
 <pre><code>## $costs
 ##       category   dr sample strategy_id     costs grp_id
-##    1:    drugs 0.03      1           1  50205.09      1
-##    2:    drugs 0.03      1           2  91043.70      1
-##    3:    drugs 0.03      2           1  56075.91      1
-##    4:    drugs 0.03      2           2 112456.02      1
-##    5:    drugs 0.03      3           1  48235.53      1
+##    1:    drugs 0.03      1           1  46056.12      1
+##    2:    drugs 0.03      1           2  97115.40      1
+##    3:    drugs 0.03      2           1  50638.17      1
+##    4:    drugs 0.03      2           2 106840.68      1
+##    5:    drugs 0.03      3           1  47994.89      1
 ##   ---                                                  
-## 5996:    total 0.03    998           2 118324.67      1
-## 5997:    total 0.03    999           1  61466.24      1
-## 5998:    total 0.03    999           2 117241.29      1
-## 5999:    total 0.03   1000           1  63010.07      1
-## 6000:    total 0.03   1000           2 112578.45      1
+## 5996:    total 0.03    998           2 115225.59      1
+## 5997:    total 0.03    999           1  64406.42      1
+## 5998:    total 0.03    999           2 120432.61      1
+## 5999:    total 0.03   1000           1  61070.81      1
+## 6000:    total 0.03   1000           2 100169.28      1
 ## 
 ## $qalys
 ##         dr sample strategy_id    qalys grp_id
-##    1: 0.03      1           1 8.749829      1
-##    2: 0.03      1           2 7.869821      1
-##    3: 0.03      2           1 8.005009      1
-##    4: 0.03      2           2 7.816588      1
-##    5: 0.03      3           1 4.688784      1
+##    1: 0.03      1           1 5.839567      1
+##    2: 0.03      1           2 6.033443      1
+##    3: 0.03      2           1 7.264875      1
+##    4: 0.03      2           2 7.379253      1
+##    5: 0.03      3           1 6.360733      1
 ##   ---                                        
-## 1996: 0.03    998           2 6.809477      1
-## 1997: 0.03    999           1 8.488227      1
-## 1998: 0.03    999           2 8.819337      1
-## 1999: 0.03   1000           1 9.402315      1
-## 2000: 0.03   1000           2 9.232314      1
+## 1996: 0.03    998           2 7.654312      1
+## 1997: 0.03    999           1 3.443313      1
+## 1998: 0.03    999           2 3.353327      1
+## 1999: 0.03   1000           1 8.216184      1
+## 2000: 0.03   1000           2 7.372686      1
 ## 
 ## attr(,"class")
 ## [1] "ce"</code></pre>
-<p>The functions <code><a href="../reference/icea.html">icea()</a></code> and <code>icea_pw</code>, which perform individualized cost-effectiveness analysis and incremental individualized cost-effectiveness analysis, respectively, can be used.</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">icea</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/icea.html">icea</a></span>(<span class="no">ce</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">.03</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.03</span>)
-<span class="no">icea_pw</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/icea.html">icea_pw</a></span>(<span class="no">ce</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">.03</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.03</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<p>The functions <code><a href="../reference/cea.html">cea()</a></code> and <code>cea_pw</code>, which perform individualized cost-effectiveness analysis and incremental individualized cost-effectiveness analysis, respectively, can be used.</p>
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">cea</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea</a></span>(<span class="no">ce</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">.03</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.03</span>)
+<span class="no">cea_pw</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span>(<span class="no">ce</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">.03</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.03</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
 <p>For instance, we might want to plot a cost-effectiveness acceptability curve (CEAC) displaying the probability that treatment strategy 2 is more cost-effective than treatment strategy 1 at a given willingness to pay for a QALY.</p>
 <div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"ggplot2"</span>)
-<span class="kw pkg">ggplot2</span><span class="kw ns">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">icea_pw</span>$<span class="no">ceac</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">k</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">prob</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">strategy_id</span>))) +
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">cea_pw</span>$<span class="no">ceac</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">k</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">prob</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">strategy_id</span>))) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Willingness to pay"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Probability most cost-effective"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">200000</span>, <span class="fl">100000</span>), <span class="kw">label</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span>) +
