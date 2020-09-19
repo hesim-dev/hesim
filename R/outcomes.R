@@ -150,7 +150,7 @@ check_summarize <- function(x){
 #' 
 #' Summarize costs and quality-adjusted life-years (QALYs) given output simulated
 #' from an economic model. The summary output is used to perform 
-#' cost-effectiveness analysis with [icea()] and [icea_pw()].
+#' cost-effectiveness analysis with [cea()] and [cea_pw()].
 #' @param costs Simulated costs by category (objects of class [costs]). 
 #' @param qalys Simulated QALYs (objects of class [qalys]).
 #' @param by_grp If `TRUE`, then costs and QALYs are computed by subgroup. If

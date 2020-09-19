@@ -20,7 +20,7 @@ An object of class \link{ce}.
 \description{
 Summarize costs and quality-adjusted life-years (QALYs) given output simulated
 from an economic model. The summary output is used to perform
-cost-effectiveness analysis with \code{\link[=icea]{icea()}} and \code{\link[=icea_pw]{icea_pw()}}.
+cost-effectiveness analysis with \code{\link[=cea]{cea()}} and \code{\link[=cea_pw]{cea_pw()}}.
 }
 \details{
 If mean costs and/or QALYs have already been computed

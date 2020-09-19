@@ -16,7 +16,7 @@
  * value in @p k, each of the @p n_samples randomly sampled parameter sets, 
  * and each of the @p n_grps subgroups. This value is exported to @c R and 
  * used in the internal function @c calc_incr_effect() (which is, in turn,
- * used in the functions @c incr_effect() and @c icea_pw()).
+ * used in the functions @c incr_effect() and @c cea_pw()).
  */
 // [[Rcpp::export]]
 std::vector<double> C_incr_effect(std::vector<double> x, std::vector<double> y,
@@ -54,7 +54,7 @@ std::vector<double> C_incr_effect(std::vector<double> x, std::vector<double> y,
  * monetary benefit of a given treatment strategy is greater than the net monetary
  * benefit of a comparator for a willingngess to pay value in @p k and each of 
  * the @p n_grps subgroups. This value is exported to @c R and used in the 
- * function @c ceac() (which is, in turn, used in @c icea()).
+ * function @c ceac() (which is, in turn, used in @c ccea()).
  */
 // [[Rcpp::export]]
 std::vector<double> C_ceac(std::vector<double> k, std::vector<double> ie,
@@ -108,7 +108,7 @@ std::vector<double> C_ceac(std::vector<double> k, std::vector<double> ie,
  * @return A vector where each element is the probability that a given 
  * treatment strategy is the most cost-effective for a given willingness to pay 
  * value in @p k and one of the @p n_grps subgroups. This value is exported to 
- * @c R and used in the function @c mce() (which is, in turn, used in @c icea()).
+ * @c R and used in the function @c mce() (which is, in turn, used in @c cea()).
  */
 // [[Rcpp::export]]
 std::vector<double> C_mce(std::vector<double> k, std::vector<double> e,
@@ -164,7 +164,7 @@ std::vector<double> C_mce(std::vector<double> k, std::vector<double> e,
  * @return A vector of the expected net monetary benefit given perfect 
  * information computed for each willingness to pay value in @p k and each of the
  * @p n_grps subgroups. This value is exported to @c R and used in the 
- * function @c icea().
+ * function @c cea().
  */
 // [[Rcpp::export]]
 std::vector<double> C_enmbpi(std::vector<double> k,
