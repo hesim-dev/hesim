@@ -1,5 +1,6 @@
 # ifndef HESIM_MATH_COMPOSITE_H
 # define HESIM_MATH_COMPOSITE_H
+#include <RcppArmadillo.h>
 
 namespace hesim {
 

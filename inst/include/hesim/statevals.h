@@ -282,9 +282,34 @@ private:
   }  
   
   /** 
+   * Integrate given method.
+   * Integrate over values at fixed time periods given chosen method.
+   * @param times The fixed time period.
+   * @param values_first A pointer to the beginning of the vector of values
+   * associated with each time period.
+   * @param method The method used to integrate state values. 
+   */ 
+   static double integrate(std::vector<double> &times, 
+                    std::vector<double>::iterator values_first,
+                    std::string method) {
+     if (method == "trapz"){
+       return math::trapz(times.begin(), times.end(), values_first);
+     }
+     else if (method == "riemann_left"){
+       return math::riemann_left(times.begin(), times.end(), values_first);
+     }
+     else if (method == "riemann_right"){
+       return math::riemann_right(times.begin(), times.end(), values_first);
+     }
+     else{
+       Rcpp::stop("The selected integration method is not available.");
+     }
+   }
+  
+  /** 
    * Weighted length of stay.
    * Integrate health state probabilities weighted by the discount rate and 
-   * assigned state values using the trapezoid rule (see @c math::trapz). 
+   * assigned state values using the chosen method. 
    * Predictions are made for observations (i.e., row indices) determined
    * by @p obs_index. 
    * @param sample A random sample of the parameters from the posterior
@@ -323,18 +348,7 @@ private:
     } // Loop over time intervals
     
     // Integrate
-    if (method == "trapz"){
-      return math::trapz(times.begin(), times.end(), value.begin());
-    }
-    else if (method == "riemann_left"){
-      return math::riemann_left(times.begin(), times.end(), value.begin());
-    }
-    else if (method == "riemann_right"){
-      return math::riemann_right(times.begin(), times.end(), value.begin());
-    }
-    else{
-      Rcpp::stop("The selected integration method is not available.");
-    }
+    return integrate(times, value.begin(), method);
   }
 
   /** 
@@ -375,6 +389,32 @@ public:
     : statevals_(init_statevals_(R_statevals)),
       obs_index_(init_obs_index_(R_statevals)),
       obs_indices_(init_obs_indices_(R_statevals)){
+  }
+  
+  /** 
+   * Length of stay.
+   * Integrate health state probabilities (potentially weighted by the discount 
+   * rate) using the chosen method.
+   * @param times Times at which state probabilities were computed. 
+   * @param stateprob_first The beginning of health state probability values.
+   * @param dr The discount rate. 
+   * @param method The method used to integrate state values. 
+   * @return Length of stay associated with a vector of health state 
+   * probabilities.
+   */ 
+  static double sim_los(std::vector<double> &times,
+                        std::vector<double>::iterator stateprob_first, 
+                        double dr, 
+                        std::string method = "trapz") {
+    
+    auto stateprob_it = stateprob_first;
+    std::vector<double> value(std::distance(times.begin(), times.end()));
+    for (int i = 0; i < times.size(); ++i) {
+      value[i] = exp(dr * times[i]) * *stateprob_it;
+      ++stateprob_it;
+    }
+    
+    return integrate(times, value.begin(), method);
   }
   
   /** 

@@ -6,9 +6,9 @@
 \alias{sim_costs}
 \title{Expected values}
 \usage{
-sim_qalys(object, utility_model, dr, method, lys)
+sim_qalys(object, utility_model, dr, integrate_method, lys)
 
-sim_costs(object, cost_models, dr, method)
+sim_costs(object, cost_models, dr, integrate_method)
 }
 \arguments{
 \item{object}{A \link{stateprobs} object.}
@@ -18,16 +18,16 @@ to simulate utility.}
 
 \item{dr}{Discount rate.}
 
+\item{integrate_method}{Method used to integrate state values when computing
+weighted length of stay. Options are \code{trapz} for the trapezoid rule,
+\code{riemann_left} left for a left Riemann sum, and
+\code{riemann_right} right for a right Riemann sum.}
+
 \item{lys}{If \code{TRUE}, then life-years are simulated in addition to
 QALYs.}
 
 \item{cost_models}{A list of objects of class \link{StateVals} used
 to simulate costs.}
-
-\item{integrate_method}{Method used to integrate state values when computing
-weighted length of stay. Options are \code{trapz} for the trapezoid rule,
-\code{riemann_left} left for a left Riemann sum, and
-\code{riemann_right} right for a right Riemann sum.}
 }
 \value{
 \code{\link[=sim_costs]{sim_costs()}} and \code{\link[=sim_qalys]{sim_qalys()}} return objects of class

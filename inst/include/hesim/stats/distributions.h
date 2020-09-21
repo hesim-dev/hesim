@@ -329,28 +329,6 @@ public:
     return rpwexp(rate_, time_);
   }
   
-  double trandom2(double lower, double upper) const {
-    // Make new time and rate parameters
-    // by concatenating the lower bound to times
-    // and removing all times prior to the lower bound
-    int j = 0;
-    while(lower >= time_[j]) {
-      ++j;
-    }
-    j = j - 1;
-    std::vector<double> rate2(rate_.begin() + j, rate_.end());
-    int n_times = rate2.size();
-    std::vector<double> time2(n_times);
-    time2[0] = lower;
-    for (int t = 1; t < n_times; ++ t){
-      time2[t] = time_[j + t];
-    }
-    
-    // Random number generation
-    double out = rpwexp(rate2, time2);
-    return std::min(out, upper);
-  }
-  
   double trandom(double lower, double upper) const {
     if (upper != INFINITY){
       Rcpp::stop("hesim does not currently support sampling from a piecewise exponential distribution truncated from above.");

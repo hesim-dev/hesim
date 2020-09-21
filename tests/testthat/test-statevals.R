@@ -252,16 +252,14 @@ test_that("StateVals$sim", {
                tbl[state_id == 3 & time_start == 4, est])
 })
 
-# sim_ev -----------------------------------------------------------------------
-n_samples <- 5
-
-# Helper function
+# sim_costs --------------------------------------------------------------------
+# Helper functions
 R_sim_wlos <- function(prob, stvals, times, dr = .03){
   yvals <- exp(-dr * times) * stvals * prob
   return(pracma::trapz(x = times, y = yvals))
 }
 
-wlos_test <- function(econmod, s, k, i, h, dr = .03){
+test_wlos <- function(econmod, s, k, i, h, dr = .03){
   costs1 <- econmod$costs_[sample == s & strategy_id == k & 
                              patient_id == i & state_id == h]
   stprobs1 <- econmod$stateprobs_[sample == s & strategy_id == k & 
@@ -280,7 +278,15 @@ wlos_test <- function(econmod, s, k, i, h, dr = .03){
                tolerance = .001, scale = 1)
 }
 
-# Simulate state probabilities
+# Construct model + simulate outcomes
+n_samples <- 5
+hesim_dat <- list(
+  strategies = data.table(strategy_id = 1:2),
+  patients = data.table(patient_id = 1),
+  states = data.table(state_id = 1:3)
+)
+
+## Transition model
 alpha1 <- rbind(c(200, 400, 600, 800),
                  c(0, 500, 200, 300),
                  c(0, 0, 500, 500),
@@ -297,83 +303,138 @@ pmat <- data.table(sample = rep(1:n_samples, each = 2),
     rdirichlet_mat(n = 5, alpha = alpha2, output = "data.table"))
 )
 transmod <- CohortDtstmTrans$new(params = tparams_transprobs(pmat))
-econmod <- CohortDtstm$new(trans_model = transmod)
-econmod$sim_stateprobs(n_cycles = 5)
 
-# Simulate costs
-hesim_dat <- list(strategies = data.table(strategy_id = 1:2),
-                  patients = data.table(patient_id = 1),
-                  states = data.table(state_id = 1:3))
-stval_tbl <- stateval_tbl(data.table(state_id = 1:3,
+## Cost model
+cost_tbl <- stateval_tbl(data.table(state_id = 1:3,
                                      mean = c(1701, 1774, 6948),
                                      se = c(1701, 1774, 6948)),
                           dist = "gamma",
                           hesim_data = hesim_dat)
-econmod$cost_models <- list(create_StateVals(stval_tbl, n = n_samples))
-econmod$sim_costs(dr = .03)
+costmods <- list(create_StateVals(cost_tbl, n = n_samples))
 
-# Tests
-wlos_test(econmod, s = 1, k = 1, i = 1, h = 1, dr = .03)
-wlos_test(econmod, s = 3, k = 2, i = 1, h = 1, dr = .03)
-
-## Cannot have same discount rate twice
-expect_error(econmod$sim_costs(dr = c(.05, .05)))
-
-## Must first simulate stateprobs_
-econmod$stateprobs_ <- NULL
-expect_error(econmod$sim_costs())
-
-##  Incorrect number of PSA samples
+## Full economic model + simulation of state probabilities
+econmod <- CohortDtstm$new(trans_model = transmod,
+                           cost_models = costmods)
 econmod$sim_stateprobs(n_cycles = 5)
-econmod$cost_models[[2]] <- create_StateVals(stval_tbl, n = n_samples - 1)
-expect_error(econmod$sim_costs())
-econmod$cost_models[[2]] <- NULL
 
-## Incorrect number of states
-stval_tbl2 <- stateval_tbl(data.table(state_id = 1:4,
-                                      est = rep(0, 4)),
-                           dist = "fixed",
-                           hesim_data = hesim_dat)
-econmod$cost_models <- list(create_StateVals(stval_tbl2, n = n_samples))
-expect_error(econmod$sim_costs())
+# Run tests
+test_that("sim_costs produces correct result", {
+  econmod$sim_costs(dr = .03)
+  test_wlos(econmod, s = 1, k = 1, i = 1, h = 1, dr = .03)
+  test_wlos(econmod, s = 3, k = 2, i = 1, h = 1, dr = .03)
+})
 
-## Time varying state values
-stval_tbl_tv <- stateval_tbl(data.table(strategy_id = rep(hesim_dat$strategies$strategy_id,
-                                                          each = 2),
-                                        time_start = c(0, 2, 0, 2),
-                                        est = c(1000, 2, 3000, 10)),
-                             dist = "fixed",
-                             hesim_data = hesim_dat)
-econmod$cost_models <- list(create_StateVals(stval_tbl_tv, n = n_samples))
-econmod$sim_costs(dr = .03)
-wlos_test(econmod, s = 2, k = 2, i = 1, h = 2, dr = .03)
+test_that("Cannot have same discount rate twice", {
+  expect_error(econmod$sim_costs(dr = c(.05, .05)))
+})
 
-## Using method = "starting" option
-stval_tbl_starting <- stateval_tbl(data.table(strategy_id = hesim_dat$strategies$strategy_id,
-                                              est = c(1000, 2000)),
-                                   dist = "fixed",
-                                   hesim_data = hesim_dat)
-econmod$cost_models <- list(create_StateVals(stval_tbl_starting, n = n_samples,
-                                             method = "starting"))
-expect_equal(econmod$cost_models[[1]]$method, "starting")
+test_that("Must first simulate stateprobs_", {
+  econmod$stateprobs_ <- NULL
+  expect_error(econmod$sim_costs())
+})
 
-### With all costs in first health state
-econmod$sim_costs()
-costs <- dcast(econmod$costs_, sample + strategy_id + patient_id + grp_id +
-                 dr + category ~ state_id, value.var = "costs")
-expect_true(all(costs[strategy_id == 1][["1"]] == 1000))
-expect_true(all(costs[strategy_id == 2][["1"]] == 2000))
-expect_true(all(costs[["2"]] == 0))
-expect_true(all(costs[["3"]] == 0))
+test_that("Incorrect number of PSA samples", {
+  econmod$sim_stateprobs(n_cycles = 5)
+  econmod$cost_models[[2]] <- create_StateVals(cost_tbl, n = n_samples - 1)
+  expect_error(econmod$sim_costs())
+})
 
-### With costs in 2 health states
-econmod$trans_model$start_stateprobs <- c(.5, .5, 0, 0)
+test_that("Incorrect number of health states", {
+  cost_tbl2 <- stateval_tbl(
+    data.table(state_id = 1:4,
+                est = rep(0, 4)),
+                dist = "fixed",
+                hesim_data = hesim_dat)
+  econmod$cost_models <- list(create_StateVals(cost_tbl2, n = n_samples))
+  expect_error(econmod$sim_costs())
+})
+
+test_that("sim_costs produces correct result with time-varying state values", {
+  cost_tbl_tv <- stateval_tbl(
+    data.table(strategy_id = rep(hesim_dat$strategies$strategy_id,each = 2),
+              time_start = c(0, 2, 0, 2),
+              est = c(1000, 2, 3000, 10)),
+              dist = "fixed",
+              hesim_data = hesim_dat
+  )
+  econmod$cost_models <- list(create_StateVals(cost_tbl_tv, n = n_samples))
+  econmod$sim_costs(dr = .03)
+  test_wlos(econmod, s = 2, k = 2, i = 1, h = 2, dr = .03)
+})
+
+cost_tbl_starting <- stateval_tbl(
+  data.table(strategy_id = hesim_dat$strategies$strategy_id,
+  est = c(1000, 2000)),
+  dist = "fixed",
+  hesim_data = hesim_dat)
+econmod$cost_models <- list(
+  create_StateVals(cost_tbl_starting, n = n_samples, method = "starting")
+)
+
+test_that("create_StateVals() correctly passes method = 'starting'", {
+  expect_equal(econmod$cost_models[[1]]$method, "starting")
+})
+
+test_that("sim_costs produces correct result with method = 'starting' and 
+          all costs in the first health state", {
+  econmod$sim_costs()
+  costs <- dcast(econmod$costs_, sample + strategy_id + patient_id + grp_id +
+                   dr + category ~ state_id, value.var = "costs")
+  expect_true(all(costs[strategy_id == 1][["1"]] == 1000))
+  expect_true(all(costs[strategy_id == 2][["1"]] == 2000))
+  expect_true(all(costs[["2"]] == 0))
+  expect_true(all(costs[["3"]] == 0))
+})
+
+test_that("sim_costs produces correct result with method = 'starting' and 
+          costs in 2 health states", {
+  econmod$trans_model$start_stateprobs <- c(.5, .5, 0, 0)
+  econmod$sim_stateprobs(n_cycles = 5)
+  econmod$sim_costs()
+  costs <- dcast(econmod$costs_, sample + strategy_id + patient_id + grp_id +
+                   dr + category ~ state_id, value.var = "costs")
+  expect_true(all(costs[strategy_id == 1][["1"]] == 1000 * .5))
+  expect_true(all(costs[strategy_id == 1][["2"]] == 1000 * .5))
+  expect_true(all(costs[strategy_id == 2][["1"]] == 2000 * .5))
+  expect_true(all(costs[strategy_id == 2][["2"]] == 2000 * .5))
+  expect_true(all(costs[["3"]] == 0))
+})
+
+# sim_qalys --------------------------------------------------------------------
+# Add utility model to economic model above
+utility_tbl <- stateval_tbl(
+  data.table(state_id = 1:3,
+              mean = c(1, .8, .7),
+              se = c(0, .02, .03)),
+              dist = "beta",
+              hesim_data = hesim_dat)
+utilitymod <- create_StateVals(utility_tbl, n = n_samples)
+econmod <- CohortDtstm$new(trans_model = transmod,
+                           utility_model = utilitymod)
+
+test_that("sim_qalys() returns an error if $_stateprobs is NULL", {
+  expect_error(
+    econmod$sim_qalys(),
+    "You must first simulate state probabilities using '$sim_stateprobs'.",
+    fixed = TRUE
+  )
+})
+
 econmod$sim_stateprobs(n_cycles = 5)
-econmod$sim_costs()
-costs <- dcast(econmod$costs_, sample + strategy_id + patient_id + grp_id +
-                 dr + category ~ state_id, value.var = "costs")
-expect_true(all(costs[strategy_id == 1][["1"]] == 1000 * .5))
-expect_true(all(costs[strategy_id == 1][["2"]] == 1000 * .5))
-expect_true(all(costs[strategy_id == 2][["1"]] == 2000 * .5))
-expect_true(all(costs[strategy_id == 2][["2"]] == 2000 * .5))
-expect_true(all(costs[["3"]] == 0))
+
+test_that("sim_qalys does not return lys column if lys = FALSE", {
+  econmod$sim_qalys(lys = FALSE)
+  expect_true(!"lys" %in% colnames(econmod$qalys_))
+})
+
+test_that("sim_qalys produces correct value of lys", {
+  dr <- .03
+  econmod$sim_qalys(lys = TRUE, dr = dr, integrate_method = "riemann_left")
+  max_t <- max(econmod$stateprobs_$t)
+  max_state_id <- max(econmod$stateprobs_$state_id)
+  lys <- econmod$stateprobs_[t != max_t & state_id != max_state_id , 
+                      .(lys = sum(exp(t * dr) * prob)), 
+                      by = c("sample", "strategy_id", "patient_id", 
+                             "grp_id", "state_id")]
+  expect_equal(econmod$qalys_$lys, lys$lys)
+})

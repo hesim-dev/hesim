@@ -5,15 +5,16 @@
  * Simulate state values over time.
  * An Rcpp exported function that simulates state values over time using
  * @c statevals::sim.
- * @param R_StateVals
- * @param times
- * @param type
- * @return N
+ * @param R_StateVals An @c R object of class @c StateVals.
+ * @param times Time to simulate state values.
+ * @param type "predict" to predict mean values; "random" to randomly draw
+ * a value from the probability distribution of the statistical model. 
+ * @return  An @c R data frame. 
  ******************************************************************************/ 
 // [[Rcpp::export]]
 Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals, 
-                           std::vector<double> times,
-                           std::string type){
+                                std::vector<double> times,
+                                std::string type){
   // Initialize
   hesim::statevals statevals(R_StateVals);
   hesim::statmods::obs_index obs_index(hesim::statmods::get_id_object(R_StateVals));
@@ -76,6 +77,9 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
  * @param categories Categories with a given @p type. For QALYs, there is only one
  * category ("qalys"), but for costs this could consist of different cost categories
  * such as drug acquisition and administration costs, resource use costs, etc. 
+ * @param times Time at which state probabilities were computed. 
+ * @param method Method used for integration when computing weighted length
+ * of stay. 
  * @return An @c R data frame with columns equivalent to the data members in
  * hesim::wlos_out_out.
  ******************************************************************************/ 
@@ -90,5 +94,44 @@ Rcpp::DataFrame C_sim_ev(Rcpp::DataFrame R_stateprobs,
   hesim::stateprobs_out stprobs(R_stateprobs);
   hesim::ev_out out = ev(stprobs, times, dr, categories, method);
   return out.create_R_data_frame();
+}
+
+/***************************************************************************//** 
+ * @ingroup statevals
+ * Simulate length of stay from simulated health state probabilities.
+ * This function is exported to @c R and used to simulate length of stay.
+ * @param R_stateprobs Simulated state probabilities from @c R.
+ * @param n_obs Number of total unique observations inclusive of parameter
+ * samples, treatment strategies, patients and (non-death) health states.
+ * @param dr Discount rate.
+ * @param times Times at which state probabilities were computed.
+ * @param integrate_method Method used to integrate state probabilities and compute
+ * length of stay.
+ * @return A vector of length of stay values for each observation. 
+ ******************************************************************************/ 
+// [[Rcpp::export]]
+std::vector<double> C_sim_los(std::vector<double> stateprobs,
+                              int n_obs,
+                              std::vector<double> dr,
+                              std::vector<double> times,
+                              std::string integrate_method = "trapz"){
+  
+  int n_dr = dr.size();
+  int n_times = times.size();
+  std::vector<double> los(n_obs * n_dr);
+  int index = 0;
+  int stateprobs_index = 0;
+  
+  for (int j = 0; j < n_dr; ++j) {
+    for (int i = 0; i < n_obs; ++ i) {
+      los[index] = hesim::ev::sim_los(times, 
+                                      stateprobs.begin() + stateprobs_index, 
+                                      dr[j], 
+                                      integrate_method);
+      ++index;
+      stateprobs_index = stateprobs_index + n_times;
+    }
+  }
+  return los;
 }
 

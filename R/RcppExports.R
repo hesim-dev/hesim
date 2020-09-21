@@ -85,6 +85,10 @@ C_sim_ev <- function(R_stateprobs, R_statevals, dr, categories, times, method = 
     .Call('_hesim_C_sim_ev', PACKAGE = 'hesim', R_stateprobs, R_statevals, dr, categories, times, method)
 }
 
+C_sim_los <- function(stateprobs, n_obs, dr, times, integrate_method = "trapz") {
+    .Call('_hesim_C_sim_los', PACKAGE = 'hesim', stateprobs, n_obs, dr, times, integrate_method)
+}
+
 C_test_trapz <- function(x, y) {
     .Call('_hesim_C_test_trapz', PACKAGE = 'hesim', x, y)
 }

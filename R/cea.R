@@ -1,10 +1,12 @@
 #' @export
+#' @rdname cea
 icea <- function(x, ...) {
   .Deprecated("cea")
   UseMethod("cea")
 }
 
 #' @export
+#' @rdname cea
 icea_pw <- function(x, ...) {
   .Deprecated("cea_pw")
   UseMethod("cea_pw")

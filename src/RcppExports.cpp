@@ -314,6 +314,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_sim_los
+std::vector<double> C_sim_los(std::vector<double> stateprobs, int n_obs, std::vector<double> dr, std::vector<double> times, std::string integrate_method);
+RcppExport SEXP _hesim_C_sim_los(SEXP stateprobsSEXP, SEXP n_obsSEXP, SEXP drSEXP, SEXP timesSEXP, SEXP integrate_methodSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type stateprobs(stateprobsSEXP);
+    Rcpp::traits::input_parameter< int >::type n_obs(n_obsSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type dr(drSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type times(timesSEXP);
+    Rcpp::traits::input_parameter< std::string >::type integrate_method(integrate_methodSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_sim_los(stateprobs, n_obs, dr, times, integrate_method));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_test_trapz
 double C_test_trapz(std::vector<double> x, std::vector<double> y);
 RcppExport SEXP _hesim_C_test_trapz(SEXP xSEXP, SEXP ySEXP) {
@@ -635,6 +650,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 6},
     {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
     {"_hesim_C_sim_ev", (DL_FUNC) &_hesim_C_sim_ev, 6},
+    {"_hesim_C_sim_los", (DL_FUNC) &_hesim_C_sim_los, 5},
     {"_hesim_C_test_trapz", (DL_FUNC) &_hesim_C_test_trapz, 2},
     {"_hesim_C_test_is_absorbing", (DL_FUNC) &_hesim_C_test_is_absorbing, 1},
     {"_hesim_C_test_trans_mat_trans_id", (DL_FUNC) &_hesim_C_test_trans_mat_trans_id, 2},

@@ -515,6 +515,14 @@ sim_ev <- function (object, ...) {
   UseMethod("sim_ev", object)
 }
 
+sim_ev.NULL <- function(object, ...) {
+  if (is.null(object)) {
+    stop("You must first simulate state probabilities using '$sim_stateprobs'.",
+         call. = FALSE)
+  }
+}
+
+
 sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
                               integrate_method = c("trapz", "riemann_left", "riemann_right")){
   integrate_method <- match.arg(integrate_method)
@@ -562,6 +570,19 @@ sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
   return(res[])
 } 
 
+sim_los <- function (object, utility_model, dr, 
+                     integrate_method = c("trapz", "riemann_left", "riemann_right")) {
+  state_id <- NULL # To avoid no visible binding note
+  id <- get_id_object(utility_model)
+  n_obs <- id$n_samples * id$n_strategies * id$n_patients * id$n_states
+  los <- C_sim_los(stateprobs = object[state_id != max(state_id)]$prob,
+                   n_obs = n_obs,
+                   dr = dr,
+                   times = unique(object$t),
+                   integrate_method = match.arg(integrate_method))
+  return(los)
+}
+
 #' Expected values
 #' 
 #' Simulate costs and quality-adjusted life-years (QALYs) as a function of
@@ -586,21 +607,29 @@ sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
 #' See `vignette("expected-values")` for details.
 #'
 #' @name sim_ev
-sim_qalys <- function(object, utility_model, dr, method, lys){
+sim_qalys <- function(object, utility_model, dr, integrate_method, lys){
   utility_model$check()
   qalys <- sim_ev(object,
                   list(utility_model),
                   "qalys",
                   dr,
-                  method)
+                  integrate_method)
+  if (lys){
+    los <- sim_los(object,
+                   utility_model,
+                   dr,
+                   integrate_method)
+    qalys[, lys := los]
+  }
+  qalys[, ("category") := NULL]
   setnames(qalys, "value", "qalys")
   setattr(qalys, "class", 
           c("qalys", "data.table", "data.frame"))
-  return(qalys)
+  return(qalys[, ])
 }
 
 #' @rdname sim_ev
-sim_costs <- function(object, cost_models, dr, method){
+sim_costs <- function(object, cost_models, dr, integrate_method){
   if(!is.list(cost_models)){
     stop("'cost_models' must be a list", call. = FALSE)
   }
@@ -614,13 +643,13 @@ sim_costs <- function(object, cost_models, dr, method){
   }   
   costs <- sim_ev(object,
                   cost_models,
-                   categories,
-                   dr,
-                  method)
+                  categories,
+                  dr,
+                  integrate_method)
   setnames(costs, "value", "costs")
   setattr(costs, "class", 
           c("costs", "data.table", "data.frame"))
-  return(costs)
+  return(costs[, ])
 }
 
 #' Costs object
