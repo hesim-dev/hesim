@@ -160,9 +160,9 @@ simulated state occupancy probabilities." />
 simulated state occupancy probabilities.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sim_qalys</span>(<span class='no'>object</span>, <span class='no'>utility_model</span>, <span class='no'>dr</span>, <span class='no'>method</span>, <span class='no'>lys</span>)
+    <pre class="usage"><span class='fu'>sim_qalys</span>(<span class='no'>object</span>, <span class='no'>utility_model</span>, <span class='no'>dr</span>, <span class='no'>integrate_method</span>, <span class='no'>lys</span>)
 
-<span class='fu'>sim_costs</span>(<span class='no'>object</span>, <span class='no'>cost_models</span>, <span class='no'>dr</span>, <span class='no'>method</span>)</pre>
+<span class='fu'>sim_costs</span>(<span class='no'>object</span>, <span class='no'>cost_models</span>, <span class='no'>dr</span>, <span class='no'>integrate_method</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,6 +181,13 @@ to simulate utility.</p></td>
       <td><p>Discount rate.</p></td>
     </tr>
     <tr>
+      <th>integrate_method</th>
+      <td><p>Method used to integrate state values when computing
+weighted length of stay. Options are <code>trapz</code> for the trapezoid rule,
+<code>riemann_left</code> left for a left Riemann sum, and
+<code>riemann_right</code> right for a right Riemann sum.</p></td>
+    </tr>
+    <tr>
       <th>lys</th>
       <td><p>If <code>TRUE</code>, then life-years are simulated in addition to
 QALYs.</p></td>
@@ -189,13 +196,6 @@ QALYs.</p></td>
       <th>cost_models</th>
       <td><p>A list of objects of class <a href='StateVals.html'>StateVals</a> used
 to simulate costs.</p></td>
-    </tr>
-    <tr>
-      <th>integrate_method</th>
-      <td><p>Method used to integrate state values when computing
-weighted length of stay. Options are <code>trapz</code> for the trapezoid rule,
-<code>riemann_left</code> left for a left Riemann sum, and
-<code>riemann_right</code> right for a right Riemann sum.</p></td>
     </tr>
     </table>
 
