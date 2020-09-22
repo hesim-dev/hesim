@@ -573,8 +573,9 @@ sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
 sim_los <- function (object, utility_model, dr, 
                      integrate_method = c("trapz", "riemann_left", "riemann_right")) {
   state_id <- NULL # To avoid no visible binding note
+  n_samples <- utility_model$params$n_samples
   id <- get_id_object(utility_model)
-  n_obs <- id$n_samples * id$n_strategies * id$n_patients * id$n_states
+  n_obs <- n_samples * id$n_strategies * id$n_patients * id$n_states
   los <- C_sim_los(stateprobs = object[state_id != max(state_id)]$prob,
                    n_obs = n_obs,
                    dr = dr,

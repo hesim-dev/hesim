@@ -120,9 +120,9 @@ std::vector<double> C_sim_los(std::vector<double> stateprobs,
   int n_times = times.size();
   std::vector<double> los(n_obs * n_dr);
   int index = 0;
-  int stateprobs_index = 0;
   
   for (int j = 0; j < n_dr; ++j) {
+    int stateprobs_index = 0;
     for (int i = 0; i < n_obs; ++ i) {
       los[index] = hesim::ev::sim_los(times, 
                                       stateprobs.begin() + stateprobs_index, 

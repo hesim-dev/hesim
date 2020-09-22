@@ -315,7 +315,7 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
     #' in `qalys_`.
     sim_qalys = function(dr = .03,
                          integrate_method = c("trapz", "riemann_left", "riemann_right"),
-                         lys = FALSE){
+                         lys = TRUE){
       self$qalys_ <- sim_qalys(self$stateprobs_, self$utility_model, dr, integrate_method,
                                lys)
       invisible(self)
