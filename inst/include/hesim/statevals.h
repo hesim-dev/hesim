@@ -410,7 +410,7 @@ public:
     auto stateprob_it = stateprob_first;
     std::vector<double> value(std::distance(times.begin(), times.end()));
     for (int i = 0; i < times.size(); ++i) {
-      value[i] = exp(dr * times[i]) * *stateprob_it;
+      value[i] = exp(-dr * times[i]) * *stateprob_it;
       ++stateprob_it;
     }
     

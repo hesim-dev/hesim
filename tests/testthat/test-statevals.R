@@ -433,7 +433,7 @@ test_that("sim_qalys produces correct value of lys", {
   max_t <- max(econmod$stateprobs_$t)
   max_state_id <- max(econmod$stateprobs_$state_id)
   lys <- econmod$stateprobs_[t != max_t & state_id != max_state_id , 
-                      .(lys = sum(exp(t * dr) * prob)), 
+                      .(lys = sum(exp(t * -dr) * prob)), 
                       by = c("sample", "strategy_id", "patient_id", 
                              "grp_id", "state_id")]
   expect_equal(econmod$qalys_$lys, lys$lys)
