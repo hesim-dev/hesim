@@ -344,7 +344,7 @@ Psm <- R6::R6Class("Psm",
       stateprobs <- data.table(res$stateprobs)
       stateprobs[, state_id := state_id + 1]
       stateprobs[, sample := sample + 1]
-      check_patient_wt(self, stateprobs)
+      check_patient_wt(self$survival_models, stateprobs)
       self$stateprobs_ <- stateprobs[]
       setattr(self$stateprobs_, "class", 
               c("stateprobs", "data.table", "data.frame"))

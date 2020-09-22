@@ -4,9 +4,10 @@ library("data.table")
 library("pracma")
 rm(list = ls())
 
-# Simulation
+# hesim data
 strategies_dt <- data.table(strategy_id = seq(2, 4)) # testing for cases when doesn't start at 1
 patients_dt <- data.table(patient_id = seq(1, 3),
+                          patient_wt = 1,
                           age = c(45, 50, 60),
                           female = c(0, 0, 1))
 states_dt <- data.frame(state_id =  seq(1, 3),
@@ -65,7 +66,7 @@ test_that("create_PsmCurves", {
                                  bootstrap = TRUE))
 })
 
-test_that("PsmCurves", {
+test_that("PsmCurves are correct", {
   times <- c(1, 2, 3)
   
   # Sampling
@@ -136,13 +137,15 @@ test_that("PsmCurves", {
 
 # Partitioned survival model  --------------------------------------------------
 set.seed(101)
+
+# Construct PSM
 times <- c(0, 2, 5, 8)
 
-# Survival models
+## Survival models
 psm_curves <- create_PsmCurves(fits_wei, input_data = surv_input_data, n = N,
                                bootstrap = FALSE)
 
-# Utility model
+## Utility model
 psm_X <- create_input_mats(formula_list(mu = formula(~1)), 
                                      expand(hesim_dat, 
                                      by = c("strategies", "patients", "states")),
@@ -151,7 +154,7 @@ psm_utility <- StateVals$new(input_data = psm_X,
                              params = params_lm(coef = runif(N, .6, .8)))
 
 
-# Cost model(s)
+## Cost model(s)
 fit_costs_medical <- stats::lm(costs ~ female + state_name, 
                                data = psm4_exdata$costs$medical)
 cost_input_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
@@ -162,34 +165,45 @@ psm_costs_medical2 <- create_StateVals(fit_costs_medical,
                                        input_data = cost_input_data, 
                                        n = N + 1)
 
-# Combine
+## Combine
 psm <- Psm$new(survival_models = psm_curves,
                utility_model = psm_utility,
                cost_models = list(medical = psm_costs_medical))
 psm$sim_survival(t = times)
 
-# Errors in survival curves
-test_that("Errors in Psm$survival_", {
-  expect_error(psm$sim_survival(t = c(2, 5))) 
+# Run tests
+## $sim_survival()
+test_that("$sim_survival() returns an error if the first element of t is not 0", {
+  expect_error(psm$sim_survival(t = c(2, 5)),
+               "The first element of 't' must be 0") 
 })
 
-# State probabilities
-test_that("Psm$stateprobs", {
-  dt_by_grp <- function(x, by_var, value_var){
-    df <- split(x, by = by_var)
-    dt <- data.table(data.frame(lapply(df, function (x) x[[value_var]])))
-  }
-  
-  surv_dt <- dt_by_grp(psm$survival_, by_var = "curve", value_var = "survival")
-  surv_dt[, cross1 := ifelse(X1 > X2, 1, 0)]
-  surv_dt[, cross2 := ifelse(X2 > X3, 1, 0)]
-  n_crossings <- sum(surv_dt$cross1) + sum(surv_dt$cross2)
+## $sim_stateprobs()
+dt_by_grp <- function(x, by_var, value_var){
+  df <- split(x, by = by_var)
+  dt <- data.table(data.frame(lapply(df, function (x) x[[value_var]])))
+}
+
+surv_dt <- dt_by_grp(psm$survival_, by_var = "curve", value_var = "survival")
+surv_dt[, cross1 := ifelse(X1 > X2, 1, 0)]
+surv_dt[, cross2 := ifelse(X2 > X3, 1, 0)]
+n_crossings <- sum(surv_dt$cross1) + sum(surv_dt$cross2)
+
+test_that("$sim_stateprobs() produces warning if curves cross", {
   if (n_crossings > 0){
     expect_warning(psm$sim_stateprobs()$stateprobs_)
-  } else{
-    psm$sim_stateprobs()$stateprobs_
+  } else{ # No warning expected
+    expect_warning(psm$sim_stateprobs()$stateprobs_, NA)
   }
-  
+})
+
+test_that("$sim_stateprobs() should return patient_wt if not NULL in hesim_data", {
+  psm$sim_stateprobs()
+  expect_true(!is.null(psm$stateprobs_$patient_wt))
+})
+
+test_that("sim_stateprobs produces expected results", {
+  psm$sim_stateprobs()
   stateprobs_dt <- dt_by_grp(psm$stateprobs_, by_var = "state_id",
                               value_var = "prob")
 
@@ -199,16 +213,17 @@ test_that("Psm$stateprobs", {
   expect_equal(1 - surv_dt$X3, stateprobs_dt$X4)
 })
 
-# Costs and QALYs
-test_that("Psm: Simulate costs and QALYs", {
-  psm$sim_stateprobs()$stateprobs_
+## sim_costs() and sim_qalys()
+test_that("sim_costs() and sim_qalys() both return a data.table", {
+  psm$sim_stateprobs()
   psm$sim_costs(dr = c(0, .03))
   expect_true(inherits(psm$costs_, "data.table"))
   psm$sim_qalys(dr = c(0, .05))
   expect_true(inherits(psm$qalys_, "data.table"))
 })
 
-test_that("Psm - from parameter object", {
+## Psm from a parameter object
+test_that("A Psm object can be constructed and simulated from a parameter object", {
   # PsmCurves
   params_wei <- create_params(fits_wei)
   tmp_input_data <- surv_input_data
