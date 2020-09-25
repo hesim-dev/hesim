@@ -111,7 +111,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 class="date">2020-09-21</h4>
+            <h4 class="date">2020-09-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-cohort.Rmd"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
@@ -142,12 +142,12 @@
 <span class="co"># Patients</span>
 <span class="no">ages</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">55</span>, <span class="fl">75</span>, <span class="fl">5</span>)
 <span class="no">age_weights</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.05</span>, <span class="fl">.1</span>, <span class="fl">.4</span>, <span class="fl">.25</span>, <span class="fl">.20</span>)
-<span class="no">gender_weights</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.65</span>, <span class="fl">.35</span>)
+<span class="no">sex_weights</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.65</span>, <span class="fl">.35</span>)
 <span class="no">weights</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="no">age_weights</span>, <span class="kw">times</span> <span class="kw">=</span> <span class="fl">2</span>) *
-           <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="no">gender_weights</span>, <span class="kw">each</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">ages</span>))
+           <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="no">sex_weights</span>, <span class="kw">each</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">ages</span>))
 <span class="no">patients</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="kw">patient_id</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">10</span>,
                        <span class="kw">grp_id</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">10</span>,
-                       <span class="kw">gender</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>), <span class="kw">each</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">ages</span>)),
+                       <span class="kw">sex</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>), <span class="kw">each</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">ages</span>)),
                        <span class="kw">age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="no">ages</span>, <span class="kw">times</span> <span class="kw">=</span> <span class="fl">2</span>),
                        <span class="kw">patient_wt</span> <span class="kw">=</span> <span class="no">weights</span>)
 <span class="no">hesim_dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span>(<span class="kw">strategies</span> <span class="kw">=</span> <span class="no">strategies</span>,
@@ -159,7 +159,7 @@
 ## 2:           2      New prosthesis
 ## 
 ## $patients
-##     patient_id grp_id gender age patient_wt
+##     patient_id grp_id    sex age patient_wt
 ##  1:          1      1 Female  55     0.0325
 ##  2:          2      2 Female  60     0.0650
 ##  3:          3      3 Female  65     0.2600
@@ -192,7 +192,7 @@
 <li>
 <strong>rr</strong>: Revision rate for prosthesis</li>
 <li>
-<strong>mr</strong>: Age and gender-specific mortality rates</li>
+<strong>mr</strong>: Age and sex-specific mortality rates</li>
 <li>
 <strong>omrRTHR</strong>: Operative mortality rate following revision THR</li>
 <li>
@@ -424,7 +424,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <p>The sampled parameter values are “transformed” as a function of input data, which consists of all treatment strategy and patient combinations.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">input_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/expand.html">expand</a></span>(<span class="no">hesim_dat</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">input_data</span>)</pre></body></html></div>
-<pre><code>##    strategy_id patient_id       strategy_name grp_id gender age patient_wt
+<pre><code>##    strategy_id patient_id       strategy_name grp_id    sex age patient_wt
 ## 1:           1          1 Standard prosthesis      1 Female  55     0.0325
 ## 2:           1          2 Standard prosthesis      2 Female  60     0.0650
 ## 3:           1          3 Standard prosthesis      3 Female  65     0.2600
@@ -432,10 +432,10 @@ S(t) = \exp(-\lambda t^\gamma) \\
 ## 5:           1          5 Standard prosthesis      5 Female  75     0.1300
 ## 6:           1          6 Standard prosthesis      6   Male  55     0.0175</code></pre>
 <p>When evaluating the <code><a href="../reference/define_tparams.html">define_tparams()</a></code> expression, operations are vectorized and performed for each combination of the sampled parameters, input data, and time periods. The model will be simulated for 60 model cycles (i.e., 60 years) so we will create 60 time intervals of length 1.</p>
-<p>Separate transformation functions are used for the transition model and the cost/utility models. This is done for computational efficiency since only the transition model depends on cycle time. In the transition model, the revision rate (<em>rr</em>) depends on the scale and the shape parameters, which, in turn, depend on the sampled values of the parameters from the Weibull model. The mortality rate depends on gender and a patient’s age during each model cycle.</p>
+<p>Separate transformation functions are used for the transition model and the cost/utility models. This is done for computational efficiency since only the transition model depends on cycle time. In the transition model, the revision rate (<em>rr</em>) depends on the scale and the shape parameters, which, in turn, depend on the sampled values of the parameters from the Weibull model. The mortality rate depends on sex and a patient’s age during each model cycle.</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">transitions_def</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/define_tparams.html">define_tparams</a></span>({
   <span class="co"># Regression for revision risk</span>
-  <span class="no">male</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span>(<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Female"</span>, <span class="fl">0</span>, <span class="fl">1</span>)
+  <span class="no">male</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span>(<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Female"</span>, <span class="fl">0</span>, <span class="fl">1</span>)
   <span class="no">np1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span>(<span class="no">strategy_name</span> <span class="kw">==</span> <span class="st">"Standard prosthesis"</span>, <span class="fl">0</span>, <span class="fl">1</span>)
   <span class="no">scale</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="no">rr_coef</span>$<span class="no">cons</span> + <span class="no">rr_coef</span>$<span class="no">age</span> * <span class="no">age</span> + <span class="no">rr_coef</span>$<span class="no">male</span> * <span class="no">male</span> +
                  <span class="no">rr_coef</span>$<span class="no">np1</span> * <span class="no">np1</span>)
@@ -444,19 +444,19 @@ S(t) = \exp(-\lambda t^\gamma) \\
 
   <span class="co"># Mortality rate</span>
   <span class="no">age_new</span> <span class="kw">&lt;-</span> <span class="no">age</span> + <span class="no">time</span>
-  <span class="no">mr</span> <span class="kw">&lt;-</span> <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"35"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">35</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">45</span>) +
-        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"45"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">45</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">55</span>) +
-        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"55"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">55</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">65</span>) +
-        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"65"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">65</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">75</span>) +
-        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"75"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">75</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">85</span>) +
-        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"85"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">85</span>) +
+  <span class="no">mr</span> <span class="kw">&lt;-</span> <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"35"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">35</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">45</span>) +
+        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"45"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">45</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">55</span>) +
+        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"55"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">55</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">65</span>) +
+        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"65"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">65</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">75</span>) +
+        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"75"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">75</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">85</span>) +
+        <span class="no">mr_female</span><span class="kw">[[</span><span class="st">"85"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Female"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">85</span>) +
 
-        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"35"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">35</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">45</span>) +
-        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"45"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">45</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">55</span>) +
-        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"55"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">55</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">65</span>) +
-        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"65"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">65</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">75</span>) +
-        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"75"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">75</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">85</span>) +
-        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"85"</span>]] * (<span class="no">gender</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">85</span>)
+        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"35"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">35</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">45</span>) +
+        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"45"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">45</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">55</span>) +
+        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"55"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">55</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">65</span>) +
+        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"65"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">65</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">75</span>) +
+        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"75"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">75</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&lt;</span> <span class="fl">85</span>) +
+        <span class="no">mr_male</span><span class="kw">[[</span><span class="st">"85"</span>]] * (<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Male"</span> <span class="kw">&amp;</span> <span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="fl">85</span>)
 
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
     <span class="kw">tpmatrix</span> <span class="kw">=</span> <span class="fu"><a href="../reference/tpmatrix.html">tpmatrix</a></span>(
@@ -537,38 +537,38 @@ S(t) = \exp(-\lambda t^\gamma) \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.56543
-## 2:           2      2 14.60899</code></pre>
+## 1:           1      2 14.61945
+## 2:           2      2 14.66314</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 509.0264
-## 2:           2      2 611.2848</code></pre>
+## 1:           1      2 513.1689
+## 2:           2      2 613.5321</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
 <pre><code>##     strategy_id grp_id            iqalys         icosts                  inmb
-##  1:           2      1 0.07 (0.02, 0.13)  70 (-37, 141)  3,454 (1,101, 6,606)
-##  2:           2      2 0.04 (0.02, 0.08)  102 (28, 153)    2,076 (642, 3,925)
-##  3:           2      3 0.03 (0.01, 0.05)  127 (73, 164)    1,172 (318, 2,254)
-##  4:           2      4 0.01 (0.01, 0.03) 146 (106, 171)      602 (122, 1,236)
-##  5:           2      5 0.01 (0.00, 0.02) 160 (133, 176)        261 (-11, 650)
-##  6:           2      6 0.11 (0.04, 0.21) -25 (-226, 98) 5,639 (2,030, 10,352)
-##  7:           2      7 0.07 (0.03, 0.13) 37 (-106, 125)  3,370 (1,223, 6,318)
-##  8:           2      8 0.04 (0.02, 0.07)  84 (-18, 146)    1,913 (649, 3,637)
-##  9:           2      9 0.02 (0.01, 0.04)  118 (45, 160)    1,019 (286, 2,063)
-## 10:           2     10 0.01 (0.00, 0.02)  142 (95, 169)       493 (82, 1,110)
+##  1:           2      1 0.07 (0.02, 0.14)  67 (-41, 138)  3,459 (1,011, 7,010)
+##  2:           2      2 0.04 (0.01, 0.09)  100 (18, 153)    2,084 (581, 4,355)
+##  3:           2      3 0.03 (0.01, 0.05)  126 (67, 163)    1,180 (282, 2,621)
+##  4:           2      4 0.02 (0.00, 0.03) 146 (105, 171)       608 (87, 1,448)
+##  5:           2      5 0.01 (0.00, 0.02) 160 (132, 176)        266 (-28, 739)
+##  6:           2      6 0.11 (0.04, 0.22) -29 (-242, 96) 5,631 (1,762, 11,098)
+##  7:           2      7 0.07 (0.02, 0.13) 33 (-116, 124)  3,374 (1,021, 6,735)
+##  8:           2      8 0.04 (0.01, 0.08)  82 (-26, 144)    1,920 (556, 3,876)
+##  9:           2      9 0.02 (0.01, 0.05)  116 (41, 159)    1,025 (253, 2,166)
+## 10:           2     10 0.01 (0.00, 0.03)  141 (92, 169)       498 (60, 1,181)
 ##          icer     conclusion
-##  1:       991 Cost-effective
-##  2:     2,348 Cost-effective
-##  3:     4,905 Cost-effective
-##  4:     9,780 Cost-effective
-##  5:    18,993 Cost-effective
+##  1:       954 Cost-effective
+##  2:     2,297 Cost-effective
+##  3:     4,829 Cost-effective
+##  4:     9,652 Cost-effective
+##  5:    18,755 Cost-effective
 ##  6: Dominates Cost-effective
-##  7:       541 Cost-effective
-##  8:     2,100 Cost-effective
-##  9:     5,188 Cost-effective
-## 10:    11,195 Cost-effective</code></pre>
+##  7:       491 Cost-effective
+##  8:     2,036 Cost-effective
+##  9:     5,097 Cost-effective
+## 10:    11,048 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -579,16 +579,19 @@ S(t) = \exp(-\lambda t^\gamma) \\
                      <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                   
-## Incremental QALYs "-" "0.03 (0.01, 0.05)" 
-## Incremental costs "-" "120 (54, 160)"     
-## Incremental NMB   "-" "1,292 (395, 2,487)"
-## ICER              "-" "4,235"             
+## Incremental QALYs "-" "0.03 (0.01, 0.06)" 
+## Incremental costs "-" "118 (49, 159)"     
+## Incremental NMB   "-" "1,298 (321, 2,699)"
+## ICER              "-" "4,167"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>
-<div id="appendix-transition-probabilities-from-a-weibull-survival-model" class="section level1">
+<div id="appendix" class="section level1">
 <h1 class="hasAnchor">
-<a href="#appendix-transition-probabilities-from-a-weibull-survival-model" class="anchor"></a>Appendix: Transition probabilities from a Weibull survival model</h1>
+<a href="#appendix" class="anchor"></a>Appendix</h1>
+<div id="transition-probabilities-from-a-weibull-survival-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#transition-probabilities-from-a-weibull-survival-model" class="anchor"></a>Transition probabilities from a Weibull survival model</h2>
 <p>In general, the transition probability of an event for a given model cycle is one minus the probability a patient does not have an event during the cycle conditional on not having an event up until that cycle. That is, given a survivor function, <span class="math inline">\(S(t)\)</span> and a cycle of length <span class="math inline">\(u\)</span>, the transition probability, <span class="math inline">\(tp(t_u)\)</span> of an event is,</p>
 <p><span class="math display">\[
 \begin{align}
@@ -608,6 +611,235 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 &amp;= 1 - exp\{\lambda[(t-u)^\gamma  - t^\gamma]\}
 \end{align}
 \]</span></p>
+</div>
+<div id="computational-efficiency" class="section level2">
+<h2 class="hasAnchor">
+<a href="#computational-efficiency" class="anchor"></a>Computational efficiency</h2>
+<p>The largest bottleneck in <code><a href="../reference/define_model.html">define_model()</a></code> is the construction of the economic model and the construction of the transition model in particular. The reason for this is that all transition probabilities are “vectorized” and consequently preallocated. This preallocation can take time if the number of parameter samples <span class="math inline">\(\times\)</span> treatment strategies <span class="math inline">\(\times\)</span> patients <span class="math inline">\(\times\)</span> time periods is large. Since the <code>$sim_stateprobs()</code> method is implemented in <code>C++</code> the simulation is very fast one the transition probabilities have been constructed.</p>
+<p>The disadvantage of <code><a href="../reference/define_model.html">define_model()</a></code> for preallocation is that it is a general function, resulting in some overhead. An alternative approach is to construct the transition probability matrix ourselves using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the <span class="math inline">\(i\)</span>th row and <span class="math inline">\(j\)</span>th column as <span class="math inline">\(p_{ij} = g(x^T\theta)\)</span> where <span class="math inline">\(x\)</span> is an input matrix, <span class="math inline">\(\theta\)</span> is a vector of coefficients (i.e., a parameter sample), and <span class="math inline">\(g()\)</span> is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well.</p>
+<div id="random-number-generation-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#random-number-generation-1" class="anchor"></a>Random number generation</h3>
+<p>To get started, we sample the parameters for the PSA using <code><a href="../reference/define_rng.html">eval_rng()</a></code>.</p>
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">params_rng</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/define_rng.html">eval_rng</a></span>(<span class="no">rng_def</span>, <span class="kw">params</span> <span class="kw">=</span> <span class="no">params</span>)</pre></body></html></div>
+</div>
+<div id="input-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#input-data" class="anchor"></a>Input data</h3>
+<p>We then create input data and add a few variables needed to construct the input matrices. Note that the variable <code>age_new</code> reflects a patients’ age as a function of time in the model.</p>
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="co"># Create new variables</span>
+<span class="no">tpmatrix_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/expand.html">expand</a></span>(<span class="no">hesim_dat</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>),
+                        <span class="kw">times</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">60</span>)
+<span class="no">tpmatrix_data</span>[, <span class="no">time_stop</span> <span class="kw">:=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/is.finite.html">is.infinite</a></span>(<span class="no">time_stop</span>), <span class="fl">61</span>, <span class="no">time_stop</span>)]
+<span class="no">tpmatrix_data</span>[, <span class="no">male</span> <span class="kw">:=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span>(<span class="no">sex</span> <span class="kw">==</span> <span class="st">"Male"</span>, <span class="fl">1</span>, <span class="fl">0</span>)]
+<span class="no">tpmatrix_data</span>[, <span class="no">np1</span> <span class="kw">:=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span>(<span class="no">strategy_name</span> <span class="kw">==</span> <span class="st">"New prosthesis"</span>, <span class="fl">1</span>, <span class="fl">0</span>)]
+<span class="no">tpmatrix_data</span>[, <span class="no">age_new</span> <span class="kw">:=</span> <span class="no">age</span> + <span class="no">time_stop</span>]
+<span class="no">tpmatrix_data</span>[, <span class="no">cons</span> <span class="kw">:=</span> <span class="fl">1</span>]</pre></body></html></div>
+<p>Different input matrices are constructed using the input data for different elements of the transition probability matrix. Some of the parameters aren’t a function of any patient characteristics or time and can therefore be predicted using a matrix with a single column of ones. A separate matrix is needed for the revision rate given the covariates in the Weibull survival model.</p>
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">x_cons</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix</a></span>(<span class="no">tpmatrix_data</span>$<span class="no">cons</span>)
+<span class="no">x_rr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix</a></span>(<span class="no">tpmatrix_data</span>[, <span class="fu">.</span>(<span class="no">cons</span>, <span class="no">age</span>, <span class="no">male</span>, <span class="no">np1</span>)])
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">x_cons</span>)</pre></body></html></div>
+<pre><code>##      [,1]
+## [1,]    1
+## [2,]    1
+## [3,]    1
+## [4,]    1
+## [5,]    1
+## [6,]    1</code></pre>
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">x_rr</span>)</pre></body></html></div>
+<pre><code>##      cons age male np1
+## [1,]    1  55    0   0
+## [2,]    1  55    0   0
+## [3,]    1  55    0   0
+## [4,]    1  55    0   0
+## [5,]    1  55    0   0
+## [6,]    1  55    0   0</code></pre>
+<p>As in our <code><a href="../reference/define_model.html">define_model()</a></code> block above, predicting the mortality rate is a little more cumbersome. One way to do it is to create dummy variables for each age and sex category. To do this it’s helpful to reshape the mortality table above to a longer format.</p>
+<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">mort_tbl2</span>)</pre></body></html></div>
+<pre><code>##     age_lower age_upper    sex       age_sex    rate
+##  1:        35        45 Female  Female_35_45 0.00099
+##  2:        45        55 Female  Female_45_55 0.00260
+##  3:        55        65 Female  Female_55_65 0.00670
+##  4:        65        75 Female  Female_65_75 0.01930
+##  5:        75        85 Female  Female_75_85 0.05350
+##  6:        85       Inf Female Female_85_Inf 0.15480
+##  7:        35        45   Male    Male_35_45 0.00151
+##  8:        45        55   Male    Male_45_55 0.00393
+##  9:        55        65   Male    Male_55_65 0.01090
+## 10:        65        75   Male    Male_65_75 0.03160
+## 11:        75        85   Male    Male_75_85 0.08010
+## 12:        85       Inf   Male   Male_85_Inf 0.18790</code></pre>
+<p>We can write a short function to create a matrix of dummy variables.</p>
+<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="no">create_age_sex_dummies</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">data</span>, <span class="no">mort_tbl</span>) {
+  <span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">data</span>), <span class="kw">ncol</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">mort_tbl2</span>))
+  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">x</span>) <span class="kw">&lt;-</span> <span class="no">mort_tbl2</span>$<span class="no">age_sex</span>
+  <span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">mort_tbl2</span>)) {
+    <span class="no">x</span>[, <span class="no">i</span>] <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span>(<span class="no">data</span>$<span class="no">sex</span> <span class="kw">==</span> <span class="no">mort_tbl2</span>[<span class="no">i</span>]$<span class="no">sex</span> <span class="kw">&amp;</span>
+                      <span class="no">data</span>$<span class="no">age_new</span> <span class="kw">&gt;=</span> <span class="no">mort_tbl2</span>[<span class="no">i</span>]$<span class="no">age_lower</span> <span class="kw">&amp;</span>
+                      <span class="no">data</span>$<span class="no">age_new</span> <span class="kw">&lt;</span> <span class="no">mort_tbl2</span>[<span class="no">i</span>]$<span class="no">age_upper</span>,
+                      <span class="fl">1</span>, <span class="fl">0</span>)
+  }
+  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">x</span>)
+}
+<span class="no">x_age_sex</span> <span class="kw">&lt;-</span> <span class="fu">create_age_sex_dummies</span>(<span class="no">tpmatrix_data</span>, <span class="no">mort_tbl2</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">x_age_sex</span>)</pre></body></html></div>
+<pre><code>##      Female_35_45 Female_45_55 Female_55_65 Female_65_75 Female_75_85
+## [1,]            0            0            1            0            0
+## [2,]            0            0            1            0            0
+## [3,]            0            0            1            0            0
+## [4,]            0            0            1            0            0
+## [5,]            0            0            1            0            0
+## [6,]            0            0            1            0            0
+##      Female_85_Inf Male_35_45 Male_45_55 Male_55_65 Male_65_75 Male_75_85
+## [1,]             0          0          0          0          0          0
+## [2,]             0          0          0          0          0          0
+## [3,]             0          0          0          0          0          0
+## [4,]             0          0          0          0          0          0
+## [5,]             0          0          0          0          0          0
+## [6,]             0          0          0          0          0          0
+##      Male_85_Inf
+## [1,]           0
+## [2,]           0
+## [3,]           0
+## [4,]           0
+## [5,]           0
+## [6,]           0</code></pre>
+</div>
+<div id="transformed-parameters-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#transformed-parameters-1" class="anchor"></a>Transformed parameters</h3>
+<p>With input matrices in hand, we can transform the parameter samples to construct a <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> object, which contains all the predicted transition probabilities needed for simulation. These objects are most easily constructed using <code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> and <code>tpmatrix_id()</code> objects. We will start with <code>tpmatrix_id()</code> which contains the ID variables for each transition probability matrix in <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> objects.</p>
+<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="co"># ID columns</span>
+<span class="co"># One for each treatment strategy patient, time period, AND parameter sample</span>
+<span class="no">tpmatrix_id</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">data</span>, <span class="no">n_samples</span>) {
+  <span class="no">id</span> <span class="kw">&lt;-</span> <span class="no">data</span>[<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">data</span>), <span class="kw">times</span> <span class="kw">=</span> <span class="no">n_samples</span>),
+       <span class="fu">.</span>(<span class="no">strategy_id</span>, <span class="no">patient_id</span>, <span class="no">grp_id</span>, <span class="no">patient_wt</span>, <span class="no">time_start</span>, <span class="no">time_stop</span>)]
+  <span class="no">id</span>[, <span class="no">sample</span> <span class="kw">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>:<span class="no">n_samples</span>, <span class="kw">each</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">data</span>))]
+  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">id</span>[, ])
+}
+<span class="no">tpmat_id</span> <span class="kw">&lt;-</span> <span class="fu">tpmatrix_id</span>(<span class="no">tpmatrix_data</span>, <span class="fl">500</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">tpmat_id</span>)</pre></body></html></div>
+<pre><code>##    strategy_id patient_id grp_id patient_wt time_start time_stop sample
+## 1:           1          1      1     0.0325          0         1      1
+## 2:           1          1      1     0.0325          1         2      1
+## 3:           1          1      1     0.0325          2         3      1
+## 4:           1          1      1     0.0325          3         4      1
+## 5:           1          1      1     0.0325          4         5      1
+## 6:           1          1      1     0.0325          5         6      1</code></pre>
+<p><code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> produces a flattened transition probability matrix for each row of <code>tpmatrix_id</code>. We predict the elements of the matrix using the input matrices we derived above.</p>
+<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="co"># "Transformed" parameters</span>
+<span class="no">time</span> <span class="kw">&lt;-</span> <span class="no">tpmat_id</span>$<span class="no">time_stop</span>
+<span class="no">omrPTHR</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">x_cons</span> <span class="kw">%*%</span> <span class="no">params_rng</span>$<span class="no">omrPTHR</span>)
+<span class="no">omrRTHR</span> <span class="kw">&lt;-</span> <span class="no">omrPTHR</span>
+<span class="no">rr_scale</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">x_rr</span> <span class="kw">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">params_rng</span>$<span class="no">rr_coef</span>[, -<span class="fl">1</span>])))
+<span class="no">rr_shape</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">x_cons</span> <span class="kw">%*%</span> <span class="no">params_rng</span>$<span class="no">rr_coef</span>$<span class="no">lngamma</span>))
+<span class="no">rr</span> <span class="kw">&lt;-</span> <span class="fl">1</span> - <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="no">rr_scale</span> * ((<span class="no">time</span> - <span class="fl">1</span>)^<span class="no">rr_shape</span> - <span class="no">time</span>^<span class="no">rr_shape</span>))
+<span class="no">mr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">x_age_sex</span> <span class="kw">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">params_rng</span>$<span class="no">mr_female</span>, <span class="no">params_rng</span>$<span class="no">mr_male</span>)))
+<span class="no">rrr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">x_cons</span> <span class="kw">%*%</span> <span class="no">params_rng</span>$<span class="no">rrr</span>)
+
+<span class="co"># Transition probability matrix</span>
+<span class="no">tpmat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tpmatrix.html">tpmatrix</a></span>(
+  <span class="fl">0</span>, <span class="no">C</span>, <span class="fl">0</span>,   <span class="fl">0</span>, <span class="no">omrPTHR</span>,
+  <span class="fl">0</span>, <span class="no">C</span>, <span class="no">rr</span>,  <span class="fl">0</span>, <span class="no">mr</span>,
+  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,   <span class="no">C</span>, <span class="no">omrRTHR</span> + <span class="no">mr</span>,
+  <span class="fl">0</span>, <span class="fl">0</span>, <span class="no">rrr</span>, <span class="no">C</span>, <span class="no">mr</span>,
+  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,   <span class="fl">0</span>, <span class="fl">1</span>
+)
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">tpmat</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"prob_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">tpmat</span>))
+<span class="no">tpmat</span>[<span class="fl">1</span>, ]</pre></body></html></div>
+<pre><code>##    prob_s1_s1 prob_s1_s2 prob_s1_s3 prob_s1_s4  prob_s1_s5 prob_s2_s1
+## 1:          0  0.9922809          0          0 0.007719079          0
+##    prob_s2_s2   prob_s2_s3 prob_s2_s4 prob_s2_s5 prob_s3_s1 prob_s3_s2
+## 1:  0.9926704 0.0006296049          0     0.0067          0          0
+##    prob_s3_s3 prob_s3_s4 prob_s3_s5 prob_s4_s1 prob_s4_s2  prob_s4_s3
+## 1:          0  0.9855809 0.01441908          0          0 0.007230197
+##    prob_s4_s4 prob_s4_s5 prob_s5_s1 prob_s5_s2 prob_s5_s3 prob_s5_s4 prob_s5_s5
+## 1:  0.9860698     0.0067          0          0          0          0          1</code></pre>
+<p>Finally, we combine the ID variables and the transition probability matrices into a single object.</p>
+<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">tparams_transprobs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tparams_transprobs.html">tparams_transprobs</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">tpmat_id</span>, <span class="no">tpmat</span>))</pre></body></html></div>
+</div>
+<div id="simulation-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#simulation-1" class="anchor"></a>Simulation</h3>
+<p>For comparison with the nonstandard evaluation approach, we will (re)construct and (re)simulate the model. Estimated costs and QALYs are very similar, as expected.</p>
+<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="no">transmod</span> <span class="kw">&lt;-</span> <span class="no">CohortDtstmTrans</span>$<span class="fu">new</span>(<span class="kw">params</span> <span class="kw">=</span> <span class="no">tparams_transprobs</span>)
+<span class="no">econmod</span>$<span class="no">trans_model</span> <span class="kw">&lt;-</span> <span class="no">transmod</span>
+<span class="no">econmod</span>$<span class="fu">sim_stateprobs</span>(<span class="kw">n_cycles</span> <span class="kw">=</span> <span class="fl">60</span>)
+<span class="no">econmod</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">.015</span>, <span class="kw">integrate_method</span> <span class="kw">=</span> <span class="st">"riemann_right"</span>)
+<span class="no">econmod</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">.06</span>, <span class="kw">integrate_method</span> <span class="kw">=</span> <span class="st">"riemann_right"</span>)
+
+<span class="no">ce_sim</span> <span class="kw">&lt;-</span> <span class="no">econmod</span>$<span class="fu">summarize</span>(<span class="kw">by_grp</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="no">ce_sim</span>$<span class="no">qalys</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span>,
+              <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
+                <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
+<pre><code>##    strategy_id grp_id     mean
+## 1:           1      2 14.62551
+## 2:           2      2 14.66897</code></pre>
+<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
+            <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
+              <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
+<pre><code>##    strategy_id grp_id     mean
+## 1:           1      2 513.5823
+## 2:           2      2 612.3993</code></pre>
+<p>However, time to construct the transition model was 3.1 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
+<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(
+  <span class="kw">Method</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"define_model()"</span>, <span class="st">"Custom tpmatrix()"</span>),
+  <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span>(
+    <span class="no">run_time1</span>[<span class="fl">1</span>:<span class="fl">3</span>],
+    <span class="no">run_time2</span>[<span class="fl">1</span>:<span class="fl">3</span>]
+  )
+) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>() <span class="kw">%&gt;%</span>
+  <span class="fu">kable_styling</span>()</pre></body></html></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+Method
+</th>
+<th style="text-align:right;">
+user.self
+</th>
+<th style="text-align:right;">
+sys.self
+</th>
+<th style="text-align:right;">
+elapsed
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+define_model()
+</td>
+<td style="text-align:right;">
+3.727
+</td>
+<td style="text-align:right;">
+0.602
+</td>
+<td style="text-align:right;">
+4.342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Custom tpmatrix()
+</td>
+<td style="text-align:right;">
+1.031
+</td>
+<td style="text-align:right;">
+0.347
+</td>
+<td style="text-align:right;">
+1.381
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
   </div>
 

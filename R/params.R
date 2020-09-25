@@ -862,8 +862,6 @@ tparams_transprobs.data.table <- function (object) {
   # Value
   prob_mat <- as.matrix(object[, colnames(object)[grep("prob_", colnames(object))], 
                                with = FALSE])
-  prob_nums <- as.numeric(sub('.*_', '', colnames(prob_mat)))
-  prob_mat <- prob_mat[, order(prob_nums)]
   n_states <- sqrt(ncol(prob_mat))
   value <- aperm(array(c(t(prob_mat)),
                        dim = c(n_states, n_states, nrow(prob_mat))),

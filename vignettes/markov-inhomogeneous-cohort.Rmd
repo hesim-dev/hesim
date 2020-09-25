@@ -39,12 +39,12 @@ strategies <- data.table(strategy_id = 1:2,
 # Patients
 ages <- seq(55, 75, 5)
 age_weights <- c(.05, .1, .4, .25, .20)
-gender_weights <- c(.65, .35)
+sex_weights <- c(.65, .35)
 weights <- rep(age_weights, times = 2) * 
-           rep(gender_weights, each = length(ages))
+           rep(sex_weights, each = length(ages))
 patients <- data.table(patient_id = 1:10,
                        grp_id = 1:10,
-                       gender = rep(c("Female", "Male"), each = length(ages)),
+                       sex = rep(c("Female", "Male"), each = length(ages)),
                        age = rep(ages, times = 2),
                        patient_wt = weights)
 hesim_dat <- hesim_data(strategies = strategies,
@@ -60,7 +60,7 @@ Transition probabilities from state $i$ (rows) to state $j$ (columns) are determ
 * **C**: The complement of other probabilities in a given row
 * **omrPTHR**: Operative mortality rate following primary THR
 * **rr**: Revision rate for prosthesis
-* **mr**: Age and gender-specific mortality rates
+* **mr**: Age and sex-specific mortality rates
 * **omrRTHR**: Operative mortality rate following revision THR
 * **rrr**: Re-revision rate 
 
@@ -217,12 +217,12 @@ head(input_data)
 
 When evaluating the `define_tparams()` expression, operations are vectorized and performed for each combination of the sampled parameters, input data, and time periods. The model will be simulated for 60 model cycles (i.e., 60 years) so we will create 60 time intervals of length 1.
 
-Separate transformation functions are used for the transition model and the cost/utility models. This is done for computational efficiency since only the transition model depends on cycle time. In the transition model, the revision rate (*rr*) depends on the scale and the shape parameters, which, in turn, depend on the sampled values of the parameters from the Weibull model. The mortality rate depends on gender and a patient's age during each model cycle. 
+Separate transformation functions are used for the transition model and the cost/utility models. This is done for computational efficiency since only the transition model depends on cycle time. In the transition model, the revision rate (*rr*) depends on the scale and the shape parameters, which, in turn, depend on the sampled values of the parameters from the Weibull model. The mortality rate depends on sex and a patient's age during each model cycle. 
 
 ```{r}
 transitions_def <- define_tparams({
   # Regression for revision risk
-  male <- ifelse(gender == "Female", 0, 1)
+  male <- ifelse(sex == "Female", 0, 1)
   np1 <- ifelse(strategy_name == "Standard prosthesis", 0, 1)
   scale <- exp(rr_coef$cons + rr_coef$age * age + rr_coef$male * male + 
                  rr_coef$np1 * np1)
@@ -231,19 +231,19 @@ transitions_def <- define_tparams({
     
   # Mortality rate
   age_new <- age + time
-  mr <- mr_female[["35"]] * (gender == "Female" & age_new >= 35 & age_new < 45) +
-        mr_female[["45"]] * (gender == "Female" & age_new >= 45 & age_new < 55) +
-        mr_female[["55"]] * (gender == "Female" & age_new >= 55 & age_new < 65) +
-        mr_female[["65"]] * (gender == "Female" & age_new >= 65 & age_new < 75) +
-        mr_female[["75"]] * (gender == "Female" & age_new >= 75 & age_new < 85) +
-        mr_female[["85"]] * (gender == "Female" & age_new >= 85) +
+  mr <- mr_female[["35"]] * (sex == "Female" & age_new >= 35 & age_new < 45) +
+        mr_female[["45"]] * (sex == "Female" & age_new >= 45 & age_new < 55) +
+        mr_female[["55"]] * (sex == "Female" & age_new >= 55 & age_new < 65) +
+        mr_female[["65"]] * (sex == "Female" & age_new >= 65 & age_new < 75) +
+        mr_female[["75"]] * (sex == "Female" & age_new >= 75 & age_new < 85) +
+        mr_female[["85"]] * (sex == "Female" & age_new >= 85) +
         
-        mr_male[["35"]] * (gender == "Male" & age_new >= 35 & age_new < 45) +
-        mr_male[["45"]] * (gender == "Male" & age_new >= 45 & age_new < 55) +
-        mr_male[["55"]] * (gender == "Male" & age_new >= 55 & age_new < 65) +
-        mr_male[["65"]] * (gender == "Male" & age_new >= 65 & age_new < 75) +
-        mr_male[["75"]] * (gender == "Male" & age_new >= 75 & age_new < 85) +
-        mr_male[["85"]] * (gender == "Male" & age_new >= 85)
+        mr_male[["35"]] * (sex == "Male" & age_new >= 35 & age_new < 45) +
+        mr_male[["45"]] * (sex == "Male" & age_new >= 45 & age_new < 55) +
+        mr_male[["55"]] * (sex == "Male" & age_new >= 55 & age_new < 65) +
+        mr_male[["65"]] * (sex == "Male" & age_new >= 65 & age_new < 75) +
+        mr_male[["75"]] * (sex == "Male" & age_new >= 75 & age_new < 85) +
+        mr_male[["85"]] * (sex == "Male" & age_new >= 85)
   
   list(
     tpmatrix = tpmatrix(
@@ -280,7 +280,11 @@ mod_def <- define_model(tparams_def = list(transitions_def,
                         params = params)
 ```
 
-The economic model is then created from the input data and the defined model. Arguments for instantiating the cost models (a list of objects of class `StateVals`) can be specified with a named list containing the values of arguments to pass to `StateVals$new()`. In this case, we note that the model for the cost of the prostheses is based on one-time costs accrued at the start of the model (with no discounting); conversely, medical costs accrue by weighting state values by time spent in the health states (in the current model simply the cost of revision over 1 year).    
+The economic model is then created from the input data and the defined model. Arguments for instantiating the cost models (a list of objects of class `StateVals`) can be specified with a named list containing the values of arguments to pass to `StateVals$new()`. In this case, we note that the model for the cost of the prostheses is based on one-time costs accrued at the start of the model (with no discounting); conversely, medical costs accrue by weighting state values by time spent in the health states (in the current model simply the cost of revision over 1 year).   
+
+```{r echo = FALSE}
+ptm <- proc.time()
+```
 
 ```{r econmod}
 cost_args <- list(
@@ -290,6 +294,11 @@ cost_args <- list(
 econmod <- create_CohortDtstm(mod_def, input_data,
                               cost_args = cost_args)
 ```
+
+```{r echo = FALSE}
+run_time1 <- time <- proc.time() - ptm
+```
+
 
 ## Simulating outcomes
 ## Health state probabilities
@@ -362,7 +371,8 @@ cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = .015, dr_costs = .06,
 icer_tbl(cea_pw_out)
 ```
 
-# Appendix: Transition probabilities from a Weibull survival model
+# Appendix
+## Transition probabilities from a Weibull survival model
 In general, the transition probability of an event for a given model cycle is one minus the probability a patient does not have an event during the cycle conditional on not having an event up until that cycle. That is, given a survivor function, $S(t)$ and a cycle of length $u$, the transition probability, $tp(t_u)$ of an event is,
 
 $$
@@ -388,3 +398,161 @@ tp(t_u) &= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 &= 1 - exp\{\lambda[(t-u)^\gamma  - t^\gamma]\}
 \end{align}
 $$
+
+## Computational efficiency
+The largest bottleneck in `define_model()` is the construction of the economic model and the construction of the transition model in particular. The reason for this is that all transition probabilities are "vectorized" and consequently preallocated. This preallocation can take time if the number of parameter samples $\times$ treatment strategies $\times$ patients $\times$ time periods is large. Since the `$sim_stateprobs()` method is implemented in `C++` the simulation is very fast one the transition probabilities have been constructed.
+
+The disadvantage of `define_model()` for preallocation is that it is a general function, resulting in some overhead. An alternative approach is to construct the transition probability matrix ourselves using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the $i$th row and $j$th column as $p_{ij} = g(x^T\theta)$ where $x$ is an input matrix, $\theta$ is a vector of coefficients (i.e., a parameter sample), and $g()$ is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well. 
+
+```{r echo = FALSE}
+ptm <- proc.time()
+```
+
+### Random number generation
+To get started, we sample the parameters for the PSA using `eval_rng()`.
+
+```{r}
+params_rng <- eval_rng(rng_def, params = params)
+```
+
+### Input data
+We then create input data and add a few variables needed to construct the input matrices. Note that the variable `age_new` reflects a patients' age as a function of time in the model. 
+
+```{r}
+# Create new variables
+tpmatrix_data <- expand(hesim_dat, by = c("strategies", "patients"),
+                        times = 1:60)
+tpmatrix_data[, time_stop := ifelse(is.infinite(time_stop), 61, time_stop)]
+tpmatrix_data[, male := ifelse(sex == "Male", 1, 0)]
+tpmatrix_data[, np1 := ifelse(strategy_name == "New prosthesis", 1, 0)]
+tpmatrix_data[, age_new := age + time_stop]
+tpmatrix_data[, cons := 1]
+```
+
+Different input matrices are constructed using the input data for different elements of the transition probability matrix. Some of the parameters aren't a function of any patient characteristics or time and can therefore be predicted using a matrix with a single column of ones. A separate matrix is needed for the revision rate given the covariates in the Weibull survival model.
+
+```{r}
+x_cons <- as.matrix(tpmatrix_data$cons)
+x_rr <- as.matrix(tpmatrix_data[, .(cons, age, male, np1)])
+
+head(x_cons)
+head(x_rr)
+```
+
+As in our `define_model()` block above, predicting the mortality rate is a little more cumbersome. One way to do it is to create dummy variables for each age and sex category. To do this it's helpful to reshape the mortality table above to a longer format. 
+
+```{r, echo = FALSE}
+mort_tbl2 <- melt(data.table(mort_tbl), 
+                  id.vars = c("age_lower", "age_upper"),
+                  variable.name = "sex", value.name = "rate",
+                  variable.factor = FALSE)
+mort_tbl2[, sex := ifelse(sex == "female", "Female", "Male")]
+mort_tbl2[, age_sex := paste0(sex, "_", age_lower, "_", age_upper)]
+mort_tbl2 <- mort_tbl2[, .(age_lower, age_upper, sex, age_sex, rate)]
+setorderv(mort_tbl2, c("sex", "age_lower"))
+```
+```{r}
+print(mort_tbl2)
+```
+
+We can write a short function to create a matrix of dummy variables.
+
+```{r}
+create_age_sex_dummies <- function(data, mort_tbl) {
+  x <- matrix(0, nrow = nrow(data), ncol = nrow(mort_tbl2))
+  colnames(x) <- mort_tbl2$age_sex
+  for (i in 1:nrow(mort_tbl2)) {
+    x[, i] <- ifelse(data$sex == mort_tbl2[i]$sex & 
+                      data$age_new >= mort_tbl2[i]$age_lower & 
+                      data$age_new < mort_tbl2[i]$age_upper,
+                      1, 0)
+  }
+  return(x)
+}
+x_age_sex <- create_age_sex_dummies(tpmatrix_data, mort_tbl2)
+head(x_age_sex)
+```
+
+### Transformed parameters
+With input matrices in hand, we can transform the parameter samples to construct a `tparams_transprobs()` object, which contains all the predicted transition probabilities needed for simulation. These objects are most easily constructed using `tpmatrix()` and `tpmatrix_id()` objects. We will start with `tpmatrix_id()` which contains the ID variables for each transition probability matrix in `tparams_transprobs()` objects. 
+
+```{r}
+# ID columns
+# One for each treatment strategy patient, time period, AND parameter sample
+tpmatrix_id <- function(data, n_samples) {
+  id <- data[rep(1:nrow(data), times = n_samples), 
+       .(strategy_id, patient_id, grp_id, patient_wt, time_start, time_stop)]
+  id[, sample := rep(1:n_samples, each = nrow(data))]
+  return(id[, ])
+}
+tpmat_id <- tpmatrix_id(tpmatrix_data, 500)
+head(tpmat_id)
+```
+
+`tpmatrix()` produces a flattened transition probability matrix for each row of `tpmatrix_id`. We predict the elements of the matrix using the input matrices we derived above. 
+
+```{r}
+# "Transformed" parameters
+time <- tpmat_id$time_stop
+omrPTHR <- c(x_cons %*% params_rng$omrPTHR)
+omrRTHR <- omrPTHR
+rr_scale <- exp(c(x_rr %*% t(params_rng$rr_coef[, -1])))
+rr_shape <- exp(c(x_cons %*% params_rng$rr_coef$lngamma))
+rr <- 1 - exp(rr_scale * ((time - 1)^rr_shape - time^rr_shape))
+mr <- c(x_age_sex %*% t(cbind(params_rng$mr_female, params_rng$mr_male)))
+rrr <- c(x_cons %*% params_rng$rrr)
+
+# Transition probability matrix
+tpmat <- tpmatrix(
+  0, C, 0,   0, omrPTHR,
+  0, C, rr,  0, mr,
+  0, 0, 0,   C, omrRTHR + mr,
+  0, 0, rrr, C, mr,
+  0, 0, 0,   0, 1
+)
+colnames(tpmat) <- paste0("prob_", colnames(tpmat))
+tpmat[1, ]
+```
+
+Finally, we combine the ID variables and the transition probability matrices into a single object.
+
+```{r}
+tparams_transprobs <- tparams_transprobs(cbind(tpmat_id, tpmat))
+```
+
+```{r echo = FALSE}
+run_time2 <- time <- proc.time() - ptm
+```
+
+### Simulation
+For comparison with the nonstandard evaluation approach, we will (re)construct and (re)simulate the model. Estimated costs and QALYs are very similar, as expected. 
+
+```{r}
+transmod <- CohortDtstmTrans$new(params = tparams_transprobs)
+econmod$trans_model <- transmod 
+econmod$sim_stateprobs(n_cycles = 60)
+econmod$sim_qalys(dr = .015, integrate_method = "riemann_right")
+econmod$sim_costs(dr = .06, integrate_method = "riemann_right")
+
+ce_sim <- econmod$summarize(by_grp = TRUE)
+ce_sim$qalys[grp_id == 2, 
+              .(mean = mean(qalys)),
+                by = c("strategy_id", "grp_id")]
+ce_sim$costs[grp_id == 2 & category == "total", 
+            .(mean = mean(costs)),
+              by = c("strategy_id", "grp_id")]
+```
+
+However, time to construct the transition model was `r formatC(run_time1["elapsed"]/run_time2["elapsed"], digits = 2)` times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased. 
+
+```{r, hide = TRUE}
+data.table(
+  Method = c("define_model()", "Custom tpmatrix()"),
+  rbind(
+    run_time1[1:3],
+    run_time2[1:3]
+  )
+) %>%
+  kable() %>%
+  kable_styling()
+```
