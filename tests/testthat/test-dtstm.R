@@ -91,7 +91,7 @@ tprob_array[, , 2, 2, 2, ] <- rdirichlet_mat(n_samples, make_alpha(tprob, .5))
 
 tprob_array <- aperm(tprob_array, perm = c(6:3, 1, 2))
 
-# tparams_transprobs.array -----------------------------------------------------
+# tparams_transprobs.array() ---------------------------------------------------
 params_tprob <- tparams_transprobs(tprob_array, times = time_start)
 params_tprob_t1 <- tparams_transprobs(tprob_array[,,,1,,, drop = FALSE])
 
@@ -124,15 +124,14 @@ test_that("tparams_transprobs with only 1 time interval", {
   expect_true(all(params_tprob_t1$time_id == 1))
 })
 
-
-# as.data.table ----------------------------------------------------------------
+# as.data.table.tparams_transprobs() -------------------------------------------
 tprob_dt <- as.data.table(params_tprob)
   
 test_that("as.data.table.tparams_transprobs returns a data.table" , {
   expect_true(inherits(as.data.table(params_tprob), "data.table"))
 })
 
-# tparams_transprobs.data.table------------------------------------------
+# tparams_transprobs.data.table() ----------------------------------------------
 params_tprob2 <- tparams_transprobs(tprob_dt)
 
 test_that(paste0("tparams_transprobs returns the same values with ",
@@ -140,6 +139,29 @@ test_that(paste0("tparams_transprobs returns the same values with ",
   expect_equal(params_tprob, params_tprob2)
   expect_equal(params_tprob_t1, 
                tparams_transprobs(tprob_dt[time_id == 1]))                
+})
+
+# tparams_transprobs.tpmatrix() ------------------------------------------------
+p <- c(.7, .6)
+tpmat <- tpmatrix(
+  C, p,
+  0, 1
+)
+input_dat <- expand(hesim_dat)
+
+test_that("tparams_transprobs returns error if 'tpmatrix_id' is wrong class", {
+  expect_error(
+    tparams_transprobs(tpmat, 2),
+    "'tpmatrix_id' must be of class 'tpmatrix_id'."
+  )
+})
+
+test_that("tparams_transprobs returns the correct class", {
+  tpmat_id <- tpmatrix_id(input_dat, n_samples = 2)
+  expect_true(
+    inherits(tparams_transprobs(tpmat, tpmat_id),
+             "tparams_transprobs")
+  )
 })
 
 # Initialize CohortDtstmTrans object -------------------------------------------

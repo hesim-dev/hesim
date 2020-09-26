@@ -7,7 +7,7 @@
 time_intervals(times)
 }
 \arguments{
-\item{times}{Either a vector of times for each interval or a
+\item{times}{Either a vector of starting times for each interval or a
 \code{data.frame} with at least one column named \code{time_start}.}
 }
 \value{

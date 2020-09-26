@@ -202,7 +202,7 @@ expand <- function(object, by, times){
 #' @param object An object of class `hesim_data`.
 #' @param by A character vector of the names of the data tables in `hesim_data` to expand by.
 #' @param times Either a numeric vector of distinct times denoting the start of time intervals or
-#' q [time_intervals] object. 
+#' a [time_intervals] object. 
 #' @details This function is similar to [expand.grid()], but works for data frames or data tables. 
 #' Specifically, it creates a `data.table` from all combinations of the supplied tables in `object`
 #' and optionally the start of times intervals in `times`. 
@@ -307,7 +307,7 @@ sort_hesim_data <- function(data, sorted_by){
 #' Create a table of time intervals given a vector or data frame of unique times.
 #' This would typically be passed to [id_attributes].
 #' 
-#' @param times Either a vector of times for each interval or a
+#' @param times Either a vector of starting times for each interval or a
 #'  `data.frame` with at least one column named `time_start`.
 #' @return An object of class `time_intervals` that inherits from
 #'  `data.table` in the same format as `time_intervals` as 

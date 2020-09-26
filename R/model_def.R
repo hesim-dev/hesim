@@ -97,8 +97,9 @@ replace_C <- function(x, complement){
 #' equal to 1 minus the sum of the probabilities of all other rows can be 
 #' conveniently referred to as `C`. 
 #' 
-#' @return Returns a `data.table` where each column is an element of the 
-#' transition probability matrix with elements ordered rowwise. 
+#' @return Returns a `tpmatrix` object that inherits from `data.table`
+#' where each column is an element of the transition probability matrix with
+#'  elements ordered rowwise. 
 #' 
 #' @examples 
 #' p <- c(.7, .6)
@@ -112,7 +113,61 @@ tpmatrix <- function(...){
   m_def <- define_tpmatrix(...)
   m <- as.data.table(transform_dots(m_def, as.list(parent.frame())))
   replace_C(m, attr(m_def, "complement"))
+  setattr(m, "class", c("tpmatrix", "data.table", "data.frame"))
   return(m)
+}
+
+#' Transition probability matrix IDs
+#' 
+#' Creates ID variables for each row returned by `tpmatrix()`. This function is
+#'  most conveniently used along with `tpmatrix()` to construct a 
+#'  `tparams_transprobs()` object.
+#' 
+#' 
+#' @param object An object of class `expanded_hesim_data` returned by 
+#' `expand.hesim_data()`. This dataset must either be expanded by treatment
+#' strategies, patients, and optionally time intervals.
+#' @param n_samples The number of parameters samples used for the probabilistic
+#' sensitivity analysis (PSA).
+#' 
+#' @return Returns a `data.table` with the same columns in `object` repeated
+#' `n_samples` time. That is, to facilitate creation of a `tparams_transprobs()`
+#' object,  there is one row for each parameter sample,
+#' treatment strategy, patient, and optionally time interval.
+#' 
+#' @examples 
+#' strategies <- data.frame(strategy_id = c(1, 2))
+#' patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
+#'                         gender = c("Female", "Female", "Male"))
+#' hesim_dat <- hesim_data(strategies = strategies,
+#'                         patients = patients)
+#' input_data <- expand(hesim_dat, by = c("strategies", "patients"))    
+#' tpmatrix_id(input_data, n_samples = 2)                   
+#' @seealso [tpmatrix()], [tparams_transprobs()], [expand.hesim_data()]
+#' @export
+tpmatrix_id <- function(object, n_samples){
+  # Checks
+  check_is_class(object, "expanded_hesim_data", "object")
+  if (!identical(attr(object, "id_vars"), c("strategy_id", "patient_id")) &&
+      !identical(attr(object, "id_vars"), c("strategy_id", "patient_id", "time_id"))
+  ) {
+    stop(paste0("'object' must be either be expanded by 'strategy_id', 'patient_id', ", 
+                "and optionally 'time_id'."), 
+         call. = FALSE)
+  }
+  
+  # Create data.table
+  id_names <- c("strategy_id", "patient_id", "grp_id", "patient_wt", 
+                    "time_id", "time_start", "time_stop")
+  cols_to_keep <- match(id_names, colnames(object))
+  cols_to_keep <- cols_to_keep[!is.na(cols_to_keep)]
+  
+  id_dt <- object[rep(1:nrow(object), times = n_samples), cols_to_keep, 
+                  with = FALSE]
+  id_dt[, sample := rep(1:n_samples, each = nrow(object))]
+  setcolorder(id_dt, c("sample", colnames(id_dt)[!ncol(id_dt)]))
+  setattr(id_dt, "class", c("tpmatrix_id", "data.table", "data.frame"))
+  return(id_dt[, ])
 }
 
 # Random number generation -----------------------------------------------------

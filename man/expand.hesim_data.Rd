@@ -12,7 +12,7 @@
 \item{by}{A character vector of the names of the data tables in \code{hesim_data} to expand by.}
 
 \item{times}{Either a numeric vector of distinct times denoting the start of time intervals or
-q \link{time_intervals} object.}
+a \link{time_intervals} object.}
 }
 \value{
 An object of class \code{expanded_hesim_data}, which is a \code{data.table} with an "id_vars"

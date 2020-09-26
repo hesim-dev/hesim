@@ -177,8 +177,9 @@ values of the matrix elements should refer to parameters defined using
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a <code>data.table</code> where each column is an element of the
-transition probability matrix with elements ordered rowwise.</p>
+    <p>Returns a <code>tpmatrix</code> object that inherits from <code>data.table</code>
+where each column is an element of the transition probability matrix with
+elements ordered rowwise.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The matrix is filled rowwise, meaning that each row should sum to 1. It is evaluated

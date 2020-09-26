@@ -42,6 +42,7 @@ reference:
   - title: "Model definition"
     contents:
       - tpmatrix
+      - tpmatrix_id
       - tpmatrix_names
       - rng_distributions
       - define_rng

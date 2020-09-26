@@ -477,14 +477,6 @@ head(x_age_sex)
 With input matrices in hand, we can transform the parameter samples to construct a `tparams_transprobs()` object, which contains all the predicted transition probabilities needed for simulation. These objects are most easily constructed using `tpmatrix()` and `tpmatrix_id()` objects. We will start with `tpmatrix_id()` which contains the ID variables for each transition probability matrix in `tparams_transprobs()` objects. 
 
 ```{r}
-# ID columns
-# One for each treatment strategy patient, time period, AND parameter sample
-tpmatrix_id <- function(data, n_samples) {
-  id <- data[rep(1:nrow(data), times = n_samples), 
-       .(strategy_id, patient_id, grp_id, patient_wt, time_start, time_stop)]
-  id[, sample := rep(1:n_samples, each = nrow(data))]
-  return(id[, ])
-}
 tpmat_id <- tpmatrix_id(tpmatrix_data, 500)
 head(tpmat_id)
 ```
@@ -510,14 +502,13 @@ tpmat <- tpmatrix(
   0, 0, rrr, C, mr,
   0, 0, 0,   0, 1
 )
-colnames(tpmat) <- paste0("prob_", colnames(tpmat))
 tpmat[1, ]
 ```
 
 Finally, we combine the ID variables and the transition probability matrices into a single object.
 
 ```{r}
-tparams_transprobs <- tparams_transprobs(cbind(tpmat_id, tpmat))
+tparams_transprobs <- tparams_transprobs(tpmat, tpmat_id)
 ```
 
 ```{r echo = FALSE}

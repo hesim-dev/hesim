@@ -12,8 +12,9 @@ values of the matrix elements should refer to parameters defined using
 \code{\link[=define_rng]{define_rng()}} or \code{\link[=define_tparams]{define_tparams()}}.}
 }
 \value{
-Returns a \code{data.table} where each column is an element of the
-transition probability matrix with elements ordered rowwise.
+Returns a \code{tpmatrix} object that inherits from \code{data.table}
+where each column is an element of the transition probability matrix with
+elements ordered rowwise.
 }
 \description{
 \code{tpmatrix()} both defines and evaluates a transition probability matrix in which

@@ -111,7 +111,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 class="date">2020-09-24</h4>
+            <h4 class="date">2020-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-cohort.Rmd"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
@@ -537,38 +537,38 @@ S(t) = \exp(-\lambda t^\gamma) \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.61945
-## 2:           2      2 14.66314</code></pre>
+## 1:           1      2 14.62631
+## 2:           2      2 14.66981</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 513.1689
-## 2:           2      2 613.5321</code></pre>
+## 1:           1      2 512.3392
+## 2:           2      2 612.4915</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
-<pre><code>##     strategy_id grp_id            iqalys         icosts                  inmb
-##  1:           2      1 0.07 (0.02, 0.14)  67 (-41, 138)  3,459 (1,011, 7,010)
-##  2:           2      2 0.04 (0.01, 0.09)  100 (18, 153)    2,084 (581, 4,355)
-##  3:           2      3 0.03 (0.01, 0.05)  126 (67, 163)    1,180 (282, 2,621)
-##  4:           2      4 0.02 (0.00, 0.03) 146 (105, 171)       608 (87, 1,448)
-##  5:           2      5 0.01 (0.00, 0.02) 160 (132, 176)        266 (-28, 739)
-##  6:           2      6 0.11 (0.04, 0.22) -29 (-242, 96) 5,631 (1,762, 11,098)
-##  7:           2      7 0.07 (0.02, 0.13) 33 (-116, 124)  3,374 (1,021, 6,735)
-##  8:           2      8 0.04 (0.01, 0.08)  82 (-26, 144)    1,920 (556, 3,876)
-##  9:           2      9 0.02 (0.01, 0.05)  116 (41, 159)    1,025 (253, 2,166)
-## 10:           2     10 0.01 (0.00, 0.03)  141 (92, 169)       498 (60, 1,181)
+<pre><code>##     strategy_id grp_id            iqalys          icosts                  inmb
+##  1:           2      1 0.07 (0.03, 0.13)   67 (-53, 142)  3,455 (1,198, 6,240)
+##  2:           2      2 0.04 (0.02, 0.08)   100 (12, 155)    2,075 (690, 3,855)
+##  3:           2      3 0.03 (0.01, 0.05)   126 (64, 165)    1,170 (342, 2,265)
+##  4:           2      4 0.01 (0.01, 0.03)  146 (101, 172)      600 (120, 1,241)
+##  5:           2      5 0.01 (0.00, 0.02)  160 (130, 177)        260 (-14, 637)
+##  6:           2      6 0.11 (0.04, 0.21) -30 (-233, 104) 5,636 (1,909, 10,573)
+##  7:           2      7 0.07 (0.02, 0.13)  34 (-107, 129)  3,367 (1,113, 6,485)
+##  8:           2      8 0.04 (0.01, 0.08)   82 (-19, 148)    1,909 (598, 3,786)
+##  9:           2      9 0.02 (0.01, 0.04)   117 (43, 161)    1,015 (261, 2,143)
+## 10:           2     10 0.01 (0.00, 0.02)   142 (93, 170)       489 (64, 1,138)
 ##          icer     conclusion
-##  1:       954 Cost-effective
-##  2:     2,297 Cost-effective
-##  3:     4,829 Cost-effective
-##  4:     9,652 Cost-effective
-##  5:    18,755 Cost-effective
+##  1:       946 Cost-effective
+##  2:     2,302 Cost-effective
+##  3:     4,865 Cost-effective
+##  4:     9,762 Cost-effective
+##  5:    19,038 Cost-effective
 ##  6: Dominates Cost-effective
-##  7:       491 Cost-effective
-##  8:     2,036 Cost-effective
-##  9:     5,097 Cost-effective
-## 10:    11,048 Cost-effective</code></pre>
+##  7:       493 Cost-effective
+##  8:     2,056 Cost-effective
+##  9:     5,161 Cost-effective
+## 10:    11,219 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -579,10 +579,10 @@ S(t) = \exp(-\lambda t^\gamma) \\
                      <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                   
-## Incremental QALYs "-" "0.03 (0.01, 0.06)" 
-## Incremental costs "-" "118 (49, 159)"     
-## Incremental NMB   "-" "1,298 (321, 2,699)"
-## ICER              "-" "4,167"             
+## Incremental QALYs "-" "0.03 (0.01, 0.05)" 
+## Incremental costs "-" "118 (50, 162)"     
+## Incremental NMB   "-" "1,290 (382, 2,532)"
+## ICER              "-" "4,196"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>
@@ -709,24 +709,16 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 <div id="transformed-parameters-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#transformed-parameters-1" class="anchor"></a>Transformed parameters</h3>
-<p>With input matrices in hand, we can transform the parameter samples to construct a <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> object, which contains all the predicted transition probabilities needed for simulation. These objects are most easily constructed using <code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> and <code>tpmatrix_id()</code> objects. We will start with <code>tpmatrix_id()</code> which contains the ID variables for each transition probability matrix in <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> objects.</p>
-<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="co"># ID columns</span>
-<span class="co"># One for each treatment strategy patient, time period, AND parameter sample</span>
-<span class="no">tpmatrix_id</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">data</span>, <span class="no">n_samples</span>) {
-  <span class="no">id</span> <span class="kw">&lt;-</span> <span class="no">data</span>[<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">data</span>), <span class="kw">times</span> <span class="kw">=</span> <span class="no">n_samples</span>),
-       <span class="fu">.</span>(<span class="no">strategy_id</span>, <span class="no">patient_id</span>, <span class="no">grp_id</span>, <span class="no">patient_wt</span>, <span class="no">time_start</span>, <span class="no">time_stop</span>)]
-  <span class="no">id</span>[, <span class="no">sample</span> <span class="kw">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>:<span class="no">n_samples</span>, <span class="kw">each</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">data</span>))]
-  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">id</span>[, ])
-}
-<span class="no">tpmat_id</span> <span class="kw">&lt;-</span> <span class="fu">tpmatrix_id</span>(<span class="no">tpmatrix_data</span>, <span class="fl">500</span>)
+<p>With input matrices in hand, we can transform the parameter samples to construct a <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> object, which contains all the predicted transition probabilities needed for simulation. These objects are most easily constructed using <code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> and <code><a href="../reference/tpmatrix_id.html">tpmatrix_id()</a></code> objects. We will start with <code><a href="../reference/tpmatrix_id.html">tpmatrix_id()</a></code> which contains the ID variables for each transition probability matrix in <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> objects.</p>
+<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="no">tpmat_id</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tpmatrix_id.html">tpmatrix_id</a></span>(<span class="no">tpmatrix_data</span>, <span class="fl">500</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">tpmat_id</span>)</pre></body></html></div>
-<pre><code>##    strategy_id patient_id grp_id patient_wt time_start time_stop sample
-## 1:           1          1      1     0.0325          0         1      1
-## 2:           1          1      1     0.0325          1         2      1
-## 3:           1          1      1     0.0325          2         3      1
-## 4:           1          1      1     0.0325          3         4      1
-## 5:           1          1      1     0.0325          4         5      1
-## 6:           1          1      1     0.0325          5         6      1</code></pre>
+<pre><code>##    sample strategy_id patient_id grp_id patient_wt time_id time_start time_stop
+## 1:      1           1          1      1     0.0325       1          0         1
+## 2:      1           1          1      1     0.0325       2          1         2
+## 3:      1           1          1      1     0.0325       3          2         3
+## 4:      1           1          1      1     0.0325       4          3         4
+## 5:      1           1          1      1     0.0325       5          4         5
+## 6:      1           1          1      1     0.0325       6          5         6</code></pre>
 <p><code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> produces a flattened transition probability matrix for each row of <code>tpmatrix_id</code>. We predict the elements of the matrix using the input matrices we derived above.</p>
 <div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="co"># "Transformed" parameters</span>
 <span class="no">time</span> <span class="kw">&lt;-</span> <span class="no">tpmat_id</span>$<span class="no">time_stop</span>
@@ -746,18 +738,15 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
   <span class="fl">0</span>, <span class="fl">0</span>, <span class="no">rrr</span>, <span class="no">C</span>, <span class="no">mr</span>,
   <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,   <span class="fl">0</span>, <span class="fl">1</span>
 )
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">tpmat</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"prob_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">tpmat</span>))
 <span class="no">tpmat</span>[<span class="fl">1</span>, ]</pre></body></html></div>
-<pre><code>##    prob_s1_s1 prob_s1_s2 prob_s1_s3 prob_s1_s4  prob_s1_s5 prob_s2_s1
-## 1:          0  0.9922809          0          0 0.007719079          0
-##    prob_s2_s2   prob_s2_s3 prob_s2_s4 prob_s2_s5 prob_s3_s1 prob_s3_s2
-## 1:  0.9926704 0.0006296049          0     0.0067          0          0
-##    prob_s3_s3 prob_s3_s4 prob_s3_s5 prob_s4_s1 prob_s4_s2  prob_s4_s3
-## 1:          0  0.9855809 0.01441908          0          0 0.007230197
-##    prob_s4_s4 prob_s4_s5 prob_s5_s1 prob_s5_s2 prob_s5_s3 prob_s5_s4 prob_s5_s5
-## 1:  0.9860698     0.0067          0          0          0          0          1</code></pre>
+<pre><code>##    s1_s1     s1_s2 s1_s3 s1_s4      s1_s5 s2_s1     s2_s2        s2_s3 s2_s4
+## 1:     0 0.9565469     0     0 0.04345307     0 0.9927579 0.0005420692     0
+##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4      s3_s5 s4_s1 s4_s2      s4_s3
+## 1: 0.0067     0     0     0 0.9498469 0.05015307     0     0 0.03649504
+##       s4_s4  s4_s5 s5_s1 s5_s2 s5_s3 s5_s4 s5_s5
+## 1: 0.956805 0.0067     0     0     0     0     1</code></pre>
 <p>Finally, we combine the ID variables and the transition probability matrices into a single object.</p>
-<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">tparams_transprobs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tparams_transprobs.html">tparams_transprobs</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">tpmat_id</span>, <span class="no">tpmat</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">tparams_transprobs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tparams_transprobs.html">tparams_transprobs</a></span>(<span class="no">tpmat</span>, <span class="no">tpmat_id</span>)</pre></body></html></div>
 </div>
 <div id="simulation-1" class="section level3">
 <h3 class="hasAnchor">
@@ -774,15 +763,15 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.62551
-## 2:           2      2 14.66897</code></pre>
+## 1:           1      2 14.62214
+## 2:           2      2 14.66667</code></pre>
 <div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 513.5823
-## 2:           2      2 612.3993</code></pre>
-<p>However, time to construct the transition model was 3.1 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
+## 1:           1      2 514.4389
+## 2:           2      2 611.8865</code></pre>
+<p>However, time to construct the transition model was 3.5 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
 <div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(
   <span class="kw">Method</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"define_model()"</span>, <span class="st">"Custom tpmatrix()"</span>),
   <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span>(
@@ -813,13 +802,13 @@ elapsed
 define_model()
 </td>
 <td style="text-align:right;">
-3.727
+3.981
 </td>
 <td style="text-align:right;">
-0.602
+0.750
 </td>
 <td style="text-align:right;">
-4.342
+4.954
 </td>
 </tr>
 <tr>
@@ -827,13 +816,13 @@ define_model()
 Custom tpmatrix()
 </td>
 <td style="text-align:right;">
-1.031
+1.030
 </td>
 <td style="text-align:right;">
-0.347
+0.377
 </td>
 <td style="text-align:right;">
-1.381
+1.412
 </td>
 </tr>
 </tbody>

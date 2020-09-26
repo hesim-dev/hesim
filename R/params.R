@@ -682,10 +682,11 @@ create_params.multinom_list <- function(object, n = 1000, point_estimate = FALSE
 #' Create a list containing predicted transition probabilities at discrete times.
 #'  Since the transition probabilities have presumably
 #' already been predicted based on covariate values, no input data is required for
-#' simulation. The class can be instantiated from either an array, a data table, or
-#' a data frame. 
+#' simulation. The class can be instantiated from either an `array`, a `data.table`,
+#' a `data.frame`, or a [tpmatrix]. 
 #' 
 #' @param object An object of the appropriate class. 
+#' @param tpmatrix_id An object of class [tpmatrix_id].
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
 #' @param times An optional numeric vector of distinct times to pass to
 #'  [time_intervals] representing time intervals indexed by the 4th dimension of 
@@ -715,7 +716,7 @@ create_params.multinom_list <- function(object, n = 1000, point_estimate = FALSE
 #'  `patient_wt` may also be used to denote the weight to apply to each
 #'  patient.
 #'  \item Columns for each element of the transition probability matrix. 
-#'  They should be prefixed with "probs_" and ordered rowwise. 
+#'  They should be prefixed with "prob_" and ordered rowwise. 
 #'  For example, the following columns would be used for a 2x2 transition
 #'   probability matrix:
 #'  `probs_1` (1st row, 1st column), 
@@ -724,7 +725,8 @@ create_params.multinom_list <- function(object, n = 1000, point_estimate = FALSE
 #'  `probs_4` (2nd row, 2nd column).
 #'  }
 #'  }
-#'  \item{data.frame}{Same as \code{data.table}.}
+#'  \item{data.frame}{Same as `data.table`.}
+#'  \item{tpmatrix_id}{An object of class [tpmatrix_id].}
 #' }
 #' 
 #' A `tparams_transprobs` object is also instantiated when creating a
@@ -875,6 +877,15 @@ tparams_transprobs.data.table <- function (object) {
 #' @export
 tparams_transprobs.data.frame <- function (object) {
   return(tparams_transprobs(data.table(object)))
+}
+
+#' @rdname tparams_transprobs
+#' @export
+tparams_transprobs.tpmatrix <- function(object, tpmatrix_id) {
+  check_is_class(tpmatrix_id, "tpmatrix_id")
+  setnames(object, colnames(object), paste0("prob_", 1:ncol(object)))
+  p_dt <- cbind(tpmatrix_id, object)
+  return(tparams_transprobs(p_dt))
 }
 
 #' @export
