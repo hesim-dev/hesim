@@ -183,7 +183,7 @@ Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_}
 \if{html}{\out{<div class="r">}}\preformatted{Psm$sim_qalys(
   dr = 0.03,
   integrate_method = c("trapz", "riemann_left", "riemann_right"),
-  lys = FALSE
+  lys = TRUE
 )}\if{html}{\out{</div>}}
 }
 

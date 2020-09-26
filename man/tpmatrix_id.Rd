@@ -16,7 +16,7 @@ sensitivity analysis (PSA).}
 }
 \value{
 Returns a \code{data.table} with the same columns in \code{object} repeated
-\code{n_samples} time. That is, to facilitate creation of a \code{tparams_transprobs()}
+\code{n_samples} times. That is, to facilitate creation of a \code{tparams_transprobs()}
 object,  there is one row for each parameter sample,
 treatment strategy, patient, and optionally time interval.
 }

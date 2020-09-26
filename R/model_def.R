@@ -131,7 +131,7 @@ tpmatrix <- function(...){
 #' sensitivity analysis (PSA).
 #' 
 #' @return Returns a `data.table` with the same columns in `object` repeated
-#' `n_samples` time. That is, to facilitate creation of a `tparams_transprobs()`
+#' `n_samples` times. That is, to facilitate creation of a `tparams_transprobs()`
 #' object,  there is one row for each parameter sample,
 #' treatment strategy, patient, and optionally time interval.
 #' 
