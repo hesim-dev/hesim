@@ -98,15 +98,15 @@ tmat %>%
   kable() %>%
   kable_styling()
 ```
-
-### Transition 1
+### Estimates from literature
+#### Transition 1
 The model for the first transition determines the time from the original surgery until it is deemed "successful". In the Markov model, we used model cycles that were 1-year long meaning that this process took 1-year. Since there are no model cycles in a CTSTM, we can be more flexible. Let's assume that time to recovery (TTR) from surgery takes on average 6 months and follows an exponential distribution. 
 
 ```{r}
 ttrrPTHR <- 2 # Time to recovery rate implies mean time of 1/2 years
 ```
 
-### Transition 2
+#### Transition 2
 The second transition depends on the operative mortality rate following primary THR (*omrPTHR*). As in the cohort model we will assume the probability of death (within 1-year) is drawn from a beta distributions. 
 
 ```{r}
@@ -123,7 +123,7 @@ prob_to_rate <- function(p, t = 1){
 }
 ```
 
-### Transition 3
+#### Transition 3
 Transition 3 depends on the revision rate (`rr`) for a prosthesis, which will again be modeled using a proportional hazards Weibull model. The coefficients and variance-covariance matrix are displayed below. 
 
 ```{r, include = FALSE, results = "hide"}
@@ -147,7 +147,7 @@ print(rr_coef)
 print(rr_vcov)
 ```
 
-### Transition 4
+#### Transition 4
 The fourth transition is modeled using the death rate following recovery from the THR (i.e., while in the successful primary state). We will again use age and sex specific mortality rates. 
 
 ```{r, echo = FALSE}
@@ -170,19 +170,19 @@ mr <- c(.0067, .0193, .0535, .1548)
 mr_times <- c(0, 5, 15, 25)
 ```
 
-### Transition 5
+#### Transition 5
 Transition 5 is similar to transition 1 in that it is a function of time to recovery from a THR. While we could again model this process with an exponential distribution, we will instead assume this time is "fixed" for illustration purposes. Specifically, let's assume it takes one year for every patient.
 
 ```{r}
 ttrRTHR <- 1 # There is no rate, the time is fixed
 ```
 
-### Transition 6
+#### Transition 6
 Following the prior example, the sixth transition depends on the operative mortality rate following revision THR (*omrRTHR*) and the overall mortality rate (*mr*). The *omrRTHR* is assumed to follow the same distribution as the *omrPTHR*.  
 
 These probabilities will be converted to rates below and then added to overall mortality rate (*mr*) at times 0, 5, 15, and 25 years. Transition 6 will consequently be modeled using a piecewise exponential distribution. 
 
-### Transition 7
+#### Transition 7
 The re-revision rate (*rrr*) is used to model the seventh transition. Like the *omrPTHR*, the probability is modeled with a beta distribution and will be converted to a rate below. 
 
 ```{r}
@@ -191,75 +191,18 @@ omrRTHR_shape1 <- 4
 omrRTHR_shape2 <- 96
 ```
 
-### Transition 8
+#### Transition 8
 The final transition is time to death following a successful revision. We model it with the same model used for transition 4; that is, we assume mortality rates following a successful revision THR are the same as mortality rates following a successful primary THR.
 
-## Utility and costs
-Costs and utilities are unchanged from the cohort model. The mean (standard error) of utility are estimated be 0.85 (0.03), 0.30 (0.03), and 0.75 (0.04) in the successful primary, revision, and successful revision health states, respectively.
+### Multi-state model
+The transition-specific estimates can be combined to create a multi-state model, which is comprised of survival models for each transition. Since we will perform a probabilistic sensitivity analysis (PSA), we will sample the parameters from the distributions described above. 500 iterations will be used.
 
-```{r}
-utility_tbl <- stateval_tbl(
-  data.table(state_id = states$state_id,
-             mean = c(0, .85, .3, .75),
-             se = c(0, .03, .03, .04)),
-  dist = "beta",
-  hesim_data = hesim_dat
-)
-head(utility_tbl)
-```
-
-The standard prosthesis costs $£394$ while the new prosthesis costs $£579$. Both are assumed to be known with certainty. 
-
-Since the model assumes that there are no ongoing medical costs, the only remaining cost is the cost of the revision procedure, which was estimated to have a mean of $£5,294$ and standard error of $£1,487$.
-
-```{r}
-drugcost_tbl <- stateval_tbl(
-  data.table(strategy_id = rep(strategies$strategy_id, each = n_states),
-             state_id = rep(states$state_id, times = n_strategies),
-             est = c(394, 0, 0, 0,
-                     579, 0, 0, 0)),
-  dist = "fixed",
-  hesim_data = hesim_dat
-)
-
-medcost_tbl <- stateval_tbl(
-  data.table(state_id = states$state_id,
-             mean = c(0, 0, 5294, 0),
-             se = c(0, 0, 1487, 0)),
-  dist = "gamma",
-  hesim_data = hesim_dat
-)
-```
-
-# Simulation
-## Constructing the model
-The economic model consists of a model for disease progression and models for assigning utility and cost values to health states. In this example, we will use 500 samples of the parameters for the probabilistic sensitivity analysis (PSA).
 
 ```{r}
 n_samples <- 500 
 ```
 
-### Disease model
-#### Input data
-The transition model is a function of parameters and input data. The input data in this case is a dataset consisting of one row for each treatment strategy and patient. It can be generated using `expand()`. 
-
-```{r}
-transmod_data <- expand(hesim_dat, by = c("strategies", "patients"))
-head(transmod_data)
-```
-
-Since we are using a Weibull regression model to simulate time until a revision hip replacement (*Successful primary* to *Revision THR*), we need to create a constant term and covariates for male sex and whether the new prosthesis was used.
-
-```{r}
-transmod_data[, cons := 1]
-transmod_data[, male := ifelse(gender == "Male", 1, 0)]
-transmod_data[, np1 := ifelse(strategy_name == "New prosthesis", 1, 0)]
-```
-
-#### Parameters
-A transition model consists of survival models for each transition. The parameters of survival models are predicted as a function of covariates and consequently depend on the coefficients of underlying statistical models. To perform PSA, we sample the coefficients from the distributions described above. Note that the coefficients are expressed on the real-line (e.g., after a log transformation if they are constrained to be positive).
-
-The coefficients of each model must be a matrix (rows for parameter samples and columns for covariates). Since we often use intercept only models, let's write a simple function to convert a vector to a matrix with a single column for the intercept. 
+Survival models are regression models, so the parameters are regression coefficients. The coefficients of each model must be a matrix (rows for parameter samples and columns for covariates). Since we often use intercept only models, let's write a simple function to convert a vector to a matrix with a single column for the intercept. 
 
 ```{r}
 matrixv <- function(v, n = NULL){
@@ -301,7 +244,7 @@ head(transmod_coef$log_omrPTHR)
 head(transmod_coef$rr_scale)
 ```
 
-In addition to the coefficients, a complete parameterization of a transition model requires specification of the survival distributions and potentially auxiliary information (e.g., the times at which rates change in a piecewise exponential model). The parameters are stored in a `params_surv_list` object, which is a list of `params_surv` objects.
+In addition to the coefficients, a complete parameterization of a transition model requires specification of the survival distributions and potentially auxiliary information (e.g., the times at which rates change in a piecewise exponential model). The parameters are stored in a `params_surv_list()` object, which is a list of `params_surv()` objects.
 
 ```{r}
 transmod_params <- params_surv_list(
@@ -343,7 +286,63 @@ transmod_params <- params_surv_list(
 )
 ```
 
-#### Model object
+## Utility and costs
+Costs and utilities are unchanged from the cohort model. The mean (standard error) of utility are estimated be $0.85$ ($0.03$), $0.30$ ($0.03$), and $0.75$ ($0.04$) in the successful primary, revision, and successful revision health states, respectively.
+
+```{r}
+utility_tbl <- stateval_tbl(
+  data.table(state_id = states$state_id,
+             mean = c(0, .85, .3, .75),
+             se = c(0, .03, .03, .04)),
+  dist = "beta",
+  hesim_data = hesim_dat
+)
+head(utility_tbl)
+```
+
+The standard prosthesis costs $£394$ while the new prosthesis costs $£579$. Both are assumed to be known with certainty. 
+
+Since the model assumes that there are no ongoing medical costs, the only remaining cost is the cost of the revision procedure, which was estimated to have a mean of $£5,294$ and standard error of $£1,487$.
+
+```{r}
+drugcost_tbl <- stateval_tbl(
+  data.table(strategy_id = rep(strategies$strategy_id, each = n_states),
+             state_id = rep(states$state_id, times = n_strategies),
+             est = c(394, 0, 0, 0,
+                     579, 0, 0, 0)),
+  dist = "fixed",
+  hesim_data = hesim_dat
+)
+
+medcost_tbl <- stateval_tbl(
+  data.table(state_id = states$state_id,
+             mean = c(0, 0, 5294, 0),
+             se = c(0, 0, 1487, 0)),
+  dist = "gamma",
+  hesim_data = hesim_dat
+)
+```
+
+# Simulation
+## Constructing the model
+The economic model consists of a model for disease progression and models for assigning utility and cost values to health states. 
+
+### Disease model
+The transition model is a function of the parameters of the multi-state model and input data. The input data in this case is a dataset consisting of one row for each treatment strategy and patient. It can be generated using `expand.hesim_data()`. 
+
+```{r}
+transmod_data <- expand(hesim_dat, by = c("strategies", "patients"))
+head(transmod_data)
+```
+
+Since we are using a Weibull regression model to simulate time until a revision hip replacement (*Successful primary* to *Revision THR*), we need to create a constant term and covariates for male sex and whether the new prosthesis was used.
+
+```{r}
+transmod_data[, cons := 1]
+transmod_data[, male := ifelse(gender == "Male", 1, 0)]
+transmod_data[, np1 := ifelse(strategy_name == "New prosthesis", 1, 0)]
+```
+
 The full transition model is created using the transition parameters, the input data, the transition matrix, and the starting age of the patients. Since we are using a clock-forward model we use the `clock = "forward"` option.
 
 ```{r}
