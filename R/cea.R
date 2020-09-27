@@ -1,12 +1,15 @@
+#' Individualized cost-effectiveness analysis
+#'
+#' These functions are deprecated, use [cea()] and [cea_pw()] instead. 
 #' @export
-#' @rdname cea
+#' @rdname icea
 icea <- function(x, ...) {
   .Deprecated("cea")
   UseMethod("cea")
 }
 
 #' @export
-#' @rdname cea
+#' @rdname icea
 icea_pw <- function(x, ...) {
   .Deprecated("cea_pw")
   UseMethod("cea_pw")
