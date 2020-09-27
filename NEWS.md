@@ -1,7 +1,27 @@
 ## hesim 0.3.1.9999
 ### New features
 
-* Disease progression (i.e., a trajectory through a multi-state model) can now be simulated using the `sim_disease()` method of the `hesim::IndivCtstmTrans` class.
+* `IndivCtstmTrans` objects can be constructed from a `params_surv_list` using `create_IndivCtstmTrans.params_surv_list()`. 
+
+* Survival models can randomly sample from piecewise exponential and proportional hazards Weibull distributions. A `fixed` distribution has also been added so that survival times can be set to a single constant value. Random number generation from truncated versions of these distributions is also supported. Note that functionality beyond random number generation (e.g., hazard functions, cumulative hazard functions, cumulative density functions) is not yet complete. See `?params_surv`. 
+
+* A new vignette incorporates the two bullets above and shows how a time-inhomogeneous Markov model can be simulated using individual patient simulation. 
+
+* Disease progression (i.e., a trajectory through a multi-state model) can be simulated using the `sim_disease()` method of the `hesim::IndivCtstmTrans` class.
+
+* A more computationally efficient approach to simulation of a time-inhomogeneous Markov cohort models has been added to the corresponding vignette. This was aided by the new `tpmatrix_id()` and `tparams_transprobs.tpmatrix()` functions.
+
+* The "Articles" on the package website have been reorganized so that they align more closely with the different types of economic models. 
+
+### API changes
+
+* `icea()` and `icea_pw()` have been deprecated and replaced by `cea()` and `cea_pw()`. 
+
+### Bug fixes
+
+* The `lys` argument for the `$sim_qalys()` method of `hesim::Psm` and `hesim::CohortDtstm` classes now works. 
+
+* The `$sim_stateprobs()` argument for the `hesim::Psm` class now properly returns the `patient_wt` column. 
 
 ## hesim 0.3.1
 Fixes a small bug in the `C++` code identified with the CRAN package checks.
