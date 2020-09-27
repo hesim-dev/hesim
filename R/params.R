@@ -338,7 +338,7 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #' the log scale) and the second element is the `sdlog` parameter (i.e.,
 #'  the standard deviation of survival on the log scale). The parameterization is
 #' that same as in [stats::Lognormal]. The coefficients predicting the `meanlog` 
-#' parameter are untransformed wheras the coefficients predicting the `sdlog` 
+#' parameter are untransformed whereas the coefficients predicting the `sdlog` 
 #' parameter are defined on the log scale.}
 #' 
 #' \item{`gompertz`}{ Gompertz distribution. The first 
@@ -394,7 +394,7 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #'  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
 #' }
 #' 
-#' #' Auxiliary arguments for pieceise exponential models should be specified as 
+#' #' Auxiliary arguments for piecewise exponential models should be specified as 
 #' a list containing the element:
 #' \describe{
 #' \item{`time`}{ A vector equal to the number of rate parameters giving the 
@@ -413,7 +413,7 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #'  \item{`random_method`}{Method used to randomly draw from
 #'  an arbitrary survival function. Options are `"invcdf"` for the inverse CDF and
 #'  `"discrete"` for a discrete time approximation that randomly samples
-#'   events from a bernoulli distribution at discrete times.}
+#'   events from a Bernoulli distribution at discrete times.}
 #'  \item{\code{step}}{Step size for computation of cumulative hazard with 
 #' numerical integration. Only required when using `"riemann"` to compute the 
 #' cumulative hazard or using `"discrete"` for random number generation.}
@@ -694,7 +694,7 @@ create_params.multinom_list <- function(object, n = 1000, point_estimate = FALSE
 #'  This argument is not required if there is only one time interval.
 #' @param grp_id An optional numeric vector of integers denoting the subgroups. Must
 #' be the same length as the 3rd dimension of the array.
-#' @param patient_wt An optional numer vector denoting the weight to apply to each 
+#' @param patient_wt An optional numeric vector denoting the weight to apply to each 
 #' patient within a subgroup. Must be the same length as the 3rd dimension of the array.
 #' 
 #' @details The format of `object` depends on its class: 

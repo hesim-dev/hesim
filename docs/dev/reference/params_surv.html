@@ -221,7 +221,7 @@ element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the me
 the log scale) and the second element is the <code>sdlog</code> parameter (i.e.,
 the standard deviation of survival on the log scale). The parameterization is
 that same as in <a href='https://rdrr.io/r/stats/Lognormal.html'>stats::Lognormal</a>. The coefficients predicting the <code>meanlog</code>
-parameter are untransformed wheras the coefficients predicting the <code>sdlog</code>
+parameter are untransformed whereas the coefficients predicting the <code>sdlog</code>
 parameter are defined on the log scale.</p></li>
 <li><p><code>gompertz</code> Gompertz distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter and the second
@@ -270,7 +270,7 @@ chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
 
 </dl>
 
-<p>#' Auxiliary arguments for pieceise exponential models should be specified as
+<p>#' Auxiliary arguments for piecewise exponential models should be specified as
 a list containing the element:</p><dl'>
 <dt><code>time</code></dt><dd><p>A vector equal to the number of rate parameters giving the
 times at which the rate changes.</p></dd>
@@ -288,7 +288,7 @@ Options are <code>"quad"</code> for adaptive quadrature and <code>"riemann"</cod
 <dt><code>random_method</code></dt><dd><p>Method used to randomly draw from
 an arbitrary survival function. Options are <code>"invcdf"</code> for the inverse CDF and
 <code>"discrete"</code> for a discrete time approximation that randomly samples
-events from a bernoulli distribution at discrete times.</p></dd>
+events from a Bernoulli distribution at discrete times.</p></dd>
 <dt><code>step</code></dt><dd><p>Step size for computation of cumulative hazard with
 numerical integration. Only required when using <code>"riemann"</code> to compute the
 cumulative hazard or using <code>"discrete"</code> for random number generation.</p></dd>

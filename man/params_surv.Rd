@@ -64,7 +64,7 @@ element of \code{coef} is the \code{meanlog} parameter (i.e., the mean of surviv
 the log scale) and the second element is the \code{sdlog} parameter (i.e.,
 the standard deviation of survival on the log scale). The parameterization is
 that same as in \link[stats:Lognormal]{stats::Lognormal}. The coefficients predicting the \code{meanlog}
-parameter are untransformed wheras the coefficients predicting the \code{sdlog}
+parameter are untransformed whereas the coefficients predicting the \code{sdlog}
 parameter are defined on the log scale.}
 
 \item{\code{gompertz}}{ Gompertz distribution. The first
@@ -120,7 +120,7 @@ Auxiliary arguments for fractional polynomial models should be specified as a li
 chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
 }
 
-#' Auxiliary arguments for pieceise exponential models should be specified as
+#' Auxiliary arguments for piecewise exponential models should be specified as
 a list containing the element:
 \describe{
 \item{\code{time}}{ A vector equal to the number of rate parameters giving the
@@ -139,7 +139,7 @@ Options are \code{"quad"} for adaptive quadrature and \code{"riemann"} for Riema
 \item{\code{random_method}}{Method used to randomly draw from
 an arbitrary survival function. Options are \code{"invcdf"} for the inverse CDF and
 \code{"discrete"} for a discrete time approximation that randomly samples
-events from a bernoulli distribution at discrete times.}
+events from a Bernoulli distribution at discrete times.}
 \item{\code{step}}{Step size for computation of cumulative hazard with
 numerical integration. Only required when using \code{"riemann"} to compute the
 cumulative hazard or using \code{"discrete"} for random number generation.}

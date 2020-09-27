@@ -11,7 +11,7 @@ icea_pw(x, ...)
 }
 \arguments{
 \item{x}{An object of simulation output characterizing the probability distribution
-of clinical effectiveness and costs.}
+of clinical effectiveness and costs.?ic}
 
 \item{...}{Further arguments passed to or from other methods.}
 }

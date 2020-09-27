@@ -31,7 +31,7 @@ This argument is not required if there is only one time interval.}
 \item{grp_id}{An optional numeric vector of integers denoting the subgroups. Must
 be the same length as the 3rd dimension of the array.}
 
-\item{patient_wt}{An optional numer vector denoting the weight to apply to each
+\item{patient_wt}{An optional numeric vector denoting the weight to apply to each
 patient within a subgroup. Must be the same length as the 3rd dimension of the array.}
 
 \item{tpmatrix_id}{An object of class \link{tpmatrix_id}.}
