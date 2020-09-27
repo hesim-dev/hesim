@@ -681,21 +681,17 @@ eval_tparams <- function(x, input_data, rng_params){
 #'  The direct output of `eval_model()` can also be useful for understanding and debugging 
 #'  model definitions, but it is not used directly for simulation.
 #'  
-#'  
-#'  A `model_def` object would typically be defined in four steps by specifying:
-#'  1. *Data* (`input_data`) of class [expanded_hesim_data][expand.hesim_data()] 
-#'  consisting of the treatment strategies and patient population
-#'  2. *Parameters* (`params`) objects storing the values of all parameters used in the model
-#'  3. *Random number generation* ([define_rng()]) expressions that randomly 
-#'  sample values of the parameters from suitable probability distributions for probabilistic
-#'   sensitivity analysis 
-#'  4. *Transformed parameter* ([define_tparams()]) expressions that transform
-#'   the parameter estimates into values used for simulation
-#'  
-#'  Step 2 can be omitted if underlying parameter values are defined in steps 3.
-#'  The output of step 4 is used to instantiate the economic model (or a portion 
-#'  of an economic model) as a function of a transition probability matrix,
-#'  utilities, and/or costs.
+#'  Economic models are constructed as a function of input data and parameters:
+#'  1. *Input data*: Objects of class [expanded_hesim_data][expand.hesim_data()] 
+#'  consisting of the treatment strategies and patient population.
+#'  2. *Parameters*: The underlying parameter estimates from the literature 
+#'  are first stored in a list (`params` argument). Random number generation
+#'  is then used to sample the parameters from suitable probability distributions
+#'  for the PSA (`rng_def` argument). Finally, the sampled parameters are
+#'  transformed as a function of the input data into values (e.g., elements of a
+#'   transition probability matrix) used for the simulation (`tparams_def` argument).
+#'   The `params` argument can be omitted if the underlying parameters values are
+#'  defined inside a `define_rng()` block.
 #' 
 #' @return `define_model()` returns an object of class `model_def`, 
 #' which is a list containing the arguments to the function. `eval_model()` returns

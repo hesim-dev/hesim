@@ -56,22 +56,19 @@ functions that instantiate economic models (e.g., \code{\link[=create_CohortDtst
 The direct output of \code{eval_model()} can also be useful for understanding and debugging
 model definitions, but it is not used directly for simulation.
 
-A \code{model_def} object would typically be defined in four steps by specifying:
+Economic models are constructed as a function of input data and parameters:
 \enumerate{
-\item \emph{Data} (\code{input_data}) of class \link[=expand.hesim_data]{expanded_hesim_data}
-consisting of the treatment strategies and patient population
-\item \emph{Parameters} (\code{params}) objects storing the values of all parameters used in the model
-\item \emph{Random number generation} (\code{\link[=define_rng]{define_rng()}}) expressions that randomly
-sample values of the parameters from suitable probability distributions for probabilistic
-sensitivity analysis
-\item \emph{Transformed parameter} (\code{\link[=define_tparams]{define_tparams()}}) expressions that transform
-the parameter estimates into values used for simulation
+\item \emph{Input data}: Objects of class \link[=expand.hesim_data]{expanded_hesim_data}
+consisting of the treatment strategies and patient population.
+\item \emph{Parameters}: The underlying parameter estimates from the literature
+are first stored in a list (\code{params} argument). Random number generation
+is then used to sample the parameters from suitable probability distributions
+for the PSA (\code{rng_def} argument). Finally, the sampled parameters are
+transformed as a function of the input data into values (e.g., elements of a
+transition probability matrix) used for the simulation (\code{tparams_def} argument).
+The \code{params} argument can be omitted if the underlying parameters values are
+defined inside a \code{define_rng()} block.
 }
-
-Step 2 can be omitted if underlying parameter values are defined in steps 3.
-The output of step 4 is used to instantiate the economic model (or a portion
-of an economic model) as a function of a transition probability matrix,
-utilities, and/or costs.
 }
 \examples{
 
