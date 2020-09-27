@@ -32,7 +32,7 @@ $$
 
 where $r$ is the discount rate. Note that unlike in cohort models, costs and QALYs can depend on time since entering a health state in an IPS; that is, costs and QALYs can also be "clock-reset" or "clock-forward".
 
-This example will demonstrate the use of IPS to simulate a clock forward model. To facilitate comparison between cohort and individual-level models, will revisit the total hip replacement (THR) example from the [time inhomogeneous Markov model article](markov-inhomogeneous.html). The following `R` packages will be used during the analysis.
+This example will demonstrate the use of IPS to simulate a clock forward model. To facilitate comparison between cohort and individual-level models, will revisit the total hip replacement (THR) example from the ["time inhomogeneous Markov cohort"](markov-inhomogeneous-cohort.html) modeling vignette. The following `R` packages will be used during the analysis.
 
 ```{r, warning = FALSE, message = FALSE}
 library("hesim")

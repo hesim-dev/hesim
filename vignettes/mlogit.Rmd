@@ -104,7 +104,7 @@ transfits <- multinom_list(healthy = fit_healthy, sick = fit_sick)
 ```
 
 ## Utility and costs
-As in the ["getting started"](getting-started.html) and ["time inhomogeneous"](markov-inhomogeneous.html) vignettes on Markov cohort modeling, utility and costs models could be generated using mathematical expressions with `define_model()`. However, in this case it is simpler and more direct (and thus more computationally efficient) to use the `stateval_tbl()` functionality. Separate tables are created for utility, drug costs, and medical costs. 
+As in the ["simple Markov cohort"](markov-cohort.html) and ["time inhomogeneous Markov cohort"](markov-inhomogeneous-cohort.html) vignettes on Markov cohort modeling, utility and costs models could be generated using mathematical expressions with `define_model()`. However, in this case it is simpler and more direct (and thus more computationally efficient) to use the `stateval_tbl()` functionality. Separate tables are created for utility, drug costs, and medical costs. 
 
 ```{r}
 utility_tbl <- stateval_tbl(multinom3_exdata$utility,
