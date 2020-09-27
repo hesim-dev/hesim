@@ -9,6 +9,12 @@ icea(x, ...)
 
 icea_pw(x, ...)
 }
+\arguments{
+\item{x}{An object of simulation output characterizing the probability distribution
+of clinical effectiveness and costs.}
+
+\item{...}{Further arguments passed to or from other methods.}
+}
 \description{
 These functions are deprecated, use \code{\link[=cea]{cea()}} and \code{\link[=cea_pw]{cea_pw()}} instead.
 }

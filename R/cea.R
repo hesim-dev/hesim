@@ -1,6 +1,9 @@
 #' Individualized cost-effectiveness analysis
 #'
 #' These functions are deprecated, use [cea()] and [cea_pw()] instead. 
+#' @param x An object of simulation output characterizing the probability distribution
+#' of clinical effectiveness and costs.?ic
+#' @param ... Further arguments passed to or from other methods. 
 #' @export
 #' @rdname icea
 icea <- function(x, ...) {
