@@ -53,14 +53,13 @@ $$
 INMB_g(\theta) = NMB_g(j = 1, \theta) - NMB_g(j = 0, \theta).
 \end{aligned}
 $$
-Equivalently, treatment $1$ is preferred to treatment $0$ in subgroup $g$ if the incremental cost-effectiveness ratio (ICER) is greater than the willingness to pay threshold $k$,
+Equivalently, (if $c_{g1} - c_{g0} >0$ and $e_{g1} - e_{g0} >0$), treatment $1$ is preferred to treatment $0$ in subgroup $g$ if the incremental cost-effectiveness ratio (ICER) is greater than the willingness to pay threshold $k$,
 
 $$
 \begin{aligned}
 k > \frac{E_\theta [c_{g1} - c_{g0}]}{E_\theta [e_{g1} - e_{g0}]} = ICER_g.
 \end{aligned}
 $$
-
 
 # Probabilistic sensitivity analysis
 Expected NMBs are expected values, which implies that NMBs are uncertain and that optimal treatment strategies may be selected incorrectly. This uncertainty can be quantified using PSA, which uses Bayesian and quasi-Bayesian techniques to estimate the distribution of NMBs given the distribution of the parameters for each treatment strategy

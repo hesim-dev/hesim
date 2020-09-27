@@ -111,7 +111,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cost-effectiveness analysis</h1>
             
-            <h4 class="date">2020-09-21</h4>
+            <h4 class="date">2020-09-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/cea.Rmd"><code>vignettes/cea.Rmd</code></a></small>
       <div class="hidden name"><code>cea.Rmd</code></div>
@@ -155,7 +155,7 @@ j^{*}_g = \text{argmax}_j E_{\theta} \left[NMB_g(j,\theta)\right].
 \begin{aligned}
 INMB_g(\theta) = NMB_g(j = 1, \theta) - NMB_g(j = 0, \theta).
 \end{aligned}
-\]</span> Equivalently, treatment <span class="math inline">\(1\)</span> is preferred to treatment <span class="math inline">\(0\)</span> in subgroup <span class="math inline">\(g\)</span> if the incremental cost-effectiveness ratio (ICER) is greater than the willingness to pay threshold <span class="math inline">\(k\)</span>,</p>
+\]</span> Equivalently, (if <span class="math inline">\(c_{g1} - c_{g0} &gt;0\)</span> and <span class="math inline">\(e_{g1} - e_{g0} &gt;0\)</span>), treatment <span class="math inline">\(1\)</span> is preferred to treatment <span class="math inline">\(0\)</span> in subgroup <span class="math inline">\(g\)</span> if the incremental cost-effectiveness ratio (ICER) is greater than the willingness to pay threshold <span class="math inline">\(k\)</span>,</p>
 <p><span class="math display">\[
 \begin{aligned}
 k &gt; \frac{E_\theta [c_{g1} - c_{g0}]}{E_\theta [e_{g1} - e_{g0}]} = ICER_g.
