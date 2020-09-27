@@ -19,7 +19,7 @@ Individual patient simulations (IPS) in `hesim` use continuous time state transi
 
 Different assumptions can be made about the time scales used to determine the hazards. In a "clock forward" (i.e., Markov) model, time $t$ refers to time since entering the initial health state. Conversely, in a "clock reset" (i.e., semi-Markov) model, time $t$ refers to time since entering the current state $r$, meaning that time resets to 0 each time a patient enters a new state. 
 
-While state occupancy probabilities in "clock forward"  models can be estimated analytically using the [Aalen-Johansen](https://www.jstor.org/stable/pdf/4615704.pdf) estimator, state occupancy probabilities in "clock reset" models can only be computed in a general fashion using individual patient simulation. `hesim` can simulate either "clock forward",  "clock reset" models, or combinations of the two via IPS. 
+While state occupancy probabilities in "clock forward"  models can be estimated analytically using the [Aalen-Johansen](https://www.jstor.org/stable/4615704) estimator, state occupancy probabilities in "clock reset" models can only be computed in a general fashion using individual patient simulation. `hesim` can simulate either "clock forward",  "clock reset" models, or combinations of the two via IPS. 
 
 Discounted costs and quality-adjusted life-years (QALYs) are computed using the continuous time present value of a flow of state values---$q_{hik}(t)$ for utility and $c_{m, hik}(t)$ for the $m$th cost category---that depend on the health state of a patient on a given treatment strategy at a particular point in time. Discounted QALYs and costs given a model starting at time $0$ with a time horizon of $T$ are then given by,
 
