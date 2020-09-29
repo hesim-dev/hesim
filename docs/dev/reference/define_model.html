@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Define and evaluate model expression — define_model" />
 <meta property="og:description" content="A model expression is defined by specifying random number generation functions
-for a probabilistic sensitivity analysis and transformations of the sampled
+for a probabilistic sensitivity analysis (PSA) and transformations of the sampled
 parameters as a function of input_data. The unevaluated expressions
 are evaluated with eval_model() and used to generate the model inputs needed to
 create an economic model." />
@@ -58,6 +58,16 @@ create an economic model." />
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-1');
+</script>
 
 
   </head>
@@ -160,7 +170,7 @@ create an economic model." />
 
     <div class="ref-description">
     <p>A model expression is defined by specifying random number generation functions
-for a probabilistic sensitivity analysis and transformations of the sampled
+for a probabilistic sensitivity analysis (PSA) and transformations of the sampled
 parameters as a function of <code>input_data</code>. The unevaluated expressions
 are evaluated with <code>eval_model()</code> and used to generate the model inputs needed to
 create an economic model.</p>

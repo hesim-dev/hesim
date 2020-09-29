@@ -655,7 +655,7 @@ eval_tparams <- function(x, input_data, rng_params){
 #' Define and evaluate model expression
 #' 
 #' A model expression is defined by specifying random number generation functions 
-#' for a probabilistic sensitivity analysis and transformations of the sampled 
+#' for a probabilistic sensitivity analysis (PSA) and transformations of the sampled 
 #' parameters as a function of `input_data`. The unevaluated expressions
 #' are evaluated with `eval_model()` and used to generate the model inputs needed to 
 #' create an economic model.

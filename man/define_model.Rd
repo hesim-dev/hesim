@@ -44,7 +44,7 @@ of random number generation samples for the PSA.
 }
 \description{
 A model expression is defined by specifying random number generation functions
-for a probabilistic sensitivity analysis and transformations of the sampled
+for a probabilistic sensitivity analysis (PSA) and transformations of the sampled
 parameters as a function of \code{input_data}. The unevaluated expressions
 are evaluated with \code{eval_model()} and used to generate the model inputs needed to
 create an economic model.
