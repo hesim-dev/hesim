@@ -543,38 +543,38 @@ S(t) = \exp(-\lambda t^\gamma) \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.65901
-## 2:           2      2 14.70386</code></pre>
+## 1:           1      2 14.62572
+## 2:           2      2 14.67081</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 511.4377
-## 2:           2      2 612.7406</code></pre>
+## 1:           1      2 509.7931
+## 2:           2      2 611.8894</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
 <pre><code>##     strategy_id grp_id            iqalys         icosts                  inmb
-##  1:           2      1 0.07 (0.03, 0.13)  68 (-43, 136)  3,562 (1,243, 6,627)
-##  2:           2      2 0.04 (0.02, 0.08)  101 (17, 150)    2,141 (704, 4,074)
-##  3:           2      3 0.03 (0.01, 0.05)  127 (66, 161)    1,211 (365, 2,354)
-##  4:           2      4 0.02 (0.01, 0.03) 146 (103, 169)      624 (135, 1,299)
-##  5:           2      5 0.01 (0.00, 0.02) 160 (131, 175)         273 (-5, 661)
-##  6:           2      6 0.12 (0.04, 0.20) -27 (-216, 96) 5,785 (2,036, 10,064)
-##  7:           2      7 0.07 (0.02, 0.12) 35 (-101, 122)  3,458 (1,230, 6,063)
-##  8:           2      8 0.04 (0.02, 0.07)  83 (-13, 142)    1,964 (647, 3,540)
-##  9:           2      9 0.02 (0.01, 0.04)  117 (52, 157)    1,046 (305, 1,920)
-## 10:           2     10 0.01 (0.01, 0.02)  142 (99, 167)      508 (102, 1,007)
+##  1:           2      1 0.07 (0.03, 0.13)  70 (-32, 135)  3,565 (1,294, 6,641)
+##  2:           2      2 0.05 (0.02, 0.08)  102 (27, 150)    2,152 (756, 4,059)
+##  3:           2      3 0.03 (0.01, 0.05)  127 (75, 160)    1,222 (397, 2,408)
+##  4:           2      4 0.02 (0.01, 0.03) 146 (110, 169)      634 (157, 1,337)
+##  5:           2      5 0.01 (0.00, 0.02) 160 (136, 175)         280 (18, 680)
+##  6:           2      6 0.12 (0.05, 0.21) -25 (-197, 96) 5,851 (2,250, 10,605)
+##  7:           2      7 0.07 (0.03, 0.13)  36 (-90, 122)  3,511 (1,335, 6,422)
+##  8:           2      8 0.04 (0.02, 0.08)   83 (-4, 142)    2,003 (723, 3,759)
+##  9:           2      9 0.02 (0.01, 0.04)  117 (58, 157)    1,073 (360, 2,078)
+## 10:           2     10 0.01 (0.01, 0.02) 141 (102, 167)      525 (118, 1,089)
 ##          icer     conclusion
-##  1:       943 Cost-effective
-##  2:     2,259 Cost-effective
-##  3:     4,743 Cost-effective
-##  4:     9,486 Cost-effective
-##  5:    18,465 Cost-effective
+##  1:       963 Cost-effective
+##  2:     2,264 Cost-effective
+##  3:     4,712 Cost-effective
+##  4:     9,368 Cost-effective
+##  5:    18,153 Cost-effective
 ##  6: Dominates Cost-effective
-##  7:       504 Cost-effective
-##  8:     2,023 Cost-effective
-##  9:     5,039 Cost-effective
-## 10:    10,916 Cost-effective</code></pre>
+##  7:       508 Cost-effective
+##  8:     1,988 Cost-effective
+##  9:     4,918 Cost-effective
+## 10:    10,611 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -586,9 +586,9 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                   
 ## Incremental QALYs "-" "0.03 (0.01, 0.05)" 
-## Incremental costs "-" "119 (52, 157)"     
-## Incremental NMB   "-" "1,331 (442, 2,531)"
-## ICER              "-" "4,099"             
+## Incremental costs "-" "119 (63, 157)"     
+## Incremental NMB   "-" "1,349 (476, 2,594)"
+## ICER              "-" "4,054"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>
@@ -622,7 +622,7 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 <h2 class="hasAnchor">
 <a href="#computational-efficiency" class="anchor"></a>Computational efficiency</h2>
 <p>The largest bottleneck in <code><a href="../reference/define_model.html">define_model()</a></code> is the construction of the economic model and the construction of the transition model in particular. The reason for this is that all transition probabilities are “vectorized” and consequently preallocated. This preallocation can take time if the number of parameter samples <span class="math inline">\(\times\)</span> treatment strategies <span class="math inline">\(\times\)</span> patients <span class="math inline">\(\times\)</span> time periods is large. Since the <code>$sim_stateprobs()</code> method is implemented in <code>C++</code> the simulation is very fast one the transition probabilities have been constructed.</p>
-<p>The disadvantage of <code><a href="../reference/define_model.html">define_model()</a></code> for preallocation is that it is a general function, resulting in some overhead. An alternative approach is to construct the transition probability matrix ourselves using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the <span class="math inline">\(i\)</span>th row and <span class="math inline">\(j\)</span>th column as <span class="math inline">\(p_{ij} = g(x^T\theta)\)</span> where <span class="math inline">\(x\)</span> is an input matrix, <span class="math inline">\(\theta\)</span> is a vector of coefficients (i.e., a parameter sample), and <span class="math inline">\(g()\)</span> is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well.</p>
+<p>The disadvantage of <code><a href="../reference/define_model.html">define_model()</a></code> for preallocation is that it is a general function, resulting in some overhead. An alternative approach is to construct the transition probability matrix ourselves using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the <span class="math inline">\(r\)</span>th row and <span class="math inline">\(s\)</span>th column as <span class="math inline">\(p_{rs} = g(x^T\theta)\)</span> where <span class="math inline">\(x\)</span> is an input matrix, <span class="math inline">\(\theta\)</span> is a vector of coefficients (i.e., a parameter sample), and <span class="math inline">\(g()\)</span> is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well.</p>
 <div id="random-number-generation-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#random-number-generation-1" class="anchor"></a>Random number generation</h3>
@@ -725,7 +725,7 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 ## 4:      1           1          1      1     0.0325       4          3         4
 ## 5:      1           1          1      1     0.0325       5          4         5
 ## 6:      1           1          1      1     0.0325       6          5         6</code></pre>
-<p><code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> produces a flattened transition probability matrix for each row of <code>tpmatrix_id</code>. We predict the elements of the matrix using the input matrices we derived above.</p>
+<p><code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> produces a flattened transition probability matrix for each row of <code>tpmatrix_id</code>. We predict the elements of the matrix using the input matrices we derived above. Matrix multiplication of an <span class="math inline">\(n \times k\)</span> input matrix by a <span class="math inline">\(k \times s\)</span> coefficient matrix results in a <span class="math inline">\(n \times s\)</span> matrix of predicted values. In other words, there is one row for each of the <span class="math inline">\(n\)</span> rows in the input data and one column for each of the <span class="math inline">\(s\)</span> parameter samples. This matrix can itself be flattened into a vector of length <span class="math inline">\(n \cdot s\)</span> using the <code><a href="https://rdrr.io/r/base/c.html">c()</a></code> function. The result is a vector of predicted values stacked by parameter sample; that is, a prediction for each row produced by <code><a href="../reference/tpmatrix_id.html">tpmatrix_id()</a></code>.</p>
 <div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="co"># "Transformed" parameters</span>
 <span class="no">time</span> <span class="kw">&lt;-</span> <span class="no">tpmat_id</span>$<span class="no">time_stop</span>
 <span class="no">omrPTHR</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">x_cons</span> <span class="kw">%*%</span> <span class="no">params_rng</span>$<span class="no">omrPTHR</span>)
@@ -745,12 +745,12 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
   <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,   <span class="fl">0</span>, <span class="fl">1</span>
 )
 <span class="no">tpmat</span>[<span class="fl">1</span>, ]</pre></body></html></div>
-<pre><code>##    s1_s1     s1_s2 s1_s3 s1_s4      s1_s5 s2_s1     s2_s2        s2_s3 s2_s4
-## 1:     0 0.9844351     0     0 0.01556493     0 0.9927275 0.0005724897     0
-##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4      s3_s5 s4_s1 s4_s2      s4_s3
-## 1: 0.0067     0     0     0 0.9777351 0.02226493     0     0 0.02247722
-##        s4_s4  s4_s5 s5_s1 s5_s2 s5_s3 s5_s4 s5_s5
-## 1: 0.9708228 0.0067     0     0     0     0     1</code></pre>
+<pre><code>##    s1_s1     s1_s2 s1_s3 s1_s4     s1_s5 s2_s1     s2_s2        s2_s3 s2_s4
+## 1:     0 0.9787901     0     0 0.0212099     0 0.9927714 0.0005285932     0
+##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4     s3_s5 s4_s1 s4_s2      s4_s3    s4_s4
+## 1: 0.0067     0     0     0 0.9720901 0.0279099     0     0 0.04606698 0.947233
+##     s4_s5 s5_s1 s5_s2 s5_s3 s5_s4 s5_s5
+## 1: 0.0067     0     0     0     0     1</code></pre>
 <p>Finally, we combine the ID variables and the transition probability matrices into a single object.</p>
 <div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">tparams_transprobs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tparams_transprobs.html">tparams_transprobs</a></span>(<span class="no">tpmat</span>, <span class="no">tpmat_id</span>)</pre></body></html></div>
 </div>
@@ -769,15 +769,15 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.66426
-## 2:           2      2 14.70811</code></pre>
+## 1:           1      2 14.61970
+## 2:           2      2 14.66424</code></pre>
 <div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 510.2951
-## 2:           2      2 613.3530</code></pre>
-<p>However, time to construct the transition model was 3.2 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
+## 1:           1      2 509.1848
+## 2:           2      2 612.2912</code></pre>
+<p>However, time to construct the transition model was 3.1 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
 <div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(
   <span class="kw">Method</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"define_model()"</span>, <span class="st">"Custom tpmatrix()"</span>),
   <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span>(
@@ -808,13 +808,13 @@ elapsed
 define_model()
 </td>
 <td style="text-align:right;">
-3.964
+4.006
 </td>
 <td style="text-align:right;">
-0.693
+0.708
 </td>
 <td style="text-align:right;">
-4.704
+4.813
 </td>
 </tr>
 <tr>
@@ -822,13 +822,13 @@ define_model()
 Custom tpmatrix()
 </td>
 <td style="text-align:right;">
-1.049
+1.095
 </td>
 <td style="text-align:right;">
-0.407
+0.408
 </td>
 <td style="text-align:right;">
-1.478
+1.552
 </td>
 </tr>
 </tbody>

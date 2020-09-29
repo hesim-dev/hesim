@@ -402,7 +402,7 @@ $$
 ## Computational efficiency
 The largest bottleneck in `define_model()` is the construction of the economic model and the construction of the transition model in particular. The reason for this is that all transition probabilities are "vectorized" and consequently preallocated. This preallocation can take time if the number of parameter samples $\times$ treatment strategies $\times$ patients $\times$ time periods is large. Since the `$sim_stateprobs()` method is implemented in `C++` the simulation is very fast one the transition probabilities have been constructed.
 
-The disadvantage of `define_model()` for preallocation is that it is a general function, resulting in some overhead. An alternative approach is to construct the transition probability matrix ourselves using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the $i$th row and $j$th column as $p_{ij} = g(x^T\theta)$ where $x$ is an input matrix, $\theta$ is a vector of coefficients (i.e., a parameter sample), and $g()$ is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well. 
+The disadvantage of `define_model()` for preallocation is that it is a general function, resulting in some overhead. An alternative approach is to construct the transition probability matrix ourselves using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the $r$th row and $s$th column as $p_{rs} = g(x^T\theta)$ where $x$ is an input matrix, $\theta$ is a vector of coefficients (i.e., a parameter sample), and $g()$ is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well. 
 
 ```{r echo = FALSE}
 ptm <- proc.time()
@@ -481,7 +481,7 @@ tpmat_id <- tpmatrix_id(tpmatrix_data, 500)
 head(tpmat_id)
 ```
 
-`tpmatrix()` produces a flattened transition probability matrix for each row of `tpmatrix_id`. We predict the elements of the matrix using the input matrices we derived above. 
+`tpmatrix()` produces a flattened transition probability matrix for each row of `tpmatrix_id`. We predict the elements of the matrix using the input matrices we derived above. Matrix multiplication of an $n \times k$ input matrix by a $k \times s$ coefficient matrix results in a $n \times s$ matrix of predicted values. In other words, there is one row for each of the $n$ rows in the input data and one column for each of the $s$ parameter samples. This matrix can itself be flattened into a vector of length $n \cdot s$ using the `c()` function. The result is a vector of predicted values stacked by parameter sample; that is, a prediction for each row produced by `tpmatrix_id()`.
 
 ```{r}
 # "Transformed" parameters
