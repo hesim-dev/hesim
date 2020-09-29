@@ -17,7 +17,13 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-1"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-1');
+</script>
 </head>
 <body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
@@ -111,7 +117,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov individual-level models</h1>
             
-            <h4 class="date">2020-09-27</h4>
+            <h4 class="date">2020-09-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-indiv.Rmd"><code>vignettes/markov-inhomogeneous-indiv.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-indiv.Rmd</code></div>
@@ -123,9 +129,9 @@
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
-<p>Individual patient simulations (IPS) in <code>hesim</code> use continuous time state transition models (CTSTMs) to simulate trajectories for patients between mutually exclusive health states. Transitions between health states <span class="math inline">\(r\)</span> and <span class="math inline">\(s\)</span> for patient <span class="math inline">\(i\)</span> with treatment <span class="math inline">\(k\)</span> at time <span class="math inline">\(t\)</span> are governed by hazard functions, <span class="math inline">\(\lambda_{rs}(t|x_{ik})\)</span>, that can depend on covariates <span class="math inline">\(x_{ik}\)</span>.</p>
+<p>Continuous time state transition models (CTSTMs) are used to simulate trajectories for patients between mutually exclusive health states. Transitions between health states <span class="math inline">\(r\)</span> and <span class="math inline">\(s\)</span> for patient <span class="math inline">\(i\)</span> with treatment <span class="math inline">\(k\)</span> at time <span class="math inline">\(t\)</span> are governed by hazard functions, <span class="math inline">\(\lambda_{rs}(t|x_{ik})\)</span>, that can depend on covariates <span class="math inline">\(x_{ik}\)</span>.</p>
 <p>Different assumptions can be made about the time scales used to determine the hazards. In a “clock forward” (i.e., Markov) model, time <span class="math inline">\(t\)</span> refers to time since entering the initial health state. Conversely, in a “clock reset” (i.e., semi-Markov) model, time <span class="math inline">\(t\)</span> refers to time since entering the current state <span class="math inline">\(r\)</span>, meaning that time resets to 0 each time a patient enters a new state.</p>
-<p>While state occupancy probabilities in “clock forward” models can be estimated analytically using the <a href="https://www.jstor.org/stable/pdf/4615704.pdf">Aalen-Johansen</a> estimator, state occupancy probabilities in “clock reset” models can only be computed in a general fashion using individual patient simulation. <code>hesim</code> can simulate either “clock forward”, “clock reset” models, or combinations of the two via IPS.</p>
+<p>While state occupancy probabilities in “clock forward” models can be estimated analytically using the <a href="https://www.jstor.org/stable/4615704">Aalen-Johansen</a> estimator, state occupancy probabilities in “clock reset” models can only be computed in a general fashion using individual patient simulation (IPS). <code>hesim</code> can simulate either “clock forward”, “clock reset” models, or combinations of the two via IPS.</p>
 <p>Discounted costs and quality-adjusted life-years (QALYs) are computed using the continuous time present value of a flow of state values—<span class="math inline">\(q_{hik}(t)\)</span> for utility and <span class="math inline">\(c_{m, hik}(t)\)</span> for the <span class="math inline">\(m\)</span>th cost category—that depend on the health state of a patient on a given treatment strategy at a particular point in time. Discounted QALYs and costs given a model starting at time <span class="math inline">\(0\)</span> with a time horizon of <span class="math inline">\(T\)</span> are then given by,</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -133,8 +139,8 @@ QALYs_{hik} &amp;= \int_{0}^{T} q_{hik}(t)e^{-rt}dt, \\
 Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 \end{aligned}
 \]</span></p>
-<p>where <span class="math inline">\(r\)</span> is the discount rate. Note that unlike in cohort models, costs and QALYs can depend on time since entering a health state in an IPS; that is, costs and QALYs can also be “clock-reset” or “clock-forward”.</p>
-<p>This example will demonstrate the use of IPS to simulate a clock forward model. To facilitate comparison between cohort and individual-level models, will revisit the total hip replacement (THR) example from the <a href="markov-inhomogeneous-cohort.html">“time inhomogeneous Markov cohort”</a> modeling vignette. The following <code>R</code> packages will be used during the analysis.</p>
+<p>where <span class="math inline">\(r\)</span> is the discount rate. Note that unlike in cohort models, costs and QALYs can depend on time since entering a health state in individual-level models; that is, costs and QALYs can also be “clock-reset” or “clock-forward”.</p>
+<p>This example will demonstrate the use of IPS to simulate a clock forward model. To facilitate comparison to a cohort approach, we will revisit the total hip replacement (THR) example from the <a href="markov-inhomogeneous-cohort.html">time inhomogeneous Markov cohort</a> modeling vignette. The following <code>R</code> packages will be used during the analysis.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"hesim"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"data.table"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"kableExtra"</span>)
@@ -384,7 +390,7 @@ NA
 <h4 class="hasAnchor">
 <a href="#transition-4" class="anchor"></a>Transition 4</h4>
 <p>The fourth transition is modeled using the death rate following recovery from the THR (i.e., while in the successful primary state). We will again use age and sex specific mortality rates.</p>
-<p>Since we are running the simulation for a 60-year old female, the mortality rate at time <span class="math inline">\(0\)</span> is <span class="math inline">\(0.0067\)</span>. We are using a clock-forward (i.e., Markov model), so the hazard depends on time since the start of the model. We can therefore model mortality over time with a piecewise exponential distribution with rates that vary over time. For a 60-year female, the rates will change at 5, 15, and 25 years.</p>
+<p>Since we are running the simulation for a 60-year old female, the mortality rate at time <span class="math inline">\(0\)</span> is <span class="math inline">\(0.0067\)</span>. We are using a clock-forward model, so the hazard depends on time since the start of the model. We can therefore model mortality over time with a piecewise exponential distribution with rates that vary over time. For a 60-year female, the rates will change at 5, 15, and 25 years.</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">mr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.0067</span>, <span class="fl">.0193</span>, <span class="fl">.0535</span>, <span class="fl">.1548</span>)
 <span class="no">mr_times</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">15</span>, <span class="fl">25</span>)</pre></body></html></div>
 </div>
@@ -449,20 +455,20 @@ NA
 <p>To get a better understanding of the output, lets take a look at a few of the sampled coefficient matrices.</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_coef</span>$<span class="no">log_omrPTHR</span>)</pre></body></html></div>
 <pre><code>##           cons
-## [1,] -4.111890
-## [2,] -2.626475
-## [3,] -4.488684
-## [4,] -3.822551
-## [5,] -4.258810
-## [6,] -4.412529</code></pre>
+## [1,] -4.402465
+## [2,] -4.506259
+## [3,] -3.655456
+## [4,] -4.400149
+## [5,] -3.431339
+## [6,] -2.693695</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_coef</span>$<span class="no">rr_scale</span>)</pre></body></html></div>
-<pre><code>##           cons         age      male       np1
-## [1,] -5.420242 -0.04211163 0.7017469 -1.541452
-## [2,] -5.512536 -0.03349197 0.7349364 -1.913073
-## [3,] -5.790058 -0.03719350 0.9202067 -1.677308
-## [4,] -5.617606 -0.03425289 0.7136702 -1.083000
-## [5,] -4.957089 -0.05219592 0.8348803 -1.102600
-## [6,] -5.787916 -0.02951033 0.8408591 -1.363955</code></pre>
+<pre><code>##           cons         age      male        np1
+## [1,] -5.599827 -0.03359525 0.9684233 -1.4843403
+## [2,] -5.314416 -0.04573843 0.8140230 -1.0579252
+## [3,] -5.620294 -0.03365601 0.8167649 -1.5646056
+## [4,] -5.587781 -0.03416844 0.6277187 -0.9099834
+## [5,] -5.983762 -0.02733983 0.9209797 -1.2759545
+## [6,] -5.574534 -0.03694161 1.0095030 -1.0552207</code></pre>
 <p>In addition to the coefficients, a complete parameterization of a transition model requires specification of the survival distributions and potentially auxiliary information (e.g., the times at which rates change in a piecewise exponential model). The parameters are stored in a <code><a href="../reference/params_surv_list.html">params_surv_list()</a></code> object, which is a list of <code><a href="../reference/params_surv.html">params_surv()</a></code> objects.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">transmod_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/params_surv_list.html">params_surv_list</a></span>(
   <span class="co"># 1. Primary THR:Successful primary (1:2)</span>
@@ -606,15 +612,15 @@ NA
 <span class="no">econmod</span>$<span class="fu">sim_disease</span>(<span class="kw">max_t</span> <span class="kw">=</span> <span class="fl">60</span>, <span class="kw">max_age</span> <span class="kw">=</span> <span class="fl">120</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>() - <span class="no">ptm</span></pre></body></html></div>
 <pre><code>##    user  system elapsed 
-##   2.467   0.108   2.582</code></pre>
+##   2.411   0.125   2.548</code></pre>
 <div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod</span>$<span class="no">disprog_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id patient_id grp_id from to final time_start  time_stop
 ## 1:      1           1          1      1    1  2     0  0.0000000  0.6931472
-## 2:      1           1          1      1    2  5     1  0.6931472 10.2342160
+## 2:      1           1          1      1    2  5     1  0.6931472 26.3190696
 ## 3:      1           1          2      1    1  2     0  0.0000000  0.6931472
-## 4:      1           1          2      1    2  5     1  0.6931472 17.9415622
+## 4:      1           1          2      1    2  5     1  0.6931472 22.8874360
 ## 5:      1           1          3      1    1  2     0  0.0000000  0.6931472
-## 6:      1           1          3      1    2  5     1  0.6931472 28.1401054</code></pre>
+## 6:      1           1          3      1    2  5     1  0.6931472 27.8586883</code></pre>
 <p>The simulated patient trajectories can be summarized by computing the probability of being in each health state over time (by averaging across the simulated patients). Here, we will compute state occupancy probabilities at yearly intervals. They are generally quite similar to those in the cohort model.</p>
 <div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="no">econmod</span>$<span class="fu">sim_stateprobs</span>(<span class="kw">t</span> <span class="kw">=</span> <span class="fl">0</span>:<span class="fl">60</span>)</pre></body></html></div>
 <p><img src="markov-inhomogeneous-indiv_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
@@ -630,29 +636,29 @@ NA
 <span class="no">ce_sim</span>$<span class="no">qalys</span>[, <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id     mean
-## 1:           1 15.18669
-## 2:           2 15.23004</code></pre>
+## 1:           1 15.23578
+## 2:           2 15.29209</code></pre>
 <div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id     mean
-## 1:           1 515.6534
-## 2:           2 612.8089</code></pre>
+## 1:           1 516.1980
+## 2:           2 612.8122</code></pre>
 </div>
 </div>
 </div>
 <div id="decision-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#decision-analysis" class="anchor"></a>Decision analysis</h1>
-<p>Since we performed a PSA, decision uncertainty could be formally quantified. Since we cover that in <a href="cea.html">other vignettes</a>, we will simply compute the incremental cost-effectiveness ratio (ICER) here.</p>
+<p>Since we performed a PSA, decision uncertainty could be formally quantified. Since we cover that in detail in the <a href="cea.html">cost-effectiveness analysis</a> vignette, we will simply compute the incremental cost-effectiveness ratio (ICER) here.</p>
 <div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">cea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">0.015</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.06</span>,
                      <span class="kw">k</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span>))
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                        
-## Incremental QALYs "-" "0.04 (-0.47, 0.65)"     
-## Incremental costs "-" "97 (-6, 163)"           
-## Incremental NMB   "-" "2,070 (-23,556, 32,321)"
-## ICER              "-" "2,241"                  
+## Incremental QALYs "-" "0.06 (-0.50, 0.65)"     
+## Incremental costs "-" "97 (-1, 164)"           
+## Incremental NMB   "-" "2,719 (-24,995, 32,421)"
+## ICER              "-" "1,716"                  
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
   </div>

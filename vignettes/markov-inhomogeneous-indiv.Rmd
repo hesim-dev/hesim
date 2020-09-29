@@ -15,11 +15,11 @@ vignette: >
 ---
 
 # Overview
-Individual patient simulations (IPS) in `hesim` use continuous time state transition models (CTSTMs) to simulate trajectories for patients between mutually exclusive health states. Transitions between health states $r$ and $s$ for patient $i$ with treatment $k$ at time $t$ are governed by hazard functions, $\lambda_{rs}(t|x_{ik})$, that can depend on covariates $x_{ik}$. 
+Continuous time state transition models (CTSTMs) are used to simulate trajectories for patients between mutually exclusive health states. Transitions between health states $r$ and $s$ for patient $i$ with treatment $k$ at time $t$ are governed by hazard functions, $\lambda_{rs}(t|x_{ik})$, that can depend on covariates $x_{ik}$. 
 
 Different assumptions can be made about the time scales used to determine the hazards. In a "clock forward" (i.e., Markov) model, time $t$ refers to time since entering the initial health state. Conversely, in a "clock reset" (i.e., semi-Markov) model, time $t$ refers to time since entering the current state $r$, meaning that time resets to 0 each time a patient enters a new state. 
 
-While state occupancy probabilities in "clock forward"  models can be estimated analytically using the [Aalen-Johansen](https://www.jstor.org/stable/4615704) estimator, state occupancy probabilities in "clock reset" models can only be computed in a general fashion using individual patient simulation. `hesim` can simulate either "clock forward",  "clock reset" models, or combinations of the two via IPS. 
+While state occupancy probabilities in "clock forward"  models can be estimated analytically using the [Aalen-Johansen](https://www.jstor.org/stable/4615704) estimator, state occupancy probabilities in "clock reset" models can only be computed in a general fashion using individual patient simulation (IPS). `hesim` can simulate either "clock forward",  "clock reset" models, or combinations of the two via IPS. 
 
 Discounted costs and quality-adjusted life-years (QALYs) are computed using the continuous time present value of a flow of state values---$q_{hik}(t)$ for utility and $c_{m, hik}(t)$ for the $m$th cost category---that depend on the health state of a patient on a given treatment strategy at a particular point in time. Discounted QALYs and costs given a model starting at time $0$ with a time horizon of $T$ are then given by,
 
@@ -30,9 +30,9 @@ Costs_{m, hik} &= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 \end{aligned}
 $$
 
-where $r$ is the discount rate. Note that unlike in cohort models, costs and QALYs can depend on time since entering a health state in an IPS; that is, costs and QALYs can also be "clock-reset" or "clock-forward".
+where $r$ is the discount rate. Note that unlike in cohort models, costs and QALYs can depend on time since entering a health state in individual-level models; that is, costs and QALYs can also be "clock-reset" or "clock-forward".
 
-This example will demonstrate the use of IPS to simulate a clock forward model. To facilitate comparison between cohort and individual-level models, will revisit the total hip replacement (THR) example from the ["time inhomogeneous Markov cohort"](markov-inhomogeneous-cohort.html) modeling vignette. The following `R` packages will be used during the analysis.
+This example will demonstrate the use of IPS to simulate a clock forward model. To facilitate comparison to a cohort approach, we will revisit the total hip replacement (THR) example from the [time inhomogeneous Markov cohort](markov-inhomogeneous-cohort.html) modeling vignette. The following `R` packages will be used during the analysis.
 
 ```{r, warning = FALSE, message = FALSE}
 library("hesim")
@@ -163,7 +163,7 @@ colnames(mort_tbl) <- c("age_lower", "age_upper", "male", "female")
 mort_tbl <- data.frame(mort_tbl)
 ```
 
-Since we are running the simulation for a 60-year old female, the mortality rate at time $0$ is $0.0067$. We are using a clock-forward (i.e., Markov model), so the hazard depends on time since the start of the model. We can therefore model mortality over time with a piecewise exponential distribution with rates that vary over time. For a 60-year female, the rates will change at 5, 15, and 25 years. 
+Since we are running the simulation for a 60-year old female, the mortality rate at time $0$ is $0.0067$. We are using a clock-forward model, so the hazard depends on time since the start of the model. We can therefore model mortality over time with a piecewise exponential distribution with rates that vary over time. For a 60-year female, the rates will change at 5, 15, and 25 years. 
 
 ```{r}
 mr <- c(.0067, .0193, .0535, .1548)
@@ -432,7 +432,7 @@ ce_sim$costs[category == "total",
 ```
 
 # Decision analysis
-Since we performed a PSA, decision uncertainty could be formally quantified. Since we cover that in [other vignettes](cea.html), we will simply compute the incremental cost-effectiveness ratio (ICER) here. 
+Since we performed a PSA, decision uncertainty could be formally quantified. Since we cover that in detail in the [cost-effectiveness analysis](cea.html) vignette, we will simply compute the incremental cost-effectiveness ratio (ICER) here. 
 
 ```{r}
 cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = 0.015, dr_costs = .06,
