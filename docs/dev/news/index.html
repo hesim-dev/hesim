@@ -54,6 +54,16 @@
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-1');
+</script>
+
 
   </head>
 
@@ -163,7 +173,7 @@
 <li><p>Survival models can randomly sample from piecewise exponential and proportional hazards Weibull distributions. A <code>fixed</code> distribution has also been added so that survival times can be set to a single constant value. Random number generation from truncated versions of these distributions is also supported. Note that functionality beyond random number generation (e.g., hazard functions, cumulative hazard functions, cumulative density functions) is not yet complete. See <code><a href="../reference/params_surv.html">?params_surv</a></code>.</p></li>
 <li><p>A new vignette incorporates the two bullets above and shows how a time-inhomogeneous Markov model can be simulated using individual patient simulation.</p></li>
 <li><p>Disease progression (i.e., a trajectory through a multi-state model) can be simulated using the <code>sim_disease()</code> method of the <code><a href="../reference/IndivCtstmTrans.html">hesim::IndivCtstmTrans</a></code> class.</p></li>
-<li><p>A more computationally efficient approach to simulation of a time-inhomogeneous Markov cohort models has been added to the corresponding vignette. This was aided by the new <code><a href="../reference/tpmatrix_id.html">tpmatrix_id()</a></code> and <code><a href="../reference/tparams_transprobs.html">tparams_transprobs.tpmatrix()</a></code> functions.</p></li>
+<li><p>A more computationally efficient approach to simulation of time-inhomogeneous Markov cohort models has been added to the corresponding vignette. This was aided by the new <code><a href="../reference/tpmatrix_id.html">tpmatrix_id()</a></code> and <code><a href="../reference/tparams_transprobs.html">tparams_transprobs.tpmatrix()</a></code> functions.</p></li>
 <li><p>The “Articles” on the package website have been reorganized so that they align more closely with the different types of economic models.</p></li>
 </ul>
 </div>

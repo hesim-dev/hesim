@@ -9,7 +9,7 @@
 
 * Disease progression (i.e., a trajectory through a multi-state model) can be simulated using the `sim_disease()` method of the `hesim::IndivCtstmTrans` class.
 
-* A more computationally efficient approach to simulation of a time-inhomogeneous Markov cohort models has been added to the corresponding vignette. This was aided by the new `tpmatrix_id()` and `tparams_transprobs.tpmatrix()` functions.
+* A more computationally efficient approach to simulation of time-inhomogeneous Markov cohort models has been added to the corresponding vignette. This was aided by the new `tpmatrix_id()` and `tparams_transprobs.tpmatrix()` functions.
 
 * The "Articles" on the package website have been reorganized so that they align more closely with the different types of economic models. 
 
