@@ -3,7 +3,7 @@ url: https://hesim-dev.github.io/hesim
 template:
   params:
     bootswatch: simplex
-    ganalytics: UA-131661920-1
+    ganalytics: UA-131661920-2
     
 development:
   mode: auto    
