@@ -17,7 +17,13 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
 </head>
 <body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
@@ -111,7 +117,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simple Markov cohort model</h1>
             
-            <h4 class="date">2020-09-21</h4>
+            <h4 class="date">2020-09-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-cohort.Rmd"><code>vignettes/markov-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-cohort.Rmd</code></div>
@@ -302,15 +308,15 @@
 <span class="no">wtp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span>)
 <span class="no">cea_pw_out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span>(<span class="no">ce_sim</span>, <span class="kw">comparator</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">dr_qalys</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">dr_costs</span> <span class="kw">=</span> <span class="fl">.06</span>,
                      <span class="kw">k</span> <span class="kw">=</span> <span class="no">wtp</span>)</pre></body></html></div>
-<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,356, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
+<p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $6,329, which is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                        
-## Incremental QALYs "-" "0.93 (0.56, 1.22)"      
-## Incremental costs "-" "5,904 (2,957, 10,047)"  
-## Incremental NMB   "-" "40,538 (23,026, 55,062)"
-## ICER              "-" "6,356"                  
+## Incremental QALYs "-" "0.93 (0.54, 1.23)"      
+## Incremental costs "-" "5,876 (2,840, 10,226)"  
+## Incremental NMB   "-" "40,548 (22,209, 55,546)"
+## ICER              "-" "6,329"                  
 ## Conclusion        "-" "Cost-effective"</code></pre>
-<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.95 and approaches 1 at slightly higher WTP values.</p>
+<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.949 and approaches 1 at slightly higher WTP values.</p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">cea_pw_out</span>$<span class="no">ceac</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">k</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">prob</span>,
            <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">strategy_id</span>, <span class="kw">labels</span> <span class="kw">=</span> <span class="no">strategies</span>$<span class="no">strategy_name</span>[-<span class="fl">1</span>]))) +

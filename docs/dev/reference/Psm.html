@@ -55,6 +55,16 @@
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
+
 
   </head>
 
@@ -362,18 +372,18 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h
 <span class='no'>psm</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>psm</span>$<span class='fu'><a href='sim_ev.html'>sim_costs</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr category    costs
-#&gt; 1:      1           1          1      1        1 0.03  medical 20038.00
-#&gt; 2:      1           1          1      1        2 0.03  medical 15033.14
-#&gt; 3:      1           1          1      1        3 0.03  medical 14649.63
-#&gt; 4:      1           1          2      1        1 0.03  medical 19098.54
-#&gt; 5:      1           1          2      1        2 0.03  medical 14580.37
-#&gt; 6:      1           1          2      1        3 0.03  medical 14133.71</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>psm</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr     qalys       lys
-#&gt; 1:      1           1          1      1        1 0.03 0.5912643 0.6573460
-#&gt; 2:      1           1          1      1        2 0.03 0.3841296 0.5325222
-#&gt; 3:      1           1          1      1        3 0.03 0.2900377 0.4229001
-#&gt; 4:      1           1          2      1        1 0.03 0.5635435 0.6265270
-#&gt; 5:      1           1          2      1        2 0.03 0.3725602 0.5164835
-#&gt; 6:      1           1          2      1        3 0.03 0.2798233 0.4080066</div><div class='input'>
+#&gt; 1:      1           1          1      1        1 0.03  medical 21437.42
+#&gt; 2:      1           1          1      1        2 0.03  medical 13344.90
+#&gt; 3:      1           1          1      1        3 0.03  medical 15141.31
+#&gt; 4:      1           1          2      1        1 0.03  medical 20578.39
+#&gt; 5:      1           1          2      1        2 0.03  medical 12900.56
+#&gt; 6:      1           1          2      1        3 0.03  medical 14130.52</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>psm</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr     qalys       lys
+#&gt; 1:      1           1          1      1        1 0.03 0.5521894 0.6438115
+#&gt; 2:      1           1          1      1        2 0.03 0.3910399 0.5526572
+#&gt; 3:      1           1          1      1        3 0.03 0.2866975 0.4299311
+#&gt; 4:      1           1          2      1        1 0.03 0.5300622 0.6180128
+#&gt; 5:      1           1          2      1        2 0.03 0.3780196 0.5342555
+#&gt; 6:      1           1          2      1        3 0.03 0.2675583 0.4012300</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
