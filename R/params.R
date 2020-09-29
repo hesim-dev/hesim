@@ -295,7 +295,7 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #' @param aux Auxiliary arguments used with splines or fractional polynomials. See "Details". 
 #' 
 #' @return An object of class `params_surv`, which is a list containing `coefs`,
-#' `dist`, and `n_samples. `n_samples` is equal to the number of rows
+#' `dist`, and `n_samples`. `n_samples` is equal to the number of rows
 #' in each element of `coefs`, which must be the same. The list may also contain
 #'  `aux` if a spline, fractional polynomial, or piecewise exponential model is 
 #'  used. 
@@ -394,7 +394,7 @@ create_params.lm_list <- function(object, n = 1000, point_estimate = FALSE, ...)
 #'  chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
 #' }
 #' 
-#' #' Auxiliary arguments for piecewise exponential models should be specified as 
+#' Auxiliary arguments for piecewise exponential models should be specified as 
 #' a list containing the element:
 #' \describe{
 #' \item{`time`}{ A vector equal to the number of rate parameters giving the 

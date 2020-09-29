@@ -56,6 +56,16 @@ flexibly parametric survival model." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-1');
+</script>
+
 
   </head>
 
@@ -186,7 +196,9 @@ after log transformation if they are defined as positive).</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>params_surv</code>, which is a list containing <code>coefs</code>,
-<code>dist</code>, and <code>n_samples. </code>n_samples<code>is equal to the number of rows in each element of</code>coefs<code>, which must be the same. The list may also contain </code>aux` if a spline, fractional polynomial, or piecewise exponential model is
+<code>dist</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the number of rows
+in each element of <code>coefs</code>, which must be the same. The list may also contain
+<code>aux</code> if a spline, fractional polynomial, or piecewise exponential model is
 used.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -270,7 +282,7 @@ chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
 
 </dl>
 
-<p>#' Auxiliary arguments for piecewise exponential models should be specified as
+<p>Auxiliary arguments for piecewise exponential models should be specified as
 a list containing the element:</p><dl'>
 <dt><code>time</code></dt><dd><p>A vector equal to the number of rate parameters giving the
 times at which the rate changes.</p></dd>

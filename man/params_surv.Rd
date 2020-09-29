@@ -19,7 +19,9 @@ after log transformation if they are defined as positive).}
 }
 \value{
 An object of class \code{params_surv}, which is a list containing \code{coefs},
-\code{dist}, and \code{n_samples. }n_samples\verb{is equal to the number of rows in each element of}coefs\verb{, which must be the same. The list may also contain }aux` if a spline, fractional polynomial, or piecewise exponential model is
+\code{dist}, and \code{n_samples}. \code{n_samples} is equal to the number of rows
+in each element of \code{coefs}, which must be the same. The list may also contain
+\code{aux} if a spline, fractional polynomial, or piecewise exponential model is
 used.
 }
 \description{
@@ -120,7 +122,7 @@ Auxiliary arguments for fractional polynomial models should be specified as a li
 chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.}
 }
 
-#' Auxiliary arguments for piecewise exponential models should be specified as
+Auxiliary arguments for piecewise exponential models should be specified as
 a list containing the element:
 \describe{
 \item{\code{time}}{ A vector equal to the number of rate parameters giving the
