@@ -17,7 +17,13 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-1"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-1');
+</script>
 </head>
 <body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
@@ -111,7 +117,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Markov models with multinomial logistic regression</h1>
             
-            <h4 class="date">2020-09-27</h4>
+            <h4 class="date">2020-09-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/mlogit.Rmd"><code>vignettes/mlogit.Rmd</code></a></small>
       <div class="hidden name"><code>mlogit.Rmd</code></div>
@@ -174,12 +180,12 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
   , <span class="no">grp_id</span> <span class="kw">:=</span> <span class="fl">1</span>:<span class="no">n_patients</span>]
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">patients</span>)</pre></body></html></div>
 <pre><code>##    patient_id      age female grp_id
-## 1:       9373 54.19522      1      1
-## 2:       7029 26.82389      0      2
-## 3:       2756 37.72464      0      3
-## 4:       9940 28.63291      0      4
-## 5:       2275 19.42047      1      5
-## 6:       3299 92.79998      0      6</code></pre>
+## 1:       5745 41.95676      1      1
+## 2:       7680 39.73199      1      2
+## 3:       2526 39.72486      1      3
+## 4:       7715 70.62372      1      4
+## 5:       5292 25.99162      0      5
+## 6:       2632 39.57160      1      6</code></pre>
 <p>To perform the cost-effectiveness analysis, each patient is simulated twice, once with the reference treatment and once with the intervention. The non-death states use for simulating costs and quality-adjusted life-years (QALYs) are the healthy and sick states.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">hesim_dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span>(
   <span class="kw">patients</span> <span class="kw">=</span> <span class="no">patients</span>,
@@ -216,7 +222,7 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 <div id="utility-and-costs" class="section level2">
 <h2 class="hasAnchor">
 <a href="#utility-and-costs" class="anchor"></a>Utility and costs</h2>
-<p>As in the <a href="markov-cohort.html">“simple Markov cohort”</a> and <a href="markov-inhomogeneous-cohort.html">“time inhomogeneous Markov cohort”</a> vignettes on Markov cohort modeling, utility and costs models could be generated using mathematical expressions with <code><a href="../reference/define_model.html">define_model()</a></code>. However, in this case it is simpler and more direct (and thus more computationally efficient) to use the <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> functionality. Separate tables are created for utility, drug costs, and medical costs.</p>
+<p>As in the <a href="markov-cohort.html">simple Markov cohort</a> and <a href="markov-inhomogeneous-cohort.html">time inhomogeneous Markov cohort</a> modeling vignettes, utility and costs models could be generated using mathematical expressions with <code><a href="../reference/define_model.html">define_model()</a></code>. However, in this case it is simpler and more direct (and thus more computationally efficient) to use the <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> functionality. Separate tables are created for utility, drug costs, and medical costs.</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">utility_tbl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="no">multinom3_exdata</span>$<span class="no">utility</span>,
                             <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"beta"</span>,
                             <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)

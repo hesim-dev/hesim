@@ -237,7 +237,7 @@ head(psm$qalys_)
 ```
 
 # Decision analysis
-A cost-effectiveness analysis can be performed with the `cea()` and `cea_pw()` functions (see [here](cea.html)) after using the `$summarize()` method to create a ["cost-effectiveness"](https://hesim-dev.github.io/hesim/reference/ce.html) object with mean costs and QALYs computed for each PSA sample. 
+A cost-effectiveness analysis can be performed with the `cea()` and `cea_pw()` functions after using the `$summarize()` method to create a `hesim::ce` object with mean costs and QALYs computed for each PSA sample. Details are provided in the [cost-effectiveness analysis](cea.html) vignette.
 
 ```{r}
 ce_sim <- psm$summarize()

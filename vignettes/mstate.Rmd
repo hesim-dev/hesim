@@ -15,7 +15,7 @@ vignette: >
 ---
 
 # Overview
-The ["time inhomogeneous Markov individual-level"](markov-inhomogeneous-indiv.html) modeling vignette shows how to simulate a continuous times state transition model (CTSTM) and perform a cost-effectiveness analysis (CEA). The model was parameterized using a variety of disparate data sources and parameter estimates. However, in an ideal scenario, a CTSTM can be fully parameterized by estimating a single statistical model. In this example, we demonstrate by fitting a multi-state model---a generalization of a survival model with more than two states---using patient-level data.
+The [time inhomogeneous Markov individual-level](markov-inhomogeneous-indiv.html) modeling vignette shows how to simulate a continuous times state transition model (CTSTM) and perform a cost-effectiveness analysis (CEA). The model was parameterized using a variety of disparate data sources and parameter estimates. However, in an ideal scenario, a CTSTM can be fully parameterized by estimating a single statistical model. In this example, we demonstrate by fitting a multi-state model---a generalization of a survival model with more than two states---using patient-level data.
 
 # An example 3-state model
 The reversible illness-death model is a commonly used state transition model (see figure below) with 3 health states and 4 transitions. In this example, we will use 3 generic health states: (1) Healthy, (2) Sick, and (3) Dead. The following 4 transitions are possible.
@@ -332,7 +332,7 @@ ggplot(costs_summary,
 ```
 
 # Decision analysis
-Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The `$summarize()` method creates a ["cost-effectiveness"](https://hesim-dev.github.io/hesim/reference/ce.html) object with mean costs and QALYs computed for each PSA sample. The `cea()` and `cea_pw()` can then be used for cost-effectiveness analysis as described [here](cea.html).
+Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The `$summarize()` method creates a `hesim::ce` object with mean costs and QALYs computed for each PSA sample. The `cea()` and `cea_pw()` can then be used for cost-effectiveness analysis as described in the [cost-effectiveness analysis](cea.html) vignette.
 
 ```{r}
 ce_sim <- econmod_cr$summarize()
