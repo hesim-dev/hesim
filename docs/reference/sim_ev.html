@@ -56,6 +56,16 @@ simulated state occupancy probabilities." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
+
 
   </head>
 
@@ -73,7 +83,7 @@ simulated state occupancy probabilities." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -93,23 +103,28 @@ simulated state occupancy probabilities." />
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -117,9 +132,8 @@ simulated state occupancy probabilities." />
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -156,9 +170,9 @@ simulated state occupancy probabilities." />
 simulated state occupancy probabilities.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sim_qalys</span>(<span class='no'>object</span>, <span class='no'>utility_model</span>, <span class='no'>dr</span>, <span class='no'>method</span>, <span class='no'>lys</span>)
+    <pre class="usage"><span class='fu'>sim_qalys</span>(<span class='no'>object</span>, <span class='no'>utility_model</span>, <span class='no'>dr</span>, <span class='no'>integrate_method</span>, <span class='no'>lys</span>)
 
-<span class='fu'>sim_costs</span>(<span class='no'>object</span>, <span class='no'>cost_models</span>, <span class='no'>dr</span>, <span class='no'>method</span>)</pre>
+<span class='fu'>sim_costs</span>(<span class='no'>object</span>, <span class='no'>cost_models</span>, <span class='no'>dr</span>, <span class='no'>integrate_method</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,6 +191,13 @@ to simulate utility.</p></td>
       <td><p>Discount rate.</p></td>
     </tr>
     <tr>
+      <th>integrate_method</th>
+      <td><p>Method used to integrate state values when computing
+weighted length of stay. Options are <code>trapz</code> for the trapezoid rule,
+<code>riemann_left</code> left for a left Riemann sum, and
+<code>riemann_right</code> right for a right Riemann sum.</p></td>
+    </tr>
+    <tr>
       <th>lys</th>
       <td><p>If <code>TRUE</code>, then life-years are simulated in addition to
 QALYs.</p></td>
@@ -185,13 +206,6 @@ QALYs.</p></td>
       <th>cost_models</th>
       <td><p>A list of objects of class <a href='StateVals.html'>StateVals</a> used
 to simulate costs.</p></td>
-    </tr>
-    <tr>
-      <th>integrate_method</th>
-      <td><p>Method used to integrate state values when computing
-weighted length of stay. Options are <code>trapz</code> for the trapezoid rule,
-<code>riemann_left</code> left for a left Riemann sum, and
-<code>riemann_right</code> right for a right Riemann sum.</p></td>
     </tr>
     </table>
 

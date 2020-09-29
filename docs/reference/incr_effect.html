@@ -56,6 +56,16 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
+
 
   </head>
 
@@ -73,7 +83,7 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -93,23 +103,28 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -117,9 +132,8 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -216,12 +230,12 @@ comparator.</p>
 <span class='no'>ie</span> <span class='kw'>&lt;-</span> <span class='fu'>incr_effect</span>(<span class='no'>sim</span>, <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>, <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>,
                         <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"c"</span>, <span class='st'>"e"</span>))
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ie</span>)</div><div class='output co'>#&gt;    sample   strategy     grp       ic       ie
-#&gt; 1:      1 Strategy 2 Group 1 77063.21 2.767131
-#&gt; 2:      1 Strategy 2 Group 2 60556.68 2.098251
-#&gt; 3:      2 Strategy 2 Group 1 63041.84 2.265125
-#&gt; 4:      2 Strategy 2 Group 2 51160.36 3.114136
-#&gt; 5:      3 Strategy 2 Group 1 46096.08 1.887154
-#&gt; 6:      3 Strategy 2 Group 2 64185.74 3.286395</div></pre>
+#&gt; 1:      1 Strategy 2 Group 1 60616.03 2.974319
+#&gt; 2:      1 Strategy 2 Group 2 55912.16 3.174493
+#&gt; 3:      2 Strategy 2 Group 1 56301.69 1.624190
+#&gt; 4:      2 Strategy 2 Group 2 50798.94 2.496652
+#&gt; 5:      3 Strategy 2 Group 1 64190.27 2.965955
+#&gt; 6:      3 Strategy 2 Group 2 61901.03 2.406834</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

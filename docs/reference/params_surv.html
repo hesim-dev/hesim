@@ -56,6 +56,16 @@ flexibly parametric survival model." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
+
 
   </head>
 
@@ -73,7 +83,7 @@ flexibly parametric survival model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -93,23 +103,28 @@ flexibly parametric survival model." />
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -117,9 +132,8 @@ flexibly parametric survival model." />
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -166,7 +180,8 @@ flexibly parametric survival model.</p>
       <td><p>A list of length equal to the number of parameters in the
 survival distribution. Each element of the list is a matrix of samples
 of the regression coefficients under sampling uncertainty used to predict
-a given parameter.</p></td>
+a given parameter. All parameters are expressed on the real line (e.g.,
+after log transformation if they are defined as positive).</p></td>
     </tr>
     <tr>
       <th>dist</th>
@@ -181,8 +196,10 @@ a given parameter.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>params_surv</code>, which is a list containing <code>coefs</code>,
-<code>dist</code>, and <code>n_samples. </code>n_samples<code>is equal to the number of rows in each element of</code>coefs<code>, which must be the same. The list may also contain </code>aux` if
-a spline or fractional polynomial model is fit.</p>
+<code>dist</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the number of rows
+in each element of <code>coefs</code>, which must be the same. The list may also contain
+<code>aux</code> if a spline, fractional polynomial, or piecewise exponential model is
+used.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Survival is modeled as a function of \(L\) parameters \(\alpha_l\).
@@ -202,14 +219,22 @@ must contain the <code>rate</code> parameter on the log scale and the same param
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
 that same as in <a href='https://rdrr.io/r/stats/Weibull.html'>stats::Weibull</a>.</p></li>
+<li><p><code>weibullPH</code> Weibull distribution with a proportional hazards
+parameterization. The first element of <code>coef</code> is the <code>shape</code> parameter
+(on the log scale) and the second element is the <code>scale</code> parameter
+(also on the log scale). The parameterization is
+that same as in <a href='https://rdrr.io/pkg/flexsurv/man/WeibullPH.html'>flexsurv::WeibullPH</a>.</p></li>
 <li><p><code>gamma</code> Gamma distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>rate</code> parameter (also on the log scale). The parameterization is
 that same as in <a href='https://rdrr.io/r/stats/GammaDist.html'>stats::GammaDist</a>.</p></li>
 <li><p><code>lnorm</code> Lognormal distribution. The first
-element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the mean on the log scale) and the second
-element is the <code>sdlog</code> parameter (i.e., the standard deviation on the log scale). The parameterization is
-that same as in <a href='https://rdrr.io/r/stats/Lognormal.html'>stats::Lognormal</a>.</p></li>
+element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the mean of survival on
+the log scale) and the second element is the <code>sdlog</code> parameter (i.e.,
+the standard deviation of survival on the log scale). The parameterization is
+that same as in <a href='https://rdrr.io/r/stats/Lognormal.html'>stats::Lognormal</a>. The coefficients predicting the <code>meanlog</code>
+parameter are untransformed whereas the coefficients predicting the <code>sdlog</code>
+parameter are defined on the log scale.</p></li>
 <li><p><code>gompertz</code> Gompertz distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter and the second
 element is the <code>rate</code> parameter (on the log scale). The parameterization is
@@ -231,6 +256,13 @@ auxiliary arguments. The parameterization is that same as in <a href='https://rd
 fractional polynomial model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
 to the number of powers minus 1. See below for details on the auxiliary arguments
 (i.e., <code>powers</code>).</p></li>
+<li><p><code>pwexp</code> Piecewise exponential distribution. Each element of <code>coef</code> is
+rate parameter for a distinct time interval. The times at which the rates
+change should be specified with the auxiliary argument <code>time</code> (see below
+for more details).</p></li>
+<li><p><code>fixed</code> A fixed survival time. Can be used for "non-random" number
+generation. <code>coef</code> should contain a single parameter, <code>est</code>, of the fixed
+survival times.</p></li>
 </ul>
 
 <p>Auxiliary arguments for spline models should be specified as a list containing the elements:</p><dl'>
@@ -250,6 +282,13 @@ chosen from the following set: -2. -1, -0.5, 0, 0.5, 1, 2, 3.</p></dd>
 
 </dl>
 
+<p>Auxiliary arguments for piecewise exponential models should be specified as
+a list containing the element:</p><dl'>
+<dt><code>time</code></dt><dd><p>A vector equal to the number of rate parameters giving the
+times at which the rate changes.</p></dd>
+
+</dl>
+
 <p>Furthermore, when splines (with <code>scale = "log_hazard"</code>) or fractional
 polynomials are used, numerical methods must be used to compute the cumulative
 hazard and for random number generation. The following additional auxiliary arguments
@@ -261,7 +300,7 @@ Options are <code>"quad"</code> for adaptive quadrature and <code>"riemann"</cod
 <dt><code>random_method</code></dt><dd><p>Method used to randomly draw from
 an arbitrary survival function. Options are <code>"invcdf"</code> for the inverse CDF and
 <code>"discrete"</code> for a discrete time approximation that randomly samples
-events from a bernoulli distribution at discrete times.</p></dd>
+events from a Bernoulli distribution at discrete times.</p></dd>
 <dt><code>step</code></dt><dd><p>Step size for computation of cumulative hazard with
 numerical integration. Only required when using <code>"riemann"</code> to compute the
 cumulative hazard or using <code>"discrete"</code> for random number generation.</p></dd>

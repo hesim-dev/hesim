@@ -57,6 +57,16 @@ for speed. Equivalent to flexsurv::rgengamma." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
+
 
   </head>
 
@@ -74,7 +84,7 @@ for speed. Equivalent to flexsurv::rgengamma." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -94,23 +104,28 @@ for speed. Equivalent to flexsurv::rgengamma." />
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -118,9 +133,8 @@ for speed. Equivalent to flexsurv::rgengamma." />
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -194,13 +208,13 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>()
 <span class='no'>r1</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.002   0.000   0.002 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>()
+#&gt;   0.002   0.001   0.002 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>()
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"flexsurv"</span>)
 <span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/GenGamma.html'>rgengamma</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.003   0.000   0.003 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt;   0.0000   0.7394   3.7148   9.9329  11.9836 139.7566 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>r2</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt;   0.0000   0.8895   3.6439  11.2069  12.5807 193.2178 </div><div class='input'>
+#&gt;   0.004   0.000   0.005 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#&gt;   0.00049   0.96059   3.75623  10.92888  13.26581 180.61912 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>r2</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+#&gt;   0.0000   0.8724   3.4590  11.4524  12.2305 193.2178 </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

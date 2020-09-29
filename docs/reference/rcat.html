@@ -56,6 +56,16 @@ rcat is vectorized and written in C++ for speed." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
+
 
   </head>
 
@@ -73,7 +83,7 @@ rcat is vectorized and written in C++ for speed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -93,23 +103,28 @@ rcat is vectorized and written in C++ for speed." />
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -117,9 +132,8 @@ rcat is vectorized and written in C++ for speed." />
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -188,7 +202,7 @@ equal to n.</p>
 <span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>()
 <span class='no'>samp1</span> <span class='kw'>&lt;-</span> <span class='fu'>rcat</span>(<span class='no'>n</span>, <span class='no'>pmat</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.003   0.000   0.003 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
+#&gt;   0.004   0.000   0.003 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp1</span>))</div><div class='output co'>#&gt; samp1
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div><div class='input'>
 <span class='co'># rmultinom from base R </span>
@@ -197,7 +211,7 @@ equal to n.</p>
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.045   0.001   0.046 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
+#&gt;   0.050   0.001   0.051 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div></pre>
   </div>

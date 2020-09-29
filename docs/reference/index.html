@@ -54,6 +54,16 @@
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
+
 
   </head>
 
@@ -71,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -91,23 +101,28 @@
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -115,9 +130,8 @@
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -366,6 +380,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="tpmatrix_id.html">tpmatrix_id()</a></code> </p>
+        </td>
+        <td><p>Transition probability matrix IDs</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="tpmatrix_names.html">tpmatrix_names()</a></code> </p>
         </td>
         <td><p>Names for elements of a transition probability matrix</p></td>
@@ -539,6 +559,12 @@
       <tr>
         
         <td>
+          <p><code><a href="disprog.html">disprog</a></code> </p>
+        </td>
+        <td><p>Disease progression object</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="stateprobs.html">stateprobs</a></code> </p>
         </td>
         <td><p>State probability object</p></td>
@@ -601,9 +627,9 @@
       <tr>
         
         <td>
-          <p><code><a href="icea.html">icea()</a></code> <code><a href="icea.html">icea_pw()</a></code> </p>
+          <p><code><a href="cea.html">cea()</a></code> <code><a href="cea.html">cea_pw()</a></code> </p>
         </td>
-        <td><p>Individualized cost-effectiveness analysis</p></td>
+        <td><p>Cost-effectiveness analysis</p></td>
       </tr><tr>
         
         <td>

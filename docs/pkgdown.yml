@@ -2,13 +2,17 @@ pandoc: 2.7.3
 pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
+  cea: cea.html
   expected-values: expected-values.html
-  getting-started: getting-started.html
-  icea: icea.html
   intro: intro.html
-  markov-inhomogeneous: markov-inhomogeneous.html
+  markov-cohort: markov-cohort.html
+  markov-inhomogeneous-cohort: markov-inhomogeneous-cohort.html
+  markov-inhomogeneous-indiv: markov-inhomogeneous-indiv.html
   mlogit: mlogit.html
   mstate: mstate.html
   psm: psm.html
-last_built: 2020-06-09T03:31Z
+last_built: 2020-09-29T05:17Z
+urls:
+  reference: https://hesim-dev.github.io/hesim/reference
+  article: https://hesim-dev.github.io/hesim/articles
 

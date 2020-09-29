@@ -58,6 +58,16 @@ an object of class model_def defined using define_model()." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
+
 
   </head>
 
@@ -75,7 +85,7 @@ an object of class model_def defined using define_model()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -95,23 +105,28 @@ an object of class model_def defined using define_model()." />
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -119,9 +134,8 @@ an object of class model_def defined using define_model()." />
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -162,7 +176,7 @@ an object of class <code>model_def</code> defined using <code><a href='define_mo
 
     <pre class="usage"><span class='fu'>define_rng</span>(<span class='no'>expr</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>)
 
-<span class='fu'>eval_rng</span>(<span class='no'>x</span>, <span class='kw'>params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>eval_rng</span>(<span class='no'>x</span>, <span class='kw'>params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>check</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,6 +209,13 @@ must either be 1 or <code>n</code>.</p></td>
       <td><p>A list containing the values of parameters for random number
 generation. Each element of the list should either be a <code>vector</code>,
 <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code></p></td>
+    </tr>
+    <tr>
+      <th>check</th>
+      <td><p>Whether to check the returned output so that (i) it returns a list
+and (ii) each element has the correct length or number of rows. Default is <code>FALSE</code>,
+meaning that any output can be returned. This is always <code>TRUE</code> when used inside
+<code><a href='define_model.html'>define_model()</a></code>.</p></td>
     </tr>
     </table>
 
@@ -244,13 +265,13 @@ transition probability matrix).</p>
 }, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>aecost_colnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>)) <span class='co'># Add aecost_colnames to environment</span>
 <span class='fu'>eval_rng</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>rng_def</span>, <span class='no'>params</span>)</div><div class='output co'>#&gt; $p
 #&gt;        s1_s1     s1_s2     s2_s1     s2_s2
-#&gt; 1: 0.7330803 0.2669197 0.3250276 0.6749724
-#&gt; 2: 0.7982298 0.2017702 0.3032865 0.6967135
+#&gt; 1: 0.7585336 0.2414664 0.3693639 0.6306361
+#&gt; 2: 0.7179212 0.2820788 0.3656385 0.6343615
 #&gt; 
 #&gt; $inptcost
-#&gt;            A         B        C
-#&gt; 1:  148.8518 219.40136 4423.237
-#&gt; 2: 1305.4172  33.66907 3494.450
+#&gt;            A        B        C
+#&gt; 1:  76.97165 3033.211 5068.454
+#&gt; 2: 266.62723 1789.356 2136.372
 #&gt; 
 #&gt; $outptcost
 #&gt;      [,1] [,2] [,3]
@@ -258,9 +279,9 @@ transition probability matrix).</p>
 #&gt; [2,]  400  700  700
 #&gt; 
 #&gt; $aecost
-#&gt;            A        B         C
-#&gt; 1:  249.4532 868.6456 2327.9261
-#&gt; 2: 2208.7228 736.8902  119.4825
+#&gt;            A         B           C
+#&gt; 1:  53.56667 4433.1612 3088.623581
+#&gt; 2: 650.55634  502.0913    4.181195
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

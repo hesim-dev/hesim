@@ -43,8 +43,8 @@
 <meta property="og:description" content="Create a list containing predicted transition probabilities at discrete times.
 Since the transition probabilities have presumably
 already been predicted based on covariate values, no input data is required for
-simulation. The class can be instantiated from either an array, a data table, or
-a data frame." />
+simulation. The class can be instantiated from either an array, a data.table,
+a data.frame, or a tpmatrix." />
 
 
 
@@ -58,6 +58,16 @@ a data frame." />
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
 
 
   </head>
@@ -76,7 +86,7 @@ a data frame." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -96,23 +106,28 @@ a data frame." />
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -120,9 +135,8 @@ a data frame." />
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -158,8 +172,8 @@ a data frame." />
     <p>Create a list containing predicted transition probabilities at discrete times.
 Since the transition probabilities have presumably
 already been predicted based on covariate values, no input data is required for
-simulation. The class can be instantiated from either an array, a data table, or
-a data frame.</p>
+simulation. The class can be instantiated from either an <code>array</code>, a <code>data.table</code>,
+a <code>data.frame</code>, or a <a href='tpmatrix.html'>tpmatrix</a>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='no'>...</span>)
@@ -171,7 +185,10 @@ a data frame.</p>
 <span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)</pre>
+<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)
+
+<span class='co'># S3 method for tpmatrix</span>
+<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='no'>tpmatrix_id</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,8 +215,12 @@ be the same length as the 3rd dimension of the array.</p></td>
     </tr>
     <tr>
       <th>patient_wt</th>
-      <td><p>An optional numer vector denoting the weight to apply to each
+      <td><p>An optional numeric vector denoting the weight to apply to each
 patient within a subgroup. Must be the same length as the 3rd dimension of the array.</p></td>
+    </tr>
+    <tr>
+      <th>tpmatrix_id</th>
+      <td><p>An object of class <a href='tpmatrix_id.html'>tpmatrix_id</a>.</p></td>
     </tr>
     </table>
 
@@ -231,7 +252,7 @@ column <code>time_start</code> denoting the starting time of a time interval. A 
 <code>patient_wt</code> may also be used to denote the weight to apply to each
 patient.</p></li>
 <li><p>Columns for each element of the transition probability matrix.
-They should be prefixed with "probs_" and ordered rowwise.
+They should be prefixed with "prob_" and ordered rowwise.
 For example, the following columns would be used for a 2x2 transition
 probability matrix:
 <code>probs_1</code> (1st row, 1st column),
@@ -240,6 +261,7 @@ probability matrix:
 <code>probs_4</code> (2nd row, 2nd column).</p></li>
 </ul></p></dd>
 <dt>data.frame</dt><dd><p>Same as <code>data.table</code>.</p></dd>
+<dt>tpmatrix_id</dt><dd><p>An object of class <a href='tpmatrix_id.html'>tpmatrix_id</a>.</p></dd>
 
 </dl>
 

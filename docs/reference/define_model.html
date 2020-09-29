@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Define and evaluate model expression — define_model" />
 <meta property="og:description" content="A model expression is defined by specifying random number generation functions
-for a probabilistic sensitivity analysis and transformations of the sampled
+for a probabilistic sensitivity analysis (PSA) and transformations of the sampled
 parameters as a function of input_data. The unevaluated expressions
 are evaluated with eval_model() and used to generate the model inputs needed to
 create an economic model." />
@@ -58,6 +58,16 @@ create an economic model." />
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
 
 
   </head>
@@ -76,7 +86,7 @@ create an economic model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -96,23 +106,28 @@ create an economic model." />
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -120,9 +135,8 @@ create an economic model." />
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -156,7 +170,7 @@ create an economic model." />
 
     <div class="ref-description">
     <p>A model expression is defined by specifying random number generation functions
-for a probabilistic sensitivity analysis and transformations of the sampled
+for a probabilistic sensitivity analysis (PSA) and transformations of the sampled
 parameters as a function of <code>input_data</code>. The unevaluated expressions
 are evaluated with <code>eval_model()</code> and used to generate the model inputs needed to
 create an economic model.</p>
@@ -222,21 +236,19 @@ of random number generation samples for the PSA.</p>
 functions that instantiate economic models (e.g., <code><a href='create_CohortDtstm.html'>create_CohortDtstm()</a></code>).
 The direct output of <code>eval_model()</code> can also be useful for understanding and debugging
 model definitions, but it is not used directly for simulation.</p>
-<p>A <code>model_def</code> object would typically be defined in four steps by specifying:</p><ol>
-<li><p><em>Data</em> (<code>input_data</code>) of class <a href='expand.hesim_data.html'>expanded_hesim_data</a>
-consisting of the treatment strategies and patient population</p></li>
-<li><p><em>Parameters</em> (<code>params</code>) objects storing the values of all parameters used in the model</p></li>
-<li><p><em>Random number generation</em> (<code><a href='define_rng.html'>define_rng()</a></code>) expressions that randomly
-sample values of the parameters from suitable probability distributions for probabilistic
-sensitivity analysis</p></li>
-<li><p><em>Transformed parameter</em> (<code><a href='define_tparams.html'>define_tparams()</a></code>) expressions that transform
-the parameter estimates into values used for simulation</p></li>
+<p>Economic models are constructed as a function of input data and parameters:</p><ol>
+<li><p><em>Input data</em>: Objects of class <a href='expand.hesim_data.html'>expanded_hesim_data</a>
+consisting of the treatment strategies and patient population.</p></li>
+<li><p><em>Parameters</em>: The underlying parameter estimates from the literature
+are first stored in a list (<code>params</code> argument). Random number generation
+is then used to sample the parameters from suitable probability distributions
+for the PSA (<code>rng_def</code> argument). Finally, the sampled parameters are
+transformed as a function of the input data into values (e.g., elements of a
+transition probability matrix) used for the simulation (<code>tparams_def</code> argument).
+The <code>params</code> argument can be omitted if the underlying parameters values are
+defined inside a <code><a href='define_rng.html'>define_rng()</a></code> block.</p></li>
 </ol>
 
-<p>Step 2 can be omitted if underlying parameter values are defined in steps 3.
-The output of step 4 is used to instantiate the economic model (or a portion
-of an economic model) as a function of a transition probability matrix,
-utilities, and/or costs.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='define_tparams.html'>define_tparams()</a></code>, <code><a href='define_rng.html'>define_rng()</a></code></p></div>
@@ -307,15 +319,15 @@ utilities, and/or costs.</p>
 #&gt; 
 #&gt; $tpmatrix
 #&gt;        s1_s1      s1_s2      s1_s3       s1_s4 s2_s1     s2_s2     s2_s3
-#&gt; 1: 0.7003560 0.20656394 0.08062025 0.012459847     0 0.5744352 0.4112925
-#&gt; 2: 0.8517514 0.10219732 0.03988679 0.006164498     0 0.7894522 0.2034866
-#&gt; 3: 0.6961992 0.21960668 0.07431412 0.009879994     0 0.5712030 0.4182734
-#&gt; 4: 0.8653078 0.09736414 0.03294768 0.004380364     0 0.8098899 0.1854444
+#&gt; 1: 0.7003112 0.20742109 0.08111184 0.011155892     0 0.5789681 0.4109986
+#&gt; 2: 0.8499283 0.10386784 0.04061743 0.005586406     0 0.7891648 0.2058110
+#&gt; 3: 0.7367850 0.19306490 0.06352435 0.006625729     0 0.6119358 0.3788990
+#&gt; 4: 0.8693126 0.09585757 0.03154012 0.003289703     0 0.8073244 0.1881250
 #&gt;          s2_s4 s3_s1 s3_s2     s3_s3     s3_s4 s4_s1 s4_s2 s4_s3 s4_s4
-#&gt; 1: 0.014272341     0     0 0.7332638 0.2667362     0     0     0     1
-#&gt; 2: 0.007061228     0     0 0.8680325 0.1319675     0     0     0     1
-#&gt; 3: 0.010523605     0     0 0.7436586 0.2563414     0     0     0     1
-#&gt; 4: 0.004665713     0     0 0.8863493 0.1136507     0     0     0     1
+#&gt; 1: 0.010033285     0     0 0.7490981 0.2509019     0     0     0     1
+#&gt; 2: 0.005024251     0     0 0.8743588 0.1256412     0     0     0     1
+#&gt; 3: 0.009165162     0     0 0.7625495 0.2374505     0     0     0     1
+#&gt; 4: 0.004550543     0     0 0.8821048 0.1178952     0     0     0     1
 #&gt; 
 #&gt; $utility
 #&gt; [1] 1 1 1 1
@@ -329,11 +341,11 @@ utilities, and/or costs.</p>
 #&gt; [1] 1
 #&gt; 
 #&gt; $costs$medical
-#&gt;           A        B         C
-#&gt; 1: 2022.271 282.2611 10691.563
-#&gt; 2: 2022.271 282.2611 10691.563
-#&gt; 3: 1326.233 786.1712  5936.631
-#&gt; 4: 1326.233 786.1712  5936.631
+#&gt;           A         B        C
+#&gt; 1: 2311.095  4399.414 5694.228
+#&gt; 2: 2311.095  4399.414 5694.228
+#&gt; 3: 4108.160 14047.722 3509.768
+#&gt; 4: 4108.160 14047.722 3509.768
 #&gt; 
 #&gt; 
 #&gt; $n_states

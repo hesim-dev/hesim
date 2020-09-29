@@ -59,6 +59,16 @@ IndivCtstmTrans." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131661920-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131661920-2');
+</script>
+
 
   </head>
 
@@ -76,7 +86,7 @@ IndivCtstmTrans." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -96,23 +106,28 @@ IndivCtstmTrans." />
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Markov cohort models</li>
+    <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/getting-started.html">Getting started with a Markov cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
     </li>
     <li>
-      <a href="../articles/markov-inhomogeneous.html">Time inhomogeneous Markov cohort model</a>
+      <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Statistical models of disease progression</li>
     <li>
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
-      <a href="../articles/psm.html">Partitioned survival models</a>
+      <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
     <li>
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Partitioned survival analysis</li>
+    <li>
+      <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Economic analysis</li>
@@ -120,9 +135,8 @@ IndivCtstmTrans." />
       <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
     </li>
     <li>
-      <a href="../articles/icea.html">Individualized cost-effectiveness analysis</a>
+      <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
-    <li class="divider"></li>
   </ul>
 </li>
 <li>
@@ -183,18 +197,7 @@ class <a href='StateVals.html'>StateVals</a>.</p></dd>
 Must be a list of objects of class <a href='StateVals.html'>StateVals</a>, where each element of the
 list represents a different cost category.</p></dd>
 
-<dt><code>disprog_</code></dt><dd><p>A <code>data.table</code> simulated using <code>$sim_disease()</code> containing the following columns:
-<ul>
-<li><p><code>sample</code>: A random sample from the PSA.</p></li>
-<li><p><code>strategy_id</code>: The treatment strategy ID.</p></li>
-<li><p><code>patient_id</code>: The patient ID.</p></li>
-<li><p><code>from</code>: The health state ID transitioned from.</p></li>
-<li><p><code>to</code>: The health state ID transitioned to.</p></li>
-<li><p><code>final</code>: An indicator equal to 1 if a patient is in their final health
-state during the simulation and 0 otherwise.</p></li>
-<li><p><code>time_start</code>: The time at the start of the interval.</p></li>
-<li><p><code>time_stop</code>: The time at the end of the interval.</p></li>
-</ul></p></dd>
+<dt><code>disprog_</code></dt><dd><p>An object of class <a href='disprog.html'>disprog</a>.</p></dd>
 
 <dt><code>stateprobs_</code></dt><dd><p>An object of class <a href='stateprobs.html'>stateprobs</a> simulated using <code>$sim_stateprobs()</code>.</p></dd>
 
@@ -236,7 +239,7 @@ state during the simulation and 0 otherwise.</p></li>
 <p><hr>
 <a id="method-sim_disease"></a></p><h3>Method <code>sim_disease()</code></h3>
 <p>Simulate disease progression (i.e., individual trajectories through a multi-state
-model using an individual patient simulation).</p><h3>Usage</h3>
+model) using <code>IndivCtstmTrans$sim_disease()</code>.</p><h3>Usage</h3>
 <p><div class="r"></p><pre><span class='no'>IndivCtstm</span>$<span class='fu'>sim_disease</span>(<span class='kw'>max_t</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>max_age</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
@@ -263,7 +266,7 @@ simulation output stored in <code>disprog</code>.</p><h3>Usage</h3>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl'>
-<dt><code>t</code></dt><dd><p>TA numeric vector of times.</p></dd>
+<dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
 
 </dl><p></div></p>
 <h3>Returns</h3>
