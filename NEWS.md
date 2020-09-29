@@ -1,4 +1,4 @@
-## hesim 0.3.1.9999
+## hesim 0.3.2
 ### New features
 
 * `IndivCtstmTrans` objects can be constructed from a `params_surv_list` using `create_IndivCtstmTrans.params_surv_list()`. 
