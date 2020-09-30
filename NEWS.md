@@ -1,3 +1,6 @@
+## hesim 0.4.0.9999
+Minor updates to the documentation and fixes to small problems in the `C++` code identified with the CRAN package checks.
+
 ## hesim 0.4.0
 ### New features
 
