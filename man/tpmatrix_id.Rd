@@ -8,7 +8,7 @@ tpmatrix_id(object, n_samples)
 }
 \arguments{
 \item{object}{An object of class \code{expanded_hesim_data} returned by
-\code{expand.hesim_data()}. This dataset must either be expanded by treatment
+\code{expand.hesim_data()}. This dataset must be expanded by treatment
 strategies, patients, and optionally time intervals.}
 
 \item{n_samples}{The number of parameters samples used for the probabilistic

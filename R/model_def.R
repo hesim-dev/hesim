@@ -125,7 +125,7 @@ tpmatrix <- function(...){
 #' 
 #' 
 #' @param object An object of class `expanded_hesim_data` returned by 
-#' `expand.hesim_data()`. This dataset must either be expanded by treatment
+#' `expand.hesim_data()`. This dataset must be expanded by treatment
 #' strategies, patients, and optionally time intervals.
 #' @param n_samples The number of parameters samples used for the probabilistic
 #' sensitivity analysis (PSA).
