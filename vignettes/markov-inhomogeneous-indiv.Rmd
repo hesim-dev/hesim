@@ -199,7 +199,7 @@ The transition-specific estimates can be combined to create a multi-state model,
 
 
 ```{r}
-n_samples <- 500 
+n_samples <- 500
 ```
 
 Survival models are regression models, so the parameters are regression coefficients. The coefficients of each model must be a matrix (rows for parameter samples and columns for covariates). Since we often use intercept only models, let's write a simple function to convert a vector to a matrix with a single column for the intercept. 
