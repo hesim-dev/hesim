@@ -335,11 +335,11 @@ public:
     }
     // Get index of time corresponding to lower
     int n_times = time_.size();
-    int j = 0;
-    while(lower >= time_[j] && j < n_times) {
+    unsigned int j = 0;
+    for (int i = 0; i < (n_times - 1); ++i) {
+      if (lower < time_[i + 1]) break;
       ++j;
     }
-    j = j - 1;
     
     // Simulation algorithm
     double out = 0.0;
