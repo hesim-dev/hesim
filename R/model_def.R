@@ -84,22 +84,21 @@ replace_C <- function(x, complement){
 #' Transition probability matrix
 #' 
 #' `tpmatrix()` both defines and evaluates a transition probability matrix in which 
-#' elements are expressions. This function is used within `define_tparams()` to 
-#' create a transition probability matrix used for simulation modeling. 
+#' elements are expressions. It can be used within [define_tparams()] to 
+#' create a transition probability matrix or directly to create a [tparams_transprobs()] 
+#' object. These are, in turn, ultimately used to create a [CohortDtstmTrans] object
+#' for simulating health state transitions.
 #' 
-#' @param ... Named values of expressions defining elements of the matrix. The parameter 
-#' values of the matrix elements should refer to parameters defined using
-#' [define_rng()] or [define_tparams()].
+#' @param ... Named values of expressions defining elements of the matrix. See
+#' "Details" and the example below.
 #' 
-#' @details The matrix is filled rowwise, meaning that each row should sum to 1. It is evaluated
-#' in the environment used by [eval_tparams()] so that any objects available
-#' within [define_tparams()] can be used by `tpmatrix()`. The complementary probability
-#' equal to 1 minus the sum of the probabilities of all other rows can be 
-#' conveniently referred to as `C`. 
+#' @details The matrix is filled rowwise, meaning that each row should sum to 1.
+#' The complementary probability (equal to 1 minus the sum of the probabilities
+#'  of all other rows) can be conveniently referred to as `C`. 
 #' 
 #' @return Returns a `tpmatrix` object that inherits from `data.table`
 #' where each column is an element of the transition probability matrix with
-#'  elements ordered rowwise. 
+#' elements ordered rowwise. 
 #' 
 #' @examples 
 #' p <- c(.7, .6)
@@ -107,7 +106,8 @@ replace_C <- function(x, complement){
 #'   C, p,
 #'   0, 1
 #' )
-#' @seealso [define_model()], [define_tparams()]
+#' @seealso [define_model()], [define_tparams()], 
+#' [tpmatrix_id()], [tparams_transprobs()], [CohortDtstmTrans()]
 #' @export
 tpmatrix <- function(...){
   m_def <- define_tpmatrix(...)

@@ -7,9 +7,8 @@
 tpmatrix(...)
 }
 \arguments{
-\item{...}{Named values of expressions defining elements of the matrix. The parameter
-values of the matrix elements should refer to parameters defined using
-\code{\link[=define_rng]{define_rng()}} or \code{\link[=define_tparams]{define_tparams()}}.}
+\item{...}{Named values of expressions defining elements of the matrix. See
+"Details" and the example below.}
 }
 \value{
 Returns a \code{tpmatrix} object that inherits from \code{data.table}
@@ -18,15 +17,15 @@ elements ordered rowwise.
 }
 \description{
 \code{tpmatrix()} both defines and evaluates a transition probability matrix in which
-elements are expressions. This function is used within \code{define_tparams()} to
-create a transition probability matrix used for simulation modeling.
+elements are expressions. It can be used within \code{\link[=define_tparams]{define_tparams()}} to
+create a transition probability matrix or directly to create a \code{\link[=tparams_transprobs]{tparams_transprobs()}}
+object. These are, in turn, ultimately used to create a \link{CohortDtstmTrans} object
+for simulating health state transitions.
 }
 \details{
-The matrix is filled rowwise, meaning that each row should sum to 1. It is evaluated
-in the environment used by \code{\link[=eval_tparams]{eval_tparams()}} so that any objects available
-within \code{\link[=define_tparams]{define_tparams()}} can be used by \code{tpmatrix()}. The complementary probability
-equal to 1 minus the sum of the probabilities of all other rows can be
-conveniently referred to as \code{C}.
+The matrix is filled rowwise, meaning that each row should sum to 1.
+The complementary probability (equal to 1 minus the sum of the probabilities
+of all other rows) can be conveniently referred to as \code{C}.
 }
 \examples{
 p <- c(.7, .6)
@@ -36,5 +35,6 @@ tpmatrix(
 )
 }
 \seealso{
-\code{\link[=define_model]{define_model()}}, \code{\link[=define_tparams]{define_tparams()}}
+\code{\link[=define_model]{define_model()}}, \code{\link[=define_tparams]{define_tparams()}},
+\code{\link[=tpmatrix_id]{tpmatrix_id()}}, \code{\link[=tparams_transprobs]{tparams_transprobs()}}, \code{\link[=CohortDtstmTrans]{CohortDtstmTrans()}}
 }
