@@ -358,7 +358,7 @@ public:
     return out;
   }
   
-}; // end class exponential
+}; // end class piecewise_exponential
 
 /***************************************************************************//**
  * The Weibull distribution.
