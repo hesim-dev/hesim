@@ -1,4 +1,4 @@
-## hesim 0.4.0.9999
+## hesim 0.4.1
 Minor updates to the documentation and fixes to small problems in the `C++` code identified with the CRAN package checks.
 
 ## hesim 0.4.0
