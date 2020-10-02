@@ -41,8 +41,10 @@
 
 <meta property="og:title" content="Transition probability matrix — tpmatrix" />
 <meta property="og:description" content="tpmatrix() both defines and evaluates a transition probability matrix in which
-elements are expressions. This function is used within define_tparams() to
-create a transition probability matrix used for simulation modeling." />
+elements are expressions. It can be used within define_tparams() to
+create a transition probability matrix or directly to create a tparams_transprobs()
+object. These are, in turn, ultimately used to create a CohortDtstmTrans object
+for simulating health state transitions." />
 
 
 
@@ -84,7 +86,7 @@ create a transition probability matrix used for simulation modeling." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -168,8 +170,10 @@ create a transition probability matrix used for simulation modeling." />
 
     <div class="ref-description">
     <p><code>tpmatrix()</code> both defines and evaluates a transition probability matrix in which
-elements are expressions. This function is used within <code><a href='define_tparams.html'>define_tparams()</a></code> to
-create a transition probability matrix used for simulation modeling.</p>
+elements are expressions. It can be used within <code><a href='define_tparams.html'>define_tparams()</a></code> to
+create a transition probability matrix or directly to create a <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>
+object. These are, in turn, ultimately used to create a <a href='CohortDtstmTrans.html'>CohortDtstmTrans</a> object
+for simulating health state transitions.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tpmatrix</span>(<span class='no'>...</span>)</pre>
@@ -179,9 +183,8 @@ create a transition probability matrix used for simulation modeling.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>Named values of expressions defining elements of the matrix. The parameter
-values of the matrix elements should refer to parameters defined using
-<code><a href='define_rng.html'>define_rng()</a></code> or <code><a href='define_tparams.html'>define_tparams()</a></code>.</p></td>
+      <td><p>Named values of expressions defining elements of the matrix. See
+"Details" and the example below.</p></td>
     </tr>
     </table>
 
@@ -192,14 +195,13 @@ where each column is an element of the transition probability matrix with
 elements ordered rowwise.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The matrix is filled rowwise, meaning that each row should sum to 1. It is evaluated
-in the environment used by <code><a href='define_tparams.html'>eval_tparams()</a></code> so that any objects available
-within <code><a href='define_tparams.html'>define_tparams()</a></code> can be used by <code>tpmatrix()</code>. The complementary probability
-equal to 1 minus the sum of the probabilities of all other rows can be
-conveniently referred to as <code>C</code>.</p>
+    <p>The matrix is filled rowwise, meaning that each row should sum to 1.
+The complementary probability (equal to 1 minus the sum of the probabilities
+of all other rows) can be conveniently referred to as <code>C</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code>,
+<code><a href='tpmatrix_id.html'>tpmatrix_id()</a></code>, <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>, <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.7</span>, <span class='fl'>.6</span>)

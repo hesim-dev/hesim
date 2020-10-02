@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Markov models with multinomial logistic regression</h1>
             
-            <h4 class="date">2020-09-28</h4>
+            <h4 class="date">2020-10-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/mlogit.Rmd"><code>vignettes/mlogit.Rmd</code></a></small>
       <div class="hidden name"><code>mlogit.Rmd</code></div>
@@ -179,12 +179,12 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
   , <span class="no">grp_id</span> <span class="kw">:=</span> <span class="fl">1</span>:<span class="no">n_patients</span>]
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">patients</span>)</pre></body></html></div>
 <pre><code>##    patient_id      age female grp_id
-## 1:       1494 18.17836      0      1
-## 2:       8622 48.90696      1      2
-## 3:       8025 79.13320      0      3
-## 4:       8641 87.89424      1      4
-## 5:       7022 28.52059      0      5
-## 6:       4954 57.51247      1      6</code></pre>
+## 1:       4272 20.91503      0      1
+## 2:       2580 54.03825      0      2
+## 3:       3657 93.83567      0      3
+## 4:       6475 25.13849      1      4
+## 5:       6381 75.61936      1      5
+## 6:       3028 73.99316      0      6</code></pre>
 <p>To perform the cost-effectiveness analysis, each patient is simulated twice, once with the reference treatment and once with the intervention. The non-death states use for simulating costs and quality-adjusted life-years (QALYs) are the healthy and sick states.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">hesim_dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span>(
   <span class="kw">patients</span> <span class="kw">=</span> <span class="no">patients</span>,
