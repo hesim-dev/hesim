@@ -396,7 +396,7 @@ The simulated patient trajectories can be summarized by computing the probabilit
 econmod$sim_stateprobs(t = 0:60)
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.width = 7, fig.height = 4}
 mean_stateprobs <- econmod$stateprobs_[, .(prob_mean = mean(prob)),
                                        by = c("strategy_id", "state_id", "t")]
 mean_stateprobs[, state_name := factor(state_id,
