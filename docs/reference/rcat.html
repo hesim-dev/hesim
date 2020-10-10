@@ -8,6 +8,13 @@
 
 <title>Random generation for categorical distribution — rcat • hesim</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -42,6 +49,7 @@
 <meta property="og:title" content="Random generation for categorical distribution — rcat" />
 <meta property="og:description" content="Draw random samples from a categorical distribution given a matrix of probabilities.
 rcat is vectorized and written in C++ for speed." />
+<meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
 
@@ -211,7 +219,7 @@ equal to n.</p>
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>pmat</span>, <span class='fl'>1</span>, <span class='no'>rmultinom</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>))
 <span class='no'>samp2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>x</span> <span class='kw'>==</span> <span class='fl'>1</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.062   0.002   0.067 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
+#&gt;   0.060   0.001   0.063 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>samp2</span>))</div><div class='output co'>#&gt; samp2
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div></pre>
   </div>

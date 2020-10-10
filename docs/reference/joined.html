@@ -8,6 +8,13 @@
 
 <title>Join statistical models at specified times — joined • hesim</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -46,6 +53,7 @@ model is used prior to the second time point, and so on. There should be N + 1
 models and N time points. Can be used to join a single set of models (e.g., for survival analysis or for making predictions from a jointly
 estimated multi-state model) or to join multiple sets of models (e.g., predicting curves in a
 partitioned survival analysis)." />
+<meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
 
@@ -221,15 +229,15 @@ list with two variables:</p><dl'>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>joined_fm</span>)</div><div class='output co'>#&gt; $models
 #&gt; $models$f1
 #&gt; ~age
-#&gt; &lt;environment: 0x7fd5c21bf398&gt;
+#&gt; &lt;environment: 0x7fb96e7af288&gt;
 #&gt; 
 #&gt; $models$f2
 #&gt; ~1
-#&gt; &lt;environment: 0x7fd5c21bf398&gt;
+#&gt; &lt;environment: 0x7fb96e7af288&gt;
 #&gt; 
 #&gt; $models$f3
 #&gt; ~age + age2
-#&gt; &lt;environment: 0x7fd5c21bf398&gt;
+#&gt; &lt;environment: 0x7fb96e7af288&gt;
 #&gt; 
 #&gt; 
 #&gt; $times
