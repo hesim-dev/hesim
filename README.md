@@ -1,4 +1,4 @@
-# Health-economic simulation modeling <img src="man/figures/logo.png" align="right" width="100" />
+# Health economic simulation modeling <img src="man/figures/logo.png" align="right" width="100" />
 
 [![Travis-CI Build Status](https://travis-ci.org/hesim-dev/hesim.svg?branch=master)](https://travis-ci.org/hesim-dev/hesim)
 [![Coverage Status](https://codecov.io/gh/hesim-dev/hesim/branch/master/graph/badge.svg)](https://codecov.io/gh/hesim-dev/hesim)
