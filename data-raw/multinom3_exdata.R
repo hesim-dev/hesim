@@ -1,6 +1,7 @@
 # Data for a 3-state discrete time state transition model
 rm(list = ls())
 library("data.table")
+set.seed(101)
 strategy_names <- c("Reference", "Intervention")
 state_names <- c("Healthy", "Sick", "Dead")
 
@@ -114,8 +115,9 @@ sim_mlogit <- function(n = 10000){
                            state_to = to_states)
     
     # Update variables for next loop iteration
-    alive <- which(sim[[t]]$state_to != "Dead")
-    from_state <- sim[[t]]$state_to[alive]
+    died <- sim[[t]][state_to == "Dead"]$patient_id
+    alive <- alive[!alive %in% died]
+    from_state <- sim[[t]][patient_id %in% alive]$state_to
   }
   sim <- rbindlist(sim)
   
