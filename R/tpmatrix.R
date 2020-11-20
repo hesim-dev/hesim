@@ -187,7 +187,7 @@ tpmatrix_id <- function(object, n_samples){
 #' 
 #' @param q A two-dimensional object that can be passed to [as.matrix()] containing
 #' elements of the transition intensity matrix. A column represents a transition
-#' from state $r$ to state $s$. Each row represents elements of a different
+#' from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
 #' transition intensity matrix. See "Details" for more information.
 #' 
 #' @param trans_mat Just as in [IndivCtstmTrans], a transition matrix 
