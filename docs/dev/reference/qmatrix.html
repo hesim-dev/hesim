@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Transition probability matrix IDs — tpmatrix_id • hesim</title>
+<title>Transition intensity matrix — qmatrix • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,10 +46,9 @@
 
 
 
-<meta property="og:title" content="Transition probability matrix IDs — tpmatrix_id" />
-<meta property="og:description" content="Creates ID variables for each row returned by tpmatrix(). This function is
-most conveniently used along with tpmatrix() to construct a
-tparams_transprobs() object." />
+<meta property="og:title" content="Transition intensity matrix — qmatrix" />
+<meta property="og:description" content="qpmatrix() creates transition intensity matrices where elements represent
+the instantaneous risk of moving between health states." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -169,65 +168,63 @@ tparams_transprobs() object." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Transition probability matrix IDs</h1>
+    <h1>Transition intensity matrix</h1>
     <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/tpmatrix.R'><code>R/tpmatrix.R</code></a></small>
-    <div class="hidden name"><code>tpmatrix_id.Rd</code></div>
+    <div class="hidden name"><code>qmatrix.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Creates ID variables for each row returned by <code><a href='tpmatrix.html'>tpmatrix()</a></code>. This function is
-most conveniently used along with <code><a href='tpmatrix.html'>tpmatrix()</a></code> to construct a
-<code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code> object.</p>
+    <p><code>qpmatrix()</code> creates transition intensity matrices where elements represent
+the instantaneous risk of moving between health states.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tpmatrix_id</span>(<span class='no'>object</span>, <span class='no'>n_samples</span>)</pre>
+    <pre class="usage"><span class='fu'>qmatrix</span>(<span class='no'>q</span>, <span class='no'>trans_mat</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>An object of class <code>expanded_hesim_data</code> returned by
-<code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>. This dataset must be expanded by treatment
-strategies, patients, and optionally time intervals.</p></td>
+      <th>q</th>
+      <td><p>A two-dimensional object that can be passed to <code><a href='https://rdrr.io/r/base/matrix.html'>as.matrix()</a></code> containing
+elements of the transition intensity matrix. A column represents a transition
+from state $r$ to state $s$. Each row represents elements of a different
+transition intensity matrix. See "Details" for more information.</p></td>
     </tr>
     <tr>
-      <th>n_samples</th>
-      <td><p>The number of parameters samples used for the probabilistic
-sensitivity analysis (PSA).</p></td>
+      <th>trans_mat</th>
+      <td><p>Just as in <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>, a transition matrix
+describing the states and transitions in a multi-state model.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a <code>data.table</code> with the same columns in <code>object</code> repeated
-<code>n_samples</code> times. That is, to facilitate creation of a <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>
-object,  there is one row for each parameter sample,
-treatment strategy, patient, and optionally time interval.</p>
+    <p>Returns a <code>qmatrix</code> object where each row is a flattened transition
+intensity matrix with elements ordered rowwise.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The object <code>q</code> must only contain non-zero and non-diagonal elements
+of a transition intensity matrix. The diagonal elements are automatically computed
+as the negative sum of the other rows.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='tpmatrix.html'>tpmatrix()</a></code>, <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>, <code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='tpmatrix.html'>tpmatrix()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>), <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>65</span>, <span class='fl'>50</span>, <span class='fl'>75</span>),
-                        <span class='kw'>gender</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Female"</span>, <span class='st'>"Female"</span>, <span class='st'>"Male"</span>))
-<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
-                        <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>)
-<span class='no'>input_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
-<span class='fu'>tpmatrix_id</span>(<span class='no'>input_data</span>, <span class='kw'>n_samples</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;     sample strategy_id patient_id
-#&gt;  1:      1           1          1
-#&gt;  2:      1           1          2
-#&gt;  3:      1           1          3
-#&gt;  4:      1           2          1
-#&gt;  5:      1           2          2
-#&gt;  6:      1           2          3
-#&gt;  7:      2           1          1
-#&gt;  8:      2           1          2
-#&gt;  9:      2           1          3
-#&gt; 10:      2           2          1
-#&gt; 11:      2           2          2
-#&gt; 12:      2           2          3</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># 3 state irreversible model</span>
+<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>3</span>),
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
+<span class='no'>q12</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.8</span>, <span class='fl'>.7</span>)
+<span class='no'>q13</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.3</span>)
+<span class='no'>q23</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.1</span>, <span class='fl'>1.2</span>)
+<span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>q12</span>, <span class='no'>q13</span>, <span class='no'>q23</span>)
+<span class='fu'>qmatrix</span>(<span class='no'>q</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>)</div><div class='output co'>#&gt;      s1_s1 s1_s2 s1_s3 s2_s1 s2_s2 s2_s3 s3_s1 s3_s2 s3_s3
+#&gt; [1,]    -1   0.8   0.2     0  -1.1   1.1     0     0     0
+#&gt; [2,]    -1   0.7   0.3     0  -1.2   1.2     0     0     0
+#&gt; attr(,"class")
+#&gt; [1] "qmatrix"</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -33,6 +33,10 @@ reference:
       - tparams
       - tparams_mean
       - tparams_transprobs
+      - tpmatrix
+      - tpmatrix_id
+      - tpmatrix_names
+      - qmatrix
   - title: "Input data"
     contents:
       - hesim_data
@@ -42,9 +46,6 @@ reference:
       - input_mats
   - title: "Model definition"
     contents:
-      - tpmatrix
-      - tpmatrix_id
-      - tpmatrix_names
       - rng_distributions
       - define_rng
       - define_tparams
