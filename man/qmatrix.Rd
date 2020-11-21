@@ -37,7 +37,11 @@ q12 <- c(.8, .7)
 q13 <- c(.2, .3)
 q23 <- c(1.1, 1.2)
 q <- data.frame(q12, q13, q23)
-qmatrix(q, trans_mat = tmat)
+qmat <- qmatrix(q, trans_mat = tmat)
+print(qmat)
+
+# Compute matrix exponential of each row
+matrix_exp(qmat)
 
 }
 \seealso{

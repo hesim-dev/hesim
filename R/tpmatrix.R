@@ -209,7 +209,11 @@ tpmatrix_id <- function(object, n_samples){
 #' q13 <- c(.2, .3)
 #' q23 <- c(1.1, 1.2)
 #' q <- data.frame(q12, q13, q23)
-#' qmatrix(q, trans_mat = tmat)
+#' qmat <- qmatrix(q, trans_mat = tmat)
+#' print(qmat)
+#' 
+#' # Compute matrix exponential of each row
+#' matrix_exp(qmat)
 #' 
 #' @seealso [tpmatrix()]
 #' @export
@@ -223,5 +227,41 @@ qmatrix <- function(q, trans_mat){
                                    prefix = "")
   qmat <- replace_Qdiag(qmat, n_states)
   class(qmat) <- "qmatrix"
+  attr(qmat, "n_states") <- n_states
   return(qmat)
+}
+
+# Matrix exponential -----------------------------------------------------------
+#' Matrix exponential
+#' 
+#' This is a wrapper around [msm::MatrixExp()] that computes the matrix
+#' exponential of multiple square matrices. 
+#' 
+#' @param x A two-dimensional array like object where each row is a square
+#' matrix ordered rowwise.
+#' @param t An optional scaling factor for `x`. 
+#' @param ... Arguments to pass to [msm::MatrixExp].
+#' 
+#' @details This function is most useful when exponentiating transition intensity
+#' matrices to produce transition probability matrices. To create transition
+#' probability matrices for discrete time state transition models with annual
+#' cycles, set `t=1`. An array of matrices is returned which can be used
+#' to create the `value` element of a [tparams_transprobs] object. See 
+#' [qmatrix()] for an example. 
+#' 
+#' @return Returns an array of exponentiated matrices. 
+#' 
+#' @seealso [qmatrix()]
+#' @export
+matrix_exp <- function(x, t = 1, ...) {
+  x <- as.matrix(x)
+  n <- nrow(x)
+  n_states <- sqrt(ncol(x))
+  if (!is_whole_number(n_states)) stop("Each row of 'x' must be square matrix.")
+  res <- array(NA, dim = c(n_states, n_states, n * length(t)))
+  for (i in 1:n) {
+    xmat_i <- matrix(x[i, ], byrow = TRUE, nrow = n_states)
+    res[,, i] <- msm::MatrixExp(xmat_i, t = t, ...)
+  }
+  return(res)
 }

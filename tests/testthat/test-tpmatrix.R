@@ -75,3 +75,16 @@ test_that("qmatrix() returns the correct diagonals" , {
   expect_equal(-qmat[, 9], qmat[, 7] + qmat[, 9])
   expect_equal(c(0, 0), qmat[, 8])
 })
+
+# Matrix exponential -----------------------------------------------------------
+test_that("Square matrices must be passed to matrix_exp()" , {
+  expect_error(matrix_exp(matrix(c(1, 2), nrow = 1)),
+               "Each row of 'x' must be square matrix.")
+})
+
+test_that("matrix_exp() returns an array where rows sum to 1." , {
+  p <- matrix_exp(qmat)
+  expect_true(inherits(p, "array"))
+  row_sums <- c(apply(p, 3, rowSums))
+  expect_equal(mean(row_sums), 1, tolerance = .001,scale = 1)
+})
