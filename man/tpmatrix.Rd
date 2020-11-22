@@ -28,11 +28,42 @@ The complementary probability (equal to 1 minus the sum of the probabilities
 of all other rows) can be conveniently referred to as \code{C}.
 }
 \examples{
-p <- c(.7, .6)
+# Pass vectors
+p_12 <- c(.7, .6)
 tpmatrix(
-  C, p,
+  C, p_12,
   0, 1
 )
+
+# Pass matrix
+pmat <- matrix(c(.5, .5, .3, .7), byrow = TRUE, ncol = 4)
+tpmatrix(pmat)
+
+# Pass vectors and data frames
+p1 <- data.frame(
+  p_12 = c(.7, .6), 
+  p_13 = c(.1, .2)
+)
+
+p2 <- data.frame(
+  p_21 = 0,
+  p_22 = c(.4, .45),
+  p_23 = c(.6, .55)
+)
+
+p3 <- data.frame(
+  p_31 = c(0, 0),
+  p_32 = c(0, 0),
+  p_33 = c(1, 1)
+)
+
+tpmatrix(
+  C, p1,
+  p2,
+  p3
+)
+
+
 }
 \seealso{
 \code{\link[=define_model]{define_model()}}, \code{\link[=define_tparams]{define_tparams()}},

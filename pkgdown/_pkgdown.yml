@@ -29,6 +29,7 @@ reference:
       - tpmatrix_names
       - qmatrix
       - expmat
+      - as_array3
   - title: "Parameters"
     contents:
       - params

@@ -251,10 +251,7 @@ tparams_transprobs.data.table <- function (object) {
   # Value
   prob_mat <- as.matrix(object[, colnames(object)[grep("prob_", colnames(object))], 
                                with = FALSE])
-  n_states <- sqrt(ncol(prob_mat))
-  value <- aperm(array(c(t(prob_mat)),
-                       dim = c(n_states, n_states, nrow(prob_mat))),
-                 c(2, 1, 3))
+  value <- as_array3(prob_mat)
   
   # Return
   return(do.call("new_tparams_transprobs", c(list(value = value), id_args)))
@@ -277,8 +274,7 @@ tparams_transprobs.tpmatrix <- function(object, tpmatrix_id) {
 
 #' @export
 as.data.table.tparams_transprobs <- function(x){
-  probs <- matrix(c(aperm(x$value, perm = c(2, 1, 3))),
-                  nrow = dim(x$value)[3], byrow = TRUE)
+  probs <- as_tpmatrix(x$value)
   colnames(probs) <- paste0("prob_", 1:ncol(probs)) 
   id_dt <- as.data.table(x[c("sample", "strategy_id", "patient_id")])
   time_dt <- x$time_intervals[match(x$time_id, x$time_intervals$time_id)]

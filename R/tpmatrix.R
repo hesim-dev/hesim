@@ -1,28 +1,72 @@
 # 3D array ---------------------------------------------------------------------
-as_array3 <- function(x, ...) {
-  UseMethod("as_array3", x)
-}
-
-as_array3.default <- function(x) {
+#' Convert between 2D tabular objects and 3D arrays
+#' 
+#' Convert a 2-dimensional tabular object where each row stores a flattened
+#' square matrix to a 3-dimensional array of square matrices and vice versa. 
+#' This allows multiple transition matrices to be stored as either tabular objects 
+#' (e.g., matrices, data frames, etc) or as arrays. 
+#' 
+#' @param x For `as_array3()` a 2-dimensional tabular object where each row stores a flattened
+#' square matrix ordered rowwise. Reasonable classes are `matrix`, `data.frame`,
+#' `data.table`, and `tpmatrix`. For `as_tpmatrix()` a 3-dimensional array 
+#' where each slice is a square matrix.
+#' 
+#'
+#' @examples 
+#' p_12 <- c(.7, .6)
+#' pmat <- tpmatrix(
+#'  C, p_12,
+#'  0, 1
+#' )
+#' pmat
+#' 
+#' as_array3(pmat)
+#' as_array3(as.matrix(pmat))
+#' as_tpmatrix(as_array3(pmat))
+#' @return For `as_array3()` a 3-dimensional array of square matrices; 
+#' for `as_tpmatrix()` a [tpmatrix] object.
+#' 
+#' @seealso [tpmatrix]
+#' @export
+as_array3 <- function(x) {
+  if (length(dim(x)) != 2) stop("'x' must be a 2-dimensional object.")
   n_states <- sqrt(ncol(x))
   y <- aperm(array(c(t(x)),
                    dim = c(n_states, n_states, nrow(x))),
-                   c(2, 1, 3))
+             c(2, 1, 3))
   return(y)
 }
 
-as_array3.matrix <- function(x) {
-  as_array3.default(x)
-} 
+#' @name as_array3
+#' @export
+as_tpmatrix <- function(x) {
+  n_col <- dim(x)[1] * dim(x)[2]
+  y <- matrix(c(aperm(x, c(2, 1, 3))), ncol = n_col, byrow = TRUE)
+  colnames(y) <- tpmatrix_names(states = paste0("s", 1:dim(x)[1]),
+                                prefix = "")
+  return(tpmatrix(y))
+}
 
 # Transition probability matrix ------------------------------------------------
-transform_dots <- function(dots, data){
+eval_dots <- function(dots, data){
   n_dots <- length(dots)
-  for (i in 1:n_dots){
-    name_i <- names(dots)[i]
-    data[[name_i]] <-  eval(dots[[i]], data)
+  res <- vector(mode = "list", length = n_dots)
+  complement <- vector(mode = "list", length = n_dots)
+  
+  update_complement <- function(complement, x) {
+    if (is.null(ncol(x))) {
+      return(complement)
+    } else{
+      return(rep(complement, ncol(x)))
+    }
   }
-  return(data[names(dots)])
+  
+  for (i in 1:n_dots){
+    res[[i]] <-  eval(dots[[i]], data)
+    complement[[i]] <- update_complement(attr(dots, "complement")[i], res[[i]])
+  }
+  attr(res, "complement") <- unlist(complement)
+  return(res)
 }
 
 #' Names for elements of a transition probability matrix
@@ -56,12 +100,6 @@ tpmatrix_names <- function(states, prefix = "p_", sep = "_"){
 
 define_tpmatrix <- function(...){
   x <- as.list(substitute(c(...))[-1])
-  n_states <- sqrt(length(x))
-  if (!is_whole_number(n_states)){
-    stop("tpmatrix() must be a square matrix.", call. = FALSE)
-  } 
-  names(x) <- tpmatrix_names(states = paste0("s", 1:n_states),
-                             prefix = "")
   which_C <- which(x == "C")
   x[which_C] <- NA
   attr(x, "complement") <- rep(0, length(x))
@@ -127,18 +165,64 @@ replace_Qdiag <- function(x, n_states) {
 #' elements ordered rowwise. 
 #' 
 #' @examples 
-#' p <- c(.7, .6)
+#' # Pass vectors
+#' p_12 <- c(.7, .6)
 #' tpmatrix(
-#'   C, p,
+#'   C, p_12,
 #'   0, 1
 #' )
+#' 
+#' # Pass matrix
+#' pmat <- matrix(c(.5, .5, .3, .7), byrow = TRUE, ncol = 4)
+#' tpmatrix(pmat)
+#' 
+#' # Pass vectors and data frames
+#' p1 <- data.frame(
+#'   p_12 = c(.7, .6), 
+#'   p_13 = c(.1, .2)
+#' )
+#'
+#' p2 <- data.frame(
+#'   p_21 = 0,
+#'   p_22 = c(.4, .45),
+#'   p_23 = c(.6, .55)
+#' )
+#'
+#' p3 <- data.frame(
+#'   p_31 = c(0, 0),
+#'   p_32 = c(0, 0),
+#'   p_33 = c(1, 1)
+#' )
+#'
+#' tpmatrix(
+#'   C, p1,
+#'   p2,
+#'   p3
+#' )
+#'
+#' 
 #' @seealso [define_model()], [define_tparams()], 
 #' [tpmatrix_id()], [tparams_transprobs()], [CohortDtstmTrans()]
 #' @export
 tpmatrix <- function(...){
+  # Evaluate
   m_def <- define_tpmatrix(...)
-  m <- as.data.table(transform_dots(m_def, as.list(parent.frame())))
-  replace_C(m, attr(m_def, "complement"))
+  m <- eval_dots(m_def, as.list(parent.frame()))
+  complement <- attr(m, "complement")
+  m <- as.data.table(m)
+
+  # Some checks
+  n_states <- sqrt(ncol(m))
+  if (!is_whole_number(n_states)){
+    stop("tpmatrix() must be a square matrix.", call. = FALSE)
+  }
+  colnames(m) <- tpmatrix_names(states = paste0("s", 1:n_states),
+                                prefix = "")
+
+  # Replace complement
+  replace_C(m, complement)
+  
+  # Return
   setattr(m, "class", c("tpmatrix", "data.table", "data.frame"))
   return(m)
 }
