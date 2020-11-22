@@ -65,25 +65,18 @@ q23 <- c(1.1, 1.2)
 q <- data.frame(q12, q13, q21, q23)
 qmat <- qmatrix(q, trans_mat = tmat)
 
-test_that("qmatrix() returns a qmatrix object" , {
-  expect_true(inherits(qmat, "qmatrix"))
+test_that("qmatrix() returns a 3D array" , {
+  expect_true(inherits(qmat, "array"))
+  expect_equal(length(dim(qmat)), 3)
 })
 
 test_that("qmatrix() returns the correct diagonals" , {
-  expect_equal(-qmat[, 1], qmat[, 2] + qmat[, 3])
-  expect_equal(-qmat[, 5], qmat[, 4] + qmat[, 6])
-  expect_equal(-qmat[, 9], qmat[, 7] + qmat[, 9])
-  expect_equal(c(0, 0), qmat[, 8])
+  expect_equal(mean(apply(qmat, 3, rowSums)), 0, tol = .00001)
 })
 
 # Matrix exponential -----------------------------------------------------------
-test_that("Square matrices must be passed to matrix_exp()" , {
-  expect_error(matrix_exp(matrix(c(1, 2), nrow = 1)),
-               "Each row of 'x' must be square matrix.")
-})
-
-test_that("matrix_exp() returns an array where rows sum to 1." , {
-  p <- matrix_exp(qmat)
+test_that("expmat() returns an array where rows sum to 1." , {
+  p <- expmat(qmat)
   expect_true(inherits(p, "array"))
   row_sums <- c(apply(p, 3, rowSums))
   expect_equal(mean(row_sums), 1, tolerance = .001,scale = 1)

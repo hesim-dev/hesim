@@ -1,3 +1,20 @@
+# 3D array ---------------------------------------------------------------------
+as_array3 <- function(x, ...) {
+  UseMethod("as_array3", x)
+}
+
+as_array3.default <- function(x) {
+  n_states <- sqrt(ncol(x))
+  y <- aperm(array(c(t(x)),
+                   dim = c(n_states, n_states, nrow(x))),
+                   c(2, 1, 3))
+  return(y)
+}
+
+as_array3.matrix <- function(x) {
+  as_array3.default(x)
+} 
+
 # Transition probability matrix ------------------------------------------------
 transform_dots <- function(dots, data){
   n_dots <- length(dots)
@@ -185,7 +202,7 @@ tpmatrix_id <- function(object, n_samples){
 #' `qpmatrix()` creates transition intensity matrices where elements represent
 #' the instantaneous risk of moving between health states. 
 #' 
-#' @param q A two-dimensional object that can be passed to [as.matrix()] containing
+#' @param q A two-dimensional tabular object that can be passed to [as.matrix()] containing
 #' elements of the transition intensity matrix. A column represents a transition
 #' from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
 #' transition intensity matrix. See "Details" for more information.
@@ -197,8 +214,8 @@ tpmatrix_id <- function(object, n_samples){
 #' of a transition intensity matrix. The diagonal elements are automatically computed
 #' as the negative sum of the other rows. 
 #' 
-#' @return Returns a `qmatrix` object where each row is a flattened transition 
-#' intensity matrix with elements ordered rowwise.  
+#' @return An array of transition intensity matrices with the third dimension 
+#' equal to the number of rows in `q`.
 #' 
 #' @examples 
 #' # 3 state irreversible model
@@ -212,8 +229,8 @@ tpmatrix_id <- function(object, n_samples){
 #' qmat <- qmatrix(q, trans_mat = tmat)
 #' print(qmat)
 #' 
-#' # Compute matrix exponential of each row
-#' matrix_exp(qmat)
+#' # Matrix exponential of each matrix in array
+#' expmat(qmat)
 #' 
 #' @seealso [tpmatrix()]
 #' @export
@@ -226,19 +243,16 @@ qmatrix <- function(q, trans_mat){
   colnames(qmat) <- tpmatrix_names(states = paste0("s", 1:n_states),
                                    prefix = "")
   qmat <- replace_Qdiag(qmat, n_states)
-  class(qmat) <- "qmatrix"
-  attr(qmat, "n_states") <- n_states
-  return(qmat)
+  return(as_array3(qmat))
 }
 
 # Matrix exponential -----------------------------------------------------------
 #' Matrix exponential
 #' 
-#' This is a wrapper around [msm::MatrixExp()] that computes the matrix
-#' exponential of multiple square matrices. 
+#' This is a wrapper around [msm::MatrixExp()] that computes the exponential
+#' of multiple square matrices. 
 #' 
-#' @param x A two-dimensional array like object where each row is a square
-#' matrix ordered rowwise.
+#' @param x An array of matrices. 
 #' @param t An optional scaling factor for `x`. 
 #' @param ... Arguments to pass to [msm::MatrixExp].
 #' 
@@ -253,15 +267,12 @@ qmatrix <- function(q, trans_mat){
 #' 
 #' @seealso [qmatrix()]
 #' @export
-matrix_exp <- function(x, t = 1, ...) {
-  x <- as.matrix(x)
-  n <- nrow(x)
-  n_states <- sqrt(ncol(x))
-  if (!is_whole_number(n_states)) stop("Each row of 'x' must be square matrix.")
+expmat <- function(x, t = 1, ...) {
+  n <- dim(x)[3]
+  n_states <- dim(x)[1]
   res <- array(NA, dim = c(n_states, n_states, n * length(t)))
   for (i in 1:n) {
-    xmat_i <- matrix(x[i, ], byrow = TRUE, nrow = n_states)
-    res[,, i] <- msm::MatrixExp(xmat_i, t = t, ...)
+    res[,, i] <- msm::MatrixExp(x[,, i], t = t, ...)
   }
   return(res)
 }

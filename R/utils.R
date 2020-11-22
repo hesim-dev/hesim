@@ -245,5 +245,3 @@ check.array <- function(coefs){
   # There are currently no other checks
 }
 
-
-

@@ -7,7 +7,7 @@
 qmatrix(q, trans_mat)
 }
 \arguments{
-\item{q}{A two-dimensional object that can be passed to \code{\link[=as.matrix]{as.matrix()}} containing
+\item{q}{A two-dimensional tabular object that can be passed to \code{\link[=as.matrix]{as.matrix()}} containing
 elements of the transition intensity matrix. A column represents a transition
 from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
 transition intensity matrix. See "Details" for more information.}
@@ -16,8 +16,8 @@ transition intensity matrix. See "Details" for more information.}
 describing the states and transitions in a multi-state model.}
 }
 \value{
-Returns a \code{qmatrix} object where each row is a flattened transition
-intensity matrix with elements ordered rowwise.
+An array of transition intensity matrices with the third dimension
+equal to the number of rows in \code{q}.
 }
 \description{
 \code{qpmatrix()} creates transition intensity matrices where elements represent
@@ -40,8 +40,8 @@ q <- data.frame(q12, q13, q23)
 qmat <- qmatrix(q, trans_mat = tmat)
 print(qmat)
 
-# Compute matrix exponential of each row
-matrix_exp(qmat)
+# Matrix exponential of each matrix in array
+expmat(qmat)
 
 }
 \seealso{

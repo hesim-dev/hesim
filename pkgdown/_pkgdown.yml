@@ -28,7 +28,7 @@ reference:
       - tpmatrix_id
       - tpmatrix_names
       - qmatrix
-      - matrix_exp
+      - expmat
   - title: "Parameters"
     contents:
       - params
