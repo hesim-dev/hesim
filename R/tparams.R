@@ -119,6 +119,7 @@ check.tparams_mean <- function(object, ...){
 #' A `tparams_transprobs` object is also instantiated when creating a
 #' cohort discrete time state transition model using [define_model()].
 #' 
+#' 
 #' @return An object of class `tparams_transprobs`, 
 #' which is a list containing `value` and relevant ID attributes. The element `value` is an 
 #' array of predicted transition probability matrices from the probability
@@ -126,7 +127,7 @@ check.tparams_mean <- function(object, ...){
 #' `value` is a prediction for a `sample`, `strategy_id`,
 #'  `patient_id`, and optionally `time_id` combination.
 #'
-#' @seealso  [define_model()], [create_CohortDtstm()]
+#' @seealso  [define_model()], [create_CohortDtstm()], [tpmatrix()]
 #' @rdname tparams_transprobs
 #' @export
 tparams_transprobs <- function(object, ...){
@@ -270,19 +271,6 @@ tparams_transprobs.tpmatrix <- function(object, tpmatrix_id) {
   setnames(object, colnames(object), paste0("prob_", 1:ncol(object)))
   p_dt <- cbind(tpmatrix_id, object)
   return(tparams_transprobs(p_dt))
-}
-
-#' @export
-as.data.table.tparams_transprobs <- function(x){
-  probs <- as_tpmatrix(x$value)
-  colnames(probs) <- paste0("prob_", 1:ncol(probs)) 
-  id_dt <- as.data.table(x[c("sample", "strategy_id", "patient_id")])
-  time_dt <- x$time_intervals[match(x$time_id, x$time_intervals$time_id)]
-  x_dt <- data.table(id_dt, time_dt, probs)
-  for (v in c("n_samples", "n_strategies", "n_patients", "n_times")){
-    setattr(x_dt, v, x[[v]])
-  }
-  return(x_dt)
 }
 
 tparams_transprobs.eval_model <- function(object){

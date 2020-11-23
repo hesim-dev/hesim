@@ -30,6 +30,7 @@ reference:
       - qmatrix
       - expmat
       - as_array3
+      - as.data.table.tparams_transprobs
   - title: "Parameters"
     contents:
       - params

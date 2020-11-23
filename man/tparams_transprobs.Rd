@@ -88,5 +88,5 @@ A \code{tparams_transprobs} object is also instantiated when creating a
 cohort discrete time state transition model using \code{\link[=define_model]{define_model()}}.
 }
 \seealso{
-\code{\link[=define_model]{define_model()}}, \code{\link[=create_CohortDtstm]{create_CohortDtstm()}}
+\code{\link[=define_model]{define_model()}}, \code{\link[=create_CohortDtstm]{create_CohortDtstm()}}, \code{\link[=tpmatrix]{tpmatrix()}}
 }
