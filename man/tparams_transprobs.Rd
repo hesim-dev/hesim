@@ -10,7 +10,13 @@
 \usage{
 tparams_transprobs(object, ...)
 
-\method{tparams_transprobs}{array}(object, times = NULL, grp_id = NULL, patient_wt = NULL)
+\method{tparams_transprobs}{array}(
+  object,
+  tpmatrix_id = NULL,
+  times = NULL,
+  grp_id = NULL,
+  patient_wt = NULL
+)
 
 \method{tparams_transprobs}{data.table}(object)
 
@@ -23,6 +29,9 @@ tparams_transprobs(object, ...)
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
+\item{tpmatrix_id}{An object of class \link{tpmatrix_id} (or an equivalent
+\code{data.table} with the same ID columns as returned by \code{tpmatrix_id()}).}
+
 \item{times}{An optional numeric vector of distinct times to pass to
 \link{time_intervals} representing time intervals indexed by the 4th dimension of
 the array. May either be the start or the end of intervals.
@@ -33,8 +42,6 @@ be the same length as the 3rd dimension of the array.}
 
 \item{patient_wt}{An optional numeric vector denoting the weight to apply to each
 patient within a subgroup. Must be the same length as the 3rd dimension of the array.}
-
-\item{tpmatrix_id}{An object of class \link{tpmatrix_id}.}
 }
 \value{
 An object of class \code{tparams_transprobs},
@@ -54,14 +61,25 @@ a \code{data.frame}, or a \link{tpmatrix}.
 \details{
 The format of \code{object} depends on its class:
 \describe{
-\item{array}{Must be a 4D array of matrices (i.e.,
-a 6D array). The dimensions of the array should be indexed as follows:
+\item{array}{
+Either a 3D or a 6D array is possible.
+\itemize{
+\item If a 3D array, then each slice is a
+square transition probability matrix. In this case
+\code{tpmatrix_id} is required and each matrix slice corresponds to the same
+numbered row in \code{tpmatrix_id}. The number of matrix slices must equal the number
+of rows in \code{tpmatrix_id}.
+
+\item If a 6D array, then the dimensions of the array should be indexed as follows:
 1st (\code{sample}), 2nd (\code{strategy_id}), 3rd (\code{patient_id}),
 4th (\code{time_id}), 5th (rows of transition matrix), and
 6th (columns of transition matrix). In other words, an index of
 \verb{[s, k, i, t]} represents the transition matrix for the \code{s}th
 sample, \code{k}th treatment strategy, \code{i}th patient, and \code{t}th
-time interval.}
+time interval.
+}
+}
+
 \item{data.table}{Must contain the following:
 \itemize{
 \item ID columns for the parameter sample (\code{sample}),
@@ -80,8 +98,10 @@ probability matrix:
 \code{probs_4} (2nd row, 2nd column).
 }
 }
+
 \item{data.frame}{Same as \code{data.table}.}
-\item{tpmatrix_id}{An object of class \link{tpmatrix_id}.}
+
+\item{tpmatrix}{An object of class \link{tpmatrix}.}
 }
 
 A \code{tparams_transprobs} object is also instantiated when creating a

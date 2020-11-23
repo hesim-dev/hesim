@@ -56,7 +56,7 @@ check.tparams_mean <- function(object, ...){
   for (v in c("strategy_id", "patient_id", "state_id")){
     if (nrow(object$value) != length(id_args[[v]])){
       stop("The length of each ID variable must equal the number of rows in 'value'.",
-           .call = FALSE)
+           call. = FALSE)
     }
   }
   return(object)  
@@ -73,7 +73,8 @@ check.tparams_mean <- function(object, ...){
 #' a `data.frame`, or a [tpmatrix]. 
 #' 
 #' @param object An object of the appropriate class. 
-#' @param tpmatrix_id An object of class [tpmatrix_id].
+#' @param tpmatrix_id An object of class [tpmatrix_id] (or an equivalent 
+#' `data.table` with the same ID columns as returned by `tpmatrix_id()`).
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
 #' @param times An optional numeric vector of distinct times to pass to
 #'  [time_intervals] representing time intervals indexed by the 4th dimension of 
@@ -86,14 +87,25 @@ check.tparams_mean <- function(object, ...){
 #' 
 #' @details The format of `object` depends on its class: 
 #' \describe{
-#' \item{array}{Must be a 4D array of matrices (i.e.,
-#'  a 6D array). The dimensions of the array should be indexed as follows: 
+#' \item{array}{
+#'  Either a 3D or a 6D array is possible.
+#'\itemize{
+#'  \item If a 3D array, then each slice is a 
+#'  square transition probability matrix. In this case
+#' `tpmatrix_id` is required and each matrix slice corresponds to the same 
+#'  numbered row in `tpmatrix_id`. The number of matrix slices must equal the number 
+#'  of rows in `tpmatrix_id`.
+#'  
+#'  \item If a 6D array, then the dimensions of the array should be indexed as follows: 
 #'  1st (`sample`), 2nd (`strategy_id`), 3rd (`patient_id`),
 #'  4th (`time_id`), 5th (rows of transition matrix), and
 #'  6th (columns of transition matrix). In other words, an index of
 #'  `[s, k, i, t]` represents the transition matrix for the `s`th 
 #'  sample, `k`th treatment strategy, `i`th patient, and `t`th
-#'  time interval.}
+#'  time interval.
+#' }
+#' }
+#'  
 #'  \item{data.table}{Must contain the following:
 #'  \itemize{
 #'  \item ID columns for the parameter sample (`sample`), 
@@ -112,8 +124,10 @@ check.tparams_mean <- function(object, ...){
 #'  `probs_4` (2nd row, 2nd column).
 #'  }
 #'  }
+#'  
 #'  \item{data.frame}{Same as `data.table`.}
-#'  \item{tpmatrix_id}{An object of class [tpmatrix_id].}
+#'  
+#'  \item{tpmatrix}{An object of class [tpmatrix].}
 #' }
 #' 
 #' A `tparams_transprobs` object is also instantiated when creating a
@@ -156,14 +170,39 @@ check.tparams_transprobs <- function(object){
   return(object)
 }
 
-#' @rdname tparams_transprobs
-#' @export
-tparams_transprobs.array <- function (object, times = NULL, 
-                                      grp_id = NULL, patient_wt = NULL) {
-  # Checks
-  if(length(dim(object)) != 6){
-    stop("'object' must be a 4D array of matrices (i.e., a 6D array).")
-  }  
+tparams_transprobs_id <- function(x) {
+  # ID attributes
+  id_args <- list()
+  id_names <- c("sample", "strategy_id", "patient_id")
+  size_names <- c("n_samples", "n_strategies", "n_patients")
+  for (i in 1:length(id_names)){
+    id_args[[id_names[i]]] <- x[[id_names[i]]]
+    id_args[[size_names[i]]] <- length(unique(x[[id_names[i]]]))
+  }
+  
+  ## Time interval
+  if (!is.null(x[["time_start"]])){
+    time_intervals <- time_intervals(unique(x[["time_start"]])) 
+    pos <- match(x[["time_start"]], time_intervals$time_start)
+    id_args[["time_id"]] <- time_intervals$time_id[pos]
+    id_args[["time_intervals"]] <- time_intervals
+    id_args[["n_times"]] <- length(time_intervals$time_id)
+  } else{
+    id_args[["time_id"]] <- rep(1, length(id_args$sample))
+    id_args[["time_intervals"]] <- data.table(time_id = 1,
+                                              time_start = 0,
+                                              time_stop = Inf)
+    id_args[["n_times"]] <- 1
+  }
+  
+  # Group ID and patient weight
+  id_args[["grp_id"]] <- x[["grp_id"]]
+  id_args[["patient_wt"]] <- x[["patient_wt"]]
+  return(id_args)
+}
+
+tparams_transprobs_array6 <- function (object, times = NULL, 
+                                       grp_id = NULL, patient_wt = NULL) {
   
   # Reshape array
   dims <- c(dim(object)[5], dim(object)[6], prod(dim(object)[1:4]))
@@ -180,7 +219,7 @@ tparams_transprobs.array <- function (object, times = NULL,
     check_var <- function(x, name){
       if (!is.null(x) & !length(x) %in% c(1, n_patients)){
         stop(paste0("The length of '", name, "' must be equal to the 3rd dimension ",
-                    "of the array (i.e., the number of patients)."),
+                    "of the array (i.e., the number of patients).", call. = FALSE),
              call. = FALSE)
       }
     }
@@ -215,46 +254,44 @@ tparams_transprobs.array <- function (object, times = NULL,
   }
   
   # Return
-  return(do.call("new_tparams_transprobs", c(list(value = value), id_args)))
+  return(list(value = value, id_args = id_args))
+}
+
+tparams_transprobs_array3 <- function(object, tpmatrix_id) {
+  
+}
+
+#' @rdname tparams_transprobs
+#' @export
+tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL, 
+                                      grp_id = NULL, patient_wt = NULL) {
+  # Checks
+  n_dim <- length(dim(object))
+  if(!n_dim %in% c(3, 6)){
+    stop("'object' must be a 3D or 6D array.", call. = FALSE)
+  }  
+  
+  # Return
+  if (n_dim == 6) {
+    y <- tparams_transprobs_array6(object, times, grp_id, patient_wt) 
+    return(do.call("new_tparams_transprobs", c(list(value = y$value), y$id_args)))
+  } else{
+    if (nrow(tpmatrix_id) != dim(object)[3]) {
+      stop(paste0("The third dimension of the array 'object' must equal the ", 
+                  "number or rows in 'tpmatrix_id'."), call. = FALSE)
+    }
+    id_args <- tparams_transprobs_id(tpmatrix_id)
+    return(do.call("new_tparams_transprobs", c(list(value = object), id_args)))
+  }
 }
 
 #' @rdname tparams_transprobs
 #' @export
 tparams_transprobs.data.table <- function (object) {
-  # ID attributes
-  id_args <- list()
-  id_names <- c("sample", "strategy_id", "patient_id")
-  size_names <- c("n_samples", "n_strategies", "n_patients")
-  for (i in 1:length(id_names)){
-    id_args[[id_names[i]]] <- object[[id_names[i]]]
-    id_args[[size_names[i]]] <- length(unique(object[[id_names[i]]]))
-  }
-  
-  ## Time interval
-  if (!is.null(object[["time_start"]])){
-    time_intervals <- time_intervals(unique(object[["time_start"]])) 
-    pos <- match(object[["time_start"]], time_intervals$time_start)
-    id_args[["time_id"]] <- time_intervals$time_id[pos]
-    id_args[["time_intervals"]] <- time_intervals
-    id_args[["n_times"]] <- length(time_intervals$time_id)
-  } else{
-    id_args[["time_id"]] <- rep(1, length(id_args$sample))
-    id_args[["time_intervals"]] <- data.table(time_id = 1,
-                                              time_start = 0,
-                                              time_stop = Inf)
-    id_args[["n_times"]] <- 1
-  }
-  
-  # Group ID and patient weight
-  id_args[["grp_id"]] <- object[["grp_id"]]
-  id_args[["patient_wt"]] <- object[["patient_wt"]]
-  
-  # Value
+  id_args <- tparams_transprobs_id(object)
   prob_mat <- as.matrix(object[, colnames(object)[grep("prob_", colnames(object))], 
                                with = FALSE])
   value <- as_array3(prob_mat)
-  
-  # Return
   return(do.call("new_tparams_transprobs", c(list(value = value), id_args)))
 }
 

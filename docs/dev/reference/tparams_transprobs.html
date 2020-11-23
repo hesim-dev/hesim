@@ -187,7 +187,13 @@ a <code>data.frame</code>, or a <a href='tpmatrix.html'>tpmatrix</a>.</p>
     <pre class="usage"><span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for array</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>patient_wt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>tparams_transprobs</span>(
+  <span class='no'>object</span>,
+  <span class='kw'>tpmatrix_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>patient_wt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)
 
 <span class='co'># S3 method for data.table</span>
 <span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)
@@ -210,6 +216,11 @@ a <code>data.frame</code>, or a <a href='tpmatrix.html'>tpmatrix</a>.</p>
       <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     <tr>
+      <th>tpmatrix_id</th>
+      <td><p>An object of class <a href='tpmatrix_id.html'>tpmatrix_id</a> (or an equivalent
+<code>data.table</code> with the same ID columns as returned by <code><a href='tpmatrix_id.html'>tpmatrix_id()</a></code>).</p></td>
+    </tr>
+    <tr>
       <th>times</th>
       <td><p>An optional numeric vector of distinct times to pass to
 <a href='time_intervals.html'>time_intervals</a> representing time intervals indexed by the 4th dimension of
@@ -226,10 +237,6 @@ be the same length as the 3rd dimension of the array.</p></td>
       <td><p>An optional numeric vector denoting the weight to apply to each
 patient within a subgroup. Must be the same length as the 3rd dimension of the array.</p></td>
     </tr>
-    <tr>
-      <th>tpmatrix_id</th>
-      <td><p>An object of class <a href='tpmatrix_id.html'>tpmatrix_id</a>.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -243,14 +250,22 @@ distribution of the underlying statistical model. Each matrix in
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The format of <code>object</code> depends on its class:</p><dl'>
-<dt>array</dt><dd><p>Must be a 4D array of matrices (i.e.,
-a 6D array). The dimensions of the array should be indexed as follows:
+<dt>array</dt><dd><p>Either a 3D or a 6D array is possible.
+<ul>
+<li><p>If a 3D array, then each slice is a
+square transition probability matrix. In this case
+<code>tpmatrix_id</code> is required and each matrix slice corresponds to the same
+numbered row in <code>tpmatrix_id</code>. The number of matrix slices must equal the number
+of rows in <code>tpmatrix_id</code>.</p></li>
+<li><p>If a 6D array, then the dimensions of the array should be indexed as follows:
 1st (<code>sample</code>), 2nd (<code>strategy_id</code>), 3rd (<code>patient_id</code>),
 4th (<code>time_id</code>), 5th (rows of transition matrix), and
 6th (columns of transition matrix). In other words, an index of
 <code>[s, k, i, t]</code> represents the transition matrix for the <code>s</code>th
 sample, <code>k</code>th treatment strategy, <code>i</code>th patient, and <code>t</code>th
-time interval.</p></dd>
+time interval.</p></li>
+</ul></p></dd>
+
 <dt>data.table</dt><dd><p>Must contain the following:
 <ul>
 <li><p>ID columns for the parameter sample (<code>sample</code>),
@@ -268,8 +283,10 @@ probability matrix:
 <code>probs_3</code> (2nd row, 1st column), and
 <code>probs_4</code> (2nd row, 2nd column).</p></li>
 </ul></p></dd>
+
 <dt>data.frame</dt><dd><p>Same as <code>data.table</code>.</p></dd>
-<dt>tpmatrix_id</dt><dd><p>An object of class <a href='tpmatrix_id.html'>tpmatrix_id</a>.</p></dd>
+
+<dt>tpmatrix</dt><dd><p>An object of class <a href='tpmatrix.html'>tpmatrix</a>.</p></dd>
 
 </dl>
 
