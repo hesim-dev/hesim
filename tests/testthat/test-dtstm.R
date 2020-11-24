@@ -149,17 +149,28 @@ tpmat <- tpmatrix(
 )
 input_dat <- expand(hesim_dat)
 
-test_that("tparams_transprobs returns error if 'tpmatrix_id' is wrong class", {
+test_that("tparams_transprobs returns error if 'tpmatrix_id' has wrong class", {
   expect_error(
     tparams_transprobs(tpmat, 2),
-    "'tpmatrix_id' must be of class 'tpmatrix_id'."
+    "'tpmatrix_id' must be of class 'data.frame'." 
+  )
+})
+
+test_that("tparams_transprobs returns error if 'tpmatrix_id' has wrong number of rows", {
+  expect_error(
+    tparams_transprobs(tpmat, data.frame(2)),
+    "'object' and 'tpmatrix_id' must have the same number of rows." 
   )
 })
 
 test_that("tparams_transprobs returns the correct class", {
-  tpmat_id <- tpmatrix_id(input_dat, n_samples = 2)
+  tpmat_id <- tpmatrix_id(input_dat, n_samples = 1)
+  tp <- tpmatrix(
+    C, c(.6, .7, .5, .4),
+    0, 1
+  )
   expect_true(
-    inherits(tparams_transprobs(tpmat, tpmat_id),
+    inherits(tparams_transprobs(tp, tpmat_id),
              "tparams_transprobs")
   )
 })

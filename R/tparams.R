@@ -276,6 +276,7 @@ tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL,
     y <- tparams_transprobs_array6(object, times, grp_id, patient_wt) 
     return(do.call("new_tparams_transprobs", c(list(value = y$value), y$id_args)))
   } else{
+    check_is_class(tpmatrix_id, "data.frame", "tpmatrix_id")
     if (nrow(tpmatrix_id) != dim(object)[3]) {
       stop(paste0("The third dimension of the array 'object' must equal the ", 
                   "number or rows in 'tpmatrix_id'."), call. = FALSE)
@@ -304,14 +305,17 @@ tparams_transprobs.data.frame <- function (object) {
 #' @rdname tparams_transprobs
 #' @export
 tparams_transprobs.tpmatrix <- function(object, tpmatrix_id) {
-  check_is_class(tpmatrix_id, "tpmatrix_id")
+  check_is_class(tpmatrix_id, "data.frame", "tpmatrix_id")
+  if (nrow(object) != nrow(tpmatrix_id)) {
+    stop("'object' and 'tpmatrix_id' must have the same number of rows.",
+         call. = FALSE)
+  }
   setnames(object, colnames(object), paste0("prob_", 1:ncol(object)))
   p_dt <- cbind(tpmatrix_id, object)
   return(tparams_transprobs(p_dt))
 }
 
 tparams_transprobs.eval_model <- function(object){
-  setnames(object$tpmatrix, paste0("prob_", 1:ncol(object$tpmatrix)))
   id_index <- attr(object$tpmatrix, "id_index")
-  return(tparams_transprobs(cbind(object$id[[id_index]], object$tpmatrix)))
+  return(tparams_transprobs(object$tpmatrix, object$id[[id_index]]))
 }

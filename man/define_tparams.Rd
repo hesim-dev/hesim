@@ -16,8 +16,8 @@ of the last expression within the braces is evaluated. The expression
 must return a named list with the following possible elements:
 \itemize{
 \item \emph{tpmatrix}: The transition probability matrix used to simulate transition
-probabilities in the economic model. Typically the output of
-\code{\link[=tpmatrix]{tpmatrix()}}.
+probabilities in the economic model. This should either be the output of
+\code{\link[=tpmatrix]{tpmatrix()}} or a 3-dimensional array as in \code{\link[=tparams_transprobs]{tparams_transprobs()}}.
 \item \emph{utility}: The utility values to attach to states and used to simulate
 quality-adjusted life-years in the economic model. Either a vector (in
 which case utility is the same in each health state) or a
