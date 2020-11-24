@@ -153,12 +153,18 @@ replace_Qdiag <- function(x, n_states) {
 #' object. These are, in turn, ultimately used to create a [CohortDtstmTrans] object
 #' for simulating health state transitions.
 #' 
-#' @param ... Named values of expressions defining elements of the matrix. See
-#' "Details" and the example below.
+#' @param ... Named values of expressions defining elements of the matrix. Each
+#' element of `...` should either be a vector or a 2-dimensional tabular object 
+#' such as a data frame. See "Details" and the examples below.
 #' 
-#' @details The matrix is filled rowwise, meaning that each row should sum to 1.
-#' The complementary probability (equal to 1 minus the sum of the probabilities
-#'  of all other rows) can be conveniently referred to as `C`. 
+#' @details A `tpmatrix` is a 2-dimensional tabular object that stores flattened
+#' square transition probability matrices in each row. Each transition probability
+#' matrix is filled rowwise. The complementary probability 
+#' (equal to \eqn{1} minus the sum of the probabilities
+#'  of all other elements in a row of a transition probability matrix)
+#'  can be conveniently referred to as `C`. There can 
+#'  only be one complement for each row in a transition 
+#'  probability matrix.
 #' 
 #' @return Returns a `tpmatrix` object that inherits from `data.table`
 #' where each column is an element of the transition probability matrix with
@@ -170,6 +176,11 @@ replace_Qdiag <- function(x, n_states) {
 #' tpmatrix(
 #'   C, p_12,
 #'   0, 1
+#' )
+#' 
+#' tpmatrix(
+#'   C, p_12,
+#'   C, 1
 #' )
 #' 
 #' # Pass matrix
@@ -359,4 +370,32 @@ expmat <- function(x, t = 1, ...) {
     res[,, i] <- msm::MatrixExp(x[,, i], t = t, ...)
   }
   return(res)
+}
+
+# Relative risks ---------------------------------------------------------------
+#' Apply relative risks to transition probability matrices
+#' 
+#' Elements of transition probability matrices are multiplied by relative risks
+#' and the transition probability matrices are adjusted so that rows sum to 1. 
+#' Operations are vectorized and each relative risk is multiplied by every 
+#' transition matrix (stored in 3-dimensional arrays).  
+#' 
+#' @param x A 3-dimensional array where each slice is a square transition
+#' probability matrix.
+#' @param rr A 2-dimensional tabular object such as a matrix or data frame where each
+#' column is a vector of relative risks to apply to each transition matrix in `x`.
+#' @param index The indices of the transition probability matrices that `rr`  is applied to. 
+#' Should either be a matrix where the first column denotes a transition probability matrix row 
+#' and the second column denotes a transition probability matrix column or a list
+#' where each element is a vector of length 2 with the first element denoting
+#'  a transition probability matrix row and the second column denoting a transition
+#'  probability matrix column.
+#' @param complement Denotes indices of transition probability matrices that are
+#' "complements" (i.e., should be computed as \eqn{1} less the sum of all other
+#' elements in that row). Should be in the same format as `index`, If `NULL`, then
+#' the diagonals of the matrix are assumed to be the complements. There can only be one
+#' complement for each row in a transition probability matrix.
+#' @export
+apply_rr <- function(x, rr, index, complement = NULL) {
+  
 }

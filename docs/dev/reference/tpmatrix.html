@@ -191,8 +191,9 @@ for simulating health state transitions.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>Named values of expressions defining elements of the matrix. See
-"Details" and the example below.</p></td>
+      <td><p>Named values of expressions defining elements of the matrix. Each
+element of <code>...</code> should either be a vector or a 2-dimensional tabular object
+such as a data frame. See "Details" and the examples below.</p></td>
     </tr>
     </table>
 
@@ -203,9 +204,14 @@ where each column is an element of the transition probability matrix with
 elements ordered rowwise.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The matrix is filled rowwise, meaning that each row should sum to 1.
-The complementary probability (equal to 1 minus the sum of the probabilities
-of all other rows) can be conveniently referred to as <code>C</code>.</p>
+    <p>A <code>tpmatrix</code> is a 2-dimensional tabular object that stores flattened
+square transition probability matrices in each row. Each transition probability
+matrix is filled rowwise. The complementary probability
+(equal to \(1\) minus the sum of the probabilities
+of all other elements in a row of a transition probability matrix)
+can be conveniently referred to as <code>C</code>. There can
+only be one complement for each row in a transition
+probability matrix.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code>,
@@ -217,6 +223,12 @@ of all other rows) can be conveniently referred to as <code>C</code>.</p>
 <span class='fu'>tpmatrix</span>(
   <span class='no'>C</span>, <span class='no'>p_12</span>,
   <span class='fl'>0</span>, <span class='fl'>1</span>
+)</div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
+#&gt; 1:   0.3   0.7     0     1
+#&gt; 2:   0.4   0.6     0     1</div><div class='input'>
+<span class='fu'>tpmatrix</span>(
+  <span class='no'>C</span>, <span class='no'>p_12</span>,
+  <span class='no'>C</span>, <span class='fl'>1</span>
 )</div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
 #&gt; 1:   0.3   0.7     0     1
 #&gt; 2:   0.4   0.6     0     1</div><div class='input'>

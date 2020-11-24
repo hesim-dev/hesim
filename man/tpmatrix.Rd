@@ -7,8 +7,9 @@
 tpmatrix(...)
 }
 \arguments{
-\item{...}{Named values of expressions defining elements of the matrix. See
-"Details" and the example below.}
+\item{...}{Named values of expressions defining elements of the matrix. Each
+element of \code{...} should either be a vector or a 2-dimensional tabular object
+such as a data frame. See "Details" and the examples below.}
 }
 \value{
 Returns a \code{tpmatrix} object that inherits from \code{data.table}
@@ -23,9 +24,14 @@ object. These are, in turn, ultimately used to create a \link{CohortDtstmTrans} 
 for simulating health state transitions.
 }
 \details{
-The matrix is filled rowwise, meaning that each row should sum to 1.
-The complementary probability (equal to 1 minus the sum of the probabilities
-of all other rows) can be conveniently referred to as \code{C}.
+A \code{tpmatrix} is a 2-dimensional tabular object that stores flattened
+square transition probability matrices in each row. Each transition probability
+matrix is filled rowwise. The complementary probability
+(equal to \eqn{1} minus the sum of the probabilities
+of all other elements in a row of a transition probability matrix)
+can be conveniently referred to as \code{C}. There can
+only be one complement for each row in a transition
+probability matrix.
 }
 \examples{
 # Pass vectors
@@ -33,6 +39,11 @@ p_12 <- c(.7, .6)
 tpmatrix(
   C, p_12,
   0, 1
+)
+
+tpmatrix(
+  C, p_12,
+  C, 1
 )
 
 # Pass matrix
