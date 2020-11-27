@@ -129,7 +129,7 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     #' @param n_cycles The number of model cycles to simulate the model for.
     #' @return An object of class [stateprobs].
     sim_stateprobs = function(n_cycles){
-      times <- seq(0, n_cycles/self$cycle_length, length.out = n_cycles + 1)
+      times <- seq(0, n_cycles * self$cycle_length, length.out = n_cycles + 1)
       stprobs <- C_cohort_dtstm_sim_stateprobs(self, times)
       stprobs <- data.table(stprobs)
       stprobs[, sample := sample + 1]
