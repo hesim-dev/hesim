@@ -31,6 +31,7 @@ reference:
       - expmat
       - as_array3
       - as.data.table.tparams_transprobs
+      - apply_rr
   - title: "Parameters"
     contents:
       - params

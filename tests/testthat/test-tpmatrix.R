@@ -81,3 +81,57 @@ test_that("expmat() returns an array where rows sum to 1." , {
   row_sums <- c(apply(p, 3, rowSums))
   expect_equal(mean(row_sums), 1, tolerance = .001,scale = 1)
 })
+
+# Relative risks ---------------------------------------------------------------
+p_12 <- c(.7, .5)
+p_23 <- c(.1, .2)
+pmat <- as_array3(tpmatrix(
+  C, p_12, .1,
+  0, C,     p_23,
+  0, 0,     1
+))
+rr_12 <- runif(4, .8, 1)
+rr_13 <- runif(4, .9, 1)
+rr <- cbind(rr_12, rr_13)
+pmat2 <- apply_rr(pmat, rr, 
+                  index = list(c(1, 2), c(1, 3)),
+                  complement = list(c(1, 1), c(2, 2)))
+
+test_that("apply_rr() correctly multiplies relative risks" , {
+  expect_equal(pmat2[1, 2, ], rr_12 * pmat[1, 2, ])
+  expect_equal(pmat2[1, 3, ], rr_13 * pmat[1, 3, ])
+})
+
+test_that("Row sums are correct with apply_rr()" , {
+  row_sums <- c(apply(pmat2, 3, rowSums))
+  expect_equal(mean(row_sums), 1, tolerance = .001,scale = 1)
+})
+
+test_that("'index' argument in apply_rr() has correct dimensions" , {
+  expect_error(
+    apply_rr(pmat, rr, 
+             index = list(c(1, 2), c(1, 3), c(2, 1)),
+             complement = list(c(1, 1), c(2, 2))),
+    paste0("'index' must contain the same number of matrix elements as the ",
+           "number of columns in 'rr'.")
+  )
+})
+
+test_that("'complement' argument in apply_rr() must have correct number of matrix elements" , {
+  expect_error(
+    apply_rr(pmat, rr, 
+             index = list(c(1, 2), c(1, 3)),
+             complement = list(c(1, 1), c(2, 2), c(3, 3), c(4, 4))),
+    paste0("The number of matrix elements in 'complement' cannot be larger than the ",
+            "number of rows in 'x'.")
+  )
+})
+
+test_that("apply_rr() can only have one complementary column for each row in matrix" , {
+  expect_error(
+    apply_rr(pmat, rr, 
+             index = list(c(1, 2), c(1, 3)),
+             complement = list(c(1, 1), c(1,2))),
+    "There can only be one complementary column in each row."
+  )
+})

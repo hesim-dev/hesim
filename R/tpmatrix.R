@@ -388,14 +388,74 @@ expmat <- function(x, t = 1, ...) {
 #' Should either be a matrix where the first column denotes a transition probability matrix row 
 #' and the second column denotes a transition probability matrix column or a list
 #' where each element is a vector of length 2 with the first element denoting
-#'  a transition probability matrix row and the second column denoting a transition
-#'  probability matrix column.
+#' a transition probability matrix row and the second column denoting a transition
+#' probability matrix column.
 #' @param complement Denotes indices of transition probability matrices that are
-#' "complements" (i.e., should be computed as \eqn{1} less the sum of all other
-#' elements in that row). Should be in the same format as `index`, If `NULL`, then
-#' the diagonals of the matrix are assumed to be the complements. There can only be one
-#' complement for each row in a transition probability matrix.
+#' "complements" (i.e.,  computed as \eqn{1} less the sum of all other
+#' elements in that row). Should be in the same format as `index`. There can be
+#' at most one complementary column in each row of a transition probability 
+#' matrix. If `NULL`, then the diagonals are assumed to be the complements.
+#' 
+#' @details This function is useful for applying relative treatment effects measured
+#' using relative risks to an existing transition probability matrix. For example,
+#' a transition probability matrix for the reference treatment strategy may exist or
+#' have been estimated from the data. Relative risks estimated from a meta-analysis
+#' or network meta-analysis can then be applied to the reference transition probability
+#' matrix. If the number of rows in `rr` exceeds `x`, then the arrays in `x` are 
+#' recycled to the number of rows in `rr`, which facilitates the application of 
+#' relative risks from multiple treatment strategies to a reference treatment.
+#' 
+#' @return A 3-dimensional array where each slice contains matrices of the same 
+#' dimension as each matrix in `x` and the number of slices is equal to the number
+#' of rows in `rr`.
+#'  
+#' @examples
+#' p_12 <- c(.7, .5)
+#' p_23 <- c(.1, .2)
+#' x <- as_array3(tpmatrix(
+#'   C, p_12, .1,
+#'   0, C,     p_23,
+#'   0, 0,     1
+#' ))
+#' 
+#' # There are the same number of relative risk rows and transition probability matrices
+#' rr_12 <- runif(2, .8, 1)
+#' rr_13 <- runif(2, .9, 1)
+#' rr <- cbind(rr_12, rr_13)
+#' apply_rr(x, rr, 
+#'          index = list(c(1, 2), c(1, 3)),
+#'          complement = list(c(1, 1), c(2, 2)))
+#'          
+#' # There are more relative risk rows than transition probability matrices
+#' rr_12 <- runif(4, .8, 1)
+#' rr_13 <- runif(4, .9, 1)
+#' rr <- cbind(rr_12, rr_13)
+#' apply_rr(x, rr, 
+#'          index = list(c(1, 2), c(1, 3)),
+#'          complement = list(c(1, 1), c(2, 2)))
 #' @export
 apply_rr <- function(x, rr, index, complement = NULL) {
+  n_rows <- dim(x)[1]
+  if (is.list(index)) index <- do.call("rbind", index)
+  if (is.null(complement)) {
+    complement <- cbind(1:n_rows, 1:n_rows)
+  } else {
+    if (is.list(complement)) complement <- do.call("rbind", complement)
+  }
   
+  # Checks
+  if (nrow(index) != ncol(rr)) {
+    stop(paste0("'index' must contain the same number of matrix elements as the ",
+                "number of columns in 'rr'."), call. = FALSE)
+  }
+  if (nrow(complement) > n_rows) {
+    stop(paste0("The number of matrix elements in 'complement' cannot be larger than the ",
+                "number of rows in 'x'."), call. = FALSE)
+  }
+  if (any(table(complement[, 1]) != 1)) {
+    stop("There can only be one complementary column in each row.", call. = FALSE)
+  }
+  
+  # Run C function
+  C_apply_rr(x, rr, index - 1, complement - 1)
 }

@@ -7,6 +7,20 @@
 
 using namespace Rcpp;
 
+// C_apply_rr
+arma::cube C_apply_rr(const arma::cube& x, const arma::mat rr, const arma::umat index, const arma::umat complement);
+RcppExport SEXP _hesim_C_apply_rr(SEXP xSEXP, SEXP rrSEXP, SEXP indexSEXP, SEXP complementSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::cube& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type rr(rrSEXP);
+    Rcpp::traits::input_parameter< const arma::umat >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< const arma::umat >::type complement(complementSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_apply_rr(x, rr, index, complement));
+    return rcpp_result_gen;
+END_RCPP
+}
 // C_incr_effect
 std::vector<double> C_incr_effect(std::vector<double> x, std::vector<double> y, int n_samples, int n_strategies, int n_grps);
 RcppExport SEXP _hesim_C_incr_effect(SEXP xSEXP, SEXP ySEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP n_grpsSEXP) {
@@ -629,6 +643,7 @@ END_RCPP
 RcppExport SEXP _rcpp_module_boot_distributions();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_hesim_C_apply_rr", (DL_FUNC) &_hesim_C_apply_rr, 4},
     {"_hesim_C_incr_effect", (DL_FUNC) &_hesim_C_incr_effect, 5},
     {"_hesim_C_ceac", (DL_FUNC) &_hesim_C_ceac, 6},
     {"_hesim_C_mce", (DL_FUNC) &_hesim_C_mce, 6},
