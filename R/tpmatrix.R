@@ -8,7 +8,7 @@
 #' 
 #' @param x For `as_array3()` a 2-dimensional tabular object where each row stores a flattened
 #' square matrix ordered rowwise. Reasonable classes are `matrix`, `data.frame`,
-#' `data.table`, and `tpmatrix`. For `as_tpmatrix()` a 3-dimensional array 
+#' `data.table`, and `tpmatrix`. For `as_tbl2()` a 3-dimensional array 
 #' where each slice is a square matrix.
 #' 
 #'
@@ -22,9 +22,9 @@
 #' 
 #' as_array3(pmat)
 #' as_array3(as.matrix(pmat))
-#' as_tpmatrix(as_array3(pmat))
+#' as_tbl2(as_array3(pmat))
 #' @return For `as_array3()` a 3-dimensional array of square matrices; 
-#' for `as_tpmatrix()` a [tpmatrix] object.
+#' for `as_tbl2()` a 2-dimensional tabular object as specified by `output`.
 #' 
 #' @seealso [tpmatrix]
 #' @export
@@ -39,12 +39,21 @@ as_array3 <- function(x) {
 
 #' @name as_array3
 #' @export
-as_tpmatrix <- function(x) {
+as_tbl2 <- function(x, output = c("data.table", "data.frame", "matrix", "tpmatrix")) {
+  output <- match.arg(output)
   n_col <- dim(x)[1] * dim(x)[2]
   y <- matrix(c(aperm(x, c(2, 1, 3))), ncol = n_col, byrow = TRUE)
   colnames(y) <- tpmatrix_names(states = paste0("s", 1:dim(x)[1]),
                                 prefix = "")
-  return(tpmatrix(y))
+  if (output == "data.table") {
+    return(as.data.table(y))
+  } else if (output == "data.frame") {
+    return(as.data.frame(y))
+  } else if (output == "matrix") {
+    return(y)
+  } else {
+    return(tpmatrix(y))
+  }
 }
 
 # Transition probability matrix ------------------------------------------------

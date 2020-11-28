@@ -184,7 +184,7 @@ This allows multiple transition matrices to be stored as either tabular objects
 
     <pre class="usage"><span class='fu'>as_array3</span>(<span class='no'>x</span>)
 
-<span class='fu'>as_tpmatrix</span>(<span class='no'>x</span>)</pre>
+<span class='fu'>as_tbl2</span>(<span class='no'>x</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"data.table"</span>, <span class='st'>"data.frame"</span>, <span class='st'>"matrix"</span>, <span class='st'>"tpmatrix"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,7 +193,7 @@ This allows multiple transition matrices to be stored as either tabular objects
       <th>x</th>
       <td><p>For <code>as_array3()</code> a 2-dimensional tabular object where each row stores a flattened
 square matrix ordered rowwise. Reasonable classes are <code>matrix</code>, <code>data.frame</code>,
-<code>data.table</code>, and <code>tpmatrix</code>. For <code>as_tpmatrix()</code> a 3-dimensional array
+<code>data.table</code>, and <code>tpmatrix</code>. For <code>as_tbl2()</code> a 3-dimensional array
 where each slice is a square matrix.</p></td>
     </tr>
     </table>
@@ -201,7 +201,7 @@ where each slice is a square matrix.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>For <code>as_array3()</code> a 3-dimensional array of square matrices;
-for <code>as_tpmatrix()</code> a <a href='tpmatrix.html'>tpmatrix</a> object.</p>
+for <code>as_tbl2()</code> a 2-dimensional tabular object as specified by <code>output</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='tpmatrix.html'>tpmatrix</a></p></div>
@@ -237,7 +237,7 @@ for <code>as_tpmatrix()</code> a <a href='tpmatrix.html'>tpmatrix</a> object.</p
 #&gt;      [,1] [,2]
 #&gt; [1,]  0.4  0.6
 #&gt; [2,]  0.0  1.0
-#&gt; </div><div class='input'><span class='fu'>as_tpmatrix</span>(<span class='fu'>as_array3</span>(<span class='no'>pmat</span>))</div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
+#&gt; </div><div class='input'><span class='fu'>as_tbl2</span>(<span class='fu'>as_array3</span>(<span class='no'>pmat</span>))</div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
 #&gt; 1:   0.3   0.7     0     1
 #&gt; 2:   0.4   0.6     0     1</div></pre>
   </div>

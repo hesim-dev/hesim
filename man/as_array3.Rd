@@ -2,22 +2,22 @@
 % Please edit documentation in R/tpmatrix.R
 \name{as_array3}
 \alias{as_array3}
-\alias{as_tpmatrix}
+\alias{as_tbl2}
 \title{Convert between 2D tabular objects and 3D arrays}
 \usage{
 as_array3(x)
 
-as_tpmatrix(x)
+as_tbl2(x, output = c("data.table", "data.frame", "matrix", "tpmatrix"))
 }
 \arguments{
 \item{x}{For \code{as_array3()} a 2-dimensional tabular object where each row stores a flattened
 square matrix ordered rowwise. Reasonable classes are \code{matrix}, \code{data.frame},
-\code{data.table}, and \code{tpmatrix}. For \code{as_tpmatrix()} a 3-dimensional array
+\code{data.table}, and \code{tpmatrix}. For \code{as_tbl2()} a 3-dimensional array
 where each slice is a square matrix.}
 }
 \value{
 For \code{as_array3()} a 3-dimensional array of square matrices;
-for \code{as_tpmatrix()} a \link{tpmatrix} object.
+for \code{as_tbl2()} a 2-dimensional tabular object as specified by \code{output}.
 }
 \description{
 Convert a 2-dimensional tabular object where each row stores a flattened
@@ -35,7 +35,7 @@ pmat
 
 as_array3(pmat)
 as_array3(as.matrix(pmat))
-as_tpmatrix(as_array3(pmat))
+as_tbl2(as_array3(pmat))
 }
 \seealso{
 \link{tpmatrix}

@@ -9,7 +9,7 @@
 #' @return A `data.table` with one row for each transition probability matrix.
 #' @export
 as.data.table.tparams_transprobs <- function(x){
-  probs <- as_tpmatrix(x$value)
+  probs <- as_tbl2(x$value)
   colnames(probs) <- paste0("prob_", 1:ncol(probs)) 
   id_dt <- as.data.table(x[c("sample", "strategy_id", "patient_id")])
   time_dt <- x$time_intervals[match(x$time_id, x$time_intervals$time_id)]
