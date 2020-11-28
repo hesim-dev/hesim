@@ -7,9 +7,6 @@ arma::rowvec apply_complement(arma::rowvec x, const int complement) {
   for (int i = 0; i < x.size(); ++i) {
     if (i != complement) rowsums += x[i];
   }
-  if (rowsums > 1) {
-    Rcpp::stop("Transition probabilities cannot be negative.");
-  } 
   x(complement) = 1 - rowsums;
   return x;
 }
