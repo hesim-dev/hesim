@@ -160,3 +160,31 @@
 #' \item{se}{Standard error of utility.}
 #' }
 "multinom3_exdata"
+
+
+#' Multi-state oncology data for 3-state model
+#'
+#' Simulated 3-state dataset in oncology with three health states
+#' (Stable, Progression, and Death) and three possible transitions (Stable ->
+#' Progression, Stable -> Death, and Progression -> Death). 
+#'
+#' @format 
+#' A `data.table` with the following columns:
+#' \describe{
+#' \item{from}{Health state making a transition from.}
+#' \item{to}{Health state making a transition to.}
+#' \item{female}{1 if a patient is female; 0 if male.}
+#' \item{age}{Patient age (in years).}
+#' \item{patient_id}{Patient identification number.}
+#' \item{time_start}{Starting time.}
+#' \item{time_stop}{Stopping time.}
+#' \item{time}{Elapsed years between `time_start` and `time_stop`.}
+#' \item{status}{Status indicator: 1=transition, 0=censored.}
+#' \item{transition_id}{Integer denoting transition: 1 = Stable -> Progression,
+#' 2 = Stable -> Death, 3 = Progression -> Death.}
+#' \item{strategy_name}{Standard of care (SOC) or new treatment (New).}
+#' }
+#' 
+#' @examples 
+#' head(onc3)
+"onc3"
