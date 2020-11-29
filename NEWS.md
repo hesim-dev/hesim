@@ -1,3 +1,26 @@
+## hesim 0.4.1.9999
+### New features
+* There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in `tparams_transprobs()` objects and used for simulation of discrete time state transition models. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., `data.table`, `data.frame`, `matrix`, `tpmatrix`).
+
+    + `as_array3()` and `as_tbl2()` lets users convert 2-dimensional tabular objects where each row stores a flattened square matrix to a 3-dimensional array of square matrices and vice versa.
+    
+    + `qmatrix()` lets you store transition intensity matrices which can be used to construct transition probability matrices with the matrix exponential via `expmat()`. The latter is a simple wrapper around `msm::MatrixExp()` that computes the matrix exponential for all matrices in an array rather than just a single matrix.
+    
+    + `apply_rr()` applies relative risks (stored in a 2-dimensional tabular object) to (potentially multiple elements) of transition probability matrices stored in an array. This function is vectorized so it can be performed very quickly even for large arrays.
+    
+    + `as.data.table.tparams_transprobs()` converts the array of transition probability matrices stored in a `tparams_transprobs` object into a `data.table` which can be helpful for debugging to ensure that the right transition probability matrices correspond to the right observations (i.e., treatment strategies, patients, etc.).
+    
+    + The `tpmatrix` element of `define_tparams()` can now be a 3-dimensional array in addition to the output of `tpmatrix()` to increase flexibility for the user.
+    
+* A new dataset `hesim::onc3` was added as an example multi-state dataset for an oncology use case with 3 health states (Stable, Progression, Death) and 3 possible transitions (Stable -> Progression, Stable -> Death, and Progression -> Death). This is similar to `hesim::mstate3_exdata` but does not allow for reversible transitions and does not contain cost or utility data.
+
+* The function `as_pfs_os()` can convert a multi-state dataset in the same format as `hesim::onc3` into a dataset with one row per patients containing time to event information for progression free survival (PFS) and overall survival (OS).
+
+### Bug fixes
+* The `cycle_length` field in `CohortDtstmTrans` was fixed so that it corresponds to a model cycle in terms of years (e.g., a value of 2 means a model cycle is 2 years long and that state probabilities are computed every 2 years with `$sim_stateprobs()`).
+
+* The simulated dataset `multinom3_exdata` was fixed by removing a bug where some patients were simulated to have died more than once. 
+
 ## hesim 0.4.1
 Minor updates to the documentation and fixes to small problems in the `C++` code identified with the CRAN package checks.
 
