@@ -1,3 +1,4 @@
+# 4-state partitioned survival model -------------------------------------------
 #'  Example data for a 4-state partitioned survival model
 #'
 #' A collection of example datasets containing simulated survival, costs, and utility data for a 4-state
@@ -43,7 +44,8 @@
 #'  }
 "psm4_exdata"
 
-#' Example data for a 3-state multi-state model
+# 3-state reversible multi-state model -----------------------------------------
+#' Example data for a reversible 3-state multi-state model
 #'
 #' Example multi-state data for parameterizing a continuous time state
 #' transition model. Costs and utility 
@@ -100,6 +102,7 @@
 #' 
 "mstate3_exdata"
 
+# 3-state multinomial model ----------------------------------------------------
 #' Example data for a 3-state multinomial model
 #'
 #' Example discrete time health state transitions data simulated using 
@@ -161,7 +164,7 @@
 #' }
 "multinom3_exdata"
 
-
+# 3-state oncology model -------------------------------------------------------
 #' Multi-state oncology data for 3-state model
 #'
 #' Simulated 3-state dataset in oncology with three health states
@@ -188,3 +191,93 @@
 #' @examples 
 #' head(onc3)
 "onc3"
+
+#' Convert multi-state data to PFS and OS data
+#' 
+#' Convert a multi-state dataset with irreversible transitions containing 3 health 
+#' states to a dataset with one row per patient and progression-free survival (PFS)
+#' and overall survival (OS) time-to-event outcomes. 
+#' 
+#' @param data A multi-state dataset.
+#' @param patient_vars Character vector of the names of patient specific variables.
+#' @param transition Character string with the name of the variable identifying
+#' a transition. The transition variable should be integer valued with values
+#' 1, 2, and 3 for the Stable -> Progression, Stable -> Death, and 
+#' Progression -> Death transitions, respectively. 
+#' @param status Character string with the name of the status variable (1 = event,
+#' 0 = censored).
+#' @param time_stop Character string with the name of the stopping time variable
+#' (i.e., time patient transitions from state \eqn{r} to state \eqn{s}).
+#' 
+#' @examples 
+#' as_pfs_os(onc3, patient_vars = c("patient_id", "female", "age")) 
+#' 
+#' @return A `data.table` with one row per patient containing each variable in 
+#' `patient_vars`  as well as a time variable and status indicator for both 
+#' PFS (`pfs_status`, `pfs_time`) and OS (`os_time`, `os_status`). 
+#' @export
+as_pfs_os <- function(data, patient_vars, status = "status", time_stop = "time_stop",
+                      transition = "transition_id") {
+  data <- as.data.table(data)
+  
+  # Checks for possible transitions
+  unique_transvar <- unique(data[[transition]])
+  if (!all(unique_transvar %in%  c(1L, 2L, 3L))) {
+    stop(paste0("'", transition, "'", " should be a vector with unique values c(1, 2, 3)."))
+  }
+  min_transvar_msg <- 
+  if (length(unique_transvar) == 2) {
+    if (!isTRUE(all.equal(unique_transvar, c(1L, 2L)))) {
+      stop(paste0("If '", transition, "'", " contains 2 values, they should be 1 and 2."))
+    }
+  }
+  if (length(unique_transvar) == 1) {
+    stop(paste0("'", transition, "'", " should contain at a minimum values 1 and 2."))
+  }
+
+  # Cast wide
+  f <- as.formula(
+    paste0(paste(patient_vars, collapse=" + "),
+          "~", 
+          transition)
+  )
+  data <- dcast(data, 
+                formula = f,
+                value.var = c(status, time_stop))
+  
+  # Helper functions so with strings passed as data.table columns
+  timev <- function(i) paste0(time_stop, "_", i)
+  gtimev <- function(i) data[[timev(i)]]
+  statusv <- function(i) paste0(status, "_", i)
+  gstatusv <- function(i) data[[statusv(i)]]
+  
+  # Compute PFS endpoint
+  set(data, j = "pfs_time", 
+      value = pmin(data[[timev(1)]], data[[timev(2)]]))
+  set(data, j = "pfs_status", 
+      value = pmax(data[[statusv(1)]], data[[statusv(2)]]))
+
+  # Works even if no one progresses
+  if (is.null(gstatusv(3))) data[, (statusv(3)) := NA]
+  if (is.null(gtimev(3))) data[, (timev(3)) := NA]
+  
+  # Compute OS endpoint
+  data[, os_status := fcase(
+    gstatusv(2) == 1 | gstatusv(3) == 1, 1L,
+    gstatusv(2) == 0 & gstatusv(3) == 0, 0L,
+    gstatusv(2) == 0 & is.na(gstatusv(3)), 0L
+    )
+  ]
+  
+  data[, os_time := fcase(
+    gstatusv(2) == 1, gtimev(2), # Observed death 1 -> 3
+    gstatusv(2) == 0 & is.na(gstatusv(3)), gtimev(2), # Right censored 1 -> 3
+    gstatusv(2) == 0 & gstatusv(3) == 1, gtimev(3), # Observed death 2 -> 3
+    gstatusv(2) == 0 & gstatusv(3) == 0,  gtimev(3) # Right censored 2 -> 3
+    )
+  ]
+  
+  # Clean and return
+  data[, c(statusv(1:3), timev(1:3)) := NULL]
+  return(data[, ])
+} 

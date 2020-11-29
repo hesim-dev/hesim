@@ -99,6 +99,7 @@ reference:
     - multinom3_exdata
     - psm4_exdata
     - onc3
+    - as_pfs_os
     
 articles:
 - title: "Using hesim"

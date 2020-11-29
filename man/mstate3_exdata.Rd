@@ -3,7 +3,7 @@
 \docType{data}
 \name{mstate3_exdata}
 \alias{mstate3_exdata}
-\title{Example data for a 3-state multi-state model}
+\title{Example data for a reversible 3-state multi-state model}
 \format{
 A list containing the following elements:
 \itemize{
