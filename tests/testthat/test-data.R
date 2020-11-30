@@ -61,7 +61,10 @@ test_that("as_pfs_os() returns correct output given stable -> death is right cen
 })
 
 test_that("as_pfs_os() returns correct number of rows" , {
-  expect_equal(nrow(onc3_pfs_os), length(unique(onc3$patient_id)))
+  expect_equal(
+    nrow(msdata_pfs_os), 
+    length(unique(msdata$patient_id))
+  )
 })
 
 test_that("as_pfs_os() returns error with wrong transition variable" , {

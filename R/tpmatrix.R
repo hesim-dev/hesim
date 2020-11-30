@@ -10,6 +10,8 @@
 #' square matrix ordered rowwise. Reasonable classes are `matrix`, `data.frame`,
 #' `data.table`, and `tpmatrix`. For `as_tbl2()` a 3-dimensional array 
 #' where each slice is a square matrix.
+#' @param output The class of the object returned by the function. Either 
+#' a `data.table`, `data.frame`, `matrix`, or [`tpmatrix`].
 #' 
 #'
 #' @examples 
@@ -26,7 +28,7 @@
 #' @return For `as_array3()` a 3-dimensional array of square matrices; 
 #' for `as_tbl2()` a 2-dimensional tabular object as specified by `output`.
 #' 
-#' @seealso [tpmatrix]
+#' @seealso [`tpmatrix`]
 #' @export
 as_array3 <- function(x) {
   if (length(dim(x)) != 2) stop("'x' must be a 2-dimensional object.")

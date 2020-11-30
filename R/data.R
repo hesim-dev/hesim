@@ -236,7 +236,7 @@ as_pfs_os <- function(data, patient_vars, status = "status", time_stop = "time_s
   }
 
   # Cast wide
-  f <- as.formula(
+  f <- stats::as.formula(
     paste0(paste(patient_vars, collapse=" + "),
           "~", 
           transition)
@@ -262,14 +262,14 @@ as_pfs_os <- function(data, patient_vars, status = "status", time_stop = "time_s
   if (is.null(gtimev(3))) data[, (timev(3)) := NA]
   
   # Compute OS endpoint
-  data[, os_status := fcase(
+  data[, ("os_status") := fcase(
     gstatusv(2) == 1 | gstatusv(3) == 1, 1L,
     gstatusv(2) == 0 & gstatusv(3) == 0, 0L,
     gstatusv(2) == 0 & is.na(gstatusv(3)), 0L
     )
   ]
   
-  data[, os_time := fcase(
+  data[, ("os_time") := fcase(
     gstatusv(2) == 1, gtimev(2), # Observed death 1 -> 3
     gstatusv(2) == 0 & is.na(gstatusv(3)), gtimev(2), # Right censored 1 -> 3
     gstatusv(2) == 0 & gstatusv(3) == 1, gtimev(3), # Observed death 2 -> 3

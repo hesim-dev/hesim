@@ -14,6 +14,9 @@ as_tbl2(x, output = c("data.table", "data.frame", "matrix", "tpmatrix"))
 square matrix ordered rowwise. Reasonable classes are \code{matrix}, \code{data.frame},
 \code{data.table}, and \code{tpmatrix}. For \code{as_tbl2()} a 3-dimensional array
 where each slice is a square matrix.}
+
+\item{output}{The class of the object returned by the function. Either
+a \code{data.table}, \code{data.frame}, \code{matrix}, or \code{\link{tpmatrix}}.}
 }
 \value{
 For \code{as_array3()} a 3-dimensional array of square matrices;
@@ -38,5 +41,5 @@ as_array3(as.matrix(pmat))
 as_tbl2(as_array3(pmat))
 }
 \seealso{
-\link{tpmatrix}
+\code{\link{tpmatrix}}
 }
