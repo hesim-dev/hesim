@@ -12,6 +12,8 @@
     
     + The `tpmatrix` element of `define_tparams()` can now be a 3-dimensional array in addition to the output of `tpmatrix()` to increase flexibility for the user.
     
+* 2-dimensional tabular objects (in addition to vectors) can now be passed to `...` with `tpmatrix()`. See the new examples. 
+    
 * A new dataset `hesim::onc3` was added as an example multi-state dataset for an oncology use case with 3 health states (Stable, Progression, Death) and 3 possible transitions (Stable -> Progression, Stable -> Death, and Progression -> Death). This is similar to `hesim::mstate3_exdata` but does not allow for reversible transitions and does not contain cost or utility data.
 
 * The function `as_pfs_os()` can convert a multi-state dataset in the same format as `hesim::onc3` into a dataset with one row per patients containing time to event information for progression free survival (PFS) and overall survival (OS).

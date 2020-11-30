@@ -187,6 +187,7 @@
 <li><p>The <code>tpmatrix</code> element of <code><a href="../reference/define_tparams.html">define_tparams()</a></code> can now be a 3-dimensional array in addition to the output of <code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> to increase flexibility for the user.</p></li>
 </ul>
 </li>
+<li><p>2-dimensional tabular objects (in addition to vectors) can now be passed to <code>...</code> with <code><a href="../reference/tpmatrix.html">tpmatrix()</a></code>. See the new examples.</p></li>
 <li><p>A new dataset <code><a href="../reference/onc3.html">hesim::onc3</a></code> was added as an example multi-state dataset for an oncology use case with 3 health states (Stable, Progression, Death) and 3 possible transitions (Stable -&gt; Progression, Stable -&gt; Death, and Progression -&gt; Death). This is similar to <code><a href="../reference/mstate3_exdata.html">hesim::mstate3_exdata</a></code> but does not allow for reversible transitions and does not contain cost or utility data.</p></li>
 <li><p>The function <code><a href="../reference/as_pfs_os.html">as_pfs_os()</a></code> can convert a multi-state dataset in the same format as <code><a href="../reference/onc3.html">hesim::onc3</a></code> into a dataset with one row per patients containing time to event information for progression free survival (PFS) and overall survival (OS).</p></li>
 </ul>
