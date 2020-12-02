@@ -552,7 +552,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     
     sim_ev = function(stateval_list, dr, stateval_type = c("costs", "qalys"),
                       sim_type, by_patient = FALSE, max_t = Inf,
-                      lys = TRUE){
+                      lys = FALSE){
      
       stateval_type <- match.arg(stateval_type)
       if(is.null(self$disprog_)){
