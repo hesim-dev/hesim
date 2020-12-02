@@ -39,6 +39,6 @@ states to a dataset with one row per patient and progression-free survival (PFS)
 and overall survival (OS) time-to-event outcomes.
 }
 \examples{
-as_pfs_os(onc3, patient_vars = c("patient_id", "female", "age")) 
+as_pfs_os(onc3, patient_vars = c("patient_id", "strategy_name", "female", "age")) 
 
 }

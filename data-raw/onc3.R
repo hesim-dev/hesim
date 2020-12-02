@@ -2,19 +2,23 @@
 rm(list = ls())
 
 # Simulate multi-state dataset -------------------------------------------------
-sim_onc3_data <- function(n = 2000, seed = NULL){
+sim_onc3_data <- function(n = 2500, seed = NULL){
   
   if (!is.null(seed)) set.seed(seed)
   
-  # Data  
+  # Data 
+  age_mu <- 60
   data <- data.table(
     intercept = 1,
     strategy_id = 1,
+    strategy_name = sample(c("SOC", "New 1", "New 2"), n, replace = TRUE,
+                             prob = c(1/3, 1/3, 1/3)),
     patient_id = 1:n,
     female = rbinom(n, 1, .5),
-    new = rbinom(n, 1, .5),
-    age = rnorm(n, mean = 60, sd = 5.5)
+    age = rnorm(n, mean = age_mu, sd = 5.5)
   )
+  data[, `:=` (new1 = ifelse(strategy_name == "New 1", 1, 0),
+               new2 = ifelse(strategy_name == "New 2", 1, 0))]
   attr(data, "id_vars") <- c("strategy_id", "patient_id")
   
   # Transition matrix
@@ -35,15 +39,17 @@ sim_onc3_data <- function(n = 2000, seed = NULL){
     return(x)
   }
   
-  params_wei <- function(shape, mean, 
-                         beta_new = log(.6), 
-                         beta_female = log(1.4)){
+  params_wei <- function(shape, mean,
+                         beta_new1 = log(1), 
+                         beta_new2 = log(1),
+                         beta_age, beta_female){
     log_shape <- matrixv(log(shape))
     scale = get_scale(shape, mean)
-    beta_intercept <- log(scale) - beta_new
-    scale_coefs <-  matrix(c(beta_intercept, beta_new, beta_female), 
-                           ncol = 3)
-    colnames(scale_coefs) <- c("intercept", "new", "female")
+    beta_intercept <- log(scale) - mean(data$age) * beta_age
+    scale_coefs <-  matrix(c(beta_intercept, beta_new1, beta_new2, 
+                             beta_age, beta_female), 
+                           ncol = 5)
+    colnames(scale_coefs) <- c("intercept", "new1", "new2", "age", "female")
     params_surv(coefs = list(shape = log_shape,
                              scale = scale_coefs),
                 dist = "weibull")
@@ -51,14 +57,19 @@ sim_onc3_data <- function(n = 2000, seed = NULL){
   
   mstate_params <- params_surv_list(
     
-    # 1. H -> S
-    params_wei(shape = 2, mean = 1/.16),
+    # 1. S -> P
+    params_wei(shape = 2, mean = 1/.16, 
+               beta_new1 = log(.7), beta_new2 = log(.6),
+               beta_female = log(1.4), beta_age = log(1.03)),
     
-    # 2. H -> D
-    params_wei(shape = 3, mean = 10),
+    # 2. S -> D
+    params_wei(shape = 3, mean = 10,
+               beta_new1 = log(.85), beta_new2 = log(.8),
+               beta_female = log(1.2), beta_age = log(1.02)),
     
-    # 3. S -> D
-    params_wei(shape = 3.5, mean = 1/.12, beta_new = log(1))
+    # 3. P -> D
+    params_wei(shape = 3.5, mean = 1/.12, beta_new1 = log(1),
+               beta_female = log(1.3), beta_age = log(1.02))
   )
   
   # Create multi-state model
@@ -95,7 +106,7 @@ sim_onc3_data <- function(n = 2000, seed = NULL){
   sim[, added := NULL]
   
   ## Add right censoring
-  rc <- data.table(patient_id = 1:2000,
+  rc <- data.table(patient_id = 1:n,
                    time = stats::rexp(n, rate = 1/15))
   sim[, time_rc := rc[match(sim$patient_id, rc$patient_id)]$time]
   sim[, status := ifelse(time_stop < 15 & time_stop < time_rc, status, 0)]
@@ -103,10 +114,14 @@ sim_onc3_data <- function(n = 2000, seed = NULL){
   sim <- sim[time_start <= pmin(time_rc, 15)]
   
   ## Final data cleaning
-  sim[, strategy_id := ifelse(new == 0, 1, 2)]
+  sim[, strategy_id := fcase(
+    strategy_name == "SOC", 1L,
+    strategy_name == "New 1", 2L,
+    strategy_name == "New 2", 3L
+  )]
   sim[, strategy_name := factor(strategy_id, 
-                                levels = c(1, 2),
-                                labels = c("SOC", "New"))]
+                                levels = c(1, 2, 3),
+                                labels = c("SOC", "New 1", "New 2"))]
   label_states <- function (x) {
     fcase(
       x == 1, "Stable",
@@ -116,15 +131,22 @@ sim_onc3_data <- function(n = 2000, seed = NULL){
   }
   sim[, from := label_states(from)]
   sim[, to := label_states(to)]
-  sim[, new := NULL]
-  sim[, final := NULL]
-  sim[, time_rc := NULL]
+  sim[, c("new1", "new2", "final", "time_rc") := NULL]
   
   # Return
   sim[, time := time_stop - time_start]
   return(sim[, ])
 }
-onc3 <- sim_onc3_data(seed = 101)
+onc3 <- sim_onc3_data(n = 3000, seed = 102)
+
+# Check that coefficient estimates are consistent with "truth"
+fit_weibull <- function(i) {
+  flexsurvreg(Surv(time, status) ~ strategy_name + female + age,
+              data = onc3, subset = (transition_id == i), dist = "weibull")
+}
+fit_weibull(1)
+fit_weibull(2)
+fit_weibull(3)
 
 # Save
 save(onc3, file = "../data/onc3.rda", compress = "bzip2")

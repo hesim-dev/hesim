@@ -18,7 +18,8 @@ A \code{data.table} with the following columns:
 \item{status}{Status indicator: 1=transition, 0=censored.}
 \item{transition_id}{Integer denoting transition: 1 = Stable -> Progression,
 2 = Stable -> Death, 3 = Progression -> Death.}
-\item{strategy_name}{Standard of care (SOC) or new treatment (New).}
+\item{strategy_name}{Standard of care (SOC), new treatment 1 (New 1), or
+new treatment 2 (New 2).}
 }
 }
 \usage{

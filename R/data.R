@@ -185,7 +185,8 @@
 #' \item{status}{Status indicator: 1=transition, 0=censored.}
 #' \item{transition_id}{Integer denoting transition: 1 = Stable -> Progression,
 #' 2 = Stable -> Death, 3 = Progression -> Death.}
-#' \item{strategy_name}{Standard of care (SOC) or new treatment (New).}
+#' \item{strategy_name}{Standard of care (SOC), new treatment 1 (New 1), or
+#' new treatment 2 (New 2).}
 #' }
 #' 
 #' @examples 
@@ -210,7 +211,7 @@
 #' (i.e., time patient transitions from state \eqn{r} to state \eqn{s}).
 #' 
 #' @examples 
-#' as_pfs_os(onc3, patient_vars = c("patient_id", "female", "age")) 
+#' as_pfs_os(onc3, patient_vars = c("patient_id", "strategy_name", "female", "age")) 
 #' 
 #' @return A `data.table` with one row per patient containing each variable in 
 #' `patient_vars`  as well as a time variable and status indicator for both 
