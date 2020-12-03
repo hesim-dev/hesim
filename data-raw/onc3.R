@@ -31,7 +31,9 @@ sim_onc3_data <- function(n = 2500, seed = NULL){
   
   # Parameters for each transition
   get_scale <- function(shape, mean) {
-    return(mean/(gamma(1 + 1/shape)))
+    scale <- mean/(gamma(1 + 1/shape))
+    scale_ph <- scale^{-shape}
+    return(scale_ph)
   }
   
   matrixv <- function(v) {
@@ -52,23 +54,23 @@ sim_onc3_data <- function(n = 2500, seed = NULL){
     colnames(scale_coefs) <- c("intercept", "new1", "new2", "age", "female")
     params_surv(coefs = list(shape = log_shape,
                              scale = scale_coefs),
-                dist = "weibull")
+                dist = "weibullPH")
   }
   
   mstate_params <- params_surv_list(
     
     # 1. S -> P
-    params_wei(shape = 2, mean = 1/.16, 
+    params_wei(shape = 2, mean = 6.25, 
                beta_new1 = log(.7), beta_new2 = log(.6),
                beta_female = log(1.4), beta_age = log(1.03)),
     
     # 2. S -> D
-    params_wei(shape = 3, mean = 10,
-               beta_new1 = log(.85), beta_new2 = log(.8),
+    params_wei(shape = 2.5, mean = 10,
+               beta_new1 = log(.85), beta_new2 = log(.75),
                beta_female = log(1.2), beta_age = log(1.02)),
     
     # 3. P -> D
-    params_wei(shape = 3.5, mean = 1/.12, beta_new1 = log(1),
+    params_wei(shape = 3.5, mean = 8, beta_new1 = log(1),
                beta_female = log(1.3), beta_age = log(1.02))
   )
   
@@ -142,7 +144,7 @@ onc3 <- sim_onc3_data(n = 3000, seed = 102)
 # Check that coefficient estimates are consistent with "truth"
 fit_weibull <- function(i) {
   flexsurvreg(Surv(time, status) ~ strategy_name + female + age,
-              data = onc3, subset = (transition_id == i), dist = "weibull")
+              data = onc3, subset = (transition_id == i), dist = "weibullPH")
 }
 fit_weibull(1)
 fit_weibull(2)
