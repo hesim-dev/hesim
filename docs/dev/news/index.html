@@ -199,6 +199,7 @@
 <li><p>The <code>cycle_length</code> field in <code>CohortDtstmTrans</code> was fixed so that it corresponds to a model cycle in terms of years (e.g., a value of 2 means a model cycle is 2 years long and that state probabilities are computed every 2 years with <code>$sim_stateprobs()</code>).</p></li>
 <li><p>The simulated dataset <code>multinom3_exdata</code> was fixed by removing a bug where some patients were simulated to have died more than once.</p></li>
 <li><p>Fixed bug where the <code>$sim_costs()</code> method of <code>IndivCtstm</code> was erroneously returning a life-years column in addition to the costs column.</p></li>
+<li><p>Modification to creation of input matrices from a <code>flexsurvreg</code> object to properly capture levels of factor variables.</p></li>
 </ul>
 </div>
 </div>

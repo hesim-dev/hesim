@@ -25,6 +25,8 @@
 
 * Fixed bug where the `$sim_costs()` method of `IndivCtstm` was erroneously returning a life-years column in addition to the costs column.
 
+* Modification to creation of input matrices from a `flexsurvreg` object to properly capture levels of factor variables.  
+
 ## hesim 0.4.1
 Minor updates to the documentation and fixes to small problems in the `C++` code identified with the CRAN package checks.
 
