@@ -253,6 +253,28 @@ create_input_mats.lm_list <- function(object, input_data, ...){
 }
 
 create_input_mats_flexsurvreg_X <- function(object, input_data, ...){
+  
+  # Based on flexsurv:::form.model.matrix()
+  mfo <- model.frame(object)
+  
+  ## Error messages for missing variables in "input_data"
+  covnames <- attr(mfo, "covnames")
+  missing.covs <- unique(covnames[!covnames %in% names(input_data)])
+  if (length(missing.covs) > 0){
+    missing.covs <- sprintf("\"%s\"", missing.covs)
+    plural <- if (length(missing.covs)>1) "s" else ""
+    stop(sprintf("Value%s of covariate%s ",plural, plural),
+         paste(missing.covs, collapse=", "), " not supplied in \"input_data\"")
+  }
+  
+  ## as in predict.lm
+  tt <- attr(mfo, "terms")
+  Terms <- delete.response(tt)
+  mf <- model.frame(Terms, input_data, xlev = .getXlevels(tt, mfo))
+  if (!is.null(cl <- attr(Terms, "dataClasses")))
+    .checkMFClasses(cl, mf)
+  
+  ## Return one model matrix for each parameter
   pars <- object$dlist$pars
   X_list <- vector(mode = "list", length = length(pars))
   names(X_list) <- pars
@@ -263,7 +285,7 @@ create_input_mats_flexsurvreg_X <- function(object, input_data, ...){
     } else{
       form <- stats::delete.response(stats::terms(form))
     }
-    X_list[[i]] <- stats::model.matrix(form, data = input_data, ...)
+    X_list[[i]] <- stats::model.matrix(form, mf, ...)
   }
   return(X_list)
 }
