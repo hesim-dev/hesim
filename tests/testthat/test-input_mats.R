@@ -4,19 +4,29 @@ library("data.table")
 rm(list = ls())
 
 strategies_dt <- data.table(strategy_id = c(1, 2))
-patients_dt <- data.table(patient_id = seq(1, 3), 
-                          age = c(45, 47, 60),
-                          female = c(1, 0, 0),
-                          group = factor(c("Good", "Medium", "Poor")))
-states_dt <- data.frame(state_id =  seq(1, 3),
-                        state_name = factor(paste0("state", seq(1, 3))))
-trans_dt <- data.frame(transition_id = seq(1, 4),
-                       from = c(1, 1, 2, 2),
-                       to = c(2, 3, 1, 3))
-hesim_dat <- hesim_data(strategies = strategies_dt,
-                        patients = patients_dt,
-                        states = states_dt,
-                        transitions = trans_dt)
+patients_dt <- data.table(
+  patient_id = seq(1, 3), 
+  age = c(45, 47, 60),
+  female = c(1, 0, 0),
+  group = factor(c("Good", "Medium", "Poor")),
+  ecog = c("Asymptomatic", "Symptomatic (ambulatory)",
+           "In bed <50%")
+)
+states_dt <- data.frame(
+  state_id =  seq(1, 3),
+  state_name = factor(paste0("state", seq(1, 3)))
+)
+trans_dt <- data.frame(
+  transition_id = seq(1, 4),
+  from = c(1, 1, 2, 2),
+  to = c(2, 3, 1, 3)
+)
+hesim_dat <- hesim_data(
+  strategies = strategies_dt,
+  patients = patients_dt,
+  states = states_dt,
+  transitions = trans_dt
+)
 
 # input_mats class -------------------------------------------------------------
 # By treatment strategy and patient
@@ -105,8 +115,27 @@ test_that("create_input_mats.params_lm", {
 })
 
 # create_input_mats with flexsurvreg or params_surv objects --------------------
-test_that("create_input_mats.flexsurv", {
-  dat <- expand(hesim_dat)
+dat <- expand(hesim_dat)
+
+test_that("input_mats.flexsurvreg returns the correct columns", {
+  lung <- data.table(survival::lung)
+  lung[, status := ifelse(status == 2, 0, 1)]
+  lung[, ecog := factor(
+    ph.ecog, levels = 0:3,
+    labels = c("Asymptomatic", "Symptomatic (ambulatory)",
+               "In bed <50%", "In bed > 50% of the day")
+  )]
+  fit <- flexsurv::flexsurvreg(Surv(time, status) ~ poly(age, 2) + factor(ecog), 
+                               data = lung,
+                               dist = "weibull") 
+  params <- create_params(fit)
+  terms <- colnames(params$coefs$scale)
+  input_mats <- create_input_mats(fit, dat)
+  expect_equal(colnames(input_mats$X$scale)[-1], terms[-1])
+})
+
+test_that(paste0("create_input_mats.flexsurvreg works with regression ",
+                  "coefficients on ancillary parameters"), {
   fit <- flexsurv::flexsurvreg(Surv(recyrs, censrec) ~ group, data = bc,
                               anc = list(sigma = ~ group), 
                               dist = "gengamma") 
@@ -128,7 +157,6 @@ fit1_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1,
 fit1_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                                   data = ovarian, dist = "exp")
 flexsurvreg_list1 <- flexsurvreg_list(wei = fit1_wei, exp = fit1_exp)
-dat <- expand(hesim_dat)
 
 test_that("create_input_mats.flexsurv_list", {
   input_mats <- create_input_mats(flexsurvreg_list1, dat)  
