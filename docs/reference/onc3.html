@@ -188,17 +188,18 @@ Progression, Stable -&gt; Death, and Progression -&gt; Death).</p>
     <p>A <code>data.table</code> with the following columns:</p><dl'>
 <dt>from</dt><dd><p>Health state making a transition from.</p></dd>
 <dt>to</dt><dd><p>Health state making a transition to.</p></dd>
+<dt>strategy_name</dt><dd><p>Standard of care (SOC), new treatment 1 (New 1), or
+new treatment 2 (New 2).</p></dd>
 <dt>female</dt><dd><p>1 if a patient is female; 0 if male.</p></dd>
 <dt>age</dt><dd><p>Patient age (in years).</p></dd>
 <dt>patient_id</dt><dd><p>Patient identification number.</p></dd>
 <dt>time_start</dt><dd><p>Starting time.</p></dd>
 <dt>time_stop</dt><dd><p>Stopping time.</p></dd>
-<dt>time</dt><dd><p>Elapsed years between <code>time_start</code> and <code>time_stop</code>.</p></dd>
 <dt>status</dt><dd><p>Status indicator: 1=transition, 0=censored.</p></dd>
 <dt>transition_id</dt><dd><p>Integer denoting transition: 1 = Stable -&gt; Progression,
 2 = Stable -&gt; Death, 3 = Progression -&gt; Death.</p></dd>
-<dt>strategy_name</dt><dd><p>Standard of care (SOC), new treatment 1 (New 1), or
-new treatment 2 (New 2).</p></dd>
+<dt>strategy_id</dt><dd><p>Strategy identification number.</p></dd>
+<dt>time</dt><dd><p>Elapsed years between <code>time_start</code> and <code>time_stop</code>.</p></dd>
 
 </dl>
 

@@ -176,17 +176,18 @@
 #' \describe{
 #' \item{from}{Health state making a transition from.}
 #' \item{to}{Health state making a transition to.}
+#' \item{strategy_name}{Standard of care (SOC), new treatment 1 (New 1), or
+#' new treatment 2 (New 2).}
 #' \item{female}{1 if a patient is female; 0 if male.}
 #' \item{age}{Patient age (in years).}
 #' \item{patient_id}{Patient identification number.}
 #' \item{time_start}{Starting time.}
 #' \item{time_stop}{Stopping time.}
-#' \item{time}{Elapsed years between `time_start` and `time_stop`.}
 #' \item{status}{Status indicator: 1=transition, 0=censored.}
 #' \item{transition_id}{Integer denoting transition: 1 = Stable -> Progression,
 #' 2 = Stable -> Death, 3 = Progression -> Death.}
-#' \item{strategy_name}{Standard of care (SOC), new treatment 1 (New 1), or
-#' new treatment 2 (New 2).}
+#' \item{strategy_id}{Strategy identification number.}
+#' \item{time}{Elapsed years between `time_start` and `time_stop`.}
 #' }
 #' 
 #' @examples 
