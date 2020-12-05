@@ -31,6 +31,18 @@
     <loc>https://hesim-dev.github.io/hesim/reference/absorbing.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/apply_rr.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/as.data.table.tparams_transprobs.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/as_array3.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/as_pfs_os.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/bootstrap.html</loc>
   </url>
   <url>
@@ -97,6 +109,9 @@
     <loc>https://hesim-dev.github.io/hesim/reference/expand.hesim_data.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/expmat.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/fast_rgengamma.html</loc>
   </url>
   <url>
@@ -151,6 +166,9 @@
     <loc>https://hesim-dev.github.io/hesim/reference/multinom_list.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/onc3.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/params.html</loc>
   </url>
   <url>
@@ -185,6 +203,9 @@
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/qalys.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/qmatrix.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/rcat.html</loc>

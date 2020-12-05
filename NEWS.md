@@ -1,6 +1,6 @@
-## hesim 0.4.1.9999
+## hesim 0.4.2
 ### New features
-* There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in `tparams_transprobs()` objects and used for simulation of discrete time state transition models. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., `data.table`, `data.frame`, `matrix`, `tpmatrix`).
+* There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in `tparams_transprobs()` objects and used for simulation of discrete time state transition models. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., `data.table`, `data.frame`, `matrix`).
 
     + `as_array3()` and `as_tbl2()` lets users convert 2-dimensional tabular objects where each row stores a flattened square matrix to a 3-dimensional array of square matrices and vice versa.
     

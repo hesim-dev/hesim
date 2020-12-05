@@ -101,7 +101,7 @@ and output for a cost-effectiveness acceptability curve.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -334,8 +334,8 @@ incremental net monetary benefits for the range of specified willingness to pay 
 <span class='co'># in each group with a willingness to pay of 20,000</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"data.table"</span>)
 <span class='no'>cea</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp best prob
-#&gt; 1: 20000 Strategy 1 Group 1    1 0.59
-#&gt; 2: 20000 Strategy 2 Group 1    0 0.41
+#&gt; 1: 20000 Strategy 1 Group 1    1 0.58
+#&gt; 2: 20000 Strategy 2 Group 1    0 0.42
 #&gt; 3: 20000 Strategy 1 Group 2    1 0.54
 #&gt; 4: 20000 Strategy 2 Group 2    0 0.46</div><div class='input'>
 <span class='co'># cea_pw</span>
@@ -344,25 +344,25 @@ incremental net monetary benefits for the range of specified willingness to pay 
                      <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>cea_pw</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>cea_pw</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k   strategy     grp prob
-#&gt; 1: 20000 Strategy 2 Group 1 0.41
+#&gt; 1: 20000 Strategy 2 Group 1 0.42
 #&gt; 2: 20000 Strategy 2 Group 2 0.46
-#&gt; 3: 20500 Strategy 2 Group 1 0.47
+#&gt; 3: 20500 Strategy 2 Group 1 0.48
 #&gt; 4: 20500 Strategy 2 Group 2 0.51
-#&gt; 5: 21000 Strategy 2 Group 1 0.54
+#&gt; 5: 21000 Strategy 2 Group 1 0.55
 #&gt; 6: 21000 Strategy 2 Group 2 0.55</div><div class='input'><span class='fu'><a href='icer_tbl.html'>icer_tbl</a></span>(<span class='no'>cea_pw</span>)</div><div class='output co'>#&gt; $`Group 1`
 #&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "2.88 (1.79, 3.93)"       
-#&gt; Incremental costs "-"        "59,450 (50,462, 70,281)" 
-#&gt; Incremental NMB   "-"        "84,522 (34,401, 140,962)"
-#&gt; ICER              "-"        "20,646"                  
+#&gt; Incremental QALYs "-"        "2.90 (1.79, 4.09)"       
+#&gt; Incremental costs "-"        "59,337 (50,462, 70,281)" 
+#&gt; Incremental NMB   "-"        "85,783 (34,401, 152,297)"
+#&gt; ICER              "-"        "20,444"                  
 #&gt; Conclusion        "-"        "Cost-effective"          
 #&gt; 
 #&gt; $`Group 2`
 #&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "2.98 (2.10, 4.15)"       
-#&gt; Incremental costs "-"        "60,073 (50,337, 70,778)" 
-#&gt; Incremental NMB   "-"        "89,035 (41,109, 145,569)"
-#&gt; ICER              "-"        "20,144"                  
+#&gt; Incremental QALYs "-"        "2.97 (2.10, 4.07)"       
+#&gt; Incremental costs "-"        "60,161 (50,337, 70,778)" 
+#&gt; Incremental NMB   "-"        "88,560 (41,109, 144,343)"
+#&gt; ICER              "-"        "20,226"                  
 #&gt; Conclusion        "-"        "Cost-effective"          
 #&gt; </div></pre>
   </div>

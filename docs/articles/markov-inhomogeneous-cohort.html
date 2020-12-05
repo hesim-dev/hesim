@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -124,7 +124,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 class="date">2020-10-10</h4>
+            <h4 class="date">2020-12-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-cohort.Rmd"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
@@ -550,38 +550,38 @@ S(t) = \exp(-\lambda t^\gamma) \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.66214
-## 2:           2      2 14.70751</code></pre>
+## 1:           1      2 14.66963
+## 2:           2      2 14.71460</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 514.4698
-## 2:           2      2 613.0405</code></pre>
+## 1:           1      2 514.0744
+## 2:           2      2 612.4745</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"data.table"</span>)</pre></body></html></div>
-<pre><code>##     strategy_id grp_id            iqalys          icosts                  inmb
-##  1:           2      1 0.07 (0.03, 0.13)   65 (-44, 141)  3,602 (1,350, 6,564)
-##  2:           2      2 0.05 (0.02, 0.08)    99 (17, 153)    2,170 (769, 4,126)
-##  3:           2      3 0.03 (0.01, 0.05)   125 (66, 163)    1,230 (381, 2,446)
-##  4:           2      4 0.02 (0.01, 0.03)  145 (104, 171)      637 (145, 1,342)
-##  5:           2      5 0.01 (0.00, 0.02)  159 (132, 176)          281 (3, 692)
-##  6:           2      6 0.12 (0.04, 0.22) -34 (-237, 101) 5,900 (2,167, 10,903)
-##  7:           2      7 0.07 (0.03, 0.13)  30 (-118, 125)  3,535 (1,296, 6,624)
-##  8:           2      8 0.04 (0.02, 0.08)   79 (-26, 144)    2,013 (703, 3,836)
-##  9:           2      9 0.02 (0.01, 0.04)   115 (45, 159)    1,077 (332, 2,156)
-## 10:           2     10 0.01 (0.01, 0.03)   140 (96, 169)      526 (103, 1,149)
+<pre><code>##     strategy_id grp_id            iqalys         icosts                  inmb
+##  1:           2      1 0.07 (0.03, 0.13)  65 (-38, 133)  3,570 (1,248, 6,733)
+##  2:           2      2 0.04 (0.02, 0.08)   98 (21, 148)    2,150 (725, 4,151)
+##  3:           2      3 0.03 (0.01, 0.05)  125 (69, 160)    1,218 (367, 2,446)
+##  4:           2      4 0.02 (0.01, 0.03) 145 (105, 169)      630 (143, 1,362)
+##  5:           2      5 0.01 (0.00, 0.02) 159 (131, 175)          277 (4, 681)
+##  6:           2      6 0.12 (0.04, 0.21) -35 (-246, 99) 5,862 (2,057, 10,741)
+##  7:           2      7 0.07 (0.03, 0.13) 29 (-129, 124)  3,511 (1,239, 6,500)
+##  8:           2      8 0.04 (0.02, 0.08)  78 (-37, 144)    1,999 (671, 3,861)
+##  9:           2      9 0.02 (0.01, 0.04)  114 (33, 159)    1,069 (322, 2,147)
+## 10:           2     10 0.01 (0.01, 0.02)  140 (85, 168)      521 (107, 1,125)
 ##          icer     conclusion
-##  1:       884 Cost-effective
-##  2:     2,172 Cost-effective
-##  3:     4,608 Cost-effective
-##  4:     9,259 Cost-effective
-##  5:    18,061 Cost-effective
+##  1:       890 Cost-effective
+##  2:     2,188 Cost-effective
+##  3:     4,642 Cost-effective
+##  4:     9,330 Cost-effective
+##  5:    18,203 Cost-effective
 ##  6: Dominates Cost-effective
-##  7:       418 Cost-effective
-##  8:     1,888 Cost-effective
-##  9:     4,813 Cost-effective
-## 10:    10,520 Cost-effective</code></pre>
+##  7:       409 Cost-effective
+##  8:     1,884 Cost-effective
+##  9:     4,823 Cost-effective
+## 10:    10,563 Cost-effective</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -593,9 +593,9 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                   
 ## Incremental QALYs "-" "0.03 (0.01, 0.05)" 
-## Incremental costs "-" "117 (50, 159)"     
-## Incremental NMB   "-" "1,358 (452, 2,620)"
-## ICER              "-" "3,951"             
+## Incremental costs "-" "116 (49, 157)"     
+## Incremental NMB   "-" "1,346 (429, 2,640)"
+## ICER              "-" "3,971"             
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
 </div>
@@ -752,12 +752,12 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
   <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,   <span class="fl">0</span>, <span class="fl">1</span>
 )
 <span class="no">tpmat</span>[<span class="fl">1</span>, ]</pre></body></html></div>
-<pre><code>##    s1_s1     s1_s2 s1_s3 s1_s4       s1_s5 s2_s1     s2_s2        s2_s3 s2_s4
-## 1:     0 0.9912752     0     0 0.008724778     0 0.9928224 0.0004776026     0
+<pre><code>##    s1_s1     s1_s2 s1_s3 s1_s4      s1_s5 s2_s1     s2_s2        s2_s3 s2_s4
+## 1:     0 0.9742256     0     0 0.02577443     0 0.9927191 0.0005808788     0
 ##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4      s3_s5 s4_s1 s4_s2      s4_s3
-## 1: 0.0067     0     0     0 0.9845752 0.01542478     0     0 0.05406099
-##       s4_s4  s4_s5 s5_s1 s5_s2 s5_s3 s5_s4 s5_s5
-## 1: 0.939239 0.0067     0     0     0     0     1</code></pre>
+## 1: 0.0067     0     0     0 0.9675256 0.03247443     0     0 0.03402182
+##        s4_s4  s4_s5 s5_s1 s5_s2 s5_s3 s5_s4 s5_s5
+## 1: 0.9592782 0.0067     0     0     0     0     1</code></pre>
 <p>Finally, we combine the ID variables and the transition probability matrices into a single object.</p>
 <div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">tparams_transprobs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tparams_transprobs.html">tparams_transprobs</a></span>(<span class="no">tpmat</span>, <span class="no">tpmat_id</span>)</pre></body></html></div>
 </div>
@@ -776,15 +776,15 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
               <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.65867
-## 2:           2      2 14.70414</code></pre>
+## 1:           1      2 14.67289
+## 2:           2      2 14.71749</code></pre>
 <div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">grp_id</span> <span class="kw">==</span> <span class="fl">2</span> <span class="kw">&amp;</span> <span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 514.4826
-## 2:           2      2 612.4438</code></pre>
-<p>However, time to construct the transition model was 3.1 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
+## 1:           1      2 513.1631
+## 2:           2      2 612.4509</code></pre>
+<p>However, time to construct the transition model was 3 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
 <div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(
   <span class="kw">Method</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"define_model()"</span>, <span class="st">"Custom tpmatrix()"</span>),
   <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span>(
@@ -815,13 +815,13 @@ elapsed
 define_model()
 </td>
 <td style="text-align:right;">
-3.801
+3.918
 </td>
 <td style="text-align:right;">
-0.750
+0.746
 </td>
 <td style="text-align:right;">
-4.595
+4.682
 </td>
 </tr>
 <tr>
@@ -829,13 +829,13 @@ define_model()
 Custom tpmatrix()
 </td>
 <td style="text-align:right;">
-1.080
+1.137
 </td>
 <td style="text-align:right;">
-0.397
+0.420
 </td>
 <td style="text-align:right;">
-1.482
+1.573
 </td>
 </tr>
 </tbody>

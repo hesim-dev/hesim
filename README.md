@@ -19,11 +19,12 @@ Features of the current version can be summarized as follows:
 * Simulation code written in `C++` to boost performance
 
 ## Installation
+You can install the current release from CRAN or the most up to date [development version](https://hesim-dev.github.io/hesim/dev/) from GitHub. 
 ```r
 # Install from CRAN:
 install.packages("hesim")
 
-# Install the most up to date development version from GitHub:
+# Install the development version from GitHub:
 # install.packages("devtools")
 devtools::install_github("hesim-dev/hesim")
 ```

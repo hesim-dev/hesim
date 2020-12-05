@@ -94,7 +94,7 @@ for simulating health state transitions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -172,7 +172,7 @@ for simulating health state transitions." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Transition probability matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/model_def.R'><code>R/model_def.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/tpmatrix.R'><code>R/tpmatrix.R</code></a></small>
     <div class="hidden name"><code>tpmatrix.Rd</code></div>
     </div>
 
@@ -191,8 +191,9 @@ for simulating health state transitions.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>Named values of expressions defining elements of the matrix. See
-"Details" and the example below.</p></td>
+      <td><p>Named values of expressions defining elements of the matrix. Each
+element of <code>...</code> should either be a vector or a 2-dimensional tabular object
+such as a data frame. See "Details" and the examples below.</p></td>
     </tr>
     </table>
 
@@ -203,22 +204,65 @@ where each column is an element of the transition probability matrix with
 elements ordered rowwise.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The matrix is filled rowwise, meaning that each row should sum to 1.
-The complementary probability (equal to 1 minus the sum of the probabilities
-of all other rows) can be conveniently referred to as <code>C</code>.</p>
+    <p>A <code>tpmatrix</code> is a 2-dimensional tabular object that stores flattened
+square transition probability matrices in each row. Each transition probability
+matrix is filled rowwise. The complementary probability
+(equal to \(1\) minus the sum of the probabilities
+of all other elements in a row of a transition probability matrix)
+can be conveniently referred to as <code>C</code>. There can
+only be one complement for each row in a transition
+probability matrix.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code>,
 <code><a href='tpmatrix_id.html'>tpmatrix_id()</a></code>, <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>, <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.7</span>, <span class='fl'>.6</span>)
+    <pre class="examples"><div class='input'><span class='co'># Pass vectors</span>
+<span class='no'>p_12</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.7</span>, <span class='fl'>.6</span>)
 <span class='fu'>tpmatrix</span>(
-  <span class='no'>C</span>, <span class='no'>p</span>,
+  <span class='no'>C</span>, <span class='no'>p_12</span>,
   <span class='fl'>0</span>, <span class='fl'>1</span>
 )</div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
 #&gt; 1:   0.3   0.7     0     1
-#&gt; 2:   0.4   0.6     0     1</div></pre>
+#&gt; 2:   0.4   0.6     0     1</div><div class='input'>
+<span class='fu'>tpmatrix</span>(
+  <span class='no'>C</span>, <span class='no'>p_12</span>,
+  <span class='no'>C</span>, <span class='fl'>1</span>
+)</div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
+#&gt; 1:   0.3   0.7     0     1
+#&gt; 2:   0.4   0.6     0     1</div><div class='input'>
+<span class='co'># Pass matrix</span>
+<span class='no'>pmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>, <span class='fl'>.5</span>, <span class='fl'>.3</span>, <span class='fl'>.7</span>), <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>4</span>)
+<span class='fu'>tpmatrix</span>(<span class='no'>pmat</span>)</div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
+#&gt; 1:   0.5   0.5   0.3   0.7</div><div class='input'>
+<span class='co'># Pass vectors and data frames</span>
+<span class='no'>p1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  <span class='kw'>p_12</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.7</span>, <span class='fl'>.6</span>),
+  <span class='kw'>p_13</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.2</span>)
+)
+
+<span class='no'>p2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  <span class='kw'>p_21</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>p_22</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.4</span>, <span class='fl'>.45</span>),
+  <span class='kw'>p_23</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.6</span>, <span class='fl'>.55</span>)
+)
+
+<span class='no'>p3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  <span class='kw'>p_31</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>),
+  <span class='kw'>p_32</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>),
+  <span class='kw'>p_33</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>)
+)
+
+<span class='fu'>tpmatrix</span>(
+  <span class='no'>C</span>, <span class='no'>p1</span>,
+  <span class='no'>p2</span>,
+  <span class='no'>p3</span>
+)</div><div class='output co'>#&gt;    s1_s1 s1_s2 s1_s3 s2_s1 s2_s2 s2_s3 s3_s1 s3_s2 s3_s3
+#&gt; 1:   0.2   0.7   0.1     0  0.40  0.60     0     0     1
+#&gt; 2:   0.2   0.6   0.2     0  0.45  0.55     0     0     1</div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

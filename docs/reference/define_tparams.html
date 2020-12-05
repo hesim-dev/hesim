@@ -96,7 +96,7 @@ economic model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -202,8 +202,8 @@ economic model.</p>
 of the last expression within the braces is evaluated. The expression
 must return a named list with the following possible elements:</p><ul>
 <li><p><em>tpmatrix</em>: The transition probability matrix used to simulate transition
-probabilities in the economic model. Typically the output of
-<code><a href='tpmatrix.html'>tpmatrix()</a></code>.</p></li>
+probabilities in the economic model. This should either be the output of
+<code><a href='tpmatrix.html'>tpmatrix()</a></code> or a 3-dimensional array as in <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>.</p></li>
 <li><p><em>utility</em>: The utility values to attach to states and used to simulate
 quality-adjusted life-years in the economic model. Either a vector (in
 which case utility is the same in each health state) or a

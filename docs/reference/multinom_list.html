@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -198,18 +198,19 @@
  <span class='no'>dat_healthy</span> <span class='kw'>&lt;-</span> <span class='no'>trans_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Healthy"</span>]
  <span class='no'>fit_healthy</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nnet/man/multinom.html'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age_cat</span> + <span class='no'>year_cat</span>,
                           <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat_healthy</span>)</div><div class='output co'>#&gt; # weights:  24 (14 variable)
-#&gt; initial  value 18461.080899 
-#&gt; iter  10 value 18166.573671
-#&gt; final  value 18139.640776 
+#&gt; initial  value 18688.493643 
+#&gt; iter  10 value 18380.224323
+#&gt; iter  20 value 18335.884276
+#&gt; iter  20 value 18335.884274
+#&gt; iter  20 value 18335.884274
+#&gt; final  value 18335.884274 
 #&gt; converged</div><div class='input'> <span class='no'>dat_sick</span> <span class='kw'>&lt;-</span> <span class='no'>trans_data</span>[<span class='no'>state_from</span> <span class='kw'>==</span> <span class='st'>"Sick"</span>]
  <span class='no'>dat_sick</span>$<span class='no'>state_to</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span>(<span class='no'>dat_sick</span>$<span class='no'>state_to</span>)
  <span class='no'>fit_sick</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nnet/man/multinom.html'>multinom</a></span>(<span class='no'>state_to</span> ~ <span class='no'>strategy_name</span> + <span class='no'>female</span> + <span class='no'>age_cat</span> + <span class='no'>year_cat</span>,
                       <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat_sick</span>)</div><div class='output co'>#&gt; # weights:  8 (7 variable)
-#&gt; initial  value 6800.466988 
-#&gt; iter  10 value 6733.594702
-#&gt; iter  10 value 6733.594663
-#&gt; iter  10 value 6733.594663
-#&gt; final  value 6733.594663 
+#&gt; initial  value 6903.052771 
+#&gt; iter  10 value 6831.929247
+#&gt; final  value 6831.929171 
 #&gt; converged</div><div class='input'> <span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'>multinom_list</span>(<span class='kw'>healthy</span> <span class='kw'>=</span> <span class='no'>fit_healthy</span>, <span class='kw'>sick</span> <span class='kw'>=</span> <span class='no'>fit_sick</span>)
  <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>fits</span>)</div><div class='output co'>#&gt; [1] "multinom_list"</div></pre>
   </div>
