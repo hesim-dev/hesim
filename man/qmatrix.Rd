@@ -4,10 +4,10 @@
 \alias{qmatrix}
 \title{Transition intensity matrix}
 \usage{
-qmatrix(q, trans_mat)
+qmatrix(x, trans_mat)
 }
 \arguments{
-\item{q}{A two-dimensional tabular object that can be passed to \code{\link[=as.matrix]{as.matrix()}} containing
+\item{x}{A two-dimensional tabular object that can be passed to \code{\link[=as.matrix]{as.matrix()}} containing
 elements of the transition intensity matrix. A column represents a transition
 from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
 transition intensity matrix. See "Details" for more information.}
@@ -17,14 +17,14 @@ describing the states and transitions in a multi-state model.}
 }
 \value{
 An array of transition intensity matrices with the third dimension
-equal to the number of rows in \code{q}.
+equal to the number of rows in \code{x}.
 }
 \description{
 \code{qpmatrix()} creates transition intensity matrices where elements represent
 the instantaneous risk of moving between health states.
 }
 \details{
-The object \code{q} must only contain non-zero and non-diagonal elements
+The object \code{x} must only contain non-zero and non-diagonal elements
 of a transition intensity matrix. The diagonal elements are automatically computed
 as the negative sum of the other rows.
 }

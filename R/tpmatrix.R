@@ -308,7 +308,7 @@ tpmatrix_id <- function(object, n_samples){
 #' `qpmatrix()` creates transition intensity matrices where elements represent
 #' the instantaneous risk of moving between health states. 
 #' 
-#' @param q A two-dimensional tabular object that can be passed to [as.matrix()] containing
+#' @param x A two-dimensional tabular object that can be passed to [as.matrix()] containing
 #' elements of the transition intensity matrix. A column represents a transition
 #' from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
 #' transition intensity matrix. See "Details" for more information.
@@ -316,12 +316,12 @@ tpmatrix_id <- function(object, n_samples){
 #' @param trans_mat Just as in [IndivCtstmTrans], a transition matrix 
 #' describing the states and transitions in a multi-state model.
 #' 
-#' @details The object `q` must only contain non-zero and non-diagonal elements
+#' @details The object `x` must only contain non-zero and non-diagonal elements
 #' of a transition intensity matrix. The diagonal elements are automatically computed
 #' as the negative sum of the other rows. 
 #' 
 #' @return An array of transition intensity matrices with the third dimension 
-#' equal to the number of rows in `q`.
+#' equal to the number of rows in `x`.
 #' 
 #' @examples 
 #' # 3 state irreversible model
@@ -340,8 +340,8 @@ tpmatrix_id <- function(object, n_samples){
 #' 
 #' @seealso [tpmatrix()]
 #' @export
-qmatrix <- function(q, trans_mat){
-  q <- as.matrix(q)
+qmatrix <- function(x, trans_mat){
+  q <- as.matrix(x)
   trans <- c(t(trans_mat))
   n_states <- nrow(trans_mat)
   qmat <- matrix(0, nrow = nrow(q), ncol = length(trans))
