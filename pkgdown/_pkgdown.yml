@@ -27,7 +27,7 @@ reference:
       - tpmatrix
       - tpmatrix_id
       - tpmatrix_names
-      - qmatrix
+      - qmatrix.matrix
       - expmat
       - as_array3
       - as.data.table.tparams_transprobs

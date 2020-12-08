@@ -303,12 +303,17 @@ tpmatrix_id <- function(object, n_samples){
 }
 
 # Transition intensity matrix --------------------------------------------------
+#' @export
+qmatrix <- function (x, ...) {
+  UseMethod("qmatrix", x)
+}
+
 #' Transition intensity matrix
 #' 
-#' `qpmatrix()` creates transition intensity matrices where elements represent
+#' Creates transition intensity matrices where elements represent
 #' the instantaneous risk of moving between health states. 
 #' 
-#' @param x A two-dimensional tabular object that can be passed to [as.matrix()] containing
+#' @param x A two-dimensional tabular object containing
 #' elements of the transition intensity matrix. A column represents a transition
 #' from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
 #' transition intensity matrix. See "Details" for more information.
@@ -340,7 +345,7 @@ tpmatrix_id <- function(object, n_samples){
 #' 
 #' @seealso [tpmatrix()]
 #' @export
-qmatrix <- function(x, trans_mat){
+qmatrix.matrix <- function(x, trans_mat){
   q <- as.matrix(x)
   trans <- c(t(trans_mat))
   n_states <- nrow(trans_mat)
@@ -350,6 +355,18 @@ qmatrix <- function(x, trans_mat){
                                    prefix = "")
   qmat <- replace_Qdiag(qmat, n_states)
   return(as_array3(qmat))
+}
+
+#' @rdname qmatrix.matrix
+#' @export
+qmatrix.data.table <- function(x, trans_mat) {
+  return(qmatrix(as.matrix(x), trans_mat))
+}
+
+#' @rdname qmatrix.matrix
+#' @export
+qmatrix.data.frame <- function(x, trans_mat) {
+  return(qmatrix(as.matrix(x), trans_mat))
 }
 
 # Matrix exponential -----------------------------------------------------------
