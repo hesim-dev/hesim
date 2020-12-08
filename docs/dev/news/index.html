@@ -89,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.1.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
       </span>
     </div>
 
@@ -170,15 +170,15 @@
       <small>Source: <a href='https://github.com/hesim-dev/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="hesim-0419999" class="section level2">
+    <div id="hesim-042" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hesim-0419999" class="anchor"></a>hesim 0.4.1.9999</h2>
+<a href="#hesim-042" class="anchor"></a>hesim 0.4.2</h2>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
 <ul>
 <li>
-<p>There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> objects and used for simulation of discrete time state transition models. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., <code>data.table</code>, <code>data.frame</code>, <code>matrix</code>, <code>tpmatrix</code>).</p>
+<p>There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> objects and used for simulation of discrete time state transition models. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., <code>data.table</code>, <code>data.frame</code>, <code>matrix</code>).</p>
 <ul>
 <li><p><code><a href="../reference/as_array3.html">as_array3()</a></code> and <code><a href="../reference/as_array3.html">as_tbl2()</a></code> lets users convert 2-dimensional tabular objects where each row stores a flattened square matrix to a 3-dimensional array of square matrices and vice versa.</p></li>
 <li><p><code><a href="../reference/qmatrix.html">qmatrix()</a></code> lets you store transition intensity matrices which can be used to construct transition probability matrices with the matrix exponential via <code><a href="../reference/expmat.html">expmat()</a></code>. The latter is a simple wrapper around <code><a href="https://rdrr.io/pkg/msm/man/MatrixExp.html">msm::MatrixExp()</a></code> that computes the matrix exponential for all matrices in an array rather than just a single matrix.</p></li>
