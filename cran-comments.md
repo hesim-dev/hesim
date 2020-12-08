@@ -2,7 +2,7 @@
 This release adds new features and fixes bugs as detailed on the package website [here](https://hesim-dev.github.io/hesim/news/index.html).
 
 ## Test environments
-* Local OS X, R 4.0.0
+* Local OS X, R 4.0.3
 * Ubuntu 16.04 (on travis-ci), R 4.0.2
 * R-hub builder
 * win-builder (devel, release)
