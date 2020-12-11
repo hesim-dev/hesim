@@ -389,21 +389,28 @@ qmatrix.data.frame <- function(x, trans_mat) {
 #' 
 #' @examples 
 #' library("msm")
-#' qinit <- rbind(
-#'   c(-0.5, 0.25, 0, 0.25), 
-#'   c(0.166, -0.498, 0.166, 0.166),
-#'   c(0, 0.25, -0.5, 0.25), 
-#'   c(0, 0, 0, 0)
-#' )
-#' fit <- msm(state ~ years, subject = PTNUM, data = cav,
-#'            covariates =~ age,
-#'            qmatrix = qinit, deathexact = 4)
-#' qmatrix(fit,  n = 3)
+#' set.seed(101)
+#'  qinit <- rbind(
+#'    c(0, 0.28163, 0.01239),
+#'    c(0, 0, 0.10204),
+#'    c(0, 0, 0)
+#'  )
+#'  fit <- msm(state_id ~ time, subject = patient_id, 
+#'            data = onc3p[patient_id %in% sample(patient_id, 100)],
+#'            covariates = list("1-2" =~ age + strategy_name), 
+#'            qmatrix = qinit)
+#' qmatrix(fit, newdata = data.frame(age = 55, strategy_name = "New 1"),
+#'         uncertainty = "none")
+#' qmatrix(fit, newdata = data.frame(age = 55, strategy_name = "New 1"),
+#'         uncertainty = "normal",  n = 3)
 #' 
 #' @seealso `qmatrix.matrix()`
 #' @export
 qmatrix.msm <- function(x, newdata = NULL, uncertainty = c("normal", "none"), n = 1000) {
   uncertainty <- match.arg(uncertainty)
+  if (is.null(newdata) && x$qcmodel$ncovs > 0) {
+    stop("'newdata' cannot be NULL if covariates are included in 'x'.")
+  }
   which_base <- which(x$paramdata$plabs=="qbase")
   which_cov <- which(x$paramdata$plabs=="qcov") 
 
