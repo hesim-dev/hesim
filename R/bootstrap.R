@@ -1,3 +1,4 @@
+# Bootstrapping ----------------------------------------------------------------
 #' Bootstrap a statistical model
 #' 
 #' \code{bootstrap} is a generic function for generating bootstrap replicates of the parameters
@@ -84,4 +85,29 @@ bootstrap.partsurvfit <- function(object, B, max_errors = 0, ...){
   names(params_surv_list) <- names(object$models)
   class(params_surv_list) <- "params_surv_list"
   return(params_surv_list)
+}
+
+# Draw parameters from multivariate normal distribution ------------------------
+#' @export
+#' @keywords internal
+normboot <- function (object, B, ...) {
+  UseMethod("normboot", object)
+}
+
+#' @export
+#' @keywords internal
+normboot.msm <- function(object, B = 1000, stat) {
+  x <- object
+  
+  # As in msm:::normboot.msm simulate from a multivariate normal distribution
+  ## Simulate from vector of unreplicated parameters to avoid numerical 
+  ## problems with rmvnorm when lots of correlations are 1
+  if (!x$foundse) stop("Asymptotic standard errors not available in fitted model.")
+  sim <- MASS::mvrnorm(B, x$opt$par, x$covmat[x$paramdata$optpars, x$paramdata$optpars])
+  params <- matrix(nrow = B, ncol = x$paramdata$npars)  # replicate constrained parameters.
+  params[, x$paramdata$optpars] <- sim
+  params[, x$paramdata$fixedpars] <- rep(x$paramdata$params[x$paramdata$fixedpars], each = B)
+  params <- params[, !duplicated(abs(x$paramdata$constr)), drop = FALSE][, abs(x$paramdata$constr), drop = FALSE] *
+    rep(sign(x$paramdata$constr), each = B)
+  return(params)
 }
