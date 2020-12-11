@@ -34,4 +34,7 @@ Progression, Stable -> Death, and Progression -> Death).
 \examples{
 head(onc3)
 }
+\seealso{
+\link{onc3p}
+}
 \keyword{datasets}
