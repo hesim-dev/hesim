@@ -74,6 +74,82 @@ test_that("qmatrix() returns the correct diagonals" , {
   expect_equal(mean(apply(qmat, 3, rowSums)), 0, tol = .00001)
 })
 
+# Transition intensity matrix (from msm) ---------------------------------------
+set.seed(101)
+library("msm")
+qinit <- rbind(
+  c(0, 0.28163, 0.01239),
+  c(0, 0, 0.10204),
+  c(0, 0, 0)
+)
+ptid <- sample(onc3p$patient_id, 200)
+fit <- msm(state_id ~ time, subject = patient_id, 
+           data = onc3p[patient_id %in% ptid],
+           covariates = ~ age + strategy_name, qmatrix = qinit)
+
+test_that("qmatrix.msm() works with factor covariates and 'newdata' is one row" , {
+  newdata <- data.frame(strategy_name = "New 1", age = 50)
+  expect_equal(
+    msm::qmatrix.msm(fit, newdata[1, , drop = FALSE], ci = "none"),
+    qmatrix(fit, newdata, uncertainty = "none")[, , 1],
+    check.attributes = FALSE
+  )
+})
+
+test_that("qmatrix.msm() works with factor covariates and 'newdata' is multiple rows" , {
+  newdata <- data.frame(strategy_name = c("New 1", "New 2"),
+                        age = c(50, 55))
+  expect_equal(
+    msm::qmatrix.msm(fit, newdata[2, , drop = FALSE], ci = "none"),
+    qmatrix(fit, newdata, uncertainty = "none")[, , 2],
+    check.attributes = FALSE
+  )
+})
+
+test_that("qmatrix.msm() works with covariates that vary by transition" , {
+  fit <- update(fit, covariates = list("1-2" = ~ strategy_name + age))
+  newdata <- data.frame(strategy_name = c("New 1", "New 2"),
+                        age = c(50, 55))
+  expect_equal(
+    msm::qmatrix.msm(fit, newdata[2, , drop = FALSE], ci = "none"),
+    qmatrix(fit, newdata, uncertainty = "none")[, , 2],
+    check.attributes = FALSE
+  )
+})
+
+test_that("qmatrix.msm() works with a hidden Markov model" , {
+  qinith <- rbind(
+    c(0, exp(-6), exp(-9)),
+    c(0, 0, exp(-6)), 
+    c(0, 0, 0)
+  )
+  hmod <- list(
+    hmmNorm(mean = 100, sd = 16), 
+    hmmNorm(mean = 54, sd = 18),
+    hmmIdent(999)
+  )
+  fith <- msm(fev ~ days, subject = ptnum, 
+              data = fev[fev$ptnum %in% 1:20, ],
+              qmatrix = qinith, 
+              covariates = ~acute,
+              hmodel = hmod, 
+              hcovariates = list(~ acute, ~ acute, NULL),
+              hconstraint = list(acute = c(1, 1)), 
+              death = 3,
+              method = "BFGS")
+  expect_equal(
+    msm::qmatrix.msm(fev1.msm, covariates = list(acute = 0), ci = "none"),
+    qmatrix(fev1.msm, data.frame(acute = 0), uncertainty = "none")[,,1],
+    check.attributes = FALSE
+  )
+})  
+
+test_that("qmatrix.msm() returns correct number of matrices with uncertainy = 'normal'" , {
+  newdata <- data.frame(strategy_name = c("New 1"), age = c(55))
+  sim <- qmatrix(fit, newdata, uncertainty = "normal", n = 5)
+  expect_true(dim(sim)[3] == 5)
+})  
+  
 # Matrix exponential -----------------------------------------------------------
 test_that("expmat() returns an array where rows sum to 1." , {
   p <- expmat(qmat)

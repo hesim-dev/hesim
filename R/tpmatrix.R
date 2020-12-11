@@ -126,7 +126,7 @@ get_matind <- function(n_cols, i, j){
 
 get_matrow <- function(x, i, n_states){
   start <- get_matind(n_states, i, 1)
-  return(x[, start:(start + n_states - 1)])
+  return(x[, start:(start + n_states - 1), drop = FALSE])
 }
 
 replace_C <- function(x, complement){
@@ -367,6 +367,82 @@ qmatrix.data.table <- function(x, trans_mat) {
 #' @export
 qmatrix.data.frame <- function(x, trans_mat) {
   return(qmatrix(as.matrix(x), trans_mat))
+}
+
+#' Transition intensity matrix from `msm` object
+#' 
+#' Draw transition intensity matrices for a probabilistic sensitivity analysis
+#' from a fitted `msm` object.
+#' 
+#' @param x A [`msm::msm`] object.
+#' @param newdata A data frame to look for variables with which to predict. A 
+#' separate transition intensity matrix is predicted based on each row in
+#' `newdata`. Can be `NULL` if no covariates are included in the fitted `msm`
+#' object.
+#' @param uncertainty Method used to draw transition intensity matrices. If `"none`",
+#' then point estimates are used. If `"normal"`, then samples are drawn from the 
+#' multivariate normal distribution of the regression coefficients. 
+#' @param n Number of random observations of the parameters to draw.
+#' 
+#' @return An array of transition intensity matrices with the third dimension 
+#' equal to the number of rows in `newdata`.
+#' 
+#' @examples 
+#' library("msm")
+#' qinit <- rbind(
+#'   c(-0.5, 0.25, 0, 0.25), 
+#'   c(0.166, -0.498, 0.166, 0.166),
+#'   c(0, 0.25, -0.5, 0.25), 
+#'   c(0, 0, 0, 0)
+#' )
+#' fit <- msm(state ~ years, subject = PTNUM, data = cav,
+#'            covariates =~ age,
+#'            qmatrix = qinit, deathexact = 4)
+#' qmatrix(fit,  n = 3)
+#' 
+#' @seealso `qmatrix.matrix()`
+#' @export
+qmatrix.msm <- function(x, newdata = NULL, uncertainty = c("normal", "none"), n = 1000) {
+  uncertainty <- match.arg(uncertainty)
+  which_base <- which(x$paramdata$plabs=="qbase")
+  which_cov <- which(x$paramdata$plabs=="qcov") 
+
+  # Simulate distribution of parameters
+  if (uncertainty == "normal") {
+    beta <- normboot(x, n)
+  } else if (uncertainty == "none"){
+    beta <- matrix(x$paramdata$params[c(which_base, which_cov)], nrow = 1)
+  }
+  
+  # Create model matrix from newdata
+  if (is.null(newdata)) {
+    X <- matrix(1, nrow = 1, ncol = 1)
+  } else{
+    mfo <- stats::model.frame(x$covariates, x$data$mf)
+    tt <- attr(mfo, "terms")
+    Terms <- stats::delete.response(tt)
+    mf <- stats::model.frame(Terms, newdata, xlev = stats::.getXlevels(tt, mfo))
+    if (!is.null(cl <- attr(Terms, "dataClasses")))
+      stats::.checkMFClasses(cl, mf)
+    X <- stats::model.matrix(Terms, mf)
+    if (x$center) {
+      X <- cbind(X[, 1, drop = FALSE],
+                 sweep(X[, -1, drop = FALSE], 2, x$qcmodel$covmeans))
+    } 
+  }
+  
+  # Predict each element of the transition intensity matrix
+  res <- array(NA, dim = c(x$qmodel$nstates, x$qmodel$nstates, nrow(X) * nrow(beta)))
+  tmat <- x$qmodel$imatrix
+  tmat[tmat == 0] <- NA
+  n_params <- sum(!is.na(tmat))
+  n_covs <- x$qcmodel$ncovs
+  q <- matrix(0, nrow = dim(res)[3], ncol = n_params)
+  for (i in 1:n_params) {
+    ind <- seq(from = i, by = n_params, length.out = n_covs + 1)
+    q[, i] <- c(X %*% t(beta[, ind, drop = FALSE]))
+  }
+  return(qmatrix(exp(q), tmat))
 }
 
 # Matrix exponential -----------------------------------------------------------
