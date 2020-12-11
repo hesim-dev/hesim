@@ -148,7 +148,23 @@ test_that("qmatrix.msm() returns correct number of matrices with uncertainy = 'n
   newdata <- data.frame(strategy_name = c("New 1"), age = c(55))
   sim <- qmatrix(fit, newdata, uncertainty = "normal", n = 5)
   expect_true(dim(sim)[3] == 5)
-})  
+}) 
+
+test_that("qmatrix.msm() requires 'newdata' if covariates are included in the model." , {
+  expect_error(
+    qmatrix(fit),
+    "'newdata' cannot be NULL if covariates are included in 'x'."
+  )
+})
+
+test_that("qmatrix.msm() does not require 'newdata' if no covariates are included in the model." , {
+  fit <- update(fit, covariates =~ 1)
+  expect_equal(
+    msm::qmatrix.msm(fit, ci = "none"),
+    qmatrix(fit, uncertainty = "none")[,,1],
+    check.attributes = FALSE
+  )
+})
   
 # Matrix exponential -----------------------------------------------------------
 test_that("expmat() returns an array where rows sum to 1." , {
