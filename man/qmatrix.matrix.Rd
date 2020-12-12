@@ -4,13 +4,13 @@
 \alias{qmatrix.matrix}
 \alias{qmatrix.data.table}
 \alias{qmatrix.data.frame}
-\title{Transition intensity matrix}
+\title{Transition intensity matrix from tabular object}
 \usage{
-\method{qmatrix}{matrix}(x, trans_mat)
+\method{qmatrix}{matrix}(x, trans_mat, ...)
 
-\method{qmatrix}{data.table}(x, trans_mat)
+\method{qmatrix}{data.table}(x, trans_mat, ...)
 
-\method{qmatrix}{data.frame}(x, trans_mat)
+\method{qmatrix}{data.frame}(x, trans_mat, ...)
 }
 \arguments{
 \item{x}{A two-dimensional tabular object containing
@@ -20,6 +20,8 @@ transition intensity matrix. See "Details" for more information.}
 
 \item{trans_mat}{Just as in \link{IndivCtstmTrans}, a transition matrix
 describing the states and transitions in a multi-state model.}
+
+\item{...}{Further arguments passed to or from other methods. Currently unused.}
 }
 \value{
 An array of transition intensity matrices with the third dimension

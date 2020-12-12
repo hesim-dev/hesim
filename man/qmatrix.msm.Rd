@@ -4,7 +4,7 @@
 \alias{qmatrix.msm}
 \title{Transition intensity matrix from \code{msm} object}
 \usage{
-\method{qmatrix}{msm}(x, newdata = NULL, uncertainty = c("normal", "none"), n = 1000)
+\method{qmatrix}{msm}(x, newdata = NULL, uncertainty = c("normal", "none"), n = 1000, ...)
 }
 \arguments{
 \item{x}{A \code{\link[msm:msm]{msm::msm}} object.}
@@ -19,6 +19,8 @@ then point estimates are used. If \code{"normal"}, then samples are drawn from t
 multivariate normal distribution of the regression coefficients.}
 
 \item{n}{Number of random observations of the parameters to draw.}
+
+\item{...}{Further arguments passed to or from other methods. Currently unused.}
 }
 \value{
 An array of transition intensity matrices with the third dimension
@@ -36,7 +38,7 @@ set.seed(101)
    c(0, 0, 0.10204),
    c(0, 0, 0)
  )
- fit <- msm(state_id ~ time, subject = patient_id, 
+fit <- msm(state_id ~ time, subject = patient_id, 
            data = onc3p[patient_id \%in\% sample(patient_id, 100)],
            covariates = list("1-2" =~ age + strategy_name), 
            qmatrix = qinit)
