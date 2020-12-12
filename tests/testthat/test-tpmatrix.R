@@ -138,8 +138,8 @@ test_that("qmatrix.msm() works with a hidden Markov model" , {
               death = 3,
               method = "BFGS")
   expect_equal(
-    msm::qmatrix.msm(fev1.msm, covariates = list(acute = 0), ci = "none"),
-    qmatrix(fev1.msm, data.frame(acute = 0), uncertainty = "none")[,,1],
+    msm::qmatrix.msm(fith, covariates = list(acute = 0), ci = "none"),
+    qmatrix(fith, data.frame(acute = 0), uncertainty = "none")[,,1],
     check.attributes = FALSE
   )
 })  
