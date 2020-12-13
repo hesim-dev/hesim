@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Transition intensity matrix from <code>msm</code> object — qmatrix.msm • hesim</title>
+<title>Draw parameters of statistical model from multivariate normal distribution — normboot • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,9 @@
 
 
 
-<meta property="og:title" content="Transition intensity matrix from <code>msm</code> object — qmatrix.msm" />
-<meta property="og:description" content="Draw transition intensity matrices for a probabilistic sensitivity analysis
-from a fitted msm object." />
+<meta property="og:title" content="Draw parameters of statistical model from multivariate normal distribution — normboot" />
+<meta property="og:description" content="normboot is a generic function for drawing parameters from a fitted
+statistical model from their (asymptotic) multivariate normal distribution." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -168,99 +168,39 @@ from a fitted msm object." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Transition intensity matrix from <code>msm</code> object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/tpmatrix.R'><code>R/tpmatrix.R</code></a></small>
-    <div class="hidden name"><code>qmatrix.msm.Rd</code></div>
+    <h1>Draw parameters of statistical model from multivariate normal distribution</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/bootstrap.R'><code>R/bootstrap.R</code></a></small>
+    <div class="hidden name"><code>normboot.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Draw transition intensity matrices for a probabilistic sensitivity analysis
-from a fitted <code>msm</code> object.</p>
+    <p><code>normboot</code> is a generic function for drawing parameters from a fitted
+statistical model from their (asymptotic) multivariate normal distribution.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for msm</span>
-<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>x</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>uncertainty</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"normal"</span>, <span class='st'>"none"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>normboot</span>(<span class='no'>object</span>, <span class='no'>B</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for msm</span>
+<span class='fu'>normboot</span>(<span class='no'>object</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A <code><a href='https://rdrr.io/pkg/msm/man/msm.html'>msm::msm</a></code> object.</p></td>
+      <th>object</th>
+      <td><p>A statistical model.</p></td>
     </tr>
     <tr>
-      <th>newdata</th>
-      <td><p>A data frame to look for variables with which to predict. A
-separate transition intensity matrix is predicted based on each row in
-<code>newdata</code>. Can be <code>NULL</code> if no covariates are included in the fitted <code>msm</code>
-object.</p></td>
-    </tr>
-    <tr>
-      <th>uncertainty</th>
-      <td><p>Method used to draw transition intensity matrices. If <code>"none</code>",
-then point estimates are used. If <code>"normal"</code>, then samples are drawn from the
-multivariate normal distribution of the regression coefficients.</p></td>
-    </tr>
-    <tr>
-      <th>n</th>
-      <td><p>Number of random observations of the parameters to draw.</p></td>
+      <th>B</th>
+      <td><p>Number of draws of the parameters.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
+      <td><p>Further arguments passed to or from other methods.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An array of transition intensity matrices with the third dimension
-equal to the number of rows in <code>newdata</code>.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='qmatrix.matrix.html'>qmatrix.matrix()</a></code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"msm"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>101</span>)
- <span class='no'>qinit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(
-   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0.28163</span>, <span class='fl'>0.01239</span>),
-   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0.10204</span>),
-   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>)
- )
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/msm/man/msm.html'>msm</a></span>(<span class='no'>state_id</span> ~ <span class='no'>time</span>, <span class='kw'>subject</span> <span class='kw'>=</span> <span class='no'>patient_id</span>,
-           <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>onc3p</span>[<span class='no'>patient_id</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='no'>patient_id</span>, <span class='fl'>100</span>)],
-           <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"1-2"</span> <span class='kw'>=</span>~ <span class='no'>age</span> + <span class='no'>strategy_name</span>),
-           <span class='kw'>qmatrix</span> <span class='kw'>=</span> <span class='no'>qinit</span>)
-<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>fit</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='fl'>55</span>, <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='st'>"New 1"</span>),
-        <span class='kw'>uncertainty</span> <span class='kw'>=</span> <span class='st'>"none"</span>)</div><div class='output co'>#&gt; , , 1
-#&gt; 
-#&gt;            [,1]        [,2]         [,3]
-#&gt; [1,] -0.4381051  0.43802597 7.908247e-05
-#&gt; [2,]  0.0000000 -0.08275169 8.275169e-02
-#&gt; [3,]  0.0000000  0.00000000 0.000000e+00
-#&gt; </div><div class='input'><span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>fit</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='fl'>55</span>, <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='st'>"New 1"</span>),
-        <span class='kw'>uncertainty</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; , , 1
-#&gt; 
-#&gt;            [,1]        [,2]         [,3]
-#&gt; [1,] -0.4373615  0.43722582 0.0001356349
-#&gt; [2,]  0.0000000 -0.08824339 0.0882433860
-#&gt; [3,]  0.0000000  0.00000000 0.0000000000
-#&gt; 
-#&gt; , , 2
-#&gt; 
-#&gt;            [,1]        [,2]         [,3]
-#&gt; [1,] -0.5147023  0.51470228 1.010117e-08
-#&gt; [2,]  0.0000000 -0.08154997 8.154997e-02
-#&gt; [3,]  0.0000000  0.00000000 0.000000e+00
-#&gt; 
-#&gt; , , 3
-#&gt; 
-#&gt;            [,1]        [,2]         [,3]
-#&gt; [1,] -0.4893177  0.48930814 9.547637e-06
-#&gt; [2,]  0.0000000 -0.08225225 8.225225e-02
-#&gt; [3,]  0.0000000  0.00000000 0.000000e+00
-#&gt; </div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

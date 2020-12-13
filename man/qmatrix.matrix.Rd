@@ -53,5 +53,5 @@ expmat(qmat)
 
 }
 \seealso{
-\code{\link[=tpmatrix]{tpmatrix()}}
+\code{\link[=qmatrix.msm]{qmatrix.msm()}}
 }

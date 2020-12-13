@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Transition intensity matrix — qmatrix.matrix • hesim</title>
+<title>Transition intensity matrix from tabular object — qmatrix.matrix • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Transition intensity matrix — qmatrix.matrix" />
+<meta property="og:title" content="Transition intensity matrix from tabular object — qmatrix.matrix" />
 <meta property="og:description" content="Creates transition intensity matrices where elements represent
 the instantaneous risk of moving between health states." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
@@ -168,7 +168,7 @@ the instantaneous risk of moving between health states." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Transition intensity matrix</h1>
+    <h1>Transition intensity matrix from tabular object</h1>
     <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/tpmatrix.R'><code>R/tpmatrix.R</code></a></small>
     <div class="hidden name"><code>qmatrix.matrix.Rd</code></div>
     </div>
@@ -179,13 +179,13 @@ the instantaneous risk of moving between health states.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for matrix</span>
-<span class='fu'>qmatrix</span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>)
+<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.table</span>
-<span class='fu'>qmatrix</span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>)
+<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>qmatrix</span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>)</pre>
+<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -202,6 +202,10 @@ transition intensity matrix. See "Details" for more information.</p></td>
       <td><p>Just as in <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>, a transition matrix
 describing the states and transitions in a multi-state model.</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -215,7 +219,7 @@ of a transition intensity matrix. The diagonal elements are automatically comput
 as the negative sum of the other rows.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='tpmatrix.html'>tpmatrix()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='qmatrix.msm.html'>qmatrix.msm()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># 3 state irreversible model</span>
@@ -226,7 +230,7 @@ as the negative sum of the other rows.</p>
 <span class='no'>q13</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.3</span>)
 <span class='no'>q23</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.1</span>, <span class='fl'>1.2</span>)
 <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>q12</span>, <span class='no'>q13</span>, <span class='no'>q23</span>)
-<span class='no'>qmat</span> <span class='kw'>&lt;-</span> <span class='fu'>qmatrix</span>(<span class='no'>q</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>)
+<span class='no'>qmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>q</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>qmat</span>)</div><div class='output co'>#&gt; , , 1
 #&gt; 
 #&gt;      [,1] [,2] [,3]

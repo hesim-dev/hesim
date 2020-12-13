@@ -349,7 +349,7 @@ qmatrix <- function (x, ...) {
 #' # Matrix exponential of each matrix in array
 #' expmat(qmat)
 #' 
-#' @seealso [tpmatrix()]
+#' @seealso [qmatrix.msm()]
 #' @export
 qmatrix.matrix <- function(x, trans_mat, ...){
   q <- as.matrix(x)
