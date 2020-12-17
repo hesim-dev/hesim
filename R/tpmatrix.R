@@ -126,7 +126,7 @@ get_matind <- function(n_cols, i, j){
 
 get_matrow <- function(x, i, n_states){
   start <- get_matind(n_states, i, 1)
-  return(x[, start:(start + n_states - 1)])
+  return(x[, start:(start + n_states - 1), drop = FALSE])
 }
 
 replace_C <- function(x, complement){
@@ -303,18 +303,29 @@ tpmatrix_id <- function(object, n_samples){
 }
 
 # Transition intensity matrix --------------------------------------------------
-#' Transition intensity matrix
+#' Transition intensity matrix 
 #' 
-#' `qpmatrix()` creates transition intensity matrices where elements represent
+#' A generic function for creating transition intensity matrices where 
+#' elements represent the instantaneous risk of moving between health states.
+#' @param x An `R` object.
+#' @param ... Further arguments passed to or from other methods. Currently unused.
+#' @export
+qmatrix <- function (x, ...) {
+  UseMethod("qmatrix", x)
+}
+
+#' Transition intensity matrix from tabular object
+#' 
+#' Creates transition intensity matrices where elements represent
 #' the instantaneous risk of moving between health states. 
 #' 
-#' @param x A two-dimensional tabular object that can be passed to [as.matrix()] containing
+#' @param x A two-dimensional tabular object containing
 #' elements of the transition intensity matrix. A column represents a transition
 #' from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
 #' transition intensity matrix. See "Details" for more information.
-#' 
 #' @param trans_mat Just as in [IndivCtstmTrans], a transition matrix 
 #' describing the states and transitions in a multi-state model.
+#' @param ... Further arguments passed to or from other methods. Currently unused.
 #' 
 #' @details The object `x` must only contain non-zero and non-diagonal elements
 #' of a transition intensity matrix. The diagonal elements are automatically computed
@@ -338,9 +349,9 @@ tpmatrix_id <- function(object, n_samples){
 #' # Matrix exponential of each matrix in array
 #' expmat(qmat)
 #' 
-#' @seealso [tpmatrix()]
+#' @seealso [qmatrix.msm()]
 #' @export
-qmatrix <- function(x, trans_mat){
+qmatrix.matrix <- function(x, trans_mat, ...){
   q <- as.matrix(x)
   trans <- c(t(trans_mat))
   n_states <- nrow(trans_mat)
@@ -350,6 +361,103 @@ qmatrix <- function(x, trans_mat){
                                    prefix = "")
   qmat <- replace_Qdiag(qmat, n_states)
   return(as_array3(qmat))
+}
+
+#' @rdname qmatrix.matrix
+#' @export
+qmatrix.data.table <- function(x, trans_mat, ...) {
+  return(qmatrix(as.matrix(x), trans_mat))
+}
+
+#' @rdname qmatrix.matrix
+#' @export
+qmatrix.data.frame <- function(x, trans_mat, ...) {
+  return(qmatrix(as.matrix(x), trans_mat))
+}
+
+#' Transition intensity matrix from `msm` object
+#' 
+#' Draw transition intensity matrices for a probabilistic sensitivity analysis
+#' from a fitted `msm` object.
+#' 
+#' @param x A [`msm::msm`] object.
+#' @param newdata A data frame to look for variables with which to predict. A 
+#' separate transition intensity matrix is predicted based on each row in
+#' `newdata`. Can be `NULL` if no covariates are included in the fitted `msm`
+#' object.
+#' @param uncertainty Method used to draw transition intensity matrices. If `"none`",
+#' then point estimates are used. If `"normal"`, then samples are drawn from the 
+#' multivariate normal distribution of the regression coefficients. 
+#' @param n Number of random observations of the parameters to draw.
+#' @param ... Further arguments passed to or from other methods. Currently unused.
+#' 
+#' @return An array of transition intensity matrices with the third dimension 
+#' equal to the number of rows in `newdata`.
+#' 
+#' @examples 
+#' library("msm")
+#' set.seed(101)
+#'  qinit <- rbind(
+#'    c(0, 0.28163, 0.01239),
+#'    c(0, 0, 0.10204),
+#'    c(0, 0, 0)
+#'  )
+#' fit <- msm(state_id ~ time, subject = patient_id, 
+#'            data = onc3p[patient_id %in% sample(patient_id, 100)],
+#'            covariates = list("1-2" =~ age + strategy_name), 
+#'            qmatrix = qinit)
+#' qmatrix(fit, newdata = data.frame(age = 55, strategy_name = "New 1"),
+#'         uncertainty = "none")
+#' qmatrix(fit, newdata = data.frame(age = 55, strategy_name = "New 1"),
+#'         uncertainty = "normal",  n = 3)
+#' 
+#' @seealso `qmatrix.matrix()`
+#' @export
+qmatrix.msm <- function(x, newdata = NULL, uncertainty = c("normal", "none"), n = 1000, 
+                        ...) {
+  uncertainty <- match.arg(uncertainty)
+  if (is.null(newdata) && x$qcmodel$ncovs > 0) {
+    stop("'newdata' cannot be NULL if covariates are included in 'x'.")
+  }
+  which_base <- which(x$paramdata$plabs=="qbase")
+  which_cov <- which(x$paramdata$plabs=="qcov") 
+
+  # Simulate distribution of parameters
+  if (uncertainty == "normal") {
+    beta <- normboot(x, n)
+  } else if (uncertainty == "none"){
+    beta <- matrix(x$paramdata$params[c(which_base, which_cov)], nrow = 1)
+  }
+  
+  # Create model matrix from newdata
+  if (is.null(newdata)) {
+    X <- matrix(1, nrow = 1, ncol = 1)
+  } else{
+    mfo <- stats::model.frame(x$covariates, x$data$mf)
+    tt <- attr(mfo, "terms")
+    Terms <- stats::delete.response(tt)
+    mf <- stats::model.frame(Terms, newdata, xlev = stats::.getXlevels(tt, mfo))
+    if (!is.null(cl <- attr(Terms, "dataClasses")))
+      stats::.checkMFClasses(cl, mf)
+    X <- stats::model.matrix(Terms, mf)
+    if (x$center) {
+      X <- cbind(X[, 1, drop = FALSE],
+                 sweep(X[, -1, drop = FALSE], 2, x$qcmodel$covmeans))
+    } 
+  }
+  
+  # Predict each element of the transition intensity matrix
+  res <- array(NA, dim = c(x$qmodel$nstates, x$qmodel$nstates, nrow(X) * nrow(beta)))
+  tmat <- x$qmodel$imatrix
+  tmat[tmat == 0] <- NA
+  n_params <- sum(!is.na(tmat))
+  n_covs <- x$qcmodel$ncovs
+  q <- matrix(0, nrow = dim(res)[3], ncol = n_params)
+  for (i in 1:n_params) {
+    ind <- seq(from = i, by = n_params, length.out = n_covs + 1)
+    q[, i] <- c(X %*% t(beta[, ind, drop = FALSE]))
+  }
+  return(qmatrix(exp(q), tmat))
 }
 
 # Matrix exponential -----------------------------------------------------------
@@ -371,7 +479,7 @@ qmatrix <- function(x, trans_mat){
 #' 
 #' @return Returns an array of exponentiated matrices. 
 #' 
-#' @seealso [qmatrix()]
+#' @seealso [qmatrix.msm()], [qmatrix.data.table()]
 #' @export
 expmat <- function(x, t = 1, ...) {
   n <- dim(x)[3]

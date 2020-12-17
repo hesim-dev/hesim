@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Multi-state oncology data for 3-state model — onc3 • hesim</title>
+<title>Transition intensity matrix from <code>msm</code> object — qmatrix.msm • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,10 +46,9 @@
 
 
 
-<meta property="og:title" content="Multi-state oncology data for 3-state model — onc3" />
-<meta property="og:description" content="Simulated 3-state dataset in oncology with three health states
-(Stable, Progression, and Death) and three possible transitions (Stable -&amp;gt;
-Progression, Stable -&amp;gt; Death, and Progression -&amp;gt; Death)." />
+<meta property="og:title" content="Transition intensity matrix from <code>msm</code> object — qmatrix.msm" />
+<meta property="og:description" content="Draw transition intensity matrices for a probabilistic sensitivity analysis
+from a fitted msm object." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -169,59 +168,99 @@ Progression, Stable -&amp;gt; Death, and Progression -&amp;gt; Death)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Multi-state oncology data for 3-state model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>onc3.Rd</code></div>
+    <h1>Transition intensity matrix from <code>msm</code> object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/tpmatrix.R'><code>R/tpmatrix.R</code></a></small>
+    <div class="hidden name"><code>qmatrix.msm.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Simulated 3-state dataset in oncology with three health states
-(Stable, Progression, and Death) and three possible transitions (Stable -&gt;
-Progression, Stable -&gt; Death, and Progression -&gt; Death).</p>
+    <p>Draw transition intensity matrices for a probabilistic sensitivity analysis
+from a fitted <code>msm</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='no'>onc3</span></pre>
+    <pre class="usage"><span class='co'># S3 method for msm</span>
+<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>x</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>uncertainty</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"normal"</span>, <span class='st'>"none"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='no'>...</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A <code><a href='https://rdrr.io/pkg/msm/man/msm.html'>msm::msm</a></code> object.</p></td>
+    </tr>
+    <tr>
+      <th>newdata</th>
+      <td><p>A data frame to look for variables with which to predict. A
+separate transition intensity matrix is predicted based on each row in
+<code>newdata</code>. Can be <code>NULL</code> if no covariates are included in the fitted <code>msm</code>
+object.</p></td>
+    </tr>
+    <tr>
+      <th>uncertainty</th>
+      <td><p>Method used to draw transition intensity matrices. If <code>"none</code>",
+then point estimates are used. If <code>"normal"</code>, then samples are drawn from the
+multivariate normal distribution of the regression coefficients.</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>Number of random observations of the parameters to draw.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.table</code> with the following columns:</p><dl'>
-<dt>from</dt><dd><p>Health state making a transition from.</p></dd>
-<dt>to</dt><dd><p>Health state making a transition to.</p></dd>
-<dt>strategy_name</dt><dd><p>Standard of care (SOC), new treatment 1 (New 1), or
-new treatment 2 (New 2).</p></dd>
-<dt>female</dt><dd><p>1 if a patient is female; 0 if male.</p></dd>
-<dt>age</dt><dd><p>Patient age (in years).</p></dd>
-<dt>patient_id</dt><dd><p>Patient identification number.</p></dd>
-<dt>time_start</dt><dd><p>Starting time.</p></dd>
-<dt>time_stop</dt><dd><p>Stopping time.</p></dd>
-<dt>status</dt><dd><p>Status indicator: 1=transition, 0=censored.</p></dd>
-<dt>transition_id</dt><dd><p>Integer denoting transition: 1 = Stable -&gt; Progression,
-2 = Stable -&gt; Death, 3 = Progression -&gt; Death.</p></dd>
-<dt>strategy_id</dt><dd><p>Strategy identification number.</p></dd>
-<dt>time</dt><dd><p>Elapsed years between <code>time_start</code> and <code>time_stop</code>.</p></dd>
-
-</dl>
-
+    <p>An array of transition intensity matrices with the third dimension
+equal to the number of rows in <code>newdata</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='onc3p.html'>onc3p</a></p></div>
+    <div class='dont-index'><p><code><a href='qmatrix.matrix.html'>qmatrix.matrix()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>onc3</span>)</div><div class='output co'>#&gt;           from          to strategy_name female      age patient_id time_start
-#&gt; 1:      Stable Progression         New 2      0 59.85813          1   0.000000
-#&gt; 2:      Stable       Death         New 2      0 59.85813          1   0.000000
-#&gt; 3: Progression       Death         New 2      0 59.85813          1   2.420226
-#&gt; 4:      Stable Progression         New 2      0 62.57282          2   0.000000
-#&gt; 5:      Stable       Death         New 2      0 62.57282          2   0.000000
-#&gt; 6:      Stable Progression           SOC      1 61.44379          3   0.000000
-#&gt;    time_stop status transition_id strategy_id      time
-#&gt; 1:  2.420226      1             1           3  2.420226
-#&gt; 2:  2.420226      0             2           3  2.420226
-#&gt; 3: 14.620258      1             3           3 12.200032
-#&gt; 4:  7.497464      0             1           3  7.497464
-#&gt; 5:  7.497464      0             2           3  7.497464
-#&gt; 6:  2.365867      0             1           1  2.365867</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"msm"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>101</span>)
+ <span class='no'>qinit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(
+   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0.28163</span>, <span class='fl'>0.01239</span>),
+   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0.10204</span>),
+   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>)
+ )
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/msm/man/msm.html'>msm</a></span>(<span class='no'>state_id</span> ~ <span class='no'>time</span>, <span class='kw'>subject</span> <span class='kw'>=</span> <span class='no'>patient_id</span>,
+           <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>onc3p</span>[<span class='no'>patient_id</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='no'>patient_id</span>, <span class='fl'>100</span>)],
+           <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"1-2"</span> <span class='kw'>=</span>~ <span class='no'>age</span> + <span class='no'>strategy_name</span>),
+           <span class='kw'>qmatrix</span> <span class='kw'>=</span> <span class='no'>qinit</span>)
+<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>fit</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='fl'>55</span>, <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='st'>"New 1"</span>),
+        <span class='kw'>uncertainty</span> <span class='kw'>=</span> <span class='st'>"none"</span>)</div><div class='output co'>#&gt; , , 1
+#&gt; 
+#&gt;            [,1]        [,2]         [,3]
+#&gt; [1,] -0.4381051  0.43802597 7.908247e-05
+#&gt; [2,]  0.0000000 -0.08275169 8.275169e-02
+#&gt; [3,]  0.0000000  0.00000000 0.000000e+00
+#&gt; </div><div class='input'><span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>fit</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='fl'>55</span>, <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='st'>"New 1"</span>),
+        <span class='kw'>uncertainty</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; , , 1
+#&gt; 
+#&gt;            [,1]        [,2]         [,3]
+#&gt; [1,] -0.4373615  0.43722582 0.0001356349
+#&gt; [2,]  0.0000000 -0.08824339 0.0882433860
+#&gt; [3,]  0.0000000  0.00000000 0.0000000000
+#&gt; 
+#&gt; , , 2
+#&gt; 
+#&gt;            [,1]        [,2]         [,3]
+#&gt; [1,] -0.5147023  0.51470228 1.010117e-08
+#&gt; [2,]  0.0000000 -0.08154997 8.154997e-02
+#&gt; [3,]  0.0000000  0.00000000 0.000000e+00
+#&gt; 
+#&gt; , , 3
+#&gt; 
+#&gt;            [,1]        [,2]         [,3]
+#&gt; [1,] -0.4893177  0.48930814 9.547637e-06
+#&gt; [2,]  0.0000000 -0.08225225 8.225225e-02
+#&gt; [3,]  0.0000000  0.00000000 0.000000e+00
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

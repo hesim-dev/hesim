@@ -1,5 +1,8 @@
 # Data for a 3-state (Stable, Progression, Death) oncology model
 rm(list = ls())
+library("flexsurv")
+library("hesim")
+library("data.table")
 
 # Simulate multi-state dataset -------------------------------------------------
 sim_onc3_data <- function(n = 2500, seed = NULL){
@@ -150,5 +153,32 @@ fit_weibull(1)
 fit_weibull(2)
 fit_weibull(3)
 
-# Save
+# Panel data version -----------------------------------------------------------
+onc3p <- copy(onc3)
+onc3p[, n := 1:.N, by = c("patient_id", "time_start")]
+onc3p[, c("transition_id", "time") := NULL]
+
+# Time 0
+onc3p_t0 <- onc3p[time_start == 0 & n == 1]
+onc3p_t0[, c("time_stop", "n", "to", "status") := NULL]
+setnames(onc3p_t0, c("time_start", "from"), c("time", "state"))
+
+# Time > 0
+onc3p[, mstatus := mean(status), by = c("patient_id", "time_start")]
+onc3p <- onc3p[status == 1 | (mstatus == 0 & n == 1)]
+onc3p[, state := ifelse(mstatus == 0, from, to)]
+onc3p[, c("time_start", "n", "from",
+                   "to", "status", "mstatus") := NULL]
+setnames(onc3p, "time_stop", "time")
+
+# Full panel
+onc3p <- rbind(onc3p_t0, onc3p)
+setorderv(onc3p, c("patient_id", "time"))
+onc3p[, state_id := factor(
+  state, 
+  levels = c("Stable", "Progression", "Death"),
+  labels = 1:3)]
+
+# Save -------------------------------------------------------------------------
 save(onc3, file = "../data/onc3.rda", compress = "bzip2")
+save(onc3p, file = "../data/onc3p.rda", compress = "bzip2")

@@ -190,9 +190,35 @@
 #' \item{time}{Elapsed years between `time_start` and `time_stop`.}
 #' }
 #' 
+#' @seealso [onc3p]
 #' @examples 
 #' head(onc3)
 "onc3"
+
+#' Multi-state panel oncology data for 3-state model
+#'
+#' The same dataset as [onc3] converted into a panel data format in which health
+#' states are recorded at a finite series of times.
+#'
+#' @format 
+#' A `data.table` with the following columns:
+#' \describe{
+#' \item{state}{The name of the health state (Stable, Progression,
+#' and Death).}
+#' \item{strategy_name}{Standard of care (SOC), new treatment 1 (New 1), or
+#' new treatment 2 (New 2).}
+#' \item{female}{1 if a patient is female; 0 if male.}
+#' \item{age}{Patient age (in years).}
+#' \item{patient_id}{Patient identification number.}
+#' \item{time}{Time that `state` was recorded.}
+#' \item{strategy_id}{Strategy identification number.}
+#' \item{state_id}{The health state identification number.}
+#' }
+#' 
+#' @seealso [onc3]
+#' @examples 
+#' head(onc3p)
+"onc3p"
 
 #' Convert multi-state data to PFS and OS data
 #' 

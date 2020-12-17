@@ -27,7 +27,8 @@ reference:
       - tpmatrix
       - tpmatrix_id
       - tpmatrix_names
-      - qmatrix
+      - qmatrix.matrix
+      - qmatrix.msm
       - expmat
       - as_array3
       - as.data.table.tparams_transprobs
@@ -99,6 +100,7 @@ reference:
     - multinom3_exdata
     - psm4_exdata
     - onc3
+    - onc3p
     - as_pfs_os
     
 articles:

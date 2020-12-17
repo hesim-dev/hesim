@@ -4,46 +4,14 @@
 \alias{qmatrix}
 \title{Transition intensity matrix}
 \usage{
-qmatrix(x, trans_mat)
+qmatrix(x, ...)
 }
 \arguments{
-\item{x}{A two-dimensional tabular object that can be passed to \code{\link[=as.matrix]{as.matrix()}} containing
-elements of the transition intensity matrix. A column represents a transition
-from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
-transition intensity matrix. See "Details" for more information.}
+\item{x}{An \code{R} object.}
 
-\item{trans_mat}{Just as in \link{IndivCtstmTrans}, a transition matrix
-describing the states and transitions in a multi-state model.}
-}
-\value{
-An array of transition intensity matrices with the third dimension
-equal to the number of rows in \code{x}.
+\item{...}{Further arguments passed to or from other methods. Currently unused.}
 }
 \description{
-\code{qpmatrix()} creates transition intensity matrices where elements represent
-the instantaneous risk of moving between health states.
-}
-\details{
-The object \code{x} must only contain non-zero and non-diagonal elements
-of a transition intensity matrix. The diagonal elements are automatically computed
-as the negative sum of the other rows.
-}
-\examples{
-# 3 state irreversible model
-tmat <- rbind(c(NA, 1, 2),
-              c(NA, NA, 3),
-              c(NA, NA, NA)) 
-q12 <- c(.8, .7)
-q13 <- c(.2, .3)
-q23 <- c(1.1, 1.2)
-q <- data.frame(q12, q13, q23)
-qmat <- qmatrix(q, trans_mat = tmat)
-print(qmat)
-
-# Matrix exponential of each matrix in array
-expmat(qmat)
-
-}
-\seealso{
-\code{\link[=tpmatrix]{tpmatrix()}}
+A generic function for creating transition intensity matrices where
+elements represent the instantaneous risk of moving between health states.
 }

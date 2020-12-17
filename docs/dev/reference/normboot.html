@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Multi-state oncology data for 3-state model — onc3 • hesim</title>
+<title>Draw parameters of statistical model from multivariate normal distribution — normboot • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,10 +46,9 @@
 
 
 
-<meta property="og:title" content="Multi-state oncology data for 3-state model — onc3" />
-<meta property="og:description" content="Simulated 3-state dataset in oncology with three health states
-(Stable, Progression, and Death) and three possible transitions (Stable -&amp;gt;
-Progression, Stable -&amp;gt; Death, and Progression -&amp;gt; Death)." />
+<meta property="og:title" content="Draw parameters of statistical model from multivariate normal distribution — normboot" />
+<meta property="og:description" content="normboot is a generic function for drawing parameters from a fitted
+statistical model from their (asymptotic) multivariate normal distribution." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -169,59 +168,39 @@ Progression, Stable -&amp;gt; Death, and Progression -&amp;gt; Death)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Multi-state oncology data for 3-state model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>onc3.Rd</code></div>
+    <h1>Draw parameters of statistical model from multivariate normal distribution</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/bootstrap.R'><code>R/bootstrap.R</code></a></small>
+    <div class="hidden name"><code>normboot.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Simulated 3-state dataset in oncology with three health states
-(Stable, Progression, and Death) and three possible transitions (Stable -&gt;
-Progression, Stable -&gt; Death, and Progression -&gt; Death).</p>
+    <p><code>normboot</code> is a generic function for drawing parameters from a fitted
+statistical model from their (asymptotic) multivariate normal distribution.</p>
     </div>
 
-    <pre class="usage"><span class='no'>onc3</span></pre>
+    <pre class="usage"><span class='fu'>normboot</span>(<span class='no'>object</span>, <span class='no'>B</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for msm</span>
+<span class='fu'>normboot</span>(<span class='no'>object</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='no'>...</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>object</th>
+      <td><p>A statistical model.</p></td>
+    </tr>
+    <tr>
+      <th>B</th>
+      <td><p>Number of draws of the parameters.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods.</p></td>
+    </tr>
+    </table>
 
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>A <code>data.table</code> with the following columns:</p><dl'>
-<dt>from</dt><dd><p>Health state making a transition from.</p></dd>
-<dt>to</dt><dd><p>Health state making a transition to.</p></dd>
-<dt>strategy_name</dt><dd><p>Standard of care (SOC), new treatment 1 (New 1), or
-new treatment 2 (New 2).</p></dd>
-<dt>female</dt><dd><p>1 if a patient is female; 0 if male.</p></dd>
-<dt>age</dt><dd><p>Patient age (in years).</p></dd>
-<dt>patient_id</dt><dd><p>Patient identification number.</p></dd>
-<dt>time_start</dt><dd><p>Starting time.</p></dd>
-<dt>time_stop</dt><dd><p>Stopping time.</p></dd>
-<dt>status</dt><dd><p>Status indicator: 1=transition, 0=censored.</p></dd>
-<dt>transition_id</dt><dd><p>Integer denoting transition: 1 = Stable -&gt; Progression,
-2 = Stable -&gt; Death, 3 = Progression -&gt; Death.</p></dd>
-<dt>strategy_id</dt><dd><p>Strategy identification number.</p></dd>
-<dt>time</dt><dd><p>Elapsed years between <code>time_start</code> and <code>time_stop</code>.</p></dd>
-
-</dl>
-
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><a href='onc3p.html'>onc3p</a></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>onc3</span>)</div><div class='output co'>#&gt;           from          to strategy_name female      age patient_id time_start
-#&gt; 1:      Stable Progression         New 2      0 59.85813          1   0.000000
-#&gt; 2:      Stable       Death         New 2      0 59.85813          1   0.000000
-#&gt; 3: Progression       Death         New 2      0 59.85813          1   2.420226
-#&gt; 4:      Stable Progression         New 2      0 62.57282          2   0.000000
-#&gt; 5:      Stable       Death         New 2      0 62.57282          2   0.000000
-#&gt; 6:      Stable Progression           SOC      1 61.44379          3   0.000000
-#&gt;    time_stop status transition_id strategy_id      time
-#&gt; 1:  2.420226      1             1           3  2.420226
-#&gt; 2:  2.420226      0             2           3  2.420226
-#&gt; 3: 14.620258      1             3           3 12.200032
-#&gt; 4:  7.497464      0             1           3  7.497464
-#&gt; 5:  7.497464      0             2           3  7.497464
-#&gt; 6:  2.365867      0             1           1  2.365867</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

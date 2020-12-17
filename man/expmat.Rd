@@ -29,5 +29,5 @@ to create the \code{value} element of a \link{tparams_transprobs} object. See
 \code{\link[=qmatrix]{qmatrix()}} for an example.
 }
 \seealso{
-\code{\link[=qmatrix]{qmatrix()}}
+\code{\link[=qmatrix.msm]{qmatrix.msm()}}, \code{\link[=qmatrix.data.table]{qmatrix.data.table()}}
 }
