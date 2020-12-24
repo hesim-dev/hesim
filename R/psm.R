@@ -385,7 +385,7 @@ Psm <- R6::R6Class("Psm",
     #' `FALSE`, then costs and QALYs are aggregated across all patients (and subgroups).      
     summarize = function(by_grp = FALSE) {
       check_summarize(self)
-      return(summarize_ce(self$costs_, self$qalys_))
+      return(summarize_ce(self$costs_, self$qalys_, by_grp))
     }
   )
 )
