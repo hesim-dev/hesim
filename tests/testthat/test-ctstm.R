@@ -531,7 +531,7 @@ test_that("IndivCtstm - joint", {
   
   # Mixture
   params <- create_params(msfit, n = 2)
-  msfit_data <- cbind(msfit_data, model.matrix(~factor(trans), msfit_data), shape = 1, scale = 1)
+  msfit_data <- cbind(msfit_data, model.matrix(~-1 + factor(trans), msfit_data), intercept = 1)
   mstate_mix <- create_IndivCtstmTrans(params, input_data = msfit_data, 
                                        trans_mat = tmat_ebmt4,
                                        clock = "mix", reset_states = 1:nrow(tmat_ebmt4))  

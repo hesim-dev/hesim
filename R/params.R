@@ -487,6 +487,7 @@ create_params.flexsurvreg <- function(object, n = 1000, point_estimate = FALSE, 
   inds <- flexsurvreg_inds(object)
   for (j in seq_along(object$dlist$pars)){
     coefs[[j]] <- sim[, inds[[j]], drop = FALSE]
+    colnames(coefs[[j]])[1] <- "intercept"
   }
   return(new_params_surv(dist = object$dlist$name,
                          coefs = coefs,
