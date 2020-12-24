@@ -23,9 +23,10 @@ create_PsmCurves(object, ...)
 \arguments{
 \item{object}{Fitted survival models.}
 
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
+\item{...}{Further arguments passed to or from other methods. Passed to \code{create_params.partsurvfit()}
+when \code{object} is of class \code{\link{flexsurvreg_list}}.}
 
-\item{input_data}{An object of class "expanded_hesim_data" returned by
+\item{input_data}{An object of class \code{expanded_hesim_data} returned by
 \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
 "patients".}
 
@@ -34,14 +35,14 @@ create_PsmCurves(object, ...)
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
 
 \item{bootstrap}{If TRUE, then \code{n} bootstrap replications are drawn by refitting the survival
-models in \code{object} on resamples of the sample data; if FALSE, then the parameters for each survival
+models in \code{object} on resamples of the sample data; if \code{FALSE}, then the parameters for each survival
 model are independently draw from multivariate normal distributions.}
 
 \item{est_data}{A \code{data.table} or \code{data.frame} of estimation data
 used to fit survival models during bootstrap replications.}
 }
 \value{
-Returns an \code{\link{R6Class}} object of class \code{\link{PsmCurves}}.
+Returns an \code{R6Class} object of class \code{\link{PsmCurves}}.
 }
 \description{
 \code{create_PsmCurves} is a function for creating an object of class

@@ -5,19 +5,20 @@
 #' \code{create_PsmCurves} is a function for creating an object of class
 #' \code{\link{PsmCurves}}.
 #' @param object Fitted survival models.
-#' @param input_data An object of class "expanded_hesim_data" returned by 
+#' @param input_data An object of class `expanded_hesim_data` returned by 
 #' \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
 #' "patients". 
 #' @param n Number of random observations of the parameters to draw.
-#' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.
-#' @param bootstrap If TRUE, then \code{n} bootstrap replications are drawn by refitting the survival
-#'  models in \code{object} on resamples of the sample data; if FALSE, then the parameters for each survival
+#' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
+#' @param bootstrap If TRUE, then `n` bootstrap replications are drawn by refitting the survival
+#'  models in `object` on resamples of the sample data; if `FALSE`, then the parameters for each survival
 #'  model are independently draw from multivariate normal distributions.  
-#' @param est_data A \code{data.table} or \code{data.frame} of estimation data 
+#' @param est_data A `data.table` or `data.frame` of estimation data 
 #' used to fit survival models during bootstrap replications.
-#' @param ... Further arguments passed to or from other methods. Currently unused. 
-#' @return Returns an \code{\link{R6Class}} object of class \code{\link{PsmCurves}}.
-#' @seealso \code{\link{PsmCurves}}
+#' @param ... Further arguments passed to or from other methods. Passed to `create_params.partsurvfit()`
+#' when `object` is of class [`flexsurvreg_list`].
+#' @return Returns an `R6Class` object of class [`PsmCurves`].
+#' @seealso [`PsmCurves`]
 #' @export
 create_PsmCurves <- function(object, ...){
   UseMethod("create_PsmCurves", object)
@@ -26,13 +27,15 @@ create_PsmCurves <- function(object, ...){
 #' @export
 #' @rdname create_PsmCurves
 create_PsmCurves.flexsurvreg_list <- function(object, input_data, n = 1000, point_estimate = FALSE,
-                                              bootstrap = FALSE, est_data = NULL, ...){
+                                              bootstrap = FALSE, est_data = NULL,
+                                               ...){
   if (bootstrap == TRUE & is.null(est_data)){
     stop("If 'bootstrap' == TRUE, then 'est_data' cannot be NULL")
   }
   psfit <- partsurvfit(object, est_data)
   input_mats <- create_input_mats(psfit, input_data, id_vars = c("strategy_id", "patient_id"))
-  params <- create_params(psfit, n = n, point_estimate = point_estimate, bootstrap = bootstrap)
+  params <- create_params(psfit, n = n, point_estimate = point_estimate, 
+                          bootstrap = bootstrap, ...)
   return(PsmCurves$new(input_data = input_mats, params = params))
 }
 
