@@ -1,3 +1,7 @@
+## hesim 0.4.9999
+### New features
+* A transition intensity matrix can be created from a multi-state model fit using `msm::msm()` with the  `qmatrix.msm()` method.
+
 ## hesim 0.4.2
 ### New features
 * There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in `tparams_transprobs()` objects and used for simulation of discrete time state transition models. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., `data.table`, `data.frame`, `matrix`).
