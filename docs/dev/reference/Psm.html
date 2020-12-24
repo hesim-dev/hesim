@@ -311,8 +311,14 @@ in <code>costs_</code>.</p>
 <a id="method-summarize"></a></p><h3>Method <code>summarize()</code></h3>
 <p>Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>Psm</span>$<span class='fu'>summarize</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='no'>Psm</span>$<span class='fu'>summarize</span>(<span class='kw'>by_grp</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl'>
+<dt><code>by_grp</code></dt><dd><p>If <code>TRUE</code>, then costs and QALYs are computed by subgroup. If
+<code>FALSE</code>, then costs and QALYs are aggregated across all patients (and subgroups).</p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
 <p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
@@ -380,18 +386,18 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h
 <span class='no'>psm</span>$<span class='fu'>sim_stateprobs</span>()
 <span class='no'>psm</span>$<span class='fu'><a href='sim_ev.html'>sim_costs</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>psm</span>$<span class='no'>costs_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr category    costs
-#&gt; 1:      1           1          1      1        1 0.03  medical 21437.42
-#&gt; 2:      1           1          1      1        2 0.03  medical 13344.90
-#&gt; 3:      1           1          1      1        3 0.03  medical 15141.31
-#&gt; 4:      1           1          2      1        1 0.03  medical 20578.39
-#&gt; 5:      1           1          2      1        2 0.03  medical 12900.56
-#&gt; 6:      1           1          2      1        3 0.03  medical 14130.52</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>psm</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr     qalys       lys
-#&gt; 1:      1           1          1      1        1 0.03 0.5521894 0.6438115
-#&gt; 2:      1           1          1      1        2 0.03 0.3910399 0.5526572
-#&gt; 3:      1           1          1      1        3 0.03 0.2866975 0.4299311
-#&gt; 4:      1           1          2      1        1 0.03 0.5300622 0.6180128
-#&gt; 5:      1           1          2      1        2 0.03 0.3780196 0.5342555
-#&gt; 6:      1           1          2      1        3 0.03 0.2675583 0.4012300</div><div class='input'>
+#&gt; 1:      1           1          1      1        1 0.03  medical 22718.78
+#&gt; 2:      1           1          1      1        2 0.03  medical 14298.32
+#&gt; 3:      1           1          1      1        3 0.03  medical 13474.17
+#&gt; 4:      1           1          2      1        1 0.03  medical 21608.05
+#&gt; 5:      1           1          2      1        2 0.03  medical 13821.81
+#&gt; 6:      1           1          2      1        3 0.03  medical 13114.90</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>psm</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)$<span class='no'>qalys_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr     qalys       lys
+#&gt; 1:      1           1          1      1        1 0.03 0.5350519 0.6503901
+#&gt; 2:      1           1          1      1        2 0.03 0.4225619 0.5500606
+#&gt; 3:      1           1          1      1        3 0.03 0.2512030 0.4041385
+#&gt; 4:      1           1          2      1        1 0.03 0.5088931 0.6185924
+#&gt; 5:      1           1          2      1        2 0.03 0.4084794 0.5317290
+#&gt; 6:      1           1          2      1        3 0.03 0.2445051 0.3933629</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

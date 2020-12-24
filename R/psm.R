@@ -380,10 +380,12 @@ Psm <- R6::R6Class("Psm",
     
     #' @description
     #' Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
-    #' See [summarize_ce()].       
-    summarize = function() {
+    #' See [summarize_ce()]. 
+    #' @param by_grp If `TRUE`, then costs and QALYs are computed by subgroup. If
+    #' `FALSE`, then costs and QALYs are aggregated across all patients (and subgroups).      
+    summarize = function(by_grp = FALSE) {
       check_summarize(self)
-      return(summarize_ce(self$costs_, self$qalys_))
+      return(summarize_ce(self$costs_, self$qalys_, by_grp))
     }
   )
 )

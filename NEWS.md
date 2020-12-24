@@ -1,9 +1,12 @@
-## hesim 0.4.9999
+## hesim 0.4.2.9999
 ### New features
 * A transition intensity matrix can be created from a multi-state model fit using `msm::msm()` with the  `qmatrix.msm()` method.
 
 ### API changes
 * The first column of each matrix listed in the `coef` element returned by `create_params.flexsurvreg()` is now named "(Intercept)" instead of the name of the corresponding parameter.
+
+### Bug fixes
+* The `$summarize()` method of `hesim::Psm` now contains the `by_grp` argument so that subgroup analyses can be performed.
 
 ## hesim 0.4.2
 ### New features

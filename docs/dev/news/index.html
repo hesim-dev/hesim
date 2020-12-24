@@ -170,9 +170,9 @@
       <small>Source: <a href='https://github.com/hesim-dev/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="hesim-049999" class="section level2">
+    <div id="hesim-0429999" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hesim-049999" class="anchor"></a>hesim 0.4.9999</h2>
+<a href="#hesim-0429999" class="anchor"></a>hesim 0.4.2.9999</h2>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
@@ -185,6 +185,13 @@
 <a href="#api-changes" class="anchor"></a>API changes</h3>
 <ul>
 <li>The first column of each matrix listed in the <code>coef</code> element returned by <code><a href="../reference/create_params.html">create_params.flexsurvreg()</a></code> is now named “(Intercept)” instead of the name of the corresponding parameter.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>The <code>$summarize()</code> method of <code><a href="../reference/Psm.html">hesim::Psm</a></code> now contains the <code>by_grp</code> argument so that subgroup analyses can be performed.</li>
 </ul>
 </div>
 </div>
@@ -210,9 +217,9 @@
 <li><p>The function <code><a href="../reference/as_pfs_os.html">as_pfs_os()</a></code> can convert a multi-state dataset in the same format as <code><a href="../reference/onc3.html">hesim::onc3</a></code> into a dataset with one row per patients containing time to event information for progression free survival (PFS) and overall survival (OS).</p></li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level3">
+<div id="bug-fixes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li><p>The <code>cycle_length</code> field in <code>CohortDtstmTrans</code> was fixed so that it corresponds to a model cycle in terms of years (e.g., a value of 2 means a model cycle is 2 years long and that state probabilities are computed every 2 years with <code>$sim_stateprobs()</code>).</p></li>
 <li><p>The simulated dataset <code>multinom3_exdata</code> was fixed by removing a bug where some patients were simulated to have died more than once.</p></li>
@@ -249,9 +256,9 @@
 <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code> have been deprecated and replaced by <code><a href="../reference/cea.html">cea()</a></code> and <code><a href="../reference/cea.html">cea_pw()</a></code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li><p>The <code>lys</code> argument for the <code>$sim_qalys()</code> method of <code><a href="../reference/Psm.html">hesim::Psm</a></code> and <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> classes now works.</p></li>
 <li><p>The <code>$sim_stateprobs()</code> argument for the <code><a href="../reference/Psm.html">hesim::Psm</a></code> class now properly returns the <code>patient_wt</code> column.</p></li>
