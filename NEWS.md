@@ -2,10 +2,10 @@
 ### New features
 * A transition intensity matrix can be created from a multi-state model fit using `msm::msm()` with the  `qmatrix.msm()` method.
 
+* The `...` argument to `create_PsmCurves()` now passes arguments to `create_params.partsurvfit()` when `object` is of class `flexsurvreg_list`. This allows more control over bootstrapping (i.e., use of the `max_errors` argument). 
+
 ### API changes
 * The first column of each matrix listed in the `coef` element returned by `create_params.flexsurvreg()` is now named "(Intercept)" instead of the name of the corresponding parameter.
-
-* The `...` argument to `create_PsmCurves()` now passes arguments to `create_params.partsurvfit()` when `object` is of class `flexsurvreg_list`. This allows more control over bootstrapping (i.e., use of the `max_errors` argument). 
 
 ### Bug fixes
 * The `$summarize()` method of `hesim::Psm` now contains the `by_grp` argument so that subgroup analyses can be performed.
