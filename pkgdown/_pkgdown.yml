@@ -36,6 +36,7 @@ reference:
   - title: "Parameters"
     contents:
       - params
+      - create_params
       - params_lm
       - params_mlogit
       - params_mlogit_list

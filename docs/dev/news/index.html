@@ -180,6 +180,13 @@
 <li>A transition intensity matrix can be created from a multi-state model fit using <code><a href="https://rdrr.io/pkg/msm/man/msm.html">msm::msm()</a></code> with the <code><a href="../reference/qmatrix.msm.html">qmatrix.msm()</a></code> method.</li>
 </ul>
 </div>
+<div id="api-changes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#api-changes" class="anchor"></a>API changes</h3>
+<ul>
+<li>The first column of each matrix listed in the <code>coef</code> element returned by <code><a href="../reference/create_params.html">create_params.flexsurvreg()</a></code> is now named “(Intercept)” instead of the name of the corresponding parameter.</li>
+</ul>
+</div>
 </div>
     <div id="hesim-042" class="section level2">
 <h2 class="hasAnchor">
@@ -234,9 +241,9 @@
 <li><p>The “Articles” on the package website have been reorganized so that they align more closely with the different types of economic models.</p></li>
 </ul>
 </div>
-<div id="api-changes" class="section level3">
+<div id="api-changes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#api-changes" class="anchor"></a>API changes</h3>
+<a href="#api-changes-1" class="anchor"></a>API changes</h3>
 <ul>
 <li>
 <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code> have been deprecated and replaced by <code><a href="../reference/cea.html">cea()</a></code> and <code><a href="../reference/cea.html">cea_pw()</a></code>.</li>
@@ -275,9 +282,9 @@
 <li><p><code><a href="../reference/rdirichlet_mat.html">rdirichlet_mat()</a></code> has a new argument <code>output</code> so that multiple object types can be returned.</p></li>
 </ul>
 </div>
-<div id="api-changes-1" class="section level3">
+<div id="api-changes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#api-changes-1" class="anchor"></a>API changes</h3>
+<a href="#api-changes-2" class="anchor"></a>API changes</h3>
 <ul>
 <li><p>The auxiliary argument <code>random_method = "sample"</code> in <code><a href="../reference/params_surv.html">params_surv()</a></code> is deprecated and <code>random_method = "discrete"</code> should be used instead.</p></li>
 <li><p><code>stateval_tbl</code> now contains a <code>grp_var</code> column used to assign state values to “groups” of patients. This is distinct from <code>grp_id</code> in <code><a href="../reference/hesim_data.html">hesim_data()</a></code>, which is used to define groups for subgroup analyses.</p></li>
@@ -340,9 +347,9 @@
 <p>Utility and cost models are constructed with the <code><a href="../reference/StateVals.html">hesim::StateVals</a></code> class.</p>
 <p>The economic models are used to simulate disease progression (<code>$sim_disease()</code>, <code>$sim_stateprobs()</code>), quality-adjusted life-years (QALYs) (<code>$sim_qalys()</code>), and costs (<code>$sim_costs()</code>). Parameter uncertainty is propagated to model outcomes using probabilistic sensitivity analysis. Summaries of the simulated costs and QALYs are used to perform model-based cost-effectiveness analyses (CEAs) and represent decision uncertainty with <code>icea.ce()</code> and <code>icea_pw.ce()</code>.</p>
 </div>
-<div id="api-changes-2" class="section level3">
+<div id="api-changes-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#api-changes-2" class="anchor"></a>API changes</h3>
+<a href="#api-changes-3" class="anchor"></a>API changes</h3>
 <ul>
 <li>The argument <code>sim</code> was renamed <code>sample</code> in <code><a href="../reference/icea.html">icea()</a></code>, <code><a href="../reference/icea.html">icea_pw()</a></code>, and <code><a href="../reference/incr_effect.html">incr_effect()</a></code>.</li>
 <li>Custom functions and variables are no longer supported in <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code>.</li>
