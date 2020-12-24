@@ -227,7 +227,7 @@ test_that("A Psm object can be constructed and simulated from a parameter object
   # PsmCurves
   params_wei <- create_params(fits_wei, n = 5)
   tmp_input_data <- surv_input_data
-  tmp_input_data$intercept <- 1
+  tmp_input_data[["(Intercept)"]] <- 1
   psm_curves <- create_PsmCurves(params_wei, input_data = tmp_input_data)
   expect_true(inherits(psm_curves$hazard(t = c(1, 2, 3)),
                       "data.table"))
