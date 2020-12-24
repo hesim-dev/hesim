@@ -170,12 +170,23 @@
       <small>Source: <a href='https://github.com/hesim-dev/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="hesim-042" class="section level2">
+    <div id="hesim-049999" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hesim-042" class="anchor"></a>hesim 0.4.2</h2>
+<a href="#hesim-049999" class="anchor"></a>hesim 0.4.9999</h2>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
+<ul>
+<li>A transition intensity matrix can be created from a multi-state model fit using <code><a href="https://rdrr.io/pkg/msm/man/msm.html">msm::msm()</a></code> with the <code><a href="../reference/qmatrix.msm.html">qmatrix.msm()</a></code> method.</li>
+</ul>
+</div>
+</div>
+    <div id="hesim-042" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hesim-042" class="anchor"></a>hesim 0.4.2</h2>
+<div id="new-features-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>New features</h3>
 <ul>
 <li>
 <p>There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> objects and used for simulation of discrete time state transition models. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., <code>data.table</code>, <code>data.frame</code>, <code>matrix</code>).</p>
@@ -211,9 +222,9 @@
     <div id="hesim-040" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-040" class="anchor"></a>hesim 0.4.0</h2>
-<div id="new-features-1" class="section level3">
+<div id="new-features-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New features</h3>
+<a href="#new-features-2" class="anchor"></a>New features</h3>
 <ul>
 <li><p><code>IndivCtstmTrans</code> objects can be constructed from a <code>params_surv_list</code> using <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans.params_surv_list()</a></code>.</p></li>
 <li><p>Survival models can randomly sample from piecewise exponential and proportional hazards Weibull distributions. A <code>fixed</code> distribution has also been added so that survival times can be set to a single constant value. Random number generation from truncated versions of these distributions is also supported. Note that functionality beyond random number generation (e.g., hazard functions, cumulative hazard functions, cumulative density functions) is not yet complete. See <code><a href="../reference/params_surv.html">?params_surv</a></code>.</p></li>
@@ -253,9 +264,9 @@
 <a href="#highlights" class="anchor"></a>Highlights</h3>
 <p><code>hesim</code> now supports discrete time state transition models via <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> objects. Users can build a model by either fitting multinomial logistic regressions with <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html">nnet::multinom()</a></code> or with a mathematical expression using <code><a href="../reference/define_model.html">define_model()</a></code>. Furthermore, <code>$summarize()</code> methods now have a <code>by_grp</code> option to facilitate subgroup analyses.</p>
 </div>
-<div id="new-features-2" class="section level3">
+<div id="new-features-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>New features</h3>
+<a href="#new-features-3" class="anchor"></a>New features</h3>
 <ul>
 <li><p>The <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> class simulates cohort discrete time state transition models (cDTSTM). State transitions in a cDTSTM are simulated using the <code><a href="../reference/CohortDtstmTrans.html">hesim::CohortDtstmTrans</a></code> class, which can be constructed from a <code><a href="../reference/multinom_list.html">multinom_list()</a></code> object or using <code><a href="../reference/define_model.html">define_model()</a></code>.</p></li>
 <li><p><code>$summarize()</code> methods now have a <code>by_grp = "TRUE"</code> option to facilitate subgroup analyses. If <code>by_grp = "FALSE"</code>, then estimates are aggregated across groups. A new <code>patient_wt</code> argument in the <code>patients</code> table of <code><a href="../reference/hesim_data.html">hesim_data()</a></code> can be used to weight groups during the aggregation.</p></li>
@@ -309,9 +320,9 @@
 <a href="#highlights-1" class="anchor"></a>Highlights</h3>
 <p><code>hesim</code> now provides a general framework for integrating statistical models with economic evaluation. Users build a decision model by specifying a model structure, which consists of a set of statistical models for disease progression, utilities, and costs. Each statistical model is used to simulate outcomes as a function of estimated parameters and input data. N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are now supported.</p>
 </div>
-<div id="new-features-3" class="section level3">
+<div id="new-features-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#new-features-3" class="anchor"></a>New features</h3>
+<a href="#new-features-4" class="anchor"></a>New features</h3>
 <p>Economic models—which combine the disease, utility, and cost models—are constructed with the following classes:</p>
 <ul>
 <li>
