@@ -177,7 +177,8 @@
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
 <ul>
-<li>A transition intensity matrix can be created from a multi-state model fit using <code><a href="https://rdrr.io/pkg/msm/man/msm.html">msm::msm()</a></code> with the <code><a href="../reference/qmatrix.msm.html">qmatrix.msm()</a></code> method.</li>
+<li><p>A transition intensity matrix can be created from a multi-state model fit using <code><a href="https://rdrr.io/pkg/msm/man/msm.html">msm::msm()</a></code> with the <code><a href="../reference/qmatrix.msm.html">qmatrix.msm()</a></code> method.</p></li>
+<li><p>The <code>...</code> argument to <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> now passes arguments to <code><a href="../reference/create_params.html">create_params.partsurvfit()</a></code> when <code>object</code> is of class <code>flexsurvreg_list</code>. This allows more control over bootstrapping (i.e., use of the <code>max_errors</code> argument).</p></li>
 </ul>
 </div>
 <div id="api-changes" class="section level3">
