@@ -18,13 +18,8 @@ values. See "Details" for specifics.}
 \item{dist}{Probability distribution used to sample parameters for a
 probabilistic sensitivity analysis (PSA).}
 
-\item{hesim_data}{A \link{hesim_data} object. Required to specify
-treatment strategies , patients,
-and/or health states not included as columns
-in \code{tbl}, or, to match patients in \code{tbl} to groups.
-Not required if \code{tbl} includes one row for each treatment strategy, patient, and
-health state combination. Patients are matched to groups by specifying both a
-\code{patient_id} and a \code{grp_var} column in the \code{patients} table.}
+\item{hesim_data}{A \code{\link{hesim_data}} object. This argument is deprecated
+and should be passed to \code{create_StateVals.stateval_tbl} instead.}
 
 \item{grp_var}{The name of the variable used to group patients.}
 }

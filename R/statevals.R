@@ -9,13 +9,8 @@
 #' values. See "Details" for specifics. 
 #' @param dist Probability distribution used to sample parameters for a 
 #' probabilistic sensitivity analysis (PSA). 
-#' @param hesim_data A [hesim_data] object. Required to specify 
-#' treatment strategies , patients,
-#'  and/or health states not included as columns
-#' in `tbl`, or, to match patients in `tbl` to groups.
-#'  Not required if `tbl` includes one row for each treatment strategy, patient, and
-#' health state combination. Patients are matched to groups by specifying both a 
-#' `patient_id` and a `grp_var` column in the `patients` table.
+#' @param hesim_data A [`hesim_data`] object. This argument is deprecated
+#' and should be passed to `create_StateVals.stateval_tbl` instead.
 #' @param grp_var The name of the variable used to group patients.
 #' 
 #' @details 
@@ -120,36 +115,6 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   }
   
   # Check
-  ## Column names
-  check_column <- function(var){
-    if (is.null(tbl2[[var]])){
-      name <- switch(var,
-                     "state_id" = "states",
-                     "strategy_id" = "strategies",
-                     "patient_id" = "patients")
-      if (is.null(hesim_data[[name]])){
-        msg <- paste0("If '", var, "' is not a column in 'tbl', ",
-                      "then 'hesim_data' must be included as an argument ",
-                      "and '",  name, "' must be an element of 'hesim_data'.")
-        stop(msg, call. = FALSE)
-      }
-    }
-  }
-  check_column("state_id")
-  check_column("strategy_id")
-  check_column("patient_id")
-  
-  ### Additional logic for patients
-  if (is.null(tbl2[["patient_id"]])){
-    if (is.null(hesim_data[["patients"]][["patient_id"]]) & 
-        (is.null(grp_var) || is.null(tbl2[[grp_var]]))){
-      stop(paste0("If 'patient_id' is not included as a column in `tbl`, ",
-                  "then both 'patient_id' and 'grp_var' cannot be missing from the ",
-                  " 'patients' element of hesim_data"),
-           call. = FALSE)
-    }
-  }
-  
   ## Need sample
   if (dist != "custom") {
     if ("sample" %in% colnames(tbl2)){
@@ -245,9 +210,9 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   expected_n_times <- size("time_start")
   expected_n <- expected_n_samples * expected_n_strategies * expected_n_states * expected_n_grps * expected_n_times
   if (nrow(tbl2) != expected_n) {
-    stop(paste0("The number of rows in 'tbl' should equal ", expected_n, 
+    stop(paste0("The number of rows in 'object' should equal ", expected_n, 
                 " which is the number of unique values of ",
-                id_vars_msg, " in 'tbl'"))
+                id_vars_msg, " in 'object'."))
   }
   
   # Nice sorting
@@ -259,10 +224,10 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   # Return
   setattr(tbl2, "class", c("stateval_tbl", "data.table", "data.frame"))
   setattr(tbl2, "dist", dist)
-  setattr(tbl2, "strategy_id", hesim_data$strategies$strategy_id)
-  setattr(tbl2, "patients", data.table(hesim_data$patients))
-  setattr(tbl2, "state_id", hesim_data$states$state_id)
   setattr(tbl2, "grp_var", grp_var)
+  if (!is.null(hesim_data)) {
+    attr(tbl2, "hesim_data") <- hesim_data
+  }
   return(tbl2)
 }
 
@@ -275,10 +240,18 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 #' @param object A model object of the appropriate class.
 #' @param input_data An object of class [expanded_hesim_data][expand.hesim_data()].
 #' Must be expanded by treatment strategies, patients, and health states.
+#' @param hesim_data A [`hesim_data`] object. Only required when `object` is of class
+#' [`stateval_tbl`]. See "details". 
 #' @param n Number of random observations of the parameters to draw when parameters 
 #' are fit using a statistical model.
 #' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
 #' @param ... Further arguments (`time_reset` and `method`) passed to [StateVals$new()][StateVals].
+#' @details If `object` is a `stateval_tbl`, then a [`hesim_data`] object is used
+#'  to specify treatment strategies , patients, and/or health states not included as 
+#'  columns in the table, or, to match patients in the table to groups. Not required if 
+#'  the table includes one row for each treatment strategy, patient, and health state
+#'   combination. Patients are matched to groups by specifying both a `patient_id` 
+#'   and a `grp_var` column in the `patients` table.
 #' @return A [StateVals] object.
 #' @seealso [StateVals], [stateval_tbl]
 #' @export
@@ -297,7 +270,52 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
 
 #' @rdname create_StateVals 
 #' @export
-create_StateVals.stateval_tbl <- function(object, n = 1000, ...){
+create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, ...){
+  
+  grp_var <- attr(object, "grp_var")
+  
+  # For backwards compatibility, use hesim_data attribute of object 
+  # if needed and available
+  if (!is.null(attr(object, "hesim_data")) && is.null(hesim_data)) {
+    hesim_data <- attr(object, "hesim_data")
+  } 
+  
+  # Check whether hesim_data is required
+  need_hesim_data <- function(var){
+    if (is.null(object[[var]])){
+      name <- switch(var,
+                     "state_id" = "states",
+                     "strategy_id" = "strategies",
+                     "patient_id" = "patients")
+      if (is.null(hesim_data[[name]])){
+        msg <- paste0("If '", var, "' is not a column in 'object', ",
+                      "then 'hesim_data' must be included as an argument ",
+                      "and '",  name, "' must be an element of 'hesim_data'.")
+        stop(msg, call. = FALSE)
+      }
+    }
+  }
+  need_hesim_data("state_id")
+  need_hesim_data("strategy_id")
+  need_hesim_data("patient_id")
+  
+  ## Additional logic for patients
+  if (is.null(object[["patient_id"]])){
+    if (is.null(hesim_data[["patients"]][["patient_id"]]) & 
+        (is.null(grp_var) || is.null(object[[grp_var]]))){
+      stop(paste0("If 'patient_id' is not included as a column in `object`, ",
+                  "then both 'patient_id' and 'grp_var' cannot be missing from the ",
+                  " 'patients' element of hesim_data"),
+           call. = FALSE)
+    }
+  }
+
+  # If not NULL, add hesim_data to attributes of object 
+  if (!is.null(hesim_data)) {
+    setattr(object, "strategy_id", hesim_data$strategies$strategy_id)
+    setattr(object, "patients", data.table(hesim_data$patients))
+    setattr(object, "state_id", hesim_data$states$state_id)
+  }
   
   # Random number generation
   tbl <- copy(object)

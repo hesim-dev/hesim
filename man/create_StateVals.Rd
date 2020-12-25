@@ -16,7 +16,7 @@ create_StateVals(object, ...)
   ...
 )
 
-\method{create_StateVals}{stateval_tbl}(object, n = 1000, ...)
+\method{create_StateVals}{stateval_tbl}(object, hesim_data = NULL, n = 1000, ...)
 }
 \arguments{
 \item{object}{A model object of the appropriate class.}
@@ -30,6 +30,9 @@ Must be expanded by treatment strategies, patients, and health states.}
 are fit using a statistical model.}
 
 \item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
+
+\item{hesim_data}{A \code{\link{hesim_data}} object. Only required when \code{object} is of class
+\code{\link{stateval_tbl}}. See "details".}
 }
 \value{
 A \link{StateVals} object.
@@ -38,6 +41,14 @@ A \link{StateVals} object.
 \code{create_StateVals()} is a generic function for creating an object of class
 \link{StateVals} from a fitted statistical model or a \link{stateval_tbl}
 object.
+}
+\details{
+If \code{object} is a \code{stateval_tbl}, then a \code{\link{hesim_data}} object is used
+to specify treatment strategies , patients, and/or health states not included as
+columns in the table, or, to match patients in the table to groups. Not required if
+the table includes one row for each treatment strategy, patient, and health state
+combination. Patients are matched to groups by specifying both a \code{patient_id}
+and a \code{grp_var} column in the \code{patients} table.
 }
 \seealso{
 \link{StateVals}, \link{stateval_tbl}
