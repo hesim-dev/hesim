@@ -102,8 +102,7 @@ Although utility and cost models can be fit using regression models, in many cas
 utility_tbl <- stateval_tbl(tbl = data.frame(state_id = states_dt$state_id,
                                              min = psm4_exdata$utility$lower,
                                              max = psm4_exdata$utility$upper),
-                            dist = "unif",
-                            hesim_data = hesim_dat)
+                            dist = "unif")
 ```
 
 Similar to utility, we will not simulate drug costs based on a statistical model but will instead use published estimates. Drug costs will only vary by treatment strategy (i.e., they do not vary by health state or across samples in the PSA).
@@ -111,8 +110,7 @@ Similar to utility, we will not simulate drug costs based on a statistical model
 ```{r, warning = FALSE, message = FALSE}
 drugcost_tbl <- stateval_tbl(tbl = data.frame(strategy_id = strategies_dt$strategy_id,
                                            est = psm4_exdata$costs$drugs$costs),
-                          dist = "fixed",
-                          hesim_data = hesim_dat)
+                          dist = "fixed")
 ```
 
 For cases in which we want to use a regression model to simulate costs, `hesim` supports parameterizing a cost or utility model using linear models. Here, we fit a model for medical costs as a function of the three non-death health states using the `lm()` function in R. 
@@ -144,13 +142,13 @@ survmods <- create_PsmCurves(psfit_wei, input_data = surv_input_data, n = n_samp
 Utility and cost values are simulated using models of class `StateVals`. We can instantiate a `StateVals` object from a 'stateval_tbl` object, which creates a "mean model" that predicts mean state values for each treatment strategy, patient, and health state combination. In the utility model, utility only varies across health states and is constant within patients and treatment strategies conditional on health state.
 
 ```{r, warning = FALSE, message = FALSE}
-utilitymod <- create_StateVals(utility_tbl, n = n_samples)
+utilitymod <- create_StateVals(utility_tbl, n = n_samples, hesim_data = hesim_dat)
 ```
 
 We take a similar approach for drug costs, in which costs only vary across treatment strategies.
 
 ```{r, warning = FALSE, message = FALSE}
-drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples)
+drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples, hesim_data = hesim_dat)
 ```
 
 Finally, we can also instantiate a `StateVals()` from a fitted linear model and a corresponding dataset of class `expanded_hesim_data`.

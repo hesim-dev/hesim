@@ -124,7 +124,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Markov models with multinomial logistic regression</h1>
             
-            <h4 class="date">2020-12-07</h4>
+            <h4 class="date">2020-12-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/mlogit.Rmd"><code>vignettes/mlogit.Rmd</code></a></small>
       <div class="hidden name"><code>mlogit.Rmd</code></div>
@@ -187,12 +187,12 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
   , <span class="no">grp_id</span> <span class="kw">:=</span> <span class="fl">1</span>:<span class="no">n_patients</span>]
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">patients</span>)</pre></body></html></div>
 <pre><code>##    patient_id      age female grp_id
-## 1:       7470 77.49958      1      1
-## 2:       5993 23.71684      0      2
-## 3:       6463 39.68552      1      3
-## 4:       8464 26.60253      1      4
-## 5:       3911 65.38093      1      5
-## 6:       3279 23.85191      1      6</code></pre>
+## 1:         53 60.06896      1      1
+## 2:       8304 68.40021      1      2
+## 3:        206 22.89067      0      3
+## 4:       3859 81.96641      0      4
+## 5:       9215 42.16991      1      5
+## 6:       8996 62.58691      1      6</code></pre>
 <p>To perform the cost-effectiveness analysis, each patient is simulated twice, once with the reference treatment and once with the intervention. The non-death states use for simulating costs and quality-adjusted life-years (QALYs) are the healthy and sick states.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">hesim_dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span>(
   <span class="kw">patients</span> <span class="kw">=</span> <span class="no">patients</span>,
@@ -231,18 +231,15 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 <a href="#utility-and-costs" class="anchor"></a>Utility and costs</h2>
 <p>As in the <a href="markov-cohort.html">simple Markov cohort</a> and <a href="markov-inhomogeneous-cohort.html">time inhomogeneous Markov cohort</a> modeling vignettes, utility and costs models could be generated using mathematical expressions with <code><a href="../reference/define_model.html">define_model()</a></code>. However, in this case it is simpler and more direct (and thus more computationally efficient) to use the <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> functionality. Separate tables are created for utility, drug costs, and medical costs.</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">utility_tbl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="no">multinom3_exdata</span>$<span class="no">utility</span>,
-                            <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"beta"</span>,
-                            <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)
+                            <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"beta"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">utility_tbl</span>)</pre></body></html></div>
 <pre><code>##    state_id state_name mean        se
 ## 1:        1    Healthy 0.90 0.1732051
 ## 2:        2       Sick 0.65 0.2000000</code></pre>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">drugcost_tbl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="no">multinom3_exdata</span>$<span class="no">costs</span>$<span class="no">drugs</span>,
-                            <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"fixed"</span>,
-                            <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)
+                            <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"fixed"</span>)
 <span class="no">medcost_tbl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="no">multinom3_exdata</span>$<span class="no">costs</span>$<span class="no">medical</span>,
-                            <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"gamma"</span>,
-                            <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)</pre></body></html></div>
+                            <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"gamma"</span>)</pre></body></html></div>
 </div>
 </div>
 <div id="simulation" class="section level1">
@@ -271,11 +268,11 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 <a href="#utility-and-cost-models" class="anchor"></a>Utility and cost models</h3>
 <p>The utility and cost models can be created directly from the utility and cost tables since they do not include covariates. That is, unlike the disease model which explicitly models the transition probabilities as a function of covariates, they are based solely on predicted means (see <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) and therefore do not require input data.</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="co"># Utility</span>
-<span class="no">utilitymod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">utility_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>)
+<span class="no">utilitymod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">utility_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>, <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)
 
 <span class="co"># Costs</span>
-<span class="no">drugcostmod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">drugcost_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>)
-<span class="no">medcostmod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">medcost_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>)
+<span class="no">drugcostmod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">drugcost_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>, <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)
+<span class="no">medcostmod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">medcost_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>, <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)
 <span class="no">costmods</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">Drug</span> <span class="kw">=</span> <span class="no">drugcostmod</span>,
                  <span class="kw">Medical</span> <span class="kw">=</span> <span class="no">medcostmod</span>)</pre></body></html></div>
 </div>

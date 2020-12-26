@@ -18,23 +18,14 @@ values. See "Details" for specifics.}
 \item{dist}{Probability distribution used to sample parameters for a
 probabilistic sensitivity analysis (PSA).}
 
-\item{hesim_data}{A \link{hesim_data} object. Required to specify
-treatment strategies , patients,
-and/or health states not included as columns
-in \code{tbl}, or, to match patients in \code{tbl} to groups.
-Not required if \code{tbl} includes one row for each treatment strategy, patient, and
-health state combination. Patients are matched to groups by specifying both a
-\code{patient_id} and a \code{grp_var} column in the \code{patients} table.}
+\item{hesim_data}{A \code{\link{hesim_data}} object. This argument is deprecated
+and should be passed to \code{\link[=create_StateVals.stateval_tbl]{create_StateVals.stateval_tbl()}} instead.}
 
 \item{grp_var}{The name of the variable used to group patients.}
 }
 \value{
-An object of class "stateval_tbl", which is a \code{data.table} of
-parameter values with attributes for \code{dist} and optionally
-\code{strategy_id}, \code{patients}, \code{state_id}, and \code{grp_var}. \code{tbl}
-is in the same format as described in "Details". \code{patients} is a
-\code{data.table} with one column containing \code{patient_id} and
-optionally a second column containing \code{grp_var}.
+An object of class \code{stateval_tbl}, which is a \code{data.table} of
+parameter values with attributes for \code{dist} and \code{grp_var}.
 }
 \description{
 Create a table for storing parameter estimates used to simulate costs or
@@ -42,7 +33,7 @@ utility in an economic model by treatment strategy, patient, health state, and
 (optionally) time interval.
 }
 \details{
-\code{tbl} is a \code{data.table} containing columns for treatment
+\code{tbl} is a tabular object containing columns for treatment
 strategies (\code{strategy_id}), patients (\code{patient_id}),
 health states (\code{state_id}), and/or the start of time intervals
 (\code{time_start}). The table must contain at least one column
@@ -101,22 +92,20 @@ utility_tbl <- stateval_tbl(data.frame(state_id = rep(states$state_id, 2),
                                        mean = c(.8, .7, .75, .55),
                                        se = c(.18, .12, .10, .06)),
                             dist = "beta",
-                            hesim_data = hesim_dat,
                             grp_var = "grp")
 print(utility_tbl)
-utilmod <- create_StateVals(utility_tbl, n = 2)
+utilmod <- create_StateVals(utility_tbl, n = 2, hesim_data = hesim_dat)
 
 # Costs vary by treatment strategy
 cost_tbl <- stateval_tbl(data.frame(strategy_id = strategies$strategy_id,
                                     mean = c(5000, 3000),
                                     se = c(200, 100)),
-                         dist = "gamma",
-                         hesim_data = hesim_dat)
+                         dist = "gamma")
 print(cost_tbl)
-costmod <- create_StateVals(cost_tbl, n = 2)
+costmod <- create_StateVals(cost_tbl, n = 2, hesim_data = hesim_dat)
 
 
 }
 \seealso{
-\link{create_StateVals}, \link{StateVals}
+\code{\link[=create_StateVals]{create_StateVals()}}, \code{\link{StateVals}}
 }

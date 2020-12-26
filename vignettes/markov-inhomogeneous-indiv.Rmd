@@ -294,8 +294,7 @@ utility_tbl <- stateval_tbl(
   data.table(state_id = states$state_id,
              mean = c(0, .85, .3, .75),
              se = c(0, .03, .03, .04)),
-  dist = "beta",
-  hesim_data = hesim_dat
+  dist = "beta"
 )
 head(utility_tbl)
 ```
@@ -310,8 +309,7 @@ drugcost_tbl <- stateval_tbl(
              state_id = rep(states$state_id, times = n_strategies),
              est = c(394, 0, 0, 0,
                      579, 0, 0, 0)),
-  dist = "fixed",
-  hesim_data = hesim_dat
+  dist = "fixed"
 )
 
 medcost_tbl <- stateval_tbl(
@@ -319,7 +317,6 @@ medcost_tbl <- stateval_tbl(
              mean = c(0, 0, 5294, 0),
              se = c(0, 0, 1487, 0)),
   dist = "gamma",
-  hesim_data = hesim_dat
 )
 ```
 
@@ -359,12 +356,14 @@ Models based on predicted means (see `tparams_mean()`) can be created directly f
 
 ```{r}
 # Utility
-utilitymod <- create_StateVals(utility_tbl, n = transmod_coef_def$n)
+utilitymod <- create_StateVals(utility_tbl, n = transmod_coef_def$n, 
+                               hesim_data = hesim_dat)
 
 # Costs
 drugcostmod <- create_StateVals(drugcost_tbl, n = transmod_coef_def$n,
-                                method = "starting")
-medcostmod <- create_StateVals(medcost_tbl, n = transmod_coef_def$n)
+                                method = "starting", hesim_data = hesim_dat)
+medcostmod <- create_StateVals(medcost_tbl, n = transmod_coef_def$n,
+                               hesim_data = hesim_dat)
 costmods <- list(Drug = drugcostmod,
                  Medical = medcostmod)
 ```

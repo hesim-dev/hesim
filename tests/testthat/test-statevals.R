@@ -18,7 +18,7 @@ hesim_dat <- hesim_data(strategies = strategies,
                         states = states)
 N <- 5
 
-# stateval_tbl -----------------------------------------------------------------
+# stateval_tbl and create_StateVals.stateval_tbl -------------------------------
 n_grps <- 2
 strategy_id <- rep(strategies$strategy_id, each = n_grps * n_states)
 state_id <- rep(states$state_id, times = n_grps * n_strategies)
@@ -40,58 +40,69 @@ tbl <- data.table(strategy_id = strategy_id, grp = grp,
                   shape1 = shape1,
                   shape2 = shape2, min = .3, max = .5)
 
-test_that("stateval_tbl with state_id and built-in distributions", {
-  # Beta distribution
-  stateval_tbl <- stateval_tbl(tbl[strategy_id == 1 & grp == 1,
-                                   .(state_id, mean, se)], 
-                               dist = "beta", 
-                               hesim_data = hesim_dat) 
-  mod <- create_StateVals(stateval_tbl, n = 2)
-  expect_equal(nrow(mod$params$value), nrow(stateval_tbl) * 3 * 2)
+test_that(paste0("create_StateVals.stateval_tbl() returns correct output with state_id ",
+                 "column and beta distribution"), {
+  sv <- stateval_tbl(
+    tbl[strategy_id == 1 & grp == 1, .(state_id, mean, se)], 
+    dist = "beta"
+  )
+  mod <- create_StateVals(sv, n = 2, hesim_data = hesim_dat)
+  expect_equal(nrow(mod$params$value), nrow(sv) * 3 * 2)
   expect_equal(ncol(mod$params$value), 2)
   expect_true(all(mod$params$value[c(1, 4, 7, 10), 1] == mod$params$value[1, 1]))
-  
-  ## time_reset = TRUE
-  mod <- create_StateVals(stateval_tbl, n = 2, time_reset = TRUE)
-  expect_true(mod$time_reset)
-  
-  # Uniform distribution
-  stateval_tbl <- stateval_tbl(tbl[strategy_id == 1 & grp == 1,
-                                   .(state_id, min, max)], 
-                               dist = "unif",  
-                               hesim_data = hesim_dat)
-  mod <- create_StateVals(stateval_tbl, n = 2)
-  expect_true(all(mod$params$value >= .3 & mod$params$value <= .5))
-  
-  # Normal distribution
-  stateval_tbl <- stateval_tbl(tbl[strategy_id == 1 & grp == 1,
-                                   .(state_id, mean, sd)], 
-                               dist = "norm",  
-                               hesim_data = hesim_dat)  
-  mod <- create_StateVals(stateval_tbl, n = 2) 
-  expect_equal(nrow(mod$params$value), 
-               nrow(stateval_tbl) * n_patients * n_strategies) 
 })
-  
-test_that("stateval_tbl with state_id and custom distribution", {
+
+test_that("'time_reset' argument is passed correctly with create_StateVals.stateval_tbl()", {
+  sv <- stateval_tbl(
+    tbl[strategy_id == 1 & grp == 1, .(state_id, mean, se)], 
+    dist = "beta"
+  )
+  mod <- create_StateVals(sv, n = 2, hesim_data = hesim_dat, time_reset = TRUE)
+  expect_true(mod$time_reset)
+}) 
+
+test_that(paste0("create_StateVals.stateval_tbl() returns correct output with state_id ",
+                 "column and uniform distribution"), {
+  sv <- stateval_tbl(
+    tbl[strategy_id == 1 & grp == 1, .(state_id, min, max)], 
+    dist = "unif"
+  )
+  mod <- create_StateVals(sv, n = 2, hesim_data = hesim_dat)
+  expect_true(all(mod$params$value >= .3 & mod$params$value <= .5))  
+})
+
+test_that(paste0("create_StateVals.stateval_tbl() returns correct output with state_id ",
+                 "column and normal distribution"), {
+  sv <- stateval_tbl(
+    tbl[strategy_id == 1 & grp == 1, .(state_id, mean, sd)], 
+    dist = "norm"
+  )  
+  mod <- create_StateVals(sv, n = 2, hesim_data = hesim_dat) 
+  expect_equal(nrow(mod$params$value), 
+               nrow(sv) * n_patients * n_strategies)  
+})
+
+test_that(paste0("create_StateVals.stateval_tbl() works as expected with state_id", 
+                 " column and custom distribution"), {
   tbl2 <- data.table(state_id = rep(states$state_id, 2),
-                     sample = rep(c(1, 2), each = n_states),
-                     value = rnorm(6, 4))
-  expect_error(stateval_tbl(tbl2, 
-                            hesim_data = hesim_dat),
-               "If 'sample' is in 'tbl', then 'dist' must equal 'custom'")
-  stateval_tbl <- stateval_tbl(tbl2, 
-                               dist = "custom",
-                               hesim_data = hesim_dat)
+                    sample = rep(c(1, 2), each = n_states),
+                    value = rnorm(6, 4))
+  sv <- stateval_tbl(tbl2, dist = "custom")
+  
+  # Should be error if the distribution is not custom
+  expect_error(
+    stateval_tbl(tbl2),
+    "If 'sample' is in 'tbl', then 'dist' must equal 'custom'"
+  )
   
   # n is less than the number of samples in tbl
-  expect_warning(mod <- create_StateVals(stateval_tbl, n = 3))
+  expect_warning(mod <- create_StateVals(sv, n = 3, hesim_data = hesim_dat))
   expect_equal(ncol(mod$params$value), 3)
   expect_true(mod$params$value[1, 1] == tbl2[state_id == 1 & sample == 1, value] |
                 mod$params$value[1, 1] == tbl2[state_id == 1 & sample == 2, value]) 
   
   # n equals number of samples in tbl
-  mod <- create_StateVals(stateval_tbl, n = 2) 
+  mod <- create_StateVals(sv, n = 2, hesim_data = hesim_dat) 
   expect_equal(ncol(mod$params$value), 2)
   expect_equal(nrow(mod$params$value), 
                n_states * n_patients * n_strategies) 
@@ -99,124 +110,140 @@ test_that("stateval_tbl with state_id and custom distribution", {
                tbl2[state_id == 2 & sample == 1, value])
   
   # n is less than the number of samples in tbl
-  mod <- create_StateVals(stateval_tbl, n = 1) 
+  mod <- create_StateVals(sv, n = 1, hesim_data = hesim_dat) 
   expect_equal(ncol(mod$params$value), 1)
   expect_true(mod$params$value[3, 1] == tbl2[state_id == 3 & sample == 1, value] |
                 mod$params$value[3, 1] == tbl2[state_id == 3 & sample == 2, value]) 
 })
 
-test_that("stateval_tbl with strategy_id", {
-  # Gamma distribution
-  stateval_tbl <- stateval_tbl(tbl[state_id == 3 & grp == 1,
-                                   .(strategy_id, mean, se)], 
-                               dist = "gamma",
-                               hesim_data = hesim_dat)   
-  mod <- create_StateVals(stateval_tbl, n = 2)
-  expect_equal(nrow(mod$params$value), nrow(stateval_tbl) * 3 * 3)
+test_that("create_StateVals.stateval_tbl() returns correct output state_id column and gamma distribution", {
+  sv <- stateval_tbl(
+    tbl[state_id == 3 & grp == 1, .(strategy_id, mean, se)], 
+    dist = "gamma"
+  )
+  mod <- create_StateVals(sv, n = 2, hesim_data = hesim_dat)
+  expect_equal(nrow(mod$params$value), nrow(sv) * 3 * 3)
   expect_equal(mod$params$state_id, rep(c(1, 2, 3), 3 * 2))
   expect_true(all(mod$params$value[1:9, 2] == mod$params$value[1, 2]))
 })
 
-test_that("stateval_tbl with patient_id", {
+test_that(paste0("create_StateVals.stateval_tbl() returns correct output with" ,
+                 "patient_id column and gamma distribution"), {
   tbl[, patient_id := grp]
-  stateval_tbl <- stateval_tbl(tbl[state_id == 3 & grp == 1,
-                                   .(strategy_id, mean, se)], 
-                               dist = "gamma",
-                               hesim_data = hesim_dat)   
-  mod <- create_StateVals(stateval_tbl, n = 2)
-  expect_equal(nrow(mod$params$value), nrow(stateval_tbl) * 3 * 3)
+  sv <- stateval_tbl(
+    tbl[state_id == 3 & grp == 1, .(strategy_id, mean, se)], 
+    dist = "gamma"
+  )
+  mod <- create_StateVals(sv, n = 2, hesim_data = hesim_dat)
+  expect_equal(nrow(mod$params$value), nrow(sv) * 3 * 3)
   expect_equal(mod$params$state_id, rep(c(1, 2, 3), 3 * 2))
   expect_true(all(mod$params$value[1:9, 2] == mod$params$value[1, 2]))
 })
 
-test_that("stateval_tbl with grp_var", {
-  stateval_tbl <- stateval_tbl(tbl[, .(strategy_id, grp, state_id,
-                                       shape1, shape2)], 
-                               dist = "beta", 
-                               hesim_data = hesim_dat,
-                               grp_var = "grp")  
-  mod <- create_StateVals(stateval_tbl, n = 1)
+test_that("create_StateVals.stateval_tbl() returns correct output when using grp_var", {
+  sv <- stateval_tbl(
+    tbl[, .(strategy_id, grp, state_id, shape1, shape2)], 
+    dist = "beta", 
+    grp_var = "grp"
+  )  
+  mod <- create_StateVals(sv, n = 1, hesim_data = hesim_dat)
   expect_equal(ncol(mod$params$value), 1)
   expect_equal(mod$params$patient_id,
                rep(rep(patients$patient_id, each = nrow(states)), 
                    nrow(strategies))) 
 })
   
-test_that("stateval_tbl with state_id and time", {
+test_that("create_StateVals.stateval_tbl() returns correct output with state_id and time columns", {
   tbl2 <- tbl[strategy_id == 1]
   tbl2[, time_start := ifelse(grp == 1, 0, 4)]
   tbl2[, time_stop := ifelse(grp == 1, 4, 10)]
-  stateval_tbl <- stateval_tbl(tbl2[,.(state_id, time_start, time_stop,
-                                       mean, se)], 
-                               dist = "beta",
-                               hesim_data = hesim_dat)
-  mod <- create_StateVals(stateval_tbl, n = 2)
+  sv <- stateval_tbl(
+    tbl2[,.(state_id, time_start, time_stop, mean, se)], 
+    dist = "beta"
+  )
+  mod <- create_StateVals(sv, n = 2, hesim_data = hesim_dat)
   expect_equal(nrow(mod$params$value),
                n_states * n_strategies * n_patients * 2)
 })
 
-test_that("Errors wuth stateval_tbl", {
-  # Don't have required tables in hesim_data
-  expect_error(stateval_tbl(tbl[,.(strategy_id, grp, mean)], 
-                            dist = "beta"),
-               paste0("If 'state_id' is not a column in 'tbl', then ",
-                       "'hesim_data' must be included as an argument and ", 
-                       "'states' must be an element of 'hesim_data'."))
-  expect_error(stateval_tbl(tbl[,.(state_id, grp, mean)], 
-                            dist = "beta"),
-               paste0("If 'strategy_id' is not a column in 'tbl', then ",
-                      "'hesim_data' must be included as an argument and ", 
-                      "'strategies' must be an element of 'hesim_data'."))  
-  expect_error(stateval_tbl(tbl[,.(state_id, strategy_id, grp, mean)], 
-                            dist = "beta"),
-               paste0("If 'patient_id' is not a column in 'tbl', then ",
-                      "'hesim_data' must be included as an argument and ", 
-                      "'patients' must be an element of 'hesim_data'."))  
-  
-  # Correct number of rows
-  row_msg <- paste0("There must only be one row for each combination ",
-                    "of strategy_id and state_id in 'tbl'.")
+test_that(paste0("create_StateVals.stateval_tbl() returns an error if the 'states'",
+                  "table is not included in hesim_data when it should be"), {
+  sv <- stateval_tbl(
+    tbl[state_id == 1 & grp == 1, .(strategy_id, mean, se)], 
+    dist = "beta"
+  )
+  expect_error(
+    create_StateVals(sv, n = 2),
+    paste0("If 'state_id' is not a column in 'object', then ",
+           "'hesim_data' must be included as an argument and ", 
+           "'states' must be an element of 'hesim_data'.")
+    ) 
+})
+
+test_that(paste0("create_StateVals.stateval_tbl() returns an error if the 'patients'",
+                 "table is not included in hesim_data when it should be"), {
+  sv <- stateval_tbl(
+   tbl[patient_id == 1 & grp == 1, .(strategy_id, state_id, mean, se)], 
+   dist = "beta"
+  )
+  expect_error(
+   create_StateVals(sv, n = 2),
+   paste0("If 'patient_id' is not a column in 'object', then ",
+          "'hesim_data' must be included as an argument and ", 
+          "'patients' must be an element of 'hesim_data'.")
+  ) 
+})
+
+test_that("stateval_tbl() returns error if the number of rows is wreong", {
   tbl2 <- tbl[,.(strategy_id, state_id, grp, mean, se)]
   tbl2 <- rbind(tbl2, data.table(strategy_id = 2, state_id = 1, grp = 1, 
                                  mean = .5, se = .1))
-  expect_error(stateval_tbl(tbl2, dist = "beta",
-                            hesim_data = hesim_dat),
-               row_msg)
+  expect_error(
+    stateval_tbl(tbl2, dist = "beta"),
+    paste0("There must only be one row for each combination ",
+           "of strategy_id and state_id in 'tbl'.")
+  )
+})
+
+
+test_that("stateval_tbl() returns error if the columns aren't correct for the distribution", {
   
-  tbl2 <- tbl2[(strategy_id == 1 & state_id == 1) |
-                 (strategy_id == 2 & state_id == 2)]
-  expect_error(stateval_tbl(tbl2, dist = "beta",
-                            hesim_data = hesim_dat),
-               row_msg)  
-  expect_error(stateval_tbl(tbl2[, !"grp", with = FALSE], dist = "beta",
-                            hesim_data = hesim_dat))
-  
-  # Correct columns for distribution
-  ## Beta
+  # Beta
   expect_error(stateval_tbl(tbl[,.(strategy_id, grp, state_id, mean)], 
-                            dist = "beta", hesim_data = hesim_dat),
+                            dist = "beta"),
                paste0("If a beta distribution is specified, then tbl must ",
                "either contain the columns 'mean' and 'se' or 'shape1' and ", 
                "'shape2'."))
   
-  ## Gamma
+  # Gamma
   expect_error(stateval_tbl(tbl[,.(strategy_id, grp, state_id, mean)], 
-                            dist = "gamma", hesim_data = hesim_dat),
+                            dist = "gamma"),
                paste0("If a gamma distribution is specified, then tbl must ",
                "either contain the columns 'mean' and 'se', 'shape' and ",
                "'rate', or 'shape' and 'scale'.")) 
   
-  ## Lognormal
+  # Lognormal
   expect_error(stateval_tbl(tbl[,.(strategy_id, grp, state_id, mean)], 
-                            dist = "lnorm", hesim_data = hesim_dat),
+                            dist = "lnorm"),
                paste0("If a lognormal distribution is specified, then tbl must ",
                "contain the columns 'meanlog' and 'sdlog'."))   
   
-  ## Uniform
+  # Uniform
   expect_error(stateval_tbl(tbl[,.(strategy_id, grp, state_id, min)], 
-                            dist = "unif", hesim_data = hesim_dat),
+                            dist = "unif"),
                paste0("If a uniform distribution is specified, then tbl must ",
                       "contain the columns 'min' and 'max'."))   
+})
+
+test_that("stateval_tbl() returns error if the number of rows is incorrect", {
+  expect_error(
+    stateval_tbl(
+      tbl[strategy_id == 1][!(grp ==2 & state_id == 3)],
+      dist = "beta"
+    ),
+    paste0("The number of rows in 'object' should equal 6 which is the number of",
+            " unique values of strategy_id, state_id, and patient_id in 'object'.")
+  )
 })
 
 # StateVals$sim ----------------------------------------------------------------

@@ -176,7 +176,7 @@ object." />
 
     <div class="ref-description">
     <p><code>create_StateVals()</code> is a generic function for creating an object of class
-<a href='StateVals.html'>StateVals</a> from a fitted statistical model or a <a href='stateval_tbl.html'>stateval_tbl</a>
+<code><a href='StateVals.html'>StateVals</a></code> from a fitted statistical model or a <code><a href='stateval_tbl.html'>stateval_tbl</a></code>
 object.</p>
     </div>
 
@@ -192,7 +192,7 @@ object.</p>
 )
 
 <span class='co'># S3 method for stateval_tbl</span>
-<span class='fu'>create_StateVals</span>(<span class='no'>object</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>create_StateVals</span>(<span class='no'>object</span>, <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,11 +203,11 @@ object.</p>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments (<code>time_reset</code> and <code>method</code>) passed to <a href='StateVals.html'>StateVals$new()</a>.</p></td>
+      <td><p>Further arguments (<code>time_reset</code> and <code>method</code>) passed to <code><a href='StateVals.html'>StateVals$new()</a></code>.</p></td>
     </tr>
     <tr>
       <th>input_data</th>
-      <td><p>An object of class <a href='expand.hesim_data.html'>expanded_hesim_data</a>.
+      <td><p>An object of class <code><a href='expand.hesim_data.html'>expanded_hesim_data</a></code>.
 Must be expanded by treatment strategies, patients, and health states.</p></td>
     </tr>
     <tr>
@@ -219,14 +219,27 @@ are fit using a statistical model.</p></td>
       <th>point_estimate</th>
       <td><p>If <code>TRUE</code>, then the point estimates are returned and and no samples are drawn.</p></td>
     </tr>
+    <tr>
+      <th>hesim_data</th>
+      <td><p>A <code><a href='hesim_data.html'>hesim_data</a></code> object. Only required when <code>object</code> is of class
+<code><a href='stateval_tbl.html'>stateval_tbl</a></code>. See "details".</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <a href='StateVals.html'>StateVals</a> object.</p>
+    <p>A <code><a href='StateVals.html'>StateVals</a></code> object.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If <code>object</code> is a <code>stateval_tbl</code>, then a <code><a href='hesim_data.html'>hesim_data</a></code> object is used
+to specify treatment strategies, patients, and/or health states not included as
+columns in the table, or, to match patients in the table to groups. Not required if
+the table includes one row for each treatment strategy, patient, and health state
+combination. Patients are matched to groups by specifying both a <code>patient_id</code>
+and a <code>grp_var</code> column in the <code>patients</code> table.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='StateVals.html'>StateVals</a>, <a href='stateval_tbl.html'>stateval_tbl</a></p></div>
+    <div class='dont-index'><p><code><a href='StateVals.html'>StateVals</a></code>, <code><a href='stateval_tbl.html'>stateval_tbl()</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

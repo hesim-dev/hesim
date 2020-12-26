@@ -125,7 +125,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov individual-level models</h1>
             
-            <h4 class="date">2020-12-07</h4>
+            <h4 class="date">2020-12-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-indiv.Rmd"><code>vignettes/markov-inhomogeneous-indiv.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-indiv.Rmd</code></div>
@@ -463,20 +463,20 @@ NA
 <p>To get a better understanding of the output, lets take a look at a few of the sampled coefficient matrices.</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_coef</span>$<span class="no">log_omrPTHR</span>)</pre></body></html></div>
 <pre><code>##           cons
-## [1,] -4.550232
-## [2,] -3.907149
-## [3,] -4.678300
-## [4,] -3.482070
-## [5,] -4.174604
-## [6,] -4.225102</code></pre>
+## [1,] -4.492675
+## [2,] -3.898847
+## [3,] -3.553905
+## [4,] -4.700753
+## [5,] -3.312389
+## [6,] -4.216208</code></pre>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_coef</span>$<span class="no">rr_scale</span>)</pre></body></html></div>
-<pre><code>##           cons         age      male       np1
-## [1,] -5.513839 -0.03536181 0.8904715 -1.694202
-## [2,] -5.287322 -0.04258314 0.8247902 -2.017190
-## [3,] -5.420399 -0.04177115 0.7219672 -1.278779
-## [4,] -5.243281 -0.03921141 0.6362875 -1.021986
-## [5,] -5.462114 -0.03440872 0.6172152 -1.335946
-## [6,] -5.353113 -0.03614520 0.8557781 -1.173385</code></pre>
+<pre><code>##           cons         age      male        np1
+## [1,] -5.201536 -0.03808022 0.6268357 -1.2715238
+## [2,] -5.195097 -0.03850292 0.6619195 -1.9885328
+## [3,] -5.648810 -0.03251519 0.8930733 -1.4402079
+## [4,] -5.462675 -0.03032231 0.4572915 -1.4233278
+## [5,] -5.469932 -0.04051068 0.8091343 -0.8934607
+## [6,] -5.280076 -0.03757859 0.7466312 -1.5618635</code></pre>
 <p>In addition to the coefficients, a complete parameterization of a transition model requires specification of the survival distributions and potentially auxiliary information (e.g., the times at which rates change in a piecewise exponential model). The parameters are stored in a <code><a href="../reference/params_surv_list.html">params_surv_list()</a></code> object, which is a list of <code><a href="../reference/params_surv.html">params_surv()</a></code> objects.</p>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">transmod_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/params_surv_list.html">params_surv_list</a></span>(
   <span class="co"># 1. Primary THR:Successful primary (1:2)</span>
@@ -525,8 +525,7 @@ NA
   <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(<span class="kw">state_id</span> <span class="kw">=</span> <span class="no">states</span>$<span class="no">state_id</span>,
              <span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">.85</span>, <span class="fl">.3</span>, <span class="fl">.75</span>),
              <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">.03</span>, <span class="fl">.03</span>, <span class="fl">.04</span>)),
-  <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"beta"</span>,
-  <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>
+  <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"beta"</span>
 )
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">utility_tbl</span>)</pre></body></html></div>
 <pre><code>##    state_id mean   se
@@ -541,8 +540,7 @@ NA
              <span class="kw">state_id</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="no">states</span>$<span class="no">state_id</span>, <span class="kw">times</span> <span class="kw">=</span> <span class="no">n_strategies</span>),
              <span class="kw">est</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">394</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,
                      <span class="fl">579</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>)),
-  <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"fixed"</span>,
-  <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>
+  <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"fixed"</span>
 )
 
 <span class="no">medcost_tbl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(
@@ -550,7 +548,6 @@ NA
              <span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">5294</span>, <span class="fl">0</span>),
              <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1487</span>, <span class="fl">0</span>)),
   <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"gamma"</span>,
-  <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>
 )</pre></body></html></div>
 </div>
 </div>
@@ -591,12 +588,14 @@ NA
 <a href="#cost-and-utility-models" class="anchor"></a>Cost and utility models</h3>
 <p>Models based on predicted means (see <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) can be created directly from the utility and cost tables using since they do not include covariates and therefore do not require input data.</p>
 <div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="co"># Utility</span>
-<span class="no">utilitymod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">utility_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">transmod_coef_def</span>$<span class="no">n</span>)
+<span class="no">utilitymod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">utility_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">transmod_coef_def</span>$<span class="no">n</span>,
+                               <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)
 
 <span class="co"># Costs</span>
 <span class="no">drugcostmod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">drugcost_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">transmod_coef_def</span>$<span class="no">n</span>,
-                                <span class="kw">method</span> <span class="kw">=</span> <span class="st">"starting"</span>)
-<span class="no">medcostmod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">medcost_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">transmod_coef_def</span>$<span class="no">n</span>)
+                                <span class="kw">method</span> <span class="kw">=</span> <span class="st">"starting"</span>, <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)
+<span class="no">medcostmod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">medcost_tbl</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">transmod_coef_def</span>$<span class="no">n</span>,
+                               <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)
 <span class="no">costmods</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">Drug</span> <span class="kw">=</span> <span class="no">drugcostmod</span>,
                  <span class="kw">Medical</span> <span class="kw">=</span> <span class="no">medcostmod</span>)</pre></body></html></div>
 </div>
@@ -620,15 +619,15 @@ NA
 <span class="no">econmod</span>$<span class="fu">sim_disease</span>(<span class="kw">max_t</span> <span class="kw">=</span> <span class="fl">60</span>, <span class="kw">max_age</span> <span class="kw">=</span> <span class="fl">120</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>() - <span class="no">ptm</span></pre></body></html></div>
 <pre><code>##    user  system elapsed 
-##   2.750   0.200   3.645</code></pre>
+##   2.634   0.179   3.063</code></pre>
 <div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod</span>$<span class="no">disprog_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id patient_id grp_id from to final time_start  time_stop
 ## 1:      1           1          1      1    1  2     0  0.0000000  0.6931472
-## 2:      1           1          1      1    2  5     1  0.6931472 31.4617116
+## 2:      1           1          1      1    2  5     1  0.6931472 28.1842116
 ## 3:      1           1          2      1    1  2     0  0.0000000  0.6931472
-## 4:      1           1          2      1    2  5     1  0.6931472 20.6726526
+## 4:      1           1          2      1    2  5     1  0.6931472 24.9821604
 ## 5:      1           1          3      1    1  2     0  0.0000000  0.6931472
-## 6:      1           1          3      1    2  5     1  0.6931472 21.3409557</code></pre>
+## 6:      1           1          3      1    2  5     1  0.6931472 28.9719898</code></pre>
 <p>The simulated patient trajectories can be summarized by computing the probability of being in each health state over time (by averaging across the simulated patients). Here, we will compute state occupancy probabilities at yearly intervals. They are generally quite similar to those in the cohort model.</p>
 <div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="no">econmod</span>$<span class="fu">sim_stateprobs</span>(<span class="kw">t</span> <span class="kw">=</span> <span class="fl">0</span>:<span class="fl">60</span>)</pre></body></html></div>
 <p><img src="markov-inhomogeneous-indiv_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
@@ -644,14 +643,14 @@ NA
 <span class="no">ce_sim</span>$<span class="no">qalys</span>[, <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                 <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id     mean
-## 1:           1 15.24725
-## 2:           2 15.30566</code></pre>
+## 1:           1 15.23334
+## 2:           2 15.26680</code></pre>
 <div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">ce_sim</span>$<span class="no">costs</span>[<span class="no">category</span> <span class="kw">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),
               <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>)]</pre></body></html></div>
 <pre><code>##    strategy_id     mean
-## 1:           1 512.6681
-## 2:           2 612.1570</code></pre>
+## 1:           1 511.7343
+## 2:           2 613.9065</code></pre>
 </div>
 </div>
 </div>
@@ -663,10 +662,10 @@ NA
                      <span class="kw">k</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span>))
 <span class="fu"><a href="../reference/icer_tbl.html">icer_tbl</a></span>(<span class="no">cea_pw_out</span>)</pre></body></html></div>
 <pre><code>##                   1   2                        
-## Incremental QALYs "-" "0.06 (-0.41, 0.57)"     
-## Incremental costs "-" "99 (-1, 163)"           
-## Incremental NMB   "-" "2,821 (-20,691, 28,520)"
-## ICER              "-" "1,703"                  
+## Incremental QALYs "-" "0.03 (-0.49, 0.63)"     
+## Incremental costs "-" "102 (9, 165)"           
+## Incremental NMB   "-" "1,571 (-24,668, 31,356)"
+## ICER              "-" "3,054"                  
 ## Conclusion        "-" "Cost-effective"</code></pre>
 </div>
   </div>
