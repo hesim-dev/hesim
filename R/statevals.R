@@ -95,6 +95,9 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
                                        "lnorm", "unif", "fixed", "custom"),
                          hesim_data = NULL,
                          grp_var = NULL){
+  if (!missing("hesim_data")) {
+    warning("'hesim_data' argument deprecated; pass to create_StateVals() instead.")
+  }
   dist <- match.arg(dist)
   tbl <- data.table(tbl)
   tbl2 <- copy(tbl)
