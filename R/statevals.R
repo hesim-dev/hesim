@@ -59,7 +59,7 @@
 #'  
 #' @return An object of class `stateval_tbl`, which is a `data.table` of
 #' parameter values with attributes for `dist` and `grp_var`.
-#' @seealso [create_StateVals], [StateVals]
+#' @seealso [`create_StateVals()`], [`StateVals`]
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3),
@@ -232,22 +232,22 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 #'  [`StateVals`] from a fitted statistical model or a [`stateval_tbl`]
 #'  object. 
 #' @param object A model object of the appropriate class.
-#' @param input_data An object of class [expanded_hesim_data][expand.hesim_data()].
+#' @param input_data An object of class [`expanded_hesim_data`][expand.hesim_data()].
 #' Must be expanded by treatment strategies, patients, and health states.
 #' @param hesim_data A [`hesim_data`] object. Only required when `object` is of class
 #' [`stateval_tbl`]. See "details". 
 #' @param n Number of random observations of the parameters to draw when parameters 
 #' are fit using a statistical model.
 #' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
-#' @param ... Further arguments (`time_reset` and `method`) passed to [StateVals$new()][StateVals].
+#' @param ... Further arguments (`time_reset` and `method`) passed to [`StateVals$new()`][StateVals].
 #' @details If `object` is a `stateval_tbl`, then a [`hesim_data`] object is used
-#'  to specify treatment strategies , patients, and/or health states not included as 
+#'  to specify treatment strategies, patients, and/or health states not included as 
 #'  columns in the table, or, to match patients in the table to groups. Not required if 
 #'  the table includes one row for each treatment strategy, patient, and health state
 #'   combination. Patients are matched to groups by specifying both a `patient_id` 
 #'   and a `grp_var` column in the `patients` table.
-#' @return A [StateVals] object.
-#' @seealso [StateVals], [stateval_tbl]
+#' @return A [`StateVals`] object.
+#' @seealso [`StateVals`], [`stateval_tbl()`]
 #' @export
 create_StateVals <- function(object, ...){
   UseMethod("create_StateVals", object)

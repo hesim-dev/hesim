@@ -107,5 +107,5 @@ costmod <- create_StateVals(cost_tbl, n = 2, hesim_data = hesim_dat)
 
 }
 \seealso{
-\link{create_StateVals}, \link{StateVals}
+\code{\link[=create_StateVals]{create_StateVals()}}, \code{\link{StateVals}}
 }
