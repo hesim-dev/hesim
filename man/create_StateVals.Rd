@@ -39,7 +39,7 @@ A \link{StateVals} object.
 }
 \description{
 \code{create_StateVals()} is a generic function for creating an object of class
-\link{StateVals} from a fitted statistical model or a \link{stateval_tbl}
+\code{\link{StateVals}} from a fitted statistical model or a \code{\link{stateval_tbl}}
 object.
 }
 \details{

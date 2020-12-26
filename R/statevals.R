@@ -10,11 +10,11 @@
 #' @param dist Probability distribution used to sample parameters for a 
 #' probabilistic sensitivity analysis (PSA). 
 #' @param hesim_data A [`hesim_data`] object. This argument is deprecated
-#' and should be passed to `create_StateVals.stateval_tbl` instead.
+#' and should be passed to [`create_StateVals.stateval_tbl()`] instead.
 #' @param grp_var The name of the variable used to group patients.
 #' 
 #' @details 
-#' `tbl` is a `data.table` containing columns for treatment 
+#' `tbl` is a tabular object containing columns for treatment 
 #' strategies (`strategy_id`), patients (`patient_id`),
 #' health states (`state_id`), and/or the start of time intervals 
 #' (`time_start`). The table must contain at least one column
@@ -57,12 +57,8 @@
 #'  but does not need to contain them all.
 #'  
 #'  
-#' @return An object of class "stateval_tbl", which is a `data.table` of
-#' parameter values with attributes for `dist` and optionally 
-#' `strategy_id`, `patients`, `state_id`, and `grp_var`. `tbl` 
-#' is in the same format as described in "Details". `patients` is a 
-#' `data.table` with one column containing `patient_id` and 
-#' optionally a second column containing `grp_var`.
+#' @return An object of class `stateval_tbl`, which is a `data.table` of
+#' parameter values with attributes for `dist` and `grp_var`.
 #' @seealso [create_StateVals], [StateVals]
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
@@ -81,19 +77,17 @@
 #'                                        mean = c(.8, .7, .75, .55),
 #'                                        se = c(.18, .12, .10, .06)),
 #'                             dist = "beta",
-#'                             hesim_data = hesim_dat,
 #'                             grp_var = "grp")
 #' print(utility_tbl)
-#' utilmod <- create_StateVals(utility_tbl, n = 2)
+#' utilmod <- create_StateVals(utility_tbl, n = 2, hesim_data = hesim_dat)
 #'
 #' # Costs vary by treatment strategy
 #' cost_tbl <- stateval_tbl(data.frame(strategy_id = strategies$strategy_id,
 #'                                     mean = c(5000, 3000),
 #'                                     se = c(200, 100)),
-#'                          dist = "gamma",
-#'                          hesim_data = hesim_dat)
+#'                          dist = "gamma")
 #' print(cost_tbl)
-#' costmod <- create_StateVals(cost_tbl, n = 2)
+#' costmod <- create_StateVals(cost_tbl, n = 2, hesim_data = hesim_dat)
 #'
 #'
 #' @export
@@ -235,7 +229,7 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 #' Create a `StateVals` object
 #' 
 #' `create_StateVals()` is a generic function for creating an object of class
-#'  [StateVals] from a fitted statistical model or a [stateval_tbl]
+#'  [`StateVals`] from a fitted statistical model or a [`stateval_tbl`]
 #'  object. 
 #' @param object A model object of the appropriate class.
 #' @param input_data An object of class [expanded_hesim_data][expand.hesim_data()].
