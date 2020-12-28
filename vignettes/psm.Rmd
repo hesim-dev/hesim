@@ -135,7 +135,7 @@ To conduct the PSA, we must sample random draws of the regression coefficients f
 ```{r, warning = FALSE, message = FALSE}
 surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
 survmods <- create_PsmCurves(psfit_wei, input_data = surv_input_data, n = n_samples,
-                               bootstrap = TRUE, est_data = surv_est_data)
+                               uncertainty = "bootstrap", est_data = surv_est_data)
 ```
 
 ### Utility and cost models

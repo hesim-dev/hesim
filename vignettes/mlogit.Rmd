@@ -138,7 +138,7 @@ transmod <- create_CohortDtstmTrans(transfits,
                                     input_data = transmod_data,
                                     trans_mat = tmat,
                                     n = n_samples,
-                                    point_estimate = FALSE)
+                                    uncertainty = "normal")
 ```
 
 ### Utility and cost models
