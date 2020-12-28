@@ -347,16 +347,13 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h
 <span class='co'>## Utility</span>
 <span class='no'>utility_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>utility</span>,
                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"beta"</span>,
-                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
-
+                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'hesim_data' argument deprecated; pass to create_StateVals() instead.</span></div><div class='input'>
 <span class='co'>## Costs</span>
 <span class='no'>drugcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>costs</span>$<span class='no'>drugs</span>,
                              <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
-                             <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
-<span class='no'>medcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>,
+                             <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'hesim_data' argument deprecated; pass to create_StateVals() instead.</span></div><div class='input'><span class='no'>medcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='no'>multinom3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>,
                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"gamma"</span>,
-                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
-
+                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'hesim_data' argument deprecated; pass to create_StateVals() instead.</span></div><div class='input'>
 <span class='co'># Economic model</span>
 <span class='no'>n_samples</span> <span class='kw'>&lt;-</span> <span class='fl'>3</span>
 
@@ -366,8 +363,7 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h
 <span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans</a></span>(<span class='no'>transfits</span>,
                                     <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='no'>transmod_data</span>,
                                     <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
-                                    <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>,
-                                    <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+                                    <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
 
 <span class='co'>### Utility</span>
 <span class='no'>utilitymod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>utility_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)

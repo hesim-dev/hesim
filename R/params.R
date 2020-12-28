@@ -69,6 +69,7 @@ create_params_joined <- function(object, n, uncertainty, inner_class){
 #' @param uncertainty Method determining how parameter uncertainty should be handled. 
 #' If `"normal"`, then parameters are randomly drawn from their multivariate normal
 #' distribution. If `"bootstrap`, then parameters are bootstrapped using [`bootstrap`].
+#' If `"none`, then only point estimates are returned.
 #' @param max_errors Equivalent to the `max_errors` argument in [bootstrap]. 
 #' @param ... Further arguments passed to or from other methods. Currently unused.
 #' @return An object prefixed by `params_`. Mapping between `create_params` 

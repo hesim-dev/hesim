@@ -307,8 +307,7 @@ create_IndivCtstmTrans.params_surv_list <- function(object, input_data, trans_ma
 #' fits_data <- expand(hesim_dat)
 #' transmod <- create_IndivCtstmTrans(fits, input_data = fits_data, 
 #'                                    trans_mat = tmat,
-#'                                    n = 2,
-#'                                    point_estimate = FALSE)       
+#'                                    n = 2)
 #' head(transmod$hazard(c(1, 2, 3)))
 #' head(transmod$cumhazard(c(1, 2, 3)))
 #' 

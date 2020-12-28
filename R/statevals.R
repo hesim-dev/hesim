@@ -241,7 +241,8 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 #' [`stateval_tbl`]. See "details". 
 #' @param n Number of random observations of the parameters to draw when parameters 
 #' are fit using a statistical model.
-#' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
+#' @param uncertainty Method determining how parameter uncertainty should be handled. See
+#'  documentation in [`create_params()`].
 #' @param ... Further arguments (`time_reset` and `method`) passed to [`StateVals$new()`][StateVals].
 #' @details If `object` is a `stateval_tbl`, then a [`hesim_data`] object is used
 #'  to specify treatment strategies, patients, and/or health states not included as 

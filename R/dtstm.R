@@ -153,7 +153,8 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
 #' @param trans_mat A transition matrix describing the states and transitions 
 #' in a discrete-time multi-state model. See [CohortDtstmTrans].
 #' @param n Number of random observations of the parameters to draw.
-#' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
+#' @param uncertainty Method determining how parameter uncertainty should be handled. See
+#'  documentation in [`create_params()`].
 #' @export
 create_CohortDtstmTrans <- function(object, ...){
   UseMethod("create_CohortDtstmTrans", object)
@@ -241,8 +242,7 @@ create_CohortDtstmTrans.multinom_list <- function(object, input_data,
 #' transmod <- create_CohortDtstmTrans(transfits,
 #'                                     input_data = transmod_data,
 #'                                     trans_mat = tmat,
-#'                                     n = n_samples,
-#'                                     point_estimate = FALSE)
+#'                                     n = n_samples)
 #'
 #' ### Utility
 #' utilitymod <- create_StateVals(utility_tbl, n = n_samples)
