@@ -166,7 +166,13 @@
     <loc>https://hesim-dev.github.io/hesim/reference/multinom_list.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/normboot.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/onc3.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/onc3p.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/params.html</loc>
@@ -206,6 +212,12 @@
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/qmatrix.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/qmatrix.matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/qmatrix.msm.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/rcat.html</loc>

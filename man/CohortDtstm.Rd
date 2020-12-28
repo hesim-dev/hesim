@@ -62,8 +62,7 @@ transmod_data <- expand(hesim_dat)
 transmod <- create_CohortDtstmTrans(transfits,
                                     input_data = transmod_data,
                                     trans_mat = tmat,
-                                    n = n_samples,
-                                    point_estimate = FALSE)
+                                    n = n_samples)
 
 ### Utility
 utilitymod <- create_StateVals(utility_tbl, n = n_samples)

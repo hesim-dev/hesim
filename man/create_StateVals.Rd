@@ -12,7 +12,7 @@ create_StateVals(object, ...)
   object,
   input_data = NULL,
   n = 1000,
-  point_estimate = FALSE,
+  uncertainty = c("normal", "none"),
   ...
 )
 
@@ -29,7 +29,8 @@ Must be expanded by treatment strategies, patients, and health states.}
 \item{n}{Number of random observations of the parameters to draw when parameters
 are fit using a statistical model.}
 
-\item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
+\item{uncertainty}{Method determining how parameter uncertainty should be handled. See
+documentation in \code{\link[=create_params]{create_params()}}.}
 
 \item{hesim_data}{A \code{\link{hesim_data}} object. Only required when \code{object} is of class
 \code{\link{stateval_tbl}}. See "details".}

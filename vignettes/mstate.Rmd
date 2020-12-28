@@ -156,7 +156,7 @@ predict_haz <- function(fits, clock){
  transmod_cr_pat1 <- create_IndivCtstmTrans(fits, transmod_data_pat1,
                                             trans_mat = tmat, 
                                             clock = clock,
-                                            point_estimate = TRUE)
+                                            uncertainty = "none")
   haz <- transmod_cr_pat1$hazard(t = seq(0, 20, 1))
   title_clock <- paste(toupper(substr(clock, 1, 1)), 
                        substr(clock, 2, nchar(clock)), sep="")

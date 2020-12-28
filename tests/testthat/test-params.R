@@ -27,20 +27,20 @@ test_that("create_params.lm", {
   expect_error(create_params(list(x = 5), 2))
   
   # point estimates
-  pars_lm <- create_params(fit1, n = 5, point_estimate = TRUE)
+  pars_lm <- create_params(fit1, n = 5, uncertainty = "none")
   expect_equal(pars_lm$coefs[, ], coef(fit1))
   expect_equal(pars_lm$sigma, summary(fit1)$sigma)
   expect_equal(colnames(pars_lm$coefs), names(fit1$coefficients))
   
   # sampling
   set.seed(101)
-  pars_lm <- create_params(fit1, n = n, point_estimate = FALSE)
+  pars_lm <- create_params(fit1, n = n, uncertainty = "normal")
   set.seed(101)
   r <- MASS::mvrnorm(n, fit1$coefficients, vcov(fit1))
   expect_equal(pars_lm$coefs, r)
   
   # sample size of 1
-  pars_lm <- create_params(fit1, n = 1, point_estimate = FALSE)
+  pars_lm <- create_params(fit1, n = 1, uncertainty = "normal")
   expect_error(pars_lm$coefs, NA)
 })
 
@@ -104,7 +104,7 @@ test_that("create_params.flexsurv", {
   ## exponential
   fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                      data = ovarian, dist = "exponential")
-  pars_surv <- create_params(fit, point_estimate = TRUE)
+  pars_surv <- create_params(fit, uncertainty = "none")
   expect_equal(pars_surv$coefs$rate[, ], fit$res.t["rate", "est"])
   
   ### sample of size 1
@@ -178,7 +178,8 @@ test_that("create_params.partsurvfit", {
                          data = psm4_exdata$survival[1:30, ])
   fit2 <- flexsurvspline(Surv(endpoint2_time, endpoint2_status) ~ age,
                          data = psm4_exdata$survival[1:30, ])
-  partsurv_fit <- partsurvfit(flexsurvreg_list(fit1 = fit1, fit2 = fit2), data = psm4_exdata$survival)
+  partsurv_fit <- partsurvfit(flexsurvreg_list(fit1 = fit1, fit2 = fit2), 
+                              data = psm4_exdata$survival)
   pars_surv_list <- create_params(partsurv_fit, n = 2)
   expect_equal(length(pars_surv_list), 2)
 })

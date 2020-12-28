@@ -1,23 +1,3 @@
-#' Individualized cost-effectiveness analysis
-#'
-#' These functions are deprecated, use [cea()] and [cea_pw()] instead. 
-#' @param x An object of simulation output characterizing the probability distribution
-#' of clinical effectiveness and costs.?ic
-#' @param ... Further arguments passed to or from other methods. 
-#' @export
-#' @rdname icea
-icea <- function(x, ...) {
-  .Deprecated("cea")
-  UseMethod("cea")
-}
-
-#' @export
-#' @rdname icea
-icea_pw <- function(x, ...) {
-  .Deprecated("cea_pw")
-  UseMethod("cea_pw")
-}
-
 #'  A cost-effectiveness object
 #'
 #' An object that summarizes simulated measures of clinical effectiveness and costs from a simulation model for use in a cost-effectiveness analysis.

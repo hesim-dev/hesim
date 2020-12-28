@@ -124,7 +124,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Markov and semi-Markov multi-state models</h1>
             
-            <h4 class="date">2020-12-26</h4>
+            <h4 class="date">2020-12-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/mstate.Rmd"><code>vignettes/mstate.Rmd</code></a></small>
       <div class="hidden name"><code>mstate.Rmd</code></div>
@@ -239,12 +239,12 @@
                         <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">transmod_data</span>)</pre></body></html></div>
 <pre><code>##    strategy_id patient_id      age female
-## 1:           1          1 64.93278      1
-## 2:           1          2 49.79493      0
-## 3:           1          3 52.21593      0
-## 4:           1          4 44.81957      0
-## 5:           1          5 43.99035      1
-## 6:           1          6 48.20839      1</code></pre>
+## 1:           1          1 48.09524      0
+## 2:           1          2 54.60869      1
+## 3:           1          3 45.34197      1
+## 4:           1          4 46.03574      1
+## 5:           1          5 47.24156      0
+## 6:           1          6 38.33752      0</code></pre>
 <p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">transmod_cr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span>(<span class="no">wei_fits_cr</span>, <span class="no">transmod_data</span>,
                                       <span class="kw">trans_mat</span> <span class="kw">=</span> <span class="no">tmat</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>,
@@ -261,7 +261,7 @@
  <span class="no">transmod_cr_pat1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span>(<span class="no">fits</span>, <span class="no">transmod_data_pat1</span>,
                                             <span class="kw">trans_mat</span> <span class="kw">=</span> <span class="no">tmat</span>,
                                             <span class="kw">clock</span> <span class="kw">=</span> <span class="no">clock</span>,
-                                            <span class="kw">point_estimate</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+                                            <span class="kw">uncertainty</span> <span class="kw">=</span> <span class="st">"none"</span>)
   <span class="no">haz</span> <span class="kw">&lt;-</span> <span class="no">transmod_cr_pat1</span>$<span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/hazard.html">hazard</a></span>(<span class="kw">t</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">20</span>, <span class="fl">1</span>))
   <span class="no">title_clock</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/chartr.html">toupper</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span>(<span class="no">clock</span>, <span class="fl">1</span>, <span class="fl">1</span>)),
                        <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span>(<span class="no">clock</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/nchar.html">nchar</a></span>(<span class="no">clock</span>)), <span class="kw">sep</span><span class="kw">=</span><span class="st">""</span>)
@@ -326,12 +326,12 @@
 <span class="no">econmod_cr</span>$<span class="fu">sim_disease</span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod_cr</span>$<span class="no">disprog_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id patient_id grp_id from to final time_start time_stop
-## 1:      1           1          1      1    1  2     0   0.000000 13.063377
-## 2:      1           1          1      1    2  1     0  13.063377 13.186911
-## 3:      1           1          1      1    1  2     0  13.186911 13.532434
-## 4:      1           1          1      1    2  3     1  13.532434 14.084493
-## 5:      1           1          2      1    1  2     0   0.000000  1.565777
-## 6:      1           1          2      1    2  1     0   1.565777  8.204766</code></pre>
+## 1:      1           1          1      1    1  3     1  0.0000000 2.0707922
+## 2:      1           1          2      1    1  2     0  0.0000000 0.2747627
+## 3:      1           1          2      1    2  1     0  0.2747627 0.3279687
+## 4:      1           1          2      1    1  2     0  0.3279687 1.1917966
+## 5:      1           1          2      1    2  1     0  1.1917966 4.2277323
+## 6:      1           1          2      1    1  2     0  4.2277323 6.9523623</code></pre>
 <div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="co"># "Clock forward"</span>
 <span class="no">econmod_cf</span>$<span class="fu">sim_disease</span>()</pre></body></html></div>
 <p>State occupancy probabilities at different time points are computed using <code>$sim_stateprobs()</code>. First, we simulate state probabilities for the “clock reset” model.</p>
@@ -384,12 +384,12 @@
 <div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">econmod_cr</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_qalys</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">.03</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod_cr</span>$<span class="no">qalys_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id grp_id state_id dr    qalys      lys
-## 1:      1           1      1        1  0 2.459713 5.200200
-## 2:      1           1      1        2  0 1.387596 1.387780
-## 3:      1           2      1        1  0 4.424121 9.353249
-## 4:      1           2      1        2  0 1.361702 1.361882
-## 5:      2           1      1        1  0 2.862848 5.882400
-## 6:      2           1      1        2  0 1.639643 1.642460</code></pre>
+## 1:      1           1      1        1  0 4.072346 7.310831
+## 2:      1           1      1        2  0 1.263807 1.264027
+## 3:      1           2      1        1  0 4.540468 8.151223
+## 4:      1           2      1        2  0 1.030008 1.030188
+## 5:      2           1      1        1  0 4.127532 6.796740
+## 6:      2           1      1        2  0 1.482353 1.626531</code></pre>
 <p>We summarize the simulated QALYs by computing means by treatment strategy and health state across the PSA samples.</p>
 <div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">qalys_summary</span> <span class="kw">&lt;-</span> <span class="no">econmod_cr</span>$<span class="no">qalys_</span>[, <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">qalys</span>)),
                                     <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span>)]
@@ -409,12 +409,12 @@
 <div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">econmod_cr</span>$<span class="fu"><a href="../reference/sim_ev.html">sim_costs</a></span>(<span class="kw">dr</span> <span class="kw">=</span> <span class="fl">0.03</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">econmod_cr</span>$<span class="no">costs_</span>)</pre></body></html></div>
 <pre><code>##    sample strategy_id grp_id state_id   dr category     costs
-## 1:      1           1      1        1 0.03     Drug 21463.328
-## 2:      1           1      1        2 0.03     Drug  5682.980
-## 3:      1           2      1        1 0.03     Drug 70165.548
-## 4:      1           2      1        2 0.03     Drug 10318.065
-## 5:      2           1      1        1 0.03     Drug 23754.173
-## 6:      2           1      1        2 0.03     Drug  6525.598</code></pre>
+## 1:      1           1      1        1 0.03     Drug 28475.349
+## 2:      1           1      1        2 0.03     Drug  4999.995
+## 3:      1           2      1        1 0.03     Drug 62808.820
+## 4:      1           2      1        2 0.03     Drug  8093.884
+## 5:      2           1      1        1 0.03     Drug 26665.913
+## 6:      2           1      1        2 0.03     Drug  6403.821</code></pre>
 <p>As with QALYs, we summarize costs by computing means (now by treatment strategy and category) across the PSA samples.</p>
 <div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"scales"</span>)
 <span class="no">costs_summary</span> <span class="kw">&lt;-</span> <span class="no">econmod_cr</span>$<span class="no">costs_</span>[<span class="no">dr</span> <span class="kw">==</span> <span class="fl">.03</span> , <span class="fu">.</span>(<span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">costs</span>)),

@@ -9,10 +9,8 @@
 #' \code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
 #' "patients". 
 #' @param n Number of random observations of the parameters to draw.
-#' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
-#' @param bootstrap If TRUE, then `n` bootstrap replications are drawn by refitting the survival
-#'  models in `object` on resamples of the sample data; if `FALSE`, then the parameters for each survival
-#'  model are independently draw from multivariate normal distributions.  
+#' @param uncertainty Method determining how parameter uncertainty should be handled. See
+#'  documentation in [`create_params()`].
 #' @param est_data A `data.table` or `data.frame` of estimation data 
 #' used to fit survival models during bootstrap replications.
 #' @param ... Further arguments passed to or from other methods. Passed to `create_params.partsurvfit()`
@@ -26,16 +24,25 @@ create_PsmCurves <- function(object, ...){
  
 #' @export
 #' @rdname create_PsmCurves
-create_PsmCurves.flexsurvreg_list <- function(object, input_data, n = 1000, point_estimate = FALSE,
-                                              bootstrap = FALSE, est_data = NULL,
+create_PsmCurves.flexsurvreg_list <- function(object, input_data, n = 1000, 
+                                              uncertainty = c("normal", "bootstrap", "none"), 
+                                              est_data = NULL,
                                                ...){
-  if (bootstrap == TRUE & is.null(est_data)){
+  # For backwards compatibility until deprecated point_estimate argument is no longer supported
+  is_uncertainty_missing <- missing(uncertainty)
+  uncertainty <- deprecate_point_estimate(list(...)$point_estimate, uncertainty,
+                                          is_uncertainty_missing)
+  uncertainty <- deprecate_bootstrap(list(...)$bootstrap, uncertainty,
+                                     is_uncertainty_missing)
+  
+  # Code to always keep
+  uncertainty <- match.arg(uncertainty)
+  if (uncertainty == "bootstrap" & is.null(est_data)){
     stop("If 'bootstrap' == TRUE, then 'est_data' cannot be NULL")
   }
   psfit <- partsurvfit(object, est_data)
   input_mats <- create_input_mats(psfit, input_data, id_vars = c("strategy_id", "patient_id"))
-  params <- create_params(psfit, n = n, point_estimate = point_estimate, 
-                          bootstrap = bootstrap, ...)
+  params <- create_params(psfit, n = n, uncertainty = uncertainty)
   return(PsmCurves$new(input_data = input_mats, params = params))
 }
 

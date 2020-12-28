@@ -12,21 +12,20 @@
 \usage{
 create_params(object, ...)
 
-\method{create_params}{lm}(object, n = 1000, point_estimate = FALSE, ...)
+\method{create_params}{lm}(object, n = 1000, uncertainty = c("normal", "none"), ...)
 
-\method{create_params}{flexsurvreg}(object, n = 1000, point_estimate = FALSE, ...)
+\method{create_params}{flexsurvreg}(object, n = 1000, uncertainty = c("normal", "none"), ...)
 
-\method{create_params}{multinom}(object, n = 1000, point_estimate = FALSE, ...)
+\method{create_params}{multinom}(object, n = 1000, uncertainty = c("normal", "none"), ...)
 
-\method{create_params}{multinom_list}(object, n = 1000, point_estimate = FALSE, ...)
+\method{create_params}{multinom_list}(object, n = 1000, uncertainty = c("normal", "none"), ...)
 
-\method{create_params}{flexsurvreg_list}(object, n = 1000, point_estimate = FALSE, ...)
+\method{create_params}{flexsurvreg_list}(object, n = 1000, uncertainty = c("normal", "none"), ...)
 
 \method{create_params}{partsurvfit}(
   object,
   n = 1000,
-  point_estimate = FALSE,
-  bootstrap = TRUE,
+  uncertainty = c("normal", "bootstrap", "none"),
   max_errors = 0,
   ...
 )
@@ -36,14 +35,12 @@ create_params(object, ...)
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
-\item{n}{Number of random observations to draw.}
+\item{n}{Number of random observations to draw. Not used if \code{uncertainty = "none"}.}
 
-\item{point_estimate}{If TRUE, then the point estimates are returned and
-and no samples are drawn.}
-
-\item{bootstrap}{If \code{bootstrap} is \code{FALSE} or not specified, then \code{n} parameter sets are
-drawn by sampling from a multivariate normal distribution. If \code{bootstrap} is \code{TRUE}, then
-parameters are bootstrapped using \link{bootstrap}.}
+\item{uncertainty}{Method determining how parameter uncertainty should be handled.
+If \code{"normal"}, then parameters are randomly drawn from their multivariate normal
+distribution. If \verb{"bootstrap}, then parameters are bootstrapped using \code{\link{bootstrap}}.
+If \verb{"none}, then only point estimates are returned.}
 
 \item{max_errors}{Equivalent to the \code{max_errors} argument in \link{bootstrap}.}
 }
@@ -61,7 +58,7 @@ and the classes of the returned objects are:
 }
 \description{
 \code{create_params} is a generic function for creating an object containing
-parameters from a fitted statistical model. If \code{point_estimate = FALSE},
+parameters from a fitted statistical model. If \code{uncertainty != "none"},
 then random samples from suitable probability distributions are returned.
 }
 \examples{

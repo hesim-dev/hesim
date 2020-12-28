@@ -241,7 +241,8 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 #' [`stateval_tbl`]. See "details". 
 #' @param n Number of random observations of the parameters to draw when parameters 
 #' are fit using a statistical model.
-#' @param point_estimate If `TRUE`, then the point estimates are returned and and no samples are drawn.
+#' @param uncertainty Method determining how parameter uncertainty should be handled. See
+#'  documentation in [`create_params()`].
 #' @param ... Further arguments (`time_reset` and `method`) passed to [`StateVals$new()`][StateVals].
 #' @details If `object` is a `stateval_tbl`, then a [`hesim_data`] object is used
 #'  to specify treatment strategies, patients, and/or health states not included as 
@@ -259,8 +260,10 @@ create_StateVals <- function(object, ...){
 #' @rdname create_StateVals
 #' @export  
 create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
-                                point_estimate = FALSE, ...){
-  params <- create_params(object, n, point_estimate) 
+                                uncertainty = c("normal", "none"), ...){
+  uncertainty <- deprecate_point_estimate(list(...)$point_estimate, uncertainty,
+                                          missing(uncertainty))
+  params <- create_params(object, n, uncertainty) 
   input_mats <- create_input_mats(object, input_data)
   return(StateVals$new(params = params, input_data = input_mats, ...))
 }

@@ -370,8 +370,7 @@ using <code>IndivCtstm$sim_disease()</code>.</p></dd>
 <span class='no'>fits_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>)
 <span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='no'>fits_data</span>,
                                    <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
-                                   <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-                                   <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+                                   <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>transmod</span>$<span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/hazard.html'>hazard</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt;    trans sample strategy_id patient_id grp_id t     hazard
 #&gt; 1:     1      1           1          1      1 1 0.17340092
 #&gt; 2:     1      1           1          1      1 2 0.17340092

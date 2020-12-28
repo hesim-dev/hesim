@@ -6,6 +6,7 @@
 
 ### API changes
 * The first column of each matrix listed in the `coef` element returned by `create_params.flexsurvreg()` is now named "(Intercept)" instead of the name of the corresponding parameter.
+* The `create_params()` methods now use the argument `uncertainty` to draw parameters  and the old arguments `point_estimate` and `bootstrap` are deprecated. This also affects `create_CohortDtstmTrans()`, `create_IndivCtstmTrans()`, and `create_PsmCurves()`.
 
 ### Bug fixes
 * The `$summarize()` method of `hesim::Psm` now contains the `by_grp` argument so that subgroup analyses can be performed.

@@ -186,6 +186,7 @@
 <a href="#api-changes" class="anchor"></a>API changes</h3>
 <ul>
 <li>The first column of each matrix listed in the <code>coef</code> element returned by <code><a href="../reference/create_params.html">create_params.flexsurvreg()</a></code> is now named “(Intercept)” instead of the name of the corresponding parameter.</li>
+<li>The <code><a href="../reference/create_params.html">create_params()</a></code> methods now use the argument <code>uncertainty</code> to draw parameters and the old arguments <code>point_estimate</code> and <code>bootstrap</code> are deprecated. This also affects <code><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans()</a></code>, <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans()</a></code>, and <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code>.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">

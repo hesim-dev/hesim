@@ -12,7 +12,7 @@ create_CohortDtstmTrans(object, ...)
   input_data,
   trans_mat,
   n = 1000,
-  point_estimate = FALSE,
+  uncertainty = c("normal", "none"),
   ...
 )
 }
@@ -30,7 +30,8 @@ in a discrete-time multi-state model. See \link{CohortDtstmTrans}.}
 
 \item{n}{Number of random observations of the parameters to draw.}
 
-\item{point_estimate}{If \code{TRUE}, then the point estimates are returned and and no samples are drawn.}
+\item{uncertainty}{Method determining how parameter uncertainty should be handled. See
+documentation in \code{\link[=create_params]{create_params()}}.}
 }
 \description{
 A generic function for creating an object of class \code{CohortDtstmTrans}.
