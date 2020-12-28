@@ -153,7 +153,7 @@ tmat <- rbind(c(NA, 1, 2),
 test_that("IndivCtstmTrans - transition specific", {
   mstate_list <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
                                         trans_mat = tmat,
-                                        point_estimate = TRUE)  
+                                        uncertainty = "none")  
   
   # Hazard
   hesim_hazard <- mstate_list$hazard(3)
@@ -186,7 +186,7 @@ test_that("IndivCtstmTrans - transition specific", {
   expect_error(create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
                                       trans_mat = tmat,
                                       death_state = nrow(tmat),
-                                      point_estimate = TRUE),
+                                      uncertainty = "none"),
                NA)
   
   # Errors
@@ -196,7 +196,7 @@ test_that("IndivCtstmTrans - transition specific", {
   expect_error(create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
                                       trans_mat = tmat,
                                       death_state = nrow(tmat) + 1,
-                                      point_estimate = TRUE))
+                                      uncertainty = "none"))
   
   mstate_list2 <- mstate_list$clone()
   mstate_list2$trans_mat <- matrix(1)
@@ -215,7 +215,7 @@ msfit_data <- expand(hesim_dat, by = c("strategies", "patients", "transitions"))
 test_that("IndivCtstmTrans - joint", {
   mstate <- create_IndivCtstmTrans(msfit, input_data = msfit_data, 
                                    trans_mat = tmat_ebmt4,
-                                   point_estimate = TRUE)    
+                                   uncertainty = "none")    
   # hazard
   hesim_hazard <- mstate$hazard(3)
   expect_equal(hesim_hazard[trans == 1][1]$hazard,
@@ -239,7 +239,7 @@ test_that("IndivCtstmTrans - joint", {
 test_that("Simulate disease progression with transition specific models", {
   mstate_list <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
                                          trans_mat = tmat,
-                                         point_estimate = TRUE)
+                                         uncertainty = "none")
   ictstm <- IndivCtstm$new(trans_model = mstate_list,
                            utility_model = utilmod)
   

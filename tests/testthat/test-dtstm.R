@@ -302,7 +302,7 @@ transmod <- create_CohortDtstmTrans(transfits,
                                     input_data = transmod_data,
                                     trans_mat = tmat,
                                     n = n_samples,
-                                    point_estimate = TRUE)
+                                    uncertainty = "none")
 
 
 test_that(paste0("create_CohortDtstmTrans$sim_stateprobs() is consistent with ",

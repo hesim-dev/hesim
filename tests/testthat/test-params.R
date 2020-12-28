@@ -104,7 +104,7 @@ test_that("create_params.flexsurv", {
   ## exponential
   fit <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
                      data = ovarian, dist = "exponential")
-  pars_surv <- create_params(fit, point_estimate = TRUE)
+  pars_surv <- create_params(fit, uncertainty = "none")
   expect_equal(pars_surv$coefs$rate[, ], fit$res.t["rate", "est"])
   
   ### sample of size 1
