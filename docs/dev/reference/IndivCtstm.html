@@ -396,18 +396,15 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h
                                        <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>utility</span>$<span class='no'>mean</span>,
                                        <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>utility</span>$<span class='no'>se</span>),
                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"beta"</span>,
-                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
-<span class='co'>## Costs</span>
+                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'hesim_data' argument deprecated; pass to create_StateVals() instead.</span></div><div class='input'><span class='co'>## Costs</span>
 <span class='no'>drugcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='no'>strategies</span>$<span class='no'>strategy_id</span>,
                                         <span class='kw'>est</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>costs</span>$<span class='no'>drugs</span>$<span class='no'>costs</span>),
                              <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
-                             <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
-<span class='no'>medcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='no'>states</span>$<span class='no'>state_id</span>,
+                             <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'hesim_data' argument deprecated; pass to create_StateVals() instead.</span></div><div class='input'><span class='no'>medcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='no'>states</span>$<span class='no'>state_id</span>,
                                        <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>$<span class='no'>mean</span>,
                                        <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>$<span class='no'>se</span>),
                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"gamma"</span>,
-                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
-
+                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'hesim_data' argument deprecated; pass to create_StateVals() instead.</span></div><div class='input'>
 <span class='co'># Economic model</span>
 <span class='no'>n_samples</span> <span class='kw'>=</span> <span class='fl'>2</span>
 

@@ -124,7 +124,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Partitioned survival models</h1>
             
-            <h4 class="date">2020-12-26</h4>
+            <h4 class="date">2020-12-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/psm.Rmd"><code>vignettes/psm.Rmd</code></a></small>
       <div class="hidden name"><code>psm.Rmd</code></div>
@@ -256,7 +256,7 @@ S_{n}(t|\alpha_{1n}(x_{1n, ik}), \ldots, \alpha_{Ln}(x_{Ln, ik})).
 <p>To conduct the PSA, we must sample random draws of the regression coefficients from suitable probability distribution, which can be done in one of two ways. First, the parameters of each survival model can be sampled separately using a multivariate normal distribution. However, this option does not preserve the correlation in the survival endpoints. By default, <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> consequently samples the parameters via bootstrapping, whereby the survival models are refit repeatedly to resamples of the estimation dataset.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">surv_input_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/expand.html">expand</a></span>(<span class="no">hesim_dat</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"strategies"</span>, <span class="st">"patients"</span>))
 <span class="no">survmods</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_PsmCurves.html">create_PsmCurves</a></span>(<span class="no">psfit_wei</span>, <span class="kw">input_data</span> <span class="kw">=</span> <span class="no">surv_input_data</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n_samples</span>,
-                               <span class="kw">bootstrap</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">est_data</span> <span class="kw">=</span> <span class="no">surv_est_data</span>)</pre></body></html></div>
+                               <span class="kw">uncertainty</span> <span class="kw">=</span> <span class="st">"bootstrap"</span>, <span class="kw">est_data</span> <span class="kw">=</span> <span class="no">surv_est_data</span>)</pre></body></html></div>
 </div>
 <div id="utility-and-cost-models-1" class="section level3">
 <h3 class="hasAnchor">
