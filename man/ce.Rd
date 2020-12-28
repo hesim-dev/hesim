@@ -21,7 +21,7 @@ The 'costs' \code{\link{data.table}} contains the following columns:
 \item{dr}{The discount rate.}
 \item{sample}{A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)}
 \item{strategy_id}{The treatment strategy ID.}
-\item{grp}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
+\item{grp_id}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
 \item{costs}{Costs.}
 }
 }
@@ -33,7 +33,7 @@ The 'qalys' \code{\link{data.table}} contains the following columns:
 \item{dr}{The discount rate.}
 \item{sample}{A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)}
 \item{strategy_id}{The treatment strategy ID.}
-\item{grp}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
+\item{grp_id}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
 \item{qalys}{Quality-adjusted life-years}
 }
 }

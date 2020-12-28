@@ -17,7 +17,7 @@
 #' \item{dr}{The discount rate.}
 #' \item{sample}{A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)}
 #' \item{strategy_id}{The treatment strategy ID.}
-#' \item{grp}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
+#' \item{grp_id}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
 #' \item{costs}{Costs.}
 #' }
 #' 
@@ -27,7 +27,7 @@
 #' \item{dr}{The discount rate.}
 #' \item{sample}{A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)}
 #' \item{strategy_id}{The treatment strategy ID.}
-#' \item{grp}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
+#' \item{grp_id}{An optional column denoting a subgroup. If not included, it is assumed that a single subgroup is being analyzed.}
 #' \item{qalys}{Quality-adjusted life-years}
 #' }
 #' 
@@ -355,14 +355,6 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
                        ret$icer)
   }
   return(ret)
-}
-
-format_costs <- function(x, digits){
-  formatC(x, format = "f", digits = digits, big.mark = ",")
-}
-
-format_qalys <- function(x, digits){
-  formatC(x, format = "f", digits = digits)
 }
 
 format_cri <- function(est, lower, upper, costs = TRUE, digits){

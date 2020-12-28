@@ -1,3 +1,4 @@
+# Incremental treatment effect -------------------------------------------------
 #' Incremental treatment effect
 #'
 #' Computes incremental effect for all treatment strategies 
@@ -57,7 +58,7 @@ incr_effect <- function(x, comparator, sample, strategy, grp = NULL, outcomes){
   n_grps <- length(unique(x_treat[[grp]]))
   setorderv(x_treat, c(strategy, sample))
   setorderv(x_comparator, c(strategy, sample))
-
+  
   # estimation
   return(calc_incr_effect(x_treat, x_comparator, sample, strategy, grp, outcomes, 
                           n_samples, n_strategies, n_grps))
@@ -70,13 +71,14 @@ calc_incr_effect <- function(x_treat, x_comparator, sample, strategy, grp, outco
   colnames(outcomes_mat) <- paste0("i", outcomes)
   for (i in 1:length(outcomes)){
     outcomes_mat[, i] <- C_incr_effect(x_treat[[outcomes[i]]],
-                                      x_comparator[[outcomes[i]]],
-                                      n_samples, n_strategies, n_grps)
+                                       x_comparator[[outcomes[i]]],
+                                       n_samples, n_strategies, n_grps)
   }
   dt <- data.table(x_treat[[sample]], x_treat[[strategy]], x_treat[[grp]], outcomes_mat)
   setnames(dt, c(sample, strategy, grp, paste0("i", outcomes)))
 }
 
+# Survival quantiles -----------------------------------------------------------
 #' Survival quantiles
 #' 
 #' Compute quantiles from survival curves.
@@ -107,12 +109,12 @@ surv_quantile <- function (x, probs = .5, t, surv_cols, by) {
   for (i in 1:length(probs)){
     if (probs[i] > 1 | probs[i] < 0){
       stop("'prob' must be in the interval [0,1]",
-          call. = FALSE)
+           call. = FALSE)
     }  
     
     for (j in 1:length(surv_cols)){
       rows <- x[, .I[which(get(surv_cols[j]) <=  1 - probs[i])[1]], 
-                     by = by]$V1
+                by = by]$V1
       obs1_rows <- x[, .I[1], by = by]$V1
       na_rows <- which(is.na(rows))
       rows[is.na(rows)] <- obs1_rows[na_rows]
@@ -134,15 +136,16 @@ surv_quantile <- function (x, probs = .5, t, surv_cols, by) {
   return(res)
 }
 
+# Summarize costs and QALYs ----------------------------------------------------
 check_summarize <- function(x){
   if (is.null(x$costs_)) {
     stop("Cannot summarize costs without first simulating 'costs_' with '$sim_costs()'.",
-           call. = FALSE)
+         call. = FALSE)
   }
   
   if (is.null(x$qalys_)) {
     stop("Cannot summarize QALYs without first simulating 'qalys_' with '$sim_qalys()'.",
-          call. = FALSE)
+         call. = FALSE)
   }      
 }
 
@@ -175,7 +178,7 @@ summarize_ce <- function(costs, qalys, by_grp = FALSE) {
     if (by_grp == TRUE & !"grp_id" %in% colnames(x)){
       x[, ("grp_id") := 1]
     }
-
+    
     # Some differences between cost and QALY output
     if (costs) {
       by_cols <- c("category", by_cols)
@@ -185,19 +188,19 @@ summarize_ce <- function(costs, qalys, by_grp = FALSE) {
     }
     by_cols0 <- c(by_cols, "patient_id")
     if("patient_wt" %in% colnames(x)) by_cols0 <- c(by_cols0, "patient_wt")
-  
+    
     # Summarize
     if ("patient_id" %in% colnames(x)){ # Mean across patients
       x_summary <- x[, lapply(.SD, sum), by = by_cols0, .SDcols = sd_cols] 
       if ("patient_wt" %in% colnames(x)){ # Weighted mean
         x_summary <- x_summary[, lapply(.SD, stats::weighted.mean, w = patient_wt),
-                       by = by_cols, .SDcols = sd_cols]
+                               by = by_cols, .SDcols = sd_cols]
       } else{ # Non-weighted mean
         x_summary <- x_summary[, lapply(.SD, mean), by = by_cols, .SDcols = sd_cols]
       }
       
     } else{ # Mean already computed by health state, so sum across health states
-            # Only for individual patient simulation
+      # Only for individual patient simulation
       x_summary <- x[, lapply(.SD, sum), by = by_cols, .SDcols = sd_cols]
     }
   }
@@ -221,4 +224,129 @@ summarize_ce <- function(costs, qalys, by_grp = FALSE) {
   return(ce)
 }
 
+# Summary method ---------------------------------------------------------------
+format_costs <- function(x, digits){
+  formatC(x, format = "f", digits = digits, big.mark = ",")
+}
 
+format_qalys <- function(x, digits){
+  formatC(x, format = "f", digits = digits)
+}
+
+ci_alpha <- function(prob) {
+  if (prob > 1 | prob < 0){
+    stop("'prob' must be in the interval (0,1)",
+         call. = FALSE)
+  }
+  lower <- (1 - prob)/2
+  upper <- 1 - lower
+  return(list(lower = lower, upper = upper))
+}
+
+format_ci <- function(est, lower, upper, costs = TRUE, digits){
+  if (costs){
+    est <- format_costs(est, digits = digits)
+    lower <- format_costs(lower, digits = digits)
+    upper <- format_costs(upper, digits = digits)
+  } else{
+    est <- format_qalys(est, digits = digits)
+    lower <- format_qalys(lower, digits = digits)
+    upper <- format_qalys(upper, digits = digits)
+  }
+  paste0(est, " (",lower, ", ", upper, ")")
+}
+
+#' Summary method for cost-effectiveness object
+#' 
+#' Summarize a [`ce`] object by producing confidence intervals for quality-adjusted
+#' life-years (QALYs) and each cost category.
+#' @param object A [`ce`] object. 
+#' @param prob A numeric scalar in the interval `(0,1)` giving the confidence interval.
+#' Default is 0.95 for a 95 percent interval. 
+#' @param tidy Whether to return a table in "tidy" format. See "Value".
+#' @param digits_qalys Number of digits to use to report QALYs.
+#' @param digits_costs Number of digits to use to report costs.
+#' @param strategy_names Character vector of names for treatment strategies. Must
+#' be the same length as the number of unique values of `strategy_id` in `object`.
+#' @param grp_names Character vector of names for subgroups. Must
+#' be the same length as the number of unique values of `grp_id` in `object`.
+#' 
+#' @return A `data.table`. If `tidy = TRUE`, then the following columns are returned:
+#' 
+#' \describe{
+#' \item{dr}{The discount rate.}
+#' \item{strategy}{The treatment strategy.}
+#' \item{grp}{The patient subgroup.}
+#' \item{type}{Either `"QALYs"` or `"Costs"`.}
+#'  \item{category}{Category is always `"QALYs"` when `type == "QALYs"`; otherwise,
+#'  it is the cost category.}
+#' \item{estimate}{The point estimate comptued as the average across the PSA samples.}
+#' \item{lower}{The lower limit of the confidence interval.}
+#' \item{upper}{The upper limit of the confidence interval.}
+#' \item{value}{A formatted column that combines `estimate`, `lower`, and `upper` based
+#' on `digit_qalys` and `digit_costs`.}
+#' }
+#' If `tidy = FALSE`, then the table above is reshaped into a wider format with one
+#' column for each treatment strategy with values filled using the "value" column in the 
+#' tidy table. In this case the columns `estimate`, `lower`, and `upper` are removed and
+#' there is one row for each discount rate and subgroup.
+#' 
+#' @details For an example, see [`IndivCtstm`].
+#' @export
+summary.ce <- function(object, prob = 0.95, tidy = FALSE, digits_qalys = 2, 
+                       digits_costs = 0, strategy_names = NULL, grp_names = NULL) {
+  qalys <- costs <- value <- dr <- grp <- order <- strategy <-  NULL
+  alpha <- ci_alpha(prob)
+  
+  # Initial summary in tidy format
+  res <- list(
+    qalys = object$qalys[, list(type = "QALYs",
+                                category = "QALYs",
+                                estimate = mean(qalys),
+                                lower = stats::quantile(qalys, alpha$lower),
+                                upper = stats::quantile(qalys, alpha$upper)),
+                         by = c("dr", "strategy_id", "grp_id")],
+    costs = object$costs[, list(type = "Costs",
+                                estimate = mean(costs),
+                                lower = stats::quantile(costs, alpha$lower),
+                                upper = stats::quantile(costs, alpha$upper)),
+                         by = c("dr", "strategy_id", "grp_id", "category")]
+  )
+  
+  # Apply formatting
+  res$qalys[, value := format_ci(estimate, lower, upper, costs = FALSE,
+                                 digits = digits_qalys)]
+  res$costs[, value := format_ci(estimate, lower, upper, costs = TRUE,
+                                 digits = digits_costs)]
+  
+  
+  # Combine costs and QALYs into a single table
+  res <- rbindlist(res, use.names = TRUE)
+  setnames(res, c("strategy_id", "grp_id"), c("strategy", "grp"))
+  
+  if (!is.null(dr)) {
+    dr_env <- dr
+    res <- res[dr %in% dr_env]
+  } 
+  if (!is.null(strategy_names)) {
+    res[, strategy := factor(strategy, labels = strategy_names)]
+  }
+  if (!is.null(grp_names)) {
+    res[, grp := factor(grp, labels = grp_names)]
+  }
+  
+  # Return
+  ## If tidy = TRUE, we are done
+  if (tidy) return(res)
+  
+  ## Otherwise, reshape so strategies are columns
+  res[, order := 1:.N, by = c("dr", "grp", "strategy")]
+  res <- dcast(res, dr +  grp + type + category + order ~ strategy, value.var = "value")
+  setorderv(res, "order")
+  res[, order := NULL]
+  res[, category := ifelse(type == "QALYs",
+                           category,
+                           paste0(type, ": ", category))]
+  res[, type := NULL]
+  return(res)
+}
