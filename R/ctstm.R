@@ -183,23 +183,24 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
   return(stprobs[])      
 }
 
-#' Create \code{IndivCtstmTrans} object
+#' Create `IndivCtstmTrans` object
 #' 
-#' A generic function for creating an object of class \code{\link{IndivCtstmTrans}}.
+#' A generic function for creating an object of class [`IndivCtstmTrans`].
 #' @param object A fitted survival model or the parameters of a survival model.  
-#' @param input_data An object of class "expanded_hesim_data" returned by 
-#' \code{\link{expand.hesim_data}}.
+#' @param input_data An object of class `expanded_hesim_data` returned by 
+#' [`expand.hesim_data`].
 #' @param n Number of random observations of the parameters to draw.
 #' @param trans_mat The transition matrix describing the states and transitions in a 
-#' multi-state model in the format from the \link[mstate]{mstate} package. See \link{IndivCtstmTrans}.
+#' multi-state model in the format from the [mstate] package. See [`IndivCtstmTrans`].
 #' @param clock "reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
-#' of clock-reset and clock-forward models. See the field \code{clock} in \code{\link{IndivCtstmTrans}}.
+#' of clock-reset and clock-forward models. See the field `clock` in [`IndivCtstmTrans`].
 #' @param reset_states A vector denoting the states in which time resets. See the field 
-#' \code{reset_states} in \code{\link{IndivCtstmTrans}}.
-#' @param point_estimate If \code{TRUE}, then the point estimates are returned and and no samples are drawn.
-#' @param ... Further arguments passed to \code{IndivCtstmTrans$new()} in \code{\link{IndivCtstmTrans}}.
-#' @return Returns an \code{\link{R6Class}} object of class \code{\link{IndivCtstmTrans}}.
-#' @seealso \code{\link{IndivCtstmTrans}}
+#' `reset_states` in [`IndivCtstmTrans`].
+#' @param uncertainty Method determining how parameter uncertainty should be handled. See
+#'  documentation in [`create_params()`].
+#' @param ... Further arguments passed to `IndivCtstmTrans$new()` in [`IndivCtstmTrans`].
+#' @return Returns an [`R6Class`] object of class [`IndivCtstmTrans`].
+#' @seealso [`IndivCtstmTrans`]
 #' @name create_IndivCtstmTrans
 #' @rdname create_IndivCtstmTrans
 #' @export
@@ -207,24 +208,50 @@ create_IndivCtstmTrans <- function(object, ...){
   UseMethod("create_IndivCtstmTrans", object)
 }
 
+create_IndivCtstmTrans_flexsurvreg <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
+                                               n = 1000, uncertainty = c("normal", "none"),
+                                               is_uncertainty_missing, ...) {
+  # For backwards compatibility until deprecated point_estimate argument is no longer supported
+  dots <- list(...)  
+  uncertainty <- deprecate_point_estimate(dots$point_estimate, uncertainty,
+                                          is_uncertainty_missing)
+  dots <- dots[names(dots) != "point_estimate"]
+  
+  # Code to always keep
+  uncertainty <- match.arg(uncertainty)
+  input_mats <- create_input_mats(object, input_data)
+  params <- create_params(object, n = n, uncertainty = uncertainty)
+  return(
+    do.call(IndivCtstmTrans$new, 
+            c(list(input_data = input_mats, params = params, trans_mat = trans_mat,
+                   clock = match.arg(clock)), 
+              dots))
+  )
+  
+}
+
+
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg_list <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
-                                                    n = 1000, point_estimate = FALSE, ...){
-  input_mats <- create_input_mats(object, input_data)
-  params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(input_data = input_mats, params = params, trans_mat = trans_mat,
-                             clock = match.arg(clock), ...))
+                                                    n = 1000, uncertainty = c("normal", "none"), ...){
+  return(
+    create_IndivCtstmTrans_flexsurvreg(object = object, input_data = input_data, trans_mat = trans_mat,
+                                       n = n, uncertainty = uncertainty,
+                                       is_uncertainty_missing = missing(uncertainty), ...)
+  )
 }
 
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
-                                               n = 1000, point_estimate = FALSE, ...){
-  input_mats <- create_input_mats(object, input_data)
-  params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(IndivCtstmTrans$new(input_data = input_mats, params = params, trans_mat = trans_mat, 
-                             clock = match.arg(clock), ...))
+                                               n = 1000, uncertainty = c("normal", "none"), ...){
+  
+  return(
+    create_IndivCtstmTrans_flexsurvreg(object = object, input_data = input_data, trans_mat = trans_mat,
+                                       n = n, uncertainty = uncertainty,
+                                       is_uncertainty_missing = missing(uncertainty), ...)
+  )
 }
 
 #' @export

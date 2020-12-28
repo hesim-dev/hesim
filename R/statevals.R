@@ -259,8 +259,10 @@ create_StateVals <- function(object, ...){
 #' @rdname create_StateVals
 #' @export  
 create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
-                                point_estimate = FALSE, ...){
-  params <- create_params(object, n, point_estimate) 
+                                uncertainty = c("normal", "none"), ...){
+  uncertainty <- deprecate_point_estimate(list(...)$point_estimate, uncertainty,
+                                          missing(uncertainty))
+  params <- create_params(object, n, uncertainty) 
   input_mats <- create_input_mats(object, input_data)
   return(StateVals$new(params = params, input_data = input_mats, ...))
 }

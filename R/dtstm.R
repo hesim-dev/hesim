@@ -163,12 +163,24 @@ create_CohortDtstmTrans <- function(object, ...){
 #' @rdname create_CohortDtstmTrans
 create_CohortDtstmTrans.multinom_list <- function(object, input_data,
                                                   trans_mat,
-                                                  n = 1000, point_estimate = FALSE,
+                                                  n = 1000, 
+                                                  uncertainty = c("normal", "none"),
                                                   ...){
+  # For backwards compatibility until deprecated point_estimate argument is no longer supported
+  dots <- list(...)  
+  uncertainty <- deprecate_point_estimate(dots$point_estimate, uncertainty,
+                                          missing(uncertainty))
+  dots <- dots[names(dots) != "point_estimate"]
+  
+  # Code to always keep
+  uncertainty <- match.arg(uncertainty)
   input_mats <- create_input_mats(object, input_data)
-  params <- create_params(object, n = n, point_estimate = point_estimate)
-  return(CohortDtstmTrans$new(params = params, input_data = input_mats, 
-                              trans_mat = trans_mat, ...))
+  params <- create_params(object, n = n, uncertainty = uncertainty)
+  return(
+    do.call(CohortDtstmTrans$new, 
+            c(list(params = params, input_data = input_mats, trans_mat = trans_mat),
+              dots))
+  )
 }
 
 # CohortDtstm ------------------------------------------------------------------
