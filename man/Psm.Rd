@@ -36,7 +36,7 @@ fits <- flexsurvreg_list(fit1, fit2, fit3)
 
 surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
 psm_curves <- create_PsmCurves(fits, input_data = surv_input_data,
-                               bootstrap = TRUE, est_data = surv_est_data, 
+                               uncertainty = "bootstrap", est_data = surv_est_data, 
                                n = n_samples)
 
 # Cost model(s)
@@ -51,9 +51,9 @@ psm_costs_medical <- create_StateVals(fit_costs_medical,
 utility_tbl <- stateval_tbl(tbl = data.frame(state_id = states$state_id,
                                              min = psm4_exdata$utility$lower,
                                              max = psm4_exdata$utility$upper),
-                            dist = "unif",
-                            hesim_data = hesim_dat)
-psm_utility <- create_StateVals(utility_tbl, n = n_samples)
+                            dist = "unif")
+psm_utility <- create_StateVals(utility_tbl, n = n_samples,
+                                hesim_data = hesim_dat)
 
 # Partitioned survival decision model
 psm <- Psm$new(survival_models = psm_curves,

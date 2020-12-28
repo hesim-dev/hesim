@@ -42,16 +42,13 @@ transfits <- multinom_list(healthy = fit_healthy, sick = fit_sick)
 
 ## Utility
 utility_tbl <- stateval_tbl(multinom3_exdata$utility,
-                            dist = "beta",
-                            hesim_data = hesim_dat)
+                            dist = "beta")
 
 ## Costs
 drugcost_tbl <- stateval_tbl(multinom3_exdata$costs$drugs,
-                             dist = "fixed",
-                             hesim_data = hesim_dat) 
+                             dist = "fixed")
 medcost_tbl <- stateval_tbl(multinom3_exdata$costs$medical,
-                            dist = "gamma",
-                            hesim_data = hesim_dat)  
+                            dist = "gamma")
 
 # Economic model
 n_samples <- 3
@@ -65,11 +62,11 @@ transmod <- create_CohortDtstmTrans(transfits,
                                     n = n_samples)
 
 ### Utility
-utilitymod <- create_StateVals(utility_tbl, n = n_samples)
+utilitymod <- create_StateVals(utility_tbl, n = n_samples, hesim_data = hesim_dat)
 
 ### Costs
-drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples)
-medcostmod <- create_StateVals(medcost_tbl, n = n_samples)
+drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples, hesim_data = hesim_dat)
+medcostmod <- create_StateVals(medcost_tbl, n = n_samples, hesim_data = hesim_dat)
 costmods <- list(Drug = drugcostmod,
                  Medical = medcostmod)
 

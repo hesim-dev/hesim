@@ -83,7 +83,7 @@ create_PsmCurves.params_surv_list <- function(object, input_data, ...){
 #' # Form PsmCurves
 #' surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
 #' psm_curves <- create_PsmCurves(fits, input_data = surv_input_data, n = 3,
-#'                                bootstrap = TRUE, est_data = surv_est_data)
+#'                                uncertainty = "bootstrap", est_data = surv_est_data)
 #'
 #' # Summarize survival curves
 #' head(psm_curves$quantile(p = c(.25, .5, .75)))
@@ -231,7 +231,7 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #'
 #' surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
 #' psm_curves <- create_PsmCurves(fits, input_data = surv_input_data,
-#'                                bootstrap = TRUE, est_data = surv_est_data, 
+#'                                uncertainty = "bootstrap", est_data = surv_est_data, 
 #'                                n = n_samples)
 #'
 #' # Cost model(s)
@@ -246,9 +246,9 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #' utility_tbl <- stateval_tbl(tbl = data.frame(state_id = states$state_id,
 #'                                              min = psm4_exdata$utility$lower,
 #'                                              max = psm4_exdata$utility$upper),
-#'                             dist = "unif",
-#'                             hesim_data = hesim_dat)
-#' psm_utility <- create_StateVals(utility_tbl, n = n_samples)
+#'                             dist = "unif")
+#' psm_utility <- create_StateVals(utility_tbl, n = n_samples,
+#'                                 hesim_data = hesim_dat)
 #'
 #' # Partitioned survival decision model
 #' psm <- Psm$new(survival_models = psm_curves,
