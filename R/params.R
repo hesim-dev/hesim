@@ -217,9 +217,8 @@ create_params.lm <- function(object, n = 1000, uncertainty = c("normal", "none")
 # #' @rdname create_params
 #' @keywords internal
 create_params.lm_list <- function(object, n = 1000, uncertainty = c("normal", "none"),
-                                   point_estimate = FALSE, ...){
+                                   ...){
   return(create_params_list(object, n = n, uncertainty = uncertainty, 
-                            point_estimate = point_estimate, 
                             inner_class = "params_lm", new_class = "params_lm_list"))
 }
 
