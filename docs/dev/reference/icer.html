@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ICER table — icer_tbl • hesim</title>
+<title>Incremental cost-effectiveness ratio — icer • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,9 @@
 
 
 
-<meta property="og:title" content="ICER table — icer_tbl" />
-<meta property="og:description" content="Generate a table of incremental cost-effectiveness ratios given output from
-cea_pw()." />
+<meta property="og:title" content="Incremental cost-effectiveness ratio — icer" />
+<meta property="og:description" content="Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
+cea_pw() with icer() and format for pretty printing with format()." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -168,28 +168,20 @@ cea_pw()." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>ICER table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/deprecated.R'><code>R/deprecated.R</code></a></small>
-    <div class="hidden name"><code>icer_tbl.Rd</code></div>
+    <h1>Incremental cost-effectiveness ratio</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/cea.R'><code>R/cea.R</code></a></small>
+    <div class="hidden name"><code>icer.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Generate a table of incremental cost-effectiveness ratios given output from
-<code><a href='cea.html'>cea_pw()</a></code>.</p>
+    <p>Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
+<code><a href='cea.html'>cea_pw()</a></code> with <code>icer()</code> and format for pretty printing with <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>icer_tbl</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>,
-  <span class='kw'>cri</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>digits_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>digits_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"matrix"</span>, <span class='st'>"data.table"</span>),
-  <span class='kw'>rownames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>colnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>icer</span>(<span class='no'>x</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>)
+
+<span class='co'># S3 method for icer</span>
+<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='no'>x</span>, <span class='kw'>digit_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>digit_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>pivot_from</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -199,18 +191,21 @@ cea_pw()." />
       <td><p>An object of class <code>cea_pw</code> returned by <code><a href='cea.html'>cea_pw()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>k</th>
-      <td><p>Willingness to pay.</p></td>
-    </tr>
-    <tr>
-      <th>cri</th>
-      <td><p>If <code>TRUE</code>, credible intervals are computed; otherwise
-they are not.</p></td>
-    </tr>
-    <tr>
       <th>prob</th>
-      <td><p>A numeric scalar in the interval <code>(0,1)</code> giving the credible interval.
-Default is 0.95 for a 95 percent credible interval.</p></td>
+      <td><p>A numeric scalar in the interval <code>(0,1)</code> giving the confidence interval.
+Default is 0.95 for a 95 percent interval.</p></td>
+    </tr>
+    <tr>
+      <th>k</th>
+      <td><p>Willingness to pay quality-adjusted life-year.</p></td>
+    </tr>
+    <tr>
+      <th>pivot_from</th>
+      <td><p>Character vector denoting a column or columns used to
+"widen" the data. There will be one column for each value of the variables in
+<code>pivot_from</code>. Default is to widen so there is a column for each treatment
+strategy. Other options are the subgroup and outcome variable (or a combination of
+them all). Set to <code>NULL</code> if you do not want to widen the table.</p></td>
     </tr>
     <tr>
       <th>digits_qalys</th>
@@ -220,40 +215,21 @@ Default is 0.95 for a 95 percent credible interval.</p></td>
       <th>digits_costs</th>
       <td><p>Number of digits to use to report costs.</p></td>
     </tr>
-    <tr>
-      <th>output</th>
-      <td><p>Should output be a <code>data.table</code> or a list of matrices for
-each group.</p></td>
-    </tr>
-    <tr>
-      <th>rownames</th>
-      <td><p>Row names for matrices when <code>output = "matrix"</code>.</p></td>
-    </tr>
-    <tr>
-      <th>colnames</th>
-      <td><p>Column names for matrices when <code>output = "matrix"</code>.</p></td>
-    </tr>
-    <tr>
-      <th>drop</th>
-      <td><p>If <code>TRUE</code>, then the result is coerced to the lowest possible dimension.
-Relevant if <code>output = "matrix"</code> and there is one group, in which case a single
-matrix will be returned if <code>drop = TRUE</code> and a list of length 1 will be returned
-if <code>drop = FALSE</code>.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If <code>output = "matrix"</code>, then a list of matrices (or a matrix if
-<code>drop = TRUE</code>) reporting incremental cost-effectiveness ratios (ICERs)
-by group. Specifically, each matrix contains five rows for: (i)
-incremental quality-adjusted life-years (QALYs), (ii) incremental costs,
-(iii) the incremental net monetary benefit (NMB), (iv) the ICER,
-and (v) a conclusion stating whether each strategy is cost-effective relative
-to a comparator. The number of columns is equal to the
-number of strategies (including the comparator).</p>
-<p>If <code>output = "data.table"</code>, then the results are reported as a <code>data.table</code>,
-with one row for each strategy and group combination.</p>
+    <p><code>icer()</code> returns a tidy <code>data.table</code> with the following columns:</p><dl'>
+<dt>strategy</dt><dd><p>The treatment strategy.</p></dd>
+<dt>grp</dt><dd><p>The subgroup.</p></dd>
+<dt>outcome</dt><dd><p>The outcome metric.</p></dd>
+<dt>mean</dt><dd><p>The point estimate comptued as the average across the PSA samples.</p></dd>
+<dt>lower</dt><dd><p>The lower limit of the confidence interval.</p></dd>
+<dt>upper</dt><dd><p>The upper limit of the confidence interval.</p></dd>
+
+</dl>
+
+<p><code><a href='https://rdrr.io/r/base/format.html'>format()</a></code> formats the table according to the arguments passed.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='cea.html'>cea_pw()</a></code></p></div>

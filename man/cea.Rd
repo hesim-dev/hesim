@@ -134,7 +134,10 @@ cea_pw <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
                     sample = "sample", strategy = "strategy", grp = "grp",
                      e = "e", c = "c")
 names(cea_pw)
+
 # cost-effectiveness acceptability curve
 head(cea_pw$ceac[k >= 20000])
-icer_tbl(cea_pw)
+
+# Summarize the incremental cost-effectiveness ratio
+format(icer(cea_pw))
 }
