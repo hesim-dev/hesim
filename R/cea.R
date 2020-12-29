@@ -97,7 +97,7 @@ NULL
 #' }
 #' @name cea
 #' @examples
-#' # simulation output
+#' # Simulation output
 #' n_samples <- 100
 #' sim <- data.frame(sample = rep(seq(n_samples), 4),
 #'                   c = c(rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
@@ -110,7 +110,7 @@ NULL
 #'                             each = n_samples), 2)
 #')
 #'
-#' # cea
+#' # cea()
 #' cea <- cea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
 #'              grp = "grp", e = "e", c = "c")
 #' names(cea)
@@ -119,13 +119,13 @@ NULL
 #' library("data.table")
 #' cea$mce[k == 20000]
 #' 
-#' # cea_pw
+#' # cea_pw()
 #' cea_pw <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
 #'                     sample = "sample", strategy = "strategy", grp = "grp",
 #'                      e = "e", c = "c")
 #' names(cea_pw)
 #' 
-#' # cost-effectiveness acceptability curve
+#' # Cost-effectiveness acceptability curve
 #' head(cea_pw$ceac[k >= 20000])
 #' 
 #' # Summarize the incremental cost-effectiveness ratio
@@ -379,7 +379,12 @@ format_cri <- function(est, lower, upper, costs = TRUE, digits){
 #' @param x An object of class `cea_pw` returned by [cea_pw()].
 #' @param prob A numeric scalar in the interval `(0,1)` giving the confidence interval.
 #' Default is 0.95 for a 95 percent interval. 
-#' @param k Willingness to pay quality-adjusted life-year.
+#' @param k Willingness to pay per quality-adjusted life-year.
+#' @param strategy_values Character vector of values (i.e., names) for 
+#' treatment strategies. Must be the same length as the number of unique values
+#'  of the "strategy" column in `object`.
+#' @param grp_values Character vector of values (i.e., names) for subgroups. Must
+#' be the same length as the number of unique values of the "subgroup" column in `object`.
 #' @return `icer()` returns a tidy `data.table` with the following columns:
 #' \describe{
 #' \item{strategy}{The treatment strategy.}
@@ -394,7 +399,8 @@ format_cri <- function(est, lower, upper, costs = TRUE, digits){
 #' 
 #' @seealso [`cea_pw()`]
 #' @export
-icer <- function(x, prob = .95, k = 50000){
+icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
+                 grp_values = NULL){
   ie <- ic <- imbm <- inmb_lower <- inmb_mean <- inmb_upper <- NULL 
   
   if (!inherits(x, "cea_pw")){
@@ -430,11 +436,21 @@ icer <- function(x, prob = .95, k = 50000){
                                       "Incremental costs",
                                       "Incremental NMB",
                                       "ICER"))]
-  setorderv(tbl, c(grp, strategy))
+  
+  # Values of treatment strategies and subgroups
+  setnames(tbl, c(strategy, grp), c("strategy", "grp"))
+  
+  if (!is.null(strategy_values)) {
+    tbl[, strategy := as.character(factor(strategy, labels = strategy_values))]
+  }
+  if (!is.null(grp_values)) {
+    tbl[, grp := as.character(factor(grp, labels = grp_values))]
+  }
+  
+  # Return
+  setorderv(tbl, c("grp", "strategy"))
   setattr(tbl, "class", c("icer", "data.table", "data.frame"))
   setattr(tbl, "k", k)
-  setattr(tbl, "strategy", strategy)
-  setattr(tbl, "grp", grp)
   return(tbl[, ])
 }
 
@@ -442,16 +458,14 @@ icer <- function(x, prob = .95, k = 50000){
 #' @param digits_qalys Number of digits to use to report QALYs.
 #' @param digits_costs Number of digits to use to report costs.
 #' @param pivot_from Character vector denoting a column or columns used to 
-#' "widen" the data. There will be one column for each value of the variables in
-#' `pivot_from`. Default is to widen so there is a column for each treatment
-#' strategy. Other options are the subgroup and outcome variable (or a combination of
-#' them all). Set to `NULL` if you do not want to widen the table. 
+#' "widen" the data. Should either be `"strategy"`, `"grp"`, `"outcome"`,
+#' or some combination of the three. There will be one column for each value of 
+#' the variables in `pivot_from`. Default is to widen so there is a column for each treatment
+#' strategy. Set to `NULL` if you do not want to widen the table. 
 #' @export
 format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
                         pivot_from = "strategy", conclusion = FALSE) {
   y <- copy(x)
-  grp <- attr(x, "grp")
-  strategy <- attr(x, "strategy")
   
   # Format values
   y[, value := fcase(
@@ -467,21 +481,20 @@ format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
   
   # Pivot wider
   if (!is.null(pivot_from)) {
-    if (missing(pivot_from)) pivot_from <- attr(x, "strategy")
     rhs <- pivot_from
-    lhs <- setdiff(c(strategy, grp, "outcome"),
+    lhs <- setdiff(c("strategy", "grp", "outcome"),
                    pivot_from)
     f <- paste(paste(lhs, collapse=" + "), paste(rhs, collapse=" + "),  sep=" ~ ")
     
     y <- dcast(y, f, value.var = "value")
     
     # Sort by group and then strategy
-    if (all(c(grp, strategy) %in% colnames(y))) {
-      setorderv(y, c(grp, strategy))
-    } else if (grp %in% colnames(y)) {
-      setorderv(y, grp)
-    } else if (strategy %in% colnames(y)) {
-      setorderv(y, strategy)
+    if (all(c("grp", "strategy") %in% colnames(y))) {
+      setorderv(y, c("grp", "strategy"))
+    } else if ("grp" %in% colnames(y)) {
+      setorderv(y, "grp")
+    } else if ("strategy" %in% colnames(y)) {
+      setorderv(y, "strategy")
     }
   }
   

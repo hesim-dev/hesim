@@ -266,7 +266,7 @@ test_that("icer() and format.icer() return the correct columns", {
   # icer()
   x <- icer(cea_pw2)
   expect_equal(colnames(x),
-               c("strategy_name", "group", "outcome", "mean", "lower", "upper"))
+               c("strategy", "grp", "outcome", "mean", "lower", "upper"))
   
   # Formatting
   ## Pivoting
@@ -276,20 +276,30 @@ test_that("icer() and format.icer() return the correct columns", {
   
   ### No pivoting
   y <- format(x, pivot_from = NULL)
-  expect_equal(colnames(y), c("strategy_name", "group", "outcome", "value"))
+  expect_equal(colnames(y), c("strategy", "grp", "outcome", "value"))
 
   ### Pivot strategy
-  y <- format(x, pivot_from = "strategy_name")
+  y <- format(x, pivot_from = "strategy")
   expect_true("Strategy 3" %in% colnames(y))
   
   ### Pivot group
-  y <- format(x, pivot_from = "group")
+  y <- format(x, pivot_from = "grp")
   expect_true("Group 1" %in% colnames(y))
   
   ### Pivot group and outcome
-  y <- format(x, pivot_from = c("group", "outcome"))
+  y <- format(x, pivot_from = c("grp", "outcome"))
   expect_true(!"outcome" %in% colnames(y))
-  expect_true(!"group" %in% colnames(y))
+  expect_true(!"grp" %in% colnames(y))
+})
+
+test_that("icer() correctly passes strategy_values", {
+  x <- icer(cea_pw2, strategy_values = c("2", "3"))
+  expect_equal(c("2", "3"), unique(x$strategy))
+})
+
+test_that("icer() correctly passes grp_values", {
+  x <- icer(cea_pw2, grp_values = c("g1", "g2"))
+  expect_equal(c("g1", "g2"), unique(x$grp))
 })
 
 # Test incr_effect function ---------------------------------------------------

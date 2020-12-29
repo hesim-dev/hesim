@@ -178,10 +178,16 @@ cea_pw() with icer() and format for pretty printing with format()." />
 <code><a href='cea.html'>cea_pw()</a></code> with <code>icer()</code> and format for pretty printing with <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>icer</span>(<span class='no'>x</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>)
+    <pre class="usage"><span class='fu'>icer</span>(<span class='no'>x</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>, <span class='kw'>strategy_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>grp_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='co'># S3 method for icer</span>
-<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='no'>x</span>, <span class='kw'>digit_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>digit_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>pivot_from</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(
+  <span class='no'>x</span>,
+  <span class='kw'>digit_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>digit_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>pivot_from</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
+  <span class='kw'>conclusion</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -197,15 +203,26 @@ Default is 0.95 for a 95 percent interval.</p></td>
     </tr>
     <tr>
       <th>k</th>
-      <td><p>Willingness to pay quality-adjusted life-year.</p></td>
+      <td><p>Willingness to pay per quality-adjusted life-year.</p></td>
+    </tr>
+    <tr>
+      <th>strategy_values</th>
+      <td><p>Character vector of values (i.e., names) for
+treatment strategies. Must be the same length as the number of unique values
+of the "strategy" column in <code>object</code>.</p></td>
+    </tr>
+    <tr>
+      <th>grp_values</th>
+      <td><p>Character vector of values (i.e., names) for subgroups. Must
+be the same length as the number of unique values of the "subgroup" column in <code>object</code>.</p></td>
     </tr>
     <tr>
       <th>pivot_from</th>
       <td><p>Character vector denoting a column or columns used to
-"widen" the data. There will be one column for each value of the variables in
-<code>pivot_from</code>. Default is to widen so there is a column for each treatment
-strategy. Other options are the subgroup and outcome variable (or a combination of
-them all). Set to <code>NULL</code> if you do not want to widen the table.</p></td>
+"widen" the data. Should either be <code>"strategy"</code>, <code>"grp"</code>, <code>"outcome"</code>,
+or some combination of the three. There will be one column for each value of
+the variables in <code>pivot_from</code>. Default is to widen so there is a column for each treatment
+strategy. Set to <code>NULL</code> if you do not want to widen the table.</p></td>
     </tr>
     <tr>
       <th>digits_qalys</th>

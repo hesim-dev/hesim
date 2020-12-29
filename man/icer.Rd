@@ -5,9 +5,15 @@
 \alias{format.icer}
 \title{Incremental cost-effectiveness ratio}
 \usage{
-icer(x, prob = 0.95, k = 50000)
+icer(x, prob = 0.95, k = 50000, strategy_values = NULL, grp_values = NULL)
 
-\method{format}{icer}(x, digit_qalys = 2, digit_costs = 0, pivot_from = "strategy")
+\method{format}{icer}(
+  x,
+  digit_qalys = 2,
+  digit_costs = 0,
+  pivot_from = "strategy",
+  conclusion = FALSE
+)
 }
 \arguments{
 \item{x}{An object of class \code{cea_pw} returned by \code{\link[=cea_pw]{cea_pw()}}.}
@@ -15,13 +21,20 @@ icer(x, prob = 0.95, k = 50000)
 \item{prob}{A numeric scalar in the interval \verb{(0,1)} giving the confidence interval.
 Default is 0.95 for a 95 percent interval.}
 
-\item{k}{Willingness to pay quality-adjusted life-year.}
+\item{k}{Willingness to pay per quality-adjusted life-year.}
+
+\item{strategy_values}{Character vector of values (i.e., names) for
+treatment strategies. Must be the same length as the number of unique values
+of the "strategy" column in \code{object}.}
+
+\item{grp_values}{Character vector of values (i.e., names) for subgroups. Must
+be the same length as the number of unique values of the "subgroup" column in \code{object}.}
 
 \item{pivot_from}{Character vector denoting a column or columns used to
-"widen" the data. There will be one column for each value of the variables in
-\code{pivot_from}. Default is to widen so there is a column for each treatment
-strategy. Other options are the subgroup and outcome variable (or a combination of
-them all). Set to \code{NULL} if you do not want to widen the table.}
+"widen" the data. Should either be \code{"strategy"}, \code{"grp"}, \code{"outcome"},
+or some combination of the three. There will be one column for each value of
+the variables in \code{pivot_from}. Default is to widen so there is a column for each treatment
+strategy. Set to \code{NULL} if you do not want to widen the table.}
 
 \item{digits_qalys}{Number of digits to use to report QALYs.}
 
