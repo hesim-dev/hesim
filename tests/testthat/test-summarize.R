@@ -104,4 +104,11 @@ test_that("summary.ce() correctly passed 'grp_names' argument", {
                gnames)
 })
 
+test_that("summary.ce() must have 'prob' values in correct range", {
+  expect_error(summary(ce, prob = "0.95"))
+  expect_error(summary(ce, prob = "1.5"),
+               "'prob' must be in the interval (0,1)",
+               fixed = TRUE)
+})
+
 
