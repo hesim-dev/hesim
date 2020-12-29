@@ -358,7 +358,7 @@ ce_sim$costs[grp_id == 2 & category == "total",
 We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (*rr*) depends on covariates. 
 
 ```{r icerSubgroup}
-icer_tbl(cea_pw_out, output = "data.table")
+format(icer(cea_pw_out), pivot_from = "outcome")
 ```
 
 ## Overall
@@ -368,7 +368,7 @@ Estimates aggregated across all patients can also be computed with `$sim_summari
 ce_sim <- econmod$summarize(by_grp = FALSE)
 cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = .015, dr_costs = .06,
                      k = wtp)
-icer_tbl(cea_pw_out)
+format(icer(cea_pw_out), digits_qalys = 3)
 ```
 
 # Appendix

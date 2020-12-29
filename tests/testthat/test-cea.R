@@ -1,5 +1,5 @@
 context("cea.R unit tests")
-rm(list = ls())
+library("data.table")
 
 # Output for testing ----------------------------------------------------------
 n_samples <- 1000
@@ -25,12 +25,15 @@ e[[5]] <- rnorm(n_samples, 8.5, .6)
 e[[6]] <- rnorm(n_samples, 11, .6)
 
 # cost and effectiveness by strategy and simulation
-ce <- data.table::data.table(sample = rep(seq(n_samples), length(e)),
+ce <- data.table(sample = rep(seq(n_samples), length(e)),
                  strategy = rep(paste0("Strategy ", seq(1, 3)), 
                            each = n_samples * 2),
                  grp = rep(rep(c("Group 1", "Group 2"),
                                each = n_samples), 3),
                  cost = do.call("c", c), qalys = do.call("c", e))
+
+ce2 <- copy(ce)
+setnames(ce2, c("sample", "strategy", "grp"), c("samp", "strategy_name", "group"))
 
 # net benefits by willingess to pay
 krange <- seq(100000, 120000, 500)
@@ -44,10 +47,10 @@ ce[, nmb2 := qalys * kval2 - cost]
 ceaR <- function(x, kval, grpname){
   x <- x[grp == grpname] 
   x[, nmb := qalys * kval - cost]
-  nmb <- data.table::dcast(x, sample ~ strategy, value.var = "nmb")
+  nmb <- dcast(x, sample ~ strategy, value.var = "nmb")
   strategies <- seq(1, ncol(nmb) - 1)
   nmb_names <- paste0("nmb", strategies)
-  data.table::setnames(nmb, colnames(nmb), c("sample", nmb_names))
+  setnames(nmb, colnames(nmb), c("sample", nmb_names))
   nmb[, maxj := apply(nmb[, -1, with = FALSE], 1, which.max)]
   nmb[, maxj := factor(maxj, levels = strategies)]
   prob_ce <- as.numeric(prop.table(table(nmb$maxj)))
@@ -76,13 +79,13 @@ deltaR <- function(x, comparator, grpname){
   x <- x[grp == grpname]
   x.comparator <- x[strategy == comparator]
   x.treat <- x[strategy != comparator]
-  x.treat.qalys <- data.table::dcast(x.treat, sample ~ strategy, value.var = c("qalys"))
-  x.treat.cost <- data.table::dcast(x.treat, sample ~ strategy, value.var = c("cost"))
+  x.treat.qalys <- dcast(x.treat, sample ~ strategy, value.var = c("qalys"))
+  x.treat.cost <- dcast(x.treat, sample ~ strategy, value.var = c("cost"))
   delta.qalys <- x.treat.qalys[, -1, with = FALSE] - x.comparator$qalys
   delta.cost <- x.treat.cost[, -1, with = FALSE] - x.comparator$cost
   n_samples <- max(x$sample)
-  ret <- data.table::data.table(sample = seq(1, n_samples), 
-                                strategy = rep(unique(x.treat$strategy), each = n_samples),
+  ret <- data.table(sample = seq(1, n_samples), 
+                    strategy = rep(unique(x.treat$strategy), each = n_samples),
                     grp = grpname,
                     ie = c(as.matrix(delta.qalys)), 
                     ic = c(as.matrix(delta.cost)))
@@ -96,8 +99,8 @@ ceacR <- function(ix, kval, grpname) {
   ceac <- ix[, .(prob = mean(nmb >= 0)), by = "strategy"]
 }
 
-# Test cea function ------------------------------------------------------------
-test_that("cea", {
+# Test cea() -------------------------------------------------------------------
+test_that("cea() produced expected results", {
   
   # function gets expected results
   cea <-  cea(ce, k = krange, sample = "sample", strategy = "strategy",
@@ -114,13 +117,13 @@ test_that("cea", {
                                      c_lower = quantile(cost, .025)), by = "strategy"]
   ce_upper <- ce[grp == "Group 2", .(e_upper = quantile(qalys, .975), 
                                      c_upper = quantile(cost, .975)), by = "strategy"]
-  summary_test <- data.table::data.table(strategy = ce_mean$strategy, 
-                                        e_mean = ce_mean$e_mean,
-                                        e_lower = ce_lower$e_lower, 
-                                        e_upper = ce_upper$e_upper,
-                                        c_mean = ce_mean$c_mean, 
-                                        c_lower = ce_lower$c_lower,
-                                        c_upper = ce_upper$c_upper)
+  summary_test <- data.table(strategy = ce_mean$strategy, 
+                             e_mean = ce_mean$e_mean,
+                             e_lower = ce_lower$e_lower, 
+                             e_upper = ce_upper$e_upper,
+                             c_mean = ce_mean$c_mean, 
+                             c_lower = ce_lower$c_lower,
+                             c_upper = ce_upper$c_upper)
   expect_equal(summary_test, cea$summary[grp == "Group 2", -2, with = FALSE])
   
   # mce
@@ -151,22 +154,24 @@ test_that("cea", {
   evpi_test <- ceaR_1$evpi
   expect_equal(evpi$evpi, evpi_test)
   
-  ## function works with other names
-  ce2 = data.table::copy(ce)
-  data.table::setnames(ce2, c("sample", "strategy", "grp"), c("samp", "strategy_name", "group"))
+  # Function works with non-default names
   cea2 <-  cea(ce2, k = krange, sample = "samp", strategy = "strategy_name",
                grp = "group", e = "qalys", c = "cost")
   evpi_v2 <- cea2$evpi[group == "Group 1" &  k == kval]
   expect_equal(evpi_v2$evpi, evpi$evpi)
 })
 
-# Test cea_pw function ---------------------------------------------------------
-test_that("cea_pw", {
+# Test cea_pw() ----------------------------------------------------------------
+cea_pw <-  cea_pw(ce, k = krange, comparator = "Strategy 1",
+                  sample = "sample", strategy = "strategy", grp = "grp",
+                  e = "qalys", c = "cost")
+cea_pw2 <- cea_pw(ce2,  k = krange, comparator = "Strategy 1",
+                  sample = "samp", strategy = "strategy_name", grp = "group",
+                  e = "qalys", c = "cost")
+
+test_that("cea_pw() produces expected results", {
   
   ### function gets expected results
-  cea_pw <-  cea_pw(ce, k = krange, comparator = "Strategy 1",
-                         sample = "sample", strategy = "strategy", grp = "grp",
-                      e = "qalys", c = "cost")
   kval <- sample(krange, 1)
   
   ## delta
@@ -211,54 +216,99 @@ test_that("cea_pw", {
                      by = "strategy"]
   expect_equal(inmb$einmb, einmb_test$einmb)
   
-  ### function works with other names
-  ce2 = data.table::copy(ce)
-  data.table::setnames(ce2, c("sample", "strategy", "grp"), c("samp", "strategy_name", "group"))
-  cea_pw2 <- cea_pw(ce2,  k = krange, comparator = "Strategy 1",
-                    sample = "samp", strategy = "strategy_name", grp = "group",
-                    e = "qalys", c = "cost")
+  # Function works with non-default names
   ceac_v2 <- cea_pw2$ceac[group == "Group 2" & k == kval]
   expect_equal(ceac$prob, ceac_v2$prob)
-  
-  ## ICER table
-  icer <- icer_tbl(cea_pw)
+
+})
+
+# Test icer_tbl() --------------------------------------------------------------
+test_that("icer_tbl() produces expected results", {
+  # No "credible interval"
+  expect_warning(icer <- icer_tbl(cea_pw))
   expect_true(inherits(icer, "list"))
   expect_true(inherits(icer[[1]], "matrix"))
   
-  icer <- icer_tbl(cea_pw, cri = FALSE)
+  # With "credible interval"
+  expect_warning(icer <- icer_tbl(cea_pw, cri = TRUE))
   expect_true(inherits(icer, "list"))
   
-  icer <- icer_tbl(cea_pw, output = "data.table")
+  # data.table output
+  expect_warning(icer <- icer_tbl(cea_pw, output = "data.table"))
   expect_true(inherits(icer, "data.table"))
   
+  # Single group with output = "matrix"
   cea_pw2 <-  cea_pw(ce[grp == "Group 1"],  k = krange, comparator = "Strategy 1",
                      sample = "sample", strategy = "strategy", e = "qalys", c = "cost")
-  icer <- icer_tbl(cea_pw2)
+  expect_warning(icer <- icer_tbl(cea_pw2))
   expect_true(inherits(icer, "matrix"))
   expect_equal(ncol(icer), 3)
   
-  icer <- icer_tbl(cea_pw2, drop = FALSE)
+  # Single group with output = "matrix" and drop = FALSE
+  expect_warning(icer <- icer_tbl(cea_pw2, drop = FALSE))
   expect_true(inherits(icer, "list"))
   
+  # Specifying row and column names
   cols <- c("S1", "S2", "S3")
   rows <- c("iqalys", "icosts", "inmb", "icer", "conclusion")
-  icer <- icer_tbl(cea_pw2, 
-                   colnames = cols,
-                   rownames = rows)
+  expect_warning(icer <- icer_tbl(cea_pw2, colnames = cols, rownames = rows))
   expect_true(inherits(icer, "matrix"))
   expect_equal(colnames(icer), cols)
   expect_equal(rownames(icer), rows)
   
-  ### Strategy 2 is cost saving and better
-  ce2[strategy_name == "Strategy 3", cost := 2]
-  cea_pw2 <- cea_pw(ce2,  k = krange, comparator = "Strategy 1",
-                    grp = "group",
-                    sample = "samp", strategy = "strategy_name", 
-                    e = "qalys", c = "cost")
+  # Expect errors
+  expect_error(expect_warning(icer_tbl(2)))
+  expect_error(expect_warning(icer_tbl(cea_pw, prob = 1.4)))
+})
+
+# Test icer() ------------------------------------------------------------------
+test_that("icer() and format.icer() return the correct columns", {
+  # icer()
+  x <- icer(cea_pw2)
+  expect_equal(colnames(x),
+               c("strategy", "grp", "outcome", "mean", "lower", "upper"))
   
-  ### Errors
-  expect_error(icer_tbl(2)) 
-  expect_error(icer_tbl(cea_pw, prob = 1.4)) 
+  # Formatting
+  ## Pivoting
+  ### Default
+  y <- format(x)
+  expect_true("Strategy 2" %in% colnames(y))
+  
+  ### No pivoting
+  y <- format(x, pivot_from = NULL)
+  expect_equal(colnames(y), c("strategy", "grp", "outcome", "value"))
+
+  ### Pivot strategy
+  y <- format(x, pivot_from = "strategy")
+  expect_true("Strategy 3" %in% colnames(y))
+  
+  ### Pivot group
+  y <- format(x, pivot_from = "grp")
+  expect_true("Group 1" %in% colnames(y))
+  
+  ### Pivot group and outcome
+  y <- format(x, pivot_from = c("grp", "outcome"))
+  expect_true(!"outcome" %in% colnames(y))
+  expect_true(!"grp" %in% colnames(y))
+})
+
+test_that("icer() correctly passes strategy_values", {
+  x <- icer(cea_pw2, strategy_values = c("2", "3"))
+  expect_equal(c("2", "3"), unique(x$strategy))
+})
+
+test_that("icer() correctly passes grp_values", {
+  x <- icer(cea_pw2, grp_values = c("g1", "g2"))
+  expect_equal(c("g1", "g2"), unique(x$grp))
+})
+
+test_that("format.icer() will drop groups", {
+  z <- cea_pw(ce[grp == "Group 1"], 
+              k = krange, comparator = "Strategy 1",
+              sample = "sample", strategy = "strategy", grp = "grp",
+                         e = "qalys", c = "cost")
+  x <- format(icer(z))
+  expect_true(!"grp" %in% colnames(x))
 })
 
 # Test incr_effect function ---------------------------------------------------

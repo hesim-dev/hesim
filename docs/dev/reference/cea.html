@@ -301,7 +301,7 @@ for the range of specified willingness to pay values.</p></dd>
 
 <p><code>cea_pw</code> also returns a list of four <code>data.table</code> elements:</p><dl'>
 <dt>summary</dt><dd><p>A data.table of the mean, 2.5% quantile, and 97.5%
-quantile by strategy and group for clinical effectiveness and costs.</p></dd>
+quantile by strategy and group for incremental clinical effectiveness and costs.</p></dd>
 <dt>delta</dt><dd><p>Incremental effectiveness and incremental cost for each simulated
 parameter set by strategy and group. Can be used to plot a cost-effectiveness plane.</p></dd>
 <dt>ceac</dt><dd><p>Values needed to plot a cost-effectiveness acceptability curve by
@@ -314,7 +314,7 @@ incremental net monetary benefits for the range of specified willingness to pay 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># simulation output</span>
+    <pre class="examples"><div class='input'><span class='co'># Simulation output</span>
 <span class='no'>n_samples</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>
 <span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='no'>n_samples</span>), <span class='fl'>4</span>),
                   <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>),
@@ -327,44 +327,40 @@ incremental net monetary benefits for the range of specified willingness to pay 
                             <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n_samples</span>), <span class='fl'>2</span>)
 )
 
-<span class='co'># cea</span>
+<span class='co'># cea()</span>
 <span class='no'>cea</span> <span class='kw'>&lt;-</span> <span class='fu'>cea</span>(<span class='no'>sim</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
              <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>cea</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'><span class='co'># The probability that each strategy is the most cost-effective </span>
 <span class='co'># in each group with a willingness to pay of 20,000</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"data.table"</span>)
 <span class='no'>cea</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k   strategy     grp best prob
-#&gt; 1: 20000 Strategy 1 Group 1    1 0.58
-#&gt; 2: 20000 Strategy 2 Group 1    0 0.42
-#&gt; 3: 20000 Strategy 1 Group 2    1 0.54
-#&gt; 4: 20000 Strategy 2 Group 2    0 0.46</div><div class='input'>
-<span class='co'># cea_pw</span>
+#&gt; 1: 20000 Strategy 1 Group 1    1 0.51
+#&gt; 2: 20000 Strategy 2 Group 1    0 0.49
+#&gt; 3: 20000 Strategy 1 Group 2    1 0.46
+#&gt; 4: 20000 Strategy 2 Group 2    0 0.54</div><div class='input'>
+<span class='co'># cea_pw()</span>
 <span class='no'>cea_pw</span> <span class='kw'>&lt;-</span>  <span class='fu'>cea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>,
                     <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>,
                      <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>cea_pw</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'><span class='co'># cost-effectiveness acceptability curve</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>cea_pw</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'>
+<span class='co'># Cost-effectiveness acceptability curve</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>cea_pw</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k   strategy     grp prob
-#&gt; 1: 20000 Strategy 2 Group 1 0.42
-#&gt; 2: 20000 Strategy 2 Group 2 0.46
-#&gt; 3: 20500 Strategy 2 Group 1 0.48
-#&gt; 4: 20500 Strategy 2 Group 2 0.51
-#&gt; 5: 21000 Strategy 2 Group 1 0.55
-#&gt; 6: 21000 Strategy 2 Group 2 0.55</div><div class='input'><span class='fu'><a href='icer_tbl.html'>icer_tbl</a></span>(<span class='no'>cea_pw</span>)</div><div class='output co'>#&gt; $`Group 1`
-#&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "2.90 (1.79, 4.09)"       
-#&gt; Incremental costs "-"        "59,337 (50,462, 70,281)" 
-#&gt; Incremental NMB   "-"        "85,783 (34,401, 152,297)"
-#&gt; ICER              "-"        "20,444"                  
-#&gt; Conclusion        "-"        "Cost-effective"          
-#&gt; 
-#&gt; $`Group 2`
-#&gt;                   Strategy 1 Strategy 2                
-#&gt; Incremental QALYs "-"        "2.97 (2.10, 4.07)"       
-#&gt; Incremental costs "-"        "60,161 (50,337, 70,778)" 
-#&gt; Incremental NMB   "-"        "88,560 (41,109, 144,343)"
-#&gt; ICER              "-"        "20,226"                  
-#&gt; Conclusion        "-"        "Cost-effective"          
-#&gt; </div></pre>
+#&gt; 1: 20000 Strategy 2 Group 1 0.49
+#&gt; 2: 20000 Strategy 2 Group 2 0.54
+#&gt; 3: 20500 Strategy 2 Group 1 0.52
+#&gt; 4: 20500 Strategy 2 Group 2 0.57
+#&gt; 5: 21000 Strategy 2 Group 1 0.54
+#&gt; 6: 21000 Strategy 2 Group 2 0.62</div><div class='input'>
+<span class='co'># Summarize the incremental cost-effectiveness ratio</span>
+<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='icer.html'>icer</a></span>(<span class='no'>cea_pw</span>))</div><div class='output co'>#&gt;        grp           outcome               Strategy 2
+#&gt; 1: Group 1 Incremental QALYs        2.94 (1.89, 4.14)
+#&gt; 2: Group 1 Incremental costs  59,872 (48,472, 73,041)
+#&gt; 3: Group 1   Incremental NMB 86,995 (33,148, 148,920)
+#&gt; 4: Group 1              ICER                   20,383
+#&gt; 5: Group 2 Incremental QALYs        3.04 (1.86, 4.04)
+#&gt; 6: Group 2 Incremental costs  61,161 (50,600, 73,027)
+#&gt; 7: Group 2   Incremental NMB 90,760 (25,901, 145,576)
+#&gt; 8: Group 2              ICER                   20,129</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

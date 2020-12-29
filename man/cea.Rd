@@ -82,7 +82,7 @@ for the range of specified willingness to pay values.}
 \code{cea_pw} also returns a list of four \code{data.table} elements:
 \describe{
 \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\%
-quantile by strategy and group for clinical effectiveness and costs.}
+quantile by strategy and group for incremental clinical effectiveness and costs.}
 \item{delta}{Incremental effectiveness and incremental cost for each simulated
 parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
 \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
@@ -107,7 +107,7 @@ and output for a cost-effectiveness acceptability curve.
 }
 }
 \examples{
-# simulation output
+# Simulation output
 n_samples <- 100
 sim <- data.frame(sample = rep(seq(n_samples), 4),
                   c = c(rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
@@ -120,7 +120,7 @@ sim <- data.frame(sample = rep(seq(n_samples), 4),
                             each = n_samples), 2)
 )
 
-# cea
+# cea()
 cea <- cea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
              grp = "grp", e = "e", c = "c")
 names(cea)
@@ -129,12 +129,15 @@ names(cea)
 library("data.table")
 cea$mce[k == 20000]
 
-# cea_pw
+# cea_pw()
 cea_pw <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
                     sample = "sample", strategy = "strategy", grp = "grp",
                      e = "e", c = "c")
 names(cea_pw)
-# cost-effectiveness acceptability curve
+
+# Cost-effectiveness acceptability curve
 head(cea_pw$ceac[k >= 20000])
-icer_tbl(cea_pw)
+
+# Summarize the incremental cost-effectiveness ratio
+format(icer(cea_pw))
 }
