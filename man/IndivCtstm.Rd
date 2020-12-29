@@ -85,7 +85,9 @@ head(ictstm$sim_disease()$disprog_)
 head(ictstm$sim_stateprobs(t = c(0, 5, 10))$stateprobs_[t == 5])
 ictstm$sim_qalys(dr = .03)
 ictstm$sim_costs(dr = .03)
-head(ictstm$summarize())
+ce <- ictstm$summarize()
+head(ce)
+summary(ce)
 
 }
 \seealso{

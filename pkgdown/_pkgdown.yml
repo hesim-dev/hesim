@@ -90,6 +90,7 @@ reference:
     contents:
       - incr_effect
       - surv_quantile
+      - summary.ce
   - title: "Cost-effectiveness analysis"
     contents:
       - cea
