@@ -201,10 +201,10 @@ cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = 0, dr_costs = .06,
                      k = wtp)
 ```
 
-The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is $`r icer_tbl(cea_pw_out)["ICER", 2]`, which is very close to the estimate from the deterministic analysis from Chancellor et al.  
+The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is very close to the estimate from the deterministic analysis from Chancellor et al.  
 
 ```{r icer}
-icer_tbl(cea_pw_out)
+format(icer(cea_pw_out))
 ```
 
 A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is `r cea_pw_out$ceac[k == 10000, prob]` and approaches 1 at slightly higher WTP values.   
