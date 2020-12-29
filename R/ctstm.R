@@ -521,18 +521,15 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #' utility_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
 #'                                        mean = mstate3_exdata$utility$mean,
 #'                                        se = mstate3_exdata$utility$se),
-#'                             dist = "beta",
-#'                             hesim_data = hesim_dat)
+#'                             dist = "beta")
 #' ## Costs
 #' drugcost_tbl <- stateval_tbl(data.frame(strategy_id = strategies$strategy_id,
 #'                                         est = mstate3_exdata$costs$drugs$costs),
-#'                              dist = "fixed",
-#'                              hesim_data = hesim_dat) 
+#'                              dist = "fixed") 
 #' medcost_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
 #'                                        mean = mstate3_exdata$costs$medical$mean,
 #'                                        se = mstate3_exdata$costs$medical$se),
-#'                             dist = "gamma",
-#'                             hesim_data = hesim_dat)  
+#'                             dist = "gamma")  
 #'
 #' # Economic model
 #' n_samples = 2
@@ -545,11 +542,11 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #'                                    n = n_samples)
 #'
 #' ### Utility 
-#' utilitymod <- create_StateVals(utility_tbl, n = n_samples)
+#' utilitymod <- create_StateVals(utility_tbl, n = n_samples, hesim_data = hesim_dat)
 #'
 #' ### Costs
-#' drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples)
-#' medcostmod <- create_StateVals(medcost_tbl, n = n_samples)
+#' drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples, hesim_data = hesim_dat)
+#' medcostmod <- create_StateVals(medcost_tbl, n = n_samples, hesim_data = hesim_dat)
 #' costmods <- list(drugs = drugcostmod,
 #'                  medical = medcostmod)
 #'

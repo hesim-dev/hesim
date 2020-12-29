@@ -266,10 +266,8 @@ test_that("StateVals$sim", {
   tbl <- data.table(state_id = rep(c(1, 2, 3), 2),
                     time_start = rep(c(0, 4), each = 3),
                     est = c(1000, 1500, 2000, 2000, 3500, 4000))
-  stateval_tbl <- stateval_tbl(tbl, 
-                               dist = "fixed", 
-                               hesim_data = hesim_dat) 
-  mod <- create_StateVals(stateval_tbl, n = 2)
+  sv <- stateval_tbl(tbl, dist = "fixed") 
+  mod <- create_StateVals(sv, n = 2, hesim_data = hesim_dat)
   pred <- mod$sim(t = c(1, 2, 3, 4, 5), type = "predict")
   expect_equal(pred[sample == 1 & strategy_id == 1 & 
                       patient_id == 1 & state_id == 1 & time == 1]$value,
@@ -335,9 +333,9 @@ transmod <- CohortDtstmTrans$new(params = tparams_transprobs(pmat))
 cost_tbl <- stateval_tbl(data.table(state_id = 1:3,
                                      mean = c(1701, 1774, 6948),
                                      se = c(1701, 1774, 6948)),
-                          dist = "gamma",
-                          hesim_data = hesim_dat)
-costmods <- list(create_StateVals(cost_tbl, n = n_samples))
+                          dist = "gamma")
+costmods <- list(create_StateVals(cost_tbl, n = n_samples,
+                                  hesim_data = hesim_dat))
 
 ## Full economic model + simulation of state probabilities
 econmod <- CohortDtstm$new(trans_model = transmod,
@@ -362,7 +360,8 @@ test_that("Must first simulate stateprobs_", {
 
 test_that("Incorrect number of PSA samples", {
   econmod$sim_stateprobs(n_cycles = 5)
-  econmod$cost_models[[2]] <- create_StateVals(cost_tbl, n = n_samples - 1)
+  econmod$cost_models[[2]] <- create_StateVals(cost_tbl, n = n_samples - 1,
+                                               hesim_data = hesim_dat)
   expect_error(econmod$sim_costs())
 })
 
@@ -370,9 +369,9 @@ test_that("Incorrect number of health states", {
   cost_tbl2 <- stateval_tbl(
     data.table(state_id = 1:4,
                 est = rep(0, 4)),
-                dist = "fixed",
-                hesim_data = hesim_dat)
-  econmod$cost_models <- list(create_StateVals(cost_tbl2, n = n_samples))
+                dist = "fixed")
+  econmod$cost_models <- list(create_StateVals(cost_tbl2, n = n_samples, 
+                                               hesim_data = hesim_dat))
   expect_error(econmod$sim_costs())
 })
 
@@ -381,10 +380,10 @@ test_that("sim_costs produces correct result with time-varying state values", {
     data.table(strategy_id = rep(hesim_dat$strategies$strategy_id,each = 2),
               time_start = c(0, 2, 0, 2),
               est = c(1000, 2, 3000, 10)),
-              dist = "fixed",
-              hesim_data = hesim_dat
+              dist = "fixed"
   )
-  econmod$cost_models <- list(create_StateVals(cost_tbl_tv, n = n_samples))
+  econmod$cost_models <- list(create_StateVals(cost_tbl_tv, n = n_samples,
+                                               hesim_data = hesim_dat))
   econmod$sim_costs(dr = .03)
   test_wlos(econmod, s = 2, k = 2, i = 1, h = 2, dr = .03)
 })
@@ -392,10 +391,10 @@ test_that("sim_costs produces correct result with time-varying state values", {
 cost_tbl_starting <- stateval_tbl(
   data.table(strategy_id = hesim_dat$strategies$strategy_id,
   est = c(1000, 2000)),
-  dist = "fixed",
-  hesim_data = hesim_dat)
+  dist = "fixed")
 econmod$cost_models <- list(
-  create_StateVals(cost_tbl_starting, n = n_samples, method = "starting")
+  create_StateVals(cost_tbl_starting, n = n_samples, method = "starting",
+                   hesim_data = hesim_dat)
 )
 
 test_that("create_StateVals() correctly passes method = 'starting'", {
@@ -433,9 +432,8 @@ utility_tbl <- stateval_tbl(
   data.table(state_id = 1:3,
               mean = c(1, .8, .7),
               se = c(0, .02, .03)),
-              dist = "beta",
-              hesim_data = hesim_dat)
-utilitymod <- create_StateVals(utility_tbl, n = n_samples)
+              dist = "beta")
+utilitymod <- create_StateVals(utility_tbl, n = n_samples, hesim_data = hesim_dat)
 econmod <- CohortDtstm$new(trans_model = transmod,
                            utility_model = utilitymod)
 

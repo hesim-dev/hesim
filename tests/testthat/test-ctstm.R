@@ -24,23 +24,20 @@ n_samples <- 2
 # Utility
 utility_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
                                        est = c(0.90, 0.55)),
-                            dist = "fixed",
-                            hesim_data = hesim_dat)
+                            dist = "fixed")
 
 # Costs
 ## Medical
 medcost_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
                                        mean = c(800, 1500),
                                        se = c(100, 150)),
-                            dist = "gamma",
-                            hesim_data = hesim_dat)
+                            dist = "gamma")
 
 
 ## Drugs
 drugcost_tbl <- stateval_tbl(tbl = data.frame(strategy_id = strategies$strategy_id,
                                            est = c(10000, 12500)),
-                            dist = "fixed",
-                            hesim_data = hesim_dat)
+                            dist = "fixed")
 
 # Clock-reset multi-state model
 ## Separate 
@@ -137,11 +134,11 @@ test_that("C_ctstm_indiv_stateprobs", {
 # Simulate economic model ------------------------------------------------------
 # Construct economic model
 ## Utility
-utilmod <- create_StateVals(utility_tbl, n = n_samples)
+utilmod <- create_StateVals(utility_tbl, n = n_samples, hesim_data = hesim_dat)
 
 ## Costs
-medcostsmod <- create_StateVals(medcost_tbl, n = n_samples)
-drugcostsmod <- create_StateVals(drugcost_tbl, n = n_samples) 
+medcostsmod <- create_StateVals(medcost_tbl, n = n_samples, hesim_data = hesim_dat)
+drugcostsmod <- create_StateVals(drugcost_tbl, n = n_samples, hesim_data = hesim_dat) 
 
 ## Transitions
 ### With transition specific survival models
@@ -340,8 +337,8 @@ test_that("Simulate costs and QALYs", {
   utility_tbl2 <- data.table(state_id = rep(states$state_id, 2),
                              time_start = c(0, 0, t2, t2),
                              est = c(.90, .55, .70, .35))
-  utility_tbl2 <- stateval_tbl(utility_tbl2, dist = "fixed", hesim_data = hesim_dat)
-  utilmod2 <- create_StateVals(utility_tbl2, n = n_samples)
+  utility_tbl2 <- stateval_tbl(utility_tbl2, dist = "fixed")
+  utilmod2 <- create_StateVals(utility_tbl2, n = n_samples, hesim_data = hesim_dat)
   ictstm2 <- ictstm$clone()
   ictstm2$utility_model <- utilmod2
   ictstm2$sim_disease()
@@ -400,9 +397,9 @@ test_that("Simulate costs and QALYs", {
   drugcost_tbl_tv <- stateval_tbl(tbl = data.frame(strategy_id = rep(strategies$strategy_id, each = 2),
                                                  time_start = c(0, 1.2, 0, 1.2),
                                                   est = c(10000, 500, 12500, 250)),
-                                  dist = "fixed",
-                                  hesim_data = hesim_dat)
-  drugcostsmod_tv <- create_StateVals(drugcost_tbl_tv, n = n_samples, time_reset = TRUE) 
+                                  dist = "fixed")
+  drugcostsmod_tv <- create_StateVals(drugcost_tbl_tv, n = n_samples, time_reset = TRUE,
+                                      hesim_data = hesim_dat) 
   ictstm2$cost_models <- list(medical = medcostsmod, 
                               drugs = drugcostsmod_tv)
   ictstm2$sim_costs(dr = 0, by_patient = TRUE)
@@ -436,10 +433,10 @@ test_that("Simulate costs and QALYs", {
                                                                   0, 1.2, 4),
                                                    est = c(10000, 500, 0, 
                                                            12500, 250, 0)),
-                                  dist = "fixed",
-                                  hesim_data = hesim_dat)
+                                  dist = "fixed")
   drugcostsmod_tv2 <- create_StateVals(drugcost_tbl_tv2, n = n_samples, 
-                                       time_reset = FALSE, method = "starting") 
+                                       time_reset = FALSE, method = "starting",
+                                       hesim_data = hesim_dat) 
   ictstm2$cost_models$drugs <- drugcostsmod_tv2
   ictstm2$sim_costs(dr = .03, by_patient = TRUE)
   
