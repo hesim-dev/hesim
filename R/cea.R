@@ -395,7 +395,8 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
 #' @export
 icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
                  grp_values = NULL, ...){
-  ie <- ic <- imbm <- inmb_lower <- inmb_mean <- inmb_upper <- NULL
+  ie <- ic <- imbm <- inmb_lower <- inmb_mean <- inmb_upper <- 
+    ic_mean <- ie_mean <- outcome <- NULL
   
   if (!inherits(x, "cea_pw")){
     stop("'x' must be an object of class 'cea_pw'",
