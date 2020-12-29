@@ -1,3 +1,4 @@
+# Cost-effectiveness object ----------------------------------------------------
 #'  A cost-effectiveness object
 #'
 #' An object that summarizes simulated measures of clinical effectiveness and costs from a simulation model for use in a cost-effectiveness analysis.
@@ -34,6 +35,7 @@
 #' @name ce
 NULL
 
+# Cost-effectiveness analysis --------------------------------------------------
 #' Cost-effectiveness analysis
 #'
 #' Conduct cost-effectiveness analysis (CEA) given output of an economic
@@ -360,17 +362,7 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
   return(ret)
 }
 
-format_cri <- function(est, lower, upper, costs = TRUE, digits){
-  if (costs){
-    lower <- format_costs(lower, digits = digits)
-    upper <- format_costs(upper, digits = digits)
-  } else{
-    lower <- format_qalys(lower, digits = digits)
-    upper <- format_qalys(upper, digits = digits)
-  }
-  paste0(est, " (",lower, ", ", upper, ")")
-}
-
+# Incremental cost-effectiveness ratio------------------------------------------
 #' Incremental cost-effectiveness ratio
 #'
 #' Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from 
@@ -386,6 +378,9 @@ format_cri <- function(est, lower, upper, costs = TRUE, digits){
 #' @param grp_values Character vector of values (i.e., names) for subgroups. Must
 #' be the same length as the number of unique values of the "subgroup" column in `object`.
 #' @return `icer()` returns a tidy `data.table` with the following columns:
+#' @param drop_grp If `TRUE`, then the group column will be removed if there is only
+#' one subgroup; other it will be kept. If `FALSE`, then the `grp` column is never
+#' removed. 
 #' \describe{
 #' \item{strategy}{The treatment strategy.}
 #' \item{grp}{The subgroup.}
@@ -462,9 +457,12 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
 #' or some combination of the three. There will be one column for each value of 
 #' the variables in `pivot_from`. Default is to widen so there is a column for each treatment
 #' strategy. Set to `NULL` if you do not want to widen the table. 
+#' @param drop_grp If `TRUE`, then the group column will be removed if there is only
+#' one subgroup; other it will be kept. If `FALSE`, then the `grp` column is never
+#' removed. 
 #' @export
 format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
-                        pivot_from = "strategy", conclusion = FALSE) {
+                        pivot_from = "strategy", drop_grp = TRUE) {
   y <- copy(x)
   
   # Format values
@@ -496,6 +494,12 @@ format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
     } else if ("strategy" %in% colnames(y)) {
       setorderv(y, "strategy")
     }
+  }
+  
+  # Drop group if desired
+  if (drop_grp && ("grp" %in% colnames(y))) {
+    n_grps <- length(unique(y$grp))
+    if (n_grps == 1) y[, grp := NULL]
   }
   
   # Return

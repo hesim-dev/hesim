@@ -302,6 +302,15 @@ test_that("icer() correctly passes grp_values", {
   expect_equal(c("g1", "g2"), unique(x$grp))
 })
 
+test_that("format.icer() will drop groups", {
+  z <- cea_pw(ce[grp == "Group 1"], 
+              k = krange, comparator = "Strategy 1",
+              sample = "sample", strategy = "strategy", grp = "grp",
+                         e = "qalys", c = "cost")
+  x <- format(icer(z))
+  expect_true(!"grp" %in% colnames(x))
+})
+
 # Test incr_effect function ---------------------------------------------------
 test_that("incr_effect", {
   # Default

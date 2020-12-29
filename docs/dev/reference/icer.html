@@ -186,7 +186,7 @@ cea_pw() with icer() and format for pretty printing with format()." />
   <span class='kw'>digit_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>,
   <span class='kw'>digit_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>pivot_from</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
-  <span class='kw'>conclusion</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>drop_grp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -225,6 +225,12 @@ the variables in <code>pivot_from</code>. Default is to widen so there is a colu
 strategy. Set to <code>NULL</code> if you do not want to widen the table.</p></td>
     </tr>
     <tr>
+      <th>drop_grp</th>
+      <td><p>If <code>TRUE</code>, then the group column will be removed if there is only
+one subgroup; other it will be kept. If <code>FALSE</code>, then the <code>grp</code> column is never
+removed.</p></td>
+    </tr>
+    <tr>
       <th>digits_qalys</th>
       <td><p>Number of digits to use to report QALYs.</p></td>
     </tr>
@@ -236,17 +242,7 @@ strategy. Set to <code>NULL</code> if you do not want to widen the table.</p></t
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>icer()</code> returns a tidy <code>data.table</code> with the following columns:</p><dl'>
-<dt>strategy</dt><dd><p>The treatment strategy.</p></dd>
-<dt>grp</dt><dd><p>The subgroup.</p></dd>
-<dt>outcome</dt><dd><p>The outcome metric.</p></dd>
-<dt>mean</dt><dd><p>The point estimate comptued as the average across the PSA samples.</p></dd>
-<dt>lower</dt><dd><p>The lower limit of the confidence interval.</p></dd>
-<dt>upper</dt><dd><p>The upper limit of the confidence interval.</p></dd>
-
-</dl>
-
-<p><code><a href='https://rdrr.io/r/base/format.html'>format()</a></code> formats the table according to the arguments passed.</p>
+    <p><code>icer()</code> returns a tidy <code>data.table</code> with the following columns:</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='cea.html'>cea_pw()</a></code></p></div>

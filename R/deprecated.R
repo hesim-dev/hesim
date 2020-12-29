@@ -19,6 +19,17 @@ icea_pw <- function(x, ...) {
   UseMethod("cea_pw")
 }
 
+format_cri <- function(est, lower, upper, costs = TRUE, digits){
+  if (costs){
+    lower <- format_costs(lower, digits = digits)
+    upper <- format_costs(upper, digits = digits)
+  } else{
+    lower <- format_qalys(lower, digits = digits)
+    upper <- format_qalys(upper, digits = digits)
+  }
+  paste0(est, " (",lower, ", ", upper, ")")
+}
+
 #' ICER table
 #'
 #' Generate a table of incremental cost-effectiveness ratios given output from 

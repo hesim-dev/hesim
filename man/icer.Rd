@@ -12,7 +12,7 @@ icer(x, prob = 0.95, k = 50000, strategy_values = NULL, grp_values = NULL)
   digit_qalys = 2,
   digit_costs = 0,
   pivot_from = "strategy",
-  conclusion = FALSE
+  drop_grp = TRUE
 )
 }
 \arguments{
@@ -36,22 +36,16 @@ or some combination of the three. There will be one column for each value of
 the variables in \code{pivot_from}. Default is to widen so there is a column for each treatment
 strategy. Set to \code{NULL} if you do not want to widen the table.}
 
+\item{drop_grp}{If \code{TRUE}, then the group column will be removed if there is only
+one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column is never
+removed.}
+
 \item{digits_qalys}{Number of digits to use to report QALYs.}
 
 \item{digits_costs}{Number of digits to use to report costs.}
 }
 \value{
 \code{icer()} returns a tidy \code{data.table} with the following columns:
-\describe{
-\item{strategy}{The treatment strategy.}
-\item{grp}{The subgroup.}
-\item{outcome}{The outcome metric.}
-\item{mean}{The point estimate comptued as the average across the PSA samples.}
-\item{lower}{The lower limit of the confidence interval.}
-\item{upper}{The upper limit of the confidence interval.}
-}
-
-\code{format()} formats the table according to the arguments passed.
 }
 \description{
 Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
