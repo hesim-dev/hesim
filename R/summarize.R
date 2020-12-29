@@ -337,16 +337,17 @@ summary.ce <- function(object, prob = 0.95, tidy = FALSE, digits_qalys = 2,
   
   # Return
   ## If tidy = TRUE, we are done
-  if (tidy) return(res)
+  if (tidy) return(res[, ])
   
   ## Otherwise, reshape so strategies are columns
   res[, order := 1:.N, by = c("dr", "grp", "strategy")]
+  if (is.null(strategy_names)) res[, strategy := paste0("Strategy ", strategy)]
   res <- dcast(res, dr +  grp + type + category + order ~ strategy, value.var = "value")
-  setorderv(res, "order")
+  setorderv(res, c("dr", "grp", "order"))
   res[, order := NULL]
   res[, category := ifelse(type == "QALYs",
                            category,
                            paste0(type, ": ", category))]
   res[, type := NULL]
-  return(res)
+  return(res[, ])
 }
