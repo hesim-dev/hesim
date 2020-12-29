@@ -459,8 +459,8 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
 }
 
 #' @rdname icer
-#' @param digit_qalys Number of digits to use to report QALYs.
-#' @param digit_costs Number of digits to use to report costs.
+#' @param digits_qalys Number of digits to use to report QALYs.
+#' @param digits_costs Number of digits to use to report costs.
 #' @param pivot_from Character vector denoting a column or columns used to 
 #' "widen" the data. Should either be `"strategy"`, `"grp"`, `"outcome"`,
 #' or some combination of the three. There will be one column for each value of 
@@ -470,7 +470,7 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
 #' one subgroup; other it will be kept. If `FALSE`, then the `grp` column is never
 #' removed. 
 #' @export
-format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
+format.icer <- function(x, digits_qalys = 2, digits_costs = 0,
                         pivot_from = "strategy", drop_grp = TRUE, ...) {
   value <- outcome <- lower <- upper <- grp <- NULL 
   y <- copy(x)
@@ -481,16 +481,16 @@ format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
   y[, value := fcase(
     outcome %in% c("Incremental costs", "Incremental NMB"),
       format_ci(mean, lower, upper, costs = TRUE,
-                digits = digit_costs),
+                digits = digits_costs),
     outcome == "Incremental QALYs", 
       format_ci(mean, lower, upper, costs = FALSE,
-                digits = digit_qalys),
+                digits = digits_qalys),
     outcome == "ICER" & icer_plane == "Dominates", 
       "Dominates",
     outcome == "ICER" & icer_plane == "Dominated", 
       "Dominated",
     outcome == "ICER" & !icer_plane %in% c("Dominates", "Dominated"), 
-      format_costs(mean, digits = digit_costs)
+      format_costs(mean, digits = digits_costs)
   )]
   y[, c("mean", "lower", "upper") := NULL]
   

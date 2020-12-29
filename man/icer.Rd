@@ -9,8 +9,8 @@ icer(x, prob = 0.95, k = 50000, strategy_values = NULL, grp_values = NULL, ...)
 
 \method{format}{icer}(
   x,
-  digit_qalys = 2,
-  digit_costs = 0,
+  digits_qalys = 2,
+  digits_costs = 0,
   pivot_from = "strategy",
   drop_grp = TRUE,
   ...
@@ -33,9 +33,9 @@ be the same length as the number of unique values of the "subgroup" column in \c
 
 \item{...}{Further arguments passed to and from methods. Currently unused.}
 
-\item{digit_qalys}{Number of digits to use to report QALYs.}
+\item{digits_qalys}{Number of digits to use to report QALYs.}
 
-\item{digit_costs}{Number of digits to use to report costs.}
+\item{digits_costs}{Number of digits to use to report costs.}
 
 \item{pivot_from}{Character vector denoting a column or columns used to
 "widen" the data. Should either be \code{"strategy"}, \code{"grp"}, \code{"outcome"},
