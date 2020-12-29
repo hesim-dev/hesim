@@ -448,7 +448,7 @@ icer <- function(x, prob = .95, k = 50000){
 #' them all). Set to `NULL` if you do not want to widen the table. 
 #' @export
 format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
-                        pivot_from = "strategy") {
+                        pivot_from = "strategy", conclusion = FALSE) {
   y <- copy(x)
   grp <- attr(x, "grp")
   strategy <- attr(x, "strategy")
