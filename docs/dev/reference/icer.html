@@ -178,7 +178,7 @@ cea_pw() with icer() and format for pretty printing with format()." />
 <code><a href='cea.html'>cea_pw()</a></code> with <code>icer()</code> and format for pretty printing with <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>icer</span>(<span class='no'>x</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>, <span class='kw'>strategy_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>grp_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>icer</span>(<span class='no'>x</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>, <span class='kw'>strategy_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>grp_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icer</span>
 <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(
@@ -186,7 +186,8 @@ cea_pw() with icer() and format for pretty printing with format()." />
   <span class='kw'>digit_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>,
   <span class='kw'>digit_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>pivot_from</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
-  <span class='kw'>drop_grp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>drop_grp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -217,6 +218,18 @@ of the "strategy" column in <code>object</code>.</p></td>
 be the same length as the number of unique values of the "subgroup" column in <code>object</code>.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to and from methods. Currently unused.</p></td>
+    </tr>
+    <tr>
+      <th>digit_qalys</th>
+      <td><p>Number of digits to use to report QALYs.</p></td>
+    </tr>
+    <tr>
+      <th>digit_costs</th>
+      <td><p>Number of digits to use to report costs.</p></td>
+    </tr>
+    <tr>
       <th>pivot_from</th>
       <td><p>Character vector denoting a column or columns used to
 "widen" the data. Should either be <code>"strategy"</code>, <code>"grp"</code>, <code>"outcome"</code>,
@@ -230,19 +243,21 @@ strategy. Set to <code>NULL</code> if you do not want to widen the table.</p></t
 one subgroup; other it will be kept. If <code>FALSE</code>, then the <code>grp</code> column is never
 removed.</p></td>
     </tr>
-    <tr>
-      <th>digits_qalys</th>
-      <td><p>Number of digits to use to report QALYs.</p></td>
-    </tr>
-    <tr>
-      <th>digits_costs</th>
-      <td><p>Number of digits to use to report costs.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>icer()</code> returns a tidy <code>data.table</code> with the following columns:</p>
+    <p><code>icer()</code> returns a tidy <code>data.table</code> with the following columns:</p><dl'>
+<dt>strategy</dt><dd><p>The treatment strategy.</p></dd>
+<dt>grp</dt><dd><p>The subgroup.</p></dd>
+<dt>outcome</dt><dd><p>The outcome metric.</p></dd>
+<dt>mean</dt><dd><p>The point estimate comptued as the average across the PSA samples.</p></dd>
+<dt>lower</dt><dd><p>The lower limit of the confidence interval.</p></dd>
+<dt>upper</dt><dd><p>The upper limit of the confidence interval.</p></dd>
+
+</dl>
+
+<p><code><a href='https://rdrr.io/r/base/format.html'>format()</a></code> formats the table according to the arguments passed.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='cea.html'>cea_pw()</a></code></p></div>

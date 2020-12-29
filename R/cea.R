@@ -377,10 +377,9 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
 #'  of the "strategy" column in `object`.
 #' @param grp_values Character vector of values (i.e., names) for subgroups. Must
 #' be the same length as the number of unique values of the "subgroup" column in `object`.
+#' @param ... Further arguments passed to and from methods. Currently unused. 
+#' 
 #' @return `icer()` returns a tidy `data.table` with the following columns:
-#' @param drop_grp If `TRUE`, then the group column will be removed if there is only
-#' one subgroup; other it will be kept. If `FALSE`, then the `grp` column is never
-#' removed. 
 #' \describe{
 #' \item{strategy}{The treatment strategy.}
 #' \item{grp}{The subgroup.}
@@ -395,8 +394,8 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
 #' @seealso [`cea_pw()`]
 #' @export
 icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
-                 grp_values = NULL){
-  ie <- ic <- imbm <- inmb_lower <- inmb_mean <- inmb_upper <- NULL 
+                 grp_values = NULL, ...){
+  ie <- ic <- imbm <- inmb_lower <- inmb_mean <- inmb_upper <- NULL
   
   if (!inherits(x, "cea_pw")){
     stop("'x' must be an object of class 'cea_pw'",
@@ -450,8 +449,8 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
 }
 
 #' @rdname icer
-#' @param digits_qalys Number of digits to use to report QALYs.
-#' @param digits_costs Number of digits to use to report costs.
+#' @param digit_qalys Number of digits to use to report QALYs.
+#' @param digit_costs Number of digits to use to report costs.
 #' @param pivot_from Character vector denoting a column or columns used to 
 #' "widen" the data. Should either be `"strategy"`, `"grp"`, `"outcome"`,
 #' or some combination of the three. There will be one column for each value of 
@@ -462,7 +461,8 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
 #' removed. 
 #' @export
 format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
-                        pivot_from = "strategy", drop_grp = TRUE) {
+                        pivot_from = "strategy", drop_grp = TRUE, ...) {
+  value -> outcome -> lower -> upper -> grp -> NULL 
   y <- copy(x)
   
   # Format values

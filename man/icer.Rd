@@ -5,14 +5,15 @@
 \alias{format.icer}
 \title{Incremental cost-effectiveness ratio}
 \usage{
-icer(x, prob = 0.95, k = 50000, strategy_values = NULL, grp_values = NULL)
+icer(x, prob = 0.95, k = 50000, strategy_values = NULL, grp_values = NULL, ...)
 
 \method{format}{icer}(
   x,
   digit_qalys = 2,
   digit_costs = 0,
   pivot_from = "strategy",
-  drop_grp = TRUE
+  drop_grp = TRUE,
+  ...
 )
 }
 \arguments{
@@ -30,6 +31,12 @@ of the "strategy" column in \code{object}.}
 \item{grp_values}{Character vector of values (i.e., names) for subgroups. Must
 be the same length as the number of unique values of the "subgroup" column in \code{object}.}
 
+\item{...}{Further arguments passed to and from methods. Currently unused.}
+
+\item{digit_qalys}{Number of digits to use to report QALYs.}
+
+\item{digit_costs}{Number of digits to use to report costs.}
+
 \item{pivot_from}{Character vector denoting a column or columns used to
 "widen" the data. Should either be \code{"strategy"}, \code{"grp"}, \code{"outcome"},
 or some combination of the three. There will be one column for each value of
@@ -39,13 +46,19 @@ strategy. Set to \code{NULL} if you do not want to widen the table.}
 \item{drop_grp}{If \code{TRUE}, then the group column will be removed if there is only
 one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column is never
 removed.}
-
-\item{digits_qalys}{Number of digits to use to report QALYs.}
-
-\item{digits_costs}{Number of digits to use to report costs.}
 }
 \value{
 \code{icer()} returns a tidy \code{data.table} with the following columns:
+\describe{
+\item{strategy}{The treatment strategy.}
+\item{grp}{The subgroup.}
+\item{outcome}{The outcome metric.}
+\item{mean}{The point estimate comptued as the average across the PSA samples.}
+\item{lower}{The lower limit of the confidence interval.}
+\item{upper}{The upper limit of the confidence interval.}
+}
+
+\code{format()} formats the table according to the arguments passed.
 }
 \description{
 Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
