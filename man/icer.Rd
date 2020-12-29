@@ -64,6 +64,11 @@ removed.}
 Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
 \code{\link[=cea_pw]{cea_pw()}} with \code{icer()} and format for pretty printing with \code{format()}.
 }
+\details{
+Note that \code{icer()} will report negative ICERs; however, \code{format()} will
+correctly note whether a treatment strategy is dominated by or dominates the
+reference treatment.
+}
 \seealso{
 \code{\link[=cea_pw]{cea_pw()}}
 }

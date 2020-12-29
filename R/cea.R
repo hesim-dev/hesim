@@ -88,7 +88,7 @@ NULL
 #' \code{cea_pw} also returns a list of four `data.table` elements:
 #'  \describe{
 #'   \item{summary}{A data.table of the mean, 2.5% quantile, and 97.5% 
-#'   quantile by strategy and group for clinical effectiveness and costs.}
+#'   quantile by strategy and group for incremental clinical effectiveness and costs.}
 #'   \item{delta}{Incremental effectiveness and incremental cost for each simulated
 #'   parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
 #'   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
@@ -354,10 +354,6 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
     ie_mean <- paste0(e, "_mean")
     ic_mean <- paste0(c, "_mean")
     ret$icer <- ret[, ic_mean, with = FALSE]/ret[, ie_mean, with = FALSE]
-    ret$icer <- ifelse(ret[, ic_mean, with = FALSE] < 0 & ret[, ie_mean, with = FALSE] >= 0, "Dominates",
-                       ret$icer)
-    ret$icer <- ifelse(ret[, ic_mean, with = FALSE] > 0 & ret[, ie_mean, with = FALSE] <= 0, "Dominated",
-                       ret$icer)
   }
   return(ret)
 }
@@ -378,6 +374,10 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
 #' @param grp_values Character vector of values (i.e., names) for subgroups. Must
 #' be the same length as the number of unique values of the "subgroup" column in `object`.
 #' @param ... Further arguments passed to and from methods. Currently unused. 
+#' 
+#' @details Note that `icer()` will report negative ICERs; however, `format()` will
+#' correctly note whether a treatment strategy is dominated by or dominates the 
+#' reference treatment. 
 #' 
 #' @return `icer()` returns a tidy `data.table` with the following columns:
 #' \describe{
@@ -418,6 +418,15 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
                 by = c(strategy, grp)]
   tbl <- cbind(tbl, 
                inmb[, c("inmb_lower", "inmb_mean", "inmb_upper"), with = FALSE])
+  tbl[, icer_plane := fcase(
+    inmb_mean >= 0 & ic_mean > 0 & ie_mean > 0, "Cost-effective",
+    inmb_mean < 0 & ic_mean > 0 & ie_mean > 0, "Not cost-effective",
+    inmb_mean >= 0 & ic_mean < 0 & ie_mean < 0, "Cost-effective",
+    inmb_mean < 0 & ic_mean < 0 & ie_mean < 0, "Not cost-effective",
+    ic_mean < 0 & ie_mean >= 0, "Dominates",
+    ic_mean > 0 & ie_mean <= 0, "Dominated"
+  )]
+  icer_plane <- tbl$icer_plane
   tbl <- melt(tbl, id.vars = c(strategy, grp),
               measure.vars = list(c("ie_mean", "ic_mean", "inmb_mean", "icer"),
                                   c("ie_lower", "ic_lower", "inmb_lower"),
@@ -445,6 +454,7 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
   setorderv(tbl, c("grp", "strategy"))
   setattr(tbl, "class", c("icer", "data.table", "data.frame"))
   setattr(tbl, "k", k)
+  setattr(tbl, "icer_plane", icer_plane)
   return(tbl[, ])
 }
 
@@ -462,10 +472,12 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
 #' @export
 format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
                         pivot_from = "strategy", drop_grp = TRUE, ...) {
-  value -> outcome -> lower -> upper -> grp -> NULL 
+  value <- outcome <- lower <- upper <- grp <- NULL 
   y <- copy(x)
   
   # Format values
+  icer_plane <- attr(x, "icer_plane")
+  icer_plane <- rep(icer_plane, each = nrow(y)/length(icer_plane))
   y[, value := fcase(
     outcome %in% c("Incremental costs", "Incremental NMB"),
       format_ci(mean, lower, upper, costs = TRUE,
@@ -473,7 +485,12 @@ format.icer <- function(x, digit_qalys = 2, digit_costs = 0,
     outcome == "Incremental QALYs", 
       format_ci(mean, lower, upper, costs = FALSE,
                 digits = digit_qalys),
-    outcome == "ICER", format_costs(mean, digits = digit_costs)
+    outcome == "ICER" & icer_plane == "Dominates", 
+      "Dominates",
+    outcome == "ICER" & icer_plane == "Dominated", 
+      "Dominated",
+    outcome == "ICER" & !icer_plane %in% c("Dominates", "Dominated"), 
+      format_costs(mean, digits = digit_costs)
   )]
   y[, c("mean", "lower", "upper") := NULL]
   

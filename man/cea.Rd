@@ -82,7 +82,7 @@ for the range of specified willingness to pay values.}
 \code{cea_pw} also returns a list of four \code{data.table} elements:
 \describe{
 \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\%
-quantile by strategy and group for clinical effectiveness and costs.}
+quantile by strategy and group for incremental clinical effectiveness and costs.}
 \item{delta}{Incremental effectiveness and incremental cost for each simulated
 parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
 \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
