@@ -4,11 +4,16 @@
 
 * The `...` argument to `create_PsmCurves()` now passes arguments to `create_params.partsurvfit()` when `object` is of class `flexsurvreg_list`. This allows more control over bootstrapping (i.e., use of the `max_errors` argument). 
 
-* `summary.ce()` is a new summary method for a `hesim::ce` object that produces confidence intervals for quality-adjusted life-years (QALYs) and each cost category.
+* `summary.ce()` is a new summary method for a `hesim::ce` object that produces confidence intervals for quality-adjusted life-years (QALYs) and each cost category; `format.summary.ce()` formats the output for pretty printing. 
+
+* `icer()` generates a tidy table of incremental cost-effectiveness ratios (ICERs) given output from `cea_pw()`; `format.icer()` formats the output for pretty printing.   
 
 ### API changes
 * The first column of each matrix listed in the `coef` element returned by `create_params.flexsurvreg()` is now named "(Intercept)" instead of the name of the corresponding parameter.
+
 * The `create_params()` methods now use the argument `uncertainty` to draw parameters  and the old arguments `point_estimate` and `bootstrap` are deprecated. This also affects `create_CohortDtstmTrans()`, `create_IndivCtstmTrans()`, and `create_PsmCurves()`.
+
+* `icer_tbl()` has been deprecated in favor of `icer()`.
 
 ### Bug fixes
 * The `$summarize()` method of `hesim::Psm` now contains the `by_grp` argument so that subgroup analyses can be performed.

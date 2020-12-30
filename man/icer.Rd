@@ -48,21 +48,22 @@ one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column
 removed.}
 }
 \value{
-\code{icer()} returns a tidy \code{data.table} with the following columns:
+\code{icer()} returns an object of class \code{icer} that is a tidy
+\code{data.table} with the following columns:
 \describe{
 \item{strategy}{The treatment strategy.}
 \item{grp}{The subgroup.}
 \item{outcome}{The outcome metric.}
-\item{mean}{The point estimate comptued as the average across the PSA samples.}
+\item{estimate}{The point estimate computed as the average across the PSA samples.}
 \item{lower}{The lower limit of the confidence interval.}
 \item{upper}{The upper limit of the confidence interval.}
 }
 
-\code{format()} formats the table according to the arguments passed.
+\code{format.icer()} formats the table according to the arguments passed.
 }
 \description{
 Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
-\code{\link[=cea_pw]{cea_pw()}} with \code{icer()} and format for pretty printing with \code{format()}.
+\code{\link[=cea_pw]{cea_pw()}} with \code{icer()} and format for pretty printing with \code{format.icer()}.
 }
 \details{
 Note that \code{icer()} will report negative ICERs; however, \code{format()} will

@@ -191,7 +191,7 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
 #' [`expand.hesim_data`].
 #' @param n Number of random observations of the parameters to draw.
 #' @param trans_mat The transition matrix describing the states and transitions in a 
-#' multi-state model in the format from the [mstate] package. See [`IndivCtstmTrans`].
+#' multi-state model in the format from the [mstate][mstate::mstate] package. See [`IndivCtstmTrans`].
 #' @param clock "reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
 #' of clock-reset and clock-forward models. See the field `clock` in [`IndivCtstmTrans`].
 #' @param reset_states A vector denoting the states in which time resets. See the field 
@@ -561,9 +561,11 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #' head(ictstm$sim_stateprobs(t = c(0, 5, 10))$stateprobs_[t == 5])
 #' ictstm$sim_qalys(dr = .03)
 #' ictstm$sim_costs(dr = .03)
+#' 
+#' ### Summarize cost-effectiveness
 #' ce <- ictstm$summarize()
 #' head(ce)
-#' summary(ce)
+#' format(summary(ce), pivot_from = "strategy")
 #'
 #' @format An [R6::R6Class] object.
 #' @seealso [create_IndivCtstmTrans()], [IndivCtstmTrans]
