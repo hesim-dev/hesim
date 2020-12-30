@@ -179,15 +179,17 @@
 <ul>
 <li><p>A transition intensity matrix can be created from a multi-state model fit using <code><a href="https://rdrr.io/pkg/msm/man/msm.html">msm::msm()</a></code> with the <code><a href="../reference/qmatrix.msm.html">qmatrix.msm()</a></code> method.</p></li>
 <li><p>The <code>...</code> argument to <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> now passes arguments to <code><a href="../reference/create_params.html">create_params.partsurvfit()</a></code> when <code>object</code> is of class <code>flexsurvreg_list</code>. This allows more control over bootstrapping (i.e., use of the <code>max_errors</code> argument).</p></li>
-<li><p><code><a href="../reference/summary.ce.html">summary.ce()</a></code> is a new summary method for a <code><a href="../reference/ce.html">hesim::ce</a></code> object that produces confidence intervals for quality-adjusted life-years (QALYs) and each cost category.</p></li>
+<li><p><code><a href="../reference/summary.ce.html">summary.ce()</a></code> is a new summary method for a <code><a href="../reference/ce.html">hesim::ce</a></code> object that produces confidence intervals for quality-adjusted life-years (QALYs) and each cost category; <code><a href="../reference/summary.ce.html">format.summary.ce()</a></code> formats the output for pretty printing.</p></li>
+<li><p><code><a href="../reference/icer.html">icer()</a></code> generates a tidy table of incremental cost-effectiveness ratios (ICERs) given output from <code><a href="../reference/cea.html">cea_pw()</a></code>; <code><a href="../reference/icer.html">format.icer()</a></code> formats the output for pretty printing.</p></li>
 </ul>
 </div>
 <div id="api-changes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#api-changes" class="anchor"></a>API changes</h3>
 <ul>
-<li>The first column of each matrix listed in the <code>coef</code> element returned by <code><a href="../reference/create_params.html">create_params.flexsurvreg()</a></code> is now named “(Intercept)” instead of the name of the corresponding parameter.</li>
-<li>The <code><a href="../reference/create_params.html">create_params()</a></code> methods now use the argument <code>uncertainty</code> to draw parameters and the old arguments <code>point_estimate</code> and <code>bootstrap</code> are deprecated. This also affects <code><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans()</a></code>, <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans()</a></code>, and <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code>.</li>
+<li><p>The first column of each matrix listed in the <code>coef</code> element returned by <code><a href="../reference/create_params.html">create_params.flexsurvreg()</a></code> is now named “(Intercept)” instead of the name of the corresponding parameter.</p></li>
+<li><p>The <code><a href="../reference/create_params.html">create_params()</a></code> methods now use the argument <code>uncertainty</code> to draw parameters and the old arguments <code>point_estimate</code> and <code>bootstrap</code> are deprecated. This also affects <code><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans()</a></code>, <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans()</a></code>, and <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code>.</p></li>
+<li><p><code><a href="../reference/icer_tbl.html">icer_tbl()</a></code> has been deprecated in favor of <code><a href="../reference/icer.html">icer()</a></code>.</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
