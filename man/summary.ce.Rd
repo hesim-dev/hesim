@@ -2,16 +2,28 @@
 % Please edit documentation in R/summarize.R
 \name{summary.ce}
 \alias{summary.ce}
+\alias{format.summary.ce}
 \title{Summary method for cost-effectiveness object}
 \usage{
 \method{summary}{ce}(
   object,
   prob = 0.95,
-  tidy = FALSE,
   digits_qalys = 2,
   digits_costs = 0,
-  strategy_names = NULL,
-  grp_names = NULL
+  strategy_values = NULL,
+  grp_values = NULL,
+  ...
+)
+
+\method{format}{summary.ce}(
+  x,
+  digits_qalys = 2,
+  digits_costs = 0,
+  dr_qalys = NULL,
+  dr_costs = NULL,
+  pivot_from = "strategy",
+  drop_grp = TRUE,
+  ...
 )
 }
 \arguments{
@@ -20,20 +32,39 @@
 \item{prob}{A numeric scalar in the interval \verb{(0,1)} giving the confidence interval.
 Default is 0.95 for a 95 percent interval.}
 
-\item{tidy}{Whether to return a table in "tidy" format. See "Value".}
-
 \item{digits_qalys}{Number of digits to use to report QALYs.}
 
 \item{digits_costs}{Number of digits to use to report costs.}
 
-\item{strategy_names}{Character vector of names for treatment strategies. Must
-be the same length as the number of unique values of \code{strategy_id} in \code{object}.}
+\item{strategy_values}{Character vector of values (i.e., names) for
+treatment strategies. Must be the same length as the number of unique values
+of the "strategy" column in \code{object}.}
 
-\item{grp_names}{Character vector of names for subgroups. Must
-be the same length as the number of unique values of \code{grp_id} in \code{object}.}
+\item{grp_values}{Character vector of values (i.e., names) for subgroups. Must
+be the same length as the number of unique values of the "subgroup" column in \code{object}.}
+
+\item{...}{Further arguments passed to or from other methods. Currently unused.}
+
+\item{x}{A \code{summary.ce} object.}
+
+\item{dr_qalys}{Discount rate to subset to for quality-adjusted life-years (QALYs).}
+
+\item{dr_costs}{Discount rate to subset to for costs.}
+
+\item{pivot_from}{Character vector denoting a column or columns used to
+"widen" the data. Should either be \code{"strategy"}, \code{"grp"}, \code{"outcome"},
+or some combination of the three. \code{outcome} is a column computed by concatenating
+\code{type} and \code{category} into a single column. There will be one column for each value of
+the variables in \code{pivot_from}. Default is to widen so there is a column for each treatment
+strategy. Set to \code{NULL} if you do not want to widen the table.}
+
+\item{drop_grp}{If \code{TRUE}, then the group column will be removed if there is only
+one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column is never
+removed.}
 }
 \value{
-A \code{data.table}. If \code{tidy = TRUE}, then the following columns are returned:
+\code{summary.ce()} returns an object of class \code{summary.ce} that is a tidy
+\code{data.table} with the following columns:
 
 \describe{
 \item{dr}{The discount rate.}
@@ -42,20 +73,17 @@ A \code{data.table}. If \code{tidy = TRUE}, then the following columns are retur
 \item{type}{Either \code{"QALYs"} or \code{"Costs"}.}
 \item{category}{Category is always \code{"QALYs"} when \code{type == "QALYs"}; otherwise,
 it is the cost category.}
-\item{estimate}{The point estimate comptued as the average across the PSA samples.}
+\item{estimate}{The point estimate computed as the average across the PSA samples.}
 \item{lower}{The lower limit of the confidence interval.}
 \item{upper}{The upper limit of the confidence interval.}
-\item{value}{A formatted column that combines \code{estimate}, \code{lower}, and \code{upper} based
-on \code{digit_qalys} and \code{digit_costs}.}
 }
-If \code{tidy = FALSE}, then the table above is reshaped into a wider format with one
-column for each treatment strategy with values filled using the "value" column in the
-tidy table. In this case the columns \code{estimate}, \code{lower}, and \code{upper} are removed and
-there is one row for each discount rate and subgroup.
+
+\code{format.summary.ce()} formats the table according to the arguments passed.
 }
 \description{
 Summarize a \code{\link{ce}} object by producing confidence intervals for quality-adjusted
-life-years (QALYs) and each cost category.
+life-years (QALYs) and each cost category with \code{summary.ce()} and format for
+pretty printing with \code{format.summary.ce()}.
 }
 \details{
 For an example, see \code{\link{IndivCtstm}}.

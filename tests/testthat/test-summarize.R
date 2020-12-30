@@ -81,27 +81,9 @@ class(ce) <- "ce"
 # Run tests
 test_that("summary.ce() returns the correct number or rows", {
   expect_equal(
-    nrow(summary(ce, tidy = TRUE)),
+    nrow(summary(ce)),
     n_grps * n_strategies *  n_dr * 4
   )
-  expect_equal(
-    nrow(summary(ce, tidy = FALSE)),
-    n_grps *  n_dr * 4
-  )
-})
-
-test_that("summary.ce() correctly passed 'strategy_names' argument", {
-  snames <- c("s1", "s2")
-  expect_true(
-    all(snames %in% colnames(summary(ce, strategy_names = snames)))
-  )
-})
-
-test_that("summary.ce() correctly passed 'grp_names' argument", {
-  gnames <- c("g1", "g2")
-  x <- summary(ce, grp_names = gnames)
-  expect_equal(as.character(unique(x$grp)), 
-               gnames)
 })
 
 test_that("summary.ce() must have 'prob' values in correct range", {
@@ -109,6 +91,34 @@ test_that("summary.ce() must have 'prob' values in correct range", {
   expect_error(summary(ce, prob = "1.5"),
                "'prob' must be in the interval (0,1)",
                fixed = TRUE)
+})
+
+test_that("summary.ce() correctly passes strategy_values", {
+  x <- summary(ce, strategy_values = c("2", "3"))
+  expect_equal(c("2", "3"), unique(x$strategy))
+})
+
+test_that("summary.ce() correctly passes grp_values", {
+  x <- summary(ce, grp_values = c("g1", "g2"))
+  expect_equal(c("g1", "g2"), unique(x$grp))
+})
+
+
+test_that("format.summary.ce() returns the correct number or rows", {
+  expect_equal(
+    nrow(format(summary(ce), pivot_from = NULL)),
+    n_grps * n_strategies *  n_dr * 4
+  )
+  
+  expect_equal(
+    nrow(format(summary(ce))),
+    n_grps *  n_dr * 4
+  )
+  
+  expect_equal(
+    nrow(format(summary(ce), pivot_from = c("strategy", "grp"))),
+    n_dr * 4
+  )
 })
 
 

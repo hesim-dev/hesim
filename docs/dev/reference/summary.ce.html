@@ -48,7 +48,8 @@
 
 <meta property="og:title" content="Summary method for cost-effectiveness object — summary.ce" />
 <meta property="og:description" content="Summarize a ce object by producing confidence intervals for quality-adjusted
-life-years (QALYs) and each cost category." />
+life-years (QALYs) and each cost category with summary.ce() and format for
+pretty printing with format.summary.ce()." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -175,18 +176,31 @@ life-years (QALYs) and each cost category." />
 
     <div class="ref-description">
     <p>Summarize a <code><a href='ce.html'>ce</a></code> object by producing confidence intervals for quality-adjusted
-life-years (QALYs) and each cost category.</p>
+life-years (QALYs) and each cost category with <code>summary.ce()</code> and format for
+pretty printing with <code>format.summary.ce()</code>.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for ce</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(
   <span class='no'>object</span>,
   <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>digits_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>,
   <span class='kw'>digits_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>strategy_names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>grp_names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>strategy_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>grp_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)
+
+<span class='co'># S3 method for summary.ce</span>
+<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(
+  <span class='no'>x</span>,
+  <span class='kw'>digits_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>digits_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>dr_qalys</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>dr_costs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pivot_from</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
+  <span class='kw'>drop_grp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -202,10 +216,6 @@ life-years (QALYs) and each cost category.</p>
 Default is 0.95 for a 95 percent interval.</p></td>
     </tr>
     <tr>
-      <th>tidy</th>
-      <td><p>Whether to return a table in "tidy" format. See "Value".</p></td>
-    </tr>
-    <tr>
       <th>digits_qalys</th>
       <td><p>Number of digits to use to report QALYs.</p></td>
     </tr>
@@ -214,20 +224,53 @@ Default is 0.95 for a 95 percent interval.</p></td>
       <td><p>Number of digits to use to report costs.</p></td>
     </tr>
     <tr>
-      <th>strategy_names</th>
-      <td><p>Character vector of names for treatment strategies. Must
-be the same length as the number of unique values of <code>strategy_id</code> in <code>object</code>.</p></td>
+      <th>strategy_values</th>
+      <td><p>Character vector of values (i.e., names) for
+treatment strategies. Must be the same length as the number of unique values
+of the "strategy" column in <code>object</code>.</p></td>
     </tr>
     <tr>
-      <th>grp_names</th>
-      <td><p>Character vector of names for subgroups. Must
-be the same length as the number of unique values of <code>grp_id</code> in <code>object</code>.</p></td>
+      <th>grp_values</th>
+      <td><p>Character vector of values (i.e., names) for subgroups. Must
+be the same length as the number of unique values of the "subgroup" column in <code>object</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>A <code>summary.ce</code> object.</p></td>
+    </tr>
+    <tr>
+      <th>dr_qalys</th>
+      <td><p>Discount rate to subset to for quality-adjusted life-years (QALYs).</p></td>
+    </tr>
+    <tr>
+      <th>dr_costs</th>
+      <td><p>Discount rate to subset to for costs.</p></td>
+    </tr>
+    <tr>
+      <th>pivot_from</th>
+      <td><p>Character vector denoting a column or columns used to
+"widen" the data. Should either be <code>"strategy"</code>, <code>"grp"</code>, <code>"outcome"</code>,
+or some combination of the three. <code>outcome</code> is a column computed by concatenating
+<code>type</code> and <code>category</code> into a single column. There will be one column for each value of
+the variables in <code>pivot_from</code>. Default is to widen so there is a column for each treatment
+strategy. Set to <code>NULL</code> if you do not want to widen the table.</p></td>
+    </tr>
+    <tr>
+      <th>drop_grp</th>
+      <td><p>If <code>TRUE</code>, then the group column will be removed if there is only
+one subgroup; other it will be kept. If <code>FALSE</code>, then the <code>grp</code> column is never
+removed.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.table</code>. If <code>tidy = TRUE</code>, then the following columns are returned:</p>
+    <p><code>summary.ce()</code> returns an object of class <code>summary.ce</code> that is a tidy
+<code>data.table</code> with the following columns:</p>
 <dl'>
 <dt>dr</dt><dd><p>The discount rate.</p></dd>
 <dt>strategy</dt><dd><p>The treatment strategy.</p></dd>
@@ -235,16 +278,13 @@ be the same length as the number of unique values of <code>grp_id</code> in <cod
 <dt>type</dt><dd><p>Either <code>"QALYs"</code> or <code>"Costs"</code>.</p></dd>
 <dt>category</dt><dd><p>Category is always <code>"QALYs"</code> when <code>type == "QALYs"</code>; otherwise,
 it is the cost category.</p></dd>
-<dt>estimate</dt><dd><p>The point estimate comptued as the average across the PSA samples.</p></dd>
+<dt>estimate</dt><dd><p>The point estimate computed as the average across the PSA samples.</p></dd>
 <dt>lower</dt><dd><p>The lower limit of the confidence interval.</p></dd>
 <dt>upper</dt><dd><p>The upper limit of the confidence interval.</p></dd>
-<dt>value</dt><dd><p>A formatted column that combines <code>estimate</code>, <code>lower</code>, and <code>upper</code> based
-on <code>digit_qalys</code> and <code>digit_costs</code>.</p></dd>
 
-</dl><p>If <code>tidy = FALSE</code>, then the table above is reshaped into a wider format with one
-column for each treatment strategy with values filled using the "value" column in the
-tidy table. In this case the columns <code>estimate</code>, <code>lower</code>, and <code>upper</code> are removed and
-there is one row for each discount rate and subgroup.</p>
+</dl>
+
+<p><code>format.summary.ce()</code> formats the table according to the arguments passed.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For an example, see <code><a href='IndivCtstm.html'>IndivCtstm</a></code>.</p>

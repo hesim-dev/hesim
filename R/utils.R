@@ -202,6 +202,56 @@ get_n_samples <- function (coefs) {
   UseMethod("get_n_samples")
 }
 
+format_costs <- function(x, digits){
+  formatC(x, format = "f", digits = digits, big.mark = ",")
+}
+
+format_qalys <- function(x, digits){
+  formatC(x, format = "f", digits = digits)
+}
+
+ci_alpha <- function(prob) {
+  if (prob > 1 | prob < 0){
+    stop("'prob' must be in the interval (0,1)",
+         call. = FALSE)
+  }
+  lower <- (1 - prob)/2
+  upper <- 1 - lower
+  return(list(lower = lower, upper = upper))
+}
+
+format_ci <- function(est, lower, upper, costs = TRUE, digits){
+  if (costs){
+    est <- format_costs(est, digits = digits)
+    lower <- format_costs(lower, digits = digits)
+    upper <- format_costs(upper, digits = digits)
+  } else{
+    est <- format_qalys(est, digits = digits)
+    lower <- format_qalys(lower, digits = digits)
+    upper <- format_qalys(upper, digits = digits)
+  }
+  paste0(est, " (",lower, ", ", upper, ")")
+}
+
+format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
+  
+  if (!is.null(pivot_from)) {
+    rhs <- pivot_from
+    lhs <- setdiff(id_cols, pivot_from)
+    f <- paste(paste(lhs, collapse=" + "), paste(rhs, collapse = " + "),  sep=" ~ ")
+    x <- dcast(x, f, value.var = "value")
+  }
+  
+  # Drop group if desired
+  if (drop_grp && ("grp" %in% colnames(x))) {
+    n_grps <- length(unique(x$grp))
+    if (n_grps == 1) x[, ("grp") := NULL]
+  }
+  
+  # Return
+  return(x)
+}
+
 # List of matrices -------------------------------------------------------------
 matlist <- function(x){
   class(x) <- "matlist"

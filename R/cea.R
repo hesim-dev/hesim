@@ -362,7 +362,7 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
 #' Incremental cost-effectiveness ratio
 #'
 #' Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from 
-#' [cea_pw()] with `icer()` and format for pretty printing with `format()`.
+#' [cea_pw()] with `icer()` and format for pretty printing with `format.icer()`.
 #'
 #' @param x An object of class `cea_pw` returned by [cea_pw()].
 #' @param prob A numeric scalar in the interval `(0,1)` giving the confidence interval.
@@ -379,17 +379,18 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
 #' correctly note whether a treatment strategy is dominated by or dominates the 
 #' reference treatment. 
 #' 
-#' @return `icer()` returns a tidy `data.table` with the following columns:
+#' @return `icer()` returns an object of class `icer` that is a tidy 
+#' `data.table` with the following columns:
 #' \describe{
 #' \item{strategy}{The treatment strategy.}
 #' \item{grp}{The subgroup.}
 #' \item{outcome}{The outcome metric.}
-#' \item{mean}{The point estimate comptued as the average across the PSA samples.}
+#' \item{estimate}{The point estimate computed as the average across the PSA samples.}
 #' \item{lower}{The lower limit of the confidence interval.}
 #' \item{upper}{The upper limit of the confidence interval.}
 #' }
 #' 
-#' `format()` formats the table according to the arguments passed.
+#' `format.icer()` formats the table according to the arguments passed.
 #' 
 #' @seealso [`cea_pw()`]
 #' @export
@@ -434,7 +435,7 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
                                   c("ie_upper", "ic_upper", "inmb_upper")),
               variable.factor = FALSE,
               variable.name = "outcome",
-       value.name = c("mean", "lower", "upper"))
+       value.name = c("estimate", "lower", "upper"))
   tbl[, outcome := factor(outcome, levels = 1:4,
                            labels = c("Incremental QALYs",
                                       "Incremental costs",
@@ -473,7 +474,7 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
 #' @export
 format.icer <- function(x, digits_qalys = 2, digits_costs = 0,
                         pivot_from = "strategy", drop_grp = TRUE, ...) {
-  value <- outcome <- lower <- upper <- grp <- NULL 
+  value <- outcome <- estimate <- lower <- upper <- grp <- NULL 
   y <- copy(x)
   
   # Format values
@@ -481,44 +482,25 @@ format.icer <- function(x, digits_qalys = 2, digits_costs = 0,
   icer_plane <- rep(icer_plane, each = nrow(y)/length(icer_plane))
   y[, value := fcase(
     outcome %in% c("Incremental costs", "Incremental NMB"),
-      format_ci(mean, lower, upper, costs = TRUE,
+      format_ci(estimate, lower, upper, costs = TRUE,
                 digits = digits_costs),
     outcome == "Incremental QALYs", 
-      format_ci(mean, lower, upper, costs = FALSE,
+      format_ci(estimate, lower, upper, costs = FALSE,
                 digits = digits_qalys),
     outcome == "ICER" & icer_plane == "Dominates", 
       "Dominates",
     outcome == "ICER" & icer_plane == "Dominated", 
       "Dominated",
     outcome == "ICER" & !icer_plane %in% c("Dominates", "Dominated"), 
-      format_costs(mean, digits = digits_costs)
+      format_costs(estimate, digits = digits_costs)
   )]
-  y[, c("mean", "lower", "upper") := NULL]
+  y[, c("estimate", "lower", "upper") := NULL]
   
-  # Pivot wider
-  if (!is.null(pivot_from)) {
-    rhs <- pivot_from
-    lhs <- setdiff(c("strategy", "grp", "outcome"),
-                   pivot_from)
-    f <- paste(paste(lhs, collapse=" + "), paste(rhs, collapse=" + "),  sep=" ~ ")
-    
-    y <- dcast(y, f, value.var = "value")
-    
-    # Sort by group and then strategy
-    if (all(c("grp", "strategy") %in% colnames(y))) {
-      setorderv(y, c("grp", "strategy"))
-    } else if ("grp" %in% colnames(y)) {
-      setorderv(y, "grp")
-    } else if ("strategy" %in% colnames(y)) {
-      setorderv(y, "strategy")
-    }
-  }
-  
-  # Drop group if desired
-  if (drop_grp && ("grp" %in% colnames(y))) {
-    n_grps <- length(unique(y$grp))
-    if (n_grps == 1) y[, grp := NULL]
-  }
+  # Potentially pivot wider and drop groups
+  y[, outcome := factor(outcome, levels = unique(y$outcome))]
+  y <- format_summary_default(y, pivot_from = pivot_from,
+                              id_cols = c("grp", "strategy", "outcome"),
+                              drop_grp = drop_grp)
   
   # Return
   return(y[, ])

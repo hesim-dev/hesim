@@ -266,7 +266,7 @@ test_that("icer() and format.icer() return the correct columns", {
   # icer()
   x <- icer(cea_pw2)
   expect_equal(colnames(x),
-               c("strategy", "grp", "outcome", "mean", "lower", "upper"))
+               c("strategy", "grp", "outcome", "estimate", "lower", "upper"))
   
   # Formatting
   ## Pivoting

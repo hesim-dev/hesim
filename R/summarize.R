@@ -225,53 +225,23 @@ summarize_ce <- function(costs, qalys, by_grp = FALSE) {
 }
 
 # Summary method ---------------------------------------------------------------
-format_costs <- function(x, digits){
-  formatC(x, format = "f", digits = digits, big.mark = ",")
-}
-
-format_qalys <- function(x, digits){
-  formatC(x, format = "f", digits = digits)
-}
-
-ci_alpha <- function(prob) {
-  if (prob > 1 | prob < 0){
-    stop("'prob' must be in the interval (0,1)",
-         call. = FALSE)
-  }
-  lower <- (1 - prob)/2
-  upper <- 1 - lower
-  return(list(lower = lower, upper = upper))
-}
-
-format_ci <- function(est, lower, upper, costs = TRUE, digits){
-  if (costs){
-    est <- format_costs(est, digits = digits)
-    lower <- format_costs(lower, digits = digits)
-    upper <- format_costs(upper, digits = digits)
-  } else{
-    est <- format_qalys(est, digits = digits)
-    lower <- format_qalys(lower, digits = digits)
-    upper <- format_qalys(upper, digits = digits)
-  }
-  paste0(est, " (",lower, ", ", upper, ")")
-}
-
 #' Summary method for cost-effectiveness object
 #' 
 #' Summarize a [`ce`] object by producing confidence intervals for quality-adjusted
-#' life-years (QALYs) and each cost category.
+#' life-years (QALYs) and each cost category with `summary.ce()` and format for 
+#' pretty printing with `format.summary.ce()`.
 #' @param object A [`ce`] object. 
 #' @param prob A numeric scalar in the interval `(0,1)` giving the confidence interval.
 #' Default is 0.95 for a 95 percent interval. 
-#' @param tidy Whether to return a table in "tidy" format. See "Value".
-#' @param digits_qalys Number of digits to use to report QALYs.
-#' @param digits_costs Number of digits to use to report costs.
-#' @param strategy_names Character vector of names for treatment strategies. Must
-#' be the same length as the number of unique values of `strategy_id` in `object`.
-#' @param grp_names Character vector of names for subgroups. Must
-#' be the same length as the number of unique values of `grp_id` in `object`.
+#' @param strategy_values Character vector of values (i.e., names) for 
+#' treatment strategies. Must be the same length as the number of unique values
+#'  of the "strategy" column in `object`.
+#' @param grp_values Character vector of values (i.e., names) for subgroups. Must
+#' be the same length as the number of unique values of the "subgroup" column in `object`.
+#' @param ... Further arguments passed to or from other methods. Currently unused.
 #' 
-#' @return A `data.table`. If `tidy = TRUE`, then the following columns are returned:
+#' @return `summary.ce()` returns an object of class `summary.ce` that is a tidy
+#'  `data.table` with the following columns:
 #' 
 #' \describe{
 #' \item{dr}{The discount rate.}
@@ -280,74 +250,98 @@ format_ci <- function(est, lower, upper, costs = TRUE, digits){
 #' \item{type}{Either `"QALYs"` or `"Costs"`.}
 #'  \item{category}{Category is always `"QALYs"` when `type == "QALYs"`; otherwise,
 #'  it is the cost category.}
-#' \item{estimate}{The point estimate comptued as the average across the PSA samples.}
+#' \item{estimate}{The point estimate computed as the average across the PSA samples.}
 #' \item{lower}{The lower limit of the confidence interval.}
 #' \item{upper}{The upper limit of the confidence interval.}
-#' \item{value}{A formatted column that combines `estimate`, `lower`, and `upper` based
-#' on `digit_qalys` and `digit_costs`.}
 #' }
-#' If `tidy = FALSE`, then the table above is reshaped into a wider format with one
-#' column for each treatment strategy with values filled using the "value" column in the 
-#' tidy table. In this case the columns `estimate`, `lower`, and `upper` are removed and
-#' there is one row for each discount rate and subgroup.
+#' 
+#' `format.summary.ce()` formats the table according to the arguments passed.
 #' 
 #' @details For an example, see [`IndivCtstm`].
 #' @export
-summary.ce <- function(object, prob = 0.95, tidy = FALSE, digits_qalys = 2, 
-                       digits_costs = 0, strategy_names = NULL, grp_names = NULL) {
+summary.ce <- function(object, prob = 0.95, digits_qalys = 2, 
+                       digits_costs = 0, strategy_values = NULL, grp_values = NULL,
+                       ...) {
   qalys <- costs <- value <- dr <- grp <- order <- strategy <-  NULL
   alpha <- ci_alpha(prob)
   
-  # Initial summary in tidy format
+  # Summarize the PSA separately for costa and QALYs
   res <- list(
     qalys = object$qalys[, list(type = "QALYs",
                                 category = "QALYs",
                                 estimate = mean(qalys),
                                 lower = stats::quantile(qalys, alpha$lower),
                                 upper = stats::quantile(qalys, alpha$upper)),
-                         by = c("dr", "strategy_id", "grp_id")],
+                         by = c("grp_id", "strategy_id", "dr")],
     costs = object$costs[, list(type = "Costs",
                                 estimate = mean(costs),
                                 lower = stats::quantile(costs, alpha$lower),
                                 upper = stats::quantile(costs, alpha$upper)),
-                         by = c("dr", "strategy_id", "grp_id", "category")]
+                         by = c("grp_id", "strategy_id", "dr", "category")]
   )
-  
-  # Apply formatting
-  res$qalys[, value := format_ci(estimate, lower, upper, costs = FALSE,
-                                 digits = digits_qalys)]
-  res$costs[, value := format_ci(estimate, lower, upper, costs = TRUE,
-                                 digits = digits_costs)]
-  
-  
+
   # Combine costs and QALYs into a single table
   res <- rbindlist(res, use.names = TRUE)
   setnames(res, c("strategy_id", "grp_id"), c("strategy", "grp"))
+  setorderv(res, c("grp", "strategy", "dr"))
   
-  if (!is.null(dr)) {
-    dr_env <- dr
-    res <- res[dr %in% dr_env]
-  } 
-  if (!is.null(strategy_names)) {
-    res[, strategy := factor(strategy, labels = strategy_names)]
+  if (!is.null(strategy_values)) {
+    res[, strategy := as.character(factor(strategy, labels = strategy_values))]
   }
-  if (!is.null(grp_names)) {
-    res[, grp := factor(grp, labels = grp_names)]
+  if (!is.null(grp_values)) {
+    res[, grp := as.character(factor(grp, labels = grp_values))]
   }
   
   # Return
-  ## If tidy = TRUE, we are done
-  if (tidy) return(res[, ])
-  
-  ## Otherwise, reshape so strategies are columns
-  res[, order := 1:.N, by = c("dr", "grp", "strategy")]
-  if (is.null(strategy_names)) res[, strategy := paste0("Strategy ", strategy)]
-  res <- dcast(res, dr +  grp + type + category + order ~ strategy, value.var = "value")
-  setorderv(res, c("dr", "grp", "order"))
-  res[, order := NULL]
-  res[, category := ifelse(type == "QALYs",
-                           category,
-                           paste0(type, ": ", category))]
-  res[, type := NULL]
+  setattr(res, "class", c("summary.ce", "data.table", "data.frame"))
   return(res[, ])
+}
+
+#' @rdname summary.ce
+#' @param x A `summary.ce` object.
+#' @param digits_qalys Number of digits to use to report QALYs.
+#' @param digits_costs Number of digits to use to report costs.
+#' @param dr_qalys Discount rate to subset to for quality-adjusted life-years (QALYs).
+#' @param dr_costs Discount rate to subset to for costs.
+#' @param pivot_from Character vector denoting a column or columns used to 
+#' "widen" the data. Should either be `"strategy"`, `"grp"`, `"outcome"`,
+#' or some combination of the three. `outcome` is a column computed by concatenating
+#' `type` and `category` into a single column. There will be one column for each value of 
+#' the variables in `pivot_from`. Default is to widen so there is a column for each treatment
+#' strategy. Set to `NULL` if you do not want to widen the table. 
+#' @param drop_grp If `TRUE`, then the group column will be removed if there is only
+#' one subgroup; other it will be kept. If `FALSE`, then the `grp` column is never
+#' removed. 
+#' @export
+format.summary.ce <- function(x, digits_qalys = 2, digits_costs = 0,
+                              dr_qalys = NULL, dr_costs = NULL,
+                              pivot_from = "strategy", drop_grp = TRUE, ...) {
+  dr <- type <- value <- estimate <- lower <- upper <- category <- 
+    outcome <- grp <- NULL
+  
+  y <- copy(x)
+  
+  # Subset based on discount rate if specified
+  if (!is.null(dr_qalys)) y <- y[dr %in% dr_qalys | type == "Costs"]
+  if (!is.null(dr_costs)) y <- y[dr %in% dr_costs | type == "QALYs"]
+    
+  # Apply formatting
+  y[, value := ifelse(type == "QALYs",
+                      format_ci(estimate, lower, upper, costs = FALSE,
+                                digits = digits_qalys),
+                      format_ci(estimate, lower, upper, costs = TRUE,
+                                digits = digits_costs))]
+  y[, ("category") := ifelse(type == "QALYs",
+                             category,
+                             paste0(type, ": ", category))]
+  setnames(y, "category", "outcome")
+  y[, c("estimate", "lower", "upper", "type") := NULL]
+
+  # Potentially pivot wider and drop groups
+  y[, outcome := factor(outcome, levels = unique(y$outcome))]
+  y <- format_summary_default(y, pivot_from = pivot_from,
+                              id_cols = c("grp", "strategy", "dr", "outcome"),
+                              drop_grp = drop_grp)
+  # Return
+  return(y[, ])
 }

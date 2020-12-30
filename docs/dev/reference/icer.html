@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Incremental cost-effectiveness ratio — icer" />
 <meta property="og:description" content="Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
-cea_pw() with icer() and format for pretty printing with format()." />
+cea_pw() with icer() and format for pretty printing with format.icer()." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -175,7 +175,7 @@ cea_pw() with icer() and format for pretty printing with format()." />
 
     <div class="ref-description">
     <p>Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
-<code><a href='cea.html'>cea_pw()</a></code> with <code>icer()</code> and format for pretty printing with <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code>.</p>
+<code><a href='cea.html'>cea_pw()</a></code> with <code>icer()</code> and format for pretty printing with <code>format.icer()</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>icer</span>(<span class='no'>x</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>, <span class='kw'>strategy_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>grp_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
@@ -247,17 +247,18 @@ removed.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>icer()</code> returns a tidy <code>data.table</code> with the following columns:</p><dl'>
+    <p><code>icer()</code> returns an object of class <code>icer</code> that is a tidy
+<code>data.table</code> with the following columns:</p><dl'>
 <dt>strategy</dt><dd><p>The treatment strategy.</p></dd>
 <dt>grp</dt><dd><p>The subgroup.</p></dd>
 <dt>outcome</dt><dd><p>The outcome metric.</p></dd>
-<dt>mean</dt><dd><p>The point estimate comptued as the average across the PSA samples.</p></dd>
+<dt>estimate</dt><dd><p>The point estimate computed as the average across the PSA samples.</p></dd>
 <dt>lower</dt><dd><p>The lower limit of the confidence interval.</p></dd>
 <dt>upper</dt><dd><p>The upper limit of the confidence interval.</p></dd>
 
 </dl>
 
-<p><code><a href='https://rdrr.io/r/base/format.html'>format()</a></code> formats the table according to the arguments passed.</p>
+<p><code>format.icer()</code> formats the table according to the arguments passed.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Note that <code>icer()</code> will report negative ICERs; however, <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code> will
