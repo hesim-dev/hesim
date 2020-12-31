@@ -118,15 +118,14 @@ sim <- data.table(sample = rep(seq(n_samples), 4),
                         rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)),
                   e = c(rnorm(n_samples, 8, .2), rnorm(n_samples, 8.5, .1),
                         rnorm(n_samples, 11, .6), rnorm(n_samples, 11.5, .6)),
-                  strategy = rep(paste0("Strategy ", seq(1, 2)),
-                                 each = n_samples * 2),
-                  grp = rep(rep(c("Group 1", "Group 2"),
-                            each = n_samples), 2)
+                  strategy_id = rep(1:2, each = n_samples * 2),
+                  grp_id = rep(rep(1:2, each = n_samples), 2)
 )
 
 # Cost-effectiveness analysis
-cea_out <- cea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
-               grp = "grp", e = "e", c = "c")
+cea_out <- cea(sim, k = seq(0, 200000, 500), sample = "sample", 
+               strategy = "strategy_id", grp = "grp_id", 
+               e = "e", c = "c")
 names(cea_out)
 
 ## Some sample output
@@ -135,9 +134,9 @@ names(cea_out)
 cea_out$mce[k == 20000]
 
 # Pairwise cost-effectiveness analysis
-cea_pw_out <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
-                      sample = "sample", strategy = "strategy", grp = "grp",
-                      e = "e", c = "c")
+cea_pw_out <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = 1,
+                      sample = "sample", strategy = "strategy_id", 
+                      grp = "grp_id", e = "e", c = "c")
 names(cea_pw_out)
 
 ## Some sample output
@@ -148,5 +147,11 @@ head(cea_pw_out$ceac[k >= 20000])
 format(icer(cea_pw_out))
 
 # Plots
-plot_ceplane(cea_pw_out)
+labs <- list(strategy_id = c("Strategy 1" = 1, "Strategy 2" = 2),
+             grp_id = c("Group 1" = 1, "Group 2" = 2))
+plot_ceplane(cea_pw_out, label = labs)
+plot_ceac(cea_out, label = labs)
+plot_ceac(cea_pw_out, label = labs)
+plot_ceaf(cea_out, label = labs)
+plot_evpi(cea_out, label = labs)
 }

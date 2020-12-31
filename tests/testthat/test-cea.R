@@ -331,7 +331,7 @@ test_that("plot_ceplane() correctly passes labels", {
 
 test_that("plot_ceplane() throws error if 'x' is wrong class", {
   expect_error(plot_ceplane(2),
-               "'x' must be an object of class 'cea_pw'.")
+               "'x' must be of class 'cea_pw'.")
 })
 
 # Test plot_ceac() -------------------------------------------------------------
@@ -359,10 +359,22 @@ test_that("plot_ceaf() only uses data for optimal treatment strategy", {
 
 test_that("plot_ceaf() throws error if 'x' is wrong class", {
   expect_error(plot_ceaf(2),
-               "'x' must be an object of class 'cea'.")
+               "'x' must be of class 'cea'.")
 })
 
-# Test incr_effect function ----------------------------------------------------
+# Test plot_evpi() -------------------------------------------------------------
+test_that("plot_evpi() throws error if 'x' is wrong class", {
+  expect_error(plot_evpi(2),
+               "'x' must be of class 'cea'.")
+})
+
+test_that("plot_evpi() works with one group", {
+  z <- cea(ce[grp == "Group 1"], k = krange, sample = "sample", 
+           strategy = "strategy", grp = "grp", e = "qalys", c = "cost")
+  expect_true(inherits(plot_evpi(z), "ggplot"))
+})
+
+# Test incr_effect() -----------------------------------------------------------
 test_that("incr_effect", {
   # Default
   delta <- incr_effect(ce, comparator = "Strategy 1", sample = "sample", 

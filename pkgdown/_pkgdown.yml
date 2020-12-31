@@ -96,6 +96,12 @@ reference:
       - cea
       - cea_pw
       - icer
+  - title: "Plotting"
+    contents:
+    - plot_ceplane
+    - plot_ceac
+    - plot_ceaf
+    - plot_evpi
   - title: "Datasets"
     contents:
     - mstate3_exdata

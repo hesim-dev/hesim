@@ -17,12 +17,10 @@ format_dollar <- function(x) {
 #' then a faceted plot is produced with one plot for each subgroup. 
 #' @export 
 plot_ceplane <- function(x, k = 50000, labels = NULL) {
-  if (!inherits(x, "cea_pw")){
-    stop("'x' must be an object of class 'cea_pw'.",
-         call. = FALSE)
-  }
+  check_is_class(x, "cea_pw", "x")
   pdata <- copy(x$delta)
   
+  # Some metadata
   strategy <- attr(x, "strategy")
   grp <- attr(x, "grp")
   
@@ -68,7 +66,7 @@ plot_ceplane <- function(x, k = 50000, labels = NULL) {
 # Cost-effectiveness acceptability curve ---------------------------------------
 #' Plot cost-effectiveness acceptability curve
 #' 
-#' Plot a cost-effectiveness curve from either the the output of [`cea()`] or
+#' Plot a cost-effectiveness curve from either the output of [`cea()`] or
 #' [`cea_pw()`] using [`ggplot2`]. The former compares all treatment strategies
 #' simultaneously and uses the probabilistic sensitivity analysis (PSA) to compute
 #' the probability that each strategy is the most cost-effective at a given 
@@ -78,6 +76,9 @@ plot_ceplane <- function(x, k = 50000, labels = NULL) {
 #' @inheritParams set_labels
 #' @param x An object of the appropriate class. 
 #' @param ... Further arguments passed to and from methods. Currently unused. 
+#' 
+#' @details See the [`cea()`] documentation for an example. If there are multiple subgroups,
+#' then a faceted plot is produced with one plot for each subgroup. 
 #' @export
 plot_ceac <- function(x, ...) {
   UseMethod("plot_ceac", x)
@@ -135,8 +136,6 @@ plot_ceac.default <- function(x, labels = NULL, ceaf = FALSE, ...) {
 #' @rdname plot_ceac
 plot_ceac.cea_pw <- function(x, labels = NULL, ...) {
   plot_ceac.default(x, labels = labels)
-  
-
 }
 
 #' @export
@@ -148,22 +147,66 @@ plot_ceac.cea <- function(x, labels = NULL, ...) {
 # Cost-effectiveness acceptability frontier ------------------------------------
 #' Plot cost-effectiveness acceptability frontier
 #' 
-#' Plot a cost-effectiveness plane from the output of [`cea`] using [`ggplot2`]. 
-#' The cost-effectiveness acceptability frontier (CEAF) plots the probability
+#' Plot a cost-effectiveness acceptability frontier (CEAF) from the output of 
+#' [`cea`] using [`ggplot2`]. The CEAF plots the probability
 #' that the optimal treatment strategy (i.e., the strategy with the highest 
 #' expected net monetary benefit) is cost-effective. 
 #' @inheritParams set_labels
 #' @param x A `cea` object produced by [`cea`].
 #' @return A `ggplot` object.
-#' @details See the [`cea_pw()`] documentation for an example. If there are multiple subgroups,
+#' @details See the [`cea()`] documentation for an example. If there are multiple subgroups,
 #' then a faceted plot is produced with one plot for each subgroup. 
 #' @export 
 plot_ceaf <- function(x, labels = NULL) {
-  if (!inherits(x, "cea")){
-    stop("'x' must be an object of class 'cea'.",
-         call. = FALSE)
-  }
-  
+  check_is_class(x, "cea", "x")
   plot_ceac.default(x, labels = labels, ceaf = TRUE)
 }
 
+# Expected value of perfect information ----------------------------------------
+#' Plot expected value of perfect information
+#' 
+#' Plot the expected value of perfect information (EVPI) from the output of 
+#' [`cea()`] using [`ggplot2`]. Intuitively, the EVPI provides an estimate of the 
+#' amount that a decision maker would be willing to pay to collect additional data 
+#' and completely eliminate uncertainty.
+#' @inheritParams set_labels
+#' @param x A `cea` object produced by [`cea()`].
+#' @return A `ggplot` object.
+#' @details See the [`cea()`] documentation for an example. If there are multiple subgroups,
+#' then a faceted plot is produced with one plot for each subgroup. 
+#' @export 
+plot_evpi <- function(x, labels = NULL) {
+  check_is_class(x, "cea", "x")
+  pdata <- copy(x$evpi)
+  
+  # Some metadata
+  strategy <- attr(x, "strategy")
+  grp <- attr(x, "grp")
+  max_k <- max(pdata$k)
+  
+  # Passing custom names from user
+  set_labels(pdata, labels = labels)
+  
+  # Main plot
+  p <-  ggplot2::ggplot(
+    data = pdata,
+    mapping = ggplot2::aes(x = .data[["k"]], y = .data[["evpi"]])
+  ) +
+    ggplot2::geom_line() +
+    ggplot2::xlab("Willingness to pay") +
+    ggplot2::ylab("Expected value of perfect information") +
+    ggplot2::scale_x_continuous(limits = c(0, max_k),
+                                labels = format_dollar) +
+    ggplot2::scale_y_continuous(breaks = pretty(pdata$evpi, n = 5),
+                                labels = format_dollar) +
+    ggplot2::theme(legend.position = "bottom")
+  
+  # Add facets if more than one group
+  n_grps <- length(unique(x$summary[[grp]]))
+  if (n_grps > 1) {
+    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[grp]]))
+  }
+  
+  # Return
+  return(p)
+}

@@ -22,10 +22,14 @@ variables. The elements of each vector are
 the levels of a variable and the names are the labels.}
 }
 \description{
-Plot a cost-effectiveness curve from either the the output of \code{\link[=cea]{cea()}} or
+Plot a cost-effectiveness curve from either the output of \code{\link[=cea]{cea()}} or
 \code{\link[=cea_pw]{cea_pw()}} using \code{\link{ggplot2}}. The former compares all treatment strategies
 simultaneously and uses the probabilistic sensitivity analysis (PSA) to compute
 the probability that each strategy is the most cost-effective at a given
 willingness to pay value, while the latter uses the PSA to compute the probability
 that each treatment is cost-effective relative to a comparator.
+}
+\details{
+See the \code{\link[=cea]{cea()}} documentation for an example. If there are multiple subgroups,
+then a faceted plot is produced with one plot for each subgroup.
 }
