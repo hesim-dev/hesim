@@ -36,7 +36,7 @@ ce2 <- copy(ce)
 setnames(ce2, c("sample", "strategy", "grp"), c("samp", "strategy_name", "group"))
 
 # net benefits by willingess to pay
-krange <- seq(100000, 120000, 500)
+krange <- seq(0, 200000, by = 25000)
 kval1 <- sample(krange, 1)
 kval2 <- sample(krange, 1)
 ce[, nmb1 := qalys * kval1 - cost]
@@ -100,17 +100,18 @@ ceacR <- function(ix, kval, grpname) {
 }
 
 # Test cea() -------------------------------------------------------------------
+cea_out <-  cea(ce, k = krange, sample = "sample", strategy = "strategy",
+                grp = "grp", e = "qalys", c = "cost")
+
 test_that("cea() produced expected results", {
   
-  # function gets expected results
-  cea <-  cea(ce, k = krange, sample = "sample", strategy = "strategy",
-              grp = "grp", e = "qalys", c = "cost")
+  # Function gets expected results
   kval <- sample(krange, 1)
   ceaR_1 <- ceaR(ce, kval , "Group 1")
   ceaR_2 <- ceaR(ce, kval , "Group 2")
   
-  ## summary
-  ### group 2
+  ## Summary
+  ### Group 2
   ce_mean <- ce[grp == "Group 2", .(e_mean = mean(qalys), 
                                      c_mean = mean(cost)), by = "strategy"]
   ce_lower <- ce[grp == "Group 2", .(e_lower = quantile(qalys, .025), 
@@ -124,50 +125,50 @@ test_that("cea() produced expected results", {
                              c_mean = ce_mean$c_mean, 
                              c_lower = ce_lower$c_lower,
                              c_upper = ce_upper$c_upper)
-  expect_equal(summary_test, cea$summary[grp == "Group 2", -2, with = FALSE])
+  expect_equal(summary_test, cea_out$summary[grp == "Group 2", -2, with = FALSE])
   
-  # mce
-  ### group 1
-  mce <- cea$mce[grp == "Group 1" &  k == kval]
+  # MCE
+  ### Group 1
+  mce <- cea_out$mce[grp == "Group 1" &  k == kval]
   mce_test <- ceaR_1$mce
   expect_equal(mce$prob, mce_test)
   
-  ### group 2
-  mce <- cea$mce[grp == "Group 2" &  k == kval]
+  ### Group 2
+  mce <- cea_out$mce[grp == "Group 2" &  k == kval]
   mce_test <- ceaR_2$mce
   expect_equal(mce$prob, mce_test)
   
   ## CEAF
-  ### group 1
-  ceaf <- cea$mce[best == 1 & grp == "Group 1" &  k == kval]
+  ### Group 1
+  ceaf <- cea_out$mce[best == 1 & grp == "Group 1" &  k == kval]
   ceaf_test <- ceaR_1$ceaf
   expect_equal(ceaf$prob, ceaf_test)
   
-  ### group 2
-  ceaf <- cea$mce[best == 1 & grp == "Group 2" &  k == kval]
+  ### Group 2
+  ceaf <- cea_out$mce[best == 1 & grp == "Group 2" &  k == kval]
   ceaf_test <- ceaR_2$ceaf
   expect_equal(ceaf$prob, ceaf_test)  
   
-  ## evpi
-  ### group 1
-  evpi <- cea$evpi[grp == "Group 1" &  k == kval]
+  ## EVPI
+  ### Group 1
+  evpi <- cea_out$evpi[grp == "Group 1" &  k == kval]
   evpi_test <- ceaR_1$evpi
   expect_equal(evpi$evpi, evpi_test)
   
   # Function works with non-default names
-  cea2 <-  cea(ce2, k = krange, sample = "samp", strategy = "strategy_name",
+  cea_out2 <-  cea(ce2, k = krange, sample = "samp", strategy = "strategy_name",
                grp = "group", e = "qalys", c = "cost")
-  evpi_v2 <- cea2$evpi[group == "Group 1" &  k == kval]
+  evpi_v2 <- cea_out2$evpi[group == "Group 1" &  k == kval]
   expect_equal(evpi_v2$evpi, evpi$evpi)
 })
 
 # Test cea_pw() ----------------------------------------------------------------
-cea_pw <-  cea_pw(ce, k = krange, comparator = "Strategy 1",
-                  sample = "sample", strategy = "strategy", grp = "grp",
-                  e = "qalys", c = "cost")
-cea_pw2 <- cea_pw(ce2,  k = krange, comparator = "Strategy 1",
-                  sample = "samp", strategy = "strategy_name", grp = "group",
-                  e = "qalys", c = "cost")
+cea_pw_out <-  cea_pw(ce, k = krange, comparator = "Strategy 1",
+                      sample = "sample", strategy = "strategy", grp = "grp",
+                       e = "qalys", c = "cost")
+cea_pw_out2 <- cea_pw(ce2,  k = krange, comparator = "Strategy 1",
+                      sample = "samp", strategy = "strategy_name", grp = "group",
+                       e = "qalys", c = "cost")
 
 test_that("cea_pw() produces expected results", {
   
@@ -175,7 +176,7 @@ test_that("cea_pw() produces expected results", {
   kval <- sample(krange, 1)
   
   ## delta
-  delta <- cea_pw$delta
+  delta <- cea_pw_out$delta
   delta_test <- deltaR(ce, comparator = "Strategy 1", grpname = "Group 1")
   expect_equal(delta[grp == "Group 1"], delta_test)
   
@@ -196,28 +197,28 @@ test_that("cea_pw() produces expected results", {
                                          ic_lower = delta_lower$ic_lower,
                                          ic_upper = delta_upper$ic_upper, 
                                          icer = icer)
-  expect_equal(summary_test, cea_pw$summary[grp == "Group 2", -2, with = FALSE])
+  expect_equal(summary_test, cea_pw_out$summary[grp == "Group 2", -2, with = FALSE])
   
   ## ceac
   # group 1
-  ceac <- cea_pw$ceac[grp == "Group 1" & k == kval]
+  ceac <- cea_pw_out$ceac[grp == "Group 1" & k == kval]
   ceac_test <- ceacR(delta, kval = kval, grpname = "Group 1")
   expect_equal(ceac$prob, ceac_test$prob)
   
   # group 2
-  ceac <- cea_pw$ceac[grp == "Group 2" & k == kval]
+  ceac <- cea_pw_out$ceac[grp == "Group 2" & k == kval]
   ceac_test <- ceacR(delta, kval = kval, grpname = "Group 2")
   expect_equal(ceac$prob, ceac_test$prob)
   
   ## inmb
   # group 2
-  inmb <- cea_pw$inmb[k == kval & grp == "Group 2"]
+  inmb <- cea_pw_out$inmb[k == kval & grp == "Group 2"]
   einmb_test <- delta[grp == "Group 2", .(einmb = mean(ie * kval - ic)), 
                      by = "strategy"]
   expect_equal(inmb$einmb, einmb_test$einmb)
   
   # Function works with non-default names
-  ceac_v2 <- cea_pw2$ceac[group == "Group 2" & k == kval]
+  ceac_v2 <- cea_pw_out2$ceac[group == "Group 2" & k == kval]
   expect_equal(ceac$prob, ceac_v2$prob)
 
 })
@@ -225,46 +226,46 @@ test_that("cea_pw() produces expected results", {
 # Test icer_tbl() --------------------------------------------------------------
 test_that("icer_tbl() produces expected results", {
   # No "credible interval"
-  expect_warning(icer <- icer_tbl(cea_pw))
+  expect_warning(icer <- icer_tbl(cea_pw_out))
   expect_true(inherits(icer, "list"))
   expect_true(inherits(icer[[1]], "matrix"))
   
   # With "credible interval"
-  expect_warning(icer <- icer_tbl(cea_pw, cri = TRUE))
+  expect_warning(icer <- icer_tbl(cea_pw_out, cri = TRUE))
   expect_true(inherits(icer, "list"))
   
   # data.table output
-  expect_warning(icer <- icer_tbl(cea_pw, output = "data.table"))
+  expect_warning(icer <- icer_tbl(cea_pw_out, output = "data.table"))
   expect_true(inherits(icer, "data.table"))
   
   # Single group with output = "matrix"
-  cea_pw2 <-  cea_pw(ce[grp == "Group 1"],  k = krange, comparator = "Strategy 1",
-                     sample = "sample", strategy = "strategy", e = "qalys", c = "cost")
-  expect_warning(icer <- icer_tbl(cea_pw2))
+  cea_pw_out2 <-  cea_pw(ce[grp == "Group 1"],  k = krange, comparator = "Strategy 1",
+                         sample = "sample", strategy = "strategy", e = "qalys", c = "cost")
+  expect_warning(icer <- icer_tbl(cea_pw_out2))
   expect_true(inherits(icer, "matrix"))
   expect_equal(ncol(icer), 3)
   
   # Single group with output = "matrix" and drop = FALSE
-  expect_warning(icer <- icer_tbl(cea_pw2, drop = FALSE))
+  expect_warning(icer <- icer_tbl(cea_pw_out2, drop = FALSE))
   expect_true(inherits(icer, "list"))
   
   # Specifying row and column names
   cols <- c("S1", "S2", "S3")
   rows <- c("iqalys", "icosts", "inmb", "icer", "conclusion")
-  expect_warning(icer <- icer_tbl(cea_pw2, colnames = cols, rownames = rows))
+  expect_warning(icer <- icer_tbl(cea_pw_out2, colnames = cols, rownames = rows))
   expect_true(inherits(icer, "matrix"))
   expect_equal(colnames(icer), cols)
   expect_equal(rownames(icer), rows)
   
   # Expect errors
   expect_error(expect_warning(icer_tbl(2)))
-  expect_error(expect_warning(icer_tbl(cea_pw, prob = 1.4)))
+  expect_error(expect_warning(icer_tbl(cea_pw_out, prob = 1.4)))
 })
 
 # Test icer() ------------------------------------------------------------------
 test_that("icer() and format.icer() return the correct columns", {
   # icer()
-  x <- icer(cea_pw2)
+  x <- icer(cea_pw_out2)
   expect_equal(colnames(x),
                c("strategy", "grp", "outcome", "estimate", "lower", "upper"))
   
@@ -293,12 +294,12 @@ test_that("icer() and format.icer() return the correct columns", {
 })
 
 test_that("icer() correctly passes strategy_values", {
-  x <- icer(cea_pw2, strategy_values = c("2", "3"))
+  x <- icer(cea_pw_out2, strategy_values = c("2", "3"))
   expect_equal(c("2", "3"), unique(x$strategy))
 })
 
 test_that("icer() correctly passes grp_values", {
-  x <- icer(cea_pw2, grp_values = c("g1", "g2"))
+  x <- icer(cea_pw_out2, grp_values = c("g1", "g2"))
   expect_equal(c("g1", "g2"), unique(x$grp))
 })
 
@@ -312,19 +313,20 @@ test_that("format.icer() will drop groups", {
 })
 
 # Test plot_ceplane() ----------------------------------------------------------
-labs <- list("strategy_name" = c("s2" = "Strategy 2", 
-                                 "s3" = "Strategy 3"),
-              "group" = c("g1" = "Group 1", 
-                          "g2" = "Group 2"))
-p <- plot_ceplane(cea_pw2, labels = labs)
+labs <- list("strategy" = c("s1" = "Strategy 1",
+                            "s2" = "Strategy 2", 
+                            "s3" = "Strategy 3"),
+              "grp" = c("g1" = "Group 1", 
+                        "g2" = "Group 2"))
+p <- plot_ceplane(cea_pw_out, labels = labs)
 
 test_that("plot_ceplane() returns ggplot", {
   expect_true(inherits(p, "ggplot"))
 })
 
 test_that("plot_ceplane() correctly passes labels", {
-  expect_equal(levels(p$data$strategy_name), names(labs$strategy_name))
-  expect_equal(levels(p$data$group), names(labs$group))
+  expect_equal(levels(p$data$strategy), names(labs$strategy))
+  expect_equal(levels(p$data$grp), names(labs$grp))
 })
 
 test_that("plot_ceplane() throws error if `x` is wrong class", {
@@ -332,6 +334,21 @@ test_that("plot_ceplane() throws error if `x` is wrong class", {
                "'x' must be an object of class 'cea_pw'.")
 })
 
+# Test plot_ceac() -------------------------------------------------------------
+p1 <- plot_ceac(cea_out, labels = labs)
+p2 <- plot_ceac(cea_pw_out, labels = labs)
+
+test_that("plot_ceac returns ggplot from cea object", {
+  expect_true(inherits(p1, "ggplot"))
+})
+
+test_that("plot_ceac returns ggplot from cea_pw object", {
+  expect_true(inherits(p2, "ggplot"))
+})
+
+test_that("plot_ceac works with no labels", {
+  expect_true(inherits(plot_ceac(cea_out), "ggplot"))
+})
 
 # Test incr_effect function ----------------------------------------------------
 test_that("incr_effect", {

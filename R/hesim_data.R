@@ -528,7 +528,10 @@ check.id_attributes <- function(object){
 #' d3
 #' @export
 set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
-  if (!is.null(labels)) {
+  
+  labels <- labels[names(labels) %in% colnames(x)]
+  
+  if (length(labels) > 0) {
     for (i in 1:length(labels)) {
       old_name <- names(labels)[i]
       if (!is.null(new_names)) new_name <- new_names[i] else new_name <- old_name
