@@ -108,6 +108,8 @@ and output for a cost-effectiveness acceptability curve.
 }
 \examples{
 library("data.table")
+library("ggplot2")
+theme_set(theme_bw())
 
 # Simulation output
 n_samples <- 100
@@ -130,7 +132,7 @@ names(cea_out)
 ## Some sample output
 ## The probability that each strategy is the most cost-effective 
 ## in each group with a willingness to pay of 20,000
-cea$cea_out[k == 20000]
+cea_out$mce[k == 20000]
 
 # Pairwise cost-effectiveness analysis
 cea_pw_out <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
@@ -145,6 +147,6 @@ head(cea_pw_out$ceac[k >= 20000])
 # Summarize the incremental cost-effectiveness ratio
 format(icer(cea_pw_out))
 
-# Plot
+# Plots
 plot_ceplane(cea_pw_out)
 }

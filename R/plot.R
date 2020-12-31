@@ -18,7 +18,7 @@ format_dollar <- function(x) {
 #' @export 
 plot_ceplane <- function(x, k = 50000, labels = NULL) {
   if (!inherits(x, "cea_pw")){
-    stop("'x' must be an object of class 'cea_pw'",
+    stop("'x' must be an object of class 'cea_pw'.",
          call. = FALSE)
   }
   pdata <- copy(x$delta)

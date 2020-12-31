@@ -2,7 +2,7 @@ context("cea.R unit tests")
 library("data.table")
 
 # Output for testing ----------------------------------------------------------
-n_samples <- 1000
+n_samples <- 50
 
 # cost
 c <- vector(mode = "list", length = 6)
@@ -311,7 +311,29 @@ test_that("format.icer() will drop groups", {
   expect_true(!"grp" %in% colnames(x))
 })
 
-# Test incr_effect function ---------------------------------------------------
+# Test plot_ceplane() ----------------------------------------------------------
+labs <- list("strategy_name" = c("s2" = "Strategy 2", 
+                                 "s3" = "Strategy 3"),
+              "group" = c("g1" = "Group 1", 
+                          "g2" = "Group 2"))
+p <- plot_ceplane(cea_pw2, labels = labs)
+
+test_that("plot_ceplane() returns ggplot", {
+  expect_true(inherits(p, "ggplot"))
+})
+
+test_that("plot_ceplane() correctly passes labels", {
+  expect_equal(levels(p$data$strategy_name), names(labs$strategy_name))
+  expect_equal(levels(p$data$group), names(labs$group))
+})
+
+test_that("plot_ceplane() throws error if `x` is wrong class", {
+  expect_error(plot_ceplane(2),
+               "'x' must be an object of class 'cea_pw'.")
+})
+
+
+# Test incr_effect function ----------------------------------------------------
 test_that("incr_effect", {
   # Default
   delta <- incr_effect(ce, comparator = "Strategy 1", sample = "sample", 
