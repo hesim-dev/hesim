@@ -493,3 +493,53 @@ check.id_attributes <- function(object){
     }
   }
 }
+
+# Labels -----------------------------------------------------------------------
+#' Set value labels
+#' 
+#' Update existing variables or create new ones that replace existing values
+#' with more informative labels as in [`factor()`]. All modifications are performed 
+#' by reference (see [`data.table::set()`] for more information about assignment by 
+#' reference.)
+#' @param data A `data.table`.
+#' @param labels A list of named vectors containing the levels and labels of 
+#' variables. The elements of each vector are
+#' the levels of a variable and the names are the labels. 
+#' @param new_names A character vector of the same length as `labels` where
+#' each element denotes the name of a new variable to create for the
+#' corresponding element in `labels`. If `NULL`, then the variables in `labels`
+#' are modified and no new variables are created; otherwise, the existing variables
+#' are not modified and new variables are created instead.
+#' @param as_factor If `TRUE` factor variables are created; otherwise character
+#' vectors are created. 
+#' @return `x` is modified by reference and returned invisibly.  
+#' @examples 
+#' library("data.table")
+#' labs <- list("strategy_id" = c("s1" = 1, 
+#'                                "s2" = 2),
+#'             "grp_id" = c("g1" = 1, 
+#'                          "g2" = 2))
+#' d1 <- data.table(strategy_id = 1:2, grp_id = 1:2)
+#' d2 <- copy(d1); d3 <- copy(d2)
+#' set_labels(d2, labels = labs)
+#' set_labels(d3, labels = labs, new_names = c("strategy_name", "grp_name"))
+#' d1
+#' d2
+#' d3
+#' @export
+set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
+  if (!is.null(labels)) {
+    for (i in 1:length(labels)) {
+      old_name <- names(labels)[i]
+      if (!is.null(new_names)) new_name <- new_names[i] else new_name <- old_name
+      if (is.null(names(labels[[i]]))) {
+        stop("Each element of 'labels' must be a named vector.")
+      }
+      x[,  (new_name) := factor(x[[old_name]], 
+                                levels = labels[[i]],
+                                labels = names(labels[[i]]))]
+      if (!as_factor) x[, (new_name) := as.character(x[[new_name]])]
+    }
+  }
+  invisible(x[])
+}
