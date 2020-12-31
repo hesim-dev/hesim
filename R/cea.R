@@ -99,9 +99,13 @@ NULL
 #' }
 #' @name cea
 #' @examples
+#' library("data.table")
+#' library("ggplot2")
+#' theme_set(theme_bw())
+#' 
 #' # Simulation output
 #' n_samples <- 100
-#' sim <- data.frame(sample = rep(seq(n_samples), 4),
+#' sim <- data.table(sample = rep(seq(n_samples), 4),
 #'                   c = c(rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
 #'                         rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)),
 #'                   e = c(rnorm(n_samples, 8, .2), rnorm(n_samples, 8.5, .1),
@@ -112,26 +116,31 @@ NULL
 #'                             each = n_samples), 2)
 #')
 #'
-#' # cea()
-#' cea <- cea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
-#'              grp = "grp", e = "e", c = "c")
-#' names(cea)
-#' # The probability that each strategy is the most cost-effective 
-#' # in each group with a willingness to pay of 20,000
-#' library("data.table")
-#' cea$mce[k == 20000]
+#' # Cost-effectiveness analysis
+#' cea_out <- cea(sim, k = seq(0, 200000, 500), sample = "sample", strategy = "strategy",
+#'                grp = "grp", e = "e", c = "c")
+#' names(cea_out)
 #' 
-#' # cea_pw()
-#' cea_pw <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
-#'                     sample = "sample", strategy = "strategy", grp = "grp",
-#'                      e = "e", c = "c")
-#' names(cea_pw)
+#' ## Some sample output
+#' ## The probability that each strategy is the most cost-effective 
+#' ## in each group with a willingness to pay of 20,000
+#' cea_out$mce[k == 20000]
 #' 
-#' # Cost-effectiveness acceptability curve
-#' head(cea_pw$ceac[k >= 20000])
+#' # Pairwise cost-effectiveness analysis
+#' cea_pw_out <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = "Strategy 1",
+#'                       sample = "sample", strategy = "strategy", grp = "grp",
+#'                       e = "e", c = "c")
+#' names(cea_pw_out)
+#' 
+#' ## Some sample output
+#' ## The cost-effectiveness acceptability curve
+#' head(cea_pw_out$ceac[k >= 20000])
 #' 
 #' # Summarize the incremental cost-effectiveness ratio
-#' format(icer(cea_pw))
+#' format(icer(cea_pw_out))
+#' 
+#' # Plots
+#' plot_ceplane(cea_pw_out)
 #' @export
 cea <- function(x, ...) {
   UseMethod("cea")
