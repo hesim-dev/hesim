@@ -33,6 +33,7 @@ Depends:
 Imports:
     data.table,
     flexsurv,
+    ggplot2,
     MASS,
     msm,
     Rcpp (>= 0.12.16),
@@ -41,7 +42,6 @@ Imports:
     survival
 Suggests:
     covr,
-    ggplot2,
     kableExtra,
     knitr,
     mstate,
