@@ -329,7 +329,7 @@ test_that("plot_ceplane() correctly passes labels", {
   expect_equal(levels(p$data$grp), names(labs$grp))
 })
 
-test_that("plot_ceplane() throws error if `x` is wrong class", {
+test_that("plot_ceplane() throws error if 'x' is wrong class", {
   expect_error(plot_ceplane(2),
                "'x' must be an object of class 'cea_pw'.")
 })
@@ -348,6 +348,18 @@ test_that("plot_ceac returns ggplot from cea_pw object", {
 
 test_that("plot_ceac works with no labels", {
   expect_true(inherits(plot_ceac(cea_out), "ggplot"))
+})
+
+# Test plot_ceaf() -------------------------------------------------------------
+p <- plot_ceaf(cea_out, labels = labs)
+
+test_that("plot_ceaf() only uses data for optimal treatment strategy", {
+  expect_equal(unique(p$data$best), 1)
+})
+
+test_that("plot_ceaf() throws error if 'x' is wrong class", {
+  expect_error(plot_ceaf(2),
+               "'x' must be an object of class 'cea'.")
 })
 
 # Test incr_effect function ----------------------------------------------------

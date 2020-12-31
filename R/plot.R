@@ -65,7 +65,7 @@ plot_ceplane <- function(x, k = 50000, labels = NULL) {
   return(p)
 }
 
-# Cost-effectiveness acceptability curve (pairwise) ----------------------------
+# Cost-effectiveness acceptability curve ---------------------------------------
 #' Plot cost-effectiveness acceptability curve
 #' 
 #' Plot a cost-effectiveness curve from either the the output of [`cea()`] or
@@ -75,7 +75,7 @@ plot_ceplane <- function(x, k = 50000, labels = NULL) {
 #' willingness to pay value, while the latter uses the PSA to compute the probability
 #' that each treatment is cost-effective relative to a comparator. 
 #' 
-#' @inheritParams plot_ceplane
+#' @inheritParams set_labels
 #' @param x An object of the appropriate class. 
 #' @param ... Further arguments passed to and from methods. Currently unused. 
 #' @export
@@ -83,12 +83,13 @@ plot_ceac <- function(x, ...) {
   UseMethod("plot_ceac", x)
 }
 
-plot_ceac.default <- function(x, labels = NULL, ...) {
+plot_ceac.default <- function(x, labels = NULL, ceaf = FALSE, ...) {
   # Get plotting data
   if (inherits(x, "cea_pw")){
     pdata <- copy(x$ceac)
   } else if (inherits(x, "cea")) {
     pdata <- copy(x$mce)
+    if (ceaf) pdata <- pdata[best == 1]
   } else{
     x_class <- class(x)[1]
     stop(paste0("No default method for object of class ", x_class, "."))
@@ -108,7 +109,7 @@ plot_ceac.default <- function(x, labels = NULL, ...) {
     mapping = ggplot2::aes(x = .data[["k"]], y = .data[["prob"]], 
                            col = .data[[strategy]])
   ) +
-    
+    ggplot2::facet_wrap(ggplot2::vars(.data[[grp]])) +
     ggplot2::geom_line() +
     ggplot2::xlab("Willingness to pay") +
     ggplot2::ylab("Probability most cost-effective") +
@@ -133,7 +134,7 @@ plot_ceac.default <- function(x, labels = NULL, ...) {
 #' @export
 #' @rdname plot_ceac
 plot_ceac.cea_pw <- function(x, labels = NULL, ...) {
-  plot_ceac.default(x, labels)
+  plot_ceac.default(x, labels = labels)
   
 
 }
@@ -141,7 +142,28 @@ plot_ceac.cea_pw <- function(x, labels = NULL, ...) {
 #' @export
 #' @rdname plot_ceac
 plot_ceac.cea <- function(x, labels = NULL, ...) {
-  plot_ceac.default(x, labels)
+  plot_ceac.default(x, labels = labels)
 }
 
+# Cost-effectiveness acceptability frontier ------------------------------------
+#' Plot cost-effectiveness acceptability frontier
+#' 
+#' Plot a cost-effectiveness plane from the output of [`cea`] using [`ggplot2`]. 
+#' The cost-effectiveness acceptability frontier (CEAF) plots the probability
+#' that the optimal treatment strategy (i.e., the strategy with the highest 
+#' expected net monetary benefit) is cost-effective. 
+#' @inheritParams set_labels
+#' @param x A `cea` object produced by [`cea`].
+#' @return A `ggplot` object.
+#' @details See the [`cea_pw()`] documentation for an example. If there are multiple subgroups,
+#' then a faceted plot is produced with one plot for each subgroup. 
+#' @export 
+plot_ceaf <- function(x, labels = NULL) {
+  if (!inherits(x, "cea")){
+    stop("'x' must be an object of class 'cea'.",
+         call. = FALSE)
+  }
+  
+  plot_ceac.default(x, labels = labels, ceaf = TRUE)
+}
 
