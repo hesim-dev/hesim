@@ -112,7 +112,6 @@ plot_ceac.default <- function(x, labels = NULL, ceaf = FALSE, ...) {
     mapping = ggplot2::aes(x = .data[["k"]], y = .data[["prob"]], 
                            col = .data[[strategy]])
   ) +
-    ggplot2::facet_wrap(ggplot2::vars(.data[[grp]])) +
     ggplot2::geom_line() +
     ggplot2::xlab("Willingness to pay") +
     ggplot2::ylab("Probability most cost-effective") +
