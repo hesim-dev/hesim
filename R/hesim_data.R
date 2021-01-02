@@ -568,17 +568,18 @@ set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
 #' variables. The elements of each vector are the values of a variable and the names 
 #' are the labels. The names of the list are the names of the ID variables. 
 #' @examples
-#' strategies <- data.frame(
+#' library("data.table")
+#' strategies <- data.table(
 #'   strategy_id = c(1, 2),
 #'   strategy_name = c("Strategy 1", "Strategy 2")
 #' )
-#' patients <- data.frame(
+#' patients <- data.table(
 #'   patient_id = seq(1, 4),
 #'   age = c(50, 55, 60, 65),
 #'   grp_id = c(1, 1, 2, 2),
 #'   grp_name = rep(c("Age 50-59", "Age 60-69"), each = 2)
 #' )
-#' states <- data.frame(
+#' states <- data.table(
 #'   state_id =  seq(1, 3),
 #'   state_name = c("State 1", "State 2", "Death")
 #' )
