@@ -614,13 +614,19 @@ get_labels <- function(object, strategy_label = "strategy_name",
   )
 
   # Then create labels
-  create_labels <- function(x, id_var, label_var, table_name) {
-    if (!label_var %in% colnames(x[[table_name]])) {
+  create_labels <- function(object, id_var, label_var, table_name) {
+    if (!label_var %in% colnames(object[[table_name]])) {
       stop(paste0("'", label_var, "' is not contained in the '", table_name, "' table"),
            call. = FALSE)
     } 
-    v <- x[[table_name]][[id_var]]
-    names(v) <- x[[table_name]][[label_var]]
+    x <- as.data.table(object[[table_name]])
+    x <- unique(x[, c(id_var, label_var), with = FALSE])
+    if (length(unique(x[[id_var]])) != nrow(x)) {
+      stop("There should be exactly one label for each ID value.",
+           call. = FALSE)
+    }
+    v <- x[[id_var]]
+    names(v) <- x[[label_var]]
     return(v)
   }
   

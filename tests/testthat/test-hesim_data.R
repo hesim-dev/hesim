@@ -193,6 +193,23 @@ test_that("get_labels() works with only 1 label", {
   expect_equal(length(x), 1)
 })
 
+test_that("get_labels() works with more patients than subgroups", {
+  pt <- data.table(patient_id = 1:3, grp_id = c(1, 2, 2), grp_name = c("g1", "g2", "g2"))
+  h <- hesim_data(strategies = strategies_dt, patient = pt)
+  x <- get_labels(h)
+  expect_equivalent(x$grp_id, unique(pt$grp_id))
+  expect_equivalent(names(x$grp_id), as.character(unique(pt$grp_name)))
+})
+
+test_that("get_labels() throws an error if there is not exactly one label for each ID", {
+  pt <- data.table(patient_id = 1:3, grp_id = c(1, 2, 2), grp_name = c("g1", "g2", "g3"))
+  h <- hesim_data(strategies = strategies_dt, patient = pt)
+  expect_error(
+    get_labels(h), 
+    "There should be exactly one label for each ID value."
+  )
+})
+
 test_that("get_labels() throws error with no labels", {
   expect_error(
     get_labels(hesim_dat, strategy_label = NULL,  grp_label = NULL, 
