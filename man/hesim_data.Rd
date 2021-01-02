@@ -51,5 +51,5 @@ hesim_dat <- hesim_data(strategies = strategies,
                          states = states)
 }
 \seealso{
-\code{\link[=expand.hesim_data]{expand.hesim_data()}}
+\link[=`expand.hesim_data`]{\code{expand.hesim_data}()}, \code{\link[=get_labels]{get_labels()}}
 }

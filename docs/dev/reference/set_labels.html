@@ -188,10 +188,15 @@ reference.)</p>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>x</th>
+      <td><p>A <code>data.table</code>.</p></td>
+    </tr>
+    <tr>
       <th>labels</th>
-      <td><p>A list of named vectors containing the levels and labels of
-variables. The elements of each vector are
-the levels of a variable and the names are the labels.</p></td>
+      <td><p>A list of named vectors containing the values and labels of
+variables. The elements of each vector are the values of a variable and the
+names are the labels. The names of the list are the names of the variables.
+See the output returned by <code><a href='get_labels.html'>get_labels()</a></code> for an example.</p></td>
     </tr>
     <tr>
       <th>new_names</th>
@@ -205,10 +210,6 @@ are not modified and new variables are created instead.</p></td>
       <th>as_factor</th>
       <td><p>If <code>TRUE</code> factor variables are created; otherwise character
 vectors are created.</p></td>
-    </tr>
-    <tr>
-      <th>data</th>
-      <td><p>A <code>data.table</code>.</p></td>
     </tr>
     </table>
 

@@ -7,9 +7,12 @@
 set_labels(x, labels, new_names = NULL, as_factor = TRUE)
 }
 \arguments{
-\item{labels}{A list of named vectors containing the levels and labels of
-variables. The elements of each vector are
-the levels of a variable and the names are the labels.}
+\item{x}{A \code{data.table}.}
+
+\item{labels}{A list of named vectors containing the values and labels of
+variables. The elements of each vector are the values of a variable and the
+names are the labels. The names of the list are the names of the variables.
+See the output returned by \code{\link[=get_labels]{get_labels()}} for an example.}
 
 \item{new_names}{A character vector of the same length as \code{labels} where
 each element denotes the name of a new variable to create for the
@@ -19,8 +22,6 @@ are not modified and new variables are created instead.}
 
 \item{as_factor}{If \code{TRUE} factor variables are created; otherwise character
 vectors are created.}
-
-\item{data}{A \code{data.table}.}
 }
 \value{
 \code{x} is modified by reference and returned invisibly.

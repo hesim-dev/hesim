@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot expected value of perfect information — plot_evpi • hesim</title>
+<title>Get value labels — get_labels • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,11 +46,11 @@
 
 
 
-<meta property="og:title" content="Plot expected value of perfect information — plot_evpi" />
-<meta property="og:description" content="Plot the expected value of perfect information (EVPI) from the output of
-cea() using ggplot2. Intuitively, the EVPI provides an estimate of the
-amount that a decision maker would be willing to pay to collect additional data
-and completely eliminate uncertainty." />
+<meta property="og:title" content="Get value labels — get_labels" />
+<meta property="og:description" content="Get value labels for the ID variables in a hesim_data object and create a list
+of named vectors that can be passed to formatting and plotting functions. This
+lets users create nice labels for treatment strategies, subgroups, health states,
+and/or transitions when presenting results." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -170,44 +170,96 @@ and completely eliminate uncertainty." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot expected value of perfect information</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/plot.R'><code>R/plot.R</code></a></small>
-    <div class="hidden name"><code>plot_evpi.Rd</code></div>
+    <h1>Get value labels</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/hesim_data.R'><code>R/hesim_data.R</code></a></small>
+    <div class="hidden name"><code>get_labels.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot the expected value of perfect information (EVPI) from the output of
-<code><a href='cea.html'>cea()</a></code> using <code>ggplot2</code>. Intuitively, the EVPI provides an estimate of the
-amount that a decision maker would be willing to pay to collect additional data
-and completely eliminate uncertainty.</p>
+    <p>Get value labels for the ID variables in a <code>hesim_data</code> object and create a list
+of named vectors that can be passed to formatting and plotting functions. This
+lets users create nice labels for treatment strategies, subgroups, health states,
+and/or transitions when presenting results.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_evpi</span>(<span class='no'>x</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>get_labels</span>(
+  <span class='no'>object</span>,
+  <span class='kw'>strategy_label</span> <span class='kw'>=</span> <span class='st'>"strategy_name"</span>,
+  <span class='kw'>grp_label</span> <span class='kw'>=</span> <span class='st'>"grp_name"</span>,
+  <span class='kw'>state_label</span> <span class='kw'>=</span> <span class='st'>"state_name"</span>,
+  <span class='kw'>transition_label</span> <span class='kw'>=</span> <span class='st'>"transition_name"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A <code>cea</code> object produced by <code><a href='cea.html'>cea()</a></code>.</p></td>
+      <th>object</th>
+      <td><p>An object of class <code>hesim_data</code> created with <code><a href='hesim_data.html'>hesim_data()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>labels</th>
-      <td><p>A list of named vectors containing the values and labels of
-variables. The elements of each vector are the values of a variable and the
-names are the labels. The names of the list are the names of the variables.
-See the output returned by <code><a href='get_labels.html'>get_labels()</a></code> for an example.</p></td>
+      <th>strategy_label</th>
+      <td><p>The name of the column in the <code>strategy</code> element of <code>object</code>
+containing labels for <code>strategy_id</code>.</p></td>
+    </tr>
+    <tr>
+      <th>grp_label</th>
+      <td><p>The name of the column in the <code>patient</code> element of <code>object</code>
+containing labels for <code>grp_id</code>.</p></td>
+    </tr>
+    <tr>
+      <th>state_label</th>
+      <td><p>The name of the column in the <code>state</code> element of <code>object</code>
+containing labels for <code>state_id</code>.</p></td>
+    </tr>
+    <tr>
+      <th>transition_label</th>
+      <td><p>The name of the column in the <code>transition</code> element of <code>object</code>
+containing labels for <code>transition_id</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>ggplot</code> object.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>A list of named vectors containing the values and labels of
+variables. The elements of each vector are the values of a variable and the names
+are the labels. The names of the list are the names of the ID variables.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>See the <code><a href='cea.html'>cea()</a></code> documentation for an example. If there are multiple subgroups,
-then a faceted plot is produced with one plot for each subgroup.</p>
+    <div class='dont-index'><p><code><a href='hesim_data.html'>hesim_data()</a></code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  <span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+  <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Strategy 1"</span>, <span class='st'>"Strategy 2"</span>)
+)
+<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  <span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>),
+  <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>50</span>, <span class='fl'>55</span>, <span class='fl'>60</span>, <span class='fl'>65</span>),
+  <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>),
+  <span class='kw'>grp_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Age 50-59"</span>, <span class='st'>"Age 60-69"</span>), <span class='kw'>each</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+)
+<span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  <span class='kw'>state_id</span> <span class='kw'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
+  <span class='kw'>state_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"State 1"</span>, <span class='st'>"State 2"</span>, <span class='st'>"Death"</span>)
+)
+<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(
+  <span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
+  <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,
+  <span class='kw'>states</span> <span class='kw'>=</span> <span class='no'>states</span>
+)
+<span class='fu'>get_labels</span>(<span class='no'>hesim_dat</span>)</div><div class='output co'>#&gt; $strategy_id
+#&gt; Strategy 1 Strategy 2 
+#&gt;          1          2 
+#&gt; 
+#&gt; $grp_id
+#&gt; Age 50-59 Age 50-59 Age 60-69 Age 60-69 
+#&gt;         1         1         2         2 
+#&gt; 
+#&gt; $state_id
+#&gt; State 1 State 2   Death 
+#&gt;       1       2       3 
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
