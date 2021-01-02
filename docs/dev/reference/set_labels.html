@@ -50,7 +50,7 @@
 <meta property="og:description" content="Update existing variables or create new ones that replace existing values
 with more informative labels as in factor(). All modifications are performed
 by reference (see data.table::set() for more information about assignment by
-reference.)" />
+reference)." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -179,7 +179,7 @@ reference.)" />
     <p>Update existing variables or create new ones that replace existing values
 with more informative labels as in <code><a href='https://rdrr.io/r/base/factor.html'>factor()</a></code>. All modifications are performed
 by reference (see <code><a href='https://Rdatatable.gitlab.io/data.table/reference/assign.html'>data.table::set()</a></code> for more information about assignment by
-reference.)</p>
+reference).</p>
     </div>
 
     <pre class="usage"><span class='fu'>set_labels</span>(<span class='no'>x</span>, <span class='no'>labels</span>, <span class='kw'>new_names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>as_factor</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
@@ -216,6 +216,9 @@ vectors are created.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>x</code> is modified by reference and returned invisibly.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='get_labels.html'>get_labels()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"data.table"</span>)

@@ -58,8 +58,15 @@ hesim_dat <- hesim_data(
   patients = patients,
   states = states
 )
-get_labels(hesim_dat)
+labs <- get_labels(hesim_dat)
+labs
+
+# Pass to set_labels()
+d <- data.table(strategy_id = c(1, 1, 2, 2),
+                grp_id = c(1, 2, 1, 2))
+set_labels(d, labs, new_name = c("strategy_name", "grp_name"))
+d
 }
 \seealso{
-\code{\link[=hesim_data]{hesim_data()}}
+\code{\link[=hesim_data]{hesim_data()}}, \code{\link[=set_labels]{set_labels()}}
 }

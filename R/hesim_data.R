@@ -500,7 +500,7 @@ check.id_attributes <- function(object){
 #' Update existing variables or create new ones that replace existing values
 #' with more informative labels as in [`factor()`]. All modifications are performed 
 #' by reference (see [`data.table::set()`] for more information about assignment by 
-#' reference.)
+#' reference).
 #' @param x A `data.table`.
 #' @param labels A list of named vectors containing the values and labels of 
 #' variables. The elements of each vector are the values of a variable and the 
@@ -527,6 +527,7 @@ check.id_attributes <- function(object){
 #' d1
 #' d2
 #' d3
+#' @seealso [`get_labels()`]
 #' @export
 set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
   
@@ -586,8 +587,15 @@ set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
 #'   patients = patients,
 #'   states = states
 #' )
-#' get_labels(hesim_dat)
-#' @seealso [`hesim_data()`]
+#' labs <- get_labels(hesim_dat)
+#' labs
+#' 
+#' # Pass to set_labels()
+#' d <- data.table(strategy_id = c(1, 1, 2, 2),
+#'                 grp_id = c(1, 2, 1, 2))
+#' set_labels(d, labs, new_name = c("strategy_name", "grp_name"))
+#' d
+#' @seealso [`hesim_data()`], [`set_labels()`]
 #' @export
 get_labels <- function(object, strategy_label = "strategy_name",
                        grp_label = "grp_name", state_label = "state_name",
