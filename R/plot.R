@@ -28,8 +28,8 @@ plot_ceplane <- function(x, k = 50000, labels = NULL) {
   set_labels(pdata, labels = labels)
   
   # X and y limits
-  xlim <- ceiling(max(x$delta[, ie]) * 1.2)
-  ylim <- max(x$delta[, ic]) * 1.2
+  xlim <- ceiling(max(x$delta[["ie"]]) * 1.2)
+  ylim <- max(x$delta[["ic"]]) * 1.2
   
   # Main plot
   p <- ggplot2::ggplot(
@@ -85,6 +85,8 @@ plot_ceac <- function(x, ...) {
 }
 
 plot_ceac.default <- function(x, labels = NULL, ceaf = FALSE, ...) {
+  best <- NULL
+  
   # Get plotting data
   if (inherits(x, "cea_pw")){
     pdata <- copy(x$ceac)

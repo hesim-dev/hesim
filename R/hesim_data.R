@@ -105,7 +105,7 @@ create_trans_dt <- function(trans_mat){
 #' transitioned to.
 #' @return Returns an object of class `hesim_data`, which is a list of data tables for
 #' health economic simulation modeling.
-#' @seealso [`expand.hesim_data`()], [`get_labels()`]
+#' @seealso [`expand.hesim_data()`], [`get_labels()`]
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
