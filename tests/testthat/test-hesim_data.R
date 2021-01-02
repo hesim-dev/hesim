@@ -189,13 +189,13 @@ test_that("get_labels() works with 2 tables in hesim_data", {
 })
 
 test_that("get_labels() works with only 1 label", {
-  x <- get_labels(h,  grp_label = NULL, state_label = NULL, transition_label = NULL)
+  x <- get_labels(hesim_dat,  grp_label = NULL, state_label = NULL, transition_label = NULL)
   expect_equal(length(x), 1)
 })
 
 test_that("get_labels() throws error with no labels", {
   expect_error(
-    get_labels(h, strategy_label = NULL,  grp_label = NULL, 
+    get_labels(hesim_dat, strategy_label = NULL,  grp_label = NULL, 
               state_label = NULL, transition_label = NULL),
     "There are no labels to get."
   )
