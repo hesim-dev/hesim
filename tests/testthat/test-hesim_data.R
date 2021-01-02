@@ -223,3 +223,33 @@ test_that("get_labels() throws error if label variable does not exist", {
                "'grp_name' is not contained in the 'patients' table")
 })
 
+# set_labels() -----------------------------------------------------------------
+labs <- get_labels(hesim_dat, grp_label = "group")
+d <- data.table(strategy_id = rep(1:2, each = 3) , grp_id = rep(1:3, 2))
+
+test_that("set_labels() modifies existing variables if 'new_names' = NULL", {
+  d2 <- copy(d)
+  set_labels(d2, labels = labs, as_factor = FALSE)
+  expect_equal(unique(d2$strategy_id), names(labs$strategy_id))
+  expect_equal(unique(d2$grp_id), names(labs$grp_id))
+})
+
+test_that("set_labels() creates new variables if 'new_names' = NULL", {
+  d2 <- copy(d)
+  set_labels(d2, labels = labs, new_names = c("s", "g"), as_factor = FALSE)
+  expect_equal(unique(d2$s), names(labs$strategy_id))
+  expect_equal(unique(d2$g), names(labs$grp_id))
+})
+
+test_that("set_labels() creates factors if 'as_factor' = TRUE", {
+  d2 <- copy(d)
+  set_labels(d2, labels = labs, as_factor = TRUE)
+  expect_equal(levels(d2$strategy_id), names(labs$strategy_id))
+  expect_equal(levels(d2$grp_id), names(labs$grp_id))
+})
+
+test_that("set_labels() does nothing if there are no labels", {
+  d2 <- copy(d)
+  set_labels(d2, labels = NULL)
+  expect_equal(d, d2)
+})
