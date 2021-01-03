@@ -252,6 +252,13 @@ format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
   return(x)
 }
 
+capitalize <- function(x) {
+  paste0(
+    toupper(substr(x, 1, 1)),
+    substr(x, 2, nchar(x))
+  )
+}
+
 # List of matrices -------------------------------------------------------------
 matlist <- function(x){
   class(x) <- "matlist"

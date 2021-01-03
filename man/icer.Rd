@@ -5,7 +5,7 @@
 \alias{format.icer}
 \title{Incremental cost-effectiveness ratio}
 \usage{
-icer(x, prob = 0.95, k = 50000, strategy_values = NULL, grp_values = NULL, ...)
+icer(x, prob = 0.95, k = 50000, labels = NULL, ...)
 
 \method{format}{icer}(
   x,
@@ -13,6 +13,7 @@ icer(x, prob = 0.95, k = 50000, strategy_values = NULL, grp_values = NULL, ...)
   digits_costs = 0,
   pivot_from = "strategy",
   drop_grp = TRUE,
+  capitalize = TRUE,
   ...
 )
 }
@@ -24,12 +25,10 @@ Default is 0.95 for a 95 percent interval.}
 
 \item{k}{Willingness to pay per quality-adjusted life-year.}
 
-\item{strategy_values}{Character vector of values (i.e., names) for
-treatment strategies. Must be the same length as the number of unique values
-of the "strategy" column in \code{object}.}
-
-\item{grp_values}{Character vector of values (i.e., names) for subgroups. Must
-be the same length as the number of unique values of the "subgroup" column in \code{object}.}
+\item{labels}{A list of named vectors containing the values and labels of
+variables. The elements of each vector are the values of a variable and the
+names are the labels. The names of the list are the names of the variables.
+See the output returned by \code{\link[=get_labels]{get_labels()}} for an example.}
 
 \item{...}{Further arguments passed to and from methods. Currently unused.}
 
@@ -38,7 +37,7 @@ be the same length as the number of unique values of the "subgroup" column in \c
 \item{digits_costs}{Number of digits to use to report costs.}
 
 \item{pivot_from}{Character vector denoting a column or columns used to
-"widen" the data. Should either be \code{"strategy"}, \code{"grp"}, \code{"outcome"},
+"widen" the data. Should either be \code{"strategy"}, \code{"group"}, \code{"outcome"},
 or some combination of the three. There will be one column for each value of
 the variables in \code{pivot_from}. Default is to widen so there is a column for each treatment
 strategy. Set to \code{NULL} if you do not want to widen the table.}
@@ -46,13 +45,17 @@ strategy. Set to \code{NULL} if you do not want to widen the table.}
 \item{drop_grp}{If \code{TRUE}, then the group column will be removed if there is only
 one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column is never
 removed.}
+
+\item{capitalize}{Logical. If \code{TRUE}, then the first letter of \code{group},
+\code{strategy}, and \code{outcome} are capitalized so that they are renamed
+\code{Group}, \code{Strategy}, and \code{Outcome}.}
 }
 \value{
 \code{icer()} returns an object of class \code{icer} that is a tidy
 \code{data.table} with the following columns:
 \describe{
 \item{strategy}{The treatment strategy.}
-\item{grp}{The subgroup.}
+\item{group}{The subgroup.}
 \item{outcome}{The outcome metric.}
 \item{estimate}{The point estimate computed as the average across the PSA samples.}
 \item{lower}{The lower limit of the confidence interval.}
