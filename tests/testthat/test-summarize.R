@@ -77,6 +77,12 @@ qalys[, "qalys"] <- runif(N, 3, 5)
 ce <- list(costs = costs, qalys = qalys)
 class(ce) <- "ce"
 
+## labels
+labs <- list(
+  strategy_id = c("s1" = 1, "s2" = 2),
+  grp_id = c("g1" = 1, "g2" = 2)
+)
+
 
 # Run tests
 test_that("summary.ce() returns the correct number or rows", {
@@ -93,14 +99,10 @@ test_that("summary.ce() must have 'prob' values in correct range", {
                fixed = TRUE)
 })
 
-test_that("summary.ce() correctly passes strategy_values", {
-  x <- summary(ce, strategy_values = c("2", "3"))
-  expect_equal(c("2", "3"), unique(x$strategy))
-})
-
-test_that("summary.ce() correctly passes grp_values", {
-  x <- summary(ce, grp_values = c("g1", "g2"))
-  expect_equal(c("g1", "g2"), unique(x$grp))
+test_that("summary.ce() correctly passes labels", {
+  x <- summary(ce, labels = labs)
+  expect_equal(levels(x$strategy), c("s1", "s2"))
+  expect_equal(levels(x$grp), c("g1", "g2"))
 })
 
 
@@ -121,4 +123,18 @@ test_that("format.summary.ce() returns the correct number or rows", {
   )
 })
 
-
+test_that("format.summary.ce() returns the correct column names", {
+  # pretty_names = TRUE
+  x <- format(summary(ce, labels = labs))
+  expect_equal(
+    colnames(x),
+    c("Group", "Discount rate", "Outcome", "s1", 's2')
+  )
+  
+  # pretty_names = FALSE
+  x <- format(summary(ce), pretty_names = FALSE)
+  expect_equal(
+    colnames(x),
+    c("grp", "dr", "outcome", "1", '2')
+  )
+})

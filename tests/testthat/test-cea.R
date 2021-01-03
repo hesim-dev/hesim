@@ -273,7 +273,7 @@ test_that("icer() and format.icer() return the correct columns", {
   # icer()
   x <- icer(cea_pw_out2)
   expect_equal(colnames(x),
-               c("strategy", "group", "outcome", "estimate", "lower", "upper"))
+               c("strategy", "grp", "outcome", "estimate", "lower", "upper"))
   
   # Formatting
   ## Pivoting
@@ -283,18 +283,18 @@ test_that("icer() and format.icer() return the correct columns", {
   
   ### No pivoting
   y <- format(x, pivot_from = NULL)
-  expect_equal(colnames(y), c("Strategy", "Group", "Outcome", "value"))
+  expect_equal(colnames(y), c("Strategy", "Group", "Outcome", "Value"))
 
   ### Pivot strategy
   y <- format(x, pivot_from = "strategy")
   expect_true("Strategy 3" %in% colnames(y))
   
   ### Pivot group
-  y <- format(x, pivot_from = "group")
+  y <- format(x, pivot_from = "grp")
   expect_true("Group 1" %in% colnames(y))
   
   ### Pivot group and outcome
-  y <- format(x, pivot_from = c("group", "outcome"))
+  y <- format(x, pivot_from = c("grp", "outcome"))
   expect_true(!"Outcome" %in% colnames(y))
   expect_true(!"Group" %in% colnames(y))
 })
@@ -302,7 +302,7 @@ test_that("icer() and format.icer() return the correct columns", {
 test_that("icer() correctly passes labels", {
   x <- icer(cea_pw_out, labels = labs)
   expect_equal(c("s2", "s3"), as.character(unique(x$strategy)))
-  expect_equal(c("g1", "g2"), as.character(unique(x$group)))
+  expect_equal(c("g1", "g2"), as.character(unique(x$grp)))
 })
 
 test_that("format.icer() will drop groups", {

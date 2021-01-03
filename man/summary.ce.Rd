@@ -5,15 +5,7 @@
 \alias{format.summary.ce}
 \title{Summary method for cost-effectiveness object}
 \usage{
-\method{summary}{ce}(
-  object,
-  prob = 0.95,
-  digits_qalys = 2,
-  digits_costs = 0,
-  strategy_values = NULL,
-  grp_values = NULL,
-  ...
-)
+\method{summary}{ce}(object, prob = 0.95, labels = NULL, ...)
 
 \method{format}{summary.ce}(
   x,
@@ -23,6 +15,7 @@
   dr_costs = NULL,
   pivot_from = "strategy",
   drop_grp = TRUE,
+  pretty_names = TRUE,
   ...
 )
 }
@@ -32,20 +25,18 @@
 \item{prob}{A numeric scalar in the interval \verb{(0,1)} giving the confidence interval.
 Default is 0.95 for a 95 percent interval.}
 
-\item{digits_qalys}{Number of digits to use to report QALYs.}
-
-\item{digits_costs}{Number of digits to use to report costs.}
-
-\item{strategy_values}{Character vector of values (i.e., names) for
-treatment strategies. Must be the same length as the number of unique values
-of the "strategy" column in \code{object}.}
-
-\item{grp_values}{Character vector of values (i.e., names) for subgroups. Must
-be the same length as the number of unique values of the "subgroup" column in \code{object}.}
+\item{labels}{A list of named vectors containing the values and labels of
+variables. The elements of each vector are the values of a variable and the
+names are the labels. The names of the list are the names of the variables.
+See the output returned by \code{\link[=get_labels]{get_labels()}} for an example.}
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}
 
 \item{x}{A \code{summary.ce} object.}
+
+\item{digits_qalys}{Number of digits to use to report QALYs.}
+
+\item{digits_costs}{Number of digits to use to report costs.}
 
 \item{dr_qalys}{Discount rate to subset to for quality-adjusted life-years (QALYs).}
 
@@ -53,14 +44,17 @@ be the same length as the number of unique values of the "subgroup" column in \c
 
 \item{pivot_from}{Character vector denoting a column or columns used to
 "widen" the data. Should either be \code{"strategy"}, \code{"grp"}, \code{"outcome"},
-or some combination of the three. \code{outcome} is a column computed by concatenating
-\code{type} and \code{category} into a single column. There will be one column for each value of
+or some combination of the three. There will be one column for each value of
 the variables in \code{pivot_from}. Default is to widen so there is a column for each treatment
 strategy. Set to \code{NULL} if you do not want to widen the table.}
 
 \item{drop_grp}{If \code{TRUE}, then the group column will be removed if there is only
 one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column is never
 removed.}
+
+\item{pretty_names}{Logical. If \code{TRUE}, then the columns \code{strategy}, \code{grp},
+\code{outcome}, \code{dr}, and \code{value} are renamed (if they exist) to \code{Strategy}, \code{Group},
+\code{Outcome}, \verb{Discount rate}, and \code{Value}.}
 }
 \value{
 \code{summary.ce()} returns an object of class \code{summary.ce} that is a tidy

@@ -393,7 +393,7 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
 #' `data.table` with the following columns:
 #' \describe{
 #' \item{strategy}{The treatment strategy.}
-#' \item{group}{The subgroup.}
+#' \item{grp}{The subgroup.}
 #' \item{outcome}{The outcome metric.}
 #' \item{estimate}{The point estimate computed as the average across the PSA samples.}
 #' \item{lower}{The lower limit of the confidence interval.}
@@ -453,10 +453,10 @@ icer <- function(x, prob = .95, k = 50000, labels = NULL, ...){
   
   # Values of treatment strategies and subgroups
   set_labels(tbl, labels = labels)
-  setnames(tbl, c(strategy, grp), c("strategy", "group"))
+  setnames(tbl, c(strategy, grp), c("strategy", "grp"))
 
   # Return
-  setorderv(tbl, c("group", "strategy"))
+  setorderv(tbl, c("grp", "strategy"))
   setattr(tbl, "class", c("icer", "data.table", "data.frame"))
   setattr(tbl, "k", k)
   setattr(tbl, "icer_plane", icer_plane)
@@ -467,20 +467,20 @@ icer <- function(x, prob = .95, k = 50000, labels = NULL, ...){
 #' @param digits_qalys Number of digits to use to report QALYs.
 #' @param digits_costs Number of digits to use to report costs.
 #' @param pivot_from Character vector denoting a column or columns used to 
-#' "widen" the data. Should either be `"strategy"`, `"group"`, `"outcome"`,
+#' "widen" the data. Should either be `"strategy"`, `"grp"`, `"outcome"`,
 #' or some combination of the three. There will be one column for each value of 
 #' the variables in `pivot_from`. Default is to widen so there is a column for each treatment
 #' strategy. Set to `NULL` if you do not want to widen the table. 
 #' @param drop_grp If `TRUE`, then the group column will be removed if there is only
 #' one subgroup; other it will be kept. If `FALSE`, then the `grp` column is never
 #' removed. 
-#' @param capitalize Logical. If `TRUE`, then the first letter of `group`, 
-#' `strategy`, and `outcome` are capitalized so that they are renamed
-#' `Group`, `Strategy`, and `Outcome`.
+#' @param pretty_names Logical. If `TRUE`, then the columns `strategy`, `grp`,
+#' `outcome`, and `value` are renamed (if they exist) to `Strategy`, 
+#' `Group`, `Outcome`, and `Value`.
 #' @export
 format.icer <- function(x, digits_qalys = 2, digits_costs = 0,
                         pivot_from = "strategy", drop_grp = TRUE,
-                        capitalize = TRUE,...) {
+                        pretty_names = TRUE,...) {
   value <- outcome <- estimate <- lower <- upper <- grp <- NULL 
   y <- copy(x)
   
@@ -504,14 +504,21 @@ format.icer <- function(x, digits_qalys = 2, digits_costs = 0,
   y[, c("estimate", "lower", "upper") := NULL]
   
   # Potentially pivot wider and drop groups
-  id <- c("group", "strategy", "outcome")
+  id <- c("grp", "strategy", "outcome")
   y[, outcome := factor(outcome, levels = unique(y$outcome))]
   y <- format_summary_default(y, pivot_from = pivot_from,
                               id_cols = id,
                               drop_grp = drop_grp)
   
-  # Capitalize column names
-  if (capitalize) setnames(y, id, capitalize(id), skip_absent = TRUE)
+  # Pretty names
+  if (pretty_names) {
+    setnames(
+      y, 
+      c("grp", "strategy", "outcome", "value"),
+      c("Group", "Strategy", "Outcome", "Value"),
+      skip_absent = TRUE
+    )
+  } 
   
   # Return
   return(y[, ])

@@ -181,15 +181,7 @@ pretty printing with <code>format.summary.ce()</code>.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for ce</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(
-  <span class='no'>object</span>,
-  <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>digits_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>digits_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>strategy_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>grp_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for summary.ce</span>
 <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(
@@ -200,6 +192,7 @@ pretty printing with <code>format.summary.ce()</code>.</p>
   <span class='kw'>dr_costs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>pivot_from</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
   <span class='kw'>drop_grp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>pretty_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -216,23 +209,11 @@ pretty printing with <code>format.summary.ce()</code>.</p>
 Default is 0.95 for a 95 percent interval.</p></td>
     </tr>
     <tr>
-      <th>digits_qalys</th>
-      <td><p>Number of digits to use to report QALYs.</p></td>
-    </tr>
-    <tr>
-      <th>digits_costs</th>
-      <td><p>Number of digits to use to report costs.</p></td>
-    </tr>
-    <tr>
-      <th>strategy_values</th>
-      <td><p>Character vector of values (i.e., names) for
-treatment strategies. Must be the same length as the number of unique values
-of the "strategy" column in <code>object</code>.</p></td>
-    </tr>
-    <tr>
-      <th>grp_values</th>
-      <td><p>Character vector of values (i.e., names) for subgroups. Must
-be the same length as the number of unique values of the "subgroup" column in <code>object</code>.</p></td>
+      <th>labels</th>
+      <td><p>A list of named vectors containing the values and labels of
+variables. The elements of each vector are the values of a variable and the
+names are the labels. The names of the list are the names of the variables.
+See the output returned by <code><a href='get_labels.html'>get_labels()</a></code> for an example.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -241,6 +222,14 @@ be the same length as the number of unique values of the "subgroup" column in <c
     <tr>
       <th>x</th>
       <td><p>A <code>summary.ce</code> object.</p></td>
+    </tr>
+    <tr>
+      <th>digits_qalys</th>
+      <td><p>Number of digits to use to report QALYs.</p></td>
+    </tr>
+    <tr>
+      <th>digits_costs</th>
+      <td><p>Number of digits to use to report costs.</p></td>
     </tr>
     <tr>
       <th>dr_qalys</th>
@@ -254,8 +243,7 @@ be the same length as the number of unique values of the "subgroup" column in <c
       <th>pivot_from</th>
       <td><p>Character vector denoting a column or columns used to
 "widen" the data. Should either be <code>"strategy"</code>, <code>"grp"</code>, <code>"outcome"</code>,
-or some combination of the three. <code>outcome</code> is a column computed by concatenating
-<code>type</code> and <code>category</code> into a single column. There will be one column for each value of
+or some combination of the three. There will be one column for each value of
 the variables in <code>pivot_from</code>. Default is to widen so there is a column for each treatment
 strategy. Set to <code>NULL</code> if you do not want to widen the table.</p></td>
     </tr>
@@ -264,6 +252,12 @@ strategy. Set to <code>NULL</code> if you do not want to widen the table.</p></t
       <td><p>If <code>TRUE</code>, then the group column will be removed if there is only
 one subgroup; other it will be kept. If <code>FALSE</code>, then the <code>grp</code> column is never
 removed.</p></td>
+    </tr>
+    <tr>
+      <th>pretty_names</th>
+      <td><p>Logical. If <code>TRUE</code>, then the columns <code>strategy</code>, <code>grp</code>,
+<code>outcome</code>, <code>dr</code>, and <code>value</code> are renamed (if they exist) to <code>Strategy</code>, <code>Group</code>,
+<code>Outcome</code>, <code>Discount rate</code>, and <code>Value</code>.</p></td>
     </tr>
     </table>
 

@@ -239,7 +239,7 @@ format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
     rhs <- pivot_from
     lhs <- setdiff(id_cols, pivot_from)
     f <- paste(paste(lhs, collapse=" + "), paste(rhs, collapse = " + "),  sep=" ~ ")
-    x <- dcast(x, f, value.var = "value")
+    x <- dcast(x, f, value.var = "value", sep = ", ")
   }
   
   # Drop group if desired
@@ -250,13 +250,6 @@ format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
   
   # Return
   return(x)
-}
-
-capitalize <- function(x) {
-  paste0(
-    toupper(substr(x, 1, 1)),
-    substr(x, 2, nchar(x))
-  )
 }
 
 # List of matrices -------------------------------------------------------------

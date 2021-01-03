@@ -13,7 +13,7 @@ icer(x, prob = 0.95, k = 50000, labels = NULL, ...)
   digits_costs = 0,
   pivot_from = "strategy",
   drop_grp = TRUE,
-  capitalize = TRUE,
+  pretty_names = TRUE,
   ...
 )
 }
@@ -37,7 +37,7 @@ See the output returned by \code{\link[=get_labels]{get_labels()}} for an exampl
 \item{digits_costs}{Number of digits to use to report costs.}
 
 \item{pivot_from}{Character vector denoting a column or columns used to
-"widen" the data. Should either be \code{"strategy"}, \code{"group"}, \code{"outcome"},
+"widen" the data. Should either be \code{"strategy"}, \code{"grp"}, \code{"outcome"},
 or some combination of the three. There will be one column for each value of
 the variables in \code{pivot_from}. Default is to widen so there is a column for each treatment
 strategy. Set to \code{NULL} if you do not want to widen the table.}
@@ -46,16 +46,16 @@ strategy. Set to \code{NULL} if you do not want to widen the table.}
 one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column is never
 removed.}
 
-\item{capitalize}{Logical. If \code{TRUE}, then the first letter of \code{group},
-\code{strategy}, and \code{outcome} are capitalized so that they are renamed
-\code{Group}, \code{Strategy}, and \code{Outcome}.}
+\item{pretty_names}{Logical. If \code{TRUE}, then the columns \code{strategy}, \code{grp},
+\code{outcome}, and \code{value} are renamed (if they exist) to \code{Strategy},
+\code{Group}, \code{Outcome}, and \code{Value}.}
 }
 \value{
 \code{icer()} returns an object of class \code{icer} that is a tidy
 \code{data.table} with the following columns:
 \describe{
 \item{strategy}{The treatment strategy.}
-\item{group}{The subgroup.}
+\item{grp}{The subgroup.}
 \item{outcome}{The outcome metric.}
 \item{estimate}{The point estimate computed as the average across the PSA samples.}
 \item{lower}{The lower limit of the confidence interval.}
