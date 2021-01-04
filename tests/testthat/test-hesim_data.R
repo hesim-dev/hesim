@@ -3,20 +3,33 @@ library("flexsurv")
 library("data.table")
 rm(list = ls())
 
-strategies_dt <- data.table(strategy_id = c(1, 2))
-patients_dt <- data.table(patient_id = seq(1, 3), 
-                          age = c(45, 47, 60),
-                          female = c(1, 0, 0),
-                          group = factor(c("Good", "Medium", "Poor"))) 
-states_dt <- data.frame(state_id =  seq(1, 3),
-                        state_name = factor(paste0("state", seq(1, 3))))
-trans_dt <- data.frame(transition_id = seq(1, 4),
-                       from = c(1, 1, 2, 2),
-                       to = c(2, 3, 1, 3))
-hesim_dat <- hesim_data(strategies = strategies_dt,
-                        patients = patients_dt,
-                        states = states_dt,
-                        transitions = trans_dt)
+strategies_dt <- data.table(
+  strategy_id = c(1, 2),
+  strategy_name = c("Strategy 1", "Strategy 2")
+)
+patients_dt <- data.table(
+  patient_id = 1:3, 
+  age = c(45, 47, 60),
+  female = c(1, 0, 0),
+  grp_id = 1:3,
+  group = factor(c("Good", "Medium", "Poor"))
+) 
+states_dt <- data.frame(
+  state_id =  seq(1, 3),
+  state_name = factor(paste0("state", seq(1, 3)))
+)
+trans_dt <- data.frame(
+  transition_id = seq(1, 4),
+  from = c(1, 1, 2, 2),
+  to = c(2, 3, 1, 3),
+  transition_name = c("1->2", "1->3", "2->1", "2->3")
+)
+hesim_dat <- hesim_data(
+  strategies = strategies_dt,
+  patients = patients_dt,
+  states = states_dt,
+  transitions = trans_dt
+)
 
 # create_lines_dt --------------------------------------------------------------
 test_that("create_lines_dt", {
@@ -37,7 +50,7 @@ test_that("create_lines_dt", {
                                   c("tx1"))))
 })
 
-# create_trans_dt --------------------------------------------------------------
+# create_trans_dt() ------------------------------------------------------------
 test_that("create_trans_dt", {
   tmat <- rbind(c(NA, 1, 2),
                 c(NA, NA, 3),
@@ -63,7 +76,7 @@ test_that("create_trans_dt", {
   expect_equal(trans_dt$to_name, colnames(tmat)[c(2, 3, 3)])
 })
 
-# hesim data -------------------------------------------------------------------
+# hesim data() -----------------------------------------------------------------
 test_that("hesim_data", {
 
   # strategy by patient
@@ -155,3 +168,97 @@ expect_error(id_attributes(strategy_id = dat$strategy_id,
                            patient_id = sort(dat$patient_id),
                            n_patients = length(unique(dat$patient_id))))
 
+# get_labels() -----------------------------------------------------------------
+test_that("get_labels() works with 4 tables in hesim_data", {
+  x <- get_labels(hesim_dat, grp_label = "group")
+  expect_true(is.list(x))
+  expect_equal(length(x), length(hesim_dat))
+  expect_equivalent(sapply(x, length),
+                    sapply(hesim_dat, nrow))
+})
+
+test_that("get_labels() works with 2 tables in hesim_data", {
+  h <- hesim_data(strategies = strategies_dt, patient = patients_dt)
+  x <- get_labels(h, grp_label = "group")
+  
+  expect_equivalent(x[[1]], h$strategies$strategy_id)
+  expect_equivalent(names(x[[1]]), h$strategies$strategy_name)
+  
+  expect_equivalent(x[[2]], h$patients$grp_id)
+  expect_equivalent(names(x[[2]]), as.character(h$patients$group))
+})
+
+test_that("get_labels() works with only 1 label", {
+  x <- get_labels(hesim_dat,  grp_label = NULL, state_label = NULL, transition_label = NULL)
+  expect_equal(length(x), 1)
+})
+
+test_that("get_labels() works with more patients than subgroups", {
+  pt <- data.table(patient_id = 1:3, grp_id = c(1, 2, 2), grp_name = c("g1", "g2", "g2"))
+  h <- hesim_data(strategies = strategies_dt, patient = pt)
+  x <- get_labels(h)
+  expect_equivalent(x$grp_id, unique(pt$grp_id))
+  expect_equivalent(names(x$grp_id), as.character(unique(pt$grp_name)))
+})
+
+test_that("get_labels() removes label if variable does not exist", {
+  x <- get_labels(hesim_dat)
+  expect_equal(names(x), c("strategy_id", "state_id", "transition_id"))
+})
+
+
+test_that("get_labels() throws an error if there is not exactly one label for each ID", {
+  pt <- data.table(patient_id = 1:3, grp_id = c(1, 2, 2), grp_name = c("g1", "g2", "g3"))
+  h <- hesim_data(strategies = strategies_dt, patient = pt)
+  expect_error(
+    get_labels(h), 
+    "There should be exactly one label for each ID value."
+  )
+})
+
+test_that("get_labels() throws error with all labels NULL", {
+  expect_error(
+    get_labels(hesim_dat, strategy_label = NULL,  grp_label = NULL, 
+              state_label = NULL, transition_label = NULL),
+    "There are no labels to get."
+  )
+})
+
+test_that("get_labels() throws error with no valid labels", {
+  expect_error(
+    get_labels(hesim_dat, strategy_label = "s", grp_label = "g",
+               state_label = "s2", transition_label ="t"),
+    "The selected labels are not contained in the tables of 'object'."
+  )
+})
+
+# set_labels() -----------------------------------------------------------------
+labs <- get_labels(hesim_dat, grp_label = "group")
+d <- data.table(strategy_id = rep(1:2, each = 3) , grp_id = rep(1:3, 2))
+
+test_that("set_labels() modifies existing variables if 'new_names' = NULL", {
+  d2 <- copy(d)
+  set_labels(d2, labels = labs, as_factor = FALSE)
+  expect_equal(unique(d2$strategy_id), names(labs$strategy_id))
+  expect_equal(unique(d2$grp_id), names(labs$grp_id))
+})
+
+test_that("set_labels() creates new variables if 'new_names' = NULL", {
+  d2 <- copy(d)
+  set_labels(d2, labels = labs, new_names = c("s", "g"), as_factor = FALSE)
+  expect_equal(unique(d2$s), names(labs$strategy_id))
+  expect_equal(unique(d2$g), names(labs$grp_id))
+})
+
+test_that("set_labels() creates factors if 'as_factor' = TRUE", {
+  d2 <- copy(d)
+  set_labels(d2, labels = labs, as_factor = TRUE)
+  expect_equal(levels(d2$strategy_id), names(labs$strategy_id))
+  expect_equal(levels(d2$grp_id), names(labs$grp_id))
+})
+
+test_that("set_labels() does nothing if there are no labels", {
+  d2 <- copy(d)
+  set_labels(d2, labels = NULL)
+  expect_equal(d, d2)
+})

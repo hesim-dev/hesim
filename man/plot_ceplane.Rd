@@ -11,9 +11,10 @@ plot_ceplane(x, k = 50000, labels = NULL)
 
 \item{k}{Willingness to pay per QALY.}
 
-\item{labels}{A list of named vectors containing the levels and labels of
-variables. The elements of each vector are
-the levels of a variable and the names are the labels.}
+\item{labels}{A list of named vectors containing the values and labels of
+variables. The elements of each vector are the values of a variable and the
+names are the labels. The names of the list are the names of the variables.
+See the output returned by \code{\link[=get_labels]{get_labels()}} for an example.}
 }
 \value{
 A \code{ggplot} object.

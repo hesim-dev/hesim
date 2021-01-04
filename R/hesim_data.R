@@ -105,7 +105,7 @@ create_trans_dt <- function(trans_mat){
 #' transitioned to.
 #' @return Returns an object of class `hesim_data`, which is a list of data tables for
 #' health economic simulation modeling.
-#' @seealso [expand.hesim_data()]
+#' @seealso [`expand.hesim_data()`], [`get_labels()`]
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
@@ -500,11 +500,12 @@ check.id_attributes <- function(object){
 #' Update existing variables or create new ones that replace existing values
 #' with more informative labels as in [`factor()`]. All modifications are performed 
 #' by reference (see [`data.table::set()`] for more information about assignment by 
-#' reference.)
-#' @param data A `data.table`.
-#' @param labels A list of named vectors containing the levels and labels of 
-#' variables. The elements of each vector are
-#' the levels of a variable and the names are the labels. 
+#' reference).
+#' @param x A `data.table`.
+#' @param labels A list of named vectors containing the values and labels of 
+#' variables. The elements of each vector are the values of a variable and the 
+#' names are the labels. The names of the list are the names of the variables.
+#' See the output returned by [`get_labels()`] for an example.
 #' @param new_names A character vector of the same length as `labels` where
 #' each element denotes the name of a new variable to create for the
 #' corresponding element in `labels`. If `NULL`, then the variables in `labels`
@@ -526,6 +527,7 @@ check.id_attributes <- function(object){
 #' d1
 #' d2
 #' d3
+#' @seealso [`get_labels()`]
 #' @export
 set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
   
@@ -545,4 +547,108 @@ set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
     }
   }
   invisible(x[])
+}
+
+#' Get value labels
+#' 
+#' Get value labels for the ID variables in a `hesim_data` object and create a list
+#' of named vectors that can be passed to formatting and plotting functions. This
+#' lets users create nice labels for treatment strategies, subgroups, health states,
+#' and/or transitions when presenting results. 
+#' @param object An object of class `hesim_data` created with [`hesim_data()`].
+#' @param strategy_label The name of the column in the `strategy` element of `object`
+#' containing labels for `strategy_id`.
+#' @param grp_label The name of the column in the `patient` element of `object`
+#' containing labels for `grp_id`.
+#' @param state_label The name of the column in the `state` element of `object`
+#' containing labels for `state_id`.
+#' @param transition_label The name of the column in the `transition` element of `object`
+#' containing labels for `transition_id`.
+#' @return A list of named vectors containing the values and labels of 
+#' variables. The elements of each vector are the values of a variable and the names 
+#' are the labels. The names of the list are the names of the ID variables. 
+#' @examples
+#' library("data.table")
+#' strategies <- data.table(
+#'   strategy_id = c(1, 2),
+#'   strategy_name = c("Strategy 1", "Strategy 2")
+#' )
+#' patients <- data.table(
+#'   patient_id = seq(1, 4),
+#'   age = c(50, 55, 60, 65),
+#'   grp_id = c(1, 1, 2, 2),
+#'   grp_name = rep(c("Age 50-59", "Age 60-69"), each = 2)
+#' )
+#' states <- data.table(
+#'   state_id =  seq(1, 3),
+#'   state_name = c("State 1", "State 2", "Death")
+#' )
+#' hesim_dat <- hesim_data(
+#'   strategies = strategies,
+#'   patients = patients,
+#'   states = states
+#' )
+#' labs <- get_labels(hesim_dat)
+#' labs
+#' 
+#' # Pass to set_labels()
+#' d <- data.table(strategy_id = c(1, 1, 2, 2),
+#'                 grp_id = c(1, 2, 1, 2))
+#' set_labels(d, labs, new_name = c("strategy_name", "grp_name"))
+#' d
+#' @seealso [`hesim_data()`], [`set_labels()`]
+#' @export
+get_labels <- function(object, strategy_label = "strategy_name",
+                       grp_label = "grp_name", state_label = "state_name",
+                       transition_label = "transition_name") {
+  check_is_class(object, "hesim_data", "object")
+
+  # All possible ID variables
+  tables <- c("strategies", "patients", "states", "transitions")
+  id_vars <- c("strategy_id", "grp_id", "state_id", "transition_id")
+  label_vars <- list(strategy_label, grp_label, state_label, transition_label)
+  
+  # Remove NULL labels and tables
+  label_keep1 <- which(sapply(label_vars, function (z) !is.null(z)))
+  table_keep <- which(tables %in% names(object))
+  keep <- intersect(label_keep1, table_keep)
+  if (length(keep) == 0) stop("There are no labels to get.")
+  
+  # Create table of non-NULL labels and tables
+  m <- data.table(
+    table = tables[keep], 
+    id = id_vars[keep],
+    label = unlist(label_vars[keep])
+  )
+
+  # Create labels
+  create_labels <- function(object, id_var, label_var, table_name) {
+    if (label_var %in% colnames(object[[table_name]])) {
+      x <- as.data.table(object[[table_name]])
+      x <- unique(x[, c(id_var, label_var), with = FALSE])
+      if (length(unique(x[[id_var]])) != nrow(x)) {
+        stop("There should be exactly one label for each ID value.",
+             call. = FALSE)
+      }
+      v <- x[[id_var]]
+      names(v) <- x[[label_var]]
+      return(v)
+    } else{
+      return(NULL)
+    } 
+  }
+  
+  l <- vector(mode = "list", length = nrow(m))
+  names(l) <- m$id
+  for (i in 1:length(l)){
+    labs <- create_labels(object, id_var = m$id[i], label_var = m$label[i],
+                           table_name = m$table[i])
+    if (!is.null(labs)) l[[i]] <- labs
+  }
+  l <- l[lengths(l) != 0]
+  if (length(l) == 0) stop("The selected labels are not contained in the tables of 'object'.")
+  
+
+  # Return
+  return(l)
 }
