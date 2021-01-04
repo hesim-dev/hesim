@@ -201,6 +201,12 @@ test_that("get_labels() works with more patients than subgroups", {
   expect_equivalent(names(x$grp_id), as.character(unique(pt$grp_name)))
 })
 
+test_that("get_labels() removes label if variable does not exist", {
+  x <- get_labels(hesim_dat)
+  expect_equal(names(x), c("strategy_id", "state_id", "transition_id"))
+})
+
+
 test_that("get_labels() throws an error if there is not exactly one label for each ID", {
   pt <- data.table(patient_id = 1:3, grp_id = c(1, 2, 2), grp_name = c("g1", "g2", "g3"))
   h <- hesim_data(strategies = strategies_dt, patient = pt)
@@ -210,7 +216,7 @@ test_that("get_labels() throws an error if there is not exactly one label for ea
   )
 })
 
-test_that("get_labels() throws error with no labels", {
+test_that("get_labels() throws error with all labels NULL", {
   expect_error(
     get_labels(hesim_dat, strategy_label = NULL,  grp_label = NULL, 
               state_label = NULL, transition_label = NULL),
@@ -218,9 +224,12 @@ test_that("get_labels() throws error with no labels", {
   )
 })
 
-test_that("get_labels() throws error if label variable does not exist", {
-  expect_error(get_labels(hesim_dat),
-               "'grp_name' is not contained in the 'patients' table")
+test_that("get_labels() throws error with no valid labels", {
+  expect_error(
+    get_labels(hesim_dat, strategy_label = "s", grp_label = "g",
+               state_label = "s2", transition_label ="t"),
+    "The selected labels are not contained in the tables of 'object'."
+  )
 })
 
 # set_labels() -----------------------------------------------------------------

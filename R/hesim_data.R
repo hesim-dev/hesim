@@ -609,42 +609,45 @@ get_labels <- function(object, strategy_label = "strategy_name",
   label_vars <- list(strategy_label, grp_label, state_label, transition_label)
   
   # Remove NULL labels and tables
-  label_keep <- which(sapply(label_vars, function (z) !is.null(z)))
+  label_keep1 <- which(sapply(label_vars, function (z) !is.null(z)))
   table_keep <- which(tables %in% names(object))
-  keep <- intersect(label_keep, table_keep)
-  if (length(keep) == 0) {
-    stop("There are no labels to get.")
-  } 
+  keep <- intersect(label_keep1, table_keep)
+  if (length(keep) == 0) stop("There are no labels to get.")
   
+  # Create table of non-NULL labels and tables
   m <- data.table(
     table = tables[keep], 
     id = id_vars[keep],
     label = unlist(label_vars[keep])
   )
 
-  # Then create labels
+  # Create labels
   create_labels <- function(object, id_var, label_var, table_name) {
-    if (!label_var %in% colnames(object[[table_name]])) {
-      stop(paste0("'", label_var, "' is not contained in the '", table_name, "' table"),
-           call. = FALSE)
+    if (label_var %in% colnames(object[[table_name]])) {
+      x <- as.data.table(object[[table_name]])
+      x <- unique(x[, c(id_var, label_var), with = FALSE])
+      if (length(unique(x[[id_var]])) != nrow(x)) {
+        stop("There should be exactly one label for each ID value.",
+             call. = FALSE)
+      }
+      v <- x[[id_var]]
+      names(v) <- x[[label_var]]
+      return(v)
+    } else{
+      return(NULL)
     } 
-    x <- as.data.table(object[[table_name]])
-    x <- unique(x[, c(id_var, label_var), with = FALSE])
-    if (length(unique(x[[id_var]])) != nrow(x)) {
-      stop("There should be exactly one label for each ID value.",
-           call. = FALSE)
-    }
-    v <- x[[id_var]]
-    names(v) <- x[[label_var]]
-    return(v)
   }
   
   l <- vector(mode = "list", length = nrow(m))
   names(l) <- m$id
   for (i in 1:length(l)){
-    l[[i]] <- create_labels(object, id_var = m$id[i], label_var = m$label[i],
-                            table_name = m$table[i])
+    labs <- create_labels(object, id_var = m$id[i], label_var = m$label[i],
+                           table_name = m$table[i])
+    if (!is.null(labs)) l[[i]] <- labs
   }
+  l <- l[lengths(l) != 0]
+  if (length(l) == 0) stop("The selected labels are not contained in the tables of 'object'.")
+  
 
   # Return
   return(l)
