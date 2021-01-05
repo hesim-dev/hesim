@@ -6,26 +6,32 @@
 \usage{
 get_labels(
   object,
-  strategy_label = "strategy_name",
-  grp_label = "grp_name",
-  state_label = "state_name",
-  transition_label = "transition_name"
+  strategy = "strategy_name",
+  grp = "grp_name",
+  state = "state_name",
+  transition = "transition_name",
+  death_label = "Death"
 )
 }
 \arguments{
 \item{object}{An object of class \code{hesim_data} created with \code{\link[=hesim_data]{hesim_data()}}.}
 
-\item{strategy_label}{The name of the column in the \code{strategy} element of \code{object}
+\item{strategy}{The name of the column in the \code{strategy} element of \code{object}
 containing labels for \code{strategy_id}.}
 
-\item{grp_label}{The name of the column in the \code{patient} element of \code{object}
+\item{grp}{The name of the column in the \code{patient} element of \code{object}
 containing labels for \code{grp_id}.}
 
-\item{state_label}{The name of the column in the \code{state} element of \code{object}
+\item{state}{The name of the column in the \code{state} element of \code{object}
 containing labels for \code{state_id}.}
 
-\item{transition_label}{The name of the column in the \code{transition} element of \code{object}
+\item{transition}{The name of the column in the \code{transition} element of \code{object}
 containing labels for \code{transition_id}.}
+
+\item{death_label}{The label to use for the death health state. By default a
+label named "Death" will be concatenated to the labels for the non-death health
+states. The death state can be omitted from labels for the health states by setting
+\code{death_label = NULL}.}
 }
 \value{
 A list of named vectors containing the values and labels of
@@ -51,8 +57,8 @@ patients <- data.table(
   grp_name = rep(c("Age 50-59", "Age 60-69"), each = 2)
 )
 states <- data.table(
-  state_id =  seq(1, 3),
-  state_name = c("State 1", "State 2", "Death")
+  state_id =  seq(1, 2),
+  state_name = c("State 1", "State 2")
 )
 hesim_dat <- hesim_data(
   strategies = strategies,

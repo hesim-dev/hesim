@@ -184,10 +184,11 @@ and/or transitions when presenting results.</p>
 
     <pre class="usage"><span class='fu'>get_labels</span>(
   <span class='no'>object</span>,
-  <span class='kw'>strategy_label</span> <span class='kw'>=</span> <span class='st'>"strategy_name"</span>,
-  <span class='kw'>grp_label</span> <span class='kw'>=</span> <span class='st'>"grp_name"</span>,
-  <span class='kw'>state_label</span> <span class='kw'>=</span> <span class='st'>"state_name"</span>,
-  <span class='kw'>transition_label</span> <span class='kw'>=</span> <span class='st'>"transition_name"</span>
+  <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy_name"</span>,
+  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp_name"</span>,
+  <span class='kw'>state</span> <span class='kw'>=</span> <span class='st'>"state_name"</span>,
+  <span class='kw'>transition</span> <span class='kw'>=</span> <span class='st'>"transition_name"</span>,
+  <span class='kw'>death_label</span> <span class='kw'>=</span> <span class='st'>"Death"</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -198,24 +199,31 @@ and/or transitions when presenting results.</p>
       <td><p>An object of class <code>hesim_data</code> created with <code><a href='hesim_data.html'>hesim_data()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>strategy_label</th>
+      <th>strategy</th>
       <td><p>The name of the column in the <code>strategy</code> element of <code>object</code>
 containing labels for <code>strategy_id</code>.</p></td>
     </tr>
     <tr>
-      <th>grp_label</th>
+      <th>grp</th>
       <td><p>The name of the column in the <code>patient</code> element of <code>object</code>
 containing labels for <code>grp_id</code>.</p></td>
     </tr>
     <tr>
-      <th>state_label</th>
+      <th>state</th>
       <td><p>The name of the column in the <code>state</code> element of <code>object</code>
 containing labels for <code>state_id</code>.</p></td>
     </tr>
     <tr>
-      <th>transition_label</th>
+      <th>transition</th>
       <td><p>The name of the column in the <code>transition</code> element of <code>object</code>
 containing labels for <code>transition_id</code>.</p></td>
+    </tr>
+    <tr>
+      <th>death_label</th>
+      <td><p>The label to use for the death health state. By default a
+label named "Death" will be concatenated to the labels for the non-death health
+states. The death state can be omitted from labels for the health states by setting
+<code>death_label = NULL</code>.</p></td>
     </tr>
     </table>
 
@@ -241,8 +249,8 @@ are the labels. The names of the list are the names of the ID variables.</p>
   <span class='kw'>grp_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Age 50-59"</span>, <span class='st'>"Age 60-69"</span>), <span class='kw'>each</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 )
 <span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(
-  <span class='kw'>state_id</span> <span class='kw'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
-  <span class='kw'>state_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"State 1"</span>, <span class='st'>"State 2"</span>, <span class='st'>"Death"</span>)
+  <span class='kw'>state_id</span> <span class='kw'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
+  <span class='kw'>state_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"State 1"</span>, <span class='st'>"State 2"</span>)
 )
 <span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(
   <span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
