@@ -556,14 +556,18 @@ set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
 #' lets users create nice labels for treatment strategies, subgroups, health states,
 #' and/or transitions when presenting results. 
 #' @param object An object of class `hesim_data` created with [`hesim_data()`].
-#' @param strategy_label The name of the column in the `strategy` element of `object`
+#' @param strategy The name of the column in the `strategy` element of `object`
 #' containing labels for `strategy_id`.
-#' @param grp_label The name of the column in the `patient` element of `object`
+#' @param grp The name of the column in the `patient` element of `object`
 #' containing labels for `grp_id`.
-#' @param state_label The name of the column in the `state` element of `object`
+#' @param state The name of the column in the `state` element of `object`
 #' containing labels for `state_id`.
-#' @param transition_label The name of the column in the `transition` element of `object`
+#' @param transition The name of the column in the `transition` element of `object`
 #' containing labels for `transition_id`.
+#' @param death_label The label to use for the death health state. By default a
+#' label named "Death" will be concatenated to the labels for the non-death health
+#' states. The death state can be omitted from labels for the health states by setting
+#' `death_label = NULL`.
 #' @return A list of named vectors containing the values and labels of 
 #' variables. The elements of each vector are the values of a variable and the names 
 #' are the labels. The names of the list are the names of the ID variables. 
@@ -580,8 +584,8 @@ set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
 #'   grp_name = rep(c("Age 50-59", "Age 60-69"), each = 2)
 #' )
 #' states <- data.table(
-#'   state_id =  seq(1, 3),
-#'   state_name = c("State 1", "State 2", "Death")
+#'   state_id =  seq(1, 2),
+#'   state_name = c("State 1", "State 2")
 #' )
 #' hesim_dat <- hesim_data(
 #'   strategies = strategies,
@@ -598,15 +602,16 @@ set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
 #' d
 #' @seealso [`hesim_data()`], [`set_labels()`]
 #' @export
-get_labels <- function(object, strategy_label = "strategy_name",
-                       grp_label = "grp_name", state_label = "state_name",
-                       transition_label = "transition_name") {
+get_labels <- function(object, strategy = "strategy_name",
+                       grp = "grp_name", state = "state_name",
+                       transition = "transition_name", 
+                       death_label = "Death") {
   check_is_class(object, "hesim_data", "object")
 
   # All possible ID variables
   tables <- c("strategies", "patients", "states", "transitions")
   id_vars <- c("strategy_id", "grp_id", "state_id", "transition_id")
-  label_vars <- list(strategy_label, grp_label, state_label, transition_label)
+  label_vars <- list(strategy, grp, state, transition)
   
   # Remove NULL labels and tables
   label_keep1 <- which(sapply(label_vars, function (z) !is.null(z)))
@@ -648,6 +653,11 @@ get_labels <- function(object, strategy_label = "strategy_name",
   l <- l[lengths(l) != 0]
   if (length(l) == 0) stop("The selected labels are not contained in the tables of 'object'.")
   
+  # Add death label
+  if ("state_id" %in% names(l) & !is.null(death_label)) {
+    l$state_id <- c(l$state_id, max(l$state_id) + 1L)
+    names(l$state_id)[length(l$state_id)] <- death_label
+  }
 
   # Return
   return(l)

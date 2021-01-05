@@ -170,16 +170,21 @@ expect_error(id_attributes(strategy_id = dat$strategy_id,
 
 # get_labels() -----------------------------------------------------------------
 test_that("get_labels() works with 4 tables in hesim_data", {
-  x <- get_labels(hesim_dat, grp_label = "group")
+  x <- get_labels(hesim_dat, grp = "group", death_label = NULL)
   expect_true(is.list(x))
   expect_equal(length(x), length(hesim_dat))
   expect_equivalent(sapply(x, length),
                     sapply(hesim_dat, nrow))
 })
 
+test_that("get_labels() adds a death state if death_label is not NULL", {
+  x <- get_labels(hesim_dat, grp = "group")
+  expect_true("Death" %in% names(x$state_id))
+})
+
 test_that("get_labels() works with 2 tables in hesim_data", {
   h <- hesim_data(strategies = strategies_dt, patient = patients_dt)
-  x <- get_labels(h, grp_label = "group")
+  x <- get_labels(h, grp = "group")
   
   expect_equivalent(x[[1]], h$strategies$strategy_id)
   expect_equivalent(names(x[[1]]), h$strategies$strategy_name)
@@ -189,7 +194,7 @@ test_that("get_labels() works with 2 tables in hesim_data", {
 })
 
 test_that("get_labels() works with only 1 label", {
-  x <- get_labels(hesim_dat,  grp_label = NULL, state_label = NULL, transition_label = NULL)
+  x <- get_labels(hesim_dat,  grp = NULL, state = NULL, transition = NULL)
   expect_equal(length(x), 1)
 })
 
@@ -218,22 +223,22 @@ test_that("get_labels() throws an error if there is not exactly one label for ea
 
 test_that("get_labels() throws error with all labels NULL", {
   expect_error(
-    get_labels(hesim_dat, strategy_label = NULL,  grp_label = NULL, 
-              state_label = NULL, transition_label = NULL),
+    get_labels(hesim_dat, strategy = NULL, grp = NULL, 
+              state = NULL, transition = NULL),
     "There are no labels to get."
   )
 })
 
 test_that("get_labels() throws error with no valid labels", {
   expect_error(
-    get_labels(hesim_dat, strategy_label = "s", grp_label = "g",
-               state_label = "s2", transition_label ="t"),
+    get_labels(hesim_dat, strategy = "s", grp = "g",
+               state = "s2", transition ="t"),
     "The selected labels are not contained in the tables of 'object'."
   )
 })
 
 # set_labels() -----------------------------------------------------------------
-labs <- get_labels(hesim_dat, grp_label = "group")
+labs <- get_labels(hesim_dat, grp = "group")
 d <- data.table(strategy_id = rep(1:2, each = 3) , grp_id = rep(1:3, 2))
 
 test_that("set_labels() modifies existing variables if 'new_names' = NULL", {
