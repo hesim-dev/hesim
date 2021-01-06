@@ -137,10 +137,7 @@ an object of class model_def defined using define_model()." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
@@ -273,13 +270,13 @@ transition probability matrix).</p>
 }, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>aecost_colnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>)) <span class='co'># Add aecost_colnames to environment</span>
 <span class='fu'>eval_rng</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>rng_def</span>, <span class='no'>params</span>)</div><div class='output co'>#&gt; $p
 #&gt;        s1_s1     s1_s2     s2_s1     s2_s2
-#&gt; 1: 0.7585336 0.2414664 0.3693639 0.6306361
-#&gt; 2: 0.7179212 0.2820788 0.3656385 0.6343615
+#&gt; 1: 0.7089537 0.2910463 0.2918554 0.7081446
+#&gt; 2: 0.7281516 0.2718484 0.3190543 0.6809457
 #&gt; 
 #&gt; $inptcost
-#&gt;            A        B        C
-#&gt; 1:  76.97165 3033.211 5068.454
-#&gt; 2: 266.62723 1789.356 2136.372
+#&gt;            A          B         C
+#&gt; 1: 797.55691 1505.79155  127.9843
+#&gt; 2:  36.73708   73.03553 4007.1417
 #&gt; 
 #&gt; $outptcost
 #&gt;      [,1] [,2] [,3]
@@ -287,9 +284,9 @@ transition probability matrix).</p>
 #&gt; [2,]  400  700  700
 #&gt; 
 #&gt; $aecost
-#&gt;            A         B           C
-#&gt; 1:  53.56667 4433.1612 3088.623581
-#&gt; 2: 650.55634  502.0913    4.181195
+#&gt;           A        B         C
+#&gt; 1: 362.8045 521.2948  115.4138
+#&gt; 2: 377.9967 759.1820 1392.1512
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

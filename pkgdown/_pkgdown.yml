@@ -154,9 +154,7 @@ navbar:
       - text: "N-state partitioned survival models"
         href: articles/psm.html
       - text: "---"
-      - text: "Economic analysis"  
-      - text: "Simulating costs and quality-adjusted life-years"
-        href: articles/expected-values.html
+      - text: "Decision analysis"  
       - text: "Cost-effectiveness analysis"
         href: articles/cea.html
   - text: News

@@ -134,10 +134,7 @@
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
@@ -250,7 +247,7 @@ stored in <code>stateprobs_</code>.</p>
 <p><hr>
 <a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
 <p>Simulate quality-adjusted life-years (QALYs) as a function of <code>stateprobs_</code> and
-<code>utility_model</code>. See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.</p><h3>Usage</h3>
+<code>utility_model</code>. See <code>vignette("expected-values")</code> for details.</p><h3>Usage</h3>
 <p><div class="r"></p><pre><span class='no'>CohortDtstm</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(
   <span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>0.03</span>,
   <span class='kw'>integrate_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span>),
@@ -272,7 +269,7 @@ in <code>qalys_</code>.</p>
 <p><hr>
 <a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_ev.html'>sim_costs()</a></code></h3>
 <p>Simulate costs as a function of <code>stateprobs_</code> and <code>cost_models</code>.
-See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.</p><h3>Usage</h3>
+See <code>vignette("expected-values")</code> for details.</p><h3>Usage</h3>
 <p><div class="r"></p><pre><span class='no'>CohortDtstm</span>$<span class='fu'><a href='sim_ev.html'>sim_costs</a></span>(
   <span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>0.03</span>,
   <span class='kw'>integrate_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span>)
