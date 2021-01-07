@@ -1,8 +1,10 @@
 # Health economic simulation modeling <img src="man/figures/logo.png" align="right" width="90" />
 
-[![Travis-CI Build Status](https://travis-ci.org/hesim-dev/hesim.svg?branch=master)](https://travis-ci.org/hesim-dev/hesim)
-[![Coverage Status](https://codecov.io/gh/hesim-dev/hesim/branch/master/graph/badge.svg)](https://codecov.io/gh/hesim-dev/hesim)
+<!-- badges: start -->
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/hesim)](https://cran.r-project.org/package=hesim)
+ [![R build status](https://github.com/hesim-dev/hesim/workflows/R-CMD-check/badge.svg)](https://github.com/hesim-dev/hesim/actions)
+[![Coverage Status](https://codecov.io/gh/hesim-dev/hesim/branch/master/graph/badge.svg)](https://codecov.io/gh/hesim-dev/hesim)
+<!-- badges: end -->
 
 ## Overview
 `hesim` is a modular and computationally efficient R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. The package supports cohort discrete time state transition models (DTSTMs), N-state partitioned survival models (PSMs), and individual-level continuous time state transition models (CTSTMs), encompassing both Markov (time-homogeneous and time-inhomogeneous) and semi-Markov processes. It heavily utilizes `Rcpp` and `data.table`, making individual-patient simulation, probabilistic sensitivity analysis (PSA), and incorporation of patient heterogeneity fast. 
