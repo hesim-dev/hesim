@@ -26,6 +26,8 @@ plot_ceplane <- function(x, k = 50000, labels = NULL) {
   
   # Passing custom names from user
   set_labels(pdata, labels = labels)
+  if (!is.factor(pdata[[strategy]])) pdata[[strategy]] <- factor(pdata[[strategy]])
+  if (!is.factor(pdata[[grp]])) pdata[[grp]] <- factor(pdata[[grp]])
   
   # X and y limits
   xlim <- ceiling(max(x$delta[, ie]) * 1.2)
@@ -103,12 +105,14 @@ plot_ceac.default <- function(x, labels = NULL, ceaf = FALSE, ...) {
   
   # Passing custom names from user
   set_labels(pdata, labels = labels)
+  if (!is.factor(pdata[[strategy]])) pdata[[strategy]] <- factor(pdata[[strategy]])
+  if (!is.factor(pdata[[grp]])) pdata[[grp]] <- factor(pdata[[grp]])
   
   # Make plot
   p <- ggplot2::ggplot(
     data = pdata,
     mapping = ggplot2::aes(x = .data[["k"]], y = .data[["prob"]], 
-                           col = .data[[strategy]])
+                           col = factor(.data[[strategy]]))
   ) +
     ggplot2::facet_wrap(ggplot2::vars(.data[[grp]])) +
     ggplot2::geom_line() +
@@ -186,6 +190,7 @@ plot_evpi <- function(x, labels = NULL) {
   
   # Passing custom names from user
   set_labels(pdata, labels = labels)
+  if (!is.factor(pdata[[grp]])) pdata[[grp]] <- factor(pdata[[grp]])
   
   # Main plot
   p <-  ggplot2::ggplot(
