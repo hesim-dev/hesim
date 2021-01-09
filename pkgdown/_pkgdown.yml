@@ -52,6 +52,8 @@ reference:
       - create_trans_dt
       - time_intervals
       - input_mats
+      - get_labels
+      - set_labels
   - title: "Model definition"
     contents:
       - rng_distributions

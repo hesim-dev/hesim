@@ -178,7 +178,7 @@ cea_pw() with icer() and format for pretty printing with format.icer()." />
 <code><a href='cea.html'>cea_pw()</a></code> with <code>icer()</code> and format for pretty printing with <code>format.icer()</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>icer</span>(<span class='no'>x</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>, <span class='kw'>strategy_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>grp_values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>icer</span>(<span class='no'>x</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icer</span>
 <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(
@@ -187,6 +187,7 @@ cea_pw() with icer() and format for pretty printing with format.icer()." />
   <span class='kw'>digits_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>pivot_from</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
   <span class='kw'>drop_grp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>pretty_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -207,15 +208,11 @@ Default is 0.95 for a 95 percent interval.</p></td>
       <td><p>Willingness to pay per quality-adjusted life-year.</p></td>
     </tr>
     <tr>
-      <th>strategy_values</th>
-      <td><p>Character vector of values (i.e., names) for
-treatment strategies. Must be the same length as the number of unique values
-of the "strategy" column in <code>object</code>.</p></td>
-    </tr>
-    <tr>
-      <th>grp_values</th>
-      <td><p>Character vector of values (i.e., names) for subgroups. Must
-be the same length as the number of unique values of the "subgroup" column in <code>object</code>.</p></td>
+      <th>labels</th>
+      <td><p>A list of named vectors containing the values and labels of
+variables. The elements of each vector are the values of a variable and the
+names are the labels. The names of the list are the names of the variables.
+See the output returned by <code><a href='get_labels.html'>get_labels()</a></code> for an example.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -242,6 +239,12 @@ strategy. Set to <code>NULL</code> if you do not want to widen the table.</p></t
       <td><p>If <code>TRUE</code>, then the group column will be removed if there is only
 one subgroup; other it will be kept. If <code>FALSE</code>, then the <code>grp</code> column is never
 removed.</p></td>
+    </tr>
+    <tr>
+      <th>pretty_names</th>
+      <td><p>Logical. If <code>TRUE</code>, then the columns <code>strategy</code>, <code>grp</code>,
+<code>outcome</code>, and <code>value</code> are renamed (if they exist) to <code>Strategy</code>,
+<code>Group</code>, <code>Outcome</code>, and <code>Value</code>.</p></td>
     </tr>
     </table>
 

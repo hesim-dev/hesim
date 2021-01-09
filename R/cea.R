@@ -104,7 +104,7 @@ NULL
 #' theme_set(theme_bw())
 #' 
 #' # Simulation output
-#' n_samples <- 100
+#' n_samples <- 50
 #' sim <- data.table(sample = rep(seq(n_samples), 4),
 #'                   c = c(rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
 #'                         rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)),
@@ -136,11 +136,11 @@ NULL
 #' head(cea_pw_out$ceac[k >= 20000])
 #' 
 #' # Summarize the incremental cost-effectiveness ratio
-#' format(icer(cea_pw_out))
-#' 
-#' # Plots
 #' labs <- list(strategy_id = c("Strategy 1" = 1, "Strategy 2" = 2),
 #'              grp_id = c("Group 1" = 1, "Group 2" = 2))
+#' format(icer(cea_pw_out, labels = labs))
+#' 
+#' # Plots
 #' plot_ceplane(cea_pw_out, label = labs)
 #' plot_ceac(cea_out, label = labs)
 #' plot_ceac(cea_pw_out, label = labs)
@@ -378,15 +378,11 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
 #' Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from 
 #' [cea_pw()] with `icer()` and format for pretty printing with `format.icer()`.
 #'
+#' @inheritParams set_labels
 #' @param x An object of class `cea_pw` returned by [cea_pw()].
 #' @param prob A numeric scalar in the interval `(0,1)` giving the confidence interval.
 #' Default is 0.95 for a 95 percent interval. 
 #' @param k Willingness to pay per quality-adjusted life-year.
-#' @param strategy_values Character vector of values (i.e., names) for 
-#' treatment strategies. Must be the same length as the number of unique values
-#'  of the "strategy" column in `object`.
-#' @param grp_values Character vector of values (i.e., names) for subgroups. Must
-#' be the same length as the number of unique values of the "subgroup" column in `object`.
 #' @param ... Further arguments passed to and from methods. Currently unused. 
 #' 
 #' @details Note that `icer()` will report negative ICERs; however, `format()` will
@@ -408,8 +404,7 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE){
 #' 
 #' @seealso [`cea_pw()`]
 #' @export
-icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
-                 grp_values = NULL, ...){
+icer <- function(x, prob = .95, k = 50000, labels = NULL, ...){
   ie <- ic <- imbm <- inmb_lower <- inmb_mean <- inmb_upper <- 
     ic_mean <- ie_mean <- outcome <- NULL
   
@@ -457,15 +452,9 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
                                       "ICER"))]
   
   # Values of treatment strategies and subgroups
+  set_labels(tbl, labels = labels)
   setnames(tbl, c(strategy, grp), c("strategy", "grp"))
-  
-  if (!is.null(strategy_values)) {
-    tbl[, strategy := as.character(factor(strategy, labels = strategy_values))]
-  }
-  if (!is.null(grp_values)) {
-    tbl[, grp := as.character(factor(grp, labels = grp_values))]
-  }
-  
+
   # Return
   setorderv(tbl, c("grp", "strategy"))
   setattr(tbl, "class", c("icer", "data.table", "data.frame"))
@@ -485,9 +474,13 @@ icer <- function(x, prob = .95, k = 50000, strategy_values = NULL,
 #' @param drop_grp If `TRUE`, then the group column will be removed if there is only
 #' one subgroup; other it will be kept. If `FALSE`, then the `grp` column is never
 #' removed. 
+#' @param pretty_names Logical. If `TRUE`, then the columns `strategy`, `grp`,
+#' `outcome`, and `value` are renamed (if they exist) to `Strategy`, 
+#' `Group`, `Outcome`, and `Value`.
 #' @export
 format.icer <- function(x, digits_qalys = 2, digits_costs = 0,
-                        pivot_from = "strategy", drop_grp = TRUE, ...) {
+                        pivot_from = "strategy", drop_grp = TRUE,
+                        pretty_names = TRUE,...) {
   value <- outcome <- estimate <- lower <- upper <- grp <- NULL 
   y <- copy(x)
   
@@ -511,10 +504,21 @@ format.icer <- function(x, digits_qalys = 2, digits_costs = 0,
   y[, c("estimate", "lower", "upper") := NULL]
   
   # Potentially pivot wider and drop groups
+  id <- c("grp", "strategy", "outcome")
   y[, outcome := factor(outcome, levels = unique(y$outcome))]
   y <- format_summary_default(y, pivot_from = pivot_from,
-                              id_cols = c("grp", "strategy", "outcome"),
+                              id_cols = id,
                               drop_grp = drop_grp)
+  
+  # Pretty names
+  if (pretty_names) {
+    setnames(
+      y, 
+      c("grp", "strategy", "outcome", "value"),
+      c("Group", "Strategy", "Outcome", "Value"),
+      skip_absent = TRUE
+    )
+  } 
   
   # Return
   return(y[, ])

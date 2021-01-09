@@ -263,6 +263,12 @@ test_that("icer_tbl() produces expected results", {
 })
 
 # Test icer() ------------------------------------------------------------------
+labs <- list("strategy" = c("s1" = "Strategy 1",
+                            "s2" = "Strategy 2", 
+                            "s3" = "Strategy 3"),
+             "grp" = c("g1" = "Group 1", 
+                       "g2" = "Group 2"))
+
 test_that("icer() and format.icer() return the correct columns", {
   # icer()
   x <- icer(cea_pw_out2)
@@ -277,7 +283,7 @@ test_that("icer() and format.icer() return the correct columns", {
   
   ### No pivoting
   y <- format(x, pivot_from = NULL)
-  expect_equal(colnames(y), c("strategy", "grp", "outcome", "value"))
+  expect_equal(colnames(y), c("Strategy", "Group", "Outcome", "Value"))
 
   ### Pivot strategy
   y <- format(x, pivot_from = "strategy")
@@ -289,18 +295,14 @@ test_that("icer() and format.icer() return the correct columns", {
   
   ### Pivot group and outcome
   y <- format(x, pivot_from = c("grp", "outcome"))
-  expect_true(!"outcome" %in% colnames(y))
-  expect_true(!"grp" %in% colnames(y))
+  expect_true(!"Outcome" %in% colnames(y))
+  expect_true(!"Group" %in% colnames(y))
 })
 
-test_that("icer() correctly passes strategy_values", {
-  x <- icer(cea_pw_out2, strategy_values = c("2", "3"))
-  expect_equal(c("2", "3"), unique(x$strategy))
-})
-
-test_that("icer() correctly passes grp_values", {
-  x <- icer(cea_pw_out2, grp_values = c("g1", "g2"))
-  expect_equal(c("g1", "g2"), unique(x$grp))
+test_that("icer() correctly passes labels", {
+  x <- icer(cea_pw_out, labels = labs)
+  expect_equal(c("s2", "s3"), as.character(unique(x$strategy)))
+  expect_equal(c("g1", "g2"), as.character(unique(x$grp)))
 })
 
 test_that("format.icer() will drop groups", {
@@ -313,11 +315,6 @@ test_that("format.icer() will drop groups", {
 })
 
 # Test plot_ceplane() ----------------------------------------------------------
-labs <- list("strategy" = c("s1" = "Strategy 1",
-                            "s2" = "Strategy 2", 
-                            "s3" = "Strategy 3"),
-              "grp" = c("g1" = "Group 1", 
-                        "g2" = "Group 2"))
 p <- plot_ceplane(cea_pw_out, labels = labs)
 
 test_that("plot_ceplane() returns ggplot", {

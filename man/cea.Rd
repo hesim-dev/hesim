@@ -112,7 +112,7 @@ library("ggplot2")
 theme_set(theme_bw())
 
 # Simulation output
-n_samples <- 100
+n_samples <- 50
 sim <- data.table(sample = rep(seq(n_samples), 4),
                   c = c(rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
                         rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)),
@@ -144,11 +144,11 @@ names(cea_pw_out)
 head(cea_pw_out$ceac[k >= 20000])
 
 # Summarize the incremental cost-effectiveness ratio
-format(icer(cea_pw_out))
-
-# Plots
 labs <- list(strategy_id = c("Strategy 1" = 1, "Strategy 2" = 2),
              grp_id = c("Group 1" = 1, "Group 2" = 2))
+format(icer(cea_pw_out, labels = labs))
+
+# Plots
 plot_ceplane(cea_pw_out, label = labs)
 plot_ceac(cea_out, label = labs)
 plot_ceac(cea_pw_out, label = labs)

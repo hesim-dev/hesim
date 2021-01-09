@@ -8,4 +8,5 @@
 #' @useDynLib hesim
 #' @import data.table
 #' @importFrom Rcpp evalCpp
+#' @importFrom ggplot2 .data
 NULL
