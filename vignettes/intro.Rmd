@@ -16,9 +16,12 @@ bibliography: references.bib
 ---
 
 # Overview
+This vignette provides an overview of the `hesim` package and a quick example. The other vignettes provide a number of more in depth examples.
+
 `hesim` supports three types of health-economic models: (i) cohort discrete time state transition models (cDTSTMs), (ii) N-state partitioned survival models (PSMs), and (iii) individual-level continuous time state transition models (iCTSTMs). cDTSTMs are Markov cohort models and can be time-homogeneous or time-inhomogeneous. iCTSTMs are individual-level simulations that can encompass both Markov and semi-Markov processes. All models are implemented as [R6](https://r6.r-lib.org/index.html) classes and have methods for simulating disease progression, costs, and QALYs.
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
+library("knitr")
 library("kableExtra")
 psm <- c("N-state partitioned survival model (PSM)", "`hesim::Psm`")
 cdtstm <- c("Cohort discrete time state transition model (cDTSTM)", "`hesim::CohortDtstm`")
@@ -290,15 +293,15 @@ print(ce)
 The functions `cea()` and `cea_pw()`, which perform cost-effectiveness analysis and incremental cost-effectiveness analysis, respectively, can be used. 
 
 ```{r}
-cea <- cea(ce, dr_qalys = .03, dr_costs = .03)
-cea_pw <- cea_pw(ce, dr_qalys = .03, dr_costs = .03, comparator = 1)
+cea_out <- cea(ce, dr_qalys = .03, dr_costs = .03)
+cea_pw_out <- cea_pw(ce, dr_qalys = .03, dr_costs = .03, comparator = 1)
 ```
 
 For instance, we might want to plot a cost-effectiveness acceptability curve (CEAC) displaying the probability that treatment strategy 2 is more cost-effective than treatment strategy 1 at a given willingness to pay for a QALY.
 
 ```{r ceac_plot, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 library("ggplot2")
-ggplot(cea_pw$ceac, aes(x = k, y = prob, col = factor(strategy_id))) +
+ggplot(cea_pw_out$ceac, aes(x = k, y = prob, col = factor(strategy_id))) +
   geom_line() + xlab("Willingness to pay") +
   ylab("Probability most cost-effective") +
   scale_x_continuous(breaks = seq(0, 200000, 100000), label = scales::dollar) +
