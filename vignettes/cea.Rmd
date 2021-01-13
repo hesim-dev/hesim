@@ -23,11 +23,11 @@ opts_chunk$set(fig.width = 8, fig.height = 4.5)
 # Overview 
 `hesim` provides functions for using simulated costs and quality-adjusted life-years (QALYs) from a probabilistic sensitivity analysis (PSA) for decision-analysis in a cost-effectiveness framework, including representing decision uncertainty and conducting value of information analysis. Common metrics that can be produced include the following:
 
-* incremental cost-effectiveness ratios (ICERs).
-* cost-effectiveness planes planes.
-* cost-effectiveness acceptability curves (CEACs).
-* cost-effectiveness acceptability frontiers (CEAFs).
-* the expected value of perfect information (EVPI).
+* incremental cost-effectiveness ratios (ICERs)
+* cost-effectiveness planes planes
+* cost-effectiveness acceptability curves (CEACs)
+* cost-effectiveness acceptability frontiers (CEAFs)
+* the expected value of perfect information (EVPI)
 
 Cost-effectiveness analysis (CEA) can be performed for a single target population or for different subgroups. The latter is sometimes referred to as individualized CEA (iCEA). 
 
@@ -58,7 +58,7 @@ INMB_g(\theta) = NMB_g(j = 1, \theta) - NMB_g(j = 0, \theta).
 \end{aligned}
 $$
 
-Treatments can be compared in an equivalent manner using the ICER. The most common case occurs when a new treatment is more effective and more costly so that treatment $1$ is preferred to treatment $0$ in subgroup $g$ if the ICER is greater than the WTP threshold $k$,
+Treatments can be compared in an equivalent manner using the ICER. The most common case occurs when a new treatment is more effective and more costly so that treatment $1$ is preferred to treatment $0$ in subgroup $g$ if the ICER is less than the WTP threshold $k$,
 
 $$
 \begin{aligned}
@@ -72,7 +72,7 @@ There are three additional cases:
 * Treatment $1$ is preferred to treatment $0$ if it is less effective and less costly when $k < ICER_g$. 
 
 # Probabilistic sensitivity analysis
-Expected NMBs are expected values, which implies that NMBs are uncertain and that optimal treatment strategies may be selected incorrectly. This uncertainty can be quantified using PSA, which uses Bayesian and quasi-Bayesian techniques to estimate the distribution of NMBs given the distribution of the parameters for each treatment strategy
+Expected NMBs are expected values, which implies that NMBs are uncertain and that optimal treatment strategies may be selected incorrectly. This uncertainty can be quantified using PSA, which uses Bayesian and quasi-Bayesian techniques to estimate the distribution of NMBs given the distribution of the parameters for each treatment strategy.
 
 Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest cases), the distribution of $\theta$ is typically approximated by simulating the parameters from suitable probability distribution and calculating relevant quantities of interest as a function of the simulated parameters. For each treatment strategy and subgroup, PSA therefore produces $n$ random draws from the distribution of clinical effectiveness and costs,
 
@@ -142,10 +142,10 @@ cea_pw_out <-  cea_pw(ce,  k = seq(0, ktop, 500), comparator = "Strategy 1",
                        e = "qalys", c = "cost")
 ```
 
-The primary metrics are the ICER and representations of decision uncertainty including cost-effectiveness planes, CEACs, CEAFs, and the EVPI. Plots using `ggplot2` graphics can be quickly generated with the `plot_ceplane()`, `plot_ceac()`, `plot_ceaf()`, and `plot_evpi()` functions, respectively, although output is readily available so users may create custom plots as well.  
+The primary metrics are the ICER and representations of decision uncertainty including cost-effectiveness planes, CEACs, CEAFs, and the EVPI. Plots using [`ggplot2`](https://ggplot2.tidyverse.org/) graphics can be quickly generated with the `plot_ceplane()`, `plot_ceac()`, `plot_ceaf()`, and `plot_evpi()` functions, respectively, although output is readily available so users may create custom plots as well.  
 
 ## Incremental cost-effectiveness ratio (ICER)
-The ICER is computed by `cea_pw()` and can be summarized with the`icer()` function. `icer()` creates a tidy table that can be formatted for prettier printing with `format()`. The argument `k` is the WTP threshold and is used to compute the INMB. Estimates of incremental QALYs and incremental costs are computed by averaging over PSA samples. By default, 95% confidence intervals are presented and are computed using quantiles from the PSA. 
+The ICER is computed with `cea_pw()` and can be summarized with the`icer()` function. `icer()` creates a tidy table that can be formatted for prettier printing with `format()`. The argument `k` is the WTP threshold and is used to compute the INMB. Estimates of incremental QALYs and incremental costs are computed by averaging over PSA samples. By default, 95% confidence intervals are presented and are computed using quantiles from the PSA. 
 
 ```{r}
 library("magrittr") # Use pipes
@@ -179,19 +179,17 @@ A useful summary measure for quantifying uncertainty is the probability that eac
 ```{r mce_example_setup, echo = -1, warning = FALSE, message = FALSE}
 library("knitr")
 ce <- ce[, nmb := 50000 * qalys - cost]
-enmb <- ce[, .(enmb = mean(nmb)), by = c("strategy", "grp")]
-enmb <- dcast(enmb, strategy ~ grp, value.var = "enmb")
 random_rows <- sample(1:n_samples, 10)
-nmb_dt <- dcast(ce[sample %in% random_rows & grp == "Group 2"], 
+nmb <- dcast(ce[sample %in% random_rows & grp == "Group 2"], 
                 sample ~ strategy, value.var = "nmb")
-setnames(nmb_dt, colnames(nmb_dt), c("sample", "nmb1", "nmb2", "nmb3"))
-nmb_dt <- nmb_dt[, maxj := apply(nmb_dt[, .(nmb1, nmb2, nmb3)], 1, which.max)]
-nmb_dt <- nmb_dt[, maxj := factor(maxj, levels = c(1, 2, 3))]
+setnames(nmb, colnames(nmb), c("sample", "nmb1", "nmb2", "nmb3"))
+nmb <- nmb[, maxj := apply(nmb[, .(nmb1, nmb2, nmb3)], 1, which.max)]
+nmb <- nmb[, maxj := factor(maxj, levels = c(1, 2, 3))]
 ```
 
 ```{r mce_example, echo = -1}
-kable(nmb_dt, digits = 0, format = "html")
-mce <- prop.table(table(nmb_dt$maxj))
+kable(nmb, digits = 0, format = "html")
+mce <- prop.table(table(nmb$maxj))
 print(mce)
 ```
 
@@ -201,12 +199,12 @@ Treatments 1, 2, and 3 have the highest NMBs a fraction `r mce[1]`, `r mce[2]`, 
 plot_ceac(cea_out)
 ```
 
-In group 1, Strategy 2 provides the greatest NMBs with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Strategy 3 provides the greatest NMBs with a higher probability than Strategy 2. 
+In group 1, Strategy 2 provides the greatest NMBs with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Strategy 3 provides the greatest NMBs with a higher probability than Strategy 2 for most values of k. 
 
 ### Pairwise comparison
 It is also possible to compare each strategy to a single comparator. The `ceac` element returned by `cea_pw()` contains the data for the CEACs.
 
-The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of $k$. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(cea_pw_out$ceac[strategy == "Strategy 3" & prob > .5 & grp ==  "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of $k$, although this probability is larger for Strategy 2 than Strategy 3 when $k$ is smaller.
+The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of $k$. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of $k$ larger than `r formatC(min(cea_pw_out$ceac[strategy == "Strategy 3" & prob > .5 & grp ==  "Group 1", k]), format = "d", big.mark = ",")`. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of $k$.
 
 ```{r ceac_plot}
 plot_ceac(cea_pw_out)
@@ -226,30 +224,35 @@ A limitation of the prior measures are that they ignore the magnitude of cost or
 
 $$
 \begin{aligned}
-EVPI_g &= E_\theta \left[max_j NMB_g(j, \theta)\right] - max_j E_\theta \left [ NMB_g(j, \theta)\right]. \\
+EVPI_g &= E_\theta \left[\text{max}_j NMB_g(j, \theta)\right] - \text{max}_j E_\theta \left [ NMB_g(j, \theta)\right]. \\
 \end{aligned}
 $$
 
 To illustrate consider the same random sample of 10 draws from our simulation output used above.
 
 ```{r evpi_example_a}
-strategymax_g2 <- which.max(enmb[[3]])
-nmb_dt <- nmb_dt[, nmbpi := apply(nmb_dt[, .(nmb1, nmb2, nmb3)], 1, max)]
-nmb_dt <- nmb_dt[, nmbci := nmb_dt[[strategymax_g2 + 1]]]
-kable(nmb_dt, digits = 0, format = "html")
+# Expected net monetary benefit
+enmb <- ce[, .(enmb = mean(nmb)), by = c("strategy", "grp")]
+enmb <- dcast(enmb, strategy ~ grp, value.var = "enmb")
+strategymax_g2 <- which.max(enmb[[3]]) # Optimal strategy group 2
+
+# Net monetary benefit (with perfect and current information)
+nmb <- nmb[, nmbpi := apply(nmb[, .(nmb1, nmb2, nmb3)], 1, max)]
+nmb <- nmb[, nmbci := nmb[[strategymax_g2 + 1]]]
+kable(nmb, digits = 0, format = "html")
 ```
 <br>
 To calculate EVPI, we average NMBs given current information and NMBs given perfect information across simulation draws. 
 
 ```{r evpi_example_b}
-enmbpi <- mean(nmb_dt$nmbpi)
-enmbci <- mean(nmb_dt$nmbci)
+enmbpi <- mean(nmb$nmbpi)
+enmbci <- mean(nmb$nmbci)
 print(enmbpi)
 print(enmbci)
 print(enmbpi - enmbci)
 ```
 
-The `cea()` function performs this same calculation across all simulation draws from the PSA and for a number of values of WTP values $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks in the plot represent values of $k$ where the optimal strategy changes.
+The `cea()` function performs this same calculation across all simulation draws from the PSA and for a number of values of $k$. A plot by group of the the EVPI for different values of $k$ is shown below. The kinks represent values of $k$ where the optimal strategy changes.
 
 ```{r evpi_plot}
 plot_evpi(cea_out)
