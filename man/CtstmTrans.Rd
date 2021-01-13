@@ -7,8 +7,10 @@
 An \link[R6:R6Class]{R6::R6Class} object.
 }
 \description{
-A non-exported base class for continuous time state transition models containing methods
-that can be used to summarize fitted multi-state models.
+Contains methods that can be used to summarize both individual- and cohort-level
+continuous time state transition models. That is, this class is relevant for
+both Markov and semi-Markov multi-state models and does not depend on the
+methodology used for prediction of state probabilities.
 }
 \seealso{
 \code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}, \link{IndivCtstmTrans}

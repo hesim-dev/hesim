@@ -2,10 +2,13 @@
 #' An `R6` base class for continuous time state transition models
 #'
 #' @description
-#' A non-exported base class for continuous time state transition models containing methods
-#' that can be used to summarize fitted multi-state models. 
+#' Contains methods that can be used to summarize both individual- and cohort-level
+#'  continuous time state transition models. That is, this class is relevant for
+#'  both Markov and semi-Markov multi-state models and does not depend on the 
+#'  methodology used for prediction of state probabilities. 
 #' @format An [R6::R6Class] object.
 #' @seealso [create_IndivCtstmTrans()], [IndivCtstmTrans]
+#' @export
 CtstmTrans <- R6::R6Class("CtstmTrans",
   private = list(
     check_base = function(){
