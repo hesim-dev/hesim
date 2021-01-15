@@ -1,6 +1,7 @@
 context("dtstm.R unit tests")
 library("data.table")
 library("nnet")
+library("msm")
 rm(list = ls())
 
 # Helper functions -------------------------------------------------------------
@@ -376,6 +377,51 @@ test_that(paste0("create_CohortDtstmTrans does not support offset term ",
                                        trans_mat = tmat),
                "An offset is not supported")
 })
+
+# Create model from a msm object -----------------------------------------------
+set.seed(101)
+strategies <- data.table(strategy_id = c(1, 2, 3),
+                         strategy_name = factor(c("SOC", "New 1", "New 2")))
+patients <- data.table(patient_id = 1:2)
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients)
+transmod_data <- expand(hesim_dat)
+qinit <- rbind(
+  c(0, 0.28163, 0.01239),
+  c(0, 0, 0.10204),
+  c(0, 0, 0)
+)
+fit <- msm(state_id ~ time, subject = patient_id, 
+           data = onc3p[patient_id %in% sample(patient_id, 100)],
+           covariates = list("1-2" =~ strategy_name), 
+           qmatrix = qinit)
+
+test_that("create_CohortDtstmTrans.msm returns correct transition probability matrices with no uncertainty", {
+ 
+  transmod <- create_CohortDtstmTrans(fit,
+                                      input_data = transmod_data,
+                                      cycle_length = 1/2,
+                                      fixedpars = 2,
+                                      uncertainty = "none")
+  expect_equal(transmod$params$n_samples, 1)
+  expect_equal(
+    expmat(qmatrix(fit, transmod_data, uncertainty = "none"), t = 1/2),
+    transmod$params$value
+  )
+})
+
+test_that(paste0("create_CohortDtstmTrans.msm returns transition probability matrices",
+                 "with correct dimensions when there is uncertainty"), {
+
+  transmod <- create_CohortDtstmTrans(fit,
+                                      input_data = transmod_data,
+                                      cycle_length = 1/2,
+                                      fixedpars = 2,
+                                      n = 2)
+  expect_equal(transmod$params$n_samples, 2)
+  expect_equal(dim(transmod$params$value)[3], 2 * nrow(transmod_data))
+})
+
 
 # Create model from a model_def object -----------------------------------------
 test_that(paste0("Use define_model() to create CohortDtstmTrans object"), {
