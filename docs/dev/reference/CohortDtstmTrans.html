@@ -177,17 +177,17 @@
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An <a href='https://rdrr.io/pkg/R6/man/R6Class.html'>R6::R6Class</a> object.</p>
+    <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans()</a></code>, <a href='CohortDtstm.html'>CohortDtstm</a></p></div>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p><div class="r6-fields"></p><dl'>
+    <p><div class="r6-fields"></p><dl>
 <dt><code>params</code></dt><dd><p>Parameters for simulating health state transitions.
-Supports objects of class <a href='tparams_transprobs.html'>tparams_transprobs</a> or <a href='params_mlogit.html'>params_mlogit</a>.</p></dd>
+Supports objects of class <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> or <code><a href='params_mlogit.html'>params_mlogit</a></code>.</p></dd>
 
-<dt><code>input_data</code></dt><dd><p>An object of class <a href='input_mats.html'>input_mats</a>.</p></dd>
+<dt><code>input_data</code></dt><dd><p>An object of class <code><a href='input_mats.html'>input_mats</a></code>.</p></dd>
 
 <dt><code>cycle_length</code></dt><dd><p>The length of a model cycle in terms of years.
 The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd>
@@ -195,7 +195,7 @@ The default is <code>1</code> meaning that model cycles are 1 year long.</p></dd
 </dl><p></div></p>
     <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
 
-    <p><div class="r6-active-bindings"></p><dl'>
+    <p><div class="r6-active-bindings"></p><dl>
 <dt><code>start_stateprobs</code></dt><dd><p>A non-negative vector with length equal to the number of
 health states containing the probability that the cohort is in each health
 state at the start of the simulation. For example,
@@ -217,7 +217,7 @@ and the reference category for each row should be <code>0</code>.</p></dd>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-new'><code>CohortDtstmTrans$new()</code></a></p></li>
@@ -225,18 +225,18 @@ and the reference category for each row should be <code>0</code>.</p></dd>
 <li><p><a href='#method-clone'><code>CohortDtstmTrans$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new <code>CohortDtstmTrans</code> object.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>CohortDtstmTrans</span>$<span class='fu'>new</span>(
-  <span class='no'>params</span>,
-  <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>start_stateprobs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cycle_length</span> <span class='kw'>=</span> <span class='fl'>1</span>
-)</pre><p></div></p>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<p>Create a new <code>CohortDtstmTrans</code> object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>CohortDtstmTrans</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
+  <span class='va'>params</span>,
+  input_data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  trans_mat <span class='op'>=</span> <span class='cn'>NULL</span>,
+  start_stateprobs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  cycle_length <span class='op'>=</span> <span class='fl'>1</span>
+<span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
 
 <dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
@@ -248,33 +248,81 @@ and the reference category for each row should be <code>0</code>.</p></dd>
 <dt><code>cycle_length</code></dt><dd><p>The <code>cycle_length</code> field.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>A new <code>CohortDtstmTrans</code> object.</p>
 <p><hr>
-<a id="method-sim_stateprobs"></a></p><h3>Method <code>sim_stateprobs()</code></h3>
-<p>Simulate probability of being in each health state during each model cycle.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>CohortDtstmTrans</span>$<span class='fu'>sim_stateprobs</span>(<span class='no'>n_cycles</span>)</pre><p></div></p>
+<a id="method-sim_stateprobs"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sim_stateprobs()</code></h3>
+<p>Simulate probability of being in each health state during each model cycle.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>CohortDtstmTrans</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span><span class='va'>n_cycles</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>n_cycles</code></dt><dd><p>The number of model cycles to simulate the model for.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>An object of class <a href='stateprobs.html'>stateprobs</a>.</p>
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>CohortDtstmTrans</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>CohortDtstmTrans</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
 </dl><p></div></p>
 
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/msm'>"msm"</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://Rdatatable.gitlab.io/data.table'>"data.table"</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>101</span><span class='op'>)</span>
+
+<span class='co'># Model setup</span>
+<span class='va'>strategies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>
+  strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span>,
+  strategy_name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SOC"</span>, <span class='st'>"New 1"</span>, <span class='st'>"New 2"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>
+  strategies <span class='op'>=</span> <span class='va'>strategies</span>,
+  patients <span class='op'>=</span> <span class='va'>patients</span>
+<span class='op'>)</span>
+  
+
+<span class='co'># Fit multi-state model with panel data via msm</span>
+<span class='va'>qinit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.28163</span>, <span class='fl'>0.01239</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0.10204</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/msm/man/msm.html'>msm</a></span><span class='op'>(</span><span class='va'>state_id</span> <span class='op'>~</span> <span class='va'>time</span>, subject <span class='op'>=</span> <span class='va'>patient_id</span>, 
+           data <span class='op'>=</span> <span class='va'>onc3p</span><span class='op'>[</span><span class='va'>patient_id</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>patient_id</span>, <span class='fl'>100</span><span class='op'>)</span><span class='op'>]</span>,
+           covariates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"1-2"</span> <span class='op'>=</span><span class='op'>~</span> <span class='va'>strategy_name</span><span class='op'>)</span>, 
+           qmatrix <span class='op'>=</span> <span class='va'>qinit</span><span class='op'>)</span>
+
+<span class='co'># Simulation model</span>
+<span class='va'>transmod_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span><span class='op'>)</span>
+<span class='va'>transmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans</a></span><span class='op'>(</span><span class='va'>fit</span>,
+                                    input_data <span class='op'>=</span> <span class='va'>transmod_data</span>,
+                                    cycle_length <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>2</span>,
+                                    fixedpars <span class='op'>=</span> <span class='fl'>2</span>,
+                                    n <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>transmod</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span>n_cycles <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      sample strategy_id patient_id grp_id state_id   t        prob
+#&gt;   1:      1           1          1      1        1 0.0 1.000000000
+#&gt;   2:      1           1          1      1        1 0.5 0.792695102
+#&gt;   3:      1           1          1      1        1 1.0 0.628365524
+#&gt;   4:      1           1          1      1        2 0.0 0.000000000
+#&gt;   5:      1           1          1      1        2 0.5 0.202046511
+#&gt;  ---                                                              
+#&gt; 104:      2           3          2      1        2 0.5 0.184425447
+#&gt; 105:      2           3          2      1        2 1.0 0.325475890
+#&gt; 106:      2           3          2      1        3 0.0 0.000000000
+#&gt; 107:      2           3          2      1        3 0.5 0.004553194
+#&gt; 108:      2           3          2      1        3 1.0 0.016768466</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -290,7 +338,7 @@ and the reference category for each row should be <code>0</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
