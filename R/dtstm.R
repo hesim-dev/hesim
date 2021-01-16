@@ -5,6 +5,42 @@
 #' Simulate health state transitions in a cohort discrete time state transition model.
 #' @format An [R6::R6Class] object.
 #' @seealso [create_CohortDtstmTrans()], [CohortDtstm]
+#' @examples 
+#' library("msm")
+#' library("data.table")
+#' set.seed(101)
+#' 
+#' # Model setup
+#' strategies <- data.table(
+#'   strategy_id = c(1, 2, 3),
+#'   strategy_name = c("SOC", "New 1", "New 2")
+#' )
+#' patients <- data.table(patient_id = 1:2)
+#' hesim_dat <- hesim_data(
+#'   strategies = strategies,
+#'   patients = patients
+#' )
+#'   
+#' 
+#' # Fit multi-state model with panel data via msm
+#' qinit <- rbind(
+#'   c(0, 0.28163, 0.01239),
+#'   c(0, 0, 0.10204),
+#'   c(0, 0, 0)
+#' )
+#' fit <- msm(state_id ~ time, subject = patient_id, 
+#'            data = onc3p[patient_id %in% sample(patient_id, 100)],
+#'            covariates = list("1-2" =~ strategy_name), 
+#'            qmatrix = qinit)
+#' 
+#' # Simulation model
+#' transmod_data <- expand(hesim_dat)
+#' transmod <- create_CohortDtstmTrans(fit,
+#'                                     input_data = transmod_data,
+#'                                     cycle_length = 1/2,
+#'                                     fixedpars = 2,
+#'                                     n = 2)
+#' transmod$sim_stateprobs(n_cycles = 2)
 #' @export
 CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
   private = list(
@@ -87,10 +123,10 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
 
   public = list(
     #' @field params Parameters for simulating health state transitions.
-    #' Supports objects of class [tparams_transprobs] or [params_mlogit].
+    #' Supports objects of class [`tparams_transprobs`] or [`params_mlogit`].
     params = NULL,
     
-    #' @field input_data An object of class [input_mats].
+    #' @field input_data An object of class [`input_mats`].
     input_data = NULL,
     
     #' @field cycle_length The length of a model cycle in terms of years.
@@ -142,19 +178,21 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
   )
 )
 
-#' Create \code{CohortDtstmTrans} object
+#' Create `CohortDtstmTrans` object
 #' 
 #' A generic function for creating an object of class `CohortDtstmTrans`.
 #' @param object An object of the appropriate class. 
-#' @param ... Further arguments passed to `CohortDtstmTrans$new()` in 
-#' \code{CohortDtstmTrans}.
+#' @param ... Further arguments passed to or from other methods. Currently unused.
 #' @param input_data An object of class `expanded_hesim_data` returned by 
 #' [expand.hesim_data()]
+#' @param cycle_length The length of a model cycle in terms of years. The default 
+#' is 1 meaning that model cycles are 1 year long.
 #' @param trans_mat A transition matrix describing the states and transitions 
-#' in a discrete-time multi-state model. See [CohortDtstmTrans].
+#' in a discrete-time multi-state model. See [`CohortDtstmTrans`].
 #' @param n Number of random observations of the parameters to draw.
 #' @param uncertainty Method determining how parameter uncertainty should be handled. See
 #'  documentation in [`create_params()`].
+#' @seealso [`CohortDtstmTrans`]
 #' @export
 create_CohortDtstmTrans <- function(object, ...){
   UseMethod("create_CohortDtstmTrans", object)
@@ -181,6 +219,24 @@ create_CohortDtstmTrans.multinom_list <- function(object, input_data,
     do.call(CohortDtstmTrans$new, 
             c(list(params = params, input_data = input_mats, trans_mat = trans_mat),
               dots))
+  )
+}
+
+#' @export
+#' @rdname create_CohortDtstmTrans
+create_CohortDtstmTrans.msm <- function(object, input_data,
+                                        cycle_length,
+                                        n = 1000, 
+                                        uncertainty = c("normal", "none"),
+                                        ...){
+  uncertainty <- match.arg(uncertainty)
+  qmat <- qmatrix(object, newdata = input_data, uncertainty = uncertainty, n = n)
+  tpmat <- expmat(qmat, t = cycle_length)
+  if (uncertainty == "none") n <- 1
+  tpmat_id <- tpmatrix_id(input_data, n)
+  tparams <- tparams_transprobs(tpmat, tpmat_id)
+  return(
+    CohortDtstmTrans$new(params = tparams, cycle_length = cycle_length)
   )
 }
 
