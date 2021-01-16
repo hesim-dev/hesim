@@ -142,6 +142,9 @@ the instantaneous risk of moving between health states." />
   </ul>
 </li>
 <li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
+</li>
+<li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
@@ -176,13 +179,13 @@ the instantaneous risk of moving between health states.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for matrix</span>
-<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>, <span class='no'>...</span>)
+<span class='fu'><a href='qmatrix.html'>qmatrix</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>trans_mat</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.table</span>
-<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>, <span class='no'>...</span>)
+<span class='fu'><a href='qmatrix.html'>qmatrix</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>trans_mat</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='qmatrix.html'>qmatrix</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>trans_mat</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -220,15 +223,16 @@ as the negative sum of the other rows.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># 3 state irreversible model</span>
-<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
-              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>3</span>),
-              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
-<span class='no'>q12</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.8</span>, <span class='fl'>.7</span>)
-<span class='no'>q13</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.3</span>)
-<span class='no'>q23</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.1</span>, <span class='fl'>1.2</span>)
-<span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>q12</span>, <span class='no'>q13</span>, <span class='no'>q23</span>)
-<span class='no'>qmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='qmatrix.html'>qmatrix</a></span>(<span class='no'>q</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>qmat</span>)</div><div class='output co'>#&gt; , , 1
+<span class='va'>tmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='fl'>3</span><span class='op'>)</span>,
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='va'>q12</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.8</span>, <span class='fl'>.7</span><span class='op'>)</span>
+<span class='va'>q13</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>, <span class='fl'>.3</span><span class='op'>)</span>
+<span class='va'>q23</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.1</span>, <span class='fl'>1.2</span><span class='op'>)</span>
+<span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>q12</span>, <span class='va'>q13</span>, <span class='va'>q23</span><span class='op'>)</span>
+<span class='va'>qmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='qmatrix.html'>qmatrix</a></span><span class='op'>(</span><span class='va'>q</span>, trans_mat <span class='op'>=</span> <span class='va'>tmat</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>qmat</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; , , 1
 #&gt; 
 #&gt;      [,1] [,2] [,3]
 #&gt; [1,]   -1  0.8  0.2
@@ -243,7 +247,8 @@ as the negative sum of the other rows.</p>
 #&gt; [3,]    0  0.0  0.0
 #&gt; </div><div class='input'>
 <span class='co'># Matrix exponential of each matrix in array</span>
-<span class='fu'><a href='expmat.html'>expmat</a></span>(<span class='no'>qmat</span>)</div><div class='output co'>#&gt; , , 1
+<span class='fu'><a href='expmat.html'>expmat</a></span><span class='op'>(</span><span class='va'>qmat</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; , , 1
 #&gt; 
 #&gt;           [,1]      [,2]      [,3]
 #&gt; [1,] 0.3678794 0.2800669 0.3520537
@@ -273,7 +278,7 @@ as the negative sum of the other rows.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

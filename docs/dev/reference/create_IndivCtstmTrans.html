@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create <code>IndivCtstmTrans</code> object — create_IndivCtstmTrans • hesim</title>
+<title>Create IndivCtstmTrans object — create_IndivCtstmTrans • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Create <code>IndivCtstmTrans</code> object — create_IndivCtstmTrans" />
+<meta property="og:title" content="Create IndivCtstmTrans object — create_IndivCtstmTrans" />
 <meta property="og:description" content="A generic function for creating an object of class IndivCtstmTrans." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
@@ -141,6 +141,9 @@
   </ul>
 </li>
 <li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
+</li>
+<li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
@@ -173,49 +176,49 @@
     <p>A generic function for creating an object of class <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_IndivCtstmTrans</span>(<span class='no'>object</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>create_IndivCtstmTrans</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for flexsurvreg_list</span>
-<span class='fu'>create_IndivCtstmTrans</span>(
-  <span class='no'>object</span>,
-  <span class='no'>input_data</span>,
-  <span class='no'>trans_mat</span>,
-  <span class='kw'>clock</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"reset"</span>, <span class='st'>"forward"</span>),
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>uncertainty</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"normal"</span>, <span class='st'>"none"</span>),
-  <span class='no'>...</span>
-)
+<span class='fu'>create_IndivCtstmTrans</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>input_data</span>,
+  <span class='va'>trans_mat</span>,
+  clock <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"reset"</span>, <span class='st'>"forward"</span><span class='op'>)</span>,
+  n <span class='op'>=</span> <span class='fl'>1000</span>,
+  uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for flexsurvreg</span>
-<span class='fu'>create_IndivCtstmTrans</span>(
-  <span class='no'>object</span>,
-  <span class='no'>input_data</span>,
-  <span class='no'>trans_mat</span>,
-  <span class='kw'>clock</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"reset"</span>, <span class='st'>"forward"</span>),
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>uncertainty</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"normal"</span>, <span class='st'>"none"</span>),
-  <span class='no'>...</span>
-)
+<span class='fu'>create_IndivCtstmTrans</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>input_data</span>,
+  <span class='va'>trans_mat</span>,
+  clock <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"reset"</span>, <span class='st'>"forward"</span><span class='op'>)</span>,
+  n <span class='op'>=</span> <span class='fl'>1000</span>,
+  uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for params_surv</span>
-<span class='fu'>create_IndivCtstmTrans</span>(
-  <span class='no'>object</span>,
-  <span class='no'>input_data</span>,
-  <span class='no'>trans_mat</span>,
-  <span class='kw'>clock</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"reset"</span>, <span class='st'>"forward"</span>, <span class='st'>"mix"</span>),
-  <span class='kw'>reset_states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)
+<span class='fu'>create_IndivCtstmTrans</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>input_data</span>,
+  <span class='va'>trans_mat</span>,
+  clock <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"reset"</span>, <span class='st'>"forward"</span>, <span class='st'>"mix"</span><span class='op'>)</span>,
+  reset_states <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for params_surv_list</span>
-<span class='fu'>create_IndivCtstmTrans</span>(
-  <span class='no'>object</span>,
-  <span class='no'>input_data</span>,
-  <span class='no'>trans_mat</span>,
-  <span class='kw'>clock</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"reset"</span>, <span class='st'>"forward"</span>, <span class='st'>"mix"</span>),
-  <span class='kw'>reset_states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)</pre>
+<span class='fu'>create_IndivCtstmTrans</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>input_data</span>,
+  <span class='va'>trans_mat</span>,
+  clock <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"reset"</span>, <span class='st'>"forward"</span>, <span class='st'>"mix"</span><span class='op'>)</span>,
+  reset_states <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -281,7 +284,7 @@ documentation in <code><a href='create_params.html'>create_params()</a></code>.<
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

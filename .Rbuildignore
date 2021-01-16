@@ -16,3 +16,5 @@ DoxygenLayout.xml
 ^Meta$
 ^tests/manual$
 ^\.github$
+vignettes/benchmarks.*
+vignettes/README

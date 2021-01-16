@@ -1,0 +1,23 @@
+---
+title: Benchmarks
+date: "2021-01-15"
+output: 
+  html_vignette:
+    toc: yes
+    toc_depth: 2
+    number_sections: TRUE
+pkgdown: 
+  as_is: false
+vignette: >
+  %\VignetteIndexEntry{Benchmarks}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+
+# Introduction
+
+# Semi-Markov models
+
+# Time-inhomogeneous Markov models

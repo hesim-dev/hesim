@@ -1,0 +1,26 @@
+---
+title: Benchmarks
+date: "`r Sys.Date()`"
+output: 
+  html_vignette:
+    toc: yes
+    toc_depth: 2
+    number_sections: TRUE
+pkgdown: 
+  as_is: false
+vignette: >
+  %\VignetteIndexEntry{Benchmarks}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+library("knitr")
+opts_chunk$set(fig.width = 8, fig.height = 4.5)
+```
+
+# Introduction
+
+# Semi-Markov models
+
+# Time-inhomogeneous Markov models

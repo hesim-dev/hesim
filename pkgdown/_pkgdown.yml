@@ -157,5 +157,7 @@ navbar:
       - text: "Decision analysis"  
       - text: "Cost-effectiveness analysis"
         href: articles/cea.html
+  - text: Benchmarks
+    href: articles/benchmarks.html
   - text: News
     href: news/index.html

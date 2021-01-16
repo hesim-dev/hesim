@@ -142,6 +142,9 @@ This would typically be passed to id_attributes." />
   </ul>
 </li>
 <li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
+</li>
+<li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
@@ -175,7 +178,7 @@ This would typically be passed to id_attributes." />
 This would typically be passed to <a href='id_attributes.html'>id_attributes</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>time_intervals</span>(<span class='no'>times</span>)</pre>
+    <pre class="usage"><span class='fu'>time_intervals</span><span class='op'>(</span><span class='va'>times</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -197,12 +200,14 @@ described in <a href='id_attributes.html'>id_attributes</a>.</p>
     <div class='dont-index'><p><a href='id_attributes.html'>id_attributes</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>time_intervals</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>5</span>))</div><div class='output co'>#&gt;    time_id time_start time_stop
+    <pre class="examples"><div class='input'><span class='fu'>time_intervals</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    time_id time_start time_stop
 #&gt; 1:       1          0         3
 #&gt; 2:       2          3         5
-#&gt; 3:       3          5       Inf</div><div class='input'><span class='fu'>time_intervals</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>time_start</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>5</span>),
-                          <span class='kw'>time_cat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Time &lt;= 3"</span>, <span class='st'>"3 &lt; Time &lt;= 5"</span>,
-                                       <span class='st'>"Time &gt; 5"</span>)))</div><div class='output co'>#&gt;    time_id time_start      time_cat time_stop
+#&gt; 3:       3          5       Inf</div><div class='input'><span class='fu'>time_intervals</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>time_start <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>5</span><span class='op'>)</span>,
+                          time_cat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Time &lt;= 3"</span>, <span class='st'>"3 &lt; Time &lt;= 5"</span>, 
+                                       <span class='st'>"Time &gt; 5"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    time_id time_start      time_cat time_stop
 #&gt; 1:       1          0     Time &lt;= 3         3
 #&gt; 2:       2          3 3 &lt; Time &lt;= 5         5
 #&gt; 3:       3          5      Time &gt; 5       Inf</div></pre>
@@ -221,7 +226,7 @@ described in <a href='id_attributes.html'>id_attributes</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

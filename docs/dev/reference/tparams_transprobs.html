@@ -145,6 +145,9 @@ a data.frame, or a tpmatrix." />
   </ul>
 </li>
 <li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
+</li>
+<li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
@@ -181,25 +184,25 @@ simulation. The class can be instantiated from either an <code>array</code>, a <
 a <code>data.frame</code>, or a <a href='tpmatrix.html'>tpmatrix</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for array</span>
-<span class='fu'>tparams_transprobs</span>(
-  <span class='no'>object</span>,
-  <span class='kw'>tpmatrix_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>patient_wt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)
+<span class='fu'>tparams_transprobs</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  tpmatrix_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  times <span class='op'>=</span> <span class='cn'>NULL</span>,
+  grp_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  patient_wt <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for data.table</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)
+<span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>)
+<span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
 <span class='co'># S3 method for tpmatrix</span>
-<span class='fu'>tparams_transprobs</span>(<span class='no'>object</span>, <span class='no'>tpmatrix_id</span>)</pre>
+<span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>tpmatrix_id</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -246,7 +249,7 @@ distribution of the underlying statistical model. Each matrix in
 <code>patient_id</code>, and optionally <code>time_id</code> combination.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The format of <code>object</code> depends on its class:</p><dl'>
+    <p>The format of <code>object</code> depends on its class:</p><dl>
 <dt>array</dt><dd><p>Either a 3D or a 6D array is possible.
 <ul>
 <li><p>If a 3D array, then each slice is a
@@ -308,7 +311,7 @@ cohort discrete time state transition model using <code><a href='define_model.ht
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

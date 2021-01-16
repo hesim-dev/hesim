@@ -142,6 +142,9 @@ state transition or partitioned survival model." />
   </ul>
 </li>
 <li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
+</li>
+<li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
@@ -179,7 +182,7 @@ state transition or partitioned survival model.</p>
 
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p><div class="r6-fields"></p><dl'>
+    <p><div class="r6-fields"></p><dl>
 <dt><code>params</code></dt><dd><p>Parameters for simulating state values. Currently supports
 objects of class <a href='tparams_mean.html'>tparams_mean</a> or <a href='params_lm.html'>params_lm</a>.</p></dd>
 
@@ -206,7 +209,7 @@ costs vary over time within health states. Only used if <code>method = wlos</cod
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-new'><code>StateVals$new()</code></a></p></li>
@@ -215,17 +218,17 @@ costs vary over time within health states. Only used if <code>method = wlos</cod
 <li><p><a href='#method-clone'><code>StateVals$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new <code>StateVals</code> object.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>StateVals</span>$<span class='fu'>new</span>(
-  <span class='no'>params</span>,
-  <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"wlos"</span>, <span class='st'>"starting"</span>),
-  <span class='kw'>time_reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre><p></div></p>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<p>Create a new <code>StateVals</code> object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>StateVals</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
+  <span class='va'>params</span>,
+  input_data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"wlos"</span>, <span class='st'>"starting"</span><span class='op'>)</span>,
+  time_reset <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>params</code></dt><dd><p>The <code>params</code> field.</p></dd>
 
 <dt><code>input_data</code></dt><dd><p>The <code>input_data</code> field.</p></dd>
@@ -235,36 +238,36 @@ costs vary over time within health states. Only used if <code>method = wlos</cod
 <dt><code>time_reset</code></dt><dd><p>The <code>time_reset</code> field.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>A new <code>StateVals</code> object.</p>
 <p><hr>
-<a id="method-sim"></a></p><h3>Method <code>sim()</code></h3>
+<a id="method-sim"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sim()</code></h3>
 <p>Simulate state values with either predicted means or random samples by
-treatment strategy, patient, health state, and time <code>t</code>.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>StateVals</span>$<span class='fu'>sim</span>(<span class='no'>t</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"predict"</span>, <span class='st'>"random"</span>))</pre><p></div></p>
+treatment strategy, patient, health state, and time <code>t</code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>StateVals</span><span class='op'>$</span><span class='fu'>sim</span><span class='op'>(</span><span class='va'>t</span>, type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"predict"</span>, <span class='st'>"random"</span><span class='op'>)</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
 
 <dt><code>type</code></dt><dd><p><code>"predict"</code> for mean values or <code>"random"</code> for random samples.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>A <code>data.table</code> of simulated state values with columns for <code>sample</code>,
 <code>strategy_id</code>, <code>patient_id</code>, <code>state_id</code>, <code>time</code>, and <code>value</code>.</p>
 <p><hr>
-<a id="method-check"></a></p><h3>Method <code><a href='check.html'>check()</a></code></h3>
-<p>Input validation for class. Checks that fields are the correct type.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>StateVals</span>$<span class='fu'><a href='check.html'>check</a></span>()</pre><p></div></p>
+<a id="method-check"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='check.id_attributes.html'>check()</a></code></h3>
+<p>Input validation for class. Checks that fields are the correct type.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>StateVals</span><span class='op'>$</span><span class='fu'>check</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>StateVals</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>StateVals</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
 </dl><p></div></p>
@@ -286,7 +289,7 @@ treatment strategy, patient, health state, and time <code>t</code>.</p><h3>Usage
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

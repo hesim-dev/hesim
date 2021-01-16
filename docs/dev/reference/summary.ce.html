@@ -143,6 +143,9 @@ pretty printing with format.summary.ce()." />
   </ul>
 </li>
 <li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
+</li>
+<li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
@@ -178,20 +181,20 @@ pretty printing with <code>format.summary.ce()</code>.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for ce</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, labels <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for summary.ce</span>
-<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(
-  <span class='no'>x</span>,
-  <span class='kw'>digits_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>digits_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>dr_qalys</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>dr_costs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pivot_from</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>,
-  <span class='kw'>drop_grp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>pretty_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>
-)</pre>
+<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  digits_qalys <span class='op'>=</span> <span class='fl'>2</span>,
+  digits_costs <span class='op'>=</span> <span class='fl'>0</span>,
+  dr_qalys <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dr_costs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  pivot_from <span class='op'>=</span> <span class='st'>"strategy"</span>,
+  drop_grp <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  pretty_names <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -262,7 +265,7 @@ removed.</p></td>
 
     <p><code>summary.ce()</code> returns an object of class <code>summary.ce</code> that is a tidy
 <code>data.table</code> with the following columns:</p>
-<dl'>
+<dl>
 <dt>dr</dt><dd><p>The discount rate.</p></dd>
 <dt>strategy</dt><dd><p>The treatment strategy.</p></dd>
 <dt>grp</dt><dd><p>The patient subgroup.</p></dd>
@@ -295,7 +298,7 @@ it is the cost category.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

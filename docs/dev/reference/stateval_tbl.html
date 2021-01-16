@@ -143,6 +143,9 @@ utility in an economic model by treatment strategy, patient, health state, and
   </ul>
 </li>
 <li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
+</li>
+<li>
   <a href="../news/index.html">News</a>
 </li>
       </ul>
@@ -177,12 +180,12 @@ utility in an economic model by treatment strategy, patient, health state, and
 (optionally) time interval.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>stateval_tbl</span>(
-  <span class='no'>tbl</span>,
-  <span class='kw'>dist</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"norm"</span>, <span class='st'>"beta"</span>, <span class='st'>"gamma"</span>, <span class='st'>"lnorm"</span>, <span class='st'>"unif"</span>, <span class='st'>"fixed"</span>, <span class='st'>"custom"</span>),
-  <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>grp_var</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>stateval_tbl</span><span class='op'>(</span>
+  <span class='va'>tbl</span>,
+  dist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"norm"</span>, <span class='st'>"beta"</span>, <span class='st'>"gamma"</span>, <span class='st'>"lnorm"</span>, <span class='st'>"unif"</span>, <span class='st'>"fixed"</span>, <span class='st'>"custom"</span><span class='op'>)</span>,
+  hesim_data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  grp_var <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -234,7 +237,7 @@ parameter values for a PSA  have been previously
 sampled from an arbitrary probability distribution.
 The columns in <code>tbl</code> that must be included,
 by distribution, are:</p>
-<dl'>
+<dl>
 <dt>norm</dt><dd><p><code>mean</code> and <code>sd</code></p></dd>
 <dt>beta</dt><dd><p><code>mean</code> and <code>se</code> or <code>shape1</code> and <code>shape2</code></p></dd>
 <dt>gamma</dt><dd><p><code>mean</code> and <code>se</code>, <code>shape</code> and <code>rate</code>,
@@ -259,37 +262,42 @@ but does not need to contain them all.</p>
     <div class='dont-index'><p><code><a href='create_StateVals.html'>create_StateVals()</a></code>, <code><a href='StateVals.html'>StateVals</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
-                       <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
-                       <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
-                       <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
-<span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
-<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
-                        <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,
-                        <span class='kw'>states</span> <span class='kw'>=</span> <span class='no'>states</span>)
+    <pre class="examples"><div class='input'><span class='va'>strategies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>,
+                       grp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+                       age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span><span class='op'>)</span>,
+                       female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>states</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>state_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='va'>strategies</span>,
+                        patients <span class='op'>=</span> <span class='va'>patients</span>,
+                        states <span class='op'>=</span> <span class='va'>states</span><span class='op'>)</span>
 
 <span class='co'># Utility varies by health state and patient group</span>
-<span class='no'>utility_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'>stateval_tbl</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='no'>states</span>$<span class='no'>state_id</span>, <span class='fl'>2</span>),
-                                       <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>)), <span class='kw'>each</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>states</span>)),
-                                       <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.8</span>, <span class='fl'>.7</span>, <span class='fl'>.75</span>, <span class='fl'>.55</span>),
-                                       <span class='kw'>se</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.18</span>, <span class='fl'>.12</span>, <span class='fl'>.10</span>, <span class='fl'>.06</span>)),
-                            <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"beta"</span>,
-                            <span class='kw'>grp_var</span> <span class='kw'>=</span> <span class='st'>"grp"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>utility_tbl</span>)</div><div class='output co'>#&gt;    grp state_id mean   se
+<span class='va'>utility_tbl</span> <span class='op'>&lt;-</span> <span class='fu'>stateval_tbl</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>state_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>$</span><span class='va'>state_id</span>, <span class='fl'>2</span><span class='op'>)</span>,
+                                       grp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>states</span><span class='op'>)</span><span class='op'>)</span>, 
+                                       mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.8</span>, <span class='fl'>.7</span>, <span class='fl'>.75</span>, <span class='fl'>.55</span><span class='op'>)</span>,
+                                       se <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.18</span>, <span class='fl'>.12</span>, <span class='fl'>.10</span>, <span class='fl'>.06</span><span class='op'>)</span><span class='op'>)</span>,
+                            dist <span class='op'>=</span> <span class='st'>"beta"</span>,
+                            grp_var <span class='op'>=</span> <span class='st'>"grp"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>utility_tbl</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    grp state_id mean   se
 #&gt; 1:   1        1 0.80 0.18
 #&gt; 2:   1        2 0.70 0.12
 #&gt; 3:   2        1 0.75 0.10
-#&gt; 4:   2        2 0.55 0.06</div><div class='input'><span class='no'>utilmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>utility_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
+#&gt; 4:   2        2 0.55 0.06</div><div class='input'><span class='va'>utilmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span><span class='op'>(</span><span class='va'>utility_tbl</span>, n <span class='op'>=</span> <span class='fl'>2</span>, hesim_data <span class='op'>=</span> <span class='va'>hesim_dat</span><span class='op'>)</span>
 
 <span class='co'># Costs vary by treatment strategy</span>
-<span class='no'>cost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'>stateval_tbl</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='no'>strategies</span>$<span class='no'>strategy_id</span>,
-                                    <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5000</span>, <span class='fl'>3000</span>),
-                                    <span class='kw'>se</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>200</span>, <span class='fl'>100</span>)),
-                         <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"gamma"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>cost_tbl</span>)</div><div class='output co'>#&gt;    strategy_id mean  se
+<span class='va'>cost_tbl</span> <span class='op'>&lt;-</span> <span class='fu'>stateval_tbl</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='va'>strategies</span><span class='op'>$</span><span class='va'>strategy_id</span>,
+                                    mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5000</span>, <span class='fl'>3000</span><span class='op'>)</span>,
+                                    se <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>,
+                         dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>cost_tbl</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    strategy_id mean  se
 #&gt; 1:           1 5000 200
-#&gt; 2:           2 3000 100</div><div class='input'><span class='no'>costmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>cost_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)</div></pre>
+#&gt; 2:           2 3000 100</div><div class='input'><span class='va'>costmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span><span class='op'>(</span><span class='va'>cost_tbl</span>, n <span class='op'>=</span> <span class='fl'>2</span>, hesim_data <span class='op'>=</span> <span class='va'>hesim_dat</span><span class='op'>)</span>
+
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -305,7 +313,7 @@ but does not need to contain them all.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

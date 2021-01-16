@@ -1,7 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 1.5.1
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
+  benchmarks: benchmarks.html
   cea: cea.html
   intro: intro.html
   markov-cohort: markov-cohort.html
@@ -10,7 +11,7 @@ articles:
   mlogit: mlogit.html
   mstate: mstate.html
   psm: psm.html
-last_built: 2021-01-06T06:09Z
+last_built: 2021-01-16T05:14Z
 urls:
   reference: https://hesim-dev.github.io/hesim/reference
   article: https://hesim-dev.github.io/hesim/articles
