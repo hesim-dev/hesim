@@ -9,3 +9,4 @@ src/*.gcda
 .DS_Store
 doc
 Meta
+*_cache*

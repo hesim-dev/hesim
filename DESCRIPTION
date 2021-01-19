@@ -44,6 +44,7 @@ Suggests:
     covr,
     kableExtra,
     knitr,
+    magrittr,
     mstate,
     nnet,
     numDeriv,
