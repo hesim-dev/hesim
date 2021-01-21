@@ -28,7 +28,7 @@ This page compares the computational performance of `hesim` against other `R` pa
 
 The following `R` packages and scripts are used. The file `benchmarks.R` contains the code used to run the models.
 
-```{r setup}
+```{r setup, message = FALSE}
 library("data.table")
 library("flexsurv")
 library("ggplot2")
@@ -40,7 +40,7 @@ source("benchmarks.R")
 ```
 
 # Semi-Markov models
-[Williams et al. (2016)](https://doi.org/10.1177/0272989X16651869) adapted the [`mstate`](https://www.jstatsoft.org/article/view/v038i07) package to simulate parametric semi-Markov multi-state model. Here, we simulate the 6-state model for leukemia patients following bone marrow transplantation using both `hesim` and `mstate` using individual-level simulations. Additional details were previously provided in a [blog post](https://devinincerti.com/2019/01/01/sim-mstate.html).
+[Williams et al. (2016)](https://doi.org/10.1177/0272989X16651869) adapted the [`mstate`](https://www.jstatsoft.org/article/view/v038i07) package to simulate parametric semi-Markov multi-state models. Here, we use simulate a 6-state model for leukemia patients following bone marrow transplantation with both `hesim` and `mstate`. Since a semi-Markov process is assumed, an individual-level simulation is used. Additional details were previously provided in a [blog post](https://devinincerti.com/2019/01/01/sim-mstate.html).
 
 We fit a Gompertz model, but computational performance does not differ substantially across parametric distributions. When using `mstate`, multi-state models are simulated using a cumulative hazard function estimated on a discrete grid, so a time step must be defined. We used a step size of 1/52 (i.e., one week) so that each time step was a week long. This produced reasonably accurate state probability estimates that were similar to those performed in continuous time with `hesim` (see plot below).
 
@@ -59,7 +59,7 @@ smb2 <-  benchmark_semi_markov(n_patients = 5000, uncertainty = "none", dist = D
 smb2$plot
 ```
 
-We then performed probabilistic sensitivity analysis (PSA) and varied both the number of patients simulated and the number of draws of the parameters. The results are reported in the table below. `hesim` is considerably faster and the speed advantage is most notable when a PSA is performed.
+We then performed probabilistic sensitivity analysis (PSA) and varied both the number of patients simulated and the number of draws of the parameters. Run times are reported in the table below. `hesim` is considerably faster and the speed advantage is most notable when a PSA is performed.
 
 ```{r, semiMarkovPSA, cache = CACHE}
 smb <- list(
@@ -67,31 +67,15 @@ smb <- list(
   smb2,
   benchmark_semi_markov(n_patients = 1000, uncertainty = "normal", 
                         n_samples = 100, dist = DIST,
+                        step = STEP),
+  benchmark_semi_markov(n_patients = 1000, uncertainty = "normal", 
+                        n_samples = 1000, dist = DIST,
                         step = STEP)
 )
 ```
 
-```{r}
-make_smb_row <- function(x) {
-  data.table(x$n_patients, x$n_samples, x$run_time[1], x$run_time[2])
-}
-
-format_run_time <- function(x) {
-  ifelse (
-    x < 60,
-    paste0(formatC(x, digits = 2), " seconds"),
-    paste0(formatC(x/60, digits = 2), " minutes")
-  )
-}
-
-lapply(smb, make_smb_row) %>%
-  rbindlist() %>%
-  setnames(new = c("# of patients",  "# of PSA samples", "mstate", "hesim")) %>%
-  .[, mstate := format_run_time(mstate)] %>%
-  .[, hesim := format_run_time(hesim)] %>%
-  kable() %>%
-  kable_styling() %>%
-  add_header_above(c(" " = 2, "Run time" = 2)) 
+```{r, semiMarkovTable}
+semi_markov_table(smb)
 ```
 
 # Markov models
@@ -107,23 +91,8 @@ mb <- list(
 )
 ```
 
-```{r}
-make_mb_row <- function(x) {
-  data.table(x$n_samples, 1, x$n_patients, x$run_time[1], x$run_time[2], x$run_time[3])
-}
-
-lapply(mb, make_mb_row) %>%
-  rbindlist() %>%
-  setnames(new = c("# of PSA samples", "Cohort", "Individual", 
-                   "heemod", "hesim_cohort", "hesim_indiv")) %>%
-  .[, heemod := format_run_time(heemod)] %>%
-  .[, hesim_cohort := format_run_time(hesim_cohort)] %>%
-  .[, hesim_indiv := format_run_time(hesim_indiv)] %>%
-  setnames(old = c("hesim_cohort", "hesim_indiv"),
-           new = c("hesim (cohort)", "hesim (individual)")) %>%
-  kable() %>%
-  kable_styling() %>%
-  add_header_above(c(" " = 1, "# of patients" = 2, "Run time" = 3)) 
+```{r, MarkovTable}
+markov_table(mb)
 ```
 
 # Computing environment

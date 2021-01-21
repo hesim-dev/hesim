@@ -19,3 +19,4 @@ DoxygenLayout.xml
 ^\.github$
 vignettes/benchmarks*
 ^vignettes/README
+^vignettes/precompile.R

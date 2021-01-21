@@ -1,6 +1,6 @@
 ---
 title: Benchmarks
-date: "2021-01-18"
+date: "2021-01-20"
 output: 
   html_vignette:
     toc: yes
@@ -34,7 +34,7 @@ source("benchmarks.R")
 ```
 
 # Semi-Markov models
-[Williams et al. (2016)](https://doi.org/10.1177/0272989X16651869) adapted the [`mstate`](https://www.jstatsoft.org/article/view/v038i07) package to simulate parametric semi-Markov multi-state model. Here, we simulate the 6-state model for leukemia patients following bone marrow transplantation using both `hesim` and `mstate` using individual-level simulations. Additional details were previously provided in a [blog post](https://devinincerti.com/2019/01/01/sim-mstate.html).
+[Williams et al. (2016)](https://doi.org/10.1177/0272989X16651869) adapted the [`mstate`](https://www.jstatsoft.org/article/view/v038i07) package to simulate parametric semi-Markov multi-state models. Here, we use simulate a 6-state model for leukemia patients following bone marrow transplantation with both `hesim` and `mstate`. Since a semi-Markov process is assumed, an individual-level simulation is used. Additional details were previously provided in a [blog post](https://devinincerti.com/2019/01/01/sim-mstate.html).
 
 We fit a Gompertz model, but computational performance does not differ substantially across parametric distributions. When using `mstate`, multi-state models are simulated using a cumulative hazard function estimated on a discrete grid, so a time step must be defined. We used a step size of 1/52 (i.e., one week) so that each time step was a week long. This produced reasonably accurate state probability estimates that were similar to those performed in continuous time with `hesim` (see plot below).
 
@@ -57,7 +57,7 @@ smb2$plot
 
 ![](benchmarks_figs/SemiMarkov-1.png)
 
-We then performed probabilistic sensitivity analysis (PSA) and varied both the number of patients simulated and the number of draws of the parameters. The results are reported in the table below. `hesim` is considerably faster and the speed advantage is most notable when a PSA is performed.
+We then performed probabilistic sensitivity analysis (PSA) and varied both the number of patients simulated and the number of draws of the parameters. Run times are reported in the table below. `hesim` is considerably faster and the speed advantage is most notable when a PSA is performed.
 
 
 ```r
@@ -66,32 +66,16 @@ smb <- list(
   smb2,
   benchmark_semi_markov(n_patients = 1000, uncertainty = "normal", 
                         n_samples = 100, dist = DIST,
+                        step = STEP),
+  benchmark_semi_markov(n_patients = 1000, uncertainty = "normal", 
+                        n_samples = 1000, dist = DIST,
                         step = STEP)
 )
 ```
 
 
 ```r
-make_smb_row <- function(x) {
-  data.table(x$n_patients, x$n_samples, x$run_time[1], x$run_time[2])
-}
-
-format_run_time <- function(x) {
-  ifelse (
-    x < 60,
-    paste0(formatC(x, digits = 2), " seconds"),
-    paste0(formatC(x/60, digits = 2), " minutes")
-  )
-}
-
-lapply(smb, make_smb_row) %>%
-  rbindlist() %>%
-  setnames(new = c("# of patients",  "# of PSA samples", "mstate", "hesim")) %>%
-  .[, mstate := format_run_time(mstate)] %>%
-  .[, hesim := format_run_time(hesim)] %>%
-  kable() %>%
-  kable_styling() %>%
-  add_header_above(c(" " = 2, "Run time" = 2)) 
+semi_markov_table(smb)
 ```
 
 <table class="table" style="margin-left: auto; margin-right: auto;">
@@ -111,20 +95,26 @@ lapply(smb, make_smb_row) %>%
   <tr>
    <td style="text-align:right;"> 1000 </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> 10 seconds </td>
-   <td style="text-align:left;"> 0.051 seconds </td>
+   <td style="text-align:left;"> 9.4 seconds </td>
+   <td style="text-align:left;"> 0.084 seconds </td>
   </tr>
   <tr>
    <td style="text-align:right;"> 5000 </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> 44 seconds </td>
-   <td style="text-align:left;"> 0.079 seconds </td>
+   <td style="text-align:left;"> 52 seconds </td>
+   <td style="text-align:left;"> 0.071 seconds </td>
   </tr>
   <tr>
    <td style="text-align:right;"> 1000 </td>
    <td style="text-align:right;"> 100 </td>
-   <td style="text-align:left;"> 20 minutes </td>
-   <td style="text-align:left;"> 0.32 seconds </td>
+   <td style="text-align:left;"> 22 minutes </td>
+   <td style="text-align:left;"> 0.31 seconds </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1000 </td>
+   <td style="text-align:right;"> 1000 </td>
+   <td style="text-align:left;"> 3.1 hours </td>
+   <td style="text-align:left;"> 2.8 seconds </td>
   </tr>
 </tbody>
 </table>
@@ -145,22 +135,7 @@ mb <- list(
 
 
 ```r
-make_mb_row <- function(x) {
-  data.table(x$n_samples, 1, x$n_patients, x$run_time[1], x$run_time[2], x$run_time[3])
-}
-
-lapply(mb, make_mb_row) %>%
-  rbindlist() %>%
-  setnames(new = c("# of PSA samples", "Cohort", "Individual", 
-                   "heemod", "hesim_cohort", "hesim_indiv")) %>%
-  .[, heemod := format_run_time(heemod)] %>%
-  .[, hesim_cohort := format_run_time(hesim_cohort)] %>%
-  .[, hesim_indiv := format_run_time(hesim_indiv)] %>%
-  setnames(old = c("hesim_cohort", "hesim_indiv"),
-           new = c("hesim (cohort)", "hesim (individual)")) %>%
-  kable() %>%
-  kable_styling() %>%
-  add_header_above(c(" " = 1, "# of patients" = 2, "Run time" = 3)) 
+markov_table(mb)
 ```
 
 <table class="table" style="margin-left: auto; margin-right: auto;">
@@ -184,25 +159,25 @@ lapply(mb, make_mb_row) %>%
    <td style="text-align:right;"> 10 </td>
    <td style="text-align:right;"> 1 </td>
    <td style="text-align:right;"> 1000 </td>
-   <td style="text-align:left;"> 1.8 seconds </td>
-   <td style="text-align:left;"> 0.072 seconds </td>
-   <td style="text-align:left;"> 0.11 seconds </td>
+   <td style="text-align:left;"> 1.4 seconds </td>
+   <td style="text-align:left;"> 0.098 seconds </td>
+   <td style="text-align:left;"> 0.16 seconds </td>
   </tr>
   <tr>
    <td style="text-align:right;"> 100 </td>
    <td style="text-align:right;"> 1 </td>
    <td style="text-align:right;"> 1000 </td>
-   <td style="text-align:left;"> 14 seconds </td>
+   <td style="text-align:left;"> 12 seconds </td>
    <td style="text-align:left;"> 0.13 seconds </td>
-   <td style="text-align:left;"> 0.84 seconds </td>
+   <td style="text-align:left;"> 0.68 seconds </td>
   </tr>
   <tr>
    <td style="text-align:right;"> 1000 </td>
    <td style="text-align:right;"> 1 </td>
    <td style="text-align:right;"> 1000 </td>
-   <td style="text-align:left;"> 2.1 minutes </td>
-   <td style="text-align:left;"> 1.2 seconds </td>
-   <td style="text-align:left;"> 8.1 seconds </td>
+   <td style="text-align:left;"> 1.9 minutes </td>
+   <td style="text-align:left;"> 0.88 seconds </td>
+   <td style="text-align:left;"> 7.4 seconds </td>
   </tr>
 </tbody>
 </table>
@@ -219,7 +194,7 @@ sessionInfo()
 ## Running under: macOS Mojave 10.14.6
 ## 
 ## Matrix products: default
-## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
 ## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
@@ -229,21 +204,23 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] flexsurv_1.1.1    mstate_0.3.1      survival_3.2-7    kableExtra_1.2.1  hesim_0.4.2.9999  heemod_0.13.0    
-## [7] ggplot2_3.3.3     data.table_1.13.6 knitr_1.30       
+## [1] mstate_0.3.1      kableExtra_1.2.1  hesim_0.4.2.9999  heemod_0.13.0    
+## [5] ggplot2_3.3.3     flexsurv_1.1.1    survival_3.2-7    data.table_1.13.6
+## [9] knitr_1.30       
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] httr_1.4.2         pkgload_1.1.0      tidyr_1.1.2        viridisLite_0.3.0  splines_4.0.3      assertthat_0.2.1  
-##  [7] highr_0.8          yaml_2.2.1         remotes_2.1.1      sessioninfo_1.1.1  pillar_1.4.7       lattice_0.20-41   
-## [13] glue_1.4.2         quadprog_1.5-8     digest_0.6.27      RColorBrewer_1.1-2 pryr_0.1.4         rvest_0.3.6       
-## [19] muhaz_1.2.6.1      colorspace_2.0-0   htmltools_0.5.0    Matrix_1.2-18      plyr_1.8.6         pkgconfig_2.0.3   
-## [25] devtools_2.3.0     purrr_0.3.4        mvtnorm_1.1-1      scales_1.1.1       webshot_0.5.2      processx_3.4.5    
-## [31] whisker_0.4        downlit_0.2.1      tibble_3.0.4       generics_0.1.0     farver_2.0.3       usethis_1.6.3     
-## [37] ellipsis_0.3.1     withr_2.3.0        lazyeval_0.2.2     cli_2.2.0          magrittr_2.0.1     crayon_1.3.4      
-## [43] mvnfast_0.2.5      memoise_1.1.0      evaluate_0.14      ps_1.5.0           fs_1.5.0           fansi_0.4.1       
-## [49] MASS_7.3-53        xml2_1.3.2         pkgbuild_1.2.0     tools_4.0.3        prettyunits_1.1.1  lifecycle_0.2.0   
-## [55] stringr_1.4.0      munsell_0.5.0      callr_3.5.1        compiler_4.0.3     pkgdown_1.6.1      rlang_0.4.10      
-## [61] grid_4.0.3         rstudioapi_0.13    labeling_0.4.2     rmarkdown_2.4      testthat_3.0.1     gtable_0.3.0      
-## [67] codetools_0.2-16   deSolve_1.28       rematch2_2.1.2     R6_2.5.0           dplyr_1.0.2        rprojroot_2.0.2   
-## [73] desc_1.2.0         stringi_1.5.3      Rcpp_1.0.5         vctrs_0.3.6        tidyselect_1.1.0   xfun_0.18
+##  [1] deSolve_1.28       tidyselect_1.1.0   xfun_0.18          purrr_0.3.4       
+##  [5] splines_4.0.3      lattice_0.20-41    colorspace_2.0-0   vctrs_0.3.6       
+##  [9] generics_0.1.0     htmltools_0.5.0    viridisLite_0.3.0  rlang_0.4.10      
+## [13] pillar_1.4.7       glue_1.4.2         withr_2.3.0        RColorBrewer_1.1-2
+## [17] pryr_0.1.4         muhaz_1.2.6.1      lifecycle_0.2.0    plyr_1.8.6        
+## [21] stringr_1.4.0      munsell_0.5.0      gtable_0.3.0       rvest_0.3.6       
+## [25] mvtnorm_1.1-1      mvnfast_0.2.5      codetools_0.2-16   evaluate_0.14     
+## [29] memoise_1.1.0      highr_0.8          Rcpp_1.0.5         scales_1.1.1      
+## [33] webshot_0.5.2      digest_0.6.27      stringi_1.5.3      dplyr_1.0.2       
+## [37] grid_4.0.3         quadprog_1.5-8     tools_4.0.3        magrittr_2.0.1    
+## [41] lazyeval_0.2.2     tibble_3.0.4       crayon_1.3.4       tidyr_1.1.2       
+## [45] pkgconfig_2.0.3    ellipsis_0.3.1     Matrix_1.2-18      xml2_1.3.2        
+## [49] rmarkdown_2.4      httr_1.4.2         rstudioapi_0.13    R6_2.5.0          
+## [53] compiler_4.0.3
 ```

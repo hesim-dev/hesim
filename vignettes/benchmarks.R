@@ -1,3 +1,11 @@
+format_run_time <- function(x) {
+  fcase(
+    x < 60, paste0(formatC(x, digits = 2), " seconds"),
+    x > 60 & x < 3600, paste0(formatC(x/60, digits = 2), " minutes"),
+    x > 3600, paste0(formatC(x/3600, digits = 2), " hours")
+  )
+}
+
 # Semi-Markov model ------------------------------------------------------------
 fit_semi_markov <- function(dist) {
   # Data
@@ -173,6 +181,21 @@ benchmark_semi_markov <- function(n_patients = 100, n_samples = 1,
     uncertainty = uncertainty,
     n_samples = n_samples
   ))
+}
+
+semi_markov_table <- function(x) {
+  make_row <- function(x) {
+    data.table(x$n_patients, x$n_samples, x$run_time[1], x$run_time[2])
+  }
+  
+  lapply(x, make_row) %>%
+    rbindlist() %>%
+    setnames(new = c("# of patients",  "# of PSA samples", "mstate", "hesim")) %>%
+    .[, mstate := format_run_time(mstate)] %>%
+    .[, hesim := format_run_time(hesim)] %>%
+    kable() %>%
+    kable_styling() %>%
+    add_header_above(c(" " = 2, "Run time" = 2)) 
 }
 
 # Markov model -----------------------------------------------------------------
@@ -760,5 +783,23 @@ benchmark_markov <- function(n_samples, n_patients = 1000) {
     n_samples = n_samples,
     n_patients = n_patients
   ))
+}
+
+markov_table <- function(x) {
+  make_row <- function(x) {
+    data.table(x$n_samples, 1, x$n_patients, x$run_time[1], x$run_time[2], x$run_time[3])
+  }
   
+  lapply(x, make_row) %>%
+    rbindlist() %>%
+    setnames(new = c("# of PSA samples", "Cohort", "Individual", 
+                     "heemod", "hesim_cohort", "hesim_indiv")) %>%
+    .[, heemod := format_run_time(heemod)] %>%
+    .[, hesim_cohort := format_run_time(hesim_cohort)] %>%
+    .[, hesim_indiv := format_run_time(hesim_indiv)] %>%
+    setnames(old = c("hesim_cohort", "hesim_indiv"),
+             new = c("hesim (cohort)", "hesim (individual)")) %>%
+    kable() %>%
+    kable_styling() %>%
+    add_header_above(c(" " = 1, "# of patients" = 2, "Run time" = 3)) 
 }
