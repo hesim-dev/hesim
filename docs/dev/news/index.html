@@ -177,10 +177,11 @@
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
 <ul>
-<li><p>A transition intensity matrix can be created from a multi-state model fit using <code><a href="https://rdrr.io/pkg/msm/man/msm.html">msm::msm()</a></code> with the <code><a href="../reference/qmatrix.msm.html">qmatrix.msm()</a></code> method.</p></li>
+<li><p>A transition intensity matrix can be created from a multi-state model fit using <code><a href="https://rdrr.io/pkg/msm/man/msm.html">msm::msm()</a></code> with the <code><a href="../reference/qmatrix.msm.html">qmatrix.msm()</a></code> method. Similarly, a <code>CohortDtstmTrans</code> object can be created with <code><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans.msm()</a></code>.</p></li>
 <li><p>The <code>...</code> argument to <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> now passes arguments to <code><a href="../reference/create_params.html">create_params.partsurvfit()</a></code> when <code>object</code> is of class <code>flexsurvreg_list</code>. This allows more control over bootstrapping (i.e., use of the <code>max_errors</code> argument).</p></li>
 <li><p><code><a href="../reference/summary.ce.html">summary.ce()</a></code> is a new summary method for a <code><a href="../reference/ce.html">hesim::ce</a></code> object that produces confidence intervals for quality-adjusted life-years (QALYs) and each cost category; <code><a href="../reference/summary.ce.html">format.summary.ce()</a></code> formats the output for pretty printing.</p></li>
 <li><p><code><a href="../reference/icer.html">icer()</a></code> generates a tidy table of incremental cost-effectiveness ratios (ICERs) given output from <code><a href="../reference/cea.html">cea_pw()</a></code>; <code><a href="../reference/icer.html">format.icer()</a></code> formats the output for pretty printing.</p></li>
+<li><p><code><a href="../reference/plot_ceplane.html">plot_ceplane()</a></code>, <code><a href="../reference/plot_ceac.html">plot_ceac()</a></code>, <code><a href="../reference/plot_ceaf.html">plot_ceaf()</a></code>, and <code><a href="../reference/plot_evpi.html">plot_evpi()</a></code> quickly plot the cost-effectiveness plane, cost-effectiveness acceptability curve (CEAC), cost-effectiveness acceptability frontier (CEAF), and expected value of perfect information (EVPI), respectively.</p></li>
 </ul>
 </div>
 <div id="api-changes" class="section level3">
@@ -190,6 +191,13 @@
 <li><p>The first column of each matrix listed in the <code>coef</code> element returned by <code><a href="../reference/create_params.html">create_params.flexsurvreg()</a></code> is now named “(Intercept)” instead of the name of the corresponding parameter.</p></li>
 <li><p>The <code><a href="../reference/create_params.html">create_params()</a></code> methods now use the argument <code>uncertainty</code> to draw parameters and the old arguments <code>point_estimate</code> and <code>bootstrap</code> are deprecated. This also affects <code><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans()</a></code>, <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans()</a></code>, and <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code>.</p></li>
 <li><p><code><a href="../reference/icer_tbl.html">icer_tbl()</a></code> has been deprecated in favor of <code><a href="../reference/icer.html">icer()</a></code>.</p></li>
+</ul>
+</div>
+<div id="documentation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h3>
+<ul>
+<li>Performance benchmarks are now provided <a href="../articles/benchmarks.html">here</a>.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
