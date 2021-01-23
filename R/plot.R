@@ -1,3 +1,7 @@
+#' @importFrom ggplot2 autoplot
+#' @export
+ggplot2::autoplot
+
 # Utility functions for plotting -----------------------------------------------
 format_dollar <- function(x) {
   paste0("$", formatC(x, format = "d", big.mark = ","))
@@ -213,6 +217,93 @@ plot_evpi <- function(x, labels = NULL) {
     p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[[grp]]))
   }
   
+  # Return
+  return(p)
+}
+
+# Autoplot method for state probabilities --------------------------------------
+#' Plot cost-effectiveness plane
+#' 
+#' Plot a cost-effectiveness plane from the output of [`cea_pw()`] using [`ggplot2`]. 
+#' Each point is a random draw of incremental costs (y-axis) and incremental QALYs (x-axis)
+#' from a probabilistic sensitivity analysis.
+#' @inheritParams set_labels
+#' @param object A `stateprobs` object.
+#' @param ci A logical value indicating whether confidence intervals should be 
+#' plotted. Default is `FALSE`.
+#' @param prob A numeric scalar in the interval `(0,1)` giving the confidence interval.
+#' Default is 0.95 for a 95 percent interval. 
+#' @param ci_style Style to use for the confidence interval if `ci = TRUE`. If
+#' `"line"`, then dashed lines are used; if `"ribbon"`, then shaded confidence
+#' bands are plotted using `ggplot2::geom_ribbon()`.
+#' @param geom_alpha The opacity for the shaded confidence bands when 
+#' `ci_style = "ribbon"`. This is the value of the value of the `alpha` aesthetic
+#'  passed to `ggplot2::geom_ribbon()`.
+#' @param ... Further arguments passed to and from methods. Currently unused.
+#' @return A `ggplot` object.
+#' @export 
+autoplot.stateprobs <- function(object, labels = NULL, ci = FALSE,
+                                prob = .95, ci_style = c("line", "ribbon"),
+                                geom_alpha = .3, ...) {
+  patient_wt <- lower <- upper <- NULL
+  ci_style <- match.arg(ci_style)
+  
+  # Summarize PSA
+  alpha <- ci_alpha(prob)
+  
+  ## Mean or weighted mean across groups
+  if ("patient_wt" %in% colnames(object)){ # Weighted mean
+    x <- object[, lapply(.SD, stats::weighted.mean, w = patient_wt),
+                by = c("sample", "strategy_id", "state_id", "t"),
+               .SDcols = "prob"]
+  } else {
+    x <- object[, list(prob = mean(prob)),
+                by = c("sample", "strategy_id", "state_id", "t")]
+  }
+  
+  ## Confidence intervals
+  pdata <- x[, list(estimate = mean(prob),
+                    lower = stats::quantile(prob, alpha$lower),
+                    upper = stats::quantile(prob, alpha$upper)),
+             by = c("strategy_id", "state_id", "t")]
+  
+  # Passing custom names from user
+  set_labels(pdata, labels = labels)
+  if (!is.factor(pdata[["strategy_id"]])) {
+    pdata[["strategy_id"]] <- factor(pdata[["strategy_id"]])
+  }
+  if (!is.factor(pdata[["state_id"]])) {
+    pdata[["state_id"]] <- factor(pdata[["state_id"]])
+  }
+  
+  # Main plot
+  p <- ggplot2::ggplot(
+    data = pdata,
+    mapping = ggplot2::aes(x = .data[["t"]], y = .data[["estimate"]], 
+                           col = .data[["strategy_id"]])
+  ) +
+    ggplot2::geom_line() +
+    ggplot2::facet_wrap(ggplot2::vars(.data[["state_id"]])) +
+    ggplot2::xlab("Time") +
+    ggplot2::ylab("Probability") +
+    ggplot2::scale_y_continuous(limits = c(0, 1)) +
+    ggplot2::theme(legend.position = "bottom") +
+    ggplot2::scale_colour_discrete(name = "Strategy") 
+  
+  # Add confidence intervals 
+  if (ci) {
+    if (ci_style == "line") {
+      p <-  p + ggplot2::geom_ribbon(ggplot2::aes(x = t, ymin = lower, ymax = upper,
+                                                  fill = .data[["strategy_id"]]), 
+                                     alpha = 0, linetype = "dashed")
+    } else if (ci_style == "ribbon") {
+      p <- p + ggplot2::geom_ribbon(ggplot2::aes(x = t, ymin = lower, ymax = upper,
+                                            fill = .data[["strategy_id"]]), 
+                               alpha = geom_alpha)
+    }
+    p <- p + ggplot2::scale_fill_discrete("Strategy")
+  }
+
   # Return
   return(p)
 }

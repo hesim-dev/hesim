@@ -260,7 +260,7 @@ summary.ce <- function(object, prob = 0.95, labels = NULL,
   qalys <- costs <- value <- dr <- grp <- order <- strategy <-  NULL
   alpha <- ci_alpha(prob)
   
-  # Summarize the PSA separately for costa and QALYs
+  # Summarize the PSA separately for costs and QALYs
   res <- list(
     qalys = object$qalys[, list(type = "QALYs",
                                 category = "QALYs",
