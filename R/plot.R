@@ -239,6 +239,9 @@ plot_evpi <- function(x, labels = NULL) {
 #' `ci_style = "ribbon"`. This is the value of the value of the `alpha` aesthetic
 #'  passed to `ggplot2::geom_ribbon()`.
 #' @param ... Further arguments passed to and from methods. Currently unused.
+#' @note If there are multiple patients/groups, then state probabilities are 
+#' averaged across patients/groups (using the weights in `patient_wt` if available)
+#' prior to plotting.
 #' @seealso [`Psm`] for an example.
 #' @return A `ggplot` object.
 #' @export 

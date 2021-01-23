@@ -92,7 +92,7 @@ list represents a different cost category.}
 \item{\code{t_}}{A numeric vector of times at which survival curves were predicted. Determined
 by the argument \code{t} in \verb{$sim_curves()}.}
 
-\item{\code{survival_}}{Survival curves simulated using \code{sim_curves()}.}
+\item{\code{survival_}}{An object of class \link{survival} simulated using \code{sim_survival()}.}
 
 \item{\code{stateprobs_}}{An object of class \link{stateprobs} simulated using \verb{$sim_stateprobs()}.}
 
@@ -146,7 +146,7 @@ A new \code{Psm} object.
 \if{html}{\out{<a id="method-sim_survival"></a>}}
 \if{latex}{\out{\hypertarget{method-sim_survival}{}}}
 \subsection{Method \code{sim_survival()}}{
-Simulate survival curves as a function of time using \code{PsmCurves$sim_survival()}.
+Simulate survival curves as a function of time using \code{PsmCurves$survival()}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Psm$sim_survival(t)}\if{html}{\out{</div>}}
 }
@@ -159,8 +159,8 @@ Simulate survival curves as a function of time using \code{PsmCurves$sim_surviva
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An instance of \code{self} with simulated output from \code{PsmCurves$sim_survival()}
-stored in \code{stateprobs_}.
+An instance of \code{self} with simulated output from \code{PsmCurves$survival()}
+stored in \code{survival_}.
 }
 }
 \if{html}{\out{<hr>}}

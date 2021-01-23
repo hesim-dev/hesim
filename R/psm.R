@@ -57,7 +57,7 @@ create_PsmCurves.params_surv_list <- function(object, input_data, ...){
 #' Partitioned survival curves
 #'
 #' @description
-#' Summarize `n-1` survival curves for an `N` state partitioned survival model.
+#' Summarize N-1 survival curves for an N-state partitioned survival model.
 #' @format An [R6::R6Class] object.
 #' @examples 
 #' library("flexsurv")
@@ -154,10 +154,9 @@ PsmCurves <- R6::R6Class("PsmCurves",
     },
     
     #' @description
-    #' Predict the cumulative hazard function for each survival curve as a function of time.
+    #' Predict survival probabilities for each survival curve as a function of time.
     #' @param t  A numeric vector of times.
-    #' @return A `data.table` with columns `sample`, `strategy_id`,
-    #' `patient_id`, `grp_id`, `curve`, `t`, and `survival`.    
+    #' @return An object of class [`survival`].   
     survival = function(t){
       return(private$summary(x = t, type = "survival"))
     },
@@ -289,7 +288,7 @@ Psm <- R6::R6Class("Psm",
     #' by the argument `t` in `$sim_curves()`.
     t_ = NULL,
     
-    #' @field survival_ Survival curves simulated using `sim_curves()`.
+    #' @field survival_ An object of class [survival] simulated using `sim_survival()`.
     survival_ = NULL,
     
     #' @field stateprobs_ An object of class [stateprobs] simulated using `$sim_stateprobs()`.
@@ -316,10 +315,10 @@ Psm <- R6::R6Class("Psm",
     },
     
     #' @description
-    #' Simulate survival curves as a function of time using `PsmCurves$sim_survival()`.
+    #' Simulate survival curves as a function of time using `PsmCurves$survival()`.
     #' @param t A numeric vector of times. The first element must be `0`.
-    #' @return An instance of `self` with simulated output from `PsmCurves$sim_survival()`
-    #' stored in `stateprobs_`.
+    #' @return An instance of `self` with simulated output from `PsmCurves$survival()`
+    #' stored in `survival_`.
     sim_survival = function(t){
       if (t[1] !=0){
         stop("The first element of 't' must be 0.", call. = FALSE)
@@ -329,6 +328,8 @@ Psm <- R6::R6Class("Psm",
       }
       self$survival_models$check()
       self$survival_ <- self$survival_models$survival(t)
+      setattr(self$survival_, "class", 
+              c("survival", "data.table", "data.frame"))
       self$t_ <- t
       self$stateprobs_ <- NULL
       invisible(self)

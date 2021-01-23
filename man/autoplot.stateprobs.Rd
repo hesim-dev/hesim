@@ -44,6 +44,11 @@ A \code{ggplot} object.
 \description{
 Quickly plot state probabilities stored in a \code{\link{stateprobs}} object.
 }
+\note{
+If there are multiple patients/groups, then state probabilities are
+averaged across patients/groups (using the weights in \code{patient_wt} if available)
+prior to plotting.
+}
 \seealso{
 \code{\link{Psm}} for an example.
 }

@@ -7,7 +7,7 @@
 An \link[R6:R6Class]{R6::R6Class} object.
 }
 \description{
-Summarize \code{n-1} survival curves for an \code{N} state partitioned survival model.
+Summarize N-1 survival curves for an N-state partitioned survival model.
 }
 \examples{
 library("flexsurv")
@@ -135,7 +135,7 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 \if{html}{\out{<a id="method-survival"></a>}}
 \if{latex}{\out{\hypertarget{method-survival}{}}}
 \subsection{Method \code{survival()}}{
-Predict the cumulative hazard function for each survival curve as a function of time.
+Predict survival probabilities for each survival curve as a function of time.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PsmCurves$survival(t)}\if{html}{\out{</div>}}
 }
@@ -148,8 +148,7 @@ Predict the cumulative hazard function for each survival curve as a function of 
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A \code{data.table} with columns \code{sample}, \code{strategy_id},
-\code{patient_id}, \code{grp_id}, \code{curve}, \code{t}, and \code{survival}.
+An object of class \code{\link{survival}}.
 }
 }
 \if{html}{\out{<hr>}}
