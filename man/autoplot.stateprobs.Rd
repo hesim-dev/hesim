@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{autoplot.stateprobs}
 \alias{autoplot.stateprobs}
-\title{Plot cost-effectiveness plane}
+\title{State probability plot}
 \usage{
 \method{autoplot}{stateprobs}(
   object,
@@ -42,7 +42,8 @@ passed to \code{ggplot2::geom_ribbon()}.}
 A \code{ggplot} object.
 }
 \description{
-Plot a cost-effectiveness plane from the output of \code{\link[=cea_pw]{cea_pw()}} using \code{\link{ggplot2}}.
-Each point is a random draw of incremental costs (y-axis) and incremental QALYs (x-axis)
-from a probabilistic sensitivity analysis.
+Quickly plot state probabilities stored in a \code{\link{stateprobs}} object.
+}
+\seealso{
+\code{\link{Psm}} for an example.
 }

@@ -206,26 +206,30 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #' @format An [R6::R6Class] object.
 #' @examples
 #' library("flexsurv")
+#' library("ggplot2")
+#' theme_set(theme_bw())
 #'
 #' # Simulation data
-#' strategies <- data.frame(strategy_id = c(1, 2, 3))
+#' strategies <- data.frame(strategy_id = c(1, 2, 3), 
+#'                          strategy_name = paste0("Strategy ", 1:3))
 #' patients <- data.frame(patient_id = seq(1, 3),
 #'                        age = c(45, 50, 60),
 #'                        female = c(0, 0, 1))
 #' states <- data.frame(state_id =  seq(1, 3),
-#'                      state_name = paste0("state", seq(1, 3)))
+#'                      state_name = paste0("State ", seq(1, 3)))
 #' hesim_dat <- hesim_data(strategies = strategies,
 #'                         patients = patients,
 #'                         states = states)
+#' labs <- get_labels(hesim_dat)
 #' n_samples <- 3
 #'
 #' # Survival models
 #' surv_est_data <- psm4_exdata$survival
-#' fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ age,
+#' fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ factor(strategy_id),
 #'                               data = surv_est_data, dist = "exp")
-#' fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ age,
+#' fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ factor(strategy_id),
 #'                               data = surv_est_data, dist = "exp")
-#' fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age,
+#' fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ factor(strategy_id),
 #'                               data = surv_est_data, dist = "exp")
 #' fits <- flexsurvreg_list(fit1, fit2, fit3)
 #'
@@ -256,6 +260,7 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #'                cost_models = list(medical = psm_costs_medical))
 #' psm$sim_survival(t = seq(0, 5, .05))
 #' psm$sim_stateprobs()
+#' autoplot(psm$stateprobs_, labels = labs)
 #' psm$sim_costs(dr = .03)
 #' head(psm$costs_)
 #' head(psm$sim_qalys(dr = .03)$qalys_)

@@ -222,11 +222,10 @@ plot_evpi <- function(x, labels = NULL) {
 }
 
 # Autoplot method for state probabilities --------------------------------------
-#' Plot cost-effectiveness plane
+#' State probability plot
 #' 
-#' Plot a cost-effectiveness plane from the output of [`cea_pw()`] using [`ggplot2`]. 
-#' Each point is a random draw of incremental costs (y-axis) and incremental QALYs (x-axis)
-#' from a probabilistic sensitivity analysis.
+#' Quickly plot state probabilities stored in a [`stateprobs`] object.
+#' 
 #' @inheritParams set_labels
 #' @param object A `stateprobs` object.
 #' @param ci A logical value indicating whether confidence intervals should be 
@@ -240,6 +239,7 @@ plot_evpi <- function(x, labels = NULL) {
 #' `ci_style = "ribbon"`. This is the value of the value of the `alpha` aesthetic
 #'  passed to `ggplot2::geom_ribbon()`.
 #' @param ... Further arguments passed to and from methods. Currently unused.
+#' @seealso [`Psm`] for an example.
 #' @return A `ggplot` object.
 #' @export 
 autoplot.stateprobs <- function(object, labels = NULL, ci = FALSE,
