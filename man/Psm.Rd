@@ -11,26 +11,35 @@ Simulate outcomes from an N-state partitioned survival model.
 }
 \examples{
 library("flexsurv")
+library("ggplot2")
+theme_set(theme_bw())
 
 # Simulation data
-strategies <- data.frame(strategy_id = c(1, 2, 3))
+strategies <- data.frame(strategy_id = c(1, 2, 3), 
+                         strategy_name = paste0("Strategy ", 1:3))
 patients <- data.frame(patient_id = seq(1, 3),
                        age = c(45, 50, 60),
                        female = c(0, 0, 1))
 states <- data.frame(state_id =  seq(1, 3),
-                     state_name = paste0("state", seq(1, 3)))
+                     state_name = paste0("State ", seq(1, 3)))
 hesim_dat <- hesim_data(strategies = strategies,
                         patients = patients,
                         states = states)
+labs <- c(
+  get_labels(hesim_dat),
+  list(curve = c("Endpoint 1" = 1,
+                "Endpoint 2" = 2,
+                 "Endpoint 3" = 3))
+)
 n_samples <- 3
 
 # Survival models
 surv_est_data <- psm4_exdata$survival
-fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ age,
+fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ factor(strategy_id),
                               data = surv_est_data, dist = "exp")
-fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ age,
+fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ factor(strategy_id),
                               data = surv_est_data, dist = "exp")
-fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age,
+fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ factor(strategy_id),
                               data = surv_est_data, dist = "exp")
 fits <- flexsurvreg_list(fit1, fit2, fit3)
 
@@ -60,7 +69,9 @@ psm <- Psm$new(survival_models = psm_curves,
                utility_model = psm_utility,
                cost_models = list(medical = psm_costs_medical))
 psm$sim_survival(t = seq(0, 5, .05))
+autoplot(psm$survival_, labels = labs, ci = TRUE, ci_style = "ribbon")
 psm$sim_stateprobs()
+autoplot(psm$stateprobs_, labels = labs)
 psm$sim_costs(dr = .03)
 head(psm$costs_)
 head(psm$sim_qalys(dr = .03)$qalys_)
@@ -87,7 +98,7 @@ list represents a different cost category.}
 \item{\code{t_}}{A numeric vector of times at which survival curves were predicted. Determined
 by the argument \code{t} in \verb{$sim_curves()}.}
 
-\item{\code{survival_}}{Survival curves simulated using \code{sim_curves()}.}
+\item{\code{survival_}}{An object of class \link{survival} simulated using \code{sim_survival()}.}
 
 \item{\code{stateprobs_}}{An object of class \link{stateprobs} simulated using \verb{$sim_stateprobs()}.}
 
@@ -141,7 +152,7 @@ A new \code{Psm} object.
 \if{html}{\out{<a id="method-sim_survival"></a>}}
 \if{latex}{\out{\hypertarget{method-sim_survival}{}}}
 \subsection{Method \code{sim_survival()}}{
-Simulate survival curves as a function of time using \code{PsmCurves$sim_survival()}.
+Simulate survival curves as a function of time using \code{PsmCurves$survival()}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Psm$sim_survival(t)}\if{html}{\out{</div>}}
 }
@@ -154,8 +165,8 @@ Simulate survival curves as a function of time using \code{PsmCurves$sim_surviva
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An instance of \code{self} with simulated output from \code{PsmCurves$sim_survival()}
-stored in \code{stateprobs_}.
+An instance of \code{self} with simulated output from \code{PsmCurves$survival()}
+stored in \code{survival_}.
 }
 }
 \if{html}{\out{<hr>}}
