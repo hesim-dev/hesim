@@ -25,7 +25,12 @@ states <- data.frame(state_id =  seq(1, 3),
 hesim_dat <- hesim_data(strategies = strategies,
                         patients = patients,
                         states = states)
-labs <- get_labels(hesim_dat)
+labs <- c(
+  get_labels(hesim_dat),
+  list(curve = c("Endpoint 1" = 1,
+                "Endpoint 2" = 2,
+                 "Endpoint 3" = 3))
+)
 n_samples <- 3
 
 # Survival models
@@ -64,6 +69,7 @@ psm <- Psm$new(survival_models = psm_curves,
                utility_model = psm_utility,
                cost_models = list(medical = psm_costs_medical))
 psm$sim_survival(t = seq(0, 5, .05))
+autoplot(psm$survival_, labels = labs, ci = TRUE, ci_style = "ribbon")
 psm$sim_stateprobs()
 autoplot(psm$stateprobs_, labels = labs)
 psm$sim_costs(dr = .03)

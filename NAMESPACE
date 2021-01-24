@@ -3,6 +3,7 @@
 S3method("[",expanded_hesim_data)
 S3method(as.data.table,tparams_transprobs)
 S3method(autoplot,stateprobs)
+S3method(autoplot,survival)
 S3method(bootstrap,partsurvfit)
 S3method(cbind,expanded_hesim_data)
 S3method(cea,ce)

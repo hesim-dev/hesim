@@ -158,7 +158,10 @@ PsmCurves <- R6::R6Class("PsmCurves",
     #' @param t  A numeric vector of times.
     #' @return An object of class [`survival`].   
     survival = function(t){
-      return(private$summary(x = t, type = "survival"))
+      res <- private$summary(x = t, type = "survival")
+      setattr(res, "class", 
+              c("survival", "data.table", "data.frame"))
+      return(res)
     },
 
     #' @description
@@ -219,7 +222,12 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #' hesim_dat <- hesim_data(strategies = strategies,
 #'                         patients = patients,
 #'                         states = states)
-#' labs <- get_labels(hesim_dat)
+#' labs <- c(
+#'   get_labels(hesim_dat),
+#'   list(curve = c("Endpoint 1" = 1,
+#'                 "Endpoint 2" = 2,
+#'                  "Endpoint 3" = 3))
+#' )
 #' n_samples <- 3
 #'
 #' # Survival models
@@ -258,6 +266,7 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #'                utility_model = psm_utility,
 #'                cost_models = list(medical = psm_costs_medical))
 #' psm$sim_survival(t = seq(0, 5, .05))
+#' autoplot(psm$survival_, labels = labs, ci = TRUE, ci_style = "ribbon")
 #' psm$sim_stateprobs()
 #' autoplot(psm$stateprobs_, labels = labs)
 #' psm$sim_costs(dr = .03)
