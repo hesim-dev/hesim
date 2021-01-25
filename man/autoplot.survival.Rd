@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{autoplot.survival}
 \alias{autoplot.survival}
-\title{Survival curves plot}
+\title{Plot survival curves}
 \usage{
 \method{autoplot}{survival}(
   object,
@@ -15,7 +15,7 @@
 )
 }
 \arguments{
-\item{object}{A \code{survival} object.}
+\item{object}{A \code{\link{survival}} object.}
 
 \item{labels}{A list of named vectors containing the values and labels of
 variables. The elements of each vector are the values of a variable and the
@@ -46,10 +46,6 @@ Quickly plot survival curves stored in a \code{\link{survival}} object.
 }
 \note{
 If there are multiple patients, then survival probabilities are
-averaged across patients (using the weights in \code{patient_wt} if available)
-prior to plotting.
-
-If there are multiple patients, then state probabilities are
 averaged across patients (using the weights in \code{patient_wt} if available)
 prior to plotting.
 }
