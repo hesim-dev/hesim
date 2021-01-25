@@ -71,33 +71,6 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
   )
 )
 
-# Disease progression object ---------------------------------------------------
-#' Disease progression object
-#'
-#' An object of class `disprog` returned from methods 
-#' `$sim_disease()` in model classes. It contains simulated trajectories 
-#' through a multi-state model.  
-#' 
-#' @section Components:
-#' A `disprog` object inherits from `data.table` and contains
-#' the following columns:
-#' 
-#' \describe{
-#' \item{sample}{A random sample from the PSA.}
-#' \item{strategy_id}{The treatment strategy ID.}
-#' \item{patient_id}{The patient ID.}
-#' \item{from}{The health state ID transitioned from.}
-#' \item{to}{The health state ID transitioned to.}
-#' \item{final}{An indicator equal to 1 if a patient is in their final health
-#' state during the simulation and 0 otherwise.}
-#' \item{time_start}{The time at the start of the interval.}
-#' \item{time_stop}{The time at the end of the interval.}
-#' }
-#'
-#' @seealso [IndivCtstm], [IndivCtstmTrans]
-#' @name disprog
-NULL
-
 # IndivCtstmTrans --------------------------------------------------------------
 indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
                                     progress = NULL){

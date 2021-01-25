@@ -17,7 +17,7 @@ set.seed(101)
 # Model setup
 strategies <- data.table(
   strategy_id = c(1, 2, 3),
-  strategy_name = factor(c("SOC", "New 1", "New 2"))
+  strategy_name = c("SOC", "New 1", "New 2")
 )
 patients <- data.table(patient_id = 1:2)
 hesim_dat <- hesim_data(
