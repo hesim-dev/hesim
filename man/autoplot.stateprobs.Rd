@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{autoplot.stateprobs}
 \alias{autoplot.stateprobs}
-\title{State probability plot}
+\title{Plot state probabilities}
 \usage{
 \method{autoplot}{stateprobs}(
   object,
@@ -15,7 +15,7 @@
 )
 }
 \arguments{
-\item{object}{A \code{stateprobs} object.}
+\item{object}{A \code{\link{stateprobs}} object.}
 
 \item{labels}{A list of named vectors containing the values and labels of
 variables. The elements of each vector are the values of a variable and the

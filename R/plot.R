@@ -222,12 +222,12 @@ plot_evpi <- function(x, labels = NULL) {
 }
 
 # Autoplot method for survival curves ------------------------------------------
-#' Survival curves plot
+#' Plot survival curves
 #' 
 #' Quickly plot survival curves stored in a [`survival`] object.
 #' 
 #' @inheritParams set_labels
-#' @param object A `survival` object.
+#' @param object A [`survival`] object.
 #' @param ci A logical value indicating whether confidence intervals should be 
 #' plotted. Default is `FALSE`.
 #' @param prob A numeric scalar in the interval `(0,1)` giving the confidence interval.
@@ -240,9 +240,6 @@ plot_evpi <- function(x, labels = NULL) {
 #'  passed to `ggplot2::geom_ribbon()`.
 #' @param ... Further arguments passed to and from methods. Currently unused.
 #' @note If there are multiple patients, then survival probabilities are 
-#' averaged across patients (using the weights in `patient_wt` if available)
-#' prior to plotting.
-#' @note If there are multiple patients, then state probabilities are 
 #' averaged across patients (using the weights in `patient_wt` if available)
 #' prior to plotting.
 #' @seealso [`Psm`] for an example.
@@ -315,23 +312,13 @@ autoplot.survival <- function(object, labels = NULL, ci = FALSE,
 }
 
 # Autoplot method for state probabilities --------------------------------------
-#' State probability plot
+#' Plot state probabilities
 #' 
 #' Quickly plot state probabilities stored in a [`stateprobs`] object.
 #' 
 #' @inheritParams set_labels
-#' @param object A `stateprobs` object.
-#' @param ci A logical value indicating whether confidence intervals should be 
-#' plotted. Default is `FALSE`.
-#' @param prob A numeric scalar in the interval `(0,1)` giving the confidence interval.
-#' Default is 0.95 for a 95 percent interval. 
-#' @param ci_style Style to use for the confidence interval if `ci = TRUE`. If
-#' `"line"`, then dashed lines are used; if `"ribbon"`, then shaded confidence
-#' bands are plotted using `ggplot2::geom_ribbon()`.
-#' @param geom_alpha The opacity for the shaded confidence bands when 
-#' `ci_style = "ribbon"`. This is the value of the value of the `alpha` aesthetic
-#'  passed to `ggplot2::geom_ribbon()`.
-#' @param ... Further arguments passed to and from methods. Currently unused.
+#' @inheritParams autoplot.survival
+#' @param object A [`stateprobs`] object.
 #' @note If there are multiple patients/groups, then state probabilities are 
 #' averaged across patients/groups (using the weights in `patient_wt` if available)
 #' prior to plotting.
