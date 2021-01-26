@@ -8,7 +8,9 @@
 
 * `icer()` generates a tidy table of incremental cost-effectiveness ratios (ICERs) given output from `cea_pw()`; `format.icer()` formats the output for pretty printing.
 
-* `plot_ceplane()`, `plot_ceac()`, `plot_ceaf()`, and `plot_evpi()` quickly plot the cost-effectiveness plane, cost-effectiveness acceptability curve (CEAC), cost-effectiveness acceptability frontier (CEAF), and expected value of perfect information (EVPI), respectively. 
+* `plot_ceplane()`, `plot_ceac()`, `plot_ceaf()`, and `plot_evpi()` plot the cost-effectiveness plane, cost-effectiveness acceptability curve (CEAC), cost-effectiveness acceptability frontier (CEAF), and expected value of perfect information (EVPI), respectively. 
+
+* `autoplot.survival()` and `autoplot.stateprobs()` plot survival curves and state probabilities, respectively.
 
 ### API changes
 * The first column of each matrix listed in the `coef` element returned by `create_params.flexsurvreg()` is now named "(Intercept)" instead of the name of the corresponding parameter.
