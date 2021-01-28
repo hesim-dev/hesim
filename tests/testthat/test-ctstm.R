@@ -305,6 +305,44 @@ test_that("Simulate costs and QALYs", {
   ##### Cannot repeat discount rates
   expect_error(ictstm$sim_qalys(dr = c(.03, .03))$qalys)
   
+  ##### Incorrect number of PSA samples
+  ictstm2 <- ictstm$clone(deep = TRUE)
+  ictstm2$utility_model$params$n_samples <- -1
+  expect_error(
+    ictstm2$sim_qalys(),
+    paste0("The number of samples in each 'StateVals' model must equal the ",
+           "number of samples in the 'disprog' object, which is 2.")
+  )
+  
+  ##### Incorrect number of strategies
+  ictstm2 <- ictstm$clone(deep = TRUE)
+  ictstm2$utility_model$params$n_strategies <- -1
+  expect_error(
+    ictstm2$sim_qalys(),
+    paste0("The number of strategies in each 'StateVals' model must equal the ",
+           "number of strategies in the 'disprog' object, which is 2.")
+  )
+  
+  ##### Incorrect number of patients
+  ictstm2 <- ictstm$clone(deep = TRUE)
+  ictstm2$utility_model$params$n_patients <- -1
+  expect_error(
+    ictstm2$sim_qalys(),
+    paste0("The number of patients in each 'StateVals' model must equal the ",
+           "number of patients in the 'disprog' object, which is 3.")
+  )
+  
+  ##### Incorrect number of health states
+  ictstm2 <- ictstm$clone(deep = TRUE)
+  ictstm2$utility_model$params$n_states <- -1
+  expect_error(
+    ictstm2$sim_qalys(),
+    paste0("The number of states in each 'StateVals' model must be one less ",
+           "(since state values are not applied to the death state) than ",
+           "the number of states in the 'disprog' object, which is 3."),
+    fixed = TRUE
+  )
+  
   #### No errors
   expect_error(ictstm$sim_qalys(dr = .03)$qalys_, NA)
   
