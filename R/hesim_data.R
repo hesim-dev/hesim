@@ -449,10 +449,10 @@ new_id_attributes <- function(strategy_id, n_strategies,
 
 #' @rdname check
 check.id_attributes <- function(object){
-  id_vars <- c("strategy_id", "patient_id", "state_id", "transition_id",
-               "time_id")
-  id_vars_n <- c("n_strategies", "n_patients", "n_states", "n_transitions",
-                 "n_times")
+  id_vars <- c("strategy_id", "patient_id", "state_id", 
+               "transition_id", "time_id")
+  id_vars_n <- c("n_strategies", "n_patients", "n_states",
+                 "n_transitions", "n_times")
   for (i in 1:length(id_vars)){
     if (!is.null(object[[id_vars[i]]])){
       # Check that n_strategies, n_patients, ..., is correct
@@ -492,6 +492,28 @@ check.id_attributes <- function(object){
       stop(msg, call. = FALSE)
     }
   }
+}
+
+# Get the object containing ID attributes
+get_id_object <- function(x){
+  if (is.null(x$input_data)){
+    return(x$params)
+  } else{
+    return(x$input_data)
+  }
+}
+
+# Get sizes from an ID object
+get_size <- function(x) {
+  y <- get_id_object(x)
+  return(c(
+    n_samples = get_n_samples(x$params),
+    n_strategies = y$n_strategies,
+    n_patients = y$n_patients,
+    n_states = y$n_states,
+    n_transitions = y$n_transitions,
+    n_times = y$n_times
+  ))
 }
 
 # Labels -----------------------------------------------------------------------

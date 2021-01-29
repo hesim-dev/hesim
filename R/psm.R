@@ -373,6 +373,8 @@ Psm <- R6::R6Class("Psm",
       self$stateprobs_ <- stateprobs[]
       setattr(self$stateprobs_, "class", 
               c("stateprobs", "data.table", "data.frame"))
+      setattr(self$stateprobs_, "size", 
+              c(get_size(self$survival_models), n_states = self$n_states))
       invisible(self)
     },
 
