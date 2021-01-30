@@ -124,7 +124,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cost-effectiveness analysis</h1>
             
-            <h4 class="date">2021-01-15</h4>
+            <h4 class="date">2021-01-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/cea.Rmd"><code>vignettes/cea.Rmd</code></a></small>
       <div class="hidden name"><code>cea.Rmd</code></div>
@@ -556,7 +556,7 @@ EVPI_g &amp;= E_\theta \left[\text{max}_j NMB_g(j, \theta)\right] - \text{max}_j
 <span class="co"># Net monetary benefit (with perfect and current information)</span>
 <span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">nmbpi</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">nmb1</span>, <span class="va">nmb2</span>, <span class="va">nmb3</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">max</span><span class="op">)</span><span class="op">]</span>
 <span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">nmbci</span> <span class="op">:=</span> <span class="va">nmb</span><span class="op">[[</span><span class="va">strategymax_g2</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
-<span class="fu">kable</span><span class="op">(</span><span class="va">nmb</span>, digits <span class="op">=</span> <span class="fl">0</span>, format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">nmb</span>, digits <span class="op">=</span> <span class="fl">0</span>, format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:right;">

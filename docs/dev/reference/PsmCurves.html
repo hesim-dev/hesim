@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Partitioned survival curves — PsmCurves" />
-<meta property="og:description" content="Summarize n-1 survival curves for an N state partitioned survival model." />
+<meta property="og:description" content="Summarize N-1 survival curves for an N-state partitioned survival model." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -173,7 +173,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Summarize <code>n-1</code> survival curves for an <code>N</code> state partitioned survival model.</p>
+    <p>Summarize N-1 survival curves for an N-state partitioned survival model.</p>
     </div>
 
 
@@ -249,8 +249,8 @@ be a unique treatment strategy and patient.</p></dd>
 <p>A <code>data.table</code> with columns <code>sample</code>, <code>strategy_id</code>,
 <code>patient_id</code>, <code>grp_id</code>, <code>curve</code>, <code>t</code>, and <code>cumhazard</code>.</p>
 <p><hr>
-<a id="method-survival"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>survival()</code></h3>
-<p>Predict the cumulative hazard function for each survival curve as a function of time.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<a id="method-survival"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='survival.html'>survival()</a></code></h3>
+<p>Predict survival probabilities for each survival curve as a function of time.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>PsmCurves</span><span class='op'>$</span><span class='fu'>survival</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -259,8 +259,7 @@ be a unique treatment strategy and patient.</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>A <code>data.table</code> with columns <code>sample</code>, <code>strategy_id</code>,
-<code>patient_id</code>, <code>grp_id</code>, <code>curve</code>, <code>t</code>, and <code>survival</code>.</p>
+<p>An object of class <code><a href='survival.html'>survival</a></code>.</p>
 <p><hr>
 <a id="method-rmst"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>rmst()</code></h3>
 <p>Predict the restricted mean survival time up until time points <code>t</code>

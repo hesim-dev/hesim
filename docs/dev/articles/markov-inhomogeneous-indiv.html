@@ -125,7 +125,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov individual-level models</h1>
             
-            <h4 class="date">2021-01-15</h4>
+            <h4 class="date">2021-01-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-indiv.Rmd"><code>vignettes/markov-inhomogeneous-indiv.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-indiv.Rmd</code></div>
@@ -478,21 +478,21 @@ NA
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">log_omrPTHR</span><span class="op">)</span></code></pre></div>
 <pre><code>##           cons
-## [1,] -4.291456
-## [2,] -3.768076
-## [3,] -4.365989
-## [4,] -3.685611
-## [5,] -4.889791
-## [6,] -5.209952</code></pre>
+## [1,] -4.750147
+## [2,] -4.055712
+## [3,] -3.586851
+## [4,] -4.949515
+## [5,] -4.849474
+## [6,] -6.251577</code></pre>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">rr_scale</span><span class="op">)</span></code></pre></div>
-<pre><code>##           cons         age      male        np1
-## [1,] -5.838642 -0.02804062 0.8249841 -0.9716218
-## [2,] -5.159918 -0.04629469 0.9411706 -0.9714511
-## [3,] -5.670477 -0.02967312 0.9395933 -0.7023689
-## [4,] -5.196671 -0.03522204 0.6902339 -2.0090308
-## [5,] -5.467575 -0.03992978 0.8760218 -1.3634410
-## [6,] -5.115673 -0.05098725 0.6538386 -1.7755474</code></pre>
+<pre><code>##           cons         age      male       np1
+## [1,] -5.757801 -0.03483989 0.9702679 -1.583072
+## [2,] -5.665679 -0.03344119 0.7146624 -1.175324
+## [3,] -5.666787 -0.03657070 0.7720538 -1.240259
+## [4,] -5.806995 -0.03193374 0.6992211 -1.622176
+## [5,] -5.848854 -0.03055426 0.9839978 -1.131690
+## [6,] -5.594715 -0.03626792 0.6345761 -1.618055</code></pre>
 <p>In addition to the coefficients, a complete parameterization of a transition model requires specification of the survival distributions and potentially auxiliary information (e.g., the times at which rates change in a piecewise exponential model). The parameters are stored in a <code><a href="../reference/params_surv_list.html">params_surv_list()</a></code> object, which is a list of <code><a href="../reference/params_surv.html">params_surv()</a></code> objects.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transmod_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/params_surv_list.html">params_surv_list</a></span><span class="op">(</span>
@@ -644,16 +644,16 @@ NA
 <span class="va">econmod</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span>max_t <span class="op">=</span> <span class="fl">60</span>, max_age <span class="op">=</span> <span class="fl">120</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   2.542   0.119   2.676</code></pre>
+##   2.521   0.135   2.666</code></pre>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></code></pre></div>
 <pre><code>##    sample strategy_id patient_id grp_id from to final time_start  time_stop
 ## 1:      1           1          1      1    1  2     0  0.0000000  0.6931472
-## 2:      1           1          1      1    2  5     1  0.6931472  5.5202098
+## 2:      1           1          1      1    2  5     1  0.6931472 20.1464123
 ## 3:      1           1          2      1    1  2     0  0.0000000  0.6931472
-## 4:      1           1          2      1    2  5     1  0.6931472 28.1105089
+## 4:      1           1          2      1    2  5     1  0.6931472  2.8382522
 ## 5:      1           1          3      1    1  2     0  0.0000000  0.6931472
-## 6:      1           1          3      1    2  5     1  0.6931472 11.1727301</code></pre>
+## 6:      1           1          3      1    2  5     1  0.6931472 27.7273110</code></pre>
 <p>The simulated patient trajectories can be summarized by computing the probability of being in each health state over time (by averaging across the simulated patients). Here, we will compute state occupancy probabilities at yearly intervals. They are generally quite similar to those in the cohort model.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span></code></pre></div>
@@ -672,15 +672,15 @@ NA
 <span class="va">ce_sim</span><span class="op">$</span><span class="va">qalys</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">qalys</span><span class="op">)</span><span class="op">)</span>,
                 by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <pre><code>##    strategy_id     mean
-## 1:           1 15.21193
-## 2:           2 15.27514</code></pre>
+## 1:           1 15.17351
+## 2:           2 15.22000</code></pre>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ce_sim</span><span class="op">$</span><span class="va">costs</span><span class="op">[</span><span class="va">category</span> <span class="op">==</span> <span class="st">"total"</span>,
             <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">costs</span><span class="op">)</span><span class="op">)</span>,
               by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <pre><code>##    strategy_id     mean
-## 1:           1 516.1563
-## 2:           2 614.0001</code></pre>
+## 1:           1 512.7438
+## 2:           2 612.7819</code></pre>
 </div>
 </div>
 </div>
@@ -693,10 +693,10 @@ NA
                      k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span>, digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##              Outcome                       2
-## 1: Incremental QALYs   0.063 (-0.460, 0.649)
-## 2: Incremental costs            98 (-0, 163)
-## 3:   Incremental NMB 3,063 (-23,075, 32,307)
-## 4:              ICER                   1,548</code></pre>
+## 1: Incremental QALYs   0.046 (-0.501, 0.624)
+## 2: Incremental costs            100 (7, 166)
+## 3:   Incremental NMB 2,225 (-25,167, 31,094)
+## 4:              ICER                   2,152</code></pre>
 </div>
   </div>
 
