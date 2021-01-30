@@ -145,6 +145,9 @@ check.tparams_mean <- function(object, ...){
 #' @rdname tparams_transprobs
 #' @export
 tparams_transprobs <- function(object, ...){
+  if (missing(object)){
+    stop("'object' is missing with no default.")
+  }
   UseMethod("tparams_transprobs", object)
 } 
 
@@ -284,7 +287,7 @@ new_tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NU
 #' @rdname tparams_transprobs
 #' @export
 tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL, 
-                                      grp_id = NULL, patient_wt = NULL) {
+                                      grp_id = NULL, patient_wt = NULL, ...) {
   res <- new_tparams_transprobs.array(object = object, tpmatrix_id = tpmatrix_id,
                                       times = times, grp_id = grp_id, 
                                       patient_wt = patient_wt)
@@ -301,20 +304,20 @@ new_tparams_transprobs.data.table <- function (object) {
 
 #' @rdname tparams_transprobs
 #' @export
-tparams_transprobs.data.table <- function (object) {
+tparams_transprobs.data.table <- function (object, ...) {
   return(check(new_tparams_transprobs(object)))
 }
 
 #' @rdname tparams_transprobs
 #' @export
-tparams_transprobs.data.frame <- function (object) {
+tparams_transprobs.data.frame <- function (object, ...) {
   res <- new_tparams_transprobs(data.table(object))
   return(check(res))
 }
 
 #' @rdname tparams_transprobs
 #' @export
-tparams_transprobs.tpmatrix <- function(object, tpmatrix_id) {
+tparams_transprobs.tpmatrix <- function(object, tpmatrix_id, ...) {
   check_is_class(tpmatrix_id, "data.frame", "tpmatrix_id")
   if (nrow(object) != nrow(tpmatrix_id)) {
     stop("'object' and 'tpmatrix_id' must have the same number of rows.",
@@ -325,7 +328,7 @@ tparams_transprobs.tpmatrix <- function(object, tpmatrix_id) {
   return(new_tparams_transprobs(p_dt))
 }
 
-tparams_transprobs.eval_model <- function(object){
+tparams_transprobs.eval_model <- function(object, ...){
   id_index <- attr(object$tpmatrix, "id_index")
   return(tparams_transprobs(object$tpmatrix, object$id[[id_index]]))
 }
