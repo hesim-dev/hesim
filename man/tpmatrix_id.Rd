@@ -15,10 +15,10 @@ strategies, patients, and optionally time intervals.}
 sensitivity analysis (PSA).}
 }
 \value{
-Returns a \code{data.table} with the same columns in \code{object} repeated
-\code{n_samples} times. That is, to facilitate creation of a \code{tparams_transprobs()}
-object,  there is one row for each parameter sample,
-treatment strategy, patient, and optionally time interval.
+Returns a \code{tpmatrix_id} object that inherits from \code{data.table} with
+the same columns in \code{object} repeated \code{n_samples} times. That is, to facilitate
+creation of a \code{tparams_transprobs()} object,  there is one row for each
+parameter sample, treatment strategy, patient, and optionally time interval.
 }
 \description{
 Creates ID variables for each row returned by \code{tpmatrix()}. This function is
