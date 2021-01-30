@@ -449,46 +449,66 @@ new_id_attributes <- function(strategy_id, n_strategies,
 
 #' @rdname check
 check.id_attributes <- function(object){
-  id_vars <- c("strategy_id", "patient_id", "state_id", 
+  # ID variables to check
+  id_vars <- c("sample", "strategy_id", "patient_id", "state_id", 
                "transition_id", "time_id")
-  id_vars_n <- c("n_strategies", "n_patients", "n_states",
+  id_vars_n <- c("n_samples", "n_strategies", "n_patients", "n_states",
                  "n_transitions", "n_times")
+  keep <- which(id_vars %in% names(object))
+  id_vars <- id_vars[keep]
+  id_vars_n <- id_vars_n[keep]
+  
+  # Helper function
+  str_list <- function(v) {
+    if (length(v) == 1) {
+      return(v)
+    } else if (length(v) == 2) {
+      return(paste0(v[1], " and ", v[2]))
+    } else{
+      return(paste0(paste(v[1:(length(v) - 1)], collapse = ", "),
+            ", and ", v[length(v)]))
+    }
+  }
+  
+  # Check that id variables have correct size
   for (i in 1:length(id_vars)){
-    if (!is.null(object[[id_vars[i]]])){
-      # Check that n_strategies, n_patients, ..., is correct
-      if(length(unique(object[[id_vars[i]]])) != object[id_vars_n[i]]){
-        msg <- paste0("The number of unique observations in '", id_vars[i], 
-                      "' does not equal '", id_vars_n[i], "'.")
-        stop(msg, call. = FALSE)
-      } 
-    } # end loop of id_vars
+    if(length(unique(object[[id_vars[i]]])) != object[id_vars_n[i]]){
+      msg <- paste0("The number of unique observations in '", id_vars[i], 
+                    "' does not equal '", id_vars_n[i], "'.")
+      stop(msg, call. = FALSE)
+    } 
+  }
+  
+  # Check that each ID vector is same length
+  actual_N <- sapply(object[id_vars], length)
+  expected_N <- prod(unlist(object[id_vars_n]))
+  if(sum(actual_N != expected_N) > 0) {
+    stop(paste0("The length of the ID variables is not consistent with the number ",
+                "of unique values of each ID variable."), call. = FALSE)
   }
   
   # Check if id variables are sorted properly 
   indices_df <- data.table(do.call("cbind", object[id_vars]))
   sorted_seq <- seq_len(nrow(indices_df))
   indices_df[, "row_num" := sorted_seq]
-  by <- id_vars[sapply(object[id_vars], function(x) !is.null(x))]
-  sort_hesim_data(indices_df, sorted_by = hesim_data_sorted_by(by))
+  setorderv(indices_df, id_vars)
   if(!all(indices_df$row_num == sorted_seq)){
     msg <- paste0("The ID variables are not sorted correctly. The sort priority of the ",
-                  "ID variables must be as follows: 'strategy_id', 'patient_id' ",
-                  "the health-related ID variable ('state_id' or 'transition_id') ",
-                  "and 'time_id'.")
+                  "ID variables must be as follows: ", str_list(id_vars), ".")
     stop(msg, call. = FALSE)
   }
   
   # Check if the number of unique observations is correct within groups
   indices_df[, "row_num" := NULL]
   for (i in 2:ncol(indices_df)){
-    dt_by <- colnames(indices_df)[i - 1]
+    dt_by <- colnames(indices_df)[1:(i - 1)]
     col <- colnames(indices_df)[i]
     len <- indices_df[, list(len = length(unique(get(col)))), 
-                      by = c("strategy_id", dt_by)]$len
+                      by = dt_by]$len
     user_n <- object[[id_vars_n[i]]]
     if (!all(unique(len) == user_n)){
-      msg <- paste0("The number of unique '", col, "' observations within each value",
-                    " of '", dt_by, " ' must equal '", id_vars_n[i], "'.")
+      msg <- paste0("The number of unique ", col, " observations within each ",
+                     str_list(dt_by), " group must equal ", id_vars_n[i], ".")
       stop(msg, call. = FALSE)
     }
   }
