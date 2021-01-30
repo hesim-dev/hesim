@@ -1,12 +1,6 @@
 context("plot.R unit tests")
 library("data.table")
 
-dt_strategies <- data.frame(strategy_id = c(1, 2, 3))
-dt_patients <- data.frame(patient_id = seq(1, 3),
-                          age = c(45, 50, 60),
-                          female = c(0, 0, 1))
-
-
 # Test autoplot method for survival --------------------------------------------
 # Create mock survival object
 hesim_dat <- hesim_data(

@@ -262,10 +262,10 @@ tpmatrix <- function(...){
 #' @param n_samples The number of parameters samples used for the probabilistic
 #' sensitivity analysis (PSA).
 #' 
-#' @return Returns a `data.table` with the same columns in `object` repeated
-#' `n_samples` times. That is, to facilitate creation of a `tparams_transprobs()`
-#' object,  there is one row for each parameter sample,
-#' treatment strategy, patient, and optionally time interval.
+#' @return Returns a `tpmatrix_id` object that inherits from `data.table` with 
+#' the same columns in `object` repeated `n_samples` times. That is, to facilitate
+#' creation of a `tparams_transprobs()` object,  there is one row for each 
+#' parameter sample, treatment strategy, patient, and optionally time interval.
 #' 
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))
