@@ -377,14 +377,16 @@ lognormal_rng <- function(meanlog, sdlog, names = NULL){
 #' @rdname rng_distributions
 multi_normal_rng <- function(mu, Sigma, names = NULL, ...){
   m <- MASS::mvrnorm(parent.frame()$n, mu = mu, Sigma = Sigma, ...)
-  if(!is.matrix(m)){ # Case where n = 1, mu is scalar, and Sigma is scalar
-    return(m)
-  } else if (ncol(m) == 1){
-    return(c(m))
-  } else{
-    colnames(m) <- rng_colnames(colnames(m), list(mu, Sigma), names)
-    return(data.table(m)) 
+  if (parent.frame()$n == 1) {
+    if (length(m) == 1) { # Case where n = 1 and a scalar is returned
+      return(m)
+    } else { # Otherwise convert to matrix
+      m <- matrix(m, nrow = 1)
+    }
   }
+  
+  colnames(m) <- rng_colnames(colnames(m), list(mu, Sigma), names)
+  return(data.table(m)) 
 }
 
 #' @rdname rng_distributions
