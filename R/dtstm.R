@@ -173,6 +173,8 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
       check_patient_wt(self, stprobs)
       setattr(stprobs, "class", 
               c("stateprobs", "data.table", "data.frame"))
+      setattr(stprobs, "size", 
+              c(get_size(self), n_states = private$get_n_states()))
       return(stprobs[])
     }
   )
@@ -247,80 +249,150 @@ create_CohortDtstmTrans.msm <- function(object, input_data,
 #' Simulate outcomes from a cohort discrete time state transition model.
 #' @examples 
 #' library("data.table")
-#' library("nnet")
-#' transitions_data <- data.table(multinom3_exdata$transitions)
+#' library("ggplot2")
+#' theme_set(theme_bw())
+#' set.seed(102)
 #'
-#' # Treatment strategies, target population, and model structure
-#' n_patients <- 4
-#'patients <- transitions_data[year == 1, .(patient_id, age, female)][
-#'  sort(sample.int(nrow(transitions_data[year == 1]), n_patients))][
-#'    , grp_id := 1:n_patients]
+#' # NOTE: This example replicates the "Simple Markov cohort model" vignette
+#' # using a different approach (i.e., one that is not based on non-standard
+#' # evaluation). The non-standard evaluation based approach does (more or less) 
+#' # what is done here under the hood.
+#'
+#' # (0) Model setup
 #' hesim_dat <- hesim_data(
-#'   patients = patients,
-#'   strategies = data.table(strategy_id = 1:2,
-#'                           strategy_name = c("Reference", "Intervention")),
-#'   states = data.table(state_id = c(1, 2),
-#'                       state_name = c("Healthy", "Sick")) # Non-death health states
+#'   strategies = data.table(
+#'     strategy_id = 1:2,
+#'      strategy_name = c("Monotherapy", "Combination therapy")
+#'   ),
+#'   patients <- data.table(patient_id = 1),
+#'   states = data.table(
+#'     state_id = 1:3,
+#'     state_name = c("State A", "State B", "State C")
+#'   )
 #' )
-#' tmat <- rbind(c(0, 1, 2),
-#'               c(NA, 0, 1),
-#'               c(NA, NA, NA))
+#' n_states <- nrow(hesim_dat$states) + 1
+#' labs <- get_labels(hesim_dat)
 #'
-#' # Parameter estimation
-#' ## Multinomial logistic regression
-#' data_healthy <- transitions_data[state_from == "Healthy"]
-#' fit_healthy <- multinom(state_to ~ strategy_name + female + age,
-#'                         data = data_healthy, trace = FALSE)
-#' data_sick <- droplevels(transitions_data[state_from == "Sick"])
-#' fit_sick <- multinom(state_to ~ strategy_name + female + age,
-#'                      data = data_sick, trace = FALSE)
-#' transfits <- multinom_list(healthy = fit_healthy, sick = fit_sick)
+#' # (1) Parameters
+#' n_samples <- 10 # Number of samples for PSA
+#'
+#' ## Transition matrix
+#' ### Input data (one transition matrix for each parameter sample, 
+#' ###             treatment strategy, patient, and time interval)
+#' p_id <- tpmatrix_id(expand(hesim_dat, times = c(0, 2)), n_samples)
+#' N <- nrow(p_id)
+#'
+#' ### Transition matrices (one for each row in p_id)
+#' p <- array(NA, dim = c(n_states, n_states, nrow(p_id)))
+#'
+#' #### Baseline risk
+#' trans_mono <- rbind(
+#'   c(1251, 350, 116, 17),
+#'   c(0, 731, 512, 15),
+#'   c(0, 0, 1312, 437),
+#'   c(0, 0, 0, 469)
+#' )  
+#' mono_ind <- which(p_id$strategy_id == 1 | p_id$time_id == 2)
+#' p[,, mono_ind] <- rdirichlet_mat(n = 2, trans_mono)
+#'
+#' #### Apply relative risks
+#' combo_ind <- setdiff(1:nrow(p_id), mono_ind)
+#' lrr_se <- (log(.710) - log(.365))/(2 * qnorm(.975))
+#' rr <- rlnorm(n_samples, meanlog = log(.509), sdlog = lrr_se)
+#' rr_indices <- list( # Indices of transition matrix to apply RR to
+#'   c(1, 2), c(1, 3), c(1, 4),
+#'   c(2, 3), c(2, 4),
+#'   c(3, 4)
+#' )
+#' rr_mat <- matrix(rr, nrow = n_samples, ncol = length(rr_indices))
+#' p[,, combo_ind] <- apply_rr(p[, , mono_ind], 
+#'                             rr = rr_mat, 
+#'                             index = rr_indices)
+#' tp <- tparams_transprobs(p, p_id)
 #'
 #' ## Utility
-#' utility_tbl <- stateval_tbl(multinom3_exdata$utility,
-#'                             dist = "beta")
+#' utility_tbl <- stateval_tbl(
+#'   data.table(
+#'     state_id = 1:3,
+#'     est = c(1, 1, 1)
+#'   ),
+#'   dist = "fixed"
+#' )
 #'
 #' ## Costs
-#' drugcost_tbl <- stateval_tbl(multinom3_exdata$costs$drugs,
-#'                              dist = "fixed")
-#' medcost_tbl <- stateval_tbl(multinom3_exdata$costs$medical,
-#'                             dist = "gamma")
+#' drugcost_tbl <- stateval_tbl(
+#'   data.table(
+#'     strategy_id = c(1, 1, 2, 2),
+#'     time_start = c(0, 2, 0, 2),
+#'     est = c(2278, 2278, 2278 + 2086.50, 2278)
+#'   ),
+#'   dist = "fixed"
+#' )
 #'
-#'# Economic model
-#' n_samples <- 3
+#' dmedcost_tbl <- stateval_tbl(
+#'   data.table(
+#'     state_id = 1:3,
+#'     mean = c(A = 1701, B = 1774, C = 6948),
+#'     se = c(A = 1701, B = 1774, C = 6948)
+#'   ),
+#'   dist = "gamma"
+#' )
 #'
-#' ## Construct model
-#' ### Transitions
-#' transmod_data <- expand(hesim_dat)
-#' transmod <- create_CohortDtstmTrans(transfits,
-#'                                     input_data = transmod_data,
-#'                                     trans_mat = tmat,
-#'                                     n = n_samples)
+#' cmedcost_tbl <- stateval_tbl(
+#'   data.table(
+#'     state_id = 1:3,
+#'     mean = c(A = 1055, B = 1278, C = 2059),
+#'     se = c(A = 1055, B = 1278, C = 2059)
+#'   ),
+#'   dist = "gamma"
+#' )
+#'
+#' # (2) Simulation
+#' ## Constructing the economic model
+#' ### Transition probabilities
+#' transmod <- CohortDtstmTrans$new(params = tp)
 #'
 #' ### Utility
-#' utilitymod <- create_StateVals(utility_tbl, n = n_samples, hesim_data = hesim_dat)
+#' utilitymod <- create_StateVals(utility_tbl, 
+#'                                hesim_data = hesim_dat,
+#'                                n = n_samples)
 #'
 #' ### Costs
-#' drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples, hesim_data = hesim_dat)
-#' medcostmod <- create_StateVals(medcost_tbl, n = n_samples, hesim_data = hesim_dat)
-#' costmods <- list(Drug = drugcostmod,
-#'                  Medical = medcostmod)
+#' drugcostmod <- create_StateVals(drugcost_tbl, 
+#'                                 hesim_data = hesim_dat,
+#'                                 n = n_samples)
+#' dmedcostmod <- create_StateVals(dmedcost_tbl, 
+#'                                 hesim_data = hesim_dat,
+#'                                 n = n_samples)
+#' cmedcostmod <- create_StateVals(cmedcost_tbl, 
+#'                                 hesim_data = hesim_dat,
+#'                                 n = n_samples)
+#' costmods <- list(drug = drugcostmod,
+#'                  direct_medical = dmedcostmod,
+#'                  community_medical = cmedcostmod)
 #'
-#' ### Combine
+#' ### Economic model
 #' econmod <- CohortDtstm$new(trans_model = transmod,
 #'                            utility_model = utilitymod,
 #'                            cost_models = costmods)
 #'
-#' ## Simulate outcomes
+#' ## Simulating outcomes
 #' econmod$sim_stateprobs(n_cycles = 20)
-#' econmod$sim_qalys(dr = .03)
-#' econmod$sim_costs(dr = .03)
-#' econmod$summarize()
-#' econmod$summarize(by_grp = TRUE)
+#' autoplot(econmod$stateprobs_, ci = TRUE, ci_style = "ribbon",
+#'          labels = labs)
+#' econmod$sim_qalys(dr = 0, integrate_method = "riemann_right")
+#' econmod$sim_costs(dr = 0.06, integrate_method = "riemann_right")
 #'
+#' # (3) Decision analysis
+#' ce_sim <- econmod$summarize()
+#' wtp <- seq(0, 25000, 500)
+#' cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = 0, dr_costs = .06,
+#'                      k = wtp)
+#' format(icer(cea_pw_out))
 #' @format An [R6::R6Class] object.
-#' @seealso [create_CohortDtstm()], [CohortDtstmTrans], 
-#' [create_CohortDtstmTrans()]
+#' @seealso [`create_CohortDtstm()`], [`CohortDtstmTrans`], 
+#' [`create_CohortDtstmTrans()`],  `vignette("markov-cohort")`,
+#' `vignette("markov-inhomogeneous-cohort")`, `vignette("mlogit")`,
 #' @export
 CohortDtstm <- R6::R6Class("CohortDtstm",
   public = list(

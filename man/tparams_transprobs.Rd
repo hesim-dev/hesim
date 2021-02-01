@@ -15,14 +15,15 @@ tparams_transprobs(object, ...)
   tpmatrix_id = NULL,
   times = NULL,
   grp_id = NULL,
-  patient_wt = NULL
+  patient_wt = NULL,
+  ...
 )
 
-\method{tparams_transprobs}{data.table}(object)
+\method{tparams_transprobs}{data.table}(object, ...)
 
-\method{tparams_transprobs}{data.frame}(object)
+\method{tparams_transprobs}{data.frame}(object, ...)
 
-\method{tparams_transprobs}{tpmatrix}(object, tpmatrix_id)
+\method{tparams_transprobs}{tpmatrix}(object, tpmatrix_id, ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class.}

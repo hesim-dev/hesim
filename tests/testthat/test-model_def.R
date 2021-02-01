@@ -19,7 +19,7 @@ rng_def <- define_rng({
     dir2 = dirichlet_rng(unname(alpha)),
     dir3 = dirichlet_rng(unname(alpha), names = alpha_names),
     gamma = gamma_rng(mean = gamma_mean,
-                  sd = gamma_mean), 
+                      sd = gamma_mean), 
     beta = beta_rng(mean = beta_mean,
                    sd = beta_sd,
                    names = beta_colnames),
@@ -118,16 +118,17 @@ test_that( "Column names for multi-parameter RNG is as expcted", {
   expect_equal(colnames(rng$mvnorm), c("v1", "v2"))
 })
 
-test_that( "multi_normal_rng() produces a vector if only 1 column is returned", {
-  fun <- function(n){
-    define_rng({
-      list(
-        x = multi_normal_rng(mu = 0, Sigma = 1)
-      )
-    }, n = n)
+test_that( "multi_normal_rng() returns correct output when n = 1", {
+  fun <- function(n, m = 0, V = 1){
+    define_rng({ 
+      x = multi_normal_rng(mu = m, Sigma = V)
+    }, n = n, m = m, V = V)
   }
-  expect_true(inherits(eval_rng(fun(1))$x, "numeric"))
-  expect_true(inherits(eval_rng(fun(2))$x, "numeric"))
+  expect_true(inherits(eval_rng(fun(1)), "numeric"))
+  expect_true(
+    inherits(eval_rng(fun(1, m = c(0, 0), V =  matrix(c(10,3,3,2),2,2))),
+             "data.table")
+  )
 })
 
 test_that( "define_rng() must return a list", {

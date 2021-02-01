@@ -553,29 +553,11 @@ sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
          call. = FALSE)
   }
   
-  # Discount rate
+  ## Discount rate
   check_dr(dr)
   
-  # The state value models
-  expected_samples <- max(object$sample)
-  method <- rep(NA, length(statevalmods))
-  for (i in 1:length(statevalmods)){
-    ## Number of samples
-    if (statevalmods[[i]]$params$n_samples != expected_samples){
-      msg <- paste0("Number of samples in each state value model must equal to ",
-                    " the number of samples in the 'stateprobs' object, which is ",
-                    expected_samples)
-      stop(msg, call. = FALSE)
-    }
- 
-    ## Number of states
-    if(length(unique(object$state_id)) != get_id_object(statevalmods[[i]])$n_states + 1){
-      msg <- paste0("The number of states in each 'StateVals' model ", 
-                    "must be one less (since state values cannot be applied to the ",
-                    "death state) than the number of states in 'stateprobs'.")
-      stop(msg, call. = FALSE)
-    }
-  }
+  ## The size of ID variables is correct
+  check_StateVals(statevalmods, object)
   
   # Simulate
   res <- data.table(C_sim_ev(object[state_id != max(state_id)],
