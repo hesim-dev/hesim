@@ -124,7 +124,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simple Markov cohort model</h1>
             
-            <h4 class="date">2021-01-30</h4>
+            <h4 class="date">2021-02-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-cohort.Rmd"><code>vignettes/markov-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-cohort.Rmd</code></div>
@@ -140,6 +140,7 @@
 <p>We consider a simple example by replicating the HIV model developed by <a href="https://link.springer.com/article/10.2165/00019053-199712010-00006">Chancellor et al.</a> and used for didactic purposes in the <a href="https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation"><em>Decision Modeling for Health Economic Evaluation</em></a> textbook. The analysis compares two treatment strategies, zidovudine monotherapy and zidovudine + lamivudine combination therapy. While the model is technically time-inhomogeneous because patients are assumed to only use lamivudine for 2 years before switching back to monotherapy, transition probabilities only change once so it might be referred to as (mostly) homogeneous.</p>
 <p>The model consists 4 health states. Ordered from worst to best to worst, they are: State A (CD4 cells &gt; 200 and &lt; 500 cells/mm3), State B (CD4 &lt; 200 cells/mm3), State C (AIDS), and State D (death). The model assumes that patients can transition to any state that is more severe (i.e., progress) but cannot transition back to a more severe state.</p>
 <p><img src="markov-cohort.png" width="700px"></p>
+<p>Transition probability matrices are the core of any cDTSTM. They can, in general, be constructed by either (i) using an explicit statistical model (e.g., via <code><a href="../reference/params_mlogit.html">params_mlogit()</a></code>) or (ii) by specifying transition probabilities for each parameter sample, treatment strategy, patient, and (optionally) time interval (e.g., via <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code>). The latter approach can either by done “by hand” via standard evaluation or using non-standard evaluation with <code><a href="../reference/define_model.html">define_model()</a></code>. We will construct a <code>tparams_transprobs</code> object with <code><a href="../reference/define_model.html">define_model()</a></code>in this vignette, but an example using standard evaluation is available in the <code><a href="../reference/CohortDtstm.html">?CohortDtstm</a></code> help file.</p>
 </div>
 <div id="model-setup" class="section level1">
 <h1 class="hasAnchor">
@@ -151,8 +152,11 @@
 <span class="va">strategies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,
                          strategy_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Monotherapy"</span>, <span class="st">"Combination therapy"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,
+                     state_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"State A"</span>, <span class="st">"State B"</span>, <span class="st">"State C"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">hesim_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span><span class="op">(</span>strategies <span class="op">=</span> <span class="va">strategies</span>,
-                        patients <span class="op">=</span> <span class="va">patients</span><span class="op">)</span>
+                        patients <span class="op">=</span> <span class="va">patients</span>,
+                        states <span class="op">=</span> <span class="va">states</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">hesim_dat</span><span class="op">)</span></code></pre></div>
 <pre><code>## $strategies
 ##    strategy_id       strategy_name
@@ -163,8 +167,25 @@
 ##    patient_id
 ## 1:          1
 ## 
+## $states
+##    state_id state_name
+## 1:        1    State A
+## 2:        2    State B
+## 3:        3    State C
+## 
 ## attr(,"class")
 ## [1] "hesim_data"</code></pre>
+<p>The <code><a href="../reference/get_labels.html">get_labels()</a></code> function can be used to obtain nice labels for plots and summary tables.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">labs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_labels.html">get_labels</a></span><span class="op">(</span><span class="va">hesim_dat</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">labs</span><span class="op">)</span></code></pre></div>
+<pre><code>## $strategy_id
+##         Monotherapy Combination therapy 
+##                   1                   2 
+## 
+## $state_id
+## State A State B State C   Death 
+##       1       2       3       4</code></pre>
 </div>
 <div id="model-parameters" class="section level1">
 <h1 class="hasAnchor">
@@ -173,7 +194,7 @@
 <h2 class="hasAnchor">
 <a href="#estimates-from-the-literature" class="anchor"></a>Estimates from the literature</h2>
 <p>Counts of transitions at yearly intervals between each of the 4 health states were available from a longitudinal dataset from Chelsea and Westminister hospital.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">trans_mono</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1251</span>, <span class="fl">350</span>, <span class="fl">116</span>, <span class="fl">17</span>,
                        <span class="fl">0</span>, <span class="fl">731</span>, <span class="fl">512</span>, <span class="fl">15</span>,
                        <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1312</span>, <span class="fl">437</span>,
@@ -190,7 +211,7 @@
 <p>Treatment effects are defined in terms of the relative risk, which is assumed to reduce the probability of all transitions to a more severe health state by an equal amount. We work with the log relative risk since it is approximately normally distributed. The estimated relative risk of disease progression is 0.509 (95% CI 0.365 to 0.710). We can then calculate the mean and standard error on the log scale.</p>
 <p>The cost-effectiveness analysis is based on life-years, meaning that each health state is assigned a utility value of 1. The costs of zidovudine and lamivudine are $2,278 and $2,086.50, respectively. Medical costs are split into direct medical and community medical costs.</p>
 <p>The parameter estimates are stored in a list.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
   alpha_mono <span class="op">=</span> <span class="va">trans_mono</span>, 
   lrr_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">.509</span><span class="op">)</span>, 
@@ -209,7 +230,7 @@
 <p>To perform a probabilistic sensitivity analysis (PSA), it is necessary to draw samples of the parameters from suitable probability distributions. While the probability distributions could have been drawn manually and stored in the <code>params</code> object above, it can be more easily done by using random number generation functions with <code><a href="../reference/define_rng.html">define_rng()</a></code>.</p>
 <p>As noted above, we draw the transition probabilities with monotherapy from a Dirichlet distribution and the relative risk (of a transition to a worse state with combination therapy relative to monotherapy) from a lognormal distribution. Drug costs and utility are assumed to be fixed while medical costs are drawn from gamma distributions.</p>
 <p>Sampled parameters values are stored in a list, meaning that samples for each parameter can be stored as either a vector or <code>data.table</code> (or matrix or <code>data.frame</code>). For instance, we sample medical costs for each (non-death) health state from gamma distributions and they a stored in a <code>data.table</code> (one row for each sample and one column for each health state). Likewise, the parameters of each cell in the transition probability matrix are store in a <code>data.table</code>, with parameters of the <code>data.table</code> ordered rowwise across the columns. On the other hand, samples of the relative risk are stored in a vector.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rng_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_rng.html">define_rng</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">lrr_se</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">lrr_upper</span> <span class="op">-</span> <span class="va">lrr_lower</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span><span class="op">)</span> <span class="co"># Local object </span>
                                                       <span class="co"># not returned</span>
@@ -229,7 +250,7 @@
 <a href="#transformed-parameters" class="anchor"></a>Transformed parameters</h2>
 <p>In most statistical models, the underlying parameters are “transformed” into more relevant parameters for prediction. For instance, if a multinomial logistic regression is used parameterize transition probabilities, the coefficients are used to predict the probabilities. While transition, cost, and utility models can be parameterized using supported statistical models with <code><a href="../reference/params.html">hesim::params</a></code> objects, they can also, in some cases, be parameterized using the transformed parameters themselves with <code><a href="../reference/tparams.html">hesim::tparams</a></code> objects.</p>
 <p>We will use the transformed parameter approach here by using <code><a href="../reference/define_tparams.html">define_tparams()</a></code> to define <code>tparams</code> objects as a function of the underlying parameters and input data (treatment strategies and patients). We generate the input data using <code><a href="../reference/expand.html">hesim::expand()</a></code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">input_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/expand.html">expand</a></span><span class="op">(</span><span class="va">hesim_dat</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategies"</span>, <span class="st">"patients"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">input_data</span><span class="op">)</span></code></pre></div>
 <pre><code>##    strategy_id patient_id       strategy_name
@@ -239,7 +260,7 @@
 <p>An important helper function is <code><a href="../reference/tpmatrix.html">tpmatrix()</a></code>, which allows users to define transition matrices as a function of other parameters. In this example, transition probabilities are defined in terms of the transition matrix for monotherapy (<code>p_mono</code>) and the relative risk (<code>rr</code>). The relative risk is simply 1 for monotherapy (since the corresponding transition matrix is just <code>p_mono</code>) and equal to <code>rr_comb</code> for combination therapy.</p>
 <p>The only costs in the model that vary across treatment strategies (rather than just states) are drug costs. The monotherapy treatment strategy include the cost of zidovudine only whereas the combination therapy includes the costs of both zidovudine and lamivudine.</p>
 <p>Parameters may depend on time (since the start of the model) by using the package defined <code>time</code> variable. The <code>time</code> variable corresponds to the stopping time of time intervals, which are specified using the <code>times</code> argument in <code><a href="../reference/define_tparams.html">define_tparams()</a></code>. Since patients are only assumed to use lamivudine for two years, <code>rr_comb</code> and the costs of lamivudine are not applied beyond year 2.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tparams_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_tparams.html">define_tparams</a></span><span class="op">(</span><span class="op">{</span>
   <span class="co">## The treatment effect (relative risk) is transformed so that it varies by </span>
   <span class="co">## strategies and only applies for the first 2 years (Monotherapy is </span>
@@ -271,12 +292,12 @@
 <h2 class="hasAnchor">
 <a href="#constructing-the-economic-model" class="anchor"></a>Constructing the economic model</h2>
 <p>The economic model is defined by using <code><a href="../reference/define_model.html">define_model()</a></code> to combine the underlying parameters with the expressions for random number generation and parameter transformation.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mod_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_model.html">define_model</a></span><span class="op">(</span>tparams_def <span class="op">=</span> <span class="va">tparams_def</span>, 
                         rng_def <span class="op">=</span> <span class="va">rng_def</span>, 
                         params <span class="op">=</span> <span class="va">params</span><span class="op">)</span></code></pre></div>
 <p>A economic model (of class <code>CohortDtstm</code>) can be created from the defined model and input data using the generic function <code><a href="../reference/create_CohortDtstm.html">create_CohortDtstm()</a></code>. The economic model is an <code>R6</code> object consisting of a transition model (<code>trans_model</code>) for simulating transition probabilities with <code>sim_stateprobs()</code>, a utility model for simulating quality-adjusted life-years with <code><a href="../reference/sim_ev.html">sim_qalys()</a></code>, and a set of cost models (for each cost category) for simulating costs with <code><a href="../reference/sim_ev.html">sim_costs()</a></code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_CohortDtstm.html">create_CohortDtstm</a></span><span class="op">(</span><span class="va">mod_def</span>, <span class="va">input_data</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="simulating-outcomes" class="section level2">
@@ -285,35 +306,47 @@
 <div id="health-state-probabilities" class="section level3">
 <h3 class="hasAnchor">
 <a href="#health-state-probabilities" class="anchor"></a>Health state probabilities</h3>
-<p>At the start of the model, all patients are assumed to be in State A (the default setting of the transition model of class <code>CohortDtstmTrans</code>). State occupancy probabilities are generated by simulating the discrete time Markov chain; as expected, patients survive longer with combination therapy.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p>At the start of the model, all patients are assumed to be in State A (the default setting of the transition model of class <code>CohortDtstmTrans</code>). State occupancy probabilities are generated by simulating the discrete time Markov chain.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>n_cycles <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-
-<span class="co"># Plot</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org">"ggplot2"</a></span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="va">stateprob_summary</span> <span class="op">&lt;-</span> <span class="va">econmod</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>prob_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span>,
-                                              prob_lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">prob</span>, <span class="fl">.025</span><span class="op">)</span>,
-                                              prob_upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">prob</span>, <span class="fl">.975</span><span class="op">)</span><span class="op">)</span>,
-                                          by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"t"</span><span class="op">)</span><span class="op">]</span>
-<span class="va">stateprob_summary</span><span class="op">[</span>, <span class="va">strategy_name</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">strategy_id</span>,
-                                          labels <span class="op">=</span> <span class="va">strategies</span><span class="op">$</span><span class="va">strategy_name</span><span class="op">)</span><span class="op">]</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">stateprob_summary</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">prob_mean</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">strategy_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, ymin <span class="op">=</span> <span class="va">prob_lower</span>, ymax <span class="op">=</span> <span class="va">prob_upper</span>,
-                  fill <span class="op">=</span> <span class="va">strategy_name</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">state_id</span>, labels <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Probability"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_fill_discrete</a></span><span class="op">(</span><span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span><span class="op">(</span><span class="st">"Strategy"</span><span class="op">)</span></code></pre></div>
-<p><img src="markov-cohort_files/figure-html/simStateprobs-1.png" width="672"></p>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">)</span></code></pre></div>
+<pre><code>##    sample strategy_id patient_id grp_id state_id t      prob
+## 1:      1           1          1      1        1 0 1.0000000
+## 2:      1           1          1      1        1 1 0.7200241
+## 3:      1           1          1      1        1 2 0.5184347
+## 4:      1           1          1      1        1 3 0.3732854
+## 5:      1           1          1      1        1 4 0.2687745
+## 6:      1           1          1      1        1 5 0.1935241</code></pre>
+<p>A plot can be generated quicky using the <code><a href="../reference/autoplot.stateprobs.html">autoplot.stateprobs()</a></code> method. As expected, patients survive longer with combination therapy.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">stateprobs_</span>, labels <span class="op">=</span> <span class="va">labs</span>,
+         ci <span class="op">=</span> <span class="cn">TRUE</span>, ci_style <span class="op">=</span> <span class="st">"ribbon"</span><span class="op">)</span></code></pre></div>
+<p><img src="markov-cohort_files/figure-html/simStateprobsPlot-1.png" width="672"></p>
 </div>
 <div id="costs-and-qalys" class="section level3">
 <h3 class="hasAnchor">
 <a href="#costs-and-qalys" class="anchor"></a>Costs and QALYs</h3>
-<p>Costs and quality-adjusted life-years (QALYs) are computed by integrating the previously simulated state probabilities. To maintain consistency with Chancellor et al., we approximate the integral with a right Riemann sum, which is simply a sum of costs and QALYs measured at the right endpoint of each interval (e.g., costs during model cycle 1 are measured at time 1 (rather than at say, time 0)).</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<p>Costs and quality-adjusted life-years (QALYs) are computed by integrating the previously simulated state probabilities. To maintain consistency with Chancellor et al., we approximate the integral with a right Riemann sum, which is simply a sum of costs and QALYs measured at the right endpoint of each interval (e.g., costs during model cycle 1 are measured at time 1 (rather than at say, time 0).</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span>
-<span class="va">econmod</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0.06</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></code></pre></div>
+<pre><code>##    sample strategy_id patient_id grp_id state_id dr    qalys      lys
+## 1:      1           1          1      1        1  0 2.568128 2.568128
+## 2:      1           1          1      1        2  0 1.811997 1.811997
+## 3:      1           1          1      1        3  0 3.827462 3.827462
+## 4:      1           2          1      1        1  0 3.487750 3.487750
+## 5:      1           2          1      1        2  0 1.860510 1.860510
+## 6:      1           2          1      1        3  0 3.811177 3.811177</code></pre>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0.06</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></code></pre></div>
+<pre><code>##    sample strategy_id patient_id grp_id state_id   dr category    costs
+## 1:      1           1          1      1        1 0.06     drug 4796.554
+## 2:      1           1          1      1        2 0.06     drug 3117.280
+## 3:      1           1          1      1        3 0.06     drug 5547.015
+## 4:      1           2          1      1        1 0.06     drug 9520.454
+## 5:      1           2          1      1        2 0.06     drug 3565.653
+## 6:      1           2          1      1        3 0.06     drug 5464.021</code></pre>
 </div>
 </div>
 </div>
@@ -321,28 +354,22 @@
 <h1 class="hasAnchor">
 <a href="#decision-analysis" class="anchor"></a>Decision analysis</h1>
 <p>A decision analysis is performed by comparing combination therapy to monotherapy.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ce_sim</span> <span class="op">&lt;-</span> <span class="va">econmod</span><span class="op">$</span><span class="fu">summarize</span><span class="op">(</span><span class="op">)</span>
 <span class="va">wtp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span><span class="op">)</span>
 <span class="va">cea_pw_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce_sim</span>, comparator <span class="op">=</span> <span class="fl">1</span>, dr_qalys <span class="op">=</span> <span class="fl">0</span>, dr_costs <span class="op">=</span> <span class="fl">.06</span>,
                      k <span class="op">=</span> <span class="va">wtp</span><span class="op">)</span></code></pre></div>
 <p>The incremental cost-effectiveness ratio (ICER) estimated using means from the PSA is very close to the estimate from the deterministic analysis from Chancellor et al. </p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##              Outcome                       2
-## 1: Incremental QALYs       0.93 (0.55, 1.22)
-## 2: Incremental costs    5,890 (3,062, 9,882)
-## 3:   Incremental NMB 40,581 (22,418, 55,113)
-## 4:              ICER                   6,338</code></pre>
-<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.945 and approaches 1 at slightly higher WTP values.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">$</span><span class="va">ceac</span>, 
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">k</span>, y <span class="op">=</span> <span class="va">prob</span>, 
-           col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">strategy_id</span>, labels <span class="op">=</span> <span class="va">strategies</span><span class="op">$</span><span class="va">strategy_name</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Willingness to pay"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Probability cost-effective"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">wtp</span><span class="op">)</span>, <span class="fl">5000</span><span class="op">)</span>, label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_colour_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span></code></pre></div>
+## 1: Incremental QALYs       0.93 (0.54, 1.21)
+## 2: Incremental costs    5,803 (2,785, 9,402)
+## 3:   Incremental NMB 40,585 (22,063, 54,927)
+## 4:              ICER                   6,255</code></pre>
+<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.944 and approaches 1 at slightly higher WTP values.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot_ceac.html">plot_ceac</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span></code></pre></div>
 <p><img src="markov-cohort_files/figure-html/ceac-1.png" width="576"></p>
 </div>
 <div id="appendix-dirichlet-distribution" class="section level1">
