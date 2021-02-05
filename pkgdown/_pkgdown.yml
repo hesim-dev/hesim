@@ -139,7 +139,7 @@ navbar:
         href: articles/intro.html
       - text: "---"
       - text: "Cohort discrete time state transition models"
-      - text: "Simple Markov Cohort model"
+      - text: "Simple Markov cohort model"
         href: articles/markov-cohort.html
       - text: "Time inhomogeneous Markov cohort models"
         href: articles/markov-inhomogeneous-cohort.html

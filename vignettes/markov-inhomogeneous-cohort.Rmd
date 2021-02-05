@@ -15,7 +15,7 @@ vignette: >
 ---
 
 # Overview
-We will illustrate a time inhomogeneous Markov cohort model by replicating the total hip replacement (THR) example from the [*Decision Modeling for Health Economic Evaluation*](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook. The analysis compares two treatment strategies, a "standard" prosthesis and a "new" prosthesis. A probabilistic sensitivity analysis (PSA) will be used to quantify parameter uncertainty.  
+We will illustrate a cohort discrete time state transition model (cDTSTM) with a time inhomogeneous Markov process by replicating the total hip replacement (THR) example from the [*Decision Modeling for Health Economic Evaluation*](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook. The analysis compares two treatment strategies, a "standard" prosthesis and a "new" prosthesis. A probabilistic sensitivity analysis (PSA) will be used to quantify parameter uncertainty.  
 
 The model consists 5 health states: (i) primary THR, (ii) successful primary, (iii) revision THR, (iv) successful revision, and (v) death. 
 
@@ -24,6 +24,8 @@ knitr::include_graphics("markov-inhomogeneous.png")
 ```
 
 The model is time-inhomogeneous because (i) the prosthesis survival time is modeled using a Weibull survival model so that the probability of failure is time-varying and (ii) background mortality rates increase as patients age. 
+
+As in the [Simple Markov cohort model](markov-cohort.html) vignette, we define the model in terms of expressions with `define_model()`. We demonstrate an alternative approach in which we construct the transition probability matrices directly in the [Appendix](#standard-eval).
 
 # Model setup
 We set up the model for two treatment strategies and 10 subgroups defined by age and sex.
@@ -47,9 +49,23 @@ patients <- data.table(patient_id = 1:10,
                        sex = rep(c("Female", "Male"), each = length(ages)),
                        age = rep(ages, times = 2),
                        patient_wt = weights)
+
+# Health states
+states <- data.table(state_id = 1:4,
+                     state_name = c("Primary THR", "Successful primary",
+                                    "Revision THR", "Successful revision"))
+
+# Combined data
 hesim_dat <- hesim_data(strategies = strategies,
-                        patients = patients)
+                        patients = patients,
+                        states = states)
 print(hesim_dat)
+```
+`get_labels()` is used to obtain nice labels for plots and summary tables.
+
+```{r}
+labs <- get_labels(hesim_dat)
+print(labs)
 ```
 
 # Model parameters
@@ -74,13 +90,7 @@ tpmat <- matrix(
     0, 0, 0, 0, 1),
   nrow = 5, ncol = 5, byrow = TRUE
 )
-colnames(tpmat) <- rownames(tpmat) <- c(
-  "Primary THR", 
-  "Successful primary",
-  "Revision THR",
-  "Successful revision",
-  "Death"
-)
+colnames(tpmat) <- rownames(tpmat) <- names(labs$state_id)
 knitr::kable(tpmat) %>%
   kable_styling()
 ```
@@ -317,14 +327,13 @@ stateprob_summary <- econmod$stateprobs_[patient_id == 2,
                                             count_lower = 1000 * quantile(prob, .025),
                                             count_upper = 1000 * quantile(prob, .975)),
                                           by = c("strategy_id", "patient_id", "state_id", "t")]
-stateprob_summary[, strategy_name := factor(strategy_id,
-                                            labels = strategies$strategy_name)]
+set_labels(stateprob_summary, labels = labs, 
+           new_names = c("strategy_name", "state_name"))
 ggplot(stateprob_summary, aes(x = t, y = count_mean)) +
   geom_line(aes(col = strategy_name)) +
   geom_ribbon(aes(x = t, ymin = count_lower, ymax = count_upper,
                   fill = strategy_name), alpha = .3) +
-  facet_wrap(~factor(state_id, labels = colnames(tpmat)),
-             scale = "free_y") +
+  facet_wrap(~state_name, scale = "free_y") +
   xlab("Year") + ylab("Count") +
   scale_fill_discrete("Strategy") + scale_color_discrete("Strategy")
 ```
@@ -339,7 +348,7 @@ econmod$sim_costs(dr = .06, integrate_method = "riemann_right")
 
 # Decision analysis
 ## Subgroup analysis
-Subgroup analyses can be performed with `$sim_summarize()` using the `by_grp = TRUE` option. Cost-effectiveness analyses are then performed for each subgroup (`grp_id`) from input data. We will begin by reporting results for the 60-year old female, which are consistent with those from the textbook.
+Subgroup analyses can be performed with `$summarize()` using the `by_grp = TRUE` option. Cost-effectiveness analyses are then performed for each subgroup (`grp_id`) from input data. We will begin by reporting summary results using `summary.ce()` for the 60-year old female, which are consistent with those from the textbook.
 
 ```{r cea}
 ce_sim <- econmod$summarize(by_grp = TRUE)
@@ -347,18 +356,15 @@ wtp <- seq(0, 25000, 500)
 cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = 0.015, dr_costs = .06,
                      k = wtp)
 
-ce_sim$qalys[grp_id == 2, 
-              .(mean = mean(qalys)),
-                by = c("strategy_id", "grp_id")]
-ce_sim$costs[grp_id == 2 & category == "total", 
-            .(mean = mean(costs)),
-              by = c("strategy_id", "grp_id")]
+summary(ce_sim, labels = labs)[grp == 2] %>%
+  format()
 ```
 
 We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (*rr*) depends on covariates. 
 
 ```{r icerSubgroup}
-format(icer(cea_pw_out), pivot_from = "outcome")
+icer(cea_pw_out) %>%
+  format(pivot_from = "outcome")
 ```
 
 ## Overall
@@ -368,7 +374,8 @@ Estimates aggregated across all patients can also be computed with `$sim_summari
 ce_sim <- econmod$summarize(by_grp = FALSE)
 cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = .015, dr_costs = .06,
                      k = wtp)
-format(icer(cea_pw_out), digits_qalys = 3)
+icer(cea_pw_out, labels = labs) %>%
+  format(digits_qalys = 3)
 ```
 
 # Appendix
@@ -399,10 +406,9 @@ tp(t_u) &= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 \end{align}
 $$
 
-## Computational efficiency
-The largest bottleneck in `define_model()` is the construction of the economic model and the construction of the transition model in particular. The reason for this is that all transition probabilities are "vectorized" and consequently preallocated. This preallocation can take time if the number of parameter samples $\times$ treatment strategies $\times$ patients $\times$ time periods is large. Since the `$sim_stateprobs()` method is implemented in `C++` the simulation is very fast one the transition probabilities have been constructed.
+## Direct construction of transition matrices {#standard-eval}
+Transition probability matrices can also be constructed without using `define_model()`. One way to do this is to construct the transition probability matrices using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the $r$th row and $s$th column as $p_{rs} = g(x^T\theta)$ where $x$ is an input matrix, $\theta$ is a vector of coefficients (i.e., a parameter sample), and $g()$ is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well. This approach is more computationally efficient than defining a model because `define_model()` is a general function, resulting in some overhead. 
 
-The disadvantage of `define_model()` for preallocation is that it is a general function, resulting in some overhead. An alternative approach is to construct the transition probability matrix ourselves using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the $r$th row and $s$th column as $p_{rs} = g(x^T\theta)$ where $x$ is an input matrix, $\theta$ is a vector of coefficients (i.e., a parameter sample), and $g()$ is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well. 
 
 ```{r echo = FALSE}
 ptm <- proc.time()
@@ -481,7 +487,7 @@ tpmat_id <- tpmatrix_id(tpmatrix_data, 500)
 head(tpmat_id)
 ```
 
-`tpmatrix()` produces a flattened transition probability matrix for each row of `tpmatrix_id`. We predict the elements of the matrix using the input matrices we derived above. Matrix multiplication of an $n \times k$ input matrix by a $k \times s$ coefficient matrix results in a $n \times s$ matrix of predicted values. In other words, there is one row for each of the $n$ rows in the input data and one column for each of the $s$ parameter samples. This matrix can itself be flattened into a vector of length $n \cdot s$ using the `c()` function. The result is a vector of predicted values stacked by parameter sample; that is, a prediction for each row produced by `tpmatrix_id()`.
+`tpmatrix()` produces a transition probability matrix for each row of `tpmatrix_id`. We predict the elements of the matrix using the input matrices we derived above. Matrix multiplication of an $n \times k$ input matrix by a $k \times s$ coefficient matrix results in a $n \times s$ matrix of predicted values. In other words, there is one row for each of the $n$ rows in the input data and one column for each of the $s$ parameter samples. This matrix can itself be flattened into a vector of length $n \cdot s$ using the `c()` function. The result is a vector of predicted values stacked by parameter sample; that is, a prediction for each row produced by `tpmatrix_id()`.
 
 ```{r}
 # "Transformed" parameters
@@ -516,7 +522,7 @@ run_time2 <- time <- proc.time() - ptm
 ```
 
 ### Simulation
-For comparison with the nonstandard evaluation approach, we will (re)construct and (re)simulate the model. Estimated costs and QALYs are very similar, as expected. 
+To compare with the `define_model()` approach, we will (re)construct and (re)simulate the model. Estimated costs and QALYs are very similar, as expected. 
 
 ```{r}
 transmod <- CohortDtstmTrans$new(params = tparams_transprobs)
@@ -526,12 +532,8 @@ econmod$sim_qalys(dr = .015, integrate_method = "riemann_right")
 econmod$sim_costs(dr = .06, integrate_method = "riemann_right")
 
 ce_sim <- econmod$summarize(by_grp = TRUE)
-ce_sim$qalys[grp_id == 2, 
-              .(mean = mean(qalys)),
-                by = c("strategy_id", "grp_id")]
-ce_sim$costs[grp_id == 2 & category == "total", 
-            .(mean = mean(costs)),
-              by = c("strategy_id", "grp_id")]
+summary(ce_sim, labels = labs)[grp == 2] %>%
+  format()
 ```
 
 However, time to construct the transition model was `r formatC(run_time1["elapsed"]/run_time2["elapsed"], digits = 2)` times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased. 

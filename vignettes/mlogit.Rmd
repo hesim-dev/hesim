@@ -22,11 +22,11 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 $$
 
 # An example 3-state model
-We illustrate by considering an illness-death model with 3 generic health states: (1) Healthy, (2) Sick, and (3) Dead. We will assume that patients can only transition to a more severe health state: 
+We illustrate by considering an illness-death model with 3 generic health states: (1) Healthy, (2) Sick, and (3) Death We will assume that patients can only transition to a more severe health state: 
 
 1. Healthy to Sick
-2. Healthy to Dead
-3. Sick to Dead
+2. Healthy to Death
+3. Sick to Death
 
 <br>
 ```{r, out.width = "500px", echo = FALSE}
@@ -41,7 +41,7 @@ The transitions of this model can be characterized with a transition matrix with
 tmat <- rbind(c(0, 1, 2),
               c(NA, 0, 1),
               c(NA, NA, NA))
-colnames(tmat) <- rownames(tmat) <- c("Healthy", "Sick", "Dead")
+colnames(tmat) <- rownames(tmat) <- c("Healthy", "Sick", "Death")
 print(tmat)
 ```
 
@@ -72,8 +72,15 @@ hesim_dat <- hesim_data(
   strategies = data.table(strategy_id = 1:2,
                           strategy_name = c("Reference", "Intervention")),
   states = data.table(state_id = c(1, 2),
-                     state_name = c("Healthy", "Sick")) # Non-death health states
+                     state_name = rownames(tmat)[1:2]) # Non-death health states
 )
+```
+
+We can use `get_labels()` to create nice labels for the plots and summary tables.
+
+```{r}
+labs <- get_labels(hesim_dat)
+print(labs)
 ```
 
 # Parameter estimation
@@ -165,31 +172,17 @@ econmod <- CohortDtstm$new(trans_model = transmod,
 
 ## Simulating outcomes
 ### Disease progression
-We simulate state probabilities over 20 years with 1-year model cycles. Means and 95% credible intervals from the PSA are used to summarize the probability of being in each of the 3 states over the model's time horizon.
+We simulate state probabilities over 20 years with 1-year model cycles. `autoplot.stateprobs()` is used to plot the probability of being in each of the 3 states over the model's time horizon, with the solid lines representing means from the PSA and the shaded regions representing 95% confidence intervals.
 
 ```{r stateprobs, fig.width = 7, fig.height = 4}
 econmod$sim_stateprobs(n_cycles = 20)
-
-# Plot
-library("ggplot2")
-theme_set(theme_bw())
-stateprob_summary <- econmod$stateprobs_[, .(prob_mean = mean(prob),
-                                              prob_lower = quantile(prob, .025),
-                                              prob_upper = quantile(prob, .975)),
-                                          by = c("strategy_id", "state_id", "t")]
-stateprob_summary[, strategy_name := factor(strategy_id,
-                                          labels = hesim_dat$strategies$strategy_name)]
-ggplot(stateprob_summary, aes(x = t, y = prob_mean)) +
-  geom_line(aes(col = strategy_name)) +
-  geom_ribbon(aes(x = t, ymin = prob_lower, ymax = prob_upper,
-                  fill = strategy_name), alpha = .3) +
-  facet_wrap(~factor(state_id, labels = c(hesim_dat$states$state_name, "Death"))) +
-  xlab("Year") + ylab("Probability") +
-  scale_fill_discrete("Strategy") + scale_color_discrete("Strategy")
+autoplot(econmod$stateprobs_, labels = labs,
+         ci = TRUE, ci_style = "ribbon")
 ```
 
 ### Costs and QALYs
 After simulating the health state transitions, costs and QALYs are simulated in a straightforward manner. As is typical, we use a 3 percent discount rate. 
+
 ```{r}
 econmod$sim_qalys(dr = .03)
 econmod$sim_costs(dr = .03)
@@ -214,11 +207,13 @@ icers[, gender := factor(female,
                          labels = c("Male", "Female"))]
 
 # Plot of ICER by demographics
+library("ggplot2")
 ggplot(icers, aes(x = age, y = as.numeric(gsub(",", "", icer)), col = gender)) +
   geom_point() +
   xlab("Age") + ylab("Incremental cost-effectiveness ratio") +
   scale_y_continuous(label = scales::dollar_format()) +
-  scale_colour_discrete(name = "")
+  scale_colour_discrete(name = "") + 
+  theme_bw()
 ```
 
 Of note, the heterogeneous ICER arises completely through differences in baseline risk since the effect of the "Intervention" relative to the "Reference" on transitions was assumed to be constant across patients (i.e., the treatment strategy covariate did not have any effect modifiers). This example highlights an advantage of modeling disease progression with a statistical model in that it can facilitate analyses that assess the consequences of patient heterogeneity.

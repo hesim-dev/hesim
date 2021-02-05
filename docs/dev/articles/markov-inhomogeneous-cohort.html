@@ -67,7 +67,7 @@
     <li class="divider">
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -125,7 +125,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 class="date">2021-01-30</h4>
+            <h4 class="date">2021-02-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-cohort.Rmd"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
@@ -137,10 +137,11 @@
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
-<p>We will illustrate a time inhomogeneous Markov cohort model by replicating the total hip replacement (THR) example from the <a href="https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation"><em>Decision Modeling for Health Economic Evaluation</em></a> textbook. The analysis compares two treatment strategies, a “standard” prosthesis and a “new” prosthesis. A probabilistic sensitivity analysis (PSA) will be used to quantify parameter uncertainty.</p>
+<p>We will illustrate a cohort discrete time state transition model (cDTSTM) with a time inhomogeneous Markov process by replicating the total hip replacement (THR) example from the <a href="https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation"><em>Decision Modeling for Health Economic Evaluation</em></a> textbook. The analysis compares two treatment strategies, a “standard” prosthesis and a “new” prosthesis. A probabilistic sensitivity analysis (PSA) will be used to quantify parameter uncertainty.</p>
 <p>The model consists 5 health states: (i) primary THR, (ii) successful primary, (iii) revision THR, (iv) successful revision, and (v) death.</p>
 <p><img src="markov-inhomogeneous.png" width="700px"></p>
 <p>The model is time-inhomogeneous because (i) the prosthesis survival time is modeled using a Weibull survival model so that the probability of failure is time-varying and (ii) background mortality rates increase as patients age.</p>
+<p>As in the <a href="markov-cohort.html">Simple Markov cohort model</a> vignette, we define the model in terms of expressions with <code><a href="../reference/define_model.html">define_model()</a></code>. We demonstrate an alternative approach in which we construct the transition probability matrices directly in the <a href="#standard-eval">Appendix</a>.</p>
 </div>
 <div id="model-setup" class="section level1">
 <h1 class="hasAnchor">
@@ -165,8 +166,16 @@
                        sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Female"</span>, <span class="st">"Male"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ages</span><span class="op">)</span><span class="op">)</span>,
                        age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">ages</span>, times <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
                        patient_wt <span class="op">=</span> <span class="va">weights</span><span class="op">)</span>
+
+<span class="co"># Health states</span>
+<span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,
+                     state_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Primary THR"</span>, <span class="st">"Successful primary"</span>,
+                                    <span class="st">"Revision THR"</span>, <span class="st">"Successful revision"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># Combined data</span>
 <span class="va">hesim_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span><span class="op">(</span>strategies <span class="op">=</span> <span class="va">strategies</span>,
-                        patients <span class="op">=</span> <span class="va">patients</span><span class="op">)</span>
+                        patients <span class="op">=</span> <span class="va">patients</span>,
+                        states <span class="op">=</span> <span class="va">states</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">hesim_dat</span><span class="op">)</span></code></pre></div>
 <pre><code>## $strategies
 ##    strategy_id       strategy_name
@@ -186,8 +195,28 @@
 ##  9:          9      9   Male  70     0.0875
 ## 10:         10     10   Male  75     0.0700
 ## 
+## $states
+##    state_id          state_name
+## 1:        1         Primary THR
+## 2:        2  Successful primary
+## 3:        3        Revision THR
+## 4:        4 Successful revision
+## 
 ## attr(,"class")
 ## [1] "hesim_data"</code></pre>
+<p><code><a href="../reference/get_labels.html">get_labels()</a></code> is used to obtain nice labels for plots and summary tables.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">labs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_labels.html">get_labels</a></span><span class="op">(</span><span class="va">hesim_dat</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">labs</span><span class="op">)</span></code></pre></div>
+<pre><code>## $strategy_id
+## Standard prosthesis      New prosthesis 
+##                   1                   2 
+## 
+## $state_id
+##         Primary THR  Successful primary        Revision THR Successful revision 
+##                   1                   2                   3                   4 
+##               Death 
+##                   5</code></pre>
 </div>
 <div id="model-parameters" class="section level1">
 <h1 class="hasAnchor">
@@ -338,7 +367,7 @@ Death
 </table>
 <p>Three parameters of the transition probability matrix are assumed to be constant in the model: (i) the operative mortality rate following primary THR, <em>omrPTHR</em>, (ii) the operative mortality rate following revision THR, <em>omrRTHR</em>, and the re-revision rate, <em>rrr</em>. In a sample of 100 patients receiving primary THR 2 died implying that <em>omrPTHR</em> can be characterized by a beta distribution with <span class="math inline">\(\alpha = 2\)</span> and <span class="math inline">\(\beta = 98\)</span>. Similarly, in a sample of 100 patients experiencing a revision procedure, four patients had another procedure within one year suggesting that <em>rrr</em> can be characterized by a beta distribution with <span class="math inline">\(\alpha = 4\)</span> and <span class="math inline">\(\beta = 96\)</span>. Finally. there was information available for <em>omrRTHR</em>, so it assumed to follow the same beta distribution (<span class="math inline">\(\alpha = 2\)</span> and <span class="math inline">\(\beta = 98\)</span>) as <em>omrPTHR</em>.</p>
 <p>The remaining parameters, <em>rr</em> and <em>mr</em>, are time-varying. The yearly mortality rates, <em>mr</em>, are stratified by age and sex.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">mort_tbl</span><span class="op">)</span></code></pre></div>
 <pre><code>##   age_lower age_upper    male  female
 ## 1        35        45 0.00151 0.00099
@@ -356,11 +385,11 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <p><span class="math display">\[
 1 - \exp \left\{\lambda\left[(t-1)^\gamma - t^\gamma \right] \right\}
 \]</span> The coefficients from the regression model and the variance-covariance matrix used for the PSA are stored in <code>rr_coef</code> and <code>rr_vcov</code>, respectively.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">rr_coef</span><span class="op">)</span></code></pre></div>
 <pre><code>##    lngamma       cons        age       male        np1 
 ##  0.3740968 -5.4909350 -0.0367022  0.7685360 -1.3444740</code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">rr_vcov</span><span class="op">)</span></code></pre></div>
 <pre><code>##              lngamma        cons           age        male        np1
 ## lngamma  0.002251512 -0.00569100  2.800000e-08  0.00000510  0.0002590
@@ -384,7 +413,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <h3 class="hasAnchor">
 <a href="#combining-all-parameters" class="anchor"></a>Combining all parameters</h3>
 <p>All underlying parameter estimates are stored in a list.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
   <span class="co"># Transition probabilities</span>
   <span class="co">## Operative mortality following primary THR</span>
@@ -422,7 +451,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <h2 class="hasAnchor">
 <a href="#random-number-generation" class="anchor"></a>Random number generation</h2>
 <p>As noted above, <em>omrPTHR</em>, <em>omrRTHR</em>, and <em>rrr</em> are drawn from beta distributions with <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> (i.e. <code>shape1</code> and <code>shape2</code>) specified. Similarly, utility is drawn from a beta distribution, but <code>shape1</code> and <code>shape2</code> are derived from the mean and standard error using the method of moments. The mortality rate and the cost of the prostheses are assumed to be known with certainty. The medical costs associated with health states are drawn from a gamma distribution, for which, like utility, the underlying parameters are derived from the mean and standard error using the method of moments. Finally, the parameters of the Weibull survival model are drawn from a multivariate normal distribution using the point estimates and the variance-covariance matrix. 500 samples will be drawn for the PSA.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rng_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_rng.html">define_rng</a></span><span class="op">(</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span> 
     omrPTHR <span class="op">=</span> <span class="fu"><a href="../reference/rng_distributions.html">beta_rng</a></span><span class="op">(</span>shape1 <span class="op">=</span> <span class="va">omrPTHR_shape1</span>, shape2 <span class="op">=</span> <span class="va">omrPTHR_shape2</span><span class="op">)</span>,
@@ -442,7 +471,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <h2 class="hasAnchor">
 <a href="#transformed-parameters" class="anchor"></a>Transformed parameters</h2>
 <p>The sampled parameter values are “transformed” as a function of input data, which consists of all treatment strategy and patient combinations.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">input_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/expand.html">expand</a></span><span class="op">(</span><span class="va">hesim_dat</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategies"</span>, <span class="st">"patients"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">input_data</span><span class="op">)</span></code></pre></div>
 <pre><code>##    strategy_id patient_id       strategy_name grp_id    sex age patient_wt
@@ -454,7 +483,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 ## 6:           1          6 Standard prosthesis      6   Male  55     0.0175</code></pre>
 <p>When evaluating the <code><a href="../reference/define_tparams.html">define_tparams()</a></code> expression, operations are vectorized and performed for each combination of the sampled parameters, input data, and time periods. The model will be simulated for 60 model cycles (i.e., 60 years) so we will create 60 time intervals of length 1.</p>
 <p>Separate transformation functions are used for the transition model and the cost/utility models. This is done for computational efficiency since only the transition model depends on cycle time. In the transition model, the revision rate (<em>rr</em>) depends on the scale and the shape parameters, which, in turn, depend on the sampled values of the parameters from the Weibull model. The mortality rate depends on sex and a patient’s age during each model cycle.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transitions_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_tparams.html">define_tparams</a></span><span class="op">(</span><span class="op">{</span>
   <span class="co"># Regression for revision risk</span>
   <span class="va">male</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"Female"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>
@@ -511,13 +540,13 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <h2 class="hasAnchor">
 <a href="#constructing-the-economic-model" class="anchor"></a>Constructing the economic model</h2>
 <p>The economic model is defined by specifying parameter estimates, a random number generation expression for the PSA, and the transformed parameter expressions.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mod_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_model.html">define_model</a></span><span class="op">(</span>tparams_def <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">transitions_def</span>, 
                                            <span class="va">statevals_def</span><span class="op">)</span>,
                         rng_def <span class="op">=</span> <span class="va">rng_def</span>, 
                         params <span class="op">=</span> <span class="va">params</span><span class="op">)</span></code></pre></div>
 <p>The economic model is then created from the input data and the defined model. Arguments for instantiating the cost models (a list of objects of class <code>StateVals</code>) can be specified with a named list containing the values of arguments to pass to <code>StateVals$new()</code>. In this case, we note that the model for the cost of the prostheses is based on one-time costs accrued at the start of the model (with no discounting); conversely, medical costs accrue by weighting state values by time spent in the health states (in the current model simply the cost of revision over 1 year).</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cost_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
   prosthesis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"starting"</span><span class="op">)</span>,
   medical <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"wlos"</span><span class="op">)</span>
@@ -533,7 +562,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <h2 class="hasAnchor">
 <a href="#health-state-probabilities" class="anchor"></a>Health state probabilities</h2>
 <p>Health state probabilities are simulated for 60 model cycles.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>n_cycles <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></code></pre></div>
 <p>The expected number of patients per 1,000 in each health state is plotted below. The counts in the plot are for <code>patient_id = 2</code>, a 60 year old female as in the original textbook example. Since a PSA was performed both mean values and 95 percent credible intervals can be displayed. Patients are more likely to have a revision with a standard prosthesis than with the new prosthesis.</p>
 <p><img src="markov-inhomogeneous-cohort_files/figure-html/simStateprobsPlot-1.png" width="672"></p>
@@ -542,7 +571,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <h2 class="hasAnchor">
 <a href="#costs-and-qalys" class="anchor"></a>Costs and QALYs</h2>
 <p>To again be consistent with the textbook example, QALYs and costs are simulated with discount rates of .015 and 0.06, respectively. QALYs and costs (when <code>method = "wlos"</code>) are computed with a right Riemann sum, meaning that they are measured at the right endpoint of each model cycle.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">.015</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span>
 <span class="va">econmod</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">.06</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span></code></pre></div>
 </div>
@@ -553,51 +582,46 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <div id="subgroup-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#subgroup-analysis" class="anchor"></a>Subgroup analysis</h2>
-<p>Subgroup analyses can be performed with <code>$sim_summarize()</code> using the <code>by_grp = TRUE</code> option. Cost-effectiveness analyses are then performed for each subgroup (<code>grp_id</code>) from input data. We will begin by reporting results for the 60-year old female, which are consistent with those from the textbook.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<p>Subgroup analyses can be performed with <code>$summarize()</code> using the <code>by_grp = TRUE</code> option. Cost-effectiveness analyses are then performed for each subgroup (<code>grp_id</code>) from input data. We will begin by reporting summary results using <code><a href="../reference/summary.ce.html">summary.ce()</a></code> for the 60-year old female, which are consistent with those from the textbook.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ce_sim</span> <span class="op">&lt;-</span> <span class="va">econmod</span><span class="op">$</span><span class="fu">summarize</span><span class="op">(</span>by_grp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">wtp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">25000</span>, <span class="fl">500</span><span class="op">)</span>
 <span class="va">cea_pw_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce_sim</span>, comparator <span class="op">=</span> <span class="fl">1</span>, dr_qalys <span class="op">=</span> <span class="fl">0.015</span>, dr_costs <span class="op">=</span> <span class="fl">.06</span>,
                      k <span class="op">=</span> <span class="va">wtp</span><span class="op">)</span>
 
-<span class="va">ce_sim</span><span class="op">$</span><span class="va">qalys</span><span class="op">[</span><span class="va">grp_id</span> <span class="op">==</span> <span class="fl">2</span>, 
-              <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">qalys</span><span class="op">)</span><span class="op">)</span>,
-                by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.62084
-## 2:           2      2 14.66538</code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ce_sim</span><span class="op">$</span><span class="va">costs</span><span class="op">[</span><span class="va">grp_id</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">&amp;</span> <span class="va">category</span> <span class="op">==</span> <span class="st">"total"</span>, 
-            <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">costs</span><span class="op">)</span><span class="op">)</span>,
-              by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 509.8036
-## 2:           2      2 610.7692</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">[</span><span class="va">grp</span> <span class="op">==</span> <span class="fl">2</span><span class="op">]</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>##    Discount rate           Outcome  Standard prosthesis       New prosthesis
+## 1:         0.015             QALYs 14.62 (13.46, 15.59) 14.66 (13.50, 15.64)
+## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)
+## 3:         0.060    Costs: medical        120 (53, 228)          34 (11, 86)
+## 4:         0.060      Costs: total       514 (447, 622)       613 (590, 665)</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span>, pivot_from <span class="op">=</span> <span class="st">"outcome"</span><span class="op">)</span></code></pre></div>
-<pre><code>##     Group Strategy Incremental QALYs Incremental costs       Incremental NMB
-##  1:     1        2 0.07 (0.03, 0.13)     68 (-36, 134)  3,530 (1,221, 6,653)
-##  2:     2        2 0.04 (0.02, 0.08)     101 (25, 149)    2,126 (730, 4,079)
-##  3:     3        2 0.03 (0.01, 0.05)     126 (71, 161)    1,205 (370, 2,373)
-##  4:     4        2 0.02 (0.01, 0.03)    146 (108, 169)      622 (127, 1,283)
-##  5:     5        2 0.01 (0.00, 0.02)    160 (133, 175)        274 (-13, 677)
-##  6:     6        2 0.11 (0.04, 0.21)    -27 (-213, 93) 5,758 (2,139, 10,740)
-##  7:     7        2 0.07 (0.03, 0.13)     35 (-98, 123)  3,448 (1,246, 6,423)
-##  8:     8        2 0.04 (0.02, 0.08)     82 (-18, 143)    1,963 (695, 3,779)
-##  9:     9        2 0.02 (0.01, 0.04)     117 (47, 158)    1,049 (320, 2,126)
-## 10:    10        2 0.01 (0.01, 0.02)     141 (94, 169)       511 (99, 1,123)
+<code class="sourceCode R"><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span>pivot_from <span class="op">=</span> <span class="st">"outcome"</span><span class="op">)</span></code></pre></div>
+<pre><code>##     Group Strategy Incremental QALYs Incremental costs      Incremental NMB
+##  1:     1        2 0.07 (0.03, 0.13)     66 (-47, 135) 3,561 (1,237, 6,281)
+##  2:     2        2 0.04 (0.02, 0.08)      99 (18, 149)   2,147 (754, 3,840)
+##  3:     3        2 0.03 (0.01, 0.05)     125 (68, 161)   1,218 (391, 2,264)
+##  4:     4        2 0.02 (0.01, 0.03)    145 (107, 169)     630 (153, 1,253)
+##  5:     5        2 0.01 (0.00, 0.02)    159 (134, 175)         278 (8, 638)
+##  6:     6        2 0.12 (0.05, 0.20)    -32 (-237, 94) 5,810 (2,316, 9,940)
+##  7:     7        2 0.07 (0.03, 0.12)    31 (-120, 123) 3,484 (1,368, 6,006)
+##  8:     8        2 0.04 (0.02, 0.07)     80 (-22, 144)   1,986 (731, 3,533)
+##  9:     9        2 0.02 (0.01, 0.04)     115 (48, 159)   1,063 (357, 2,001)
+## 10:    10        2 0.01 (0.01, 0.02)     140 (96, 169)     519 (127, 1,054)
 ##          ICER
-##  1:       948
-##  2:     2,267
-##  3:     4,751
-##  4:     9,484
-##  5:    18,425
+##  1:       906
+##  2:     2,208
+##  3:     4,664
+##  4:     9,349
+##  5:    18,200
 ##  6: Dominates
-##  7:       498
-##  8:     2,010
-##  9:     5,008
-## 10:    10,839</code></pre>
+##  7:       445
+##  8:     1,934
+##  9:     4,889
+## 10:    10,641</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -607,12 +631,13 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <code class="sourceCode R"><span class="va">ce_sim</span> <span class="op">&lt;-</span> <span class="va">econmod</span><span class="op">$</span><span class="fu">summarize</span><span class="op">(</span>by_grp <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">cea_pw_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce_sim</span>, comparator <span class="op">=</span> <span class="fl">1</span>, dr_qalys <span class="op">=</span> <span class="fl">.015</span>, dr_costs <span class="op">=</span> <span class="fl">.06</span>,
                      k <span class="op">=</span> <span class="va">wtp</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span>, digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code>##              Outcome                    2
-## 1: Incremental QALYs 0.029 (0.011, 0.053)
-## 2: Incremental costs        118 (57, 158)
-## 3:   Incremental NMB   1,327 (414, 2,569)
-## 4:              ICER                4,098</code></pre>
+<span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span>digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<pre><code>##              Outcome       New prosthesis
+## 1: Incremental QALYs 0.029 (0.012, 0.051)
+## 2: Incremental costs        117 (54, 157)
+## 3:   Incremental NMB   1,341 (468, 2,465)
+## 4:              ICER                4,012</code></pre>
 </div>
 </div>
 <div id="appendix" class="section level1">
@@ -641,11 +666,10 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 \end{align}
 \]</span></p>
 </div>
-<div id="computational-efficiency" class="section level2">
+<div id="standard-eval" class="section level2">
 <h2 class="hasAnchor">
-<a href="#computational-efficiency" class="anchor"></a>Computational efficiency</h2>
-<p>The largest bottleneck in <code><a href="../reference/define_model.html">define_model()</a></code> is the construction of the economic model and the construction of the transition model in particular. The reason for this is that all transition probabilities are “vectorized” and consequently preallocated. This preallocation can take time if the number of parameter samples <span class="math inline">\(\times\)</span> treatment strategies <span class="math inline">\(\times\)</span> patients <span class="math inline">\(\times\)</span> time periods is large. Since the <code>$sim_stateprobs()</code> method is implemented in <code>C++</code> the simulation is very fast one the transition probabilities have been constructed.</p>
-<p>The disadvantage of <code><a href="../reference/define_model.html">define_model()</a></code> for preallocation is that it is a general function, resulting in some overhead. An alternative approach is to construct the transition probability matrix ourselves using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the <span class="math inline">\(r\)</span>th row and <span class="math inline">\(s\)</span>th column as <span class="math inline">\(p_{rs} = g(x^T\theta)\)</span> where <span class="math inline">\(x\)</span> is an input matrix, <span class="math inline">\(\theta\)</span> is a vector of coefficients (i.e., a parameter sample), and <span class="math inline">\(g()\)</span> is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well.</p>
+<a href="#standard-eval" class="anchor"></a>Direct construction of transition matrices</h2>
+<p>Transition probability matrices can also be constructed without using <code><a href="../reference/define_model.html">define_model()</a></code>. One way to do this is to construct the transition probability matrices using matrix algebra. That is, for a given sample of the parameters from the PSA, we can predict the element for the <span class="math inline">\(r\)</span>th row and <span class="math inline">\(s\)</span>th column as <span class="math inline">\(p_{rs} = g(x^T\theta)\)</span> where <span class="math inline">\(x\)</span> is an input matrix, <span class="math inline">\(\theta\)</span> is a vector of coefficients (i.e., a parameter sample), and <span class="math inline">\(g()\)</span> is a transformation function. An input matrix will always vary by treatment strategy and patient; in a time-inhomogeneous model, it will vary by time period as well. This approach is more computationally efficient than defining a model because <code><a href="../reference/define_model.html">define_model()</a></code> is a general function, resulting in some overhead.</p>
 <div id="random-number-generation-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#random-number-generation-1" class="anchor"></a>Random number generation</h3>
@@ -755,7 +779,7 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 ## 4:      1           1          1      1     0.0325       4          3         4
 ## 5:      1           1          1      1     0.0325       5          4         5
 ## 6:      1           1          1      1     0.0325       6          5         6</code></pre>
-<p><code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> produces a flattened transition probability matrix for each row of <code>tpmatrix_id</code>. We predict the elements of the matrix using the input matrices we derived above. Matrix multiplication of an <span class="math inline">\(n \times k\)</span> input matrix by a <span class="math inline">\(k \times s\)</span> coefficient matrix results in a <span class="math inline">\(n \times s\)</span> matrix of predicted values. In other words, there is one row for each of the <span class="math inline">\(n\)</span> rows in the input data and one column for each of the <span class="math inline">\(s\)</span> parameter samples. This matrix can itself be flattened into a vector of length <span class="math inline">\(n \cdot s\)</span> using the <code><a href="https://rdrr.io/r/base/c.html">c()</a></code> function. The result is a vector of predicted values stacked by parameter sample; that is, a prediction for each row produced by <code><a href="../reference/tpmatrix_id.html">tpmatrix_id()</a></code>.</p>
+<p><code><a href="../reference/tpmatrix.html">tpmatrix()</a></code> produces a transition probability matrix for each row of <code>tpmatrix_id</code>. We predict the elements of the matrix using the input matrices we derived above. Matrix multiplication of an <span class="math inline">\(n \times k\)</span> input matrix by a <span class="math inline">\(k \times s\)</span> coefficient matrix results in a <span class="math inline">\(n \times s\)</span> matrix of predicted values. In other words, there is one row for each of the <span class="math inline">\(n\)</span> rows in the input data and one column for each of the <span class="math inline">\(s\)</span> parameter samples. This matrix can itself be flattened into a vector of length <span class="math inline">\(n \cdot s\)</span> using the <code><a href="https://rdrr.io/r/base/c.html">c()</a></code> function. The result is a vector of predicted values stacked by parameter sample; that is, a prediction for each row produced by <code><a href="../reference/tpmatrix_id.html">tpmatrix_id()</a></code>.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># "Transformed" parameters</span>
 <span class="va">time</span> <span class="op">&lt;-</span> <span class="va">tpmat_id</span><span class="op">$</span><span class="va">time_stop</span>
@@ -776,12 +800,12 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
   <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,   <span class="fl">0</span>, <span class="fl">1</span>
 <span class="op">)</span>
 <span class="va">tpmat</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></code></pre></div>
-<pre><code>##    s1_s1     s1_s2 s1_s3 s1_s4      s1_s5 s2_s1     s2_s2        s2_s3 s2_s4
-## 1:     0 0.9875898     0     0 0.01241023     0 0.9926394 0.0006605627     0
-##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4      s3_s5 s4_s1 s4_s2      s4_s3
-## 1: 0.0067     0     0     0 0.9808898 0.01911023     0     0 0.01741893
+<pre><code>##    s1_s1     s1_s2 s1_s3 s1_s4     s1_s5 s2_s1     s2_s2       s2_s3 s2_s4
+## 1:     0 0.9704085     0     0 0.0295915     0 0.9926491 0.000650854     0
+##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4     s3_s5 s4_s1 s4_s2      s4_s3
+## 1: 0.0067     0     0     0 0.9637085 0.0362915     0     0 0.02373184
 ##        s4_s4  s4_s5 s5_s1 s5_s2 s5_s3 s5_s4 s5_s5
-## 1: 0.9758811 0.0067     0     0     0     0     1</code></pre>
+## 1: 0.9695682 0.0067     0     0     0     0     1</code></pre>
 <p>Finally, we combine the ID variables and the transition probability matrices into a single object.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tparams_transprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tparams_transprobs.html">tparams_transprobs</a></span><span class="op">(</span><span class="va">tpmat</span>, <span class="va">tpmat_id</span><span class="op">)</span></code></pre></div>
@@ -789,7 +813,7 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 <div id="simulation-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#simulation-1" class="anchor"></a>Simulation</h3>
-<p>For comparison with the nonstandard evaluation approach, we will (re)construct and (re)simulate the model. Estimated costs and QALYs are very similar, as expected.</p>
+<p>To compare with the <code><a href="../reference/define_model.html">define_model()</a></code> approach, we will (re)construct and (re)simulate the model. Estimated costs and QALYs are very similar, as expected.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transmod</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortDtstmTrans.html">CohortDtstmTrans</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>params <span class="op">=</span> <span class="va">tparams_transprobs</span><span class="op">)</span>
 <span class="va">econmod</span><span class="op">$</span><span class="va">trans_model</span> <span class="op">&lt;-</span> <span class="va">transmod</span> 
@@ -798,21 +822,15 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 <span class="va">econmod</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">.06</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span>
 
 <span class="va">ce_sim</span> <span class="op">&lt;-</span> <span class="va">econmod</span><span class="op">$</span><span class="fu">summarize</span><span class="op">(</span>by_grp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">ce_sim</span><span class="op">$</span><span class="va">qalys</span><span class="op">[</span><span class="va">grp_id</span> <span class="op">==</span> <span class="fl">2</span>, 
-              <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">qalys</span><span class="op">)</span><span class="op">)</span>,
-                by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 14.62927
-## 2:           2      2 14.67294</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">[</span><span class="va">grp</span> <span class="op">==</span> <span class="fl">2</span><span class="op">]</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>##    Discount rate           Outcome  Standard prosthesis       New prosthesis
+## 1:         0.015             QALYs 14.63 (13.47, 15.58) 14.68 (13.50, 15.63)
+## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)
+## 3:         0.060    Costs: medical        118 (51, 218)          33 (11, 75)
+## 4:         0.060      Costs: total       512 (445, 612)       612 (590, 654)</code></pre>
+<p>However, time to construct the transition model was 2.3 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ce_sim</span><span class="op">$</span><span class="va">costs</span><span class="op">[</span><span class="va">grp_id</span> <span class="op">==</span> <span class="fl">2</span> <span class="op">&amp;</span> <span class="va">category</span> <span class="op">==</span> <span class="st">"total"</span>, 
-            <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">costs</span><span class="op">)</span><span class="op">)</span>,
-              by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"grp_id"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##    strategy_id grp_id     mean
-## 1:           1      2 508.9009
-## 2:           2      2 611.4484</code></pre>
-<p>However, time to construct the transition model was 2 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>
   Method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"define_model()"</span>, <span class="st">"Custom tpmatrix()"</span><span class="op">)</span>,
   <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span><span class="op">(</span>
@@ -843,13 +861,13 @@ elapsed
 define_model()
 </td>
 <td style="text-align:right;">
-4.292
+3.987
 </td>
 <td style="text-align:right;">
-0.830
+0.824
 </td>
 <td style="text-align:right;">
-5.354
+4.887
 </td>
 </tr>
 <tr>
@@ -857,13 +875,13 @@ define_model()
 Custom tpmatrix()
 </td>
 <td style="text-align:right;">
-1.701
+1.671
 </td>
 <td style="text-align:right;">
-0.416
+0.397
 </td>
 <td style="text-align:right;">
-2.647
+2.108
 </td>
 </tr>
 </tbody>

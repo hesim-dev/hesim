@@ -67,7 +67,7 @@
     <li class="divider">
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -126,7 +126,7 @@
       <h1 data-toc-skip>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2021-01-30</h4>
+            <h4 class="date">2021-02-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -753,7 +753,7 @@ $sim_costs()
 <h1 class="hasAnchor">
 <a href="#next-steps" class="anchor"></a>Next steps</h1>
 <p>This article provided an overview of the <code>hesim</code> package. We recommend exploring the examples in the other articles to learn more.</p>
-<p>cDTSTMs (i.e., Markov cohort models) are probably the most commonly used models in health economics and there are examples demonstrating multiple ways to build them with <code>hesim</code>. One approach that has not yet been discussed is a functional one based on non-standard evaluation that allows user to write mathematical expressions transforming underlying parameter draws from a PSA into relevant transformed parameters (e.g., transition probability matrices, mean state values) as a function of input data.</p>
+<p>cDTSTMs (i.e., Markov cohort models) are probably the most commonly used models in health economics and there are examples demonstrating multiple ways to build them with <code>hesim</code>. One approach that has not yet been discussed is a functional one that allows users to define a model (with <code><a href="../reference/define_model.html">define_model()</a></code>) in terms of expressions that transform underlying parameter draws from a PSA into relevant transformed parameters (e.g., transition probability matrices, mean state values) as a function of input data.</p>
 <p>Other relevant topics include more through treatments of CEA, multi-state modeling, individual-level simulations based on aggregate data, and partitioned survival analysis. As the examples illustrate, any analysis can be performed either for a single group or in the context of multiple subgroups.</p>
 </div>
   </div>

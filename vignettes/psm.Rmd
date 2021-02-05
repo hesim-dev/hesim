@@ -15,6 +15,10 @@ vignette: >
 bibliography: references.bib
 ---
 
+```{r, include = FALSE}
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
 # Overview
 An N-state partitioned survival model (PSM) simulates the probability that a patient is in each of N distinct health states at a given point of time when treated by a particular therapy. State membership is estimated from a set of non-mutually exclusive survival curves; for an N-state model, N-1 survival curves are required. 
 
@@ -53,19 +57,27 @@ We begin by defining the population, treatment strategies, and model structure. 
 library("data.table")
 library("hesim")
 set.seed(101)
-strategies_dt <- data.table(strategy_id = c(1, 2, 3))
-patients_dt <- data.table(patient_id = seq(1, 3),
-                          age = c(45, 50, 60),
-                          female = c(0, 0, 1))
-states_dt <- data.frame(state_id =  seq(1, 3),
-                        state_name = c("Progression free (1st line)",
-                                       "Progression free (2nd line)",
-                                       "Progressed (2nd line)"),
+strategies <- data.table(strategy_id = c(1, 2, 3),
+                         strategy_name = paste0("Strategy ", 1:3))
+patients <- data.table(patient_id = seq(1, 3),
+                       age = c(45, 50, 60),
+                       female = c(0, 0, 1))
+states <- data.frame(state_id =  seq(1, 3),
+                     state_name = c("Progression free (1st line)",
+                                    "Progression free (2nd line)",
+                                    "Progressed (2nd line)"),
                         stringsAsFactors = FALSE)
-hesim_dat <- hesim_data(strategies = strategies_dt,
-                        patients = patients_dt,
-                        states = states_dt)
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients,
+                        states = states)
 print(hesim_dat)
+```
+
+We use `get_labels()` to obtain nice labels for plots and summary tables.
+
+```{r}
+labs <- get_labels(hesim_dat)
+print(labs)
 ```
 
 # Parameter estimation
@@ -99,7 +111,7 @@ psfit_wei <- flexsurvreg_list(fit1, fit2, fit3)
 Although utility and cost models can be fit using regression models, in many cases, we won't fit a model directly, but will use estimated mean values from published sources. In this case, we can use a `stateval_tbl()` to store estimates. For instance, consider an example where we are only given a range of values for utility and we therefore approximate the posterior distribution of mean utility values by health state using a uniform distribution.
 
 ```{r, warning = FALSE, message = FALSE}
-utility_tbl <- stateval_tbl(tbl = data.frame(state_id = states_dt$state_id,
+utility_tbl <- stateval_tbl(tbl = data.frame(state_id = states$state_id,
                                              min = psm4_exdata$utility$lower,
                                              max = psm4_exdata$utility$upper),
                             dist = "unif")
@@ -108,7 +120,7 @@ utility_tbl <- stateval_tbl(tbl = data.frame(state_id = states_dt$state_id,
 Similar to utility, we will not simulate drug costs based on a statistical model but will instead use published estimates. Drug costs will only vary by treatment strategy (i.e., they do not vary by health state or across samples in the PSA).
 
 ```{r, warning = FALSE, message = FALSE}
-drugcost_tbl <- stateval_tbl(tbl = data.frame(strategy_id = strategies_dt$strategy_id,
+drugcost_tbl <- stateval_tbl(tbl = data.frame(strategy_id = strategies$strategy_id,
                                            est = psm4_exdata$costs$drugs$costs),
                           dist = "fixed")
 ```
@@ -116,7 +128,7 @@ drugcost_tbl <- stateval_tbl(tbl = data.frame(strategy_id = strategies_dt$strate
 For cases in which we want to use a regression model to simulate costs, `hesim` supports parameterizing a cost or utility model using linear models. Here, we fit a model for medical costs as a function of the three non-death health states using the `lm()` function in R. 
 
 ```{r, warning = FALSE, message = FALSE}
-medcosts_fit <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
+medcosts_fit <- lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
 ```
 
 # Simulation
@@ -171,43 +183,36 @@ psm <- Psm$new(survival_models = survmods,
 
 ## Simulating outcomes
 ### Simulating survival curves
-Survival curves are predicted by treatment strategy and patient with the function `$sim_survival()`. The predicted curves are returned as a tidy `data.table` to facilitate plotting and stored as a field in the class named `survival_`. Below we plot the mean survival curve for patient 2 with treatment strategy 3. 
+Survival curves are predicted by treatment strategy and patient with the function `$sim_survival()`. We can quickly generate a plot of survival curves (averaged across patients) by treatment strategy using `autoplot.survival()`. 
 
 ```{r survcurves, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 # Simulate
 times <- seq(0, 10, by = .1)
 psm$sim_survival(t = times)
+head(psm$survival_)
 
 # Plot
-library("ggplot2")
-surv_means <- psm$survival_[, .(mean_surv = mean(survival)),
-                                      by = c("curve", "strategy_id", "patient_id", "t")]
-theme_set(theme_bw())
-p_data <- surv_means[strategy_id == 3 & patient_id == 2]
-p_data[, curve := factor(curve)]
-p_data[, mean_surv_min := c(rep(0, length(times)), p_data[curve !=3, mean_surv])]
-ggplot(p_data, aes(x = t, y = mean_surv, fill = curve)) + 
-      geom_line(aes(col = curve)) + 
-      geom_ribbon(aes(ymin = mean_surv_min, ymax = mean_surv), alpha = .65) +
-      xlab("Years") + ylab("Proportion surviving") +
-      scale_color_discrete(name = "Survival curve") +
-      guides(fill = FALSE) +
-      theme(legend.position = "bottom")
+labs$curve <- c("Curve 1" = 1, "Curve 2" = 2, "Curve 3" = 3)
+autoplot(psm$survival_, labels = labs,
+         ci = TRUE, ci_style = "ribbon")
 ```
 
 ### Simulating health state probabilities 
-After simulating survival, we can calculate the probability of being in each of the four health states using `$sim_stateprobs()`. At a given point in time, the probability of being in state 1 is the survival probability from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. We plot these state probabilities for the first patient with the 30th randomly sampled parameter set.
+After simulating survival, we can calculate the probability of being in each of the four health states using `$sim_stateprobs()`. At a given point in time, the probability of being in state 1 is the survival probability from the first survival curve, the probability of being in state 2 is the difference in survival probabilities between the 2nd and 1st curves, the probability of being in state 3 is the difference in survival probabilities between the 3rd and 2nd curves, and the probability of death is 1 minus the survival probability from curve 3. 
+
+While plots can be quickly generated with `autoplot.stateprobs()`, the output is returned in a tidy format (and stored as a field in the class named `stateprobs_`) that facilitates creation of custom plots. We'll plot state probabilities for the 1st patient with the 30th randomly sampled parameter set.
 
 ```{r stateprobs, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 # Simulate
 psm$sim_stateprobs()
+head(psm$stateprobs_)
 
 # Plot
+library("ggplot2")
 stateprobs <- psm$stateprobs_[sample == 30 & patient_id == 1]
 stateprobs[, state := factor(state_id, 
                              levels = rev(unique(state_id)))]
-stateprobs[, strategy := factor(strategy_id, labels = c("Strategy 1", "Strategy 2", 
-                                                        "Strategy 3"))]
+stateprobs[, strategy := factor(strategy_id, labels = names(labs$strategy_id))]
 ggplot(stateprobs[strategy_id %in% c(1, 2)],
             aes(x = t, y = prob, fill = state, group = state)) + 
   geom_area(alpha = .65) + facet_wrap(~strategy) +

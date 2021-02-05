@@ -30,7 +30,7 @@ The model consists 4 health states. Ordered from worst to best to worst, they ar
 knitr::include_graphics("markov-cohort.png")
 ```
 
-Transition probability matrices are the core of any cDTSTM. They can, in general, be constructed by either (i) using an explicit statistical model (e.g., via `params_mlogit()`) or (ii) by specifying transition probabilities for each parameter sample, treatment strategy, patient, and (optionally) time interval (e.g., via `tparams_transprobs()`). The latter approach can either by done "by hand" via standard evaluation or using non-standard evaluation with `define_model()`. We will construct a `tparams_transprobs` object with `define_model()`in this vignette, but an example using standard evaluation is available in the `?CohortDtstm` help file. 
+Transition probability matrices are the core of any cDTSTM. They can, in general, be constructed by either (i) using an explicit statistical model (e.g., via `params_mlogit()`) or (ii) by specifying transition probabilities for each parameter sample, treatment strategy, patient, and (optionally) time interval (e.g., via `tparams_transprobs()`). The latter can either by done by constructing the transition probability matrices directly "by hand" or by defining the model in terms of expressions with `define_model()`. We will construct a `tparams_transprobs` object with `define_model()`in this vignette, but an example without it is available in the `?CohortDtstm` help file. 
 
 # Model setup
 We set up the model for two treatment strategies and one representative patient.
