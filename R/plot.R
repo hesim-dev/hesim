@@ -246,7 +246,7 @@ plot_evpi <- function(x, labels = NULL) {
 #' @return A `ggplot` object.
 #' @export 
 autoplot.survival <- function(object, labels = NULL, ci = FALSE,
-                                prob = .95, ci_style = c("line", "ribbon"),
+                                prob = .95, ci_style = c("ribbon", "line"),
                                 geom_alpha = .3, ...) {
   survival <- patient_wt <- lower <- upper <- NULL
   ci_style <- match.arg(ci_style)
@@ -326,7 +326,7 @@ autoplot.survival <- function(object, labels = NULL, ci = FALSE,
 #' @return A `ggplot` object.
 #' @export 
 autoplot.stateprobs <- function(object, labels = NULL, ci = FALSE,
-                                prob = .95, ci_style = c("line", "ribbon"),
+                                prob = .95, ci_style = c("ribbon", "line"),
                                 geom_alpha = .3, ...) {
   patient_wt <- lower <- upper <- NULL
   ci_style <- match.arg(ci_style)
