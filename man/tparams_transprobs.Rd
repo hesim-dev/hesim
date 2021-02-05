@@ -93,10 +93,10 @@ patient.
 They should be prefixed with "prob_" and ordered rowwise.
 For example, the following columns would be used for a 2x2 transition
 probability matrix:
-\code{probs_1} (1st row, 1st column),
-\code{probs_2} (1st row, 2nd column),
-\code{probs_3} (2nd row, 1st column), and
-\code{probs_4} (2nd row, 2nd column).
+\code{prob_1} (1st row, 1st column),
+\code{prob_2} (1st row, 2nd column),
+\code{prob_3} (2nd row, 1st column), and
+\code{prob_4} (2nd row, 2nd column).
 }
 }
 
