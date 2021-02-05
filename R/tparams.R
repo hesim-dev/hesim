@@ -118,10 +118,10 @@ check.tparams_mean <- function(object, ...){
 #'  They should be prefixed with "prob_" and ordered rowwise. 
 #'  For example, the following columns would be used for a 2x2 transition
 #'   probability matrix:
-#'  `probs_1` (1st row, 1st column), 
-#'  `probs_2` (1st row, 2nd column), 
-#'  `probs_3` (2nd row, 1st column), and 
-#'  `probs_4` (2nd row, 2nd column).
+#'  `prob_1` (1st row, 1st column), 
+#'  `prob_2` (1st row, 2nd column), 
+#'  `prob_3` (2nd row, 1st column), and 
+#'  `prob_4` (2nd row, 2nd column).
 #'  }
 #'  }
 #'  
@@ -296,8 +296,11 @@ tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL,
 
 new_tparams_transprobs.data.table <- function (object) {
   id_args <- tparams_transprobs_id(object)
-  prob_mat <- as.matrix(object[, colnames(object)[grep("prob_", colnames(object))], 
-                               with = FALSE])
+  indices <- grep("^prob_", colnames(object))
+  if (length(indices) == 0) {
+    stop("No columns with names starting with 'prob_'.")
+  }
+  prob_mat <- as.matrix(object[, colnames(object)[indices], with = FALSE])
   value <- as_array3(prob_mat)
   return(do.call("create_tparams_transprobs", c(list(value = value), id_args)))
 }
