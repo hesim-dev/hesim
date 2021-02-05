@@ -9,7 +9,7 @@
   labels = NULL,
   ci = FALSE,
   prob = 0.95,
-  ci_style = c("line", "ribbon"),
+  ci_style = c("ribbon", "line"),
   geom_alpha = 0.3,
   ...
 )
