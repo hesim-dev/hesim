@@ -75,7 +75,9 @@ sim_semi_markov_mstate <- function(object, newdata, n_rep = 100, n_samples = 100
                                      n = n_samples,
                                      uncertainty = uncertainty)
     cumhaz <- dismod$cumhazard(t = cumhaz_grid)  
-    data.table::setnames(cumhaz, c("t", "cumhazard"), c("time", "Haz"))
+    data.table::setnames(cumhaz, 
+                         c("transition_id", "t", "cumhazard"), 
+                         c("trans", "time", "Haz"))
     
     # Simulate
     sim <- vector(mode = "list", length = n_samples)
