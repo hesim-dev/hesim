@@ -68,10 +68,10 @@ We will create nice labels for the plots and summary tables.
 
 ```{r}
 labs <- get_labels(hesim_dat)
-labs$trans <- c("Healthy-> Sick" = 1, 
-                "Healthy -> Death" = 2,
-                "Sick -> Healthy" = 3,
-                "Sick -> Death" = 4)
+labs$transition_id <- c("Healthy-> Sick" = 1, 
+                        "Healthy -> Death" = 2,
+                        "Sick -> Healthy" = 3,
+                        "Sick -> Death" = 4)
 print(labs)
 ```
 

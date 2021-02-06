@@ -116,7 +116,7 @@ a data.frame, or a tpmatrix." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -192,17 +192,18 @@ a <code>data.frame</code>, or a <a href='tpmatrix.html'>tpmatrix</a>.</p>
   tpmatrix_id <span class='op'>=</span> <span class='cn'>NULL</span>,
   times <span class='op'>=</span> <span class='cn'>NULL</span>,
   grp_id <span class='op'>=</span> <span class='cn'>NULL</span>,
-  patient_wt <span class='op'>=</span> <span class='cn'>NULL</span>
+  patient_wt <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span>
 
 <span class='co'># S3 method for data.table</span>
-<span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+<span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+<span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for tpmatrix</span>
-<span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>tpmatrix_id</span><span class='op'>)</span></pre>
+<span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>tpmatrix_id</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -278,10 +279,10 @@ patient.</p></li>
 They should be prefixed with "prob_" and ordered rowwise.
 For example, the following columns would be used for a 2x2 transition
 probability matrix:
-<code>probs_1</code> (1st row, 1st column),
-<code>probs_2</code> (1st row, 2nd column),
-<code>probs_3</code> (2nd row, 1st column), and
-<code>probs_4</code> (2nd row, 2nd column).</p></li>
+<code>prob_1</code> (1st row, 1st column),
+<code>prob_2</code> (1st row, 2nd column),
+<code>prob_3</code> (2nd row, 1st column), and
+<code>prob_4</code> (2nd row, 2nd column).</p></li>
 </ul></p></dd>
 
 <dt>data.frame</dt><dd><p>Same as <code>data.table</code>.</p></dd>

@@ -113,7 +113,7 @@ rpwexp is vectorized and written in C++ for speed." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -215,7 +215,7 @@ equal to n.</p>
 <span class='va'>samp</span> <span class='op'>&lt;-</span> <span class='fu'>rpwexp</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>ratemat</span>, <span class='va'>t</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>ptm</span>
 </div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.010   0.001   0.018 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>samp</span><span class='op'>)</span>
+#&gt;   0.008   0.001   0.009 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>samp</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #&gt;  0.0000  0.4793  1.1517  1.6597  2.3021 14.4929 </div></pre>
   </div>

@@ -114,7 +114,7 @@ for speed. Equivalent to flexsurv::rgengamma." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -217,7 +217,7 @@ equal to n.</p>
 <span class='va'>r1</span> <span class='op'>&lt;-</span> <span class='fu'>fast_rgengamma</span><span class='op'>(</span><span class='va'>n</span>, mu <span class='op'>=</span> <span class='va'>m</span>, sigma <span class='op'>=</span> <span class='va'>s</span>, Q <span class='op'>=</span> <span class='va'>q</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>ptm</span>
 </div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.001   0.000   0.002 </div><div class='input'><span class='va'>ptm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span>
+#&gt;   0.001   0.000   0.001 </div><div class='input'><span class='va'>ptm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
 <span class='va'>r2</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/GenGamma.html'>rgengamma</a></span><span class='op'>(</span><span class='va'>n</span>, mu <span class='op'>=</span> <span class='va'>m</span>, sigma <span class='op'>=</span> <span class='va'>s</span>, Q <span class='op'>=</span> <span class='va'>q</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>ptm</span>

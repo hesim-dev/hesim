@@ -114,7 +114,7 @@ tparams_transprobs() object." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -200,10 +200,10 @@ sensitivity analysis (PSA).</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a <code>data.table</code> with the same columns in <code>object</code> repeated
-<code>n_samples</code> times. That is, to facilitate creation of a <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>
-object,  there is one row for each parameter sample,
-treatment strategy, patient, and optionally time interval.</p>
+    <p>Returns a <code>tpmatrix_id</code> object that inherits from <code>data.table</code> with
+the same columns in <code>object</code> repeated <code>n_samples</code> times. That is, to facilitate
+creation of a <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code> object,  there is one row for each
+parameter sample, treatment strategy, patient, and optionally time interval.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='tpmatrix.html'>tpmatrix()</a></code>, <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>, <code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code></p></div>
