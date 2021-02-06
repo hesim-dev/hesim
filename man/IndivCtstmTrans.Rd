@@ -50,7 +50,7 @@ transmod$sim_stateprobs(t = c(0, 5, 10), disprog = disprog)[t == 5]
 
 }
 \seealso{
-\code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}, \link{IndivCtstm}
+\code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}, \code{\link{IndivCtstm}}
 }
 \section{Super class}{
 \code{\link[hesim:CtstmTrans]{hesim::CtstmTrans}} -> \code{IndivCtstmTrans}
