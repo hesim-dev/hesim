@@ -20,7 +20,7 @@ models (DTSTMs), N-state partitioned survival models (PSMs), and
 individual-level continuous time state transition models (CTSTMs),
 encompassing both Markov (time-homogeneous and time-inhomogeneous) and
 semi-Markov processes. It heavily utilizes `Rcpp` and `data.table`,
-making individual-patient simulation, probabilistic sensitivity analysis
+making individual-level simulation, probabilistic sensitivity analysis
 (PSA), and incorporation of patient heterogeneity fast.
 
 Features of the current version can be summarized as follows:
