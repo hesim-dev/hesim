@@ -154,16 +154,16 @@ test_that("IndivCtstmTrans - transition specific", {
   
   # Hazard
   hesim_hazard <- mstate_list$hazard(3)
-  expect_equal(hesim_hazard[trans == 1][1]$hazard,
+  expect_equal(hesim_hazard[transition_id == 1][1]$hazard,
                summary(msfit_list[[1]], type = "hazard", t = 3, ci = FALSE)[[1]][1, "est"])
-  expect_equal(hesim_hazard[trans == 2][1]$hazard,
+  expect_equal(hesim_hazard[transition_id == 2][1]$hazard,
                summary(msfit_list[[2]], type = "hazard", t = 3, ci = FALSE)[[1]][1, "est"])
 
   # Cumulative hazard
   hesim_cumhazard <- mstate_list$cumhazard(5)
-  expect_equal(hesim_cumhazard[trans == 1][1]$cumhazard,
+  expect_equal(hesim_cumhazard[transition_id == 1][1]$cumhazard,
                summary(msfit_list[[1]], type = "cumhaz", t = 5)[[1]][1, "est"])
-  expect_equal(hesim_cumhazard[trans == 2][1]$cumhazard,
+  expect_equal(hesim_cumhazard[transition_id == 2][1]$cumhazard,
                summary(msfit_list[[2]], type = "cumhaz", t = 5)[[1]][1, "est"])
   
   # State probabilities only
@@ -215,16 +215,16 @@ test_that("IndivCtstmTrans - joint", {
                                    uncertainty = "none")    
   # hazard
   hesim_hazard <- mstate$hazard(3)
-  expect_equal(hesim_hazard[trans == 1][1]$hazard,
+  expect_equal(hesim_hazard[transition_id == 1][1]$hazard,
                summary(msfit, type = "hazard", t = 3, ci = FALSE)[[1]][1, "est"])
-  expect_equal(hesim_hazard[trans == 4][1]$hazard,
+  expect_equal(hesim_hazard[transition_id == 4][1]$hazard,
                summary(msfit, type = "hazard", t = 3, ci = FALSE)[[4]][1, "est"])
 
   # Cumulative hazard
   hesim_cumhazard <- mstate$cumhazard(3)
-  expect_equal(hesim_cumhazard[trans == 1][1]$cumhazard,
+  expect_equal(hesim_cumhazard[transition_id == 1][1]$cumhazard,
                summary(msfit, type = "cumhaz", t = 3, ci = FALSE)[[1]][1, "est"])
-  expect_equal(hesim_cumhazard[trans == 4][1]$cumhazard,
+  expect_equal(hesim_cumhazard[transition_id == 4][1]$cumhazard,
                summary(msfit, type = "cumhaz", t = 3, ci = FALSE)[[4]][1, "est"])
   
   # Simulate state probabilities
