@@ -42,7 +42,7 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
         self$check()
         type <- match.arg(type)
         res <- data.table(C_ctstm_summary(self, t, type))
-        res[, trans := trans + 1]
+        res[, transition_id := transition_id + 1]
         res[, sample := sample + 1]
         if (type == "hazard") setnames(res, "value", "hazard")
         if (type == "cumhazard") setnames(res, "value", "cumhazard")
@@ -54,7 +54,7 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
     #' @description
     #' Predict the hazard functions for each health state transition.
     #' @param t  A numeric vector of times.
-    #' @return A `data.table` with columns `trans` (the transition number),
+    #' @return A `data.table` with columns `transition_id`,
     #'  `sample`, `strategy_id`, `grp_id`, `t`, and `hazard`.
     hazard = function(t){
       private$summary(t, "hazard")
@@ -63,7 +63,7 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
     #' @description
     #' Predict the cumulative hazard functions for each health state transition.
     #' @param t  A numeric vector of times.    
-    #' @return A `data.table` with columns `trans`,
+    #' @return A `data.table` with columns `transition_id`,
     #'  `sample`, `strategy_id`, `grp_id`, `t`, and `hazard`.
     cumhazard = function(t){
        private$summary(t, "cumhazard")

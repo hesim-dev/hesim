@@ -33,6 +33,9 @@
 as_array3 <- function(x) {
   if (length(dim(x)) != 2) stop("'x' must be a 2-dimensional object.")
   n_states <- sqrt(ncol(x))
+  if (!is_whole_number(n_states)){
+    stop("'x' must contain square matrices.", call. = FALSE)
+  }
   y <- aperm(array(c(t(x)),
                    dim = c(n_states, n_states, nrow(x))),
              c(2, 1, 3))

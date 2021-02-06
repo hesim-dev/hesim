@@ -6,7 +6,7 @@
 namespace hesim {
 
 /** @ingroup ctstm 
- * Classes and functions for simulating continuous time state transiton models.
+ * Classes and functions for simulating continuous time state transition models.
  */
 namespace ctstm {
 
@@ -251,7 +251,7 @@ inline std::unique_ptr<transmod> transmod::create(Rcpp::Environment R_CtstmTrans
  * Data container for storing summaries of models of health state transitions.
  ******************************************************************************/ 
 struct transmod_summary{
-  std::vector<int> trans_; ///< The health state transition.
+  std::vector<int> transition_id_; ///< The health state transition ID.
   std::vector<int> sample_; ///< A randomly sampled parameter set.
   std::vector<int> strategy_id_; ///< The treatment strategy ID.
   std::vector<int> patient_id_; ///< The patient ID.
@@ -271,7 +271,7 @@ struct transmod_summary{
    * vectors in the container are initialized to a size @c n.
    */
   transmod_summary(int n) {
-    trans_.resize(n);
+    transition_id_.resize(n);
     sample_.resize(n);
     strategy_id_.resize(n);
     patient_id_.resize(n);

@@ -150,6 +150,13 @@ test_that("tparams_transprobs.data.table() checks ID attributes", {
   )
 })
 
+test_that("tparams_transprobs.data.table() throws error if there are no 'prob_' columns", {
+  expect_error(
+    tparams_transprobs(tprob_dt[, .(sample, strategy_id)]),
+    "No columns with names starting with 'prob_'."
+  )
+})
+
 # tparams_transprobs.tpmatrix() ------------------------------------------------
 p <- c(.7, .6)
 tpmat <- tpmatrix(
