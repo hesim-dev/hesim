@@ -57,7 +57,7 @@ create_PsmCurves.params_surv_list <- function(object, input_data, ...){
 #' Partitioned survival curves
 #'
 #' @description
-#' Summarize `n-1` survival curves for an `N` state partitioned survival model.
+#' Summarize N-1 survival curves for an N-state partitioned survival model.
 #' @format An [R6::R6Class] object.
 #' @examples 
 #' library("flexsurv")
@@ -154,12 +154,14 @@ PsmCurves <- R6::R6Class("PsmCurves",
     },
     
     #' @description
-    #' Predict the cumulative hazard function for each survival curve as a function of time.
+    #' Predict survival probabilities for each survival curve as a function of time.
     #' @param t  A numeric vector of times.
-    #' @return A `data.table` with columns `sample`, `strategy_id`,
-    #' `patient_id`, `grp_id`, `curve`, `t`, and `survival`.    
+    #' @return An object of class [`survival`].   
     survival = function(t){
-      return(private$summary(x = t, type = "survival"))
+      res <- private$summary(x = t, type = "survival")
+      setattr(res, "class", 
+              c("survival", "data.table", "data.frame"))
+      return(res)
     },
 
     #' @description
@@ -206,26 +208,35 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #' @format An [R6::R6Class] object.
 #' @examples
 #' library("flexsurv")
+#' library("ggplot2")
+#' theme_set(theme_bw())
 #'
 #' # Simulation data
-#' strategies <- data.frame(strategy_id = c(1, 2, 3))
+#' strategies <- data.frame(strategy_id = c(1, 2, 3), 
+#'                          strategy_name = paste0("Strategy ", 1:3))
 #' patients <- data.frame(patient_id = seq(1, 3),
 #'                        age = c(45, 50, 60),
 #'                        female = c(0, 0, 1))
 #' states <- data.frame(state_id =  seq(1, 3),
-#'                      state_name = paste0("state", seq(1, 3)))
+#'                      state_name = paste0("State ", seq(1, 3)))
 #' hesim_dat <- hesim_data(strategies = strategies,
 #'                         patients = patients,
 #'                         states = states)
+#' labs <- c(
+#'   get_labels(hesim_dat),
+#'   list(curve = c("Endpoint 1" = 1,
+#'                 "Endpoint 2" = 2,
+#'                  "Endpoint 3" = 3))
+#' )
 #' n_samples <- 3
 #'
 #' # Survival models
 #' surv_est_data <- psm4_exdata$survival
-#' fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ age,
+#' fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ factor(strategy_id),
 #'                               data = surv_est_data, dist = "exp")
-#' fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ age,
+#' fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ factor(strategy_id),
 #'                               data = surv_est_data, dist = "exp")
-#' fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age,
+#' fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ factor(strategy_id),
 #'                               data = surv_est_data, dist = "exp")
 #' fits <- flexsurvreg_list(fit1, fit2, fit3)
 #'
@@ -255,7 +266,9 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #'                utility_model = psm_utility,
 #'                cost_models = list(medical = psm_costs_medical))
 #' psm$sim_survival(t = seq(0, 5, .05))
+#' autoplot(psm$survival_, labels = labs, ci = TRUE, ci_style = "ribbon")
 #' psm$sim_stateprobs()
+#' autoplot(psm$stateprobs_, labels = labs)
 #' psm$sim_costs(dr = .03)
 #' head(psm$costs_)
 #' head(psm$sim_qalys(dr = .03)$qalys_)
@@ -284,7 +297,7 @@ Psm <- R6::R6Class("Psm",
     #' by the argument `t` in `$sim_curves()`.
     t_ = NULL,
     
-    #' @field survival_ Survival curves simulated using `sim_curves()`.
+    #' @field survival_ An object of class [survival] simulated using `sim_survival()`.
     survival_ = NULL,
     
     #' @field stateprobs_ An object of class [stateprobs] simulated using `$sim_stateprobs()`.
@@ -311,10 +324,10 @@ Psm <- R6::R6Class("Psm",
     },
     
     #' @description
-    #' Simulate survival curves as a function of time using `PsmCurves$sim_survival()`.
+    #' Simulate survival curves as a function of time using `PsmCurves$survival()`.
     #' @param t A numeric vector of times. The first element must be `0`.
-    #' @return An instance of `self` with simulated output from `PsmCurves$sim_survival()`
-    #' stored in `stateprobs_`.
+    #' @return An instance of `self` with simulated output from `PsmCurves$survival()`
+    #' stored in `survival_`.
     sim_survival = function(t){
       if (t[1] !=0){
         stop("The first element of 't' must be 0.", call. = FALSE)
@@ -324,6 +337,8 @@ Psm <- R6::R6Class("Psm",
       }
       self$survival_models$check()
       self$survival_ <- self$survival_models$survival(t)
+      setattr(self$survival_, "class", 
+              c("survival", "data.table", "data.frame"))
       self$t_ <- t
       self$stateprobs_ <- NULL
       invisible(self)
@@ -358,6 +373,8 @@ Psm <- R6::R6Class("Psm",
       self$stateprobs_ <- stateprobs[]
       setattr(self$stateprobs_, "class", 
               c("stateprobs", "data.table", "data.frame"))
+      setattr(self$stateprobs_, "size", 
+              c(get_size(self$survival_models), n_states = self$n_states))
       invisible(self)
     },
 

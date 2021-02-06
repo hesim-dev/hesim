@@ -343,36 +343,66 @@ econmod <- CohortDtstm$new(trans_model = transmod,
 econmod$sim_stateprobs(n_cycles = 5)
 
 # Run tests
-test_that("sim_costs produces correct result", {
+test_that("sim_costs() produces correct result", {
   econmod$sim_costs(dr = .03)
   test_wlos(econmod, s = 1, k = 1, i = 1, h = 1, dr = .03)
   test_wlos(econmod, s = 3, k = 2, i = 1, h = 1, dr = .03)
 })
 
-test_that("Cannot have same discount rate twice", {
+test_that("sim_costs() cannot have same discount rate twice", {
   expect_error(econmod$sim_costs(dr = c(.05, .05)))
 })
 
-test_that("Must first simulate stateprobs_", {
+test_that("sim_costs() throws error if stateprobs_ have not been simulated", {
   econmod$stateprobs_ <- NULL
   expect_error(econmod$sim_costs())
 })
 
-test_that("Incorrect number of PSA samples", {
+test_that("sim_costs() throws error with incorrect number of PSA samples", {
   econmod$sim_stateprobs(n_cycles = 5)
   econmod$cost_models[[2]] <- create_StateVals(cost_tbl, n = n_samples - 1,
                                                hesim_data = hesim_dat)
-  expect_error(econmod$sim_costs())
+  expect_error(
+    econmod$sim_costs(),
+    paste0("The number of samples in each 'StateVals' model must equal the ",
+           "number of samples in the 'stateprobs' object, which is 5.")
+  )
 })
 
-test_that("Incorrect number of health states", {
+test_that("sim_costs() throws error with incorrect number of strategies", {
+  econmod$cost_models[[2]] <- costmods[[1]]$clone()
+  econmod$cost_models[[2]]$params$n_strategies <- 1
+  expect_error(
+    econmod$sim_costs(),
+    paste0("The number of strategies in each 'StateVals' model must equal the ",
+           "number of strategies in the 'stateprobs' object, which is 2.")
+  )
+})
+
+test_that("sim_costs() throws error with incorrect number of patients", {
+  econmod$cost_models[[2]] <- costmods[[1]]$clone()
+  econmod$cost_models[[2]]$params$n_patients <- 2
+  expect_error(
+    econmod$sim_costs(),
+    paste0("The number of patients in each 'StateVals' model must equal the ",
+           "number of patients in the 'stateprobs' object, which is 1.")
+  )
+})
+
+test_that("sim_costs() throws error with incorrect number of health states", {
   cost_tbl2 <- stateval_tbl(
     data.table(state_id = 1:4,
                 est = rep(0, 4)),
                 dist = "fixed")
   econmod$cost_models <- list(create_StateVals(cost_tbl2, n = n_samples, 
                                                hesim_data = hesim_dat))
-  expect_error(econmod$sim_costs())
+  expect_error(
+    econmod$sim_costs(),
+    paste0("The number of states in each 'StateVals' model must be one less ",
+           "(since state values are not applied to the death state) than ",
+           "the number of states in the 'stateprobs' object, which is 4."),
+    fixed = TRUE
+    )
 })
 
 test_that("sim_costs produces correct result with time-varying state values", {

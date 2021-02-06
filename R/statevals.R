@@ -553,29 +553,11 @@ sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
          call. = FALSE)
   }
   
-  # Discount rate
+  ## Discount rate
   check_dr(dr)
   
-  # The state value models
-  expected_samples <- max(object$sample)
-  method <- rep(NA, length(statevalmods))
-  for (i in 1:length(statevalmods)){
-    ## Number of samples
-    if (statevalmods[[i]]$params$n_samples != expected_samples){
-      msg <- paste0("Number of samples in each state value model must equal to ",
-                    " the number of samples in the 'stateprobs' object, which is ",
-                    expected_samples)
-      stop(msg, call. = FALSE)
-    }
- 
-    ## Number of states
-    if(length(unique(object$state_id)) != get_id_object(statevalmods[[i]])$n_states + 1){
-      msg <- paste0("The number of states in each 'StateVals' model ", 
-                    "must be one less (since state values cannot be applied to the ",
-                    "death state) than the number of states in 'stateprobs'.")
-      stop(msg, call. = FALSE)
-    }
-  }
+  ## The size of ID variables is correct
+  check_StateVals(statevalmods, object)
   
   # Simulate
   res <- data.table(C_sim_ev(object[state_id != max(state_id)],
@@ -670,75 +652,3 @@ sim_costs <- function(object, cost_models, dr, integrate_method){
           c("costs", "data.table", "data.frame"))
   return(costs[, ])
 }
-
-#' Costs object
-#'
-#' An object of class `costs` returned from methods 
-#' `$sim_costs()` in model classes that store simulated costs. 
-#' 
-#' @section Components:
-#' A `costs` object inherits from `data.table` and contains
-#' the following columns:
-#' 
-#' \describe{
-#'   \item{sample}{A random sample from the PSA.}
-#'   \item{strategy_id}{The treatment strategy ID.}
-#'   \item{patient_id}{The patient ID.}
-#'   \item{state_id}{The health state ID.}
-#'   \item{dr}{The rate used to discount costs.}
-#'   \item{category}{The cost category (e.g., drug costs, medical costs, etc).}
-#'   \item{costs}{The simulated cost values.}
-#' }
-#'
-#' @name costs
-NULL
-
-#' Quality-adjusted life-years object
-#'
-#' An object of class `qalys` returned from methods 
-#' `$sim_qalys()` in model classes that store simulated 
-#' quality-adjusted life-years (QALYs).
-#' 
-#' @section Components:
-#' A `qalys` object inherits from `data.table` and contains
-#' the following columns:
-#' 
-#' \describe{
-#'   \item{sample}{A random sample from the PSA.}
-#'   \item{strategy_id}{The treatment strategy ID.}
-#'   \item{patient_id}{The patient ID.}
-#'   \item{state_id}{The health state ID.}
-#'   \item{dr}{The rate used to discount QALYs.}
-#'   \item{category}{A single category always equal to "qalys".}
-#'   \item{qalys}{The simulated values of QALYs.}
-#' }
-#' If the argument `lys = TRUE`, then the `data.table` also contains a column
-#' `lys` containing simulated life-years.
-#' @name qalys
-NULL
-
-# State probability object -----------------------------------------------------
-#' State probability object
-#'
-#' An object of class `stateprobs` returned from methods 
-#' `$sim_stateprobs()` in model classes. 
-#' 
-#' @section Components:
-#' A `stateprobs` object inherits from `data.table` and contains
-#' the following columns:
-#' 
-#' \describe{
-#'   \item{sample}{A random sample from the PSA.}
-#'   \item{strategy_id}{The treatment strategy ID.}
-#'   \item{patient_id}{The patient ID.}
-#'   \item{state_id}{The health state ID.}
-#'   \item{t}{The time at which a state probability is computed.}
-#'   \item{prob}{The probability of being in a given health state.}
-#' }
-#' 
-#' When simulating individual-level models, the `patient_id` column is
-#' not included as state probabilities are computed by averaging across patients.
-#'
-#'    
-#' @name stateprobs
-NULL

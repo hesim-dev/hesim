@@ -15,14 +15,15 @@ tparams_transprobs(object, ...)
   tpmatrix_id = NULL,
   times = NULL,
   grp_id = NULL,
-  patient_wt = NULL
+  patient_wt = NULL,
+  ...
 )
 
-\method{tparams_transprobs}{data.table}(object)
+\method{tparams_transprobs}{data.table}(object, ...)
 
-\method{tparams_transprobs}{data.frame}(object)
+\method{tparams_transprobs}{data.frame}(object, ...)
 
-\method{tparams_transprobs}{tpmatrix}(object, tpmatrix_id)
+\method{tparams_transprobs}{tpmatrix}(object, tpmatrix_id, ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class.}
@@ -92,10 +93,10 @@ patient.
 They should be prefixed with "prob_" and ordered rowwise.
 For example, the following columns would be used for a 2x2 transition
 probability matrix:
-\code{probs_1} (1st row, 1st column),
-\code{probs_2} (1st row, 2nd column),
-\code{probs_3} (2nd row, 1st column), and
-\code{probs_4} (2nd row, 2nd column).
+\code{prob_1} (1st row, 1st column),
+\code{prob_2} (1st row, 2nd column),
+\code{prob_3} (2nd row, 1st column), and
+\code{prob_4} (2nd row, 2nd column).
 }
 }
 

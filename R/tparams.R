@@ -118,10 +118,10 @@ check.tparams_mean <- function(object, ...){
 #'  They should be prefixed with "prob_" and ordered rowwise. 
 #'  For example, the following columns would be used for a 2x2 transition
 #'   probability matrix:
-#'  `probs_1` (1st row, 1st column), 
-#'  `probs_2` (1st row, 2nd column), 
-#'  `probs_3` (2nd row, 1st column), and 
-#'  `probs_4` (2nd row, 2nd column).
+#'  `prob_1` (1st row, 1st column), 
+#'  `prob_2` (1st row, 2nd column), 
+#'  `prob_3` (2nd row, 1st column), and 
+#'  `prob_4` (2nd row, 2nd column).
 #'  }
 #'  }
 #'  
@@ -148,11 +148,14 @@ tparams_transprobs <- function(object, ...){
   if (missing(object)){
     stop("'object' is missing with no default.")
   }
-  value <- UseMethod("tparams_transprobs", object)
-  check(new_tparams_transprobs(value, ...), ...)
+  UseMethod("tparams_transprobs", object)
 } 
 
-new_tparams_transprobs <- function(value, ...){
+new_tparams_transprobs <- function(object, ...){
+  UseMethod("new_tparams_transprobs", object)
+} 
+
+create_tparams_transprobs <- function(value, ...){
   C_normalize_transprobs(value)
   l <- c(list(value = value),
          do.call("new_id_attributes", list(...)))
@@ -201,8 +204,8 @@ tparams_transprobs_id <- function(x) {
   return(id_args)
 }
 
-tparams_transprobs_array6 <- function (object, times = NULL, 
-                                       grp_id = NULL, patient_wt = NULL) {
+new_tparams_transprobs_array6 <- function (object, times = NULL, 
+                                           grp_id = NULL, patient_wt = NULL) {
   
   # Reshape array
   dims <- c(dim(object)[5], dim(object)[6], prod(dim(object)[1:4]))
@@ -257,14 +260,9 @@ tparams_transprobs_array6 <- function (object, times = NULL,
   return(list(value = value, id_args = id_args))
 }
 
-tparams_transprobs_array3 <- function(object, tpmatrix_id) {
-  
-}
 
-#' @rdname tparams_transprobs
-#' @export
-tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL, 
-                                      grp_id = NULL, patient_wt = NULL) {
+new_tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL, 
+                                          grp_id = NULL, patient_wt = NULL) {
   # Checks
   n_dim <- length(dim(object))
   if(!n_dim %in% c(3, 6)){
@@ -273,8 +271,8 @@ tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL,
   
   # Return
   if (n_dim == 6) {
-    y <- tparams_transprobs_array6(object, times, grp_id, patient_wt) 
-    return(do.call("new_tparams_transprobs", c(list(value = y$value), y$id_args)))
+    y <- new_tparams_transprobs_array6(object, times, grp_id, patient_wt) 
+    return(do.call("create_tparams_transprobs", c(list(value = y$value), y$id_args)))
   } else{
     check_is_class(tpmatrix_id, "data.frame", "tpmatrix_id")
     if (nrow(tpmatrix_id) != dim(object)[3]) {
@@ -282,29 +280,47 @@ tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL,
                   "number or rows in 'tpmatrix_id'."), call. = FALSE)
     }
     id_args <- tparams_transprobs_id(tpmatrix_id)
-    return(do.call("new_tparams_transprobs", c(list(value = object), id_args)))
+    return(do.call("create_tparams_transprobs", c(list(value = object), id_args)))
   }
 }
 
 #' @rdname tparams_transprobs
 #' @export
-tparams_transprobs.data.table <- function (object) {
+tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL, 
+                                      grp_id = NULL, patient_wt = NULL, ...) {
+  res <- new_tparams_transprobs.array(object = object, tpmatrix_id = tpmatrix_id,
+                                      times = times, grp_id = grp_id, 
+                                      patient_wt = patient_wt)
+  return(check(res))
+}
+
+new_tparams_transprobs.data.table <- function (object) {
   id_args <- tparams_transprobs_id(object)
-  prob_mat <- as.matrix(object[, colnames(object)[grep("prob_", colnames(object))], 
-                               with = FALSE])
+  indices <- grep("^prob_", colnames(object))
+  if (length(indices) == 0) {
+    stop("No columns with names starting with 'prob_'.")
+  }
+  prob_mat <- as.matrix(object[, colnames(object)[indices], with = FALSE])
   value <- as_array3(prob_mat)
-  return(do.call("new_tparams_transprobs", c(list(value = value), id_args)))
+  return(do.call("create_tparams_transprobs", c(list(value = value), id_args)))
 }
 
 #' @rdname tparams_transprobs
 #' @export
-tparams_transprobs.data.frame <- function (object) {
-  return(tparams_transprobs(data.table(object)))
+tparams_transprobs.data.table <- function (object, ...) {
+  return(check(new_tparams_transprobs(object)))
 }
 
 #' @rdname tparams_transprobs
 #' @export
-tparams_transprobs.tpmatrix <- function(object, tpmatrix_id) {
+tparams_transprobs.data.frame <- function (object, ...) {
+  res <- new_tparams_transprobs(data.table(object))
+  return(check(res))
+}
+
+#' @rdname tparams_transprobs
+#' @export
+tparams_transprobs.tpmatrix <- function(object, tpmatrix_id, ...) {
   check_is_class(tpmatrix_id, "data.frame", "tpmatrix_id")
   if (nrow(object) != nrow(tpmatrix_id)) {
     stop("'object' and 'tpmatrix_id' must have the same number of rows.",
@@ -312,10 +328,10 @@ tparams_transprobs.tpmatrix <- function(object, tpmatrix_id) {
   }
   setnames(object, colnames(object), paste0("prob_", 1:ncol(object)))
   p_dt <- cbind(tpmatrix_id, object)
-  return(tparams_transprobs(p_dt))
+  return(new_tparams_transprobs(p_dt))
 }
 
-tparams_transprobs.eval_model <- function(object){
+tparams_transprobs.eval_model <- function(object, ...){
   id_index <- attr(object$tpmatrix, "id_index")
   return(tparams_transprobs(object$tpmatrix, object$id[[id_index]]))
 }

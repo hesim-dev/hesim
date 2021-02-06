@@ -33,6 +33,9 @@
 as_array3 <- function(x) {
   if (length(dim(x)) != 2) stop("'x' must be a 2-dimensional object.")
   n_states <- sqrt(ncol(x))
+  if (!is_whole_number(n_states)){
+    stop("'x' must contain square matrices.", call. = FALSE)
+  }
   y <- aperm(array(c(t(x)),
                    dim = c(n_states, n_states, nrow(x))),
              c(2, 1, 3))
@@ -262,10 +265,10 @@ tpmatrix <- function(...){
 #' @param n_samples The number of parameters samples used for the probabilistic
 #' sensitivity analysis (PSA).
 #' 
-#' @return Returns a `data.table` with the same columns in `object` repeated
-#' `n_samples` times. That is, to facilitate creation of a `tparams_transprobs()`
-#' object,  there is one row for each parameter sample,
-#' treatment strategy, patient, and optionally time interval.
+#' @return Returns a `tpmatrix_id` object that inherits from `data.table` with 
+#' the same columns in `object` repeated `n_samples` times. That is, to facilitate
+#' creation of a `tparams_transprobs()` object,  there is one row for each 
+#' parameter sample, treatment strategy, patient, and optionally time interval.
 #' 
 #' @examples 
 #' strategies <- data.frame(strategy_id = c(1, 2))

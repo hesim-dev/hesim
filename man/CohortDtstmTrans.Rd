@@ -9,6 +9,43 @@ An \link[R6:R6Class]{R6::R6Class} object.
 \description{
 Simulate health state transitions in a cohort discrete time state transition model.
 }
+\examples{
+library("msm")
+library("data.table")
+set.seed(101)
+
+# Model setup
+strategies <- data.table(
+  strategy_id = c(1, 2, 3),
+  strategy_name = c("SOC", "New 1", "New 2")
+)
+patients <- data.table(patient_id = 1:2)
+hesim_dat <- hesim_data(
+  strategies = strategies,
+  patients = patients
+)
+  
+
+# Fit multi-state model with panel data via msm
+qinit <- rbind(
+  c(0, 0.28163, 0.01239),
+  c(0, 0, 0.10204),
+  c(0, 0, 0)
+)
+fit <- msm(state_id ~ time, subject = patient_id, 
+           data = onc3p[patient_id \%in\% sample(patient_id, 100)],
+           covariates = list("1-2" =~ strategy_name), 
+           qmatrix = qinit)
+
+# Simulation model
+transmod_data <- expand(hesim_dat)
+transmod <- create_CohortDtstmTrans(fit,
+                                    input_data = transmod_data,
+                                    cycle_length = 1/2,
+                                    fixedpars = 2,
+                                    n = 2)
+transmod$sim_stateprobs(n_cycles = 2)
+}
 \seealso{
 \code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}}, \link{CohortDtstm}
 }
@@ -16,9 +53,9 @@ Simulate health state transitions in a cohort discrete time state transition mod
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{params}}{Parameters for simulating health state transitions.
-Supports objects of class \link{tparams_transprobs} or \link{params_mlogit}.}
+Supports objects of class \code{\link{tparams_transprobs}} or \code{\link{params_mlogit}}.}
 
-\item{\code{input_data}}{An object of class \link{input_mats}.}
+\item{\code{input_data}}{An object of class \code{\link{input_mats}}.}
 
 \item{\code{cycle_length}}{The length of a model cycle in terms of years.
 The default is \code{1} meaning that model cycles are 1 year long.}
