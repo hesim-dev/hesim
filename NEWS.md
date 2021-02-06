@@ -19,6 +19,8 @@
 
 * `icer_tbl()` has been deprecated in favor of `icer()`.
 
+* The column `trans` in the data table returned by the `$hazard()` and `$cumhazard()` methods from the `hesim::CtstmTrans` class has been renamed `transition_id`. 
+
 ### Documentation
 
 * Performance benchmarks are now provided [here](../articles/benchmarks.html).
