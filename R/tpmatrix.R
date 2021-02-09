@@ -477,19 +477,30 @@ qmatrix.msm <- function(x, newdata = NULL, uncertainty = c("normal", "none"), n 
 #' matrices to produce transition probability matrices. To create transition
 #' probability matrices for discrete time state transition models with annual
 #' cycles, set `t=1`. An array of matrices is returned which can be used
-#' to create the `value` element of a [tparams_transprobs] object. See 
-#' [qmatrix()] for an example. 
+#' to create the `value` element of a [`tparams_transprobs`] object. See 
+#' [`qmatrix()`] for an example. 
 #' 
 #' @return Returns an array of exponentiated matrices. 
 #' 
-#' @seealso [qmatrix.msm()], [qmatrix.data.table()]
+#' @seealso [`qmatrix.msm()`], [`qmatrix.data.table()`]
 #' @export
 expmat <- function(x, t = 1, ...) {
+  if (!is.array(x)) {
+    stop("'x' must be an array.")
+  }
+  if (length(dim(x)) == 2) {
+    x <- array(x, dim = c(dim(x)[1], dim(x)[1], 1))
+  }
   n <- dim(x)[3]
   n_states <- dim(x)[1]
-  res <- array(NA, dim = c(n_states, n_states, n * length(t)))
+  n_t <- length(t)
+  start <- 1
+  end <- start + n_t - 1
+  res <- array(NA, dim = c(n_states, n_states, n * n_t))
   for (i in 1:n) {
-    res[,, i] <- msm::MatrixExp(x[,, i], t = t, ...)
+    res[,, start:end] <- msm::MatrixExp(x[,, i], t = t, ...)
+    start <- start + n_t
+    end <- end + n_t
   }
   return(res)
 }
