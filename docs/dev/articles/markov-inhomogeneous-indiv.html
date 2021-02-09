@@ -125,7 +125,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov individual-level models</h1>
             
-            <h4 class="date">2021-02-05</h4>
+            <h4 class="date">2021-02-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-indiv.Rmd"><code>vignettes/markov-inhomogeneous-indiv.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-indiv.Rmd</code></div>
@@ -490,21 +490,21 @@ NA
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">log_omrPTHR</span><span class="op">)</span></code></pre></div>
 <pre><code>##           cons
-## [1,] -3.097493
-## [2,] -3.977959
-## [3,] -5.411412
-## [4,] -4.043041
-## [5,] -3.266601
-## [6,] -4.613995</code></pre>
+## [1,] -3.138892
+## [2,] -4.461002
+## [3,] -4.233438
+## [4,] -3.837976
+## [5,] -3.254010
+## [6,] -5.100743</code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">rr_scale</span><span class="op">)</span></code></pre></div>
 <pre><code>##           cons         age      male        np1
-## [1,] -5.384104 -0.03974279 0.6515143 -1.8545570
-## [2,] -5.591901 -0.03315296 0.8307162 -1.4820428
-## [3,] -5.408344 -0.03942086 0.7355290 -0.9763484
-## [4,] -5.785643 -0.02855680 0.8352608 -1.8515350
-## [5,] -5.617167 -0.03167672 0.9357100 -1.6097899
-## [6,] -5.486688 -0.03891351 0.7601952 -1.5282701</code></pre>
+## [1,] -5.609999 -0.03446190 0.9269373 -1.6967101
+## [2,] -5.603401 -0.03196181 0.7656716 -1.3869912
+## [3,] -5.251397 -0.04388992 0.6550378 -1.9471005
+## [4,] -5.395459 -0.03612251 0.8066160 -0.5056988
+## [5,] -5.346900 -0.04077170 0.5333325 -1.6661752
+## [6,] -5.763983 -0.03639208 0.8343236 -2.0152804</code></pre>
 <p>In addition to the coefficients, a complete parameterization of a transition model requires specification of the survival distributions and potentially auxiliary information (e.g., the times at which rates change in a piecewise exponential model). The parameters are stored in a <code><a href="../reference/params_surv_list.html">params_surv_list()</a></code> object, which is a list of <code><a href="../reference/params_surv.html">params_surv()</a></code> objects.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transmod_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/params_surv_list.html">params_surv_list</a></span><span class="op">(</span>
@@ -656,16 +656,16 @@ NA
 <span class="va">econmod</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span>max_t <span class="op">=</span> <span class="fl">60</span>, max_age <span class="op">=</span> <span class="fl">120</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   2.524   0.134   2.669</code></pre>
+##   2.516   0.124   2.653</code></pre>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></code></pre></div>
 <pre><code>##    sample strategy_id patient_id grp_id from to final time_start  time_stop
 ## 1:      1           1          1      1    1  2     0  0.0000000  0.6931472
-## 2:      1           1          1      1    2  5     1  0.6931472  9.9687934
+## 2:      1           1          1      1    2  5     1  0.6931472 34.1907801
 ## 3:      1           1          2      1    1  2     0  0.0000000  0.6931472
-## 4:      1           1          2      1    2  5     1  0.6931472 17.1725860
+## 4:      1           1          2      1    2  5     1  0.6931472 40.4222500
 ## 5:      1           1          3      1    1  2     0  0.0000000  0.6931472
-## 6:      1           1          3      1    2  5     1  0.6931472  9.2897732</code></pre>
+## 6:      1           1          3      1    2  3     0  0.6931472 22.5111070</code></pre>
 <p>The simulated patient trajectories can be summarized by computing the probability of being in each health state over time (by averaging across the simulated patients). Here, we will compute state occupancy probabilities at yearly intervals. They are generally quite similar to those in the cohort model.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span></code></pre></div>
@@ -684,10 +684,10 @@ NA
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>##    Discount rate        Outcome  Standard prosthesis       New prosthesis
-## 1:         0.015          QALYs 15.19 (14.04, 16.21) 15.25 (13.97, 16.35)
+## 1:         0.015          QALYs 15.19 (14.08, 16.28) 15.23 (14.17, 16.32)
 ## 2:         0.060    Costs: Drug       394 (394, 394)       579 (579, 579)
-## 3:         0.060 Costs: Medical        118 (47, 231)           32 (6, 91)
-## 4:         0.060   Costs: total       512 (441, 625)       611 (585, 670)</code></pre>
+## 3:         0.060 Costs: Medical        123 (48, 254)           35 (7, 85)
+## 4:         0.060   Costs: total       517 (442, 648)       614 (586, 664)</code></pre>
 </div>
 </div>
 </div>
@@ -701,10 +701,10 @@ NA
 <span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span>digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##              Outcome          New prosthesis
-## 1: Incremental QALYs   0.057 (-0.474, 0.615)
-## 2: Incremental costs            100 (4, 159)
-## 3:   Incremental NMB 2,734 (-23,786, 30,607)
-## 4:              ICER                   1,756</code></pre>
+## 1: Incremental QALYs   0.036 (-0.484, 0.586)
+## 2: Incremental costs           97 (-12, 168)
+## 3:   Incremental NMB 1,718 (-24,335, 29,219)
+## 4:              ICER                   2,660</code></pre>
 </div>
   </div>
 
