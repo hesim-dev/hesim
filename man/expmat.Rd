@@ -25,7 +25,7 @@ This function is most useful when exponentiating transition intensity
 matrices to produce transition probability matrices. To create transition
 probability matrices for discrete time state transition models with annual
 cycles, set \code{t=1}. An array of matrices is returned which can be used
-to create the \code{value} element of a \link{tparams_transprobs} object. See
+to create the \code{value} element of a \code{\link{tparams_transprobs}} object. See
 \code{\link[=qmatrix]{qmatrix()}} for an example.
 }
 \seealso{
