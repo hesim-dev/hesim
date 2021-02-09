@@ -216,21 +216,6 @@ test_that("as_array3() throws error if 'x' is not a square matrix", {
   )
 })
 
-# Convert to 3D array ----------------------------------------------------------
-test_that("as_array3() returns a 3D array if 'x' is a square matrix", {
-  expect_equal(
-    dim(as_array3(matrix(1:16, 4, 4))),
-    c(2, 2, 4)
-  )
-})
-
-test_that("as_array3() throws error if 'x' is not a square matrix", {
-  expect_error(
-    as_array3(matrix(1:4, 2, 2)),
-    "'x' must contain square matrices."
-  )
-})
-
 # Relative risks ---------------------------------------------------------------
 p_12 <- c(.7, .5)
 p_23 <- c(.1, .2)
