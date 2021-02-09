@@ -174,6 +174,33 @@ test_that("expmat() returns an array where rows sum to 1." , {
   expect_equal(mean(row_sums), 1, tolerance = .001,scale = 1)
 })
 
+test_that("expmat() works with matrix input." , {
+  expect_true(inherits(expmat(qmat[,,1]), "array"))
+})
+
+test_that("expmat() works with t as vector" , {
+  p <- expmat(qmat, t = c(1, 1))
+  expect_equal(dim(p)[3], dim(qmat)[3] * 2)        
+  expect_equal(p[,, 1], p[,, 2])
+  expect_equal(p[,, 3], p[,, 4])
+})
+
+test_that("expmat() is consisten with matrix multiplication " , {
+  z <- diag(1, 3)
+  p <- expmat(qmat, t = c(1, 2))
+  expect_equal(
+    z %*% p[,, 1] %*% p[, ,1],
+    p[,, 2]
+  )
+})
+
+test_that("expmat() returns error if x is not an array" , {
+  expect_error(
+    expmat("Test error"),
+    "'x' must be an array."
+  )
+})
+
 # Convert to 3D array ----------------------------------------------------------
 test_that("as_array3() returns a 3D array if 'x' is a square matrix", {
   expect_equal(
