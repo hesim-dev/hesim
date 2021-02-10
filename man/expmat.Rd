@@ -14,7 +14,8 @@ expmat(x, t = 1, ...)
 \item{...}{Arguments to pass to \link[msm:MatrixExp]{msm::MatrixExp}.}
 }
 \value{
-Returns an array of exponentiated matrices.
+Returns an array of exponentiated matrices. If \code{length(t) > 1}, then
+\code{length(t)} arrays are returned for each element in \code{x}.
 }
 \description{
 This is a wrapper around \code{\link[msm:MatrixExp]{msm::MatrixExp()}} that computes the exponential
