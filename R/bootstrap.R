@@ -76,6 +76,7 @@ bootstrap.partsurvfit <- function(object, B, max_errors = 0, ...){
     names(coefs[[j]]) <- c(object$models[[j]]$dlist$pars)
     for (k in 1:n_pars){
       coefs[[j]][[k]] <- boot[[j]][, inds_j[[k]], drop = FALSE]
+      colnames(coefs[[j]][[k]])[1] <- "(Intercept)"
     }
     params_surv_list[[j]] <- new_params_surv(coefs = coefs[[j]],
                                              dist = object$models[[j]]$dlist$name,
