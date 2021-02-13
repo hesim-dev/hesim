@@ -26,14 +26,15 @@ create_params(object, ...)
   object,
   n = 1000,
   uncertainty = c("normal", "bootstrap", "none"),
-  max_errors = 0,
   ...
 )
 }
 \arguments{
 \item{object}{A statistical model to randomly sample parameters from.}
 
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
+\item{...}{Further arguments passed to or from other methods. Only used when
+\code{object} is of class \code{partsurvfit}, in which case the arguments are passed
+to \code{\link[=bootstrap.partsurvfit]{bootstrap.partsurvfit()}}.}
 
 \item{n}{Number of random observations to draw. Not used if \code{uncertainty = "none"}.}
 
@@ -41,8 +42,6 @@ create_params(object, ...)
 If \code{"normal"}, then parameters are randomly drawn from their multivariate normal
 distribution. If \verb{"bootstrap}, then parameters are bootstrapped using \code{\link{bootstrap}}.
 If \verb{"none}, then only point estimates are returned.}
-
-\item{max_errors}{Equivalent to the \code{max_errors} argument in \link{bootstrap}.}
 }
 \value{
 An object prefixed by \code{params_}. Mapping between \code{create_params}
