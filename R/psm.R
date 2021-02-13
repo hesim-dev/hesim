@@ -38,7 +38,7 @@ create_PsmCurves.flexsurvreg_list <- function(object, input_data, n = 1000,
   # Code to always keep
   uncertainty <- match.arg(uncertainty)
   if (uncertainty == "bootstrap" & is.null(est_data)){
-    stop("If 'bootstrap' == TRUE, then 'est_data' cannot be NULL")
+    stop("If uncertainty == 'bootstrap', then est_data cannot be NULL")
   }
   psfit <- partsurvfit(object, est_data)
   input_mats <- create_input_mats(psfit, input_data, id_vars = c("strategy_id", "patient_id"))
