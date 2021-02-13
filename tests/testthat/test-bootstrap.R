@@ -2,7 +2,7 @@ context("bootstrap.R unit tests")
 library("flexsurv")
 
 # Partitioned survival fits  ---------------------------------------------------
-test_that("bootstrap.partsurvfit() works even some replications have errors ", {
+test_that("bootstrap.partsurvfit() works even when some replications have errors ", {
   fit <- suppressWarnings(flexsurvreg(formula = Surv(futime, fustat) ~ age, 
                                      data = ovarian[1:2, ], dist="gamma"))
   fit <- partsurvfit(flexsurvreg_list(fit), data = ovarian[1:2, ])
