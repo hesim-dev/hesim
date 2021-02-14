@@ -7,7 +7,7 @@
 \usage{
 bootstrap(object, B, ...)
 
-\method{bootstrap}{partsurvfit}(object, B, max_errors = 0, ...)
+\method{bootstrap}{partsurvfit}(object, B, max_errors = 0, silent = FALSE, ...)
 }
 \arguments{
 \item{object}{A statistical model.}
@@ -19,6 +19,9 @@ bootstrap(object, B, ...)
 \item{max_errors}{Maximum number of errors that are allowed when fitting statistical models
 during the bootstrap procedure. This argument may be useful if, for instance, the model
 fails to converge during some bootstrap replications. Default is 0.}
+
+\item{silent}{Logical indicating whether error messages should be supressed. Passed to
+the \code{silent} argument of \code{\link[=try]{try()}}.}
 }
 \value{
 Sampled values of the parameters.

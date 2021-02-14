@@ -22,7 +22,7 @@ create_PsmCurves(object, ...)
 \arguments{
 \item{object}{Fitted survival models.}
 
-\item{...}{Further arguments passed to or from other methods. Passed to \code{create_params.partsurvfit()}
+\item{...}{Further arguments passed to or from other methods. Passed to \code{\link[=create_params.partsurvfit]{create_params.partsurvfit()}}
 when \code{object} is of class \code{\link{flexsurvreg_list}}.}
 
 \item{input_data}{An object of class \code{expanded_hesim_data} returned by

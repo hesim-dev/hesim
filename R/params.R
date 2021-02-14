@@ -70,8 +70,9 @@ create_params_joined <- function(object, n, uncertainty, inner_class){
 #' If `"normal"`, then parameters are randomly drawn from their multivariate normal
 #' distribution. If `"bootstrap`, then parameters are bootstrapped using [`bootstrap`].
 #' If `"none`, then only point estimates are returned.
-#' @param max_errors Equivalent to the `max_errors` argument in [bootstrap]. 
-#' @param ... Further arguments passed to or from other methods. Currently unused.
+#' @param ... Further arguments passed to or from other methods. Only used when
+#'  `object` is of class `partsurvfit`, in which case the arguments are passed 
+#'  to [`bootstrap.partsurvfit()`].
 #' @return An object prefixed by `params_`. Mapping between `create_params` 
 #' and the classes of the returned objects are: 
 #' \itemize{
@@ -630,9 +631,9 @@ create_params.multinom_list <- function(object, n = 1000, uncertainty = c("norma
 #' Parameters of a list of survival models
 #' 
 #' Create a list containing the parameters of multiple fitted parametric survival models.
-#' @param ... Objects of class \code{\link{params_surv}}, which can be named.
+#' @param ... Objects of class [`params_surv`], which can be named.
 #' 
-#' @return An object of class "params_surv_list", which is a list containing \code{params_surv}
+#' @return An object of class `params_surv_list`, which is a list containing [`params_surv`]
 #' objects.
 #' @examples 
 #' library("flexsurv")
@@ -667,10 +668,10 @@ create_params.flexsurvreg_list <- function(object, n = 1000, uncertainty = c("no
 #' @rdname create_params
 create_params.partsurvfit <- function(object, n = 1000, 
                                       uncertainty = c("normal", "bootstrap", "none"), 
-                                      max_errors = 0, ...){
+                                      ...){
   uncertainty <- match.arg(uncertainty)
   if(uncertainty == "bootstrap"){
-    res <- bootstrap(object, B = n, max_errors = max_errors)
+    res <- bootstrap(object, B = n, ...)
   } else{
     res <- create_params(object$models, n = n, uncertainty = uncertainty)
   }

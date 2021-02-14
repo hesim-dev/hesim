@@ -13,7 +13,7 @@
 #'  documentation in [`create_params()`].
 #' @param est_data A `data.table` or `data.frame` of estimation data 
 #' used to fit survival models during bootstrap replications.
-#' @param ... Further arguments passed to or from other methods. Passed to `create_params.partsurvfit()`
+#' @param ... Further arguments passed to or from other methods. Passed to [`create_params.partsurvfit()`]
 #' when `object` is of class [`flexsurvreg_list`].
 #' @return Returns an `R6Class` object of class [`PsmCurves`].
 #' @seealso [`PsmCurves`]
