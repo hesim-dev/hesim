@@ -185,7 +185,7 @@ econmod$sim_stateprobs(n_cycles = 20)
 head(econmod$stateprobs_)
 ```
 
-A plot can be generated quicky using the `autoplot.stateprobs()` method.  As expected, patients survive longer with combination therapy. 
+A plot can be generated quickly using the `autoplot.stateprobs()` method.  As expected, patients survive longer with combination therapy. 
 
 ```{r simStateprobsPlot, fig.width = 7, fig.height = 6}
 autoplot(econmod$stateprobs_, labels = labs,

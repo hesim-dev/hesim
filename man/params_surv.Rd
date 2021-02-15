@@ -43,52 +43,52 @@ The types of distributions that can be specified are:
 \itemize{
 \item{\code{exponential} or \code{exp}}{ Exponential distribution. \code{coef}
 must contain the \code{rate} parameter on the log scale and the same parameterization as in
-\link[stats:Exponential]{stats::Exponential}}.
+\code{\link[stats:Exponential]{stats::Exponential}}}.
 
 \item{\code{weibull} or \code{weibull.quiet}}{ Weibull distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{scale} parameter (also on the log scale). The parameterization is
-that same as in \link[stats:Weibull]{stats::Weibull}.}
+that same as in \code{\link[stats:Weibull]{stats::Weibull}}.}
 
 \item{\code{weibullPH}}{ Weibull distribution with a proportional hazards
 parameterization. The first element of \code{coef} is the \code{shape} parameter
 (on the log scale) and the second element is the \code{scale} parameter
 (also on the log scale). The parameterization is
-that same as in \link[flexsurv:WeibullPH]{flexsurv::WeibullPH}.}
+that same as in \code{\link[flexsurv:WeibullPH]{flexsurv::WeibullPH}}.}
 
 \item{\code{gamma}}{ Gamma distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{rate} parameter (also on the log scale). The parameterization is
-that same as in \link[stats:GammaDist]{stats::GammaDist}.}
+that same as in \code{\link[stats:GammaDist]{stats::GammaDist}}.}
 
 \item{\code{lnorm}}{ Lognormal distribution. The first
 element of \code{coef} is the \code{meanlog} parameter (i.e., the mean of survival on
 the log scale) and the second element is the \code{sdlog} parameter (i.e.,
 the standard deviation of survival on the log scale). The parameterization is
-that same as in \link[stats:Lognormal]{stats::Lognormal}. The coefficients predicting the \code{meanlog}
+that same as in \code{\link[stats:Lognormal]{stats::Lognormal}}. The coefficients predicting the \code{meanlog}
 parameter are untransformed whereas the coefficients predicting the \code{sdlog}
 parameter are defined on the log scale.}
 
 \item{\code{gompertz}}{ Gompertz distribution. The first
 element of \code{coef} is the \code{shape} parameter and the second
 element is the \code{rate} parameter (on the log scale). The parameterization is
-that same as in \link[flexsurv:Gompertz]{flexsurv::Gompertz}.}
+that same as in \code{\link[flexsurv:Gompertz]{flexsurv::Gompertz}}.}
 
 \item{\code{llogis}}{ Log-logistic distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second
 element is the \code{scale} parameter (also on the log scale). The parameterization is
-that same as in \link[flexsurv:Llogis]{flexsurv::Llogis}.}
+that same as in \code{\link[flexsurv:Llogis]{flexsurv::Llogis}}.}
 
 \item{\code{gengamma}}{ Generalized gamma distribution. The first
 element of \code{coef} is the location parameter \code{mu}, the second
 element is the scale parameter \code{sigma} (on the log scale), and the
 third element is the shape parameter \code{Q}. The parameterization is
-that same as in \link[flexsurv:GenGamma]{flexsurv::GenGamma}.}
+that same as in \code{\link[flexsurv:GenGamma]{flexsurv::GenGamma}}.}
 
 \item{\code{survspline}}{ Survival splines. Each element of \code{coef} is a parameter of the
 spline model (i.e. \code{gamma_0}, \code{gamma_1}, \eqn{\ldots}) with length equal
 to the number of knots (including the boundary knots). See below for details on the
-auxiliary arguments. The parameterization is that same as in \link[flexsurv:Survspline]{flexsurv::Survspline}.}
+auxiliary arguments. The parameterization is that same as in \code{\link[flexsurv:Survspline]{flexsurv::Survspline}}.}
 
 \item{\code{fracpoly}}{ Fractional polynomials. Each element of \code{coef} is a parameter of the
 fractional polynomial model (i.e. \code{gamma_0}, \code{gamma_1}, \eqn{\ldots}) with length equal

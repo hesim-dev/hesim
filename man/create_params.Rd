@@ -47,12 +47,12 @@ If \verb{"none}, then only point estimates are returned.}
 An object prefixed by \code{params_}. Mapping between \code{create_params}
 and the classes of the returned objects are:
 \itemize{
-\item{\code{create_params.lm} ->}{ \link{params_lm}}
-\item{\code{create_params.multinom} ->}{ \link{params_mlogit}}
-\item{\code{create_params.multinom_list} ->}{ \link{params_mlogit_list}}
-\item{\code{create_params.flexsurvreg} ->}{ \link{params_surv}}
-\item{\code{create_params.flexsurvreg_list} ->}{ \link{params_surv_list}}
-\item{\code{create_params.partsurvfit} ->}{ \link{params_surv_list}}
+\item{\code{create_params.lm} ->}{ \code{\link{params_lm}}}
+\item{\code{create_params.multinom} ->}{ \code{\link{params_mlogit}}}
+\item{\code{create_params.multinom_list} ->}{ \code{\link{params_mlogit_list}}}
+\item{\code{create_params.flexsurvreg} ->}{ \code{\link{params_surv}}}
+\item{\code{create_params.flexsurvreg_list} ->}{ \code{\link{params_surv_list}}}
+\item{\code{create_params.partsurvfit} ->}{ \code{\link{params_surv_list}}}
 }
 }
 \description{

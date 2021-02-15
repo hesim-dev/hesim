@@ -26,8 +26,8 @@ formula_list <- function(...){
 
 #' List of `lm` objects 
 #'
-#' Combine [lm][stats::lm] objects into a list
-#' @param ... Objects of class [lm][stats::lm], which can be named.
+#' Combine [`lm`][stats::lm] objects into a list
+#' @param ... Objects of class [`lm`][stats::lm], which can be named.
 #' @return Returns an object of class `lm_list`.
 #' @keywords internal
 #' @export
@@ -42,8 +42,8 @@ lm_list <- function(...){
 
 #' List of `flexsurvreg` objects 
 #'
-#' Combine [flexsurvreg][flexsurv::flexsurvreg] into a list.
-#' @param ... Objects of class [flexsurvreg][flexsurv::flexsurvreg], which can be named.
+#' Combine [`flexsurvreg`][flexsurv::flexsurvreg] objects into a list.
+#' @param ... Objects of class [`flexsurvreg`][flexsurv::flexsurvreg], which can be named.
 #' @return An object of class `flexsurvreg_list`.
 #' @examples 
 #'  library("flexsurv")
@@ -59,7 +59,7 @@ flexsurvreg_list <- function(...){
 #' List of `multinom` objects 
 #'
 #' Combine `multinom` objects into a list.
-#' @param ... Objects of class [multinom][nnet::multinom], which can be named.
+#' @param ... Objects of class [`multinom`][nnet::multinom], which can be named.
 #' @return  An object of class `multinom_list`.
 #' @examples 
 #'  library("nnet")
@@ -81,14 +81,14 @@ multinom_list <- function(...){
 
 #' Partitioned survival regression object
 #'
-#' Create a partitioned survival regression object of class "partsurvfit". The object contains a list
+#' Create a partitioned survival regression object of class `partsurvfit`. The object contains a list
 #' of fitted survival models fit using either \code{\link{flexsurvreg}} or \code{\link{flexsurvspline}} (i.e.,
 #' an object of class \code{\link{flexsurvreg_list}}) and the data frame used to perform the fit of each model. 
 #' The same data frame must have been used for each fit.  
 #' @param object An object of class \code{\link{flexsurvreg_list}}.
 #' @param data The data frame used to fit each survival model in \code{object}.
 #' \code{\link{flexsurvreg}}.  
-#' @return Returns an object of class "partsurvfit", which is a list containing two elements. 
+#' @return Returns an object of class `partsurvfit`, which is a list containing two elements. 
 #' The first element, "models", contains the survival models passed to \code{object}, and the second 
 #' element, "data" contains the data frame passed to \code{data}.
 #' @examples 

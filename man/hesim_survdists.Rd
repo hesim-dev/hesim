@@ -30,7 +30,7 @@ hesim_survdists
 }
 \description{
 List of additional distributions for parametric survival analysis that are
-not contained in \link{flexsurv}. Can be used to fit models with
-\link{flexsurvreg}. Same format as \link{flexsurv.dists} in \link{flexsurv}.
+not contained in \code{\link[flexsurv:flexsurv]{flexsurv}}. Can be used to fit models with
+\code{\link[flexsurv:flexsurvreg]{flexsurv::flexsurvreg()}}. Same format as \code{\link[flexsurv:flexsurv.dists]{flexsurv::flexsurv.dists}}.
 }
 \keyword{datasets}

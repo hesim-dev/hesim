@@ -11,10 +11,10 @@ state transition or partitioned survival model.
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{params}}{Parameters for simulating state values. Currently supports
-objects of class \link{tparams_mean} or \link{params_lm}.}
+objects of class \code{\link{tparams_mean}} or \code{\link{params_lm}}.}
 
 \item{\code{input_data}}{An object of class \link{input_mats}. Only used for
-\link{params_lm} objects.}
+\code{\link{params_lm}} objects.}
 
 \item{\code{method}}{The method used to simulate costs and
 quality-adjusted life-years (QALYs) as a function of state values.

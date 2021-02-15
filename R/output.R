@@ -21,7 +21,7 @@
 #' \item{time_stop}{The time at the end of the interval.}
 #' }
 #'
-#' @seealso [IndivCtstm], [IndivCtstmTrans]
+#' @seealso [`IndivCtstm`], [`IndivCtstmTrans`]
 #' @name disprog
 NULL
 
@@ -135,12 +135,12 @@ NULL
 #' @format 
 #' A list containing two elements:
 #' \itemize{
-#' \item{costs}{ Total (discounted) costs by category.}
-#' \item{qalys}{ (Discounted) quality-adjusted life-years.}
+#' \item{`costs`}{ Total (discounted) costs by category.}
+#' \item{`qalys`}{ (Discounted) quality-adjusted life-years.}
 #' }
 #' 
 #' @section Costs:
-#' The 'costs' \code{\link{data.table}} contains the following columns:
+#' The `costs` `data.table` contains the following columns:
 #' \describe{
 #' \item{category}{The cost category.}
 #' \item{dr}{The discount rate.}
@@ -152,7 +152,7 @@ NULL
 #' }
 #' 
 #' @section Quality-adjusted life-years:
-#' The 'qalys' \code{\link{data.table}} contains the following columns:
+#' The `qalys` `data.table` contains the following columns:
 #' \describe{
 #' \item{dr}{The discount rate.}
 #' \item{sample}{A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)}

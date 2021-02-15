@@ -7,11 +7,11 @@
 params_mlogit_list(...)
 }
 \arguments{
-\item{...}{Objects of class \link{params_mlogit}, which can be named.}
+\item{...}{Objects of class \code{\link{params_mlogit}}, which can be named.}
 }
 \value{
 An object of class \code{params_mlogit_list}, which is a list containing
-\link{params_mlogit} objects.
+\code{\link{params_mlogit}} objects.
 }
 \description{
 Create a list containing the parameters of multiple fitted multinomial logit models.

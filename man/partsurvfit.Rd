@@ -13,12 +13,12 @@ partsurvfit(object, data)
 \code{\link{flexsurvreg}}.}
 }
 \value{
-Returns an object of class "partsurvfit", which is a list containing two elements.
+Returns an object of class \code{partsurvfit}, which is a list containing two elements.
 The first element, "models", contains the survival models passed to \code{object}, and the second
 element, "data" contains the data frame passed to \code{data}.
 }
 \description{
-Create a partitioned survival regression object of class "partsurvfit". The object contains a list
+Create a partitioned survival regression object of class \code{partsurvfit}. The object contains a list
 of fitted survival models fit using either \code{\link{flexsurvreg}} or \code{\link{flexsurvspline}} (i.e.,
 an object of class \code{\link{flexsurvreg_list}}) and the data frame used to perform the fit of each model.
 The same data frame must have been used for each fit.

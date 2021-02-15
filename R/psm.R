@@ -90,7 +90,7 @@ create_PsmCurves.params_surv_list <- function(object, input_data, ...){
 #' head(psm_curves$survival(t = seq(0, 3, by = .1)))
 #' head(psm_curves$rmst(t = c(2, 5)))
 #' 
-#' @seealso [Psm], [create_PsmCurves()]
+#' @seealso [`Psm`], [`create_PsmCurves()`]
 #' @export
 PsmCurves <- R6::R6Class("PsmCurves",
   private = list(
@@ -118,10 +118,10 @@ PsmCurves <- R6::R6Class("PsmCurves",
   ),                            
                               
   public = list(
-    #' @field params An object of class [params_surv_list].
+    #' @field params An object of class [`params_surv_list`].
     params = NULL,
     
-    #' @field input_data An object of class [input_mats]. Each row in `X` must
+    #' @field input_data An object of class [`input_mats`]. Each row in `X` must
     #' be a unique treatment strategy and patient.
     input_data = NULL,
 
@@ -273,20 +273,20 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #' head(psm$costs_)
 #' head(psm$sim_qalys(dr = .03)$qalys_)
 #'
-#' @seealso [PsmCurves], [create_PsmCurves()]
+#' @seealso [`PsmCurves`], [`create_PsmCurves()`]
 #' @export
 Psm <- R6::R6Class("Psm",
   public = list(
     #' @field survival_models The survival models used to predict survival curves. Must be
-    #' an object of class [PsmCurves].
+    #' an object of class [`PsmCurves`].
     survival_models = NULL,
     
     #' @field utility_model The model for health state utility. Must be an object of
-    #' class [StateVals].
+    #' class [`StateVals`].
     utility_model = NULL,
     
     #' @field cost_models The models used to predict costs by health state. 
-    #' Must be a list of objects of class [StateVals], where each element of the 
+    #' Must be a list of objects of class [`StateVals`], where each element of the 
     #' list represents a different cost category.    
     cost_models = NULL,
     

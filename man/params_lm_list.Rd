@@ -7,10 +7,10 @@
 params_lm_list(...)
 }
 \arguments{
-\item{...}{Objects of class \link{params_lm}, which can be named.}
+\item{...}{Objects of class \code{\link{params_lm}}, which can be named.}
 }
 \value{
-An object of class \code{params_lm_list}, which is a list containing \link{params_lm}
+An object of class \code{params_lm_list}, which is a list containing \code{\link{params_lm}}
 objects.
 }
 \description{

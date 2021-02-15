@@ -92,8 +92,8 @@ check_StateVals <- function(statevalmods, object,
 #' Absorbing states
 #' 
 #' Returns a vector of absorbing states from a transition matrix.
-#' @param trans_mat A transition matrix in the format from the \link[mstate]{mstate} package. 
-#' See \link{IndivCtstmTrans}.
+#' @param trans_mat A transition matrix in the format from the [`mstate`][mstate::mstate] package. 
+#' See [`IndivCtstmTrans`].
 #' @keywords internal
 absorbing <- function(trans_mat){
   which(apply(trans_mat, 1, function(x) all(is.na(x))))

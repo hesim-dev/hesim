@@ -58,20 +58,20 @@ transmod$sim_stateprobs(t = c(0, 5, 10), disprog = disprog)[t == 5]
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{params}}{An object of class \link{params_surv} or \link{params_surv_list}.}
+\item{\code{params}}{An object of class \code{\link{params_surv}} or \code{\link{params_surv_list}}.}
 
 \item{\code{input_data}}{Input data used to simulate health state transitions
 by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
-Must be an object of class \link{input_mats}. If \code{params} contains parameters from
-a list of models (i.e., of class \link{params_surv_list}), then \code{input_data}
+Must be an object of class \code{\link{input_mats}}. If \code{params} contains parameters from
+a list of models (i.e., of class \code{\link{params_surv_list}}), then \code{input_data}
 must contain a unique row for each treatment strategy
 and patient; if \code{params} contains parameters from a joint model
-(i.e., of class \link{params_surv}), then \code{input_data} must contain a unique
+(i.e., of class \code{\link{params_surv}}), then \code{input_data} must contain a unique
 row for each treatment strategy, patient, and transition.}
 
 \item{\code{trans_mat}}{A transition matrix describing the states and transitions
-in a multi-state model in the format from the \link[mstate:mstate]{mstate} package.
-See the documentation for the argument \code{"trans"} in \link[mstate:msprep]{mstate::msprep}.}
+in a multi-state model in the format from the \code{\link[mstate:mstate]{mstate}} package.
+See the documentation for the argument \code{"trans"} in \code{\link[mstate:msprep]{mstate::msprep}}.}
 
 \item{\code{start_state}}{A scalar or vector denoting the starting health state.
 Default is the first health state. If a vector, must be equal to the number of simulated patients.}
@@ -185,7 +185,7 @@ no output is printed.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An object of class \link{disprog}.
+An object of class \code{\link{disprog}}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -212,7 +212,7 @@ using \code{IndivCtstm$sim_disease()}.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An object of class \link{stateprobs}.
+An object of class \code{\link{stateprobs}}.
 }
 }
 \if{html}{\out{<hr>}}

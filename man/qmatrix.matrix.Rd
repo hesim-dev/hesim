@@ -18,7 +18,7 @@ elements of the transition intensity matrix. A column represents a transition
 from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
 transition intensity matrix. See "Details" for more information.}
 
-\item{trans_mat}{Just as in \link{IndivCtstmTrans}, a transition matrix
+\item{trans_mat}{Just as in \code{\link{IndivCtstmTrans}}, a transition matrix
 describing the states and transitions in a multi-state model.}
 
 \item{...}{Further arguments passed to or from other methods. Currently unused.}

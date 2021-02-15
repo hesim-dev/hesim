@@ -7,15 +7,15 @@
 summarize_ce(costs, qalys, by_grp = FALSE)
 }
 \arguments{
-\item{costs}{Simulated costs by category (objects of class \link{costs}).}
+\item{costs}{Simulated costs by category (objects of class \code{\link{costs}}).}
 
-\item{qalys}{Simulated QALYs (objects of class \link{qalys}).}
+\item{qalys}{Simulated QALYs (objects of class \code{\link{qalys}}).}
 
 \item{by_grp}{If \code{TRUE}, then costs and QALYs are computed by subgroup. If
 \code{FALSE}, then costs and QALYs are aggregated across all patients (and subgroups).}
 }
 \value{
-An object of class \link{ce}.
+An object of class \code{\link{ce}}.
 }
 \description{
 Summarize costs and quality-adjusted life-years (QALYs) given output simulated

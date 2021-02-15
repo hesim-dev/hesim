@@ -161,20 +161,20 @@ format(icer(cea_pw_out))
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{trans_model}}{The model for health state transitions. Must be an object
-of class \link{CohortDtstmTrans}.}
+of class \code{\link{CohortDtstmTrans}}.}
 
 \item{\code{utility_model}}{The model for health state utility. Must be an object of
-class \link{StateVals}.}
+class \code{\link{StateVals}}.}
 
 \item{\code{cost_models}}{The models used to predict costs by health state.
-Must be a list of objects of class \link{StateVals}, where each element of the
+Must be a list of objects of class \code{\link{StateVals}}, where each element of the
 list represents a different cost category.}
 
-\item{\code{stateprobs_}}{An object of class \link{stateprobs} simulated using \verb{$sim_stateprobs()}.}
+\item{\code{stateprobs_}}{An object of class \code{\link{stateprobs}} simulated using \verb{$sim_stateprobs()}.}
 
-\item{\code{qalys_}}{An object of class \link{qalys} simulated using \verb{$sim_qalys()}.}
+\item{\code{qalys_}}{An object of class \code{\link{qalys}} simulated using \verb{$sim_qalys()}.}
 
-\item{\code{costs_}}{An object of class \link{costs} simulated using \verb{$sim_costs()}.}
+\item{\code{costs_}}{An object of class \code{\link{costs}} simulated using \verb{$sim_costs()}.}
 }
 \if{html}{\out{</div>}}
 }

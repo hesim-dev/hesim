@@ -20,7 +20,7 @@ bootstrap(object, B, ...)
 during the bootstrap procedure. This argument may be useful if, for instance, the model
 fails to converge during some bootstrap replications. Default is 0.}
 
-\item{silent}{Logical indicating whether error messages should be supressed. Passed to
+\item{silent}{Logical indicating whether error messages should be suppressed. Passed to
 the \code{silent} argument of \code{\link[=try]{try()}}.}
 }
 \value{

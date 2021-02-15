@@ -7,11 +7,11 @@
 create_trans_dt(trans_mat)
 }
 \arguments{
-\item{trans_mat}{A transition matrix in the format from the \link[mstate]{mstate} package.
-See \link{IndivCtstmTrans}.}
+\item{trans_mat}{A transition matrix in the format from the \code{\link[mstate:mstate]{mstate}} package.
+See \code{\link{IndivCtstmTrans}}.}
 }
 \value{
-Returns a \code{\link{data.table}} in tidy format with three columns
+Returns a \code{\link{data.table}} in tidy format with three columns:
 \describe{
 \item{transition_id}{Health state transition ID.}
 \item{from}{The starting health state.}
@@ -20,7 +20,7 @@ Returns a \code{\link{data.table}} in tidy format with three columns
 }
 \description{
 Create a data table of health state transitions from a transition matrix describing
-the states and transitions in a multi-state model suitable for use with \link{hesim_data}.
+the states and transitions in a multi-state model suitable for use with \code{\link{hesim_data}}.
 }
 \examples{
 tmat <- rbind(c(NA, 1, 2),

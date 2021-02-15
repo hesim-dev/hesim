@@ -9,5 +9,5 @@ used for simulation modeling. The parameters are used to simulate outcomes
 as a function of covariates contained in input matrices (\link{input_mats}).
 }
 \seealso{
-\link{tparams}
+\code{\link{tparams}}
 }

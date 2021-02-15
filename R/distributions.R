@@ -200,8 +200,8 @@ mean_weibullNMA = function(a0, a1){
 #' List of survival distributions
 #'
 #' List of additional distributions for parametric survival analysis that are 
-#' not contained in \link{flexsurv}. Can be used to fit models with 
-#' \link{flexsurvreg}. Same format as \link{flexsurv.dists} in \link{flexsurv}.
+#' not contained in [`flexsurv`][flexsurv::flexsurv]. Can be used to fit models with 
+#' [`flexsurv::flexsurvreg()`]. Same format as [`flexsurv::flexsurv.dists`].
 #'
 #' @format A list with the following elements:
 #' \describe{

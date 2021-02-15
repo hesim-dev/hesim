@@ -6,7 +6,7 @@
 #' as a function of covariates contained in input matrices ([input_mats]).
 #' 
 #' @name params
-#' @seealso [tparams]
+#' @seealso [`tparams`]
 NULL
 
 # Helper functions -------------------------------------------------------------
@@ -76,12 +76,12 @@ create_params_joined <- function(object, n, uncertainty, inner_class){
 #' @return An object prefixed by `params_`. Mapping between `create_params` 
 #' and the classes of the returned objects are: 
 #' \itemize{
-#' \item{`create_params.lm` ->}{ [params_lm]}
-#' \item{`create_params.multinom` ->}{ [params_mlogit]}
-#' \item{`create_params.multinom_list` ->}{ [params_mlogit_list]}
-#' \item{`create_params.flexsurvreg` ->}{ [params_surv]}
-#' \item{`create_params.flexsurvreg_list` ->}{ [params_surv_list]}
-#' \item{`create_params.partsurvfit` ->}{ [params_surv_list]}
+#' \item{`create_params.lm` ->}{ [`params_lm`]}
+#' \item{`create_params.multinom` ->}{ [`params_mlogit`]}
+#' \item{`create_params.multinom_list` ->}{ [`params_mlogit_list`]}
+#' \item{`create_params.flexsurvreg` ->}{ [`params_surv`]}
+#' \item{`create_params.flexsurvreg_list` ->}{ [`params_surv_list`]}
+#' \item{`create_params.partsurvfit` ->}{ [`params_surv_list`]}
 #' }
 #' @name create_params
 #' @examples 
@@ -162,9 +162,9 @@ check.params_lm <- function(object){
 #' Parameters of a list of linear models
 #' 
 #' Create a list containing the parameters of a list of fitted linear regression models.
-#' @param ... Objects of class [params_lm], which can be named.
+#' @param ... Objects of class [`params_lm`], which can be named.
 #' 
-#' @return An object of class `params_lm_list`, which is a list containing [params_lm]
+#' @return An object of class `params_lm_list`, which is a list containing [`params_lm`]
 #' objects. 
 #' @export
 #' @keywords internal
@@ -258,52 +258,52 @@ create_params.lm_list <- function(object, n = 1000, uncertainty = c("normal", "n
 #' \itemize{
 #' \item{`exponential` or `exp`}{ Exponential distribution. `coef`
 #' must contain the `rate` parameter on the log scale and the same parameterization as in 
-#' [stats::Exponential]}.
+#' [`stats::Exponential`]}.
 #' 
 #' \item{`weibull` or `weibull.quiet`}{ Weibull distribution. The first 
 #' element of `coef` is the `shape` parameter (on the log scale) and the second
 #' element is the `scale` parameter (also on the log scale). The parameterization is
-#' that same as in [stats::Weibull].}
+#' that same as in [`stats::Weibull`].}
 #' 
 #' \item{`weibullPH`}{ Weibull distribution with a proportional hazards 
 #' parameterization. The first element of `coef` is the `shape` parameter 
 #' (on the log scale) and the second element is the `scale` parameter 
 #' (also on the log scale). The parameterization is
-#' that same as in [flexsurv::WeibullPH].}
+#' that same as in [`flexsurv::WeibullPH`].}
 #' 
 #' \item{`gamma`}{ Gamma distribution. The first 
 #' element of `coef` is the `shape` parameter (on the log scale) and the second
 #' element is the `rate` parameter (also on the log scale). The parameterization is
-#' that same as in [stats::GammaDist].}
+#' that same as in [`stats::GammaDist`].}
 #' 
 #' \item{`lnorm`}{ Lognormal distribution. The first 
 #' element of `coef` is the `meanlog` parameter (i.e., the mean of survival on 
 #' the log scale) and the second element is the `sdlog` parameter (i.e.,
 #'  the standard deviation of survival on the log scale). The parameterization is
-#' that same as in [stats::Lognormal]. The coefficients predicting the `meanlog` 
+#' that same as in [`stats::Lognormal`]. The coefficients predicting the `meanlog` 
 #' parameter are untransformed whereas the coefficients predicting the `sdlog` 
 #' parameter are defined on the log scale.}
 #' 
 #' \item{`gompertz`}{ Gompertz distribution. The first 
 #' element of `coef` is the `shape` parameter and the second
 #' element is the `rate` parameter (on the log scale). The parameterization is
-#' that same as in [flexsurv::Gompertz].}
+#' that same as in [`flexsurv::Gompertz`].}
 #' 
 #' \item{`llogis`}{ Log-logistic distribution. The first 
 #' element of `coef` is the `shape` parameter (on the log scale) and the second
 #' element is the `scale` parameter (also on the log scale). The parameterization is
-#' that same as in [flexsurv::Llogis].}
+#' that same as in [`flexsurv::Llogis`].}
 #' 
 #' \item{`gengamma`}{ Generalized gamma distribution. The first 
 #' element of `coef` is the location parameter `mu`, the second
 #' element is the scale parameter `sigma` (on the log scale), and the
 #' third element is the shape parameter `Q`. The parameterization is
-#' that same as in [flexsurv::GenGamma].}
+#' that same as in [`flexsurv::GenGamma`].}
 #' 
 #' \item{`survspline`}{ Survival splines. Each element of `coef` is a parameter of the
 #' spline model (i.e. `gamma_0`, `gamma_1`, \eqn{\ldots}) with length equal
 #' to the number of knots (including the boundary knots). See below for details on the
-#' auxiliary arguments. The parameterization is that same as in [flexsurv::Survspline].}
+#' auxiliary arguments. The parameterization is that same as in [`flexsurv::Survspline`].}
 #' 
 #' \item{`fracpoly`}{ Fractional polynomials. Each element of `coef` is a parameter of the
 #' fractional polynomial model (i.e. `gamma_0`, `gamma_1`, \eqn{\ldots}) with length equal
@@ -551,10 +551,10 @@ check.params_mlogit <- function(object){
 #' Parameters of a list of multinomial logit models
 #' 
 #' Create a list containing the parameters of multiple fitted multinomial logit models.
-#' @param ... Objects of class [params_mlogit], which can be named.
+#' @param ... Objects of class [`params_mlogit`], which can be named.
 #' 
 #' @return An object of class `params_mlogit_list`, which is a list containing 
-#' [params_mlogit] objects.
+#' [`params_mlogit`] objects.
 #' @export
 params_mlogit_list <- function(...){
   return(check(new_params_list(..., inner_class = "params_mlogit", 
@@ -683,14 +683,14 @@ create_params.partsurvfit <- function(object, n = 1000,
 #' 
 #' Create a list containing the parameters of survival models joined at specified time points. See
 #' \code{\link{joined}} for more details.
-#' @param ... Objects of class \code{\link{params_surv}}, which can be named.
+#' @param ... Objects of class [`params_surv`], which can be named.
 #' @param times A numeric vector of times at which to join models.
 #' 
-#' @return An object of class "params_joined_surv", which is a list containing two elements:
+#' @return An object of class `params_joined_surv`, which is a list containing two elements:
 #' \describe{
-#' \item{models}{A list of \code{\link{params_surv}} objects from each statistical model
+#' \item{models}{A list of [`params_surv`] objects from each statistical model
 #' to be joined.}
-#' \item{times}{Equivalent to the argument \code{times}.}
+#' \item{times}{Equivalent to the argument `times`.}
 #' }
 #' @examples 
 #' library("flexsurv")
@@ -719,16 +719,16 @@ check.params_joined_surv <- function(object, inner_class){
 #' Parameters of joined lists of survival models
 #' 
 #' Create a list containing the parameters of multiple sets of survival models, each joined
-#' at specified time points. See \code{\link{joined}} for more details.
-#' @param ... Objects of class \code{\link{params_surv_list}}, which can be named.
+#' at specified time points. See [`joined`] for more details.
+#' @param ... Objects of class [`params_surv_list`], which can be named.
 #' @param times A list of sorted numeric vectors, with the length of each list element equal
 #' to the number of sets of models.
 #' 
-#' @return An object of class "params_joined_surv_list", which is a list containing two elements:
+#' @return An object of class `params_joined_surv_list`, which is a list containing two elements:
 #' \describe{
-#' \item{models}{A list of \code{\link{params_surv_list}}, each containing code{\link{params_surv}} 
+#' \item{models}{A list of [`params_surv_list`], each containing [`params_surv`] 
 #' objects to be joined.}
-#' \item{times}{Equivalent to the argument \code{times}.}
+#' \item{times}{Equivalent to the argument `times`.}
 #' }
 #' @examples 
 #' library("flexsurv")

@@ -12,7 +12,7 @@ params_joined_surv(..., times)
 \item{times}{A numeric vector of times at which to join models.}
 }
 \value{
-An object of class "params_joined_surv", which is a list containing two elements:
+An object of class \code{params_joined_surv}, which is a list containing two elements:
 \describe{
 \item{models}{A list of \code{\link{params_surv}} objects from each statistical model
 to be joined.}

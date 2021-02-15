@@ -70,10 +70,10 @@ check.tparams_mean <- function(object, ...){
 #'  Since the transition probabilities have presumably
 #' already been predicted based on covariate values, no input data is required for
 #' simulation. The class can be instantiated from either an `array`, a `data.table`,
-#' a `data.frame`, or a [tpmatrix]. 
+#' a `data.frame`, or a [`tpmatrix`]. 
 #' 
 #' @param object An object of the appropriate class. 
-#' @param tpmatrix_id An object of class [tpmatrix_id] (or an equivalent 
+#' @param tpmatrix_id An object of class [`tpmatrix_id`] (or an equivalent 
 #' `data.table` with the same ID columns as returned by `tpmatrix_id()`).
 #' @param ... Further arguments passed to or from other methods. Currently unused. 
 #' @param times An optional numeric vector of distinct times to pass to
@@ -127,11 +127,11 @@ check.tparams_mean <- function(object, ...){
 #'  
 #'  \item{data.frame}{Same as `data.table`.}
 #'  
-#'  \item{tpmatrix}{An object of class [tpmatrix].}
+#'  \item{tpmatrix}{An object of class [`tpmatrix`].}
 #' }
 #' 
 #' A `tparams_transprobs` object is also instantiated when creating a
-#' cohort discrete time state transition model using [define_model()].
+#' cohort discrete time state transition model using [`define_model()`].
 #' 
 #' 
 #' @return An object of class `tparams_transprobs`, 
@@ -141,7 +141,7 @@ check.tparams_mean <- function(object, ...){
 #' `value` is a prediction for a `sample`, `strategy_id`,
 #'  `patient_id`, and optionally `time_id` combination.
 #'
-#' @seealso  [define_model()], [create_CohortDtstm()], [tpmatrix()]
+#' @seealso  [`define_model()`], [`create_CohortDtstm()`], [`tpmatrix()`]
 #' @rdname tparams_transprobs
 #' @export
 tparams_transprobs <- function(object, ...){

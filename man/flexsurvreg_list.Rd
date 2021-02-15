@@ -7,13 +7,13 @@
 flexsurvreg_list(...)
 }
 \arguments{
-\item{...}{Objects of class \link[flexsurv:flexsurvreg]{flexsurvreg}, which can be named.}
+\item{...}{Objects of class \code{\link[flexsurv:flexsurvreg]{flexsurvreg}}, which can be named.}
 }
 \value{
 An object of class \code{flexsurvreg_list}.
 }
 \description{
-Combine \link[flexsurv:flexsurvreg]{flexsurvreg} into a list.
+Combine \code{\link[flexsurv:flexsurvreg]{flexsurvreg}} objects into a list.
 }
 \examples{
  library("flexsurv")

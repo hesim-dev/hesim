@@ -78,19 +78,19 @@ head(psm$sim_qalys(dr = .03)$qalys_)
 
 }
 \seealso{
-\link{PsmCurves}, \code{\link[=create_PsmCurves]{create_PsmCurves()}}
+\code{\link{PsmCurves}}, \code{\link[=create_PsmCurves]{create_PsmCurves()}}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{survival_models}}{The survival models used to predict survival curves. Must be
-an object of class \link{PsmCurves}.}
+an object of class \code{\link{PsmCurves}}.}
 
 \item{\code{utility_model}}{The model for health state utility. Must be an object of
-class \link{StateVals}.}
+class \code{\link{StateVals}}.}
 
 \item{\code{cost_models}}{The models used to predict costs by health state.
-Must be a list of objects of class \link{StateVals}, where each element of the
+Must be a list of objects of class \code{\link{StateVals}}, where each element of the
 list represents a different cost category.}
 
 \item{\code{n_states}}{Number of states in the partitioned survival model.}
