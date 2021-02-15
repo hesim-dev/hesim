@@ -13,9 +13,9 @@ params_joined_surv_list(..., times)
 to the number of sets of models.}
 }
 \value{
-An object of class "params_joined_surv_list", which is a list containing two elements:
+An object of class \code{params_joined_surv_list}, which is a list containing two elements:
 \describe{
-\item{models}{A list of \code{\link{params_surv_list}}, each containing code{\link{params_surv}}
+\item{models}{A list of \code{\link{params_surv_list}}, each containing \code{\link{params_surv}}
 objects to be joined.}
 \item{times}{Equivalent to the argument \code{times}.}
 }

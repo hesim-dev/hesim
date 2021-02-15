@@ -11,7 +11,7 @@ expmat(x, t = 1, ...)
 
 \item{t}{An optional scaling factor for \code{x}.}
 
-\item{...}{Arguments to pass to \link[msm:MatrixExp]{msm::MatrixExp}.}
+\item{...}{Arguments to pass to \code{\link[msm:MatrixExp]{msm::MatrixExp()}}.}
 }
 \value{
 Returns an array of exponentiated matrices. If \code{length(t) > 1}, then

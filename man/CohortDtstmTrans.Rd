@@ -143,7 +143,7 @@ Simulate probability of being in each health state during each model cycle.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An object of class \link{stateprobs}.
+An object of class \code{\link{stateprobs}}.
 }
 }
 \if{html}{\out{<hr>}}

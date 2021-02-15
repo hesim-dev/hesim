@@ -42,14 +42,14 @@ head(psm_curves$rmst(t = c(2, 5)))
 
 }
 \seealso{
-\link{Psm}, \code{\link[=create_PsmCurves]{create_PsmCurves()}}
+\code{\link{Psm}}, \code{\link[=create_PsmCurves]{create_PsmCurves()}}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{params}}{An object of class \link{params_surv_list}.}
+\item{\code{params}}{An object of class \code{\link{params_surv_list}}.}
 
-\item{\code{input_data}}{An object of class \link{input_mats}. Each row in \code{X} must
+\item{\code{input_data}}{An object of class \code{\link{input_mats}}. Each row in \code{X} must
 be a unique treatment strategy and patient.}
 }
 \if{html}{\out{</div>}}

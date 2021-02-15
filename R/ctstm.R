@@ -169,7 +169,7 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
 #' [`expand.hesim_data`].
 #' @param n Number of random observations of the parameters to draw.
 #' @param trans_mat The transition matrix describing the states and transitions in a 
-#' multi-state model in the format from the [mstate][mstate::mstate] package. See [`IndivCtstmTrans`].
+#' multi-state model in the format from the [`mstate`][mstate::mstate] package. See [`IndivCtstmTrans`].
 #' @param clock "reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
 #' of clock-reset and clock-forward models. See the field `clock` in [`IndivCtstmTrans`].
 #' @param reset_states A vector denoting the states in which time resets. See the field 
@@ -318,22 +318,22 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
   ), # end private
 
   public = list(
-    #' @field params An object of class [params_surv] or [params_surv_list].
+    #' @field params An object of class [`params_surv`] or [`params_surv_list`].
     params = NULL,
     
     #' @field input_data Input data used to simulate health state transitions 
     #' by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
-    #' Must be an object of class [input_mats]. If `params` contains parameters from
-    #' a list of models (i.e., of class [params_surv_list]), then `input_data` 
+    #' Must be an object of class [`input_mats`]. If `params` contains parameters from
+    #' a list of models (i.e., of class [`params_surv_list`]), then `input_data` 
     #' must contain a unique row for each treatment strategy
     #' and patient; if `params` contains parameters from a joint model 
-    #' (i.e., of class [params_surv]), then `input_data` must contain a unique
+    #' (i.e., of class [`params_surv`]), then `input_data` must contain a unique
     #' row for each treatment strategy, patient, and transition.
     input_data = NULL,
     
     #' @field trans_mat A transition matrix describing the states and transitions 
-    #' in a multi-state model in the format from the [mstate][mstate::mstate] package. 
-    #' See the documentation for the argument `"trans"` in [mstate::msprep].
+    #' in a multi-state model in the format from the [`mstate`][mstate::mstate] package. 
+    #' See the documentation for the argument `"trans"` in [`mstate::msprep`].
     trans_mat = NULL, 
     
     #' @field start_state A scalar or vector denoting the starting health state. 
@@ -419,7 +419,7 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     #' should be printed every progress PSA iterations. For example, if progress = 2,
     #' then every second PSA iteration is printed. Default is NULL, in which case
     #'  no output is printed.
-    #' @return An object of class [disprog].  
+    #' @return An object of class [`disprog`].  
     sim_disease = function(max_t = 100, max_age = 100, progress = NULL){
       self$check()
       disprog <- indiv_ctstm_sim_disease(self,
@@ -437,7 +437,7 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     #' using `IndivCtstm$sim_disease()`.
     #' @param ... Additional arguments to pass to `IndivCtstm$sim_disease()` if
     #' `disprog = NULL`.
-    #' @return An object of class [stateprobs].  
+    #' @return An object of class [`stateprobs`].  
     sim_stateprobs = function(t, disprog = NULL, ...){
       self$check()
       if (is.null(disprog)){
@@ -466,7 +466,7 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #' model (CTSTM) from a fitted multi-state model. The class supports "clock-reset"
 #' (i.e., semi-Markov), "clock-forward" (i.e., Markov), and mixtures of 
 #' clock-reset and clock-forward models as described in 
-#' [IndivCtstmTrans]. 
+#' [`IndivCtstmTrans`]. 
 #' @examples 
 #' library("flexsurv")
 #'
@@ -546,7 +546,7 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #' format(summary(ce), pivot_from = "strategy")
 #'
 #' @format An [R6::R6Class] object.
-#' @seealso [create_IndivCtstmTrans()], [IndivCtstmTrans]
+#' @seealso [`create_IndivCtstmTrans()`], [`IndivCtstmTrans`]
 #' @export
 IndivCtstm <- R6::R6Class("IndivCtstm",
   private = list(  
@@ -682,28 +682,28 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                                   
   public = list(
     #' @field trans_model The model for health state transitions. Must be an object 
-    #' of class [IndivCtstmTrans]. 
+    #' of class [`IndivCtstmTrans`]. 
     trans_model = NULL,
     
     #' @field utility_model The model for health state utility. Must be an object of
-    #' class [StateVals].    
+    #' class [`StateVals`].    
     utility_model = NULL,
     
     #' @field cost_models The models used to predict costs by health state. 
-    #' Must be a list of objects of class [StateVals], where each element of the 
+    #' Must be a list of objects of class [`StateVals`], where each element of the 
     #' list represents a different cost category.    
     cost_models = NULL,
     
-    #' @field disprog_ An object of class [disprog].
+    #' @field disprog_ An object of class [`disprog`].
     disprog_ = NULL,
     
-    #' @field stateprobs_ An object of class [stateprobs] simulated using `$sim_stateprobs()`.    
+    #' @field stateprobs_ An object of class [`stateprobs`] simulated using `$sim_stateprobs()`.    
     stateprobs_ = NULL,
     
-    #' @field qalys_ An object of class [qalys] simulated using `$sim_qalys()`.
+    #' @field qalys_ An object of class [`qalys`] simulated using `$sim_qalys()`.
     qalys_ = NULL,
     
-    #' @field costs_ An object of class [costs] simulated using `$sim_costs()`.
+    #' @field costs_ An object of class [`costs`] simulated using `$sim_costs()`.
     costs_ = NULL,
     
     #' @description
@@ -750,7 +750,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     #' Simulate health state probabilities as a function of time using the 
     #' simulation output stored in `disprog`.
     #' @param t A numeric vector of times.
-    #' @return An instance of `self` with simulated output of class [stateprobs] 
+    #' @return An instance of `self` with simulated output of class [`stateprobs`] 
     #' stored in `stateprobs_`.    
     sim_stateprobs = function(t){
       if(is.null(self$disprog_)){
@@ -768,7 +768,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     #' `utility_model`. See `vignette("expected-values")` for details.
     #' @param dr Discount rate.
     #' @param type `"predict"` for mean values or `"random"` for random samples 
-    #' as in `$sim()` in [StateVals].
+    #' as in `$sim()` in [`StateVals`].
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
     #' @param by_patient If `TRUE`, then QALYs are computed at the patient level.
     #'  If `FALSE`, then QALYs are averaged across patients by health state.
@@ -792,7 +792,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     #' See `vignette("expected-values")` for details.
     #' @param dr Discount rate.
     #' @param type `"predict"` for mean values or `"random"` for random samples 
-    #' as in `$sim()` in [StateVals].
+    #' as in `$sim()` in [`StateVals`].
     #' @param by_patient If `TRUE`, then QALYs are computed at the patient level.
     #'  If `FALSE`, then QALYs are averaged across patients by health state.
     #' @param max_t  Maximum time duration to compute costs once a patient has

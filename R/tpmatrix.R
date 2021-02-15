@@ -326,7 +326,7 @@ qmatrix <- function (x, ...) {
 #' elements of the transition intensity matrix. A column represents a transition
 #' from state \eqn{r} to state \eqn{s}. Each row represents elements of a different
 #' transition intensity matrix. See "Details" for more information.
-#' @param trans_mat Just as in [IndivCtstmTrans], a transition matrix 
+#' @param trans_mat Just as in [`IndivCtstmTrans`], a transition matrix 
 #' describing the states and transitions in a multi-state model.
 #' @param ... Further arguments passed to or from other methods. Currently unused.
 #' 
@@ -466,12 +466,12 @@ qmatrix.msm <- function(x, newdata = NULL, uncertainty = c("normal", "none"), n 
 # Matrix exponential -----------------------------------------------------------
 #' Matrix exponential
 #' 
-#' This is a wrapper around [msm::MatrixExp()] that computes the exponential
+#' This is a wrapper around [`msm::MatrixExp()`] that computes the exponential
 #' of multiple square matrices. 
 #' 
 #' @param x An array of matrices. 
 #' @param t An optional scaling factor for `x`. 
-#' @param ... Arguments to pass to [msm::MatrixExp].
+#' @param ... Arguments to pass to [`msm::MatrixExp()`].
 #' 
 #' @details This function is most useful when exponentiating transition intensity
 #' matrices to produce transition probability matrices. To create transition

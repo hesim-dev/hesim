@@ -27,5 +27,5 @@ state during the simulation and 0 otherwise.}
 }
 
 \seealso{
-\link{IndivCtstm}, \link{IndivCtstmTrans}
+\code{\link{IndivCtstm}}, \code{\link{IndivCtstmTrans}}
 }

@@ -163,7 +163,7 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
     #' @description
     #' Simulate probability of being in each health state during each model cycle. 
     #' @param n_cycles The number of model cycles to simulate the model for.
-    #' @return An object of class [stateprobs].
+    #' @return An object of class [`stateprobs`].
     sim_stateprobs = function(n_cycles){
       times <- seq(0, n_cycles * self$cycle_length, length.out = n_cycles + 1)
       stprobs <- C_cohort_dtstm_sim_stateprobs(self, times)
@@ -397,25 +397,25 @@ create_CohortDtstmTrans.msm <- function(object, input_data,
 CohortDtstm <- R6::R6Class("CohortDtstm",
   public = list(
     #' @field trans_model The model for health state transitions. Must be an object 
-    #' of class [CohortDtstmTrans]. 
+    #' of class [`CohortDtstmTrans`]. 
     trans_model = NULL,
     
     #' @field utility_model The model for health state utility. Must be an object of
-    #' class [StateVals].
+    #' class [`StateVals`].
     utility_model = NULL,
     
     #' @field cost_models The models used to predict costs by health state. 
-    #' Must be a list of objects of class [StateVals], where each element of the 
+    #' Must be a list of objects of class [`StateVals`], where each element of the 
     #' list represents a different cost category.
     cost_models = NULL,
     
-    #' @field stateprobs_ An object of class [stateprobs] simulated using `$sim_stateprobs()`.
+    #' @field stateprobs_ An object of class [`stateprobs`] simulated using `$sim_stateprobs()`.
     stateprobs_ = NULL,
     
-    #' @field qalys_ An object of class [qalys] simulated using `$sim_qalys()`.
+    #' @field qalys_ An object of class [`qalys`] simulated using `$sim_qalys()`.
     qalys_ = NULL,
     
-    #' @field costs_ An object of class [costs] simulated using `$sim_costs()`.
+    #' @field costs_ An object of class [`costs`] simulated using `$sim_costs()`.
     costs_ = NULL,
     
     #' @description
@@ -485,15 +485,15 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
 
 #' Create \code{CohortDtstm} object
 #' 
-#' A generic function for creating an object of class [CohortDtstm].
+#' A generic function for creating an object of class [`CohortDtstm`].
 #' @param object An object of the appropriate class. 
-#' @param input_data 	An object of class [expanded_hesim_data][expand.hesim_data()].
+#' @param input_data 	An object of class [`expanded_hesim_data`][expand.hesim_data()].
 #' @param cost_args A list of further arguments passed to `StateVals$new()` in 
-#' [StateVals] when initiating cost models.
+#' [`StateVals`] when initiating cost models.
 #' @param utility_args A list of further arguments passed to `StateVals$new()` in
-#' [StateVals] when initiating the utility model.
+#' [`StateVals`] when initiating the utility model.
 #' @param ... Further arguments passed to `CohortDtstmTrans$new()` in 
-#' [CohortDtstmTrans]. 
+#' [`CohortDtstmTrans`]. 
 #'  
 #' @export
 create_CohortDtstm <- function(object, ...){

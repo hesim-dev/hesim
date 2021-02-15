@@ -456,11 +456,11 @@ create_StateVals.eval_model <- function(object, cost = TRUE, name = NULL,
 StateVals <- R6::R6Class("StateVals",
   public = list(
     #' @field params Parameters for simulating state values. Currently supports
-    #'  objects of class [tparams_mean] or [params_lm].   
+    #'  objects of class [`tparams_mean`] or [`params_lm`].   
     params = NULL,
     
     #' @field input_data  An object of class [input_mats]. Only used for
-    #' [params_lm] objects.
+    #' [`params_lm`] objects.
     input_data = NULL,
     
     #' @field method The method used to simulate costs and 
@@ -589,10 +589,10 @@ sim_los <- function (object, utility_model, dr,
 #' Simulate costs and quality-adjusted life-years (QALYs) as a function of
 #' simulated state occupancy probabilities. 
 #' 
-#' @param object A [stateprobs] object.
-#' @param utility_model A single object of class [StateVals] used
+#' @param object A [`stateprobs`] object.
+#' @param utility_model A single object of class [`StateVals`] used
 #' to simulate utility.
-#' @param cost_models A list of objects of class [StateVals] used
+#' @param cost_models A list of objects of class [`StateVals`] used
 #' to simulate costs.
 #' @param dr Discount rate. 
 #' @param integrate_method Method used to integrate state values when computing 
@@ -602,8 +602,8 @@ sim_los <- function (object, utility_model, dr,
 #' @param lys If `TRUE`, then life-years are simulated in addition to 
 #' QALYs. 
 #' @keywords internal
-#' @return [sim_costs()] and [sim_qalys()] return objects of class
-#' [costs] and [qalys], respectively. 
+#' @return [`sim_costs()`] and [`sim_qalys()`] return objects of class
+#' [`costs`] and [`qalys`], respectively. 
 #' @details 
 #' See `vignette("expected-values")` for details.
 #'

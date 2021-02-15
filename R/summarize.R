@@ -153,9 +153,9 @@ check_summarize <- function(x){
 #' 
 #' Summarize costs and quality-adjusted life-years (QALYs) given output simulated
 #' from an economic model. The summary output is used to perform 
-#' cost-effectiveness analysis with [cea()] and [cea_pw()].
-#' @param costs Simulated costs by category (objects of class [costs]). 
-#' @param qalys Simulated QALYs (objects of class [qalys]).
+#' cost-effectiveness analysis with [`cea()`] and [`cea_pw()`].
+#' @param costs Simulated costs by category (objects of class [`costs`]). 
+#' @param qalys Simulated QALYs (objects of class [`qalys`]).
 #' @param by_grp If `TRUE`, then costs and QALYs are computed by subgroup. If
 #' `FALSE`, then costs and QALYs are aggregated across all patients (and subgroups).
 #' @details If mean costs and/or QALYs have already been computed 
@@ -167,7 +167,7 @@ check_summarize <- function(x){
 #' averaged across patients. A `grp_id` column can also be used so that
 #' outcomes are computed for each subgroup (if `by_grp = TRUE`); otherwise it is assumed that 
 #' there is only one subgroup.
-#' @return An object of class [ce].
+#' @return An object of class [`ce`].
 summarize_ce <- function(costs, qalys, by_grp = FALSE) {
   patient_wt <- NULL
   by_cols <- c("dr", "sample", "strategy_id")

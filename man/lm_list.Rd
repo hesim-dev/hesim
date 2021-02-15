@@ -7,13 +7,13 @@
 lm_list(...)
 }
 \arguments{
-\item{...}{Objects of class \link[stats:lm]{lm}, which can be named.}
+\item{...}{Objects of class \code{\link[stats:lm]{lm}}, which can be named.}
 }
 \value{
 Returns an object of class \code{lm_list}.
 }
 \description{
-Combine \link[stats:lm]{lm} objects into a list
+Combine \code{\link[stats:lm]{lm}} objects into a list
 }
 \examples{
  dat <- psm4_exdata$costs$medical

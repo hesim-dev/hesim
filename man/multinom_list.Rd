@@ -7,7 +7,7 @@
 multinom_list(...)
 }
 \arguments{
-\item{...}{Objects of class \link[nnet:multinom]{multinom}, which can be named.}
+\item{...}{Objects of class \code{\link[nnet:multinom]{multinom}}, which can be named.}
 }
 \value{
 An object of class \code{multinom_list}.

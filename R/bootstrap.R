@@ -8,7 +8,7 @@
 #' @param max_errors Maximum number of errors that are allowed when fitting statistical models
 #' during the bootstrap procedure. This argument may be useful if, for instance, the model
 #' fails to converge during some bootstrap replications. Default is 0.
-#' @param silent Logical indicating whether error messages should be supressed. Passed to
+#' @param silent Logical indicating whether error messages should be suppressed. Passed to
 #' the `silent` argument of [`try()`].
 #' @param ... Further arguments passed to or from other methods. Currently unused.
 #' 

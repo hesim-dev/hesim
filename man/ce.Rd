@@ -6,8 +6,8 @@
 \format{
 A list containing two elements:
 \itemize{
-\item{costs}{ Total (discounted) costs by category.}
-\item{qalys}{ (Discounted) quality-adjusted life-years.}
+\item{\code{costs}}{ Total (discounted) costs by category.}
+\item{\code{qalys}}{ (Discounted) quality-adjusted life-years.}
 }
 }
 \description{
@@ -16,7 +16,7 @@ costs from a simulation model for use in a cost-effectiveness analysis.
 }
 \section{Costs}{
 
-The 'costs' \code{\link{data.table}} contains the following columns:
+The \code{costs} \code{data.table} contains the following columns:
 \describe{
 \item{category}{The cost category.}
 \item{dr}{The discount rate.}
@@ -30,7 +30,7 @@ assumed that a single subgroup is being analyzed.}
 
 \section{Quality-adjusted life-years}{
 
-The 'qalys' \code{\link{data.table}} contains the following columns:
+The \code{qalys} \code{data.table} contains the following columns:
 \describe{
 \item{dr}{The discount rate.}
 \item{sample}{A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)}
