@@ -10,7 +10,7 @@ params_surv_list(...)
 \item{...}{Objects of class \code{\link{params_surv}}, which can be named.}
 }
 \value{
-An object of class "params_surv_list", which is a list containing \code{params_surv}
+An object of class \code{params_surv_list}, which is a list containing \code{\link{params_surv}}
 objects.
 }
 \description{

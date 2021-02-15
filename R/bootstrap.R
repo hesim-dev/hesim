@@ -8,6 +8,8 @@
 #' @param max_errors Maximum number of errors that are allowed when fitting statistical models
 #' during the bootstrap procedure. This argument may be useful if, for instance, the model
 #' fails to converge during some bootstrap replications. Default is 0.
+#' @param silent Logical indicating whether error messages should be supressed. Passed to
+#' the `silent` argument of [`try()`].
 #' @param ... Further arguments passed to or from other methods. Currently unused.
 #' 
 #' @return Sampled values of the parameters.
@@ -18,7 +20,7 @@ bootstrap <- function (object, B, ...) {
 
 #' @name bootstrap
 #' @export
-bootstrap.partsurvfit <- function(object, B, max_errors = 0, ...){
+bootstrap.partsurvfit <- function(object, B, max_errors = 0, silent = FALSE, ...){
   n_obs <- nrow(object$data)
   n_models <- length(object$models)
   boot <- vector(mode = "list", length = n_models)
@@ -41,7 +43,7 @@ bootstrap.partsurvfit <- function(object, B, max_errors = 0, ...){
                     #formula = object$models[[j]]$all.formulae[[1]], 
                     # anc = object$models[[j]]$all.formulae[-1], but don't think should be needed
                     data = data_i),
-                 silent = FALSE)
+                 silent = silent)
       if(inherits(fit ,"try-error")){
         n_errors <- n_errors + 1
         error_j <- error_j + 1
@@ -76,6 +78,7 @@ bootstrap.partsurvfit <- function(object, B, max_errors = 0, ...){
     names(coefs[[j]]) <- c(object$models[[j]]$dlist$pars)
     for (k in 1:n_pars){
       coefs[[j]][[k]] <- boot[[j]][, inds_j[[k]], drop = FALSE]
+      colnames(coefs[[j]][[k]])[1] <- "(Intercept)"
     }
     params_surv_list[[j]] <- new_params_surv(coefs = coefs[[j]],
                                              dist = object$models[[j]]$dlist$name,

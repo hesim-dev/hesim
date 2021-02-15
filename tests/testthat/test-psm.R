@@ -50,20 +50,23 @@ fits_weinma <- flexsurvreg_list(fits_weinma)
 fits_spline <- flexsurvreg_list(fits_spline)
 fits_ggamma <- flexsurvreg_list(fits_ggamma)
 
-test_that("create_PsmCurves", {
-  # From fitted model
+test_that("create_PsmCurves() produces expected output", {
   psm_curves <- create_PsmCurves(fits_wei, input_data = surv_input_data, n = N,
                                  uncertainty = "bootstrap", est_data = surv_est_data)
   expect_true(inherits(psm_curves, "PsmCurves"))
   expect_true(inherits(psm_curves$params, "params_surv_list"))
   expect_equal(as.numeric(psm_curves$input_data$X[[1]]$scale[, "age"]), 
               surv_input_data$age)
-  
-  ## errors
-  expect_error(create_PsmCurves(3, input_data = surv_input_data, n = N,
-                                uncertainty = "normal"))
-  expect_error(create_PsmCurves(fits_wei, input_data = surv_input_data, n = N,
-                                uncertainty = "bootstrap"))
+  expect_equal(colnames(psm_curves$params$curves1$coefs$shape)[1],
+               "(Intercept)")
+})
+
+test_that("create_PsmCurves() returns errors when expected", {
+  expect_error(
+    create_PsmCurves(fits_wei, input_data = surv_input_data, n = N,
+                    uncertainty = "bootstrap"),
+    "If uncertainty == 'bootstrap', then est_data cannot be NULL"
+  )
 })
 
 test_that("PsmCurves are correct", {
