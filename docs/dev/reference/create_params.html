@@ -202,7 +202,6 @@ then random samples from suitable probability distributions are returned.</p>
   <span class='va'>object</span>,
   n <span class='op'>=</span> <span class='fl'>1000</span>,
   uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"bootstrap"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
-  max_errors <span class='op'>=</span> <span class='fl'>0</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -215,7 +214,9 @@ then random samples from suitable probability distributions are returned.</p>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
+      <td><p>Further arguments passed to or from other methods. Only used when
+<code>object</code> is of class <code>partsurvfit</code>, in which case the arguments are passed
+to <code><a href='bootstrap.html'>bootstrap.partsurvfit()</a></code>.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -227,10 +228,6 @@ then random samples from suitable probability distributions are returned.</p>
 If <code>"normal"</code>, then parameters are randomly drawn from their multivariate normal
 distribution. If <code>"bootstrap</code>, then parameters are bootstrapped using <code><a href='bootstrap.html'>bootstrap</a></code>.
 If <code>"none</code>, then only point estimates are returned.</p></td>
-    </tr>
-    <tr>
-      <th>max_errors</th>
-      <td><p>Equivalent to the <code>max_errors</code> argument in <a href='bootstrap.html'>bootstrap</a>.</p></td>
     </tr>
     </table>
 
