@@ -123,7 +123,7 @@ and output for a cost-effectiveness acceptability curve.
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -145,14 +145,14 @@ and output for a cost-effectiveness acceptability curve.
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -198,31 +198,31 @@ and output for a cost-effectiveness acceptability curve.</p></li>
 
     </div>
 
-    <pre class="usage"><span class='fu'>cea</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>cea</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>cea_pw</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>cea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>sample</span>, <span class='no'>strategy</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>e</span>, <span class='no'>c</span>, <span class='no'>...</span>)
+<span class='fu'>cea_pw</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>cea_pw</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>),
-  <span class='no'>comparator</span>,
-  <span class='no'>sample</span>,
-  <span class='no'>strategy</span>,
-  <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>e</span>,
-  <span class='no'>c</span>,
-  <span class='no'>...</span>
-)
+<span class='fu'>cea</span><span class='op'>(</span><span class='va'>x</span>, k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span><span class='op'>)</span>, <span class='va'>sample</span>, <span class='va'>strategy</span>, grp <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>e</span>, <span class='va'>c</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>cea_pw</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span><span class='op'>)</span>,
+  <span class='va'>comparator</span>,
+  <span class='va'>sample</span>,
+  <span class='va'>strategy</span>,
+  grp <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>e</span>,
+  <span class='va'>c</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for ce</span>
-<span class='fu'>cea</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>dr_qalys</span>, <span class='no'>dr_costs</span>, <span class='no'>...</span>)
+<span class='fu'>cea</span><span class='op'>(</span><span class='va'>x</span>, k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span><span class='op'>)</span>, <span class='va'>dr_qalys</span>, <span class='va'>dr_costs</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for ce</span>
-<span class='fu'>cea_pw</span>(<span class='no'>x</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span>), <span class='no'>comparator</span>, <span class='no'>dr_qalys</span>, <span class='no'>dr_costs</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>cea_pw</span><span class='op'>(</span><span class='va'>x</span>, k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2e+05</span>, <span class='fl'>500</span><span class='op'>)</span>, <span class='va'>comparator</span>, <span class='va'>dr_qalys</span>, <span class='va'>dr_costs</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -281,7 +281,7 @@ it is assumed that there is only one group.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>cea()</code> returns a list of four <code>data.table</code> elements.</p>
-<dl'>
+<dl>
 <dt>summary</dt><dd><p>A <code>data.table</code> of the mean, 2.5% quantile, and 97.5%
 quantile by strategy and group for clinical effectiveness and costs.</p></dd>
 <dt>mce</dt><dd><p>The probability that each strategy is the most effective treatment
@@ -299,7 +299,7 @@ for the range of specified willingness to pay values.</p></dd>
 
 </dl>
 
-<p><code>cea_pw</code> also returns a list of four <code>data.table</code> elements:</p><dl'>
+<p><code>cea_pw</code> also returns a list of four <code>data.table</code> elements:</p><dl>
 <dt>summary</dt><dd><p>A data.table of the mean, 2.5% quantile, and 97.5%
 quantile by strategy and group for incremental clinical effectiveness and costs.</p></dd>
 <dt>delta</dt><dd><p>Incremental effectiveness and incremental cost for each simulated
@@ -314,62 +314,72 @@ incremental net monetary benefits for the range of specified willingness to pay 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"data.table"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"ggplot2"</span>)
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme_get.html'>theme_set</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span>())
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://Rdatatable.gitlab.io/data.table'>"data.table"</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme_get.html'>theme_set</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># Simulation output</span>
-<span class='no'>n_samples</span> <span class='kw'>&lt;-</span> <span class='fl'>50</span>
-<span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='no'>n_samples</span>), <span class='fl'>4</span>),
-                  <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>),
-                        <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>)),
-                  <span class='kw'>e</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>8</span>, <span class='fl'>.2</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span>),
-                        <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.6</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span>)),
-                  <span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n_samples</span> * <span class='fl'>2</span>),
-                  <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n_samples</span>), <span class='fl'>2</span>)
-)
+<span class='va'>n_samples</span> <span class='op'>&lt;-</span> <span class='fl'>50</span>
+<span class='va'>sim</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>sample <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='va'>n_samples</span><span class='op'>)</span>, <span class='fl'>4</span><span class='op'>)</span>,
+                  c <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span><span class='op'>)</span>,
+                        <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span>,
+                  e <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>8</span>, <span class='fl'>.2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span><span class='op'>)</span>,
+                        <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.6</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span>,
+                  strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each <span class='op'>=</span> <span class='va'>n_samples</span> <span class='op'>*</span> <span class='fl'>2</span><span class='op'>)</span>,
+                  grp_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each <span class='op'>=</span> <span class='va'>n_samples</span><span class='op'>)</span>, <span class='fl'>2</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># Cost-effectiveness analysis</span>
-<span class='no'>cea_out</span> <span class='kw'>&lt;-</span> <span class='fu'>cea</span>(<span class='no'>sim</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>,
-               <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy_id"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp_id"</span>,
-               <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>cea_out</span>)</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'>
+<span class='va'>cea_out</span> <span class='op'>&lt;-</span> <span class='fu'>cea</span><span class='op'>(</span><span class='va'>sim</span>, k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span><span class='op'>)</span>, sample <span class='op'>=</span> <span class='st'>"sample"</span>, 
+               strategy <span class='op'>=</span> <span class='st'>"strategy_id"</span>, grp <span class='op'>=</span> <span class='st'>"grp_id"</span>, 
+               e <span class='op'>=</span> <span class='st'>"e"</span>, c <span class='op'>=</span> <span class='st'>"c"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>cea_out</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "summary" "mce"     "evpi"    "nmb"    </div><div class='input'>
 <span class='co'>## Some sample output</span>
 <span class='co'>## The probability that each strategy is the most cost-effective </span>
 <span class='co'>## in each group with a willingness to pay of 20,000</span>
-<span class='no'>cea_out</span>$<span class='no'>mce</span>[<span class='no'>k</span> <span class='kw'>==</span> <span class='fl'>20000</span>]</div><div class='output co'>#&gt;        k strategy_id grp_id best prob
+<span class='va'>cea_out</span><span class='op'>$</span><span class='va'>mce</span><span class='op'>[</span><span class='va'>k</span> <span class='op'>==</span> <span class='fl'>20000</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;        k strategy_id grp_id best prob
 #&gt; 1: 20000           1      1    0 0.46
 #&gt; 2: 20000           2      1    1 0.54
 #&gt; 3: 20000           1      2    0 0.46
 #&gt; 4: 20000           2      2    1 0.54</div><div class='input'>
 <span class='co'># Pairwise cost-effectiveness analysis</span>
-<span class='no'>cea_pw_out</span> <span class='kw'>&lt;-</span>  <span class='fu'>cea_pw</span>(<span class='no'>sim</span>,  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span>), <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-                      <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>, <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy_id"</span>,
-                      <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp_id"</span>, <span class='kw'>e</span> <span class='kw'>=</span> <span class='st'>"e"</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='st'>"c"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>cea_pw_out</span>)</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'>
+<span class='va'>cea_pw_out</span> <span class='op'>&lt;-</span>  <span class='fu'>cea_pw</span><span class='op'>(</span><span class='va'>sim</span>,  k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span><span class='op'>)</span>, comparator <span class='op'>=</span> <span class='fl'>1</span>,
+                      sample <span class='op'>=</span> <span class='st'>"sample"</span>, strategy <span class='op'>=</span> <span class='st'>"strategy_id"</span>, 
+                      grp <span class='op'>=</span> <span class='st'>"grp_id"</span>, e <span class='op'>=</span> <span class='st'>"e"</span>, c <span class='op'>=</span> <span class='st'>"c"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>cea_pw_out</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "summary" "delta"   "ceac"    "inmb"   </div><div class='input'>
 <span class='co'>## Some sample output</span>
 <span class='co'>## The cost-effectiveness acceptability curve</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>cea_pw_out</span>$<span class='no'>ceac</span>[<span class='no'>k</span> <span class='kw'>&gt;=</span> <span class='fl'>20000</span>])</div><div class='output co'>#&gt;        k strategy_id grp_id prob
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>cea_pw_out</span><span class='op'>$</span><span class='va'>ceac</span><span class='op'>[</span><span class='va'>k</span> <span class='op'>&gt;=</span> <span class='fl'>20000</span><span class='op'>]</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        k strategy_id grp_id prob
 #&gt; 1: 20000           2      1 0.54
 #&gt; 2: 20000           2      2 0.54
-#&gt; 3: 20500           2      1 0.64
+#&gt; 3: 20500           2      1 0.60
 #&gt; 4: 20500           2      2 0.58
-#&gt; 5: 21000           2      1 0.66
-#&gt; 6: 21000           2      2 0.60</div><div class='input'>
+#&gt; 5: 21000           2      1 0.72
+#&gt; 6: 21000           2      2 0.64</div><div class='input'>
 <span class='co'># Summarize the incremental cost-effectiveness ratio</span>
-<span class='no'>labs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Strategy 1"</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='st'>"Strategy 2"</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-             <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Group 1"</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='st'>"Group 2"</span> <span class='kw'>=</span> <span class='fl'>2</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='icer.html'>icer</a></span>(<span class='no'>cea_pw_out</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>labs</span>))</div><div class='output co'>#&gt;      Group           Outcome               Strategy 2
-#&gt; 1: Group 1 Incremental QALYs        3.12 (1.88, 4.44)
-#&gt; 2: Group 1 Incremental costs  60,154 (50,646, 72,998)
-#&gt; 3: Group 1   Incremental NMB 95,903 (32,092, 162,427)
-#&gt; 4: Group 1              ICER                   19,273
-#&gt; 5: Group 2 Incremental QALYs        3.12 (2.33, 4.19)
-#&gt; 6: Group 2 Incremental costs  61,297 (50,051, 74,181)
-#&gt; 7: Group 2   Incremental NMB 94,742 (52,432, 154,008)
-#&gt; 8: Group 2              ICER                   19,642</div><div class='input'>
+<span class='va'>labs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Strategy 1"</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='st'>"Strategy 2"</span> <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+             grp_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Group 1"</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='st'>"Group 2"</span> <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='icer.html'>icer</a></span><span class='op'>(</span><span class='va'>cea_pw_out</span>, labels <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      Group           Outcome               Strategy 2
+#&gt; 1: Group 1 Incremental QALYs        3.19 (2.46, 4.38)
+#&gt; 2: Group 1 Incremental costs  59,875 (48,318, 71,817)
+#&gt; 3: Group 1   Incremental NMB 99,563 (58,367, 160,369)
+#&gt; 4: Group 1              ICER                   18,777
+#&gt; 5: Group 2 Incremental QALYs        3.06 (1.68, 4.41)
+#&gt; 6: Group 2 Incremental costs  60,864 (48,876, 70,371)
+#&gt; 7: Group 2   Incremental NMB 92,325 (28,965, 159,499)
+#&gt; 8: Group 2              ICER                   19,866</div><div class='input'>
 <span class='co'># Plots</span>
-<span class='fu'><a href='plot_ceplane.html'>plot_ceplane</a></span>(<span class='no'>cea_pw_out</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>labs</span>)</div><div class='img'><img src='cea-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot_ceac.html'>plot_ceac</a></span>(<span class='no'>cea_out</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>labs</span>)</div><div class='img'><img src='cea-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot_ceac.html'>plot_ceac</a></span>(<span class='no'>cea_pw_out</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>labs</span>)</div><div class='img'><img src='cea-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot_ceaf.html'>plot_ceaf</a></span>(<span class='no'>cea_out</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>labs</span>)</div><div class='img'><img src='cea-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot_evpi.html'>plot_evpi</a></span>(<span class='no'>cea_out</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>labs</span>)</div><div class='img'><img src='cea-5.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'><a href='plot_ceplane.html'>plot_ceplane</a></span><span class='op'>(</span><span class='va'>cea_pw_out</span>, label <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span>
+</div><div class='img'><img src='cea-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot_ceac.html'>plot_ceac</a></span><span class='op'>(</span><span class='va'>cea_out</span>, label <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span>
+</div><div class='img'><img src='cea-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot_ceac.html'>plot_ceac</a></span><span class='op'>(</span><span class='va'>cea_pw_out</span>, label <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span>
+</div><div class='img'><img src='cea-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot_ceaf.html'>plot_ceaf</a></span><span class='op'>(</span><span class='va'>cea_out</span>, label <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span>
+</div><div class='img'><img src='cea-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot_evpi.html'>plot_evpi</a></span><span class='op'>(</span><span class='va'>cea_out</span>, label <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span>
+</div><div class='img'><img src='cea-5.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -385,7 +395,7 @@ incremental net monetary benefits for the range of specified willingness to pay 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

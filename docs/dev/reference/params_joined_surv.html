@@ -113,7 +113,7 @@ joined for more details." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ joined for more details." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,7 +178,7 @@ joined for more details." />
 <code><a href='joined.html'>joined</a></code> for more details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>params_joined_surv</span>(<span class='no'>...</span>, <span class='no'>times</span>)</pre>
+    <pre class="usage"><span class='fu'>params_joined_surv</span><span class='op'>(</span><span class='va'>...</span>, <span class='va'>times</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,7 +195,7 @@ joined for more details." />
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class "params_joined_surv", which is a list containing two elements:</p><dl'>
+    <p>An object of class "params_joined_surv", which is a list containing two elements:</p><dl>
 <dt>models</dt><dd><p>A list of <code><a href='params_surv.html'>params_surv</a></code> objects from each statistical model
 to be joined.</p></dd>
 <dt>times</dt><dd><p>Equivalent to the argument <code>times</code>.</p></dd>
@@ -204,23 +204,24 @@ to be joined.</p></dd>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"flexsurv"</span>)
-<span class='no'>fit_exp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
-                                 <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
-<span class='no'>fit_wei</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>,
-                                 <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
-<span class='no'>params_surv_exp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span>(<span class='no'>fit_exp</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>params_surv_wei</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span>(<span class='no'>fit_wei</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>params_joined_surv</span> <span class='kw'>&lt;-</span> <span class='fu'>params_joined_surv</span>(<span class='kw'>exp</span> <span class='kw'>=</span> <span class='no'>params_surv_exp</span>,
-                                         <span class='kw'>wei</span> <span class='kw'>=</span> <span class='no'>params_surv_wei</span>,
-                                         <span class='kw'>times</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>params_joined_surv</span>)</div><div class='output co'>#&gt; $models
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
+<span class='va'>fit_exp</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span>formula <span class='op'>=</span> <span class='fu'>Surv</span><span class='op'>(</span><span class='va'>futime</span>, <span class='va'>fustat</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, 
+                                 data <span class='op'>=</span> <span class='va'>ovarian</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
+<span class='va'>fit_wei</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span>formula <span class='op'>=</span> <span class='fu'>Surv</span><span class='op'>(</span><span class='va'>futime</span>, <span class='va'>fustat</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, 
+                                 data <span class='op'>=</span> <span class='va'>ovarian</span>, dist <span class='op'>=</span> <span class='st'>"weibull"</span><span class='op'>)</span>
+<span class='va'>params_surv_exp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span><span class='op'>(</span><span class='va'>fit_exp</span>, n <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>params_surv_wei</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span><span class='op'>(</span><span class='va'>fit_wei</span>, n <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>params_joined_surv</span> <span class='op'>&lt;-</span> <span class='fu'>params_joined_surv</span><span class='op'>(</span>exp <span class='op'>=</span> <span class='va'>params_surv_exp</span>,
+                                         wei <span class='op'>=</span> <span class='va'>params_surv_wei</span>,
+                                         times <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>params_joined_surv</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $models
 #&gt; $models$exp
 #&gt; $coefs
 #&gt; $coefs$rate
 #&gt;      (Intercept)
-#&gt; [1,]   -6.984374
-#&gt; [2,]   -7.368892
+#&gt; [1,]   -7.124122
+#&gt; [2,]   -7.395794
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -236,13 +237,13 @@ to be joined.</p></dd>
 #&gt; $coefs
 #&gt; $coefs$shape
 #&gt;      (Intercept)
-#&gt; [1,]   0.8209848
-#&gt; [2,]  -0.1916458
+#&gt; [1,]   0.2536513
+#&gt; [2,]   0.1176896
 #&gt; 
 #&gt; $coefs$scale
 #&gt;      (Intercept)
-#&gt; [1,]    6.490813
-#&gt; [2,]    7.157220
+#&gt; [1,]    6.843826
+#&gt; [2,]    7.456814
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -275,7 +276,7 @@ to be joined.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

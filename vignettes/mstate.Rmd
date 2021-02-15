@@ -14,16 +14,20 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
+```{r, include = FALSE}
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
 # Overview
 The [time inhomogeneous Markov individual-level](markov-inhomogeneous-indiv.html) modeling vignette shows how to simulate a continuous times state transition model (CTSTM) and perform a cost-effectiveness analysis (CEA). The model was parameterized using a variety of disparate data sources and parameter estimates. However, in an ideal scenario, a CTSTM can be fully parameterized by estimating a single statistical model. In this example, we demonstrate by fitting a multi-state model---a generalization of a survival model with more than two states---using patient-level data.
 
 # An example 3-state model
-The reversible illness-death model is a commonly used state transition model (see figure below) with 3 health states and 4 transitions. In this example, we will use 3 generic health states: (1) Healthy, (2) Sick, and (3) Dead. The following 4 transitions are possible.
+The reversible illness-death model is a commonly used state transition model (see figure below) with 3 health states and 4 transitions. In this example, we will use 3 generic health states: (1) Healthy, (2) Sick, and (3) Death. The following 4 transitions are possible.
 
 1. Healthy to Sick
 2. Sick to Healthy
-3. Healthy to Dead
-4. Sick to Dead
+3. Healthy to Death
+4. Sick to Death
 
 <br>
 ```{r, out.width = "500px", echo = FALSE}
@@ -38,30 +42,42 @@ In general, the transitions of a multi-state model can be characterized with an 
 tmat <- rbind(c(NA, 1, 2),
               c(3, NA, 4),
               c(NA, NA, NA))
-colnames(tmat) <- rownames(tmat) <- c("Healthy", "Sick", "Dead")
+colnames(tmat) <- rownames(tmat) <- c("Healthy", "Sick", "Death")
 print(tmat)
 ```
 
-In a cost-effectiveness analysis, the treatments strategies of interest and characteristics of the target population must be specified in addition to the selected model structure. We will consider a simple case with two treatment strategies and a heterogeneous population of 1000 patients who differ by age and gender. The model contains 3 health states (2 of which are non-death states). 
+In a cost-effectiveness analysis, the treatments strategies of interest and characteristics of the target population must be specified in addition to the selected model structure. We will consider a simple case with two treatment strategies (the standard of care (SOC) and a new intervention) and a heterogeneous population of 1000 patients who differ by age and sex. The model contains 3 health states (2 of which are non-death states). 
 
 ```{r, warning = FALSE, message = FALSE}
 library("hesim")
 library("data.table")
-strategies <- data.table(strategy_id = c(1, 2))
+strategies <- data.table(strategy_id = c(1, 2),
+                         strategy_name = c("SOC", "New"))
 n_patients <- 1000
 patients <- data.table(patient_id = 1:n_patients,
                        age = rnorm(n_patients, mean = 45, sd = 7),
                        female = rbinom(n_patients, size = 1, prob = .51))
 states <- data.table(state_id = c(1, 2),
-                     state_name = c("Healthy", "Sick")) # Non-death health states
+                     state_name = rownames(tmat)[1:2]) # Non-death health states
 hesim_dat <- hesim_data(strategies = strategies,
                         patients = patients, 
                         states = states)
 ```
 
+We will create nice labels for the plots and summary tables.
+
+```{r}
+labs <- get_labels(hesim_dat)
+labs$transition_id <- c("Healthy-> Sick" = 1, 
+                        "Healthy -> Death" = 2,
+                        "Sick -> Healthy" = 3,
+                        "Sick -> Death" = 4)
+print(labs)
+```
+
 # Parameter estimation
 ## Multi-state model
-CTSTMs can be parameterized by fitting statistical models in `R` or by storing the parameters from a model fit outside `R` as described in the [introduction](intro.html#disease-progression) to `hesim`. Either a single joint model can be estimated encompassing all transitions or separate models can be estimated for each possible transition. In the [introduction](intro.html#disease-progression) we considered a joint model; here, we will fit separate models. A number of parametric and flexibly parametric approaches are available (as described more detail in the `params_surv()` documentation), but we will illustrate with a generalized gamma model.
+CTSTMs can be parameterized by fitting statistical models in `R` or by storing the parameters from a model fit outside `R` as described in the [introduction](intro.html#disease-progression) to `hesim`. Either a single joint model can be estimated encompassing all transitions or separate models can be estimated for each possible transition. In the [introduction](intro.html#disease-progression) we considered a joint model; here, we will fit separate models. A number of parametric and flexibly parametric approaches are available (as described more detail in the `params_surv()` documentation), but we will illustrate with a Weibull model.
 
 We will begin by fitting a "clock reset" model using `flexsurvreg()`. 
 
@@ -172,19 +188,15 @@ We then plot the predicted hazard by treatment strategy and timescale.
 library("ggplot2")
 haz <- rbind(predict_haz(wei_fits_cr, "reset"),
              predict_haz(wei_fits_cf, "forward"))
-haz[, trans_name := factor(trans,
-                           levels = 1:4,
-                           labels = c("Healthy-> Sick", 
-                                      "Healthy -> Dead",
-                                      "Sick -> Healthy",
-                                      "Sick -> Dead"))]
+set_labels(haz, labels = labs, 
+           new_names = c("strategy_name", "trans_name"))
 ggplot(haz[t > 0], 
-       aes(x = t, y = hazard, col = clock, linetype = factor(strategy_id))) + 
+       aes(x = t, y = hazard, col = clock, linetype = strategy_name)) + 
   geom_line() + 
   facet_wrap(~trans_name) +
   xlab("Years") + ylab("Hazard") +
   scale_linetype_discrete(name = "Strategy") +
-  scale_color_discrete(name = "Clock") + theme_bw()
+  scale_color_discrete(name = "Clock") 
 ```
 
 While the hazards from the healthy state are similar between the "clock forward" and "clock reset" approaches, they differ significantly in the sick state. Treatment effects (i.e., the hazard ratios between treatment strategies 1 and 2) are also largest in the sick state. 
@@ -239,28 +251,20 @@ econmod_cr$sim_stateprobs(t = seq(0, 20 , 1/12))
 We can then compare state probabilities between the competing treatment strategies. 
 
 ```{r stprobs_by_strategy_plot, fig.width = 7, fig.height = 4}
-# Short funtion add create state name variable to data.tabale
-add_state_name <- function(x){
-  x[, state_name := factor(state_id,
-                           levels = 1:nrow(tmat),
-                           labels = colnames(tmat))] 
-}
-
 # Short function to create state probability "dataset" for plotting
 summarize_stprobs <- function(stateprobs){
   x <- stateprobs[, .(prob_mean = mean(prob)),
                   by = c("strategy_id", "state_id", "t")]
-  add_state_name(x)
+  set_labels(x, labels = labs, new_names = c("strategy_name", "state_name"))
 }
 
 # Plot of state probabilities
 stprobs_cr <- summarize_stprobs(econmod_cr$stateprobs_)
-ggplot(stprobs_cr, aes(x = t, y = prob_mean, col = factor(strategy_id))) +
+ggplot(stprobs_cr, aes(x = t, y = prob_mean, col = strategy_name)) +
   geom_line() + facet_wrap(~state_name) + 
   xlab("Years") + ylab("Probability in health state") +
   scale_color_discrete(name = "Strategy") +
-  theme(legend.position = "bottom") +
-  theme_bw()
+  theme(legend.position = "bottom") 
 ```
 
 Next, we compare the state probabilities from the "clock reset" and "clock forward" models. 
@@ -277,35 +281,33 @@ ggplot(stprobs[strategy_id == 1],
   geom_line() + facet_wrap(~state_name) + 
   xlab("Years") + ylab("Probability in health state") +
   scale_color_discrete(name = "Clock") +
-  theme(legend.position = "bottom") +
-  theme_bw()
+  theme(legend.position = "bottom") 
 ```
 
 The probabilities are generally quite similar, implying that the choice of timescale has a small impact on the results. This is not unexpected given that patients spend considerably more time in the healthy state and the predicted hazard rates are very similar in the healthy state.   
 
-### QALYs
-QALYs (and life-years) are simulated using `$sim_qalys()`. By default, mean QALYs are computed by treatment strategy, health state, and PSA sample (the `by_patient` option can be used to compute aggregated QALYs at the patient level). Here, we used the "clock reset" model to compute both undiscounted QALYs (`dr = 0`) and QALYs discounted at 3%.
+### Costs and QALYs
+QALYs (and life-years) are simulated using `$sim_qalys()`. By default, mean QALYs are computed by treatment strategy, health state, and PSA sample (the `by_patient` option can be used to compute QALYs at the patient level). Here, we used the "clock reset" model to compute both undiscounted QALYs (`dr = 0`) and QALYs discounted at 3%.
 
 ```{r}
 econmod_cr$sim_qalys(dr = c(0,.03))
 head(econmod_cr$qalys_)
 ```
 
-We summarize the simulated QALYs by computing means by treatment strategy and health state across the PSA samples.
+Let's compute means (across the PSA samples) by treatment strategy and health state to see how much each health state contributes to total QALYs.
 
 ```{r qalys_plot, fig.width = 6, fig.height = 4}
 qalys_summary <- econmod_cr$qalys_[, .(mean = mean(qalys)),
                                     by = c("strategy_id", "state_id", "dr")]
-add_state_name(qalys_summary)
+set_labels(qalys_summary, labels = labs,
+           new_names = c("strategy_name", "state_name"))
 ggplot(qalys_summary[dr == .03],
-       aes(x = factor(strategy_id), y = mean, fill = state_name)) + 
+       aes(x = strategy_name, y = mean, fill = state_name)) + 
   geom_bar(stat = "identity") +
   scale_fill_discrete(name = "") +
-  xlab("Strategy") + ylab("Mean QALYs") +
-  theme_bw()
+  xlab("Strategy") + ylab("Mean QALYs") 
 ```
 
-### Costs
 Costs are computed in the same way as QALYs, except that they are computed by category. We use the "clock reset" model and a 3% discount rate. 
 
 ```{r}
@@ -313,26 +315,12 @@ econmod_cr$sim_costs(dr = 0.03)
 head(econmod_cr$costs_)
 ```
 
-As with QALYs, we summarize costs by computing means (now by treatment strategy and category) across the PSA samples.
-
-```{r costs_plot, fig.width = 6, fig.height = 4}
-library("scales")
-costs_summary <- econmod_cr$costs_[dr == .03 , .(mean = mean(costs)),
-                                   by = c("strategy_id", "category")]
-ggplot(costs_summary,
-       aes(x = factor(strategy_id), y = mean, fill = category)) + 
-  geom_bar(stat = "identity") +
-  scale_fill_discrete(name = "Category") +
-  scale_y_continuous(label = scales::dollar_format()) +
-  xlab("Strategy") + ylab("Mean costs") +
-  theme_bw()
-```
-
 # Decision analysis
-Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The `$summarize()` method creates a `hesim::ce` object with mean costs and QALYs computed for each PSA sample. The `cea()` and `cea_pw()` can then be used for cost-effectiveness analysis as described in the [cost-effectiveness analysis](cea.html) vignette.
+Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The `$summarize()` method creates a `hesim::ce` object with mean costs and QALYs computed for each PSA sample and summary results are produced with `summary.ce()`. The `cea()` and `cea_pw()` can then be used for cost-effectiveness analysis as described in the [cost-effectiveness analysis](cea.html) vignette.
 
 ```{r}
 ce_sim <- econmod_cr$summarize()
+format(summary(ce_sim, labels = labs))
 cea_out <- cea(ce_sim, dr_qalys = .03, dr_costs = .03)
 cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = .03, dr_costs = .03)
 ```

@@ -112,7 +112,7 @@
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -134,14 +134,14 @@
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -176,7 +176,7 @@
     <p>Create a list containing the parameters of a list of fitted linear regression models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>params_lm_list</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>params_lm_list</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,24 +193,25 @@
 objects.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span>
-<span class='no'>coefs1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>MASS</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.6</span>),
-                        <span class='kw'>Sigma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.01</span>, <span class='fl'>.01</span>, <span class='fl'>.05</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>))
-<span class='no'>sigma1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span>(<span class='no'>n</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>)
-<span class='no'>params1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='params_lm.html'>params_lm</a></span>(<span class='kw'>coefs</span> <span class='kw'>=</span> <span class='no'>coefs1</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>sigma1</span>)
-<span class='no'>coefs2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>MASS</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.2</span>,<span class='fl'>.9</span>),
-                        <span class='kw'>Sigma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.08</span>, <span class='fl'>.02</span>, <span class='fl'>.02</span>, <span class='fl'>.08</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>))
-<span class='no'>sigma2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span>(<span class='no'>n</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>.9</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>4</span>)
-<span class='no'>params2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='params_lm.html'>params_lm</a></span>(<span class='kw'>coefs</span> <span class='kw'>=</span> <span class='no'>coefs2</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>sigma2</span>)
-<span class='no'>params_list</span> <span class='kw'>&lt;-</span> <span class='fu'>params_lm_list</span>(<span class='no'>params1</span>, <span class='no'>params2</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>params_list</span>)</div><div class='output co'>#&gt; [[1]]
+    <pre class="examples"><div class='input'><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
+<span class='va'>coefs1</span> <span class='op'>&lt;-</span> <span class='fu'>MASS</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span><span class='va'>n</span>, mu <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>,<span class='fl'>.6</span><span class='op'>)</span>,
+                        Sigma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.05</span>, <span class='fl'>.01</span>, <span class='fl'>.01</span>, <span class='fl'>.05</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>sigma1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span><span class='op'>(</span><span class='va'>n</span>, shape <span class='op'>=</span> <span class='fl'>.5</span>, rate <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+<span class='va'>params1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='params_lm.html'>params_lm</a></span><span class='op'>(</span>coefs <span class='op'>=</span> <span class='va'>coefs1</span>, sigma <span class='op'>=</span> <span class='va'>sigma1</span><span class='op'>)</span>
+<span class='va'>coefs2</span> <span class='op'>&lt;-</span> <span class='fu'>MASS</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span><span class='va'>n</span>, mu <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>,<span class='fl'>.9</span><span class='op'>)</span>,
+                        Sigma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.08</span>, <span class='fl'>.02</span>, <span class='fl'>.02</span>, <span class='fl'>.08</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>sigma2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span><span class='op'>(</span><span class='va'>n</span>, shape <span class='op'>=</span> <span class='fl'>.9</span>, rate <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+<span class='va'>params2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='params_lm.html'>params_lm</a></span><span class='op'>(</span>coefs <span class='op'>=</span> <span class='va'>coefs2</span>, sigma <span class='op'>=</span> <span class='va'>sigma2</span><span class='op'>)</span>
+<span class='va'>params_list</span> <span class='op'>&lt;-</span> <span class='fu'>params_lm_list</span><span class='op'>(</span><span class='va'>params1</span>, <span class='va'>params2</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>params_list</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; $coefs
-#&gt;           [,1]      [,2]
-#&gt; [1,] 0.4153812 0.6604186
-#&gt; [2,] 0.3423313 0.3783014
+#&gt;          [,1]      [,2]
+#&gt; [1,] 0.788506 0.8200087
+#&gt; [2,] 0.612013 0.3985392
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.3269495 0.1171409
+#&gt; [1] 0.1264108 0.3227701
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2
@@ -220,12 +221,12 @@ objects.</p>
 #&gt; 
 #&gt; [[2]]
 #&gt; $coefs
-#&gt;           [,1]      [,2]
-#&gt; [1,] 0.3228966 1.0983281
-#&gt; [2,] 0.2268974 0.8609463
+#&gt;             [,1]      [,2]
+#&gt; [1,]  0.21115003 0.8474120
+#&gt; [2,] -0.03286654 0.5031324
 #&gt; 
 #&gt; $sigma
-#&gt; [1] 0.07660208 0.34298088
+#&gt; [1] 0.3613655 0.2341328
 #&gt; 
 #&gt; $n_samples
 #&gt; [1] 2
@@ -250,7 +251,7 @@ objects.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

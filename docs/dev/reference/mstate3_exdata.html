@@ -114,7 +114,7 @@ are also included to facilitate cost-effectiveness analysis." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -136,14 +136,14 @@ are also included to facilitate cost-effectiveness analysis." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -180,14 +180,14 @@ transition model. Costs and utility
 are also included to facilitate cost-effectiveness analysis.</p>
     </div>
 
-    <pre class="usage"><span class='no'>mstate3_exdata</span></pre>
+    <pre class="usage"><span class='va'>mstate3_exdata</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A list containing the following elements:</p><ul>
 <li><p>transitions A data frame containing the times at which patient transitions between health states based
-on the <a href='https://rdrr.io/pkg/mstate/man/prothr.html'>prothr</a> dataset from the <a href='https://rdrr.io/pkg/mstate/man/mstate-package.html'>mstate</a> package.</p></li>
+on the <a href='https://rdrr.io/pkg/mstate/man/Liver-cirrhosis-data.html'>prothr</a> dataset from the <a href='https://rdrr.io/pkg/mstate/man/mstate-package.html'>mstate</a> package.</p></li>
 <li><p>costs A list of data frames. The first data frame contains summary medical cost estimates and the
 second data frame contains drug cost data.</p></li>
 <li><p>utility A data frame of summary utility estimates.</p></li>
@@ -197,7 +197,7 @@ second data frame contains drug cost data.</p></li>
 
     
 
-<p>The data frame has the following columns:</p><dl'>
+<p>The data frame has the following columns:</p><dl>
 <dt>strategy_id</dt><dd><p>Treatment strategy identification number.</p></dd>
 <dt>patient_id</dt><dd><p>Patient identification number.</p></dd>
 <dt>age</dt><dd><p>Patient age (in years).</p></dd>
@@ -217,14 +217,14 @@ second data frame contains drug cost data.</p></li>
     
 
 <p>The cost list contains two data frames. The first data frame contains
-data on the drug costs associated with each treatment strategy.</p><dl'>
+data on the drug costs associated with each treatment strategy.</p><dl>
 <dt>strategy_id</dt><dd><p>The treatment strategy identification number.</p></dd>
 <dt>costs</dt><dd><p>Annualized drug costs.</p></dd>
 
 </dl>
 
 <p>The second data frame contains summary data on
-medical costs by health state, and contains the following columns:</p><dl'>
+medical costs by health state, and contains the following columns:</p><dl>
 <dt>state_id</dt><dd><p>The health state identification number.</p></dd>
 <dt>mean</dt><dd><p>Mean costs.</p></dd>
 <dt>se</dt><dd><p>Standard error of medical costs.</p></dd>
@@ -235,7 +235,7 @@ medical costs by health state, and contains the following columns:</p><dl'>
 
     
 
-<p>The data frame has the following columns:</p><dl'>
+<p>The data frame has the following columns:</p><dl>
 <dt>state_id</dt><dd><p>The health state identification number.</p></dd>
 <dt>mean</dt><dd><p>Mean utility</p></dd>
 <dt>se</dt><dd><p>Standard error of utility</p></dd>
@@ -258,7 +258,7 @@ medical costs by health state, and contains the following columns:</p><dl'>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

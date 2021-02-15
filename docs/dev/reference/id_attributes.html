@@ -113,7 +113,7 @@ and transformed parameter objects already predicted from covariates." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ and transformed parameter objects already predicted from covariates." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,23 +178,23 @@ and transformed parameter objects already predicted from covariates." />
 and <a href='tparams.html'>transformed parameter objects</a> already predicted from covariates.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>id_attributes</span>(
-  <span class='no'>strategy_id</span>,
-  <span class='no'>n_strategies</span>,
-  <span class='no'>patient_id</span>,
-  <span class='no'>n_patients</span>,
-  <span class='kw'>state_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>n_states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>transition_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>n_transitions</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>time_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>time_intervals</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>n_times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sample</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>n_samples</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>grp_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>patient_wt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>id_attributes</span><span class='op'>(</span>
+  <span class='va'>strategy_id</span>,
+  <span class='va'>n_strategies</span>,
+  <span class='va'>patient_id</span>,
+  <span class='va'>n_patients</span>,
+  state_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  n_states <span class='op'>=</span> <span class='cn'>NULL</span>,
+  transition_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  n_transitions <span class='op'>=</span> <span class='cn'>NULL</span>,
+  time_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  time_intervals <span class='op'>=</span> <span class='cn'>NULL</span>,
+  n_times <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sample <span class='op'>=</span> <span class='cn'>NULL</span>,
+  n_samples <span class='op'>=</span> <span class='cn'>NULL</span>,
+  grp_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  patient_wt <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -300,7 +300,7 @@ objects and <code>sample</code> is used for indexing, then observations must be 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

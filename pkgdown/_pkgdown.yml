@@ -100,6 +100,8 @@ reference:
       - icer
   - title: "Plotting"
     contents:
+    - autoplot.survival
+    - autoplot.stateprobs
     - plot_ceplane
     - plot_ceac
     - plot_ceaf
@@ -137,7 +139,7 @@ navbar:
         href: articles/intro.html
       - text: "---"
       - text: "Cohort discrete time state transition models"
-      - text: "Simple Markov Cohort model"
+      - text: "Simple Markov cohort model"
         href: articles/markov-cohort.html
       - text: "Time inhomogeneous Markov cohort models"
         href: articles/markov-inhomogeneous-cohort.html
@@ -154,10 +156,10 @@ navbar:
       - text: "N-state partitioned survival models"
         href: articles/psm.html
       - text: "---"
-      - text: "Economic analysis"  
-      - text: "Simulating costs and quality-adjusted life-years"
-        href: articles/expected-values.html
+      - text: "Decision analysis"  
       - text: "Cost-effectiveness analysis"
         href: articles/cea.html
+  - text: Benchmarks
+    href: articles/benchmarks.html
   - text: News
     href: news/index.html

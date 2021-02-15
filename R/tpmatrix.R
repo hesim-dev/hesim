@@ -480,7 +480,8 @@ qmatrix.msm <- function(x, newdata = NULL, uncertainty = c("normal", "none"), n 
 #' to create the `value` element of a [`tparams_transprobs`] object. See 
 #' [`qmatrix()`] for an example. 
 #' 
-#' @return Returns an array of exponentiated matrices. 
+#' @return Returns an array of exponentiated matrices. If `length(t) > 1`, then
+#' `length(t)` arrays are returned for each element in `x`.
 #' 
 #' @seealso [`qmatrix.msm()`], [`qmatrix.data.table()`]
 #' @export

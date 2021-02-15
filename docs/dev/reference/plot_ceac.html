@@ -117,7 +117,7 @@ that each treatment is cost-effective relative to a comparator." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -139,14 +139,14 @@ that each treatment is cost-effective relative to a comparator." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -179,20 +179,20 @@ that each treatment is cost-effective relative to a comparator." />
 
     <div class="ref-description">
     <p>Plot a cost-effectiveness curve from either the output of <code><a href='cea.html'>cea()</a></code> or
-<code><a href='cea.html'>cea_pw()</a></code> using <code>ggplot2</code>. The former compares all treatment strategies
+<code><a href='cea.html'>cea_pw()</a></code> using <code><a href='https://ggplot2.tidyverse.org/reference/ggplot2-package.html'>ggplot2</a></code>. The former compares all treatment strategies
 simultaneously and uses the probabilistic sensitivity analysis (PSA) to compute
 the probability that each strategy is the most cost-effective at a given
 willingness to pay value, while the latter uses the PSA to compute the probability
 that each treatment is cost-effective relative to a comparator.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_ceac</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>plot_ceac</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for cea_pw</span>
-<span class='fu'>plot_ceac</span>(<span class='no'>x</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>plot_ceac</span><span class='op'>(</span><span class='va'>x</span>, labels <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for cea</span>
-<span class='fu'>plot_ceac</span>(<span class='no'>x</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>plot_ceac</span><span class='op'>(</span><span class='va'>x</span>, labels <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -234,7 +234,7 @@ then a faceted plot is produced with one plot for each subgroup.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

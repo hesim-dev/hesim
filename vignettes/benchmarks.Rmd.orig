@@ -1,0 +1,101 @@
+---
+title: Benchmarks
+date: "`r Sys.Date()`"
+output: 
+  html_vignette:
+    toc: yes
+    toc_depth: 2
+    number_sections: TRUE
+pkgdown: 
+  as_is: false
+vignette: >
+  %\VignetteIndexEntry{Benchmarks}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+library("knitr")
+opts_chunk$set(fig.width = 8, fig.height = 4.5,
+               fig.path = "benchmarks_figs/",
+               cache.path = "benchmarks_cache/",
+               fig.cap = "")
+CACHE <- TRUE
+```
+
+# Introduction
+This page compares the computational performance of `hesim` against other `R` packages that have been used to develop health economic models for health technology assessment. We provide benchmarks for both a semi-Markov model and a time-inhomogeneous Markov model. 
+
+The following `R` packages and scripts are used. The file `benchmarks.R` contains the code used to run the models.
+
+```{r setup, message = FALSE}
+library("data.table")
+library("flexsurv")
+library("ggplot2")
+library("heemod")
+library("hesim")
+library("kableExtra")
+library("mstate")
+source("benchmarks.R")
+```
+
+# Semi-Markov models
+[Williams et al. (2016)](https://doi.org/10.1177/0272989X16651869) adapted the [`mstate`](https://www.jstatsoft.org/article/view/v038i07) package to simulate parametric semi-Markov multi-state models. Here, we use simulate a 6-state model for leukemia patients following bone marrow transplantation with both `hesim` and `mstate`. Since a semi-Markov process is assumed, an individual-level simulation is used. Additional details were previously provided in a [blog post](https://devinincerti.com/2019/01/01/sim-mstate.html).
+
+We fit a Gompertz model, but computational performance does not differ substantially across parametric distributions. When using `mstate`, multi-state models are simulated using a cumulative hazard function estimated on a discrete grid, so a time step must be defined. We used a step size of 1/52 (i.e., one week) so that each time step was a week long. This produced reasonably accurate state probability estimates that were similar to those performed in continuous time with `hesim` (see plot below).
+
+```{r}
+DIST = "gompertz"
+STEP = 1/52
+```
+
+We began by simulating "deterministic" models assuming no parameter uncertainty. Comparisons of state probabilities simulated using 5,000 patients with `hesim` and `mstate` are shown in the plot.
+
+```{r, SemiMarkov, cache = CACHE}
+smb1 <-  benchmark_semi_markov(n_patients = 1000, uncertainty = "none", dist = DIST,
+                               step = STEP)
+smb2 <-  benchmark_semi_markov(n_patients = 5000, uncertainty = "none", dist = DIST,
+                               step = STEP)
+smb2$plot
+```
+
+We then performed probabilistic sensitivity analysis (PSA) and varied both the number of patients simulated and the number of draws of the parameters. Run times are reported in the table below. `hesim` is considerably faster and the speed advantage is most notable when a PSA is performed.
+
+```{r, semiMarkovPSA, cache = CACHE}
+smb <- list(
+  smb1,
+  smb2,
+  benchmark_semi_markov(n_patients = 1000, uncertainty = "normal", 
+                        n_samples = 100, dist = DIST,
+                        step = STEP),
+  benchmark_semi_markov(n_patients = 1000, uncertainty = "normal", 
+                        n_samples = 1000, dist = DIST,
+                        step = STEP)
+)
+```
+
+```{r, semiMarkovTable}
+semi_markov_table(smb)
+```
+
+# Markov models
+[`heemod`](https://cran.r-project.org/web/packages/heemod/index.html) is a general purpose `R` package for simulating Markov cohort models. We simulated the 5-state time inhomogeneous Markov model of total hip replacement from the [*Decision Modeling for Health Economic Evaluation*](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook with `hesim` and `heemod`. Vignettes for this example are available in both packages ( [`hesim`](https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-cohort.html), [`heemod`](https://cran.r-project.org/web/packages/heemod/vignettes/d_non_homogeneous.html)).
+
+Cohort models were simulated with both packages and an individual-level model was also simulated with `hesim`. A single representative patient was used in the cohort model and 1000 patients were simulated in the individual-level model. The cohort models were simulated for 60 years using cycle lengths of 1 year.
+
+```{r MarkovPSA, message = FALSE, cache = CACHE}
+mb <- list(
+  benchmark_markov(n_samples = 10, n_patients = 1000),
+  benchmark_markov(n_samples = 100, n_patients = 1000),
+  benchmark_markov(n_samples = 1000, n_patients = 1000)
+)
+```
+
+```{r, MarkovTable}
+markov_table(mb)
+```
+
+# Computing environment
+```{r}
+sessionInfo()
+```

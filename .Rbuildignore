@@ -15,4 +15,8 @@ DoxygenLayout.xml
 ^doc$
 ^Meta$
 ^tests/manual$
+^README\.Rmd$
 ^\.github$
+vignettes/benchmarks*
+^vignettes/README
+^vignettes/precompile.R

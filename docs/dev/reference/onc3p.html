@@ -113,7 +113,7 @@ states are recorded at a finite series of times." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ states are recorded at a finite series of times." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,12 +178,12 @@ states are recorded at a finite series of times." />
 states are recorded at a finite series of times.</p>
     </div>
 
-    <pre class="usage"><span class='no'>onc3p</span></pre>
+    <pre class="usage"><span class='va'>onc3p</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A <code>data.table</code> with the following columns:</p><dl'>
+    <p>A <code>data.table</code> with the following columns:</p><dl>
 <dt>state</dt><dd><p>The name of the health state (Stable, Progression,
 and Death).</p></dd>
 <dt>strategy_name</dt><dd><p>Standard of care (SOC), new treatment 1 (New 1), or
@@ -202,7 +202,8 @@ new treatment 2 (New 2).</p></dd>
     <div class='dont-index'><p><a href='onc3.html'>onc3</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>onc3p</span>)</div><div class='output co'>#&gt;          state strategy_name female      age patient_id      time strategy_id
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>onc3p</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;          state strategy_name female      age patient_id      time strategy_id
 #&gt; 1:      Stable         New 2      0 59.85813          1  0.000000           3
 #&gt; 2: Progression         New 2      0 59.85813          1  2.420226           3
 #&gt; 3:       Death         New 2      0 59.85813          1 14.620258           3
@@ -231,7 +232,7 @@ new treatment 2 (New 2).</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

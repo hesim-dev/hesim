@@ -113,7 +113,7 @@ of a fitted statistical model." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ of a fitted statistical model." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,10 +178,10 @@ of a fitted statistical model." />
 of a fitted statistical model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bootstrap</span>(<span class='no'>object</span>, <span class='no'>B</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>bootstrap</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>B</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for partsurvfit</span>
-<span class='fu'>bootstrap</span>(<span class='no'>object</span>, <span class='no'>B</span>, <span class='kw'>max_errors</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>bootstrap</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>B</span>, max_errors <span class='op'>=</span> <span class='fl'>0</span>, silent <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,6 +204,11 @@ of a fitted statistical model.</p>
 during the bootstrap procedure. This argument may be useful if, for instance, the model
 fails to converge during some bootstrap replications. Default is 0.</p></td>
     </tr>
+    <tr>
+      <th>silent</th>
+      <td><p>Logical indicating whether error messages should be supressed. Passed to
+the <code>silent</code> argument of <code><a href='https://rdrr.io/r/base/try.html'>try()</a></code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -225,7 +230,7 @@ fails to converge during some bootstrap replications. Default is 0.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -114,7 +114,7 @@ for speed. Equivalent to flexsurv::rgengamma." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -136,14 +136,14 @@ for speed. Equivalent to flexsurv::rgengamma." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -180,7 +180,7 @@ parameterization from <code>flexsurv</code>. Written in C++
 for speed. Equivalent to <code><a href='https://rdrr.io/pkg/flexsurv/man/GenGamma.html'>flexsurv::rgengamma</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>Q</span>)</pre>
+    <pre class="usage"><span class='fu'>fast_rgengamma</span><span class='op'>(</span><span class='va'>n</span>, mu <span class='op'>=</span> <span class='fl'>0</span>, sigma <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>Q</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,18 +211,22 @@ determined by n. The numerical arguments other than n are recycled so that the n
 equal to n.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span> ; <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fl'>1.7</span>; <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
-<span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>()
-<span class='no'>r1</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_rgengamma</span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.001   0.000   0.002 </div><div class='input'><span class='no'>ptm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>()
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"flexsurv"</span>)
-<span class='no'>r2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flexsurv</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/GenGamma.html'>rgengamma</a></span>(<span class='no'>n</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>m</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>Q</span> <span class='kw'>=</span> <span class='no'>q</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span>() - <span class='no'>ptm</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.002   0.001   0.002 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>r1</span>)</div><div class='output co'>#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-#&gt;   0.00049   0.96059   3.75623  10.92888  13.26581 180.61912 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>r2</span>)</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt;   0.0000   0.8724   3.4590  11.4524  12.2305 193.2178 </div><div class='input'>
+    <pre class="examples"><div class='input'><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>1000</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fl'>2</span> ; <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fl'>1.7</span>; <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fl'>1</span>
+<span class='va'>ptm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>r1</span> <span class='op'>&lt;-</span> <span class='fu'>fast_rgengamma</span><span class='op'>(</span><span class='va'>n</span>, mu <span class='op'>=</span> <span class='va'>m</span>, sigma <span class='op'>=</span> <span class='va'>s</span>, Q <span class='op'>=</span> <span class='va'>q</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>ptm</span>
+</div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.002   0.000   0.001 </div><div class='input'><span class='va'>ptm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
+<span class='va'>r2</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/GenGamma.html'>rgengamma</a></span><span class='op'>(</span><span class='va'>n</span>, mu <span class='op'>=</span> <span class='va'>m</span>, sigma <span class='op'>=</span> <span class='va'>s</span>, Q <span class='op'>=</span> <span class='va'>q</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>ptm</span>
+</div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   0.002   0.000   0.002 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>r1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#&gt;   0.00001   0.86459   3.77216  10.93777  12.50414 183.19929 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>r2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#&gt;   0.00007   0.69912   3.12032  10.28442  11.67629 183.13027 </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -239,7 +243,7 @@ equal to n.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

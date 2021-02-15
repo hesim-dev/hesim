@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create <code>PsmCurves</code> object — create_PsmCurves • hesim</title>
+<title>Create PsmCurves object — create_PsmCurves • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Create <code>PsmCurves</code> object — create_PsmCurves" />
+<meta property="og:title" content="Create PsmCurves object — create_PsmCurves" />
 <meta property="og:description" content="create_PsmCurves is a function for creating an object of class
 PsmCurves." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
@@ -113,7 +113,7 @@ PsmCurves." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ PsmCurves." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,20 +178,20 @@ PsmCurves." />
 <code><a href='PsmCurves.html'>PsmCurves</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>create_PsmCurves</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for flexsurvreg_list</span>
-<span class='fu'>create_PsmCurves</span>(
-  <span class='no'>object</span>,
-  <span class='no'>input_data</span>,
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>uncertainty</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"normal"</span>, <span class='st'>"bootstrap"</span>, <span class='st'>"none"</span>),
-  <span class='kw'>est_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)
+<span class='fu'>create_PsmCurves</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>input_data</span>,
+  n <span class='op'>=</span> <span class='fl'>1000</span>,
+  uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"bootstrap"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
+  est_data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for params_surv_list</span>
-<span class='fu'>create_PsmCurves</span>(<span class='no'>object</span>, <span class='no'>input_data</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>create_PsmCurves</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>input_data</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -249,7 +249,7 @@ used to fit survival models during bootstrap replications.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

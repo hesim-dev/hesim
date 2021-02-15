@@ -114,7 +114,7 @@ and overall survival (OS) time-to-event outcomes." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -136,14 +136,14 @@ and overall survival (OS) time-to-event outcomes." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -180,13 +180,13 @@ states to a dataset with one row per patient and progression-free survival (PFS)
 and overall survival (OS) time-to-event outcomes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_pfs_os</span>(
-  <span class='no'>data</span>,
-  <span class='no'>patient_vars</span>,
-  <span class='kw'>status</span> <span class='kw'>=</span> <span class='st'>"status"</span>,
-  <span class='kw'>time_stop</span> <span class='kw'>=</span> <span class='st'>"time_stop"</span>,
-  <span class='kw'>transition</span> <span class='kw'>=</span> <span class='st'>"transition_id"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>as_pfs_os</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  <span class='va'>patient_vars</span>,
+  status <span class='op'>=</span> <span class='st'>"status"</span>,
+  time_stop <span class='op'>=</span> <span class='st'>"time_stop"</span>,
+  transition <span class='op'>=</span> <span class='st'>"transition_id"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -225,7 +225,8 @@ Progression -&gt; Death transitions, respectively.</p></td>
 PFS (<code>pfs_status</code>, <code>pfs_time</code>) and OS (<code>os_time</code>, <code>os_status</code>).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>as_pfs_os</span>(<span class='no'>onc3</span>, <span class='kw'>patient_vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"patient_id"</span>, <span class='st'>"strategy_name"</span>, <span class='st'>"female"</span>, <span class='st'>"age"</span>))</div><div class='output co'>#&gt;       patient_id strategy_name female      age  pfs_time pfs_status os_status
+    <pre class="examples"><div class='input'><span class='fu'>as_pfs_os</span><span class='op'>(</span><span class='va'>onc3</span>, patient_vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"patient_id"</span>, <span class='st'>"strategy_name"</span>, <span class='st'>"female"</span>, <span class='st'>"age"</span><span class='op'>)</span><span class='op'>)</span> 
+</div><div class='output co'>#&gt;       patient_id strategy_name female      age  pfs_time pfs_status os_status
 #&gt;    1:          1         New 2      0 59.85813 2.4202260          1         1
 #&gt;    2:          2         New 2      0 62.57282 7.4974635          0         0
 #&gt;    3:          3           SOC      1 61.44379 2.3658666          1         1
@@ -265,7 +266,7 @@ PFS (<code>pfs_status</code>, <code>pfs_time</code>) and OS (<code>os_time</code
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

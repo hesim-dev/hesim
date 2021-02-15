@@ -113,7 +113,7 @@ cea_pw()." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ cea_pw()." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,18 +178,18 @@ cea_pw()." />
 <code><a href='cea.html'>cea_pw()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>icer_tbl</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>50000</span>,
-  <span class='kw'>cri</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>digits_qalys</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>digits_costs</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"matrix"</span>, <span class='st'>"data.table"</span>),
-  <span class='kw'>rownames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>colnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>icer_tbl</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  k <span class='op'>=</span> <span class='fl'>50000</span>,
+  cri <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  prob <span class='op'>=</span> <span class='fl'>0.95</span>,
+  digits_qalys <span class='op'>=</span> <span class='fl'>2</span>,
+  digits_costs <span class='op'>=</span> <span class='fl'>0</span>,
+  output <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"matrix"</span>, <span class='st'>"data.table"</span><span class='op'>)</span>,
+  rownames <span class='op'>=</span> <span class='cn'>NULL</span>,
+  colnames <span class='op'>=</span> <span class='cn'>NULL</span>,
+  drop <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -273,7 +273,7 @@ with one row for each strategy and group combination.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

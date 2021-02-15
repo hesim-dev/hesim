@@ -112,7 +112,7 @@
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -134,14 +134,14 @@
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -176,7 +176,7 @@
     <p>Create a list containing means predicted from a statistical model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tparams_mean</span>(<span class='no'>value</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>tparams_mean</span><span class='op'>(</span><span class='va'>value</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,13 +203,14 @@ mean. Columns denote random samples and rows denote means for different observat
     <div class='dont-index'><p><a href='tparams.html'>tparams</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>tparams_mean</span>(<span class='kw'>value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span>:<span class='fl'>8</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>4</span>),
-             <span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-             <span class='kw'>n_strategies</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-             <span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>),
-             <span class='kw'>n_patients</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-             <span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-             <span class='kw'>n_states</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; $value
+    <pre class="examples"><div class='input'><span class='fu'>tparams_mean</span><span class='op'>(</span>value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>8</span>, nrow <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>,
+             strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, each <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+             n_strategies <span class='op'>=</span> <span class='fl'>2</span>,
+             patient_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>4</span><span class='op'>)</span>,
+             n_patients <span class='op'>=</span> <span class='fl'>1</span>,
+             state_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, times <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+             n_states <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $value
 #&gt;      [,1] [,2]
 #&gt; [1,]    1    5
 #&gt; [2,]    2    6
@@ -258,7 +259,7 @@ mean. Columns denote random samples and rows denote means for different observat
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

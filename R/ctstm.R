@@ -6,8 +6,8 @@
 #'  continuous time state transition models. That is, this class is relevant for
 #'  both Markov and semi-Markov multi-state models and does not depend on the 
 #'  methodology used for prediction of state probabilities. 
-#' @format An [R6::R6Class] object.
-#' @seealso [create_IndivCtstmTrans()], [IndivCtstmTrans]
+#' @format An [`R6::R6Class`] object.
+#' @seealso [`create_IndivCtstmTrans()`], [`IndivCtstmTrans`]
 #' @export
 CtstmTrans <- R6::R6Class("CtstmTrans",
   private = list(
@@ -42,7 +42,7 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
         self$check()
         type <- match.arg(type)
         res <- data.table(C_ctstm_summary(self, t, type))
-        res[, trans := trans + 1]
+        res[, transition_id := transition_id + 1]
         res[, sample := sample + 1]
         if (type == "hazard") setnames(res, "value", "hazard")
         if (type == "cumhazard") setnames(res, "value", "cumhazard")
@@ -54,7 +54,7 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
     #' @description
     #' Predict the hazard functions for each health state transition.
     #' @param t  A numeric vector of times.
-    #' @return A `data.table` with columns `trans` (the transition number),
+    #' @return A `data.table` with columns `transition_id`,
     #'  `sample`, `strategy_id`, `grp_id`, `t`, and `hazard`.
     hazard = function(t){
       private$summary(t, "hazard")
@@ -63,8 +63,8 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
     #' @description
     #' Predict the cumulative hazard functions for each health state transition.
     #' @param t  A numeric vector of times.    
-    #' @return A `data.table` with columns `trans`,
-    #'  `sample`, `strategy_id`, `grp_id`, `t`, and `hazard`.
+    #' @return A `data.table` with columns `transition_id`,
+    #'  `sample`, `strategy_id`, `grp_id`, `t`, and `cumhazard`.
     cumhazard = function(t){
        private$summary(t, "cumhazard")
     }
@@ -296,7 +296,7 @@ create_IndivCtstmTrans.params_surv_list <- function(object, input_data, trans_ma
 #' disprog <- transmod$sim_disease(max_t = 10)
 #' transmod$sim_stateprobs(t = c(0, 5, 10), disprog = disprog)[t == 5]
 #' 
-#' @seealso [create_IndivCtstmTrans()], [IndivCtstm]
+#' @seealso [`create_IndivCtstmTrans()`], [`IndivCtstm`]
 #' @export
 IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
   inherit = CtstmTrans,

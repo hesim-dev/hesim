@@ -114,7 +114,7 @@ tparams_transprobs() object." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -136,14 +136,14 @@ tparams_transprobs() object." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -180,7 +180,7 @@ most conveniently used along with <code><a href='tpmatrix.html'>tpmatrix()</a></
 <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tpmatrix_id</span>(<span class='no'>object</span>, <span class='no'>n_samples</span>)</pre>
+    <pre class="usage"><span class='fu'>tpmatrix_id</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>n_samples</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -200,22 +200,23 @@ sensitivity analysis (PSA).</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a <code>data.table</code> with the same columns in <code>object</code> repeated
-<code>n_samples</code> times. That is, to facilitate creation of a <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>
-object,  there is one row for each parameter sample,
-treatment strategy, patient, and optionally time interval.</p>
+    <p>Returns a <code>tpmatrix_id</code> object that inherits from <code>data.table</code> with
+the same columns in <code>object</code> repeated <code>n_samples</code> times. That is, to facilitate
+creation of a <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code> object,  there is one row for each
+parameter sample, treatment strategy, patient, and optionally time interval.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='tpmatrix.html'>tpmatrix()</a></code>, <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>, <code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>), <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>65</span>, <span class='fl'>50</span>, <span class='fl'>75</span>),
-                        <span class='kw'>gender</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Female"</span>, <span class='st'>"Female"</span>, <span class='st'>"Male"</span>))
-<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
-                        <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>)
-<span class='no'>input_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"strategies"</span>, <span class='st'>"patients"</span>))
-<span class='fu'>tpmatrix_id</span>(<span class='no'>input_data</span>, <span class='kw'>n_samples</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;     sample strategy_id patient_id
+    <pre class="examples"><div class='input'><span class='va'>strategies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>, age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>65</span>, <span class='fl'>50</span>, <span class='fl'>75</span><span class='op'>)</span>,
+                        gender <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Female"</span>, <span class='st'>"Female"</span>, <span class='st'>"Male"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='va'>strategies</span>,
+                        patients <span class='op'>=</span> <span class='va'>patients</span><span class='op'>)</span>
+<span class='va'>input_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"strategies"</span>, <span class='st'>"patients"</span><span class='op'>)</span><span class='op'>)</span>    
+<span class='fu'>tpmatrix_id</span><span class='op'>(</span><span class='va'>input_data</span>, n_samples <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>                   
+</div><div class='output co'>#&gt;     sample strategy_id patient_id
 #&gt;  1:      1           1          1
 #&gt;  2:      1           1          2
 #&gt;  3:      1           1          3
@@ -243,7 +244,7 @@ treatment strategy, patient, and optionally time interval.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

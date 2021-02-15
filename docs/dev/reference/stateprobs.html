@@ -113,7 +113,7 @@ $sim_stateprobs() in model classes." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ $sim_stateprobs() in model classes." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -169,7 +169,7 @@ $sim_stateprobs() in model classes." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>State probability object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/statevals.R'><code>R/statevals.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/output.R'><code>R/output.R</code></a></small>
     <div class="hidden name"><code>stateprobs.Rd</code></div>
     </div>
 
@@ -186,10 +186,11 @@ $sim_stateprobs() in model classes." />
 
 <p>A <code>stateprobs</code> object inherits from <code>data.table</code> and contains
 the following columns:</p>
-<dl'>
+<dl>
 <dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
 <dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>
 <dt>patient_id</dt><dd><p>The patient ID.</p></dd>
+<dt>grp_id</dt><dd><p>The subgroup ID.</p></dd>
 <dt>state_id</dt><dd><p>The health state ID.</p></dd>
 <dt>t</dt><dd><p>The time at which a state probability is computed.</p></dd>
 <dt>prob</dt><dd><p>The probability of being in a given health state.</p></dd>
@@ -214,7 +215,7 @@ not included as state probabilities are computed by averaging across patients.</
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

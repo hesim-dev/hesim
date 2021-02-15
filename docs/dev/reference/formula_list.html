@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>List of <code>formula</code> objects — formula_list • hesim</title>
+<title>List of formula objects — formula_list • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="List of <code>formula</code> objects — formula_list" />
+<meta property="og:title" content="List of formula objects — formula_list" />
 <meta property="og:description" content="Combine formula or formula_list object into a
 formula_list object." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
@@ -113,7 +113,7 @@ formula_list object." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ formula_list object." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,7 +178,7 @@ formula_list object." />
 formula_list object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>formula_list</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>formula_list</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,11 +195,14 @@ formula_list object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Create from "formula" objects</span>
-<span class='no'>flist_wei</span> <span class='kw'>&lt;-</span> <span class='fu'>formula_list</span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>formula</a></span>(~ <span class='fl'>1</span>), <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>formula</a></span>(~ <span class='no'>x</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>flist_wei</span>)</div><div class='output co'>#&gt; [1] "formula_list"</div><div class='input'>
+<span class='va'>flist_wei</span> <span class='op'>&lt;-</span> <span class='fu'>formula_list</span><span class='op'>(</span>shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>formula</a></span><span class='op'>(</span><span class='op'>~</span> <span class='fl'>1</span><span class='op'>)</span>, scale <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>formula</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>flist_wei</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "formula_list"</div><div class='input'>
 <span class='co'># Create from "formula_list" objects</span>
-<span class='no'>flist</span> <span class='kw'>&lt;-</span> <span class='fu'>formula_list</span>(<span class='kw'>exponential</span> <span class='kw'>=</span> <span class='fu'>formula_list</span>(<span class='kw'>rate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>formula</a></span>(~<span class='fl'>1</span>)),
-                              <span class='kw'>weibull</span> <span class='kw'>=</span> <span class='no'>flist_wei</span>)</div></pre>
+<span class='va'>flist</span> <span class='op'>&lt;-</span> <span class='fu'>formula_list</span><span class='op'>(</span>exponential <span class='op'>=</span> <span class='fu'>formula_list</span><span class='op'>(</span>rate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>formula</a></span><span class='op'>(</span><span class='op'>~</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>,
+                              weibull <span class='op'>=</span> <span class='va'>flist_wei</span><span class='op'>)</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -215,7 +218,7 @@ formula_list object.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
