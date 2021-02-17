@@ -1,8 +1,8 @@
-## hesim 0.4.2.9999
+## hesim 0.5.0
 ### New features
 * A transition intensity matrix can be created from a multi-state model fit using `msm::msm()` with the  `qmatrix.msm()` method. Similarly, a `CohortDtstmTrans` object can be created with `create_CohortDtstmTrans.msm()`.
 
-* The `...` argument to `create_PsmCurves()` now passes arguments to `create_params.partsurvfit()` when `object` is of class `flexsurvreg_list`. This allows more control over bootstrapping (i.e., use of the `max_errors` argument). 
+* The `...` argument to `create_PsmCurves()` now passes arguments to `create_params.partsurvfit()` when `object` is of class `flexsurvreg_list`. This allows more control over bootstrapping (i.e., use of the `max_errors` and `silent` arguments). 
 
 * `summary.ce()` is a new summary method for a `hesim::ce` object that produces confidence intervals for quality-adjusted life-years (QALYs) and each cost category; `format.summary.ce()` formats the output for pretty printing. 
 
