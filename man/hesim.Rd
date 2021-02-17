@@ -3,7 +3,7 @@
 \docType{package}
 \name{hesim}
 \alias{hesim}
-\title{\code{hesim}: Health-Economic Simulation Modeling and Decision Analysis}
+\title{\code{hesim}: Health Economic Simulation Modeling and Decision Analysis}
 \description{
 To learn more about \code{hesim} visit the \href{https://hesim-dev.github.io/hesim/}{website}.
 }
