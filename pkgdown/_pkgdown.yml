@@ -84,6 +84,7 @@ reference:
   - title: "Simulation output"
     contents:
       - disprog
+      - survival
       - stateprobs
       - costs
       - qalys
