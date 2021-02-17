@@ -78,23 +78,24 @@ create_trans_dt <- function(trans_mat){
   return(x)
 }
 
-#' Data for health-economic simulation modeling
+#' Data for health economic simulation modeling
 #' 
-#' A list of tables required for health-economic simulation modeling.
+#' A list of tables required for health economic simulation modeling.
 #' Each table must either be a `data.frame` or `data.table`. All ID variables within 
 #' each table must be numeric vectors of integers. 
-#' @param strategies A table of treatment strategies. 
-#' Must contain the column `strategy_id` denoting a unique strategy. Other columns are variables
-#'  describing the characteristics of a treatment strategy. 
-#' @param patients A table of patients. 
-#' Must contain the column `patient_id` denoting a unique patient. The 
-#' number of rows should be equal to the number of patients in the model. The table
-#' may also include columns for `grp_id` for subgroups and `patient_wt` specifying
-#' the weight to apply to each patient (within a subgroup). If `grp_id` is
-#' `NULL`, then it is assumed that there is only 1 subgroup. If `patient_wt` is
-#' `NULL`. then each patient is given the same weight. Weights
-#' within subgroups are normalized to sum to one.
-#' Other columns are variables describing the characteristics of a patient.
+#' @param strategies A table of treatment strategies. Must contain the column 
+#' `strategy_id` denoting a unique strategy. Other columns are variables
+#' describing the characteristics of a treatment strategy. 
+#' @param patients A table of patients. Must contain the column `patient_id` denoting 
+#' a unique patient. The number of rows should be equal to the number of patients 
+#' in the model. The table may also include columns for `grp_id` for subgroups and 
+#' `patient_wt` specifying the weight to apply to each patient (within a subgroup). 
+#' If `grp_id` is `NULL`, then it is assumed that there is only one subgroup. If
+#' `patient_wt` is `NULL`. then each patient is given the same weight. Weights 
+#' cannot be used in individual-level models because each patient should be
+#' weighted equally; that is, weights can only be specified in cohort models.
+#' Weights within subgroups are normalized to sum to one. Other columns are 
+#' variables describing the characteristics of a patient.
 #' @param states A table of health states. Must contain the column
 #' `state_id`, which denotes a unique health state. The number of rows should
 #' be equal to the number of health states in the model. Other columns can describe the
@@ -111,10 +112,10 @@ create_trans_dt <- function(trans_mat){
 #' patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
 #'                        gender = c("Female", "Female", "Male"))
 #' states <- data.frame(state_id =  seq(1, 3),
-#'                         state_var = c(2, 1, 9))
+#'                      state_var = c(2, 1, 9))
 #' hesim_dat <- hesim_data(strategies = strategies,
-#'                          patients = patients,
-#'                          states = states)
+#'                         patients = patients,
+#'                         states = states)
 #' @export
 hesim_data <- function(strategies, patients, states = NULL,
                        transitions = NULL){

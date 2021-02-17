@@ -2,24 +2,25 @@
 % Please edit documentation in R/hesim_data.R
 \name{hesim_data}
 \alias{hesim_data}
-\title{Data for health-economic simulation modeling}
+\title{Data for health economic simulation modeling}
 \usage{
 hesim_data(strategies, patients, states = NULL, transitions = NULL)
 }
 \arguments{
-\item{strategies}{A table of treatment strategies.
-Must contain the column \code{strategy_id} denoting a unique strategy. Other columns are variables
+\item{strategies}{A table of treatment strategies. Must contain the column
+\code{strategy_id} denoting a unique strategy. Other columns are variables
 describing the characteristics of a treatment strategy.}
 
-\item{patients}{A table of patients.
-Must contain the column \code{patient_id} denoting a unique patient. The
-number of rows should be equal to the number of patients in the model. The table
-may also include columns for \code{grp_id} for subgroups and \code{patient_wt} specifying
-the weight to apply to each patient (within a subgroup). If \code{grp_id} is
-\code{NULL}, then it is assumed that there is only 1 subgroup. If \code{patient_wt} is
-\code{NULL}. then each patient is given the same weight. Weights
-within subgroups are normalized to sum to one.
-Other columns are variables describing the characteristics of a patient.}
+\item{patients}{A table of patients. Must contain the column \code{patient_id} denoting
+a unique patient. The number of rows should be equal to the number of patients
+in the model. The table may also include columns for \code{grp_id} for subgroups and
+\code{patient_wt} specifying the weight to apply to each patient (within a subgroup).
+If \code{grp_id} is \code{NULL}, then it is assumed that there is only one subgroup. If
+\code{patient_wt} is \code{NULL}. then each patient is given the same weight. Weights
+cannot be used in individual-level models because each patient should be
+weighted equally; that is, weights can only be specified in cohort models.
+Weights within subgroups are normalized to sum to one. Other columns are
+variables describing the characteristics of a patient.}
 
 \item{states}{A table of health states. Must contain the column
 \code{state_id}, which denotes a unique health state. The number of rows should
@@ -36,7 +37,7 @@ Returns an object of class \code{hesim_data}, which is a list of data tables for
 health economic simulation modeling.
 }
 \description{
-A list of tables required for health-economic simulation modeling.
+A list of tables required for health economic simulation modeling.
 Each table must either be a \code{data.frame} or \code{data.table}. All ID variables within
 each table must be numeric vectors of integers.
 }
@@ -45,10 +46,10 @@ strategies <- data.frame(strategy_id = c(1, 2))
 patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
                        gender = c("Female", "Female", "Male"))
 states <- data.frame(state_id =  seq(1, 3),
-                        state_var = c(2, 1, 9))
+                     state_var = c(2, 1, 9))
 hesim_dat <- hesim_data(strategies = strategies,
-                         patients = patients,
-                         states = states)
+                        patients = patients,
+                        states = states)
 }
 \seealso{
 \code{\link[=expand.hesim_data]{expand.hesim_data()}}, \code{\link[=get_labels]{get_labels()}}
