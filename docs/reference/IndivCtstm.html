@@ -94,7 +94,7 @@ IndivCtstmTrans." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@ IndivCtstmTrans." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -138,14 +138,14 @@ IndivCtstmTrans." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -181,43 +181,43 @@ IndivCtstmTrans." />
 model (CTSTM) from a fitted multi-state model. The class supports "clock-reset"
 (i.e., semi-Markov), "clock-forward" (i.e., Markov), and mixtures of
 clock-reset and clock-forward models as described in
-<a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>.</p>
+<code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An <a href='https://rdrr.io/pkg/R6/man/R6Class.html'>R6::R6Class</a> object.</p>
+    <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></p></div>
+    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code></p></div>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p><div class="r6-fields"></p><dl'>
+    <p><div class="r6-fields"></p><dl>
 <dt><code>trans_model</code></dt><dd><p>The model for health state transitions. Must be an object
-of class <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>.</p></dd>
+of class <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></dd>
 
 <dt><code>utility_model</code></dt><dd><p>The model for health state utility. Must be an object of
-class <a href='StateVals.html'>StateVals</a>.</p></dd>
+class <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
 
 <dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state.
-Must be a list of objects of class <a href='StateVals.html'>StateVals</a>, where each element of the
+Must be a list of objects of class <code><a href='StateVals.html'>StateVals</a></code>, where each element of the
 list represents a different cost category.</p></dd>
 
-<dt><code>disprog_</code></dt><dd><p>An object of class <a href='disprog.html'>disprog</a>.</p></dd>
+<dt><code>disprog_</code></dt><dd><p>An object of class <code><a href='disprog.html'>disprog</a></code>.</p></dd>
 
-<dt><code>stateprobs_</code></dt><dd><p>An object of class <a href='stateprobs.html'>stateprobs</a> simulated using <code>$sim_stateprobs()</code>.</p></dd>
+<dt><code>stateprobs_</code></dt><dd><p>An object of class <code><a href='stateprobs.html'>stateprobs</a></code> simulated using <code>$sim_stateprobs()</code>.</p></dd>
 
-<dt><code>qalys_</code></dt><dd><p>An object of class <a href='qalys.html'>qalys</a> simulated using <code>$sim_qalys()</code>.</p></dd>
+<dt><code>qalys_</code></dt><dd><p>An object of class <code><a href='qalys.html'>qalys</a></code> simulated using <code>$sim_qalys()</code>.</p></dd>
 
-<dt><code>costs_</code></dt><dd><p>An object of class <a href='costs.html'>costs</a> simulated using <code>$sim_costs()</code>.</p></dd>
+<dt><code>costs_</code></dt><dd><p>An object of class <code><a href='costs.html'>costs</a></code> simulated using <code>$sim_costs()</code>.</p></dd>
 
 </dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-new'><code>IndivCtstm$new()</code></a></p></li>
@@ -229,12 +229,12 @@ list represents a different cost category.</p></dd>
 <li><p><a href='#method-clone'><code>IndivCtstm$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new <code>IndivCtstm</code> object.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>IndivCtstm</span>$<span class='fu'>new</span>(<span class='kw'>trans_model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>utility_model</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cost_models</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre><p></div></p>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<p>Create a new <code>IndivCtstm</code> object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>IndivCtstm</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>trans_model <span class='op'>=</span> <span class='cn'>NULL</span>, utility_model <span class='op'>=</span> <span class='cn'>NULL</span>, cost_models <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>trans_model</code></dt><dd><p>The <code>trans_model</code> field.</p></dd>
 
 <dt><code>utility_model</code></dt><dd><p>The <code>utility_model</code> field.</p></dd>
@@ -242,16 +242,16 @@ list represents a different cost category.</p></dd>
 <dt><code>cost_models</code></dt><dd><p>The <code>cost_models</code> field.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>A new <code>IndivCtstm</code> object.</p>
 <p><hr>
-<a id="method-sim_disease"></a></p><h3>Method <code>sim_disease()</code></h3>
+<a id="method-sim_disease"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sim_disease()</code></h3>
 <p>Simulate disease progression (i.e., individual trajectories through a multi-state
-model) using <code>IndivCtstmTrans$sim_disease()</code>.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>IndivCtstm</span>$<span class='fu'>sim_disease</span>(<span class='kw'>max_t</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>max_age</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>progress</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre><p></div></p>
+model) using <code>IndivCtstmTrans$sim_disease()</code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>IndivCtstm</span><span class='op'>$</span><span class='fu'>sim_disease</span><span class='op'>(</span>max_t <span class='op'>=</span> <span class='fl'>100</span>, max_age <span class='op'>=</span> <span class='fl'>100</span>, progress <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>max_t</code></dt><dd><p>A scalar or vector denoting the length of time to simulate the model.
 If a vector, must be equal to the number of simulated patients.</p></dd>
 
@@ -264,39 +264,39 @@ then every second PSA iteration is printed. Default is <code>NULL</code>,
 in which case no output is printed.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>An instance of self with simulated output stored in <code>disprog_</code>.</p>
 <p><hr>
-<a id="method-sim_stateprobs"></a></p><h3>Method <code>sim_stateprobs()</code></h3>
+<a id="method-sim_stateprobs"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sim_stateprobs()</code></h3>
 <p>Simulate health state probabilities as a function of time using the
-simulation output stored in <code>disprog</code>.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>IndivCtstm</span>$<span class='fu'>sim_stateprobs</span>(<span class='no'>t</span>)</pre><p></div></p>
+simulation output stored in <code>disprog</code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>IndivCtstm</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
-<p>An instance of <code>self</code> with simulated output of class <a href='stateprobs.html'>stateprobs</a>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>An instance of <code>self</code> with simulated output of class <code><a href='stateprobs.html'>stateprobs</a></code>
 stored in <code>stateprobs_</code>.</p>
 <p><hr>
-<a id="method-sim_qalys"></a></p><h3>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
+<a id="method-sim_qalys"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
 <p>Simulate quality-adjusted life-years (QALYs) as a function of <code>disprog_</code> and
-<code>utility_model</code>. See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>IndivCtstm</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(
-  <span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>0.03</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"predict"</span>, <span class='st'>"random"</span>),
-  <span class='kw'>lys</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>by_patient</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre><p></div></p>
+<code>utility_model</code>. See <code>vignette("expected-values")</code> for details.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>IndivCtstm</span><span class='op'>$</span><span class='fu'>sim_qalys</span><span class='op'>(</span>
+  dr <span class='op'>=</span> <span class='fl'>0.03</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"predict"</span>, <span class='st'>"random"</span><span class='op'>)</span>,
+  lys <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  by_patient <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
 
 <dt><code>type</code></dt><dd><p><code>"predict"</code> for mean values or <code>"random"</code> for random samples
-as in <code>$sim()</code> in <a href='StateVals.html'>StateVals</a>.</p></dd>
+as in <code>$sim()</code> in <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
 
 <dt><code>lys</code></dt><dd><p>If <code>TRUE</code>, then life-years are simulated in addition to QALYs.</p></dd>
 
@@ -304,26 +304,26 @@ as in <code>$sim()</code> in <a href='StateVals.html'>StateVals</a>.</p></dd>
 If <code>FALSE</code>, then QALYs are averaged across patients by health state.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>An instance of <code>self</code> with simulated output of
 class <a href='qalys.html'>qalys</a> stored in <code>qalys_</code>.</p>
 <p><hr>
-<a id="method-sim_costs"></a></p><h3>Method <code><a href='sim_ev.html'>sim_costs()</a></code></h3>
+<a id="method-sim_costs"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='sim_ev.html'>sim_costs()</a></code></h3>
 <p>Simulate costs as a function of <code>disprog_</code> and <code>cost_models</code>.
-See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>IndivCtstm</span>$<span class='fu'><a href='sim_ev.html'>sim_costs</a></span>(
-  <span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>0.03</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"predict"</span>, <span class='st'>"random"</span>),
-  <span class='kw'>by_patient</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>max_t</span> <span class='kw'>=</span> <span class='fl'>Inf</span>
-)</pre><p></div></p>
+See <code>vignette("expected-values")</code> for details.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>IndivCtstm</span><span class='op'>$</span><span class='fu'>sim_costs</span><span class='op'>(</span>
+  dr <span class='op'>=</span> <span class='fl'>0.03</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"predict"</span>, <span class='st'>"random"</span><span class='op'>)</span>,
+  by_patient <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  max_t <span class='op'>=</span> <span class='cn'>Inf</span>
+<span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
 
 <dt><code>type</code></dt><dd><p><code>"predict"</code> for mean values or <code>"random"</code> for random samples
-as in <code>$sim()</code> in <a href='StateVals.html'>StateVals</a>.</p></dd>
+as in <code>$sim()</code> in <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
 
 <dt><code>by_patient</code></dt><dd><p>If <code>TRUE</code>, then QALYs are computed at the patient level.
 If <code>FALSE</code>, then QALYs are averaged across patients by health state.</p></dd>
@@ -336,28 +336,28 @@ can also be passed as a numeric vector of length equal to the number of
 cost categories (e.g., <code><a href='https://rdrr.io/r/base/c.html'>c(1, 2, Inf, 3)</a></code> for a model with four cost categories).</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>An instance of <code>self</code> with simulated output of class <a href='costs.html'>costs</a>
 stored in <code>costs_</code>.</p>
 <p><hr>
-<a id="method-summarize"></a></p><h3>Method <code>summarize()</code></h3>
+<a id="method-summarize"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>summarize()</code></h3>
 <p>Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
-See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>IndivCtstm</span>$<span class='fu'>summarize</span>(<span class='kw'>by_grp</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>IndivCtstm</span><span class='op'>$</span><span class='fu'>summarize</span><span class='op'>(</span>by_grp <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>by_grp</code></dt><dd><p>If <code>TRUE</code>, then costs and QALYs are computed by subgroup. If
 <code>FALSE</code>, then costs and QALYs are aggregated across all patients (and subgroups).</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>IndivCtstm</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>IndivCtstm</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
 </dl><p></div></p>
@@ -365,111 +365,123 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"flexsurv"</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘flexsurv’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:msm’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    qgeneric</span></div><div class='input'>
 <span class='co'># Treatment strategies, target population, and model structure</span>
-<span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>),
-                       <span class='kw'>age</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span>),
-                       <span class='kw'>female</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>))
-<span class='no'>states</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))
-<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
-                        <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,
-                        <span class='kw'>states</span> <span class='kw'>=</span> <span class='no'>states</span>)
+<span class='va'>strategies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>,
+                       age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span><span class='op'>)</span>,
+                       female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>states</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>state_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='va'>strategies</span>,
+                        patients <span class='op'>=</span> <span class='va'>patients</span>,
+                        states <span class='op'>=</span> <span class='va'>states</span><span class='op'>)</span>
 
 <span class='co'># Parameter estimation</span>
 <span class='co'>## Multi-state model</span>
-<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
-              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>NA</span>, <span class='fl'>4</span>),
-              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
-<span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span>(<span class='kw'>length</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='no'>tmat</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"list"</span>)
-<span class='no'>surv_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>mstate3_exdata</span>$<span class='no'>transitions</span>)
-<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>fits</span>)){
-  <span class='no'>fits</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>years</span>, <span class='no'>status</span>) ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>strategy_id</span>),
-                           <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>surv_dat</span>,
-                           <span class='kw'>subset</span> <span class='kw'>=</span> (<span class='no'>trans</span> <span class='kw'>==</span> <span class='no'>i</span>),
-                           <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
-}
-<span class='no'>fits</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span>(<span class='no'>fits</span>)
+<span class='va'>tmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='cn'>NA</span>, <span class='fl'>4</span><span class='op'>)</span>,
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>fits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='op'>(</span>length <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>tmat</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, mode <span class='op'>=</span> <span class='st'>"list"</span><span class='op'>)</span>
+<span class='va'>surv_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>transitions</span><span class='op'>)</span>
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>fits</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='va'>fits</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>years</span>, <span class='va'>status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>strategy_id</span><span class='op'>)</span>, 
+                           data <span class='op'>=</span> <span class='va'>surv_dat</span>,
+                           subset <span class='op'>=</span> <span class='op'>(</span><span class='va'>trans</span> <span class='op'>==</span> <span class='va'>i</span><span class='op'>)</span>,
+                           dist <span class='op'>=</span> <span class='st'>"weibull"</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='va'>fits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span><span class='op'>(</span><span class='va'>fits</span><span class='op'>)</span>
 
 <span class='co'>## Utility</span>
-<span class='no'>utility_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='no'>states</span>$<span class='no'>state_id</span>,
-                                       <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>utility</span>$<span class='no'>mean</span>,
-                                       <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>utility</span>$<span class='no'>se</span>),
-                            <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"beta"</span>,
-                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
+<span class='va'>utility_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>state_id <span class='op'>=</span> <span class='va'>states</span><span class='op'>$</span><span class='va'>state_id</span>,
+                                       mean <span class='op'>=</span> <span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>utility</span><span class='op'>$</span><span class='va'>mean</span>,
+                                       se <span class='op'>=</span> <span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>utility</span><span class='op'>$</span><span class='va'>se</span><span class='op'>)</span>,
+                            dist <span class='op'>=</span> <span class='st'>"beta"</span><span class='op'>)</span>
 <span class='co'>## Costs</span>
-<span class='no'>drugcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='no'>strategies</span>$<span class='no'>strategy_id</span>,
-                                        <span class='kw'>est</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>costs</span>$<span class='no'>drugs</span>$<span class='no'>costs</span>),
-                             <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
-                             <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
-<span class='no'>medcost_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>state_id</span> <span class='kw'>=</span> <span class='no'>states</span>$<span class='no'>state_id</span>,
-                                       <span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>$<span class='no'>mean</span>,
-                                       <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>mstate3_exdata</span>$<span class='no'>costs</span>$<span class='no'>medical</span>$<span class='no'>se</span>),
-                            <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"gamma"</span>,
-                            <span class='kw'>hesim_data</span> <span class='kw'>=</span> <span class='no'>hesim_dat</span>)
+<span class='va'>drugcost_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='va'>strategies</span><span class='op'>$</span><span class='va'>strategy_id</span>,
+                                        est <span class='op'>=</span> <span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>drugs</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>)</span>,
+                             dist <span class='op'>=</span> <span class='st'>"fixed"</span><span class='op'>)</span> 
+<span class='va'>medcost_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>state_id <span class='op'>=</span> <span class='va'>states</span><span class='op'>$</span><span class='va'>state_id</span>,
+                                       mean <span class='op'>=</span> <span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span><span class='op'>$</span><span class='va'>mean</span>,
+                                       se <span class='op'>=</span> <span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span><span class='op'>$</span><span class='va'>se</span><span class='op'>)</span>,
+                            dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span>  
 
 <span class='co'># Economic model</span>
-<span class='no'>n_samples</span> <span class='kw'>=</span> <span class='fl'>2</span>
+<span class='va'>n_samples</span> <span class='op'>=</span> <span class='fl'>2</span>
 
 <span class='co'>## Construct model</span>
 <span class='co'>### Transitions </span>
-<span class='no'>transmod_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>)
-<span class='no'>transmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span>(<span class='no'>fits</span>, <span class='kw'>input_data</span> <span class='kw'>=</span> <span class='no'>transmod_data</span>,
-                                   <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>,
-                                   <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
+<span class='va'>transmod_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span><span class='op'>)</span>
+<span class='va'>transmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span><span class='op'>(</span><span class='va'>fits</span>, input_data <span class='op'>=</span> <span class='va'>transmod_data</span>, 
+                                   trans_mat <span class='op'>=</span> <span class='va'>tmat</span>,
+                                   n <span class='op'>=</span> <span class='va'>n_samples</span><span class='op'>)</span>
 
 <span class='co'>### Utility </span>
-<span class='no'>utilitymod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>utility_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
+<span class='va'>utilitymod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span><span class='op'>(</span><span class='va'>utility_tbl</span>, n <span class='op'>=</span> <span class='va'>n_samples</span>, hesim_data <span class='op'>=</span> <span class='va'>hesim_dat</span><span class='op'>)</span>
 
 <span class='co'>### Costs</span>
-<span class='no'>drugcostmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>drugcost_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
-<span class='no'>medcostmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span>(<span class='no'>medcost_tbl</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n_samples</span>)
-<span class='no'>costmods</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>drugs</span> <span class='kw'>=</span> <span class='no'>drugcostmod</span>,
-                 <span class='kw'>medical</span> <span class='kw'>=</span> <span class='no'>medcostmod</span>)
+<span class='va'>drugcostmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span><span class='op'>(</span><span class='va'>drugcost_tbl</span>, n <span class='op'>=</span> <span class='va'>n_samples</span>, hesim_data <span class='op'>=</span> <span class='va'>hesim_dat</span><span class='op'>)</span>
+<span class='va'>medcostmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span><span class='op'>(</span><span class='va'>medcost_tbl</span>, n <span class='op'>=</span> <span class='va'>n_samples</span>, hesim_data <span class='op'>=</span> <span class='va'>hesim_dat</span><span class='op'>)</span>
+<span class='va'>costmods</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>drugs <span class='op'>=</span> <span class='va'>drugcostmod</span>,
+                 medical <span class='op'>=</span> <span class='va'>medcostmod</span><span class='op'>)</span>
 
 <span class='co'>### Combine</span>
-<span class='no'>ictstm</span> <span class='kw'>&lt;-</span> <span class='no'>IndivCtstm</span>$<span class='fu'>new</span>(<span class='kw'>trans_model</span> <span class='kw'>=</span> <span class='no'>transmod</span>,
-                         <span class='kw'>utility_model</span> <span class='kw'>=</span> <span class='no'>utilitymod</span>,
-                         <span class='kw'>cost_models</span> <span class='kw'>=</span> <span class='no'>costmods</span>)
+<span class='va'>ictstm</span> <span class='op'>&lt;-</span> <span class='va'>IndivCtstm</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>trans_model <span class='op'>=</span> <span class='va'>transmod</span>,
+                         utility_model <span class='op'>=</span> <span class='va'>utilitymod</span>,
+                         cost_models <span class='op'>=</span> <span class='va'>costmods</span><span class='op'>)</span>
 
 
 <span class='co'>## Simulate outcomes</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ictstm</span>$<span class='fu'>sim_disease</span>()$<span class='no'>disprog_</span>)</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id from to final time_start time_stop
-#&gt; 1:      1           1          1      1    1  3     1  0.0000000 0.4036627
-#&gt; 2:      1           1          2      1    1  2     0  0.0000000 5.5078506
-#&gt; 3:      1           1          2      1    2  1     0  5.5078506 5.8230571
-#&gt; 4:      1           1          2      1    1  3     1  5.8230571 6.6985224
-#&gt; 5:      1           1          3      1    1  2     0  0.0000000 0.7563655
-#&gt; 6:      1           1          3      1    2  1     0  0.7563655 0.7578541</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ictstm</span>$<span class='fu'>sim_stateprobs</span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>))$<span class='no'>stateprobs_</span>[<span class='no'>t</span> <span class='kw'>==</span> <span class='fl'>5</span>])</div><div class='output co'>#&gt;    sample strategy_id grp_id state_id t      prob
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>sim_disease</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>disprog_</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id from to final time_start time_stop
+#&gt; 1:      1           1          1      1    1  2     0  0.0000000 8.7298625
+#&gt; 2:      1           1          1      1    2  1     0  8.7298625 9.0337495
+#&gt; 3:      1           1          1      1    1  3     1  9.0337495 9.1465004
+#&gt; 4:      1           1          2      1    1  2     0  0.0000000 0.8633822
+#&gt; 5:      1           1          2      1    2  3     1  0.8633822 2.4836085
+#&gt; 6:      1           1          3      1    1  2     0  0.0000000 1.3210423</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>stateprobs_</span><span class='op'>[</span><span class='va'>t</span> <span class='op'>==</span> <span class='fl'>5</span><span class='op'>]</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    sample strategy_id grp_id state_id t      prob
 #&gt; 1:      1           1      1        1 5 0.3333333
-#&gt; 2:      1           1      1        2 5 0.3333333
-#&gt; 3:      1           1      1        3 5 0.3333333
-#&gt; 4:      1           2      1        1 5 0.6666667
-#&gt; 5:      1           2      1        2 5 0.0000000
-#&gt; 6:      1           2      1        3 5 0.3333333</div><div class='input'><span class='no'>ictstm</span>$<span class='fu'><a href='sim_ev.html'>sim_qalys</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
-<span class='no'>ictstm</span>$<span class='fu'><a href='sim_ev.html'>sim_costs</a></span>(<span class='kw'>dr</span> <span class='kw'>=</span> <span class='fl'>.03</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ictstm</span>$<span class='fu'>summarize</span>())</div><div class='output co'>#&gt; $costs
+#&gt; 2:      1           1      1        2 5 0.0000000
+#&gt; 3:      1           1      1        3 5 0.6666667
+#&gt; 4:      1           2      1        1 5 0.3333333
+#&gt; 5:      1           2      1        2 5 0.3333333
+#&gt; 6:      1           2      1        3 5 0.3333333</div><div class='input'><span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>sim_qalys</span><span class='op'>(</span>dr <span class='op'>=</span> <span class='fl'>.03</span><span class='op'>)</span>
+<span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>sim_costs</span><span class='op'>(</span>dr <span class='op'>=</span> <span class='fl'>.03</span><span class='op'>)</span>
+
+<span class='co'>### Summarize cost-effectiveness</span>
+<span class='va'>ce</span> <span class='op'>&lt;-</span> <span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>summarize</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ce</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $costs
 #&gt;     category   dr sample strategy_id     costs grp_id
-#&gt;  1:    drugs 0.03      1           1 42596.065      1
-#&gt;  2:    drugs 0.03      1           2 44645.168      1
-#&gt;  3:    drugs 0.03      2           1 25228.525      1
-#&gt;  4:    drugs 0.03      2           2 89673.803      1
-#&gt;  5:  medical 0.03      1           1 10533.655      1
-#&gt;  6:  medical 0.03      1           2  4610.220      1
-#&gt;  7:  medical 0.03      2           1  5296.932      1
-#&gt;  8:  medical 0.03      2           2  9632.893      1
-#&gt;  9:    total 0.03      1           1 53129.720      1
-#&gt; 10:    total 0.03      1           2 49255.388      1
-#&gt; 11:    total 0.03      2           1 30525.457      1
-#&gt; 12:    total 0.03      2           2 99306.697      1
+#&gt;  1:    drugs 0.03      1           1 21453.373      1
+#&gt;  2:    drugs 0.03      1           2 57372.126      1
+#&gt;  3:    drugs 0.03      2           1  5595.868      1
+#&gt;  4:    drugs 0.03      2           2 47528.668      1
+#&gt;  5:  medical 0.03      1           1  4841.629      1
+#&gt;  6:  medical 0.03      1           2  6352.965      1
+#&gt;  7:  medical 0.03      2           1  1509.390      1
+#&gt;  8:  medical 0.03      2           2  5001.122      1
+#&gt;  9:    total 0.03      1           1 26295.002      1
+#&gt; 10:    total 0.03      1           2 63725.092      1
+#&gt; 11:    total 0.03      2           1  7105.258      1
+#&gt; 12:    total 0.03      2           2 52529.789      1
 #&gt; 
 #&gt; $qalys
-#&gt;      dr sample strategy_id    qalys grp_id
-#&gt; 1: 0.03      1           1 3.572185      1
-#&gt; 2: 0.03      1           2 2.606998      1
-#&gt; 3: 0.03      2           1 1.440414      1
-#&gt; 4: 0.03      2           2 2.703469      1
-#&gt; </div><div class='input'>
+#&gt;      dr sample strategy_id     qalys grp_id
+#&gt; 1: 0.03      1           1 3.8436443      1
+#&gt; 2: 0.03      1           2 5.1130289      1
+#&gt; 3: 0.03      2           1 0.9649088      1
+#&gt; 4: 0.03      2           2 3.3398782      1
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>ce</span><span class='op'>)</span>, pivot_from <span class='op'>=</span> <span class='st'>"strategy"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Discount rate        Outcome                      1                       2
+#&gt; 1:          0.03          QALYs      2.40 (1.04, 3.77)       4.23 (3.38, 5.07)
+#&gt; 2:          0.03   Costs: drugs 13,525 (5,992, 21,057) 52,450 (47,775, 57,126)
+#&gt; 3:          0.03 Costs: medical   3,176 (1,593, 4,758)    5,677 (5,035, 6,319)
+#&gt; 4:          0.03   Costs: total 16,700 (7,585, 25,815) 58,127 (52,810, 63,445)</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -486,7 +498,7 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h3>Usage</h
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

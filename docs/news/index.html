@@ -89,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -111,7 +111,7 @@
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -133,14 +133,14 @@
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -170,12 +170,52 @@
       <small>Source: <a href='https://github.com/hesim-dev/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="hesim-042" class="section level2">
+    <div id="hesim-050" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hesim-042" class="anchor"></a>hesim 0.4.2</h2>
+<a href="#hesim-050" class="anchor"></a>hesim 0.5.0</h2>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
+<ul>
+<li><p>A transition intensity matrix can be created from a multi-state model fit using <code><a href="https://rdrr.io/pkg/msm/man/msm.html">msm::msm()</a></code> with the <code><a href="../reference/qmatrix.msm.html">qmatrix.msm()</a></code> method. Similarly, a <code>CohortDtstmTrans</code> object can be created with <code><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans.msm()</a></code>.</p></li>
+<li><p>The <code>...</code> argument to <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> now passes arguments to <code><a href="../reference/create_params.html">create_params.partsurvfit()</a></code> when <code>object</code> is of class <code>flexsurvreg_list</code>. This allows more control over bootstrapping (i.e., use of the <code>max_errors</code> and <code>silent</code> arguments).</p></li>
+<li><p><code><a href="../reference/summary.ce.html">summary.ce()</a></code> is a new summary method for a <code><a href="../reference/ce.html">hesim::ce</a></code> object that produces confidence intervals for quality-adjusted life-years (QALYs) and each cost category; <code><a href="../reference/summary.ce.html">format.summary.ce()</a></code> formats the output for pretty printing.</p></li>
+<li><p><code><a href="../reference/icer.html">icer()</a></code> generates a tidy table of incremental cost-effectiveness ratios (ICERs) given output from <code><a href="../reference/cea.html">cea_pw()</a></code>; <code><a href="../reference/icer.html">format.icer()</a></code> formats the output for pretty printing.</p></li>
+<li><p><code><a href="../reference/plot_ceplane.html">plot_ceplane()</a></code>, <code><a href="../reference/plot_ceac.html">plot_ceac()</a></code>, <code><a href="../reference/plot_ceaf.html">plot_ceaf()</a></code>, and <code><a href="../reference/plot_evpi.html">plot_evpi()</a></code> plot the cost-effectiveness plane, cost-effectiveness acceptability curve (CEAC), cost-effectiveness acceptability frontier (CEAF), and expected value of perfect information (EVPI), respectively.</p></li>
+<li><p><code><a href="../reference/autoplot.survival.html">autoplot.survival()</a></code> and <code><a href="../reference/autoplot.stateprobs.html">autoplot.stateprobs()</a></code> plot survival curves and state probabilities, respectively.</p></li>
+</ul>
+</div>
+<div id="api-changes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#api-changes" class="anchor"></a>API changes</h3>
+<ul>
+<li><p>The first column of each matrix listed in the <code>coef</code> element returned by <code><a href="../reference/create_params.html">create_params.flexsurvreg()</a></code> is now named “(Intercept)” instead of the name of the corresponding parameter.</p></li>
+<li><p>The <code><a href="../reference/create_params.html">create_params()</a></code> methods now use the argument <code>uncertainty</code> to draw parameters and the old arguments <code>point_estimate</code> and <code>bootstrap</code> are deprecated. This also affects <code><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans()</a></code>, <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans()</a></code>, and <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code>.</p></li>
+<li><p><code><a href="../reference/icer_tbl.html">icer_tbl()</a></code> has been deprecated in favor of <code><a href="../reference/icer.html">icer()</a></code>.</p></li>
+<li><p>The column <code>trans</code> in the data table returned by the <code>$hazard()</code> and <code>$cumhazard()</code> methods from the <code><a href="../reference/CtstmTrans.html">hesim::CtstmTrans</a></code> class has been renamed <code>transition_id</code>.</p></li>
+</ul>
+</div>
+<div id="documentation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h3>
+<ul>
+<li>Performance benchmarks are now provided <a href="../articles/benchmarks.html">here</a>.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>The <code>$summarize()</code> method of <code><a href="../reference/Psm.html">hesim::Psm</a></code> now contains the <code>by_grp</code> argument so that subgroup analyses can be performed.</li>
+</ul>
+</div>
+</div>
+    <div id="hesim-042" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hesim-042" class="anchor"></a>hesim 0.4.2</h2>
+<div id="new-features-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>New features</h3>
 <ul>
 <li>
 <p>There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in <code><a href="../reference/tparams_transprobs.html">tparams_transprobs()</a></code> objects and used for simulation of discrete time state transition models. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., <code>data.table</code>, <code>data.frame</code>, <code>matrix</code>).</p>
@@ -192,9 +232,9 @@
 <li><p>The function <code><a href="../reference/as_pfs_os.html">as_pfs_os()</a></code> can convert a multi-state dataset in the same format as <code><a href="../reference/onc3.html">hesim::onc3</a></code> into a dataset with one row per patients containing time to event information for progression free survival (PFS) and overall survival (OS).</p></li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level3">
+<div id="bug-fixes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li><p>The <code>cycle_length</code> field in <code>CohortDtstmTrans</code> was fixed so that it corresponds to a model cycle in terms of years (e.g., a value of 2 means a model cycle is 2 years long and that state probabilities are computed every 2 years with <code>$sim_stateprobs()</code>).</p></li>
 <li><p>The simulated dataset <code>multinom3_exdata</code> was fixed by removing a bug where some patients were simulated to have died more than once.</p></li>
@@ -211,9 +251,9 @@
     <div id="hesim-040" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hesim-040" class="anchor"></a>hesim 0.4.0</h2>
-<div id="new-features-1" class="section level3">
+<div id="new-features-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New features</h3>
+<a href="#new-features-2" class="anchor"></a>New features</h3>
 <ul>
 <li><p><code>IndivCtstmTrans</code> objects can be constructed from a <code>params_surv_list</code> using <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans.params_surv_list()</a></code>.</p></li>
 <li><p>Survival models can randomly sample from piecewise exponential and proportional hazards Weibull distributions. A <code>fixed</code> distribution has also been added so that survival times can be set to a single constant value. Random number generation from truncated versions of these distributions is also supported. Note that functionality beyond random number generation (e.g., hazard functions, cumulative hazard functions, cumulative density functions) is not yet complete. See <code><a href="../reference/params_surv.html">?params_surv</a></code>.</p></li>
@@ -223,17 +263,17 @@
 <li><p>The “Articles” on the package website have been reorganized so that they align more closely with the different types of economic models.</p></li>
 </ul>
 </div>
-<div id="api-changes" class="section level3">
+<div id="api-changes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#api-changes" class="anchor"></a>API changes</h3>
+<a href="#api-changes-1" class="anchor"></a>API changes</h3>
 <ul>
 <li>
 <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code> have been deprecated and replaced by <code><a href="../reference/cea.html">cea()</a></code> and <code><a href="../reference/cea.html">cea_pw()</a></code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li><p>The <code>lys</code> argument for the <code>$sim_qalys()</code> method of <code><a href="../reference/Psm.html">hesim::Psm</a></code> and <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> classes now works.</p></li>
 <li><p>The <code>$sim_stateprobs()</code> argument for the <code><a href="../reference/Psm.html">hesim::Psm</a></code> class now properly returns the <code>patient_wt</code> column.</p></li>
@@ -253,9 +293,9 @@
 <a href="#highlights" class="anchor"></a>Highlights</h3>
 <p><code>hesim</code> now supports discrete time state transition models via <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> objects. Users can build a model by either fitting multinomial logistic regressions with <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html">nnet::multinom()</a></code> or with a mathematical expression using <code><a href="../reference/define_model.html">define_model()</a></code>. Furthermore, <code>$summarize()</code> methods now have a <code>by_grp</code> option to facilitate subgroup analyses.</p>
 </div>
-<div id="new-features-2" class="section level3">
+<div id="new-features-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>New features</h3>
+<a href="#new-features-3" class="anchor"></a>New features</h3>
 <ul>
 <li><p>The <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> class simulates cohort discrete time state transition models (cDTSTM). State transitions in a cDTSTM are simulated using the <code><a href="../reference/CohortDtstmTrans.html">hesim::CohortDtstmTrans</a></code> class, which can be constructed from a <code><a href="../reference/multinom_list.html">multinom_list()</a></code> object or using <code><a href="../reference/define_model.html">define_model()</a></code>.</p></li>
 <li><p><code>$summarize()</code> methods now have a <code>by_grp = "TRUE"</code> option to facilitate subgroup analyses. If <code>by_grp = "FALSE"</code>, then estimates are aggregated across groups. A new <code>patient_wt</code> argument in the <code>patients</code> table of <code><a href="../reference/hesim_data.html">hesim_data()</a></code> can be used to weight groups during the aggregation.</p></li>
@@ -264,9 +304,9 @@
 <li><p><code><a href="../reference/rdirichlet_mat.html">rdirichlet_mat()</a></code> has a new argument <code>output</code> so that multiple object types can be returned.</p></li>
 </ul>
 </div>
-<div id="api-changes-1" class="section level3">
+<div id="api-changes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#api-changes-1" class="anchor"></a>API changes</h3>
+<a href="#api-changes-2" class="anchor"></a>API changes</h3>
 <ul>
 <li><p>The auxiliary argument <code>random_method = "sample"</code> in <code><a href="../reference/params_surv.html">params_surv()</a></code> is deprecated and <code>random_method = "discrete"</code> should be used instead.</p></li>
 <li><p><code>stateval_tbl</code> now contains a <code>grp_var</code> column used to assign state values to “groups” of patients. This is distinct from <code>grp_id</code> in <code><a href="../reference/hesim_data.html">hesim_data()</a></code>, which is used to define groups for subgroup analyses.</p></li>
@@ -291,15 +331,17 @@
 <p>The <code>input_mats</code> class now contains an element <code>time_reset</code>. If <code>TRUE</code>, then time intervals reset each time a patient enters a new health state. In other words, state values can depend on time since entering a health state.</p>
 <p>To illustrate, consider an oncology application with three health states (stable disease, progressed disease, and death). In these models it is common to assume that patients begin second line treatment after disease progression. Suppose the second line treatment is a chemotherapy that patients take for 12 cycles (or approximately 1 year). Then drug costs would accrue for the first year but not afterwards.</p>
 <p>State values like this can be specified by setting <code>time_reset = TRUE</code> in <code><a href="../reference/create_StateVals.html">create_StateVals.stateval_tbl()</a></code>.</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="no">hesim_dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span>(<span class="kw">strategies</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">strategy_id</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>)),
-                        <span class="kw">patients</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">patient_id</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>, <span class="fl">3</span>)),
-                        <span class="kw">states</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">state_id</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>)))
-<span class="no">drugcosts</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span>(<span class="kw">tbl</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">state_id</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>), <span class="kw">each</span> <span class="kw">=</span> <span class="fl">2</span>),
-                                           <span class="kw">time_start</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
-                                           <span class="kw">est</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10000</span>, <span class="fl">0</span>, <span class="fl">12500</span>, <span class="fl">0</span>)),
-                                  <span class="kw">dist</span> <span class="kw">=</span> <span class="st">"fixed"</span>,
-                                  <span class="kw">hesim_data</span> <span class="kw">=</span> <span class="no">hesim_dat</span>)
-<span class="no">drugcostsmod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span>(<span class="no">drugcosts</span>, <span class="kw">time_reset</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">hesim_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span><span class="op">(</span>strategies <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
+                        patients <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,
+                        states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">drugcosts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span>tbl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
+                                           time_start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
+                                           est <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10000</span>, <span class="fl">0</span>, <span class="fl">12500</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,
+                                  dist <span class="op">=</span> <span class="st">"fixed"</span>,
+                                  hesim_data <span class="op">=</span> <span class="va">hesim_dat</span><span class="op">)</span>  
+<span class="va">drugcostsmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span><span class="op">(</span><span class="va">drugcosts</span>, time_reset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </code></pre></div>
 </div>
     <div id="hesim-020" class="section level2">
 <h2 class="hasAnchor">
@@ -309,9 +351,9 @@
 <a href="#highlights-1" class="anchor"></a>Highlights</h3>
 <p><code>hesim</code> now provides a general framework for integrating statistical models with economic evaluation. Users build a decision model by specifying a model structure, which consists of a set of statistical models for disease progression, utilities, and costs. Each statistical model is used to simulate outcomes as a function of estimated parameters and input data. N-state partitioned survival models (PSMs) and individual-level continuous time state transition models (iCTSTMs) are now supported.</p>
 </div>
-<div id="new-features-3" class="section level3">
+<div id="new-features-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#new-features-3" class="anchor"></a>New features</h3>
+<a href="#new-features-4" class="anchor"></a>New features</h3>
 <p>Economic models—which combine the disease, utility, and cost models—are constructed with the following classes:</p>
 <ul>
 <li>
@@ -329,9 +371,9 @@
 <p>Utility and cost models are constructed with the <code><a href="../reference/StateVals.html">hesim::StateVals</a></code> class.</p>
 <p>The economic models are used to simulate disease progression (<code>$sim_disease()</code>, <code>$sim_stateprobs()</code>), quality-adjusted life-years (QALYs) (<code>$sim_qalys()</code>), and costs (<code>$sim_costs()</code>). Parameter uncertainty is propagated to model outcomes using probabilistic sensitivity analysis. Summaries of the simulated costs and QALYs are used to perform model-based cost-effectiveness analyses (CEAs) and represent decision uncertainty with <code>icea.ce()</code> and <code>icea_pw.ce()</code>.</p>
 </div>
-<div id="api-changes-2" class="section level3">
+<div id="api-changes-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#api-changes-2" class="anchor"></a>API changes</h3>
+<a href="#api-changes-3" class="anchor"></a>API changes</h3>
 <ul>
 <li>The argument <code>sim</code> was renamed <code>sample</code> in <code><a href="../reference/icea.html">icea()</a></code>, <code><a href="../reference/icea.html">icea_pw()</a></code>, and <code><a href="../reference/incr_effect.html">incr_effect()</a></code>.</li>
 <li>Custom functions and variables are no longer supported in <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code>.</li>
@@ -360,7 +402,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

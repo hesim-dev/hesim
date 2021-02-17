@@ -91,7 +91,7 @@ $sim_costs() in model classes that store simulated costs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@ $sim_costs() in model classes that store simulated costs." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ $sim_costs() in model classes that store simulated costs." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -169,7 +169,7 @@ $sim_costs() in model classes that store simulated costs." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Costs object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/statevals.R'><code>R/statevals.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/output.R'><code>R/output.R</code></a></small>
     <div class="hidden name"><code>costs.Rd</code></div>
     </div>
 
@@ -186,7 +186,7 @@ $sim_costs() in model classes that store simulated costs." />
 
 <p>A <code>costs</code> object inherits from <code>data.table</code> and contains
 the following columns:</p>
-<dl'>
+<dl>
 <dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
 <dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>
 <dt>patient_id</dt><dd><p>The patient ID.</p></dd>
@@ -213,7 +213,7 @@ the following columns:</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

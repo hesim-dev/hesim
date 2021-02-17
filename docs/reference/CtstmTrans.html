@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>An <code>R6</code> base class for continuous time state transition models — CtstmTrans • hesim</title>
+<title>An R6 base class for continuous time state transition models — CtstmTrans • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,11 @@
 
 
 
-<meta property="og:title" content="An <code>R6</code> base class for continuous time state transition models — CtstmTrans" />
-<meta property="og:description" content="A non-exported base class for continuous time state transition models containing methods
-that can be used to summarize fitted multi-state models." />
+<meta property="og:title" content="An R6 base class for continuous time state transition models — CtstmTrans" />
+<meta property="og:description" content="Contains methods that can be used to summarize both individual- and cohort-level
+continuous time state transition models. That is, this class is relevant for
+both Markov and semi-Markov multi-state models and does not depend on the
+methodology used for prediction of state probabilities." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -91,7 +93,7 @@ that can be used to summarize fitted multi-state models." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -113,7 +115,7 @@ that can be used to summarize fitted multi-state models." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +137,14 @@ that can be used to summarize fitted multi-state models." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -174,22 +176,24 @@ that can be used to summarize fitted multi-state models." />
     </div>
 
     <div class="ref-description">
-    <p>A non-exported base class for continuous time state transition models containing methods
-that can be used to summarize fitted multi-state models.</p>
+    <p>Contains methods that can be used to summarize both individual- and cohort-level
+continuous time state transition models. That is, this class is relevant for
+both Markov and semi-Markov multi-state models and does not depend on the
+methodology used for prediction of state probabilities.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An <a href='https://rdrr.io/pkg/R6/man/R6Class.html'>R6::R6Class</a> object.</p>
+    <p>An <code><a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a></code> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></p></div>
+    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code></p></div>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-hazard'><code>CtstmTrans$hazard()</code></a></p></li>
@@ -197,38 +201,38 @@ that can be used to summarize fitted multi-state models.</p>
 <li><p><a href='#method-clone'><code>CtstmTrans$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-hazard"></a></p><h3>Method <code>hazard()</code></h3>
-<p>Predict the hazard functions for each health state transition.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>CtstmTrans</span>$<span class='fu'>hazard</span>(<span class='no'>t</span>)</pre><p></div></p>
+<a id="method-hazard"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>hazard()</code></h3>
+<p>Predict the hazard functions for each health state transition.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>CtstmTrans</span><span class='op'>$</span><span class='fu'>hazard</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
-<p>A <code>data.table</code> with columns <code>trans</code> (the transition number),
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>A <code>data.table</code> with columns <code>transition_id</code>,
 <code>sample</code>, <code>strategy_id</code>, <code>grp_id</code>, <code>t</code>, and <code>hazard</code>.</p>
 <p><hr>
-<a id="method-cumhazard"></a></p><h3>Method <code>cumhazard()</code></h3>
-<p>Predict the cumulative hazard functions for each health state transition.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>CtstmTrans</span>$<span class='fu'>cumhazard</span>(<span class='no'>t</span>)</pre><p></div></p>
+<a id="method-cumhazard"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>cumhazard()</code></h3>
+<p>Predict the cumulative hazard functions for each health state transition.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>CtstmTrans</span><span class='op'>$</span><span class='fu'>cumhazard</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>t</code></dt><dd><p>A numeric vector of times.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
-<p>A <code>data.table</code> with columns <code>trans</code>,
-<code>sample</code>, <code>strategy_id</code>, <code>grp_id</code>, <code>t</code>, and <code>hazard</code>.</p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>A <code>data.table</code> with columns <code>transition_id</code>,
+<code>sample</code>, <code>strategy_id</code>, <code>grp_id</code>, <code>t</code>, and <code>cumhazard</code>.</p>
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>CtstmTrans</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>CtstmTrans</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
 </dl><p></div></p>
@@ -250,7 +254,7 @@ that can be used to summarize fitted multi-state models.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

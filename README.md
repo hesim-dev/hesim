@@ -25,12 +25,12 @@ making individual-level simulation, probabilistic sensitivity analysis
 
 Features of the current version can be summarized as follows:
 
-  - Cohort DTSTMs, N-state PSMs, and individual-level CTSTMs that
+  - Cohort DTSTMs, individual-level CTSTMs, and N-state PSMs that
     encompass Markov and semi-Markov processes
-  - Options to build models via mathematical expressions using
-    nonstandard evaluation or directly from fitted statistical models
-  - Parameter estimates from either an R based model or from an external
-    source
+  - Options to build models directly from fitted statistical models or
+    by defining them in terms of expressions
+  - Parameter estimates from either an `R` based model or from an
+    external source
   - Convenience functions for sampling model parameters from parametric
     distributions or via bootstrapping
   - Parameter uncertainty propagated with PSA

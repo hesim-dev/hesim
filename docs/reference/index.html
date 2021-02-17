@@ -89,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -111,7 +111,7 @@
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -133,14 +133,14 @@
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -290,9 +290,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="qmatrix.html">qmatrix()</a></code> </p>
+          <p><code><a href="qmatrix.matrix.html">qmatrix(<i>&lt;matrix&gt;</i>)</a></code> <code><a href="qmatrix.matrix.html">qmatrix(<i>&lt;data.table&gt;</i>)</a></code> <code><a href="qmatrix.matrix.html">qmatrix(<i>&lt;data.frame&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Transition intensity matrix</p></td>
+        <td><p>Transition intensity matrix from tabular object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="qmatrix.msm.html">qmatrix(<i>&lt;msm&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Transition intensity matrix from <code>msm</code> object</p></td>
       </tr><tr>
         
         <td>
@@ -336,6 +342,12 @@
           <p><code><a href="params.html">params</a></code> </p>
         </td>
         <td><p>Parameter object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="create_params.html">create_params()</a></code> </p>
+        </td>
+        <td><p>Create a parameter object from a fitted model</p></td>
       </tr><tr>
         
         <td>
@@ -402,7 +414,7 @@
         <td>
           <p><code><a href="hesim_data.html">hesim_data()</a></code> </p>
         </td>
-        <td><p>Data for health-economic simulation modeling</p></td>
+        <td><p>Data for health economic simulation modeling</p></td>
       </tr><tr>
         
         <td>
@@ -427,6 +439,18 @@
           <p><code><a href="input_mats.html">input_mats()</a></code> </p>
         </td>
         <td><p>Input matrices for a statistical model</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_labels.html">get_labels()</a></code> </p>
+        </td>
+        <td><p>Get value labels</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="set_labels.html">set_labels()</a></code> </p>
+        </td>
+        <td><p>Set value labels</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -662,6 +686,12 @@
           <p><code><a href="surv_quantile.html">surv_quantile()</a></code> </p>
         </td>
         <td><p>Survival quantiles</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="summary.ce.html">summary(<i>&lt;ce&gt;</i>)</a></code> <code><a href="summary.ce.html">format(<i>&lt;summary.ce&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summary method for cost-effectiveness object</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -684,9 +714,58 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="icer_tbl.html">icer_tbl()</a></code> </p>
+          <p><code><a href="icer.html">icer()</a></code> <code><a href="icer.html">format(<i>&lt;icer&gt;</i>)</a></code> </p>
         </td>
-        <td><p>ICER table</p></td>
+        <td><p>Incremental cost-effectiveness ratio</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-plotting" class="hasAnchor"><a href="#section-plotting" class="anchor"></a>Plotting</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="autoplot.survival.html">autoplot(<i>&lt;survival&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Plot survival curves</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="autoplot.stateprobs.html">autoplot(<i>&lt;stateprobs&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Plot state probabilities</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_ceplane.html">plot_ceplane()</a></code> </p>
+        </td>
+        <td><p>Plot cost-effectiveness plane</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_ceac.html">plot_ceac()</a></code> </p>
+        </td>
+        <td><p>Plot cost-effectiveness acceptability curve</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_ceaf.html">plot_ceaf()</a></code> </p>
+        </td>
+        <td><p>Plot cost-effectiveness acceptability frontier</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_evpi.html">plot_evpi()</a></code> </p>
+        </td>
+        <td><p>Plot expected value of perfect information</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -727,6 +806,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="onc3p.html">onc3p</a></code> </p>
+        </td>
+        <td><p>Multi-state panel oncology data for 3-state model</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="as_pfs_os.html">as_pfs_os()</a></code> </p>
         </td>
         <td><p>Convert multi-state data to PFS and OS data</p></td>
@@ -749,7 +834,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

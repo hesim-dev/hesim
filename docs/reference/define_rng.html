@@ -93,7 +93,7 @@ an object of class model_def defined using define_model()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@ an object of class model_def defined using define_model()." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -137,14 +137,14 @@ an object of class model_def defined using define_model()." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -182,9 +182,9 @@ sensitivity analysis. These functions are typically used when evaluating
 an object of class <code>model_def</code> defined using <code><a href='define_model.html'>define_model()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>define_rng</span>(<span class='no'>expr</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>define_rng</span><span class='op'>(</span><span class='va'>expr</span>, n <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>eval_rng</span>(<span class='no'>x</span>, <span class='kw'>params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>check</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>eval_rng</span><span class='op'>(</span><span class='va'>x</span>, params <span class='op'>=</span> <span class='cn'>NULL</span>, check <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -249,37 +249,38 @@ transition probability matrix).</p>
     <div class='dont-index'><p><a href='rng_distributions.html'>rng_distributions</a>, <code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='no'>params</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>75</span>, <span class='fl'>25</span>, <span class='fl'>33</span>, <span class='fl'>67</span>), <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-  <span class='kw'>inptcost_mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>A</span> <span class='kw'>=</span> <span class='fl'>900</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>1500</span>, <span class='kw'>C</span> <span class='kw'>=</span> <span class='fl'>2000</span>),
-  <span class='kw'>outptcost_mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>300</span>, <span class='fl'>600</span>, <span class='fl'>800</span>,
-                            <span class='fl'>400</span>, <span class='fl'>700</span>, <span class='fl'>700</span>),
-                           <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-)
-<span class='no'>rng_def</span> <span class='kw'>&lt;-</span> <span class='fu'>define_rng</span>({
-  <span class='no'>aecost_mean</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>500</span>, <span class='fl'>800</span>, <span class='fl'>1000</span>) <span class='co'># Local object not </span>
+    <pre class="examples"><div class='input'> 
+<span class='va'>params</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  alpha <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>75</span>, <span class='fl'>25</span>, <span class='fl'>33</span>, <span class='fl'>67</span><span class='op'>)</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+  inptcost_mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>A <span class='op'>=</span> <span class='fl'>900</span>, B <span class='op'>=</span> <span class='fl'>1500</span>, C <span class='op'>=</span> <span class='fl'>2000</span><span class='op'>)</span>,
+  outptcost_mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>300</span>, <span class='fl'>600</span>, <span class='fl'>800</span>,
+                            <span class='fl'>400</span>, <span class='fl'>700</span>, <span class='fl'>700</span><span class='op'>)</span>,
+                           ncol <span class='op'>=</span> <span class='fl'>3</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>rng_def</span> <span class='op'>&lt;-</span> <span class='fu'>define_rng</span><span class='op'>(</span><span class='op'>{</span>
+  <span class='va'>aecost_mean</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>500</span>, <span class='fl'>800</span>, <span class='fl'>1000</span><span class='op'>)</span> <span class='co'># Local object not </span>
                                    <span class='co'># not returned by eval_rng()</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>( <span class='co'># Sampled values of parameters returned by eval_rng()</span>
-    <span class='kw'>p</span> <span class='kw'>=</span> <span class='fu'><a href='rng_distributions.html'>dirichlet_rng</a></span>(<span class='no'>alpha</span>), <span class='co'># Default column names</span>
-    <span class='kw'>inptcost</span> <span class='kw'>=</span> <span class='fu'><a href='rng_distributions.html'>gamma_rng</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>inptcost_mean</span>, <span class='co'># Column names based on </span>
-                         <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>inptcost_mean</span>),  <span class='co'># named vector</span>
-    <span class='kw'>outptcost</span> <span class='kw'>=</span> <span class='no'>outptcost_mean</span>, <span class='co'># No column names because</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span> <span class='co'># Sampled values of parameters returned by eval_rng()</span>
+    p <span class='op'>=</span> <span class='fu'><a href='rng_distributions.html'>dirichlet_rng</a></span><span class='op'>(</span><span class='va'>alpha</span><span class='op'>)</span>, <span class='co'># Default column names</span>
+    inptcost <span class='op'>=</span> <span class='fu'><a href='rng_distributions.html'>gamma_rng</a></span><span class='op'>(</span>mean <span class='op'>=</span> <span class='va'>inptcost_mean</span>, <span class='co'># Column names based on </span>
+                         sd <span class='op'>=</span> <span class='va'>inptcost_mean</span><span class='op'>)</span>,  <span class='co'># named vector</span>
+    outptcost <span class='op'>=</span> <span class='va'>outptcost_mean</span>, <span class='co'># No column names because</span>
                                 <span class='co'># outptcost_mean has none.</span>
-    <span class='kw'>aecost</span> <span class='kw'>=</span> <span class='fu'><a href='rng_distributions.html'>gamma_rng</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>aecost_mean</span>, <span class='co'># Explicit naming of columns</span>
-                       <span class='kw'>sd</span> <span class='kw'>=</span> <span class='no'>aecost_mean</span>,
-                       <span class='kw'>names</span> <span class='kw'>=</span> <span class='no'>aecost_colnames</span>)
-  )
-}, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>aecost_colnames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>)) <span class='co'># Add aecost_colnames to environment</span>
-<span class='fu'>eval_rng</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>rng_def</span>, <span class='no'>params</span>)</div><div class='output co'>#&gt; $p
+    aecost <span class='op'>=</span> <span class='fu'><a href='rng_distributions.html'>gamma_rng</a></span><span class='op'>(</span>mean <span class='op'>=</span> <span class='va'>aecost_mean</span>, <span class='co'># Explicit naming of columns</span>
+                       sd <span class='op'>=</span> <span class='va'>aecost_mean</span>,
+                       names <span class='op'>=</span> <span class='va'>aecost_colnames</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>}</span>, n <span class='op'>=</span> <span class='fl'>2</span>, aecost_colnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Add aecost_colnames to environment</span>
+<span class='fu'>eval_rng</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>rng_def</span>, <span class='va'>params</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $p
 #&gt;        s1_s1     s1_s2     s2_s1     s2_s2
-#&gt; 1: 0.7585336 0.2414664 0.3693639 0.6306361
-#&gt; 2: 0.7179212 0.2820788 0.3656385 0.6343615
+#&gt; 1: 0.7641322 0.2358678 0.3216384 0.6783616
+#&gt; 2: 0.7717676 0.2282324 0.3332963 0.6667037
 #&gt; 
 #&gt; $inptcost
-#&gt;            A        B        C
-#&gt; 1:  76.97165 3033.211 5068.454
-#&gt; 2: 266.62723 1789.356 2136.372
+#&gt;            A        B         C
+#&gt; 1:  233.0313 2524.334 1931.8009
+#&gt; 2: 1374.0879 2499.035  134.1758
 #&gt; 
 #&gt; $outptcost
 #&gt;      [,1] [,2] [,3]
@@ -287,9 +288,9 @@ transition probability matrix).</p>
 #&gt; [2,]  400  700  700
 #&gt; 
 #&gt; $aecost
-#&gt;            A         B           C
-#&gt; 1:  53.56667 4433.1612 3088.623581
-#&gt; 2: 650.55634  502.0913    4.181195
+#&gt;           A        B         C
+#&gt; 1: 883.7757 2086.364  855.9896
+#&gt; 2: 623.5611 1062.843 1898.9403
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -306,7 +307,7 @@ transition probability matrix).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

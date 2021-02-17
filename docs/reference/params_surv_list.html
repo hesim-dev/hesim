@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -134,14 +134,14 @@
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -176,7 +176,7 @@
     <p>Create a list containing the parameters of multiple fitted parametric survival models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>params_surv_list</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>params_surv_list</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,29 +189,30 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class "params_surv_list", which is a list containing <code>params_surv</code>
+    <p>An object of class <code>params_surv_list</code>, which is a list containing <code><a href='params_surv.html'>params_surv</a></code>
 objects.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"flexsurv"</span>)
-<span class='no'>fit_wei</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"weibull"</span>)
-<span class='no'>params_wei</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span>(<span class='no'>fit_wei</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
+<span class='va'>fit_wei</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>futime</span>, <span class='va'>fustat</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, data <span class='op'>=</span> <span class='va'>ovarian</span>, dist <span class='op'>=</span> <span class='st'>"weibull"</span><span class='op'>)</span>
+<span class='va'>params_wei</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span><span class='op'>(</span><span class='va'>fit_wei</span>, n <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
-<span class='no'>fit_exp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span>(<span class='fu'>Surv</span>(<span class='no'>futime</span>, <span class='no'>fustat</span>) ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>ovarian</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='st'>"exp"</span>)
-<span class='no'>params_exp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span>(<span class='no'>fit_exp</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='va'>fit_exp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>futime</span>, <span class='va'>fustat</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, data <span class='op'>=</span> <span class='va'>ovarian</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
+<span class='va'>params_exp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_params.html'>create_params</a></span><span class='op'>(</span><span class='va'>fit_exp</span>, n <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
-<span class='no'>params_list</span> <span class='kw'>&lt;-</span> <span class='fu'>params_surv_list</span>(<span class='kw'>wei</span> <span class='kw'>=</span> <span class='no'>params_wei</span>, <span class='kw'>exp</span> <span class='kw'>=</span> <span class='no'>params_exp</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>params_list</span>)</div><div class='output co'>#&gt; $wei
+<span class='va'>params_list</span> <span class='op'>&lt;-</span> <span class='fu'>params_surv_list</span><span class='op'>(</span>wei <span class='op'>=</span> <span class='va'>params_wei</span>, exp <span class='op'>=</span> <span class='va'>params_exp</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>params_list</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $wei
 #&gt; $coefs
 #&gt; $coefs$shape
-#&gt;           shape
-#&gt; [1,] 0.16724202
-#&gt; [2,] 0.01821585
+#&gt;      (Intercept)
+#&gt; [1,]  0.07090086
+#&gt; [2,]  0.09470125
 #&gt; 
 #&gt; $coefs$scale
-#&gt;         scale
-#&gt; [1,] 6.594841
-#&gt; [2,] 6.996545
+#&gt;      (Intercept)
+#&gt; [1,]    6.984067
+#&gt; [2,]    6.656792
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -226,9 +227,9 @@ objects.</p>
 #&gt; $exp
 #&gt; $coefs
 #&gt; $coefs$rate
-#&gt;           rate
-#&gt; [1,] -6.778888
-#&gt; [2,] -7.060921
+#&gt;      (Intercept)
+#&gt; [1,]   -7.554442
+#&gt; [2,]   -6.589983
 #&gt; 
 #&gt; 
 #&gt; $dist
@@ -257,7 +258,7 @@ objects.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
