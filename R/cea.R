@@ -67,7 +67,8 @@
 #' theme_set(theme_bw())
 #' 
 #' # Simulation output
-#' n_samples <- 50
+#' n_samples <- 30
+#' 
 #' sim <- data.table(sample = rep(seq(n_samples), 4),
 #'                   c = c(rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
 #'                         rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)),
