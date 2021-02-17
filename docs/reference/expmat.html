@@ -91,7 +91,7 @@ of multiple square matrices." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@ of multiple square matrices." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ of multiple square matrices." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,7 +178,7 @@ of multiple square matrices." />
 of multiple square matrices.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>expmat</span>(<span class='no'>x</span>, <span class='kw'>t</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>expmat</span><span class='op'>(</span><span class='va'>x</span>, t <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,24 +193,25 @@ of multiple square matrices.</p>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments to pass to <a href='https://rdrr.io/pkg/msm/man/MatrixExp.html'>msm::MatrixExp</a>.</p></td>
+      <td><p>Arguments to pass to <code><a href='https://rdrr.io/pkg/msm/man/MatrixExp.html'>msm::MatrixExp()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns an array of exponentiated matrices.</p>
+    <p>Returns an array of exponentiated matrices. If <code>length(t) &gt; 1</code>, then
+<code><a href='https://rdrr.io/r/base/length.html'>length(t)</a></code> arrays are returned for each element in <code>x</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function is most useful when exponentiating transition intensity
 matrices to produce transition probability matrices. To create transition
 probability matrices for discrete time state transition models with annual
 cycles, set <code>t=1</code>. An array of matrices is returned which can be used
-to create the <code>value</code> element of a <a href='tparams_transprobs.html'>tparams_transprobs</a> object. See
+to create the <code>value</code> element of a <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> object. See
 <code><a href='qmatrix.html'>qmatrix()</a></code> for an example.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='qmatrix.html'>qmatrix()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='qmatrix.msm.html'>qmatrix.msm()</a></code>, <code><a href='qmatrix.matrix.html'>qmatrix.data.table()</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -227,7 +228,7 @@ to create the <code>value</code> element of a <a href='tparams_transprobs.html'>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

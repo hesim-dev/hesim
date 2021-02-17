@@ -47,8 +47,8 @@
 
 
 <meta property="og:title" content="Transition intensity matrix — qmatrix" />
-<meta property="og:description" content="qpmatrix() creates transition intensity matrices where elements represent
-the instantaneous risk of moving between health states." />
+<meta property="og:description" content="A generic function for creating transition intensity matrices where
+elements represent the instantaneous risk of moving between health states." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -91,7 +91,7 @@ the instantaneous risk of moving between health states." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@ the instantaneous risk of moving between health states." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ the instantaneous risk of moving between health states." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -174,82 +174,26 @@ the instantaneous risk of moving between health states." />
     </div>
 
     <div class="ref-description">
-    <p><code>qpmatrix()</code> creates transition intensity matrices where elements represent
-the instantaneous risk of moving between health states.</p>
+    <p>A generic function for creating transition intensity matrices where
+elements represent the instantaneous risk of moving between health states.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>qmatrix</span>(<span class='no'>x</span>, <span class='no'>trans_mat</span>)</pre>
+    <pre class="usage"><span class='fu'>qmatrix</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A two-dimensional tabular object that can be passed to <code><a href='https://rdrr.io/r/base/matrix.html'>as.matrix()</a></code> containing
-elements of the transition intensity matrix. A column represents a transition
-from state \(r\) to state \(s\). Each row represents elements of a different
-transition intensity matrix. See "Details" for more information.</p></td>
+      <td><p>An <code>R</code> object.</p></td>
     </tr>
     <tr>
-      <th>trans_mat</th>
-      <td><p>Just as in <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>, a transition matrix
-describing the states and transitions in a multi-state model.</p></td>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An array of transition intensity matrices with the third dimension
-equal to the number of rows in <code>x</code>.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The object <code>x</code> must only contain non-zero and non-diagonal elements
-of a transition intensity matrix. The diagonal elements are automatically computed
-as the negative sum of the other rows.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='tpmatrix.html'>tpmatrix()</a></code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># 3 state irreversible model</span>
-<span class='no'>tmat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>1</span>, <span class='fl'>2</span>),
-              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>3</span>),
-              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>))
-<span class='no'>q12</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.8</span>, <span class='fl'>.7</span>)
-<span class='no'>q13</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.3</span>)
-<span class='no'>q23</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.1</span>, <span class='fl'>1.2</span>)
-<span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>q12</span>, <span class='no'>q13</span>, <span class='no'>q23</span>)
-<span class='no'>qmat</span> <span class='kw'>&lt;-</span> <span class='fu'>qmatrix</span>(<span class='no'>q</span>, <span class='kw'>trans_mat</span> <span class='kw'>=</span> <span class='no'>tmat</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>qmat</span>)</div><div class='output co'>#&gt; , , 1
-#&gt; 
-#&gt;      [,1] [,2] [,3]
-#&gt; [1,]   -1  0.8  0.2
-#&gt; [2,]    0 -1.1  1.1
-#&gt; [3,]    0  0.0  0.0
-#&gt; 
-#&gt; , , 2
-#&gt; 
-#&gt;      [,1] [,2] [,3]
-#&gt; [1,]   -1  0.7  0.3
-#&gt; [2,]    0 -1.2  1.2
-#&gt; [3,]    0  0.0  0.0
-#&gt; </div><div class='input'>
-<span class='co'># Matrix exponential of each matrix in array</span>
-<span class='fu'><a href='expmat.html'>expmat</a></span>(<span class='no'>qmat</span>)</div><div class='output co'>#&gt; , , 1
-#&gt; 
-#&gt;           [,1]      [,2]      [,3]
-#&gt; [1,] 0.3678794 0.2800669 0.3520537
-#&gt; [2,] 0.0000000 0.3328711 0.6671289
-#&gt; [3,] 0.0000000 0.0000000 1.0000000
-#&gt; 
-#&gt; , , 2
-#&gt; 
-#&gt;           [,1]      [,2]      [,3]
-#&gt; [1,] 0.3678794 0.2333983 0.3987223
-#&gt; [2,] 0.0000000 0.3011942 0.6988058
-#&gt; [3,] 0.0000000 0.0000000 1.0000000
-#&gt; </div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -265,7 +209,7 @@ as the negative sum of the other rows.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

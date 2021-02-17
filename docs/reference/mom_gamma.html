@@ -91,7 +91,7 @@ using method of moments for the random variable of interest." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@ using method of moments for the random variable of interest." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ using method of moments for the random variable of interest." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,7 +178,7 @@ using method of moments for the random variable of interest." />
 using method of moments for the random variable of interest.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mom_gamma</span>(<span class='no'>mean</span>, <span class='no'>sd</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>mom_gamma</span><span class='op'>(</span><span class='va'>mean</span>, <span class='va'>sd</span>, scale <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -214,13 +214,15 @@ $$\alpha = \frac{\mu}{\theta}$$</p>
 <p>The inverse of the scale parameter, \(\beta = 1/\theta\), is the rate parameter.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>mom_gamma</span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>10000</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>2000</span>)</div><div class='output co'>#&gt; $shape
+    <pre class="examples"><div class='input'><span class='fu'>mom_gamma</span><span class='op'>(</span>mean <span class='op'>=</span> <span class='fl'>10000</span>, sd <span class='op'>=</span> <span class='fl'>2000</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $shape
 #&gt; [1] 25
 #&gt; 
 #&gt; $scale
 #&gt; [1] 400
 #&gt; </div><div class='input'><span class='co'># The function is vectorized.</span>
-<span class='fu'>mom_gamma</span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8000</span>, <span class='fl'>10000</span>), <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1500</span>, <span class='fl'>2000</span>))</div><div class='output co'>#&gt; $shape
+<span class='fu'>mom_gamma</span><span class='op'>(</span>mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8000</span>, <span class='fl'>10000</span><span class='op'>)</span>, sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1500</span>, <span class='fl'>2000</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $shape
 #&gt; [1] 28.44444 25.00000
 #&gt; 
 #&gt; $scale
@@ -242,7 +244,7 @@ $$\alpha = \frac{\mu}{\theta}$$</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

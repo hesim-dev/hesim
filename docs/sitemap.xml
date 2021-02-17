@@ -43,6 +43,12 @@
     <loc>https://hesim-dev.github.io/hesim/reference/as_pfs_os.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/autoplot.stateprobs.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/autoplot.survival.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/bootstrap.html</loc>
   </url>
   <url>
@@ -121,6 +127,9 @@
     <loc>https://hesim-dev.github.io/hesim/reference/formula_list.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/get_labels.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/hesim.html</loc>
   </url>
   <url>
@@ -131,6 +140,9 @@
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/icea.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/icer.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/icer_tbl.html</loc>
@@ -166,7 +178,13 @@
     <loc>https://hesim-dev.github.io/hesim/reference/multinom_list.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/normboot.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/onc3.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/onc3p.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/params.html</loc>
@@ -199,6 +217,18 @@
     <loc>https://hesim-dev.github.io/hesim/reference/partsurvfit.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/plot_ceac.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/plot_ceaf.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/plot_ceplane.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/plot_evpi.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/psm4_exdata.html</loc>
   </url>
   <url>
@@ -208,16 +238,28 @@
     <loc>https://hesim-dev.github.io/hesim/reference/qmatrix.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/qmatrix.matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/qmatrix.msm.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/rcat.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/rdirichlet_mat.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/reexports.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/rng_distributions.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/rpwexp.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/set_labels.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/sim_ev.html</loc>
@@ -232,7 +274,13 @@
     <loc>https://hesim-dev.github.io/hesim/reference/summarize_ce.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/summary.ce.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/surv_quantile.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/survival.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/time_intervals.html</loc>
@@ -262,10 +310,10 @@
     <loc>https://hesim-dev.github.io/hesim/reference/weibullNMA.html</loc>
   </url>
   <url>
-    <loc>https://hesim-dev.github.io/hesim/articles/cea.html</loc>
+    <loc>https://hesim-dev.github.io/hesim/articles/benchmarks.html</loc>
   </url>
   <url>
-    <loc>https://hesim-dev.github.io/hesim/articles/expected-values.html</loc>
+    <loc>https://hesim-dev.github.io/hesim/articles/cea.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/articles/intro.html</loc>

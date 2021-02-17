@@ -13,7 +13,7 @@ This release adds new features and fixes bugs as detailed on the package website
 0 errors | 0 warnings | 1 note
 
 * checking installed package size ... NOTE
-    installed size is  5.6Mb
+    installed size is  5.9Mb
     sub-directories of 1Mb or more:
-      doc    2.1Mb
+      doc    2.2Mb
       libs   1.9Mb

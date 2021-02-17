@@ -23,7 +23,7 @@ opts_chunk$set(cache = TRUE)
 # Overview
 This article provides an overview of the `hesim` package and a quick example. The other articles provide more in depth examples.
 
-`hesim` supports three types of health-economic models: (i) cohort discrete time state transition models (cDTSTMs), (ii) N-state partitioned survival models (PSMs), and (iii) individual-level continuous time state transition models (iCTSTMs). cDTSTMs are Markov cohort models and can be time-homogeneous or time-inhomogeneous. iCTSTMs are individual-level simulations that can encompass both Markov and semi-Markov processes. All models are implemented as [R6](https://r6.r-lib.org/index.html) classes and have methods for simulating disease progression, QALYs, and costs.
+`hesim` supports three types of health economic models: (i) cohort discrete time state transition models (cDTSTMs), (ii) N-state partitioned survival models (PSMs), and (iii) individual-level continuous time state transition models (iCTSTMs). cDTSTMs are Markov cohort models and can be time-homogeneous or time-inhomogeneous. iCTSTMs are individual-level simulations that can encompass both Markov and semi-Markov processes. All models are implemented as [R6](https://r6.r-lib.org/index.html) classes and have methods for simulating disease progression, QALYs, and costs.
 
 ```{r  echo = FALSE, message = FALSE, warning = FALSE}
 library("kableExtra")

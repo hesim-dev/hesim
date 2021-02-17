@@ -91,7 +91,7 @@ simulated state occupancy probabilities." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@ simulated state occupancy probabilities." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ simulated state occupancy probabilities." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,20 +178,20 @@ simulated state occupancy probabilities." />
 simulated state occupancy probabilities.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sim_qalys</span>(<span class='no'>object</span>, <span class='no'>utility_model</span>, <span class='no'>dr</span>, <span class='no'>integrate_method</span>, <span class='no'>lys</span>)
+    <pre class="usage"><span class='fu'>sim_qalys</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>utility_model</span>, <span class='va'>dr</span>, <span class='va'>integrate_method</span>, <span class='va'>lys</span><span class='op'>)</span>
 
-<span class='fu'>sim_costs</span>(<span class='no'>object</span>, <span class='no'>cost_models</span>, <span class='no'>dr</span>, <span class='no'>integrate_method</span>)</pre>
+<span class='fu'>sim_costs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>cost_models</span>, <span class='va'>dr</span>, <span class='va'>integrate_method</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>A <a href='stateprobs.html'>stateprobs</a> object.</p></td>
+      <td><p>A <code><a href='stateprobs.html'>stateprobs</a></code> object.</p></td>
     </tr>
     <tr>
       <th>utility_model</th>
-      <td><p>A single object of class <a href='StateVals.html'>StateVals</a> used
+      <td><p>A single object of class <code><a href='StateVals.html'>StateVals</a></code> used
 to simulate utility.</p></td>
     </tr>
     <tr>
@@ -212,7 +212,7 @@ QALYs.</p></td>
     </tr>
     <tr>
       <th>cost_models</th>
-      <td><p>A list of objects of class <a href='StateVals.html'>StateVals</a> used
+      <td><p>A list of objects of class <code><a href='StateVals.html'>StateVals</a></code> used
 to simulate costs.</p></td>
     </tr>
     </table>
@@ -220,10 +220,10 @@ to simulate costs.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>sim_costs()</code> and <code>sim_qalys()</code> return objects of class
-<a href='costs.html'>costs</a> and <a href='qalys.html'>qalys</a>, respectively.</p>
+<code><a href='costs.html'>costs</a></code> and <code><a href='qalys.html'>qalys</a></code>, respectively.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>See <code><a href='../articles/expected-values.html'>vignette("expected-values")</a></code> for details.</p>
+    <p>See <code>vignette("expected-values")</code> for details.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -240,7 +240,7 @@ to simulate costs.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

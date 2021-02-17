@@ -1,7 +1,7 @@
 Package: hesim
 Type: Package
-Title: Health-Economic Simulation Modeling and Decision Analysis
-Version: 0.4.2.9999
+Title: Health Economic Simulation Modeling and Decision Analysis
+Version: 0.5.0
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", role = c("aut", "cre")),
     person("Jeroen P.", "Jansen", role = "aut"),
@@ -9,7 +9,7 @@ Authors@R: c(
     comment="hesim uses some slightly modified C functions from base R")
     )
 Description: A modular and computationally efficient R package for  
-  parameterizing, simulating, and analyzing health-economic simulation 
+  parameterizing, simulating, and analyzing health economic simulation 
   models. The package supports cohort discrete time state transition models 
   (Briggs et al. 1998) <doi:10.2165/00019053-199813040-00003>,
   N-state partitioned survival models (Glasziou et al. 1990)

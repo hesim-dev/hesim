@@ -91,7 +91,7 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -169,7 +169,7 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Incremental treatment effect</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/outcomes.R'><code>R/outcomes.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/summarize.R'><code>R/summarize.R</code></a></small>
     <div class="hidden name"><code>incr_effect.Rd</code></div>
     </div>
 
@@ -178,7 +178,7 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
 on outcome variables from a probabilistic sensitivity analysis relative to a comparator.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>incr_effect</span>(<span class='no'>x</span>, <span class='no'>comparator</span>, <span class='no'>sample</span>, <span class='no'>strategy</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>outcomes</span>)</pre>
+    <pre class="usage"><span class='fu'>incr_effect</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>comparator</span>, <span class='va'>sample</span>, <span class='va'>strategy</span>, grp <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>outcomes</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -223,27 +223,28 @@ comparator.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># simulation output</span>
-<span class='no'>n_samples</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>
-<span class='no'>sim</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='no'>n_samples</span>), <span class='fl'>4</span>),
-             <span class='kw'>c</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span>),
-                    <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span>)),
-             <span class='kw'>e</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>8</span>, <span class='fl'>.2</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span>),
-                   <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.6</span>), <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n_samples</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span>)),
-             <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"Strategy "</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>)),
-                           <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n_samples</span> * <span class='fl'>2</span>),
-             <span class='kw'>grp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Group 1"</span>, <span class='st'>"Group 2"</span>),
-                           <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n_samples</span>), <span class='fl'>2</span>)
-)
+<span class='va'>n_samples</span> <span class='op'>&lt;-</span> <span class='fl'>100</span>
+<span class='va'>sim</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>sample <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='va'>n_samples</span><span class='op'>)</span>, <span class='fl'>4</span><span class='op'>)</span>,
+             c <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>5</span>, <span class='fl'>.1</span><span class='op'>)</span>,
+                    <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span>,
+             e <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>8</span>, <span class='fl'>.2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>8.5</span>, <span class='fl'>.1</span><span class='op'>)</span>,
+                   <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>11</span>, <span class='fl'>.6</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n_samples</span>, <span class='fl'>11.5</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span>,
+             strategy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Strategy "</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+                           each <span class='op'>=</span> <span class='va'>n_samples</span> <span class='op'>*</span> <span class='fl'>2</span><span class='op'>)</span>,
+             grp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Group 1"</span>, <span class='st'>"Group 2"</span><span class='op'>)</span>,
+                           each <span class='op'>=</span> <span class='va'>n_samples</span><span class='op'>)</span>, <span class='fl'>2</span><span class='op'>)</span>
+<span class='op'>)</span>
 <span class='co'># calculate incremental effect of Strategy 2 relative to Strategy 1 by group</span>
-<span class='no'>ie</span> <span class='kw'>&lt;-</span> <span class='fu'>incr_effect</span>(<span class='no'>sim</span>, <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"Strategy 1"</span>, <span class='kw'>sample</span> <span class='kw'>=</span> <span class='st'>"sample"</span>,
-                        <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"strategy"</span>, <span class='kw'>grp</span> <span class='kw'>=</span> <span class='st'>"grp"</span>, <span class='kw'>outcomes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"c"</span>, <span class='st'>"e"</span>))
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>ie</span>)</div><div class='output co'>#&gt;    sample   strategy     grp       ic       ie
-#&gt; 1:      1 Strategy 2 Group 1 60616.03 2.974319
-#&gt; 2:      1 Strategy 2 Group 2 55912.16 3.174493
-#&gt; 3:      2 Strategy 2 Group 1 56301.69 1.624190
-#&gt; 4:      2 Strategy 2 Group 2 50798.94 2.496652
-#&gt; 5:      3 Strategy 2 Group 1 64190.27 2.965955
-#&gt; 6:      3 Strategy 2 Group 2 61901.03 2.406834</div></pre>
+<span class='va'>ie</span> <span class='op'>&lt;-</span> <span class='fu'>incr_effect</span><span class='op'>(</span><span class='va'>sim</span>, comparator <span class='op'>=</span> <span class='st'>"Strategy 1"</span>, sample <span class='op'>=</span> <span class='st'>"sample"</span>,
+                        strategy <span class='op'>=</span> <span class='st'>"strategy"</span>, grp <span class='op'>=</span> <span class='st'>"grp"</span>, outcomes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"c"</span>, <span class='st'>"e"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ie</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    sample   strategy     grp       ic       ie
+#&gt; 1:      1 Strategy 2 Group 1 50484.26 4.245202
+#&gt; 2:      1 Strategy 2 Group 2 63372.15 3.367809
+#&gt; 3:      2 Strategy 2 Group 1 61872.35 2.232620
+#&gt; 4:      2 Strategy 2 Group 2 56235.00 3.972524
+#&gt; 5:      3 Strategy 2 Group 1 50966.99 3.562511
+#&gt; 6:      3 Strategy 2 Group 2 56322.86 2.810057</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -259,7 +260,7 @@ comparator.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

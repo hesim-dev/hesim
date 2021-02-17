@@ -91,7 +91,7 @@ partitioned survival model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@ partitioned survival model." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -135,14 +135,14 @@ partitioned survival model." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -178,7 +178,7 @@ partitioned survival model." />
 partitioned survival model.</p>
     </div>
 
-    <pre class="usage"><span class='no'>psm4_exdata</span></pre>
+    <pre class="usage"><span class='va'>psm4_exdata</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
@@ -193,7 +193,7 @@ second data frame contains drug cost data.</p></li>
 
     
 
-<p>The survival data frame contains a list of 3 survival curves, each containing the following columns.</p><dl'>
+<p>The survival data frame contains a list of 3 survival curves, each containing the following columns.</p><dl>
 <dt>female</dt><dd><p>An indicator variable equal to 1 if the patient is female and 0 otherwise.</p></dd>
 <dt>age</dt><dd><p>The age of the patient in years.</p></dd>
 <dt>strategy_id</dt><dd><p>The id of the treatment strategy used.</p></dd>
@@ -211,7 +211,7 @@ second data frame contains drug cost data.</p></li>
     
 
 <p>The cost list contains two data frames.The first data frame contains data on the
-medical costs by patient and health state, and contains the following columns:</p><dl'>
+medical costs by patient and health state, and contains the following columns:</p><dl>
 <dt>patient_id</dt><dd><p>An integer denoting the id of the patient.</p></dd>
 <dt>female</dt><dd><p>An indicator variable equal to 1 if the patient is female and 0 otherwise.</p></dd>
 <dt>state_name</dt><dd><p>A categorical variable denoting the three possible health states.</p></dd>
@@ -219,7 +219,7 @@ medical costs by patient and health state, and contains the following columns:</
 
 </dl>
 
-<p>The second data frame contains data on the drug costs associated with each treatment strategy.</p><dl'>
+<p>The second data frame contains data on the drug costs associated with each treatment strategy.</p><dl>
 <dt>strategy_id</dt><dd><p>The id of each treatment strategy.</p></dd>
 <dt>costs</dt><dd><p>Annualized drug costs.</p></dd>
 
@@ -241,7 +241,7 @@ medical costs by patient and health state, and contains the following columns:</
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

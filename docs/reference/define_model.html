@@ -94,7 +94,7 @@ create an economic model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@ create an economic model." />
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -138,14 +138,14 @@ create an economic model." />
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -184,9 +184,9 @@ are evaluated with <code>eval_model()</code> and used to generate the model inpu
 create an economic model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>define_model</span>(<span class='no'>tparams_def</span>, <span class='no'>rng_def</span>, <span class='kw'>params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_states</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>define_model</span><span class='op'>(</span><span class='va'>tparams_def</span>, <span class='va'>rng_def</span>, params <span class='op'>=</span> <span class='cn'>NULL</span>, n_states <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>eval_model</span>(<span class='no'>x</span>, <span class='no'>input_data</span>)</pre>
+<span class='fu'>eval_model</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>input_data</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -264,59 +264,60 @@ defined inside a <code><a href='define_rng.html'>define_rng()</a></code> block.<
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Data</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"data.table"</span>)
-<span class='no'>strategies</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>strategy_id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-                         <span class='kw'>strategy_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Monotherapy"</span>, <span class='st'>"Combination therapy"</span>))
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>hesim_dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span>(<span class='kw'>strategies</span> <span class='kw'>=</span> <span class='no'>strategies</span>,
-                       <span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>)
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span>(<span class='no'>hesim_dat</span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://Rdatatable.gitlab.io/data.table'>"data.table"</a></span><span class='op'>)</span>
+<span class='va'>strategies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>,
+                         strategy_name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Monotherapy"</span>, <span class='st'>"Combination therapy"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='va'>strategies</span>,
+                       patients <span class='op'>=</span> <span class='va'>patients</span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span><span class='op'>)</span>
 
 <span class='co'># Define the model</span>
-<span class='no'>rng_def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='define_rng.html'>define_rng</a></span>({
-  <span class='no'>alpha</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1251</span>, <span class='fl'>350</span>, <span class='fl'>116</span>, <span class='fl'>17</span>,
+<span class='va'>rng_def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='define_rng.html'>define_rng</a></span><span class='op'>(</span><span class='op'>{</span>
+  <span class='va'>alpha</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1251</span>, <span class='fl'>350</span>, <span class='fl'>116</span>, <span class='fl'>17</span>,
                     <span class='fl'>0</span>, <span class='fl'>731</span>, <span class='fl'>512</span>, <span class='fl'>15</span>,
                     <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1312</span>, <span class='fl'>437</span>,
-                    <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>469</span>),
-                  <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>byrow</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>alpha</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>alpha</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span>)
-  <span class='no'>lrr_mean</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>.509</span>)
-  <span class='no'>lrr_se</span> <span class='kw'>&lt;-</span> (<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>.710</span>) - <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>.365</span>))/(<span class='fl'>2</span> * <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span>(<span class='fl'>.975</span>))
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>p_mono</span> <span class='kw'>=</span> <span class='fu'><a href='rng_distributions.html'>dirichlet_rng</a></span>(<span class='no'>alpha</span>),
-    <span class='kw'>rr_comb</span> <span class='kw'>=</span> <span class='fu'><a href='rng_distributions.html'>lognormal_rng</a></span>(<span class='no'>lrr_mean</span>, <span class='no'>lrr_se</span>),
-    <span class='kw'>u</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-    <span class='kw'>c_zido</span> <span class='kw'>=</span> <span class='fl'>2278</span>,
-    <span class='kw'>c_lam</span> <span class='kw'>=</span> <span class='fl'>2086.50</span>,
-    <span class='kw'>c_med</span> <span class='kw'>=</span> <span class='fu'><a href='rng_distributions.html'>gamma_rng</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>A</span> <span class='kw'>=</span> <span class='fl'>2756</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>3052</span>, <span class='kw'>C</span> <span class='kw'>=</span> <span class='fl'>9007</span>),
-                        <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>A</span> <span class='kw'>=</span> <span class='fl'>2756</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>3052</span>, <span class='kw'>C</span> <span class='kw'>=</span> <span class='fl'>9007</span>))
-  )
-}, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+                    <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>469</span><span class='op'>)</span>,
+                  nrow <span class='op'>=</span> <span class='fl'>4</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>alpha</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>alpha</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span><span class='op'>)</span>
+  <span class='va'>lrr_mean</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.509</span><span class='op'>)</span>
+  <span class='va'>lrr_se</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.710</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.365</span><span class='op'>)</span><span class='op'>)</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>2</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span><span class='op'>(</span><span class='fl'>.975</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    p_mono <span class='op'>=</span> <span class='fu'><a href='rng_distributions.html'>dirichlet_rng</a></span><span class='op'>(</span><span class='va'>alpha</span><span class='op'>)</span>,
+    rr_comb <span class='op'>=</span> <span class='fu'><a href='rng_distributions.html'>lognormal_rng</a></span><span class='op'>(</span><span class='va'>lrr_mean</span>, <span class='va'>lrr_se</span><span class='op'>)</span>,
+    u <span class='op'>=</span> <span class='fl'>1</span>,
+    c_zido <span class='op'>=</span> <span class='fl'>2278</span>,
+    c_lam <span class='op'>=</span> <span class='fl'>2086.50</span>,
+    c_med <span class='op'>=</span> <span class='fu'><a href='rng_distributions.html'>gamma_rng</a></span><span class='op'>(</span>mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>A <span class='op'>=</span> <span class='fl'>2756</span>, B <span class='op'>=</span> <span class='fl'>3052</span>, C <span class='op'>=</span> <span class='fl'>9007</span><span class='op'>)</span>,
+                        sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>A <span class='op'>=</span> <span class='fl'>2756</span>, B <span class='op'>=</span> <span class='fl'>3052</span>, C <span class='op'>=</span> <span class='fl'>9007</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>}</span>, n <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
-<span class='no'>tparams_def</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='define_tparams.html'>define_tparams</a></span>({
-  <span class='no'>rr</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span>(<span class='no'>strategy_name</span> <span class='kw'>==</span> <span class='st'>"Monotherapy"</span>, <span class='fl'>1</span>, <span class='no'>rr_comb</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>tpmatrix</span> <span class='kw'>=</span> <span class='fu'><a href='tpmatrix.html'>tpmatrix</a></span>(
-      <span class='no'>C</span>, <span class='no'>p_mono</span>$<span class='no'>A_B</span> * <span class='no'>rr</span>, <span class='no'>p_mono</span>$<span class='no'>A_C</span> * <span class='no'>rr</span>, <span class='no'>p_mono</span>$<span class='no'>A_D</span> * <span class='no'>rr</span>,
-      <span class='fl'>0</span>, <span class='no'>C</span>, <span class='no'>p_mono</span>$<span class='no'>B_C</span> * <span class='no'>rr</span>, <span class='no'>p_mono</span>$<span class='no'>B_D</span> * <span class='no'>rr</span>,
-      <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='no'>C</span>, <span class='no'>p_mono</span>$<span class='no'>C_D</span> * <span class='no'>rr</span>,
-      <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>),
-    <span class='kw'>utility</span> <span class='kw'>=</span> <span class='no'>u</span>,
-    <span class='kw'>costs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>drug</span> <span class='kw'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span>(<span class='no'>strategy_name</span> <span class='kw'>==</span> <span class='st'>"Monotherapy"</span>,
-                    <span class='no'>c_zido</span>, <span class='no'>c_zido</span> + <span class='no'>c_lam</span>),
-      <span class='kw'>medical</span> <span class='kw'>=</span> <span class='no'>c_med</span>
-    )
-  )
-})
+<span class='va'>tparams_def</span> <span class='op'>&lt;-</span> <span class='fu'><a href='define_tparams.html'>define_tparams</a></span><span class='op'>(</span><span class='op'>{</span>
+  <span class='va'>rr</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>strategy_name</span> <span class='op'>==</span> <span class='st'>"Monotherapy"</span>, <span class='fl'>1</span>, <span class='va'>rr_comb</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    tpmatrix <span class='op'>=</span> <span class='fu'><a href='tpmatrix.html'>tpmatrix</a></span><span class='op'>(</span>
+      <span class='va'>C</span>, <span class='va'>p_mono</span><span class='op'>$</span><span class='va'>A_B</span> <span class='op'>*</span> <span class='va'>rr</span>, <span class='va'>p_mono</span><span class='op'>$</span><span class='va'>A_C</span> <span class='op'>*</span> <span class='va'>rr</span>, <span class='va'>p_mono</span><span class='op'>$</span><span class='va'>A_D</span> <span class='op'>*</span> <span class='va'>rr</span>,
+      <span class='fl'>0</span>, <span class='va'>C</span>, <span class='va'>p_mono</span><span class='op'>$</span><span class='va'>B_C</span> <span class='op'>*</span> <span class='va'>rr</span>, <span class='va'>p_mono</span><span class='op'>$</span><span class='va'>B_D</span> <span class='op'>*</span> <span class='va'>rr</span>,
+      <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='va'>C</span>, <span class='va'>p_mono</span><span class='op'>$</span><span class='va'>C_D</span> <span class='op'>*</span> <span class='va'>rr</span>,
+      <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>,
+    utility <span class='op'>=</span> <span class='va'>u</span>,
+    costs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      drug <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>strategy_name</span> <span class='op'>==</span> <span class='st'>"Monotherapy"</span>,
+                    <span class='va'>c_zido</span>, <span class='va'>c_zido</span> <span class='op'>+</span> <span class='va'>c_lam</span><span class='op'>)</span>,
+      medical <span class='op'>=</span> <span class='va'>c_med</span>
+    <span class='op'>)</span> 
+  <span class='op'>)</span>
+<span class='op'>}</span><span class='op'>)</span>
 
-<span class='no'>model_def</span> <span class='kw'>&lt;-</span> <span class='fu'>define_model</span>(
-  <span class='kw'>tparams_def</span> <span class='kw'>=</span> <span class='no'>tparams_def</span>,
-  <span class='kw'>rng_def</span> <span class='kw'>=</span> <span class='no'>rng_def</span>)
+<span class='va'>model_def</span> <span class='op'>&lt;-</span> <span class='fu'>define_model</span><span class='op'>(</span>
+  tparams_def <span class='op'>=</span> <span class='va'>tparams_def</span>,
+  rng_def <span class='op'>=</span> <span class='va'>rng_def</span><span class='op'>)</span>
 
 <span class='co'># Evaluate the model expression to generate model inputs</span>
 <span class='co'># This can be useful for understanding the output of a model expression</span>
-<span class='fu'>eval_model</span>(<span class='no'>model_def</span>, <span class='no'>data</span>)</div><div class='output co'>#&gt; $id
+<span class='fu'>eval_model</span><span class='op'>(</span><span class='va'>model_def</span>, <span class='va'>data</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $id
 #&gt; $id[[1]]
 #&gt;    sample strategy_id patient_id time time_start
 #&gt; 1:      1           1          1    0          0
@@ -327,15 +328,15 @@ defined inside a <code><a href='define_rng.html'>define_rng()</a></code> block.<
 #&gt; 
 #&gt; $tpmatrix
 #&gt;        s1_s1      s1_s2      s1_s3       s1_s4 s2_s1     s2_s2     s2_s3
-#&gt; 1: 0.7248738 0.20213870 0.06375945 0.009228045     0 0.5764863 0.4142595
-#&gt; 2: 0.8910632 0.08003726 0.02524570 0.003653865     0 0.8323088 0.1640269
-#&gt; 3: 0.7130353 0.20425966 0.07500436 0.007700719     0 0.5765460 0.4021009
-#&gt; 4: 0.8542749 0.10372617 0.03808835 0.003910542     0 0.7849636 0.2041929
-#&gt;          s2_s4 s3_s1 s3_s2     s3_s3      s3_s4 s4_s1 s4_s2 s4_s3 s4_s4
-#&gt; 1: 0.009254252     0     0 0.7599022 0.24009785     0     0     0     1
-#&gt; 2: 0.003664242     0     0 0.9049327 0.09506727     0     0     0     1
-#&gt; 3: 0.021353143     0     0 0.7679710 0.23202901     0     0     0     1
-#&gt; 4: 0.010843451     0     0 0.8821721 0.11782787     0     0     0     1
+#&gt; 1: 0.7012095 0.22017150 0.06600632 0.012612698     0 0.5926536 0.3955685
+#&gt; 2: 0.8380175 0.11936101 0.03578384 0.006837690     0 0.7791663 0.2144485
+#&gt; 3: 0.7152131 0.19982050 0.07251751 0.012448865     0 0.5637801 0.4232028
+#&gt; 4: 0.8695728 0.09151416 0.03321171 0.005701354     0 0.8002192 0.1938192
+#&gt;          s2_s4 s3_s1 s3_s2     s3_s3     s3_s4 s4_s1 s4_s2 s4_s3 s4_s4
+#&gt; 1: 0.011777898     0     0 0.7523905 0.2476095     0     0     0     1
+#&gt; 2: 0.006385122     0     0 0.8657641 0.1342359     0     0     0     1
+#&gt; 3: 0.013017115     0     0 0.7396643 0.2603357     0     0     0     1
+#&gt; 4: 0.005961603     0     0 0.8807710 0.1192290     0     0     0     1
 #&gt; 
 #&gt; $utility
 #&gt; [1] 1 1 1 1
@@ -350,10 +351,10 @@ defined inside a <code><a href='define_rng.html'>define_rng()</a></code> block.<
 #&gt; 
 #&gt; $costs$medical
 #&gt;           A        B         C
-#&gt; 1: 1190.217 314.6723  655.1127
-#&gt; 2: 1190.217 314.6723  655.1127
-#&gt; 3: 3703.264 540.9411 3509.7679
-#&gt; 4: 3703.264 540.9411 3509.7679
+#&gt; 1: 720.5209 1222.846  4535.133
+#&gt; 2: 720.5209 1222.846  4535.133
+#&gt; 3: 700.4812 1559.331 29107.519
+#&gt; 4: 700.4812 1559.331 29107.519
 #&gt; 
 #&gt; 
 #&gt; $n_states
@@ -365,7 +366,9 @@ defined inside a <code><a href='define_rng.html'>define_rng()</a></code> block.<
 #&gt; attr(,"class")
 #&gt; [1] "eval_model"</div><div class='input'>
 <span class='co'># Create an economic model with a factory function</span>
-<span class='no'>econmod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='create_CohortDtstm.html'>create_CohortDtstm</a></span>(<span class='no'>model_def</span>, <span class='no'>data</span>)</div></pre>
+<span class='va'>econmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_CohortDtstm.html'>create_CohortDtstm</a></span><span class='op'>(</span><span class='va'>model_def</span>, <span class='va'>data</span><span class='op'>)</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -381,7 +384,7 @@ defined inside a <code><a href='define_rng.html'>define_rng()</a></code> block.<
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

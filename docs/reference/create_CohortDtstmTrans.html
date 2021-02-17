@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create <code>CohortDtstmTrans</code> object — create_CohortDtstmTrans • hesim</title>
+<title>Create CohortDtstmTrans object — create_CohortDtstmTrans • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Create <code>CohortDtstmTrans</code> object — create_CohortDtstmTrans" />
+<meta property="og:title" content="Create CohortDtstmTrans object — create_CohortDtstmTrans" />
 <meta property="og:description" content="A generic function for creating an object of class CohortDtstmTrans." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
     <li class="divider"></li>
     <li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
-      <a href="../articles/markov-cohort.html">Simple Markov Cohort model</a>
+      <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
     <li>
       <a href="../articles/markov-inhomogeneous-cohort.html">Time inhomogeneous Markov cohort models</a>
@@ -134,14 +134,14 @@
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider"></li>
-    <li class="dropdown-header">Economic analysis</li>
-    <li>
-      <a href="../articles/expected-values.html">Simulating costs and quality-adjusted life-years</a>
-    </li>
+    <li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../articles/benchmarks.html">Benchmarks</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -176,17 +176,27 @@
     <p>A generic function for creating an object of class <code>CohortDtstmTrans</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_CohortDtstmTrans</span>(<span class='no'>object</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>create_CohortDtstmTrans</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for multinom_list</span>
-<span class='fu'>create_CohortDtstmTrans</span>(
-  <span class='no'>object</span>,
-  <span class='no'>input_data</span>,
-  <span class='no'>trans_mat</span>,
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>point_estimate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>
-)</pre>
+<span class='fu'>create_CohortDtstmTrans</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>input_data</span>,
+  <span class='va'>trans_mat</span>,
+  n <span class='op'>=</span> <span class='fl'>1000</span>,
+  uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for msm</span>
+<span class='fu'>create_CohortDtstmTrans</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>input_data</span>,
+  <span class='va'>cycle_length</span>,
+  n <span class='op'>=</span> <span class='fl'>1000</span>,
+  uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -197,8 +207,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments passed to <code>CohortDtstmTrans$new()</code> in
-<code>CohortDtstmTrans</code>.</p></td>
+      <td><p>Further arguments passed to or from other methods. Currently unused.</p></td>
     </tr>
     <tr>
       <th>input_data</th>
@@ -208,18 +217,27 @@
     <tr>
       <th>trans_mat</th>
       <td><p>A transition matrix describing the states and transitions
-in a discrete-time multi-state model. See <a href='CohortDtstmTrans.html'>CohortDtstmTrans</a>.</p></td>
+in a discrete-time multi-state model. See <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code>.</p></td>
     </tr>
     <tr>
       <th>n</th>
       <td><p>Number of random observations of the parameters to draw.</p></td>
     </tr>
     <tr>
-      <th>point_estimate</th>
-      <td><p>If <code>TRUE</code>, then the point estimates are returned and and no samples are drawn.</p></td>
+      <th>uncertainty</th>
+      <td><p>Method determining how parameter uncertainty should be handled. See
+documentation in <code><a href='create_params.html'>create_params()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>cycle_length</th>
+      <td><p>The length of a model cycle in terms of years. The default
+is 1 meaning that model cycles are 1 year long.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -236,7 +254,7 @@ in a discrete-time multi-state model. See <a href='CohortDtstmTrans.html'>Cohort
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
