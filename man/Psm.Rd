@@ -126,7 +126,7 @@ by the argument \code{t} in \verb{$sim_curves()}.}
 \subsection{Method \code{new()}}{
 Create a new \code{Psm} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Psm$new(survival_models, utility_model = NULL, cost_models = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Psm$new(survival_models = NULL, utility_model = NULL, cost_models = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

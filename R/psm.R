@@ -316,7 +316,7 @@ Psm <- R6::R6Class("Psm",
     #' @param cost_models The `cost_models` field.
     #' @details `n_states` is set equal to the number of survival models plus one.
     #' @return A new `Psm` object.    
-    initialize = function(survival_models, utility_model = NULL, cost_models = NULL) {
+    initialize = function(survival_models = NULL, utility_model = NULL, cost_models = NULL) {
       self$survival_models <- survival_models
       self$cost_models = cost_models
       self$utility_model = utility_model

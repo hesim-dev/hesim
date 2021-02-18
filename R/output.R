@@ -53,8 +53,8 @@ NULL
 # State probability object -----------------------------------------------------
 #' State probability object
 #'
-#' An object of class `stateprobs` returned from methods 
-#' `$sim_stateprobs()` in model classes. 
+#' An object of class `stateprobs` returned by [`sim_stateprobs()`] or from 
+#' `$sim_stateprobs()` methods in model classes. 
 #' 
 #' @section Components:
 #' A `stateprobs` object inherits from `data.table` and contains
