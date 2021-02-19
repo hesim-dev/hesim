@@ -36,3 +36,61 @@ install.packages("hesim")
 # install.packages("devtools")
 devtools::install_github("hesim-dev/hesim")
 ```
+
+## Getting started
+There are two good places to start: 
+
+1. The [Introduction to `hesim`](https://hesim-dev.github.io/hesim/articles/intro.html) article provides a quick introduction.
+
+2. The [`hesim` manuscript](https://arxiv.org/abs/2102.09437) describes the package (including mathematical details) more thoroughly. 
+
+You might also want to explore our example analyses which can be found in the manuscript and web articles. They are summarized in the table below, with some drawn from the [Decision Modeling for Health Economic Evaluation](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook. Key areas of focus are the (i) statistical models of disease progression (in terms of the baseline risk and relative treatment effects) and (ii) the available data (either individual patient data (IPD) or aggregate-level data).
+
+```{r  echo = FALSE, message = FALSE, warning = FALSE}
+library("knitr")
+library("kableExtra")
+level <- c("Cohort", "Cohort", "Cohort", "Cohort", "Individual", "Individual", "Cohort")
+links <- c(
+  rep("https://arxiv.org/pdf/2102.09437.pdf", 3),
+  "https://hesim-dev.github.io/hesim/articles/markov-cohort.html",
+  "https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-cohort.html",
+  "https://hesim-dev.github.io/hesim/articles/mlogit.html",
+  "https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-indiv.html",
+  "https://hesim-dev.github.io/hesim/articles/mstate.html",
+  "https://hesim-dev.github.io/hesim/articles/psm.html"
+)
+name <- c(
+  "Manuscript 4.1", "Manuscript 4.2", "Manuscript 4.3",
+  "Simple Markov cohort", "Time inhomogeneous Markov (cohort)", "Multinomial logit",
+  "Time inhomogeneous Markov (individual)", "Semi-Markov multi-state", "4-state PSM"
+)
+name <- cell_spec(name, link = links)
+model <- c("iCTSTM", "PSM", "cDTSTM", "cDTSTM", "cDTSTM", "cDTSTM", "iCTSTM", "iCTSTM", "PSM")
+num <- 1:length(model)
+application <- c(rep("Oncology", 3),"HIV", "Hip replacement", "Generic", "Hip replacement", "Generic", "Oncology")
+dismod1 <- c("Multi-state model", "Survival models", "Multi-state model (panel data)", 
+             "Multinomial", "Custom", "Multinomial logit", "Custom", "Multi-state model", 
+             "Survival models")
+dismod2 <- c("Coefficient (AFT)", "Coefficient (AFT)" , "RR",
+             "RR", "Coefficient (HR)", "Coefficient (OR)", "Coefficient (HR)", 
+             "Coefficient (AFT)", "Coefficient (AFT)")
+data1 <- c(rep("IPD", 3), "Aggregate", "Aggregate", "IPD", "Aggregate", "IPD", "IPD")
+data2 <- c("IPD", rep("Aggregate", 2), "Aggregate", "Aggregate", "IPD", "Aggregate",
+           "IPD", "IPD")
+tbl <- cbind(num, name, model, dismod1, data1, dismod2, data2, application)
+colnames(tbl) <- c("", "Name", "Model", 
+                   rep(c("Disease model", "Disease data"), 2),
+                   "Application")
+rownames(tbl) <- 1:nrow(tbl)
+kable(tbl, row.names = FALSE, escape = FALSE)  %>% 
+  kable_styling() %>%
+  add_header_above(c(rep("", 3), "Baseline risk" = 2, "Treatment effect" = 2, "")) %>%
+  column_spec(2, width = "15em") %>%
+  footnote(general = paste0(
+    "iCTSTM = Individual-level continuous time state transition model; ",
+    "PSM = partitioned survival model; ", 
+    "cDTSTM = Cohort discrete time state transition model. ",
+    "AFT = accelerated failure time; RR = relative risk; HR = hazard ratio; OR = odds ratio. ",
+    "IPD = individual patient data. "),
+           footnote_as_chunk = TRUE)
+```
