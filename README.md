@@ -672,7 +672,7 @@ transition model. AFT = accelerated failure time; RR = relative risk; HR
 
 </table>
 
-## Citing `hesim`
+## Citing hesim
 
 If you use `hesim`, please cite as follows:
 

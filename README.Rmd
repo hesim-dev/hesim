@@ -95,7 +95,7 @@ kable(tbl, row.names = FALSE, escape = FALSE)  %>%
            footnote_as_chunk = TRUE)
 ```
 
-## Citing `hesim`
+## Citing hesim
 If you use `hesim`, please cite as follows:
 
 ```{r, echo = FALSE, comment = ""}
