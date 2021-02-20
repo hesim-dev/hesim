@@ -63,11 +63,11 @@ There are two good places to start:
     `hesim`](https://hesim-dev.github.io/hesim/articles/intro.html)
     article provides a quick introduction.
 
-2.  The [`hesim` manuscript](https://arxiv.org/abs/2102.09437) describes
-    the package (including mathematical details) more thoroughly.
+2.  Our [preprint](https://arxiv.org/abs/2102.09437) describes the
+    package (including mathematical details) more thoroughly.
 
 You might also want to explore our example analyses which can be found
-in the manuscript and web articles. They are summarized in the table
+in the preprint and web articles. They are summarized in the table
 below, with some drawn from the [Decision Modeling for Health Economic
 Evaluation](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation)
 textbook. Key areas of focus are the (i) statistical models of disease
@@ -183,7 +183,7 @@ Application
 
 <td style="text-align:left;width: 15em; ">
 
-<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Manuscript
+<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Preprint
 4.1</a>
 
 </td>
@@ -236,7 +236,7 @@ Oncology
 
 <td style="text-align:left;width: 15em; ">
 
-<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Manuscript
+<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Preprint
 4.2</a>
 
 </td>
@@ -289,7 +289,7 @@ Oncology
 
 <td style="text-align:left;width: 15em; ">
 
-<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Manuscript
+<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Preprint
 4.3</a>
 
 </td>
@@ -671,3 +671,26 @@ transition model. AFT = accelerated failure time; RR = relative risk; HR
 </tfoot>
 
 </table>
+
+## Citing `hesim`
+
+If you use `hesim`, please cite as follows:
+
+``` 
+
+  Devin Incerti and Jeroen P Jansen (2021). hesim: Health Economic
+  Simulation Modeling and Decision Analysis. arXiv:2102.09437
+  [stat.AP], URL https://arxiv.org/abs/2102.09437.
+
+A BibTeX entry for LaTeX users is
+
+  @Misc{incerti2021hesim,
+    author = {Devin Incerti and Jeroen P. Jansen},
+    title = {hesim: Health Economic Simulation Modeling and Decision Analysis},
+    year = {2021},
+    eprint = {2102.09437},
+    archiveprefix = {arXiv},
+    primaryclass = {stat.AP},
+    url = {https://arxiv.org/abs/2102.09437},
+  }
+```
