@@ -1,0 +1,19 @@
+bibentry(
+  bibtype = "misc",
+  author = c(
+    person("Devin", "Incerti"),
+    person("Jeroen P.", "Jansen")
+  ),
+  key = "incerti2021hesim",
+  title = "hesim: Health Economic Simulation Modeling and Decision Analysis",
+  year = "2021",
+  eprint = "2102.09437",
+  archivePrefix = "arXiv",
+  primaryClass = "stat.AP",
+  url = "https://arxiv.org/abs/2102.09437",
+  textVersion  = 
+    paste("Devin Incerti and Jeroen P Jansen (2021).",
+          "hesim: Health Economic Simulation Modeling and Decision Analysis.",
+          "arXiv:2102.09437 [stat.AP],",
+          "URL https://arxiv.org/abs/2102.09437.")
+)
