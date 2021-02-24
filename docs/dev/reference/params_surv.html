@@ -91,7 +91,7 @@ flexibly parametric survival model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -222,44 +222,44 @@ and the identity function if the parameter space is unrestricted.</p>
 <p>The types of distributions that can be specified are:</p><ul>
 <li><p><code>exponential</code> or <code>exp</code> Exponential distribution. <code>coef</code>
 must contain the <code>rate</code> parameter on the log scale and the same parameterization as in
-<a href='https://rdrr.io/r/stats/Exponential.html'>stats::Exponential</a>.</p></li>
+<code><a href='https://rdrr.io/r/stats/Exponential.html'>stats::Exponential</a></code>.</p></li>
 <li><p><code>weibull</code> or <code>weibull.quiet</code> Weibull distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
-that same as in <a href='https://rdrr.io/r/stats/Weibull.html'>stats::Weibull</a>.</p></li>
+that same as in <code><a href='https://rdrr.io/r/stats/Weibull.html'>stats::Weibull</a></code>.</p></li>
 <li><p><code>weibullPH</code> Weibull distribution with a proportional hazards
 parameterization. The first element of <code>coef</code> is the <code>shape</code> parameter
 (on the log scale) and the second element is the <code>scale</code> parameter
 (also on the log scale). The parameterization is
-that same as in <a href='https://rdrr.io/pkg/flexsurv/man/WeibullPH.html'>flexsurv::WeibullPH</a>.</p></li>
+that same as in <code><a href='https://rdrr.io/pkg/flexsurv/man/WeibullPH.html'>flexsurv::WeibullPH</a></code>.</p></li>
 <li><p><code>gamma</code> Gamma distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>rate</code> parameter (also on the log scale). The parameterization is
-that same as in <a href='https://rdrr.io/r/stats/GammaDist.html'>stats::GammaDist</a>.</p></li>
+that same as in <code><a href='https://rdrr.io/r/stats/GammaDist.html'>stats::GammaDist</a></code>.</p></li>
 <li><p><code>lnorm</code> Lognormal distribution. The first
 element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the mean of survival on
 the log scale) and the second element is the <code>sdlog</code> parameter (i.e.,
 the standard deviation of survival on the log scale). The parameterization is
-that same as in <a href='https://rdrr.io/r/stats/Lognormal.html'>stats::Lognormal</a>. The coefficients predicting the <code>meanlog</code>
+that same as in <code><a href='https://rdrr.io/r/stats/Lognormal.html'>stats::Lognormal</a></code>. The coefficients predicting the <code>meanlog</code>
 parameter are untransformed whereas the coefficients predicting the <code>sdlog</code>
 parameter are defined on the log scale.</p></li>
 <li><p><code>gompertz</code> Gompertz distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter and the second
 element is the <code>rate</code> parameter (on the log scale). The parameterization is
-that same as in <a href='https://rdrr.io/pkg/flexsurv/man/Gompertz.html'>flexsurv::Gompertz</a>.</p></li>
+that same as in <code><a href='https://rdrr.io/pkg/flexsurv/man/Gompertz.html'>flexsurv::Gompertz</a></code>.</p></li>
 <li><p><code>llogis</code> Log-logistic distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
-that same as in <a href='https://rdrr.io/pkg/flexsurv/man/Llogis.html'>flexsurv::Llogis</a>.</p></li>
+that same as in <code><a href='https://rdrr.io/pkg/flexsurv/man/Llogis.html'>flexsurv::Llogis</a></code>.</p></li>
 <li><p><code>gengamma</code> Generalized gamma distribution. The first
 element of <code>coef</code> is the location parameter <code>mu</code>, the second
 element is the scale parameter <code>sigma</code> (on the log scale), and the
 third element is the shape parameter <code>Q</code>. The parameterization is
-that same as in <a href='https://rdrr.io/pkg/flexsurv/man/GenGamma.html'>flexsurv::GenGamma</a>.</p></li>
+that same as in <code><a href='https://rdrr.io/pkg/flexsurv/man/GenGamma.html'>flexsurv::GenGamma</a></code>.</p></li>
 <li><p><code>survspline</code> Survival splines. Each element of <code>coef</code> is a parameter of the
 spline model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
 to the number of knots (including the boundary knots). See below for details on the
-auxiliary arguments. The parameterization is that same as in <a href='https://rdrr.io/pkg/flexsurv/man/Survspline.html'>flexsurv::Survspline</a>.</p></li>
+auxiliary arguments. The parameterization is that same as in <code><a href='https://rdrr.io/pkg/flexsurv/man/Survspline.html'>flexsurv::Survspline</a></code>.</p></li>
 <li><p><code>fracpoly</code> Fractional polynomials. Each element of <code>coef</code> is a parameter of the
 fractional polynomial model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
 to the number of powers minus 1. See below for details on the auxiliary arguments
