@@ -91,7 +91,7 @@ costs from a simulation model for use in a cost-effectiveness analysis." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -183,15 +183,15 @@ costs from a simulation model for use in a cost-effectiveness analysis.</p>
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A list containing two elements:</p><ul>
-<li><p>costs Total (discounted) costs by category.</p></li>
-<li><p>qalys (Discounted) quality-adjusted life-years.</p></li>
+<li><p><code>costs</code> Total (discounted) costs by category.</p></li>
+<li><p><code>qalys</code> (Discounted) quality-adjusted life-years.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="costs"><a class="anchor" href="#costs"></a>Costs</h2>
 
     
 
-<p>The 'costs' <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> contains the following columns:</p><dl>
+<p>The <code>costs</code> <code>data.table</code> contains the following columns:</p><dl>
 <dt>category</dt><dd><p>The cost category.</p></dd>
 <dt>dr</dt><dd><p>The discount rate.</p></dd>
 <dt>sample</dt><dd><p>A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)</p></dd>
@@ -206,7 +206,7 @@ assumed that a single subgroup is being analyzed.</p></dd>
 
     
 
-<p>The 'qalys' <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> contains the following columns:</p><dl>
+<p>The <code>qalys</code> <code>data.table</code> contains the following columns:</p><dl>
 <dt>dr</dt><dd><p>The discount rate.</p></dd>
 <dt>sample</dt><dd><p>A randomly sampled parameter set from the probabilistic sensitivity analysis (PSA)</p></dd>
 <dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>

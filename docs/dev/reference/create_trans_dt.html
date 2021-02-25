@@ -91,7 +91,7 @@ the states and transitions in a multi-state model suitable for use with hesim_da
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -175,7 +175,7 @@ the states and transitions in a multi-state model suitable for use with hesim_da
 
     <div class="ref-description">
     <p>Create a data table of health state transitions from a transition matrix describing
-the states and transitions in a multi-state model suitable for use with <a href='hesim_data.html'>hesim_data</a>.</p>
+the states and transitions in a multi-state model suitable for use with <code><a href='hesim_data.html'>hesim_data</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>create_trans_dt</span><span class='op'>(</span><span class='va'>trans_mat</span><span class='op'>)</span></pre>
@@ -185,14 +185,14 @@ the states and transitions in a multi-state model suitable for use with <a href=
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>trans_mat</th>
-      <td><p>A transition matrix in the format from the <a href='https://rdrr.io/pkg/mstate/man/mstate-package.html'>mstate</a> package.
-See <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>.</p></td>
+      <td><p>A transition matrix in the format from the <code><a href='https://rdrr.io/pkg/mstate/man/mstate-package.html'>mstate</a></code> package.
+See <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> in tidy format with three columns</p><dl>
+    <p>Returns a <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> in tidy format with three columns:</p><dl>
 <dt>transition_id</dt><dd><p>Health state transition ID.</p></dd>
 <dt>from</dt><dd><p>The starting health state.</p></dd>
 <dt>to</dt><dd><p>The health state that will be transitions to.</p></dd>

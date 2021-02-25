@@ -89,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -170,15 +170,15 @@
       <small>Source: <a href='https://github.com/hesim-dev/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="hesim-0429999" class="section level2">
+    <div id="hesim-050" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hesim-0429999" class="anchor"></a>hesim 0.4.2.9999</h2>
+<a href="#hesim-050" class="anchor"></a>hesim 0.5.0</h2>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
 <ul>
 <li><p>A transition intensity matrix can be created from a multi-state model fit using <code><a href="https://rdrr.io/pkg/msm/man/msm.html">msm::msm()</a></code> with the <code><a href="../reference/qmatrix.msm.html">qmatrix.msm()</a></code> method. Similarly, a <code>CohortDtstmTrans</code> object can be created with <code><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans.msm()</a></code>.</p></li>
-<li><p>The <code>...</code> argument to <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> now passes arguments to <code><a href="../reference/create_params.html">create_params.partsurvfit()</a></code> when <code>object</code> is of class <code>flexsurvreg_list</code>. This allows more control over bootstrapping (i.e., use of the <code>max_errors</code> argument).</p></li>
+<li><p>The <code>...</code> argument to <code><a href="../reference/create_PsmCurves.html">create_PsmCurves()</a></code> now passes arguments to <code><a href="../reference/create_params.html">create_params.partsurvfit()</a></code> when <code>object</code> is of class <code>flexsurvreg_list</code>. This allows more control over bootstrapping (i.e., use of the <code>max_errors</code> and <code>silent</code> arguments).</p></li>
 <li><p><code><a href="../reference/summary.ce.html">summary.ce()</a></code> is a new summary method for a <code><a href="../reference/ce.html">hesim::ce</a></code> object that produces confidence intervals for quality-adjusted life-years (QALYs) and each cost category; <code><a href="../reference/summary.ce.html">format.summary.ce()</a></code> formats the output for pretty printing.</p></li>
 <li><p><code><a href="../reference/icer.html">icer()</a></code> generates a tidy table of incremental cost-effectiveness ratios (ICERs) given output from <code><a href="../reference/cea.html">cea_pw()</a></code>; <code><a href="../reference/icer.html">format.icer()</a></code> formats the output for pretty printing.</p></li>
 <li><p><code><a href="../reference/plot_ceplane.html">plot_ceplane()</a></code>, <code><a href="../reference/plot_ceac.html">plot_ceac()</a></code>, <code><a href="../reference/plot_ceaf.html">plot_ceaf()</a></code>, and <code><a href="../reference/plot_evpi.html">plot_evpi()</a></code> plot the cost-effectiveness plane, cost-effectiveness acceptability curve (CEAC), cost-effectiveness acceptability frontier (CEAF), and expected value of perfect information (EVPI), respectively.</p></li>
