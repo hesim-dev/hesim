@@ -94,7 +94,7 @@ IndivCtstmTrans." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -181,7 +181,7 @@ IndivCtstmTrans." />
 model (CTSTM) from a fitted multi-state model. The class supports "clock-reset"
 (i.e., semi-Markov), "clock-forward" (i.e., Markov), and mixtures of
 clock-reset and clock-forward models as described in
-<a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>.</p>
+<code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p>
     </div>
 
 
@@ -191,27 +191,27 @@ clock-reset and clock-forward models as described in
     <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></p></div>
+    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code></p></div>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
 <dt><code>trans_model</code></dt><dd><p>The model for health state transitions. Must be an object
-of class <a href='IndivCtstmTrans.html'>IndivCtstmTrans</a>.</p></dd>
+of class <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></dd>
 
 <dt><code>utility_model</code></dt><dd><p>The model for health state utility. Must be an object of
-class <a href='StateVals.html'>StateVals</a>.</p></dd>
+class <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
 
 <dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state.
-Must be a list of objects of class <a href='StateVals.html'>StateVals</a>, where each element of the
+Must be a list of objects of class <code><a href='StateVals.html'>StateVals</a></code>, where each element of the
 list represents a different cost category.</p></dd>
 
-<dt><code>disprog_</code></dt><dd><p>An object of class <a href='disprog.html'>disprog</a>.</p></dd>
+<dt><code>disprog_</code></dt><dd><p>An object of class <code><a href='disprog.html'>disprog</a></code>.</p></dd>
 
-<dt><code>stateprobs_</code></dt><dd><p>An object of class <a href='stateprobs.html'>stateprobs</a> simulated using <code>$sim_stateprobs()</code>.</p></dd>
+<dt><code>stateprobs_</code></dt><dd><p>An object of class <code><a href='stateprobs.html'>stateprobs</a></code> simulated using <code>$sim_stateprobs()</code>.</p></dd>
 
-<dt><code>qalys_</code></dt><dd><p>An object of class <a href='qalys.html'>qalys</a> simulated using <code>$sim_qalys()</code>.</p></dd>
+<dt><code>qalys_</code></dt><dd><p>An object of class <code><a href='qalys.html'>qalys</a></code> simulated using <code>$sim_qalys()</code>.</p></dd>
 
-<dt><code>costs_</code></dt><dd><p>An object of class <a href='costs.html'>costs</a> simulated using <code>$sim_costs()</code>.</p></dd>
+<dt><code>costs_</code></dt><dd><p>An object of class <code><a href='costs.html'>costs</a></code> simulated using <code>$sim_costs()</code>.</p></dd>
 
 </dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -278,7 +278,7 @@ simulation output stored in <code>disprog</code>.</p><h4 class='hasAnchor' id='a
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>An instance of <code>self</code> with simulated output of class <a href='stateprobs.html'>stateprobs</a>
+<p>An instance of <code>self</code> with simulated output of class <code><a href='stateprobs.html'>stateprobs</a></code>
 stored in <code>stateprobs_</code>.</p>
 <p><hr>
 <a id="method-sim_qalys"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
@@ -296,7 +296,7 @@ stored in <code>stateprobs_</code>.</p>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
 
 <dt><code>type</code></dt><dd><p><code>"predict"</code> for mean values or <code>"random"</code> for random samples
-as in <code>$sim()</code> in <a href='StateVals.html'>StateVals</a>.</p></dd>
+as in <code>$sim()</code> in <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
 
 <dt><code>lys</code></dt><dd><p>If <code>TRUE</code>, then life-years are simulated in addition to QALYs.</p></dd>
 
@@ -323,7 +323,7 @@ See <code>vignette("expected-values")</code> for details.</p><h4 class='hasAncho
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
 
 <dt><code>type</code></dt><dd><p><code>"predict"</code> for mean values or <code>"random"</code> for random samples
-as in <code>$sim()</code> in <a href='StateVals.html'>StateVals</a>.</p></dd>
+as in <code>$sim()</code> in <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
 
 <dt><code>by_patient</code></dt><dd><p>If <code>TRUE</code>, then QALYs are computed at the patient level.
 If <code>FALSE</code>, then QALYs are averaged across patients by health state.</p></dd>

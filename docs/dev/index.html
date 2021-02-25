@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Health-Economic Simulation Modeling and Decision Analysis • hesim</title>
+<title>Health Economic Simulation Modeling and Decision Analysis • hesim</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -17,9 +17,9 @@
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Health-Economic Simulation Modeling and Decision Analysis">
+<script src="pkgdown.js"></script><meta property="og:title" content="Health Economic Simulation Modeling and Decision Analysis">
 <meta property="og:description" content="A modular and computationally efficient R package for  
-  parameterizing, simulating, and analyzing health-economic simulation 
+  parameterizing, simulating, and analyzing health economic simulation 
   models. The package supports cohort discrete time state transition models 
   (Briggs et al. 1998) &lt;doi:10.2165/00019053-199813040-00003&gt;,
   N-state partitioned survival models (Glasziou et al. 1990)
@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -146,9 +146,9 @@
 <p><code>hesim</code> is a modular and computationally efficient R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. The package supports cohort discrete time state transition models (DTSTMs), N-state partitioned survival models (PSMs), and individual-level continuous time state transition models (CTSTMs), encompassing both Markov (time-homogeneous and time-inhomogeneous) and semi-Markov processes. It heavily utilizes <code>Rcpp</code> and <code>data.table</code>, making individual-level simulation, probabilistic sensitivity analysis (PSA), and incorporation of patient heterogeneity fast.</p>
 <p>Features of the current version can be summarized as follows:</p>
 <ul>
-<li>Cohort DTSTMs, N-state PSMs, and individual-level CTSTMs that encompass Markov and semi-Markov processes</li>
-<li>Options to build models via mathematical expressions using nonstandard evaluation or directly from fitted statistical models</li>
-<li>Parameter estimates from either an R based model or from an external source</li>
+<li>Cohort DTSTMs, individual-level CTSTMs, and N-state PSMs that encompass Markov and semi-Markov processes</li>
+<li>Options to build models directly from fitted statistical models or by defining them in terms of expressions</li>
+<li>Parameter estimates from either an <code>R</code> based model or from an external source</li>
 <li>Convenience functions for sampling model parameters from parametric distributions or via bootstrapping</li>
 <li>Parameter uncertainty propagated with PSA</li>
 <li>Modeling patient heterogeneity</li>
@@ -167,6 +167,306 @@
 <span class="co"># Install the development version from GitHub:</span>
 <span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"hesim-dev/hesim"</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="getting-started" class="section level2">
+<h2 class="hasAnchor">
+<a href="#getting-started" class="anchor"></a>Getting started</h2>
+<p>There are two good places to start:</p>
+<ol>
+<li><p>The <a href="https://hesim-dev.github.io/hesim/articles/intro.html">Introduction to <code>hesim</code></a> article provides a quick introduction.</p></li>
+<li><p>The <a href="https://arxiv.org/abs/2102.09437"><code>hesim</code> manuscript</a> describes the package (including mathematical details) more thoroughly.</p></li>
+</ol>
+<p>You might also want to explore our example analyses which can be found in the manuscript and web articles. They are summarized in the table below, with some drawn from the <a href="https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation">Decision Modeling for Health Economic Evaluation</a> textbook. Key areas of focus are the (i) statistical models of disease progression (in terms of the baseline risk and relative treatment effects) and (ii) the available data (either individual patient data (IPD) or aggregate-level data).</p>
+<table class="table table">
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+<p>Baseline risk</p>
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+<p>Treatment effect</p>
+</div>
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+<p>Name</p>
+</th>
+<th style="text-align:left;">
+<p>Model</p>
+</th>
+<th style="text-align:left;">
+<p>Disease model</p>
+</th>
+<th style="text-align:left;">
+<p>Disease data</p>
+</th>
+<th style="text-align:left;">
+<p>Disease model</p>
+</th>
+<th style="text-align:left;">
+<p>Disease data</p>
+</th>
+<th style="text-align:left;">
+<p>Application</p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<p>1</p>
+</td>
+<td style="text-align:left;width: 15em; ">
+<p><a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Manuscript 4.1</a></p>
+</td>
+<td style="text-align:left;">
+<p>iCTSTM</p>
+</td>
+<td style="text-align:left;">
+<p>Multi-state model</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>Coefficient (AFT)</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>Oncology</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>2</p>
+</td>
+<td style="text-align:left;width: 15em; ">
+<p><a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Manuscript 4.2</a></p>
+</td>
+<td style="text-align:left;">
+<p>PSM</p>
+</td>
+<td style="text-align:left;">
+<p>Survival models</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>Coefficient (AFT)</p>
+</td>
+<td style="text-align:left;">
+<p>Aggregate</p>
+</td>
+<td style="text-align:left;">
+<p>Oncology</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>3</p>
+</td>
+<td style="text-align:left;width: 15em; ">
+<p><a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Manuscript 4.3</a></p>
+</td>
+<td style="text-align:left;">
+<p>cDTSTM</p>
+</td>
+<td style="text-align:left;">
+<p>Multi-state model (panel data)</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>RR</p>
+</td>
+<td style="text-align:left;">
+<p>Aggregate</p>
+</td>
+<td style="text-align:left;">
+<p>Oncology</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>4</p>
+</td>
+<td style="text-align:left;width: 15em; ">
+<p><a href="https://hesim-dev.github.io/hesim/articles/markov-cohort.html" style="     ">Simple Markov cohort</a></p>
+</td>
+<td style="text-align:left;">
+<p>cDTSTM</p>
+</td>
+<td style="text-align:left;">
+<p>Multinomial</p>
+</td>
+<td style="text-align:left;">
+<p>Aggregate</p>
+</td>
+<td style="text-align:left;">
+<p>RR</p>
+</td>
+<td style="text-align:left;">
+<p>Aggregate</p>
+</td>
+<td style="text-align:left;">
+<p>HIV</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>5</p>
+</td>
+<td style="text-align:left;width: 15em; ">
+<p><a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-cohort.html" style="     ">Time inhomogeneous Markov (cohort)</a></p>
+</td>
+<td style="text-align:left;">
+<p>cDTSTM</p>
+</td>
+<td style="text-align:left;">
+<p>Custom</p>
+</td>
+<td style="text-align:left;">
+<p>Aggregate</p>
+</td>
+<td style="text-align:left;">
+<p>Coefficient (HR)</p>
+</td>
+<td style="text-align:left;">
+<p>Aggregate</p>
+</td>
+<td style="text-align:left;">
+<p>Hip replacement</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>6</p>
+</td>
+<td style="text-align:left;width: 15em; ">
+<p><a href="https://hesim-dev.github.io/hesim/articles/mlogit.html" style="     ">Multinomial logit</a></p>
+</td>
+<td style="text-align:left;">
+<p>cDTSTM</p>
+</td>
+<td style="text-align:left;">
+<p>Multinomial logit</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>Coefficient (OR)</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>Generic</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>7</p>
+</td>
+<td style="text-align:left;width: 15em; ">
+<p><a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-indiv.html" style="     ">Time inhomogeneous Markov (individual)</a></p>
+</td>
+<td style="text-align:left;">
+<p>iCTSTM</p>
+</td>
+<td style="text-align:left;">
+<p>Custom</p>
+</td>
+<td style="text-align:left;">
+<p>Aggregate</p>
+</td>
+<td style="text-align:left;">
+<p>Coefficient (HR)</p>
+</td>
+<td style="text-align:left;">
+<p>Aggregate</p>
+</td>
+<td style="text-align:left;">
+<p>Hip replacement</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>8</p>
+</td>
+<td style="text-align:left;width: 15em; ">
+<p><a href="https://hesim-dev.github.io/hesim/articles/mstate.html" style="     ">Semi-Markov multi-state</a></p>
+</td>
+<td style="text-align:left;">
+<p>iCTSTM</p>
+</td>
+<td style="text-align:left;">
+<p>Multi-state model</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>Coefficient (AFT)</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>Generic</p>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<p>9</p>
+</td>
+<td style="text-align:left;width: 15em; ">
+<p><a href="https://hesim-dev.github.io/hesim/articles/psm.html" style="     ">4-state PSM</a></p>
+</td>
+<td style="text-align:left;">
+<p>PSM</p>
+</td>
+<td style="text-align:left;">
+<p>Survival models</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>Coefficient (AFT)</p>
+</td>
+<td style="text-align:left;">
+<p>IPD</p>
+</td>
+<td style="text-align:left;">
+<p>Oncology</p>
+</td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<p><span style="font-style: italic;">Note: </span> <sup></sup> iCTSTM = Individual-level continuous time state transition model; PSM = partitioned survival model; cDTSTM = Cohort discrete time state transition model. AFT = accelerated failure time; RR = relative risk; HR = hazard ratio; OR = odds ratio. IPD = individual patient data.</p>
+</td>
+</tr></tfoot>
+</table>
 </div>
 </div>
   </div>

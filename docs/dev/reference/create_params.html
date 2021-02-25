@@ -92,7 +92,7 @@ then random samples from suitable probability distributions are returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -235,12 +235,12 @@ If <code>"none</code>, then only point estimates are returned.</p></td>
 
     <p>An object prefixed by <code>params_</code>. Mapping between <code>create_params</code>
 and the classes of the returned objects are:</p><ul>
-<li><p><code>create_params.lm</code> -&gt; <a href='params_lm.html'>params_lm</a></p></li>
-<li><p><code>create_params.multinom</code> -&gt; <a href='params_mlogit.html'>params_mlogit</a></p></li>
-<li><p><code>create_params.multinom_list</code> -&gt; <a href='params_mlogit_list.html'>params_mlogit_list</a></p></li>
-<li><p><code>create_params.flexsurvreg</code> -&gt; <a href='params_surv.html'>params_surv</a></p></li>
-<li><p><code>create_params.flexsurvreg_list</code> -&gt; <a href='params_surv_list.html'>params_surv_list</a></p></li>
-<li><p><code>create_params.partsurvfit</code> -&gt; <a href='params_surv_list.html'>params_surv_list</a></p></li>
+<li><p><code>create_params.lm</code> -&gt; <code><a href='params_lm.html'>params_lm</a></code></p></li>
+<li><p><code>create_params.multinom</code> -&gt; <code><a href='params_mlogit.html'>params_mlogit</a></code></p></li>
+<li><p><code>create_params.multinom_list</code> -&gt; <code><a href='params_mlogit_list.html'>params_mlogit_list</a></code></p></li>
+<li><p><code>create_params.flexsurvreg</code> -&gt; <code><a href='params_surv.html'>params_surv</a></code></p></li>
+<li><p><code>create_params.flexsurvreg_list</code> -&gt; <code><a href='params_surv_list.html'>params_surv_list</a></code></p></li>
+<li><p><code>create_params.partsurvfit</code> -&gt; <code><a href='params_surv_list.html'>params_surv_list</a></code></p></li>
 </ul>
 
 
@@ -250,12 +250,12 @@ and the classes of the returned objects are:</p><ul>
 <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
 <span class='va'>params_lm</span> <span class='op'>&lt;-</span> <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>fit</span>, n <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      (Intercept)    female
-#&gt; [1,]    28796.32 4254.1138
-#&gt; [2,]    30864.67 1429.8567
-#&gt; [3,]    31637.09 2643.6446
-#&gt; [4,]    31796.43  820.2932
-#&gt; [5,]    32401.35 -682.3044</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      (Intercept)     female
+#&gt; [1,]    32401.24 3907.96888
+#&gt; [2,]    32317.73 1590.17913
+#&gt; [3,]    30786.07 2058.30430
+#&gt; [4,]    32569.48  -61.17965
+#&gt; [5,]    30876.11   69.98317</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># create_params.flexsurvreg</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
@@ -266,20 +266,20 @@ and the classes of the returned objects are:</p><ul>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>params_surv_wei</span><span class='op'>$</span><span class='va'>dist</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_surv_wei</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $shape
-#&gt;      (Intercept)
-#&gt; [1,] -0.14637461
-#&gt; [2,]  0.33462422
-#&gt; [3,]  0.35695368
-#&gt; [4,]  0.03583317
-#&gt; [5,] -0.10409772
+#&gt;       (Intercept)
+#&gt; [1,]  0.001458613
+#&gt; [2,]  0.262720800
+#&gt; [3,] -0.132028464
+#&gt; [4,]  0.186166943
+#&gt; [5,]  0.022700315
 #&gt; 
 #&gt; $scale
 #&gt;      (Intercept)
-#&gt; [1,]    7.380932
-#&gt; [2,]    7.094997
-#&gt; [3,]    7.190061
-#&gt; [4,]    7.254044
-#&gt; [5,]    7.409041
+#&gt; [1,]    7.580215
+#&gt; [2,]    6.514265
+#&gt; [3,]    7.150658
+#&gt; [4,]    6.900664
+#&gt; [5,]    6.901837
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

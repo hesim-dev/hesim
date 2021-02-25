@@ -91,7 +91,7 @@ transition model with parameters that were estimated using a multi-state model."
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -192,20 +192,20 @@ transition model with parameters that were estimated using a multi-state model.<
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
-<dt><code>params</code></dt><dd><p>An object of class <a href='params_surv.html'>params_surv</a> or <a href='params_surv_list.html'>params_surv_list</a>.</p></dd>
+<dt><code>params</code></dt><dd><p>An object of class <code><a href='params_surv.html'>params_surv</a></code> or <code><a href='params_surv_list.html'>params_surv_list</a></code>.</p></dd>
 
 <dt><code>input_data</code></dt><dd><p>Input data used to simulate health state transitions
 by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
-Must be an object of class <a href='input_mats.html'>input_mats</a>. If <code>params</code> contains parameters from
-a list of models (i.e., of class <a href='params_surv_list.html'>params_surv_list</a>), then <code>input_data</code>
+Must be an object of class <code><a href='input_mats.html'>input_mats</a></code>. If <code>params</code> contains parameters from
+a list of models (i.e., of class <code><a href='params_surv_list.html'>params_surv_list</a></code>), then <code>input_data</code>
 must contain a unique row for each treatment strategy
 and patient; if <code>params</code> contains parameters from a joint model
-(i.e., of class <a href='params_surv.html'>params_surv</a>), then <code>input_data</code> must contain a unique
+(i.e., of class <code><a href='params_surv.html'>params_surv</a></code>), then <code>input_data</code> must contain a unique
 row for each treatment strategy, patient, and transition.</p></dd>
 
 <dt><code>trans_mat</code></dt><dd><p>A transition matrix describing the states and transitions
-in a multi-state model in the format from the <a href='https://rdrr.io/pkg/mstate/man/mstate-package.html'>mstate</a> package.
-See the documentation for the argument <code>"trans"</code> in <a href='https://rdrr.io/pkg/mstate/man/msprep.html'>mstate::msprep</a>.</p></dd>
+in a multi-state model in the format from the <code><a href='https://rdrr.io/pkg/mstate/man/mstate-package.html'>mstate</a></code> package.
+See the documentation for the argument <code>"trans"</code> in <code><a href='https://rdrr.io/pkg/mstate/man/msprep.html'>mstate::msprep</a></code>.</p></dd>
 
 <dt><code>start_state</code></dt><dd><p>A scalar or vector denoting the starting health state.
 Default is the first health state. If a vector, must be equal to the number of simulated patients.</p></dd>
@@ -305,7 +305,7 @@ no output is printed.</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>An object of class <a href='disprog.html'>disprog</a>.</p>
+<p>An object of class <code><a href='disprog.html'>disprog</a></code>.</p>
 <p><hr>
 <a id="method-sim_stateprobs"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sim_stateprobs()</code></h3>
 <p>Simulate health state probabilities from a <a href='disprog.html'>disprog</a> object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
@@ -324,7 +324,7 @@ using <code>IndivCtstm$sim_disease()</code>.</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>An object of class <a href='stateprobs.html'>stateprobs</a>.</p>
+<p>An object of class <code><a href='stateprobs.html'>stateprobs</a></code>.</p>
 <p><hr>
 <a id="method-check"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='check.id_attributes.html'>check()</a></code></h3>
 <p>Input validation for class. Checks that fields are the correct type.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
