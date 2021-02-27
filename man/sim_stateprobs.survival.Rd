@@ -18,3 +18,85 @@ A \code{stateprobs} object.
 Simulate health state probabilities from a \code{\link{survival}} object using partitioned
 survival analysis.
 }
+\examples{
+library("data.table")
+library("survival")
+
+# This example shows how to simulate a partitioned survival model by
+# manually constructing a "survival" object. We will consider a case in which
+# Cox proportional hazards models from the survival package---which are not
+# integrated with hesim---are used for parameter estimation. We will use 
+# point estimates in the example, but bootstrapping, Bayesian modeling,
+# or other techniques could be used to draw samples for a probabilistic 
+# sensitivity analysis. 
+
+# (0) We first setup our model per usual by defining the treatment strategies,
+# target population, and health states
+hesim_dat <- hesim_data(
+  strategies = data.table(strategy_id = 1:3,
+                          strategy_name = c("SOC", "New 1", "New 2")),
+  patients = data.table(patient_id = 1:2,
+                        female = c(0, 1),
+                        grp_id = 1),
+  states = data.table(state_id = 1:2,
+                      state_name = c("Stable", "Progression"))
+)
+
+# (1) Next we will estimate Cox models with survival::coxph(). We illustrate 
+# by predicting progression free survival (PFS) and overall survival(OS)
+## Fit models
+onc3_pfs_os <- as_pfs_os(onc3, patient_vars = c("patient_id", "female",
+                                                "strategy_name"))
+fit_pfs <- coxph(Surv(pfs_time, pfs_status) ~ strategy_name + female,
+                 data = onc3_pfs_os)
+fit_os <- coxph(Surv(os_time, pfs_status) ~ strategy_name + female,
+                data = onc3_pfs_os)
+
+## Predict survival on input data
+surv_input_data <- expand(hesim_dat)
+times <- seq(0, 14, 1/12)
+predict_survival <- function(object, newdata, times) {
+  surv <- summary(survfit(object, newdata = newdata, se.fit = FALSE),
+                  t = times)
+  pred <- newdata[rep(seq_len(nrow(newdata)), each = length(times)), ]
+  pred[, sample := 1] # Point estimates only in this example
+  pred[, time := rep(surv$time, times = nrow(newdata))]
+  pred[, survival := c(surv$surv)]
+  return(pred[, ])
+}
+pfs <- predict_survival(fit_pfs, newdata = surv_input_data, times = times)
+os <- predict_survival(fit_os, newdata = surv_input_data, times = times)
+surv <- rbind(
+  as.data.table(pfs)[, curve := 1L],
+  as.data.table(os)[, curve := 2L]
+)
+
+## Convert predictions to a survival object
+surv <- survival(surv, t = "time")
+\dontrun{autoplot(surv)}
+
+# (2) We can then compute state probabilities from the survival object
+stprobs <- sim_stateprobs(surv)
+
+# (3) Finally, we can use the state probabilities to compute QALYs and costs
+## A dummy utility model to illustrate
+utility_tbl <- stateval_tbl(
+  data.table(state_id = 1:2,
+             est = c(1, 1)
+  ),
+  dist = "fixed"
+)
+utilitymod <- create_StateVals(utility_tbl, 
+                               hesim_data = hesim_dat,
+                               n = 1)
+
+## Instantiate Psm class and compute QALYs
+psm <- Psm$new(utility_model = utilitymod)
+psm$stateprobs_ <- stprobs
+psm$sim_qalys()
+psm$qalys_
+
+}
+\seealso{
+\code{\link{survival}}
+}

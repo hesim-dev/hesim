@@ -339,6 +339,10 @@ Psm <- R6::R6Class("Psm",
       self$survival_ <- self$survival_models$survival(t)
       setattr(self$survival_, "class", 
               c("survival", "data.table", "data.frame"))
+      setattr(self$survival_, "size", 
+              c(get_size(self$survival_models),
+                n_states = self$n_states,
+                n_times = length(t)))
       self$t_ <- t
       self$stateprobs_ <- NULL
       invisible(self)
@@ -354,27 +358,7 @@ Psm <- R6::R6Class("Psm",
         stop("You must first simulate survival curves using '$sim_survival'.",
             call. = FALSE)
       }
-      res <- C_psm_sim_stateprobs(self$survival_,
-                                  n_samples = self$survival_models$params[[1]]$n_samples,
-                                  n_strategies = self$survival_models$input_data$n_strategies,
-                                  n_patients = self$survival_models$input_data$n_patients,
-                                  n_states = self$n_states,
-                                  n_times = length(self$t_))
-      prop_cross <- res$n_crossings/nrow(res$stateprobs)
-      if (prop_cross > 0){
-        warning(paste0("Survival curves crossed ", round(prop_cross * 100, 2), 
-                       " percent of the time."),
-                call. = FALSE)
-      }
-      stateprobs <- data.table(res$stateprobs)
-      stateprobs[, state_id := state_id + 1]
-      stateprobs[, sample := sample + 1]
-      check_patient_wt(self$survival_models, stateprobs)
-      self$stateprobs_ <- stateprobs[]
-      setattr(self$stateprobs_, "class", 
-              c("stateprobs", "data.table", "data.frame"))
-      setattr(self$stateprobs_, "size", 
-              c(get_size(self$survival_models), n_states = self$n_states))
+      self$stateprobs_ <- sim_stateprobs(self$survival_)
       invisible(self)
     },
 
