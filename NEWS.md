@@ -1,3 +1,7 @@
+## hesim 0.5.0.9999
+### New features
+* A `survival` object can now be constructed manually with `survival()` and simulated state probabilities can be computed from survival curves with `sim_stateprobs.survival()`. These features are useful for partitioned survival analyses when a user would like to use a survival model not supported by `hesim` to predict survival curves.
+
 ## hesim 0.5.0
 ### New features
 * A transition intensity matrix can be created from a multi-state model fit using `msm::msm()` with the  `qmatrix.msm()` method. Similarly, a `CohortDtstmTrans` object can be created with `create_CohortDtstmTrans.msm()`.
