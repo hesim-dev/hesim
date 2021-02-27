@@ -47,8 +47,8 @@
 
 
 <meta property="og:title" content="State probability object — stateprobs" />
-<meta property="og:description" content="An object of class stateprobs returned from methods
-$sim_stateprobs() in model classes." />
+<meta property="og:description" content="An object of class stateprobs returned by sim_stateprobs() or from
+$sim_stateprobs() methods in model classes." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -174,8 +174,8 @@ $sim_stateprobs() in model classes." />
     </div>
 
     <div class="ref-description">
-    <p>An object of class <code>stateprobs</code> returned from methods
-<code>$sim_stateprobs()</code> in model classes.</p>
+    <p>An object of class <code>stateprobs</code> returned by <code><a href='sim_stateprobs.html'>sim_stateprobs()</a></code> or from
+<code>$sim_stateprobs()</code> methods in model classes.</p>
     </div>
 
 
@@ -199,6 +199,10 @@ the following columns:</p>
 
 <p>When simulating individual-level models, the <code>patient_id</code> column is
 not included as state probabilities are computed by averaging across patients.</p>
+<p>In cohort models, the object also contains a <code>size</code> attribute that contains
+the elements <code>n_samples</code>, <code>n_strategies</code>, <code>n_patients</code>, <code>n_states</code>, and
+<code>n_times</code> denoting the number of samples, treatment strategies, patients,
+health states, and times.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

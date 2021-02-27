@@ -52,7 +52,7 @@ The object also contains a \code{size} attribute that contains the elements
 the number of samples, treatment strategies, patients, health states, and times.
 }
 \description{
-An object of class \code{survival} that stores survival probabilities. It is typically
+An object of class \code{survival} stores survival probabilities. It is typically
 returned by \code{Psm$sim_survival()} or \code{PsmCurves$survival()}; however, it can also
 be constructed "manually" from existing data using the \code{survival()}
 function as described below. The latter option is useful if survival modeling
@@ -63,7 +63,7 @@ then simulating quality-adjusted life-years and costs in a typical fashion.
 }
 \seealso{
 \code{survival} objects are returned by methods in the \code{\link{Psm}} and \code{\link{PsmCurves}}
-classes. An example in which the \code{survival} object is constructed "manually"
+classes. An example in which a \code{survival} object is constructed "manually"
 (presumably from a preexisting survival model fit using software other than \code{flexsurv})
 is provided in the documentation to \code{\link[=sim_stateprobs.survival]{sim_stateprobs.survival()}}.
 }

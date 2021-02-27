@@ -14,7 +14,7 @@ sim_stateprobs <- function(x, ...) {
   UseMethod("sim_stateprobs")
 }
 
-#' State probabilities from survival curves
+#' Simulate state probabilities from survival curves
 #'
 #' Simulate health state probabilities from a [`survival`] object using partitioned
 #' survival analysis.
@@ -48,7 +48,7 @@ sim_stateprobs <- function(x, ...) {
 #' )
 #'
 #' # (1) Next we will estimate Cox models with survival::coxph(). We illustrate 
-#' # by predicting progression free survival (PFS) and overall survival(OS)
+#' # by predicting progression free survival (PFS) and overall survival (OS)
 #' ## Fit models
 #' onc3_pfs_os <- as_pfs_os(onc3, patient_vars = c("patient_id", "female",
 #'                                                 "strategy_name"))

@@ -28,7 +28,7 @@ NULL
 # Survival object --------------------------------------------------------------
 #' Survival object
 #'
-#' An object of class `survival` that stores survival probabilities. It is typically
+#' An object of class `survival` stores survival probabilities. It is typically
 #' returned by `Psm$sim_survival()` or `PsmCurves$survival()`; however, it can also
 #' be constructed "manually" from existing data using the `survival()` 
 #' function as described below. The latter option is useful if survival modeling
@@ -66,7 +66,7 @@ NULL
 #'  the number of samples, treatment strategies, patients, health states, and times. 
 #'
 #' @seealso `survival` objects are returned by methods in the [`Psm`] and [`PsmCurves`] 
-#' classes. An example in which the `survival` object is constructed "manually"
+#' classes. An example in which a `survival` object is constructed "manually"
 #' (presumably from a preexisting survival model fit using software other than `flexsurv`) 
 #' is provided in the documentation to [`sim_stateprobs.survival()`].
 #' @export
@@ -128,8 +128,12 @@ survival <- function(data, sample = "sample", strategy_id = "strategy_id",
 #' 
 #' When simulating individual-level models, the `patient_id` column is
 #' not included as state probabilities are computed by averaging across patients.
+#' 
+#' In cohort models, the object also contains a `size` attribute that contains 
+#' the elements `n_samples`, `n_strategies`, `n_patients`, `n_states`, and
+#'  `n_times` denoting the number of samples, treatment strategies, patients, 
+#'  health states, and times. 
 #'
-#'    
 #' @name stateprobs
 NULL
 

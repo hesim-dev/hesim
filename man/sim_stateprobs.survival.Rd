@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_stateprobs.R
 \name{sim_stateprobs.survival}
 \alias{sim_stateprobs.survival}
-\title{State probabilities from survival curves}
+\title{Simulate state probabilities from survival curves}
 \usage{
 \method{sim_stateprobs}{survival}(x, ...)
 }
@@ -43,7 +43,7 @@ hesim_dat <- hesim_data(
 )
 
 # (1) Next we will estimate Cox models with survival::coxph(). We illustrate 
-# by predicting progression free survival (PFS) and overall survival(OS)
+# by predicting progression free survival (PFS) and overall survival (OS)
 ## Fit models
 onc3_pfs_os <- as_pfs_os(onc3, patient_vars = c("patient_id", "female",
                                                 "strategy_name"))

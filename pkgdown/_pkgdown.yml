@@ -81,10 +81,11 @@ reference:
       - IndivCtstmTrans
       - create_IndivCtstmTrans
       - IndivCtstm
-  - title: "Simulation output"
+  - title: "General simulation functions and output"
     contents:
       - disprog
       - survival
+      - sim_stateprobs.survival
       - stateprobs
       - costs
       - qalys
