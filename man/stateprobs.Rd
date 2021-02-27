@@ -4,8 +4,8 @@
 \alias{stateprobs}
 \title{State probability object}
 \description{
-An object of class \code{stateprobs} returned from methods
-\verb{$sim_stateprobs()} in model classes.
+An object of class \code{stateprobs} returned by \code{\link[=sim_stateprobs]{sim_stateprobs()}} or from
+\verb{$sim_stateprobs()} methods in model classes.
 }
 \section{Components}{
 
@@ -24,5 +24,10 @@ the following columns:
 
 When simulating individual-level models, the \code{patient_id} column is
 not included as state probabilities are computed by averaging across patients.
+
+In cohort models, the object also contains a \code{size} attribute that contains
+the elements \code{n_samples}, \code{n_strategies}, \code{n_patients}, \code{n_states}, and
+\code{n_times} denoting the number of samples, treatment strategies, patients,
+health states, and times.
 }
 

@@ -3,13 +3,38 @@
 \name{survival}
 \alias{survival}
 \title{Survival object}
-\description{
-An object of class \code{survival} returned from \code{Psm$sim_survival()} or
-\code{PsmCurves$survival()}.
+\usage{
+survival(
+  data,
+  sample = "sample",
+  strategy_id = "strategy_id",
+  patient_id = "patient_id",
+  grp_id = "grp_id",
+  curve = "curve",
+  t = "t",
+  survival = "survival"
+)
 }
-\section{Components}{
+\arguments{
+\item{data}{A tabular object that can be coerced to a \code{data.table} with
+\code{\link[=as.data.table]{as.data.table()}}.}
 
-A \code{survival} object inherits from \code{data.table} and contains
+\item{sample}{The name of the column corresponding to \code{sample}.}
+
+\item{strategy_id}{The name of the column corresponding to \code{strategy_id}.}
+
+\item{patient_id}{The name of the column corresponding to \code{patient_id}.}
+
+\item{grp_id}{The name of the column corresponding to \code{grp_id}.}
+
+\item{curve}{The name of the column corresponding to \code{curve}.}
+
+\item{t}{The name of the column corresponding to \code{t}.}
+
+\item{survival}{The name of the column corresponding to \code{survival}.}
+}
+\value{
+An object of class \code{survival} that inherits from \code{data.table} and contains
 the following columns:
 
 \describe{
@@ -22,8 +47,23 @@ survival model. Each curve corresponds to unique endpoint.}
 \item{t}{The time at which a survival probability is computed.}
 \item{survival}{The probability of surviving to time \code{t}.}
 }
+The object also contains a \code{size} attribute that contains the elements
+\code{n_samples}, \code{n_strategies}, \code{n_patients}, \code{n_states}, and \code{n_times} denoting
+the number of samples, treatment strategies, patients, health states, and times.
 }
-
+\description{
+An object of class \code{survival} stores survival probabilities. It is typically
+returned by \code{Psm$sim_survival()} or \code{PsmCurves$survival()}; however, it can also
+be constructed "manually" from existing data using the \code{survival()}
+function as described below. The latter option is useful if survival modeling
+has been performed by an \code{R} package other than those that integrate with \code{hesim} (
+currently \code{flexsurv}). In this case a simulation model can still be developed
+by using \code{\link[=sim_stateprobs.survival]{sim_stateprobs.survival()}} to compute simulated state probabilities and
+then simulating quality-adjusted life-years and costs in a typical fashion.
+}
 \seealso{
-\code{\link{Psm}}, \code{\link{PsmCurves}}
+\code{survival} objects are returned by methods in the \code{\link{Psm}} and \code{\link{PsmCurves}}
+classes. An example in which a \code{survival} object is constructed "manually"
+(presumably from a preexisting survival model fit using software other than \code{flexsurv})
+is provided in the documentation to \code{\link[=sim_stateprobs.survival]{sim_stateprobs.survival()}}.
 }

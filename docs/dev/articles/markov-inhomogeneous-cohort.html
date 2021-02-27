@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -125,7 +125,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 class="date">2021-02-14</h4>
+            <h4 class="date">2021-02-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-cohort.Rmd"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
@@ -592,36 +592,36 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">[</span><span class="va">grp</span> <span class="op">==</span> <span class="fl">2</span><span class="op">]</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>##    Discount rate           Outcome  Standard prosthesis       New prosthesis
-## 1:         0.015             QALYs 14.66 (13.59, 15.54) 14.71 (13.62, 15.61)
+## 1:         0.015             QALYs 14.66 (13.56, 15.60) 14.71 (13.60, 15.66)
 ## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)
-## 3:         0.060    Costs: medical        120 (50, 227)          35 (10, 86)
-## 4:         0.060      Costs: total       514 (444, 621)       614 (589, 665)</code></pre>
+## 3:         0.060    Costs: medical        116 (51, 229)          33 (11, 80)
+## 4:         0.060      Costs: total       510 (445, 623)       612 (590, 659)</code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each subgroup. There is considerable variation which is not unexpected since the the revision rate for prostheses (<em>rr</em>) depends on covariates.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span>pivot_from <span class="op">=</span> <span class="st">"outcome"</span><span class="op">)</span></code></pre></div>
 <pre><code>##     Group Strategy Incremental QALYs Incremental costs       Incremental NMB
-##  1:     1        2 0.07 (0.03, 0.14)     66 (-50, 140)  3,566 (1,353, 6,781)
-##  2:     2        2 0.04 (0.02, 0.09)     100 (11, 153)    2,150 (770, 4,231)
-##  3:     3        2 0.03 (0.01, 0.05)     125 (62, 163)    1,220 (383, 2,518)
-##  4:     4        2 0.02 (0.01, 0.03)     145 (99, 171)      631 (136, 1,408)
-##  5:     5        2 0.01 (0.00, 0.02)    159 (128, 176)         279 (-8, 735)
-##  6:     6        2 0.12 (0.05, 0.21)   -31 (-225, 103) 5,810 (2,280, 10,610)
-##  7:     7        2 0.07 (0.03, 0.13)    32 (-110, 128)  3,482 (1,329, 6,615)
-##  8:     8        2 0.04 (0.02, 0.08)     80 (-18, 146)    1,984 (748, 3,901)
-##  9:     9        2 0.02 (0.01, 0.05)     116 (46, 159)    1,061 (341, 2,215)
-## 10:    10        2 0.01 (0.01, 0.03)     141 (92, 169)       518 (99, 1,244)
+##  1:     1        2 0.07 (0.03, 0.13)     69 (-43, 138)  3,563 (1,259, 6,555)
+##  2:     2        2 0.04 (0.02, 0.08)     102 (20, 151)    2,143 (748, 3,996)
+##  3:     3        2 0.03 (0.01, 0.05)     127 (68, 162)    1,212 (410, 2,343)
+##  4:     4        2 0.02 (0.01, 0.03)    146 (105, 170)      625 (155, 1,277)
+##  5:     5        2 0.01 (0.00, 0.02)    160 (133, 176)          274 (0, 675)
+##  6:     6        2 0.12 (0.04, 0.21)    -26 (-231, 97) 5,807 (2,183, 10,639)
+##  7:     7        2 0.07 (0.03, 0.13)    36 (-112, 124)  3,471 (1,319, 6,407)
+##  8:     8        2 0.04 (0.02, 0.07)     83 (-19, 145)    1,972 (727, 3,686)
+##  9:     9        2 0.02 (0.01, 0.04)     118 (48, 159)    1,051 (348, 2,076)
+## 10:    10        2 0.01 (0.01, 0.02)     142 (95, 169)      511 (110, 1,102)
 ##          ICER
-##  1:       914
-##  2:     2,214
-##  3:     4,665
-##  4:     9,338
-##  5:    18,168
+##  1:       953
+##  2:     2,267
+##  3:     4,746
+##  4:     9,474
+##  5:    18,416
 ##  6: Dominates
-##  7:       459
-##  8:     1,949
-##  9:     4,908
-## 10:    10,670</code></pre>
+##  7:       515
+##  8:     2,027
+##  9:     5,028
+## 10:    10,870</code></pre>
 </div>
 <div id="overall" class="section level2">
 <h2 class="hasAnchor">
@@ -634,10 +634,10 @@ S(t) = \exp(-\lambda t^\gamma) \\
 <span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span>digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##              Outcome       New prosthesis
-## 1: Incremental QALYs 0.029 (0.012, 0.055)
-## 2: Incremental costs        117 (51, 160)
-## 3:   Incremental NMB   1,342 (435, 2,657)
-## 4:              ICER                4,020</code></pre>
+## 1: Incremental QALYs 0.029 (0.012, 0.052)
+## 2: Incremental costs        119 (55, 159)
+## 3:   Incremental NMB   1,334 (464, 2,510)
+## 4:              ICER                4,099</code></pre>
 </div>
 </div>
 <div id="appendix" class="section level1">
@@ -800,12 +800,12 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
   <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,   <span class="fl">0</span>, <span class="fl">1</span>
 <span class="op">)</span>
 <span class="va">tpmat</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></code></pre></div>
-<pre><code>##    s1_s1    s1_s2 s1_s3 s1_s4      s1_s5 s2_s1     s2_s2       s2_s3 s2_s4
-## 1:     0 0.985139     0     0 0.01486096     0 0.9927933 0.000506736     0
-##     s2_s5 s3_s1 s3_s2 s3_s3    s3_s4      s3_s5 s4_s1 s4_s2      s4_s3
-## 1: 0.0067     0     0     0 0.978439 0.02156096     0     0 0.02218438
+<pre><code>##    s1_s1     s1_s2 s1_s3 s1_s4      s1_s5 s2_s1     s2_s2       s2_s3 s2_s4
+## 1:     0 0.9443583     0     0 0.05564167     0 0.9929205 0.000379487     0
+##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4      s3_s5 s4_s1 s4_s2      s4_s3
+## 1: 0.0067     0     0     0 0.9376583 0.06234167     0     0 0.08782378
 ##        s4_s4  s4_s5 s5_s1 s5_s2 s5_s3 s5_s4 s5_s5
-## 1: 0.9711156 0.0067     0     0     0     0     1</code></pre>
+## 1: 0.9054762 0.0067     0     0     0     0     1</code></pre>
 <p>Finally, we combine the ID variables and the transition probability matrices into a single object.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tparams_transprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tparams_transprobs.html">tparams_transprobs</a></span><span class="op">(</span><span class="va">tpmat</span>, <span class="va">tpmat_id</span><span class="op">)</span></code></pre></div>
@@ -825,11 +825,11 @@ tp(t_u) &amp;= 1 - exp\{\lambda (t-u)^\gamma -\lambda t^\gamma\} \\
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">[</span><span class="va">grp</span> <span class="op">==</span> <span class="fl">2</span><span class="op">]</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>##    Discount rate           Outcome  Standard prosthesis       New prosthesis
-## 1:         0.015             QALYs 14.68 (13.59, 15.60) 14.72 (13.61, 15.66)
+## 1:         0.015             QALYs 14.64 (13.57, 15.56) 14.68 (13.60, 15.63)
 ## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)
-## 3:         0.060    Costs: medical        119 (50, 213)          34 (10, 79)
-## 4:         0.060      Costs: total       513 (444, 607)       613 (589, 658)</code></pre>
-<p>However, time to construct the transition model was 2.8 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
+## 3:         0.060    Costs: medical        116 (51, 209)          33 (11, 74)
+## 4:         0.060      Costs: total       510 (445, 603)       612 (590, 653)</code></pre>
+<p>However, time to construct the transition model was 3.5 times faster. Although both are quite fast (time in the table is in seconds), this difference would become more pronounced as the number of parameter samples, treatment strategies, patients, and/or distinct time periods increased.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>
   Method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"define_model()"</span>, <span class="st">"Custom tpmatrix()"</span><span class="op">)</span>,
@@ -861,13 +861,13 @@ elapsed
 define_model()
 </td>
 <td style="text-align:right;">
-4.593
+4.656
 </td>
 <td style="text-align:right;">
-1.067
+0.999
 </td>
 <td style="text-align:right;">
-5.815
+7.962
 </td>
 </tr>
 <tr>
@@ -875,13 +875,13 @@ define_model()
 Custom tpmatrix()
 </td>
 <td style="text-align:right;">
-1.621
+1.666
 </td>
 <td style="text-align:right;">
-0.413
+0.443
 </td>
 <td style="text-align:right;">
-2.067
+2.244
 </td>
 </tr>
 </tbody>

@@ -47,8 +47,14 @@
 
 
 <meta property="og:title" content="Survival object — survival" />
-<meta property="og:description" content="An object of class survival returned from Psm$sim_survival() or
-PsmCurves$survival()." />
+<meta property="og:description" content="An object of class survival stores survival probabilities. It is typically
+returned by Psm$sim_survival() or PsmCurves$survival(); however, it can also
+be constructed &quot;manually&quot; from existing data using the survival()
+function as described below. The latter option is useful if survival modeling
+has been performed by an R package other than those that integrate with hesim (
+currently flexsurv). In this case a simulation model can still be developed
+by using sim_stateprobs.survival() to compute simulated state probabilities and
+then simulating quality-adjusted life-years and costs in a typical fashion." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -91,7 +97,7 @@ PsmCurves$survival()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -174,17 +180,68 @@ PsmCurves$survival()." />
     </div>
 
     <div class="ref-description">
-    <p>An object of class <code>survival</code> returned from <code>Psm$sim_survival()</code> or
-<code>PsmCurves$survival()</code>.</p>
+    <p>An object of class <code>survival</code> stores survival probabilities. It is typically
+returned by <code>Psm$sim_survival()</code> or <code>PsmCurves$survival()</code>; however, it can also
+be constructed "manually" from existing data using the <code>survival()</code>
+function as described below. The latter option is useful if survival modeling
+has been performed by an <code>R</code> package other than those that integrate with <code>hesim</code> (
+currently <code>flexsurv</code>). In this case a simulation model can still be developed
+by using <code><a href='sim_stateprobs.survival.html'>sim_stateprobs.survival()</a></code> to compute simulated state probabilities and
+then simulating quality-adjusted life-years and costs in a typical fashion.</p>
     </div>
 
+    <pre class="usage"><span class='fu'>survival</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  sample <span class='op'>=</span> <span class='st'>"sample"</span>,
+  strategy_id <span class='op'>=</span> <span class='st'>"strategy_id"</span>,
+  patient_id <span class='op'>=</span> <span class='st'>"patient_id"</span>,
+  grp_id <span class='op'>=</span> <span class='st'>"grp_id"</span>,
+  curve <span class='op'>=</span> <span class='st'>"curve"</span>,
+  t <span class='op'>=</span> <span class='st'>"t"</span>,
+  survival <span class='op'>=</span> <span class='st'>"survival"</span>
+<span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>A tabular object that can be coerced to a <code>data.table</code> with
+<code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>sample</th>
+      <td><p>The name of the column corresponding to <code>sample</code>.</p></td>
+    </tr>
+    <tr>
+      <th>strategy_id</th>
+      <td><p>The name of the column corresponding to <code>strategy_id</code>.</p></td>
+    </tr>
+    <tr>
+      <th>patient_id</th>
+      <td><p>The name of the column corresponding to <code>patient_id</code>.</p></td>
+    </tr>
+    <tr>
+      <th>grp_id</th>
+      <td><p>The name of the column corresponding to <code>grp_id</code>.</p></td>
+    </tr>
+    <tr>
+      <th>curve</th>
+      <td><p>The name of the column corresponding to <code>curve</code>.</p></td>
+    </tr>
+    <tr>
+      <th>t</th>
+      <td><p>The name of the column corresponding to <code>t</code>.</p></td>
+    </tr>
+    <tr>
+      <th>survival</th>
+      <td><p>The name of the column corresponding to <code>survival</code>.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="components"><a class="anchor" href="#components"></a>Components</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
-
-<p>A <code>survival</code> object inherits from <code>data.table</code> and contains
+    <p>An object of class <code>survival</code> that inherits from <code>data.table</code> and contains
 the following columns:</p>
 <dl>
 <dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
@@ -196,11 +253,15 @@ survival model. Each curve corresponds to unique endpoint.</p></dd>
 <dt>t</dt><dd><p>The time at which a survival probability is computed.</p></dd>
 <dt>survival</dt><dd><p>The probability of surviving to time <code>t</code>.</p></dd>
 
-</dl>
-
+</dl><p>The object also contains a <code>size</code> attribute that contains the elements
+<code>n_samples</code>, <code>n_strategies</code>, <code>n_patients</code>, <code>n_states</code>, and <code>n_times</code> denoting
+the number of samples, treatment strategies, patients, health states, and times.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='Psm.html'>Psm</a></code>, <code><a href='PsmCurves.html'>PsmCurves</a></code></p></div>
+    <div class='dont-index'><p><code>survival</code> objects are returned by methods in the <code><a href='Psm.html'>Psm</a></code> and <code><a href='PsmCurves.html'>PsmCurves</a></code>
+classes. An example in which a <code>survival</code> object is constructed "manually"
+(presumably from a preexisting survival model fit using software other than <code>flexsurv</code>)
+is provided in the documentation to <code><a href='sim_stateprobs.survival.html'>sim_stateprobs.survival()</a></code>.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

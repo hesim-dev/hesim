@@ -91,7 +91,7 @@ rcat is vectorized and written in C++ for speed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -222,7 +222,7 @@ equal to n.</p>
 <span class='va'>samp2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>samp2</span>, <span class='fl'>1</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>x</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/proc.time.html'>proc.time</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>ptm</span>
 </div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   0.085   0.003   0.089 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>samp2</span><span class='op'>)</span><span class='op'>)</span>
+#&gt;   0.053   0.002   0.055 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/proportions.html'>prop.table</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>samp2</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; samp2
 #&gt;      1      2      3 
 #&gt; 0.2015 0.5089 0.2896 </div></pre>

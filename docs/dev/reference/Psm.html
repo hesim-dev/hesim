@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.2.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
       </span>
     </div>
 
@@ -183,18 +183,18 @@
     <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='PsmCurves.html'>PsmCurves</a>, <code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='PsmCurves.html'>PsmCurves</a></code>, <code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code></p></div>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
 <dt><code>survival_models</code></dt><dd><p>The survival models used to predict survival curves. Must be
-an object of class <a href='PsmCurves.html'>PsmCurves</a>.</p></dd>
+an object of class <code><a href='PsmCurves.html'>PsmCurves</a></code>.</p></dd>
 
 <dt><code>utility_model</code></dt><dd><p>The model for health state utility. Must be an object of
-class <a href='StateVals.html'>StateVals</a>.</p></dd>
+class <code><a href='StateVals.html'>StateVals</a></code>.</p></dd>
 
 <dt><code>cost_models</code></dt><dd><p>The models used to predict costs by health state.
-Must be a list of objects of class <a href='StateVals.html'>StateVals</a>, where each element of the
+Must be a list of objects of class <code><a href='StateVals.html'>StateVals</a></code>, where each element of the
 list represents a different cost category.</p></dd>
 
 <dt><code>n_states</code></dt><dd><p>Number of states in the partitioned survival model.</p></dd>
@@ -354,7 +354,7 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h4 class='h
                 <span class='st'>"Endpoint 2"</span> <span class='op'>=</span> <span class='fl'>2</span>,
                  <span class='st'>"Endpoint 3"</span> <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>)</span>
-<span class='va'>n_samples</span> <span class='op'>&lt;-</span> <span class='fl'>3</span>
+<span class='va'>n_samples</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
 
 <span class='co'># Survival models</span>
 <span class='va'>surv_est_data</span> <span class='op'>&lt;-</span> <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>survival</span>
@@ -391,26 +391,26 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h4 class='h
 <span class='va'>psm</span> <span class='op'>&lt;-</span> <span class='va'>Psm</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>survival_models <span class='op'>=</span> <span class='va'>psm_curves</span>,
                utility_model <span class='op'>=</span> <span class='va'>psm_utility</span>,
                cost_models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>medical <span class='op'>=</span> <span class='va'>psm_costs_medical</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>psm</span><span class='op'>$</span><span class='fu'>sim_survival</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>.05</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='va'>survival_</span>, labels <span class='op'>=</span> <span class='va'>labs</span>, ci <span class='op'>=</span> <span class='cn'>TRUE</span>, ci_style <span class='op'>=</span> <span class='st'>"ribbon"</span><span class='op'>)</span>
+<span class='va'>psm</span><span class='op'>$</span><span class='fu'>sim_survival</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>12</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='va'>survival_</span>, labels <span class='op'>=</span> <span class='va'>labs</span>, ci <span class='op'>=</span> <span class='cn'>FALSE</span>, ci_style <span class='op'>=</span> <span class='st'>"ribbon"</span><span class='op'>)</span>
 </div><div class='img'><img src='Psm-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>psm</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='va'>stateprobs_</span>, labels <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span>
 </div><div class='img'><img src='Psm-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>psm</span><span class='op'>$</span><span class='fu'>sim_costs</span><span class='op'>(</span>dr <span class='op'>=</span> <span class='fl'>.03</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='va'>costs_</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr category     costs
-#&gt; 1:      1           1          1      1        1 0.03  medical 18761.703
-#&gt; 2:      1           1          1      1        2 0.03  medical 11019.869
-#&gt; 3:      1           1          1      1        3 0.03  medical  7430.208
-#&gt; 4:      1           1          2      1        1 0.03  medical 18761.703
-#&gt; 5:      1           1          2      1        2 0.03  medical 11019.869
-#&gt; 6:      1           1          2      1        3 0.03  medical  7430.208</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='fu'>sim_qalys</span><span class='op'>(</span>dr <span class='op'>=</span> <span class='fl'>.03</span><span class='op'>)</span><span class='op'>$</span><span class='va'>qalys_</span><span class='op'>)</span>
+#&gt; 1:      1           1          1      1        1 0.03  medical 18978.492
+#&gt; 2:      1           1          1      1        2 0.03  medical 10442.076
+#&gt; 3:      1           1          1      1        3 0.03  medical  7321.311
+#&gt; 4:      1           1          2      1        1 0.03  medical 18978.492
+#&gt; 5:      1           1          2      1        2 0.03  medical 10442.076
+#&gt; 6:      1           1          2      1        3 0.03  medical  7321.311</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='fu'>sim_qalys</span><span class='op'>(</span>dr <span class='op'>=</span> <span class='fl'>.03</span><span class='op'>)</span><span class='op'>$</span><span class='va'>qalys_</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr     qalys       lys
-#&gt; 1:      1           1          1      1        1 0.03 0.4678631 0.5579978
-#&gt; 2:      1           1          1      1        2 0.03 0.2840304 0.3750449
-#&gt; 3:      1           1          1      1        3 0.03 0.1358049 0.1986354
-#&gt; 4:      1           1          2      1        1 0.03 0.4678631 0.5579978
-#&gt; 5:      1           1          2      1        2 0.03 0.2840304 0.3750449
-#&gt; 6:      1           1          2      1        3 0.03 0.1358049 0.1986354</div><div class='input'>
+#&gt; 1:      1           1          1      1        1 0.03 0.4696743 0.5586615
+#&gt; 2:      1           1          1      1        2 0.03 0.2983603 0.3747743
+#&gt; 3:      1           1          1      1        3 0.03 0.1368968 0.1985612
+#&gt; 4:      1           1          2      1        1 0.03 0.4696743 0.5586615
+#&gt; 5:      1           1          2      1        2 0.03 0.2983603 0.3747743
+#&gt; 6:      1           1          2      1        3 0.03 0.1368968 0.1985612</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
