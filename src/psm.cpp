@@ -92,6 +92,75 @@ std::unique_ptr<surv_mods> create_surv_mods(Rcpp::Environment R_PsmCurves){
     return uptr;
 }
 
+class stateprobs{
+private: 
+  arma::cube surv_; ///< Survival curves
+  int n_curves_; ///< The number of survival curves
+  int n_states_; ///< Number of health states.
+  int n_obs_; ///< Number of observations.
+  int n_times_; ////< Number of times.
+
+public:
+  arma::cube prob_; ///< State probabilities
+  std::vector<int> cross_; ///< Integers denoting whether survival curves crosses  
+  
+  /** 
+   * The constructor.
+   */ 
+  stateprobs(arma::cube surv){
+    surv_ = surv;
+    n_obs_ = surv.n_slices;
+    n_times_ = surv.n_rows;
+    n_curves_ = surv.n_cols;
+    n_states_ = n_curves_ + 1;
+    cross_.resize(n_obs_, 0);
+    prob_.resize(n_times_, n_states_, n_obs_);
+  }
+  
+  /** 
+   * Compute simulated state probabilities from survival curves for a single
+   * observation and a single time point.
+   * @param i An integer denoting the "observation the survival curve corresponds
+   * to.
+   * @param t An integer denoting the time at which a survival probability
+   * was simulated.
+   * @return None; @p prob_ and @p cross_ are updated.
+   */   
+  void sim(int i, int t) {
+    
+    // Probability in health state 1 is S1(t)
+    prob_(t, 0, i) = surv_(t, 0, i);
+    
+    // Probability in health state 2, ... N-1 is Sn(t) − Sn−1(t)
+    double surv_prior = surv_(t, 0, i);
+    for (int j = 1; j < n_curves_; ++j) {
+      if (surv_(t, j, i) >= surv_prior) { // Case where survival curves don't cross
+        prob_(t, j, i) = surv_(t, j, i) - surv_prior;
+        surv_prior = surv_(t, j, i);
+      } else { // Case where survival curves cross
+        prob_(t, j, i) = 0;
+        ++cross_[i];
+      }
+    }
+
+    // Probability in health state N is 1 - SN-1(t)
+    prob_(t, n_curves_, i) = 1 - surv_prior;
+  }
+  
+  /** 
+   * Compute simulated state probabilities from survival curves across all 
+   * observations and time points.
+   * @return None; @p prob_ and @p cross_ are updated.
+   */  
+  void sim() {
+    for (int i = 0; i < n_obs_; ++i) { // Loop over observations
+      for (int t = 0; t < n_times_; ++t) { // Loop over times
+        sim(i, t);
+      }
+    } // End loop over observations
+  }
+};
+
 } // end psm namespace
 
 } // end hesim namespace
@@ -195,106 +264,24 @@ Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PsmCurves,
 
 /***************************************************************************//** 
  * @ingroup psm
- * Helper function to compute helath state probabilities for a single row in
- * @c survival_ from the @c R class @c Psm. Used in C_psm_sim_stateprobs.
- * @param index An index denoting a row number in @c survival_.
- * @param state The health state to compute a probability for.
- * @param n_states The number of health states in the partitioned survival
- * model.
- * @param n_times The number of times at which survival was simulated. 
- * @param[out] n_crossings Incremented by 1 if the survival curves cross for this
- * row.
- * @param[in] survcurves_ The simulated survival curves passed from @c R to @c
- * C++.
- * @return The health state probability. 
- ******************************************************************************/ 
-double stateprobs_sim1(int index, int state, int n_states, int n_times,
-                       int &n_crossings, hesim::psm::surv_summary &survcurves) {
-  if (state == 0){
-    return survcurves.value_[index];
-  }
-  else if (state > 0 && state < (n_states - 1)){
-    double survival = survcurves.value_[index];
-    double survival_prior = survcurves.value_[index - n_times]; // Each health state is repeated n_times.
-    if (survival < survival_prior){
-      survival = survival_prior;
-      ++n_crossings;
-    }
-    return survival - survival_prior;
-  } 
-  else{
-    return 1 - survcurves.value_[index];
-  }
-}
-
-/***************************************************************************//** 
- * @ingroup psm
  * Simulate health state probabilities with a partitioned survival model.
  * This function is exported to @c R and used in @c Psm$sim_stateprobs().
- * @param R_psm_survival The @c survival_ member of an R object of class @c Psm.
- * @param n_samples The number of random samples of the parameter set.
- * @param n_strategies The number of treatment strategies.
- * @param n_patients The number of patients.
- * @param n_states The number of health states.
- * @param n_times The number of times at which survival was simulated. 
- * @return The same output returned by hesim::psm::stateprobs::sim.
- ******************************************************************************/ 
+ * @param surv A cube containing survival curves where rows are times, columns
+ * denote the curve number, and slices are an observation (sorted by parameter sample,
+ * treatment strategy, and patient).
+ * @return A list with two elements. The first element @c prob contains health
+ * state probabilities computed using partitioned survival analysis. It is of the
+ * same dimensions as @c surv but has one more column (where columns denote the
+ * health state rather than the curve number). The second element is an integer
+ * valued vector with length equal to the number of slices in @c surv denoting
+ * the number of times survival curves crossed for a given observation.
+ ******************************************************************************/
 // [[Rcpp::export]]
-Rcpp::List C_psm_sim_stateprobs(Rcpp::DataFrame R_psm_survival,
-                                int n_samples, int n_strategies, int n_patients,
-                                int n_states, int n_times){
-  hesim::psm::surv_summary surv_curves(R_psm_survival); 
-  hesim::stateprobs_out out(n_samples * n_strategies * n_patients * n_states * n_times);
-  int n_curves = n_states - 1;
-  
-  // Loop
-  int n_crossings = 0;
-  int counter = 0;
-  for (int s = 0; s < n_samples; ++s){ // begin samples loop
-    for (int k = 0; k < n_strategies; ++k) { // begin strategies loop
-      for (int i = 0; i < n_patients; ++i){ // begin patient loop
-        for (int h = 0; h < n_states; ++h){ // begin loop over health states
-          for (int t = 0; t < n_times; ++t) { // begin loop over time
-            
-            
-          // Get the index for the survival curves
-          int sc = 0;
-          if (h < (n_states - 1)) { // If not in last health state
-            sc = h;
-          }
-          else{
-            sc = h - 1; // If the last health state
-          }
-          int index = s * n_strategies * n_patients * n_curves * n_times + 
-                              k * n_patients * n_curves * n_times +
-                              i * n_curves * n_times +
-                              sc * n_times + 
-                              t;
-          
-          // Results
-          out.sample_[counter] = surv_curves.sample_[index];
-          out.strategy_id_[counter] = surv_curves.strategy_id_[index];
-          out.patient_id_[counter] = surv_curves.patient_id_[index];
-          out.grp_id_[counter] = surv_curves.grp_id_[index];
-          out.patient_wt_[counter] = surv_curves.patient_wt_[index];
-          out.state_id_[counter] = h;
-          out.t_[counter] = surv_curves.x_[index];
-          out.prob_[counter] = stateprobs_sim1(index, h, n_states, n_times,
-                                               n_crossings, surv_curves);          
-            
-          ++counter;
-          }
-        } // end health state loop
-      } // end patient loop
-    } // end treatment strategies loop
-  } // end sample loop
-
-  // Return
-  Rcpp::DataFrame stateprobs_df = out.create_R_data_frame();
-  
+Rcpp::List C_psm_sim_stateprobs(arma::cube surv) {
+  hesim::psm::stateprobs stprobs(surv);
+  stprobs.sim();
   return(Rcpp::List::create(
-    Rcpp::_["stateprobs"] = stateprobs_df,
-    Rcpp::_["n_crossings"] = n_crossings
-  ));    
-  
+    Rcpp::_["prob"] = stprobs.prob_,
+    Rcpp::_["cross"] = stprobs.cross_
+  )); 
 }
