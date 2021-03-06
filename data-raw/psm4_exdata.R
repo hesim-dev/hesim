@@ -2,54 +2,89 @@
 n_strategies <- 3
 
 # Survival curves for 4-state partitioned survival model  ----------------------
-sim_surv_data <-  function(X, beta){
-  n.obs <- nrow(X)
-  lograte <- X %*% beta
-  latent.surv.times <- rexp(n.obs, exp(lograte))
-  censoring.times <- rexp(n.obs, exp(-2))
-  
-  time <- pmin(latent.surv.times, censoring.times)
-  status <- as.numeric(latent.surv.times <= censoring.times)
-  return(data.frame(time = time, status = status))
-}
+# Simulate a 4-state partitioned survival model using a mutli-state framework
+# The following transitions are possible
+# 1 -> 2, 1 -> 4
+# 2 -> 3, 2 -> 4
+# 3 -> 4
 
-sim_part_surv4_curves <- function(n_strategies = 3, n_patients){ # n_strategies
+sim_psm4_survival <- function(n_patients = 500){ 
   set.seed(101)
+  n_strategies <- 3
   n_obs <- n_strategies * n_patients
   
   # Parameters
-  beta1 <- c(0, .02, .01, -.1, 0)
-  beta2 <- c(-.4, .02, .01, -.3, -.4)
-  beta3 <- c(-.8, .02, .01, -.4, -.3)
-  beta <- matrix(c(beta1, beta2, beta3), nrow = 3, byrow = TRUE) 
+  x_names <- c("intercept", "strategy_id2", "strategy_id3", "female", "age")
+  beta <- rbind(
+    c(log(1/2), log(.8), log(.65), log(.9), log(1.01)), # 1 -> 2
+    c(log(1/10), log(.9), log(.8), log(.9), log(1.01)), # 1 -> 4
+    c(log(1/2), log(.8), log(.65), log(.9), log(1.01)), # 2 -> 3
+    c(log(1/6), log(.85), log(.75), log(.9), log(1.01)), # 2 -> 4
+    c(log(1/2), log(.85), log(.75), log(.9), log(1.01)) # 3 -> 4
+  )
+  colnames(beta) <- x_names
   
   # Data
+  ## Dataset
   female <- rbinom(n_obs, 1, .5)
   age <- rlnorm(n_obs, meanlog = 4, sdlog = .25)
   strategy_id <- factor(rep(seq_len(n_strategies), n_patients))
   sim_data <- data.frame(female, age, strategy_id = strategy_id)
   
-  # Simulate
-  n_curves <- nrow(beta)
-  X <- model.matrix(~female + age + strategy_id, sim_data)
-  colnames(X)[colnames(X) == "(Intercept)"] <- "intercept"
-  surv_data <- data.frame(female = female, age = age, strategy_id = strategy_id)
-  censoring_times <- rexp(n_obs, exp(-2))
-  prior_times <- rep(0, n_obs)
+  ## Design matrix
+  n_trans <- nrow(beta)
+  x <- model.matrix(~strategy_id + female + age, sim_data)
   
-  for (i in 1:n_curves){
-    latent_surv_times <- rexp(n_obs, exp(X %*% beta[i, ]))
-    status_str <- paste0("endpoint", i, "_status")
-    time_str <- paste0("endpoint", i, "_time")
-    surv_data[[time_str]] <- pmin(latent_surv_times + prior_times, censoring_times) 
-    surv_data[[status_str]] <- as.numeric(latent_surv_times + prior_times <= censoring_times)
+  # Simulate 
+  censored_time <- rexp(n_obs, 1/10)
+  
+  ## General function to simulate competing risks
+  sim_crisk <- function(x, beta, died = rep(FALSE, nrow(x)),
+                        start_status = rep(1, nrow(x)), start_time = 0) {
+    latent_time_k <- matrix(0, nrow = nrow(x), ncol = nrow(beta))
+    for (i in 1:ncol(latent_time_k)) {
+      latent_time_k[, i] <- rexp(nrow(x), exp(x %*% beta[i, ]))
+    }
+    latent_time <- ifelse(died | start_status == 0,
+                          start_time,
+                          apply(latent_time_k, 1, min) + start_time)
+    time <- pmin(latent_time, censored_time) 
+    status <- ifelse(latent_time <= censored_time & start_status == 1, 1, 0)
+    to <- apply(latent_time_k, 1, which.min)
+    to[status == 0] <- NA
+    to[died] <- ncol(latent_time_k)
+    
+    return(data.frame(time, status, to))
   }
-  return(surv_data)
+ 
+  
+  ## Transitions from state 1
+  t1 <- sim_crisk(x, beta[1:2, ])
+  sim_data$endpoint1_time <- t1$time
+  sim_data$endpoint1_status <- t1$status
+  
+  ## Transitions from state 2
+  t2 <- sim_crisk(x, beta[3:4, ],
+                  died = t1$to == 2,
+                  start_status = t1$status,
+                  start_time = t1$time)
+  sim_data$endpoint2_time <- t2$time
+  sim_data$endpoint2_status <- t2$status
+  
+  ## Transitions from state 3
+  t3 <- sim_crisk(x, beta[5, , drop = FALSE],
+                  died = t2$to == 2,
+                  start_status = t2$status,
+                  start_time = t2$time)
+  sim_data$endpoint3_time <- t3$time
+  sim_data$endpoint3_status <- t3$status
+  
+  # Return
+  return(sim_data)
 }
 
-survival_simdata <- sim_part_surv4_curves(n_patients = 500)
+survival_simdata <- sim_psm4_survival(n_patients = 500)
   
-
 # Costs in 3 health states  ----------------------------------------------------
 # Medical costs
 sim_cost3_medical <- function(n_patients){

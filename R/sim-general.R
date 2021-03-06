@@ -285,12 +285,14 @@ sim_stateprobs.survival <- function(x, ...) {
   stprobs_df[, ("prob") := c(stprobs$prob)]
   
   # Summarize curve crossing
-  n_cross <- sum(stprobs$cross > 0)
+  nr <- nrow(stprobs_df)
+  n_cross <- sum(stprobs$cross)
   if (n_cross > 0) {
-    percent_cross <- paste0(formatC(n_cross/N * 100, format = "f", digits = 1), 
+    percent_cross <- paste0(formatC(n_cross/nr * 100, format = "f", digits = 1), 
                             "%")
-    warning(paste0(n_cross, "/", N, " (", percent_cross, ")",
-                   " of the survival curves crossed at at least one time point."),
+    warning(paste0("The survival curves were crossed ",
+                   n_cross, "/", nr, " (", percent_cross, ") ",
+                   "of the time."),
             call. = FALSE)
   }
   

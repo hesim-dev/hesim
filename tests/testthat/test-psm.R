@@ -38,7 +38,7 @@ for (i in 1:3){
   fits_weinma[[i]] <- suppressWarnings(flexsurv::flexsurvreg(as.formula(formulas[[i]]), 
                                          data = surv_est_data,
                                          dist = hesim_survdists$weibullNMA,
-                                         inits = fits_wei[[i]]$res.t[, "est"]))
+                                         inits = rep(0, 3)))
   fits_spline[[i]] <- flexsurv::flexsurvspline(as.formula(formulas[[i]]), data = surv_est_data)
   fits_ggamma[[i]] <- flexsurv::flexsurvreg(as.formula(formulas[[i]]),
                                          data = surv_est_data,

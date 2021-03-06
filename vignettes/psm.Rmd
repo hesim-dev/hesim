@@ -22,7 +22,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 # Overview
 An N-state partitioned survival model (PSM) simulates the probability that a patient is in each of N distinct health states at a given point of time when treated by a particular therapy. State membership is estimated from a set of non-mutually exclusive survival curves; for an N-state model, N-1 survival curves are required. 
 
-The cumulative survival function, $S_n(t)$, represents the probability that a patient survives to health state $n$ or to a lower indexed state beyond time $t$. The probability that a patient is in health state 1 is always just $S_1(t)$. State membership in health states $2,\ldots, n-1$ is calculated as $S_{n}(t) - S_{n-1}(t)$. Finally, the probability of being in the final health state $n$ (i.e., the dead state) is $1-S_{n-1}(t)$, or one minus the overall survival curve.
+The cumulative survival function, $S_n(t)$, represents the probability that a patient survives to health state $n$ or to a lower indexed state beyond time $t$. The probability that a patient is in health state 1 is always just $S_1(t)$. State membership in health states $2,\ldots, n-1$ is calculated as $S_{n}(t) - S_{n-1}(t)$. Finally, the probability of being in the final health state $N$ (i.e., the dead state) is $1-S_{N-1}(t)$, or one minus the overall survival curve.
 
 In `hesim`, an N-state PSM consists of three types of separate statistical models: a set of N-1 survival models, a model of the utility values to assign to each health state, and a set of models for costs to assign to each health state. Multiple cost models can be used to categorize costs into different categories (e.g., costs of medical care, drug costs). All models can either be fit using R or constructed with external data.
 
@@ -92,18 +92,18 @@ Survival models in `hesim` can be fit using either `flexsurvreg` or `flexsurvspl
 ```{r, warning = FALSE, message = FALSE}
 library("flexsurv")
 surv_est_data <- psm4_exdata$survival
-fit1 <- flexsurv::flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ age + female + 
-                                   factor(strategy_id),
-                              data = surv_est_data,
-                              dist = "weibull")
-fit2 <- flexsurv::flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ age + female +
-                                   factor(strategy_id),
-                              data = surv_est_data,
-                              dist = "weibull")
-fit3 <- flexsurv::flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age + female +
-                                   factor(strategy_id),
-                              data = surv_est_data,
-                              dist = "weibull")
+fit1 <- flexsurvreg(Surv(endpoint1_time, endpoint1_status) ~ age + female + 
+                    factor(strategy_id),
+                    data = surv_est_data,
+                    dist = "weibull")
+fit2 <- flexsurvreg(Surv(endpoint2_time, endpoint2_status) ~ age + female +
+                    factor(strategy_id),
+                    data = surv_est_data,
+                    dist = "weibull")
+fit3 <- flexsurvreg(Surv(endpoint3_time, endpoint3_status) ~ age + female +
+                    factor(strategy_id),
+                    data = surv_est_data,
+                    dist = "weibull")
 psfit_wei <- flexsurvreg_list(fit1, fit2, fit3)
 ```
 
@@ -187,14 +187,16 @@ Survival curves are predicted by treatment strategy and patient with the functio
 
 ```{r survcurves, warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4}
 # Simulate
-times <- seq(0, 10, by = .1)
+times <- seq(0, 12, by = .1)
 psm$sim_survival(t = times)
 head(psm$survival_)
 
 # Plot
+library("ggplot2")
 labs$curve <- c("Curve 1" = 1, "Curve 2" = 2, "Curve 3" = 3)
 autoplot(psm$survival_, labels = labs,
-         ci = TRUE, ci_style = "ribbon")
+         ci = TRUE, ci_style = "ribbon") +
+  scale_x_continuous(breaks = seq(0, max(times), 2))
 ```
 
 ### Simulating health state probabilities 
@@ -208,12 +210,11 @@ psm$sim_stateprobs()
 head(psm$stateprobs_)
 
 # Plot
-library("ggplot2")
 stateprobs <- psm$stateprobs_[sample == 30 & patient_id == 1]
 stateprobs[, state := factor(state_id, 
                              levels = rev(unique(state_id)))]
 stateprobs[, strategy := factor(strategy_id, labels = names(labs$strategy_id))]
-ggplot(stateprobs[strategy_id %in% c(1, 2)],
+ggplot(stateprobs[strategy_id %in% c(1, 2, 3)],
             aes(x = t, y = prob, fill = state, group = state)) + 
   geom_area(alpha = .65) + facet_wrap(~strategy) +
   xlab("Years") + ylab("Proportion in state") +
@@ -221,6 +222,7 @@ ggplot(stateprobs[strategy_id %in% c(1, 2)],
                     values = c("gray92", "green4", "orange", "purple"),
                     labels = c("Death", 
                                rev(hesim_dat$states$state_name))) +
+  scale_x_continuous(breaks = seq(0, max(times), 2)) +
   guides(fill = guide_legend(reverse = TRUE,
                              nrow = 2, byrow = TRUE)) + 
   theme(legend.position = "bottom")

@@ -91,7 +91,7 @@ surv2 <- survival(
 test_that("sim_stateprobs.survival() produces expected warning when curves cross", {
   expect_warning(
     sim_stateprobs(surv2),
-    "1/1 (100.0%) of the survival curves crossed at at least one time point.",
+    "The survival curves were crossed 1/6 (16.7%) of the time.",
     fixed = TRUE
   )
 })
