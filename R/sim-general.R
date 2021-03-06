@@ -160,8 +160,25 @@ sim_stateprobs <- function(x, ...) {
 #' 
 #' @param x An object of class [`survival`].
 #' @param ... Further arguments passed to or from other methods.
+#' @details In an \eqn{N}-state partitioned survival model there are \eqn{N-1} survival curves
+#' and \eqn{S_n(t)} is the cumulative survival function denoting the probability of 
+#' survival to health state \eqn{n} or a lower indexed state beyond time \eqn{t}. 
+#' The probability that a patient is in health state 1 at time \eqn{t} is simply
+#' \eqn{S_1(t)}. State membership in health states \eqn{2,\ldots, N -1} is calculated 
+#' as \eqn{S_n(t) - S_{n-1}(t)}. Finally, the probability of being in the final
+#' health state \eqn{N} (i.e., the death state) is \eqn{1-S_{N-1}(t)}, i.e.,
+#' one minus the overall survival curve.
+#' 
+#' In some cases, the survival curves may cross. `hesim` will throw a warning
+#' but the function will still run. Probabilities will be set to 0 in a health state 
+#' if the prior survival curve lies below the curve for state \eqn{n};
+#' that is, if \eqn{S_n(t) < S_{n-1}(t)}, then the probability of being in state \eqn{n}
+#' is set to 0 and \eqn{S_n(t)} is adjusted to equal \eqn{S_{n-1}(t)}. The  
+#' probability of being in the final health state is also adjusted if necessary to
+#' ensure that probabilities sum to 1.
+#' 
 #' @return 
-#' A `stateprobs` object.
+#' A [`stateprobs`] object.
 #' @examples 
 #' library("data.table")
 #' library("survival")
@@ -245,39 +262,64 @@ sim_stateprobs <- function(x, ...) {
 sim_stateprobs.survival <- function(x, ...) {
   state_id <- NULL
   
-  # Size
+  # Size and attributes
   if (is.null(attr(x, "size"))) stop("'size' attribute missing from 'x'.")
   n_samples <- attr(x, "size")[["n_samples"]]
   n_strategies <- attr(x, "size")[["n_strategies"]]
   n_patients <- attr(x, "size")[["n_patients"]]
   n_states <- attr(x, "size")[["n_states"]]
+  n_curves <- n_states - 1
   n_times <- attr(x, "size")[["n_times"]]
+  N <- n_samples * n_strategies * n_patients
+  unique_times <- x$t[1:n_times]
+  
   
   # Simulate state probabilities
-  res <- C_psm_sim_stateprobs(x,
-                              n_samples = n_samples,
-                              n_strategies = n_strategies,
-                              n_patients = n_patients,
-                              n_states = n_states,
-                              n_times = n_times)
-  prop_cross <- res$n_crossings/nrow(res$stateprobs)
-  if (prop_cross > 0){
-    warning(paste0("Survival curves crossed ", round(prop_cross * 100, 2), 
-                   " percent of the time."),
+  ## Reshape into array for easier handling with C++
+  x2 <- array(x$survival, dim = c(n_times,  n_curves, N))
+  
+  ## Compute state probabilities via partitioned survival analysis
+  stprobs <- C_psm_sim_stateprobs(x2)
+  
+  # Link simulated state probabilities to ID variables
+  ## First expand 'x' to include rows for each health state 
+  ## (n_states = n_curves + 1)
+  rep_every_n <- function(i, n, times = 2) {
+    v <- rep(1, length(i))
+    v[seq_along(v) %% n == 0L] <- times
+    rep(i, v)
+  }
+  n_curves * n_times
+  new_rows <- rep_every_n(1:nrow(x), n = n_curves * n_times, times = n_times + 1)
+  cols <- c("sample", "strategy_id", "patient_id", "grp_id", "patient_wt")
+  cols <- cols[cols %in% colnames(x)]
+  stprobs_df <- x[new_rows, cols, with = FALSE]
+  stprobs_df[, state_id := rep(rep(1:n_states, each = n_times),
+                               times = N)]
+  stprobs_df[, t := rep(unique_times, times = N * n_states)]
+  
+  ## Then add the probabilities as a column
+  stprobs_df[, ("prob") := c(stprobs$prob)]
+  
+  # Summarize curve crossing
+  nr <- nrow(stprobs_df)
+  n_cross <- sum(stprobs$cross)
+  if (n_cross > 0) {
+    percent_cross <- paste0(formatC(n_cross/nr * 100, format = "f", digits = 1), 
+                            "%")
+    warning(paste0("The survival curves were crossed ",
+                   n_cross, "/", nr, " (", percent_cross, ") ",
+                   "of the time."),
             call. = FALSE)
   }
   
   # Create object and set attributes
-  stprobs <- data.table(res$stateprobs)
-  stprobs[, state_id := state_id + 1]
-  stprobs[, sample := sample + 1]
-  if (!"patient_wt" %in% colnames(x)) stprobs[, ("patient_wt") := NULL]
-  setattr(stprobs, "class", 
+  setattr(stprobs_df, "class", 
           c("stateprobs", "data.table", "data.frame"))
-  setattr(stprobs, "size", 
+  setattr(stprobs_df, "size", 
           c(n_samples = n_samples, n_strategies = n_strategies, 
             n_patients = n_patients, n_states = n_states, n_times = n_times))
-  return(stprobs[, ])
+  return(stprobs_df[, ])
 }
 
 # Cost and QALYs ---------------------------------------------------------------

@@ -77,8 +77,8 @@ C_psm_curves_summary <- function(R_PsmCurves, x, type, dr) {
     .Call('_hesim_C_psm_curves_summary', PACKAGE = 'hesim', R_PsmCurves, x, type, dr)
 }
 
-C_psm_sim_stateprobs <- function(R_psm_survival, n_samples, n_strategies, n_patients, n_states, n_times) {
-    .Call('_hesim_C_psm_sim_stateprobs', PACKAGE = 'hesim', R_psm_survival, n_samples, n_strategies, n_patients, n_states, n_times)
+C_psm_sim_stateprobs <- function(surv) {
+    .Call('_hesim_C_psm_sim_stateprobs', PACKAGE = 'hesim', surv)
 }
 
 C_statevals_sim <- function(R_StateVals, times, type) {

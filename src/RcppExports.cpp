@@ -284,18 +284,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_psm_sim_stateprobs
-Rcpp::List C_psm_sim_stateprobs(Rcpp::DataFrame R_psm_survival, int n_samples, int n_strategies, int n_patients, int n_states, int n_times);
-RcppExport SEXP _hesim_C_psm_sim_stateprobs(SEXP R_psm_survivalSEXP, SEXP n_samplesSEXP, SEXP n_strategiesSEXP, SEXP n_patientsSEXP, SEXP n_statesSEXP, SEXP n_timesSEXP) {
+Rcpp::List C_psm_sim_stateprobs(arma::cube surv);
+RcppExport SEXP _hesim_C_psm_sim_stateprobs(SEXP survSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type R_psm_survival(R_psm_survivalSEXP);
-    Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
-    Rcpp::traits::input_parameter< int >::type n_strategies(n_strategiesSEXP);
-    Rcpp::traits::input_parameter< int >::type n_patients(n_patientsSEXP);
-    Rcpp::traits::input_parameter< int >::type n_states(n_statesSEXP);
-    Rcpp::traits::input_parameter< int >::type n_times(n_timesSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_psm_sim_stateprobs(R_psm_survival, n_samples, n_strategies, n_patients, n_states, n_times));
+    Rcpp::traits::input_parameter< arma::cube >::type surv(survSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_psm_sim_stateprobs(surv));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -662,7 +657,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_indiv_ctstm_starting", (DL_FUNC) &_hesim_C_indiv_ctstm_starting, 6},
     {"_hesim_C_indiv_ctstm_los", (DL_FUNC) &_hesim_C_indiv_ctstm_los, 4},
     {"_hesim_C_psm_curves_summary", (DL_FUNC) &_hesim_C_psm_curves_summary, 4},
-    {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 6},
+    {"_hesim_C_psm_sim_stateprobs", (DL_FUNC) &_hesim_C_psm_sim_stateprobs, 1},
     {"_hesim_C_statevals_sim", (DL_FUNC) &_hesim_C_statevals_sim, 3},
     {"_hesim_C_sim_ev", (DL_FUNC) &_hesim_C_sim_ev, 6},
     {"_hesim_C_sim_los", (DL_FUNC) &_hesim_C_sim_los, 5},

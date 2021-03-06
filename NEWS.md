@@ -1,6 +1,7 @@
 ## hesim 0.5.0.9999
-### New features
-* A `survival` object can now be constructed manually with `survival()` and simulated state probabilities can be computed from survival curves with `sim_stateprobs.survival()`. These features are useful for partitioned survival analyses when a user would like to use a survival model not supported by `hesim` to predict survival curves.
+* A `survival` object can now be constructed manually with `survival()` and simulated state probabilities can be computed from survival curves with `sim_stateprobs.survival()`. These features are useful for partitioned survival analyses when a user would like to use a survival model not supported by `hesim` to predict survival curves (#49).
+
+* `sim_stateprobs.survival()` handles scenarios where survival curves cross better, ensuring that state probabilities sum to 1 (#56).
 
 ## hesim 0.5.0
 ### New features
