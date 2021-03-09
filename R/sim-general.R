@@ -166,12 +166,12 @@ sim_stateprobs <- function(x, ...) {
 #' The probability that a patient is in health state 1 at time \eqn{t} is simply
 #' \eqn{S_1(t)}. State membership in health states \eqn{2,\ldots, N -1} is calculated 
 #' as \eqn{S_n(t) - S_{n-1}(t)}. Finally, the probability of being in the final
-#' health state \eqn{N} (i.e., the death state) is \eqn{1-S_{N-1}(t)}, i.e.,
+#' health state \eqn{N} (i.e., the death state) is \eqn{1-S_{N-1}(t)}, or
 #' one minus the overall survival curve.
 #' 
-#' In some cases, the survival curves may cross. `hesim` will throw a warning
+#' In some cases, the survival curves may cross. `hesim` will issue a warning
 #' but the function will still run. Probabilities will be set to 0 in a health state 
-#' if the prior survival curve lies below the curve for state \eqn{n};
+#' if the prior survival curve lies above the curve for state \eqn{n};
 #' that is, if \eqn{S_n(t) < S_{n-1}(t)}, then the probability of being in state \eqn{n}
 #' is set to 0 and \eqn{S_n(t)} is adjusted to equal \eqn{S_{n-1}(t)}. The  
 #' probability of being in the final health state is also adjusted if necessary to

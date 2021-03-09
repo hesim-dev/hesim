@@ -205,14 +205,14 @@ survival to health state \(n\) or a lower indexed state beyond time \(t\).
 The probability that a patient is in health state 1 at time \(t\) is simply
 \(S_1(t)\). State membership in health states \(2,\ldots, N -1\) is calculated
 as \(S_n(t) - S_{n-1}(t)\). Finally, the probability of being in the final
-health state \(N\) (i.e., the death state) is \(1-S_{N-1}(t)\), i.e.,
+health state \(N\) (i.e., the death state) is \(1-S_{N-1}(t)\), or
 one minus the overall survival curve.</p>
-<p>In some cases, the survival curves may cross. <code>hesim</code> will throw a warning
+<p>In some cases, the survival curves may cross. <code>hesim</code> will issue a warning
 but the function will still run. Probabilities will be set to 0 in a health state
-if the prior survival curve lies below the curve for state \(n\);
+if the prior survival curve lies above the curve for state \(n\);
 that is, if \(S_n(t) &lt; S_{n-1}(t)\), then the probability of being in state \(n\)
 is set to 0 and \(S_n(t)\) is adjusted to equal \(S_{n-1}(t)\). The
-probability of being in the final health state is also adjusted if needed to
+probability of being in the final health state is also adjusted if necessary to
 ensure that probabilities sum to 1.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
