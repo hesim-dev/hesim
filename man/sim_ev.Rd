@@ -19,7 +19,7 @@ to simulate utility.}
 \item{dr}{Discount rate.}
 
 \item{integrate_method}{Method used to integrate state values when computing
-weighted length of stay. Options are \code{trapz} for the trapezoid rule,
+costs or QALYs. Options are \code{trapz} for the trapezoid rule,
 \code{riemann_left} left for a left Riemann sum, and
 \code{riemann_right} right for a right Riemann sum.}
 
@@ -37,7 +37,7 @@ to simulate costs.}
 Simulate costs and quality-adjusted life-years (QALYs) as a function of
 simulated state occupancy probabilities.
 }
-\details{
-See \code{vignette("expected-values")} for details.
+\references{
+\href{https://arxiv.org/abs/2102.09437}{Incerti and Jansen (2021)}. See
+Section 2.1 for details.
 }
-\keyword{internal}

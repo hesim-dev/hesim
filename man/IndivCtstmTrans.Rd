@@ -8,7 +8,7 @@ An \link[R6:R6Class]{R6::R6Class} object.
 }
 \description{
 Simulate health state transitions in an individual-level continuous time state
-transition model with parameters that were estimated using a multi-state model.
+transition model using parameters from a multi-state model.
 }
 \examples{
 library("flexsurv")
