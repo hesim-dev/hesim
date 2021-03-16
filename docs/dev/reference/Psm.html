@@ -181,6 +181,12 @@
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><a href='https://arxiv.org/abs/2102.09437'>Incerti and Jansen (2021)</a>.
+See Section 2.3 for a mathematical description of a PSM and Section 4.2 for an
+example in oncology. The mathematical approach used to simulate costs and QALYs from
+state probabilities is described in Section 2.1.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='PsmCurves.html'>PsmCurves</a></code>, <code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code></p></div>
@@ -228,7 +234,7 @@ by the argument <code>t</code> in <code>$sim_curves()</code>.</p></dd>
 <p><hr>
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
 <p>Create a new <code>Psm</code> object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
-<p><div class="r"></p><pre><span class='va'>Psm</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>survival_models</span>, utility_model <span class='op'>=</span> <span class='cn'>NULL</span>, cost_models <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
+<p><div class="r"></p><pre><span class='va'>Psm</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>survival_models <span class='op'>=</span> <span class='cn'>NULL</span>, utility_model <span class='op'>=</span> <span class='cn'>NULL</span>, cost_models <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
@@ -258,7 +264,7 @@ by the argument <code>t</code> in <code>$sim_curves()</code>.</p></dd>
 <p>An instance of <code>self</code> with simulated output from <code>PsmCurves$survival()</code>
 stored in <code>survival_</code>.</p>
 <p><hr>
-<a id="method-sim_stateprobs"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sim_stateprobs()</code></h3>
+<a id="method-sim_stateprobs"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='sim_stateprobs.html'>sim_stateprobs()</a></code></h3>
 <p>Simulate health state probabilities from <code>survival_</code> using a partitioned
 survival analysis.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Psm</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
@@ -269,7 +275,7 @@ stored in <code>stateprobs_</code>.</p>
 <p><hr>
 <a id="method-sim_qalys"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
 <p>Simulate quality-adjusted life-years (QALYs) as a function of <code>stateprobs_</code> and
-<code>utility_model</code>. See <code>vignette("expected-values")</code> for details.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<code>utility_model</code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Psm</span><span class='op'>$</span><span class='fu'>sim_qalys</span><span class='op'>(</span>
   dr <span class='op'>=</span> <span class='fl'>0.03</span>,
   integrate_method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span><span class='op'>)</span>,
@@ -280,7 +286,10 @@ stored in <code>stateprobs_</code>.</p>
 <p><div class="arguments"></p><dl>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
 
-<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing (QALYs).</p></dd>
+<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing
+costs or QALYs. Options are <code>trapz</code> for the trapezoid rule,
+<code>riemann_left</code> for a left Riemann sum, and
+<code>riemann_right</code> for a right Riemann sum.</p></dd>
 
 <dt><code>lys</code></dt><dd><p>If <code>TRUE</code>, then life-years are simulated in addition to QALYs.</p></dd>
 
@@ -301,7 +310,10 @@ See <code>vignette("expected-values")</code> for details.</p><h4 class='hasAncho
 <p><div class="arguments"></p><dl>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
 
-<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing costs.</p></dd>
+<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing
+costs or QALYs. Options are <code>trapz</code> for the trapezoid rule,
+<code>riemann_left</code> for a left Riemann sum, and
+<code>riemann_right</code> for a right Riemann sum.</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
@@ -358,11 +370,11 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h4 class='h
 
 <span class='co'># Survival models</span>
 <span class='va'>surv_est_data</span> <span class='op'>&lt;-</span> <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>survival</span>
-<span class='va'>fit1</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>endpoint1_time</span>, <span class='va'>endpoint1_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>strategy_id</span><span class='op'>)</span>,
+<span class='va'>fit1</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>endpoint1_time</span>, <span class='va'>endpoint1_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>strategy_id</span><span class='op'>)</span>,
                               data <span class='op'>=</span> <span class='va'>surv_est_data</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
-<span class='va'>fit2</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>endpoint2_time</span>, <span class='va'>endpoint2_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>strategy_id</span><span class='op'>)</span>,
+<span class='va'>fit2</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>endpoint2_time</span>, <span class='va'>endpoint2_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>strategy_id</span><span class='op'>)</span>,
                               data <span class='op'>=</span> <span class='va'>surv_est_data</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
-<span class='va'>fit3</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>endpoint3_time</span>, <span class='va'>endpoint3_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>strategy_id</span><span class='op'>)</span>,
+<span class='va'>fit3</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>endpoint3_time</span>, <span class='va'>endpoint3_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>strategy_id</span><span class='op'>)</span>,
                               data <span class='op'>=</span> <span class='va'>surv_est_data</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
 <span class='va'>fits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span><span class='op'>(</span><span class='va'>fit1</span>, <span class='va'>fit2</span>, <span class='va'>fit3</span><span class='op'>)</span>
 
@@ -397,20 +409,20 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h4 class='h
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='va'>stateprobs_</span>, labels <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span>
 </div><div class='img'><img src='Psm-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>psm</span><span class='op'>$</span><span class='fu'>sim_costs</span><span class='op'>(</span>dr <span class='op'>=</span> <span class='fl'>.03</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='va'>costs_</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr category     costs
-#&gt; 1:      1           1          1      1        1 0.03  medical 18978.492
-#&gt; 2:      1           1          1      1        2 0.03  medical 10442.076
-#&gt; 3:      1           1          1      1        3 0.03  medical  7321.311
-#&gt; 4:      1           1          2      1        1 0.03  medical 18978.492
-#&gt; 5:      1           1          2      1        2 0.03  medical 10442.076
-#&gt; 6:      1           1          2      1        3 0.03  medical  7321.311</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='fu'>sim_qalys</span><span class='op'>(</span>dr <span class='op'>=</span> <span class='fl'>.03</span><span class='op'>)</span><span class='op'>$</span><span class='va'>qalys_</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr category    costs
+#&gt; 1:      1           1          1      1        1 0.03  medical 33454.98
+#&gt; 2:      1           1          1      1        2 0.03  medical 15605.78
+#&gt; 3:      1           1          1      1        3 0.03  medical 18394.77
+#&gt; 4:      1           1          2      1        1 0.03  medical 33454.98
+#&gt; 5:      1           1          2      1        2 0.03  medical 15605.78
+#&gt; 6:      1           1          2      1        3 0.03  medical 18394.77</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm</span><span class='op'>$</span><span class='fu'>sim_qalys</span><span class='op'>(</span>dr <span class='op'>=</span> <span class='fl'>.03</span><span class='op'>)</span><span class='op'>$</span><span class='va'>qalys_</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id state_id   dr     qalys       lys
-#&gt; 1:      1           1          1      1        1 0.03 0.4696743 0.5586615
-#&gt; 2:      1           1          1      1        2 0.03 0.2983603 0.3747743
-#&gt; 3:      1           1          1      1        3 0.03 0.1368968 0.1985612
-#&gt; 4:      1           1          2      1        1 0.03 0.4696743 0.5586615
-#&gt; 5:      1           1          2      1        2 0.03 0.2983603 0.3747743
-#&gt; 6:      1           1          2      1        3 0.03 0.1368968 0.1985612</div><div class='input'>
+#&gt; 1:      1           1          1      1        1 0.03 0.8610755 1.0468003
+#&gt; 2:      1           1          1      1        2 0.03 0.4690326 0.6473138
+#&gt; 3:      1           1          1      1        3 0.03 0.3659059 0.5338159
+#&gt; 4:      1           1          2      1        1 0.03 0.8610755 1.0468003
+#&gt; 5:      1           1          2      1        2 0.03 0.4690326 0.6473138
+#&gt; 6:      1           1          2      1        3 0.03 0.3659059 0.5338159</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

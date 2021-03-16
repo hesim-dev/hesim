@@ -436,16 +436,15 @@ sim_los <- function (object, utility_model, dr,
 #' to simulate costs.
 #' @param dr Discount rate. 
 #' @param integrate_method Method used to integrate state values when computing 
-#' weighted length of stay. Options are `trapz` for the trapezoid rule,
+#' costs or QALYs. Options are `trapz` for the trapezoid rule,
 #' `riemann_left` left for a left Riemann sum, and  
 #' `riemann_right` right for a right Riemann sum.
 #' @param lys If `TRUE`, then life-years are simulated in addition to 
 #' QALYs. 
-#' @keywords internal
 #' @return [`sim_costs()`] and [`sim_qalys()`] return objects of class
 #' [`costs`] and [`qalys`], respectively. 
-#' @details 
-#' See `vignette("expected-values")` for details.
+#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437). See
+#' Section 2.1 for details.
 #'
 #' @name sim_ev
 sim_qalys <- function(object, utility_model, dr, integrate_method, lys){

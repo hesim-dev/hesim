@@ -247,6 +247,11 @@ create_CohortDtstmTrans.msm <- function(object, input_data,
 #'
 #' @description
 #' Simulate outcomes from a cohort discrete time state transition model.
+#' @param dr Discount rate.
+#' @param integrate_method Method used to integrate state values when computing 
+#' costs or QALYs. Options are `trapz` for the trapezoid rule,
+#' `riemann_left` for a left Riemann sum, and  
+#' `riemann_right` for a right Riemann sum.
 #' @examples 
 #' library("data.table")
 #' library("ggplot2")
@@ -393,6 +398,9 @@ create_CohortDtstmTrans.msm <- function(object, input_data,
 #' @seealso [`create_CohortDtstm()`], [`CohortDtstmTrans`], 
 #' [`create_CohortDtstmTrans()`],  `vignette("markov-cohort")`,
 #' `vignette("markov-inhomogeneous-cohort")`, `vignette("mlogit")`,
+#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437).
+#' See Section 2.1 for a description of a cohort DTSTM and details on simulating costs and QALYs from
+#' state probabilities. An example in oncology is provided in Section 4.3.
 #' @export
 CohortDtstm <- R6::R6Class("CohortDtstm",
   public = list(
@@ -444,9 +452,7 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
     
     #' @description
     #' Simulate quality-adjusted life-years (QALYs) as a function of `stateprobs_` and
-    #' `utility_model`. See `vignette("expected-values")` for details.
-    #' @param dr Discount rate.
-    #' @param integrate_method Method used to integrate state values when computing (QALYs).
+    #' `utility_model`.
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
     #' @return An instance of `self` with simulated output of class [qalys] stored
     #' in `qalys_`.
@@ -460,9 +466,6 @@ CohortDtstm <- R6::R6Class("CohortDtstm",
     
     #' @description
     #' Simulate costs as a function of `stateprobs_` and `cost_models`. 
-    #' See `vignette("expected-values")` for details.
-    #' @param dr Discount rate.
-    #' @param integrate_method Method used to integrate state values when computing costs.
     #' @return An instance of `self` with simulated output of class [costs] stored
     #' in `costs_`.
     sim_costs = function(dr = .03, 

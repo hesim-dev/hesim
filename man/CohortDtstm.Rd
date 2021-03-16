@@ -152,6 +152,11 @@ cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = 0, dr_costs = .06,
                      k = wtp)
 format(icer(cea_pw_out))
 }
+\references{
+\href{https://arxiv.org/abs/2102.09437}{Incerti and Jansen (2021)}.
+See Section 2.1 for a description of a cohort DTSTM and details on simulating costs and QALYs from
+state probabilities. An example in oncology is provided in Section 4.3.
+}
 \seealso{
 \code{\link[=create_CohortDtstm]{create_CohortDtstm()}}, \code{\link{CohortDtstmTrans}},
 \code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}},  \code{vignette("markov-cohort")},
@@ -239,7 +244,7 @@ stored in \code{stateprobs_}.
 \if{latex}{\out{\hypertarget{method-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_} and
-\code{utility_model}. See \code{vignette("expected-values")} for details.
+\code{utility_model}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$sim_qalys(
   dr = 0.03,
@@ -253,7 +258,10 @@ Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_}
 \describe{
 \item{\code{dr}}{Discount rate.}
 
-\item{\code{integrate_method}}{Method used to integrate state values when computing (QALYs).}
+\item{\code{integrate_method}}{Method used to integrate state values when computing
+costs or QALYs. Options are \code{trapz} for the trapezoid rule,
+\code{riemann_left} for a left Riemann sum, and
+\code{riemann_right} for a right Riemann sum.}
 
 \item{\code{lys}}{If \code{TRUE}, then life-years are simulated in addition to QALYs.}
 }
@@ -269,7 +277,6 @@ in \code{qalys_}.
 \if{latex}{\out{\hypertarget{method-sim_costs}{}}}
 \subsection{Method \code{sim_costs()}}{
 Simulate costs as a function of \code{stateprobs_} and \code{cost_models}.
-See \code{vignette("expected-values")} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$sim_costs(
   dr = 0.03,
@@ -282,7 +289,10 @@ See \code{vignette("expected-values")} for details.
 \describe{
 \item{\code{dr}}{Discount rate.}
 
-\item{\code{integrate_method}}{Method used to integrate state values when computing costs.}
+\item{\code{integrate_method}}{Method used to integrate state values when computing
+costs or QALYs. Options are \code{trapz} for the trapezoid rule,
+\code{riemann_left} for a left Riemann sum, and
+\code{riemann_right} for a right Riemann sum.}
 }
 \if{html}{\out{</div>}}
 }

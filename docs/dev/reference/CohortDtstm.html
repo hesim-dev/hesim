@@ -181,6 +181,11 @@
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><a href='https://arxiv.org/abs/2102.09437'>Incerti and Jansen (2021)</a>.
+See Section 2.1 for a description of a cohort DTSTM and details on simulating costs and QALYs from
+state probabilities. An example in oncology is provided in Section 4.3.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='create_CohortDtstm.html'>create_CohortDtstm()</a></code>, <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code>,
@@ -236,7 +241,7 @@ list represents a different cost category.</p></dd>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>A new <code>CohortDtstm</code> object.</p>
 <p><hr>
-<a id="method-sim_stateprobs"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>sim_stateprobs()</code></h3>
+<a id="method-sim_stateprobs"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='sim_stateprobs.html'>sim_stateprobs()</a></code></h3>
 <p>Simulate health state probabilities using <code>CohortDtstmTrans$sim_stateprobs()</code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>CohortDtstm</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span><span class='va'>n_cycles</span><span class='op'>)</span></pre><p></div></p>
 
@@ -251,7 +256,7 @@ stored in <code>stateprobs_</code>.</p>
 <p><hr>
 <a id="method-sim_qalys"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='sim_ev.html'>sim_qalys()</a></code></h3>
 <p>Simulate quality-adjusted life-years (QALYs) as a function of <code>stateprobs_</code> and
-<code>utility_model</code>. See <code>vignette("expected-values")</code> for details.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<code>utility_model</code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>CohortDtstm</span><span class='op'>$</span><span class='fu'>sim_qalys</span><span class='op'>(</span>
   dr <span class='op'>=</span> <span class='fl'>0.03</span>,
   integrate_method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span><span class='op'>)</span>,
@@ -262,7 +267,10 @@ stored in <code>stateprobs_</code>.</p>
 <p><div class="arguments"></p><dl>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
 
-<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing (QALYs).</p></dd>
+<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing
+costs or QALYs. Options are <code>trapz</code> for the trapezoid rule,
+<code>riemann_left</code> for a left Riemann sum, and
+<code>riemann_right</code> for a right Riemann sum.</p></dd>
 
 <dt><code>lys</code></dt><dd><p>If <code>TRUE</code>, then life-years are simulated in addition to QALYs.</p></dd>
 
@@ -272,8 +280,7 @@ stored in <code>stateprobs_</code>.</p>
 in <code>qalys_</code>.</p>
 <p><hr>
 <a id="method-sim_costs"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='sim_ev.html'>sim_costs()</a></code></h3>
-<p>Simulate costs as a function of <code>stateprobs_</code> and <code>cost_models</code>.
-See <code>vignette("expected-values")</code> for details.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Simulate costs as a function of <code>stateprobs_</code> and <code>cost_models</code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>CohortDtstm</span><span class='op'>$</span><span class='fu'>sim_costs</span><span class='op'>(</span>
   dr <span class='op'>=</span> <span class='fl'>0.03</span>,
   integrate_method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span><span class='op'>)</span>
@@ -283,7 +290,10 @@ See <code>vignette("expected-values")</code> for details.</p><h4 class='hasAncho
 <p><div class="arguments"></p><dl>
 <dt><code>dr</code></dt><dd><p>Discount rate.</p></dd>
 
-<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing costs.</p></dd>
+<dt><code>integrate_method</code></dt><dd><p>Method used to integrate state values when computing
+costs or QALYs. Options are <code>trapz</code> for the trapezoid rule,
+<code>riemann_left</code> for a left Riemann sum, and
+<code>riemann_right</code> for a right Riemann sum.</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>

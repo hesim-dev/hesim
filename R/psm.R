@@ -206,6 +206,11 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #' @description
 #' Simulate outcomes from an N-state partitioned survival model.
 #' @format An [R6::R6Class] object.
+#' @param dr Discount rate.
+#' @param integrate_method Method used to integrate state values when computing 
+#' costs or QALYs. Options are `trapz` for the trapezoid rule,
+#' `riemann_left` for a left Riemann sum, and  
+#' `riemann_right` for a right Riemann sum.
 #' @examples
 #' library("flexsurv")
 #' library("ggplot2")
@@ -274,6 +279,10 @@ PsmCurves <- R6::R6Class("PsmCurves",
 #' head(psm$sim_qalys(dr = .03)$qalys_)
 #'
 #' @seealso [`PsmCurves`], [`create_PsmCurves()`]
+#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437).
+#' See Section 2.3 for a mathematical description of a PSM and Section 4.2 for an 
+#' example in oncology. The mathematical approach used to simulate costs and QALYs from
+#' state probabilities is described in Section 2.1.
 #' @export
 Psm <- R6::R6Class("Psm",
   public = list(
@@ -364,9 +373,7 @@ Psm <- R6::R6Class("Psm",
 
     #' @description
     #' Simulate quality-adjusted life-years (QALYs) as a function of `stateprobs_` and
-    #' `utility_model`. See `vignette("expected-values")` for details.
-    #' @param dr Discount rate.
-    #' @param integrate_method Method used to integrate state values when computing (QALYs).
+    #' `utility_model`. 
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
     #' @return An instance of `self` with simulated output of class [qalys] stored
     #' in `qalys_`.    
@@ -380,8 +387,6 @@ Psm <- R6::R6Class("Psm",
     #' @description
     #' Simulate costs as a function of `stateprobs_` and `cost_models`. 
     #' See `vignette("expected-values")` for details.
-    #' @param dr Discount rate.
-    #' @param integrate_method Method used to integrate state values when computing costs.
     #' @return An instance of `self` with simulated output of class [costs] stored
     #' in `costs_`.    
     sim_costs = function(dr = .03, integrate_method = c("trapz", "riemann_left", "riemann_right")){

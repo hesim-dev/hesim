@@ -256,7 +256,7 @@ create_IndivCtstmTrans.params_surv_list <- function(object, input_data, trans_ma
 #'
 #' @description
 #' Simulate health state transitions in an individual-level continuous time state
-#'  transition model with parameters that were estimated using a multi-state model.
+#'  transition model using parameters from a multi-state model.
 #' @format An [R6::R6Class] object.
 #' @examples 
 #' library("flexsurv")
@@ -463,10 +463,15 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #'
 #' @description
 #' Simulate outcomes from an individual-level continuous time state transition 
-#' model (CTSTM) from a fitted multi-state model. The class supports "clock-reset"
+#' model (CTSTM). The class supports "clock-reset"
 #' (i.e., semi-Markov), "clock-forward" (i.e., Markov), and mixtures of 
-#' clock-reset and clock-forward models as described in 
+#' clock-reset and clock-forward multi-state models as described in 
 #' [`IndivCtstmTrans`]. 
+#' @param dr Discount rate.
+#' @param type `"predict"` for mean values or `"random"` for random samples 
+#' as in `$sim()` in [`StateVals`].
+#' @param by_patient If `TRUE`, then QALYs and/or costs are computed at the patient level.
+#'  If `FALSE`, then they are averaged across patients by health state.
 #' @examples 
 #' library("flexsurv")
 #'
@@ -547,6 +552,9 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #'
 #' @format An [R6::R6Class] object.
 #' @seealso [`create_IndivCtstmTrans()`], [`IndivCtstmTrans`]
+#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437).
+#' See Section 2.2 for a mathematical description of an individual-level CTSTM and Section 4.1 for 
+#' an example in oncology.
 #' @export
 IndivCtstm <- R6::R6Class("IndivCtstm",
   private = list(  
@@ -765,13 +773,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     
     #' @description
     #' Simulate quality-adjusted life-years (QALYs) as a function of `disprog_` and
-    #' `utility_model`. See `vignette("expected-values")` for details.
-    #' @param dr Discount rate.
-    #' @param type `"predict"` for mean values or `"random"` for random samples 
-    #' as in `$sim()` in [`StateVals`].
+    #' `utility_model`. 
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
-    #' @param by_patient If `TRUE`, then QALYs are computed at the patient level.
-    #'  If `FALSE`, then QALYs are averaged across patients by health state.
     #' @return An instance of `self` with simulated output of
     #' class [qalys] stored in `qalys_`.    
     sim_qalys = function(dr = .03, type = c("predict", "random"),
@@ -789,12 +792,6 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     
     #' @description
     #' Simulate costs as a function of `disprog_` and `cost_models`. 
-    #' See `vignette("expected-values")` for details.
-    #' @param dr Discount rate.
-    #' @param type `"predict"` for mean values or `"random"` for random samples 
-    #' as in `$sim()` in [`StateVals`].
-    #' @param by_patient If `TRUE`, then QALYs are computed at the patient level.
-    #'  If `FALSE`, then QALYs are averaged across patients by health state.
     #' @param max_t  Maximum time duration to compute costs once a patient has
     #'   entered a (new) health state. By default, equal to `Inf`, 
     #'   so that costs are computed over the entire duration that a patient is in

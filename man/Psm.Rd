@@ -77,6 +77,12 @@ head(psm$costs_)
 head(psm$sim_qalys(dr = .03)$qalys_)
 
 }
+\references{
+\href{https://arxiv.org/abs/2102.09437}{Incerti and Jansen (2021)}.
+See Section 2.3 for a mathematical description of a PSM and Section 4.2 for an
+example in oncology. The mathematical approach used to simulate costs and QALYs from
+state probabilities is described in Section 2.1.
+}
 \seealso{
 \code{\link{PsmCurves}}, \code{\link[=create_PsmCurves]{create_PsmCurves()}}
 }
@@ -189,7 +195,7 @@ stored in \code{stateprobs_}.
 \if{latex}{\out{\hypertarget{method-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_} and
-\code{utility_model}. See \code{vignette("expected-values")} for details.
+\code{utility_model}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Psm$sim_qalys(
   dr = 0.03,
@@ -203,7 +209,10 @@ Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_}
 \describe{
 \item{\code{dr}}{Discount rate.}
 
-\item{\code{integrate_method}}{Method used to integrate state values when computing (QALYs).}
+\item{\code{integrate_method}}{Method used to integrate state values when computing
+costs or QALYs. Options are \code{trapz} for the trapezoid rule,
+\code{riemann_left} for a left Riemann sum, and
+\code{riemann_right} for a right Riemann sum.}
 
 \item{\code{lys}}{If \code{TRUE}, then life-years are simulated in addition to QALYs.}
 }
@@ -232,7 +241,10 @@ See \code{vignette("expected-values")} for details.
 \describe{
 \item{\code{dr}}{Discount rate.}
 
-\item{\code{integrate_method}}{Method used to integrate state values when computing costs.}
+\item{\code{integrate_method}}{Method used to integrate state values when computing
+costs or QALYs. Options are \code{trapz} for the trapezoid rule,
+\code{riemann_left} for a left Riemann sum, and
+\code{riemann_right} for a right Riemann sum.}
 }
 \if{html}{\out{</div>}}
 }
