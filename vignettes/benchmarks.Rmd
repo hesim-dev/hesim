@@ -1,6 +1,6 @@
 ---
 title: Benchmarks
-date: "2021-01-20"
+date: "2021-03-25"
 output: 
   html_vignette:
     toc: yes
@@ -36,11 +36,11 @@ source("benchmarks.R")
 # Semi-Markov models
 [Williams et al. (2016)](https://doi.org/10.1177/0272989X16651869) adapted the [`mstate`](https://www.jstatsoft.org/article/view/v038i07) package to simulate parametric semi-Markov multi-state models. Here, we use simulate a 6-state model for leukemia patients following bone marrow transplantation with both `hesim` and `mstate`. Since a semi-Markov process is assumed, an individual-level simulation is used. Additional details were previously provided in a [blog post](https://devinincerti.com/2019/01/01/sim-mstate.html).
 
-We fit a Gompertz model, but computational performance does not differ substantially across parametric distributions. When using `mstate`, multi-state models are simulated using a cumulative hazard function estimated on a discrete grid, so a time step must be defined. We used a step size of 1/52 (i.e., one week) so that each time step was a week long. This produced reasonably accurate state probability estimates that were similar to those performed in continuous time with `hesim` (see plot below).
+We fit a parametric Weibull model, but note that computational performance does not differ substantially across parametric distributions. We also checked the performance of a spline model, which can be used to model very flexible baseline hazards, but is slower because the quantile function must be computed numerically and `hesim`, by default, uses inverse transform sampling to randomy sample from survival splines. To facilitate direct comparison with the Weibull model, we used a parameterization of the spline equivalent to a Weibull distribution. When using `mstate`, multi-state models are simulated using a cumulative hazard function estimated on a discrete grid, so a time step must be defined. We used a step size of 1/52 (i.e., one week) so that each time step was a week long. This produced reasonably accurate state probability estimates that were similar to those performed in continuous time with `hesim` (see plot below).
 
 
 ```r
-DIST = "gompertz"
+DIST = "weibull"
 STEP = 1/52
 ```
 
@@ -57,7 +57,7 @@ smb2$plot
 
 ![](benchmarks_figs/SemiMarkov-1.png)
 
-We then performed probabilistic sensitivity analysis (PSA) and varied both the number of patients simulated and the number of draws of the parameters. Run times are reported in the table below. `hesim` is considerably faster and the speed advantage is most notable when a PSA is performed.
+We then performed probabilistic sensitivity analysis (PSA) and varied both the number of patients simulated and the number of draws of the parameters. Run times are reported in the table below. `hesim` is considerably faster and the speed advantage is most notable when a PSA is performed. Although slower than the Weibull model, the spline model is still fast, meaning that flexible baseline hazards can be modeled if required with only a small negative impact on performance.
 
 
 ```r
@@ -82,39 +82,44 @@ semi_markov_table(smb)
  <thead>
 <tr>
 <th style="empty-cells: hide;border-bottom:hidden;" colspan="2"></th>
-<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Run time</div></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Run time</div></th>
 </tr>
   <tr>
    <th style="text-align:right;"> # of patients </th>
    <th style="text-align:right;"> # of PSA samples </th>
    <th style="text-align:left;"> mstate </th>
-   <th style="text-align:left;"> hesim </th>
+   <th style="text-align:left;"> hesim (parametric) </th>
+   <th style="text-align:left;"> hesim (spline) </th>
   </tr>
  </thead>
 <tbody>
   <tr>
    <td style="text-align:right;"> 1000 </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> 9.4 seconds </td>
-   <td style="text-align:left;"> 0.084 seconds </td>
+   <td style="text-align:left;"> 11 seconds </td>
+   <td style="text-align:left;"> 0.062 seconds </td>
+   <td style="text-align:left;"> 0.061 seconds </td>
   </tr>
   <tr>
    <td style="text-align:right;"> 5000 </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> 52 seconds </td>
-   <td style="text-align:left;"> 0.071 seconds </td>
+   <td style="text-align:left;"> 1.4 minutes </td>
+   <td style="text-align:left;"> 0.11 seconds </td>
+   <td style="text-align:left;"> 0.24 seconds </td>
   </tr>
   <tr>
    <td style="text-align:right;"> 1000 </td>
    <td style="text-align:right;"> 100 </td>
    <td style="text-align:left;"> 22 minutes </td>
-   <td style="text-align:left;"> 0.31 seconds </td>
+   <td style="text-align:left;"> 0.63 seconds </td>
+   <td style="text-align:left;"> 2.9 seconds </td>
   </tr>
   <tr>
    <td style="text-align:right;"> 1000 </td>
    <td style="text-align:right;"> 1000 </td>
-   <td style="text-align:left;"> 3.1 hours </td>
-   <td style="text-align:left;"> 2.8 seconds </td>
+   <td style="text-align:left;"> 3.6 hours </td>
+   <td style="text-align:left;"> 6 seconds </td>
+   <td style="text-align:left;"> 29 seconds </td>
   </tr>
 </tbody>
 </table>
@@ -159,25 +164,25 @@ markov_table(mb)
    <td style="text-align:right;"> 10 </td>
    <td style="text-align:right;"> 1 </td>
    <td style="text-align:right;"> 1000 </td>
-   <td style="text-align:left;"> 1.4 seconds </td>
-   <td style="text-align:left;"> 0.098 seconds </td>
-   <td style="text-align:left;"> 0.16 seconds </td>
+   <td style="text-align:left;"> 1.5 seconds </td>
+   <td style="text-align:left;"> 0.097 seconds </td>
+   <td style="text-align:left;"> 0.21 seconds </td>
   </tr>
   <tr>
    <td style="text-align:right;"> 100 </td>
    <td style="text-align:right;"> 1 </td>
    <td style="text-align:right;"> 1000 </td>
    <td style="text-align:left;"> 12 seconds </td>
-   <td style="text-align:left;"> 0.13 seconds </td>
-   <td style="text-align:left;"> 0.68 seconds </td>
+   <td style="text-align:left;"> 0.12 seconds </td>
+   <td style="text-align:left;"> 1.1 seconds </td>
   </tr>
   <tr>
    <td style="text-align:right;"> 1000 </td>
    <td style="text-align:right;"> 1 </td>
    <td style="text-align:right;"> 1000 </td>
-   <td style="text-align:left;"> 1.9 minutes </td>
-   <td style="text-align:left;"> 0.88 seconds </td>
-   <td style="text-align:left;"> 7.4 seconds </td>
+   <td style="text-align:left;"> 2 minutes </td>
+   <td style="text-align:left;"> 1.2 seconds </td>
+   <td style="text-align:left;"> 11 seconds </td>
   </tr>
 </tbody>
 </table>
@@ -204,7 +209,7 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] mstate_0.3.1      kableExtra_1.2.1  hesim_0.4.2.9999  heemod_0.13.0    
+## [1] mstate_0.3.1      kableExtra_1.2.1  hesim_0.5.0.9999  heemod_0.13.0    
 ## [5] ggplot2_3.3.3     flexsurv_1.1.1    survival_3.2-7    data.table_1.13.6
 ## [9] knitr_1.30       
 ## 
