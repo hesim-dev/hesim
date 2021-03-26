@@ -7,6 +7,23 @@ format_run_time <- function(x) {
 }
 
 # Semi-Markov model ------------------------------------------------------------
+init_spline_weibull <- function(formula, data, k = 0) {
+  # Parameter estimates from Weibull model
+  fit_wei <- flexsurv::flexsurvreg(formula, data = data, dist = "weibullPH")
+  wei_coef <- fit_wei$res.t[, "est"]
+  
+  # Initialize spline parameter vector
+  inits <- rep(0, 2 + fit_wei$ncoveffs)
+  cov_names <- names(coef(fit_wei))[fit_wei$covpars]
+  names(inits) <-  c("gamma0", "gamma1", cov_names)
+  
+  # Set spline parameter values
+  inits["gamma0"] <- wei_coef["scale"]
+  inits["gamma1"] <- exp(wei_coef["shape"])
+  inits[cov_names] <- wei_coef[cov_names]
+  return(inits)
+}
+
 fit_semi_markov <- function(dist) {
   # Data
   tmat <- mstate::transMat(x = list(c(2, 3, 5, 6), 
@@ -25,14 +42,17 @@ fit_semi_markov <- function(dist) {
   
   # Model fitting
   n_trans <- max(tmat, na.rm = TRUE)
-  fits <- vector(mode = "list", length = n_trans)
+  fits <- fits_spline <- vector(mode = "list", length = n_trans)
   msebmt$years <- msebmt$time/365.25
+  f <- formula(survival::Surv(years, status) ~ match + proph + year + agecl)
   for (i in 1:n_trans){
-    fits[[i]] <- flexsurv::flexsurvreg(survival::Surv(years, status) ~ match + proph + year + agecl ,
-                                       data = subset(msebmt, trans == i),
-                                       dist = dist)
+    data_i <- msebmt[msebmt$trans == i, ]
+    fits[[i]] <- flexsurv::flexsurvreg(f, data = data_i, dist = dist)
+    inits <- init_spline_weibull(f, data = data_i) 
+    fits_spline[[i]] <- flexsurv::flexsurvspline(f, data = data_i, scale = "hazard",
+                                                 k = 0, inits = inits)
   }
-  return(list(fit = fits, data = msebmt))
+  return(list(fit = fits, fit_spline = fits_spline, data = msebmt))
 }
 
 make_semi_markov_input_data <- function(newdata, n_rep) {
@@ -99,7 +119,8 @@ sim_semi_markov_mstate <- function(object, newdata, n_rep = 100, n_samples = 100
 
 sim_semi_markov_hesim <- function(object, newdata, n_rep = 100, n_samples = 100,
                                    uncertainty = c("normal", "none"),
-                                   yr_grid = seq(0, 10, .1)) {
+                                   yr_grid = seq(0, 10, .1), spline = FALSE,
+                                   step = NULL) {
   ptm <- proc.time()
   
   # Input data
@@ -111,12 +132,21 @@ sim_semi_markov_hesim <- function(object, newdata, n_rep = 100, n_samples = 100,
   input_data <- expand(hesim_dat, by = c("strategies", "patients")) 
   
   # Simulate
-  dismod <- create_IndivCtstmTrans(hesim::flexsurvreg_list(object$fit), 
+  fit <- if (!spline) object$fit else object$fit_spline
+  dismod <- create_IndivCtstmTrans(hesim::flexsurvreg_list(fit), 
                                    input_data = input_data,
                                    trans_mat = attr(object$data, "trans"),
                                    clock = "reset",
                                    uncertainty = uncertainty,
                                    n = n_samples) 
+  if (!is.null(step)) {
+    dismod$params <- params_surv_list(lapply(dismod$params, function(z){
+      z$aux$random_method <- "discrete"
+      z$aux$cumhaz_method <- "riemann"
+      z$aux$step <- step
+      return(z)
+    }))
+  }
   sim <- dismod$sim_stateprobs(t = yr_grid)
   
   # Return
@@ -125,7 +155,7 @@ sim_semi_markov_hesim <- function(object, newdata, n_rep = 100, n_samples = 100,
   return(sim)
 }
 
-rbind_semi_markov <- function(mstate_sim, hesim_sim) {
+rbind_semi_markov <- function(mstate_sim, hesim_sim, hesim_sim_spline) {
   # mstate
   sim1 <- data.table::melt(mstate_sim, id.vars = c("sample", "time"), 
                            variable.name = "state_id",
@@ -135,8 +165,16 @@ rbind_semi_markov <- function(mstate_sim, hesim_sim) {
   sim1[, lab := "mstate"]
   
   # hesim
-  sim2 <- data.table::copy(hesim_sim)
-  sim2[, lab := "hesim"]
+  ## Parametric model
+  sim2a <- data.table::copy(hesim_sim)
+  sim2a[, lab := "hesim (parametric)"]
+  
+  ## Spline
+  sim2b <- data.table::copy(hesim_sim_spline)
+  sim2b[, lab := "hesim (spline)"]
+  
+  # Combine
+  sim2 <- rbind(sim2a, sim2b)
   sim2[, c("strategy_id", "grp_id") := NULL]
   data.table::setnames(sim2, "t", "time")
   
@@ -160,7 +198,8 @@ plot_semi_markov <- function(x, state_labels) {
 
 benchmark_semi_markov <- function(n_patients = 100, n_samples = 1, 
                                  uncertainty = c("normal", "none"),
-                                 dist = "gompertz", step = .01) {
+                                 dist = "gompertz", step = .01,
+                                 spline_step = FALSE) {
   fit <- fit_semi_markov(dist = dist)
   pat2 <- data.frame(fit$data[fit$data$id == 2, 
                               c("match", "proph", "year", "agecl")][1, ])
@@ -171,13 +210,22 @@ benchmark_semi_markov <- function(n_patients = 100, n_samples = 1,
   hesim_sim <- sim_semi_markov_hesim(fit, newdata = pat2, n_rep = n_patients,
                                      n_samples = n_samples, uncertainty = uncertainty,
                                      yr_grid = yr_grid)
-  sim <- rbind_semi_markov(mstate_sim = mstate_sim, hesim_sim = hesim_sim)
+  spline_step <-  if (spline_step) step else NULL
+  hesim_sim_spline <- sim_semi_markov_hesim(fit, newdata = pat2, n_rep = n_patients,
+                                            n_samples = n_samples, uncertainty = uncertainty,
+                                            yr_grid = yr_grid, spline = TRUE,
+                                            step = spline_step)
+  sim <- rbind_semi_markov(mstate_sim = mstate_sim, hesim_sim = hesim_sim,
+                           hesim_sim_spline = hesim_sim_spline)
   plot <- plot_semi_markov(sim, state_labels = rownames(attr(fit$data, "trans")))
   if (uncertainty == "none") n_samples <- 1
   return(list(
     sim = sim,
-    run_time = c(mstate = attr(mstate_sim, "run_time")[["elapsed"]],
-                 hesim = attr(hesim_sim, "run_time")[["elapsed"]]),
+    run_time = c(
+      mstate = attr(mstate_sim, "run_time")[["elapsed"]],
+      hesim = attr(hesim_sim, "run_time")[["elapsed"]],
+      hesim_spline = attr(hesim_sim_spline, "run_time")[["elapsed"]]
+    ),
     plot = plot,
     n_patients = n_patients,
     uncertainty = uncertainty,
@@ -186,18 +234,19 @@ benchmark_semi_markov <- function(n_patients = 100, n_samples = 1,
 }
 
 semi_markov_table <- function(x) {
-  make_row <- function(x) {
-    data.table(x$n_patients, x$n_samples, x$run_time[1], x$run_time[2])
+  run_times <- lapply(x, function (z) format_run_time(z$run_time))
+  
+  make_row <- function(x, y) {
+    data.table(x$n_patients, x$n_samples, matrix(y, nrow = 1))
   }
   
-  lapply(x, make_row) %>%
+  mapply(make_row, x, run_times, SIMPLIFY = FALSE) %>%
     rbindlist() %>%
-    setnames(new = c("# of patients",  "# of PSA samples", "mstate", "hesim")) %>%
-    .[, mstate := format_run_time(mstate)] %>%
-    .[, hesim := format_run_time(hesim)] %>%
+    setnames(new = c("# of patients",  "# of PSA samples", "mstate", 
+                     "hesim (parametric)", "hesim (spline)")) %>%
     kable() %>%
     kable_styling() %>%
-    add_header_above(c(" " = 2, "Run time" = 2)) 
+    add_header_above(c(" " = 2, "Run time" = 3)) 
 }
 
 # Markov model -----------------------------------------------------------------
