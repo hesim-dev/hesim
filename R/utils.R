@@ -31,7 +31,7 @@ check_scalar <- function(x, name){
 }
 
 check_dr <- function(dr){
-  if(any(table(dr) > 1)){
+  if(anyDuplicated(dr) != 0L){
     stop("You cannot specify the same discount rate twice.",
          call. = FALSE)
   }  
