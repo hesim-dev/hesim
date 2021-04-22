@@ -37,12 +37,6 @@ check_dr <- function(dr){
   }  
 }
 
-check.array <- function(coefs){
-  # 'coefs' must be a 3D array (and this has been checked in get_n_samples())
-  
-  # There are currently no other checks
-}
-
 check_StateVals <- function(statevalmods, object, 
                             object_name = c("stateprobs", "disprog")) {
   
