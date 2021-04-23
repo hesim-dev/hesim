@@ -544,7 +544,7 @@ new_params_mlogit <- function(coefs, n_samples){
 
 #' @rdname check
 check.params_mlogit <- function(object){
-  check(object$coefs)
+  if (!is.numeric(object$coefs)) stop("'coefs' must be a numeric array.")
   return(object)
 }
 

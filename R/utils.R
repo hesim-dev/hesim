@@ -31,16 +31,10 @@ check_scalar <- function(x, name){
 }
 
 check_dr <- function(dr){
-  if(any(table(dr) > 1)){
+  if(anyDuplicated(dr) != 0L){
     stop("You cannot specify the same discount rate twice.",
          call. = FALSE)
   }  
-}
-
-check.array <- function(coefs){
-  # 'coefs' must be a 3D array (and this has been checked in get_n_samples())
-  
-  # There are currently no other checks
 }
 
 check_StateVals <- function(statevalmods, object, 
@@ -289,7 +283,7 @@ matlist <- function(x){
 }
 
 check.matlist <- function(coefs){
-  # 'coefs' must be a list (and this has been cheked in get_n_samples())
+  # 'coefs' must be a list (and this has been checked in get_n_samples())
   
   # Each element of 'coefs' must be a matrix
   matrix_bool <- unlist(lapply(coefs, is.matrix))
