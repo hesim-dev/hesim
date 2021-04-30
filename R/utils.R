@@ -277,14 +277,17 @@ format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
 }
 
 # List of matrices -------------------------------------------------------------
-matlist <- function(x){
-  class(x) <- "matlist"
-  return(x)
+matlist <- function(coefs){
+  if (inherits(coefs, "list")) {
+    coefs <- lapply(coefs, as.matrix)
+  } else {
+    stop("'coefs' must be a list.", call. = FALSE)
+  }
+  class(coefs) <- "matlist"
+  return(coefs)
 }
 
 check.matlist <- function(coefs){
-  # 'coefs' must be a list (and this has been checked in get_n_samples())
-  
   # Each element of 'coefs' must be a matrix
   matrix_bool <- unlist(lapply(coefs, is.matrix))
   if(sum(!matrix_bool) > 0){
