@@ -1,7 +1,7 @@
-context("params_)surv.R unit tests")
+context("params_surv.R unit tests")
 library("flexsurv")
 
-# params_surv() ----------------------------------------------------------------
+# params_surv() works as expected ----------------------------------------------
 test_that("params_surv() works as expected for various distributions", {
   ## exponential
   p <- params_surv(coefs = list(matrix(c(1, 2, 3, 4), nrow = 2)),
@@ -57,6 +57,7 @@ test_that("params_surv() throws error if coef argument is not a list", {
   )
 })
 
+# params_surv() throws errors --------------------------------------------------
 test_that("params_surv() throws error if number of rows in coef matrices are unequal", {
   expect_error(
     params_surv(coefs = list(matrix(c(1, 2), nrow = 1),
@@ -66,6 +67,41 @@ test_that("params_surv() throws error if number of rows in coef matrices are une
     )
 })
 
+test_that("params_surv() throws error if knots are not specified for a spline model", {
+  expect_error(
+    params_surv(coefs = list(matrix(.5)),
+                aux = list(scale = "log_cumhazard"),
+                dist = "survspline"),
+    "'knots' must be specified in a spline model."
+  )
+})
+
+test_that("params_surv() throws error if hazard scale is wong for spline model", {
+  choices <- c("log_cumhazard", "log_hazard", "log_cumodds", "inv_normal")
+  expect_error(
+    params_surv(coefs = list(gamma0 = matrix(.5),
+                             gamma1 = matrix(0)),
+                aux = list(knots = c(0, 10),
+                           scale = "log"),
+                dist = "survspline"),
+    paste0("The auxiliary argument 'scale' must be one of ", 
+           paste(dQuote(choices), collapse = ", "))
+  )
+})
+
+test_that("params_surv() throws error if time scale is wong for spline model", {
+  expect_error(
+    params_surv(coefs = list(gamma0 = matrix(.5),
+                             gamma1 = matrix(0)),
+                aux = list(knots = c(0, 10),
+                           scale = "log_hazard",
+                           timescale = "wrong"),
+                dist = "survspline"),
+    paste0("The auxiliary argument 'timescale' must be one of ", 
+           paste(dQuote(c("log", "identity")), collapse = ", "))
+  )
+})
+
 test_that("params_surv() throws error if piecewise exponential if times aren't consistent with rates", {
   expect_error(
     params_surv(coefs = list(matrix(.8),
@@ -73,6 +109,17 @@ test_that("params_surv() throws error if piecewise exponential if times aren't c
                 aux = list(time = c(1)),
                 dist = "pwexp"),
     "The length of 'time' must equal the length of 'coefs'."
+  )
+})
+
+test_that("params_surv() throws error if numbers of parameters in fractional polynomial model is wrong", {
+  expect_error(
+    params_surv(coefs = list(matrix(.8),
+                             matrix(.9)),
+                aux = list(powers = c(-2, -1)),
+                dist = "fracpoly"),
+    paste0("The number of parameters in a fractional polynomial model must equal ", 
+           "the number of powers plus 1.")
   )
 })
 
@@ -94,6 +141,40 @@ test_that("summary.params_surv()", {
   expect_equal(ps$parameter, c("shape", "scale", "scale"))
   expect_equal(ps$term, c("intercept", "intercept", "var"))
   expect_equal(ps$estimate, c(1.5, 2, 1))
+})
+
+# print.params_surv() ----------------------------------------------------------
+test_that("print.params_surv() works as expected", {
+  p <- params_surv(coefs = list(rate = rep(3, 10)),
+                   dist = "exp")
+  expect_output(print(p), "A \"params_surv\" object:")
+  expect_output(print(p), "Summary of coefficient estimates:")
+  expect_output(print(p), "Number of parameter samples: 10")
+  expect_output(print(p), "Distribution: exp")
+})
+
+test_that("print.params_surv() works with piecewise exponential model", {
+  p <- params_surv(coefs = list(rate1 = 1, rate = 2),
+                   dist = "pwexp",
+                   aux = list(times = c(1, 5)))
+  expect_output(print(p), "Times: 1 5")
+})
+
+test_that("print.params_surv() works with survival splines", {
+  p <- params_surv(coefs = list(gamma0 = 1, gamma1 = 2),
+                   dist = "survspline",
+                   aux = list(knots = c(1, 3)))
+  expect_output(print(p), "Knots: 1 3")
+  expect_output(print(p), "Scale: log_cumhazard")
+  expect_output(print(p), "Time scale: log")
+})
+
+test_that("print.params_surv() works with fractional polynomials", {
+  p <- params_surv(coefs = list(gamma0 = 1, gamma2 = 2),
+                   dist = "fracpoly",
+                   aux = list(powers = 1))
+  expect_output(print(p), "Distribution: fracpoly")
+  expect_output(print(p), "Powers: 1")
 })
 
 # create_params.flexsurv() -----------------------------------------------------

@@ -646,16 +646,27 @@ test_that("IndivCtstm - survspline", {
   
   # Warnings
   spline_args$aux$random_method <- "sample"
-  expect_warning(do.call("params_surv", spline_args))
+  spline_args$aux$scale <- "log_cumhazard"
+  expect_warning(
+    do.call("params_surv", spline_args),
+    "'random_method' = 'sample' is deprecated. Use 'discrete' instead."
+  )
   
   # Errors
   ## Need step size
   ### (1)
   spline_args$aux$random_method <- "discrete"
-  expect_error(do.call("params_surv", spline_args))
+  spline_args$aux$scale <- "log_hazard"
+  expect_error(
+    do.call("params_surv", spline_args),
+    "'step' must be specified"
+  )
   
   ### (2)
   spline_args$aux$random_method <- "invcdf"
   spline_args$aux$cumhaz_method <- "riemann"
-  expect_error(do.call("params_surv", spline_args)) 
+  expect_error(
+    do.call("params_surv", spline_args),
+    "'step' must be specified"
+  ) 
 })

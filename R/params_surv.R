@@ -11,7 +11,8 @@
 #' of the list may also be an object coercible to a matrix such as a 
 #' `data.frame` or `data.table`.
 #' @param dist Character vector denoting the parametric distribution. See "Details".
-#' @param aux Auxiliary arguments used with splines or fractional polynomials. See "Details". 
+#' @param aux Auxiliary arguments used with splines, fractional polynomial,
+#' or piecewise exponential models. See "Details". 
 #' 
 #' @return An object of class `params_surv`, which is a list containing `coefs`,
 #' `dist`, and `n_samples`. `n_samples` is equal to the number of rows
@@ -83,7 +84,7 @@
 #' 
 #' \item{`fracpoly`}{ Fractional polynomials. Each element of `coef` is a parameter of the
 #' fractional polynomial model (i.e. `gamma_0`, `gamma_1`, \eqn{\ldots}) with length equal
-#' to the number of powers minus 1. See below for details on the auxiliary arguments 
+#' to the number of powers plus 1. See below for details on the auxiliary arguments 
 #' (i.e., `powers`).}
 #' 
 #' \item{`pwexp`}{ Piecewise exponential distribution. Each element of `coef` is 
@@ -154,6 +155,7 @@
 #' )
 #' summary(params)
 #' print(params)
+#' @aliases print.params_surv
 #' @export
 params_surv <- function(coefs, dist, aux = NULL){
   coefs <- matlist(coefs)
@@ -166,15 +168,23 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
   stopifnot(is.numeric(n_samples))
   res <- list(coefs = coefs, dist = dist)
   if (!is.null(aux)) {
-    res[["aux"]] <- aux
+    
+    # Spline defaults
+    if (dist == "survspline") {
+      if (is.null(aux$knots)) stop("'knots' must be specified in a spline model.",
+                                   call. = FALSE)
+      if (is.null(aux$scale)) aux$scale <- "log_cumhazard"
+      if (is.null(aux$timescale)) aux$timescale <- "log"
+    }
     
     # RNG 
     if (dist %in% c("survspline", "fracpoly")){
       if (is.null(aux$random_method)){
-        res[["aux"]]$random_method <- "invcdf"
+        aux$random_method <- "invcdf"
       } else{
         if (aux$random_method == "sample"){
-          warning("'random_method' = 'sample' is deprecated. Use 'discrete' instead.")
+          warning("'random_method' = 'sample' is deprecated. Use 'discrete' instead.",
+                  call. = FALSE)
           aux$random_method <- "discrete"
         }
       }
@@ -183,10 +193,10 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
       if (is.null(aux$cumhaz_method)){
         if (dist == "survspline"){
           if (aux$scale == "log_hazard"){
-            res[["aux"]]$cumhaz_method <- "quad"
+            aux$cumhaz_method <- "quad"
           }
         } else {
-          res[["aux"]]$cumhaz_method <- "quad"
+          aux$cumhaz_method <- "quad"
         }
       }
     } # End RNG for fractional polynomials and survival splines
@@ -195,29 +205,20 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
     check_step <- function(aux){
       if (aux$random_method == "discrete" | aux$cumhaz_method == "riemann"){
         if (is.null(aux$step)){
-          stop("'step' must be specified", call. = FALSE)
+          stop("'step' must be specified.", call. = FALSE)
         }  
       }
     }
     if (dist == "survspline"){
       if (aux$scale == "log_hazard"){
-        check_step(res[["aux"]])
+        check_step(aux)
       }
     } 
     if (dist == "fracpoly"){
-      check_step(res[["aux"]])
+      check_step(aux)
     }
     
-    # Piecewise exponential
-    if (dist == "pwexp"){
-      if (!is_1d_vector(aux$time)){
-        stop("`time` must be a 1-dimensional vector", call. = FALSE)
-      }
-      if (length(aux$time) != length(coefs)){
-        stop("The length of 'time' must equal the length of 'coefs'.", 
-             call. = FALSE)
-      }
-    }
+    res[["aux"]] <- aux
     
   } # End if statement for aux
   res[["n_samples"]] <- n_samples
@@ -227,10 +228,65 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
 
 #' @rdname check
 check.params_surv <- function(object){
+  # Check coefficients
   if (list_depth(object$coefs) !=1 | length(object$dist) !=1){
     stop("'coefs' must only contain one survival model.", call. = FALSE)
   }
   check(object$coefs)
+  
+  # Check auxiliary arguments
+  # Provide nicer error messages that match.arg()
+  check_aux_match <- function(arg, arg_name, choices) {
+   if (length(arg) > 1) {
+     stop(paste0("The auxiliary argument ", arg_name, " must be of length 1."),
+          call. = FALSE)
+   } 
+   if(!arg %in% choices) {
+     stop(paste0("The auxiliary argument ", arg_name, " must be one of ",
+                 paste(dQuote(choices), collapse = ", "), "."),
+          call. = FALSE)
+   }
+  }
+  
+  ## Survival spines
+  if (object$dist == "survspline") {
+    ### Knots
+    if (length(object$coefs) != length(object$aux$knots)) {
+      stop(paste0("The number of knots (including boundary knots) in a spline-based ",
+                  "survival model must equal the number of parameters."),
+           call. = FALSE)
+    }
+    
+    ### Scale
+    scale_choices <- c("log_cumhazard", "log_hazard", "log_cumodds", "inv_normal")
+    check_aux_match(object$aux$scale, "'scale'", scale_choices)
+    
+    ### Time scale
+    check_aux_match(object$aux$timescale, "'timescale'", c("log", "identity"))
+  } 
+  
+  ## Piecewise exponential
+  if (object$dist == "pwexp"){
+    if (!is_1d_vector(object$aux$time)){
+      stop("`time` must be a 1-dimensional vector", call. = FALSE)
+    }
+    if (length(object$aux$time) != length(object$coefs)){
+      stop("The length of 'time' must equal the length of 'coefs'.", 
+           call. = FALSE)
+    }
+  }
+  
+  ## Fractional polynomials
+  if (object$dist == "fracpoly"){
+    if (length(object$coefs) != length(object$aux$powers) + 1) {
+      stop(paste0("The number of parameters in a fractional polynomial ",
+                  "model must equal the number of powers plus 1."),
+           call. = FALSE)
+    }
+  }
+  
+  
+  # Return
   return(object)
 }
 
@@ -273,6 +329,41 @@ summary.params_surv <- function(object, prob = 0.95, ...) {
 }
 
 # print.params_surv() ----------------------------------------------------------
+#' @export
+print.params_surv <- function(x, ...) {
+  
+  # Standard output
+  cat("A \"params_surv\" object:\n\n")
+  cat("Summary of coefficient estimates:\n")
+  print(summary(x))
+  cat("\n")
+  cat(paste0("Number of parameter samples: ", x$n_samples))
+  cat("\n")
+  cat(paste0("Distribution: ", x$dist))
+  
+  # Auxiliary arguments
+  if (!is.null(x$aux)) {
+    a <- list() 
+    if (x$dist == "pwexp") {
+      a[["Times:"]] <- x$aux$times
+    }
+    if (x$dist == "survspline") {
+      a[["Knots:"]] <- x$aux$knots
+      a[["Scale:"]] <- x$aux$scale
+      a[["Time scale:"]] <- x$aux$timescale
+    }
+    if (x$dist == "fracpoly") {
+      a[["Powers:"]] <- x$aux$powers
+    }
+    for (i in 1:length(a)) {
+      cat("\n") 
+      cat(names(a)[i], a[[i]])
+    }
+  } # End printing for auxiliary arguments
+  
+  # Invisible return
+  invisible(x)
+}
 
 # create_params.flexsurvreg() --------------------------------------------------
 flexsurvreg_inds <- function(object){

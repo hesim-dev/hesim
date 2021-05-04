@@ -2,6 +2,7 @@
 % Please edit documentation in R/params_surv.R
 \name{params_surv}
 \alias{params_surv}
+\alias{print.params_surv}
 \title{Parameters of a survival model}
 \usage{
 params_surv(coefs, dist, aux = NULL)
@@ -17,7 +18,8 @@ of the list may also be an object coercible to a matrix such as a
 
 \item{dist}{Character vector denoting the parametric distribution. See "Details".}
 
-\item{aux}{Auxiliary arguments used with splines or fractional polynomials. See "Details".}
+\item{aux}{Auxiliary arguments used with splines, fractional polynomial,
+or piecewise exponential models. See "Details".}
 }
 \value{
 An object of class \code{params_surv}, which is a list containing \code{coefs},
