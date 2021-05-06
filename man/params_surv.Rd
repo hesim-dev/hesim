@@ -96,7 +96,7 @@ auxiliary arguments. The parameterization is that same as in \code{\link[flexsur
 
 \item{\code{fracpoly}}{ Fractional polynomials. Each element of \code{coef} is a parameter of the
 fractional polynomial model (i.e. \code{gamma_0}, \code{gamma_1}, \eqn{\ldots}) with length equal
-to the number of powers minus 1. See below for details on the auxiliary arguments
+to the number of powers plus 1. See below for details on the auxiliary arguments
 (i.e., \code{powers}).}
 
 \item{\code{pwexp}}{ Piecewise exponential distribution. Each element of \code{coef} is

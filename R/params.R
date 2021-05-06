@@ -1,4 +1,4 @@
-# Generic parameter object documentation ---------------------------------------
+# Generic documentation for parameter object -----------------------------------
 #' Parameter object
 #' 
 #' Objects prefixed by "params_" are lists containing the parameters of a statistical model
@@ -7,6 +7,29 @@
 #' 
 #' @name params
 #' @seealso [`tparams`]
+NULL
+
+# Generic documentation for summary method -------------------------------------
+#' Summarize parameter objects
+#' 
+#' A collection of summary method for different parameter objects.
+#' @param  object An object of the appropriate class.
+#' @param prob A numeric scalar in the interval `(0,1)` giving the confidence 
+#' interval for coefficients. Default is 0.95 for a 95 percent interval, in which case
+#' the lower and upper limits are computed using the 2.5th and 97.5th percentiles.
+#' @param ... Additional arguments affecting the summary. Currently unused. 
+#' 
+#' @return A [`data.table`] with the following columns:
+#' \describe{
+#' \item{parameter}{The name of the parameter of the survival distribution.}
+#' \item{term}{The regression term.}
+#' \item{estimate}{The estimated value of the regression term, computed as the mean
+#' from its probability distribution.}
+#' \item{lower}{The lower limit of the confidence interval for the estimate.}
+#' \item{upper}{The upper limit of the confidence interval for the estimate.}
+#' }
+#' @seealso See [`params_surv`] for an example.
+#' @name summary.params
 NULL
 
 # Helper functions -------------------------------------------------------------
@@ -345,57 +368,6 @@ create_params.multinom_list <- function(object, n = 1000, uncertainty = c("norma
   return(create_params_list(object, n = n, uncertainty = uncertainty, 
                             inner_class = "params_mlogit", new_class = "params_mlogit_list",
                             ...))
-}
-
-# List of survival models ------------------------------------------------------
-#' Parameters of a list of survival models
-#' 
-#' Create a list containing the parameters of multiple fitted parametric survival models.
-#' @param ... Objects of class [`params_surv`], which can be named.
-#' 
-#' @return An object of class `params_surv_list`, which is a list containing [`params_surv`]
-#' objects.
-#' @examples 
-#' library("flexsurv")
-#' fit_wei <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
-#' params_wei <- create_params(fit_wei, n = 2)
-#' 
-#' fit_exp <- flexsurvreg(Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
-#' params_exp <- create_params(fit_exp, n = 2)
-#' 
-#' params_list <- params_surv_list(wei = params_wei, exp = params_exp)
-#' print(params_list)
-#' @export
-params_surv_list <- function(...){
-  return(check(new_params_list(..., inner_class = "params_surv", 
-                               new_class = "params_surv_list")))
-}
-
-#' @rdname check
-check.params_surv_list <- function(object){
-  check_params_list(object)
-}
-
-#' @export
-#' @rdname create_params
-create_params.flexsurvreg_list <- function(object, n = 1000, uncertainty = c("normal", "none"),
-                                           ...){
-  return(create_params_list(object, n = n, uncertainty = uncertainty, 
-                            inner_class = "params_surv", new_class = "params_surv_list"))
-}
-
-#' @export
-#' @rdname create_params
-create_params.partsurvfit <- function(object, n = 1000, 
-                                      uncertainty = c("normal", "bootstrap", "none"), 
-                                      ...){
-  uncertainty <- match.arg(uncertainty)
-  if(uncertainty == "bootstrap"){
-    res <- bootstrap(object, B = n, ...)
-  } else{
-    res <- create_params(object$models, n = n, uncertainty = uncertainty)
-  }
-  return(res)
 }
 
 # Joined survival models -------------------------------------------------------

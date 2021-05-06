@@ -241,43 +241,6 @@ pars_surv_lnorm <- create_params(fit_lnorm, n = 2)
 fit_list1 <- flexsurvreg_list(exp = fit_exp, wei = fit_wei)
 fit_list2 <- flexsurvreg_list(exp = fit_exp, wei = fit_lnorm)
 
-# params_surv_list() -----------------------------------------------------------
-test_that("params_surv_list", {
-  pars_surv_list <- params_surv_list(pars_surv_exp, pars_surv_wei)
-  expect_equal(length(pars_surv_list), 2)
-})
-
-# create_params.flexsurvreg_list() ---------------------------------------------
-test_that("create_params.flexsurvreg_list", {
-  pars_surv_list <- create_params(fit_list1, n = 3)
-  expect_true(inherits(pars_surv_list, "params_surv_list"))
-})
-
-# create_params.partsurvfit() --------------------------------------------------
-test_that("create_params.partsurvfit", {
-  fit1 <- flexsurvspline(Surv(endpoint1_time, endpoint1_status) ~ age,
-                         data = psm4_exdata$survival[1:30, ])
-  fit2 <- flexsurvspline(Surv(endpoint2_time, endpoint2_status) ~ age,
-                         data = psm4_exdata$survival[1:30, ])
-  partsurv_fit <- partsurvfit(flexsurvreg_list(fit1 = fit1, fit2 = fit2), 
-                              data = psm4_exdata$survival)
-  pars_surv_list <- create_params(partsurv_fit, n = 2)
-  expect_equal(length(pars_surv_list), 2)
-})
-
-# params_joined_surv() ---------------------------------------------------------
-test_that("params_joined_surv", {
-  pars_joined_surv <- params_joined_surv(exp = pars_surv_exp,
-                                         wei = pars_surv_wei,
-                                         times = 3)
-  expect_true(inherits(pars_joined_surv, "params_joined_surv"))
-  expect_equal(length(pars_joined_surv$models), 2)
-  expect_equal(pars_joined_surv$times, 3)
-  
-  # errors
-  expect_error(params_joined_surv(exp = pars_surv_exp, 5, times = 3))
-})
-
 # params_joined_surv_list() ----------------------------------------------------
 test_that("params_joined_surv_list", {
   pars_surv_list1 <- params_surv_list(pars_surv_exp, pars_surv_wei)
