@@ -198,27 +198,6 @@ public:
 };
 
 /***************************************************************************//** 
- * Parameters of survival models joined at specified time points.
- ******************************************************************************/
-class params_joined_surv {
-public: 
-  std::vector<params_surv> params_;
-  std::vector<double> times_;
-  int n_samples_;
-  int n_times_;
-  params_joined_surv(Rcpp::List R_params_joined_survs) {
-    Rcpp::List R_params = Rcpp::as<Rcpp::List> (R_params_joined_survs["params"]);
-    times_ = Rcpp::as<std::vector<double> > (R_params_joined_survs["times"]);
-    n_times_ = times_.size();
-    for (int i = 0; i < R_params_joined_survs.size(); ++i){
-      Rcpp::List R_params_i = R_params[i];
-      params_[i] = params_surv(R_params_i);
-    }
-    n_samples_ = params_[0].n_samples_;    
-  }
-};
-
-/***************************************************************************//** 
  * Parameters of a multinomial logit model.
  ******************************************************************************/ 
 class params_mlogit  {

@@ -168,7 +168,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Input validation for class objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/hesim_data.R'><code>R/hesim_data.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/input_mats.R'><code>R/input_mats.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, and 2 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/hesim_data.R'><code>R/hesim_data.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/input_mats.R'><code>R/input_mats.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, and 4 more</small>
     <div class="hidden name"><code>check.Rd</code></div>
     </div>
 
@@ -188,20 +188,14 @@
 <span class='co'># S3 method for params_lm_list</span>
 <span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
-<span class='co'># S3 method for params_surv</span>
+<span class='co'># S3 method for params_mlogit</span>
 <span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
-<span class='co'># S3 method for params_mlogit</span>
+<span class='co'># S3 method for params_surv</span>
 <span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
 <span class='co'># S3 method for params_surv_list</span>
 <span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S3 method for params_joined_surv</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>inner_class</span><span class='op'>)</span>
-
-<span class='co'># S3 method for params_joined_surv_list</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>inner_class</span><span class='op'>)</span>
 
 <span class='co'># S3 method for tparams_mean</span>
 <span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -219,13 +213,13 @@
       <td><p>object to check.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to or from other methods.</p></td>
+    </tr>
+    <tr>
       <th>inner_class</th>
       <td><p>When checking a list of objects, the class of elements within
 the inner most list.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to or from other methods.</p></td>
     </tr>
     </table>
 

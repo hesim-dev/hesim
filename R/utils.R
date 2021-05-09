@@ -129,46 +129,6 @@ object_list <- function(..., inner_class, new_class){
   check_object_list(res, inner_class)
 }
 
-# Join objects at specified time points
-check_joined_object <- function(x, inner_class, model_list){
-  check_object_list(x$models, inner_class)
-  
-  if(model_list == FALSE){
-     check_joined_times(x$models, x$times)
-  } else {
-    if(!is.list(x$times)){
-      stop("'times' must be a list.", call. = FALSE)
-    }
-    for (i in 1:length(x$times)){
-      check_joined_times(x$models[[i]], x$times[[i]])
-    }
-  } 
-  return(x)
-}
-
-new_joined_object <- function(..., times, new_class){
-  objects <- create_object_list(...)
-  res <- list(models = objects, times = times)
-  class(res) <- new_class
-  return(res)
-}
-
-
-joined_object <- function(..., times, inner_class, new_class, model_list = FALSE){
-  res <- new_joined_object(..., times = times, new_class = new_class)
-  check_joined_object(res, inner_class, model_list)
-}
-
-check_joined_times <- function(objects, times){
-  stopifnot(is.vector(times))
-  stopifnot(is.numeric(times))
-  stopifnot(!is.unsorted(times))
-  if(length(objects) != (length(times) + 1)){
-    stop("Length of joined models must equal 'times' + 1.",
-         call. = FALSE)
-  }
-}
-
 # list to array
 list_to_array <- function(L){
   if (is.matrix(L[[1]]) == TRUE){

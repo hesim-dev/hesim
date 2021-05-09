@@ -2,7 +2,6 @@
 % Please edit documentation in R/input_mats.R
 \name{create_input_mats}
 \alias{create_input_mats}
-\alias{create_input_mats.formula_list}
 \alias{create_input_mats.lm}
 \alias{create_input_mats.lm_list}
 \alias{create_input_mats.flexsurvreg}
@@ -16,8 +15,6 @@
 \title{Create input matrices}
 \usage{
 create_input_mats(object, ...)
-
-\method{create_input_mats}{formula_list}(object, input_data, ...)
 
 \method{create_input_mats}{lm}(object, input_data, ...)
 

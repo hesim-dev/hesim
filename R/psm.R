@@ -191,8 +191,7 @@ PsmCurves <- R6::R6Class("PsmCurves",
         stop("'input_data' must be an object of class 'input_mats'",
             call. = FALSE)
       }
-      if(!inherits(self$params, c("params_surv_list", 
-                                  "joined_params_surv_list"))){
+      if(!inherits(self$params, c("params_surv_list"))){
         stop("Class of 'params' is not supported. See documentation.",
              call. = FALSE)
       }

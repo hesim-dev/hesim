@@ -71,16 +71,3 @@ test_that("create_params.partsurvfit() works as expected", {
   pars_surv_list <- create_params(partsurv_fit, n = 2)
   expect_equal(length(pars_surv_list), 2)
 })
-
-# params_joined_surv() ---------------------------------------------------------
-test_that("params_joined_surv", {
-  pars_joined_surv <- params_joined_surv(exp = params_surv_exp,
-                                         wei = params_surv_wei,
-                                         times = 3)
-  expect_true(inherits(pars_joined_surv, "params_joined_surv"))
-  expect_equal(length(pars_joined_surv$models), 2)
-  expect_equal(pars_joined_surv$times, 3)
-  
-  # errors
-  expect_error(params_joined_surv(exp = params_surv_exp, 5, times = 3))
-})

@@ -211,13 +211,20 @@ formula_list_rec <- function(object, input_data, ...){
   return(x)
 }
 
+#' Create input matrices from formula
+#' 
+#' This is an internal function for creating input matrices from formulas. It
+#' is currently used in some unit tests.
+#' @inheritParams create_input_mats
+#' @inherit create_input_mats return
 #' @export
-#' @rdname create_input_mats
+#' @keywords internal
+#' @seealso [create_input_mats()]
 create_input_mats.formula_list <- function(object, input_data, ...){
   check_edata(input_data)
   X_list <- formula_list_rec(object, input_data, ...)
   args <- c(list(X = X_list),
-           get_input_mats_id_vars(input_data))
+            get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
@@ -319,24 +326,6 @@ create_input_mats.flexsurvreg_list <- function(object, input_data,...){
 create_input_mats.partsurvfit <- function(object, input_data, ...){
   check_edata(input_data)
   return(create_input_mats.flexsurvreg_list(object$models, input_data, ...))
-}
-
-#' @export
-create_input_mats.joined_flexsurvreg_list <- function(object, input_data,...){
-  check_edata(input_data)
-  models <- object$models
-  X_list_3d <- vector(mode = "list", length = length(models))
-  names(X_list_3d) <- names(models)
-  for (i in 1:length(models)){
-    X_list_3d[[i]] <- vector(mode = "list", length = length(models[[i]]))
-    names(X_list_3d[[i]]) <- names(models[[i]])
-    for (j in 1:length(models[[i]])){
-      X_list_3d[[i]][[j]] <- create_input_mats_flexsurvreg_X(models[[i]][[j]], input_data, ...)
-    }
-  }
-  args <- c(list(X = X_list_3d),
-           get_input_mats_id_vars(input_data))
-  return(do.call("new_input_mats", args))
 }
 
 #' @export 

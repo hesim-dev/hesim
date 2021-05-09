@@ -48,18 +48,6 @@ check_params_list <- function(x){
   return(x)
 }
 
-new_params_joined <- function(..., times, inner_class){
-  objects <- create_object_list(...)
-  res <- list(models = objects, times = times)
-  class(res) <- paste0("params_joined", sub("params", "", inner_class))
-  return(res)
-}
-
-check_params_joined <- function(x, inner_class, model_list){
-  check_joined_object(x, inner_class = inner_class, model_list = model_list)
-  return(x)
-}
-
 create_params_list <- function(object, n, uncertainty, inner_class, new_class,
                                ...){
   n_objects <- length(object)
@@ -70,16 +58,6 @@ create_params_list <- function(object, n, uncertainty, inner_class, new_class,
   }
   return(new_params_list(params_list, inner_class = inner_class,
                          new_class = new_class))
-}
-
-create_params_joined <- function(object, n, uncertainty, inner_class){
-  n_models <- length(object$models)
-  models <- vector(mode = "list", length = n_models)
-  names(models) <- names(object$models)
-  for (i in 1:n_models){
-    models[[i]] <- create_params(object$models[[i]], n = n, uncertainty = uncertainty)
-  }
-  return(new_params_joined(models, times = object$times, inner_class = inner_class))
 }
 
 #' Create a parameter object from a fitted model
@@ -369,104 +347,3 @@ create_params.multinom_list <- function(object, n = 1000, uncertainty = c("norma
                             inner_class = "params_mlogit", new_class = "params_mlogit_list",
                             ...))
 }
-
-# Joined survival models -------------------------------------------------------
-#' Parameters of joined survival models
-#' 
-#' Create a list containing the parameters of survival models joined at specified time points. See
-#' \code{\link{joined}} for more details.
-#' @param ... Objects of class [`params_surv`], which can be named.
-#' @param times A numeric vector of times at which to join models.
-#' 
-#' @return An object of class `params_joined_surv`, which is a list containing two elements:
-#' \describe{
-#' \item{models}{A list of [`params_surv`] objects from each statistical model
-#' to be joined.}
-#' \item{times}{Equivalent to the argument `times`.}
-#' }
-#' @examples 
-#' library("flexsurv")
-#' fit_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
-#'                                  data = ovarian, dist = "exp")
-#' fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
-#'                                  data = ovarian, dist = "weibull")
-#' params_surv_exp <- create_params(fit_exp, n = 2)
-#' params_surv_wei <- create_params(fit_wei, n = 2)
-#' params_joined_surv <- params_joined_surv(exp = params_surv_exp,
-#'                                          wei = params_surv_wei,
-#'                                          times = 3)
-#' print(params_joined_surv)
-#' @export
-params_joined_surv <- function(..., times){
-  return(check(new_params_joined(..., times = times, inner_class = "params_surv"),
-               inner_class = "params_surv"))
-}
-
-#' @rdname check
-check.params_joined_surv <- function(object, inner_class){
-  check_params_joined(object, inner_class = inner_class, model_list = FALSE)
-}
-
-# Joined list of survival models -----------------------------------------------
-#' Parameters of joined lists of survival models
-#' 
-#' Create a list containing the parameters of multiple sets of survival models, each joined
-#' at specified time points. See [`joined`] for more details.
-#' @param ... Objects of class [`params_surv_list`], which can be named.
-#' @param times A list of sorted numeric vectors, with the length of each list element equal
-#' to the number of sets of models.
-#' 
-#' @return An object of class `params_joined_surv_list`, which is a list containing two elements:
-#' \describe{
-#' \item{models}{A list of [`params_surv_list`], each containing [`params_surv`] 
-#' objects to be joined.}
-#' \item{times}{Equivalent to the argument `times`.}
-#' }
-#' @examples 
-#' library("flexsurv")
-#' fit_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
-#'                                  data = ovarian, dist = "exp")
-#' fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
-#'                                  data = ovarian, dist = "weibull")
-#' fit_lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
-#'                                   data = ovarian, dist = "lognormal")
-#'
-#' params_exp <- create_params(fit_exp, n = 2)
-#' params_wei <- create_params(fit_wei, n = 2)
-#' params_lnorm <- create_params(fit_lnorm, n = 2)
-#'
-#' params_list1 <- params_surv_list(params_exp, params_wei)
-#' params_list2 <- params_surv_list(params_exp, params_lnorm)
-#' params_joined <- params_joined_surv_list(model1 = params_list1,
-#'                                          model2 = params_list2,
-#'                                          times = list(3, 5))
-#' print(params_joined)
-#' @export
-params_joined_surv_list <- function(..., times){
-  return(check(new_params_joined(..., times = times, inner_class = "params_surv_list"),
-               inner_class = "params_surv_list"))
-}
-
-#' @rdname check
-check.params_joined_surv_list <- function(object, inner_class){
-  check_params_joined(object, inner_class = inner_class, model_list = TRUE)
-}
-
-#' @export
-# #' @rdname create_params
-#' @keywords internal
-create_params.joined_flexsurvreg <- function(object, n = 1000, uncertainty = c("normal", "none"),
-                                             ...){
-  return(create_params_joined(object, n = n, uncertainty = uncertainty,
-                              inner_class =  "params_surv"))
-}
-
-#' @export
-# #' @rdname create_params
-#' @keywords internal
-create_params.joined_flexsurvreg_list <- function(object, n = 1000, uncertainty = c("normal", "none"),
-                                                  ...){
-  return(create_params_joined(object, n = n, uncertainty = uncertainty, 
-                              inner_class = "params_surv_list"))
-}
-

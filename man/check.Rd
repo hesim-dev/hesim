@@ -7,8 +7,6 @@
 \alias{check.params_lm}
 \alias{check.params_lm_list}
 \alias{check.params_mlogit}
-\alias{check.params_joined_surv}
-\alias{check.params_joined_surv_list}
 \alias{check.params_surv}
 \alias{check.params_surv_list}
 \alias{check.tparams_mean}
@@ -26,10 +24,6 @@
 
 \method{check}{params_mlogit}(object)
 
-\method{check}{params_joined_surv}(object, inner_class)
-
-\method{check}{params_joined_surv_list}(object, inner_class)
-
 \method{check}{params_surv}(object)
 
 \method{check}{params_surv_list}(object)
@@ -43,10 +37,10 @@ check(object, ...)
 \arguments{
 \item{object}{object to check.}
 
+\item{...}{Further arguments passed to or from other methods.}
+
 \item{inner_class}{When checking a list of objects, the class of elements within
 the inner most list.}
-
-\item{...}{Further arguments passed to or from other methods.}
 }
 \value{
 If validation is successful, returns the object in question; otherwise,

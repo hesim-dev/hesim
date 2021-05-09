@@ -170,7 +170,7 @@ then random samples from suitable probability distributions are returned." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a parameter object from a fitted model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_surv.R'><code>R/params_surv.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_surv_list.R'><code>R/params_surv_list.R</code></a></small>
     <div class="hidden name"><code>create_params.Rd</code></div>
     </div>
 
@@ -185,13 +185,13 @@ then random samples from suitable probability distributions are returned.</p>
 <span class='co'># S3 method for lm</span>
 <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='co'># S3 method for flexsurvreg</span>
-<span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
-
 <span class='co'># S3 method for multinom</span>
 <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for multinom_list</span>
+<span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for flexsurvreg</span>
 <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for flexsurvreg_list</span>
