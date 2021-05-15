@@ -49,15 +49,15 @@ test_that("params_surv() with vector passed to coefs", {
   expect_equal(nrow(p$coefs$rate), 10)
 })
 
+# params_surv() throws errors --------------------------------------------------
 test_that("params_surv() throws error if coef argument is not a list", {
   expect_error(
     params_surv(coefs = matrix(c(1, 2, 3, 4), nrow = 2),
-                           dist = "exponential"),
+                dist = "exponential"),
     "'coefs' must be a list."
   )
 })
 
-# params_surv() throws errors --------------------------------------------------
 test_that("params_surv() throws error if number of rows in coef matrices are unequal", {
   expect_error(
     params_surv(coefs = list(matrix(c(1, 2), nrow = 1),

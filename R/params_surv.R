@@ -158,7 +158,7 @@
 #' @aliases print.params_surv
 #' @export
 params_surv <- function(coefs, dist, aux = NULL){
-  coefs <- matlist(coefs)
+  coefs <- coeflist(coefs)
   n_samples <- get_n_samples(coefs)
   check(new_params_surv(coefs, dist, n_samples, aux))
 }
@@ -295,19 +295,8 @@ check.params_surv <- function(object){
 #' @rdname summary.params
 summary.params_surv <- function(object, prob = 0.95, ...) {
   
-  ci_coef <- function(x, prob) {
-    alpha <- ci_alpha(prob)
-    data.table(
-      term = colnames(x),
-      estimate = apply(x, 2, mean),
-      lower = apply(x, 2, stats::quantile, prob = alpha$lower),
-      upper = apply(x, 2, stats::quantile, prob = alpha$upper)
-    )
-  }
-
-  res <- rbindlist(lapply(object$coef, ci_coef, prob = prob),
-                   idcol = "parameter")
-  return(res)
+  rbindlist(lapply(object$coef, coef_summary, prob = prob),
+            idcol = "parameter")
 }
 
 # print.params_surv() ----------------------------------------------------------

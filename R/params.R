@@ -60,6 +60,17 @@ create_params_list <- function(object, n, uncertainty, inner_class, new_class,
                          new_class = new_class))
 }
 
+coef_summary <- function(x, prob) {
+  alpha <- ci_alpha(prob)
+  data.table(
+    term = colnames(x),
+    estimate = apply(x, 2, mean),
+    lower = apply(x, 2, stats::quantile, prob = alpha$lower),
+    upper = apply(x, 2, stats::quantile, prob = alpha$upper)
+  )
+}
+
+# create_params generic method -------------------------------------------------
 #' Create a parameter object from a fitted model
 #' 
 #' `create_params` is a generic function for creating an object containing 
@@ -225,125 +236,3 @@ create_params.lm_list <- function(object, n = 1000, uncertainty = c("normal", "n
                             inner_class = "params_lm", new_class = "params_lm_list"))
 }
 
-
-# Multinomial logit model ------------------------------------------------------
-#' Parameters of a multinomial logit model
-#' 
-#' Store the parameters of a fitted multinomial logistic 
-#' regression model. The model is used to predict probabilities of \eqn{K} 
-#' classes.
-#' @param coefs  A 3D array of stacked matrices. The number of matrices (i.e.,
-#' the number of slices in the cube) should be equal to \eqn{K-1}. Each 
-#' matrix is contains samples of the regression coefficients under sampling uncertainty
-#' corresponding to a particular class. Rows index parameter samples and 
-#'  columns index coefficients.
-#' 
-#' @details Multinomial logit models are used to predict the probability of 
-#' membership for subject \eqn{i} in each of \eqn{K} classes as a function of covariates:
-#' \deqn{Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}}
-#' @return An object of class `params_mlogit`, which is a list containing `coefs`
-#' and `n_samples`, where `n_samples` is equal to the number of rows
-#' in each element of `coefs`.
-#' @examples 
-#' params <- params_mlogit(coefs = array(
-#'   c(matrix(c(intercept = 0, treatment = log(.75)), nrow = 1),
-#'     matrix(c(intercept = 0, treatment = log(.8)), nrow = 1)),
-#'   dim = c(1, 2, 2)
-#' )) 
-#' @export
-params_mlogit <- function(coefs){
-  n_samples <- get_n_samples(coefs)
-  return(check(new_params_mlogit(coefs, n_samples)))
-}
-
-new_params_mlogit <- function(coefs, n_samples){
-  stopifnot(is.numeric(n_samples))
-  res <- list(coefs = coefs, n_samples = n_samples)
-  class(res) <- "params_mlogit"
-  return(res)
-}
-
-#' @rdname check
-check.params_mlogit <- function(object){
-  if (!is.numeric(object$coefs)) stop("'coefs' must be a numeric array.")
-  return(object)
-}
-
-#' Parameters of a list of multinomial logit models
-#' 
-#' Create a list containing the parameters of multiple fitted multinomial logit models.
-#' @param ... Objects of class [`params_mlogit`], which can be named.
-#' 
-#' @return An object of class `params_mlogit_list`, which is a list containing 
-#' [`params_mlogit`] objects.
-#' @export
-params_mlogit_list <- function(...){
-  return(check(new_params_list(..., inner_class = "params_mlogit", 
-                               new_class = "params_mlogit_list")))
-}
-
-create_coef_multinom <- function(object, n = 1000, uncertainty){
-  # Extract/simulate coefficients
-  coefs <- c(t(stats::coef(object)))
-  if (uncertainty == "normal"){
-    coefs_sim <- MASS::mvrnorm(n = n, 
-                               mu = coefs,
-                               Sigma = stats::vcov(object))
-    if (n == 1) coefs_sim <- matrix(coefs_sim, nrow = 1)
-  } else{
-    coefs_sim <- matrix(coefs, nrow = 1)
-  }
-  coefs_est <- stats::coef(object) # The point estimate
-  if (is_1d_vector(coefs_est)){
-    coefs_est <- matrix(coefs_est, nrow = 1)
-    colnames(coefs_est) <- names(stats::coef(object))
-  } 
-  
-  # Store coefficients in array
-  p <- ncol(coefs_est)
-  K <- nrow(coefs_est)
-  coefs_sim_array <- array(NA, dim = c(nrow(coefs_sim), p, K))
-  start_col <- 1
-  end_col <- p
-  for (j in 1:K){
-    coefs_sim_array[, , j] <- coefs_sim[, start_col:end_col, drop = FALSE]
-    start_col <- end_col + 1
-    end_col <- end_col + p
-  } 
-  
-  # Array dimension names
-  class_names <- NULL
-  if(length(object$lev)) class_names < object$lev[-1L]
-  if(length(object$lab)) class_names <- object$lab[-1L]
-  dimnames(coefs_sim_array) <- list(NULL,
-                                    colnames(coefs_est),
-                                    class_names)
-  
-  # Return
-  return(coefs_sim_array)
-}
-
-#' @export
-#' @rdname create_params
-create_params.multinom <- function(object, n = 1000, uncertainty = c("normal", "none"),
-                                   ...){
-  uncertainty <- deprecate_point_estimate(list(...)$point_estimate, uncertainty,
-                                          missing(uncertainty))
-  uncertainty <- match.arg(uncertainty)
-  coefs <- create_coef_multinom(object, n, uncertainty)
-  if (uncertainty == "none"){
-    n_samples <- 1
-  } else{
-    n_samples <- n
-  }
-  return(new_params_mlogit(coefs = coefs,
-                          n_samples = n_samples))
-}
-
-#' @export
-#' @rdname create_params
-create_params.multinom_list <- function(object, n = 1000, uncertainty = c("normal", "none"), ...){
-  return(create_params_list(object, n = n, uncertainty = uncertainty, 
-                            inner_class = "params_mlogit", new_class = "params_mlogit_list",
-                            ...))
-}

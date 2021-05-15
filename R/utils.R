@@ -129,17 +129,6 @@ object_list <- function(..., inner_class, new_class){
   check_object_list(res, inner_class)
 }
 
-# list to array
-list_to_array <- function(L){
-  if (is.matrix(L[[1]]) == TRUE){
-      array(unlist(L), dim = c(nrow(L[[1]]), ncol(L[[1]]), length(L)))
-  } else if (is.vector(L[[1]]) == TRUE){
-      array(unlist(L), dim = c(1, length(L[[1]]), length(L)))
-  } else{
-      stop("List must contain matrices or vectors")
-  }
-}
-
 # List depth
 list_depth <- function(list) {
   ifelse(is.list(list), 1L + max(sapply(list, list_depth)), 0L)
@@ -237,17 +226,21 @@ format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
 }
 
 # List of matrices -------------------------------------------------------------
-matlist <- function(coefs){
+coeflist <- function(coefs){
   if (inherits(coefs, "list")) {
-    coefs <- lapply(coefs, as.matrix)
+    coefs <- lapply(coefs, function(x) {
+      x <- as.matrix(x)
+      if (is.null(colnames(x))) colnames(x) <- paste0("x", 1:ncol(x))
+      x
+    })
   } else {
     stop("'coefs' must be a list.", call. = FALSE)
   }
-  class(coefs) <- "matlist"
+  class(coefs) <- "coeflist"
   return(coefs)
 }
 
-check.matlist <- function(coefs){
+check.coeflist <- function(coefs){
   # Each element of 'coefs' must be a matrix
   matrix_bool <- unlist(lapply(coefs, is.matrix))
   if(sum(!matrix_bool) > 0){
@@ -278,7 +271,7 @@ get_n_samples.default <- function(x) {
   }
 } 
 
-get_n_samples.matlist <- function(x){
+get_n_samples.coeflist <- function(x){
   stopifnot(is.list(x))
   if (!is.matrix(x[[1]])){
     stop("'coefs' must be a list of matrices.", call. = FALSE)
