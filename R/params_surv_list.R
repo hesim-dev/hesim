@@ -39,8 +39,7 @@ check.params_surv_list <- function(object){
 #' @export
 #' @rdname summary.params
 summary.params_surv_list <- function(object, prob = 0.95, ...) {
-  res <- lapply(object, summary)
-  rbindlist(res, idcol = "model")
+  summary_params_list(object, prob, ...)
 }
 
 # print.params_surv_list() ----------------------------------------------------------
@@ -48,7 +47,7 @@ summary.params_surv_list <- function(object, prob = 0.95, ...) {
 print.params_surv_list <- function(x, ...) {
   
   # Standard output
-  cat("A \"params_surv_list\" object:\n\n")
+  cat("A \"params_surv_list\" object \n\n")
   cat("Summary of coefficient estimates:\n")
   print(summary(x))
   cat("\n")

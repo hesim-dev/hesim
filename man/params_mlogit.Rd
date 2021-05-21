@@ -8,21 +8,24 @@
 params_mlogit(coefs)
 }
 \arguments{
-\item{coefs}{A 3D array of stacked matrices. The number of matrices (i.e.,
-the number of slices in the cube) should be equal to \eqn{K-1}. Each
-matrix contains samples of the regression coefficients under sampling uncertainty
-corresponding to a particular class. Rows index parameter samples and
-columns index coefficients.}
+\item{coefs}{A 3D array of stacked matrices containing samples of the regression
+coefficients under sampling uncertainty. May also be a
+list of objects (e.g., data frames) that can be coerced into matrices with
+\code{as.matrix()}. Each matrix must have the same number of columns and the
+number of matrices must be equal to \eqn{K-1}.}
 }
 \value{
 An object of class \code{params_mlogit}, which is a list containing \code{coefs}
-and \code{n_samples}, where \code{n_samples} is equal to the number of rows
-in each element of \code{coefs}.
+and \code{n_samples}, where \code{n_samples} is equal to the number of rows in each
+element of \code{coefs}. The \code{coefs} element is always converted into
+a 3D array of stacked matrices.
 }
 \description{
 Store the parameters of a fitted multinomial logistic
 regression model. The model is used to predict probabilities of \eqn{K}
-classes.
+classes, which represent the probability of transitioning to particular health
+state in a discrete time state transition model. Can be used as an element of a
+\code{\link{params_mlogit_list}} to parameterize a \code{\link{CohortDtstmTrans}} object.
 }
 \details{
 Multinomial logit models are used to predict the probability of
@@ -30,14 +33,19 @@ membership for subject \eqn{i} in each of \eqn{K} classes as a function of covar
 \deqn{Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}}
 }
 \examples{
+# Consider a sick-sicker model and model transitions from the sick state
+
+## We can conveniently instantiate from a list of matrices
 params <- params_mlogit(
   coefs = list(
-    healthy_to_sick = data.frame(
+    ### Transition from sick to sicker
+    sicker = data.frame(
       intercept = c(-0.33, -.2, -.15),
       treat = c(log(.75), log(.8), log(.9))
     ),
-   
-    healthy_to_death = data.frame(
+    
+   ### Transition from sick to death
+    death = data.frame(
       intercept = c(-1, -1.2, -.5),
       treat = c(log(.6), log(.65), log(.55))
     )
@@ -45,4 +53,27 @@ params <- params_mlogit(
 )
 summary(params)
 params
+
+## We can also less conveniently instantiate from an array
+coefs_sicker <- data.frame(
+  intercept = c(-0.33, -.2, -.15),
+  treat = c(log(.75), log(.8), log(.9))
+)
+coefs_death <- data.frame(
+  intercept = c(-1, -1.2, -.5),
+  treat = c(log(.6), log(.65), log(.55))
+)
+
+params2 <- params_mlogit(
+  coefs <- array(
+    data = c(as.matrix(coefs_sicker),
+             as.matrix(coefs_death)),
+    dim = c(3, 2, 2),
+    dimnames = list(NULL, c("intercept", "treat"), c("sicker", "death"))
+  )
+)
+params2
+}
+\seealso{
+\code{\link[=summary.params_mlogit]{summary.params_mlogit()}}, \code{\link[=params_mlogit_list]{params_mlogit_list()}}, \code{\link{CohortDtstmTrans}}
 }

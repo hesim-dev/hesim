@@ -15,4 +15,41 @@ An object of class \code{params_mlogit_list}, which is a list containing
 }
 \description{
 Create a list containing the parameters of multiple fitted multinomial logit models.
+Can be used to parameterize state transitions in a discrete time transition model
+by passing to the \code{params} field of a \code{\link{CohortDtstmTrans}} object.
+}
+\examples{
+# Consider a sick-sicker model
+
+params <- params_mlogit_list(
+  ## Transitions from sick state (sick -> sicker, sick -> death)
+  sick = params_mlogit(
+    coefs = list(
+      sicker = data.frame(
+        intercept = c(-0.33, -.2),
+        treat = c(log(.75), log(.8))
+      ),
+      death = data.frame(
+        intercept = c(-1, -1.2),
+        treat = c(log(.6), log(.65))
+      )
+    )
+  ),
+  
+  ## Transitions from sicker state (sicker -> death)
+  sicker = params_mlogit(
+    coefs = list(
+      death = data.frame(
+        intercept = c(-1.5, -1.4),
+        treat = c(log(.5), log(.55))
+      )
+    )
+  )
+)
+summary(params)
+params
+
+}
+\seealso{
+\code{\link[=summary.params_mlogit_list]{summary.params_mlogit_list()}}, \code{\link[=params_mlogit]{params_mlogit()}}, \code{\link{CohortDtstmTrans}}
 }

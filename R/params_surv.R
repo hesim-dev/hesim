@@ -304,7 +304,7 @@ summary.params_surv <- function(object, prob = 0.95, ...) {
 print.params_surv <- function(x, ...) {
   
   # Standard output
-  cat("A \"params_surv\" object:\n\n")
+  cat("A \"params_surv\" object \n\n")
   cat("Summary of coefficient estimates:\n")
   print(summary(x))
   cat("\n")

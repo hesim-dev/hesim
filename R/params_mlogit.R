@@ -21,28 +21,38 @@ coeflist_to_array <- function(coefs) {
 #' 
 #' Store the parameters of a fitted multinomial logistic 
 #' regression model. The model is used to predict probabilities of \eqn{K} 
-#' classes.
-#' @param coefs  A 3D array of stacked matrices. The number of matrices (i.e.,
-#' the number of slices in the cube) should be equal to \eqn{K-1}. Each 
-#' matrix contains samples of the regression coefficients under sampling uncertainty
-#' corresponding to a particular class. Rows index parameter samples and 
-#' columns index coefficients.
+#' classes, which represent the probability of transitioning to particular health
+#' state in a discrete time state transition model. Can be used as an element of a
+#' [`params_mlogit_list`] to parameterize a [`CohortDtstmTrans`] object.
+#' @param coefs  A 3D array of stacked matrices containing samples of the regression 
+#' coefficients under sampling uncertainty. May also be a 
+#' list of objects (e.g., data frames) that can be coerced into matrices with 
+#' `as.matrix()`. Each matrix must have the same number of columns and the 
+#' number of matrices must be equal to \eqn{K-1}.
 #' 
 #' @details Multinomial logit models are used to predict the probability of 
 #' membership for subject \eqn{i} in each of \eqn{K} classes as a function of covariates:
 #' \deqn{Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}}
-#' @return An object of class `params_mlogit`, which is a list containing `coefs`
-#' and `n_samples`, where `n_samples` is equal to the number of rows
-#' in each element of `coefs`.
+#' @return An object of class `params_mlogit`, which is a list containing `coefs` 
+#' and `n_samples`, where `n_samples` is equal to the number of rows in each
+#'  element of `coefs`. The `coefs` element is always converted into
+#' a 3D array of stacked matrices.
+#' 
+#' @seealso [summary.params_mlogit()], [params_mlogit_list()], [`CohortDtstmTrans`]
 #' @examples 
+#' # Consider a sick-sicker model and model transitions from the sick state
+#' 
+#' ## We can conveniently instantiate from a list of matrices
 #' params <- params_mlogit(
 #'   coefs = list(
-#'     healthy_to_sick = data.frame(
+#'     ### Transition from sick to sicker
+#'     sicker = data.frame(
 #'       intercept = c(-0.33, -.2, -.15),
 #'       treat = c(log(.75), log(.8), log(.9))
 #'     ),
-#'    
-#'     healthy_to_death = data.frame(
+#'     
+#'    ### Transition from sick to death
+#'     death = data.frame(
 #'       intercept = c(-1, -1.2, -.5),
 #'       treat = c(log(.6), log(.65), log(.55))
 #'     )
@@ -50,6 +60,26 @@ coeflist_to_array <- function(coefs) {
 #' )
 #' summary(params)
 #' params
+#' 
+#' ## We can also less conveniently instantiate from an array
+#' coefs_sicker <- data.frame(
+#'   intercept = c(-0.33, -.2, -.15),
+#'   treat = c(log(.75), log(.8), log(.9))
+#' )
+#' coefs_death <- data.frame(
+#'   intercept = c(-1, -1.2, -.5),
+#'   treat = c(log(.6), log(.65), log(.55))
+#' )
+#' 
+#' params2 <- params_mlogit(
+#'   coefs <- array(
+#'     data = c(as.matrix(coefs_sicker),
+#'              as.matrix(coefs_death)),
+#'     dim = c(3, 2, 2),
+#'     dimnames = list(NULL, c("intercept", "treat"), c("sicker", "death"))
+#'   )
+#' )
+#' params2
 #' @aliases print.params_mlogit
 #' @export
 params_mlogit <- function(coefs){
@@ -80,20 +110,20 @@ check.params_mlogit <- function(object){
 summary.params_mlogit <- function(object, prob = 0.95, ...) {
   
  rbindlist(apply(object$coef, 3, coef_summary, prob = prob),
-          idcol = "transition")
+          idcol = "to")
 }
 
 # print.params_mlogit() --------------------------------------------------------
 #' @export
 print.params_mlogit <- function(x, ...) {
   
-  cat("A \"params_mlogit\" object:\n\n")
+  cat("A \"params_mlogit\" object\n\n")
   cat("Summary of coefficient estimates:\n")
   print(summary(x))
   cat("\n")
   cat(paste0("Number of parameter samples: ", x$n_samples))
   cat("\n")
-  cat(paste0("Number of health states: ",  dim(x$coefs)[3] + 1))
+  cat(paste0("Number of transitions: ",  dim(x$coefs)[3]))
 
   invisible(x)
 }

@@ -123,7 +123,7 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
 
   public = list(
     #' @field params Parameters for simulating health state transitions.
-    #' Supports objects of class [`tparams_transprobs`] or [`params_mlogit`].
+    #' Supports objects of class [`tparams_transprobs`] or [`params_mlogit_list`].
     params = NULL,
     
     #' @field input_data An object of class [`input_mats`].

@@ -4,12 +4,12 @@ context("params_mlogit.R unit tests")
 test_that("params_mlogit() works with a list of data frames", {
   p <- params_mlogit(
     coefs = list(
-      healthy_to_sick = data.frame(
+      sicker = data.frame(
         intercept = c(-0.33, -.2),
         treat = c(log(.75), log(.8))
       ),
       
-      healthy_to_death = data.frame(
+      death = data.frame(
         intercept = c(-1, -1.2),
         treat = c(log(.6), log(.65))
       )
@@ -22,8 +22,8 @@ test_that("params_mlogit() works with a list of data frames", {
 test_that("params_mlogit() works with a list of matrices", {
   p <- params_mlogit(
     coefs = list(
-      healthy_to_sick = matrix(1:4, 2, 2),
-      healthy_to_death = matrix(1:4, 2, 2)
+      sicker = matrix(1:4, 2, 2),
+      death = matrix(1:4, 2, 2)
     )
   )
   expect_true(inherits(p, "params_mlogit"))
@@ -62,12 +62,12 @@ test_that("params_mlogit() coefficients must be a 3D array", {
 test_that("summary.params_mlogit()", {
   p <- params_mlogit(
     coefs = list(
-      healthy_to_sick = data.frame(
+      sicker = data.frame(
         intercept = c(-0.30, -.2),
         treat = c(-.3, -.1)
       ),
       
-      healthy_to_death = data.frame(
+      death = data.frame(
         intercept = c(-1, -1.2),
         treat = c(-.5, -.4)
       )
@@ -75,8 +75,7 @@ test_that("summary.params_mlogit()", {
   )
   ps <- summary(p)
   expect_true(inherits(ps, "data.table"))
-  expect_equal(ps$transition, rep(c("healthy_to_sick", "healthy_to_death"), 
-                                  each = 2))
+  expect_equal(ps$to, rep(c("sicker", "death"), each = 2))
   expect_equal(ps$term, rep(c("intercept", "treat"), 2))
   expect_equal(ps$estimate, c(-.25, -.2, -1.1, -.45))
 })
@@ -86,8 +85,8 @@ test_that("print.params_mlogit() works as expected", {
   p <- params_mlogit(
     coefs = array(1:16, dim = c(4, 2, 2))
   )
-  expect_output(print(p), "A \"params_mlogit\" object:")
+  expect_output(print(p), "A \"params_mlogit\" object")
   expect_output(print(p), "Summary of coefficient estimates:")
   expect_output(print(p), "Number of parameter samples: 4")
-  expect_output(print(p), "Number of health states: 3")
+  expect_output(print(p), "Number of transitions: 2")
 })

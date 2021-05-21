@@ -53,7 +53,7 @@ transmod$sim_stateprobs(n_cycles = 2)
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{params}}{Parameters for simulating health state transitions.
-Supports objects of class \code{\link{tparams_transprobs}} or \code{\link{params_mlogit}}.}
+Supports objects of class \code{\link{tparams_transprobs}} or \code{\link{params_mlogit_list}}.}
 
 \item{\code{input_data}}{An object of class \code{\link{input_mats}}.}
 

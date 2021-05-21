@@ -70,6 +70,11 @@ coef_summary <- function(x, prob) {
   )
 }
 
+summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {
+  res <- lapply(object, summary)
+  rbindlist(res, idcol = idcol)
+}
+
 # create_params generic method -------------------------------------------------
 #' Create a parameter object from a fitted model
 #' 

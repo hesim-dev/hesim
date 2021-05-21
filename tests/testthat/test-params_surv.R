@@ -147,7 +147,7 @@ test_that("summary.params_surv()", {
 test_that("print.params_surv() works as expected", {
   p <- params_surv(coefs = list(rate = rep(3, 10)),
                    dist = "exp")
-  expect_output(print(p), "A \"params_surv\" object:")
+  expect_output(print(p), "A \"params_surv\" object")
   expect_output(print(p), "Summary of coefficient estimates:")
   expect_output(print(p), "Number of parameter samples: 10")
   expect_output(print(p), "Distribution: exp")
