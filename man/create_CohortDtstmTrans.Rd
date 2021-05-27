@@ -4,6 +4,7 @@
 \alias{create_CohortDtstmTrans}
 \alias{create_CohortDtstmTrans.multinom_list}
 \alias{create_CohortDtstmTrans.msm}
+\alias{create_CohortDtstmTrans.params_mlogit_list}
 \title{Create \code{CohortDtstmTrans} object}
 \usage{
 create_CohortDtstmTrans(object, ...)
@@ -25,11 +26,14 @@ create_CohortDtstmTrans(object, ...)
   uncertainty = c("normal", "none"),
   ...
 )
+
+\method{create_CohortDtstmTrans}{params_mlogit_list}(object, input_data, trans_mat, ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class.}
 
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
+\item{...}{Further arguments passed to \code{CohortDtstmTrans$new()} in
+\code{\link{CohortDtstmTrans}}.}
 
 \item{input_data}{An object of class \code{expanded_hesim_data} returned by
 \code{\link[=expand.hesim_data]{expand.hesim_data()}}}

@@ -393,6 +393,63 @@ test_that(paste0("create_CohortDtstmTrans does not support offset term ",
                "An offset is not supported")
 })
 
+# Create model from a params_mlogit_list object --------------------------------
+input_dat <- expand(hesim_dat)
+input_dat[, intercept := 1L]
+input_dat[, intervention := ifelse(strategy_name == "Intervention", 1L, 0L)]
+tmat <- rbind(
+  c(0, 1, 2),
+  c(NA, 0, 1),
+  c(NA, NA, NA)
+)
+
+p <- params_mlogit_list(
+  ## Transitions from sick state (sick -> sicker, sick -> death)
+  sick = params_mlogit(
+    coefs = list(
+      sicker = data.frame(
+        intercept = c(-0.33, -.2),
+        intervention = c(log(.75), log(.8))
+      ),
+      death = data.frame(
+        intercept = c(-1, -1.2),
+        strategy_name = c(log(.6), log(.65))
+      )
+    )
+  ),
+  
+  ## Transitions from sicker state (sicker -> death)
+  sicker = params_mlogit(
+    coefs = list(
+      death = data.frame(
+        intercept = c(-1.5, -1.4),
+        intervention = c(log(.5), log(.55))
+      )
+    )
+  )
+)
+
+test_that("create_CohortDtstmTrans.params_mlogit_list works as expcted", {
+  transmod <- create_CohortDtstmTrans(p, input_data = input_dat, trans_mat = tmat)
+  expect_true(inherits(transmod, "CohortDtstmTrans"))
+  expect_equal(
+    unique(c(sapply(transmod$input_data$X, colnames))),
+    c("intercept", "intervention")
+  )
+})
+
+test_that("create_CohortDtstmTrans requires numeric input data when built from params objects", {
+  p2 <- p
+  dimnames(p2$sick$coefs)[[2]][2] <- "strategy_name"
+  dimnames(p2$sicker$coefs)[[2]][2] <- "strategy_name"
+  
+  expect_error(
+    create_CohortDtstmTrans(p2, input_data = input_dat, trans_mat = tmat),
+    "'data' must only include numeric variables."
+  )
+})
+
+
 # Create model from a msm object -----------------------------------------------
 set.seed(101)
 strategies <- data.table(strategy_id = c(1, 2, 3),

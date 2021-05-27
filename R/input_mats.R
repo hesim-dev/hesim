@@ -1,4 +1,4 @@
-# input_mats class -------------------------------------------------------------
+# Input matrices class ---------------------------------------------------------
 #' Input matrices for a statistical model
 #' 
 #' Create an object of class `input_mats`, which contains inputs matrices
@@ -91,7 +91,7 @@ check.input_mats <- function(object){
   check(do.call("id_attributes", id_args))
 }
 
-# Create input data from a fitted model ----------------------------------------
+# Helper functions to create input matrices ------------------------------------
 size_id_map <- function(){
   c(strategy_id = "n_strategies", 
     patient_id = "n_patients",
@@ -138,16 +138,27 @@ check_edata <- function(data){
 extract_X <- function(coef_mat, data){
   varnames <- colnames(coef_mat)
   if (is.null(varnames)){
-    stop("Variable names for coefficients cannot be NULL.")
+    stop("Variable names for coefficients cannot be NULL.",
+         call. = FALSE)
   }
   if(!all(varnames %in% colnames(data))){
     stop("Not all variables in 'object' are contained in 'data'.",
          call. = FALSE)
   }  
   X <- as.matrix(data[, varnames, with = FALSE])
+  if (!is.numeric(X)) {
+    stop("'data' must only include numeric variables.",
+         call. = FALSE)
+  }
   return(X)
 }
 
+get_terms <- function(object){
+  tt <- stats::terms(object)
+  return(stats::delete.response(tt))
+}
+
+# Generic method for creating input matrices  ----------------------------------
 #' Create input matrices
 #' 
 #' \code{create_input_mats} is a generic function for creating an object of class
@@ -198,6 +209,7 @@ create_input_mats <- function (object, ...) {
   UseMethod("create_input_mats", object)
 }
 
+# Create input matrices from formula  ------------------------------------------
 formula_list_rec <- function(object, input_data, ...){
   x <- vector(mode = "list", length = length(object))
   names(x) <- names(object)
@@ -228,11 +240,7 @@ create_input_mats.formula_list <- function(object, input_data, ...){
   return(do.call("new_input_mats", args))
 }
 
-get_terms <- function(object){
-  tt <- stats::terms(object)
-  return(stats::delete.response(tt))
-}
-
+# Create input matrices from lm  -----------------------------------------------
 #' @export 
 #' @rdname create_input_mats
 create_input_mats.lm <- function(object, input_data, ...){
@@ -259,6 +267,7 @@ create_input_mats.lm_list <- function(object, input_data, ...){
   return(do.call("new_input_mats", args))
 }
 
+# Create input matrices from flexsurvreg  --------------------------------------
 create_input_mats_flexsurvreg_X <- function(object, input_data, ...){
   
   # Based on flexsurv:::form.model.matrix()
@@ -321,6 +330,7 @@ create_input_mats.flexsurvreg_list <- function(object, input_data,...){
   return(do.call("new_input_mats", args))
 }
 
+# Create input matrices from partsurvfit  --------------------------------------
 #' @export
 #' @rdname create_input_mats
 create_input_mats.partsurvfit <- function(object, input_data, ...){
@@ -328,6 +338,7 @@ create_input_mats.partsurvfit <- function(object, input_data, ...){
   return(create_input_mats.flexsurvreg_list(object$models, input_data, ...))
 }
 
+# Create input matrices from params_lm  ----------------------------------------
 #' @export 
 #' @rdname create_input_mats
 create_input_mats.params_lm <- function(object, input_data, ...){
@@ -338,7 +349,8 @@ create_input_mats.params_lm <- function(object, input_data, ...){
   return(do.call("new_input_mats", args))
 }
 
-create_input_mats.params_surv_X <- function(object, input_data){
+# Create input matrices from params_surv  --------------------------------------
+create_input_mats_params_surv_X <- function(object, input_data){
   X_list <- vector(mode = "list", length = length(object$coefs))
   names(X_list) <- names(object$coefs)
   for (i in 1:length(X_list)){
@@ -351,7 +363,7 @@ create_input_mats.params_surv_X <- function(object, input_data){
 #' @rdname create_input_mats
 create_input_mats.params_surv <- function(object, input_data, ...){
   check_edata(input_data)
-  X_list <- create_input_mats.params_surv_X(object, input_data)
+  X_list <- create_input_mats_params_surv_X(object, input_data)
   args <- c(list(X = X_list),
             get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
@@ -363,13 +375,14 @@ create_input_mats.params_surv_list <- function(object, input_data, ...){
   X_list_2d <- vector(mode = "list", length = length(object))
   names(X_list_2d) <- names(object)
   for (i in 1:length(object)){
-    X_list_2d[[i]] <- create_input_mats.params_surv_X(object[[i]], input_data)
+    X_list_2d[[i]] <- create_input_mats_params_surv_X(object[[i]], input_data)
   }
   args <- c(list(X = X_list_2d),
             get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
 
+# Create input matrices from multinom  -----------------------------------------
 create_input_mats_multinom_X <- function(object, input_data, ...){
   check_edata(input_data)
   terms <- get_terms(object)
@@ -387,7 +400,7 @@ create_input_mats_multinom_X <- function(object, input_data, ...){
 #' @rdname create_input_mats
 create_input_mats.multinom <- function(object, input_data, ...){
   X <- create_input_mats_multinom_X(object, input_data, ...)
-  args <- c(list(X = X ),
+  args <- c(list(X = X),
             get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
 }
@@ -399,6 +412,36 @@ create_input_mats.multinom_list <- function(object, input_data, ...){
   names(X_list) <- names(object)
   for (i in 1:length(object)){
     X_list[[i]] <- create_input_mats_multinom_X(object[[i]], input_data, ...)
+  }
+  args <- c(list(X = X_list),
+            get_input_mats_id_vars(input_data))
+  return(do.call("new_input_mats", args))
+}
+
+# Create input matrices from mlogit  -------------------------------------------
+create_input_mats_params_mlogit_X <- function(object, input_data){
+  X_list <- vector(mode = "list", length = dim(object$coefs)[3])
+  names(X_list) <- dimnames(object$coefs)[[3]]
+  for (i in 1:length(X_list)){
+    X_list[[i]] <- extract_X(object$coefs[,, i], input_data)
+  }
+  return(X_list)
+}
+
+create_input_mats.params_mlogit <- function(object, input_data, ...){
+  check_edata(input_data)
+  X_list <- create_input_mats_params_mlogit_X(object, input_data)
+  args <- c(list(X = extract_X(object$coefs[,, 1], input_data)),
+            get_input_mats_id_vars(input_data))
+  return(do.call("new_input_mats", args))
+}
+
+#' @export 
+#' @rdname create_input_mats
+create_input_mats.params_mlogit_list <- function(object, input_data, ...){
+  X_list <- vector(mode = "list", length = length(object))
+  for (i in 1:length(object)){
+    X_list[[i]] <- extract_X(object[[i]]$coefs[, , 1], input_data)
   }
   args <- c(list(X = X_list),
             get_input_mats_id_vars(input_data))

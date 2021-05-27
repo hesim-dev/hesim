@@ -4,13 +4,21 @@
 #' @description
 #' Simulate health state transitions in a cohort discrete time state transition model.
 #' @format An [R6::R6Class] object.
-#' @seealso [create_CohortDtstmTrans()], [CohortDtstm]
+#' @seealso [create_CohortDtstmTrans()] creates a [`CohortDtstmTrans`] object from either
+#' a fitted statistical model or a parameter object. A complete economic model can be implemented
+#' with [`CohortDtstm`]. `vignette("mlogit")` provides an example model in which transition
+#' probabilities are estimated using multinomial logistic regression with [nnet::multinom()].
 #' @examples 
 #' library("msm")
 #' library("data.table")
 #' set.seed(101)
 #' 
-#' # Model setup
+#' # We consider two examples that have the same treatment strategies and patients.
+#' # One model is parameterized by fitting a multi-state model with the "msm"
+#' # package; in the second model, the parameters are entered "manually" with 
+#' # a "params_mlogit_list" object.
+#' 
+#' # MODEL SETUP
 #' strategies <- data.table(
 #'   strategy_id = c(1, 2, 3),
 #'   strategy_name = c("SOC", "New 1", "New 2")
@@ -21,8 +29,8 @@
 #'   patients = patients
 #' )
 #'   
-#' 
-#' # Fit multi-state model with panel data via msm
+#' # EXAMPLE #1: msm
+#' ## Fit multi-state model with panel data via msm
 #' qinit <- rbind(
 #'   c(0, 0.28163, 0.01239),
 #'   c(0, 0, 0.10204),
@@ -33,7 +41,7 @@
 #'            covariates = list("1-2" =~ strategy_name), 
 #'            qmatrix = qinit)
 #' 
-#' # Simulation model
+#' ## Simulation model
 #' transmod_data <- expand(hesim_dat)
 #' transmod <- create_CohortDtstmTrans(fit,
 #'                                     input_data = transmod_data,
@@ -41,6 +49,66 @@
 #'                                     fixedpars = 2,
 #'                                     n = 2)
 #' transmod$sim_stateprobs(n_cycles = 2)
+#' 
+#' # EXAMPLE #2: params_mlogit_list
+#' ## Input data
+#' transmod_data[, intercept := 1]
+#' transmod_data[, new1 := ifelse(strategy_name == "New 1", 1, 0)]
+#' transmod_data[, new2 := ifelse(strategy_name == "New 2", 1, 0)]
+#' 
+#' ## Parameters
+#' n <- 10
+#' transmod_params <- params_mlogit_list(
+#'   
+#'   ## Transitions from stable state (stable -> progression, stable -> death)
+#'   stable = params_mlogit(
+#'     coefs = list(
+#'       progression = data.frame(
+#'         intercept = rnorm(n, -0.65, .1),
+#'         new1 = rnorm(n, log(.8), .02),
+#'         new2 = rnorm(n, log(.7, .02))
+#'       ),
+#'       death = data.frame(
+#'         intercept = rnorm(n, -3.75, .1),
+#'         new1 = rep(0, n),
+#'         new2 = rep(0, n)
+#'       )
+#'     )
+#'   ),
+#'   
+#'   ## Transition from progression state (progression -> death)
+#'   progression = params_mlogit(
+#'     coefs = list(
+#'       death = data.frame(
+#'         intercept = rnorm(n, 2.45, .1),
+#'         new1 = rep(0, n),
+#'         new2 = rep(0, n)
+#'       )
+#'     )
+#'   )  
+#' )
+#' transmod_params
+#' 
+#' ## Simulation model
+#' tmat <- rbind(c(0, 1, 2),
+#'               c(NA, 0, 1),
+#'               c(NA, NA, NA))
+#' transmod <- create_CohortDtstmTrans(transmod_params, input_data = transmod_data, 
+#'                                     trans_mat = tmat, cycle_length = 1)
+#' transmod$sim_stateprobs(n_cycles = 2)
+#' 
+#' \dontshow{
+#'   pb <- expmat(coef(fit)$baseline)[, , 1]
+#'   
+#'   ## From stable 
+#'   b1 <- log(pb[1, 2]/(1 - pb[1, 2] - pb[1, 3]))
+#'   b2 <- log(pb[1, 3]/(1 - pb[1, 2] - pb[1, 3]))
+#'   exp(b1)/(1 + exp(b1) + exp(b2))
+#'   exp(b2)/(1 + exp(b1) + exp(b2))
+#'   
+#'   ### From progression
+#'   b <- qlogis(pb[2, 2])
+#' }
 #' @export
 CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
   private = list(
@@ -184,7 +252,8 @@ CohortDtstmTrans <- R6::R6Class("CohortDtstmTrans",
 #' 
 #' A generic function for creating an object of class `CohortDtstmTrans`.
 #' @param object An object of the appropriate class. 
-#' @param ... Further arguments passed to or from other methods. Currently unused.
+#' @param ... Further arguments passed to `CohortDtstmTrans$new()` in 
+#' [`CohortDtstmTrans`].
 #' @param input_data An object of class `expanded_hesim_data` returned by 
 #' [expand.hesim_data()]
 #' @param cycle_length The length of a model cycle in terms of years. The default 
@@ -217,11 +286,10 @@ create_CohortDtstmTrans.multinom_list <- function(object, input_data,
   uncertainty <- match.arg(uncertainty)
   input_mats <- create_input_mats(object, input_data)
   params <- create_params(object, n = n, uncertainty = uncertainty)
-  return(
-    do.call(CohortDtstmTrans$new, 
-            c(list(params = params, input_data = input_mats, trans_mat = trans_mat),
-              dots))
-  )
+  
+  do.call(CohortDtstmTrans$new, 
+          c(list(params = params, input_data = input_mats, trans_mat = trans_mat),
+            dots))
 }
 
 #' @export
@@ -237,9 +305,18 @@ create_CohortDtstmTrans.msm <- function(object, input_data,
   if (uncertainty == "none") n <- 1
   tpmat_id <- tpmatrix_id(input_data, n)
   tparams <- tparams_transprobs(tpmat, tpmat_id)
-  return(
-    CohortDtstmTrans$new(params = tparams, cycle_length = cycle_length)
-  )
+  
+  CohortDtstmTrans$new(params = tparams, cycle_length = cycle_length)
+}
+
+#' @export
+#' @rdname create_CohortDtstmTrans
+create_CohortDtstmTrans.params_mlogit_list <- function(object, input_data,
+                                                       trans_mat, ...){
+  input_mats <- create_input_mats(object, input_data)
+  
+  CohortDtstmTrans$new(params = object, input_data = input_mats,
+                       trans_mat = trans_mat, ...)
 }
 
 # CohortDtstm ------------------------------------------------------------------
