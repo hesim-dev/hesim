@@ -49,7 +49,6 @@ params_mlogit_list <- function(...){
 
 # summary.params_surv_list() ---------------------------------------------------
 #' @export
-#' @rdname summary.params
 summary.params_mlogit_list <- function(object, prob = 0.95, ...) {
   summary_params_list(object, prob, idcol = "from", ...)
 }

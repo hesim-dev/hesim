@@ -419,23 +419,6 @@ create_input_mats.multinom_list <- function(object, input_data, ...){
 }
 
 # Create input matrices from mlogit  -------------------------------------------
-create_input_mats_params_mlogit_X <- function(object, input_data){
-  X_list <- vector(mode = "list", length = dim(object$coefs)[3])
-  names(X_list) <- dimnames(object$coefs)[[3]]
-  for (i in 1:length(X_list)){
-    X_list[[i]] <- extract_X(object$coefs[,, i], input_data)
-  }
-  return(X_list)
-}
-
-create_input_mats.params_mlogit <- function(object, input_data, ...){
-  check_edata(input_data)
-  X_list <- create_input_mats_params_mlogit_X(object, input_data)
-  args <- c(list(X = extract_X(object$coefs[,, 1], input_data)),
-            get_input_mats_id_vars(input_data))
-  return(do.call("new_input_mats", args))
-}
-
 #' @export 
 #' @rdname create_input_mats
 create_input_mats.params_mlogit_list <- function(object, input_data, ...){

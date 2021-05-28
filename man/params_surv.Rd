@@ -166,5 +166,5 @@ params <- params_surv(
   dist = "weibull"
 )
 summary(params)
-print(params)
+params
 }

@@ -9,29 +9,6 @@
 #' @seealso [`tparams`]
 NULL
 
-# Generic documentation for summary method -------------------------------------
-#' Summarize parameter objects
-#' 
-#' A collection of summary method for different parameter objects.
-#' @param  object An object of the appropriate class.
-#' @param prob A numeric scalar in the interval `(0,1)` giving the confidence 
-#' interval for coefficients. Default is 0.95 for a 95 percent interval, in which case
-#' the lower and upper limits are computed using the 2.5th and 97.5th percentiles.
-#' @param ... Additional arguments affecting the summary. Currently unused. 
-#' 
-#' @return A [`data.table`] with the following columns:
-#' \describe{
-#' \item{parameter}{The name of the parameter of the survival distribution.}
-#' \item{term}{The regression term.}
-#' \item{estimate}{The estimated value of the regression term, computed as the mean
-#' from its probability distribution.}
-#' \item{lower}{The lower limit of the confidence interval for the estimate.}
-#' \item{upper}{The upper limit of the confidence interval for the estimate.}
-#' }
-#' @seealso See [`params_surv`] for an example.
-#' @name summary.params
-NULL
-
 # Helper functions -------------------------------------------------------------
 new_params_list <- function(..., inner_class, new_class){
   return(object_list(..., inner_class = inner_class,

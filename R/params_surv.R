@@ -154,7 +154,7 @@
 #'   dist = "weibull"
 #' )
 #' summary(params)
-#' print(params)
+#' params
 #' @aliases print.params_surv
 #' @export
 params_surv <- function(coefs, dist, aux = NULL){
@@ -291,8 +291,11 @@ check.params_surv <- function(object){
 }
 
 # summary.params_surv() --------------------------------------------------------
+#' @templateVar class `params_surv`
+#' @template summary_params_head
+#' 
+#' @evalRd summary_params_return(extra_items = "parameter")
 #' @export
-#' @rdname summary.params
 summary.params_surv <- function(object, prob = 0.95, ...) {
   
   rbindlist(lapply(object$coef, coef_summary, prob = prob),

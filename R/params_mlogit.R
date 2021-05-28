@@ -106,7 +106,6 @@ check.params_mlogit <- function(object){
 
 # summary.params_mlogit() --------------------------------------------------------
 #' @export
-#' @rdname summary.params
 summary.params_mlogit <- function(object, prob = 0.95, ...) {
   
  rbindlist(apply(object$coef, 3, coef_summary, prob = prob),
