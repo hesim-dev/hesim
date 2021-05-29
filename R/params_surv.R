@@ -291,10 +291,7 @@ check.params_surv <- function(object){
 }
 
 # summary.params_surv() --------------------------------------------------------
-#' @templateVar class `params_surv`
-#' @template summary_params_head
-#' 
-#' @evalRd summary_params_return(extra_items = "parameter")
+#' @rdname summary.params
 #' @export
 summary.params_surv <- function(object, prob = 0.95, ...) {
   

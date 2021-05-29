@@ -105,6 +105,7 @@ check.params_mlogit <- function(object){
 }
 
 # summary.params_mlogit() --------------------------------------------------------
+#' @rdname summary.params
 #' @export
 summary.params_mlogit <- function(object, prob = 0.95, ...) {
   

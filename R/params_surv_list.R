@@ -36,12 +36,8 @@ check.params_surv_list <- function(object){
 }
 
 # summary.params_surv_list() ---------------------------------------------------
-#' @templateVar class `params_surv_list`
-#' @template summary_params_head
-#' 
-#' @evalRd summary_params_return(extra_items = c("model", "parameter"))
-#' @export
 #' @rdname summary.params
+#' @export
 summary.params_surv_list <- function(object, prob = 0.95, ...) {
   summary_params_list(object, prob, ...)
 }
