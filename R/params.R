@@ -16,7 +16,7 @@ NULL
 #' lower confidence limit, and upper confidence limit for each model term. The point 
 #' estimate is the mean of the samples of the coefficients and the lower and 
 #' upper confidence limits are determined by the `prob` argument. This is a 
-#' convenient way to check whether a a parameter object has been specified 
+#' convenient way to check whether a parameter object has been specified 
 #' correctly and sampling distributions of the coefficients are as expected.
 #' @param object An object of the appropriate class.
 #' @param prob A numeric scalar in the interval `(0,1)` giving the confidence 

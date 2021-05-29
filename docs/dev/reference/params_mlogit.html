@@ -49,7 +49,9 @@
 <meta property="og:title" content="Parameters of a multinomial logit model — params_mlogit" />
 <meta property="og:description" content="Store the parameters of a fitted multinomial logistic
 regression model. The model is used to predict probabilities of \(K\)
-classes." />
+classes, which represent the probability of transitioning to particular health
+state in a discrete time state transition model. Can be used as an element of a
+params_mlogit_list to parameterize a CohortDtstmTrans object." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -170,14 +172,16 @@ classes." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Parameters of a multinomial logit model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit.R'><code>R/params_mlogit.R</code></a></small>
     <div class="hidden name"><code>params_mlogit.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Store the parameters of a fitted multinomial logistic
 regression model. The model is used to predict probabilities of \(K\)
-classes.</p>
+classes, which represent the probability of transitioning to particular health
+state in a discrete time state transition model. Can be used as an element of a
+<code><a href='params_mlogit_list.html'>params_mlogit_list</a></code> to parameterize a <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> object.</p>
     </div>
 
     <pre class="usage"><span class='fu'>params_mlogit</span><span class='op'>(</span><span class='va'>coefs</span><span class='op'>)</span></pre>
@@ -187,32 +191,95 @@ classes.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>coefs</th>
-      <td><p>A 3D array of stacked matrices. The number of matrices (i.e.,
-the number of slices in the cube) should be equal to \(K-1\). Each
-matrix is contains samples of the regression coefficients under sampling uncertainty
-corresponding to a particular class. Rows index parameter samples and
-columns index coefficients.</p></td>
+      <td><p>A 3D array of stacked matrices containing samples of the regression
+coefficients under sampling uncertainty. May also be a
+list of objects (e.g., data frames) that can be coerced into matrices with
+<code><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix()</a></code>. Each matrix must have the same number of columns and the
+number of matrices must be equal to \(K-1\).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>params_mlogit</code>, which is a list containing <code>coefs</code>
-and <code>n_samples</code>, where <code>n_samples</code> is equal to the number of rows
-in each element of <code>coefs</code>.</p>
+and <code>n_samples</code>, where <code>n_samples</code> is equal to the number of rows in each
+element of <code>coefs</code>. The <code>coefs</code> element is always converted into
+a 3D array of stacked matrices.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Multinomial logit models are used to predict the probability of
 membership for subject \(i\) in each of \(K\) classes as a function of covariates:
 $$Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}$$</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='summary.params.html'>summary.params_mlogit()</a></code>, <code><a href='params_mlogit_list.html'>params_mlogit_list()</a></code>, <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>params</span> <span class='op'>&lt;-</span> <span class='fu'>params_mlogit</span><span class='op'>(</span>coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='fl'>0</span>, treatment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.75</span><span class='op'>)</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='fl'>0</span>, treatment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.8</span><span class='op'>)</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>,
-  dim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>
-<span class='op'>)</span><span class='op'>)</span> 
-</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># Consider a sick-sicker model and model transitions from the sick state</span>
+
+<span class='co'>## We can conveniently instantiate from a list of matrices</span>
+<span class='va'>params</span> <span class='op'>&lt;-</span> <span class='fu'>params_mlogit</span><span class='op'>(</span>
+  coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='co'>### Transition from sick to sicker</span>
+    sicker <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+      intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.33</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='op'>-</span><span class='fl'>.15</span><span class='op'>)</span>,
+      treat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.75</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.8</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.9</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    
+   <span class='co'>### Transition from sick to death</span>
+    death <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+      intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='op'>-</span><span class='fl'>1.2</span>, <span class='op'>-</span><span class='fl'>.5</span><span class='op'>)</span>,
+      treat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.6</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.65</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.55</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>params</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        to      term   estimate      lower      upper
+#&gt; 1: sicker intercept -0.2266667 -0.3235000 -0.1525000
+#&gt; 2: sicker     treat -0.2053954 -0.2844551 -0.1112497
+#&gt; 3:  death intercept -0.9000000 -1.1900000 -0.5250000
+#&gt; 4:  death     treat -0.5131485 -0.5934864 -0.4347851</div><div class='input'><span class='va'>params</span>
+</div><div class='output co'>#&gt; A "params_mlogit" object
+#&gt; 
+#&gt; Summary of coefficient estimates:
+#&gt;        to      term   estimate      lower      upper
+#&gt; 1: sicker intercept -0.2266667 -0.3235000 -0.1525000
+#&gt; 2: sicker     treat -0.2053954 -0.2844551 -0.1112497
+#&gt; 3:  death intercept -0.9000000 -1.1900000 -0.5250000
+#&gt; 4:  death     treat -0.5131485 -0.5934864 -0.4347851
+#&gt; 
+#&gt; Number of parameter samples: 3
+#&gt; Number of transitions: 2</div><div class='input'>
+<span class='co'>## We can also less conveniently instantiate from an array</span>
+<span class='va'>coefs_sicker</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+  intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.33</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='op'>-</span><span class='fl'>.15</span><span class='op'>)</span>,
+  treat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.75</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.8</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.9</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>coefs_death</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+  intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='op'>-</span><span class='fl'>1.2</span>, <span class='op'>-</span><span class='fl'>.5</span><span class='op'>)</span>,
+  treat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.6</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.65</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.55</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='va'>params2</span> <span class='op'>&lt;-</span> <span class='fu'>params_mlogit</span><span class='op'>(</span>
+  <span class='va'>coefs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>coefs_sicker</span><span class='op'>)</span>,
+             <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>coefs_death</span><span class='op'>)</span><span class='op'>)</span>,
+    dim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>,
+    dimnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"intercept"</span>, <span class='st'>"treat"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sicker"</span>, <span class='st'>"death"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>params2</span>
+</div><div class='output co'>#&gt; A "params_mlogit" object
+#&gt; 
+#&gt; Summary of coefficient estimates:
+#&gt;        to      term   estimate      lower      upper
+#&gt; 1: sicker intercept -0.2266667 -0.3235000 -0.1525000
+#&gt; 2: sicker     treat -0.2053954 -0.2844551 -0.1112497
+#&gt; 3:  death intercept -0.9000000 -1.1900000 -0.5250000
+#&gt; 4:  death     treat -0.5131485 -0.5934864 -0.4347851
+#&gt; 
+#&gt; Number of parameter samples: 3
+#&gt; Number of transitions: 2</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

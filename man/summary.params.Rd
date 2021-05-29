@@ -58,7 +58,7 @@ Summarize the coefficients of a parameter object by computing the point estimate
 lower confidence limit, and upper confidence limit for each model term. The point
 estimate is the mean of the samples of the coefficients and the lower and
 upper confidence limits are determined by the \code{prob} argument. This is a
-convenient way to check whether a a parameter object has been specified
+convenient way to check whether a parameter object has been specified
 correctly and sampling distributions of the coefficients are as expected.
 }
 \seealso{

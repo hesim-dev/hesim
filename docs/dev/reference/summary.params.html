@@ -47,7 +47,12 @@
 
 
 <meta property="og:title" content="Summarize parameter objects — summary.params" />
-<meta property="og:description" content="A collection of summary method for different parameter objects." />
+<meta property="og:description" content="Summarize the coefficients of a parameter object by computing the point estimate,
+lower confidence limit, and upper confidence limit for each model term. The point
+estimate is the mean of the samples of the coefficients and the lower and
+upper confidence limits are determined by the prob argument. This is a
+convenient way to check whether a parameter object has been specified
+correctly and sampling distributions of the coefficients are as expected." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -168,15 +173,26 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Summarize parameter objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_surv.R'><code>R/params_surv.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_surv_list.R'><code>R/params_surv_list.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit.R'><code>R/params_mlogit.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit_list.R'><code>R/params_mlogit_list.R</code></a>, and 2 more</small>
     <div class="hidden name"><code>summary.params.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A collection of summary method for different parameter objects.</p>
+    <p>Summarize the coefficients of a parameter object by computing the point estimate,
+lower confidence limit, and upper confidence limit for each model term. The point
+estimate is the mean of the samples of the coefficients and the lower and
+upper confidence limits are determined by the <code>prob</code> argument. This is a
+convenient way to check whether a parameter object has been specified
+correctly and sampling distributions of the coefficients are as expected.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for params_surv</span>
+    <pre class="usage"><span class='co'># S3 method for params_mlogit</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for params_mlogit_list</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for params_surv</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for params_surv_list</span>
@@ -203,19 +219,36 @@ the lower and upper limits are computed using the 2.5th and 97.5th percentiles.<
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> with the following columns:</p><dl>
-<dt>parameter</dt><dd><p>The name of the parameter of the survival distribution.</p></dd>
+    <p>A <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> containing at least the following columns:</p><dl>
 <dt>term</dt><dd><p>The regression term.</p></dd>
 <dt>estimate</dt><dd><p>The estimated value of the regression term, computed as the mean
 from its probability distribution.</p></dd>
 <dt>lower</dt><dd><p>The lower limit of the confidence interval for the estimate.</p></dd>
 <dt>upper</dt><dd><p>The upper limit of the confidence interval for the estimate.</p></dd>
 
+</dl><p>In addition, the following columns may also be present:</p><dl>
+<dt>parameter</dt><dd><p>The name of the parameter of interest. This is relevant
+for <code><a href='params_surv.html'>params_surv</a></code> and <code><a href='params_surv_list.html'>params_surv_list</a></code> objects since regression coefficients
+are used to model the underlying parameters of the survival distribution (e.g.,
+shape and scale for a Weibull model).</p></dd>
+<dt>model</dt><dd><p>The name of the statistical model. This is used for a
+<code><a href='params_surv_list.html'>params_surv_list</a></code> object, where each list element represents a separate model.
+In a state transition model, each model is a unique health state transition and
+in a partitioned survival model, there is a separate model for each curve.</p></dd>
+<dt>to</dt><dd><p>The health state that is being transitioned to. In <code><a href='params_mlogit.html'>params_mlogit</a></code>
+and <code><a href='params_mlogit_list.html'>params_mlogit_list</a></code> objects, there are coefficients for each health
+state that can be transitioned to.</p></dd>
+<dt>from</dt><dd><p>The health state that is being transitions from. This is used
+for a <code><a href='params_mlogit_list.html'>params_mlogit_list</a></code> objects where a different multinomial
+logistic regression is used for each state that can be transitioned from.</p></dd>
+
 </dl>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>See <code><a href='params_surv.html'>params_surv</a></code> for an example.</p></div>
+    <div class='dont-index'><p>For examples, see the the underlying parameter object functions:
+<code><a href='params_surv.html'>params_surv()</a></code>, <code><a href='params_surv_list.html'>params_surv_list()</a></code>, <code><a href='params_mlogit.html'>params_mlogit()</a></code>, and
+<code><a href='params_mlogit_list.html'>params_mlogit_list()</a></code>.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

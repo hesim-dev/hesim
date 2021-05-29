@@ -183,12 +183,15 @@
     <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans()</a></code>, <a href='CohortDtstm.html'>CohortDtstm</a></p></div>
+    <div class='dont-index'><p><code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans()</a></code> creates a <code>CohortDtstmTrans</code> object from either
+a fitted statistical model or a parameter object. A complete economic model can be implemented
+with <code><a href='CohortDtstm.html'>CohortDtstm</a></code>. <code><a href='../articles/mlogit.html'>vignette("mlogit")</a></code> provides an example model in which transition
+probabilities are estimated using multinomial logistic regression with <code><a href='https://rdrr.io/pkg/nnet/man/multinom.html'>nnet::multinom()</a></code>.</p></div>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
 <dt><code>params</code></dt><dd><p>Parameters for simulating health state transitions.
-Supports objects of class <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> or <code><a href='params_mlogit.html'>params_mlogit</a></code>.</p></dd>
+Supports objects of class <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> or <code><a href='params_mlogit_list.html'>params_mlogit_list</a></code>.</p></dd>
 
 <dt><code>input_data</code></dt><dd><p>An object of class <code><a href='input_mats.html'>input_mats</a></code>.</p></dd>
 
@@ -283,7 +286,12 @@ and the reference category for each row should be <code>0</code>.</p></dd>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://Rdatatable.gitlab.io/data.table'>"data.table"</a></span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>101</span><span class='op'>)</span>
 
-<span class='co'># Model setup</span>
+<span class='co'># We consider two examples that have the same treatment strategies and patients.</span>
+<span class='co'># One model is parameterized by fitting a multi-state model with the "msm"</span>
+<span class='co'># package; in the second model, the parameters are entered "manually" with </span>
+<span class='co'># a "params_mlogit_list" object.</span>
+
+<span class='co'># MODEL SETUP</span>
 <span class='va'>strategies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>
   strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span>,
   strategy_name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SOC"</span>, <span class='st'>"New 1"</span>, <span class='st'>"New 2"</span><span class='op'>)</span>
@@ -294,8 +302,8 @@ and the reference category for each row should be <code>0</code>.</p></dd>
   patients <span class='op'>=</span> <span class='va'>patients</span>
 <span class='op'>)</span>
   
-
-<span class='co'># Fit multi-state model with panel data via msm</span>
+<span class='co'># EXAMPLE #1: msm</span>
+<span class='co'>## Fit multi-state model with panel data via msm</span>
 <span class='va'>qinit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span><span class='op'>(</span>
   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.28163</span>, <span class='fl'>0.01239</span><span class='op'>)</span>,
   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0.10204</span><span class='op'>)</span>,
@@ -306,7 +314,7 @@ and the reference category for each row should be <code>0</code>.</p></dd>
            covariates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"1-2"</span> <span class='op'>=</span><span class='op'>~</span> <span class='va'>strategy_name</span><span class='op'>)</span>, 
            qmatrix <span class='op'>=</span> <span class='va'>qinit</span><span class='op'>)</span>
 
-<span class='co'># Simulation model</span>
+<span class='co'>## Simulation model</span>
 <span class='va'>transmod_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span><span class='op'>)</span>
 <span class='va'>transmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans</a></span><span class='op'>(</span><span class='va'>fit</span>,
                                     input_data <span class='op'>=</span> <span class='va'>transmod_data</span>,
@@ -325,7 +333,112 @@ and the reference category for each row should be <code>0</code>.</p></dd>
 #&gt; 105:      2           3          2      1        2 1.0 0.325475890
 #&gt; 106:      2           3          2      1        3 0.0 0.000000000
 #&gt; 107:      2           3          2      1        3 0.5 0.004553194
-#&gt; 108:      2           3          2      1        3 1.0 0.016768466</div></pre>
+#&gt; 108:      2           3          2      1        3 1.0 0.016768466</div><div class='input'>
+<span class='co'># EXAMPLE #2: params_mlogit_list</span>
+<span class='co'>## Input data</span>
+<span class='va'>transmod_data</span><span class='op'>[</span>, <span class='va'>intercept</span> <span class='op'>:=</span> <span class='fl'>1</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;    strategy_id patient_id strategy_name intercept
+#&gt; 1:           1          1           SOC         1
+#&gt; 2:           1          2           SOC         1
+#&gt; 3:           2          1         New 1         1
+#&gt; 4:           2          2         New 1         1
+#&gt; 5:           3          1         New 2         1
+#&gt; 6:           3          2         New 2         1</div><div class='input'><span class='va'>transmod_data</span><span class='op'>[</span>, <span class='va'>new1</span> <span class='op'>:=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>strategy_name</span> <span class='op'>==</span> <span class='st'>"New 1"</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;    strategy_id patient_id strategy_name intercept new1
+#&gt; 1:           1          1           SOC         1    0
+#&gt; 2:           1          2           SOC         1    0
+#&gt; 3:           2          1         New 1         1    1
+#&gt; 4:           2          2         New 1         1    1
+#&gt; 5:           3          1         New 2         1    0
+#&gt; 6:           3          2         New 2         1    0</div><div class='input'><span class='va'>transmod_data</span><span class='op'>[</span>, <span class='va'>new2</span> <span class='op'>:=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>strategy_name</span> <span class='op'>==</span> <span class='st'>"New 2"</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;    strategy_id patient_id strategy_name intercept new1 new2
+#&gt; 1:           1          1           SOC         1    0    0
+#&gt; 2:           1          2           SOC         1    0    0
+#&gt; 3:           2          1         New 1         1    1    0
+#&gt; 4:           2          2         New 1         1    1    0
+#&gt; 5:           3          1         New 2         1    0    1
+#&gt; 6:           3          2         New 2         1    0    1</div><div class='input'>
+<span class='co'>## Parameters</span>
+<span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>10</span>
+<span class='va'>transmod_params</span> <span class='op'>&lt;-</span> <span class='fu'><a href='params_mlogit_list.html'>params_mlogit_list</a></span><span class='op'>(</span>
+  
+  <span class='co'>## Transitions from stable state (stable -&gt; progression, stable -&gt; death)</span>
+  stable <span class='op'>=</span> <span class='fu'><a href='params_mlogit.html'>params_mlogit</a></span><span class='op'>(</span>
+    coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      progression <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+        intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='op'>-</span><span class='fl'>0.65</span>, <span class='fl'>.1</span><span class='op'>)</span>,
+        new1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.8</span><span class='op'>)</span>, <span class='fl'>.02</span><span class='op'>)</span>,
+        new2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.7</span>, <span class='fl'>.02</span><span class='op'>)</span><span class='op'>)</span>
+      <span class='op'>)</span>,
+      death <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+        intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='op'>-</span><span class='fl'>3.75</span>, <span class='fl'>.1</span><span class='op'>)</span>,
+        new1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='va'>n</span><span class='op'>)</span>,
+        new2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='va'>n</span><span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  
+  <span class='co'>## Transition from progression state (progression -&gt; death)</span>
+  progression <span class='op'>=</span> <span class='fu'><a href='params_mlogit.html'>params_mlogit</a></span><span class='op'>(</span>
+    coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      death <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+        intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>2.45</span>, <span class='fl'>.1</span><span class='op'>)</span>,
+        new1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='va'>n</span><span class='op'>)</span>,
+        new2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='va'>n</span><span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>  
+<span class='op'>)</span>
+<span class='va'>transmod_params</span>
+</div><div class='output co'>#&gt; A "params_mlogit_list" object
+#&gt; 
+#&gt; Summary of coefficient estimates:
+#&gt;           from          to      term   estimate      lower      upper
+#&gt; 1:      stable progression intercept -0.6634794 -0.7388932 -0.5587877
+#&gt; 2:      stable progression      new1 -0.2152838 -0.2372537 -0.1993740
+#&gt; 3:      stable progression      new2 -0.2360914 -2.0402193  1.9666138
+#&gt; 4:      stable       death intercept -3.7448951 -3.8635279 -3.6104667
+#&gt; 5:      stable       death      new1  0.0000000  0.0000000  0.0000000
+#&gt; 6:      stable       death      new2  0.0000000  0.0000000  0.0000000
+#&gt; 7: progression       death intercept  2.4654098  2.3275534  2.5418337
+#&gt; 8: progression       death      new1  0.0000000  0.0000000  0.0000000
+#&gt; 9: progression       death      new2  0.0000000  0.0000000  0.0000000
+#&gt; 
+#&gt; Number of parameter samples: 10
+#&gt; Number of starting (non-absorbing) states: 2
+#&gt; Number of transitions by starting state: 2 1</div><div class='input'>
+<span class='co'>## Simulation model</span>
+<span class='va'>tmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>,
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>transmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans</a></span><span class='op'>(</span><span class='va'>transmod_params</span>, input_data <span class='op'>=</span> <span class='va'>transmod_data</span>, 
+                                    trans_mat <span class='op'>=</span> <span class='va'>tmat</span>, cycle_length <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>transmod</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span>n_cycles <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      sample strategy_id patient_id grp_id state_id t        prob
+#&gt;   1:      1           1          1      1        1 0 1.000000000
+#&gt;   2:      1           1          1      1        1 1 0.644542208
+#&gt;   3:      1           1          1      1        1 2 0.415434658
+#&gt;   4:      1           1          1      1        2 0 0.000000000
+#&gt;   5:      1           1          1      1        2 1 0.338329178
+#&gt;  ---                                                            
+#&gt; 536:     10           3          2      1        2 1 0.842673723
+#&gt; 537:     10           3          2      1        2 2 0.191956639
+#&gt; 538:     10           3          2      1        3 0 0.000000000
+#&gt; 539:     10           3          2      1        3 1 0.003998375
+#&gt; 540:     10           3          2      1        3 2 0.784533916</div><div class='input'>
+<span class='co'># \dontshow{</span>
+  <span class='va'>pb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expmat.html'>expmat</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>)</span><span class='op'>$</span><span class='va'>baseline</span><span class='op'>)</span><span class='op'>[</span>, , <span class='fl'>1</span><span class='op'>]</span>
+  
+  <span class='co'>## From stable </span>
+  <span class='va'>b1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>pb</span><span class='op'>[</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>]</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>pb</span><span class='op'>[</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>pb</span><span class='op'>[</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>b2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>pb</span><span class='op'>[</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>]</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>pb</span><span class='op'>[</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>pb</span><span class='op'>[</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>b1</span><span class='op'>)</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>b1</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>b2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.3379348</div><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>b2</span><span class='op'>)</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>b1</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>b2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.01522282</div><div class='input'>  
+  <span class='co'>### From progression</span>
+  <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Logistic.html'>qlogis</a></span><span class='op'>(</span><span class='va'>pb</span><span class='op'>[</span><span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
+<span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

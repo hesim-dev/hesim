@@ -45,6 +45,7 @@ reference:
       - tparams
       - tparams_mean
       - tparams_transprobs
+      - summary.params
   - title: "Input data"
     contents:
       - hesim_data

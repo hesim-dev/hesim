@@ -170,7 +170,7 @@ then random samples from suitable probability distributions are returned." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a parameter object from a fitted model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_surv.R'><code>R/params_surv.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_surv_list.R'><code>R/params_surv_list.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit.R'><code>R/params_mlogit.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit_list.R'><code>R/params_mlogit_list.R</code></a>, and 2 more</small>
     <div class="hidden name"><code>create_params.Rd</code></div>
     </div>
 
@@ -251,11 +251,11 @@ and the classes of the returned objects are:</p><ul>
 <span class='va'>params_lm</span> <span class='op'>&lt;-</span> <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>fit</span>, n <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      (Intercept)     female
-#&gt; [1,]    32401.24 3907.96888
-#&gt; [2,]    32317.73 1590.17913
-#&gt; [3,]    30786.07 2058.30430
-#&gt; [4,]    32569.48  -61.17965
-#&gt; [5,]    30876.11   69.98317</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
+#&gt; [1,]    33635.21  1293.1617
+#&gt; [2,]    31688.59  -843.0253
+#&gt; [3,]    31119.71  3867.6203
+#&gt; [4,]    33937.78 -2447.6996
+#&gt; [5,]    29714.33  5863.4354</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># create_params.flexsurvreg</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
@@ -266,20 +266,20 @@ and the classes of the returned objects are:</p><ul>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>params_surv_wei</span><span class='op'>$</span><span class='va'>dist</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_surv_wei</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $shape
-#&gt;       (Intercept)
-#&gt; [1,]  0.001458613
-#&gt; [2,]  0.262720800
-#&gt; [3,] -0.132028464
-#&gt; [4,]  0.186166943
-#&gt; [5,]  0.022700315
+#&gt;      (Intercept)
+#&gt; [1,] -0.18974308
+#&gt; [2,]  0.33931250
+#&gt; [3,]  0.05098713
+#&gt; [4,]  0.10409912
+#&gt; [5,]  0.27292908
 #&gt; 
 #&gt; $scale
 #&gt;      (Intercept)
-#&gt; [1,]    7.580215
-#&gt; [2,]    6.514265
-#&gt; [3,]    7.150658
-#&gt; [4,]    6.900664
-#&gt; [5,]    6.901837
+#&gt; [1,]    7.257392
+#&gt; [2,]    6.424840
+#&gt; [3,]    6.521574
+#&gt; [4,]    7.168182
+#&gt; [5,]    7.184668
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
