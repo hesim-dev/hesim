@@ -225,12 +225,16 @@ format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
   return(x)
 }
 
+default_colnames <- function(x) {
+  paste0("x", 1:ncol(x))
+}
+
 # List of matrices -------------------------------------------------------------
 coeflist <- function(coefs){
   if (inherits(coefs, "list")) {
     coefs <- lapply(coefs, function(x) {
       x <- as.matrix(x)
-      if (is.null(colnames(x))) colnames(x) <- paste0("x", 1:ncol(x))
+      if (is.null(colnames(x))) colnames(x) <- default_colnames(x)
       x
     })
   } else {
