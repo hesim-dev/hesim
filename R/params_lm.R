@@ -81,6 +81,7 @@ summary.params_lm <- function(object, prob = 0.95, ...) {
 #' @export
 print.params_lm <- function(x, ...) {
   
+  parameter <- NULL
   x_summary <- summary(x)
   
   cat("A \"params_lm\" object\n\n")

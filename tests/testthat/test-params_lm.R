@@ -58,8 +58,8 @@ test_that("print.params_lm()", {
 })
 
 # create_params.lm() -----------------------------------------------------------
-medcost_fit <- stats::lm(costs ~ female + state_name, 
-                         data = psm4_exdata$costs$medical)
+medcost_fit <- lm(costs ~ female + state_name, 
+                  data = psm4_exdata$costs$medical)
 
 test_that("create_params.lm works with point estimates", {
   
@@ -72,13 +72,13 @@ test_that("create_params.lm works with point estimates", {
 
 test_that("create_params.lm works with PSA", {
   set.seed(101)
-  p <- create_params(medcost_fit, n = n, uncertainty = "normal")
+  p <- create_params(medcost_fit, n = 2, uncertainty = "normal")
   set.seed(101)
-  r <- mvrnorm(n, medcost_fit$coefficients, vcov(medcost_fit))
+  r <- mvrnorm(n = 2, medcost_fit$coefficients, vcov(medcost_fit))
   expect_equal(p$coefs, r)
 })
 
 test_that("create_params.lm works with PSA and sample size of 1", {
   p <- create_params(medcost_fit, n = 1, uncertainty = "normal")
-  expect_error(pars_lm$coefs, NA)
+  expect_true(inherits(p, "params_lm"))
 })
