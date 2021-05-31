@@ -4,19 +4,22 @@
 \alias{params_lm}
 \title{Parameters of a linear model}
 \usage{
-params_lm(coefs, sigma = NULL)
+params_lm(coefs, sigma = 1)
 }
 \arguments{
-\item{coefs}{Matrix of samples of the coefficients under sampling uncertainty.}
+\item{coefs}{Samples of the coefficients under sampling uncertainty.
+Must be a matrix or any object coercible to a matrix such as \code{data.frame}
+or \code{data.table}.}
 
 \item{sigma}{A vector of samples of the standard error of the regression model.
-Must only be specified if the model is used to randomly simulate values
-(rather than to predict means).}
+Default value is 1 for all samples. Only used if the model is
+used to randomly simulate values (rather than to predict means).}
 }
 \value{
 An object of class \code{params_lm}, which is a list containing \code{coefs},
-\code{sigma}, and \code{n_samples}. \code{n_samples} is equal to the number of rows
-in \code{coefs}.
+\code{sigma}, and \code{n_samples}. \code{n_samples} is equal to the
+number of rows in \code{coefs}. The \code{coefs} element is always converted into a
+matrix.
 }
 \description{
 Create a list containing the parameters of a fitted linear regression model.

@@ -2,10 +2,12 @@
 #' Parameters of a linear model
 #' 
 #' Create a list containing the parameters of a fitted linear regression model.
-#' @param coefs  Matrix of samples of the coefficients under sampling uncertainty.
+#' @param coefs  Samples of the coefficients under sampling uncertainty.
+#' Must be a matrix or any object coercible to a matrix such as `data.frame`
+#' or `data.table`.
 #' @param sigma A vector of samples of the standard error of the regression model. 
-#' Must only be specified if the model is used to randomly simulate values 
-#' (rather than to predict means).
+#' Default value is 1 for all samples. Only used if the model is
+#' used to randomly simulate values (rather than to predict means). 
 #' 
 #' @details Fitted linear models are used to predict values, \eqn{y},
 #'  as a function of covariates, \eqn{x},
@@ -15,8 +17,9 @@
 #' sampling the error term from a normal distribution, 
 #' \eqn{\epsilon \sim N(0, \hat{\sigma}^2)}{\epsilon ~ N(0, \hat{\sigma}^2)}.
 #' @return An object of class `params_lm`, which is a list containing `coefs`,
-#' `sigma`, and `n_samples`. `n_samples` is equal to the number of rows
-#' in `coefs`.
+#' `sigma`, and `n_samples`. `n_samples` is equal to the
+#'  number of rows in `coefs`. The `coefs` element is always converted into a
+#'  matrix.
 #' @examples 
 #' library("MASS")
 #' n <- 2
@@ -34,10 +37,9 @@
 #' use a [`stateval_tbl`]. For an example use case see the documentation for
 #' [create_StateVals.lm()].
 #' @export
-params_lm <- function(coefs, sigma = NULL){
-  stopifnot(is.matrix(coefs) | is_1d_vector(coefs))
-  if (is_1d_vector(coefs)) coefs <- matrix(coefs, ncol = 1)
-  if(is.null(sigma)) sigma <- rep(1, nrow(coefs))
+params_lm <- function(coefs, sigma = 1){
+  coefs <- as.matrix(coefs)
+  if(length(sigma) == 1) sigma <- rep(sigma, nrow(coefs))
   n_samples <- nrow(coefs)
   check(new_params_lm(coefs, sigma, n_samples))
 }

@@ -15,8 +15,9 @@
 #' or piecewise exponential models. See "Details". 
 #' 
 #' @return An object of class `params_surv`, which is a list containing `coefs`,
-#' `dist`, and `n_samples`. `n_samples` is equal to the number of rows
-#' in each element of `coefs`, which must be the same. The list may also contain
+#' `dist`, and `n_samples`. `n_samples` is equal to the 
+#'  number of rows in each element of `coefs`, which must be the same. The `coefs`
+#'  element is always converted into a list of matrices. The list may also contain
 #'  `aux` if a spline, fractional polynomial, or piecewise exponential model is 
 #'  used. 
 #' 
@@ -305,7 +306,7 @@ print.params_surv <- function(x, ...) {
   
   # Standard output
   cat("A \"params_surv\" object \n\n")
-  cat("Summary of coefficient estimates:\n")
+  cat("Summary of coefficients:\n")
   print(summary(x))
   cat("\n")
   cat(paste0("Number of parameter samples: ", x$n_samples))

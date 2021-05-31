@@ -53,7 +53,7 @@ test_that("summary.params_surv_list()", {
 # print.params_surv_list() -----------------------------------------------------
 test_that("print.params_surv_list()", {
   expect_output(print(p_ex), "A \"params_surv_list\" object")
-  expect_output(print(p_ex), "Summary of coefficient estimates:")
+  expect_output(print(p_ex), "Summary of coefficients:")
   expect_output(print(p_ex), paste0("Number of parameter samples: ", n))
   expect_output(print(p_ex), "Distributions: \\n mod1  mod2 \\n\"exp\" \"exp\"")
 })

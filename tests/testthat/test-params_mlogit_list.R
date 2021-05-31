@@ -43,7 +43,7 @@ test_that("summary.params_mlogit_list()", {
 # print.params_mlogit_list() ---------------------------------------------------
 test_that("print.params_mlogit_list()", {
   expect_output(print(p_ex), "A \"params_mlogit_list\" object")
-  expect_output(print(p_ex), "Summary of coefficient estimates:")
+  expect_output(print(p_ex), "Summary of coefficients:")
   expect_output(print(p_ex), "Number of parameter samples: 2")
   expect_output(print(p_ex), "Number of transitions by starting state: 2 1")
 })

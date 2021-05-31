@@ -23,8 +23,9 @@ or piecewise exponential models. See "Details".}
 }
 \value{
 An object of class \code{params_surv}, which is a list containing \code{coefs},
-\code{dist}, and \code{n_samples}. \code{n_samples} is equal to the number of rows
-in each element of \code{coefs}, which must be the same. The list may also contain
+\code{dist}, and \code{n_samples}. \code{n_samples} is equal to the
+number of rows in each element of \code{coefs}, which must be the same. The \code{coefs}
+element is always converted into a list of matrices. The list may also contain
 \code{aux} if a spline, fractional polynomial, or piecewise exponential model is
 used.
 }

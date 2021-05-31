@@ -81,10 +81,10 @@ head(params_surv_wei$coefs)
 \seealso{
 These methods are typically used to create model objects as a function
 of input data and a fitted statistical model. For examples, see
-\code{\link[=create_PsmCurves.flexsurvreg_list]{create_PsmCurves.flexsurvreg_list()}} for a partitioned survival model,
-\code{\link[=create_IndivCtstmTrans.flexsurvreg_list]{create_IndivCtstmTrans.flexsurvreg_list()}} for an individual continuous time
+\link{PsmCurves} for a partitioned survival model,
+\link{IndivCtstmTrans} for an individual continuous time
 state transition model,
-\code{\link[=create_CohortDtstmTrans.msm]{create_CohortDtstmTrans.msm()}} for a cohort discrete time state transition
+\link{CohortDtstmTrans} for a cohort discrete time state transition
 model, and
 \code{\link[=create_StateVals.lm]{create_StateVals.lm()}} for a health state values model.
 }

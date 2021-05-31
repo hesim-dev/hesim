@@ -42,7 +42,7 @@ coeflist_to_array <- function(coefs) {
 #' @examples 
 #' # Consider a sick-sicker model and model transitions from the sick state
 #' 
-#' ## We can conveniently instantiate from a list of matrices
+#' ## We can instantiate from a list of data frames
 #' params <- params_mlogit(
 #'   coefs = list(
 #'     ### Transition from sick to sicker
@@ -61,7 +61,7 @@ coeflist_to_array <- function(coefs) {
 #' summary(params)
 #' params
 #' 
-#' ## We can also less conveniently instantiate from an array
+#' ## We can also instantiate from an array
 #' coefs_sicker <- data.frame(
 #'   intercept = c(-0.33, -.2, -.15),
 #'   treat = c(log(.75), log(.8), log(.9))
@@ -118,7 +118,7 @@ summary.params_mlogit <- function(object, prob = 0.95, ...) {
 print.params_mlogit <- function(x, ...) {
   
   cat("A \"params_mlogit\" object\n\n")
-  cat("Summary of coefficient estimates:\n")
+  cat("Summary of coefficients:\n")
   print(summary(x))
   cat("\n")
   cat(paste0("Number of parameter samples: ", x$n_samples))

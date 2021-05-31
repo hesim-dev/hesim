@@ -86,7 +86,7 @@ test_that("print.params_mlogit() works as expected", {
     coefs = array(1:16, dim = c(4, 2, 2))
   )
   expect_output(print(p), "A \"params_mlogit\" object")
-  expect_output(print(p), "Summary of coefficient estimates:")
+  expect_output(print(p), "Summary of coefficients:")
   expect_output(print(p), "Number of parameter samples: 4")
   expect_output(print(p), "Number of transitions: 2")
 })

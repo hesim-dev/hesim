@@ -35,7 +35,7 @@ membership for subject \eqn{i} in each of \eqn{K} classes as a function of covar
 \examples{
 # Consider a sick-sicker model and model transitions from the sick state
 
-## We can conveniently instantiate from a list of matrices
+## We can instantiate from a list of data frames
 params <- params_mlogit(
   coefs = list(
     ### Transition from sick to sicker
@@ -54,7 +54,7 @@ params <- params_mlogit(
 summary(params)
 params
 
-## We can also less conveniently instantiate from an array
+## We can also instantiate from an array
 coefs_sicker <- data.frame(
   intercept = c(-0.33, -.2, -.15),
   treat = c(log(.75), log(.8), log(.9))

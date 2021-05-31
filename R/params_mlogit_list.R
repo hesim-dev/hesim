@@ -59,7 +59,7 @@ summary.params_mlogit_list <- function(object, prob = 0.95, ...) {
 print.params_mlogit_list <- function(x, ...) {
   
   cat("A \"params_mlogit_list\" object\n\n")
-  cat("Summary of coefficient estimates:\n")
+  cat("Summary of coefficients:\n")
   print(summary(x))
   cat("\n")
   cat(paste0("Number of parameter samples: ", x[[1]]$n_samples))

@@ -146,10 +146,10 @@ summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {
 #' @export
 #' @seealso These methods are typically used to create model objects as a function
 #' of input data and a fitted statistical model. For examples, see 
-#' [create_PsmCurves.flexsurvreg_list()] for a partitioned survival model,
-#' [create_IndivCtstmTrans.flexsurvreg_list()] for an individual continuous time
+#' [PsmCurves] for a partitioned survival model,
+#' [IndivCtstmTrans] for an individual continuous time
 #' state transition model, 
-#' [create_CohortDtstmTrans.msm()] for a cohort discrete time state transition 
+#' [CohortDtstmTrans] for a cohort discrete time state transition 
 #' model, and
 #' [`create_StateVals.lm()`] for a health state values model. 
 #' @rdname create_params

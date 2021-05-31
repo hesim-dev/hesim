@@ -48,7 +48,7 @@ print.params_surv_list <- function(x, ...) {
   
   # Standard output
   cat("A \"params_surv_list\" object \n\n")
-  cat("Summary of coefficient estimates:\n")
+  cat("Summary of coefficients:\n")
   print(summary(x))
   cat("\n")
   cat(paste0("Number of parameter samples: ", x[[1]]$n_samples))
