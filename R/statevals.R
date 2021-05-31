@@ -251,13 +251,16 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
 #'   combination. Patients are matched to groups by specifying both a `patient_id` 
 #'   and a `grp_var` column in the `patients` table.
 #' @return A [`StateVals`] object.
-#' @seealso [`StateVals`], [`stateval_tbl()`]
+#' @seealso See [`StateVals`] for documentation of the class and additional examples. 
+#' An example use case for [create_StateVals.stateval_tbl()] is provided in 
+#' the [stateval_tbl()] documentation.
 #' @export
 create_StateVals <- function(object, ...){
   UseMethod("create_StateVals", object)
 } 
  
 #' @rdname create_StateVals
+#' @example man-roxygen/example-create_StateVals.lm.R
 #' @export  
 create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
                                 uncertainty = c("normal", "none"), ...){
@@ -507,7 +510,7 @@ StateVals <- R6::R6Class("StateVals",
     sim = function(t, type = c("predict", "random")){
       type <- match.arg(type)
       self$check()
-      res <- data.table(C_statevals_sim(self, t, type))
+      res <- data.table(C_statevals_sim(self, sort(t), type))
       res[, sample := sample + 1]
       return(res[])
     },

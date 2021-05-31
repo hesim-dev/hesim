@@ -36,9 +36,12 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
     for (int k = 0; k < obs_index.n_strategies_;++k){
       for (int i = 0; i < obs_index.n_patients_;++i){
         for (int h = 0; h < obs_index.n_healthvals_; ++h){
-          int time_index = 0;
+          obs_index.set_time_index(0);
           for (int t = 0; t < times.size(); ++t){
-            int obs = obs_index(k, i, h, time_index);
+            while (times[t] > obs_index.get_time_stop()){
+              obs_index.set_time_index(obs_index.get_time_index() + 1);
+            }
+            int obs = obs_index(k, i, h, obs_index.get_time_index());
             strategy_id_vec[index] = obs_index.get_strategy_id();
             sample_vec[index] = s;
             state_id_vec[index] = obs_index.get_health_id();
@@ -46,9 +49,6 @@ Rcpp::DataFrame C_statevals_sim(Rcpp::Environment R_StateVals,
             times_vec[index] = times[t];
             value_vec[index] = statevals.sim(s, obs, type);
             ++index;
-            if (times[t] >= obs_index.get_time_stop()){
-              ++time_index;
-            }
           } // end time loop
         } // end health states loop
       } // end patients loop

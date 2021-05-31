@@ -104,7 +104,10 @@ create_params.lm <- function(object, n = 1000, uncertainty = c("normal", "none")
   
   if (uncertainty == "normal"){
     coefs_sim <- MASS::mvrnorm(n, stats::coef(object), stats::vcov(object))
-    if(is.vector(coefs_sim)) coefs_sim <- matrix(coefs_sim, nrow = 1)
+    if (n == 1) {
+      coefs_sim <- matrix(coefs_sim, nrow = 1)
+      colnames(coefs_sim) <- names(stats::coef(object))
+    }
     return(new_params_lm(coefs = coefs_sim,
                          sigma = rep(summary(object)$sigma, n),
                          n_samples = n))
