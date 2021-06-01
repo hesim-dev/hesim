@@ -455,6 +455,12 @@ create_StateVals.eval_model <- function(object, cost = TRUE, name = NULL,
 #' @description
 #' Simulate values (i.e., utility or costs) associated with health states in a 
 #' state transition or partitioned survival model. 
+#' 
+#' @example man-roxygen/example-StateVals.R
+#' @name StateVals
+NULL
+
+#' @rdname StateVals
 #' @export
 StateVals <- R6::R6Class("StateVals",
   public = list(
