@@ -15,7 +15,7 @@ library("ggplot2")
 theme_set(theme_bw())
 
 # Simulation data
-strategies <- data.frame(strategy_id = c(1, 2, 3), 
+strategies <- data.frame(strategy_id = c(1, 2, 3),
                          strategy_name = paste0("Strategy ", 1:3))
 patients <- data.frame(patient_id = seq(1, 3),
                        age = c(45, 50, 60),
@@ -28,7 +28,7 @@ hesim_dat <- hesim_data(strategies = strategies,
 labs <- c(
   get_labels(hesim_dat),
   list(curve = c("Endpoint 1" = 1,
-                "Endpoint 2" = 2,
+                 "Endpoint 2" = 2,
                  "Endpoint 3" = 3))
 )
 n_samples <- 2
@@ -45,15 +45,15 @@ fits <- flexsurvreg_list(fit1, fit2, fit3)
 
 surv_input_data <- expand(hesim_dat, by = c("strategies", "patients"))
 psm_curves <- create_PsmCurves(fits, input_data = surv_input_data,
-                               uncertainty = "bootstrap", est_data = surv_est_data, 
+                               uncertainty = "bootstrap", est_data = surv_est_data,
                                n = n_samples)
 
 # Cost model(s)
 cost_input_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
-fit_costs_medical <- stats::lm(costs ~ female + state_name, 
+fit_costs_medical <- stats::lm(costs ~ female + state_name,
                                data = psm4_exdata$costs$medical)
-psm_costs_medical <- create_StateVals(fit_costs_medical, 
-                                      input_data = cost_input_data, 
+psm_costs_medical <- create_StateVals(fit_costs_medical,
+                                      input_data = cost_input_data,
                                       n = n_samples)
 
 # Utility model
@@ -75,7 +75,6 @@ autoplot(psm$stateprobs_, labels = labs)
 psm$sim_costs(dr = .03)
 head(psm$costs_)
 head(psm$sim_qalys(dr = .03)$qalys_)
-
 }
 \references{
 \href{https://arxiv.org/abs/2102.09437}{Incerti and Jansen (2021)}.
@@ -84,6 +83,12 @@ example in oncology. The mathematical approach used to simulate costs and QALYs 
 state probabilities is described in Section 2.1.
 }
 \seealso{
+The \code{\link{PsmCurves}} documentation
+describes the class for the survival models and the \code{\link{StateVals}} documentation
+describes the class for the cost and utility models. A \code{\link{PsmCurves}}
+object is typically created using \code{\link[=create_PsmCurves]{create_PsmCurves()}}. A longer example is
+provided in \code{vignette("psm")}.
+
 \code{\link{PsmCurves}}, \code{\link[=create_PsmCurves]{create_PsmCurves()}}
 }
 \section{Public fields}{

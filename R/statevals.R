@@ -1,3 +1,93 @@
+# StateVals class --------------------------------------------------------------
+#' Model for state values
+#' 
+#' @description
+#' Simulate values (i.e., utility or costs) associated with health states in a 
+#' state transition or partitioned survival model. 
+#' 
+#' @example man-roxygen/example-StateVals.R
+#' @name StateVals
+NULL
+
+#' @rdname StateVals
+#' @export
+StateVals <- R6::R6Class(
+  "StateVals",
+  
+  public = list(
+    #' @field params Parameters for simulating state values. Currently supports
+    #'  objects of class [`tparams_mean`] or [`params_lm`].   
+    params = NULL,
+    
+    #' @field input_data  An object of class [input_mats]. Only used for
+    #' [`params_lm`] objects.
+    input_data = NULL,
+    
+    #' @field method The method used to simulate costs and 
+    #' quality-adjusted life-years (QALYs) as a function of state values.
+    #'  If `wlos`, then costs and QALYs are
+    #' simulated by weighting state values by the length of stay in a health
+    #' state. If `starting`, then state values represent a one-time value
+    #' that occurs when a patient enters a health state. When `starting` is 
+    #' used in a cohort model, the state values only accrue at time 0; 
+    #' in contrast, in an individual-level model, state values
+    #' accrue each time a patient enters a new state and are discounted based on
+    #' time of entrance into that state. 
+    method = NULL,
+    
+    #' @field time_reset If `FALSE` then time intervals are based on time since
+    #'  the start of the simulation. If `TRUE`, then time intervals reset each 
+    #'  time a patient enters a new health state. This is relevant if, for example, 
+    #'  costs vary over time within health states. Only used if `method = wlos`.
+    time_reset = NULL,    
+    
+    #' @description
+    #' Create a new `StateVals` object.
+    #' @param params The `params` field.
+    #' @param input_data The `input_data` field.
+    #' @param method The `method` field.
+    #' @param time_reset The `time_reset` field.
+    #' @return A new `StateVals` object.
+    initialize = function(params, input_data = NULL,
+                          method = c("wlos", "starting"),
+                          time_reset = FALSE) {
+      self$params <- params
+      self$input_data <- input_data
+      self$method <- match.arg(method)
+      self$time_reset <- time_reset
+    },
+    
+    #' @description
+    #' Simulate state values with either predicted means or random samples by
+    #'  treatment strategy, patient, health state, and time `t`.
+    #' @param t A numeric vector of times. 
+    #' @param type  `"predict"` for mean values or `"random"` for random samples. 
+    #' @return A `data.table` of simulated state values with columns for `sample`,
+    #' `strategy_id`, `patient_id`, `state_id`, `time`, and `value`.  
+    sim = function(t, type = c("predict", "random")){
+      type <- match.arg(type)
+      self$check()
+      res <- data.table(C_statevals_sim(self, sort(t), type))
+      res[, sample := sample + 1]
+      return(res[])
+    },
+    
+    #' @description
+    #' Input validation for class. Checks that fields are the correct type. 
+    check = function(){
+      if(!inherits(self$params, c("tparams_mean", "params_lm"))){
+        stop("Class of 'params' is not supported. See documentation.",
+             call. = FALSE)
+      }      
+      if(!inherits(self$input_data, c("input_mats", "NULL"))){
+        stop("'input_data' must be an object of class 'input_mats'",
+             call. = FALSE)
+      }
+      stopifnot(is.logical(self$time_reset))
+    }
+  )
+)
+
 # stateval_tbl -----------------------------------------------------------------
 #' Table to store state value parameters
 #' 
@@ -228,7 +318,7 @@ stateval_tbl <- function(tbl, dist = c("norm", "beta", "gamma",
   return(tbl2)
 }
 
-# StateVals --------------------------------------------------------------------
+# create_StateVals methods -----------------------------------------------------
 #' Create a `StateVals` object
 #' 
 #' `create_StateVals()` is a generic function for creating an object of class
@@ -450,89 +540,3 @@ create_StateVals.eval_model <- function(object, cost = TRUE, name = NULL,
                            init_args)))
 }
 
-#' Model for state values
-#' 
-#' @description
-#' Simulate values (i.e., utility or costs) associated with health states in a 
-#' state transition or partitioned survival model. 
-#' 
-#' @example man-roxygen/example-StateVals.R
-#' @name StateVals
-NULL
-
-#' @rdname StateVals
-#' @export
-StateVals <- R6::R6Class("StateVals",
-  public = list(
-    #' @field params Parameters for simulating state values. Currently supports
-    #'  objects of class [`tparams_mean`] or [`params_lm`].   
-    params = NULL,
-    
-    #' @field input_data  An object of class [input_mats]. Only used for
-    #' [`params_lm`] objects.
-    input_data = NULL,
-    
-    #' @field method The method used to simulate costs and 
-    #' quality-adjusted life-years (QALYs) as a function of state values.
-    #'  If `wlos`, then costs and QALYs are
-    #' simulated by weighting state values by the length of stay in a health
-    #' state. If `starting`, then state values represent a one-time value
-    #' that occurs when a patient enters a health state. When `starting` is 
-    #' used in a cohort model, the state values only accrue at time 0; 
-    #' in contrast, in an individual-level model, state values
-    #' accrue each time a patient enters a new state and are discounted based on
-    #' time of entrance into that state. 
-    method = NULL,
-    
-    #' @field time_reset If `FALSE` then time intervals are based on time since
-    #'  the start of the simulation. If `TRUE`, then time intervals reset each 
-    #'  time a patient enters a new health state. This is relevant if, for example, 
-    #'  costs vary over time within health states. Only used if `method = wlos`.
-    time_reset = NULL,    
-
-    #' @description
-    #' Create a new `StateVals` object.
-    #' @param params The `params` field.
-    #' @param input_data The `input_data` field.
-    #' @param method The `method` field.
-    #' @param time_reset The `time_reset` field.
-    #' @return A new `StateVals` object.
-    initialize = function(params, input_data = NULL,
-                          method = c("wlos", "starting"),
-                          time_reset = FALSE) {
-      self$params <- params
-      self$input_data <- input_data
-      self$method <- match.arg(method)
-      self$time_reset <- time_reset
-    },
-    
-    #' @description
-    #' Simulate state values with either predicted means or random samples by
-    #'  treatment strategy, patient, health state, and time `t`.
-    #' @param t A numeric vector of times. 
-    #' @param type  `"predict"` for mean values or `"random"` for random samples. 
-    #' @return A `data.table` of simulated state values with columns for `sample`,
-    #' `strategy_id`, `patient_id`, `state_id`, `time`, and `value`.  
-    sim = function(t, type = c("predict", "random")){
-      type <- match.arg(type)
-      self$check()
-      res <- data.table(C_statevals_sim(self, sort(t), type))
-      res[, sample := sample + 1]
-      return(res[])
-    },
-    
-    #' @description
-    #' Input validation for class. Checks that fields are the correct type. 
-    check = function(){
-      if(!inherits(self$params, c("tparams_mean", "params_lm"))){
-        stop("Class of 'params' is not supported. See documentation.",
-             call. = FALSE)
-      }      
-      if(!inherits(self$input_data, c("input_mats", "NULL"))){
-        stop("'input_data' must be an object of class 'input_mats'",
-            call. = FALSE)
-      }
-      stopifnot(is.logical(self$time_reset))
-    }
-  )
-)

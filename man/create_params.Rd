@@ -41,8 +41,8 @@ to \code{\link[=bootstrap.partsurvfit]{bootstrap.partsurvfit()}}.}
 
 \item{uncertainty}{Method determining how parameter uncertainty should be handled.
 If \code{"normal"}, then parameters are randomly drawn from their multivariate normal
-distribution. If \verb{"bootstrap}, then parameters are bootstrapped using \code{\link{bootstrap}}.
-If \verb{"none}, then only point estimates are returned.}
+distribution. If \code{"bootstrap"}, then parameters are bootstrapped using \code{\link{bootstrap}}.
+If \code{"none"}, then only point estimates are returned.}
 }
 \value{
 An object prefixed by \code{params_}. Mapping between \code{create_params}
@@ -79,12 +79,13 @@ print(params_surv_wei$dist)
 head(params_surv_wei$coefs)
 }
 \seealso{
-These methods are typically used to create model objects as a function
-of input data and a fitted statistical model. For examples, see
-\link{PsmCurves} for a partitioned survival model,
-\link{IndivCtstmTrans} for an individual continuous time
+These methods are typically used alongside \code{\link[=create_input_mats]{create_input_mats()}}
+to create model objects as a function of input data and a
+fitted statistical model. For instance,
+\code{\link[=create_PsmCurves]{create_PsmCurves()}} creates a partitioned survival model,
+\code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}} creates an individual continuous time
 state transition model,
-\link{CohortDtstmTrans} for a cohort discrete time state transition
+\code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}} creates a cohort discrete time state transition
 model, and
-\code{\link[=create_StateVals.lm]{create_StateVals.lm()}} for a health state values model.
+\code{\link[=create_StateVals]{create_StateVals()}} creates a health state values model.
 }

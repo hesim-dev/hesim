@@ -20,19 +20,22 @@ create_PsmCurves(object, ...)
 \method{create_PsmCurves}{params_surv_list}(object, input_data, ...)
 }
 \arguments{
-\item{object}{Fitted survival models.}
+\item{object}{An object of the appropriate class containing fitted survival
+models.}
 
 \item{...}{Further arguments passed to or from other methods. Passed to \code{\link[=create_params.partsurvfit]{create_params.partsurvfit()}}
 when \code{object} is of class \code{\link{flexsurvreg_list}}.}
 
 \item{input_data}{An object of class \code{expanded_hesim_data} returned by
-\code{\link{expand.hesim_data}}. Must be expanded by the data tables "strategies" and
-"patients".}
+\code{\link[=expand.hesim_data]{expand.hesim_data()}}. Must be expanded by the data tables \code{"strategies"} and
+\code{"patients"}.}
 
-\item{n}{Number of random observations of the parameters to draw.}
+\item{n}{Number of random observations to draw. Not used if \code{uncertainty = "none"}.}
 
-\item{uncertainty}{Method determining how parameter uncertainty should be handled. See
-documentation in \code{\link[=create_params]{create_params()}}.}
+\item{uncertainty}{Method determining how parameter uncertainty should be handled.
+If \code{"normal"}, then parameters are randomly drawn from their multivariate normal
+distribution. If \code{"bootstrap"}, then parameters are bootstrapped using \code{\link{bootstrap}}.
+If \code{"none"}, then only point estimates are returned.}
 
 \item{est_data}{A \code{data.table} or \code{data.frame} of estimation data
 used to fit survival models during bootstrap replications.}
@@ -41,9 +44,8 @@ used to fit survival models during bootstrap replications.}
 Returns an \code{R6Class} object of class \code{\link{PsmCurves}}.
 }
 \description{
-\code{create_PsmCurves} is a function for creating an object of class
-\code{\link{PsmCurves}}.
+A generic function for creating a \code{\link{PsmCurves}} object.
 }
 \seealso{
-\code{\link{PsmCurves}}
+See \code{\link{PsmCurves}} and \code{\link{Psm}} for examples.
 }

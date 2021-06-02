@@ -13,12 +13,12 @@ Summarize N-1 survival curves for an N-state partitioned survival model.
 library("flexsurv")
 
 # Simulation data
-dt_strategies <- data.frame(strategy_id = c(1, 2, 3))
-dt_patients <- data.frame(patient_id = seq(1, 3),
-                          age = c(45, 50, 60),
-                          female = c(0, 0, 1))
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients)
+strategies <- data.frame(strategy_id = c(1, 2, 3))
+patients <- data.frame(patient_id = seq(1, 3),
+                       age = c(45, 50, 60),
+                       female = c(0, 0, 1))
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients)
 
 # Fit survival models
 surv_est_data <- psm4_exdata$survival
@@ -39,10 +39,12 @@ psm_curves <- create_PsmCurves(fits, input_data = surv_input_data, n = 3,
 head(psm_curves$quantile(p = c(.25, .5, .75)))
 head(psm_curves$survival(t = seq(0, 3, by = .1)))
 head(psm_curves$rmst(t = c(2, 5)))
-
 }
 \seealso{
-\code{\link{Psm}}, \code{\link[=create_PsmCurves]{create_PsmCurves()}}
+\code{PsmCurves} are conveniently created from either fitted models or
+parameter objects with \code{\link[=create_PsmCurves]{create_PsmCurves()}}. A complete economic model can be
+implemented with the \code{\link{Psm}} class. A longer example is provided in
+\code{vignette("psm")}.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

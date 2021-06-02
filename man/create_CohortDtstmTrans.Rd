@@ -41,17 +41,18 @@ create_CohortDtstmTrans(object, ...)
 \item{trans_mat}{A transition matrix describing the states and transitions
 in a discrete-time multi-state model. See \code{\link{CohortDtstmTrans}}.}
 
-\item{n}{Number of random observations of the parameters to draw.}
+\item{n}{Number of random observations to draw. Not used if \code{uncertainty = "none"}.}
 
-\item{uncertainty}{Method determining how parameter uncertainty should be handled. See
-documentation in \code{\link[=create_params]{create_params()}}.}
+\item{uncertainty}{Method determining how parameter uncertainty should be handled.
+If \code{"normal"}, then parameters are randomly drawn from their multivariate normal
+distribution. If \code{"none"}, then only point estimates are returned.}
 
 \item{cycle_length}{The length of a model cycle in terms of years. The default
 is 1 meaning that model cycles are 1 year long.}
 }
 \description{
-A generic function for creating an object of class \code{CohortDtstmTrans}.
+A generic function for creating an object of class \code{\link{CohortDtstmTrans}}.
 }
 \seealso{
-\code{\link{CohortDtstmTrans}}
+See \code{\link{CohortDtstmTrans}} for examples.
 }

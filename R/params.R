@@ -111,8 +111,8 @@ summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {
 #' @param n Number of random observations to draw. Not used if `uncertainty = "none"`.
 #' @param uncertainty Method determining how parameter uncertainty should be handled. 
 #' If `"normal"`, then parameters are randomly drawn from their multivariate normal
-#' distribution. If `"bootstrap`, then parameters are bootstrapped using [`bootstrap`].
-#' If `"none`, then only point estimates are returned.
+#' distribution. If `"bootstrap"`, then parameters are bootstrapped using [`bootstrap`].
+#' If `"none"`, then only point estimates are returned.
 #' @param ... Further arguments passed to or from other methods. Only used when
 #'  `object` is of class `partsurvfit`, in which case the arguments are passed 
 #'  to [`bootstrap.partsurvfit()`].
@@ -144,14 +144,15 @@ summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {
 #' print(params_surv_wei$dist)
 #' head(params_surv_wei$coefs)
 #' @export
-#' @seealso These methods are typically used to create model objects as a function
-#' of input data and a fitted statistical model. For examples, see 
-#' [PsmCurves] for a partitioned survival model,
-#' [IndivCtstmTrans] for an individual continuous time
+#' @seealso These methods are typically used alongside [create_input_mats()] 
+#' to create model objects as a function of input data and a 
+#' fitted statistical model. For instance, 
+#' [create_PsmCurves()] creates a partitioned survival model,
+#' [create_IndivCtstmTrans()] creates an individual continuous time
 #' state transition model, 
-#' [CohortDtstmTrans] for a cohort discrete time state transition 
+#' [create_CohortDtstmTrans()] creates a cohort discrete time state transition 
 #' model, and
-#' [`create_StateVals.lm()`] for a health state values model. 
+#' [`create_StateVals()`] creates a health state values model. 
 #' @rdname create_params
 create_params <- function (object, ...) {
   UseMethod("create_params", object)
