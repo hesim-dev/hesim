@@ -6,12 +6,12 @@
 ## Setup the model
 hesim_dat <- hesim_data(
   strategies = data.frame(strategy_id = c(1, 2)),
-  patients <- data.frame(patient_id = 1:3),
+  patients = data.frame(patient_id = 1:3),
   states = data.frame(state_id = c(1, 2), # Non-death states
                       state_name = c("sick", "sicker")) 
 )
 
-## Utility varies by health state
+## Drug costs vary by health state and time interval
 drugcost_tbl <- stateval_tbl(
   data.frame(
     strategy_id = c(1, 1, 2, 2),

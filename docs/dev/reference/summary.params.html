@@ -173,7 +173,7 @@ correctly and sampling distributions of the coefficients are as expected." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Summarize parameter objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit.R'><code>R/params_mlogit.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit_list.R'><code>R/params_mlogit_list.R</code></a>, and 2 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_lm.R'><code>R/params_lm.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit.R'><code>R/params_mlogit.R</code></a>, and 3 more</small>
     <div class="hidden name"><code>summary.params.Rd</code></div>
     </div>
 
@@ -186,7 +186,10 @@ convenient way to check whether a parameter object has been specified
 correctly and sampling distributions of the coefficients are as expected.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for params_mlogit</span>
+    <pre class="usage"><span class='co'># S3 method for params_lm</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for params_mlogit</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for params_mlogit_list</span>
@@ -228,9 +231,11 @@ from its probability distribution.</p></dd>
 
 </dl><p>In addition, the following columns may also be present:</p><dl>
 <dt>parameter</dt><dd><p>The name of the parameter of interest. This is relevant
-for <code><a href='params_surv.html'>params_surv</a></code> and <code><a href='params_surv_list.html'>params_surv_list</a></code> objects since regression coefficients
-are used to model the underlying parameters of the survival distribution (e.g.,
-shape and scale for a Weibull model).</p></dd>
+for any parametric model in which the underlying probability distribution
+has multiple parameters. For instance, both <code><a href='params_surv.html'>params_surv</a></code> and <code><a href='params_surv_list.html'>params_surv_list</a></code>
+store regression coefficients that are used to model the underlying parameters
+of the survival distribution (e.g., shape and scale for a Weibull model). Similarly,
+there are two parameters (<code>mean</code> and <code>sd</code>) for <code><a href='params_lm.html'>params_lm</a></code> objects.</p></dd>
 <dt>model</dt><dd><p>The name of the statistical model. This is used for a
 <code><a href='params_surv_list.html'>params_surv_list</a></code> object, where each list element represents a separate model.
 In a state transition model, each model is a unique health state transition and

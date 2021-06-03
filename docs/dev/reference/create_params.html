@@ -170,7 +170,7 @@ then random samples from suitable probability distributions are returned." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a parameter object from a fitted model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit.R'><code>R/params_mlogit.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit_list.R'><code>R/params_mlogit_list.R</code></a>, and 2 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_lm.R'><code>R/params_lm.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit.R'><code>R/params_mlogit.R</code></a>, and 3 more</small>
     <div class="hidden name"><code>create_params.Rd</code></div>
     </div>
 
@@ -226,8 +226,8 @@ to <code><a href='bootstrap.html'>bootstrap.partsurvfit()</a></code>.</p></td>
       <th>uncertainty</th>
       <td><p>Method determining how parameter uncertainty should be handled.
 If <code>"normal"</code>, then parameters are randomly drawn from their multivariate normal
-distribution. If <code>"bootstrap</code>, then parameters are bootstrapped using <code><a href='bootstrap.html'>bootstrap</a></code>.
-If <code>"none</code>, then only point estimates are returned.</p></td>
+distribution. If <code>"bootstrap"</code>, then parameters are bootstrapped using <code><a href='bootstrap.html'>bootstrap</a></code>.
+If <code>"none"</code>, then only point estimates are returned.</p></td>
     </tr>
     </table>
 
@@ -243,43 +243,54 @@ and the classes of the returned objects are:</p><ul>
 <li><p><code>create_params.partsurvfit</code> -&gt; <code><a href='params_surv_list.html'>params_surv_list</a></code></p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>These methods are typically used alongside <code><a href='create_input_mats.html'>create_input_mats()</a></code>
+to create model objects as a function of input data and a
+fitted statistical model. For instance,
+<code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code> creates the survival model for a partitioned survival model,
+<code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code> creates the transition model for an individual
+continuous time state transition model,
+<code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans()</a></code> creates the transition model for a cohort discrete
+time state transition model, and
+<code><a href='create_StateVals.html'>create_StateVals()</a></code> creates a health state values model.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># create_params.lm</span>
-<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>costs</span> <span class='op'>~</span> <span class='va'>female</span>, data <span class='op'>=</span> <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span><span class='op'>)</span>
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>costs</span> <span class='op'>~</span> <span class='va'>female</span>, data <span class='op'>=</span> <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span><span class='op'>)</span>
 <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
 <span class='va'>params_lm</span> <span class='op'>&lt;-</span> <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>fit</span>, n <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      (Intercept)     female
-#&gt; [1,]    33635.21  1293.1617
-#&gt; [2,]    31688.59  -843.0253
-#&gt; [3,]    31119.71  3867.6203
-#&gt; [4,]    33937.78 -2447.6996
-#&gt; [5,]    29714.33  5863.4354</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      (Intercept)    female
+#&gt; [1,]    32452.58 -1435.596
+#&gt; [2,]    32281.27  3643.123
+#&gt; [3,]    35033.22 -2915.586
+#&gt; [4,]    31465.69  2262.802
+#&gt; [5,]    30575.49  3618.836</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># create_params.flexsurvreg</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
-<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span>formula <span class='op'>=</span> <span class='fu'>Surv</span><span class='op'>(</span><span class='va'>futime</span>, <span class='va'>fustat</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, 
-                    data <span class='op'>=</span> <span class='va'>ovarian</span>, dist <span class='op'>=</span> <span class='st'>"weibull"</span><span class='op'>)</span>
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span>formula <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>futime</span>, <span class='va'>fustat</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, 
+                   data <span class='op'>=</span> <span class='va'>ovarian</span>, dist <span class='op'>=</span> <span class='st'>"weibull"</span><span class='op'>)</span>
 <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
 <span class='va'>params_surv_wei</span> <span class='op'>&lt;-</span> <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>fit</span>, n <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>params_surv_wei</span><span class='op'>$</span><span class='va'>dist</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_surv_wei</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $shape
 #&gt;      (Intercept)
-#&gt; [1,] -0.18974308
-#&gt; [2,]  0.33931250
-#&gt; [3,]  0.05098713
-#&gt; [4,]  0.10409912
-#&gt; [5,]  0.27292908
+#&gt; [1,] -0.07338911
+#&gt; [2,]  0.71344775
+#&gt; [3,]  0.34712364
+#&gt; [4,] -0.02217379
+#&gt; [5,]  0.29415180
 #&gt; 
 #&gt; $scale
 #&gt;      (Intercept)
-#&gt; [1,]    7.257392
-#&gt; [2,]    6.424840
-#&gt; [3,]    6.521574
-#&gt; [4,]    7.168182
-#&gt; [5,]    7.184668
+#&gt; [1,]    7.326029
+#&gt; [2,]    6.513450
+#&gt; [3,]    6.546107
+#&gt; [4,]    7.129277
+#&gt; [5,]    6.815276
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

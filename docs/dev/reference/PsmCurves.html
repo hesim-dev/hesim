@@ -183,7 +183,10 @@
     <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='Psm.html'>Psm</a></code>, <code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code></p></div>
+    <div class='dont-index'><p><code>PsmCurves</code> are conveniently created from either fitted models or
+parameter objects with <code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code>. A complete economic model can be
+implemented with the <code><a href='Psm.html'>Psm</a></code> class. A longer example is provided in
+<code><a href='../articles/psm.html'>vignette("psm")</a></code>.</p></div>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
@@ -311,12 +314,12 @@ for each survival curve.</p><h4 class='hasAnchor' id='arguments'><a class='ancho
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
 
 <span class='co'># Simulation data</span>
-<span class='va'>dt_strategies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>dt_patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>,
-                          age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span><span class='op'>)</span>,
-                          female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='va'>dt_strategies</span>,
-                        patients <span class='op'>=</span> <span class='va'>dt_patients</span><span class='op'>)</span>
+<span class='va'>strategies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>,
+                       age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span><span class='op'>)</span>,
+                       female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='va'>strategies</span>,
+                        patients <span class='op'>=</span> <span class='va'>patients</span><span class='op'>)</span>
 
 <span class='co'># Fit survival models</span>
 <span class='va'>surv_est_data</span> <span class='op'>&lt;-</span> <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>survival</span>
@@ -336,27 +339,26 @@ for each survival curve.</p><h4 class='hasAnchor' id='arguments'><a class='ancho
 <span class='co'># Summarize survival curves</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves</span><span class='op'>$</span><span class='fu'>quantile</span><span class='op'>(</span>p <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve    p  quantile
-#&gt; 1:      1           1          1      1     1 0.25 0.3866488
-#&gt; 2:      1           1          1      1     1 0.50 0.9315998
-#&gt; 3:      1           1          1      1     1 0.75 1.8631995
-#&gt; 4:      1           1          1      1     2 0.25 0.7106876
-#&gt; 5:      1           1          1      1     2 0.50 1.7123456
-#&gt; 6:      1           1          1      1     2 0.75 3.4246912</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves</span><span class='op'>$</span><span class='fu'>survival</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span>, by <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+#&gt; 1:      1           1          1      1     1 0.25 0.3848725
+#&gt; 2:      1           1          1      1     1 0.50 0.9273197
+#&gt; 3:      1           1          1      1     1 0.75 1.8546395
+#&gt; 4:      1           1          1      1     2 0.25 0.7150268
+#&gt; 5:      1           1          1      1     2 0.50 1.7228005
+#&gt; 6:      1           1          1      1     2 0.75 3.4456010</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves</span><span class='op'>$</span><span class='fu'>survival</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span>, by <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve   t  survival
 #&gt; 1:      1           1          1      1     1 0.0 1.0000000
-#&gt; 2:      1           1          1      1     1 0.1 0.9282966
-#&gt; 3:      1           1          1      1     1 0.2 0.8617346
-#&gt; 4:      1           1          1      1     1 0.3 0.7999453
-#&gt; 5:      1           1          1      1     1 0.4 0.7425865
-#&gt; 6:      1           1          1      1     1 0.5 0.6893406</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves</span><span class='op'>$</span><span class='fu'>rmst</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+#&gt; 2:      1           1          1      1     1 0.1 0.9279779
+#&gt; 3:      1           1          1      1     1 0.2 0.8611430
+#&gt; 4:      1           1          1      1     1 0.3 0.7991216
+#&gt; 5:      1           1          1      1     1 0.4 0.7415672
+#&gt; 6:      1           1          1      1     1 0.5 0.6881580</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves</span><span class='op'>$</span><span class='fu'>rmst</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve t     rmst
-#&gt; 1:      1           1          1      1     1 2 1.040528
-#&gt; 2:      1           1          1      1     1 5 1.311450
-#&gt; 3:      1           1          1      1     2 2 1.370966
-#&gt; 4:      1           1          1      1     2 5 2.143980
-#&gt; 5:      1           1          1      1     3 2 1.529316
-#&gt; 6:      1           1          1      1     3 5 2.682939</div><div class='input'>
-</div></pre>
+#&gt; 1:      1           1          1      1     1 2 1.037815
+#&gt; 2:      1           1          1      1     1 5 1.305977
+#&gt; 3:      1           1          1      1     2 2 1.373888
+#&gt; 4:      1           1          1      1     2 5 2.153012
+#&gt; 5:      1           1          1      1     3 2 1.527851
+#&gt; 6:      1           1          1      1     3 5 2.677468</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

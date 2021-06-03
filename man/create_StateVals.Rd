@@ -52,7 +52,6 @@ combination. Patients are matched to groups by specifying both a \code{patient_i
 and a \code{grp_var} column in the \code{patients} table.
 }
 \examples{
-library("data.table")
 set.seed(10)
 
 # EXAMPLE FOR `create_statevals.lm()`
@@ -73,8 +72,9 @@ hesim_dat <- hesim_data(
 )
 
 ## Fit model
-medcost_estimation_data <- data.table(psm4_exdata$costs$medical)
-medcost_estimation_data[, time5 := rbinom(.N, 1, .5)] # Illustrative time dummy
+medcost_estimation_data <- psm4_exdata$costs$medical
+medcost_estimation_data$time5 <- rbinom(nrow(medcost_estimation_data), 
+                                        1, .5) # Illustrative time dummy
 medcost_fit <- lm(costs ~ female + state_name + time5, 
                   data = medcost_estimation_data)
 

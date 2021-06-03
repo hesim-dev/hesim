@@ -274,6 +274,67 @@ treatment strategy, patient, health state, and time <code>t</code>.</p><h4 class
 
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Simple sick-sicker example where drug costs vary by treatment strategy</span>
+<span class='co'># and over time. Prior to time = 5, costs are $10,000 for treatment strategy </span>
+<span class='co'># 1 and $5,000 for treatment strategy 2. After time = 5, costs are $2,000</span>
+<span class='co'># for both treatment strategies</span>
+
+<span class='co'>## Setup the model</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>
+  strategies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+  patients <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>,
+  states <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>state_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, <span class='co'># Non-death states</span>
+                      state_name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sick"</span>, <span class='st'>"sicker"</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='op'>)</span>
+
+<span class='co'>## Drug costs vary by health state and time interval</span>
+<span class='va'>drugcost_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>,
+    time_start <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>0</span>, <span class='fl'>5</span><span class='op'>)</span>,
+    est <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10000</span>, <span class='fl'>2000</span>, <span class='fl'>5000</span>, <span class='fl'>2000</span><span class='op'>)</span>
+  <span class='op'>)</span>,
+  dist <span class='op'>=</span> <span class='st'>"fixed"</span>
+<span class='op'>)</span>
+<span class='va'>drugcost_tbl</span>
+</div><div class='output co'>#&gt;    strategy_id time_id time_start time_stop   est
+#&gt; 1:           1       1          0         5 10000
+#&gt; 2:           1       2          5       Inf  2000
+#&gt; 3:           2       1          0         5  5000
+#&gt; 4:           2       2          5       Inf  2000</div><div class='input'>
+<span class='co'>## Create drug cost model</span>
+<span class='va'>drugcostmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span><span class='op'>(</span><span class='va'>drugcost_tbl</span>, n <span class='op'>=</span> <span class='fl'>1</span>, hesim_data <span class='op'>=</span> <span class='va'>hesim_dat</span><span class='op'>)</span>
+      
+<span class='co'>## Explore predictions from the drug cost model</span>
+<span class='va'>drugcostmod</span><span class='op'>$</span><span class='fu'>sim</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>6</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"predict"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id state_id time value
+#&gt;  1:      1           1          1        1    2 10000
+#&gt;  2:      1           1          1        1    6  2000
+#&gt;  3:      1           1          1        2    2 10000
+#&gt;  4:      1           1          1        2    6  2000
+#&gt;  5:      1           1          2        1    2 10000
+#&gt;  6:      1           1          2        1    6  2000
+#&gt;  7:      1           1          2        2    2 10000
+#&gt;  8:      1           1          2        2    6  2000
+#&gt;  9:      1           1          3        1    2 10000
+#&gt; 10:      1           1          3        1    6  2000
+#&gt; 11:      1           1          3        2    2 10000
+#&gt; 12:      1           1          3        2    6  2000
+#&gt; 13:      1           2          1        1    2  5000
+#&gt; 14:      1           2          1        1    6  2000
+#&gt; 15:      1           2          1        2    2  5000
+#&gt; 16:      1           2          1        2    6  2000
+#&gt; 17:      1           2          2        1    2  5000
+#&gt; 18:      1           2          2        1    6  2000
+#&gt; 19:      1           2          2        2    2  5000
+#&gt; 20:      1           2          2        2    6  2000
+#&gt; 21:      1           2          3        1    2  5000
+#&gt; 22:      1           2          3        1    6  2000
+#&gt; 23:      1           2          3        2    2  5000
+#&gt; 24:      1           2          3        2    6  2000
+#&gt;     sample strategy_id patient_id state_id time value</div><div class='input'> 
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

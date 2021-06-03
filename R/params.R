@@ -147,11 +147,11 @@ summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {
 #' @seealso These methods are typically used alongside [create_input_mats()] 
 #' to create model objects as a function of input data and a 
 #' fitted statistical model. For instance, 
-#' [create_PsmCurves()] creates a partitioned survival model,
-#' [create_IndivCtstmTrans()] creates an individual continuous time
-#' state transition model, 
-#' [create_CohortDtstmTrans()] creates a cohort discrete time state transition 
-#' model, and
+#' [create_PsmCurves()] creates the survival model for a partitioned survival model,
+#' [create_IndivCtstmTrans()] creates the transition model for an individual 
+#' continuous time state transition model, 
+#' [create_CohortDtstmTrans()] creates the transition model for a cohort discrete 
+#' time state transition model, and
 #' [`create_StateVals()`] creates a health state values model. 
 #' @rdname create_params
 create_params <- function (object, ...) {

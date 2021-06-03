@@ -82,10 +82,10 @@ head(params_surv_wei$coefs)
 These methods are typically used alongside \code{\link[=create_input_mats]{create_input_mats()}}
 to create model objects as a function of input data and a
 fitted statistical model. For instance,
-\code{\link[=create_PsmCurves]{create_PsmCurves()}} creates a partitioned survival model,
-\code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}} creates an individual continuous time
-state transition model,
-\code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}} creates a cohort discrete time state transition
-model, and
+\code{\link[=create_PsmCurves]{create_PsmCurves()}} creates the survival model for a partitioned survival model,
+\code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}} creates the transition model for an individual
+continuous time state transition model,
+\code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}} creates the transition model for a cohort discrete
+time state transition model, and
 \code{\link[=create_StateVals]{create_StateVals()}} creates a health state values model.
 }

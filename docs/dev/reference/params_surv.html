@@ -207,8 +207,9 @@ or piecewise exponential models. See "Details".</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>params_surv</code>, which is a list containing <code>coefs</code>,
-<code>dist</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the number of rows
-in each element of <code>coefs</code>, which must be the same. The list may also contain
+<code>dist</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the
+number of rows in each element of <code>coefs</code>, which must be the same. The <code>coefs</code>
+element is always converted into a list of matrices. The list may also contain
 <code>aux</code> if a spline, fractional polynomial, or piecewise exponential model is
 used.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -335,16 +336,16 @@ cumulative hazard or using <code>"discrete"</code> for random number generation.
 <span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>params</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    parameter      term    estimate      lower       upper
-#&gt; 1:     shape intercept  0.53080255  0.2352142  1.11475668
-#&gt; 2:     scale intercept 12.94850869 10.6444777 14.83119282
-#&gt; 3:     scale       age -0.08128706 -0.1231684 -0.03618582</div><div class='input'><span class='va'>params</span>
+#&gt; 1:     shape intercept  0.57127834  0.2902728  0.80848511
+#&gt; 2:     scale intercept 12.26309816 10.0587534 15.34147560
+#&gt; 3:     scale       age -0.08496697 -0.1124793 -0.06350733</div><div class='input'><span class='va'>params</span>
 </div><div class='output co'>#&gt; A "params_surv" object 
 #&gt; 
-#&gt; Summary of coefficient estimates:
+#&gt; Summary of coefficients:
 #&gt;    parameter      term    estimate      lower       upper
-#&gt; 1:     shape intercept  0.53080255  0.2352142  1.11475668
-#&gt; 2:     scale intercept 12.94850869 10.6444777 14.83119282
-#&gt; 3:     scale       age -0.08128706 -0.1231684 -0.03618582
+#&gt; 1:     shape intercept  0.57127834  0.2902728  0.80848511
+#&gt; 2:     scale intercept 12.26309816 10.0587534 15.34147560
+#&gt; 3:     scale       age -0.08496697 -0.1124793 -0.06350733
 #&gt; 
 #&gt; Number of parameter samples: 10
 #&gt; Distribution: weibull</div></pre>

@@ -217,7 +217,7 @@ $$Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}$$</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Consider a sick-sicker model and model transitions from the sick state</span>
 
-<span class='co'>## We can conveniently instantiate from a list of matrices</span>
+<span class='co'>## We can instantiate from a list of data frames</span>
 <span class='va'>params</span> <span class='op'>&lt;-</span> <span class='fu'>params_mlogit</span><span class='op'>(</span>
   coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='co'>### Transition from sick to sicker</span>
@@ -241,7 +241,7 @@ $$Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}$$</p>
 #&gt; 4:  death     treat -0.5131485 -0.5934864 -0.4347851</div><div class='input'><span class='va'>params</span>
 </div><div class='output co'>#&gt; A "params_mlogit" object
 #&gt; 
-#&gt; Summary of coefficient estimates:
+#&gt; Summary of coefficients:
 #&gt;        to      term   estimate      lower      upper
 #&gt; 1: sicker intercept -0.2266667 -0.3235000 -0.1525000
 #&gt; 2: sicker     treat -0.2053954 -0.2844551 -0.1112497
@@ -250,7 +250,7 @@ $$Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}$$</p>
 #&gt; 
 #&gt; Number of parameter samples: 3
 #&gt; Number of transitions: 2</div><div class='input'>
-<span class='co'>## We can also less conveniently instantiate from an array</span>
+<span class='co'>## We can also instantiate from an array</span>
 <span class='va'>coefs_sicker</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
   intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.33</span>, <span class='op'>-</span><span class='fl'>.2</span>, <span class='op'>-</span><span class='fl'>.15</span><span class='op'>)</span>,
   treat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.75</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.8</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.9</span><span class='op'>)</span><span class='op'>)</span>
@@ -271,7 +271,7 @@ $$Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}$$</p>
 <span class='va'>params2</span>
 </div><div class='output co'>#&gt; A "params_mlogit" object
 #&gt; 
-#&gt; Summary of coefficient estimates:
+#&gt; Summary of coefficients:
 #&gt;        to      term   estimate      lower      upper
 #&gt; 1: sicker intercept -0.2266667 -0.3235000 -0.1525000
 #&gt; 2: sicker     treat -0.2053954 -0.2844551 -0.1112497
