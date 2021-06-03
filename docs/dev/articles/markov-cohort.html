@@ -124,7 +124,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simple Markov cohort model</h1>
             
-            <h4 class="date">2021-02-24</h4>
+            <h4 class="date">2021-05-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-cohort.Rmd"><code>vignettes/markov-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-cohort.Rmd</code></div>
@@ -296,7 +296,7 @@
 <code class="sourceCode R"><span class="va">mod_def</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/define_model.html">define_model</a></span><span class="op">(</span>tparams_def <span class="op">=</span> <span class="va">tparams_def</span>, 
                         rng_def <span class="op">=</span> <span class="va">rng_def</span>, 
                         params <span class="op">=</span> <span class="va">params</span><span class="op">)</span></code></pre></div>
-<p>A economic model (of class <code>CohortDtstm</code>) can be created from the defined model and input data using the generic function <code><a href="../reference/create_CohortDtstm.html">create_CohortDtstm()</a></code>. The economic model is an <code>R6</code> object consisting of a transition model (<code>trans_model</code>) for simulating transition probabilities with <code>sim_stateprobs()</code>, a utility model for simulating quality-adjusted life-years with <code><a href="../reference/sim_ev.html">sim_qalys()</a></code>, and a set of cost models (for each cost category) for simulating costs with <code><a href="../reference/sim_ev.html">sim_costs()</a></code>.</p>
+<p>A economic model (of class <code>CohortDtstm</code>) can be created from the defined model and input data using the generic function <code><a href="../reference/create_CohortDtstm.html">create_CohortDtstm()</a></code>. The economic model is an <code>R6</code> object consisting of a transition model (<code>trans_model</code>) for simulating transition probabilities with <code><a href="../reference/sim_stateprobs.html">sim_stateprobs()</a></code>, a utility model for simulating quality-adjusted life-years with <code><a href="../reference/sim_ev.html">sim_qalys()</a></code>, and a set of cost models (for each cost category) for simulating costs with <code><a href="../reference/sim_ev.html">sim_costs()</a></code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_CohortDtstm.html">create_CohortDtstm</a></span><span class="op">(</span><span class="va">mod_def</span>, <span class="va">input_data</span><span class="op">)</span></code></pre></div>
 </div>
@@ -312,11 +312,11 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">)</span></code></pre></div>
 <pre><code>##    sample strategy_id patient_id grp_id state_id t      prob
 ## 1:      1           1          1      1        1 0 1.0000000
-## 2:      1           1          1      1        1 1 0.7158196
-## 3:      1           1          1      1        1 2 0.5123977
-## 4:      1           1          1      1        1 3 0.3667843
-## 5:      1           1          1      1        1 4 0.2625514
-## 6:      1           1          1      1        1 5 0.1879394</code></pre>
+## 2:      1           1          1      1        1 1 0.7291490
+## 3:      1           1          1      1        1 2 0.5316582
+## 4:      1           1          1      1        1 3 0.3876580
+## 5:      1           1          1      1        1 4 0.2826605
+## 6:      1           1          1      1        1 5 0.2061016</code></pre>
 <p>A plot can be generated quickly using the <code><a href="../reference/autoplot.stateprobs.html">autoplot.stateprobs()</a></code> method. As expected, patients survive longer with combination therapy.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">stateprobs_</span>, labels <span class="op">=</span> <span class="va">labs</span>,
@@ -331,22 +331,22 @@
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></code></pre></div>
 <pre><code>##    sample strategy_id patient_id grp_id state_id dr    qalys      lys
-## 1:      1           1          1      1        1  0 2.515749 2.515749
-## 2:      1           1          1      1        2  0 1.631820 1.631820
-## 3:      1           1          1      1        3  0 3.482907 3.482907
-## 4:      1           2          1      1        1  0 3.565556 3.565556
-## 5:      1           2          1      1        2  0 1.678202 1.678202
-## 6:      1           2          1      1        3  0 3.475159 3.475159</code></pre>
+## 1:      1           1          1      1        1  0 2.687209 2.687209
+## 2:      1           1          1      1        2  0 1.727430 1.727430
+## 3:      1           1          1      1        3  0 3.769376 3.769376
+## 4:      1           2          1      1        1  0 3.757508 3.757508
+## 5:      1           2          1      1        2  0 1.774959 1.774959
+## 6:      1           2          1      1        3  0 3.745847 3.745847</code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0.06</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></code></pre></div>
-<pre><code>##    sample strategy_id patient_id grp_id state_id   dr category    costs
-## 1:      1           1          1      1        1 0.06     drug 4710.822
-## 2:      1           1          1      1        2 0.06     drug 2834.178
-## 3:      1           1          1      1        3 0.06     drug 5168.898
-## 4:      1           2          1      1        1 0.06     drug 9760.481
-## 5:      1           2          1      1        2 0.06     drug 3195.636
-## 6:      1           2          1      1        3 0.06     drug 5064.196</code></pre>
+<pre><code>##    sample strategy_id patient_id grp_id state_id   dr category     costs
+## 1:      1           1          1      1        1 0.06     drug  4989.963
+## 2:      1           1          1      1        2 0.06     drug  2987.171
+## 3:      1           1          1      1        3 0.06     drug  5459.642
+## 4:      1           2          1      1        1 0.06     drug 10103.556
+## 5:      1           2          1      1        2 0.06     drug  3349.282
+## 6:      1           2          1      1        3 0.06     drug  5272.135</code></pre>
 </div>
 </div>
 </div>
@@ -363,11 +363,11 @@
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##              Outcome                       2
-## 1: Incremental QALYs       0.93 (0.56, 1.23)
-## 2: Incremental costs    5,796 (2,321, 9,692)
-## 3:   Incremental NMB 40,570 (22,564, 55,339)
-## 4:              ICER                   6,250</code></pre>
-<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.947 and approaches 1 at slightly higher WTP values.</p>
+## 1: Incremental QALYs       0.94 (0.56, 1.21)
+## 2: Incremental costs   5,927 (2,844, 10,636)
+## 3:   Incremental NMB 40,851 (22,988, 55,134)
+## 4:              ICER                   6,336</code></pre>
+<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.93 and approaches 1 at slightly higher WTP values.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_ceac.html">plot_ceac</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span></code></pre></div>
 <p><img src="markov-cohort_files/figure-html/ceac-1.png" width="576"></p>

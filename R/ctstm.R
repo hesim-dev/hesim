@@ -1,15 +1,17 @@
-# CtstmTrans -------------------------------------------------------------------
+# CtstmTrans base class --------------------------------------------------------
 #' An `R6` base class for continuous time state transition models
 #'
-#' @description
+#' @description 
 #' Contains methods that can be used to summarize both individual- and cohort-level
-#'  continuous time state transition models. That is, this class is relevant for
-#'  both Markov and semi-Markov multi-state models and does not depend on the 
-#'  methodology used for prediction of state probabilities. 
+#' continuous time state transition models. That is, this class is relevant for
+#' both Markov and semi-Markov multi-state models and does not depend on the 
+#' methodology used for prediction of state probabilities. 
 #' @format An [`R6::R6Class`] object.
 #' @seealso [`create_IndivCtstmTrans()`], [`IndivCtstmTrans`]
 #' @export
-CtstmTrans <- R6::R6Class("CtstmTrans",
+CtstmTrans <- R6::R6Class(
+  "CtstmTrans",
+  
   private = list(
     check_base = function(){
       if(!inherits(self$input_data, "input_mats")){
@@ -71,7 +73,7 @@ CtstmTrans <- R6::R6Class("CtstmTrans",
   )
 )
 
-# IndivCtstmTrans --------------------------------------------------------------
+# IndivCtstmTrans class --------------------------------------------------------
 indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
                                     progress = NULL){
   sample <- from <- to <- NULL # to avoid no visible bindings CRAN warning
@@ -161,144 +163,24 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
   return(stprobs[])      
 }
 
-#' Create `IndivCtstmTrans` object
-#' 
-#' A generic function for creating an object of class [`IndivCtstmTrans`].
-#' @param object A fitted survival model or the parameters of a survival model.  
-#' @param input_data An object of class `expanded_hesim_data` returned by 
-#' [`expand.hesim_data`].
-#' @param n Number of random observations of the parameters to draw.
-#' @param trans_mat The transition matrix describing the states and transitions in a 
-#' multi-state model in the format from the [`mstate`][mstate::mstate] package. See [`IndivCtstmTrans`].
-#' @param clock "reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
-#' of clock-reset and clock-forward models. See the field `clock` in [`IndivCtstmTrans`].
-#' @param reset_states A vector denoting the states in which time resets. See the field 
-#' `reset_states` in [`IndivCtstmTrans`].
-#' @param uncertainty Method determining how parameter uncertainty should be handled. See
-#'  documentation in [`create_params()`].
-#' @param ... Further arguments passed to `IndivCtstmTrans$new()` in [`IndivCtstmTrans`].
-#' @return Returns an [`R6Class`] object of class [`IndivCtstmTrans`].
-#' @seealso [`IndivCtstmTrans`]
-#' @name create_IndivCtstmTrans
-#' @rdname create_IndivCtstmTrans
-#' @export
-create_IndivCtstmTrans <- function(object, ...){
-  UseMethod("create_IndivCtstmTrans", object)
-}
-
-create_IndivCtstmTrans_flexsurvreg <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
-                                               n = 1000, uncertainty = c("normal", "none"),
-                                               is_uncertainty_missing, ...) {
-  # For backwards compatibility until deprecated point_estimate argument is no longer supported
-  dots <- list(...)  
-  uncertainty <- deprecate_point_estimate(dots$point_estimate, uncertainty,
-                                          is_uncertainty_missing)
-  dots <- dots[names(dots) != "point_estimate"]
-  
-  # Code to always keep
-  uncertainty <- match.arg(uncertainty)
-  input_mats <- create_input_mats(object, input_data)
-  params <- create_params(object, n = n, uncertainty = uncertainty)
-  return(
-    do.call(IndivCtstmTrans$new, 
-            c(list(input_data = input_mats, params = params, trans_mat = trans_mat,
-                   clock = match.arg(clock)), 
-              dots))
-  )
-  
-}
-
-
-#' @export
-#' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.flexsurvreg_list <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
-                                                    n = 1000, uncertainty = c("normal", "none"), ...){
-  return(
-    create_IndivCtstmTrans_flexsurvreg(object = object, input_data = input_data, trans_mat = trans_mat,
-                                       n = n, uncertainty = uncertainty,
-                                       is_uncertainty_missing = missing(uncertainty), ...)
-  )
-}
-
-#' @export
-#' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.flexsurvreg <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
-                                               n = 1000, uncertainty = c("normal", "none"), ...){
-  
-  return(
-    create_IndivCtstmTrans_flexsurvreg(object = object, input_data = input_data, trans_mat = trans_mat,
-                                       n = n, uncertainty = uncertainty,
-                                       is_uncertainty_missing = missing(uncertainty), ...)
-  )
-}
-
-#' @export
-#' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.params_surv <- function(object, input_data, trans_mat, 
-                                               clock = c("reset", "forward", "mix"),
-                                               reset_states = NULL,...){
-  input_mats <- create_input_mats(object, input_data)
-  return(IndivCtstmTrans$new(input_data = input_mats, params = object, trans_mat = trans_mat,
-                             clock = match.arg(clock), reset_states = reset_states, ...))
-}
-
-#' @export
-#' @rdname create_IndivCtstmTrans
-create_IndivCtstmTrans.params_surv_list <- function(object, input_data, trans_mat, 
-                                                    clock = c("reset", "forward", "mix"),
-                                                    reset_states = NULL,...){
-  input_mats <- create_input_mats(object, input_data)
-  return(IndivCtstmTrans$new(input_data = input_mats, params = object, trans_mat = trans_mat,
-                             clock = match.arg(clock), reset_states = reset_states, ...))
-}
-
 #' Transitions for an individual-level continuous time state transition model
 #'
 #' @description
 #' Simulate health state transitions in an individual-level continuous time state
 #'  transition model using parameters from a multi-state model.
 #' @format An [R6::R6Class] object.
-#' @examples 
-#' library("flexsurv")
-#'
-#' # Simulation data
-#' strategies <- data.frame(strategy_id = c(1, 2, 3))
-#' patients <- data.frame(patient_id = seq(1, 3),
-#'                        age = c(45, 50, 60),
-#'                        female = c(0, 0, 1))
-#'
-#' # Multi-state model with transition specific models
-#' tmat <- rbind(c(NA, 1, 2),
-#'               c(NA, NA, 3),
-#'               c(NA, NA, NA))
-#' fits <- vector(length = max(tmat, na.rm = TRUE), mode = "list")
-#' for (i in 1:length(fits)){
-#'   fits[[i]] <- flexsurvreg(Surv(years, status) ~ 1, 
-#'                            data = bosms3[bosms3$trans == i, ],
-#'                            dist = "exp")
-#' }
-#' fits <- flexsurvreg_list(fits)
-#'
-#' # Simulation model
-#' hesim_dat <- hesim_data(strategies = strategies,
-#'                         patients = patients)
-#' fits_data <- expand(hesim_dat)
-#' transmod <- create_IndivCtstmTrans(fits, input_data = fits_data, 
-#'                                    trans_mat = tmat,
-#'                                    n = 2)
-#' head(transmod$hazard(c(1, 2, 3)))
-#' head(transmod$cumhazard(c(1, 2, 3)))
-#' 
-#' ## Simulate disease progression and state probabilities together
-#' transmod$sim_stateprobs(t = c(0, 5, 10))[t == 5]
-#' 
-#' ## Simulate disease progression and state probabilities separately
-#' disprog <- transmod$sim_disease(max_t = 10)
-#' transmod$sim_stateprobs(t = c(0, 5, 10), disprog = disprog)[t == 5]
-#' 
-#' @seealso [`create_IndivCtstmTrans()`], [`IndivCtstm`]
+#' @example man-roxygen/example-IndivCtstmTrans.R
+#' @seealso `IndivCtstmTrans` objects are conveniently created from either 
+#' fitted models or parameter objects with [create_IndivCtstmTrans()]. 
+#' A complete economic model can be implemented with the [`IndivCtstm`] class. 
+#' @name IndivCtstmTrans
+NULL
+
+#' @rdname IndivCtstmTrans
 #' @export
-IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
+IndivCtstmTrans <- R6::R6Class(
+  "IndivCtstmTrans",
+  
   inherit = CtstmTrans,
   
   private = list(
@@ -455,10 +337,99 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
     
     
   ) # end public
-  
 )
 
-# IndivCtstm -------------------------------------------------------------------
+# create_IndivCtstmTrans methods -----------------------------------------------
+#' Create `IndivCtstmTrans` object
+#' 
+#' A generic function for creating an object of class [`IndivCtstmTrans`].
+#' @param object A fitted survival model or the parameters of a survival model.  
+#' @param input_data An object of class `expanded_hesim_data` returned by 
+#' [`expand.hesim_data`].
+#' @param trans_mat The transition matrix describing the states and transitions in a 
+#' multi-state model in the format from the [`mstate`][mstate::mstate] package. See [`IndivCtstmTrans`].
+#' @param clock "reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
+#' of clock-reset and clock-forward models. See the field `clock` in [`IndivCtstmTrans`].
+#' @param reset_states A vector denoting the states in which time resets. See the field 
+#' `reset_states` in [`IndivCtstmTrans`].
+#' @inheritParams create_CohortDtstmTrans
+#' @param ... Further arguments passed to `IndivCtstmTrans$new()` in [`IndivCtstmTrans`].
+#' @return Returns an [`R6Class`] object of class [`IndivCtstmTrans`].
+#' @seealso See [`IndivCtstmTrans`] and [`IndivCtstm`] for examples.
+#' @name create_IndivCtstmTrans
+#' @rdname create_IndivCtstmTrans
+#' @export
+create_IndivCtstmTrans <- function(object, ...){
+  UseMethod("create_IndivCtstmTrans", object)
+}
+
+create_IndivCtstmTrans_flexsurvreg <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
+                                               n = 1000, uncertainty = c("normal", "none"),
+                                               is_uncertainty_missing, ...) {
+  # For backwards compatibility until deprecated point_estimate argument is no longer supported
+  dots <- list(...)  
+  uncertainty <- deprecate_point_estimate(dots$point_estimate, uncertainty,
+                                          is_uncertainty_missing)
+  dots <- dots[names(dots) != "point_estimate"]
+  
+  # Code to always keep
+  uncertainty <- match.arg(uncertainty)
+  input_mats <- create_input_mats(object, input_data)
+  params <- create_params(object, n = n, uncertainty = uncertainty)
+  return(
+    do.call(IndivCtstmTrans$new, 
+            c(list(input_data = input_mats, params = params, trans_mat = trans_mat,
+                   clock = match.arg(clock)), 
+              dots))
+  )
+  
+}
+
+
+#' @export
+#' @rdname create_IndivCtstmTrans
+create_IndivCtstmTrans.flexsurvreg_list <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
+                                                    n = 1000, uncertainty = c("normal", "none"), ...){
+  return(
+    create_IndivCtstmTrans_flexsurvreg(object = object, input_data = input_data, trans_mat = trans_mat,
+                                       n = n, uncertainty = uncertainty,
+                                       is_uncertainty_missing = missing(uncertainty), ...)
+  )
+}
+
+#' @export
+#' @rdname create_IndivCtstmTrans
+create_IndivCtstmTrans.flexsurvreg <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
+                                               n = 1000, uncertainty = c("normal", "none"), ...){
+  
+  return(
+    create_IndivCtstmTrans_flexsurvreg(object = object, input_data = input_data, trans_mat = trans_mat,
+                                       n = n, uncertainty = uncertainty,
+                                       is_uncertainty_missing = missing(uncertainty), ...)
+  )
+}
+
+#' @export
+#' @rdname create_IndivCtstmTrans
+create_IndivCtstmTrans.params_surv <- function(object, input_data, trans_mat, 
+                                               clock = c("reset", "forward", "mix"),
+                                               reset_states = NULL,...){
+  input_mats <- create_input_mats(object, input_data)
+  return(IndivCtstmTrans$new(input_data = input_mats, params = object, trans_mat = trans_mat,
+                             clock = match.arg(clock), reset_states = reset_states, ...))
+}
+
+#' @export
+#' @rdname create_IndivCtstmTrans
+create_IndivCtstmTrans.params_surv_list <- function(object, input_data, trans_mat, 
+                                                    clock = c("reset", "forward", "mix"),
+                                                    reset_states = NULL,...){
+  input_mats <- create_input_mats(object, input_data)
+  return(IndivCtstmTrans$new(input_data = input_mats, params = object, trans_mat = trans_mat,
+                             clock = match.arg(clock), reset_states = reset_states, ...))
+}
+
+# IndivCtstm class -------------------------------------------------------------
 #' Individual-level continuous time state transition model
 #'
 #' @description
@@ -467,94 +438,31 @@ IndivCtstmTrans <- R6::R6Class("IndivCtstmTrans",
 #' (i.e., semi-Markov), "clock-forward" (i.e., Markov), and mixtures of 
 #' clock-reset and clock-forward multi-state models as described in 
 #' [`IndivCtstmTrans`]. 
+#' @format An [R6::R6Class] object.
+#' @seealso  The [`IndivCtstmTrans`] documentation
+#' describes the class for the transition model and the [`StateVals`] documentation
+#' describes the class for the cost and utility models. An [`IndivCtstmTrans`] 
+#' object is typically created using [create_IndivCtstmTrans()]. 
+#' 
+#' There are currently two relevant vignettes. `vignette("mstate")` shows how to
+#' parameterize `IndivCtstmTrans` objects in cases where patient-level data is 
+#' available by fitting a multi-state models. `vignette("markov-inhomogeneous-indiv")`
+#' shows how the time inhomogeneous Markov cohort model in 
+#' `vignette("markov-inhomogeneous-cohort")` can be developed as an individual
+#' patient simulation; in doing so, it shows how `IndivCtstm` models can be
+#' used even without access to patient-level data.
+#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437).
+#' See Section 2.2 for a mathematical description of an individual-level CTSTM and Section 4.1 for 
+#' an example in oncology.
+#' @example man-roxygen/example-IndivCtstm.R
+#' @name IndivCtstm
+NULL
+
 #' @param dr Discount rate.
 #' @param type `"predict"` for mean values or `"random"` for random samples 
 #' as in `$sim()` in [`StateVals`].
 #' @param by_patient If `TRUE`, then QALYs and/or costs are computed at the patient level.
 #'  If `FALSE`, then they are averaged across patients by health state.
-#' @examples 
-#' library("flexsurv")
-#'
-#' # Treatment strategies, target population, and model structure
-#' strategies <- data.frame(strategy_id = c(1, 2))
-#' patients <- data.frame(patient_id = seq(1, 3),
-#'                        age = c(45, 50, 60),
-#'                        female = c(0, 0, 1))
-#' states <- data.frame(state_id = c(1, 2))
-#' hesim_dat <- hesim_data(strategies = strategies,
-#'                         patients = patients,
-#'                         states = states)
-#'
-#' # Parameter estimation
-#' ## Multi-state model
-#' tmat <- rbind(c(NA, 1, 2),
-#'               c(3, NA, 4),
-#'               c(NA, NA, NA))
-#' fits <- vector(length = max(tmat, na.rm = TRUE), mode = "list")
-#' surv_dat <- data.frame(mstate3_exdata$transitions)
-#' for (i in 1:length(fits)){
-#'   fits[[i]] <- flexsurvreg(Surv(years, status) ~ factor(strategy_id), 
-#'                            data = surv_dat,
-#'                            subset = (trans == i),
-#'                            dist = "weibull")
-#' }
-#' fits <- flexsurvreg_list(fits)
-#'
-#' ## Utility
-#' utility_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
-#'                                        mean = mstate3_exdata$utility$mean,
-#'                                        se = mstate3_exdata$utility$se),
-#'                             dist = "beta")
-#' ## Costs
-#' drugcost_tbl <- stateval_tbl(data.frame(strategy_id = strategies$strategy_id,
-#'                                         est = mstate3_exdata$costs$drugs$costs),
-#'                              dist = "fixed") 
-#' medcost_tbl <- stateval_tbl(data.frame(state_id = states$state_id,
-#'                                        mean = mstate3_exdata$costs$medical$mean,
-#'                                        se = mstate3_exdata$costs$medical$se),
-#'                             dist = "gamma")  
-#'
-#' # Economic model
-#' n_samples = 2
-#'
-#' ## Construct model
-#' ### Transitions 
-#' transmod_data <- expand(hesim_dat)
-#' transmod <- create_IndivCtstmTrans(fits, input_data = transmod_data, 
-#'                                    trans_mat = tmat,
-#'                                    n = n_samples)
-#'
-#' ### Utility 
-#' utilitymod <- create_StateVals(utility_tbl, n = n_samples, hesim_data = hesim_dat)
-#'
-#' ### Costs
-#' drugcostmod <- create_StateVals(drugcost_tbl, n = n_samples, hesim_data = hesim_dat)
-#' medcostmod <- create_StateVals(medcost_tbl, n = n_samples, hesim_data = hesim_dat)
-#' costmods <- list(drugs = drugcostmod,
-#'                  medical = medcostmod)
-#'
-#' ### Combine
-#' ictstm <- IndivCtstm$new(trans_model = transmod,
-#'                          utility_model = utilitymod,
-#'                          cost_models = costmods)
-#'
-#'
-#' ## Simulate outcomes
-#' head(ictstm$sim_disease()$disprog_)
-#' head(ictstm$sim_stateprobs(t = c(0, 5, 10))$stateprobs_[t == 5])
-#' ictstm$sim_qalys(dr = .03)
-#' ictstm$sim_costs(dr = .03)
-#' 
-#' ### Summarize cost-effectiveness
-#' ce <- ictstm$summarize()
-#' head(ce)
-#' format(summary(ce), pivot_from = "strategy")
-#'
-#' @format An [R6::R6Class] object.
-#' @seealso [`create_IndivCtstmTrans()`], [`IndivCtstmTrans`]
-#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437).
-#' See Section 2.2 for a mathematical description of an individual-level CTSTM and Section 4.1 for 
-#' an example in oncology.
 #' @export
 IndivCtstm <- R6::R6Class("IndivCtstm",
   private = list(  

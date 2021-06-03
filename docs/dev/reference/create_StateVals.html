@@ -240,8 +240,79 @@ combination. Patients are matched to groups by specifying both a <code>patient_i
 and a <code>grp_var</code> column in the <code>patients</code> table.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='StateVals.html'>StateVals</a></code>, <code><a href='stateval_tbl.html'>stateval_tbl()</a></code></p></div>
+    <div class='dont-index'><p>See <code><a href='StateVals.html'>StateVals</a></code> for documentation of the class and additional examples.
+An example use case for <code>create_StateVals.stateval_tbl()</code> is provided in
+the <code><a href='stateval_tbl.html'>stateval_tbl()</a></code> documentation.</p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
+
+<span class='co'># EXAMPLE FOR `create_statevals.lm()`</span>
+<span class='co'>## Simple example comparing two treatment strategies where</span>
+<span class='co'>## medical costs vary by sex and health state</span>
+
+<span class='co'>## Setup model</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>
+  strategies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>,
+  patients <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    patient_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+    female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
+  <span class='op'>)</span>,
+  states <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    state_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span>,
+    state_name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"state1"</span>, <span class='st'>"state2"</span>, <span class='st'>"state3"</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='co'>## Fit model</span>
+<span class='va'>medcost_estimation_data</span> <span class='op'>&lt;-</span> <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span>
+<span class='va'>medcost_estimation_data</span><span class='op'>$</span><span class='va'>time5</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>medcost_estimation_data</span><span class='op'>)</span>, 
+                                        <span class='fl'>1</span>, <span class='fl'>.5</span><span class='op'>)</span> <span class='co'># Illustrative time dummy</span>
+<span class='va'>medcost_fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>costs</span> <span class='op'>~</span> <span class='va'>female</span> <span class='op'>+</span> <span class='va'>state_name</span> <span class='op'>+</span> <span class='va'>time5</span>, 
+                  data <span class='op'>=</span> <span class='va'>medcost_estimation_data</span><span class='op'>)</span>
+
+<span class='co'>## Create medical cost model</span>
+<span class='co'>### Allow medical costs to vary across time in addition to by patient and </span>
+<span class='co'>### health state</span>
+<span class='va'>medcost_times</span> <span class='op'>&lt;-</span> <span class='fu'><a href='time_intervals.html'>time_intervals</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>time_start <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span>, <span class='fl'>5</span><span class='op'>)</span>,
+            time5 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Time dummy corresponds to time &gt; 5</span>
+<span class='op'>)</span>
+<span class='va'>medcost_input_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span>, 
+                             by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"strategies"</span>, <span class='st'>"patients"</span>, <span class='st'>"states"</span><span class='op'>)</span>,
+                             times <span class='op'>=</span> <span class='va'>medcost_times</span><span class='op'>)</span>
+<span class='va'>medcost_model</span> <span class='op'>&lt;-</span> <span class='fu'>create_StateVals</span><span class='op'>(</span><span class='va'>medcost_fit</span>, <span class='va'>medcost_input_data</span>,
+                                  n <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='co'>## Explore predictions from medical cost model</span>
+<span class='co'>### We can assess predictions at multiple time points</span>
+<span class='va'>medcost_model</span><span class='op'>$</span><span class='fu'>sim</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>6</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"predict"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id state_id time    value
+#&gt;  1:      1           1          1        1    1 35375.09
+#&gt;  2:      1           1          1        1    6 34766.14
+#&gt;  3:      1           1          1        2    1 31086.85
+#&gt;  4:      1           1          1        2    6 30477.90
+#&gt;  5:      1           1          1        3    1 36661.84
+#&gt;  6:      1           1          1        3    6 36052.89
+#&gt;  7:      1           1          2        1    1 33251.43
+#&gt;  8:      1           1          2        1    6 32642.48
+#&gt;  9:      1           1          2        2    1 28963.19
+#&gt; 10:      1           1          2        2    6 28354.24
+#&gt; 11:      1           1          2        3    1 34538.19
+#&gt; 12:      1           1          2        3    6 33929.23
+#&gt; 13:      1           2          1        1    1 35375.09
+#&gt; 14:      1           2          1        1    6 34766.14
+#&gt; 15:      1           2          1        2    1 31086.85
+#&gt; 16:      1           2          1        2    6 30477.90
+#&gt; 17:      1           2          1        3    1 36661.84
+#&gt; 18:      1           2          1        3    6 36052.89
+#&gt; 19:      1           2          2        1    1 33251.43
+#&gt; 20:      1           2          2        1    6 32642.48
+#&gt; 21:      1           2          2        2    1 28963.19
+#&gt; 22:      1           2          2        2    6 28354.24
+#&gt; 23:      1           2          2        3    1 34538.19
+#&gt; 24:      1           2          2        3    6 33929.23
+#&gt;     sample strategy_id patient_id state_id time    value</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -15,6 +15,7 @@ DoxygenLayout.xml
 ^doc$
 ^Meta$
 ^tests/manual$
+^man-roxygen$
 ^README\.Rmd$
 ^\.github$
 vignettes/benchmarks*

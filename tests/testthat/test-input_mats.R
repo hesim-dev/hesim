@@ -58,20 +58,6 @@ expect_error(input_mats(X = list(model.matrix(~ age, dat)),
                         patient_id = dat$patient_id,
                         n_patients = length(unique(dat$patient_id))))
 
-# create_input_mats with formula objects ---------------------------------------
-test_that("create_input_mats.formula_list", {
-  dat <- expand(hesim_dat)
-  f_list <- formula_list(list(f1 = formula(~ age), f2 = formula(~ 1)))
-  expect_equal(class(f_list), "formula_list")
-  input_mats <- create_input_mats(f_list, dat)
-  
-  expect_equal(length(input_mats$X), length(f_list))
-  expect_equal(names(input_mats$X), names(f_list))
-  expect_equal(as.numeric(input_mats$X$f1[, "age"]), dat$age)
-  expect_equal(ncol(input_mats$X$f1), 2)
-  expect_equal(ncol(input_mats$X$f2), 1)
-})
-
 # create_input_mats with lm objects or params_lm objects -----------------------
 dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 fit1 <- stats::lm(costs ~ female + state_name, data = psm4_exdata$costs$medical)
@@ -152,33 +138,15 @@ test_that(paste0("create_input_mats.flexsurvreg works with regression ",
   expect_equal(ncol(input_mats$X$Q), 1)
 })
 
-fit1_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+fit1_wei <- flexsurv::flexsurvreg(Surv(futime, fustat) ~ 1, 
                                   data = ovarian, dist = "weibull")
-fit1_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
+fit1_exp <- flexsurv::flexsurvreg(Surv(futime, fustat) ~ 1, 
                                   data = ovarian, dist = "exp")
 flexsurvreg_list1 <- flexsurvreg_list(wei = fit1_wei, exp = fit1_exp)
 
 test_that("create_input_mats.flexsurv_list", {
   input_mats <- create_input_mats(flexsurvreg_list1, dat)  
   expect_true(inherits(input_mats$X$wei$shape, "matrix"))
-})
-
-fit2_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1 + age, 
-                                  data = ovarian, 
-                                  dist = "weibull")
-fit2_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1 + age, 
-                                  data = ovarian, 
-                                  dist = "exp")
-flexsurvreg_list2 <- flexsurvreg_list(wei = fit2_wei, exp = fit2_exp)
-joined_flexsurvreg_list <- joined_flexsurvreg_list(mod1 = flexsurvreg_list1,
-                                                   mod2 = flexsurvreg_list2,
-                                                   times = list(2, 5))
-
-test_that("create_input_mats.joined_flexsurv_list", {
-  input_mats <- create_input_mats(joined_flexsurvreg_list, dat)  
-  
-  expect_equal(input_mats$state_id, dat$state_id)
-  expect_true(inherits(input_mats$X[[1]]$wei$shape, "matrix"))
 })
 
 test_that("create_input_mats.params_surv", {

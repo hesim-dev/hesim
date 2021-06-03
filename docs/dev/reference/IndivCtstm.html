@@ -196,7 +196,17 @@ See Section 2.2 for a mathematical description of an individual-level CTSTM and 
 an example in oncology.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code></p></div>
+    <div class='dont-index'><p>The <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code> documentation
+describes the class for the transition model and the <code><a href='StateVals.html'>StateVals</a></code> documentation
+describes the class for the cost and utility models. An <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>
+object is typically created using <code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>.</p>
+<p>There are currently two relevant vignettes. <code><a href='../articles/mstate.html'>vignette("mstate")</a></code> shows how to
+parameterize <code>IndivCtstmTrans</code> objects in cases where patient-level data is
+available by fitting a multi-state models. <code><a href='../articles/markov-inhomogeneous-indiv.html'>vignette("markov-inhomogeneous-indiv")</a></code>
+shows how the time inhomogeneous Markov cohort model in
+<code><a href='../articles/markov-inhomogeneous-cohort.html'>vignette("markov-inhomogeneous-cohort")</a></code> can be developed as an individual
+patient simulation; in doing so, it shows how <code>IndivCtstm</code> models can be
+used even without access to patient-level data.</p></div>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
@@ -389,7 +399,7 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h4 class='h
 <span class='va'>fits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='op'>(</span>length <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>tmat</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, mode <span class='op'>=</span> <span class='st'>"list"</span><span class='op'>)</span>
 <span class='va'>surv_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>transitions</span><span class='op'>)</span>
 <span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>fits</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span>
-  <span class='va'>fits</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>years</span>, <span class='va'>status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>strategy_id</span><span class='op'>)</span>, 
+  <span class='va'>fits</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>years</span>, <span class='va'>status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>strategy_id</span><span class='op'>)</span>,
                            data <span class='op'>=</span> <span class='va'>surv_dat</span>,
                            subset <span class='op'>=</span> <span class='op'>(</span><span class='va'>trans</span> <span class='op'>==</span> <span class='va'>i</span><span class='op'>)</span>,
                            dist <span class='op'>=</span> <span class='st'>"weibull"</span><span class='op'>)</span>
@@ -404,23 +414,23 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h4 class='h
 <span class='co'>## Costs</span>
 <span class='va'>drugcost_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='va'>strategies</span><span class='op'>$</span><span class='va'>strategy_id</span>,
                                         est <span class='op'>=</span> <span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>drugs</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>)</span>,
-                             dist <span class='op'>=</span> <span class='st'>"fixed"</span><span class='op'>)</span> 
+                             dist <span class='op'>=</span> <span class='st'>"fixed"</span><span class='op'>)</span>
 <span class='va'>medcost_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>state_id <span class='op'>=</span> <span class='va'>states</span><span class='op'>$</span><span class='va'>state_id</span>,
                                        mean <span class='op'>=</span> <span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span><span class='op'>$</span><span class='va'>mean</span>,
                                        se <span class='op'>=</span> <span class='va'>mstate3_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span><span class='op'>$</span><span class='va'>se</span><span class='op'>)</span>,
-                            dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span>  
+                            dist <span class='op'>=</span> <span class='st'>"gamma"</span><span class='op'>)</span>
 
 <span class='co'># Economic model</span>
 <span class='va'>n_samples</span> <span class='op'>=</span> <span class='fl'>2</span>
 
 <span class='co'>## Construct model</span>
-<span class='co'>### Transitions </span>
+<span class='co'>### Transitions</span>
 <span class='va'>transmod_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span><span class='op'>)</span>
-<span class='va'>transmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span><span class='op'>(</span><span class='va'>fits</span>, input_data <span class='op'>=</span> <span class='va'>transmod_data</span>, 
+<span class='va'>transmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span><span class='op'>(</span><span class='va'>fits</span>, input_data <span class='op'>=</span> <span class='va'>transmod_data</span>,
                                    trans_mat <span class='op'>=</span> <span class='va'>tmat</span>,
                                    n <span class='op'>=</span> <span class='va'>n_samples</span><span class='op'>)</span>
 
-<span class='co'>### Utility </span>
+<span class='co'>### Utility</span>
 <span class='va'>utilitymod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span><span class='op'>(</span><span class='va'>utility_tbl</span>, n <span class='op'>=</span> <span class='va'>n_samples</span>, hesim_data <span class='op'>=</span> <span class='va'>hesim_dat</span><span class='op'>)</span>
 
 <span class='co'>### Costs</span>
@@ -438,16 +448,16 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h4 class='h
 <span class='co'>## Simulate outcomes</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>sim_disease</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>disprog_</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id from to final time_start time_stop
-#&gt; 1:      1           1          1      1    1  2     0   0.000000  3.759731
-#&gt; 2:      1           1          1      1    2  3     1   3.759731  5.971252
-#&gt; 3:      1           1          2      1    1  2     0   0.000000  4.687091
-#&gt; 4:      1           1          2      1    2  1     0   4.687091  6.211248
-#&gt; 5:      1           1          2      1    1  2     0   6.211248  6.572338
-#&gt; 6:      1           1          2      1    2  1     0   6.572338  7.618977</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>stateprobs_</span><span class='op'>[</span><span class='va'>t</span> <span class='op'>==</span> <span class='fl'>5</span><span class='op'>]</span><span class='op'>)</span>
+#&gt; 1:      1           1          1      1    1  2     0   0.000000  4.789877
+#&gt; 2:      1           1          1      1    2  1     0   4.789877 10.752426
+#&gt; 3:      1           1          1      1    1  3     1  10.752426 10.832476
+#&gt; 4:      1           1          2      1    1  2     0   0.000000  1.018639
+#&gt; 5:      1           1          2      1    2  1     0   1.018639  2.983852
+#&gt; 6:      1           1          2      1    1  3     1   2.983852  3.230585</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>stateprobs_</span><span class='op'>[</span><span class='va'>t</span> <span class='op'>==</span> <span class='fl'>5</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    sample strategy_id grp_id state_id t      prob
 #&gt; 1:      1           1      1        1 5 0.0000000
-#&gt; 2:      1           1      1        2 5 1.0000000
-#&gt; 3:      1           1      1        3 5 0.0000000
+#&gt; 2:      1           1      1        2 5 0.3333333
+#&gt; 3:      1           1      1        3 5 0.6666667
 #&gt; 4:      1           2      1        1 5 0.6666667
 #&gt; 5:      1           2      1        2 5 0.0000000
 #&gt; 6:      1           2      1        3 5 0.3333333</div><div class='input'><span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>sim_qalys</span><span class='op'>(</span>dr <span class='op'>=</span> <span class='fl'>.03</span><span class='op'>)</span>
@@ -457,33 +467,37 @@ See <code><a href='summarize_ce.html'>summarize_ce()</a></code>.</p><h4 class='h
 <span class='va'>ce</span> <span class='op'>&lt;-</span> <span class='va'>ictstm</span><span class='op'>$</span><span class='fu'>summarize</span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ce</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $costs
-#&gt;     category   dr sample strategy_id     costs grp_id
-#&gt;  1:    drugs 0.03      1           1 38164.878      1
-#&gt;  2:    drugs 0.03      1           2 57546.053      1
-#&gt;  3:    drugs 0.03      2           1  5308.587      1
-#&gt;  4:    drugs 0.03      2           2 65741.343      1
-#&gt;  5:  medical 0.03      1           1  8643.137      1
-#&gt;  6:  medical 0.03      1           2  6216.491      1
-#&gt;  7:  medical 0.03      2           1  1204.330      1
-#&gt;  8:  medical 0.03      2           2  6919.485      1
-#&gt;  9:    total 0.03      1           1 46808.015      1
-#&gt; 10:    total 0.03      1           2 63762.544      1
-#&gt; 11:    total 0.03      2           1  6512.917      1
-#&gt; 12:    total 0.03      2           2 72660.828      1
+#&gt;     category   dr sample strategy_id      costs grp_id
+#&gt;  1:    drugs 0.03      1           1  25297.218      1
+#&gt;  2:    drugs 0.03      1           2 101329.237      1
+#&gt;  3:    drugs 0.03      2           1  37553.845      1
+#&gt;  4:    drugs 0.03      2           2 104678.730      1
+#&gt;  5:  medical 0.03      1           1   6394.144      1
+#&gt;  6:  medical 0.03      1           2  10430.703      1
+#&gt;  7:  medical 0.03      2           1   8063.916      1
+#&gt;  8:  medical 0.03      2           2  11330.360      1
+#&gt;  9:    total 0.03      1           1  31691.363      1
+#&gt; 10:    total 0.03      1           2 111759.939      1
+#&gt; 11:    total 0.03      2           1  45617.761      1
+#&gt; 12:    total 0.03      2           2 116009.090      1
 #&gt; 
 #&gt; $qalys
-#&gt;      dr sample strategy_id     qalys grp_id
-#&gt; 1: 0.03      1           1 5.3989021      1
-#&gt; 2: 0.03      1           2 3.9859904      1
-#&gt; 3: 0.03      2           1 0.8963122      1
-#&gt; 4: 0.03      2           2 5.3724371      1
+#&gt;      dr sample strategy_id    qalys grp_id
+#&gt; 1: 0.03      1           1 4.225877      1
+#&gt; 2: 0.03      1           2 9.662371      1
+#&gt; 3: 0.03      2           1 4.120444      1
+#&gt; 4: 0.03      2           2 5.794268      1
 #&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>ce</span><span class='op'>)</span>, pivot_from <span class='op'>=</span> <span class='st'>"strategy"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Discount rate        Outcome                      1                       2
-#&gt; 1:          0.03          QALYs      3.15 (1.01, 5.29)       4.68 (4.02, 5.34)
-#&gt; 2:          0.03   Costs: drugs 21,737 (6,130, 37,343) 61,644 (57,751, 65,536)
-#&gt; 3:          0.03 Costs: medical   4,924 (1,390, 8,457)    6,568 (6,234, 6,902)
-#&gt; 4:          0.03   Costs: total 26,660 (7,520, 45,801) 68,212 (63,985, 72,438)</div><div class='input'>
-</div></pre>
+</div><div class='output co'>#&gt;    Discount rate        Outcome                       1
+#&gt; 1:          0.03          QALYs       4.17 (4.12, 4.22)
+#&gt; 2:          0.03   Costs: drugs 31,426 (25,604, 37,247)
+#&gt; 3:          0.03 Costs: medical    7,229 (6,436, 8,022)
+#&gt; 4:          0.03   Costs: total 38,655 (32,040, 45,270)
+#&gt;                             2
+#&gt; 1:          7.73 (5.89, 9.57)
+#&gt; 2: 103,004 (101,413, 104,595)
+#&gt; 3:    10,881 (10,453, 11,308)
+#&gt; 4: 113,885 (111,866, 115,903)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

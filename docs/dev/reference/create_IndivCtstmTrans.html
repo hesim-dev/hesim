@@ -248,12 +248,13 @@ of clock-reset and clock-forward models. See the field <code>clock</code> in <co
     </tr>
     <tr>
       <th>n</th>
-      <td><p>Number of random observations of the parameters to draw.</p></td>
+      <td><p>Number of random observations to draw. Not used if <code>uncertainty = "none"</code>.</p></td>
     </tr>
     <tr>
       <th>uncertainty</th>
-      <td><p>Method determining how parameter uncertainty should be handled. See
-documentation in <code><a href='create_params.html'>create_params()</a></code>.</p></td>
+      <td><p>Method determining how parameter uncertainty should be handled.
+If <code>"normal"</code>, then parameters are randomly drawn from their multivariate normal
+distribution. If <code>"none"</code>, then only point estimates are returned.</p></td>
     </tr>
     <tr>
       <th>reset_states</th>
@@ -267,7 +268,7 @@ documentation in <code><a href='create_params.html'>create_params()</a></code>.<
     <p>Returns an <code>R6Class</code> object of class <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code></p></div>
+    <div class='dont-index'><p>See <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code> and <code><a href='IndivCtstm.html'>IndivCtstm</a></code> for examples.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

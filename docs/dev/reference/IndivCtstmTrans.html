@@ -185,7 +185,9 @@ transition model using parameters from a multi-state model.</p>
     <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>, <code><a href='IndivCtstm.html'>IndivCtstm</a></code></p></div>
+    <div class='dont-index'><p><code>IndivCtstmTrans</code> objects are conveniently created from either
+fitted models or parameter objects with <code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code>.
+A complete economic model can be implemented with the <code><a href='IndivCtstm.html'>IndivCtstm</a></code> class.</p></div>
     <h2 class="hasAnchor" id="super-class"><a class="anchor" href="#super-class"></a>Super class</h2>
 
     <p><code><a href='CtstmTrans.html'>hesim::CtstmTrans</a></code> -&gt; <code>IndivCtstmTrans</code></p>
@@ -358,7 +360,7 @@ using <code>IndivCtstm$sim_disease()</code>.</p></dd>
               <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>fits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='op'>(</span>length <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>tmat</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, mode <span class='op'>=</span> <span class='st'>"list"</span><span class='op'>)</span>
 <span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>fits</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span>
-  <span class='va'>fits</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>years</span>, <span class='va'>status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, 
+  <span class='va'>fits</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>years</span>, <span class='va'>status</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>,
                            data <span class='op'>=</span> <span class='va'>bosms3</span><span class='op'>[</span><span class='va'>bosms3</span><span class='op'>$</span><span class='va'>trans</span> <span class='op'>==</span> <span class='va'>i</span>, <span class='op'>]</span>,
                            dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
 <span class='op'>}</span>
@@ -368,68 +370,67 @@ using <code>IndivCtstm$sim_disease()</code>.</p></dd>
 <span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='va'>strategies</span>,
                         patients <span class='op'>=</span> <span class='va'>patients</span><span class='op'>)</span>
 <span class='va'>fits_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span><span class='op'>)</span>
-<span class='va'>transmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span><span class='op'>(</span><span class='va'>fits</span>, input_data <span class='op'>=</span> <span class='va'>fits_data</span>, 
+<span class='va'>transmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans</a></span><span class='op'>(</span><span class='va'>fits</span>, input_data <span class='op'>=</span> <span class='va'>fits_data</span>,
                                    trans_mat <span class='op'>=</span> <span class='va'>tmat</span>,
                                    n <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>transmod</span><span class='op'>$</span><span class='fu'>hazard</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    transition_id sample strategy_id patient_id grp_id t     hazard
-#&gt; 1:             1      1           1          1      1 1 0.16540081
-#&gt; 2:             1      1           1          1      1 2 0.16540081
-#&gt; 3:             1      1           1          1      1 3 0.16540081
-#&gt; 4:             2      1           1          1      1 1 0.03399796
-#&gt; 5:             2      1           1          1      1 2 0.03399796
-#&gt; 6:             2      1           1          1      1 3 0.03399796</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>transmod</span><span class='op'>$</span><span class='fu'>cumhazard</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+#&gt; 1:             1      1           1          1      1 1 0.19598562
+#&gt; 2:             1      1           1          1      1 2 0.19598562
+#&gt; 3:             1      1           1          1      1 3 0.19598562
+#&gt; 4:             2      1           1          1      1 1 0.03837766
+#&gt; 5:             2      1           1          1      1 2 0.03837766
+#&gt; 6:             2      1           1          1      1 3 0.03837766</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>transmod</span><span class='op'>$</span><span class='fu'>cumhazard</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    transition_id sample strategy_id patient_id grp_id t  cumhazard
-#&gt; 1:             1      1           1          1      1 1 0.16540081
-#&gt; 2:             1      1           1          1      1 2 0.33080162
-#&gt; 3:             1      1           1          1      1 3 0.49620243
-#&gt; 4:             2      1           1          1      1 1 0.03399796
-#&gt; 5:             2      1           1          1      1 2 0.06799591
-#&gt; 6:             2      1           1          1      1 3 0.10199387</div><div class='input'>
+#&gt; 1:             1      1           1          1      1 1 0.19598562
+#&gt; 2:             1      1           1          1      1 2 0.39197124
+#&gt; 3:             1      1           1          1      1 3 0.58795685
+#&gt; 4:             2      1           1          1      1 1 0.03837766
+#&gt; 5:             2      1           1          1      1 2 0.07675531
+#&gt; 6:             2      1           1          1      1 3 0.11513297</div><div class='input'>
 <span class='co'>## Simulate disease progression and state probabilities together</span>
 <span class='va'>transmod</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='va'>t</span> <span class='op'>==</span> <span class='fl'>5</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;     sample strategy_id grp_id state_id t      prob
-#&gt;  1:      1           1      1        1 5 1.0000000
+#&gt;  1:      1           1      1        1 5 0.6666667
 #&gt;  2:      1           1      1        2 5 0.0000000
-#&gt;  3:      1           1      1        3 5 0.0000000
-#&gt;  4:      1           2      1        1 5 0.0000000
-#&gt;  5:      1           2      1        2 5 0.3333333
-#&gt;  6:      1           2      1        3 5 0.6666667
-#&gt;  7:      1           3      1        1 5 0.6666667
+#&gt;  3:      1           1      1        3 5 0.3333333
+#&gt;  4:      1           2      1        1 5 0.3333333
+#&gt;  5:      1           2      1        2 5 0.6666667
+#&gt;  6:      1           2      1        3 5 0.0000000
+#&gt;  7:      1           3      1        1 5 0.3333333
 #&gt;  8:      1           3      1        2 5 0.3333333
-#&gt;  9:      1           3      1        3 5 0.0000000
-#&gt; 10:      2           1      1        1 5 0.3333333
-#&gt; 11:      2           1      1        2 5 0.0000000
-#&gt; 12:      2           1      1        3 5 0.6666667
-#&gt; 13:      2           2      1        1 5 0.0000000
+#&gt;  9:      1           3      1        3 5 0.3333333
+#&gt; 10:      2           1      1        1 5 0.0000000
+#&gt; 11:      2           1      1        2 5 0.6666667
+#&gt; 12:      2           1      1        3 5 0.3333333
+#&gt; 13:      2           2      1        1 5 0.3333333
 #&gt; 14:      2           2      1        2 5 0.3333333
-#&gt; 15:      2           2      1        3 5 0.6666667
+#&gt; 15:      2           2      1        3 5 0.3333333
 #&gt; 16:      2           3      1        1 5 0.0000000
-#&gt; 17:      2           3      1        2 5 1.0000000
-#&gt; 18:      2           3      1        3 5 0.0000000</div><div class='input'>
+#&gt; 17:      2           3      1        2 5 0.0000000
+#&gt; 18:      2           3      1        3 5 1.0000000</div><div class='input'>
 <span class='co'>## Simulate disease progression and state probabilities separately</span>
 <span class='va'>disprog</span> <span class='op'>&lt;-</span> <span class='va'>transmod</span><span class='op'>$</span><span class='fu'>sim_disease</span><span class='op'>(</span>max_t <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 <span class='va'>transmod</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span><span class='op'>)</span>, disprog <span class='op'>=</span> <span class='va'>disprog</span><span class='op'>)</span><span class='op'>[</span><span class='va'>t</span> <span class='op'>==</span> <span class='fl'>5</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;     sample strategy_id grp_id state_id t      prob
 #&gt;  1:      1           1      1        1 5 0.0000000
-#&gt;  2:      1           1      1        2 5 0.0000000
-#&gt;  3:      1           1      1        3 5 1.0000000
+#&gt;  2:      1           1      1        2 5 0.6666667
+#&gt;  3:      1           1      1        3 5 0.3333333
 #&gt;  4:      1           2      1        1 5 0.3333333
 #&gt;  5:      1           2      1        2 5 0.0000000
 #&gt;  6:      1           2      1        3 5 0.6666667
-#&gt;  7:      1           3      1        1 5 0.3333333
-#&gt;  8:      1           3      1        2 5 0.0000000
-#&gt;  9:      1           3      1        3 5 0.6666667
+#&gt;  7:      1           3      1        1 5 0.0000000
+#&gt;  8:      1           3      1        2 5 0.6666667
+#&gt;  9:      1           3      1        3 5 0.3333333
 #&gt; 10:      2           1      1        1 5 0.3333333
-#&gt; 11:      2           1      1        2 5 0.3333333
-#&gt; 12:      2           1      1        3 5 0.3333333
-#&gt; 13:      2           2      1        1 5 0.6666667
+#&gt; 11:      2           1      1        2 5 0.6666667
+#&gt; 12:      2           1      1        3 5 0.0000000
+#&gt; 13:      2           2      1        1 5 0.0000000
 #&gt; 14:      2           2      1        2 5 0.0000000
-#&gt; 15:      2           2      1        3 5 0.3333333
-#&gt; 16:      2           3      1        1 5 0.0000000
+#&gt; 15:      2           2      1        3 5 1.0000000
+#&gt; 16:      2           3      1        1 5 0.3333333
 #&gt; 17:      2           3      1        2 5 0.0000000
-#&gt; 18:      2           3      1        3 5 1.0000000</div><div class='input'>
-</div></pre>
+#&gt; 18:      2           3      1        3 5 0.6666667</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

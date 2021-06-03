@@ -62,10 +62,11 @@ multi-state model in the format from the \code{\link[mstate:mstate]{mstate}} pac
 \item{clock}{"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
 of clock-reset and clock-forward models. See the field \code{clock} in \code{\link{IndivCtstmTrans}}.}
 
-\item{n}{Number of random observations of the parameters to draw.}
+\item{n}{Number of random observations to draw. Not used if \code{uncertainty = "none"}.}
 
-\item{uncertainty}{Method determining how parameter uncertainty should be handled. See
-documentation in \code{\link[=create_params]{create_params()}}.}
+\item{uncertainty}{Method determining how parameter uncertainty should be handled.
+If \code{"normal"}, then parameters are randomly drawn from their multivariate normal
+distribution. If \code{"none"}, then only point estimates are returned.}
 
 \item{reset_states}{A vector denoting the states in which time resets. See the field
 \code{reset_states} in \code{\link{IndivCtstmTrans}}.}
@@ -77,5 +78,5 @@ Returns an \code{\link{R6Class}} object of class \code{\link{IndivCtstmTrans}}.
 A generic function for creating an object of class \code{\link{IndivCtstmTrans}}.
 }
 \seealso{
-\code{\link{IndivCtstmTrans}}
+See \code{\link{IndivCtstmTrans}} and \code{\link{IndivCtstm}} for examples.
 }

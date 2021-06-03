@@ -2,7 +2,6 @@
 % Please edit documentation in R/input_mats.R
 \name{create_input_mats}
 \alias{create_input_mats}
-\alias{create_input_mats.formula_list}
 \alias{create_input_mats.lm}
 \alias{create_input_mats.lm_list}
 \alias{create_input_mats.flexsurvreg}
@@ -13,11 +12,10 @@
 \alias{create_input_mats.params_surv_list}
 \alias{create_input_mats.multinom}
 \alias{create_input_mats.multinom_list}
+\alias{create_input_mats.params_mlogit_list}
 \title{Create input matrices}
 \usage{
 create_input_mats(object, ...)
-
-\method{create_input_mats}{formula_list}(object, input_data, ...)
 
 \method{create_input_mats}{lm}(object, input_data, ...)
 
@@ -38,6 +36,8 @@ create_input_mats(object, ...)
 \method{create_input_mats}{multinom}(object, input_data, ...)
 
 \method{create_input_mats}{multinom_list}(object, input_data, ...)
+
+\method{create_input_mats}{params_mlogit_list}(object, input_data, ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class.}

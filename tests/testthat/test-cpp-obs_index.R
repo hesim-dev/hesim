@@ -2,20 +2,20 @@ context("obs_index.h unit tests")
 library("flexsurv")
 library("data.table")
 
-strategies_dt <- data.table(strategy_id = c(1, 2))
-patients_dt <- data.table(patient_id = seq(1, 3), 
-                          age = c(45, 47, 60),
-                          female = c(1, 0, 0),
-                          group = factor(c("Good", "Medium", "Poor")))
-states_dt <- data.frame(state_id =  seq(1, 3),
-                         state_name = factor(paste0("state", seq(1, 3))))
-trans_dt <- data.frame(transition_id = seq(1, 4),
-                       from = c(1, 1, 2, 2),
-                       to = c(2, 3, 1, 3))
-hesim_dat <- hesim_data(strategies = strategies_dt,
-                        patients = patients_dt,
-                        states = states_dt,
-                        transitions = trans_dt)
+strategies <- data.table(strategy_id = c(1, 2))
+patients <- data.table(patient_id = seq(1, 3), 
+                       age = c(45, 47, 60),
+                       female = c(1, 0, 0),
+                       group = factor(c("Good", "Medium", "Poor")))
+states <- data.frame(state_id =  seq(1, 3),
+                     state_name = factor(paste0("state", seq(1, 3))))
+trans <- data.frame(transition_id = seq(1, 4),
+                    from = c(1, 1, 2, 2),
+                    to = c(2, 3, 1, 3))
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients,
+                        states = states,
+                        transitions = trans)
 
 # obs_index --------------------------------------------------------------------
 test_that("obs_index", {

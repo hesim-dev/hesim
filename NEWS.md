@@ -3,6 +3,10 @@
 
 * `sim_stateprobs.survival()` handles scenarios where survival curves cross better, ensuring that state probabilities sum to 1 (#56).
 
+* There are now summary and print methods for parameter objects. See `summary.params()`.
+
+* A new `create_CohortDtstmTrans.params_mlogit_list()` method allows the transition component of a cohort discrete time state transition model (cDTSTM) to be created directly from multinomial logistic regression parameter objects.
+
 ## hesim 0.5.0
 ### New features
 * A transition intensity matrix can be created from a multi-state model fit using `msm::msm()` with the  `qmatrix.msm()` method. Similarly, a `CohortDtstmTrans` object can be created with `create_CohortDtstmTrans.msm()`.
@@ -35,7 +39,7 @@
 
 ## hesim 0.4.2
 ### New features
-* There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in `tparams_transprobs()` objects and used for simulation of discrete time state transition models. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., `data.table`, `data.frame`, `matrix`).
+* There are new functions to construct (and debug the construction of) the multiple transition probability matrices stored in `tparams_transprobs()` objects and used for cDTSTMs. These can either stored as 3-dimensional arrays or as 2-dimensional tabular objects (i.e., `data.table`, `data.frame`, `matrix`).
 
     + `as_array3()` and `as_tbl2()` lets users convert 2-dimensional tabular objects where each row stores a flattened square matrix to a 3-dimensional array of square matrices and vice versa.
     
@@ -95,11 +99,11 @@ Fixes a small bug in the `C++` code identified with the CRAN package checks.
 
 ## hesim 0.3.0
 ### Highlights
-`hesim` now supports discrete time state transition models via `hesim::CohortDtstm` objects. Users can build a model by either fitting multinomial logistic regressions with `nnet::multinom()` or with a mathematical expression using `define_model()`. Furthermore, `$summarize()` methods now have a `by_grp` option to facilitate subgroup analyses. 
+`hesim` now supports cDTSTM via `hesim::CohortDtstm` objects. Users can build a model by either fitting multinomial logistic regressions with `nnet::multinom()` or with a mathematical expression using `define_model()`. Furthermore, `$summarize()` methods now have a `by_grp` option to facilitate subgroup analyses. 
 
 ### New features
 
-* The `hesim::CohortDtstm` class simulates cohort discrete time state transition models (cDTSTM). State transitions in a cDTSTM are simulated using the `hesim::CohortDtstmTrans` class, which can be constructed from a `multinom_list()` object or using `define_model()`.
+* The `hesim::CohortDtstm` class simulates cDTSTMs. State transitions in a cDTSTM are simulated using the `hesim::CohortDtstmTrans` class, which can be constructed from a `multinom_list()` object or using `define_model()`.
 
 * `$summarize()` methods now have a `by_grp = "TRUE"` option to facilitate subgroup analyses. If `by_grp = "FALSE"`, then estimates are aggregated across groups. A new `patient_wt` argument in the `patients` table of `hesim_data()` can be used to weight groups during the aggregation.
 
