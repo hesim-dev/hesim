@@ -53,6 +53,7 @@ reference:
       - create_trans_dt
       - time_intervals
       - input_mats
+      - as.data.table.input_mats
       - get_labels
       - set_labels
   - title: "Model definition"

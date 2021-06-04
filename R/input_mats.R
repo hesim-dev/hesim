@@ -91,6 +91,51 @@ check.input_mats <- function(object){
   check(do.call("id_attributes", id_args))
 }
 
+# Convert input matrices to data tables ----------------------------------------
+#' Convert input matrices to `data.table`
+#' 
+#' Convert an [`input_mats`] object to a single [`data.table`] that contains all
+#' columns from the `X` matrices and all ID variables. 
+#' @param x An [`input_mats`] object.
+#' @param ... Currently unused. 
+#' 
+#' @return A [`data.table`].
+#' 
+#' @seealso See [input_mats()] for an example.
+#' @export
+as.data.table.input_mats <- function(x, ...) {
+  
+  # Get ID columns
+  all_id_vars <- c("sample", "strategy_id", "patient_id", "state_id", 
+                    "transition_id", "time_id")
+  id_vars <- all_id_vars[all_id_vars %in% names(x)] # ID variables used
+  
+  id_dt <- as.data.table(x[id_vars])
+  if ("time_id" %in% colnames(tbl)) {
+    ti <- x$time_intervals[match(tbl$time_id, x$time_intervals$time_id)]
+    ti <- ti[, c("time_start", "time_stop"), with = FALSE]
+    id_dt <- cbind(id_dt, ti)
+  }
+  
+  # Combine all x matrices
+  xl <- lapply(flatten_lists(x$X), as.data.table)
+  cols <- NULL; tbl <- NULL
+  for (i in 1:length(xl)) {
+    cols_i <- colnames(xl[[i]])
+    new_cols <- cols_i[!cols_i %in% cols]
+    if (length(new_cols) > 0) {
+      x_dt <- cbind(tbl, xl[[i]][, new_cols, with = FALSE])
+    }
+  }
+  
+  # Create a single data.table
+  tbl <- cbind(id_dt, x_dt)
+  setattr(tbl, "id_vars", id_vars)
+  
+  # Return
+  tbl
+}
+
 # Helper functions to create input matrices ------------------------------------
 size_id_map <- function(){
   c(strategy_id = "n_strategies", 
