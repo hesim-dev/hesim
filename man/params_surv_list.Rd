@@ -19,15 +19,20 @@ Create a list containing the parameters of multiple fitted parametric survival m
 \examples{
 n <- 5
 params <- params_surv_list(
-  # Model 1
-  mod1 = params_surv(
-    coefs = list(rate = data.frame(intercept = rlnorm(n, 0, 1))),
+  # Model for progression free survival
+  pfs = params_surv(
+    coefs = list(
+      rate = data.frame(intercept = rnorm(n, log(.5), .5),
+                        new_strategy = rnorm(n, log(.8), .1))
+   ),
     dist = "exp"
   ),
  
-  # Model 2
-  mod2 = params_surv(
-    coefs = list(rate = data.frame(intercept = rlnorm(n, 1, 1))),
+  # Model for overall survival
+  os = params_surv(
+    coefs = list(
+      rate = data.frame(intercept = rnorm(n, log(.3) , .5))
+    ),
     dist = "exp"
   )
 )

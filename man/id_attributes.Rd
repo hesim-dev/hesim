@@ -68,14 +68,14 @@ Stores metadata related to the ID variables used to index \link{input_mats}
 and \link[=tparams]{transformed parameter objects} already predicted from covariates.
 }
 \details{
-When using the ID variables to index \link{input_mats}, sorting order should be
-the same as specified in \code{\link[=expand.hesim_data]{expand.hesim_data()}}; that is,
-observations must be sorted by: (i) \code{strategy_id}, (ii) \code{patient_id},
-and (iii) the health-related ID variable (either \code{state_id} or
-\code{transition_id}). When using ID variables to index transformed parameter
-objects and \code{sample} is used for indexing, then observations must be sorted by:
-(i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id}, and
-(iv) the health-related ID variable.
+When using the ID variables to index \link{input_mats}, the sorting order
+should be the same as specified in \code{\link[=expand.hesim_data]{expand.hesim_data()}}; that is,
+observations must be sorted by prioritizing: (i) \code{strategy_id}, (ii) \code{patient_id},
+(iii) the health-related ID variable (either \code{state_id} or \code{transition_id}),
+and (iv) \code{time_id}. When using ID variables are used to index transformed parameter
+objects and \code{sample} is used for indexing, then observations must be sorted by
+prioritizing: (i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id},
+(iv) the health-related ID variable, and (v) \code{time_id}.
 }
 \seealso{
 \code{\link[=hesim_data]{hesim_data()}},\code{\link[=expand.hesim_data]{expand.hesim_data()}}, \link{input_mats}

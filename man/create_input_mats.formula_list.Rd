@@ -9,14 +9,15 @@
 \arguments{
 \item{object}{An object of the appropriate class.}
 
-\item{input_data}{An object of class "expanded_hesim_data" returned by the function
-\code{\link{expand.hesim_data}}. Used to look for the input variables needed to create an input matrix
-for use in a statistical models and the id variables for indexing rows in the input matrix.}
+\item{input_data}{An object of class \code{expanded_hesim_data} returned by
+\code{\link[=expand.hesim_data]{expand.hesim_data()}}. It is used to look for the variables needed to create
+an input matrix for use in a statistical models and the ID variables for
+indexing rows in the input matrix.}
 
-\item{...}{Further arguments passed to \code{\link{model.matrix}}.}
+\item{...}{Further arguments passed to \code{\link[=model.matrix]{model.matrix()}}.}
 }
 \value{
-An object of class \code{\link{input_mats}}.
+An object of class \code{input_mats}.
 }
 \description{
 This is an internal function for creating input matrices from formulas. It
