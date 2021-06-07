@@ -124,12 +124,12 @@ as.data.table.input_mats <- function(x, ...) {
   
   # Combine all X matrices
   xl <- lapply(flatten_lists(x$X), as.data.table)
-  cols <- NULL; tbl <- NULL
+  x_dt <- NULL
   for (i in 1:length(xl)) {
     cols_i <- colnames(xl[[i]])
-    new_cols <- cols_i[!cols_i %in% cols]
+    new_cols <- cols_i[!cols_i %in% colnames(x_dt)]
     if (length(new_cols) > 0) {
-      x_dt <- cbind(tbl, xl[[i]][, new_cols, with = FALSE])
+      x_dt <- cbind(x_dt, xl[[i]][, new_cols, with = FALSE])
     }
   }
   
@@ -187,22 +187,22 @@ get_input_mats_id_vars <- function(data){
   return(res)
 }
 
-#' Check data argument for `create_input_mats`
+#' Check input data argument for `create_input_mats`
 #' 
-#' Check that data argument for `create_input_mats` exists and that it is
+#' Check that input data argument for `create_input_mats` exists and that it is
 #' of the correct type. 
-#' @param data An object of class "expanded_hesim_data" returned by the function
-#'  [expand.hesim_data]. 
+#' @param input_data An object of class "expanded_hesim_data" returned by the function
+#'  [expand.hesim_data()]. 
 #' @return If all tests passed, returns nothing; otherwise, throws an exception.
-check_edata <- function(data){
-  if (!inherits(data, "expanded_hesim_data")){
-    stop("'data' must be of class 'expanded_hesim_data'.")
+check_input_data <- function(input_data){
+  if (!inherits(input_data, "expanded_hesim_data")){
+    stop("'input_data' must be of class 'expanded_hesim_data'.")
   } 
-  if (!inherits(data, "data.table") & !inherits(data, "data.frame")){
-    stop("'data' must inherit from either 'data.table' or 'data.frame'.")
+  if (!inherits(input_data, "data.table") & !inherits(input_data, "data.frame")){
+    stop("'input_data' must inherit from either 'data.table' or 'data.frame'.")
   }   
-  if (!inherits(data, "data.table")){
-    setattr(data, "class", c("expanded_hesim_data", "data.table", "data.frame"))
+  if (!inherits(input_data, "data.table")){
+    setattr(input_data, "class", c("expanded_hesim_data", "data.table", "data.frame"))
   } 
 }
 
@@ -281,7 +281,7 @@ formula_list_rec <- function(object, input_data, ...){
 #' @keywords internal
 #' @seealso [create_input_mats()]
 create_input_mats.formula_list <- function(object, input_data, ...){
-  check_edata(input_data)
+  check_input_data(input_data)
   X_list <- formula_list_rec(object, input_data, ...)
   args <- c(list(X = X_list),
             get_input_mats_id_vars(input_data))
@@ -292,7 +292,7 @@ create_input_mats.formula_list <- function(object, input_data, ...){
 #' @export 
 #' @rdname create_input_mats
 create_input_mats.lm <- function(object, input_data, ...){
-  check_edata(input_data)
+  check_input_data(input_data)
   terms <- get_terms(object)
   X <- stats::model.matrix(terms, data = input_data, ...)
   args <- c(list(X = list(mu = X)),
@@ -342,7 +342,7 @@ create_input_mats_flexsurvreg_X <- function(object, input_data, ...){
 #' @export
 #' @rdname create_input_mats
 create_input_mats.flexsurvreg <- function(object, input_data,...){
-  check_edata(input_data)
+  check_input_data(input_data)
   X_list <- create_input_mats_flexsurvreg_X(object, input_data, ...)
   args <- c(list(X = X_list),
            get_input_mats_id_vars(input_data))
@@ -352,7 +352,7 @@ create_input_mats.flexsurvreg <- function(object, input_data,...){
 #' @export
 #' @rdname create_input_mats
 create_input_mats.flexsurvreg_list <- function(object, input_data,...){
-  check_edata(input_data)
+  check_input_data(input_data)
   X_list_2d <- vector(mode = "list", length = length(object))
   names(X_list_2d) <- names(object)
   for (i in 1:length(object)){
@@ -367,7 +367,7 @@ create_input_mats.flexsurvreg_list <- function(object, input_data,...){
 #' @export
 #' @rdname create_input_mats
 create_input_mats.partsurvfit <- function(object, input_data, ...){
-  check_edata(input_data)
+  check_input_data(input_data)
   return(create_input_mats.flexsurvreg_list(object$models, input_data, ...))
 }
 
@@ -375,7 +375,7 @@ create_input_mats.partsurvfit <- function(object, input_data, ...){
 #' @export 
 #' @rdname create_input_mats
 create_input_mats.params_lm <- function(object, input_data, ...){
-  check_edata(input_data)
+  check_input_data(input_data)
   X <- extract_X(object$coefs, input_data)
   args <- c(list(X = list(mu = X)),
             get_input_mats_id_vars(input_data))
@@ -395,7 +395,7 @@ create_input_mats_params_surv_X <- function(object, input_data){
 #' @export 
 #' @rdname create_input_mats
 create_input_mats.params_surv <- function(object, input_data, ...){
-  check_edata(input_data)
+  check_input_data(input_data)
   X_list <- create_input_mats_params_surv_X(object, input_data)
   args <- c(list(X = X_list),
             get_input_mats_id_vars(input_data))
@@ -417,7 +417,7 @@ create_input_mats.params_surv_list <- function(object, input_data, ...){
 
 # Create input matrices from multinom  -----------------------------------------
 create_input_mats_multinom_X <- function(object, input_data, ...){
-  check_edata(input_data)
+  check_input_data(input_data)
   terms <- get_terms(object)
   if (!is.null(attr(terms(object), "offset"))){
     stop("An offset is not supported.", call. = FALSE)
