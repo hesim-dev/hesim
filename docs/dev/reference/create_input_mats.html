@@ -264,9 +264,11 @@ indexing rows in the input matrix.</p></td>
 <span class='co'># Class "lm"</span>
 <span class='va'>input_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"strategies"</span>, <span class='st'>"patients"</span>, <span class='st'>"states"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>medcost_fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>costs</span> <span class='op'>~</span> <span class='va'>female</span> <span class='op'>+</span> <span class='va'>state_name</span>, <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span><span class='op'>)</span>
-<span class='va'>input_mats</span> <span class='op'>&lt;-</span> <span class='fu'>create_input_mats</span><span class='op'>(</span><span class='va'>fit_lm</span>, <span class='va'>input_data</span><span class='op'>)</span>
+<span class='va'>input_mats</span> <span class='op'>&lt;-</span> <span class='fu'>create_input_mats</span><span class='op'>(</span><span class='va'>medcost_fit</span>, <span class='va'>input_data</span><span class='op'>)</span>
 <span class='va'>input_mats</span>
-</div><div class='output co'>#&gt; Column binding the ID variables with all variables contained in the X matrices:
+</div><div class='output co'>#&gt; An "input_mats" object 
+#&gt; 
+#&gt; Column binding the ID variables with all variables contained in the X matrices:
 #&gt;     strategy_id patient_id state_id (Intercept) female state_namestate2
 #&gt;  1:           1          1        1           1      1                0
 #&gt;  2:           1          1        2           1      1                1
@@ -316,7 +318,9 @@ indexing rows in the input matrix.</p></td>
                        data <span class='op'>=</span> <span class='va'>ovarian</span>, dist <span class='op'>=</span> <span class='st'>"weibull"</span><span class='op'>)</span>
 <span class='va'>input_mats</span> <span class='op'>&lt;-</span> <span class='fu'>create_input_mats</span><span class='op'>(</span><span class='va'>fit_wei</span>, <span class='va'>input_data</span><span class='op'>)</span>
 <span class='va'>input_mats</span>
-</div><div class='output co'>#&gt; Column binding the ID variables with all variables contained in the X matrices:
+</div><div class='output co'>#&gt; An "input_mats" object 
+#&gt; 
+#&gt; Column binding the ID variables with all variables contained in the X matrices:
 #&gt;    strategy_id patient_id (Intercept)
 #&gt; 1:           1          1           1
 #&gt; 2:           1          2           1

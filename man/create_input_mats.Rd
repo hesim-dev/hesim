@@ -75,7 +75,7 @@ hesim_dat <- hesim_data(strategies = strategies,
 # Class "lm"
 input_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
 medcost_fit <- lm(costs ~ female + state_name, psm4_exdata$costs$medical)
-input_mats <- create_input_mats(fit_lm, input_data)
+input_mats <- create_input_mats(medcost_fit, input_data)
 input_mats
 
 # Class "flexsurvreg"
