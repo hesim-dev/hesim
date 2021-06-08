@@ -3,7 +3,6 @@
 \name{create_input_mats}
 \alias{create_input_mats}
 \alias{create_input_mats.lm}
-\alias{create_input_mats.lm_list}
 \alias{create_input_mats.flexsurvreg}
 \alias{create_input_mats.flexsurvreg_list}
 \alias{create_input_mats.partsurvfit}
@@ -18,8 +17,6 @@
 create_input_mats(object, ...)
 
 \method{create_input_mats}{lm}(object, input_data, ...)
-
-\method{create_input_mats}{lm_list}(object, input_data, ...)
 
 \method{create_input_mats}{flexsurvreg}(object, input_data, ...)
 
@@ -42,50 +39,52 @@ create_input_mats(object, ...)
 \arguments{
 \item{object}{An object of the appropriate class.}
 
-\item{...}{Further arguments passed to \code{\link{model.matrix}}.}
+\item{...}{Further arguments passed to \code{\link[=model.matrix]{model.matrix()}}.}
 
-\item{input_data}{An object of class "expanded_hesim_data" returned by the function
-\code{\link{expand.hesim_data}}. Used to look for the input variables needed to create an input matrix
-for use in a statistical models and the id variables for indexing rows in the input matrix.}
+\item{input_data}{An object of class \code{expanded_hesim_data} returned by
+\code{\link[=expand.hesim_data]{expand.hesim_data()}}. It is used to look for the variables needed to create
+an input matrix for use in a statistical models and the ID variables for
+indexing rows in the input matrix.}
 }
 \value{
-An object of class \code{\link{input_mats}}.
+An object of class \code{input_mats}.
 }
 \description{
-\code{create_input_mats} is a generic function for creating an object of class
-\code{\link{input_mats}}. Model matrices are typically constructed based on the
-variables specified in the model \code{object} and the data specified in \code{data},
-although there are some cases in which \code{\link{input_mats}} can be created
-from \code{object} alone.
+\code{create_input_mats()} is a generic function for creating an object of class
+\code{\link{input_mats}}. Model matrices are constructed based on the
+variables specified in the model \code{object} and the data specified in \code{input_data}.
+\code{create_input_mats()} is not typically called by users directly, but is
+instead used by functions that create model objects (e.g.,
+\code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}, \code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}},
+\code{\link[=create_PsmCurves]{create_PsmCurves()}}).
 }
 \examples{
 library("flexsurv")
 
-dt_strategies <- data.frame(strategy_id = c(1, 2))
-dt_patients <- data.frame(patient_id = seq(1, 3), 
-                          age = c(45, 47, 60),
-                          female = c(1, 0, 0),
-                          group = factor(c("Good", "Medium", "Poor")))
-dt_states <- data.frame(state_id =  seq(1, 3),
-                        state_name = factor(paste0("state", seq(1, 3))))
-hesim_dat <- hesim_data(strategies = dt_strategies,
-                        patients = dt_patients,
-                        states = dt_states)
+strategies <- data.frame(strategy_id = c(1, 2))
+patients <- data.frame(patient_id = seq(1, 3),
+                       age = c(45, 47, 60),
+                       female = c(1, 0, 0),
+                       group = factor(c("Good", "Medium", "Poor")))
+states <- data.frame(state_id =  seq(1, 3),
+                     state_name = factor(paste0("state", seq(1, 3))))
+hesim_dat <- hesim_data(strategies = strategies,
+                        patients = patients,
+                        states = states)
 
 # Class "lm"
-expanded_dat <- expand(hesim_dat, by = c("strategies", "patients", "states"))
-fit_lm <- stats::lm(costs ~ female + state_name, psm4_exdata$costs$medical)
-input_mats <- create_input_mats(fit_lm, expanded_dat)
-class(input_mats)
+input_data <- expand(hesim_dat, by = c("strategies", "patients", "states"))
+medcost_fit <- lm(costs ~ female + state_name, psm4_exdata$costs$medical)
+input_mats <- create_input_mats(medcost_fit, input_data)
+input_mats
 
 # Class "flexsurvreg"
-expanded_dat <- expand(hesim_dat, by = c("strategies", "patients"))
-fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, 
-                                 data = ovarian, dist = "weibull")
-input_mats <- create_input_mats(fit_wei, expanded_dat)
-class(input_mats)
+input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+fit_wei <- flexsurvreg(formula = Surv(futime, fustat) ~ 1,
+                       data = ovarian, dist = "weibull")
+input_mats <- create_input_mats(fit_wei, input_data)
+input_mats
 }
 \seealso{
-\code{\link{input_mats}}.
+\code{\link[=input_mats]{input_mats()}}
 }
-\keyword{internal}

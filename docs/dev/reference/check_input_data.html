@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Parameters of a list of survival models — params_surv_list • hesim</title>
+<title>Check input data argument for create_input_mats — check_input_data • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Parameters of a list of survival models — params_surv_list" />
-<meta property="og:description" content="Create a list containing the parameters of multiple fitted parametric survival models." />
+<meta property="og:title" content="Check input data argument for create_input_mats — check_input_data" />
+<meta property="og:description" content="Check that input data argument for create_input_mats exists and that it is
+of the correct type." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -167,71 +168,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Parameters of a list of survival models</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_surv_list.R'><code>R/params_surv_list.R</code></a></small>
-    <div class="hidden name"><code>params_surv_list.Rd</code></div>
+    <h1>Check input data argument for <code>create_input_mats</code></h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/input_mats.R'><code>R/input_mats.R</code></a></small>
+    <div class="hidden name"><code>check_input_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a list containing the parameters of multiple fitted parametric survival models.</p>
+    <p>Check that input data argument for <code>create_input_mats</code> exists and that it is
+of the correct type.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>params_surv_list</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>check_input_data</span><span class='op'>(</span><span class='va'>input_data</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Objects of class <code><a href='params_surv.html'>params_surv</a></code>, which can be named.</p></td>
+      <th>input_data</th>
+      <td><p>An object of class "expanded_hesim_data" returned by the function
+<code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>params_surv_list</code>, which is a list containing <code><a href='params_surv.html'>params_surv</a></code>
-objects.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>If all tests passed, returns nothing; otherwise, throws an exception.</p>
 
-    <div class='dont-index'><p><code><a href='create_params.html'>create_params()</a></code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
-<span class='va'>params</span> <span class='op'>&lt;-</span> <span class='fu'>params_surv_list</span><span class='op'>(</span>
-  <span class='co'># Model for progression free survival</span>
-  pfs <span class='op'>=</span> <span class='fu'><a href='params_surv.html'>params_surv</a></span><span class='op'>(</span>
-    coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-      rate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.5</span><span class='op'>)</span>, <span class='fl'>.5</span><span class='op'>)</span>,
-                        new_strategy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.8</span><span class='op'>)</span>, <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='op'>)</span>,
-    dist <span class='op'>=</span> <span class='st'>"exp"</span>
-  <span class='op'>)</span>,
- 
-  <span class='co'># Model for overall survival</span>
-  os <span class='op'>=</span> <span class='fu'><a href='params_surv.html'>params_surv</a></span><span class='op'>(</span>
-    coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-      rate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.3</span><span class='op'>)</span> , <span class='fl'>.5</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='op'>)</span>,
-    dist <span class='op'>=</span> <span class='st'>"exp"</span>
-  <span class='op'>)</span>
-<span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>params</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    model parameter         term   estimate      lower       upper
-#&gt; 1:   pfs      rate    intercept -1.0081219 -1.5406501 -0.81540327
-#&gt; 2:   pfs      rate new_strategy -0.2288949 -0.4071245 -0.03100149
-#&gt; 3:    os      rate    intercept -1.2517267 -1.6414071 -0.93621673</div><div class='input'><span class='va'>params</span>
-</div><div class='output co'>#&gt; A "params_surv_list" object 
-#&gt; 
-#&gt; Summary of coefficients:
-#&gt;    model parameter         term   estimate      lower       upper
-#&gt; 1:   pfs      rate    intercept -1.0081219 -1.5406501 -0.81540327
-#&gt; 2:   pfs      rate new_strategy -0.2288949 -0.4071245 -0.03100149
-#&gt; 3:    os      rate    intercept -1.2517267 -1.6414071 -0.93621673
-#&gt; 
-#&gt; Number of parameter samples: 5
-#&gt; Distributions: 
-#&gt;   pfs    os 
-#&gt; "exp" "exp" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

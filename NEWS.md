@@ -5,6 +5,8 @@
 
 * There are now summary and print methods for parameter objects. See `summary.params()`.
 
+* An `input_mats` object can be converted to a `data.table` with `as.data.table.input_mats()` and printed to the console in a less verbose way than in prior versions with `print.input_mats()`.
+
 * A new `create_CohortDtstmTrans.params_mlogit_list()` method allows the transition component of a cohort discrete time state transition model (cDTSTM) to be created directly from multinomial logistic regression parameter objects.
 
 ## hesim 0.5.0

@@ -2,51 +2,113 @@
 % Please edit documentation in R/input_mats.R
 \name{input_mats}
 \alias{input_mats}
+\alias{as.data.table.input_mats}
+\alias{print.input_mats}
 \title{Input matrices for a statistical model}
 \usage{
 input_mats(X, ...)
+
+\method{as.data.table}{input_mats}(x, ...)
+
+\method{print}{input_mats}(x, ...)
 }
 \arguments{
 \item{X}{A list of input matrices for predicting the values of each parameter
 in a statistical model. May also be a list of lists of input matrices when a
 list of separate models is fit (e.g., with \code{\link[=flexsurvreg_list]{flexsurvreg_list()}}).}
 
-\item{...}{Arguments to pass to \code{\link[=id_attributes]{id_attributes()}}.}
+\item{...}{For \code{input_mats()}, arguments to pass to \code{\link[=id_attributes]{id_attributes()}}. For \code{print()},
+arguments to pass to \code{\link[=print.data.table]{print.data.table()}}.}
+
+\item{x}{An \code{\link{input_mats}} object.}
 }
 \description{
-Create an object of class \code{input_mats}, which contains inputs matrices
+An object of class \code{input_mats} contains inputs matrices
 for simulating a statistical model. Consists of (i) input matrices, \code{X}, and
 (ii) \link[=id_attributes]{metadata} used to index each matrix in \code{X}.
+
+Once created, an \code{input_mats} object can be converted
+to a \code{\link{data.table}} with \code{as.data.table()}, which is a helpful way to check that
+the object is as expected. The \code{print()} method summarizes the object and
+prints it to the console.
+
 More details are provided under "Details" below.
 }
 \details{
-Each row of each matrix \code{X} is an input vector, \eqn{x_{hik}}, where \eqn{h} denotes
-a health-related index, \eqn{i} indexes a patient, and \eqn{k} is a treatment strategy.
-A health-related index is either a health state
-(e.g., \code{state_id} or a transition between health states (e.g., \code{transition_id}).
-In some cases, the health-related index \eqn{h} can be suppressed and separate models
-can be fit for each health index. This is, for instance, the case in a \link[=Psm]{partitioned survival model} where separate models are fit for each survival endpoint.
+\code{input_mats} objects are used with \code{\link{params}} objects to simulate
+disease models, cost models, and/or utility models. Each column of \verb{$X} contains
+variables from the \code{params} object and a given row corresponds to a combination
+of the ID variables. The input matrix must always have rows for the treatment
+strategies (\code{strategy_id}) and patients (\code{patient_id}); it may optionally
+have rows for health variables (\code{state_id} or \code{transition_id}) and time
+intervals (\code{time_id}). The rows must be sorted by prioritizing (i) \code{strategy_id},
+(ii) \code{patient_id}, (iii) the health related ID variable
+(either \code{state_id} or \code{transition_id}) and (iv) \code{time_id}.
 
-The rows of the matrices in \code{X} must be sorted in a manner consistent with the ID variables as
-described in \code{\link[=id_attributes]{id_attributes()}}.
+While \code{input_mats} objects can be created directly with \code{\link[=input_mats]{input_mats()}}, it
+is rarely a good idea to do so. They are typically created as the
+\code{input_data} field when creating model objects (e.g., with
+\code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}, \code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}}, and
+\code{\link[=create_PsmCurves]{create_PsmCurves()}}). Internally, these functions
+create the input matrices using \code{\link[=create_input_mats]{create_input_mats()}} methods, which ensure
+that they are in the correct format. Users may also use \code{\link[=create_input_mats]{create_input_mats()}}
+methods, but there is not usually a good reason to do so.
+
+\code{as.data.table.input_mats()} will convert input matrices into a single
+\code{data.table()} that column binds the ID variables and the unique combinations
+of variables contained in the elements of \verb{$X}. \code{print.input_mats()} prints
+a call to \code{as.data.table()} and provides additional information about the
+ID variables.
 }
 \examples{
-strategies <- data.frame(strategy_id = c(1, 2))
-patients <- data.frame(patient_id = seq(1, 3), 
-                          age = c(45, 47, 60),
-                          female = c(1, 0, 0),
-                          group = factor(c("Good", "Medium", "Poor")))
+library("data.table")
+
+# Input matrices are typically created as part of model objects
+# Let's illustrate with a partitioned survival model (PSM)
+
+## Model setup
+strategies <- data.frame(strategy_id = c(1, 2),
+                         new_strategy = c(0, 1))
+patients <- data.frame(patient_id = seq(1, 3),
+                       age = c(45, 47, 60),
+                       female = c(1, 0, 0),
+                       group = factor(c("Good", "Medium", "Poor")))
 hesim_dat <- hesim_data(strategies = strategies,
                         patients = patients)
 
-dat <- expand(hesim_dat, by = c("strategies", "patients"))
-input_mats <- input_mats(X = list(mu = model.matrix(~ age, dat)),
-                         strategy_id = dat$strategy_id,
-                         n_strategies = length(unique(dat$strategy_id)),
-                         patient_id = dat$patient_id,
-                        n_patients = length(unique(dat$patient_id)))
-print(input_mats)
+## Create survival models for PSM
+### Parameters
+n <- 2
+survmod_params <- params_surv_list(
+  # Progression free survival (PFS) 
+  pfs = params_surv(
+    coefs = list(
+      rate = data.frame(intercept = rnorm(n, log(1/5), 1),
+                        new_strategy = rnorm(n, log(.8), 1))
+      ),
+    dist = "exp"
+  ),
+  
+  # Overall survival (OS)
+  os = params_surv(
+    coefs = list(
+      rate = data.frame(intercept = rnorm(n, log(1/10), 1))
+    ),
+    dist = "exp"
+  )
+)
+
+### Input data
+survmod_input_data <- expand(hesim_dat)[, intercept := 1]
+
+### Model object
+survmod <- create_PsmCurves(survmod_params, input_data = survmod_input_data)
+
+## Inspect input data
+survmod$input_data # Print "input_mats" object to console
+as.data.table(survmod$input_data) # Convert "input_mats" object to data.table
 }
 \seealso{
-\code{\link[=create_input_mats]{create_input_mats()}}
+See \code{\link[=IndivCtstmTrans]{IndivCtstmTrans()}} and \code{\link[=PsmCurves]{PsmCurves()}} for examples in which the
+\code{input_data} field of an instance of a model class is an \code{input_mats} object.
 }

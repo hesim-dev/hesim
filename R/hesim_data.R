@@ -383,14 +383,14 @@ time_intervals <- function(times){
 #' @param patient_wt An optional numeric vector denoting the weight to apply to each patient
 #' within a subgroup. 
 #'  
-#' @details When using the ID variables to index [input_mats], sorting order should be 
-#' the same as specified in [expand.hesim_data()]; that is,
-#' observations must be sorted by: (i) `strategy_id`, (ii) `patient_id`, 
-#' and (iii) the health-related ID variable (either `state_id` or
-#'  `transition_id`). When using ID variables to index transformed parameter 
-#'  objects and `sample` is used for indexing, then observations must be sorted by:
-#'  (i) `sample`, (ii) `strategy_id`, (iii) `patient_id`, and
-#'   (iv) the health-related ID variable. 
+#' @details When using the ID variables to index [input_mats], the sorting order 
+#' should be the same as specified in [expand.hesim_data()]; that is,
+#' observations must be sorted by prioritizing: (i) `strategy_id`, (ii) `patient_id`, 
+#' (iii) the health-related ID variable (either `state_id` or `transition_id`), 
+#' and (iv) `time_id`. When using ID variables are used to index transformed parameter 
+#' objects and `sample` is used for indexing, then observations must be sorted by
+#' prioritizing: (i) `sample`, (ii) `strategy_id`, (iii) `patient_id`,
+#' (iv) the health-related ID variable, and (v) `time_id`. 
 #'   
 #' @seealso [hesim_data()],[expand.hesim_data()], [input_mats]
 #' @export
