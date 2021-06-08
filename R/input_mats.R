@@ -150,6 +150,7 @@ print.input_mats <- function(x, ...) {
   size <- unlist(x[grepl("n_", names(x))])
   
   # Printing
+  cat("An \"input_mats\" object \n\n")
   cat("Column binding the ID variables with all variables contained in the X matrices:\n")
   print(as.data.table(x), ...)
   cat("\n")

@@ -29,22 +29,37 @@ hesim_dat <- hesim_data(
 )
 input_data <- expand(hesim_dat)
 
-# input_mats class -------------------------------------------------------------
+# input_mats class works as expected -------------------------------------------
+im <- input_mats(
+  X = list(mu = model.matrix(~ age, input_data)),
+  strategy_id = input_data$strategy_id,
+  n_strategies = length(unique(input_data$strategy_id)),
+  patient_id = input_data$patient_id,
+  n_patients = length(unique(input_data$patient_id))
+)
+
 test_that("input_mats() works as expected", {
-  im <- input_mats(
-    X = list(mu = model.matrix(~ age, input_data)),
-    strategy_id = input_data$strategy_id,
-    n_strategies = length(unique(input_data$strategy_id)),
-    patient_id = input_data$patient_id,
-    n_patients = length(unique(input_data$patient_id))
-  )
-  expected_X <- as.matrix(data.frame(1,input_data$age))
+  expected_X <- as.matrix(data.frame(1, input_data$age))
   colnames(expected_X) <- c("(Intercept)", "age")
   
   expect_true(inherits(im, "input_mats"))
   expect_equivalent(im$X$mu, expected_X)
 })
 
+test_that("print.input_mats() works as expected", {
+  expect_output(print(im), "An \"input_mats\" object")
+  expect_output(print(im), paste0("Column binding the ID variables with all ",
+                                  "variables contained in the X matrices:"))
+  expect_output(print(im), "Number of unique values of ID variables:")
+})
+
+test_that("as.data.table.input_mats() works as expected", {
+ imd <- as.data.table(im)
+ expect_true(inherits(imd, "data.table"))
+ expect_equal(imd$age, input_data$age)
+})
+
+# input_mats class throws errors -----------------------------------------------
 test_that("input_mats() throws error if X is not a list", {
   expect_error(
     input_mats(
@@ -99,6 +114,21 @@ test_that("create_input_mats.lm() works with both data.table and data.frame inpu
   setattr(input_data2, "class", c("expanded_hesim_data", "data.frame"))
   im2 <- create_input_mats(fit1, input_data2)
   expect_equal(im1, im2)
+})
+
+test_that("create_input_mats.lm() works with times", {
+  d <- expand(hesim_dat, by = c("strategies", "patients", "states"), 
+              times = c(0, 2))
+  im <- create_input_mats(fit1, d)
+  
+  expect_output(print(im), "Time intervals:")
+  imd <- as.data.table(im)
+  expect_true(
+    all(c("strategy_id", "patient_id", "state_id", "time_id", "time_start", 
+          "time_stop", "state_namestate2", "state_namestate3") %in%
+        colnames(imd))
+  )
+  expect_equal(d$female, imd$female)
 })
 
 test_that("create_input_mats.lm() thows error if input data is not a data.table or data.frame", {
