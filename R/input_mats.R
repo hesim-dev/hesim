@@ -2,8 +2,8 @@
 #' Input matrices for a statistical model
 #' 
 #' @description 
-#' An object of class `input_mats` contains inputs matrices
-#' for simulating a statistical model. Consists of (i) input matrices, `X`, and 
+#' An object of class `input_mats` contains input matrices
+#' for simulating a statistical model. Cons ists of (i) input matrices, `X`, and 
 #' (ii) [metadata][id_attributes()] used to index each matrix in `X`. 
 #' 
 #' Once created, an `input_mats` object can be converted 
@@ -24,7 +24,7 @@
 #' `input_mats` objects are used with [`params`] objects to simulate
 #' disease models, cost models, and/or utility models. Each column of `$X` contains
 #' variables from the `params` object and a given row corresponds to a combination
-#' of the ID variables. The input matrix must always have rows for the treatment
+#' of the ID variables. An input matrix must always have rows for the treatment
 #' strategies (`strategy_id`) and patients (`patient_id`); it may optionally 
 #' have rows for health variables (`state_id` or `transition_id`) and time 
 #' intervals (`time_id`). The rows must be sorted by prioritizing (i) `strategy_id`,
@@ -49,6 +49,7 @@
 #' @example man-roxygen/example-input_mats.R
 #' @seealso See [IndivCtstmTrans()] and [PsmCurves()] for examples in which the
 #' `input_data` field of an instance of a model class is an `input_mats` object.
+#' 
 #' @export
 input_mats <- function(X, ...){
   object <- new_input_mats(X, ...)
@@ -57,7 +58,7 @@ input_mats <- function(X, ...){
 }
 
 new_input_mats <- function(X, ...){
-  stopifnot(is.matrix(X) | is.list(X) | is.null(X))
+  stopifnot(is.matrix(X) | is.list(X) | is.null(X)) 
   object <- c(list(X = X),
                    do.call("new_id_attributes", list(...)))
   object[sapply(object, is.null)] <- NULL

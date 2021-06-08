@@ -23,8 +23,8 @@ arguments to pass to \code{\link[=print.data.table]{print.data.table()}}.}
 \item{x}{An \code{\link{input_mats}} object.}
 }
 \description{
-An object of class \code{input_mats} contains inputs matrices
-for simulating a statistical model. Consists of (i) input matrices, \code{X}, and
+An object of class \code{input_mats} contains input matrices
+for simulating a statistical model. Cons ists of (i) input matrices, \code{X}, and
 (ii) \link[=id_attributes]{metadata} used to index each matrix in \code{X}.
 
 Once created, an \code{input_mats} object can be converted
@@ -38,7 +38,7 @@ More details are provided under "Details" below.
 \code{input_mats} objects are used with \code{\link{params}} objects to simulate
 disease models, cost models, and/or utility models. Each column of \verb{$X} contains
 variables from the \code{params} object and a given row corresponds to a combination
-of the ID variables. The input matrix must always have rows for the treatment
+of the ID variables. An input matrix must always have rows for the treatment
 strategies (\code{strategy_id}) and patients (\code{patient_id}); it may optionally
 have rows for health variables (\code{state_id} or \code{transition_id}) and time
 intervals (\code{time_id}). The rows must be sorted by prioritizing (i) \code{strategy_id},
