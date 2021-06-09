@@ -192,16 +192,32 @@ test_eval_model <- function(tparams_def, rng_def){
 }
 
 test_that( "define_rng() returns list elements of the right class", {
-  rng_def <- define_rng({
-    list(list(y = 3))
-  }, n = 2)
+  error_msg <- paste0("Each element of the list returned by define_rng() must be a ",
+                      "numeric vector, matrix, data.frame, or data.table.")
+  
+  # Error if element is a list
+  rng_def <- define_rng({list(list(y = 3))})
   tparams_def <- define_tparams({
     list(z = 3)
   })
   expect_error(test_eval_model(tparams_def, rng_def),
-               paste0("Each element of the list returned by define_rng() must be a ",
-                      "numeric vector, matrix, data.frame, or data.table."), 
-               fixed = TRUE)
+               error_msg, fixed = TRUE)
+  
+  # Error if element is an array
+  rng_def <- define_rng({list(y = array(1))})
+  expect_error(test_eval_model(tparams_def, rng_def),
+               error_msg, fixed = TRUE)
+  
+  # Should work with a matrix
+  rng_def <- define_rng({list(y = matrix(1))})
+  tparams_def <- define_tparams({
+    list(tpmatrix = tpmatrix(1, 0, 0, 1))
+  })
+  mod <- test_eval_model(list(tparams_def), rng_def)
+  expect_equal(
+    unname(unlist(mod$tpmatrix)),
+    c(1, 0, 0, 1)
+  )
 })
 
 test_that( "eval_tparams() must return a list", {

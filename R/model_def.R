@@ -653,8 +653,9 @@ eval_model <- function(x, input_data){
   params <- eval_rng(x$rng_def, x$params, check = TRUE)
   params_len <- lapply(params, function (z) if (is_1d_vector(z)) 1 else ncol(z))
   params_class <- lapply(params, class)
-  if(any(!unlist(params_class) %in% c("integer", "numeric", "matrix",
-                                      "data.frame", "data.table"))){
+  if (any(!sapply(params, function(z) {
+    inherits(z, c("integer", "numeric", "matrix", "data.frame", "data.table"))
+  }))) {
     stop(paste0("Each element of the list returned by define_rng() must be a ",
                 "numeric vector, matrix, data.frame, or data.table."),
          call. = FALSE)
