@@ -38,7 +38,9 @@ meaning that any output can be returned. This is always \code{TRUE} when used in
 \code{define_rng()} returns an object of class \code{rng_def},
 which is a list containing the unevaluated random number generation
 expressions passed  to \code{expr}, \code{n}, and any additional arguments passed to
-\code{...} . \code{eval_rng()} evaluates the \code{rng_def} object and should return a list.
+\code{...} . \code{eval_rng()} evaluates the \code{rng_def} object and
+returns the evaluated expression (which should be a list) as well
+as \code{n} as an attribute.
 }
 \description{
 Random number generation expressions are used to
@@ -52,7 +54,7 @@ that return parameter samples in convenient formats
 and do not require the number of samples, \code{n}, as arguments
 (see \link{rng_distributions}). The random number generation expressions
 are evaluated using \code{eval_rng()} and used within \code{expr}
-in \code{define_rng()}. If multivariate object is returned by \code{eval_rng()},
+in \code{define_rng()}. If a multivariate object is returned by \code{eval_rng()},
 then the rows are random samples and columns are
 distinct parameters (e.g., costs for each health state, elements of a
 transition probability matrix).

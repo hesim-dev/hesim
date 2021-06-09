@@ -17,20 +17,22 @@
 #' @param ... Additional arguments to pass to the environment used to evaluate
 #' `expr`.
 #' 
-#' @details \code{hesim} contains a number of random number generation functions
+#' @details `hesim` contains a number of random number generation functions
 #' that return parameter samples in convenient formats
 #' and do not require the number of samples, `n`, as arguments 
 #' (see [rng_distributions]). The random number generation expressions
 #' are evaluated using `eval_rng()` and used within `expr`
-#' in `define_rng()`. If multivariate object is returned by `eval_rng()`,
+#' in `define_rng()`. If a multivariate object is returned by `eval_rng()`,
 #' then the rows are random samples and columns are 
 #' distinct parameters (e.g., costs for each health state, elements of a 
 #' transition probability matrix).  
 #' 
 #' @return `define_rng()` returns an object of class `rng_def`,
-#'  which is a list containing the unevaluated random number generation
-#'   expressions passed  to `expr`, `n`, and any additional arguments passed to 
-#'   `...` . `eval_rng()` evaluates the `rng_def` object and should return a list. 
+#' which is a list containing the unevaluated random number generation
+#' expressions passed  to `expr`, `n`, and any additional arguments passed to 
+#' `...` . `eval_rng()` evaluates the `rng_def` object and 
+#' returns the evaluated expression (which should be a list) as well 
+#' as `n` as an attribute.
 #' 
 #' @seealso [rng_distributions], [define_model()], [define_tparams()]
 #' @examples  
@@ -102,9 +104,10 @@ check_eval_rng <- function(object){
 #' @export
 #' @rdname define_rng
 eval_rng <- function(x, params = NULL, check = FALSE){
-  x <- eval(x$expr, envir = c(x[-1], params)) # -1 is the position of "expr"
-  if (check) check_eval_rng(x)
-  return(x)
+  y <- eval(x$expr, envir = c(x[-1], params)) # -1 is the position of "expr"
+  if (check) check_eval_rng(y)
+  attr(y, "n") <- x$n
+  return(y)
 }
 
 rng_colnames <- function(old_names, params, new_names = NULL){

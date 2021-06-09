@@ -232,7 +232,9 @@ meaning that any output can be returned. This is always <code>TRUE</code> when u
     <p><code>define_rng()</code> returns an object of class <code>rng_def</code>,
 which is a list containing the unevaluated random number generation
 expressions passed  to <code>expr</code>, <code>n</code>, and any additional arguments passed to
-<code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and should return a list.</p>
+<code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and
+returns the evaluated expression (which should be a list) as well
+as <code>n</code> as an attribute.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>hesim</code> contains a number of random number generation functions
@@ -240,7 +242,7 @@ that return parameter samples in convenient formats
 and do not require the number of samples, <code>n</code>, as arguments
 (see <a href='rng_distributions.html'>rng_distributions</a>). The random number generation expressions
 are evaluated using <code>eval_rng()</code> and used within <code>expr</code>
-in <code>define_rng()</code>. If multivariate object is returned by <code>eval_rng()</code>,
+in <code>define_rng()</code>. If a multivariate object is returned by <code>eval_rng()</code>,
 then the rows are random samples and columns are
 distinct parameters (e.g., costs for each health state, elements of a
 transition probability matrix).</p>
@@ -274,13 +276,13 @@ transition probability matrix).</p>
 <span class='fu'>eval_rng</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>rng_def</span>, <span class='va'>params</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $p
 #&gt;        s1_s1     s1_s2     s2_s1     s2_s2
-#&gt; 1: 0.7641322 0.2358678 0.3216384 0.6783616
-#&gt; 2: 0.7717676 0.2282324 0.3332963 0.6667037
+#&gt; 1: 0.7608402 0.2391598 0.3086310 0.6913690
+#&gt; 2: 0.7410398 0.2589602 0.2821142 0.7178858
 #&gt; 
 #&gt; $inptcost
-#&gt;            A        B         C
-#&gt; 1:  233.0313 2524.334 1931.8009
-#&gt; 2: 1374.0879 2499.035  134.1758
+#&gt;            A          B         C
+#&gt; 1:  70.07225 551.354278  199.4009
+#&gt; 2: 710.62083   4.510317 7099.5086
 #&gt; 
 #&gt; $outptcost
 #&gt;      [,1] [,2] [,3]
@@ -288,10 +290,12 @@ transition probability matrix).</p>
 #&gt; [2,]  400  700  700
 #&gt; 
 #&gt; $aecost
-#&gt;           A        B         C
-#&gt; 1: 883.7757 2086.364  855.9896
-#&gt; 2: 623.5611 1062.843 1898.9403
-#&gt; </div></pre>
+#&gt;           A         B         C
+#&gt; 1: 160.3943  45.76685 1192.5447
+#&gt; 2: 488.8383 216.41404  632.5834
+#&gt; 
+#&gt; attr(,"n")
+#&gt; [1] 2</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
