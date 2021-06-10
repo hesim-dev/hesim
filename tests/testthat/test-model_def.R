@@ -258,7 +258,7 @@ test_that( "define_rng() returns list elements of the right class", {
 test_that("define_model() requires either params or rng_def to be non NULL", {
   expect_error(
     define_model(
-      tparams_def = tparams_def, rng_def = NULL, params = NULL
+      tparams_def = 2, rng_def = NULL, params = NULL
     ),
     "'rng_def' and 'params' cannot both be NULL."
   )

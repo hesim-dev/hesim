@@ -20,8 +20,8 @@ test_that("tpmatrix() works with complement argument" , {
   
   # Character vector
   tpmat1 <- tpmatrix(pmat, complement = c("s1_s1", "s2_s2"))
-  expect_equal(tpmat$s1_s1, .5)
-  expect_equal(tpmat$s2_s2, .7)
+  expect_equal(tpmat1$s1_s1, .5)
+  expect_equal(tpmat1$s2_s2, .7)
   
   # Numeric vector
   tpmat2 <- tpmatrix(pmat, complement = c(1, 4))
@@ -32,7 +32,7 @@ test_that("tpmatrix() works with complement argument" , {
 
 test_that("tpmatrix() throws error if complement argument is incorrectly specified" , {
   expect_error(
-    tpmatrix(pmat, complement = data.frame(2)),
+    tpmatrix(2, complement = data.frame(2)),
     "'complement' must either be a vector of integers or a character vector."
   )
 })
