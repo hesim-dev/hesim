@@ -20,8 +20,9 @@ for more details).}
 \item{rng_def}{A \link[=define_rng]{rng_def} object used to randomly draw samples
 of the parameters from suitable probability distributions.}
 
-\item{params}{A list containing the values of parameters for random
-number generation.}
+\item{params}{Either (i) a list containing the values of parameters for random
+number generation or (ii) parameter samples that have already been randomly
+generated using \code{eval_rng()}. In case (ii), \code{rng_def} should be \code{NULL}.}
 
 \item{n_states}{The number of health states (inclusive of all health states
 including the the death state) in the model. If \code{tpmatrix} is
@@ -81,7 +82,7 @@ hesim_dat <- hesim_data(strategies = strategies,
                        patients = patients)
 data <- expand(hesim_dat)
 
-# Define the model
+# Model parameters
 rng_def <- define_rng({
   alpha <- matrix(c(1251, 350, 116, 17,
                     0, 731, 512, 15,
@@ -91,6 +92,7 @@ rng_def <- define_rng({
   rownames(alpha) <- colnames(alpha) <- c("A", "B", "C", "D")
   lrr_mean <- log(.509)
   lrr_se <- (log(.710) - log(.365))/(2 * qnorm(.975))
+  
   list(
     p_mono = dirichlet_rng(alpha),
     rr_comb = lognormal_rng(lrr_mean, lrr_se),
@@ -98,7 +100,7 @@ rng_def <- define_rng({
     c_zido = 2278,
     c_lam = 2086.50,
     c_med = gamma_rng(mean = c(A = 2756, B = 3052, C = 9007),
-                        sd = c(A = 2756, B = 3052, C = 9007))
+                      sd = c(A = 2756, B = 3052, C = 9007))
   )
 }, n = 2)
 
@@ -119,15 +121,17 @@ tparams_def <- define_tparams({
   )
 })
 
+# Simulation
+## Define the economic model
 model_def <- define_model(
   tparams_def = tparams_def,
   rng_def = rng_def)
 
-# Evaluate the model expression to generate model inputs
-# This can be useful for understanding the output of a model expression
+### Evaluate the model expression to generate model inputs
+### This can be useful for understanding the output of a model expression
 eval_model(model_def, data)
 
-# Create an economic model with a factory function
+## Create an economic model with a factory function
 econmod <- create_CohortDtstm(model_def, data)
 
 }

@@ -153,7 +153,7 @@ test_that( "define_rng() has incorrect number of samples", {
                fixed = TRUE)
 })
 
-# Model definition -------------------------------------------------------------
+# Model definition works as expected -------------------------------------------
 # Setup an example
 ## Data
 strategies <- data.table(strategy_id = 1:2,
@@ -163,7 +163,7 @@ hesim_dat <- hesim_data(strategies = strategies,
                         patients = patients)
 data <- expand(hesim_dat)
 
-# Define model
+## Random number generation
 rng_def <- define_rng({
   alpha <- matrix(c(1251, 350, 116, 17,
                     0, 731, 512, 15,
@@ -182,7 +182,7 @@ rng_def <- define_rng({
   )
 }, n = 2)
 
-# First test define_tparams()
+## Helper function
 test_eval_model <- function(tparams_def, rng_def){
   model_def <- define_model(
     tparams_def = tparams_def,
@@ -191,6 +191,44 @@ test_eval_model <- function(tparams_def, rng_def){
   return(eval_model(model_def, data))
 }
 
+# Test
+test_that("define_tparams() can be a list", {
+  tparams_def1 <- define_tparams({
+    list(
+      costs = list(medical = c_med)
+    )
+  })
+  tparams_def2 <- define_tparams({
+    list(
+      costs = list(drug = ifelse(strategy_name == "S1", c_s1, c_s2))
+    )
+  })  
+  model_def <- define_model(
+    tparams_def = list(tparams_def1, tparams_def2),
+    rng_def = rng_def,
+    n_states = 4
+  )
+  expect_equal(names(eval_model(model_def, data)$costs), c("medical", "drug"))
+})
+
+test_that("define_model() works with rng_def = NULL", {
+  rng <- eval_rng(rng_def) 
+  tparams_def <- define_tparams({
+    list(tpmatrix = tpmatrix(1, 0, 0, 1))
+  })
+  model_def <- define_model(tparams_def, rng_def = NULL, params = rng)
+  m <- eval_model(model_def, data)
+  
+  expect_equivalent(m$tpmatrix, tpmatrix(1, 0, 0, 1))
+  rdata <- data[rep(1:nrow(data), rng_def$n)]
+  expect_equal(m$id[[1]]$strategy_id, rdata$strategy_id)
+  expect_equal(m$id[[1]]$patient_id, rdata$patient_id)
+  expect_equal(m$id[[1]]$sample, rep(1:rng_def$n, each = nrow(data)))
+})
+
+
+
+# Model definition throws errors -----------------------------------------------
 test_that( "define_rng() returns list elements of the right class", {
   error_msg <- paste0("Each element of the list returned by define_rng() must be a ",
                       "numeric vector, matrix, data.frame, or data.table.")
@@ -214,9 +252,15 @@ test_that( "define_rng() returns list elements of the right class", {
     list(tpmatrix = tpmatrix(1, 0, 0, 1))
   })
   mod <- test_eval_model(list(tparams_def), rng_def)
-  expect_equal(
-    unname(unlist(mod$tpmatrix)),
-    c(1, 0, 0, 1)
+  expect_equivalent(mod$tpmatrix, tpmatrix(1, 0, 0, 1))
+})
+
+test_that("define_model() requires either params or rng_def to be non NULL", {
+  expect_error(
+    define_model(
+      tparams_def = tparams_def, rng_def = NULL, params = NULL
+    ),
+    "'rng_def' and 'params' cannot both be NULL."
   )
 })
 
@@ -313,24 +357,4 @@ test_that("costs in define_tparams() must be a list", {
   expect_error(eval_model(model_def, data),
                "The 'costs' element returned by define_tparams() must be a list",
                fixed = TRUE)
-})
-
-
-test_that("define_tparams() can be a list", {
-  tparams_def1 <- define_tparams({
-    list(
-      costs = list(medical = c_med)
-    )
-  })
-  tparams_def2 <- define_tparams({
-    list(
-      costs = list(drug = ifelse(strategy_name == "S1", c_s1, c_s2))
-    )
-  })  
-  model_def <- define_model(
-    tparams_def = list(tparams_def1, tparams_def2),
-    rng_def = rng_def,
-    n_states = 4
-  )
-  expect_equal(names(eval_model(model_def, data)$costs), c("medical", "drug"))
 })

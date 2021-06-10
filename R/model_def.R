@@ -501,8 +501,9 @@ eval_tparams <- function(x, input_data, rng_params){
 #' for more details).
 #' @param rng_def A [rng_def][define_rng()] object used to randomly draw samples
 #' of the parameters from suitable probability distributions.
-#' @param params 	A list containing the values of parameters for random 
-#' number generation. 
+#' @param params 	Either (i) a list containing the values of parameters for random 
+#' number generation or (ii) parameter samples that have already been randomly
+#' generated using `eval_rng()`. In case (ii), `rng_def` should be `NULL`. 
 #' @param n_states The number of health states (inclusive of all health states
 #' including the the death state) in the model. If `tpmatrix` is 
 #' an element returned by `tparams_def`, then it will be equal to the number of states 
@@ -545,7 +546,7 @@ eval_tparams <- function(x, input_data, rng_params){
 #'                        patients = patients)
 #' data <- expand(hesim_dat)
 #' 
-#' # Define the model
+#' # Model parameters
 #' rng_def <- define_rng({
 #'   alpha <- matrix(c(1251, 350, 116, 17,
 #'                     0, 731, 512, 15,
@@ -555,6 +556,7 @@ eval_tparams <- function(x, input_data, rng_params){
 #'   rownames(alpha) <- colnames(alpha) <- c("A", "B", "C", "D")
 #'   lrr_mean <- log(.509)
 #'   lrr_se <- (log(.710) - log(.365))/(2 * qnorm(.975))
+#'   
 #'   list(
 #'     p_mono = dirichlet_rng(alpha),
 #'     rr_comb = lognormal_rng(lrr_mean, lrr_se),
@@ -562,7 +564,7 @@ eval_tparams <- function(x, input_data, rng_params){
 #'     c_zido = 2278,
 #'     c_lam = 2086.50,
 #'     c_med = gamma_rng(mean = c(A = 2756, B = 3052, C = 9007),
-#'                         sd = c(A = 2756, B = 3052, C = 9007))
+#'                       sd = c(A = 2756, B = 3052, C = 9007))
 #'   )
 #' }, n = 2)
 #'
@@ -582,16 +584,18 @@ eval_tparams <- function(x, input_data, rng_params){
 #'     ) 
 #'   )
 #' })
-#'
+#' 
+#' # Simulation
+#' ## Define the economic model
 #' model_def <- define_model(
 #'   tparams_def = tparams_def,
 #'   rng_def = rng_def)
 #'
-#' # Evaluate the model expression to generate model inputs
-#' # This can be useful for understanding the output of a model expression
+#' ### Evaluate the model expression to generate model inputs
+#' ### This can be useful for understanding the output of a model expression
 #' eval_model(model_def, data)
 #' 
-#' # Create an economic model with a factory function
+#' ## Create an economic model with a factory function
 #' econmod <- create_CohortDtstm(model_def, data)
 #'
 #' @seealso [define_tparams()], [define_rng()]
@@ -600,6 +604,9 @@ define_model <- function(tparams_def, rng_def, params = NULL,
                          n_states = NULL){
   if (!inherits(tparams_def, "list")){
     tparams_def <- list(tparams_def)
+  }
+  if (is.null(rng_def) & is.null(params)) {
+    stop("'rng_def' and 'params' cannot both be NULL.")
   }
   x <- list(tparams_def = tparams_def, rng_def = rng_def, params = params,
             n_states = n_states)
@@ -614,7 +621,7 @@ check.model_def <- function(x){
                 "or a list of objects of class 'tparams_def'"),
          call. = FALSE)
   }
-  check_is_class(x$rng_def, class = "rng_def")
+  if (!is.null(x$rng_def)) check_is_class(x$rng_def, class = "rng_def")
   if (!is.null(x$n_states)) check_scalar(x$n_states, "n_states")
 }
 
@@ -653,7 +660,14 @@ eval_model <- function(x, input_data){
   data <- data.table(input_data)
   
   # Step 1: RNG for parameters
-  params <- eval_rng(x$rng_def, x$params, check = TRUE)
+  if (!is.null(x$rng_def)) {
+    params <- eval_rng(x$rng_def, x$params, check = TRUE)
+    n_samples <- x$rng_def$n
+  } else {
+    check_eval_rng(x$params)
+    params <- x$params
+    n_samples <- attr(x$params, "n")
+  }
   params_len <- lapply(params, function (z) if (is_1d_vector(z)) 1 else ncol(z))
   params_class <- lapply(params, class)
   if (any(!sapply(params, function(z) {
@@ -671,8 +685,8 @@ eval_model <- function(x, input_data){
   n_obs <- nrow(data)
   
   #### First expand 'data'
-  data <- data[rep(1:nrow(data), times = x$rng_def$n)]
-  data <- data.table(sample = rep(1:x$rng_def$n, each = n_obs), 
+  data <- data[rep(1:nrow(data), times = n_samples)]
+  data <- data.table(sample = rep(1:n_samples, each = n_obs), 
                      data)
   
   #### Then expand 'params'
@@ -764,7 +778,7 @@ eval_model <- function(x, input_data){
               utility = utility,
               costs = costs,
               n_states = x$n_states,
-              n = x$rng_def$n)
+              n = n_samples)
   class(res) <- "eval_model" 
   check(res)
   return(res)
