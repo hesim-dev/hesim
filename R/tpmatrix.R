@@ -170,7 +170,7 @@ replace_Qdiag <- function(x, n_states) {
 #' @param ... Named values of expressions defining elements of the matrix. Each
 #' element of `...` should either be a vector or a 2-dimensional tabular object 
 #' such as a data frame. See "Details" and the examples below.
-#' @param complemnt Either a character vector or a numeric vector denoting the 
+#' @param complement Either a character vector or a numeric vector denoting the 
 #' transitions (i.e., the columns of the tabular object formed from `...`) that
 #' are complementary (see "Details" below). If a character vector, each element
 #' should be the name of a column in the tabular object; if a numeric vector,
