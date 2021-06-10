@@ -51,7 +51,7 @@ an object of class \code{model_def} defined using \code{\link[=define_model]{def
 \details{
 \code{hesim} contains a number of random number generation functions
 that return parameter samples in convenient formats
-and do not require the number of samples, \code{n}, as arguments
+and do not typically require the number of samples, \code{n}, as arguments
 (see \link{rng_distributions}). The random number generation expressions
 are evaluated using \code{eval_rng()} and used within \code{expr}
 in \code{define_rng()}. If a multivariate object is returned by \code{eval_rng()},

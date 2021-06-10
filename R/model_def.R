@@ -19,7 +19,7 @@
 #' 
 #' @details `hesim` contains a number of random number generation functions
 #' that return parameter samples in convenient formats
-#' and do not require the number of samples, `n`, as arguments 
+#' and do not typically require the number of samples, `n`, as arguments 
 #' (see [rng_distributions]). The random number generation expressions
 #' are evaluated using `eval_rng()` and used within `expr`
 #' in `define_rng()`. If a multivariate object is returned by `eval_rng()`,
@@ -131,10 +131,9 @@ rng_colnames <- function(old_names, params, new_names = NULL){
   return(new_names)
 }
 
-mom_fun_rng <- function(rng_fun, mom_fun, mean, sd){
+mom_fun_rng <- function(n, rng_fun, mom_fun, mean, sd){
   which_fixed <- which(sd == 0)
   which_rng <- which(sd != 0)
-  n <- parent.frame()$n
   if (length(which_rng) > 0){
     rng_params <- do.call(mom_fun, list(mean[which_rng], sd[which_rng]))
     x <- do.call(rng_fun, c(list(n = n * length(which_rng)),
@@ -167,7 +166,7 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
   
   # Random number generation
   if (!is.null(mom_fun)){
-    x <- mom_fun_rng(rng_fun, mom_fun, params[[1]], params[[2]])
+    x <- mom_fun_rng(n, rng_fun, mom_fun, params[[1]], params[[2]])
   } else{
     x <- do.call(rng_fun, c(list(n = n * k), params))
   }
@@ -197,6 +196,10 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
 #' @param mean,sd Mean and standard deviation of the random variable.
 #' @param names Names for columns if an object with multiple columns is returned 
 #' by the function. 
+#' @param n The number of random samples of the parameters to draw. Default is
+#' the value of `n` in the environment in which the function is called, which 
+#' can be useful when used inside `define_rng` because it means that a value does
+#' not need to be explictly passed to `n`.
 #' @param ... Additional arguments to pass to underlying random number generation
 #' functions. See "details". 
 #' 
@@ -269,15 +272,16 @@ NULL
 #' @param shape1,shape2 Non-negative parameters of the Beta distribution.
 #' @name rng_distributions
 beta_rng <- function(shape1 = 1, shape2 = 1,
-                     mean = NULL, sd = NULL, names = NULL){
+                     mean = NULL, sd = NULL, names = NULL,
+                     n = parent.frame()$n){
   if (!is.null(mean) & !is.null(sd)){
-    return(uv_rng(n = parent.frame()$n, 
+    return(uv_rng(n = n, 
                   params = list(mean, sd) ,
                   rng_fun = "rbeta",
                   mom_fun = "mom_beta",
                   names = names))  
   } else{
-    return(uv_rng(n = parent.frame()$n, 
+    return(uv_rng(n = n, 
                   params = list(shape1, shape2) ,
                   rng_fun = "rbeta",
                   names = names)) 
@@ -286,8 +290,8 @@ beta_rng <- function(shape1 = 1, shape2 = 1,
 
 #' @param alpha A matrix where each row is a separate vector of shape parameters.
 #' @rdname rng_distributions
-dirichlet_rng <- function(alpha, names = NULL){
-  x <- rdirichlet_mat(n = parent.frame()$n, alpha = alpha, output = "data.table")
+dirichlet_rng <- function(alpha, names = NULL, n = parent.frame()$n){
+  x <- rdirichlet_mat(n = n, alpha = alpha, output = "data.table")
   
   # Column names
   make_names <- function(x, y){
@@ -311,12 +315,12 @@ dirichlet_rng <- function(alpha, names = NULL){
 
 #' @param est A vector of estimates of the variable of interest. 
 #' @rdname rng_distributions
-fixed <- function(est, names = NULL){
+fixed <- function(est, names = NULL, n = parent.frame()$n){
   stopifnot(is.vector(est))
   if (length(est) == 1){
-    return(rep(est, parent.frame()$n))
+    return(rep(est, n))
   } else{
-    x <- matrix(est, byrow = TRUE, nrow = parent.frame()$n,
+    x <- matrix(est, byrow = TRUE, nrow = n,
                 ncol = length(est))
     colnames(x) <- rng_colnames(colnames(x), list(est), names)
     return(data.table(x))
@@ -327,7 +331,7 @@ fixed <- function(est, names = NULL){
 #' random samples of the variable of interest from a suitable probability distribution. This would 
 #' typically be a posterior distribution from a Bayesian analysis. 
 #' @rdname rng_distributions
-custom <- function(x, names = NULL){
+custom <- function(x, names = NULL, n = parent.frame()$n){
   stopifnot(is.numeric(x))
   n_dims <- length(dim(x)) 
   if (n_dims > 2){
@@ -338,7 +342,7 @@ custom <- function(x, names = NULL){
   }
 
   # Return samples from posterior distribution
-  samples <- sample_from_posterior(n = parent.frame()$n,
+  samples <- sample_from_posterior(n = n,
                                    n_samples = nrow(x))
   x <- x[samples, ]
   
@@ -356,8 +360,8 @@ custom <- function(x, names = NULL){
 }
 
 #' @rdname rng_distributions
-gamma_rng <- function(mean, sd, names = NULL){
-  return(uv_rng(n = parent.frame()$n, 
+gamma_rng <- function(mean, sd, names = NULL, n = parent.frame()$n){
+  return(uv_rng(n = n, 
                 params = list(mean, sd),
                 rng_fun = "rgamma",
                 mom_fun = "mom_gamma",
@@ -367,8 +371,8 @@ gamma_rng <- function(mean, sd, names = NULL){
 #' @param meanlog,sdlog Mean and standard deviation of the distribution on the 
 #' log scale.
 #' @rdname rng_distributions
-lognormal_rng <- function(meanlog, sdlog, names = NULL){
-  return(uv_rng(n = parent.frame()$n, 
+lognormal_rng <- function(meanlog, sdlog, names = NULL, n = parent.frame()$n){
+  return(uv_rng(n = n, 
                 params = list(meanlog, sdlog),
                 rng_fun = "rlnorm",
                 names = names))
@@ -378,9 +382,9 @@ lognormal_rng <- function(meanlog, sdlog, names = NULL){
 #' `Sigma` is a positive-definite symmetric matrix specifying the 
 #' covariance matrix of the variables.
 #' @rdname rng_distributions
-multi_normal_rng <- function(mu, Sigma, names = NULL, ...){
-  m <- MASS::mvrnorm(parent.frame()$n, mu = mu, Sigma = Sigma, ...)
-  if (parent.frame()$n == 1) {
+multi_normal_rng <- function(mu, Sigma, names = NULL, n = parent.frame()$n, ...){
+  m <- MASS::mvrnorm(n, mu = mu, Sigma = Sigma, ...)
+  if (n == 1) {
     if (length(m) == 1) { # Case where n = 1 and a scalar is returned
       return(m)
     } else { # Otherwise convert to matrix
@@ -393,8 +397,8 @@ multi_normal_rng <- function(mu, Sigma, names = NULL, ...){
 }
 
 #' @rdname rng_distributions
-normal_rng <- function(mean, sd, names = NULL){
-  return(uv_rng(n = parent.frame()$n, 
+normal_rng <- function(mean, sd, names = NULL, n = parent.frame()$n){
+  return(uv_rng(n = n, 
                 params = list(mean, sd),
                 rng_fun = "rnorm",
                 names = names))
@@ -402,8 +406,8 @@ normal_rng <- function(mean, sd, names = NULL){
 
 #' @param min,max Lower and upper limits of the distribution. Must be finite.
 #' @rdname rng_distributions
-uniform_rng <- function(min, max, names = NULL){
-  return(uv_rng(n = parent.frame()$n, 
+uniform_rng <- function(min, max, names = NULL, n = parent.frame()$n){
+  return(uv_rng(n = n, 
                 params = list(min, max),
                 rng_fun = "runif",
                 names = names))
