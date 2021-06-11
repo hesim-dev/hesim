@@ -33,14 +33,24 @@ rng_def <- define_rng({
     fixed_dt = fixed(est = c(2, 3)),
     custom_vec = custom(x = c(1, 2, 3)),
     custom_dt = custom(x = matrix(1:4, nrow = 2, ncol = 2))
-    
   )
 }, n = 2, beta_colnames = c("A", "B", "C"), 
    alpha_names = tpmatrix_names(c("A", "B"), prefix = "")) 
 rng <- eval_rng(x = rng_def, params)
 
 test_that( "eval_rng() runs without error", {
-  expect_true(inherits(rng, "list"))
+  expect_true(inherits(rng, "eval_rng"))
+})
+
+test_that( "Can add elements to eval_rng() objects", {
+  rng2 <- c(rng, list(z = 2))
+  expect_true(inherits(rng2, "eval_rng"))
+  expect_equal(rng2$z, 2)
+  expect_equal(length(rng2), length(rng) + 1)
+  expect_equal(attr(rng, "n"), attr(rng2, "n"))
+  
+  rng3 <- c(rng, z = 2)
+  expect_equal(rng2, rng3)
 })
  
 test_that( "eval_rng has correct number of samples", {
@@ -121,12 +131,12 @@ test_that( "Column names for multi-parameter RNG is as expcted", {
 test_that( "multi_normal_rng() returns correct output when n = 1", {
   fun <- function(n, m = 0, V = 1){
     define_rng({ 
-      x = multi_normal_rng(mu = m, Sigma = V)
+      list(x = multi_normal_rng(mu = m, Sigma = V))
     }, n = n, m = m, V = V)
   }
-  expect_true(inherits(eval_rng(fun(1)), "numeric"))
+  expect_true(inherits(eval_rng(fun(1))$x, "numeric"))
   expect_true(
-    inherits(eval_rng(fun(1, m = c(0, 0), V =  matrix(c(10,3,3,2),2,2))),
+    inherits(eval_rng(fun(1, m = c(0, 0), V =  matrix(c(10,3,3,2),2,2)))$x,
              "data.table")
   )
 })
@@ -135,8 +145,8 @@ test_that( "define_rng() must return a list", {
   rng_def <- define_rng({
     data.frame(2)
   })
-  expect_error(eval_rng(rng_def, check = TRUE),
-               "define_rng() must return a list", fixed = TRUE)
+  expect_error(eval_rng(rng_def),
+               "define_rng() must return a list.", fixed = TRUE)
 })
 
 test_that( "define_rng() has incorrect number of samples", {
@@ -226,12 +236,10 @@ test_that("define_model() works with rng_def = NULL", {
   expect_equal(m$id[[1]]$sample, rep(1:rng_def$n, each = nrow(data)))
 })
 
-
-
 # Model definition throws errors -----------------------------------------------
 test_that( "define_rng() returns list elements of the right class", {
-  error_msg <- paste0("Each element of the list returned by define_rng() must be a ",
-                      "numeric vector, matrix, data.frame, or data.table.")
+  error_msg <- paste0("Each element returned by define_rng() must either be ", 
+                      "a vector or a tabular object.")
   
   # Error if element is a list
   rng_def <- define_rng({list(list(y = 3))})
@@ -241,8 +249,8 @@ test_that( "define_rng() returns list elements of the right class", {
   expect_error(test_eval_model(tparams_def, rng_def),
                error_msg, fixed = TRUE)
   
-  # Error if element is an array
-  rng_def <- define_rng({list(y = array(1))})
+  # Error if element is a 3D array
+  rng_def <- define_rng({list(y = array(1, dim = c(1, 1, 1)))})
   expect_error(test_eval_model(tparams_def, rng_def),
                error_msg, fixed = TRUE)
   

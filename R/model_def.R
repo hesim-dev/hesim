@@ -9,10 +9,9 @@
 #' @param expr An expression used to randomly draw variates for each parameter of
 #' interest in the model. [Braces][base::Paren] should be used so that the result
 #' of the last expression within the braces is evaluated. The expression must
-#'  return a list where each element is either a `vector`, `matrix`, `data.frame`,
-#'  or `data.table`. The length of 
-#'  the `vector` and number of rows in the `matrix`/`data.frame`/`data.table`,
-#'   must either be 1 or `n`.
+#'  return a list where each element is either a `vector` or tabular object
+#'  ( `matrix`, `data.frame`, or `data.table`). The length of the vector must
+#'  either be or `n` and the number of rows in the tabular object must be `n`.
 #' @param n Number of samples of the parameters to draw.
 #' @param ... Additional arguments to pass to the environment used to evaluate
 #' `expr`.
@@ -31,8 +30,7 @@
 #' which is a list containing the unevaluated random number generation
 #' expressions passed  to `expr`, `n`, and any additional arguments passed to 
 #' `...` . `eval_rng()` evaluates the `rng_def` object and 
-#' returns the evaluated expression (which should be a list) as well 
-#' as `n` as an attribute.
+#' returns an `eval_rng` object containing the evaluated expression.
 #' 
 #' @seealso [rng_distributions], [define_model()], [define_tparams()]
 #' @examples  
@@ -65,34 +63,6 @@ define_rng <- function(expr, n = 1, ...){
   return(x)
 }
 
-check_eval_rng <- function(object){
-  # Must be a list
-  if (!inherits(object, "list")){
-    stop("define_rng() must return a list", call. = FALSE)
-  } 
-  
-  # Number of samples
-  fun <- function(z){
-    if (is.matrix(z) | is.data.frame(z) | is.data.table(z)){
-      return(list(n = nrow(z), is_vector = FALSE))
-    } else{
-      return(list(n = length(z), is_vector = TRUE))
-    } 
-  }  
-  n_objects <- length(object)
-  is_vector <- n <- rep(NA, n_objects)
-  for (i in 1:n_objects){
-    res <- fun(object[[i]])
-    is_vector[i] <- res$is_vector
-    n[i] <- res$n
-  }
-  if(any(!(n == n[1] | (is_vector == TRUE & n == 1)))){
-    stop(paste0("The number of samples produced by define_rng() must be ",
-                "equal to n unless a scalar (of length 1) is returned."),
-                call. = FALSE)
-  }
-}
-
 #' @param x An object of class `rng_def` created with `define_rng()`.
 #' @param params A list containing the values of parameters for random number 
 #' generation. Each element of the list should either be a `vector`,
@@ -105,9 +75,61 @@ check_eval_rng <- function(object){
 #' @rdname define_rng
 eval_rng <- function(x, params = NULL, check = FALSE){
   y <- eval(x$expr, envir = c(x[-1], params)) # -1 is the position of "expr"
-  if (check) check_eval_rng(y)
+  if (!inherits(y, "list")){
+    stop("define_rng() must return a list.", call. = FALSE)
+  } 
+  class(y) <- "eval_rng"
+  if (check) check(y)
   attr(y, "n") <- x$n
+  attr(y, "checked") <- check
   return(y)
+}
+
+#' @export
+as.list.eval_rng <- function(x, ...) {
+  class(x) <- "list"
+  x
+}
+
+#' @export
+c.eval_rng <- function(...) {
+  dots <- list(...)
+  n <- attr(dots[[1]], "n")
+  class(dots[[1]]) <- "list"
+  x <- do.call("c", dots)
+  class(x) <- "eval_rng"
+  attr(x, "n") <- n
+  x
+}
+
+check.eval_rng <- function(object){
+  
+  object <- as.list(object)
+  
+  # Number of samples
+  fun <- function(z){
+    if (length(dim(z)) == 2){
+      return(list(n = nrow(z), is_vector = FALSE))
+    } else if (is_1d_vector(z)) {
+      return(list(n = length(z), is_vector = TRUE))
+    } else {
+      stop(paste0("Each element returned by define_rng() must either be a ",
+                  "vector or a tabular object."))
+    }
+  }  
+  
+  n_elem <- length(object)
+  is_vector <- n <- rep(NA, n_elem)
+  for (i in 1:n_elem){
+    res <- fun(object[[i]])
+    is_vector[i] <- res$is_vector
+    n[i] <- res$n
+  }
+  if(any(!(n == n[1] | (is_vector == TRUE & n == 1)))){
+    stop(paste0("The number of samples produced by define_rng() must be ",
+                "equal to n unless a scalar (of length 1) is returned."),
+         call. = FALSE)
+  }
 }
 
 rng_colnames <- function(old_names, params, new_names = NULL){
@@ -668,19 +690,13 @@ eval_model <- function(x, input_data){
     params <- eval_rng(x$rng_def, x$params, check = TRUE)
     n_samples <- x$rng_def$n
   } else {
-    check_eval_rng(x$params)
+    if(!attr(x$params, "checked")) check(x$params)
     params <- x$params
     n_samples <- attr(x$params, "n")
   }
+  params <- as.list(params)
   params_len <- lapply(params, function (z) if (is_1d_vector(z)) 1 else ncol(z))
   params_class <- lapply(params, class)
-  if (any(!sapply(params, function(z) {
-    inherits(z, c("integer", "numeric", "matrix", "data.frame", "data.table"))
-  }))) {
-    stop(paste0("Each element of the list returned by define_rng() must be a ",
-                "numeric vector, matrix, data.frame, or data.table."),
-         call. = FALSE)
-  }
   params_names <- rep(names(params), params_len)
   
   # Step 2: Vectorized parameter and transformed parameter values

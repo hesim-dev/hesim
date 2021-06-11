@@ -13,10 +13,9 @@ eval_rng(x, params = NULL, check = FALSE)
 \item{expr}{An expression used to randomly draw variates for each parameter of
 interest in the model. \link[base:Paren]{Braces} should be used so that the result
 of the last expression within the braces is evaluated. The expression must
-return a list where each element is either a \code{vector}, \code{matrix}, \code{data.frame},
-or \code{data.table}. The length of
-the \code{vector} and number of rows in the \code{matrix}/\code{data.frame}/\code{data.table},
-must either be 1 or \code{n}.}
+return a list where each element is either a \code{vector} or tabular object
+( \code{matrix}, \code{data.frame}, or \code{data.table}). The length of the vector must
+either be or \code{n} and the number of rows in the tabular object must be \code{n}.}
 
 \item{n}{Number of samples of the parameters to draw.}
 
@@ -39,8 +38,7 @@ meaning that any output can be returned. This is always \code{TRUE} when used in
 which is a list containing the unevaluated random number generation
 expressions passed  to \code{expr}, \code{n}, and any additional arguments passed to
 \code{...} . \code{eval_rng()} evaluates the \code{rng_def} object and
-returns the evaluated expression (which should be a list) as well
-as \code{n} as an attribute.
+returns an \code{eval_rng} object containing the evaluated expression.
 }
 \description{
 Random number generation expressions are used to

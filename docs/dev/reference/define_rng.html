@@ -194,10 +194,9 @@ an object of class <code>model_def</code> defined using <code><a href='define_mo
       <td><p>An expression used to randomly draw variates for each parameter of
 interest in the model. <a href='https://rdrr.io/r/base/Paren.html'>Braces</a> should be used so that the result
 of the last expression within the braces is evaluated. The expression must
-return a list where each element is either a <code>vector</code>, <code>matrix</code>, <code>data.frame</code>,
-or <code>data.table</code>. The length of
-the <code>vector</code> and number of rows in the <code>matrix</code>/<code>data.frame</code>/<code>data.table</code>,
-must either be 1 or <code>n</code>.</p></td>
+return a list where each element is either a <code>vector</code> or tabular object
+( <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code>). The length of the vector must
+either be or <code>n</code> and the number of rows in the tabular object must be <code>n</code>.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -233,8 +232,7 @@ meaning that any output can be returned. This is always <code>TRUE</code> when u
 which is a list containing the unevaluated random number generation
 expressions passed  to <code>expr</code>, <code>n</code>, and any additional arguments passed to
 <code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and
-returns the evaluated expression (which should be a list) as well
-as <code>n</code> as an attribute.</p>
+returns an <code>eval_rng</code> object containing the evaluated expression.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>hesim</code> contains a number of random number generation functions
@@ -294,8 +292,12 @@ transition probability matrix).</p>
 #&gt; 1: 160.3943  45.76685 1192.5447
 #&gt; 2: 488.8383 216.41404  632.5834
 #&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "eval_rng"
 #&gt; attr(,"n")
-#&gt; [1] 2</div></pre>
+#&gt; [1] 2
+#&gt; attr(,"checked")
+#&gt; [1] FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
