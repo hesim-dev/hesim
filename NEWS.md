@@ -1,9 +1,14 @@
 ## hesim 0.5.0.9999
+
 * A `survival` object can now be constructed manually with `survival()` and simulated state probabilities can be computed from survival curves with `sim_stateprobs.survival()`. These features are useful for partitioned survival analyses when a user would like to use a survival model not supported by `hesim` to predict survival curves (#49).
 
 * `sim_stateprobs.survival()` handles scenarios where survival curves cross better, ensuring that state probabilities sum to 1 (#56).
 
-* There are now summary and print methods for parameter objects. See `summary.params()`.
+* There is now a `complement` argument to `tpmatrix()` where users can define transitions that are "complements". This is particularly helpful for creating large transition probability matrices since there is no longer a need to manually enter `"C"` in the `...` portion of `tpmatrix()`. In other words, users can pass a single object to `tpmatrix()` and use the `complement` argument to ensure probabilities sum to 1 in each row. One reasonable workflow with `define_tparams()` would be to (i) create a single matrix of initial values (say zeros), (ii) modify the transitions that differ from the initial values, and (iii) pass the resulting object to `tpmatrix()` while using the `complement` argument.
+
+* An `eval_rng()` object can now be passed directly to `define_model()`, meaning that users can sample parameters prior to defining a model. Previously users could only pass an `rng_def` object to `define_model()`, which meant that sampling could only occur while evaluating a `model_def` object. 
+
+* There are now summary and print methods for parameter and `eval_rng` objects. See `summary.params()` and `summary.eval_rng()`.
 
 * An `input_mats` object can be converted to a `data.table` with `as.data.table.input_mats()` and printed to the console in a less verbose way than in prior versions with `print.input_mats()`.
 

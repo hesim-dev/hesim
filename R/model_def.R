@@ -9,30 +9,35 @@
 #' @param expr An expression used to randomly draw variates for each parameter of
 #' interest in the model. [Braces][base::Paren] should be used so that the result
 #' of the last expression within the braces is evaluated. The expression must
-#'  return a list where each element is either a `vector`, `matrix`, `data.frame`,
-#'  or `data.table`. The length of 
-#'  the `vector` and number of rows in the `matrix`/`data.frame`/`data.table`,
-#'   must either be 1 or `n`.
+#'  return a list where each element is either a `vector` or tabular object
+#'  ( `matrix`, `data.frame`, or `data.table`). The length of the vector must
+#'  either be or `n` and the number of rows in the tabular object must be `n`.
 #' @param n Number of samples of the parameters to draw.
 #' @param ... Additional arguments to pass to the environment used to evaluate
 #' `expr`.
 #' 
-#' @details \code{hesim} contains a number of random number generation functions
+#' @details `hesim` contains a number of random number generation functions
 #' that return parameter samples in convenient formats
-#' and do not require the number of samples, `n`, as arguments 
-#' (see [rng_distributions]). The random number generation expressions
+#' and do not typically require the number of samples, `n`, as arguments 
+#' (see [`rng_distributions`]). The random number generation expressions
 #' are evaluated using `eval_rng()` and used within `expr`
-#' in `define_rng()`. If multivariate object is returned by `eval_rng()`,
+#' in `define_rng()`. If a multivariate object is returned by `eval_rng()`,
 #' then the rows are random samples and columns are 
 #' distinct parameters (e.g., costs for each health state, elements of a 
 #' transition probability matrix).  
 #' 
 #' @return `define_rng()` returns an object of class `rng_def`,
-#'  which is a list containing the unevaluated random number generation
-#'   expressions passed  to `expr`, `n`, and any additional arguments passed to 
-#'   `...` . `eval_rng()` evaluates the `rng_def` object and should return a list. 
+#' which is a list containing the unevaluated random number generation
+#' expressions passed  to `expr`, `n`, and any additional arguments passed to 
+#' `...` . `eval_rng()` evaluates the `rng_def` object and 
+#' returns an `eval_rng` object containing the evaluated expression.
 #' 
-#' @seealso [rng_distributions], [define_model()], [define_tparams()]
+#' @seealso Parameters can be conveniently sampled from probability distributions 
+#' using a number of random number generation functions (see [`rng_distributions`]). 
+#' An economic model can be created with [create_CohortDtstm()] by using 
+#' `define_rng()` (or a previously evaluated `eval_rng` object)  
+#' alongside [define_tparams()] to define a model with [define_model()].
+#' It can be useful to summarize an evaluated expression with `summary.eval_rng()`.
 #' @examples  
 #' params <- list(
 #'   alpha = matrix(c(75, 25, 33, 67), byrow = TRUE, ncol = 2),
@@ -55,40 +60,14 @@
 #'                        names = aecost_colnames)
 #'   )
 #' }, n = 2, aecost_colnames = c("A", "B", "C")) # Add aecost_colnames to environment
-#' eval_rng(x = rng_def, params)
+#' params_sample <- eval_rng(x = rng_def, params)
+#' summary(params_sample)
+#' params_sample
 #' @export
 define_rng <- function(expr, n = 1, ...){
   x <- c(list(expr = substitute(expr), n = n), list(...))
   class(x) <- "rng_def"
   return(x)
-}
-
-check_eval_rng <- function(object){
-  # Must be a list
-  if (!inherits(object, "list")){
-    stop("define_rng() must return a list", call. = FALSE)
-  } 
-  
-  # Number of samples
-  fun <- function(z){
-    if (is.matrix(z) | is.data.frame(z) | is.data.table(z)){
-      return(list(n = nrow(z), is_vector = FALSE))
-    } else{
-      return(list(n = length(z), is_vector = TRUE))
-    } 
-  }  
-  n_objects <- length(object)
-  is_vector <- n <- rep(NA, n_objects)
-  for (i in 1:n_objects){
-    res <- fun(object[[i]])
-    is_vector[i] <- res$is_vector
-    n[i] <- res$n
-  }
-  if(any(!(n == n[1] | (is_vector == TRUE & n == 1)))){
-    stop(paste0("The number of samples produced by define_rng() must be ",
-                "equal to n unless a scalar (of length 1) is returned."),
-                call. = FALSE)
-  }
 }
 
 #' @param x An object of class `rng_def` created with `define_rng()`.
@@ -102,9 +81,131 @@ check_eval_rng <- function(object){
 #' @export
 #' @rdname define_rng
 eval_rng <- function(x, params = NULL, check = FALSE){
-  x <- eval(x$expr, envir = c(x[-1], params)) # -1 is the position of "expr"
-  if (check) check_eval_rng(x)
-  return(x)
+  y <- eval(x$expr, envir = c(x[-1], params)) # -1 is the position of "expr"
+  if (!inherits(y, "list")){
+    stop("define_rng() must return a list.", call. = FALSE)
+  } 
+  class(y) <- "eval_rng"
+  if (check) check(y)
+  attr(y, "n") <- x$n
+  attr(y, "checked") <- check
+  return(y)
+}
+
+#' @export
+as.list.eval_rng <- function(x, ...) {
+  class(x) <- "list"
+  x
+}
+
+#' @export
+c.eval_rng <- function(...) {
+  dots <- list(...)
+  n <- attr(dots[[1]], "n")
+  class(dots[[1]]) <- "list"
+  x <- do.call("c", dots)
+  class(x) <- "eval_rng"
+  attr(x, "n") <- n
+  x
+}
+
+#' Sumnmarize `eval_rng` object
+#' 
+#' Summarize the model parameters randomly sampled for probabilistic sensitivity 
+#' analysis with [eval_rng()]. 
+#' @param object,x An [`eval_rng`] object.
+#' @param probs A numeric vector of probabilities with values in `[0,1]` used to 
+#' compute quantiles with [stats::quantile()].
+#' @param sep When a list element returned by `eval_rng` is a tabular object,
+#' the parameter name is created by concatenating the name of the list element 
+#' with the columns of the tabular object. The `sep` argument determines the 
+#' character string used to separate the terms.
+#' @param ... For the print method, arguments to pass to `summary.eval_rng()`. 
+#' 
+#' @return `summary.eval_rng()` returns a [`data.table`] with columns for
+#' (i) the name of the parameter (`param`), (ii) the mean of the parameter
+#' samples (`mean`), (iii) the standard deviation of the parameter samples (`sd`),
+#' and (iv) quantiles of the parameter samples corresponding
+#' to the `probs` argument. `print.eval_rng()` prints the output of 
+#' `summary.eval_rng()` to the console. 
+#' 
+#' @seealso See [eval_rng()] for an example. 
+#' @export
+summary.eval_rng <- function(object, probs = c(.025, .975), sep = "_",  ...) {
+  
+  apply_quantile <- function(x, probs) {
+    y <- apply(x, 2, stats::quantile, probs = probs)
+    if (length(probs) == 1) {
+      y <- matrix(y, ncol = 1)
+      colnames(y) <- paste0(probs * 100, "%")
+      return(y)
+    } else{
+      return(t(y))
+    }
+  }
+  
+  fun <- function(x, name, sep) {
+    if (is_1d_vector(x)) {
+      as.data.table(t(c(
+        param = name,
+        mean = mean(x),
+        sd = stats::sd(x),
+        stats::quantile(x, probs = probs)
+      )))
+    } else {
+      p <- if (!is.null(colnames(x))) colnames(x) else paste0("v", 1:ncol(x))
+      data.table(
+        param = paste0(name, sep, p),
+        mean = apply(x, 2, mean),
+        sd = apply(x, 2, stats::sd),
+        apply_quantile(x, probs)
+      )
+    }
+  }
+  
+  res_list <- lapply(seq_along(object), function(i, x, names) {
+    fun(x[[i]], names[i], sep)
+  }, x = object, names = names(object))
+  rbindlist(res_list)
+}
+
+#' @rdname summary.eval_rng
+#' @export
+print.eval_rng <- function(x, ...) {
+  cat("A summary of the \"eval_rng\" object:")
+  cat("\n\n")
+  print(summary(x, ...))
+  invisible(x)
+}
+
+check.eval_rng <- function(object){
+  
+  object <- as.list(object)
+  
+  # Number of samples
+  fun <- function(z){
+    if (length(dim(z)) == 2){
+      return(list(n = nrow(z), is_vector = FALSE))
+    } else if (is_1d_vector(z)) {
+      return(list(n = length(z), is_vector = TRUE))
+    } else {
+      stop(paste0("Each element returned by define_rng() must either be a ",
+                  "vector or a tabular object."))
+    }
+  }  
+  
+  n_elem <- length(object)
+  is_vector <- n <- rep(NA, n_elem)
+  for (i in 1:n_elem){
+    res <- fun(object[[i]])
+    is_vector[i] <- res$is_vector
+    n[i] <- res$n
+  }
+  if(any(!(n == n[1] | (is_vector == TRUE & n == 1)))){
+    stop(paste0("The number of samples produced by define_rng() must be ",
+                "equal to n unless a scalar (of length 1) is returned."),
+         call. = FALSE)
+  }
 }
 
 rng_colnames <- function(old_names, params, new_names = NULL){
@@ -128,10 +229,9 @@ rng_colnames <- function(old_names, params, new_names = NULL){
   return(new_names)
 }
 
-mom_fun_rng <- function(rng_fun, mom_fun, mean, sd){
+mom_fun_rng <- function(n, rng_fun, mom_fun, mean, sd){
   which_fixed <- which(sd == 0)
   which_rng <- which(sd != 0)
-  n <- parent.frame()$n
   if (length(which_rng) > 0){
     rng_params <- do.call(mom_fun, list(mean[which_rng], sd[which_rng]))
     x <- do.call(rng_fun, c(list(n = n * length(which_rng)),
@@ -164,7 +264,7 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
   
   # Random number generation
   if (!is.null(mom_fun)){
-    x <- mom_fun_rng(rng_fun, mom_fun, params[[1]], params[[2]])
+    x <- mom_fun_rng(n, rng_fun, mom_fun, params[[1]], params[[2]])
   } else{
     x <- do.call(rng_fun, c(list(n = n * k), params))
   }
@@ -194,6 +294,10 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
 #' @param mean,sd Mean and standard deviation of the random variable.
 #' @param names Names for columns if an object with multiple columns is returned 
 #' by the function. 
+#' @param n The number of random samples of the parameters to draw. Default is
+#' the value of `n` in the environment in which the function is called, which 
+#' can be useful when used inside `define_rng` because it means that a value does
+#' not need to be explictly passed to `n`.
 #' @param ... Additional arguments to pass to underlying random number generation
 #' functions. See "details". 
 #' 
@@ -266,15 +370,16 @@ NULL
 #' @param shape1,shape2 Non-negative parameters of the Beta distribution.
 #' @name rng_distributions
 beta_rng <- function(shape1 = 1, shape2 = 1,
-                     mean = NULL, sd = NULL, names = NULL){
+                     mean = NULL, sd = NULL, names = NULL,
+                     n = parent.frame()$n){
   if (!is.null(mean) & !is.null(sd)){
-    return(uv_rng(n = parent.frame()$n, 
+    return(uv_rng(n = n, 
                   params = list(mean, sd) ,
                   rng_fun = "rbeta",
                   mom_fun = "mom_beta",
                   names = names))  
   } else{
-    return(uv_rng(n = parent.frame()$n, 
+    return(uv_rng(n = n, 
                   params = list(shape1, shape2) ,
                   rng_fun = "rbeta",
                   names = names)) 
@@ -283,8 +388,8 @@ beta_rng <- function(shape1 = 1, shape2 = 1,
 
 #' @param alpha A matrix where each row is a separate vector of shape parameters.
 #' @rdname rng_distributions
-dirichlet_rng <- function(alpha, names = NULL){
-  x <- rdirichlet_mat(n = parent.frame()$n, alpha = alpha, output = "data.table")
+dirichlet_rng <- function(alpha, names = NULL, n = parent.frame()$n){
+  x <- rdirichlet_mat(n = n, alpha = alpha, output = "data.table")
   
   # Column names
   make_names <- function(x, y){
@@ -308,12 +413,12 @@ dirichlet_rng <- function(alpha, names = NULL){
 
 #' @param est A vector of estimates of the variable of interest. 
 #' @rdname rng_distributions
-fixed <- function(est, names = NULL){
+fixed <- function(est, names = NULL, n = parent.frame()$n){
   stopifnot(is.vector(est))
   if (length(est) == 1){
-    return(rep(est, parent.frame()$n))
+    return(rep(est, n))
   } else{
-    x <- matrix(est, byrow = TRUE, nrow = parent.frame()$n,
+    x <- matrix(est, byrow = TRUE, nrow = n,
                 ncol = length(est))
     colnames(x) <- rng_colnames(colnames(x), list(est), names)
     return(data.table(x))
@@ -324,7 +429,7 @@ fixed <- function(est, names = NULL){
 #' random samples of the variable of interest from a suitable probability distribution. This would 
 #' typically be a posterior distribution from a Bayesian analysis. 
 #' @rdname rng_distributions
-custom <- function(x, names = NULL){
+custom <- function(x, names = NULL, n = parent.frame()$n){
   stopifnot(is.numeric(x))
   n_dims <- length(dim(x)) 
   if (n_dims > 2){
@@ -335,7 +440,7 @@ custom <- function(x, names = NULL){
   }
 
   # Return samples from posterior distribution
-  samples <- sample_from_posterior(n = parent.frame()$n,
+  samples <- sample_from_posterior(n = n,
                                    n_samples = nrow(x))
   x <- x[samples, ]
   
@@ -353,8 +458,8 @@ custom <- function(x, names = NULL){
 }
 
 #' @rdname rng_distributions
-gamma_rng <- function(mean, sd, names = NULL){
-  return(uv_rng(n = parent.frame()$n, 
+gamma_rng <- function(mean, sd, names = NULL, n = parent.frame()$n){
+  return(uv_rng(n = n, 
                 params = list(mean, sd),
                 rng_fun = "rgamma",
                 mom_fun = "mom_gamma",
@@ -364,8 +469,8 @@ gamma_rng <- function(mean, sd, names = NULL){
 #' @param meanlog,sdlog Mean and standard deviation of the distribution on the 
 #' log scale.
 #' @rdname rng_distributions
-lognormal_rng <- function(meanlog, sdlog, names = NULL){
-  return(uv_rng(n = parent.frame()$n, 
+lognormal_rng <- function(meanlog, sdlog, names = NULL, n = parent.frame()$n){
+  return(uv_rng(n = n, 
                 params = list(meanlog, sdlog),
                 rng_fun = "rlnorm",
                 names = names))
@@ -375,9 +480,9 @@ lognormal_rng <- function(meanlog, sdlog, names = NULL){
 #' `Sigma` is a positive-definite symmetric matrix specifying the 
 #' covariance matrix of the variables.
 #' @rdname rng_distributions
-multi_normal_rng <- function(mu, Sigma, names = NULL, ...){
-  m <- MASS::mvrnorm(parent.frame()$n, mu = mu, Sigma = Sigma, ...)
-  if (parent.frame()$n == 1) {
+multi_normal_rng <- function(mu, Sigma, names = NULL, n = parent.frame()$n, ...){
+  m <- MASS::mvrnorm(n, mu = mu, Sigma = Sigma, ...)
+  if (n == 1) {
     if (length(m) == 1) { # Case where n = 1 and a scalar is returned
       return(m)
     } else { # Otherwise convert to matrix
@@ -390,8 +495,8 @@ multi_normal_rng <- function(mu, Sigma, names = NULL, ...){
 }
 
 #' @rdname rng_distributions
-normal_rng <- function(mean, sd, names = NULL){
-  return(uv_rng(n = parent.frame()$n, 
+normal_rng <- function(mean, sd, names = NULL, n = parent.frame()$n){
+  return(uv_rng(n = n, 
                 params = list(mean, sd),
                 rng_fun = "rnorm",
                 names = names))
@@ -399,8 +504,8 @@ normal_rng <- function(mean, sd, names = NULL){
 
 #' @param min,max Lower and upper limits of the distribution. Must be finite.
 #' @rdname rng_distributions
-uniform_rng <- function(min, max, names = NULL){
-  return(uv_rng(n = parent.frame()$n, 
+uniform_rng <- function(min, max, names = NULL, n = parent.frame()$n){
+  return(uv_rng(n = n, 
                 params = list(min, max),
                 rng_fun = "runif",
                 names = names))
@@ -498,8 +603,9 @@ eval_tparams <- function(x, input_data, rng_params){
 #' for more details).
 #' @param rng_def A [rng_def][define_rng()] object used to randomly draw samples
 #' of the parameters from suitable probability distributions.
-#' @param params 	A list containing the values of parameters for random 
-#' number generation. 
+#' @param params 	Either (i) a list containing the values of parameters for random 
+#' number generation or (ii) parameter samples that have already been randomly
+#' generated using `eval_rng()`. In case (ii), `rng_def` should be `NULL`. 
 #' @param n_states The number of health states (inclusive of all health states
 #' including the the death state) in the model. If `tpmatrix` is 
 #' an element returned by `tparams_def`, then it will be equal to the number of states 
@@ -542,7 +648,7 @@ eval_tparams <- function(x, input_data, rng_params){
 #'                        patients = patients)
 #' data <- expand(hesim_dat)
 #' 
-#' # Define the model
+#' # Model parameters
 #' rng_def <- define_rng({
 #'   alpha <- matrix(c(1251, 350, 116, 17,
 #'                     0, 731, 512, 15,
@@ -552,6 +658,7 @@ eval_tparams <- function(x, input_data, rng_params){
 #'   rownames(alpha) <- colnames(alpha) <- c("A", "B", "C", "D")
 #'   lrr_mean <- log(.509)
 #'   lrr_se <- (log(.710) - log(.365))/(2 * qnorm(.975))
+#'   
 #'   list(
 #'     p_mono = dirichlet_rng(alpha),
 #'     rr_comb = lognormal_rng(lrr_mean, lrr_se),
@@ -559,7 +666,7 @@ eval_tparams <- function(x, input_data, rng_params){
 #'     c_zido = 2278,
 #'     c_lam = 2086.50,
 #'     c_med = gamma_rng(mean = c(A = 2756, B = 3052, C = 9007),
-#'                         sd = c(A = 2756, B = 3052, C = 9007))
+#'                       sd = c(A = 2756, B = 3052, C = 9007))
 #'   )
 #' }, n = 2)
 #'
@@ -579,16 +686,18 @@ eval_tparams <- function(x, input_data, rng_params){
 #'     ) 
 #'   )
 #' })
-#'
+#' 
+#' # Simulation
+#' ## Define the economic model
 #' model_def <- define_model(
 #'   tparams_def = tparams_def,
 #'   rng_def = rng_def)
 #'
-#' # Evaluate the model expression to generate model inputs
-#' # This can be useful for understanding the output of a model expression
+#' ### Evaluate the model expression to generate model inputs
+#' ### This can be useful for understanding the output of a model expression
 #' eval_model(model_def, data)
 #' 
-#' # Create an economic model with a factory function
+#' ## Create an economic model with a factory function
 #' econmod <- create_CohortDtstm(model_def, data)
 #'
 #' @seealso [define_tparams()], [define_rng()]
@@ -597,6 +706,9 @@ define_model <- function(tparams_def, rng_def, params = NULL,
                          n_states = NULL){
   if (!inherits(tparams_def, "list")){
     tparams_def <- list(tparams_def)
+  }
+  if (is.null(rng_def) & is.null(params)) {
+    stop("'rng_def' and 'params' cannot both be NULL.")
   }
   x <- list(tparams_def = tparams_def, rng_def = rng_def, params = params,
             n_states = n_states)
@@ -611,7 +723,7 @@ check.model_def <- function(x){
                 "or a list of objects of class 'tparams_def'"),
          call. = FALSE)
   }
-  check_is_class(x$rng_def, class = "rng_def")
+  if (!is.null(x$rng_def)) check_is_class(x$rng_def, class = "rng_def")
   if (!is.null(x$n_states)) check_scalar(x$n_states, "n_states")
 }
 
@@ -650,15 +762,17 @@ eval_model <- function(x, input_data){
   data <- data.table(input_data)
   
   # Step 1: RNG for parameters
-  params <- eval_rng(x$rng_def, x$params, check = TRUE)
+  if (!is.null(x$rng_def)) {
+    params <- eval_rng(x$rng_def, x$params, check = TRUE)
+    n_samples <- x$rng_def$n
+  } else {
+    if(!attr(x$params, "checked")) check(x$params)
+    params <- x$params
+    n_samples <- attr(x$params, "n")
+  }
+  params <- as.list(params)
   params_len <- lapply(params, function (z) if (is_1d_vector(z)) 1 else ncol(z))
   params_class <- lapply(params, class)
-  if(any(!unlist(params_class) %in% c("integer", "numeric", "matrix",
-                                      "data.frame", "data.table"))){
-    stop(paste0("Each element of the list returned by define_rng() must be a ",
-                "numeric vector, matrix, data.frame, or data.table."),
-         call. = FALSE)
-  }
   params_names <- rep(names(params), params_len)
   
   # Step 2: Vectorized parameter and transformed parameter values
@@ -667,8 +781,8 @@ eval_model <- function(x, input_data){
   n_obs <- nrow(data)
   
   #### First expand 'data'
-  data <- data[rep(1:nrow(data), times = x$rng_def$n)]
-  data <- data.table(sample = rep(1:x$rng_def$n, each = n_obs), 
+  data <- data[rep(1:nrow(data), times = n_samples)]
+  data <- data.table(sample = rep(1:n_samples, each = n_obs), 
                      data)
   
   #### Then expand 'params'
@@ -760,7 +874,7 @@ eval_model <- function(x, input_data){
               utility = utility,
               costs = costs,
               n_states = x$n_states,
-              n = x$rng_def$n)
+              n = n_samples)
   class(res) <- "eval_model" 
   check(res)
   return(res)

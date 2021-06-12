@@ -170,22 +170,26 @@ replace_Qdiag <- function(x, n_states) {
 #' @param ... Named values of expressions defining elements of the matrix. Each
 #' element of `...` should either be a vector or a 2-dimensional tabular object 
 #' such as a data frame. See "Details" and the examples below.
+#' @param complement Either a character vector or a numeric vector denoting the 
+#' transitions (i.e., the columns of the tabular object formed from `...`) that
+#' are complementary (see "Details" below). If a character vector, each element
+#' should be the name of a column in the tabular object; if a numeric vector,
+#' each element should be the index of a column in the tabular object. 
 #' 
 #' @details A `tpmatrix` is a 2-dimensional tabular object that stores flattened
 #' square transition probability matrices in each row. Each transition probability
-#' matrix is filled rowwise. The complementary probability 
-#' (equal to \eqn{1} minus the sum of the probabilities
-#'  of all other elements in a row of a transition probability matrix)
-#'  can be conveniently referred to as `C`. There can 
-#'  only be one complement for each row in a transition 
-#'  probability matrix.
+#' matrix is filled rowwise. The complementary probability (equal to \eqn{1} 
+#' minus the sum of the probabilities of all other elements in a row of a 
+#' transition probability matrix) can be conveniently referred to as `C` or 
+#' specified with the `complement` argument. There can only be one complement 
+#' for each row in a transition probability matrix.
 #' 
 #' @return Returns a `tpmatrix` object that inherits from `data.table`
 #' where each column is an element of the transition probability matrix with
 #' elements ordered rowwise. 
 #' 
 #' @examples 
-#' # Pass vectors
+# Pass vectors
 #' p_12 <- c(.7, .6)
 #' tpmatrix(
 #'   C, p_12,
@@ -203,38 +207,53 @@ replace_Qdiag <- function(x, n_states) {
 #' 
 #' # Pass vectors and data frames
 #' p1 <- data.frame(
-#'   p_12 = c(.7, .6), 
+#'   p_12 = c(.7, .6),
 #'   p_13 = c(.1, .2)
 #' )
-#'
+#' 
 #' p2 <- data.frame(
 #'   p_21 = 0,
 #'   p_22 = c(.4, .45),
 #'   p_23 = c(.6, .55)
 #' )
-#'
+#' 
 #' p3 <- data.frame(
 #'   p_31 = c(0, 0),
 #'   p_32 = c(0, 0),
 #'   p_33 = c(1, 1)
 #' )
-#'
+#' 
 #' tpmatrix(
 #'   C, p1,
 #'   p2,
 #'   p3
 #' )
-#'
+#' 
+#' # Use the 'complement' argument
+#' pmat <- data.frame(s1_s1 = 0, s1_s2 = .5, s2_s1 = .3, s2_s2 = 0)
+#' tpmatrix(pmat, complement = c("s1_s1", "s2_s2"))
+#' tpmatrix(pmat, complement = c(1, 4)) # Can also pass integers
 #' 
 #' @seealso [define_model()], [define_tparams()], 
 #' [tpmatrix_id()], [tparams_transprobs()], [CohortDtstmTrans()]
 #' @export
-tpmatrix <- function(...){
+tpmatrix <- function(..., complement = NULL){
   # Evaluate
   m_def <- define_tpmatrix(...)
   m <- eval_dots(m_def, as.list(parent.frame()))
-  complement <- attr(m, "complement")
+  m_complement <- attr(m, "complement")
   m <- as.data.table(m)
+  
+  # Update complement
+  if (is.null(complement)) {
+    complement <- m_complement
+  } else if (inherits(complement, c("numeric", "integer"))) {
+    complement <- ifelse(1:ncol(m) %in% complement, 1, m_complement)
+  } else if (inherits(complement, "character")) {
+    complement <- ifelse(colnames(m) %in% complement, 1, m_complement)
+  } else {
+    stop("'complement' must either be a vector of integers or a character vector.")
+  }
 
   # Some checks
   n_states <- sqrt(ncol(m))

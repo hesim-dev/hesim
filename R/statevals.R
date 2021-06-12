@@ -419,7 +419,7 @@ create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, .
     if (all(c("shape1", "shape2") %in% colnames(tbl))){
       mu <- stats::rbeta(n * n_rows, shape1 = tbl$shape1, shape2 = tbl$shape2)
     } else if (all(c("mean", "se") %in% colnames(tbl))){
-      mu <- mom_fun_rng(rng_fun = "rbeta", mom_fun = "mom_beta",
+      mu <- mom_fun_rng(n, rng_fun = "rbeta", mom_fun = "mom_beta",
                         mean = tbl$mean, sd = tbl$se)
     } 
   } else if (attr(object, "dist") == "gamma"){
@@ -428,7 +428,7 @@ create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, .
     } else if (all(c("shape", "scale") %in% colnames(tbl))){
       mu <- stats::rgamma(n * n_rows, shape = tbl$shape, scale = tbl$scale)
     } else if (all(c("mean", "se") %in% colnames(tbl))){
-      mu <- mom_fun_rng(rng_fun = "rgamma", mom_fun = "mom_gamma",
+      mu <- mom_fun_rng(n, rng_fun = "rgamma", mom_fun = "mom_gamma",
                         mean = tbl$mean, sd = tbl$se)
     } 
   } else if (attr(object, "dist") == "lnorm"){

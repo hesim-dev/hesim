@@ -194,10 +194,9 @@ an object of class <code>model_def</code> defined using <code><a href='define_mo
       <td><p>An expression used to randomly draw variates for each parameter of
 interest in the model. <a href='https://rdrr.io/r/base/Paren.html'>Braces</a> should be used so that the result
 of the last expression within the braces is evaluated. The expression must
-return a list where each element is either a <code>vector</code>, <code>matrix</code>, <code>data.frame</code>,
-or <code>data.table</code>. The length of
-the <code>vector</code> and number of rows in the <code>matrix</code>/<code>data.frame</code>/<code>data.table</code>,
-must either be 1 or <code>n</code>.</p></td>
+return a list where each element is either a <code>vector</code> or tabular object
+( <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code>). The length of the vector must
+either be or <code>n</code> and the number of rows in the tabular object must be <code>n</code>.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -232,21 +231,27 @@ meaning that any output can be returned. This is always <code>TRUE</code> when u
     <p><code>define_rng()</code> returns an object of class <code>rng_def</code>,
 which is a list containing the unevaluated random number generation
 expressions passed  to <code>expr</code>, <code>n</code>, and any additional arguments passed to
-<code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and should return a list.</p>
+<code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and
+returns an <code>eval_rng</code> object containing the evaluated expression.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>hesim</code> contains a number of random number generation functions
 that return parameter samples in convenient formats
-and do not require the number of samples, <code>n</code>, as arguments
-(see <a href='rng_distributions.html'>rng_distributions</a>). The random number generation expressions
+and do not typically require the number of samples, <code>n</code>, as arguments
+(see <code><a href='rng_distributions.html'>rng_distributions</a></code>). The random number generation expressions
 are evaluated using <code>eval_rng()</code> and used within <code>expr</code>
-in <code>define_rng()</code>. If multivariate object is returned by <code>eval_rng()</code>,
+in <code>define_rng()</code>. If a multivariate object is returned by <code>eval_rng()</code>,
 then the rows are random samples and columns are
 distinct parameters (e.g., costs for each health state, elements of a
 transition probability matrix).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='rng_distributions.html'>rng_distributions</a>, <code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code></p></div>
+    <div class='dont-index'><p>Parameters can be conveniently sampled from probability distributions
+using a number of random number generation functions (see <code><a href='rng_distributions.html'>rng_distributions</a></code>).
+An economic model can be created with <code><a href='create_CohortDtstm.html'>create_CohortDtstm()</a></code> by using
+<code>define_rng()</code> (or a previously evaluated <code>eval_rng</code> object)
+alongside <code><a href='define_tparams.html'>define_tparams()</a></code> to define a model with <code><a href='define_model.html'>define_model()</a></code>.
+It can be useful to summarize an evaluated expression with <code><a href='summary.eval_rng.html'>summary.eval_rng()</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'> 
@@ -271,27 +276,38 @@ transition probability matrix).</p>
                        names <span class='op'>=</span> <span class='va'>aecost_colnames</span><span class='op'>)</span>
   <span class='op'>)</span>
 <span class='op'>}</span>, n <span class='op'>=</span> <span class='fl'>2</span>, aecost_colnames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Add aecost_colnames to environment</span>
-<span class='fu'>eval_rng</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>rng_def</span>, <span class='va'>params</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $p
-#&gt;        s1_s1     s1_s2     s2_s1     s2_s2
-#&gt; 1: 0.7641322 0.2358678 0.3216384 0.6783616
-#&gt; 2: 0.7717676 0.2282324 0.3332963 0.6667037
+<span class='va'>params_sample</span> <span class='op'>&lt;-</span> <span class='fu'>eval_rng</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>rng_def</span>, <span class='va'>params</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>params_sample</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;            param         mean           sd        2.5%        97.5%
+#&gt;  1:      p_s1_s1    0.7509400 1.400104e-02   0.7415348    0.7603452
+#&gt;  2:      p_s1_s2    0.2490600 1.400104e-02   0.2396548    0.2584652
+#&gt;  3:      p_s2_s1    0.2953726 1.875018e-02   0.2827772    0.3079681
+#&gt;  4:      p_s2_s2    0.7046274 1.875018e-02   0.6920319    0.7172228
+#&gt;  5:   inptcost_A  390.3465401 4.529362e+02  86.0859666  694.6071136
+#&gt;  6:   inptcost_B  277.9322978 3.866771e+02  18.1814163  537.6831793
+#&gt;  7:   inptcost_C 3649.4547431 4.879113e+03 371.9035680 6927.0059181
+#&gt;  8: outptcost_v1  350.0000000 7.071068e+01 302.5000000  397.5000000
+#&gt;  9: outptcost_v2  650.0000000 7.071068e+01 602.5000000  697.5000000
+#&gt; 10: outptcost_v3  750.0000000 7.071068e+01 702.5000000  797.5000000
+#&gt; 11:     aecost_A  324.6162544 2.322450e+02 168.6053505  480.6271582
+#&gt; 12:     aecost_B  131.0904441 1.206658e+02  50.0330259  212.1478623
+#&gt; 13:     aecost_C  912.5640214 3.959525e+02 646.5823843 1178.5456585</div><div class='input'><span class='va'>params_sample</span>
+</div><div class='output co'>#&gt; A summary of the "eval_rng" object:
 #&gt; 
-#&gt; $inptcost
-#&gt;            A        B         C
-#&gt; 1:  233.0313 2524.334 1931.8009
-#&gt; 2: 1374.0879 2499.035  134.1758
-#&gt; 
-#&gt; $outptcost
-#&gt;      [,1] [,2] [,3]
-#&gt; [1,]  300  600  800
-#&gt; [2,]  400  700  700
-#&gt; 
-#&gt; $aecost
-#&gt;           A        B         C
-#&gt; 1: 883.7757 2086.364  855.9896
-#&gt; 2: 623.5611 1062.843 1898.9403
-#&gt; </div></pre>
+#&gt;            param         mean           sd        2.5%        97.5%
+#&gt;  1:      p_s1_s1    0.7509400 1.400104e-02   0.7415348    0.7603452
+#&gt;  2:      p_s1_s2    0.2490600 1.400104e-02   0.2396548    0.2584652
+#&gt;  3:      p_s2_s1    0.2953726 1.875018e-02   0.2827772    0.3079681
+#&gt;  4:      p_s2_s2    0.7046274 1.875018e-02   0.6920319    0.7172228
+#&gt;  5:   inptcost_A  390.3465401 4.529362e+02  86.0859666  694.6071136
+#&gt;  6:   inptcost_B  277.9322978 3.866771e+02  18.1814163  537.6831793
+#&gt;  7:   inptcost_C 3649.4547431 4.879113e+03 371.9035680 6927.0059181
+#&gt;  8: outptcost_v1  350.0000000 7.071068e+01 302.5000000  397.5000000
+#&gt;  9: outptcost_v2  650.0000000 7.071068e+01 602.5000000  697.5000000
+#&gt; 10: outptcost_v3  750.0000000 7.071068e+01 702.5000000  797.5000000
+#&gt; 11:     aecost_A  324.6162544 2.322450e+02 168.6053505  480.6271582
+#&gt; 12:     aecost_B  131.0904441 1.206658e+02  50.0330259  212.1478623
+#&gt; 13:     aecost_C  912.5640214 3.959525e+02 646.5823843 1178.5456585</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

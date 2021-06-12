@@ -13,23 +13,30 @@
 \alias{uniform_rng}
 \title{Random number generation distributions}
 \usage{
-beta_rng(shape1 = 1, shape2 = 1, mean = NULL, sd = NULL, names = NULL)
+beta_rng(
+  shape1 = 1,
+  shape2 = 1,
+  mean = NULL,
+  sd = NULL,
+  names = NULL,
+  n = parent.frame()$n
+)
 
-dirichlet_rng(alpha, names = NULL)
+dirichlet_rng(alpha, names = NULL, n = parent.frame()$n)
 
-fixed(est, names = NULL)
+fixed(est, names = NULL, n = parent.frame()$n)
 
-custom(x, names = NULL)
+custom(x, names = NULL, n = parent.frame()$n)
 
-gamma_rng(mean, sd, names = NULL)
+gamma_rng(mean, sd, names = NULL, n = parent.frame()$n)
 
-lognormal_rng(meanlog, sdlog, names = NULL)
+lognormal_rng(meanlog, sdlog, names = NULL, n = parent.frame()$n)
 
-multi_normal_rng(mu, Sigma, names = NULL, ...)
+multi_normal_rng(mu, Sigma, names = NULL, n = parent.frame()$n, ...)
 
-normal_rng(mean, sd, names = NULL)
+normal_rng(mean, sd, names = NULL, n = parent.frame()$n)
 
-uniform_rng(min, max, names = NULL)
+uniform_rng(min, max, names = NULL, n = parent.frame()$n)
 }
 \arguments{
 \item{shape1, shape2}{Non-negative parameters of the Beta distribution.}
@@ -38,6 +45,11 @@ uniform_rng(min, max, names = NULL)
 
 \item{names}{Names for columns if an object with multiple columns is returned
 by the function.}
+
+\item{n}{The number of random samples of the parameters to draw. Default is
+the value of \code{n} in the environment in which the function is called, which
+can be useful when used inside \code{define_rng} because it means that a value does
+not need to be explictly passed to \code{n}.}
 
 \item{alpha}{A matrix where each row is a separate vector of shape parameters.}
 

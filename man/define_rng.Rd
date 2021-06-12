@@ -13,10 +13,9 @@ eval_rng(x, params = NULL, check = FALSE)
 \item{expr}{An expression used to randomly draw variates for each parameter of
 interest in the model. \link[base:Paren]{Braces} should be used so that the result
 of the last expression within the braces is evaluated. The expression must
-return a list where each element is either a \code{vector}, \code{matrix}, \code{data.frame},
-or \code{data.table}. The length of
-the \code{vector} and number of rows in the \code{matrix}/\code{data.frame}/\code{data.table},
-must either be 1 or \code{n}.}
+return a list where each element is either a \code{vector} or tabular object
+( \code{matrix}, \code{data.frame}, or \code{data.table}). The length of the vector must
+either be or \code{n} and the number of rows in the tabular object must be \code{n}.}
 
 \item{n}{Number of samples of the parameters to draw.}
 
@@ -38,7 +37,8 @@ meaning that any output can be returned. This is always \code{TRUE} when used in
 \code{define_rng()} returns an object of class \code{rng_def},
 which is a list containing the unevaluated random number generation
 expressions passed  to \code{expr}, \code{n}, and any additional arguments passed to
-\code{...} . \code{eval_rng()} evaluates the \code{rng_def} object and should return a list.
+\code{...} . \code{eval_rng()} evaluates the \code{rng_def} object and
+returns an \code{eval_rng} object containing the evaluated expression.
 }
 \description{
 Random number generation expressions are used to
@@ -49,10 +49,10 @@ an object of class \code{model_def} defined using \code{\link[=define_model]{def
 \details{
 \code{hesim} contains a number of random number generation functions
 that return parameter samples in convenient formats
-and do not require the number of samples, \code{n}, as arguments
-(see \link{rng_distributions}). The random number generation expressions
+and do not typically require the number of samples, \code{n}, as arguments
+(see \code{\link{rng_distributions}}). The random number generation expressions
 are evaluated using \code{eval_rng()} and used within \code{expr}
-in \code{define_rng()}. If multivariate object is returned by \code{eval_rng()},
+in \code{define_rng()}. If a multivariate object is returned by \code{eval_rng()},
 then the rows are random samples and columns are
 distinct parameters (e.g., costs for each health state, elements of a
 transition probability matrix).
@@ -80,8 +80,15 @@ rng_def <- define_rng({
                        names = aecost_colnames)
   )
 }, n = 2, aecost_colnames = c("A", "B", "C")) # Add aecost_colnames to environment
-eval_rng(x = rng_def, params)
+params_sample <- eval_rng(x = rng_def, params)
+summary(params_sample)
+params_sample
 }
 \seealso{
-\link{rng_distributions}, \code{\link[=define_model]{define_model()}}, \code{\link[=define_tparams]{define_tparams()}}
+Parameters can be conveniently sampled from probability distributions
+using a number of random number generation functions (see \code{\link{rng_distributions}}).
+An economic model can be created with \code{\link[=create_CohortDtstm]{create_CohortDtstm()}} by using
+\code{define_rng()} (or a previously evaluated \code{eval_rng} object)
+alongside \code{\link[=define_tparams]{define_tparams()}} to define a model with \code{\link[=define_model]{define_model()}}.
+It can be useful to summarize an evaluated expression with \code{summary.eval_rng()}.
 }

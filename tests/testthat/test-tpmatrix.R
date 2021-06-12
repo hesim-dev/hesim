@@ -15,6 +15,28 @@ test_that("tpmatrix() works correctly" , {
   expect_equal(tpmat$s2_s2,rep(1, n))
 })
 
+test_that("tpmatrix() works with complement argument" , {
+  pmat <- data.frame(s1_s1 = 0, s1_s2 = .5, s2_s1 = .3, s2_s2 = 0)
+  
+  # Character vector
+  tpmat1 <- tpmatrix(pmat, complement = c("s1_s1", "s2_s2"))
+  expect_equal(tpmat1$s1_s1, .5)
+  expect_equal(tpmat1$s2_s2, .7)
+  
+  # Numeric vector
+  tpmat2 <- tpmatrix(pmat, complement = c(1, 4))
+  tpmat3 <- tpmatrix(pmat, complement = c(1L, 4L))
+  expect_equal(tpmat1, tpmat2)
+  expect_equal(tpmat1, tpmat3)
+})
+
+test_that("tpmatrix() throws error if complement argument is incorrectly specified" , {
+  expect_error(
+    tpmatrix(2, complement = data.frame(2)),
+    "'complement' must either be a vector of integers or a character vector."
+  )
+})
+
 # Transition probability matrix IDs---------------------------------------------
 strategies <- data.frame(strategy_id = c(1, 2))
 patients <- data.frame(patient_id = seq(1, 3),

@@ -60,6 +60,7 @@ reference:
     contents:
       - rng_distributions
       - define_rng
+      - summary.eval_rng
       - define_tparams
       - define_model
   - title: "Health state values"
