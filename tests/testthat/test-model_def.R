@@ -163,6 +163,27 @@ test_that( "define_rng() has incorrect number of samples", {
                fixed = TRUE)
 })
 
+# Summary and print methods for random number generation -----------------------
+test_that( "summary.eval_rng() works as expected", {
+  s <- summary(rng)
+  expect_equal(colnames(s), c("param", "mean", "sd", "2.5%", "97.5%"))
+  expect_true(!any(grepl("\\.", s$param)))
+})
+
+test_that( "summary.eval_rng() uses sep argument", {
+  s <- summary(rng, sep = ".")
+  expect_true(any(grepl("\\.", s$param)))
+})
+
+test_that( "summary.eval_rng() uses probs argument", {
+  s <- summary(rng, probs = .5)
+  expect_equal(colnames(s), c("param", "mean", "sd", "50%"))
+})
+
+test_that( "print.eval_rng() works as expected", {
+  expect_output(print(rng), "A summary of the \"eval_rng\" object:")
+})
+
 # Model definition works as expected -------------------------------------------
 # Setup an example
 ## Data

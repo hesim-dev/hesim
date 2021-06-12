@@ -50,7 +50,7 @@ an object of class \code{model_def} defined using \code{\link[=define_model]{def
 \code{hesim} contains a number of random number generation functions
 that return parameter samples in convenient formats
 and do not typically require the number of samples, \code{n}, as arguments
-(see \link{rng_distributions}). The random number generation expressions
+(see \code{\link{rng_distributions}}). The random number generation expressions
 are evaluated using \code{eval_rng()} and used within \code{expr}
 in \code{define_rng()}. If a multivariate object is returned by \code{eval_rng()},
 then the rows are random samples and columns are
@@ -80,8 +80,15 @@ rng_def <- define_rng({
                        names = aecost_colnames)
   )
 }, n = 2, aecost_colnames = c("A", "B", "C")) # Add aecost_colnames to environment
-eval_rng(x = rng_def, params)
+params_sample <- eval_rng(x = rng_def, params)
+summary(params_sample)
+params_sample
 }
 \seealso{
-\link{rng_distributions}, \code{\link[=define_model]{define_model()}}, \code{\link[=define_tparams]{define_tparams()}}
+Parameters can be conveniently sampled from probability distributions
+using a number of random number generation functions (see \code{\link{rng_distributions}}).
+An economic model can be created with \code{\link[=create_CohortDtstm]{create_CohortDtstm()}} by using
+\code{define_rng()} (or a previously evaluated \code{eval_rng} object)
+alongside \code{\link[=define_tparams]{define_tparams()}} to define a model with \code{\link[=define_model]{define_model()}}.
+It can be useful to summarize an evaluated expression with \code{summary.eval_rng()}.
 }

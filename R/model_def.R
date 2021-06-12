@@ -19,7 +19,7 @@
 #' @details `hesim` contains a number of random number generation functions
 #' that return parameter samples in convenient formats
 #' and do not typically require the number of samples, `n`, as arguments 
-#' (see [rng_distributions]). The random number generation expressions
+#' (see [`rng_distributions`]). The random number generation expressions
 #' are evaluated using `eval_rng()` and used within `expr`
 #' in `define_rng()`. If a multivariate object is returned by `eval_rng()`,
 #' then the rows are random samples and columns are 
@@ -32,7 +32,12 @@
 #' `...` . `eval_rng()` evaluates the `rng_def` object and 
 #' returns an `eval_rng` object containing the evaluated expression.
 #' 
-#' @seealso [rng_distributions], [define_model()], [define_tparams()]
+#' @seealso Parameters can be conveniently sampled from probability distributions 
+#' using a number of random number generation functions (see [`rng_distributions`]). 
+#' An economic model can be created with [create_CohortDtstm()] by using 
+#' `define_rng()` (or a previously evaluated `eval_rng` object)  
+#' alongside [define_tparams()] to define a model with [define_model()].
+#' It can be useful to summarize an evaluated expression with `summary.eval_rng()`.
 #' @examples  
 #' params <- list(
 #'   alpha = matrix(c(75, 25, 33, 67), byrow = TRUE, ncol = 2),
@@ -55,7 +60,9 @@
 #'                        names = aecost_colnames)
 #'   )
 #' }, n = 2, aecost_colnames = c("A", "B", "C")) # Add aecost_colnames to environment
-#' eval_rng(x = rng_def, params)
+#' params_sample <- eval_rng(x = rng_def, params)
+#' summary(params_sample)
+#' params_sample
 #' @export
 define_rng <- function(expr, n = 1, ...){
   x <- c(list(expr = substitute(expr), n = n), list(...))
@@ -100,6 +107,75 @@ c.eval_rng <- function(...) {
   class(x) <- "eval_rng"
   attr(x, "n") <- n
   x
+}
+
+#' Sumnmarize `eval_rng` object
+#' 
+#' Summarize the model parameters randomly sampled for probabilistic sensitivity 
+#' analysis with [eval_rng()]. 
+#' @param object,x An [`eval_rng`] object.
+#' @param probs A numeric vector of probabilities with values in `[0,1]` used to 
+#' compute quantiles with [stats::quantile()].
+#' @param sep When a list element returned by `eval_rng` is a tabular object,
+#' the parameter name is created by concatenating the name of the list element 
+#' with the columns of the tabular object. The `sep` argument determines the 
+#' character string used to separate the terms.
+#' @param ... For the print method, arguments to pass to `summary.eval_rng()`. 
+#' 
+#' @return `summary.eval_rng()` returns a [`data.table`] with columns for
+#' (i) the name of the parameter (`param`), (ii) the mean of the parameter
+#' samples (`mean`), (iii) the standard deviation of the parameter samples (`sd`),
+#' and (iv) quantiles of the parameter samples corresponding
+#' to the `probs` argument. `print.eval_rng()` prints the output of 
+#' `summary.eval_rng()` to the console. 
+#' 
+#' @seealso See [eval_rng()] for an example. 
+#' @export
+summary.eval_rng <- function(object, probs = c(.025, .975), sep = "_",  ...) {
+  
+  apply_quantile <- function(x, probs) {
+    y <- apply(x, 2, stats::quantile, probs = probs)
+    if (length(probs) == 1) {
+      y <- matrix(y, ncol = 1)
+      colnames(y) <- paste0(probs * 100, "%")
+      return(y)
+    } else{
+      return(t(y))
+    }
+  }
+  
+  fun <- function(x, name, sep) {
+    if (is_1d_vector(x)) {
+      as.data.table(t(c(
+        param = name,
+        mean = mean(x),
+        sd = sd(x),
+        stats::quantile(x, probs = probs)
+      )))
+    } else {
+      p <- if (!is.null(colnames(x))) colnames(x) else paste0("v", 1:ncol(x))
+      data.table(
+        param = paste0(name, sep, p),
+        mean = apply(x, 2, mean),
+        sd = apply(x, 2, sd),
+        apply_quantile(x, probs)
+      )
+    }
+  }
+  
+  res_list <- lapply(seq_along(object), function(i, x, names) {
+    fun(x[[i]], names[i], sep)
+  }, x = object, names = names(object))
+  rbindlist(res_list)
+}
+
+#' @rdname summary.eval_rng
+#' @export
+print.eval_rng <- function(x, ...) {
+  cat("A summary of the \"eval_rng\" object:")
+  cat("\n\n")
+  print(summary(x, ...))
+  invisible(x)
 }
 
 check.eval_rng <- function(object){
