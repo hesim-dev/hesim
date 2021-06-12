@@ -149,7 +149,7 @@ summary.eval_rng <- function(object, probs = c(.025, .975), sep = "_",  ...) {
       as.data.table(t(c(
         param = name,
         mean = mean(x),
-        sd = sd(x),
+        sd = stats::sd(x),
         stats::quantile(x, probs = probs)
       )))
     } else {
@@ -157,7 +157,7 @@ summary.eval_rng <- function(object, probs = c(.025, .975), sep = "_",  ...) {
       data.table(
         param = paste0(name, sep, p),
         mean = apply(x, 2, mean),
-        sd = apply(x, 2, sd),
+        sd = apply(x, 2, stats::sd),
         apply_quantile(x, probs)
       )
     }
