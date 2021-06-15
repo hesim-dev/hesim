@@ -10,35 +10,38 @@
 \alias{summary.params_surv_list}
 \title{Summarize parameter objects}
 \usage{
-\method{summary}{params_lm}(object, prob = 0.95, ...)
+\method{summary}{params_lm}(object, probs = c(0.025, 0.975), ...)
 
-\method{summary}{params_mlogit}(object, prob = 0.95, ...)
+\method{summary}{params_mlogit}(object, probs = c(0.025, 0.975), ...)
 
-\method{summary}{params_mlogit_list}(object, prob = 0.95, ...)
+\method{summary}{params_mlogit_list}(object, probs = c(0.025, 0.975), ...)
 
-\method{summary}{params_surv}(object, prob = 0.95, ...)
+\method{summary}{params_surv}(object, probs = c(0.025, 0.975), ...)
 
-\method{summary}{params_surv_list}(object, prob = 0.95, ...)
+\method{summary}{params_surv_list}(object, probs = c(0.025, 0.975), ...)
 }
 \arguments{
 \item{object}{An object of the appropriate class.}
 
-\item{prob}{A numeric scalar in the interval \verb{(0,1)} giving the confidence
-interval for coefficients. Default is 0.95 for a 95 percent interval, in which case
-the lower and upper limits are computed using the 2.5th and 97.5th percentiles.}
+\item{probs}{A numeric vector of probabilities with values in \verb{[0,1]} used
+to compute quantiles. By default, the 2.5th and 97.5th percentiles are
+computed.}
 
 \item{...}{Additional arguments affecting the summary. Currently unused.}
 }
 \value{
-A \code{\link{data.table}} containing at least the following columns:
+A \code{\link{data.table}} that always contains the following columns:
 \describe{
 \item{term}{The regression term.}
-\item{estimate}{The estimated value of the regression term, computed as the mean
-from its probability distribution.}
-\item{lower}{The lower limit of the confidence interval for the estimate.}
-\item{upper}{The upper limit of the confidence interval for the estimate.}
+\item{mean}{The mean value of the regression term.}
+\item{sd}{The standard deviation of the values of the regression term.}
 }
-In addition, the following columns may also be present:
+
+In addition, the \code{probs} argument determines the quantiles that are computed.
+By default, the columns \verb{2.5\%} and \verb{97.5\%} are returned corresponding to the
+2.5th and 97.5th percentiles.
+
+Finally, the following columns may also be present:
 \describe{
 \item{parameter}{The name of the parameter of interest. This is relevant
 for any parametric model in which the underlying probability distribution
@@ -59,15 +62,13 @@ logistic regression is used for each state that can be transitioned from.}
 }
 }
 \description{
-Summarize the coefficients of a parameter object by computing the point estimate,
-lower confidence limit, and upper confidence limit for each model term. The point
-estimate is the mean of the samples of the coefficients and the lower and
-upper confidence limits are determined by the \code{prob} argument. This is a
-convenient way to check whether a parameter object has been specified
+Summarize the coefficients of a parameter object by computing the mean,
+standard deviation, and quantiles for each model term.
+This is a convenient way to check whether a parameter object has been specified
 correctly and sampling distributions of the coefficients are as expected.
 }
 \seealso{
 For examples, see the the underlying parameter object functions:
-\code{\link[=params_surv]{params_surv()}}, \code{\link[=params_surv_list]{params_surv_list()}}, \code{\link[=params_mlogit]{params_mlogit()}}, and
+\code{\link[=params_lm]{params_lm()}}, \code{\link[=params_surv]{params_surv()}}, \code{\link[=params_surv_list]{params_surv_list()}}, \code{\link[=params_mlogit]{params_mlogit()}}, and
 \code{\link[=params_mlogit_list]{params_mlogit_list()}}.
 }

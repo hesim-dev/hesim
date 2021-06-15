@@ -77,7 +77,7 @@ test_that("summary.params_mlogit()", {
   expect_true(inherits(ps, "data.table"))
   expect_equal(ps$to, rep(c("sicker", "death"), each = 2))
   expect_equal(ps$term, rep(c("intercept", "treat"), 2))
-  expect_equal(ps$estimate, c(-.25, -.2, -1.1, -.45))
+  expect_equal(ps$mean, c(-.25, -.2, -1.1, -.45))
 })
 
 # print.params_mlogit() ----------------------------------------------------------

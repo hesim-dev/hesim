@@ -140,7 +140,7 @@ test_that("summary.params_surv()", {
   expect_true(inherits(ps, "data.table"))
   expect_equal(ps$parameter, c("shape", "scale", "scale"))
   expect_equal(ps$term, c("intercept", "intercept", "var"))
-  expect_equal(ps$estimate, c(1.5, 2, 1))
+  expect_equal(ps$mean, c(1.5, 2, 1))
 })
 
 # print.params_surv() ----------------------------------------------------------

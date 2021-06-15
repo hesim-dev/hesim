@@ -50,8 +50,8 @@ params_mlogit_list <- function(...){
 # summary.params_surv_list() ---------------------------------------------------
 #' @rdname summary.params
 #' @export
-summary.params_mlogit_list <- function(object, prob = 0.95, ...) {
-  summary_params_list(object, prob, idcol = "from", ...)
+summary.params_mlogit_list <- function(object, probs = c(.025, .975), ...) {
+  summary_params_list(object, probs, idcol = "from", ...)
 }
 
 # print.params_mlogit_list() ---------------------------------------------------

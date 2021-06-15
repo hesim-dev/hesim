@@ -107,9 +107,9 @@ check.params_mlogit <- function(object){
 # summary.params_mlogit() --------------------------------------------------------
 #' @rdname summary.params
 #' @export
-summary.params_mlogit <- function(object, prob = 0.95, ...) {
+summary.params_mlogit <- function(object, probs = c(.025, .975), ...) {
   
- rbindlist(apply(object$coef, 3, coef_summary, prob = prob),
+ rbindlist(apply(object$coef, 3, coef_summary, probs = probs),
           idcol = "to")
 }
 

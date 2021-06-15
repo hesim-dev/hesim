@@ -46,7 +46,7 @@ test_that("summary.params_lm()", {
   ps <- summary(p_ex)
   expect_equal(ps$term, c("x1", "x2", "sigma"))
   expect_equal(ps$parameter, c("mean", "mean", "sd"))
-  expect_equal(unname(unlist(ps[term == "x1", .(estimate, lower, upper)])), 
+  expect_equal(unname(unlist(ps[term == "x1", .(mean, `2.5%`, `97.5%`)])), 
                rep(1, 3))
 })
 

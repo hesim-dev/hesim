@@ -229,6 +229,35 @@ default_colnames <- function(x) {
   paste0("x", 1:ncol(x))
 }
 
+# Summarize parameter values ---------------------------------------------------
+summarize_params <- function(x, ...) {
+  UseMethod("summarize_params")
+}
+
+
+summarize_params.matrix <- function(x, probs, param_name = "param", ...) {
+  
+  apply_quantile <- function(x, probs) {
+    y <- apply(x, 2, stats::quantile, probs = probs)
+    if (length(probs) == 1) {
+      y <- matrix(y, ncol = 1)
+      colnames(y) <- paste0(probs * 100, "%")
+      return(y)
+    } else{
+      return(t(y))
+    }
+  }
+
+  x <- data.table(
+    param = colnames(x),
+    mean = apply(x, 2, mean),
+    sd = apply(x, 2, stats::sd),
+    apply_quantile(x, probs)
+  )
+  setnames(x, "param", param_name)
+  x
+}
+
 # List of matrices -------------------------------------------------------------
 coeflist <- function(coefs){
   if (inherits(coefs, "list")) {
