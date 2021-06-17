@@ -234,8 +234,28 @@ summarize_params <- function(x, ...) {
   UseMethod("summarize_params")
 }
 
+summarize_params.numeric <- function(x, probs, param_name = "param",
+                                     param_values, ...) {
+  stats <- as.data.table(t(c(
+    mean = mean(x),
+    sd = stats::sd(x),
+    stats::quantile(x, probs = probs)
+  )))
+  y <- data.table(
+    param = param_values,
+    stats
+  )
+  setnames(y, "param", param_name)
+  y
+}
 
-summarize_params.matrix <- function(x, probs, param_name = "param", ...) {
+summarize_params.integer <- function(x, probs, param_name = "param",
+                                     param_values, ...) {
+  summarize_params.numeric(x, probs, param_name, param_values)
+}
+
+summarize_params.matrix <- function(x, probs, param_name = "param",
+                                    param_values = NULL,...) {
   
   apply_quantile <- function(x, probs) {
     y <- apply(x, 2, stats::quantile, probs = probs)
@@ -248,8 +268,9 @@ summarize_params.matrix <- function(x, probs, param_name = "param", ...) {
     }
   }
 
+  if (is.null(param_values)) param_values <- colnames(x)
   x <- data.table(
-    param = colnames(x),
+    param = param_values,
     mean = apply(x, 2, mean),
     sd = apply(x, 2, stats::sd),
     apply_quantile(x, probs)
@@ -257,6 +278,43 @@ summarize_params.matrix <- function(x, probs, param_name = "param", ...) {
   setnames(x, "param", param_name)
   x
 }
+
+summarize_params.data.table <- function(x, probs, param_name = "param",
+                                        param_values = NULL, cols = NULL, 
+                                        by = NULL,...) {
+  
+  if (is.null(cols)) cols <- colnames(x)
+  
+  # If no by, then just use the method for matrices
+  if (is.null(by)) {
+    x <- as.matrix(x)
+    return(summarize_params.matrix(x, probs = probs, param_name = param_name,
+                                   param_values = param_values))
+  } 
+  
+  # Otherwise use data.table solution
+  cols <- cols[!cols %in% by]
+  out <- x[, list(mean = lapply(.SD, mean),
+                  sd = lapply(.SD, stats::sd),
+                  q = lapply(.SD, quantile, probs = probs)),
+        .SDcols = cols, by = by]
+  
+  ## q is a list column, so we need to split it into multiple columns
+  qmat <- t(matrix(unlist(stats$q), nrow = length(probs)))
+  colnames(qmat) <- paste0(100 * probs, "%")
+  
+  ## Nicely formatted output
+  if (is.null(param_values)) param_values <- cols
+  out <- data.table(
+    out[, by, with  = FALSE],
+    param = param_values,
+    mean = out$mean,
+    sd = out$sd,
+    qmat
+  )
+  setnames(x, "param", param_name)
+  out
+}  
 
 # List of matrices -------------------------------------------------------------
 coeflist <- function(coefs){

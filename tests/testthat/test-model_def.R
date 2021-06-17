@@ -31,7 +31,7 @@ rng_def <- define_rng({
                              Sigma = matrix(c(10, 3, 3, 2) , nrow = 2, ncol = 2)),
     fixed_vec = fixed(est = 2),
     fixed_dt = fixed(est = c(2, 3)),
-    custom_vec = custom(x = c(1, 2, 3)),
+    custom_vec = custom(x = c(1L, 2L, 3L)),
     custom_dt = custom(x = matrix(1:4, nrow = 2, ncol = 2))
   )
 }, n = 2, beta_colnames = c("A", "B", "C"), 
@@ -87,7 +87,7 @@ test_that( "fixed() produces vector or data.table", {
 })
 
 test_that( "custom() produces vector or data.table", {
-  expect_true(inherits(rng$custom_vec, "numeric"))
+  expect_true(inherits(rng$custom_vec, "integer"))
   expect_true(inherits(rng$custom_dt, "data.table"))
 })
 
