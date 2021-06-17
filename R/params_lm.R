@@ -21,6 +21,7 @@
 #'  number of rows in `coefs`. The `coefs` element is always converted into a
 #'  matrix.
 #' @examples 
+#' library("MASS")
 #' n <- 2
 #' params <- params_lm(
 #'   coefs = mvrnorm(n, mu = c(.5,.6),

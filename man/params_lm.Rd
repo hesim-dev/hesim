@@ -34,6 +34,7 @@ sampling the error term from a normal distribution,
 \eqn{\epsilon \sim N(0, \hat{\sigma}^2)}{\epsilon ~ N(0, \hat{\sigma}^2)}.
 }
 \examples{
+library("MASS")
 n <- 2
 params <- params_lm(
   coefs = mvrnorm(n, mu = c(.5,.6),

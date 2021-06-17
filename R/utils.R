@@ -296,11 +296,11 @@ summarize_params.data.table <- function(x, probs, param_name = "param",
   cols <- cols[!cols %in% by]
   out <- x[, list(mean = lapply(.SD, mean),
                   sd = lapply(.SD, stats::sd),
-                  q = lapply(.SD, quantile, probs = probs)),
+                  q = lapply(.SD, stats::quantile, probs = probs)),
         .SDcols = cols, by = by]
   
   ## q is a list column, so we need to split it into multiple columns
-  qmat <- t(matrix(unlist(stats$q), nrow = length(probs)))
+  qmat <- t(matrix(unlist(out$q), nrow = length(probs)))
   colnames(qmat) <- paste0(100 * probs, "%")
   
   ## Nicely formatted output
@@ -312,7 +312,7 @@ summarize_params.data.table <- function(x, probs, param_name = "param",
     sd = out$sd,
     qmat
   )
-  setnames(x, "param", param_name)
+  setnames(out, "param", param_name)
   out
 }  
 
