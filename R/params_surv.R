@@ -294,9 +294,9 @@ check.params_surv <- function(object){
 # summary.params_surv() --------------------------------------------------------
 #' @rdname summary.params
 #' @export
-summary.params_surv <- function(object, prob = 0.95, ...) {
+summary.params_surv <- function(object, probs = c(.025, .975), ...) {
   
-  rbindlist(lapply(object$coef, coef_summary, prob = prob),
+  rbindlist(lapply(object$coef, coef_summary, probs = probs),
             idcol = "parameter")
 }
 

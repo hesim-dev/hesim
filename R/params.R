@@ -12,27 +12,28 @@ NULL
 # Generic documentation for summary method -------------------------------------
 #' Summarize parameter objects
 #' 
-#' Summarize the coefficients of a parameter object by computing the point estimate, 
-#' lower confidence limit, and upper confidence limit for each model term. The point 
-#' estimate is the mean of the samples of the coefficients and the lower and 
-#' upper confidence limits are determined by the `prob` argument. This is a 
-#' convenient way to check whether a parameter object has been specified 
+#' Summarize the coefficients of a parameter object by computing the mean,
+#' standard deviation, and quantiles for each model term.
+#' This is a convenient way to check whether a parameter object has been specified 
 #' correctly and sampling distributions of the coefficients are as expected.
 #' @param object An object of the appropriate class.
-#' @param prob A numeric scalar in the interval `(0,1)` giving the confidence 
-#' interval for coefficients. Default is 0.95 for a 95 percent interval, in which case
-#' the lower and upper limits are computed using the 2.5th and 97.5th percentiles.
+#' @param probs A numeric vector of probabilities with values in `[0,1]` used
+#' to compute quantiles. By default, the 2.5th and 97.5th percentiles are 
+#' computed.
 #' @param ... Additional arguments affecting the summary. Currently unused. 
 #' 
-#' @return A [`data.table`] containing at least the following columns:
+#' @return A [`data.table`] that always contains the following columns:
 #' \describe{
 #' \item{term}{The regression term.}
-#' \item{estimate}{The estimated value of the regression term, computed as the mean
-#' from its probability distribution.}
-#' \item{lower}{The lower limit of the confidence interval for the estimate.}
-#' \item{upper}{The upper limit of the confidence interval for the estimate.}
+#' \item{mean}{The mean value of the regression term.}
+#' \item{sd}{The standard deviation of the values of the regression term.}
 #' }
-#' In addition, the following columns may also be present:
+#' 
+#' In addition, the `probs` argument determines the quantiles that are computed.
+#' By default, the columns `2.5%` and `97.5%` are returned corresponding to the
+#' 2.5th and 97.5th percentiles. 
+#' 
+#' Finally, the following columns may also be present:
 #' \describe{
 #' \item{parameter}{The name of the parameter of interest. This is relevant
 #' for any parametric model in which the underlying probability distribution
@@ -53,7 +54,7 @@ NULL
 #' }
 #' 
 #' @seealso For examples, see the the underlying parameter object functions: 
-#' [params_surv()], [params_surv_list()], [params_mlogit()], and 
+#' [params_lm()], [params_surv()], [params_surv_list()], [params_mlogit()], and 
 #' [params_mlogit_list()].
 #' @name summary.params
 NULL
@@ -86,14 +87,8 @@ create_params_list <- function(object, n, uncertainty, inner_class, new_class,
                          new_class = new_class))
 }
 
-coef_summary <- function(x, prob) {
-  alpha <- ci_alpha(prob)
-  data.table(
-    term = colnames(x),
-    estimate = apply(x, 2, mean),
-    lower = apply(x, 2, stats::quantile, prob = alpha$lower),
-    upper = apply(x, 2, stats::quantile, prob = alpha$upper)
-  )
+coef_summary <- function(x, probs = c(.025, .975)) {
+  summarize_params(x, probs = probs, param_name = "term")
 }
 
 summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {

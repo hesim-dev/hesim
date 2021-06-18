@@ -133,39 +133,22 @@ c.eval_rng <- function(...) {
 #' @export
 summary.eval_rng <- function(object, probs = c(.025, .975), sep = "_",  ...) {
   
-  apply_quantile <- function(x, probs) {
-    y <- apply(x, 2, stats::quantile, probs = probs)
-    if (length(probs) == 1) {
-      y <- matrix(y, ncol = 1)
-      colnames(y) <- paste0(probs * 100, "%")
-      return(y)
-    } else{
-      return(t(y))
-    }
-  }
-  
-  fun <- function(x, name, sep) {
-    if (is_1d_vector(x)) {
-      as.data.table(t(c(
-        param = name,
-        mean = mean(x),
-        sd = stats::sd(x),
-        stats::quantile(x, probs = probs)
-      )))
-    } else {
-      p <- if (!is.null(colnames(x))) colnames(x) else paste0("v", 1:ncol(x))
-      data.table(
-        param = paste0(name, sep, p),
-        mean = apply(x, 2, mean),
-        sd = apply(x, 2, stats::sd),
-        apply_quantile(x, probs)
-      )
-    }
-  }
-  
   res_list <- lapply(seq_along(object), function(i, x, names) {
-    fun(x[[i]], names[i], sep)
+    # Get parameter names
+    if (is_1d_vector(x[[i]])) {
+      param_values <- names[[i]]
+    } else{
+      p <- if (!is.null(colnames(x[[i]]))) {
+        colnames(x[[i]])
+      } else{
+        paste0("v", 1:ncol(x[[i]]))
+      }
+      param_values <- paste0(names[i], sep, p)
+    }
+    summarize_params(x[[i]], param_name = "param", param_values = param_values,
+                     probs = probs)
   }, x = object, names = names(object))
+  
   rbindlist(res_list)
 }
 

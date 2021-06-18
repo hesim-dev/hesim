@@ -228,23 +228,23 @@ by passing to the <code>params</code> field of a <code><a href='CohortDtstmTrans
   <span class='op'>)</span>
 <span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>params</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      from     to      term   estimate      lower      upper
-#&gt; 1:   sick sicker intercept -0.2650000 -0.3267500 -0.2032500
-#&gt; 2:   sick sicker     treat -0.2554128 -0.2860686 -0.2247570
-#&gt; 3:   sick  death intercept -1.1000000 -1.1950000 -1.0050000
-#&gt; 4:   sick  death     treat -0.4708043 -0.5088246 -0.4327840
-#&gt; 5: sicker  death intercept -1.4500000 -1.4975000 -1.4025000
-#&gt; 6: sicker  death     treat -0.6454921 -0.6907644 -0.6002198</div><div class='input'><span class='va'>params</span>
+</div><div class='output co'>#&gt;      from     to      term       mean         sd       2.5%      97.5%
+#&gt; 1:   sick sicker intercept -0.2650000 0.09192388 -0.3267500 -0.2032500
+#&gt; 2:   sick sicker     treat -0.2554128 0.04563563 -0.2860686 -0.2247570
+#&gt; 3:   sick  death intercept -1.1000000 0.14142136 -1.1950000 -1.0050000
+#&gt; 4:   sick  death     treat -0.4708043 0.05659874 -0.5088246 -0.4327840
+#&gt; 5: sicker  death intercept -1.4500000 0.07071068 -1.4975000 -1.4025000
+#&gt; 6: sicker  death     treat -0.6454921 0.06739447 -0.6907644 -0.6002198</div><div class='input'><span class='va'>params</span>
 </div><div class='output co'>#&gt; A "params_mlogit_list" object
 #&gt; 
-#&gt; Summary of coefficient estimates:
-#&gt;      from     to      term   estimate      lower      upper
-#&gt; 1:   sick sicker intercept -0.2650000 -0.3267500 -0.2032500
-#&gt; 2:   sick sicker     treat -0.2554128 -0.2860686 -0.2247570
-#&gt; 3:   sick  death intercept -1.1000000 -1.1950000 -1.0050000
-#&gt; 4:   sick  death     treat -0.4708043 -0.5088246 -0.4327840
-#&gt; 5: sicker  death intercept -1.4500000 -1.4975000 -1.4025000
-#&gt; 6: sicker  death     treat -0.6454921 -0.6907644 -0.6002198
+#&gt; Summary of coefficients:
+#&gt;      from     to      term       mean         sd       2.5%      97.5%
+#&gt; 1:   sick sicker intercept -0.2650000 0.09192388 -0.3267500 -0.2032500
+#&gt; 2:   sick sicker     treat -0.2554128 0.04563563 -0.2860686 -0.2247570
+#&gt; 3:   sick  death intercept -1.1000000 0.14142136 -1.1950000 -1.0050000
+#&gt; 4:   sick  death     treat -0.4708043 0.05659874 -0.5088246 -0.4327840
+#&gt; 5: sicker  death intercept -1.4500000 0.07071068 -1.4975000 -1.4025000
+#&gt; 6: sicker  death     treat -0.6454921 0.06739447 -0.6907644 -0.6002198
 #&gt; 
 #&gt; Number of parameter samples: 2
 #&gt; Number of starting (non-absorbing) states: 2

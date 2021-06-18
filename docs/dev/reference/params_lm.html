@@ -227,20 +227,20 @@ use a <code><a href='stateval_tbl.html'>stateval_tbl</a></code>. For an example 
   <span class='va'>sigma</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/GammaDist.html'>rgamma</a></span><span class='op'>(</span><span class='va'>n</span>, shape <span class='op'>=</span> <span class='fl'>.5</span>, rate <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
 <span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>params</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    parameter  term    estimate       lower      upper
-#&gt; 1:      mean    x1 0.498697024 0.293921462 0.70347259
-#&gt; 2:      mean    x2 0.419523371 0.326250749 0.51279599
-#&gt; 3:        sd sigma 0.001658411 0.001627743 0.00168908</div><div class='input'><span class='va'>params</span>
+</div><div class='output co'>#&gt;    parameter  term        mean          sd        2.5%      97.5%
+#&gt; 1:      mean    x1 0.493112085 0.082076057 0.437977375 0.54824679
+#&gt; 2:      mean    x2 0.542920689 0.269452405 0.361915647 0.72392573
+#&gt; 3:        sd sigma 0.009274254 0.007342469 0.004341939 0.01420657</div><div class='input'><span class='va'>params</span>
 </div><div class='output co'>#&gt; A "params_lm" object
 #&gt; 
 #&gt; Summary of coefficients:
-#&gt;    parameter term  estimate     lower     upper
-#&gt; 1:      mean   x1 0.4986970 0.2939215 0.7034726
-#&gt; 2:      mean   x2 0.4195234 0.3262507 0.5127960
+#&gt;    parameter term      mean         sd      2.5%     97.5%
+#&gt; 1:      mean   x1 0.4931121 0.08207606 0.4379774 0.5482468
+#&gt; 2:      mean   x2 0.5429207 0.26945241 0.3619156 0.7239257
 #&gt; 
 #&gt; Summary of sigma:
-#&gt;    parameter  term    estimate       lower      upper
-#&gt; 1:        sd sigma 0.001658411 0.001627743 0.00168908</div><div class='input'>
+#&gt;    parameter  term        mean          sd        2.5%      97.5%
+#&gt; 1:        sd sigma 0.009274254 0.007342469 0.004341939 0.01420657</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

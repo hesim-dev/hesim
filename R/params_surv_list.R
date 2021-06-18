@@ -43,8 +43,8 @@ check.params_surv_list <- function(object){
 # summary.params_surv_list() ---------------------------------------------------
 #' @rdname summary.params
 #' @export
-summary.params_surv_list <- function(object, prob = 0.95, ...) {
-  summary_params_list(object, prob, ...)
+summary.params_surv_list <- function(object, probs = c(.025, .975), ...) {
+  summary_params_list(object, probs, ...)
 }
 
 # print.params_surv_list() ----------------------------------------------------------

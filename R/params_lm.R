@@ -65,14 +65,14 @@ check.params_lm <- function(object){
 # summary.params_lm() ----------------------------------------------------------
 #' @rdname summary.params
 #' @export
-summary.params_lm <- function(object, prob = 0.95, ...) {
+summary.params_lm <- function(object, probs = c(.025, .975), ...) {
   
   sigma_mat <-  matrix(object$sigma, ncol = 1)
   colnames(sigma_mat) <- "sigma"
   
   rbindlist(
     lapply(list(mean = object$coef, sd = sigma_mat),
-           coef_summary, prob = prob),
+           coef_summary, probs = probs),
     idcol = "parameter"
   )
 }

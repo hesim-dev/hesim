@@ -262,11 +262,11 @@ time state transition model, and
 <span class='va'>params_lm</span> <span class='op'>&lt;-</span> <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>fit</span>, n <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      (Intercept)    female
-#&gt; [1,]    32452.58 -1435.596
-#&gt; [2,]    32281.27  3643.123
-#&gt; [3,]    35033.22 -2915.586
-#&gt; [4,]    31465.69  2262.802
-#&gt; [5,]    30575.49  3618.836</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
+#&gt; [1,]    31262.29  882.5941
+#&gt; [2,]    32447.73 1905.9169
+#&gt; [3,]    28861.79 4782.5384
+#&gt; [4,]    28628.35 7038.5227
+#&gt; [5,]    30309.50 3072.4469</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># create_params.flexsurvreg</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
@@ -278,19 +278,19 @@ time state transition model, and
 </div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_surv_wei</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $shape
 #&gt;      (Intercept)
-#&gt; [1,] -0.07338911
-#&gt; [2,]  0.71344775
-#&gt; [3,]  0.34712364
-#&gt; [4,] -0.02217379
-#&gt; [5,]  0.29415180
+#&gt; [1,]  -0.1721055
+#&gt; [2,]  -0.1228815
+#&gt; [3,]   0.2868667
+#&gt; [4,]   0.3138653
+#&gt; [5,]   0.3201733
 #&gt; 
 #&gt; $scale
 #&gt;      (Intercept)
-#&gt; [1,]    7.326029
-#&gt; [2,]    6.513450
-#&gt; [3,]    6.546107
-#&gt; [4,]    7.129277
-#&gt; [5,]    6.815276
+#&gt; [1,]    7.059577
+#&gt; [2,]    7.261128
+#&gt; [3,]    7.390533
+#&gt; [4,]    6.926668
+#&gt; [5,]    6.719093
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

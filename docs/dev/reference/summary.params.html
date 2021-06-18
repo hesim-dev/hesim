@@ -47,11 +47,9 @@
 
 
 <meta property="og:title" content="Summarize parameter objects — summary.params" />
-<meta property="og:description" content="Summarize the coefficients of a parameter object by computing the point estimate,
-lower confidence limit, and upper confidence limit for each model term. The point
-estimate is the mean of the samples of the coefficients and the lower and
-upper confidence limits are determined by the prob argument. This is a
-convenient way to check whether a parameter object has been specified
+<meta property="og:description" content="Summarize the coefficients of a parameter object by computing the mean,
+standard deviation, and quantiles for each model term.
+This is a convenient way to check whether a parameter object has been specified
 correctly and sampling distributions of the coefficients are as expected." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
@@ -178,28 +176,26 @@ correctly and sampling distributions of the coefficients are as expected." />
     </div>
 
     <div class="ref-description">
-    <p>Summarize the coefficients of a parameter object by computing the point estimate,
-lower confidence limit, and upper confidence limit for each model term. The point
-estimate is the mean of the samples of the coefficients and the lower and
-upper confidence limits are determined by the <code>prob</code> argument. This is a
-convenient way to check whether a parameter object has been specified
+    <p>Summarize the coefficients of a parameter object by computing the mean,
+standard deviation, and quantiles for each model term.
+This is a convenient way to check whether a parameter object has been specified
 correctly and sampling distributions of the coefficients are as expected.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for params_lm</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.975</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for params_mlogit</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.975</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for params_mlogit_list</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.975</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for params_surv</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.975</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for params_surv_list</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, prob <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.975</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -209,10 +205,10 @@ correctly and sampling distributions of the coefficients are as expected.</p>
       <td><p>An object of the appropriate class.</p></td>
     </tr>
     <tr>
-      <th>prob</th>
-      <td><p>A numeric scalar in the interval <code>(0,1)</code> giving the confidence
-interval for coefficients. Default is 0.95 for a 95 percent interval, in which case
-the lower and upper limits are computed using the 2.5th and 97.5th percentiles.</p></td>
+      <th>probs</th>
+      <td><p>A numeric vector of probabilities with values in <code>[0,1]</code> used
+to compute quantiles. By default, the 2.5th and 97.5th percentiles are
+computed.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -222,14 +218,17 @@ the lower and upper limits are computed using the 2.5th and 97.5th percentiles.<
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> containing at least the following columns:</p><dl>
+    <p>A <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code> that always contains the following columns:</p><dl>
 <dt>term</dt><dd><p>The regression term.</p></dd>
-<dt>estimate</dt><dd><p>The estimated value of the regression term, computed as the mean
-from its probability distribution.</p></dd>
-<dt>lower</dt><dd><p>The lower limit of the confidence interval for the estimate.</p></dd>
-<dt>upper</dt><dd><p>The upper limit of the confidence interval for the estimate.</p></dd>
+<dt>mean</dt><dd><p>The mean value of the regression term.</p></dd>
+<dt>sd</dt><dd><p>The standard deviation of the values of the regression term.</p></dd>
 
-</dl><p>In addition, the following columns may also be present:</p><dl>
+</dl>
+
+<p>In addition, the <code>probs</code> argument determines the quantiles that are computed.
+By default, the columns <code>2.5%</code> and <code>97.5%</code> are returned corresponding to the
+2.5th and 97.5th percentiles.</p>
+<p>Finally, the following columns may also be present:</p><dl>
 <dt>parameter</dt><dd><p>The name of the parameter of interest. This is relevant
 for any parametric model in which the underlying probability distribution
 has multiple parameters. For instance, both <code><a href='params_surv.html'>params_surv</a></code> and <code><a href='params_surv_list.html'>params_surv_list</a></code>
@@ -252,7 +251,7 @@ logistic regression is used for each state that can be transitioned from.</p></d
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>For examples, see the the underlying parameter object functions:
-<code><a href='params_surv.html'>params_surv()</a></code>, <code><a href='params_surv_list.html'>params_surv_list()</a></code>, <code><a href='params_mlogit.html'>params_mlogit()</a></code>, and
+<code><a href='params_lm.html'>params_lm()</a></code>, <code><a href='params_surv.html'>params_surv()</a></code>, <code><a href='params_surv_list.html'>params_surv_list()</a></code>, <code><a href='params_mlogit.html'>params_mlogit()</a></code>, and
 <code><a href='params_mlogit_list.html'>params_mlogit_list()</a></code>.</p></div>
 
   </div>

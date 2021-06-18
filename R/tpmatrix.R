@@ -271,6 +271,11 @@ tpmatrix <- function(..., complement = NULL){
   return(m)
 }
 
+#' @export
+summary.tpmatrix <- function(object, ...) {
+  
+}
+
 #' Transition probability matrix IDs
 #' 
 #' Creates ID variables for each row returned by `tpmatrix()`. This function is

@@ -47,7 +47,7 @@ test_that("summary.params_surv_list()", {
   expect_true(inherits(ps, "data.table"))
   expect_equal(ps$parameter, c("rate", "rate", "rate"))
   expect_equal(ps$term, c("intercept", "intercept", "treat"))
-  expect_equal(ps$estimate[1], mean(p_ex$mod1$coefs$rate))
+  expect_equal(ps$mean[1], mean(p_ex$mod1$coefs$rate))
 })
 
 # print.params_surv_list() -----------------------------------------------------
