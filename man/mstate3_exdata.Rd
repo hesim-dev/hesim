@@ -8,7 +8,7 @@
 A list containing the following elements:
 \itemize{
 \item{transitions}{ A data frame containing the times at which patient transitions between health states based
-on the \link[mstate:prothr]{prothr} dataset from the \link[mstate:mstate]{mstate} package.}
+on the \link[mstate:Liver-cirrhosis-data]{prothr} dataset from the \link[mstate:mstate-package]{mstate} package.}
 \item{costs}{ A list of data frames. The first data frame contains summary medical cost estimates and the
 second data frame contains drug cost data.}
 \item{utility}{ A data frame of summary utility estimates.}

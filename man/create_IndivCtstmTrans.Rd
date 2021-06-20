@@ -57,7 +57,7 @@ create_IndivCtstmTrans(object, ...)
 \code{\link{expand.hesim_data}}.}
 
 \item{trans_mat}{The transition matrix describing the states and transitions in a
-multi-state model in the format from the \code{\link[mstate:mstate]{mstate}} package. See \code{\link{IndivCtstmTrans}}.}
+multi-state model in the format from the \code{\link[mstate:mstate-package]{mstate}} package. See \code{\link{IndivCtstmTrans}}.}
 
 \item{clock}{"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
 of clock-reset and clock-forward models. See the field \code{clock} in \code{\link{IndivCtstmTrans}}.}

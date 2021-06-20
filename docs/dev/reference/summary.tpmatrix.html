@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Attributes for ID variables — id_attributes • hesim</title>
+<title>Summarize transition probability matrix — summary.tpmatrix • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,9 @@
 
 
 
-<meta property="og:title" content="Attributes for ID variables — id_attributes" />
-<meta property="og:description" content="Stores metadata related to the ID variables used to index input_mats
-and transformed parameter objects already predicted from covariates." />
+<meta property="og:title" content="Summarize transition probability matrix — summary.tpmatrix" />
+<meta property="og:description" content="Summarize a tpmatrix object storing transition probability matrices.
+Summary statistics are computed for each possible transition." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -168,123 +168,83 @@ and transformed parameter objects already predicted from covariates." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Attributes for ID variables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/hesim_data.R'><code>R/hesim_data.R</code></a></small>
-    <div class="hidden name"><code>id_attributes.Rd</code></div>
+    <h1>Summarize transition probability matrix</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/tpmatrix.R'><code>R/tpmatrix.R</code></a></small>
+    <div class="hidden name"><code>summary.tpmatrix.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Stores metadata related to the ID variables used to index <a href='input_mats.html'>input_mats</a>
-and <a href='tparams.html'>transformed parameter objects</a> already predicted from covariates.</p>
+    <p>Summarize a <code><a href='tpmatrix.html'>tpmatrix</a></code> object storing transition probability matrices.
+Summary statistics are computed for each possible transition.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>id_attributes</span><span class='op'>(</span>
-  <span class='va'>strategy_id</span>,
-  <span class='va'>n_strategies</span>,
-  <span class='va'>patient_id</span>,
-  <span class='va'>n_patients</span>,
-  state_id <span class='op'>=</span> <span class='cn'>NULL</span>,
-  n_states <span class='op'>=</span> <span class='cn'>NULL</span>,
-  transition_id <span class='op'>=</span> <span class='cn'>NULL</span>,
-  n_transitions <span class='op'>=</span> <span class='cn'>NULL</span>,
-  time_id <span class='op'>=</span> <span class='cn'>NULL</span>,
-  time_intervals <span class='op'>=</span> <span class='cn'>NULL</span>,
-  n_times <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sample <span class='op'>=</span> <span class='cn'>NULL</span>,
-  n_samples <span class='op'>=</span> <span class='cn'>NULL</span>,
-  grp_id <span class='op'>=</span> <span class='cn'>NULL</span>,
-  patient_wt <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for tpmatrix</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.975</span><span class='op'>)</span>, unflatten <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>strategy_id</th>
-      <td><p>A numeric vector of integers denoting the treatment strategy.</p></td>
+      <th>object</th>
+      <td><p>A <code><a href='tpmatrix.html'>tpmatrix</a></code> object.</p></td>
     </tr>
     <tr>
-      <th>n_strategies</th>
-      <td><p>A scalar denoting the number of unique treatment strategies.</p></td>
+      <th>probs</th>
+      <td><p>A numeric vector of probabilities with values in <code>[0,1]</code> used
+to compute quantiles. By default, the 2.5th and 97.5th percentiles are
+computed.</p></td>
     </tr>
     <tr>
-      <th>patient_id</th>
-      <td><p>A numeric vector of integers denoting the patient.</p></td>
+      <th>unflatten</th>
+      <td><p>If <code>FALSE</code>, then each column is a vector and the
+generated table contains one row for each possible transition; if
+<code>TRUE</code>, then each column stores a list of <code>matrix</code> objects containing
+transition probability matrices formed by "unflattening" the one-dimensional
+vectors. See "Value" below for additional details.</p></td>
     </tr>
     <tr>
-      <th>n_patients</th>
-      <td><p>A scalar denoting the number of unique patients.</p></td>
-    </tr>
-    <tr>
-      <th>state_id</th>
-      <td><p>A numeric vector of integers denoting the health state.</p></td>
-    </tr>
-    <tr>
-      <th>n_states</th>
-      <td><p>A scalar denoting the number of unique health states.</p></td>
-    </tr>
-    <tr>
-      <th>transition_id</th>
-      <td><p>A numeric vector denoting the
-health state transition. This is only used for state transition models.</p></td>
-    </tr>
-    <tr>
-      <th>n_transitions</th>
-      <td><p>A scalar denoting the number of unique transitions.</p></td>
-    </tr>
-    <tr>
-      <th>time_id</th>
-      <td><p>A numeric vector of integers denoting a unique time interval.</p></td>
-    </tr>
-    <tr>
-      <th>time_intervals</th>
-      <td><p>A <code>data.table</code> denoting unique time intervals. Must
-contain the columns <code>time_id</code>, <code>time_start</code>, and <code>time_stop</code>.
-<code>time_start</code> is the starting time of an interval and <code>time_stop</code> is
-the stopping time of an interval. Following the <a href='https://rdrr.io/pkg/survival/man/tmerge.html'>survival</a> package,
-time intervals are closed on the right and
-open on the left (except in the final interval where <code>time_stop</code> is equal to
-infinity).</p></td>
-    </tr>
-    <tr>
-      <th>n_times</th>
-      <td><p>A scalar denoting the number of time intervals. Equal to the
-number of rows in <code>time_intervals</code>.</p></td>
-    </tr>
-    <tr>
-      <th>sample</th>
-      <td><p>A numeric vector of integer denoting the sample from the posterior
-distribution of the parameters.</p></td>
-    </tr>
-    <tr>
-      <th>n_samples</th>
-      <td><p>A scalar denoting the number of samples.</p></td>
-    </tr>
-    <tr>
-      <th>grp_id</th>
-      <td><p>An optional numeric vector of integers denoting the subgroup.</p></td>
-    </tr>
-    <tr>
-      <th>patient_wt</th>
-      <td><p>An optional numeric vector denoting the weight to apply to each patient
-within a subgroup.</p></td>
+      <th>...</th>
+      <td><p>Additional arguments affecting the summary. Currently unused.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>When using the ID variables to index <a href='input_mats.html'>input_mats</a>, the sorting order
-should be the same as specified in <code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>; that is,
-observations must be sorted by prioritizing: (i) <code>strategy_id</code>, (ii) <code>patient_id</code>,
-(iii) the health-related ID variable (either <code>state_id</code> or <code>transition_id</code>),
-and (iv) <code>time_id</code>. When using ID variables are used to index transformed parameter
-objects and <code>sample</code> is used for indexing, then observations must be sorted by
-prioritizing: (i) <code>sample</code>, (ii) <code>strategy_id</code>, (iii) <code>patient_id</code>,
-(iv) the health-related ID variable, and (v) <code>time_id</code>.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>If <code>unflatten = "FALSE"</code> (the default), then a <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code>
+is returned with columns for (i) the name of the parameter representing
+a transition in the transition probability matrix (<code>params</code>),
+(ii) the mean of each parameter across parameter samples (<code>mean</code>),
+(iii) the standard deviation of the parameter samples (<code>sd</code>), and
+(iv) quantiles of the parameter samples corresponding to the <code>probs</code> argument.</p>
+<p>If, on the other hand, <code>unflatten = "TRUE"</code>, then the parameters are unflattened
+to form transition probability matrices; that is, the <code>mean</code>, <code>sd</code>, and
+quantile columns are matrices.</p>
 
-    <div class='dont-index'><p><code><a href='hesim_data.html'>hesim_data()</a></code>,<code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>, <a href='input_mats.html'>input_mats</a></p></div>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tpmatrix.html'>tpmatrix</a></span><span class='op'>(</span>
+  <span class='va'>C</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.7</span>, <span class='fl'>.6</span><span class='op'>)</span>,
+  <span class='fl'>0</span>, <span class='fl'>1</span>
+<span class='op'>)</span>
 
+<span class='co'># Summaries where each column is a vector</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    param mean         sd   2.5%  97.5%
+#&gt; 1: s1_s1 0.35 0.07071068 0.3025 0.3975
+#&gt; 2: s1_s2 0.65 0.07071068 0.6025 0.6975
+#&gt; 3: s2_s1 0.00 0.00000000 0.0000 0.0000
+#&gt; 4: s2_s2 1.00 0.00000000 1.0000 1.0000</div><div class='input'>
+<span class='co'># Summaries where each column is a matrix</span>
+<span class='va'>ps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>p</span>, probs <span class='op'>=</span> <span class='fl'>.5</span>, unflatten <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>ps</span>
+</div><div class='output co'>#&gt;                   mean                                          sd
+#&gt; 1: 0.35,0.00,0.65,1.00 0.07071068,0.00000000,0.07071068,0.00000000
+#&gt;                    50%
+#&gt; 1: 0.35,0.00,0.65,1.00</div><div class='input'><span class='va'>ps</span><span class='op'>$</span><span class='va'>mean</span>
+</div><div class='output co'>#&gt; [[1]]
+#&gt;      [,1] [,2]
+#&gt; [1,] 0.35 0.65
+#&gt; [2,] 0.00 1.00
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -7,7 +7,7 @@
 absorbing(trans_mat)
 }
 \arguments{
-\item{trans_mat}{A transition matrix in the format from the \code{\link[mstate:mstate]{mstate}} package.
+\item{trans_mat}{A transition matrix in the format from the \code{\link[mstate:mstate-package]{mstate}} package.
 See \code{\link{IndivCtstmTrans}}.}
 }
 \description{
