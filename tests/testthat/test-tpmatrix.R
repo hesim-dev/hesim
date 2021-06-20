@@ -37,6 +37,38 @@ test_that("tpmatrix() throws error if complement argument is incorrectly specifi
   )
 })
 
+# Summarize transition probability matrix --------------------------------------
+p <- tpmatrix(
+  C, c(.7, .6),
+  0, 1
+)
+
+test_that("summarize.tpmatrix() works without unflattening" , {
+  ps <- summary(p)
+  expect_equal(colnames(ps), c("param", "mean", "sd", "2.5%", "97.5%"))
+  expect_equal(nrow(ps), 4)
+  expect_equal(colnames(p), ps$param)
+  expect_equivalent(ps$mean, apply(p, 2, mean))
+})
+
+test_that("summarize.tpmatrix() works with variables probs arguments" , {
+  ps <- summary(p, prob =.5)
+  expect_equal(colnames(ps), c("param", "mean", "sd", "50%"))
+  
+  ps <- summary(p, prob = c(.25, .75, .9))
+  expect_equal(colnames(ps), c("param", "mean", "sd", "25%", "75%", "90%"))
+})
+
+test_that("summarize.tpmatrix() works with unflattening" , {
+  ps <- summary(p, unflatten = TRUE)
+  expect_equal(colnames(ps), c("mean", "sd", "2.5%", "97.5%"))
+  expect_true(is.matrix(ps$mean[[1]]))
+  expect_equal(
+    ps$mean[[1]],
+    matrix(apply(p, 2, mean), nrow = 2, byrow = TRUE)
+  )
+})
+
 # Transition probability matrix IDs---------------------------------------------
 strategies <- data.frame(strategy_id = c(1, 2))
 patients <- data.frame(patient_id = seq(1, 3),

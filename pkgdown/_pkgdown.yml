@@ -27,6 +27,7 @@ reference:
       - tpmatrix
       - tpmatrix_id
       - tpmatrix_names
+      - summary.tpmatrix
       - qmatrix.matrix
       - qmatrix.msm
       - expmat

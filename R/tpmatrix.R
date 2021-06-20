@@ -271,9 +271,55 @@ tpmatrix <- function(..., complement = NULL){
   return(m)
 }
 
+#' Summarize transition probability matrix
+#' 
+#' Summarize a [`tpmatrix`] object storing transition probability matrices. 
+#' Summary statistics are computed for each possible transition. 
+#' 
+#' @inheritParams summary.params
+#' @param object A [`tpmatrix`] object.
+#' @param unflatten If `FALSE`, then each column is a vector and the
+#' generated table contains one row for each possible transition; if
+#' `TRUE`, then each column stores a list of `matrix` objects containing
+#' transition probability matrices formed by "unflattening" the one-dimensional
+#' vectors. See "Value" below for additional details.
+#' @param ... Additional arguments affecting the summary. Currently unused.
+#' 
+#' @return If `unflatten = "FALSE"` (the default), then a [`data.table`]
+#' is returned with columns for (i) the name of the parameter representing
+#' a transition in the transition probability matrix (`params`),
+#' (ii) the mean of each parameter across parameter samples (`mean`),
+#' (iii) the standard deviation of the parameter samples (`sd`), and
+#' (iv) quantiles of the parameter samples corresponding to the `probs` argument. 
+#' 
+#' If, on the other hand, `unflatten = "TRUE"`, then the parameters are unflattened
+#' to form transition probability matrices; that is, the `mean`, `sd`, and 
+#' quantile columns are matrices. 
+#' @examples 
+#' p <- tpmatrix(
+#'   C, c(.7, .6),
+#'   0, 1
+#' )
+#' 
+#' # Summaries where each column is a vector
+#' summary(p)
+#' 
+#' # Summaries where each column is a matrix
+#' ps <- summary(p, probs = .5, unflatten = TRUE)
+#' ps
+#' ps$mean
 #' @export
-summary.tpmatrix <- function(object, ...) {
+summary.tpmatrix <- function(object, probs = c(.025, .975), 
+                             unflatten = FALSE, ...) {
+  n_states <- sqrt(ncol(object))
+  out <- summarize_params(object, probs = probs)
   
+  if (unflatten) {
+    out <- lapply(out[,.SD, .SDcols = !c("param")],
+                  function (z) list(t(matrix(z, nrow = n_states))))
+    out <- as.data.table(out)
+  }
+  out
 }
 
 #' Transition probability matrix IDs
