@@ -4,17 +4,22 @@
 \alias{summary.tpmatrix}
 \title{Summarize transition probability matrix}
 \usage{
-\method{summary}{tpmatrix}(object, probs = c(0.025, 0.975), unflatten = FALSE, ...)
+\method{summary}{tpmatrix}(object, id = NULL, probs = c(0.025, 0.975), unflatten = FALSE, ...)
 }
 \arguments{
 \item{object}{A \code{\link{tpmatrix}} object.}
+
+\item{id}{A \code{\link{tpmatrix_id}} object for which columns contain the ID variables
+for each row in \code{object}. If not \code{NULL}, then transition probability matrices
+are summarized by the ID variables in \code{id}.}
 
 \item{probs}{A numeric vector of probabilities with values in \verb{[0,1]} used
 to compute quantiles. By default, the 2.5th and 97.5th percentiles are
 computed.}
 
-\item{unflatten}{If \code{FALSE}, then each column is a vector and the
-generated table contains one row for each possible transition; if
+\item{unflatten}{If \code{FALSE}, then each column containing a summary statistic
+is a vector and the generated table contains one row
+(for each set of ID variables) for each possible transition; if
 \code{TRUE}, then each column stores a list of \code{matrix} objects containing
 transition probability matrices formed by "unflattening" the one-dimensional
 vectors. See "Value" below for additional details.}
@@ -38,16 +43,39 @@ Summarize a \code{\link{tpmatrix}} object storing transition probability matrice
 Summary statistics are computed for each possible transition.
 }
 \examples{
+library("data.table")
+hesim_dat <-  hesim_data(strategies = data.table(strategy_id = 1:2),
+                                patients = data.table(patient_id = 1:3))
+input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+
+# Summarize across all rows in "input_data"
+p_12 <- ifelse(input_data$strategy_id == 1, .8, .6)
 p <- tpmatrix(
-  C, c(.7, .6),
+  C, p_12,
   0, 1
 )
 
-# Summaries where each column is a vector
+## Summary where each column is a vector
 summary(p)
 
-# Summaries where each column is a matrix
+## Summary where each column is a matrix
 ps <- summary(p, probs = .5, unflatten = TRUE)
+ps
+ps$mean
+
+# Summarize by ID variables
+tpmat_id <- tpmatrix_id(input_data, n_samples = 2) 
+p_12 <- ifelse(tpmat_id$strategy_id == 1, .8, .6)
+p <- tpmatrix(
+  C, p_12,
+  0, 1
+)
+
+## Summary where each column is a vector
+summary(p, id = tpmat_id)
+
+## Summary where each column is a matrix
+ps <- summary(p, id = tpmat_id, unflatten = TRUE)
 ps
 ps$mean
 }

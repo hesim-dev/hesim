@@ -278,8 +278,12 @@ tpmatrix <- function(..., complement = NULL){
 #' 
 #' @inheritParams summary.params
 #' @param object A [`tpmatrix`] object.
-#' @param unflatten If `FALSE`, then each column is a vector and the
-#' generated table contains one row for each possible transition; if
+#' @param id A [`tpmatrix_id`] object for which columns contain the ID variables 
+#' for each row in `object`. If not `NULL`, then transition probability matrices
+#' are summarized by the ID variables in `id`. 
+#' @param unflatten If `FALSE`, then each column containing a summary statistic
+#'  is a vector and the generated table contains one row 
+#'  (for each set of ID variables) for each possible transition; if
 #' `TRUE`, then each column stores a list of `matrix` objects containing
 #' transition probability matrices formed by "unflattening" the one-dimensional
 #' vectors. See "Value" below for additional details.
@@ -296,28 +300,59 @@ tpmatrix <- function(..., complement = NULL){
 #' to form transition probability matrices; that is, the `mean`, `sd`, and 
 #' quantile columns are matrices. 
 #' @examples 
+#' library("data.table")
+#' hesim_dat <-  hesim_data(strategies = data.table(strategy_id = 1:2),
+#'                                 patients = data.table(patient_id = 1:3))
+#' input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+#' 
+#' # Summarize across all rows in "input_data"
+#' p_12 <- ifelse(input_data$strategy_id == 1, .8, .6)
 #' p <- tpmatrix(
-#'   C, c(.7, .6),
+#'   C, p_12,
 #'   0, 1
 #' )
 #' 
-#' # Summaries where each column is a vector
+#' ## Summary where each column is a vector
 #' summary(p)
 #' 
-#' # Summaries where each column is a matrix
+#' ## Summary where each column is a matrix
 #' ps <- summary(p, probs = .5, unflatten = TRUE)
 #' ps
 #' ps$mean
+#' 
+#' # Summarize by ID variables
+#' tpmat_id <- tpmatrix_id(input_data, n_samples = 2) 
+#' p_12 <- ifelse(tpmat_id$strategy_id == 1, .8, .6)
+#' p <- tpmatrix(
+#'   C, p_12,
+#'   0, 1
+#' )
+#' 
+#' ## Summary where each column is a vector
+#' summary(p, id = tpmat_id)
+#'
+#' ## Summary where each column is a matrix
+#' ps <- summary(p, id = tpmat_id, unflatten = TRUE)
+#' ps
+#' ps$mean
 #' @export
-summary.tpmatrix <- function(object, probs = c(.025, .975), 
+summary.tpmatrix <- function(object, id = NULL, probs = c(.025, .975), 
                              unflatten = FALSE, ...) {
   n_states <- sqrt(ncol(object))
-  out <- summarize_params(object, probs = probs)
+  if (!is.null(id)) {
+    check_is_class(id, "tpmatrix_id", "tpmatrix_id")
+    id <- id[, attr(id, "id_vars"), with = FALSE]
+    by <- colnames(id)
+    object <- cbind(object, id)
+  } else {
+    by <- NULL
+  }
+  out <- summarize_params(object, probs = probs, by = by)
   
   if (unflatten) {
-    out <- lapply(out[,.SD, .SDcols = !c("param")],
-                  function (z) list(t(matrix(z, nrow = n_states))))
-    out <- as.data.table(out)
+    sdcols <- colnames(out)[!colnames(out) %in% c(by, "param")]
+    out <- out[, lapply(.SD, function (z) list(t(matrix(z, nrow = n_states)))),
+                .SDcols = sdcols, by = by]
   }
   out
 }
