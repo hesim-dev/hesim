@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Input validation for class objects — check.id_attributes • hesim</title>
+<title>Summarize tparams_transprobs object — summary.tparams_transprobs • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,10 @@
 
 
 
-<meta property="og:title" content="Input validation for class objects — check.id_attributes" />
-<meta property="og:description" content="check is a generic function for validating the inputs of class objects." />
+<meta property="og:title" content="Summarize tparams_transprobs object — summary.tparams_transprobs" />
+<meta property="og:description" content="Summarize a tparams_transprobs containing predicted transition
+probabilities. Summary statistics are computed for each
+possible transition by the relevant ID variables." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -167,63 +169,56 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Input validation for class objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/hesim_data.R'><code>R/hesim_data.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/input_mats.R'><code>R/input_mats.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_lm.R'><code>R/params_lm.R</code></a>, and 6 more</small>
-    <div class="hidden name"><code>check.Rd</code></div>
+    <h1>Summarize <code>tparams_transprobs</code> object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/tparams_transprobs.R'><code>R/tparams_transprobs.R</code></a></small>
+    <div class="hidden name"><code>summary.tparams_transprobs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>check</code> is a generic function for validating the inputs of class objects.</p>
+    <p>Summarize a <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> containing predicted transition
+probabilities. Summary statistics are computed for each
+possible transition by the relevant ID variables.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for id_attributes</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S3 method for input_mats</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S3 method for params_lm</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S3 method for params_mlogit</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S3 method for params_surv</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S3 method for params_surv_list</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='co'># S3 method for tparams_mean</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for tparams_transprobs</span>
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
-
-<span class='fu'>check</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for tparams_transprobs</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.975</span><span class='op'>)</span>, unflatten <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>object to check.</p></td>
+      <td><p>A <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> object.</p></td>
+    </tr>
+    <tr>
+      <th>probs</th>
+      <td><p>A numeric vector of probabilities with values in <code>[0,1]</code> used
+to compute quantiles. By default, the 2.5th and 97.5th percentiles are
+computed.</p></td>
+    </tr>
+    <tr>
+      <th>unflatten</th>
+      <td><p>If <code>FALSE</code>, then each column containing a summary statistic
+is a vector and the generated table contains one row
+(for each set of ID variables) for each possible transition; if
+<code>TRUE</code>, then each column stores a list of <code>matrix</code> objects containing
+transition probability matrices formed by "unflattening" the one-dimensional
+vectors. See "Value" below for additional details.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments passed to or from other methods.</p></td>
-    </tr>
-    <tr>
-      <th>inner_class</th>
-      <td><p>When checking a list of objects, the class of elements within
-the inner most list.</p></td>
+      <td><p>Additional arguments affecting the summary. Currently unused.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If validation is successful, returns the object in question; otherwise,
-informs the user that an error has occurred.</p>
+    <p><code>summary.tparams_transprobs()</code> uses the <code><a href='summary.tpmatrix.html'>summary.tpmatrix()</a></code>
+method under the hood and returns the same output.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>See <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> for an example use of the summary method.
+Also see <code><a href='summary.tpmatrix.html'>summary.tpmatrix()</a></code> for more information on what is returned.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -111,17 +111,7 @@ check.input_mats <- function(object){
 as.data.table.input_mats <- function(x, ...) {
   
   # Get ID columns
-  all_id_vars <- c("sample", "strategy_id", "patient_id", "state_id", 
-                    "transition_id", "time_id")
-  id_vars <- all_id_vars[all_id_vars %in% names(x)] # ID variables used
-  
-  id_dt <- as.data.table(x[id_vars])
-  
-  if ("time_id" %in% colnames(id_dt)) {
-    ti <- x$time_intervals[match(id_dt$time_id, x$time_intervals$time_id)]
-    ti <- ti[, c("time_start", "time_stop"), with = FALSE]
-    id_dt <- cbind(id_dt, ti)
-  }
+  id_dt <- make_id_data_table(x)
   
   # Combine all X matrices
   xl <- lapply(flatten_lists(x$X), as.data.table)
@@ -136,7 +126,7 @@ as.data.table.input_mats <- function(x, ...) {
   
   # Create a single data.table
   tbl <- cbind(id_dt, x_dt)
-  setattr(tbl, "id_vars", id_vars)
+  setattr(tbl, "id_vars", attr(id_dt, "id_vars"))
   
   # Return
   tbl

@@ -28,15 +28,15 @@ vectors. See "Value" below for additional details.}
 }
 \value{
 If \code{unflatten = "FALSE"} (the default), then a \code{\link{data.table}}
-is returned with columns for (i) the name of the parameter representing
-a transition in the transition probability matrix (\code{params}),
-(ii) the mean of each parameter across parameter samples (\code{mean}),
-(iii) the standard deviation of the parameter samples (\code{sd}), and
-(iv) quantiles of the parameter samples corresponding to the \code{probs} argument.
+is returned with columns for (i) the health state that is being transitioned
+from (\code{from}), (ii) the health state that is being transitioned to (\code{to})
+(iii) the mean of each parameter across parameter samples (\code{mean}),
+(iv) the standard deviation of the parameter samples (\code{sd}), and
+(v) quantiles of the parameter samples corresponding to the \code{probs} argument.
 
 If, on the other hand, \code{unflatten = "TRUE"}, then the parameters are unflattened
 to form transition probability matrices; that is, the \code{mean}, \code{sd}, and
-quantile columns are matrices.
+quantile columns are (lists of) matrices.
 }
 \description{
 Summarize a \code{\link{tpmatrix}} object storing transition probability matrices.

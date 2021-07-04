@@ -93,10 +93,10 @@ tprob_array[, , 2, 2, 2, ] <- rdirichlet_mat(n_samples, make_alpha(tprob, .5))
 tprob_array <- aperm(tprob_array, perm = c(6:3, 1, 2))
 
 # tparams_transprobs.array() (6D) ----------------------------------------------
-params_tprob <- tparams_transprobs(tprob_array, times = time_start)
-params_tprob_t1 <- tparams_transprobs(tprob_array[,,,1,,, drop = FALSE])
+tprob <- tparams_transprobs(tprob_array, times = time_start)
+tprob_t1 <- tparams_transprobs(tprob_array[,,,1,,, drop = FALSE])
 
-test_that("Extra arguments with tparams_transprobs.array()" , {
+test_that("Extra arguments work with tparams_transprobs.array()" , {
   expect_equal(tparams_transprobs(tprob_array, times = time_start, grp_id = 1)$grp_id,
                rep(1, prod(dim(tprob_array)[1:4])))
   expect_equal(tparams_transprobs(tprob_array, times = time_start, patient_wt = 1)$patient_wt,
@@ -112,33 +112,63 @@ test_that("Extra arguments with tparams_transprobs.array()" , {
   
 })
 
-test_that("tparams_transprobs() returns array of matrices" , {
-  expect_true(inherits(params_tprob$value, "array"))
-  expect_equal(length(dim(params_tprob$value)), 3)
-  expect_equal(dim(params_tprob$value)[1], dim(params_tprob$value)[2])
+test_that("tparams_transprobs.array() returns array of matrices" , {
+  expect_true(inherits(tprob$value, "array"))
+  expect_equal(length(dim(tprob$value)), 3)
+  expect_equal(dim(tprob$value)[1], dim(tprob$value)[2])
 })
 
-test_that("tparams_transprobs() with only 1 time interval", {
-  expect_true(inherits(params_tprob_t1, "tparams_transprobs"))
-  expect_equal(params_tprob_t1$n_times, 1)
-  expect_equal(nrow(params_tprob_t1$time_intervals), 1)
-  expect_true(all(params_tprob_t1$time_id == 1))
+test_that("tparams_transprobs.array() works with only 1 time interval", {
+  expect_true(inherits(tprob_t1, "tparams_transprobs"))
+  expect_equal(tprob_t1$n_times, 1)
+  expect_equal(nrow(tprob_t1$time_intervals), 1)
+  expect_true(all(tprob_t1$time_id == 1))
+})
+
+test_that("Summary method for tparams_transprobs.array() works as expected", {
+  ts <- summary(tprob)
+  expect_equal(
+    colnames(ts),
+    c("strategy_id", "patient_id", "time_id", "from", "to", "mean", "sd",
+      "2.5%", "97.5%")
+  )
+  
+  # Check means
+  i <- which(tprob$patient_id == 1 & tprob$strategy_id == 1 & 
+                 tprob$time_id == 2)
+  m <- apply(tprob$value[,, i], c(1,2), mean)
+  expect_equal(
+    c(t(m)),
+    ts[patient_id == 1 & strategy_id == 1 & time_id == 2]$mean
+  )
+})
+
+test_that("Summary method for tparams_transprobs uses correct state names", {
+  tprob2 <- tprob
+  n_states <- dim(tprob2$value)[1]
+  state_names <- paste0("State", 1:n_states)
+  dimnames(tprob2$value) <- list(state_names, state_names, NULL)
+  ts <- summary(tprob2)
+  expect_equal(
+   unique(ts$from),
+   state_names
+  )
 })
 
 # as.data.table.tparams_transprobs() -------------------------------------------
-tprob_dt <- as.data.table(params_tprob)
+tprob_dt <- as.data.table(tprob)
   
 test_that("as.data.table.tparams_transprobs() returns a data.table" , {
-  expect_true(inherits(as.data.table(params_tprob), "data.table"))
+  expect_true(inherits(as.data.table(tprob), "data.table"))
 })
 
 # tparams_transprobs.data.table() ----------------------------------------------
-params_tprob2 <- tparams_transprobs(tprob_dt)
+tprob2 <- tparams_transprobs(tprob_dt)
 
 test_that(paste0("tparams_transprobs() returns the same values with ",
                  ".array and .data.table "), {
-  expect_equal(params_tprob, params_tprob2)
-  expect_equal(params_tprob_t1, 
+  expect_equal(tprob, tprob2)
+  expect_equal(tprob_t1, 
                tparams_transprobs(tprob_dt[time_id == 1]))                
 })
 
@@ -213,7 +243,7 @@ test_that("tparams_transprobs.array() returns an error with the incorrect number
 })
 
 # Initialize CohortDtstmTrans object -------------------------------------------
-transmod <- CohortDtstmTrans$new(params = params_tprob)
+transmod <- CohortDtstmTrans$new(params = tprob)
 
 test_that("CohortDtstmTrans$new() automatically sets 'start_stateprobs' ",{
   expect_equal(transmod$start_stateprobs, c(1, 0, 0))   
@@ -222,23 +252,23 @@ test_that("CohortDtstmTrans$new() automatically sets 'start_stateprobs' ",{
 test_that("CohortDtstmTrans$new() 'start_stateprobs' normalizes to 1 ",{
   # Positive values
   v <- c(5, 5, 10, 10)
-  tmp <- CohortDtstmTrans$new(params = params_tprob,
+  tmp <- CohortDtstmTrans$new(params = tprob,
                               start_stateprobs = v)
   expect_equal(tmp$start_stateprobs, v/sum(v))
   tmp$start_stateprobs <- c(0, 0)
   expect_equal(tmp$start_stateprobs, c(1/2, 1/2))
   
   # All zeros
-  tmp <- CohortDtstmTrans$new(params = params_tprob,
+  tmp <- CohortDtstmTrans$new(params = tprob,
                               start_stateprobs = c(0, 0))
   expect_equal(tmp$start_stateprobs, c(1/2, 1/2))
 })
 
 test_that("CohortDtstmTrans$new() 'start_stateprobs' exceptions ",{
-  expect_error(CohortDtstmTrans$new(params = params_tprob, 
+  expect_error(CohortDtstmTrans$new(params = tprob, 
                                     start_stateprobs = c(Inf, 1)),
                "Elements of 'state_stateprobs' cannot be infinite.")
-  expect_error(CohortDtstmTrans$new(params = params_tprob, 
+  expect_error(CohortDtstmTrans$new(params = tprob, 
                                     start_stateprobs = c(0, -1)),
                "All elements of 'state_stateprobs' must be non-negative.")
 })
@@ -250,18 +280,18 @@ test_that("CohortDtstmTrans 'trans_mat' must be a matrix of the correct form ",{
                      "of possible transitions (i.e., non-NA elements)")
   
   # Exceptions with $new()
-  expect_error(CohortDtstmTrans$new(params = params_tprob, trans_mat = 1),
+  expect_error(CohortDtstmTrans$new(params = tprob, trans_mat = 1),
                msg_matrix)
   tmat_bad <- rbind(c(0, 0),
                     c(0, 0))
-  expect_error(CohortDtstmTrans$new(params = params_tprob, trans_mat = tmat_bad),
+  expect_error(CohortDtstmTrans$new(params = tprob, trans_mat = tmat_bad),
               msg_form, fixed = TRUE)
   
   # Correct
   tmat_good <- rbind(c(0, 1, 2),
                      c(NA, 0, 1),
                      c(NA, NA, NA))
-  tmp <- CohortDtstmTrans$new(params = params_tprob, trans_mat = tmat_good)
+  tmp <- CohortDtstmTrans$new(params = tprob, trans_mat = tmat_good)
   expect_equal(tmp$trans_mat, tmat_good)
   
   # Active binding errors
@@ -335,7 +365,7 @@ test_that(paste0("create_CohortDtstmTrans$sim_stateprobs() is consistent with ",
                as.matrix(hesim_probs[, c("Healthy", "Sick", "Dead")]))
 })
      
-test_that(paste0("create_CohortDtstmTrans$sim_stateprobs() with mulinom() objects"), {
+test_that(paste0("create_CohortDtstmTrans$sim_stateprobs() with multinom() objects"), {
   tpmatrix_multinom <- function(fits, data, patid){
     newdata <- data[patient_id == patid]
     n_times <- length(unique(transmod_data$time_id))

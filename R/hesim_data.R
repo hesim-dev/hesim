@@ -537,6 +537,22 @@ get_size <- function(x) {
   ))
 }
 
+make_id_data_table <- function(x) {
+  all_id_vars <- c("sample", "strategy_id", "patient_id", "state_id", 
+                   "transition_id", "time_id")
+  id_vars <- all_id_vars[all_id_vars %in% names(x)] # ID variables used
+  
+  id_dt <- as.data.table(x[id_vars])
+  
+  if ("time_id" %in% colnames(id_dt)) {
+    ti <- x$time_intervals[match(id_dt$time_id, x$time_intervals$time_id)]
+    ti <- ti[, c("time_start", "time_stop"), with = FALSE]
+    id_dt <- cbind(id_dt, ti)
+  }
+  setattr(id_dt, "id_vars", id_vars[id_vars != "sample"])
+  return(id_dt)
+}
+
 # Labels -----------------------------------------------------------------------
 #' Set value labels
 #' 
