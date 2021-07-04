@@ -129,8 +129,9 @@ test_that("Summary method for tparams_transprobs.array() works as expected", {
   ts <- summary(tprob)
   expect_equal(
     colnames(ts),
-    c("strategy_id", "patient_id", "time_id", "from", "to", "mean", "sd",
-      "2.5%", "97.5%")
+    c("strategy_id", "patient_id", "time_id", "time_start", "time_stop",
+      "from", "to", 
+      "mean", "sd", "2.5%", "97.5%")
   )
   
   # Check means

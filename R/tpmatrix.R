@@ -377,7 +377,10 @@ summary.tpmatrix <- function(object, id = NULL, probs = c(.025, .975),
   # Get columns to summarize parameters by
   if (!is.null(id)) {
     check_is_class(id, "tpmatrix_id", "tpmatrix_id")
-    id <- id[, attr(id, "id_vars"), with = FALSE]
+    id_cols <- attr(id, "id_vars")
+    if ("time_start" %in% colnames(id)) id_cols <- c(id_cols, "time_start") 
+    if ("time_stop" %in% colnames(id)) id_cols <- c(id_cols, "time_stop") 
+    id <- id[, id_cols, with = FALSE]
     by <- colnames(id)
     object <- cbind(object, id)
   } else {

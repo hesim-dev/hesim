@@ -140,7 +140,8 @@ test_that("summarize.tpmatrix() works with ID argument and time intervals" , {
   
   # Flattened
   ps <- summary(p2, id = tpid, probs = .9)
-  expect_equal(colnames(ps), c("strategy_id", "patient_id", "time_id",
+  expect_equal(colnames(ps), c("strategy_id", "patient_id",
+                               "time_id", "time_start", "time_stop",
                                "from", "to", "mean", "sd", "90%"))
   expect_equal(nrow(ps), nrow(x) * 4)
   
