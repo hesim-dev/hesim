@@ -10,10 +10,15 @@ tpmatrix_names(states, prefix = "p_", sep = "_")
 \item{states}{A character vector of the names of health states in the
 transition matrix.}
 
-\item{prefix}{A prefix that precedes the described transitions between states.}
+\item{prefix}{A prefix that precedes the described transitions between states
+used to name a transition. For example, if \code{prefix = "p_"} (and \code{sep = "_"}),
+then a transition between state \code{i} and state \code{j} will be of the form
+\code{"p_states[i]_states[j]"}; similarly, if \code{prefix = ""}, then the same
+transition will be named \code{"states[i]_states[j]"}.}
 
 \item{sep}{A character string to separate the terms representing
-state \code{i} and state \code{j}.}
+state \code{i} and state \code{j}. For instance, if \code{sep = "."}, the resulting name
+will be of the form \code{"states[i].states[j]"}.}
 }
 \value{
 A character vector containing a name for each element of the transition
@@ -25,11 +30,15 @@ names for the health states. This is useful for flattening a transition
 probability matrix (rowwise) into a vector and naming the resulting vector.
 The name of an element of the flattened vector representing a transition from
 the ith state to the jth state is of the form
-\code{paste0(prefix, state_i, sep, state_j)}.
+\code{paste0(prefix, states[i], sep, states[j])}.
 }
 \examples{
 tpmatrix_names(LETTERS[1:4])
 tpmatrix_names(LETTERS[1:4], prefix = "")
 tpmatrix_names(LETTERS[1:4], prefix = "", sep = ".")
 
+}
+\seealso{
+See \code{tpmatrix()}, which uses \code{tpmatrix_names()} to name the columns
+of the returned object.
 }

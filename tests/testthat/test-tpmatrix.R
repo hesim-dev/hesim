@@ -30,6 +30,17 @@ test_that("tpmatrix() works with complement argument" , {
   expect_equal(tpmat1, tpmat3)
 })
 
+test_that("tpmatrix() works with states argument" , {
+  p <- tpmatrix(
+    .5, .5, .5, .5,
+    states = c("s1", "s2"), sep = "."
+  )
+  expect_equal(
+    colnames(p),
+    c("s1.s1", "s1.s2", "s2.s1", "s2.s2")
+  )
+})
+
 test_that("tpmatrix() throws error if complement argument is incorrectly specified" , {
   expect_error(
     tpmatrix(2, complement = data.frame(2)),
@@ -37,6 +48,113 @@ test_that("tpmatrix() throws error if complement argument is incorrectly specifi
   )
 })
 
+test_that("tpmatrix() throws error if it is not a square msatrix" , {
+  expect_error(
+    tpmatrix(1, 2, 3),
+    "tpmatrix() must be a square matrix.",
+    fixed = TRUE
+  )
+})
+
+test_that("tpmatrix() throws error if states has wrong length" , {
+  expect_error(
+    tpmatrix(1, 2, 3, 4, states = "s1"),
+    paste0("The length of 'states' must equal the square root of the number of ",
+           "elements in the transition probability matrix."),
+    fixed = TRUE
+  )
+})
+
+# Summarize transition probability matrix --------------------------------------
+# Transition probability IDs
+h <-  hesim_data(strategies = data.table(strategy_id = 1:2),
+                 patients = data.table(patient_id = 1:3))
+input_data <- expand(h, by = c("strategies", "patients"))
+tpmat_id <- tpmatrix_id(input_data, n_samples = 2) 
+
+# Transition probability matrix
+p_12 <- ifelse(tpmat_id$strategy_id == 1, .6, .7)
+p <- tpmatrix(
+  C, p_12,
+  0, 1
+)
+
+test_that("summarize.tpmatrix() works without unflattening" , {
+  ps <- summary(p)
+  expect_equal(colnames(ps), c("from", "to", "mean", "sd", "2.5%", "97.5%"))
+  expect_equal(nrow(ps), 4)
+  expect_equal(colnames(p), paste0(ps$from, "_", ps$to))
+  expect_equivalent(ps$mean, apply(p, 2, mean))
+})
+
+test_that("summarize.tpmatrix() works with variables probs arguments" , {
+  ps <- summary(p, prob =.5)
+  expect_equal(colnames(ps), c("from", "to", "mean", "sd", "50%"))
+  
+  ps <- summary(p, prob = c(.25, .75, .9))
+  expect_equal(colnames(ps), c("from", "to",  "mean", "sd", "25%", "75%", "90%"))
+})
+
+test_that("summarize.tpmatrix() works with unflattening" , {
+  ps <- summary(p, unflatten = TRUE)
+  expect_equal(colnames(ps), c("mean", "sd", "2.5%", "97.5%"))
+  expect_true(is.matrix(ps$mean[[1]]))
+  states <- attr(p, "states")
+  expect_equal(
+    ps$mean[[1]],
+    matrix(apply(p, 2, mean), nrow = 2, byrow = TRUE,
+           dimnames = list(states, states))
+  )
+})
+
+test_that("summarize.tpmatrix() works with ID argument" , {
+  # Flattened 
+  ps <- summary(p, id = tpmat_id)
+  expect_equal(nrow(input_data) * 4, nrow(ps))
+  expect_equal(colnames(ps), c("strategy_id", "patient_id",
+                               "from", "to", "mean", "sd", "2.5%", "97.5%"))
+  expect_true(all(ps$sd == 0))
+  expect_true(all(ps[strategy_id == 1 & from == "s1" & to == "s2"]$mean == .6))
+  expect_true(all(ps[strategy_id == 2 & from == "s1" & to == "s2"]$mean == .7))
+  
+  # Unflattened
+  ps <- summary(p, id = tpmat_id, unflatten = TRUE)
+  expect_equal(nrow(ps), nrow(input_data))
+  expect_equal(
+    unlist(ps[strategy_id == 1]$mean),
+    rep(c(0.4, 0.0, 0.6, 1.0), times = 3)
+  )
+  expect_equal(
+    unlist(ps[strategy_id == 2]$mean),
+    rep(c(0.3, 0.0, 0.7, 1.0), times = 3)
+  )
+})  
+
+test_that("summarize.tpmatrix() works with ID argument and time intervals" , {
+  x <- expand(h, by = c("strategies", "patients"), times = c(0, 2))
+  tpid <- tpmatrix_id(x, n_samples = 2) 
+  p2 <- tpmatrix(
+    C, ifelse(tpid$strategy_id == 1, .6, .7),
+    0, 1
+  )
+  
+  # Flattened
+  ps <- summary(p2, id = tpid, probs = .9)
+  expect_equal(colnames(ps), c("strategy_id", "patient_id",
+                               "time_id", "time_start", "time_stop",
+                               "from", "to", "mean", "sd", "90%"))
+  expect_equal(nrow(ps), nrow(x) * 4)
+  
+  # Unflattened
+  ps <- summary(p2, id = tpid, unflatten = TRUE)
+  expect_equal(nrow(ps), nrow(x))
+  expect_true(all(unlist(ps$sd) == 0))
+  expect_equal(
+    unlist(ps[strategy_id == 2]$mean),
+    rep(c(0.3, 0.0, 0.7, 1.0), times = 6)
+  )
+})
+  
 # Transition probability matrix IDs---------------------------------------------
 strategies <- data.frame(strategy_id = c(1, 2))
 patients <- data.frame(patient_id = seq(1, 3),
@@ -53,7 +171,7 @@ test_that("tpmatrix_id() returns errror if 'object' is not expanded correctly." 
   object <- expand(hesim_dat, by = c("strategies"))
   expect_error(
     tpmatrix_id(object, 1),
-    paste0("'object' must be either be expanded by 'strategy_id', 'patient_id',",
+    paste0("'object' must be expanded by 'strategy_id', 'patient_id',",
            " and optionally 'time_id'.")
   )
 })

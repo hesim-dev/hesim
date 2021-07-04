@@ -39,6 +39,10 @@ as_array3 <- function(x) {
   y <- aperm(array(c(t(x)),
                    dim = c(n_states, n_states, nrow(x))),
              c(2, 1, 3))
+  if (!is.null(attr(x, "states"))) {
+    states <- attr(x, "states")
+    dimnames(y) <- list(states, states, NULL)
+  }
   return(y)
 }
 
@@ -48,8 +52,12 @@ as_tbl2 <- function(x, output = c("data.table", "data.frame", "matrix", "tpmatri
   output <- match.arg(output)
   n_col <- dim(x)[1] * dim(x)[2]
   y <- matrix(c(aperm(x, c(2, 1, 3))), ncol = n_col, byrow = TRUE)
-  colnames(y) <- tpmatrix_names(states = paste0("s", 1:dim(x)[1]),
-                                prefix = "")
+  if (is.null(colnames(x))) {
+    states <- paste0("s", 1:dim(x)[1])
+  } else{
+    states <- colnames(x)
+  }
+  colnames(y) <- tpmatrix_names(states = states, prefix = "")
   if (output == "data.table") {
     return(as.data.table(y))
   } else if (output == "data.frame") {
@@ -90,13 +98,18 @@ eval_dots <- function(dots, data){
 #' probability matrix (rowwise) into a vector and naming the resulting vector. 
 #' The name of an element of the flattened vector representing a transition from
 #' the ith state to the jth state is of the form 
-#' `paste0(prefix, state_i, sep, state_j)`.
+#' `paste0(prefix, states[i], sep, states[j])`.
 #' 
 #' @param states A character vector of the names of health states in the 
 #' transition matrix.
-#' @param prefix A prefix that precedes the described transitions between states.
+#' @param prefix A prefix that precedes the described transitions between states
+#' used to name a transition. For example, if `prefix = "p_"` (and `sep = "_"`), 
+#' then a transition between state `i` and state `j` will be of the form 
+#' `"p_states[i]_states[j]"`; similarly, if `prefix = ""`, then the same 
+#' transition will be named `"states[i]_states[j]"`. 
 #' @param sep A character string to separate the terms representing
-#' state `i` and state `j`.
+#' state `i` and state `j`. For instance, if `sep = "."`, the resulting name
+#' will be of the form `"states[i].states[j]"`. 
 #' @examples 
 #' tpmatrix_names(LETTERS[1:4])
 #' tpmatrix_names(LETTERS[1:4], prefix = "")
@@ -104,6 +117,9 @@ eval_dots <- function(dots, data){
 #' 
 #' @return A character vector containing a name for each element of the transition
 #' probability matrix encompassing all possible transitions. 
+#' 
+#' @seealso See `tpmatrix()`, which uses `tpmatrix_names()` to name the columns
+#' of the returned object. 
 #' 
 #' @export
 tpmatrix_names <- function(states, prefix = "p_", sep = "_"){
@@ -167,6 +183,7 @@ replace_Qdiag <- function(x, n_states) {
 #' object. These are, in turn, ultimately used to create a [CohortDtstmTrans] object
 #' for simulating health state transitions.
 #' 
+#' @inheritParams tpmatrix_names
 #' @param ... Named values of expressions defining elements of the matrix. Each
 #' element of `...` should either be a vector or a 2-dimensional tabular object 
 #' such as a data frame. See "Details" and the examples below.
@@ -184,9 +201,15 @@ replace_Qdiag <- function(x, n_states) {
 #' specified with the `complement` argument. There can only be one complement 
 #' for each row in a transition probability matrix.
 #' 
+#' The column names are determined by the arguments `states`, `prefix`, and `sep`, 
+#' which are passed to `tpmatrix_names()`. If `states = NULL` (the default),
+#' then the states are named `s1`, ..., `sh` where `h` is the number of health 
+#' states. 
+#' 
 #' @return Returns a `tpmatrix` object that inherits from `data.table`
 #' where each column is an element of the transition probability matrix with
 #' elements ordered rowwise. 
+#' 
 #' 
 #' @examples 
 # Pass vectors
@@ -237,7 +260,8 @@ replace_Qdiag <- function(x, n_states) {
 #' @seealso [define_model()], [define_tparams()], 
 #' [tpmatrix_id()], [tparams_transprobs()], [CohortDtstmTrans()]
 #' @export
-tpmatrix <- function(..., complement = NULL){
+tpmatrix <- function(..., complement = NULL, states = NULL,
+                     prefix = "", sep = "_"){
   # Evaluate
   m_def <- define_tpmatrix(...)
   m <- eval_dots(m_def, as.list(parent.frame()))
@@ -257,23 +281,137 @@ tpmatrix <- function(..., complement = NULL){
 
   # Some checks
   n_states <- sqrt(ncol(m))
+  if (is.null(states)) states <- paste0("s", 1:n_states)
   if (!is_whole_number(n_states)){
     stop("tpmatrix() must be a square matrix.", call. = FALSE)
   }
-  colnames(m) <- tpmatrix_names(states = paste0("s", 1:n_states),
-                                prefix = "")
+  if (length(states) != n_states) {
+    stop(paste0("The length of 'states' must equal the square root of the ",
+                 "number of elements in the transition probability matrix."),
+                call. = FALSE)
+  }
+  
+  # Naming the columns
+  colnames(m) <- tpmatrix_names(states = states, prefix = prefix, sep = sep)
 
   # Replace complement
   replace_C(m, complement)
   
   # Return
   setattr(m, "class", c("tpmatrix", "data.table", "data.frame"))
+  setattr(m, "states", states)
   return(m)
 }
 
+#' Summarize transition probability matrix
+#' 
+#' Summarize a [`tpmatrix`] object storing transition probability matrices. 
+#' Summary statistics are computed for each possible transition. 
+#' 
+#' @inheritParams summary.params
+#' @param object A [`tpmatrix`] object.
+#' @param id A [`tpmatrix_id`] object for which columns contain the ID variables 
+#' for each row in `object`. If not `NULL`, then transition probability matrices
+#' are summarized by the ID variables in `id`. 
+#' @param unflatten If `FALSE`, then each column containing a summary statistic
+#'  is a vector and the generated table contains one row 
+#'  (for each set of ID variables) for each possible transition; if
+#' `TRUE`, then each column stores a list of `matrix` objects containing
+#' transition probability matrices formed by "unflattening" the one-dimensional
+#' vectors. See "Value" below for additional details.
+#' @param ... Additional arguments affecting the summary. Currently unused.
+#' 
+#' @return If `unflatten = "FALSE"` (the default), then a [`data.table`]
+#' is returned with columns for (i) the health state that is being transitioned
+#' from (`from`), (ii) the health state that is being transitioned to (`to`)
+#' (iii) the mean of each parameter across parameter samples (`mean`),
+#' (iv) the standard deviation of the parameter samples (`sd`), and
+#' (v) quantiles of the parameter samples corresponding to the `probs` argument. 
+#' 
+#' If, on the other hand, `unflatten = "TRUE"`, then the parameters are unflattened
+#' to form transition probability matrices; that is, the `mean`, `sd`, and 
+#' quantile columns are (lists of) matrices. 
+#' @examples 
+#' library("data.table")
+#' hesim_dat <-  hesim_data(strategies = data.table(strategy_id = 1:2),
+#'                                 patients = data.table(patient_id = 1:3))
+#' input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+#' 
+#' # Summarize across all rows in "input_data"
+#' p_12 <- ifelse(input_data$strategy_id == 1, .8, .6)
+#' p <- tpmatrix(
+#'   C, p_12,
+#'   0, 1
+#' )
+#' 
+#' ## Summary where each column is a vector
+#' summary(p)
+#' 
+#' ## Summary where each column is a matrix
+#' ps <- summary(p, probs = .5, unflatten = TRUE)
+#' ps
+#' ps$mean
+#' 
+#' # Summarize by ID variables
+#' tpmat_id <- tpmatrix_id(input_data, n_samples = 2) 
+#' p_12 <- ifelse(tpmat_id$strategy_id == 1, .8, .6)
+#' p <- tpmatrix(
+#'   C, p_12,
+#'   0, 1
+#' )
+#' 
+#' ## Summary where each column is a vector
+#' summary(p, id = tpmat_id)
+#'
+#' ## Summary where each column is a matrix
+#' ps <- summary(p, id = tpmat_id, unflatten = TRUE)
+#' ps
+#' ps$mean
 #' @export
-summary.tpmatrix <- function(object, ...) {
+summary.tpmatrix <- function(object, id = NULL, probs = c(.025, .975), 
+                             unflatten = FALSE, ...) {
+  states <- attr(object, "states")
+  n_states <- length(states)
+  n_trans <- ncol(object)
   
+  # Get columns to summarize parameters by
+  if (!is.null(id)) {
+    check_is_class(id, "tpmatrix_id", "tpmatrix_id")
+    id_cols <- attr(id, "id_vars")
+    if ("time_start" %in% colnames(id)) id_cols <- c(id_cols, "time_start") 
+    if ("time_stop" %in% colnames(id)) id_cols <- c(id_cols, "time_stop") 
+    id <- id[, id_cols, with = FALSE]
+    by <- colnames(id)
+    object <- cbind(object, id)
+  } else {
+    by <- NULL
+  }
+  
+  # Summarize the parameters
+  out <- summarize_params(object, probs = probs, by = by)
+  
+  # Add from/to columns
+  n_id <- nrow(out)/n_trans
+  out[, ("from") := rep(rep(states, each = n_states), n_id)]
+  out[, ("to") := rep(rep(states, times = n_states), n_id)]
+  param_index <- which(colnames(out) == "param")
+  setcolorder(out, c(colnames(out)[1:(param_index - 1)],
+                     "from", "to"))
+  out[, ("param") := NULL]
+  
+  # Convert to lists of matrices if specified
+  if (unflatten) {
+    sdcols <- colnames(out)[!colnames(out) %in% c(by, "from", "to")]
+    out <- out[, lapply(.SD, function (z) {
+      list(t(
+        matrix(z, nrow = n_states, dimnames = list(states, states))
+      ))
+    }),
+    .SDcols = sdcols, by = by]
+  }
+  
+  # Return
+  out[, ]
 }
 
 #' Transition probability matrix IDs
@@ -310,7 +448,7 @@ tpmatrix_id <- function(object, n_samples){
   if (!identical(attr(object, "id_vars"), c("strategy_id", "patient_id")) &&
       !identical(attr(object, "id_vars"), c("strategy_id", "patient_id", "time_id"))
   ) {
-    stop(paste0("'object' must be either be expanded by 'strategy_id', 'patient_id', ", 
+    stop(paste0("'object' must be expanded by 'strategy_id', 'patient_id', ", 
                 "and optionally 'time_id'."), 
          call. = FALSE)
   }

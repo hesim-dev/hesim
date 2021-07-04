@@ -29,7 +29,7 @@ vectors are created.}
 \description{
 Update existing variables or create new ones that replace existing values
 with more informative labels as in \code{\link[=factor]{factor()}}. All modifications are performed
-by reference (see \code{\link[data.table:set]{data.table::set()}} for more information about assignment by
+by reference (see \code{\link[data.table:assign]{data.table::set()}} for more information about assignment by
 reference).
 }
 \examples{

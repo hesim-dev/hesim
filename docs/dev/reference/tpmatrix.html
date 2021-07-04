@@ -154,7 +154,7 @@ for simulating health state transitions." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -184,7 +184,7 @@ object. These are, in turn, ultimately used to create a <a href='CohortDtstmTran
 for simulating health state transitions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tpmatrix</span><span class='op'>(</span><span class='va'>...</span>, complement <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tpmatrix</span><span class='op'>(</span><span class='va'>...</span>, complement <span class='op'>=</span> <span class='cn'>NULL</span>, states <span class='op'>=</span> <span class='cn'>NULL</span>, prefix <span class='op'>=</span> <span class='st'>""</span>, sep <span class='op'>=</span> <span class='st'>"_"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,6 +203,25 @@ are complementary (see "Details" below). If a character vector, each element
 should be the name of a column in the tabular object; if a numeric vector,
 each element should be the index of a column in the tabular object.</p></td>
     </tr>
+    <tr>
+      <th>states</th>
+      <td><p>A character vector of the names of health states in the
+transition matrix.</p></td>
+    </tr>
+    <tr>
+      <th>prefix</th>
+      <td><p>A prefix that precedes the described transitions between states
+used to name a transition. For example, if <code>prefix = "p_"</code> (and <code>sep = "_"</code>),
+then a transition between state <code>i</code> and state <code>j</code> will be of the form
+<code>"p_states[i]_states[j]"</code>; similarly, if <code>prefix = ""</code>, then the same
+transition will be named <code>"states[i]_states[j]"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>sep</th>
+      <td><p>A character string to separate the terms representing
+state <code>i</code> and state <code>j</code>. For instance, if <code>sep = "."</code>, the resulting name
+will be of the form <code>"states[i].states[j]"</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -219,6 +238,10 @@ minus the sum of the probabilities of all other elements in a row of a
 transition probability matrix) can be conveniently referred to as <code>C</code> or
 specified with the <code>complement</code> argument. There can only be one complement
 for each row in a transition probability matrix.</p>
+<p>The column names are determined by the arguments <code>states</code>, <code>prefix</code>, and <code>sep</code>,
+which are passed to <code><a href='tpmatrix_names.html'>tpmatrix_names()</a></code>. If <code>states = NULL</code> (the default),
+then the states are named <code>s1</code>, ..., <code>sh</code> where <code>h</code> is the number of health
+states.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code>,

@@ -71,7 +71,7 @@ and patient; if \code{params} contains parameters from a joint model
 row for each treatment strategy, patient, and transition.}
 
 \item{\code{trans_mat}}{A transition matrix describing the states and transitions
-in a multi-state model in the format from the \code{\link[mstate:mstate]{mstate}} package.
+in a multi-state model in the format from the \code{\link[mstate:mstate-package]{mstate}} package.
 See the documentation for the argument \code{"trans"} in \code{\link[mstate:msprep]{mstate::msprep}}.}
 
 \item{\code{start_state}}{A scalar or vector denoting the starting health state.

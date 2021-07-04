@@ -294,8 +294,8 @@ summarize_params.data.table <- function(x, probs, param_name = "param",
   
   # Otherwise use data.table solution
   cols <- cols[!cols %in% by]
-  out <- x[, list(mean = lapply(.SD, mean),
-                  sd = lapply(.SD, stats::sd),
+  out <- x[, list(mean = sapply(.SD, mean),
+                  sd = sapply(.SD, stats::sd),
                   q = lapply(.SD, stats::quantile, probs = probs)),
         .SDcols = cols, by = by]
   

@@ -27,11 +27,11 @@ reference:
       - tpmatrix
       - tpmatrix_id
       - tpmatrix_names
+      - summary.tpmatrix
       - qmatrix.matrix
       - qmatrix.msm
       - expmat
       - as_array3
-      - as.data.table.tparams_transprobs
       - apply_rr
   - title: "Parameters"
     contents:
@@ -42,10 +42,12 @@ reference:
       - params_mlogit_list
       - params_surv
       - params_surv_list
+      - summary.params
       - tparams
       - tparams_mean
       - tparams_transprobs
-      - summary.params
+      - as.data.table.tparams_transprobs
+      - summary.tparams_transprobs
   - title: "Input data"
     contents:
       - hesim_data
