@@ -24,7 +24,7 @@ arguments to pass to \code{\link[=print.data.table]{print.data.table()}}.}
 }
 \description{
 An object of class \code{input_mats} contains input matrices
-for simulating a statistical model. Cons ists of (i) input matrices, \code{X}, and
+for simulating a statistical model. Consists of (i) input matrices, \code{X}, and
 (ii) \link[=id_attributes]{metadata} used to index each matrix in \code{X}.
 
 Once created, an \code{input_mats} object can be converted

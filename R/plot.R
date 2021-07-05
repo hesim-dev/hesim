@@ -1,7 +1,3 @@
-#' @importFrom ggplot2 autoplot
-#' @export
-ggplot2::autoplot
-
 # Utility functions for plotting -----------------------------------------------
 format_dollar <- function(x) {
   paste0("$", formatC(x, format = "d", big.mark = ","))

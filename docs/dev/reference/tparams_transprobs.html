@@ -48,10 +48,12 @@
 
 <meta property="og:title" content="Transition probabilities — tparams_transprobs" />
 <meta property="og:description" content="Create a list containing predicted transition probabilities at discrete times.
-Since the transition probabilities have presumably
-already been predicted based on covariate values, no input data is required for
-simulation. The class can be instantiated from either an array, a data.table,
-a data.frame, or a tpmatrix." />
+Since the transition probabilities have presumably already been predicted
+based on covariate values, no input data is required for
+simulation. The class can be instantiated from either an array,
+a data.table, a data.frame, or a tpmatrix. This is the object in
+hesim used to specify the transition probabilities required to simulate
+Markov chains with the CohortDtstmTrans class." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -178,10 +180,12 @@ a data.frame, or a tpmatrix." />
 
     <div class="ref-description">
     <p>Create a list containing predicted transition probabilities at discrete times.
-Since the transition probabilities have presumably
-already been predicted based on covariate values, no input data is required for
-simulation. The class can be instantiated from either an <code>array</code>, a <code>data.table</code>,
-a <code>data.frame</code>, or a <code><a href='tpmatrix.html'>tpmatrix</a></code>.</p>
+Since the transition probabilities have presumably already been predicted
+based on covariate values, no input data is required for
+simulation. The class can be instantiated from either an <code>array</code>,
+a <code>data.table</code>, a <code>data.frame</code>, or a <code><a href='tpmatrix.html'>tpmatrix</a></code>. This is the object in
+<code>hesim</code> used to specify the transition probabilities required to simulate
+Markov chains with the <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> class.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -243,11 +247,11 @@ patient within a subgroup. Must be the same length as the 3rd dimension of the a
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>tparams_transprobs</code>,
-which is a list containing <code>value</code> and relevant ID attributes. The element <code>value</code> is an
-array of predicted transition probability matrices from the probability
-distribution of the underlying statistical model. Each matrix in
-<code>value</code> is a prediction for a <code>sample</code>, <code>strategy_id</code>,
-<code>patient_id</code>, and optionally <code>time_id</code> combination.</p>
+which is a list containing <code>value</code> and relevant ID attributes. The element
+<code>value</code> is an array of predicted transition probability matrices from the
+probability distribution of the underlying statistical model. Each matrix in
+<code>value</code> is a prediction for a <code>sample</code>, <code>strategy_id</code>, <code>patient_id</code>, and
+optionally <code>time_id</code> combination.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The format of <code>object</code> depends on its class:</p><dl>
@@ -295,7 +299,22 @@ probability matrix:
 cohort discrete time state transition model using <code><a href='define_model.html'>define_model()</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='create_CohortDtstm.html'>create_CohortDtstm()</a></code>, <code><a href='tpmatrix.html'>tpmatrix()</a></code></p></div>
+    <div class='dont-index'><p>A <code>tparams_transprobs</code> object is used to store the "parameters" of
+the transition component of a cohort discrete time state transition
+model (cDTSTM). You can create such an object with <code>CohortDtstmTran$new()</code>.</p>
+<p><code><a href='tpmatrix.html'>tpmatrix()</a></code> and <code><a href='tpmatrix_id.html'>tpmatrix_id()</a></code> provide a convenient way to construct a
+<code>tparams_transprobs</code> object in a flexible way. <code><a href='define_model.html'>define_model()</a></code> is, in turn,
+a convenient way to construct a <code><a href='tpmatrix.html'>tpmatrix</a></code> object using mathematical
+expressions; in this case, an entire cDTSTM can be instantiated from a model
+definition using <code><a href='create_CohortDtstm.html'>create_CohortDtstm.model_def()</a></code>. Detailed examples
+are provided in <code><a href='../articles/markov-cohort.html'>vignette("markov-cohort")</a></code> and
+<code><a href='../articles/markov-inhomogeneous-cohort.html'>vignette("markov-inhomogeneous-cohort")</a></code></p>
+<p>The output of a <code>tparams_transprobs</code> object is rather verbose. It can be
+helpful to check the output by converting it to a <code>data.table</code> (containing
+both the ID variables and flattened transition probability matrices)
+with <code><a href='as.data.table.tparams_transprobs.html'>as.data.table.tparams_transprobs()</a></code>. Transition probabilities can
+also be summarized (across parameter samples) using
+<code><a href='summary.tparams_transprobs.html'>summary.tparams_transprobs()</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>,
@@ -312,14 +331,163 @@ cohort discrete time state transition model using <code><a href='define_model.ht
   <span class='fl'>0</span>, <span class='fl'>1</span>
 <span class='op'>)</span>
 <span class='va'>tprobs</span> <span class='op'>&lt;-</span> <span class='fu'>tparams_transprobs</span><span class='op'>(</span><span class='va'>tpmat</span>, <span class='va'>tpmat_id</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tprobs</span>, unflatten <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    strategy_id patient_id time_id                                    mean
-#&gt; 1:           1          1       1 0.3710736,0.0000000,0.6289264,1.0000000
-#&gt; 2:           1          2       1     0.343795,0.000000,0.656205,1.000000
-#&gt; 3:           1          3       1 0.3333179,0.0000000,0.6666821,1.0000000
-#&gt; 4:           2          1       1 0.3035135,0.0000000,0.6964865,1.0000000
-#&gt; 5:           2          2       1             0.3059,0.0000,0.6941,1.0000
-#&gt; 6:           2          3       1 0.3179333,0.0000000,0.6820667,1.0000000
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>tprobs</span><span class='op'>)</span> <span class='co'># Names of list elements</span>
+</div><div class='output co'>#&gt;  [1] "value"          "strategy_id"    "n_strategies"   "patient_id"    
+#&gt;  [5] "n_patients"     "time_id"        "time_intervals" "n_times"       
+#&gt;  [9] "sample"         "n_samples"      "grp_id"        </div><div class='input'>
+<span class='co'># Convert to data.table</span>
+<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id time_id time_start time_stop    prob_1
+#&gt;  1:      1           1          1       1          0       Inf 0.3919250
+#&gt;  2:      1           1          2       1          0       Inf 0.3165667
+#&gt;  3:      1           1          3       1          0       Inf 0.3399239
+#&gt;  4:      1           2          1       1          0       Inf 0.3342792
+#&gt;  5:      1           2          2       1          0       Inf 0.3492601
+#&gt;  6:      1           2          3       1          0       Inf 0.3033607
+#&gt;  7:      2           1          1       1          0       Inf 0.3502223
+#&gt;  8:      2           1          2       1          0       Inf 0.3710233
+#&gt;  9:      2           1          3       1          0       Inf 0.3267118
+#&gt; 10:      2           2          1       1          0       Inf 0.2727478
+#&gt; 11:      2           2          2       1          0       Inf 0.2625399
+#&gt; 12:      2           2          3       1          0       Inf 0.3325059
+#&gt;        prob_2 prob_3 prob_4
+#&gt;  1: 0.6080750      0      1
+#&gt;  2: 0.6834333      0      1
+#&gt;  3: 0.6600761      0      1
+#&gt;  4: 0.6657208      0      1
+#&gt;  5: 0.6507399      0      1
+#&gt;  6: 0.6966393      0      1
+#&gt;  7: 0.6497777      0      1
+#&gt;  8: 0.6289767      0      1
+#&gt;  9: 0.6732882      0      1
+#&gt; 10: 0.7272522      0      1
+#&gt; 11: 0.7374601      0      1
+#&gt; 12: 0.6674941      0      1</div><div class='input'>
+<span class='co'># Print output to console</span>
+<span class='va'>tprobs</span>
+</div><div class='output co'>#&gt; A "tparams_transprobs" object 
+#&gt; 
+#&gt; Summary of transition probabilities:
+#&gt;     strategy_id patient_id time_id time_start time_stop from to      mean
+#&gt;  1:           1          1       1          0       Inf   s1 s1 0.3710736
+#&gt;  2:           1          1       1          0       Inf   s1 s2 0.6289264
+#&gt;  3:           1          1       1          0       Inf   s2 s1 0.0000000
+#&gt;  4:           1          1       1          0       Inf   s2 s2 1.0000000
+#&gt;  5:           1          2       1          0       Inf   s1 s1 0.3437950
+#&gt;  6:           1          2       1          0       Inf   s1 s2 0.6562050
+#&gt;  7:           1          2       1          0       Inf   s2 s1 0.0000000
+#&gt;  8:           1          2       1          0       Inf   s2 s2 1.0000000
+#&gt;  9:           1          3       1          0       Inf   s1 s1 0.3333179
+#&gt; 10:           1          3       1          0       Inf   s1 s2 0.6666821
+#&gt; 11:           1          3       1          0       Inf   s2 s1 0.0000000
+#&gt; 12:           1          3       1          0       Inf   s2 s2 1.0000000
+#&gt; 13:           2          1       1          0       Inf   s1 s1 0.3035135
+#&gt; 14:           2          1       1          0       Inf   s1 s2 0.6964865
+#&gt; 15:           2          1       1          0       Inf   s2 s1 0.0000000
+#&gt; 16:           2          1       1          0       Inf   s2 s2 1.0000000
+#&gt; 17:           2          2       1          0       Inf   s1 s1 0.3059000
+#&gt; 18:           2          2       1          0       Inf   s1 s2 0.6941000
+#&gt; 19:           2          2       1          0       Inf   s2 s1 0.0000000
+#&gt; 20:           2          2       1          0       Inf   s2 s2 1.0000000
+#&gt; 21:           2          3       1          0       Inf   s1 s1 0.3179333
+#&gt; 22:           2          3       1          0       Inf   s1 s2 0.6820667
+#&gt; 23:           2          3       1          0       Inf   s2 s1 0.0000000
+#&gt; 24:           2          3       1          0       Inf   s2 s2 1.0000000
+#&gt;     strategy_id patient_id time_id time_start time_stop from to      mean
+#&gt;              sd      2.5%     97.5%
+#&gt;  1: 0.029488280 0.3512648 0.3908824
+#&gt;  2: 0.029488280 0.6091176 0.6487352
+#&gt;  3: 0.000000000 0.0000000 0.0000000
+#&gt;  4: 0.000000000 1.0000000 1.0000000
+#&gt;  5: 0.038506616 0.3179281 0.3696619
+#&gt;  6: 0.038506616 0.6303381 0.6820719
+#&gt;  7: 0.000000000 0.0000000 0.0000000
+#&gt;  8: 0.000000000 1.0000000 1.0000000
+#&gt;  9: 0.009342373 0.3270421 0.3395936
+#&gt; 10: 0.009342373 0.6604064 0.6729579
+#&gt; 11: 0.000000000 0.0000000 0.0000000
+#&gt; 12: 0.000000000 1.0000000 1.0000000
+#&gt; 13: 0.043509204 0.2742861 0.3327409
+#&gt; 14: 0.043509204 0.6672591 0.7257139
+#&gt; 15: 0.000000000 0.0000000 0.0000000
+#&gt; 16: 0.000000000 1.0000000 1.0000000
+#&gt; 17: 0.061320386 0.2647079 0.3470921
+#&gt; 18: 0.061320386 0.6529079 0.7352921
+#&gt; 19: 0.000000000 0.0000000 0.0000000
+#&gt; 20: 0.000000000 1.0000000 1.0000000
+#&gt; 21: 0.020608830 0.3040893 0.3317773
+#&gt; 22: 0.020608830 0.6682227 0.6959107
+#&gt; 23: 0.000000000 0.0000000 0.0000000
+#&gt; 24: 0.000000000 1.0000000 1.0000000
+#&gt;              sd      2.5%     97.5%</div><div class='input'>
+<span class='co'># Summary methods</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tprobs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     strategy_id patient_id time_id time_start time_stop from to      mean
+#&gt;  1:           1          1       1          0       Inf   s1 s1 0.3710736
+#&gt;  2:           1          1       1          0       Inf   s1 s2 0.6289264
+#&gt;  3:           1          1       1          0       Inf   s2 s1 0.0000000
+#&gt;  4:           1          1       1          0       Inf   s2 s2 1.0000000
+#&gt;  5:           1          2       1          0       Inf   s1 s1 0.3437950
+#&gt;  6:           1          2       1          0       Inf   s1 s2 0.6562050
+#&gt;  7:           1          2       1          0       Inf   s2 s1 0.0000000
+#&gt;  8:           1          2       1          0       Inf   s2 s2 1.0000000
+#&gt;  9:           1          3       1          0       Inf   s1 s1 0.3333179
+#&gt; 10:           1          3       1          0       Inf   s1 s2 0.6666821
+#&gt; 11:           1          3       1          0       Inf   s2 s1 0.0000000
+#&gt; 12:           1          3       1          0       Inf   s2 s2 1.0000000
+#&gt; 13:           2          1       1          0       Inf   s1 s1 0.3035135
+#&gt; 14:           2          1       1          0       Inf   s1 s2 0.6964865
+#&gt; 15:           2          1       1          0       Inf   s2 s1 0.0000000
+#&gt; 16:           2          1       1          0       Inf   s2 s2 1.0000000
+#&gt; 17:           2          2       1          0       Inf   s1 s1 0.3059000
+#&gt; 18:           2          2       1          0       Inf   s1 s2 0.6941000
+#&gt; 19:           2          2       1          0       Inf   s2 s1 0.0000000
+#&gt; 20:           2          2       1          0       Inf   s2 s2 1.0000000
+#&gt; 21:           2          3       1          0       Inf   s1 s1 0.3179333
+#&gt; 22:           2          3       1          0       Inf   s1 s2 0.6820667
+#&gt; 23:           2          3       1          0       Inf   s2 s1 0.0000000
+#&gt; 24:           2          3       1          0       Inf   s2 s2 1.0000000
+#&gt;     strategy_id patient_id time_id time_start time_stop from to      mean
+#&gt;              sd      2.5%     97.5%
+#&gt;  1: 0.029488280 0.3512648 0.3908824
+#&gt;  2: 0.029488280 0.6091176 0.6487352
+#&gt;  3: 0.000000000 0.0000000 0.0000000
+#&gt;  4: 0.000000000 1.0000000 1.0000000
+#&gt;  5: 0.038506616 0.3179281 0.3696619
+#&gt;  6: 0.038506616 0.6303381 0.6820719
+#&gt;  7: 0.000000000 0.0000000 0.0000000
+#&gt;  8: 0.000000000 1.0000000 1.0000000
+#&gt;  9: 0.009342373 0.3270421 0.3395936
+#&gt; 10: 0.009342373 0.6604064 0.6729579
+#&gt; 11: 0.000000000 0.0000000 0.0000000
+#&gt; 12: 0.000000000 1.0000000 1.0000000
+#&gt; 13: 0.043509204 0.2742861 0.3327409
+#&gt; 14: 0.043509204 0.6672591 0.7257139
+#&gt; 15: 0.000000000 0.0000000 0.0000000
+#&gt; 16: 0.000000000 1.0000000 1.0000000
+#&gt; 17: 0.061320386 0.2647079 0.3470921
+#&gt; 18: 0.061320386 0.6529079 0.7352921
+#&gt; 19: 0.000000000 0.0000000 0.0000000
+#&gt; 20: 0.000000000 1.0000000 1.0000000
+#&gt; 21: 0.020608830 0.3040893 0.3317773
+#&gt; 22: 0.020608830 0.6682227 0.6959107
+#&gt; 23: 0.000000000 0.0000000 0.0000000
+#&gt; 24: 0.000000000 1.0000000 1.0000000
+#&gt;              sd      2.5%     97.5%</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tprobs</span>, unflatten <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    strategy_id patient_id time_id time_start time_stop
+#&gt; 1:           1          1       1          0       Inf
+#&gt; 2:           1          2       1          0       Inf
+#&gt; 3:           1          3       1          0       Inf
+#&gt; 4:           2          1       1          0       Inf
+#&gt; 5:           2          2       1          0       Inf
+#&gt; 6:           2          3       1          0       Inf
+#&gt;                                       mean
+#&gt; 1: 0.3710736,0.0000000,0.6289264,1.0000000
+#&gt; 2:     0.343795,0.000000,0.656205,1.000000
+#&gt; 3: 0.3333179,0.0000000,0.6666821,1.0000000
+#&gt; 4: 0.3035135,0.0000000,0.6964865,1.0000000
+#&gt; 5:             0.3059,0.0000,0.6941,1.0000
+#&gt; 6: 0.3179333,0.0000000,0.6820667,1.0000000
 #&gt;                                                 sd
 #&gt; 1:     0.02948828,0.00000000,0.02948828,0.00000000
 #&gt; 2:     0.03850662,0.00000000,0.03850662,0.00000000
@@ -340,59 +508,7 @@ cohort discrete time state transition model using <code><a href='define_model.ht
 #&gt; 3: 0.3395936,0.0000000,0.6729579,1.0000000
 #&gt; 4: 0.3327409,0.0000000,0.7257139,1.0000000
 #&gt; 5: 0.3470921,0.0000000,0.7352921,1.0000000
-#&gt; 6: 0.3317773,0.0000000,0.6959107,1.0000000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tprobs</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     strategy_id patient_id time_id from to      mean          sd      2.5%
-#&gt;  1:           1          1       1   s1 s1 0.3710736 0.029488280 0.3512648
-#&gt;  2:           1          1       1   s1 s2 0.6289264 0.029488280 0.6091176
-#&gt;  3:           1          1       1   s2 s1 0.0000000 0.000000000 0.0000000
-#&gt;  4:           1          1       1   s2 s2 1.0000000 0.000000000 1.0000000
-#&gt;  5:           1          2       1   s1 s1 0.3437950 0.038506616 0.3179281
-#&gt;  6:           1          2       1   s1 s2 0.6562050 0.038506616 0.6303381
-#&gt;  7:           1          2       1   s2 s1 0.0000000 0.000000000 0.0000000
-#&gt;  8:           1          2       1   s2 s2 1.0000000 0.000000000 1.0000000
-#&gt;  9:           1          3       1   s1 s1 0.3333179 0.009342373 0.3270421
-#&gt; 10:           1          3       1   s1 s2 0.6666821 0.009342373 0.6604064
-#&gt; 11:           1          3       1   s2 s1 0.0000000 0.000000000 0.0000000
-#&gt; 12:           1          3       1   s2 s2 1.0000000 0.000000000 1.0000000
-#&gt; 13:           2          1       1   s1 s1 0.3035135 0.043509204 0.2742861
-#&gt; 14:           2          1       1   s1 s2 0.6964865 0.043509204 0.6672591
-#&gt; 15:           2          1       1   s2 s1 0.0000000 0.000000000 0.0000000
-#&gt; 16:           2          1       1   s2 s2 1.0000000 0.000000000 1.0000000
-#&gt; 17:           2          2       1   s1 s1 0.3059000 0.061320386 0.2647079
-#&gt; 18:           2          2       1   s1 s2 0.6941000 0.061320386 0.6529079
-#&gt; 19:           2          2       1   s2 s1 0.0000000 0.000000000 0.0000000
-#&gt; 20:           2          2       1   s2 s2 1.0000000 0.000000000 1.0000000
-#&gt; 21:           2          3       1   s1 s1 0.3179333 0.020608830 0.3040893
-#&gt; 22:           2          3       1   s1 s2 0.6820667 0.020608830 0.6682227
-#&gt; 23:           2          3       1   s2 s1 0.0000000 0.000000000 0.0000000
-#&gt; 24:           2          3       1   s2 s2 1.0000000 0.000000000 1.0000000
-#&gt;     strategy_id patient_id time_id from to      mean          sd      2.5%
-#&gt;         97.5%
-#&gt;  1: 0.3908824
-#&gt;  2: 0.6487352
-#&gt;  3: 0.0000000
-#&gt;  4: 1.0000000
-#&gt;  5: 0.3696619
-#&gt;  6: 0.6820719
-#&gt;  7: 0.0000000
-#&gt;  8: 1.0000000
-#&gt;  9: 0.3395936
-#&gt; 10: 0.6729579
-#&gt; 11: 0.0000000
-#&gt; 12: 1.0000000
-#&gt; 13: 0.3327409
-#&gt; 14: 0.7257139
-#&gt; 15: 0.0000000
-#&gt; 16: 1.0000000
-#&gt; 17: 0.3470921
-#&gt; 18: 0.7352921
-#&gt; 19: 0.0000000
-#&gt; 20: 1.0000000
-#&gt; 21: 0.3317773
-#&gt; 22: 0.6959107
-#&gt; 23: 0.0000000
-#&gt; 24: 1.0000000
-#&gt;         97.5%</div></pre>
+#&gt; 6: 0.3317773,0.0000000,0.6959107,1.0000000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

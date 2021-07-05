@@ -3,7 +3,7 @@
 #' 
 #' @description 
 #' An object of class `input_mats` contains input matrices
-#' for simulating a statistical model. Cons ists of (i) input matrices, `X`, and 
+#' for simulating a statistical model. Consists of (i) input matrices, `X`, and 
 #' (ii) [metadata][id_attributes()] used to index each matrix in `X`. 
 #' 
 #' Once created, an `input_mats` object can be converted 
@@ -152,6 +152,7 @@ print.input_mats <- function(x, ...) {
     cat("Time intervals:\n")
     print(x$time_intervals)
   }
+  invisible(x)
 }
 
 # Helper functions to create input matrices ------------------------------------

@@ -17,18 +17,9 @@ are complementary (see "Details" below). If a character vector, each element
 should be the name of a column in the tabular object; if a numeric vector,
 each element should be the index of a column in the tabular object.}
 
-\item{states}{A character vector of the names of health states in the
-transition matrix.}
-
-\item{prefix}{A prefix that precedes the described transitions between states
-used to name a transition. For example, if \code{prefix = "p_"} (and \code{sep = "_"}),
-then a transition between state \code{i} and state \code{j} will be of the form
-\code{"p_states[i]_states[j]"}; similarly, if \code{prefix = ""}, then the same
-transition will be named \code{"states[i]_states[j]"}.}
-
-\item{sep}{A character string to separate the terms representing
-state \code{i} and state \code{j}. For instance, if \code{sep = "."}, the resulting name
-will be of the form \code{"states[i].states[j]"}.}
+\item{states, prefix, sep}{Arguments passed to \code{\link[=tpmatrix_names]{tpmatrix_names()}} for naming
+the columns. If \code{states = NULL} (the default), then the states are named
+\code{s1}, ..., \code{sh} where \code{h} is the number of health states.}
 }
 \value{
 Returns a \code{tpmatrix} object that inherits from \code{data.table}
@@ -50,11 +41,6 @@ minus the sum of the probabilities of all other elements in a row of a
 transition probability matrix) can be conveniently referred to as \code{C} or
 specified with the \code{complement} argument. There can only be one complement
 for each row in a transition probability matrix.
-
-The column names are determined by the arguments \code{states}, \code{prefix}, and \code{sep},
-which are passed to \code{tpmatrix_names()}. If \code{states = NULL} (the default),
-then the states are named \code{s1}, ..., \code{sh} where \code{h} is the number of health
-states.
 }
 \examples{
 p_12 <- c(.7, .6)
@@ -100,6 +86,10 @@ tpmatrix(
 pmat <- data.frame(s1_s1 = 0, s1_s2 = .5, s2_s1 = .3, s2_s2 = 0)
 tpmatrix(pmat, complement = c("s1_s1", "s2_s2"))
 tpmatrix(pmat, complement = c(1, 4)) # Can also pass integers
+
+# Can control column names
+tpmatrix(pmat, complement = c(1, 4),
+         states = c("state1", "state2"), sep = ".")
 
 }
 \seealso{

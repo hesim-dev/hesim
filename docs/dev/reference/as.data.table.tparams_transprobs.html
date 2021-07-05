@@ -152,7 +152,7 @@ debugging." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -170,7 +170,7 @@ debugging." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Coerce to <code>data.table</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/as.data.table.R'><code>R/as.data.table.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/tparams_transprobs.R'><code>R/tparams_transprobs.R</code></a></small>
     <div class="hidden name"><code>as.data.table.tparams_transprobs.Rd</code></div>
     </div>
 
@@ -181,7 +181,7 @@ debugging.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tparams_transprobs</span>
-<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
+<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, prefix <span class='op'>=</span> <span class='st'>"prob_"</span>, sep <span class='op'>=</span> <span class='st'>"_"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,6 +189,18 @@ debugging.</p>
     <tr>
       <th>x</th>
       <td><p>A <a href='tparams_transprobs.html'>tparams_transprobs</a> object.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently unused.</p></td>
+    </tr>
+    <tr>
+      <th>prefix, sep</th>
+      <td><p>Arguments passed to <code><a href='tpmatrix_names.html'>tpmatrix_names()</a></code> for naming
+the transition probability columns. The <code>states</code> argument is based on
+the column names (i.e., names of the second dimension) of the <code>$value</code>
+element of <code>x</code>; if <code>NULL</code>, then states are named <code>s1</code>, ..., <code>sh</code> where h is
+the number of states.</p></td>
     </tr>
     </table>
 
@@ -199,6 +211,101 @@ debugging.</p>
 
     <div class='dont-index'><p><a href='tparams_transprobs.html'>tparams_transprobs</a></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Create tparams_transprobs object</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>,
+                        patients <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>input_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"strategies"</span>, <span class='st'>"patients"</span><span class='op'>)</span><span class='op'>)</span>    
+<span class='va'>tpmat_id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tpmatrix_id.html'>tpmatrix_id</a></span><span class='op'>(</span><span class='va'>input_data</span>, n_samples <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>      
+<span class='va'>p_12</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>tpmat_id</span><span class='op'>)</span>, <span class='fl'>.6</span>, <span class='fl'>.7</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fl'>.05</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>tpmat_id</span><span class='op'>$</span><span class='va'>strategy_id</span> <span class='op'>==</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>tpmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tpmatrix.html'>tpmatrix</a></span><span class='op'>(</span>
+  <span class='va'>C</span>, <span class='va'>p_12</span>,
+  <span class='fl'>0</span>, <span class='fl'>1</span>
+<span class='op'>)</span>
+<span class='va'>tprobs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tparams_transprobs.html'>tparams_transprobs</a></span><span class='op'>(</span><span class='va'>tpmat</span>, <span class='va'>tpmat_id</span><span class='op'>)</span>
+
+<span class='co'># Convert to data.table</span>
+<span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id time_id time_start time_stop prob_s1_s1
+#&gt;  1:      1           1          1       1          0       Inf  0.3919250
+#&gt;  2:      1           1          2       1          0       Inf  0.3165667
+#&gt;  3:      1           1          3       1          0       Inf  0.3399239
+#&gt;  4:      1           2          1       1          0       Inf  0.3342792
+#&gt;  5:      1           2          2       1          0       Inf  0.3492601
+#&gt;  6:      1           2          3       1          0       Inf  0.3033607
+#&gt;  7:      2           1          1       1          0       Inf  0.3502223
+#&gt;  8:      2           1          2       1          0       Inf  0.3710233
+#&gt;  9:      2           1          3       1          0       Inf  0.3267118
+#&gt; 10:      2           2          1       1          0       Inf  0.2727478
+#&gt; 11:      2           2          2       1          0       Inf  0.2625399
+#&gt; 12:      2           2          3       1          0       Inf  0.3325059
+#&gt;     prob_s1_s2 prob_s2_s1 prob_s2_s2
+#&gt;  1:  0.6080750          0          1
+#&gt;  2:  0.6834333          0          1
+#&gt;  3:  0.6600761          0          1
+#&gt;  4:  0.6657208          0          1
+#&gt;  5:  0.6507399          0          1
+#&gt;  6:  0.6966393          0          1
+#&gt;  7:  0.6497777          0          1
+#&gt;  8:  0.6289767          0          1
+#&gt;  9:  0.6732882          0          1
+#&gt; 10:  0.7272522          0          1
+#&gt; 11:  0.7374601          0          1
+#&gt; 12:  0.6674941          0          1</div><div class='input'><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span>, prefix <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id time_id time_start time_stop     s1_s1
+#&gt;  1:      1           1          1       1          0       Inf 0.3919250
+#&gt;  2:      1           1          2       1          0       Inf 0.3165667
+#&gt;  3:      1           1          3       1          0       Inf 0.3399239
+#&gt;  4:      1           2          1       1          0       Inf 0.3342792
+#&gt;  5:      1           2          2       1          0       Inf 0.3492601
+#&gt;  6:      1           2          3       1          0       Inf 0.3033607
+#&gt;  7:      2           1          1       1          0       Inf 0.3502223
+#&gt;  8:      2           1          2       1          0       Inf 0.3710233
+#&gt;  9:      2           1          3       1          0       Inf 0.3267118
+#&gt; 10:      2           2          1       1          0       Inf 0.2727478
+#&gt; 11:      2           2          2       1          0       Inf 0.2625399
+#&gt; 12:      2           2          3       1          0       Inf 0.3325059
+#&gt;         s1_s2 s2_s1 s2_s2
+#&gt;  1: 0.6080750     0     1
+#&gt;  2: 0.6834333     0     1
+#&gt;  3: 0.6600761     0     1
+#&gt;  4: 0.6657208     0     1
+#&gt;  5: 0.6507399     0     1
+#&gt;  6: 0.6966393     0     1
+#&gt;  7: 0.6497777     0     1
+#&gt;  8: 0.6289767     0     1
+#&gt;  9: 0.6732882     0     1
+#&gt; 10: 0.7272522     0     1
+#&gt; 11: 0.7374601     0     1
+#&gt; 12: 0.6674941     0     1</div><div class='input'><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span>, prefix <span class='op'>=</span> <span class='st'>""</span>, sep <span class='op'>=</span> <span class='st'>"."</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id time_id time_start time_stop     s1.s1
+#&gt;  1:      1           1          1       1          0       Inf 0.3919250
+#&gt;  2:      1           1          2       1          0       Inf 0.3165667
+#&gt;  3:      1           1          3       1          0       Inf 0.3399239
+#&gt;  4:      1           2          1       1          0       Inf 0.3342792
+#&gt;  5:      1           2          2       1          0       Inf 0.3492601
+#&gt;  6:      1           2          3       1          0       Inf 0.3033607
+#&gt;  7:      2           1          1       1          0       Inf 0.3502223
+#&gt;  8:      2           1          2       1          0       Inf 0.3710233
+#&gt;  9:      2           1          3       1          0       Inf 0.3267118
+#&gt; 10:      2           2          1       1          0       Inf 0.2727478
+#&gt; 11:      2           2          2       1          0       Inf 0.2625399
+#&gt; 12:      2           2          3       1          0       Inf 0.3325059
+#&gt;         s1.s2 s2.s1 s2.s2
+#&gt;  1: 0.6080750     0     1
+#&gt;  2: 0.6834333     0     1
+#&gt;  3: 0.6600761     0     1
+#&gt;  4: 0.6657208     0     1
+#&gt;  5: 0.6507399     0     1
+#&gt;  6: 0.6966393     0     1
+#&gt;  7: 0.6497777     0     1
+#&gt;  8: 0.6289767     0     1
+#&gt;  9: 0.6732882     0     1
+#&gt; 10: 0.7272522     0     1
+#&gt; 11: 0.7374601     0     1
+#&gt; 12: 0.6674941     0     1</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

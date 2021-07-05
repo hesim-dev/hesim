@@ -46,18 +46,20 @@ patient within a subgroup. Must be the same length as the 3rd dimension of the a
 }
 \value{
 An object of class \code{tparams_transprobs},
-which is a list containing \code{value} and relevant ID attributes. The element \code{value} is an
-array of predicted transition probability matrices from the probability
-distribution of the underlying statistical model. Each matrix in
-\code{value} is a prediction for a \code{sample}, \code{strategy_id},
-\code{patient_id}, and optionally \code{time_id} combination.
+which is a list containing \code{value} and relevant ID attributes. The element
+\code{value} is an array of predicted transition probability matrices from the
+probability distribution of the underlying statistical model. Each matrix in
+\code{value} is a prediction for a \code{sample}, \code{strategy_id}, \code{patient_id}, and
+optionally \code{time_id} combination.
 }
 \description{
 Create a list containing predicted transition probabilities at discrete times.
-Since the transition probabilities have presumably
-already been predicted based on covariate values, no input data is required for
-simulation. The class can be instantiated from either an \code{array}, a \code{data.table},
-a \code{data.frame}, or a \code{\link{tpmatrix}}.
+Since the transition probabilities have presumably already been predicted
+based on covariate values, no input data is required for
+simulation. The class can be instantiated from either an \code{array},
+a \code{data.table}, a \code{data.frame}, or a \code{\link{tpmatrix}}. This is the object in
+\code{hesim} used to specify the transition probabilities required to simulate
+Markov chains with the \code{\link{CohortDtstmTrans}} class.
 }
 \details{
 The format of \code{object} depends on its class:
@@ -123,9 +125,35 @@ tpmat <- tpmatrix(
   0, 1
 )
 tprobs <- tparams_transprobs(tpmat, tpmat_id)
-summary(tprobs, unflatten = TRUE)
+names(tprobs) # Names of list elements
+
+# Convert to data.table
+as.data.table(tprobs)
+
+# Print output to console
+tprobs
+
+# Summary methods
 summary(tprobs)
+summary(tprobs, unflatten = TRUE)
 }
 \seealso{
-\code{\link[=define_model]{define_model()}}, \code{\link[=create_CohortDtstm]{create_CohortDtstm()}}, \code{\link[=tpmatrix]{tpmatrix()}}
+A \code{tparams_transprobs} object is used to store the "parameters" of
+the transition component of a cohort discrete time state transition
+model (cDTSTM). You can create such an object with \code{CohortDtstmTran$new()}.
+
+\code{\link[=tpmatrix]{tpmatrix()}} and \code{\link[=tpmatrix_id]{tpmatrix_id()}} provide a convenient way to construct a
+\code{tparams_transprobs} object in a flexible way. \code{\link[=define_model]{define_model()}} is, in turn,
+a convenient way to construct a \code{\link{tpmatrix}} object using mathematical
+expressions; in this case, an entire cDTSTM can be instantiated from a model
+definition using \code{\link[=create_CohortDtstm.model_def]{create_CohortDtstm.model_def()}}. Detailed examples
+are provided in \code{vignette("markov-cohort")} and
+\code{vignette("markov-inhomogeneous-cohort")}
+
+The output of a \code{tparams_transprobs} object is rather verbose. It can be
+helpful to check the output by converting it to a \code{data.table} (containing
+both the ID variables and flattened transition probability matrices)
+with \code{\link[=as.data.table.tparams_transprobs]{as.data.table.tparams_transprobs()}}. Transition probabilities can
+also be summarized (across parameter samples) using
+\code{\link[=summary.tparams_transprobs]{summary.tparams_transprobs()}}.
 }
