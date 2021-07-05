@@ -12,5 +12,14 @@ tpmat <- tpmatrix(
   0, 1
 )
 tprobs <- tparams_transprobs(tpmat, tpmat_id)
-summary(tprobs, unflatten = TRUE)
+names(tprobs) # Names of list elements
+
+# Convert to data.table
+as.data.table(tprobs)
+
+# Print output to console
+tprobs
+
+# Summary methods
 summary(tprobs)
+summary(tprobs, unflatten = TRUE)

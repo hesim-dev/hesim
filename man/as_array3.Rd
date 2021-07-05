@@ -7,7 +7,12 @@
 \usage{
 as_array3(x)
 
-as_tbl2(x, output = c("data.table", "data.frame", "matrix", "tpmatrix"))
+as_tbl2(
+  x,
+  output = c("data.table", "data.frame", "matrix", "tpmatrix"),
+  prefix = "",
+  sep = "_"
+)
 }
 \arguments{
 \item{x}{For \code{as_array3()} a 2-dimensional tabular object where each row stores a flattened
@@ -17,6 +22,12 @@ where each slice is a square matrix.}
 
 \item{output}{The class of the object returned by the function. Either
 a \code{data.table}, \code{data.frame}, \code{matrix}, or \code{\link{tpmatrix}}.}
+
+\item{prefix, sep}{Arguments passed to \code{\link[=tpmatrix_names]{tpmatrix_names()}} for naming
+the transition probability columns. The \code{states} argument is based on
+the column names (i.e., names of the second dimension) of array;
+if \code{NULL}, then states are named \code{s1}, ..., \code{sh} where h is
+the number of states.}
 }
 \value{
 For \code{as_array3()} a 3-dimensional array of square matrices;
@@ -39,6 +50,7 @@ pmat
 as_array3(pmat)
 as_array3(as.matrix(pmat))
 as_tbl2(as_array3(pmat))
+as_tbl2(as_array3(pmat), prefix = "p_", sep = ".")
 }
 \seealso{
 \code{\link{tpmatrix}}

@@ -25,6 +25,7 @@
 #' as_array3(pmat)
 #' as_array3(as.matrix(pmat))
 #' as_tbl2(as_array3(pmat))
+#' as_tbl2(as_array3(pmat), prefix = "p_", sep = ".")
 #' @return For `as_array3()` a 3-dimensional array of square matrices; 
 #' for `as_tbl2()` a 2-dimensional tabular object as specified by `output`.
 #' 
@@ -47,8 +48,14 @@ as_array3 <- function(x) {
 }
 
 #' @name as_array3
+#' @param prefix,sep Arguments passed to [tpmatrix_names()] for naming
+#' the transition probability columns. The `states` argument is based on
+#' the column names (i.e., names of the second dimension) of array; 
+#' if `NULL`, then states are named `s1`, ..., `sh` where h is 
+#' the number of states.
 #' @export
-as_tbl2 <- function(x, output = c("data.table", "data.frame", "matrix", "tpmatrix")) {
+as_tbl2 <- function(x, output = c("data.table", "data.frame", "matrix", "tpmatrix"),
+                    prefix = "", sep = "_") {
   output <- match.arg(output)
   n_col <- dim(x)[1] * dim(x)[2]
   y <- matrix(c(aperm(x, c(2, 1, 3))), ncol = n_col, byrow = TRUE)
@@ -57,7 +64,7 @@ as_tbl2 <- function(x, output = c("data.table", "data.frame", "matrix", "tpmatri
   } else{
     states <- colnames(x)
   }
-  colnames(y) <- tpmatrix_names(states = states, prefix = "")
+  colnames(y) <- tpmatrix_names(states = states, prefix = prefix, sep = sep)
   if (output == "data.table") {
     return(as.data.table(y))
   } else if (output == "data.frame") {
@@ -183,7 +190,6 @@ replace_Qdiag <- function(x, n_states) {
 #' object. These are, in turn, ultimately used to create a [CohortDtstmTrans] object
 #' for simulating health state transitions.
 #' 
-#' @inheritParams tpmatrix_names
 #' @param ... Named values of expressions defining elements of the matrix. Each
 #' element of `...` should either be a vector or a 2-dimensional tabular object 
 #' such as a data frame. See "Details" and the examples below.
@@ -193,6 +199,10 @@ replace_Qdiag <- function(x, n_states) {
 #' should be the name of a column in the tabular object; if a numeric vector,
 #' each element should be the index of a column in the tabular object. 
 #' 
+#' @param states,prefix,sep Arguments passed to [tpmatrix_names()] for naming
+#' the columns. If `states = NULL` (the default), then the states are named 
+#' `s1`, ..., `sh` where `h` is the number of health states. 
+#' 
 #' @details A `tpmatrix` is a 2-dimensional tabular object that stores flattened
 #' square transition probability matrices in each row. Each transition probability
 #' matrix is filled rowwise. The complementary probability (equal to \eqn{1} 
@@ -200,11 +210,6 @@ replace_Qdiag <- function(x, n_states) {
 #' transition probability matrix) can be conveniently referred to as `C` or 
 #' specified with the `complement` argument. There can only be one complement 
 #' for each row in a transition probability matrix.
-#' 
-#' The column names are determined by the arguments `states`, `prefix`, and `sep`, 
-#' which are passed to `tpmatrix_names()`. If `states = NULL` (the default),
-#' then the states are named `s1`, ..., `sh` where `h` is the number of health 
-#' states. 
 #' 
 #' @return Returns a `tpmatrix` object that inherits from `data.table`
 #' where each column is an element of the transition probability matrix with
@@ -256,6 +261,10 @@ replace_Qdiag <- function(x, n_states) {
 #' pmat <- data.frame(s1_s1 = 0, s1_s2 = .5, s2_s1 = .3, s2_s2 = 0)
 #' tpmatrix(pmat, complement = c("s1_s1", "s2_s2"))
 #' tpmatrix(pmat, complement = c(1, 4)) # Can also pass integers
+#' 
+#' # Can control column names
+#' tpmatrix(pmat, complement = c(1, 4),
+#'          states = c("state1", "state2"), sep = ".")
 #' 
 #' @seealso [define_model()], [define_tparams()], 
 #' [tpmatrix_id()], [tparams_transprobs()], [CohortDtstmTrans()]

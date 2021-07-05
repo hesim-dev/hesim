@@ -156,6 +156,11 @@ test_that("Summary method for tparams_transprobs uses correct state names", {
   )
 })
 
+test_that("Print method for tparams_transprobs works as expected", {
+  expect_output(print(tprob), "A \"tparams_transprobs\" object")
+  expect_output(print(tprob), "Summary of transition probabilities:")
+})
+
 # as.data.table.tparams_transprobs() -------------------------------------------
 tprob_dt <- as.data.table(tprob)
   

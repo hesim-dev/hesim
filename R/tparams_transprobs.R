@@ -2,10 +2,12 @@
 #' Transition probabilities
 #' 
 #' Create a list containing predicted transition probabilities at discrete times.
-#'  Since the transition probabilities have presumably
-#' already been predicted based on covariate values, no input data is required for
-#' simulation. The class can be instantiated from either an `array`, a `data.table`,
-#' a `data.frame`, or a [`tpmatrix`]. 
+#' Since the transition probabilities have presumably already been predicted 
+#' based on covariate values, no input data is required for
+#' simulation. The class can be instantiated from either an `array`, 
+#' a `data.table`, a `data.frame`, or a [`tpmatrix`]. This is the object in
+#' `hesim` used to specify the transition probabilities required to simulate 
+#' Markov chains with the [`CohortDtstmTrans`] class. 
 #' 
 #' @param object An object of the appropriate class. 
 #' @param tpmatrix_id An object of class [`tpmatrix_id`] (or an equivalent 
@@ -70,13 +72,32 @@
 #' 
 #' 
 #' @return An object of class `tparams_transprobs`, 
-#' which is a list containing `value` and relevant ID attributes. The element `value` is an 
-#' array of predicted transition probability matrices from the probability
-#' distribution of the underlying statistical model. Each matrix in 
-#' `value` is a prediction for a `sample`, `strategy_id`,
-#'  `patient_id`, and optionally `time_id` combination.
+#' which is a list containing `value` and relevant ID attributes. The element 
+#' `value` is an array of predicted transition probability matrices from the 
+#' probability distribution of the underlying statistical model. Each matrix in 
+#' `value` is a prediction for a `sample`, `strategy_id`, `patient_id`, and 
+#' optionally `time_id` combination.
 #'
-#' @seealso  [`define_model()`], [`create_CohortDtstm()`], [`tpmatrix()`]
+#' @seealso A `tparams_transprobs` object is used to store the "parameters" of 
+#' the transition component of a cohort discrete time state transition 
+#' model (cDTSTM). You can create such an object with `CohortDtstmTran$new()`.
+#' 
+#' [tpmatrix()] and [tpmatrix_id()] provide a convenient way to construct a 
+#' `tparams_transprobs` object in a flexible way. [`define_model()`] is, in turn,
+#' a convenient way to construct a [`tpmatrix`] object using mathematical 
+#' expressions; in this case, an entire cDTSTM can be instantiated from a model 
+#' definition using [create_CohortDtstm.model_def()]. Detailed examples
+#' are provided in `vignette("markov-cohort")` and 
+#' `vignette("markov-inhomogeneous-cohort")`
+#' 
+#' The output of a `tparams_transprobs` object is rather verbose. It can be
+#' helpful to check the output by converting it to a `data.table` (containing
+#' both the ID variables and flattened transition probability matrices)
+#' with [as.data.table.tparams_transprobs()]. Transition probabilities can
+#' also be summarized (across parameter samples) using 
+#' [summary.tparams_transprobs()].
+#' 
+#' 
 #' @example man-roxygen/example-tparams_transprobs.R
 #' @rdname tparams_transprobs
 #' @export
@@ -275,9 +296,11 @@ tparams_transprobs.eval_model <- function(object, ...){
 # summary.tparams_transprobs ---------------------------------------------------
 #' Summarize `tparams_transprobs` object
 #' 
-#' Summarize a [`tparams_transprobs`] containing predicted transition
-#' probabilities. Summary statistics are computed for each 
-#' possible transition by the relevant ID variables. 
+#' The `summary()` method summarizes a [`tparams_transprobs`] containing 
+#' predicted transition probabilities; summary statistics are computed for each 
+#' possible transition by the relevant ID variables. The `print()` method
+#' summarizes the object using `summary.tparams_transprobs()` and prints it to the
+#' console. 
 #' 
 #' @inheritParams summary.tpmatrix
 #' @param object A [`tparams_transprobs`] object.
@@ -285,8 +308,9 @@ tparams_transprobs.eval_model <- function(object, ...){
 #' @return `summary.tparams_transprobs()` uses the [summary.tpmatrix()]
 #' method under the hood and returns the same output. 
 #' 
-#' @seealso See [`tparams_transprobs`] for an example use of the summary method.
-#' Also see [summary.tpmatrix()] for more information on what is returned.
+#' @seealso See [`tparams_transprobs`] for an example use of the summary and
+#' print methods. Also see [summary.tpmatrix()] for more information on what is 
+#' returned.
 #' 
 #' @export
 summary.tparams_transprobs <- function(object, probs = c(0.025, 0.975), 
@@ -301,4 +325,16 @@ summary.tparams_transprobs <- function(object, probs = c(0.025, 0.975),
   
   # Summarize
   summary(tpmat, id = id_dt, probs = probs, unflatten = unflatten)
+}
+
+# print.tparams_transprobs -----------------------------------------------------
+#' @rdname summary.tparams_transprobs
+#' @param ... For the `print()` method, arguments to pass to `summary.tparams_transprobs`;
+#' currently unused for the `summary()` method.
+#' @export
+print.tparams_transprobs <- function(x, ...) {
+  cat("A \"tparams_transprobs\" object \n\n")
+  cat("Summary of transition probabilities:\n")
+  print(summary(x, ...))
+  invisible(x)
 }
