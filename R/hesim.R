@@ -1,3 +1,11 @@
+#' @importFrom data.table as.data.table
+#' @export
+data.table::as.data.table
+
+#' @importFrom ggplot2 autoplot
+#' @export
+ggplot2::autoplot
+
 #' `hesim`: Health Economic Simulation Modeling and Decision Analysis
 #' 
 #' @description 

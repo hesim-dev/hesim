@@ -10,7 +10,7 @@
 \method{print}{tparams_transprobs}(x, ...)
 }
 \arguments{
-\item{object}{A \code{\link{tparams_transprobs}} object.}
+\item{object, x}{A \code{\link{tparams_transprobs}} object.}
 
 \item{probs}{A numeric vector of probabilities with values in \verb{[0,1]} used
 to compute quantiles. By default, the 2.5th and 97.5th percentiles are
