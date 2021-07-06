@@ -2,42 +2,176 @@
 % Please edit documentation in R/sim-general.R
 \name{sim_ev}
 \alias{sim_ev}
-\alias{sim_qalys}
+\alias{sim_ev.stateprobs}
 \alias{sim_costs}
-\title{Expected values}
+\alias{sim_qalys}
+\title{Expected values from state probabilities}
 \usage{
-sim_qalys(object, utility_model, dr, integrate_method, lys)
+\method{sim_ev}{stateprobs}(
+  object,
+  models,
+  dr = 0.03,
+  integrate_method = c("trapz", "riemann_left", "riemann_right"),
+  ...
+)
 
-sim_costs(object, cost_models, dr, integrate_method)
+sim_qalys(
+  object,
+  model,
+  dr = 0.03,
+  integrate_method = c("trapz", "riemann_left", "riemann_right"),
+  lys
+)
+
+sim_costs(
+  object,
+  models,
+  dr = 0.03,
+  integrate_method = c("trapz", "riemann_left", "riemann_right")
+)
 }
 \arguments{
 \item{object}{A \code{\link{stateprobs}} object.}
 
-\item{utility_model}{A single object of class \code{\link{StateVals}} used
-to simulate utility.}
-
 \item{dr}{Discount rate.}
 
 \item{integrate_method}{Method used to integrate state values when computing
-costs or QALYs. Options are \code{trapz} for the trapezoid rule,
+costs or QALYs. Options are \code{trapz} (the default) for the trapezoid rule,
 \code{riemann_left} left for a left Riemann sum, and
 \code{riemann_right} right for a right Riemann sum.}
 
+\item{...}{Currently unused.}
+
+\item{model, models}{An object or list of objects of class \code{\link{StateVals}} used to
+model state values. When using \code{sim_qalys()}, this should be
+a single model for utility. With \code{sim_costs()}, a list of models should be
+used with one model for each cost category. Finally, with \code{sim_ev()},
+this may either be a single model or a list of models.}
+
 \item{lys}{If \code{TRUE}, then life-years are simulated in addition to
 QALYs.}
-
-\item{cost_models}{A list of objects of class \code{\link{StateVals}} used
-to simulate costs.}
 }
 \value{
-\code{\link[=sim_costs]{sim_costs()}} and \code{\link[=sim_qalys]{sim_qalys()}} return objects of class
+\code{sim_ev()} returns a \code{data.table} with the following columns:
+\describe{
+\item{sample}{A random sample from the PSA.}
+\item{strategy_id}{The treatment strategy ID.}
+\item{patient_id}{The patient ID.}
+\item{grp_id}{The subgroup ID.}
+\item{state_id}{The health state ID.}
+\item{dr}{The rate used to discount costs.}
+\item{outcome}{The outcome corresponding to each model in \code{models}.
+Only included if \code{models} is a list.}
+\item{value}{The expected value.}
+}
+\code{sim_costs()} and \code{sim_qalys()} return similar objects, that are of class
 \code{\link{costs}} and \code{\link{qalys}}, respectively.
 }
 \description{
-Simulate costs and quality-adjusted life-years (QALYs) as a function of
-simulated state occupancy probabilities.
+Simulate expected values as a function of simulated state occupancy
+probabilities, with simulation of costs and quality-adjusted life-years
+(QALYs) as particular use cases.
+}
+\details{
+Expected values in cohort models (i.e.,  those implemented with
+the \code{\link{CohortDtstm}} and \code{\link{Psm}} classes) are mean outcomes for patients comprising
+the cohort. The method used to simulate expected values depends on the
+\verb{$method} field in the \code{\link{StateVals}} object(s) stored in \code{model(s)}. If
+\verb{$method = "starting"}, then state values represent a one-time value that
+occurs at time 0.
+
+The more common use case is \verb{$method = "wlos"}, or a "weighted length of stay".
+That is, expected values for each health state can be thought of as state values
+weighted by the time a patient spends in each state (and discounted by a
+discount factor that depends on the discount rate \code{dr}). The
+precise computation proceeds in four steps. In the first step, the probability
+of being in each health state at each discrete time point is simulated
+(this is the output contained in the \code{\link{stateprobs}} object). Second, a
+\code{\link{StateVals}} model is used to predict state values at each time point.
+Third an expected value at each time point is computed by multiplying the
+state probability, the state value, and the discount factor. Fourth, the
+expected values at each time point are summed across all time points.
+
+The summation in the fourth step can be thought of as a discrete approximation
+of an integral. In particular, the limits of integration can be partitioned
+into time intervals, with each interval containing a start and an end.
+The \code{integrate_method} argument determines the approach used
+for this approximation:
+\enumerate{
+\item A left Riemann sum (\code{integrate_method = "riemann_left"}) uses expected values
+at the start of each time interval.
+\item A right Riemann sum (\code{integrate_method = "riemann_right"}) uses expected values
+at the end of each time interval.
+\item The trapezoid rule (\code{integrate_method = "trapz"}) averages expected values
+at the start and end of each time interval. (This will generally be the
+most accurate and is recommended.)
+}
+
+Mathematical details are provided in the reference within the "References"
+section below.
+}
+\examples{
+# We need (i) a state probability object and (ii) a model for state values
+## We should start by setting up our decision problem
+hesim_dat <-  hesim_data(strategies = data.frame(strategy_id = 1:2),
+                         patients = data.frame(patient_id = 1:3),
+                         states = data.frame(state_id = 1))
+input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+
+## (i) Simulate a state probability object
+tpmat_id <- tpmatrix_id(input_data, n_samples = 2) 
+p_12 <- ifelse(tpmat_id$strategy_id == 1, .15, .1)
+tpmat <- tpmatrix(
+  C, p_12,
+  0, 1
+)
+transmod <- CohortDtstmTrans$new(params = tparams_transprobs(tpmat, tpmat_id))
+stprobs <- transmod$sim_stateprobs(n_cycles = 3)
+
+## Construct model for state values
+outcome_tbl <- stateval_tbl(
+  data.frame(
+    state_id = 1,
+    est = 5000
+  ),
+  dist = "fixed"
+)
+outmod <- create_StateVals(outcome_tbl, n = 2, hesim_data = hesim_dat)
+
+# We can then simulate expected values
+## The generic expected values function
+sim_ev(stprobs, models = outmod)
+
+## We can also pass a list of models
+sim_ev(stprobs, models = list(`Outcome 1` = outmod))
+
+## Suppose the outcome were a cost category. Then we might
+## prefer the following:
+sim_costs(stprobs, models = list(drug = outmod))
 }
 \references{
-\href{https://arxiv.org/abs/2102.09437}{Incerti and Jansen (2021)}. See
-Section 2.1 for details.
+\href{https://arxiv.org/abs/2102.09437}{Incerti and Jansen (2021)},
+See Section 2.1 for mathematical details.
+}
+\seealso{
+State probabilities can be simulated using the
+\verb{$sim_stateprobs()} methods from either the \code{\link{CohortDtstmTrans}}
+(or \code{\link{CohortDtstm}}) or \code{\link{Psm}} classes. State probabilities can also be
+computed directly from survival curves with the generic method
+\code{\link[=sim_stateprobs.survival]{sim_stateprobs.survival()}}.
+
+Costs and QALYs are typically computed within the \code{R6} model classes
+using the \verb{$sim_costs()} and \verb{$sim_qalys()} methods. For instance, see the
+documentation and examples for the \code{\link{CohortDtstm}} and \code{\link{Psm}} classes.
+The \code{sim_qalys()} and \code{sim_costs()} functions are exported to give users
+additional flexibility when creating their own modeling pipelines.
+\code{sim_ev()} may be useful for computing outcomes other than costs or QALYs.
+
+\code{\link{costs}} and \code{\link{qalys}} objects can be passed to \code{\link[=summarize_ce]{summarize_ce()}} to
+create a cost-effectiveness object for performing a cost-effectiveness analysis
+with \code{\link[=cea]{cea()}}. Although note that typically the \verb{$summarize()} method
+belonging to the \code{\link{CohortDtstm}} or \code{\link{Psm}} classes would be used instead.
+
+Use the \code{\link{IndivCtstm}} class to simulate costs and QALYs with an individual
+continuous-time state transition model.
 }

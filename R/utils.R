@@ -37,18 +37,27 @@ check_dr <- function(dr){
   }  
 }
 
-check_StateVals <- function(statevalmods, object, 
+check_StateVals <- function(models, object, 
                             object_name = c("stateprobs", "disprog")) {
   
+  if(!is.list(models)){
+    stop("'models' must be a list", call. = FALSE)
+  }
   object_name <- match.arg(object_name)
   
+  # Generic check for state value model
+  for (i in 1:length(models)){
+    models[[i]]$check()
+  }
+  
+  # Check that state value models have correct size
   if (!is.null(attr(object, "size"))) {
     expected_size <- attr(object, "size")
   } else {
     stop("'size' attribute missing from ", object_name, ".")
   }
   
-  for (i in 1:length(statevalmods)){ # Loop over state value models to check size 
+  for (i in 1:length(models)){ 
     
     check_size <- function(actual, expected, z = NULL, msg = NULL) {
       if (actual != expected) {
@@ -61,17 +70,17 @@ check_StateVals <- function(statevalmods, object,
       }
     }
     
-    check_size(get_n_samples(statevalmods[[i]]$params),
+    check_size(get_n_samples(models[[i]]$params),
                expected_size[["n_samples"]],
                z = "samples")
-    check_size(get_id_object(statevalmods[[i]])$n_strategies, 
+    check_size(get_id_object(models[[i]])$n_strategies, 
                expected_size[["n_strategies"]],
                z = "strategies")
-    check_size(get_id_object(statevalmods[[i]])$n_patients, 
+    check_size(get_id_object(models[[i]])$n_patients, 
                expected_size[["n_patients"]],
                z = "patients")
     check_size(
-      get_id_object(statevalmods[[i]])$n_states + 1, 
+      get_id_object(models[[i]])$n_states + 1, 
       expected_size[["n_states"]],
       msg = paste0("The number of states in each 'StateVals' model ", 
                    "must be one less (since state values are not applied to the ",

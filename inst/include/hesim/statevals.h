@@ -185,7 +185,8 @@ struct ev_out {
   std::vector<int> grp_id_; ////< The subgroup ID.
   std::vector<double> patient_wt_; ///< Weights given to patients.
   std::vector<double> dr_; ///< The discount rate.
-  std::vector<std::string> category_; ///< For costs, the name of the cost category; 
+  std::vector<std::string> outcome_; ///< The name of the outcome. 
+                                     ///<For costs, the name of the cost category; 
                                      ///<for QALYs, simply 'qalys'.
   std::vector<double> value_; ///< The value of weighted length of stay.
   
@@ -202,7 +203,7 @@ struct ev_out {
     grp_id_.resize(n);
     patient_wt_.resize(n);
     dr_.resize(n);
-    category_.resize(n);
+    outcome_.resize(n);
     value_.resize(n);
   }
   
@@ -218,7 +219,7 @@ struct ev_out {
       Rcpp::_["patient_wt"] = patient_wt_,
       Rcpp::_["state_id"] = state_id_,
       Rcpp::_["dr"] = dr_,
-      Rcpp::_["category"] = category_,
+      Rcpp::_["outcome"] = outcome_,
       Rcpp::_["value"] = value_,
       Rcpp::_["stringsAsFactors"] = false
     );
@@ -237,8 +238,6 @@ struct ev_out {
 class ev {
 private:
   std::vector<statevals> statevals_; ///< A vector of models for simulating state values;
-                                     ///< the vector will be of length 1 for 'qalys' and 
-                                     ///< equal to the number of cost categories for 'costs'.
   
   /** 
    * Initialize obs_index_.
@@ -252,10 +251,10 @@ private:
   
   /** 
    * Initialize obs_indices_.
-   * Initialize vector of @c obs_index_ objects for each category predicted
+   * Initialize vector of @c obs_index_ objects for each outcome predicted
    * with an @c R based @c hesim simulation model. 
    * @param R_statevals A list of @c R based @c  models for state values by
-   * category.
+   * outcome.
    */ 
   static std::vector<statmods::obs_index> init_obs_indices_(Rcpp::List R_statevals){
     std::vector<statmods::obs_index> obs_index_vec;
@@ -425,20 +424,20 @@ public:
    * @param stateprobs
    * @param times
    * @param dr
-   * @param categories
+   * @param outcomes
    * @return 
    */   
   ev_out operator()(stateprobs_out stateprobs, 
                       std::vector<double> times,
                       std::vector<double> dr, 
-                      std::vector<std::string> categories,
+                      std::vector<std::string> outcomes,
                       std::string integrate_method = "trapz") {
     int N = stateprobs.prob_.size()/times.size();
     int n_samples = statevals_[0].statmod_->get_n_samples();
     ev_out out(N * dr.size() * statevals_.size());
     
     int counter = 0;
-    for (int k = 0; k < statevals_.size(); ++k){ // start category loop
+    for (int k = 0; k < statevals_.size(); ++k){ // start outcome loop
       for (int j = 0; j < dr.size(); ++j){ // start discount rate loop
         int integrate_start = 0;
         double dr_j = dr[j];
@@ -457,7 +456,7 @@ public:
                 out.patient_wt_[counter] = obs_indices_[k].get_patient_wt();
                 out.state_id_[counter] = obs_indices_[k].get_health_id();;
                 out.dr_[counter] = dr_j;
-                out.category_[counter] = categories[k];
+                out.outcome_[counter] = outcomes[k];
                 if (statevals_[k].method_ == "wlos"){
                   out.value_[counter] = sim_wlos(s, obs_indices_[k],
                                                     times,
@@ -477,7 +476,7 @@ public:
           } // end strategy loop
         } // end samples loop
       } // end loop over discount rates
-    } // end loop over categories
+    } // end loop over outcomes
     return out;
   }
   
