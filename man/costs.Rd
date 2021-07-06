@@ -16,6 +16,7 @@ the following columns:
 \item{sample}{A random sample from the PSA.}
 \item{strategy_id}{The treatment strategy ID.}
 \item{patient_id}{The patient ID.}
+\item{grp_id}{The subgroup ID.}
 \item{state_id}{The health state ID.}
 \item{dr}{The rate used to discount costs.}
 \item{category}{The cost category (e.g., drug costs, medical costs, etc).}

@@ -200,7 +200,7 @@ stored in \code{stateprobs_}.
 \if{latex}{\out{\hypertarget{method-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_} and
-\code{utility_model}.
+\code{utility_model}. See \code{sim_qalys()} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Psm$sim_qalys(
   dr = 0.03,
@@ -233,7 +233,7 @@ in \code{qalys_}.
 \if{latex}{\out{\hypertarget{method-sim_costs}{}}}
 \subsection{Method \code{sim_costs()}}{
 Simulate costs as a function of \code{stateprobs_} and \code{cost_models}.
-See \code{vignette("expected-values")} for details.
+See \code{sim_costs()} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Psm$sim_costs(
   dr = 0.03,

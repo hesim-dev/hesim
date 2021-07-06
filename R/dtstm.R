@@ -312,7 +312,7 @@ CohortDtstm <- R6::R6Class(
     
     #' @description
     #' Simulate quality-adjusted life-years (QALYs) as a function of `stateprobs_` and
-    #' `utility_model`.
+    #' `utility_model`. See `sim_qalys()` for details.
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
     #' @return An instance of `self` with simulated output of class [qalys] stored
     #' in `qalys_`.
@@ -326,6 +326,7 @@ CohortDtstm <- R6::R6Class(
     
     #' @description
     #' Simulate costs as a function of `stateprobs_` and `cost_models`. 
+    #' See `sim_costs()` for details.
     #' @return An instance of `self` with simulated output of class [costs] stored
     #' in `costs_`.
     sim_costs = function(dr = .03, 

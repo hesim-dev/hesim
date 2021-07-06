@@ -92,6 +92,7 @@ reference:
       - survival
       - sim_stateprobs.survival
       - stateprobs
+      - sim_ev
       - costs
       - qalys
       - ce

@@ -322,7 +322,7 @@ sim_stateprobs.survival <- function(x, ...) {
   return(stprobs_df[, ])
 }
 
-# Cost and QALYs ---------------------------------------------------------------
+# Cost and QALY objects --------------------------------------------------------
 #' Costs object
 #'
 #' An object of class `costs` returned from methods 
@@ -336,6 +336,7 @@ sim_stateprobs.survival <- function(x, ...) {
 #'   \item{sample}{A random sample from the PSA.}
 #'   \item{strategy_id}{The treatment strategy ID.}
 #'   \item{patient_id}{The patient ID.}
+#'   \item{grp_id}{The subgroup ID.}
 #'   \item{state_id}{The health state ID.}
 #'   \item{dr}{The rate used to discount costs.}
 #'   \item{category}{The cost category (e.g., drug costs, medical costs, etc).}
@@ -359,6 +360,7 @@ NULL
 #'   \item{sample}{A random sample from the PSA.}
 #'   \item{strategy_id}{The treatment strategy ID.}
 #'   \item{patient_id}{The patient ID.}
+#'   \item{grp_id}{The subgroup ID.}
 #'   \item{state_id}{The health state ID.}
 #'   \item{dr}{The rate used to discount QALYs.}
 #'   \item{category}{A single category always equal to "qalys".}
@@ -369,6 +371,8 @@ NULL
 #' @name qalys
 NULL
 
+# Simulate expected values (inclusive of costs and QALYs) ----------------------
+#' @export
 sim_ev <- function (object, ...) {
   UseMethod("sim_ev", object)
 }
@@ -380,11 +384,125 @@ sim_ev.NULL <- function(object, ...) {
   }
 }
 
-
-sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
-                              integrate_method = c("trapz", "riemann_left", "riemann_right")){
+#' Expected values from state probabilities
+#' 
+#' Simulate expected values as a function of simulated state occupancy 
+#' probabilities, with simulation of costs and quality-adjusted life-years 
+#' (QALYs) as particular use cases.
+#' 
+#' @param object A [`stateprobs`] object.
+#' @param model,models An object or list of objects of class [`StateVals`] used to 
+#' model state values. When using `sim_qalys()`, this should be 
+#' a single model for utility. With `sim_costs()`, a list of models should be
+#' used with one model for each cost category. Finally, with `sim_ev()`,
+#' this may either be a single model or a list of models.
+#' @param dr Discount rate. 
+#' @param integrate_method Method used to integrate state values when computing 
+#' costs or QALYs. Options are `trapz` (the default) for the trapezoid rule,
+#' `riemann_left` left for a left Riemann sum, and  
+#' `riemann_right` right for a right Riemann sum.
+#' @param lys If `TRUE`, then life-years are simulated in addition to 
+#' QALYs. 
+#' @param ... Currently unused.
+#' 
+#' @details Expected values in cohort models (i.e.,  those implemented with 
+#' the [`CohortDtstm`] and [`Psm`] classes) are mean outcomes for patients comprising 
+#' the cohort. The method used to simulate expected values depends on the
+#' `$method` field in the [`StateVals`] object(s) stored in `model(s)`. If
+#' `$method = "starting"`, then state values represent a one-time value that
+#' occurs at time 0. 
+#' 
+#' The more common use case is `$method = "wlos"`, or a "weighted length of stay". 
+#' That is, expected values for each health state can be thought of as state values
+#' weighted by the time a patient spends in each state (and discounted by a 
+#' discount factor that depends on the discount rate `dr`). The 
+#' precise computation proceeds in four steps. In the first step, the probability 
+#' of being in each health state at each discrete time point is simulated 
+#' (this is the output contained in the [`stateprobs`] object). Second, a 
+#' [`StateVals`] model is used to predict state values at each time point. 
+#' Third an expected value at each time point is computed by multiplying the 
+#' state probability, the state value, and the discount factor. Fourth, the 
+#' expected values at each time point are summed across all time points.
+#' 
+#' The summation in the fourth step can be thought of as a discrete approximation
+#' of an integral. In particular, the limits of integration can be partitioned
+#' into time intervals, with each interval containing a start and an end. 
+#' The `integrate_method` argument determines the approach used
+#' for this approximation:
+#' 
+#' 1. A left Riemann sum (`integrate_method = "riemann_left"`) uses expected values
+#' at the start of each time interval.
+#' 2. A right Riemann sum (`integrate_method = "riemann_right"`) uses expected values
+#' at the end of each time interval.
+#' 3. The trapezoid rule (`integrate_method = "trapz"`) averages expected values
+#' at the start and end of each time interval. (This will generally be the
+#'  most accurate and is recommended.)
+#' 
+#' Mathematical details are provided in the reference within the "References" 
+#' section below.
+#' 
+#' @return `sim_ev()` returns a `data.table` with the following columns:
+#' \describe{
+#'   \item{sample}{A random sample from the PSA.}
+#'   \item{strategy_id}{The treatment strategy ID.}
+#'   \item{patient_id}{The patient ID.}
+#'   \item{grp_id}{The subgroup ID.}
+#'   \item{state_id}{The health state ID.}
+#'   \item{dr}{The rate used to discount costs.}
+#'   \item{outcome}{The outcome corresponding to each model in `models`.
+#'   Only included if `models` is a list.}
+#'   \item{value}{The expected value.}
+#' }
+#' `sim_costs()` and `sim_qalys()` return similar objects, that are of class
+#'  [`costs`] and [`qalys`], respectively. 
+#'  
+#' @seealso State probabilities can be simulated using the 
+#' `$sim_stateprobs()` methods from either the [`CohortDtstmTrans`] 
+#' (or [`CohortDtstm`]) or [`Psm`] classes. State probabilities can also be 
+#' computed directly from survival curves with the generic method 
+#' [sim_stateprobs.survival()].
+#' 
+#' Costs and QALYs are typically computed within the `R6` model classes
+#' using the `$sim_costs()` and `$sim_qalys()` methods. For instance, see the 
+#' documentation and examples for the [`CohortDtstm`] and [`Psm`] classes.
+#' The `sim_qalys()` and `sim_costs()` functions are exported to give users 
+#' additional flexibility when creating their own modeling pipelines. 
+#' `sim_ev()` may be useful for computing outcomes other than costs or QALYs.
+#' 
+#' [`costs`] and [`qalys`] objects can be passed to [summarize_ce()] to
+#' create a cost-effectiveness object for performing a cost-effectiveness analysis
+#' with [cea()]. Although note that typically the `$summarize()` method 
+#' belonging to the [`CohortDtstm`] or [`Psm`] classes would be used instead.
+#' 
+#' Use the [`IndivCtstm`] class to simulate costs and QALYs with an individual 
+#' continuous-time state transition model.
+#' 
+#' @example man-roxygen/example-sim_ev.stateprobs.R
+#' 
+#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437),
+#' See Section 2.1 for mathematical details.
+#'
+#' @export
+#' @name sim_ev
+#' @aliases sim_costs sim_qalys
+sim_ev.stateprobs <- function(object, models, dr = .03,
+                              integrate_method = c("trapz", "riemann_left", "riemann_right"),
+                              ...){
   integrate_method <- match.arg(integrate_method)
   state_id <- NULL
+  
+  # Case where a single model is provide
+  if (inherits(models, "StateVals")) {
+    models <- list(models)
+    model_is_list <- FALSE
+  } else{
+    model_is_list <- TRUE
+  }
+  
+  # Add default names if required
+  if (is.null(names(models))) {
+    names(models) <- paste0("Outcome ", seq(1, length(models)))
+  }
   
   # Checks
   ## State probabilities
@@ -396,15 +514,18 @@ sim_ev.stateprobs <- function(object, statevalmods, categories, dr = .03,
   ## Discount rate
   check_dr(dr)
   
-  ## The size of ID variables is correct
-  check_StateVals(statevalmods, object)
+  ## The state value models, particularly that the size of the ID variables
+  ## is correct
+  check_StateVals(models, object)
   
   # Simulate
   res <- data.table(C_sim_ev(object[state_id != max(state_id)],
-                             statevalmods,
-                             dr, categories,
+                             models,
+                             dr, 
+                             names(models),
                              unique(object$t),
                              integrate_method))
+  if (!model_is_list) res[, ("outcome") := NULL]
   res[, sample := sample + 1]
   if (!"patient_wt" %in% colnames(object)) res[, ("patient_wt") := NULL]
   return(res[])
@@ -424,44 +545,23 @@ sim_los <- function (object, utility_model, dr,
   return(los)
 }
 
-#' Expected values
-#' 
-#' Simulate costs and quality-adjusted life-years (QALYs) as a function of
-#' simulated state occupancy probabilities. 
-#' 
-#' @param object A [`stateprobs`] object.
-#' @param utility_model A single object of class [`StateVals`] used
-#' to simulate utility.
-#' @param cost_models A list of objects of class [`StateVals`] used
-#' to simulate costs.
-#' @param dr Discount rate. 
-#' @param integrate_method Method used to integrate state values when computing 
-#' costs or QALYs. Options are `trapz` for the trapezoid rule,
-#' `riemann_left` left for a left Riemann sum, and  
-#' `riemann_right` right for a right Riemann sum.
-#' @param lys If `TRUE`, then life-years are simulated in addition to 
-#' QALYs. 
-#' @return [`sim_costs()`] and [`sim_qalys()`] return objects of class
-#' [`costs`] and [`qalys`], respectively. 
-#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437). See
-#' Section 2.1 for details.
-#'
-#' @name sim_ev
-sim_qalys <- function(object, utility_model, dr, integrate_method, lys){
-  utility_model$check()
+#' @rdname sim_ev
+#' @export
+sim_qalys <- function(object, model, dr = .03, 
+                      integrate_method = c("trapz", "riemann_left", "riemann_right"), 
+                      lys){
+  model$check()
   qalys <- sim_ev(object,
-                  list(utility_model),
-                  "qalys",
+                  model,
                   dr,
                   integrate_method)
   if (lys){
     los <- sim_los(object,
-                   utility_model,
+                   model,
                    dr,
                    integrate_method)
     qalys[, lys := los]
   }
-  qalys[, ("category") := NULL]
   setnames(qalys, "value", "qalys")
   setattr(qalys, "class", 
           c("qalys", "data.table", "data.frame"))
@@ -469,24 +569,22 @@ sim_qalys <- function(object, utility_model, dr, integrate_method, lys){
 }
 
 #' @rdname sim_ev
-sim_costs <- function(object, cost_models, dr, integrate_method){
-  if(!is.list(cost_models)){
-    stop("'cost_models' must be a list", call. = FALSE)
+#' @export
+sim_costs <- function(object, models, dr = .03, 
+                      integrate_method = c("trapz", "riemann_left", "riemann_right")){
+  if(!is.list(models)){
+    stop("'models' must be a list", call. = FALSE)
   }
-  for (i in 1:length(cost_models)){
-    cost_models[[i]]$check()
+  if (is.null(names(models))){
+    names(models) <- paste0("Category ", seq(1, length(models)))
   }
-  if (is.null(names(cost_models))){
-    categories <- paste0("Category ", seq(1, length(cost_models)))
-  } else{
-    categories <- names(cost_models)
-  }   
   costs <- sim_ev(object,
-                  cost_models,
-                  categories,
+                  models,
                   dr,
                   integrate_method)
-  setnames(costs, "value", "costs")
+  setnames(costs, 
+           c("outcome", "value"),
+           c("category", "costs"))
   setattr(costs, "class", 
           c("costs", "data.table", "data.frame"))
   return(costs[, ])
