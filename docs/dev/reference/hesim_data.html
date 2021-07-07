@@ -47,9 +47,9 @@
 
 
 <meta property="og:title" content="Data for health economic simulation modeling — hesim_data" />
-<meta property="og:description" content="A list of tables required for health economic simulation modeling.
-Each table must either be a data.frame or data.table. All ID variables within
-each table must be numeric vectors of integers." />
+<meta property="og:description" content="A list of tables required for health economic simulation modeling. This object
+is used to setup models by defining the treatment strategies, target population,
+and model structure." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -152,7 +152,7 @@ each table must be numeric vectors of integers." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -175,9 +175,9 @@ each table must be numeric vectors of integers." />
     </div>
 
     <div class="ref-description">
-    <p>A list of tables required for health economic simulation modeling.
-Each table must either be a <code>data.frame</code> or <code>data.table</code>. All ID variables within
-each table must be numeric vectors of integers.</p>
+    <p>A list of tables required for health economic simulation modeling. This object
+is used to setup models by defining the treatment strategies, target population,
+and model structure.</p>
     </div>
 
     <pre class="usage"><span class='fu'>hesim_data</span><span class='op'>(</span><span class='va'>strategies</span>, <span class='va'>patients</span>, states <span class='op'>=</span> <span class='cn'>NULL</span>, transitions <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
@@ -224,6 +224,11 @@ transitioned to.</p></td>
 
     <p>Returns an object of class <code>hesim_data</code>, which is a list of data tables for
 health economic simulation modeling.</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>Each table must either be a <code>data.frame</code> or <code>data.table</code>. All ID variables
+within each table must be numeric vectors of integers and should be of the form
+1,2,...N where N is the number of unique values of the ID variable.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>, <code><a href='get_labels.html'>get_labels()</a></code></p></div>

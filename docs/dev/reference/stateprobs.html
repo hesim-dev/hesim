@@ -199,10 +199,13 @@ the following columns:</p>
 
 <p>When simulating individual-level models, the <code>patient_id</code> column is
 not included as state probabilities are computed by averaging across patients.</p>
-<p>In cohort models, the object also contains a <code>size</code> attribute that contains
-the elements <code>n_samples</code>, <code>n_strategies</code>, <code>n_patients</code>, <code>n_states</code>, and
+<p>In cohort models, the object also contains <code>size</code> and <code>absorbing</code> attributes.
+The <code>size</code> attribute is a numeric vector with the elements <code>n_samples</code>,
+<code>n_strategies</code>, <code>n_patients</code>, <code>n_states</code>, and
 <code>n_times</code> denoting the number of samples, treatment strategies, patients,
-health states, and times.</p>
+health states, and times. The <code>absorbing</code> attribute is a numeric vector
+containing the absorbing health states (see the <code>absorbing</code> field of the
+<code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> class for more details).</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

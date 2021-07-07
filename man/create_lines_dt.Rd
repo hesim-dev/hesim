@@ -18,7 +18,8 @@ Returns a \code{data.table} in tidy format with three columns:
 \describe{
 \item{strategy_id}{Treatment strategy ids.}
 \item{line}{Line of therapy.}
-\item{treatment_id}{Treatment ID for treatment used at a given line of therapy within a treatment strategy.}
+\item{treatment_id}{Treatment ID for treatment used at a given line of therapy
+within a treatment strategy.}
 }
 }
 \description{

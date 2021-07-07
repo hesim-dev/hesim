@@ -21,7 +21,17 @@
 #' \item{time_stop}{The time at the end of the interval.}
 #' }
 #'
-#' @seealso [`IndivCtstm`], [`IndivCtstmTrans`]
+#' The object also contains `size` and `absorbing` attributes.
+#' The `size` attribute is a numeric vector with the elements `n_samples`, 
+#' `n_strategies`, `n_patients`, and `n_states` denoting the number of samples, 
+#' treatment strategies, patients, and health states The `absorbing` attribute 
+#' is a numeric vector containing the absorbing health states; i.e., the 
+#' health states that cannot be transitioned from. Operationally, an
+#' absorbing state is a row in a transition matrix (as in the `trans_mat` field
+#' of the `IndivCtstmTrans` class) with all `NA`s.
+#' 
+#' @seealso A disease progression object can be simulated with either the
+#' [`IndivCtstm`] or [`IndivCtstmTrans`] classes.
 #' @name disprog
 NULL
 
@@ -129,10 +139,13 @@ survival <- function(data, sample = "sample", strategy_id = "strategy_id",
 #' When simulating individual-level models, the `patient_id` column is
 #' not included as state probabilities are computed by averaging across patients.
 #' 
-#' In cohort models, the object also contains a `size` attribute that contains 
-#' the elements `n_samples`, `n_strategies`, `n_patients`, `n_states`, and
-#'  `n_times` denoting the number of samples, treatment strategies, patients, 
-#'  health states, and times. 
+#' In cohort models, the object also contains `size` and `absorbing` attributes.
+#' The `size` attribute is a numeric vector with the elements `n_samples`, 
+#' `n_strategies`, `n_patients`, `n_states`, and
+#' `n_times` denoting the number of samples, treatment strategies, patients, 
+#'  health states, and times. The `absorbing` attribute is a numeric vector
+#'  containing the absorbing health states (see the `absorbing` field of the
+#'  [`CohortDtstmTrans`] class for more details). 
 #'
 #' @name stateprobs
 NULL
@@ -319,6 +332,7 @@ sim_stateprobs.survival <- function(x, ...) {
   setattr(stprobs_df, "size", 
           c(n_samples = n_samples, n_strategies = n_strategies, 
             n_patients = n_patients, n_states = n_states, n_times = n_times))
+  setattr(stprobs_df, "absorbing", n_states) 
   return(stprobs_df[, ])
 }
 
@@ -395,17 +409,24 @@ sim_ev.NULL <- function(object, ...) {
 #' model state values. When using `sim_qalys()`, this should be 
 #' a single model for utility. With `sim_costs()`, a list of models should be
 #' used with one model for each cost category. Finally, with `sim_ev()`,
-#' this may either be a single model or a list of models.
+#' this may either be a single model or a list of models. May also be `NULL`,
+#' in which case length of stay is computed based on the state probabilities
+#' contained in `object`.
 #' @param dr Discount rate. 
 #' @param integrate_method Method used to integrate state values when computing 
 #' costs or QALYs. Options are `trapz` (the default) for the trapezoid rule,
 #' `riemann_left` left for a left Riemann sum, and  
 #' `riemann_right` right for a right Riemann sum.
+#' @param outcome_name Name of the column indicating the outcome corresponding 
+#' to each model. Only used if `models` is a list. Default is `"outcome"`.
+#' @param value_name Name of the column containing values of the outcome. Default
+#' is `"value"`.
 #' @param lys If `TRUE`, then life-years are simulated in addition to 
 #' QALYs. 
 #' @param ... Currently unused.
 #' 
-#' @details Expected values in cohort models (i.e.,  those implemented with 
+#' @details 
+#' Expected values in cohort models (i.e.,  those implemented with 
 #' the [`CohortDtstm`] and [`Psm`] classes) are mean outcomes for patients comprising 
 #' the cohort. The method used to simulate expected values depends on the
 #' `$method` field in the [`StateVals`] object(s) stored in `model(s)`. If
@@ -441,6 +462,20 @@ sim_ev.NULL <- function(object, ...) {
 #' Mathematical details are provided in the reference within the "References" 
 #' section below.
 #' 
+#' @note The ID variables in the state value models in `models` must be 
+#' consistent with the ID variables contained in `object`. In particular,
+#' the `models` should predict state values for each non-absorbing health state 
+#' in `object`; that is, the number of health states modeled with the
+#'  `models` should equal the number of health states in `object` less the number 
+#'  of absorbing states. 
+#'  
+#' The absorbing states are saved as an attribute named `absorbing` to 
+#' [`stateprobs`] objects. When simulating state probabilities with a 
+#' [`CohortDtstmTrans`] object, the absorbing state is determined by the 
+#' `absorbing` field in the class; in a `Psm` (or with 
+#' [sim_stateprobs.survival()]), the absorbing state is always equal to the
+#' final health state.
+#' 
 #' @return `sim_ev()` returns a `data.table` with the following columns:
 #' \describe{
 #'   \item{sample}{A random sample from the PSA.}
@@ -453,8 +488,9 @@ sim_ev.NULL <- function(object, ...) {
 #'   Only included if `models` is a list.}
 #'   \item{value}{The expected value.}
 #' }
-#' `sim_costs()` and `sim_qalys()` return similar objects, that are of class
-#'  [`costs`] and [`qalys`], respectively. 
+#' The names of the `outcome` and `value` columns may be changed with the 
+#' `value_name` and `outcome_name` arguments. `sim_costs()` and `sim_qalys()` 
+#' return similar objects, that are of class [`costs`] and [`qalys`], respectively. 
 #'  
 #' @seealso State probabilities can be simulated using the 
 #' `$sim_stateprobs()` methods from either the [`CohortDtstmTrans`] 
@@ -479,19 +515,48 @@ sim_ev.NULL <- function(object, ...) {
 #' 
 #' @example man-roxygen/example-sim_ev.stateprobs.R
 #' 
-#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437),
+#' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437).
 #' See Section 2.1 for mathematical details.
 #'
 #' @export
 #' @name sim_ev
 #' @aliases sim_costs sim_qalys
-sim_ev.stateprobs <- function(object, models, dr = .03,
+sim_ev.stateprobs <- function(object, models = NULL, dr = .03,
                               integrate_method = c("trapz", "riemann_left", "riemann_right"),
+                              value_name = "value", outcome_name = "outcome",
                               ...){
   integrate_method <- match.arg(integrate_method)
   state_id <- NULL
   
-  # Case where a single model is provide
+  # Some standard checks
+  if(is.null(object)){
+    stop("You must first simulate health state probabilities.",
+         call. = FALSE)
+  }
+  check_dr(dr)
+  
+  # Resize the state probabilities based on the absorbing states
+  absorbing <- attr(object, "absorbing")
+  if (is.null(absorbing)) {
+    stprobs <- object
+  } else {
+    stprobs <- object[state_id != absorbing]
+  }
+  
+  # Case where models is NULL
+  if (is.null(models)) {
+    out <- data.table(
+      stprobs[t == 0][, c("prob", "t") := NULL],
+      value = sim_los(object,
+                      dr, 
+                      integrate_method)
+    )
+    setnames(out, "value", value_name)
+    return(out)
+  }
+  
+  # Case where models is not NULL
+  ## Differentiate between a single model or a list of models being provided
   if (inherits(models, "StateVals")) {
     models <- list(models)
     model_is_list <- FALSE
@@ -499,45 +564,48 @@ sim_ev.stateprobs <- function(object, models, dr = .03,
     model_is_list <- TRUE
   }
   
-  # Add default names if required
+  ## Add default names if required
   if (is.null(names(models))) {
     names(models) <- paste0("Outcome ", seq(1, length(models)))
   }
   
-  # Checks
-  ## State probabilities
-  if(is.null(object)){
-    stop("You must first simulate health state probabilities.",
-         call. = FALSE)
-  }
-  
-  ## Discount rate
-  check_dr(dr)
-  
-  ## The state value models, particularly that the size of the ID variables
-  ## is correct
+  ## Check the state value models, particularly that the size of the 
+  # ID variables is correct
   check_StateVals(models, object)
+
   
-  # Simulate
-  res <- data.table(C_sim_ev(object[state_id != max(state_id)],
+  ## Simulate
+  out <- data.table(C_sim_ev(stprobs,
                              models,
                              dr, 
                              names(models),
                              unique(object$t),
                              integrate_method))
-  if (!model_is_list) res[, ("outcome") := NULL]
-  res[, sample := sample + 1]
-  if (!"patient_wt" %in% colnames(object)) res[, ("patient_wt") := NULL]
-  return(res[])
+  if (!model_is_list) {
+    out[, ("outcome") := NULL]
+  } else {
+    setnames(out, "outcome", outcome_name)
+  }
+  out[, sample := sample + 1]
+  if (!"patient_wt" %in% colnames(object)) out[, ("patient_wt") := NULL]
+  setnames(out, "value", value_name)
+  return(out[])
 } 
 
-sim_los <- function (object, utility_model, dr, 
+sim_los <- function (object, dr, 
                      integrate_method = c("trapz", "riemann_left", "riemann_right")) {
   state_id <- NULL # To avoid no visible binding note
-  n_samples <- utility_model$params$n_samples
-  id <- get_id_object(utility_model)
-  n_obs <- n_samples * id$n_strategies * id$n_patients * id$n_states
-  los <- C_sim_los(stateprobs = object[state_id != max(state_id)]$prob,
+  size <- attr(object, "size")
+  n_samples <- size["n_samples"]
+  absorbing <- attr(object, "absorbing")
+  if (is.null(absorbing)) {
+    n_states <- size["n_states"]
+  } else {
+    n_states <- size["n_states"] - length(absorbing)
+  }
+  n_obs <- n_samples * size["n_strategies"] * size["n_patients"] * n_states
+  stprobs <- object[state_id != absorbing]$prob
+  los <- C_sim_los(stateprobs = stprobs,
                    n_obs = n_obs,
                    dr = dr,
                    times = unique(object$t),
@@ -549,20 +617,19 @@ sim_los <- function (object, utility_model, dr,
 #' @export
 sim_qalys <- function(object, model, dr = .03, 
                       integrate_method = c("trapz", "riemann_left", "riemann_right"), 
-                      lys){
+                      lys = TRUE){
   model$check()
   qalys <- sim_ev(object,
-                  model,
-                  dr,
-                  integrate_method)
+                  models = model,
+                  dr = dr,
+                  integrate_method = integrate_method,
+                  value_name = "qalys")
   if (lys){
     los <- sim_los(object,
-                   model,
                    dr,
                    integrate_method)
     qalys[, lys := los]
   }
-  setnames(qalys, "value", "qalys")
   setattr(qalys, "class", 
           c("qalys", "data.table", "data.frame"))
   return(qalys[, ])
@@ -579,12 +646,11 @@ sim_costs <- function(object, models, dr = .03,
     names(models) <- paste0("Category ", seq(1, length(models)))
   }
   costs <- sim_ev(object,
-                  models,
-                  dr,
-                  integrate_method)
-  setnames(costs, 
-           c("outcome", "value"),
-           c("category", "costs"))
+                  models = models,
+                  dr = dr,
+                  integrate_method = integrate_method,
+                  value_name = "costs",
+                  outcome_name = "category")
   setattr(costs, "class", 
           c("costs", "data.table", "data.frame"))
   return(costs[, ])

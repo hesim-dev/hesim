@@ -25,9 +25,12 @@ the following columns:
 When simulating individual-level models, the \code{patient_id} column is
 not included as state probabilities are computed by averaging across patients.
 
-In cohort models, the object also contains a \code{size} attribute that contains
-the elements \code{n_samples}, \code{n_strategies}, \code{n_patients}, \code{n_states}, and
+In cohort models, the object also contains \code{size} and \code{absorbing} attributes.
+The \code{size} attribute is a numeric vector with the elements \code{n_samples},
+\code{n_strategies}, \code{n_patients}, \code{n_states}, and
 \code{n_times} denoting the number of samples, treatment strategies, patients,
-health states, and times.
+health states, and times. The \code{absorbing} attribute is a numeric vector
+containing the absorbing health states (see the \code{absorbing} field of the
+\code{\link{CohortDtstmTrans}} class for more details).
 }
 

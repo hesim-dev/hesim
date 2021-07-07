@@ -9,10 +9,113 @@ An \link[R6:R6Class]{R6::R6Class} object.
 \description{
 Simulate health state transitions in a cohort discrete time state transition model.
 }
+\examples{
+library("msm")
+library("data.table")
+set.seed(101)
+
+# We consider two examples that have the same treatment strategies and patients.
+# One model is parameterized by fitting a multi-state model with the "msm"
+# package; in the second model, the parameters are entered "manually" with
+# a "params_mlogit_list" object.
+
+# MODEL SETUP
+strategies <- data.table(
+  strategy_id = c(1, 2, 3),
+  strategy_name = c("SOC", "New 1", "New 2")
+)
+patients <- data.table(patient_id = 1:2)
+hesim_dat <- hesim_data(
+  strategies = strategies,
+  patients = patients
+)
+
+# EXAMPLE #1: msm
+## Fit multi-state model with panel data via msm
+qinit <- rbind(
+  c(0, 0.28163, 0.01239),
+  c(0, 0, 0.10204),
+  c(0, 0, 0)
+)
+fit <- msm(state_id ~ time, subject = patient_id,
+           data = onc3p[patient_id \%in\% sample(patient_id, 100)],
+           covariates = list("1-2" =~ strategy_name),
+           qmatrix = qinit)
+
+## Simulation model
+transmod_data <- expand(hesim_dat)
+transmod <- create_CohortDtstmTrans(fit,
+                                    input_data = transmod_data,
+                                    cycle_length = 1/2,
+                                    fixedpars = 2,
+                                    n = 2)
+transmod$sim_stateprobs(n_cycles = 2)
+
+# EXAMPLE #2: params_mlogit_list
+## Input data
+transmod_data[, intercept := 1]
+transmod_data[, new1 := ifelse(strategy_name == "New 1", 1, 0)]
+transmod_data[, new2 := ifelse(strategy_name == "New 2", 1, 0)]
+
+## Parameters
+n <- 10
+transmod_params <- params_mlogit_list(
+  
+  ## Transitions from stable state (stable -> progression, stable -> death)
+  stable = params_mlogit(
+    coefs = list(
+      progression = data.frame(
+        intercept = rnorm(n, -0.65, .1),
+        new1 = rnorm(n, log(.8), .02),
+        new2 = rnorm(n, log(.7, .02))
+      ),
+      death = data.frame(
+        intercept = rnorm(n, -3.75, .1),
+        new1 = rep(0, n),
+        new2 = rep(0, n)
+      )
+    )
+  ),
+  
+  ## Transition from progression state (progression -> death)
+  progression = params_mlogit(
+    coefs = list(
+      death = data.frame(
+        intercept = rnorm(n, 2.45, .1),
+        new1 = rep(0, n),
+        new2 = rep(0, n)
+      )
+    )
+  )
+)
+transmod_params
+
+## Simulation model
+tmat <- rbind(c(0, 1, 2),
+              c(NA, 0, 1),
+              c(NA, NA, NA))
+transmod <- create_CohortDtstmTrans(transmod_params, 
+                                    input_data = transmod_data,
+                                    trans_mat = tmat, cycle_length = 1)
+transmod$sim_stateprobs(n_cycles = 2)
+
+\dontshow{
+  pb <- expmat(coef(fit)$baseline)[, , 1]
+  
+  ## From stable
+  b1 <- log(pb[1, 2]/(1 - pb[1, 2] - pb[1, 3]))
+  b2 <- log(pb[1, 3]/(1 - pb[1, 2] - pb[1, 3]))
+  exp(b1)/(1 + exp(b1) + exp(b2))
+  exp(b2)/(1 + exp(b1) + exp(b2))
+  
+  ### From progression
+  b <- qlogis(pb[2, 2])
+}
+}
 \seealso{
 \code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}} creates a \code{\link{CohortDtstmTrans}} object from either
 a fitted statistical model or a parameter object. A complete economic model can be implemented
-with the\code{\link{CohortDtstm}} class.
+with the \code{\link{CohortDtstm}} class.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -24,6 +127,11 @@ Supports objects of class \code{\link{tparams_transprobs}} or \code{\link{params
 
 \item{\code{cycle_length}}{The length of a model cycle in terms of years.
 The default is \code{1} meaning that model cycles are 1 year long.}
+
+\item{\code{absorbing}}{A numeric vector denoting the states that are
+absorbing states; i.e., states that cannot be transitioned from.
+Each element should correspond to a \code{state_id},
+which should, in turn, be the index of the health state.}
 }
 \if{html}{\out{</div>}}
 }
@@ -68,7 +176,8 @@ Create a new \code{CohortDtstmTrans} object.
   input_data = NULL,
   trans_mat = NULL,
   start_stateprobs = NULL,
-  cycle_length = 1
+  cycle_length = 1,
+  absorbing = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -84,6 +193,10 @@ Create a new \code{CohortDtstmTrans} object.
 \item{\code{start_stateprobs}}{The \code{start_stateprobs} field.}
 
 \item{\code{cycle_length}}{The \code{cycle_length} field.}
+
+\item{\code{absorbing}}{The \code{absorbing} field. If \code{NULL}, then the constructor
+will determine which states are absorbing automatically; non \code{NULL} values
+will override this behavior.}
 }
 \if{html}{\out{</div>}}
 }
