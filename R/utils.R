@@ -57,6 +57,13 @@ check_StateVals <- function(models, object,
     stop("'size' attribute missing from ", object_name, ".")
   }
   
+  ## The expected number of states depends on the number of absorbing states
+  expected_states <- expected_size[["n_states"]]
+  if (!is.null(attr(object, "absorbing"))) {
+    expected_states <- expected_states - length(attr(object, "absorbing"))
+  }
+  
+  ## Loop over models
   for (i in 1:length(models)){ 
     
     check_size <- function(actual, expected, z = NULL, msg = NULL) {
@@ -80,28 +87,44 @@ check_StateVals <- function(models, object,
                expected_size[["n_patients"]],
                z = "patients")
     check_size(
-      get_id_object(models[[i]])$n_states + 1, 
-      expected_size[["n_states"]],
+      get_id_object(models[[i]])$n_states, 
+      expected_states,
       msg = paste0("The number of states in each 'StateVals' model ", 
-                   "must be one less (since state values are not applied to the ",
-                   "death state) than the number of states in the ",
-                   "'", object_name, "' object",
-                   ", which is ", expected_size[["n_states"]], ".")
+                   "must equal the number of states in the ",
+                   "'", object_name, "' object less the number of ",
+                   "absorbing states, which is ", expected_states, ".")
     )
   } # End loop over state value models
 }
 
-# Additional utility methods ---------------------------------------------------
+# Absorbing states -------------------------------------------------------------
 #' Absorbing states
 #' 
-#' Returns a vector of absorbing states from a transition matrix.
-#' @param trans_mat A transition matrix in the format from the [`mstate`][mstate::mstate] package. 
-#' See [`IndivCtstmTrans`].
+#' This is a generic function that returns a vector of absorbing states.
+#' @param x An object of the appropriate class. When `x` is a `matrix`, 
+#' it must be a transition matrix in the format from the 
+#' [`mstate`][mstate::mstate] package (see also [`IndivCtstmTrans`]). 
 #' @keywords internal
-absorbing <- function(trans_mat){
-  which(apply(trans_mat, 1, function(x) all(is.na(x))))
+absorbing <- function(x, ...) {
+  UseMethod("absorbing")
 }
 
+#' @rdname absorbing
+absorbing.matrix <- function(x, ...){
+  which(apply(x, 1, function(z) all(is.na(z))))
+}
+
+#' @rdname absorbing
+absorbing.tparams_transprobs <- function(x, ...){
+  n_states <- ncol(x$value)
+  m <- apply(x$value, c(1, 2), mean)
+  sum_zero <- apply(m, 1, function (z) sum(z == 0))
+  absorbing <- which(sum_zero == (n_states - 1))
+  if (length(absorbing) == 0) absorbing <- NULL
+  absorbing
+}
+
+# Additional utility methods ---------------------------------------------------
 #' Form a list from \code{...}
 #' 
 #' Form a list of objects from \code{...}.

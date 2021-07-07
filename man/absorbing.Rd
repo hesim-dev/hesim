@@ -2,15 +2,22 @@
 % Please edit documentation in R/utils.R
 \name{absorbing}
 \alias{absorbing}
+\alias{absorbing.matrix}
+\alias{absorbing.tparams_transprobs}
 \title{Absorbing states}
 \usage{
-absorbing(trans_mat)
+absorbing(x, ...)
+
+\method{absorbing}{matrix}(x, ...)
+
+\method{absorbing}{tparams_transprobs}(x, ...)
 }
 \arguments{
-\item{trans_mat}{A transition matrix in the format from the \code{\link[mstate:mstate-package]{mstate}} package.
-See \code{\link{IndivCtstmTrans}}.}
+\item{x}{An object of the appropriate class. When \code{x} is a \code{matrix},
+it must be a transition matrix in the format from the
+\code{\link[mstate:mstate-package]{mstate}} package (see also \code{\link{IndivCtstmTrans}}).}
 }
 \description{
-Returns a vector of absorbing states from a transition matrix.
+This is a generic function that returns a vector of absorbing states.
 }
 \keyword{internal}

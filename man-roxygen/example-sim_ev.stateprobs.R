@@ -35,3 +35,6 @@ sim_ev(stprobs, models = list(`Outcome 1` = outmod))
 ## Suppose the outcome were a cost category. Then we might
 ## prefer the following:
 sim_costs(stprobs, models = list(drug = outmod))
+
+## Length of stay is computed if there is no state value model
+sim_ev(stprobs)

@@ -398,9 +398,9 @@ test_that("sim_costs() throws error with incorrect number of health states", {
                                                hesim_data = hesim_dat))
   expect_error(
     econmod$sim_costs(),
-    paste0("The number of states in each 'StateVals' model must be one less ",
-           "(since state values are not applied to the death state) than ",
-           "the number of states in the 'stateprobs' object, which is 4."),
+    paste0("The number of states in each 'StateVals' model must equal ",
+           "the number of states in the 'stateprobs' object less the ",
+           "number of absorbing states, which is 3."),
     fixed = TRUE
     )
 })

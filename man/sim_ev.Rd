@@ -9,9 +9,11 @@
 \usage{
 \method{sim_ev}{stateprobs}(
   object,
-  models,
+  models = NULL,
   dr = 0.03,
   integrate_method = c("trapz", "riemann_left", "riemann_right"),
+  value_name = "value",
+  outcome_name = "outcome",
   ...
 )
 
@@ -20,7 +22,7 @@ sim_qalys(
   model,
   dr = 0.03,
   integrate_method = c("trapz", "riemann_left", "riemann_right"),
-  lys
+  lys = TRUE
 )
 
 sim_costs(
@@ -40,13 +42,21 @@ costs or QALYs. Options are \code{trapz} (the default) for the trapezoid rule,
 \code{riemann_left} left for a left Riemann sum, and
 \code{riemann_right} right for a right Riemann sum.}
 
+\item{value_name}{Name of the column containing values of the outcome. Default
+is \code{"value"}.}
+
+\item{outcome_name}{Name of the column indicating the outcome corresponding
+to each model. Only used if \code{models} is a list. Default is \code{"outcome"}.}
+
 \item{...}{Currently unused.}
 
 \item{model, models}{An object or list of objects of class \code{\link{StateVals}} used to
 model state values. When using \code{sim_qalys()}, this should be
 a single model for utility. With \code{sim_costs()}, a list of models should be
 used with one model for each cost category. Finally, with \code{sim_ev()},
-this may either be a single model or a list of models.}
+this may either be a single model or a list of models. May also be \code{NULL},
+in which case length of stay is computed based on the state probabilities
+contained in \code{object}.}
 
 \item{lys}{If \code{TRUE}, then life-years are simulated in addition to
 QALYs.}
@@ -64,8 +74,9 @@ QALYs.}
 Only included if \code{models} is a list.}
 \item{value}{The expected value.}
 }
-\code{sim_costs()} and \code{sim_qalys()} return similar objects, that are of class
-\code{\link{costs}} and \code{\link{qalys}}, respectively.
+The names of the \code{outcome} and \code{value} columns may be changed with the
+\code{value_name} and \code{outcome_name} arguments. \code{sim_costs()} and \code{sim_qalys()}
+return similar objects, that are of class \code{\link{costs}} and \code{\link{qalys}}, respectively.
 }
 \description{
 Simulate expected values as a function of simulated state occupancy
@@ -110,6 +121,21 @@ most accurate and is recommended.)
 Mathematical details are provided in the reference within the "References"
 section below.
 }
+\note{
+The ID variables in the state value models in \code{models} must be
+consistent with the ID variables contained in \code{object}. In particular,
+the \code{models} should predict state values for each non-absorbing health state
+in \code{object}; that is, the number of health states modeled with the
+\code{models} should equal the number of health states in \code{object} less the number
+of absorbing states.
+
+The absorbing states are saved as an attribute named \code{absorbing} to
+\code{\link{stateprobs}} objects. When simulating state probabilities with a
+\code{\link{CohortDtstmTrans}} object, the absorbing state is determined by the
+\code{absorbing} field in the class; in a \code{Psm} (or with
+\code{\link[=sim_stateprobs.survival]{sim_stateprobs.survival()}}), the absorbing state is always equal to the
+final health state.
+}
 \examples{
 # We need (i) a state probability object and (ii) a model for state values
 ## We should start by setting up our decision problem
@@ -148,9 +174,12 @@ sim_ev(stprobs, models = list(`Outcome 1` = outmod))
 ## Suppose the outcome were a cost category. Then we might
 ## prefer the following:
 sim_costs(stprobs, models = list(drug = outmod))
+
+## Length of stay is computed if there is no state value model
+sim_ev(stprobs)
 }
 \references{
-\href{https://arxiv.org/abs/2102.09437}{Incerti and Jansen (2021)},
+\href{https://arxiv.org/abs/2102.09437}{Incerti and Jansen (2021)}.
 See Section 2.1 for mathematical details.
 }
 \seealso{

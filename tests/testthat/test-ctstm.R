@@ -337,9 +337,9 @@ test_that("Simulate costs and QALYs", {
   ictstm2$utility_model$params$n_states <- -1
   expect_error(
     ictstm2$sim_qalys(),
-    paste0("The number of states in each 'StateVals' model must be one less ",
-           "(since state values are not applied to the death state) than ",
-           "the number of states in the 'disprog' object, which is 3."),
+    paste0("The number of states in each 'StateVals' model must equal ",
+           "the number of states in the 'disprog' object less the number ",
+           "of absorbing states, which is 2."),
     fixed = TRUE
   )
   

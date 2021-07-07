@@ -37,9 +37,14 @@ Returns an object of class \code{hesim_data}, which is a list of data tables for
 health economic simulation modeling.
 }
 \description{
-A list of tables required for health economic simulation modeling.
-Each table must either be a \code{data.frame} or \code{data.table}. All ID variables within
-each table must be numeric vectors of integers.
+A list of tables required for health economic simulation modeling. This object
+is used to setup models by defining the treatment strategies, target population,
+and model structure.
+}
+\note{
+Each table must either be a \code{data.frame} or \code{data.table}. All ID variables
+within each table must be numeric vectors of integers and should be of the form
+1,2,...N where N is the number of unique values of the ID variable.
 }
 \examples{
 strategies <- data.frame(strategy_id = c(1, 2))

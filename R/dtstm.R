@@ -6,7 +6,8 @@
 #' @format An [R6::R6Class] object.
 #' @seealso [create_CohortDtstmTrans()] creates a [`CohortDtstmTrans`] object from either
 #' a fitted statistical model or a parameter object. A complete economic model can be implemented
-#' with the[`CohortDtstm`] class.
+#' with the [`CohortDtstm`] class.
+#' @example man-roxygen/example-CohortDtstmTrans.R
 #' @name CohortDtstmTrans
 NULL 
 
@@ -54,6 +55,16 @@ CohortDtstmTrans <- R6::R6Class(
           } 
         }
         private$.trans_mat <- x
+      }
+    },
+    
+    set_absorbing = function(x) {
+      if (!is.null(x)) {
+        self$absorbing <- x
+      } else if (!is.null(private$.trans_mat)) {
+        self$absorbing <- absorbing(private$.trans_mat)
+      } else {
+        self$absorbing <- absorbing(self$params)
       }
     },
     
@@ -105,6 +116,12 @@ CohortDtstmTrans <- R6::R6Class(
     #' The default is `1` meaning that model cycles are 1 year long.
     cycle_length = NULL,
     
+    #' @field absorbing A numeric vector denoting the states that are 
+    #' absorbing states; i.e., states that cannot be transitioned from. 
+    #' Each element should correspond to a `state_id`, 
+    #' which should, in turn, be the index of the health state. 
+    absorbing = NULL,
+    
     #' @description
     #' Create a new `CohortDtstmTrans` object.
     #' @param params The `params` field.
@@ -112,12 +129,16 @@ CohortDtstmTrans <- R6::R6Class(
     #' @param trans_mat The `trans_mat` field.
     #' @param start_stateprobs The `start_stateprobs` field.
     #' @param cycle_length The `cycle_length` field.
+    #' @param absorbing The `absorbing` field. If `NULL`, then the constructor
+    #' will determine which states are absorbing automatically; non `NULL` values
+    #' will override this behavior.
     #' @return A new `CohortDtstmTrans` object.
     initialize = function(params,
                           input_data = NULL,
                           trans_mat = NULL,
                           start_stateprobs = NULL, 
-                          cycle_length = 1){
+                          cycle_length = 1,
+                          absorbing = NULL){
       self$params <- params
       self$input_data <- input_data
       private$set_trans_mat(trans_mat)
@@ -130,6 +151,7 @@ CohortDtstmTrans <- R6::R6Class(
         self$start_stateprobs <- c(1, rep(0, private$get_n_states() - 1))
       }
       self$cycle_length <- cycle_length
+      private$set_absorbing(absorbing)
     },
     
     #' @description
@@ -147,6 +169,7 @@ CohortDtstmTrans <- R6::R6Class(
               c("stateprobs", "data.table", "data.frame"))
       setattr(stprobs, "size", 
               c(get_size(self), n_states = private$get_n_states()))
+      setattr(stprobs, "absorbing", self$absorbing)
       return(stprobs[])
     }
   )
