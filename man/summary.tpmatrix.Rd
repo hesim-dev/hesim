@@ -33,6 +33,7 @@ from (\code{from}), (ii) the health state that is being transitioned to (\code{t
 (iii) the mean of each parameter across parameter samples (\code{mean}),
 (iv) the standard deviation of the parameter samples (\code{sd}), and
 (v) quantiles of the parameter samples corresponding to the \code{probs} argument.
+If \code{id} is not \code{NULL}, then the ID variables are also returned as columns.
 
 If, on the other hand, \code{unflatten = "TRUE"}, then the parameters are unflattened
 to form transition probability matrices; that is, the \code{mean}, \code{sd}, and

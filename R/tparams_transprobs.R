@@ -296,7 +296,7 @@ tparams_transprobs.eval_model <- function(object, ...){
 # summary.tparams_transprobs ---------------------------------------------------
 #' Summarize `tparams_transprobs` object
 #' 
-#' The `summary()` method summarizes a [`tparams_transprobs`] containing 
+#' The `summary()` method summarizes a [`tparams_transprobs`] object containing 
 #' predicted transition probabilities; summary statistics are computed for each 
 #' possible transition by the relevant ID variables. The `print()` method
 #' summarizes the object using `summary.tparams_transprobs()` and prints it to the

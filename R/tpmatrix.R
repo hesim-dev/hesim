@@ -336,6 +336,7 @@ tpmatrix <- function(..., complement = NULL, states = NULL,
 #' (iii) the mean of each parameter across parameter samples (`mean`),
 #' (iv) the standard deviation of the parameter samples (`sd`), and
 #' (v) quantiles of the parameter samples corresponding to the `probs` argument. 
+#' If `id` is not `NULL`, then the ID variables are also returned as columns.
 #' 
 #' If, on the other hand, `unflatten = "TRUE"`, then the parameters are unflattened
 #' to form transition probability matrices; that is, the `mean`, `sd`, and 

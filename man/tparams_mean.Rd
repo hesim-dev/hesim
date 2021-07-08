@@ -8,7 +8,8 @@ tparams_mean(value, ...)
 }
 \arguments{
 \item{value}{Matrix of samples from the distribution of the
-mean. Columns denote random samples and rows denote means for different observations.}
+mean. Columns denote random samples and rows denote means for different
+observations.}
 
 \item{...}{Arguments to pass to \link{id_attributes}. Each row in
 \code{value} must be a prediction for a \code{strategy_id},
@@ -21,16 +22,41 @@ An object of class \code{tparams_mean}, which is a list containing \code{value},
 \description{
 Create a list containing means predicted from a statistical model.
 }
+\note{
+The \code{tparams_mean()} constructor would not normally be used by users; instead,
+a \code{tparams_mean} object is typically created automatically as part of the
+\code{\link{StateVals}} class with \code{\link[=create_StateVals]{create_StateVals()}}.
+}
 \examples{
-tparams_mean(value = matrix(1:8, nrow = 4),
-             strategy_id = rep(1:2, each = 2),
-             n_strategies = 2,
-             patient_id = rep(1, 4),
-             n_patients = 1,
-             state_id = rep(1:2, times = 2),
-             n_states = 2)
+# Setup model
+hesim_dat <- hesim_data(
+  strategies = data.frame(strategy_id = c(1, 2)),
+  patients = data.frame(patient_id = c(1, 2)),
+  states = data.frame(
+    state_id = c(1, 2, 3),
+    state_name = c("state1", "state2", "state3")
+  )
+)
 
+# Cost model
+cost_tbl <- stateval_tbl(
+  data.frame(strategy_id = hesim_dat$strategies$strategy_id,
+             mean = c(5000, 3000),
+             se = c(200, 100)
+            ),
+  dist = "gamma"
+)
+costmod <- create_StateVals(cost_tbl, n = 2, hesim_data = hesim_dat)
+
+# The 'params' field of the `StateVals` class is a tparams_mean object
+class(costmod$params)
+costmod$params
+summary(costmod$params)
 }
 \seealso{
-\link{tparams}
+A \code{tparams_mean} object is a type of \link[=tparams]{transformed parameter}
+object and is a supported class type of the \code{params} field of the \code{\link{StateVals}}
+class. See the documentation for \code{\link[=create_StateVals]{create_StateVals()}} and \code{\link[=stateval_tbl]{stateval_tbl()}}
+for examples of how to create\code{StateVals} objects. Predicted means can be
+summarized across parameter samples using \code{\link[=summary.tparams_mean]{summary.tparams_mean()}}.
 }
