@@ -540,7 +540,7 @@ sim_ev.stateprobs <- function(object, models = NULL, dr = .03,
   if (is.null(absorbing)) {
     stprobs <- object
   } else {
-    stprobs <- object[state_id != absorbing]
+    stprobs <- object[!state_id %in% absorbing]
   }
   
   # Case where models is NULL
@@ -595,20 +595,17 @@ sim_ev.stateprobs <- function(object, models = NULL, dr = .03,
 sim_los <- function (object, dr, 
                      integrate_method = c("trapz", "riemann_left", "riemann_right")) {
   state_id <- NULL # To avoid no visible binding note
-  size <- attr(object, "size")
-  n_samples <- size["n_samples"]
   absorbing <- attr(object, "absorbing")
   if (is.null(absorbing)) {
-    n_states <- size["n_states"]
+    stprobs <- object
   } else {
-    n_states <- size["n_states"] - length(absorbing)
+    stprobs <- object[!state_id %in% absorbing]
   }
-  n_obs <- n_samples * size["n_strategies"] * size["n_patients"] * n_states
-  stprobs <- object[state_id != absorbing]$prob
-  los <- C_sim_los(stateprobs = stprobs,
-                   n_obs = n_obs,
+  unique_times <- unique(object$t)
+  los <- C_sim_los(stateprobs = stprobs$prob,
+                   n_obs = nrow(stprobs)/length(unique_times),
                    dr = dr,
-                   times = unique(object$t),
+                   times = unique_times,
                    integrate_method = match.arg(integrate_method))
   return(los)
 }
