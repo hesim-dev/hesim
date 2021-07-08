@@ -45,6 +45,7 @@ reference:
       - summary.params
       - tparams
       - tparams_mean
+      - summary.tparams_mean
       - tparams_transprobs
       - as.data.table.tparams_transprobs
       - summary.tparams_transprobs

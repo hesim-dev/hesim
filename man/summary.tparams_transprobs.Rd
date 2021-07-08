@@ -31,7 +31,7 @@ currently unused for the \code{summary()} method.}
 method under the hood and returns the same output.
 }
 \description{
-The \code{summary()} method summarizes a \code{\link{tparams_transprobs}} containing
+The \code{summary()} method summarizes a \code{\link{tparams_transprobs}} object containing
 predicted transition probabilities; summary statistics are computed for each
 possible transition by the relevant ID variables. The \code{print()} method
 summarizes the object using \code{summary.tparams_transprobs()} and prints it to the

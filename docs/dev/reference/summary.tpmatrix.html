@@ -222,7 +222,8 @@ is returned with columns for (i) the health state that is being transitioned
 from (<code>from</code>), (ii) the health state that is being transitioned to (<code>to</code>)
 (iii) the mean of each parameter across parameter samples (<code>mean</code>),
 (iv) the standard deviation of the parameter samples (<code>sd</code>), and
-(v) quantiles of the parameter samples corresponding to the <code>probs</code> argument.</p>
+(v) quantiles of the parameter samples corresponding to the <code>probs</code> argument.
+If <code>id</code> is not <code>NULL</code>, then the ID variables are also returned as columns.</p>
 <p>If, on the other hand, <code>unflatten = "TRUE"</code>, then the parameters are unflattened
 to form transition probability matrices; that is, the <code>mean</code>, <code>sd</code>, and
 quantile columns are (lists of) matrices.</p>
