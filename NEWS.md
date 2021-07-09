@@ -1,18 +1,31 @@
 ## hesim 0.5.0.9999
 
+### New features
+
 * A `survival` object can now be constructed manually with `survival()` and simulated state probabilities can be computed from survival curves with `sim_stateprobs.survival()`. These features are useful for partitioned survival analyses when a user would like to use a survival model not supported by `hesim` to predict survival curves (#49).
 
-* `sim_stateprobs.survival()` handles scenarios where survival curves cross better, ensuring that state probabilities sum to 1 (#56).
-
-* There is now a `complement` argument to `tpmatrix()` where users can define transitions that are "complements". This is particularly helpful for creating large transition probability matrices since there is no longer a need to manually enter `"C"` in the `...` portion of `tpmatrix()`. In other words, users can pass a single object to `tpmatrix()` and use the `complement` argument to ensure probabilities sum to 1 in each row. One reasonable workflow with `define_tparams()` would be to (i) create a single matrix of initial values (say zeros), (ii) modify the transitions that differ from the initial values, and (iii) pass the resulting object to `tpmatrix()` while using the `complement` argument.
+* `tpmatrix()` is more flexible: 
+    + There is now a `complement` argument where users can define transitions that are "complements". This is particularly helpful for creating large transition probability matrices since there is no longer a need to manually enter `"C"` in the `...` portion of `tpmatrix()`. In other words, users can pass a single object to `tpmatrix()` and use the `complement` argument to ensure probabilities sum to 1 in each row. One reasonable workflow with `define_tparams()` would be to (i) create a single matrix of initial values (say zeros), (ii) modify the transitions that differ from the initial values, and (iii) pass the resulting object to `tpmatrix()` while using the `complement` argument.
+    
+    + The `states`, `prefix`, and `sep` arguments can be used to name the columns (i.e., the transitions) and the states. The named states are, in turn, passed to the `$value` element of a `tparams_transprobs` object with `tparams_transprobs.tpmatrix()`. 
 
 * An `eval_rng()` object can now be passed directly to `define_model()`, meaning that users can sample parameters prior to defining a model. Previously users could only pass an `rng_def` object to `define_model()`, which meant that sampling could only occur while evaluating a `model_def` object. 
 
-* There are now summary and print methods for parameter and `eval_rng` objects. See `summary.params()` and `summary.eval_rng()`.
+* There are now summary and print methods for parameter, transformed parameter, and `eval_rng` objects. See `summary.params()`, `summary.tparams_transprobs()`, `summary.tparams_mean()`, and `summary.eval_rng()`.
 
 * An `input_mats` object can be converted to a `data.table` with `as.data.table.input_mats()` and printed to the console in a less verbose way than in prior versions with `print.input_mats()`.
 
+* `sim_ev()`, `sim_costs()`, and `sim_qalys()` are now exported functions that give users additional flexibility in their modeling pipelines and provide improved documentation for computation of expected values in cohort models. `sim_ev()` is particularly useful for computing outcomes that depend on time in state other than costs or quality-adjusted life-years (QALYs). 
+
+* Multiple absorbing states (or none at all) are possible in `hesim::CohortDtstm` and `hesim::IndivCtstm` models (previously the final health state was always assumed to be a death state). In cohort models, the absorbing states can be set manually using the `absorbing` field in the `hesim::CohortDtstmTrans` class; if not, they are set automatically based on the transition probabilities. The number of health states in state value models (class `hesim::StateVals`) must equal the number of health states in the transition models less the number of absorbing states. 
+
 * A new `create_CohortDtstmTrans.params_mlogit_list()` method allows the transition component of a cohort discrete time state transition model (cDTSTM) to be created directly from multinomial logistic regression parameter objects.
+
+* The coefficient elements of parameter objects can be constructed from any object (e.g., data frame) than can be passed to `as.matrix()` (rather than only from matrices as in previous versions). See, for instance, `params_surv()`. 
+
+### Bug fixes
+
+* `sim_stateprobs.survival()` handles scenarios where survival curves cross better, ensuring that state probabilities sum to 1 (#56).
 
 ## hesim 0.5.0
 ### New features
@@ -20,7 +33,7 @@
 
 * The `...` argument to `create_PsmCurves()` now passes arguments to `create_params.partsurvfit()` when `object` is of class `flexsurvreg_list`. This allows more control over bootstrapping (i.e., use of the `max_errors` and `silent` arguments). 
 
-* `summary.ce()` is a new summary method for a `hesim::ce` object that produces confidence intervals for quality-adjusted life-years (QALYs) and each cost category; `format.summary.ce()` formats the output for pretty printing. 
+* `summary.ce()` is a new summary method for a `hesim::ce` object that produces confidence intervals for QALYs and each cost category; `format.summary.ce()` formats the output for pretty printing. 
 
 * `icer()` generates a tidy table of incremental cost-effectiveness ratios (ICERs) given output from `cea_pw()`; `format.icer()` formats the output for pretty printing.
 
