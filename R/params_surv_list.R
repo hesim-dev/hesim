@@ -82,13 +82,14 @@ create_params.flexsurvreg_list <- function(object, n = 1000, uncertainty = c("no
 }
 
 #' @export
+#' @inheritParams bootstrap
 #' @rdname create_params
 create_params.partsurvfit <- function(object, n = 1000, 
                                       uncertainty = c("normal", "bootstrap", "none"), 
-                                      ...){
+                                      max_errors = 0, silent = FALSE, ...){
   uncertainty <- match.arg(uncertainty)
   if(uncertainty == "bootstrap"){
-    res <- bootstrap(object, B = n, ...)
+    res <- bootstrap(object, B = n, max_errors = max_errors, silent = silent)
   } else{
     res <- create_params(object$models, n = n, uncertainty = uncertainty)
   }

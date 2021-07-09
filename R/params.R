@@ -108,9 +108,7 @@ summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {
 #' If `"normal"`, then parameters are randomly drawn from their multivariate normal
 #' distribution. If `"bootstrap"`, then parameters are bootstrapped using [`bootstrap`].
 #' If `"none"`, then only point estimates are returned.
-#' @param ... Further arguments passed to or from other methods. Only used when
-#'  `object` is of class `partsurvfit`, in which case the arguments are passed 
-#'  to [`bootstrap.partsurvfit()`].
+#' @param ... Currently unused. 
 #' @return An object prefixed by `params_`. Mapping between `create_params` 
 #' and the classes of the returned objects are: 
 #' \itemize{
