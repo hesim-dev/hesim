@@ -106,6 +106,7 @@ c.eval_rng <- function(...) {
   x <- do.call("c", dots)
   class(x) <- "eval_rng"
   attr(x, "n") <- n
+  attr(x, "checked") <- FALSE
   x
 }
 
