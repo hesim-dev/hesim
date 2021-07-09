@@ -134,8 +134,8 @@ articles:
   - markov-inhomogeneous-indiv
   - mstate
   - psm
-  - expected-values
   - cea
+  - benchmarks
 
 navbar:
   title: hesim

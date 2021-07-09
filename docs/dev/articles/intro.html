@@ -105,7 +105,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,14 +119,14 @@
 
       
 
-      </header><script src="intro_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="intro_files/kePrint-0.0.1/kePrint.js"></script><link href="intro_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="intro_files/header-attrs-2.9/header-attrs.js"></script><script src="intro_files/kePrint-0.0.1/kePrint.js"></script><link href="intro_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to <code>hesim</code>
 </h1>
             
-            <h4 class="date">2021-05-08</h4>
+            <h4 class="date">2021-07-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -182,7 +182,7 @@ Individual-level continuous time state transition model (iCTSTM)
 <li>
 <strong>Parameterization</strong>: An economic model is parameterized by estimating statistical models for disease progression, utilities, and costs using “estimation” datasets, such as individual patient data (IPD) from a single study or aggregate data from multiple studies.</li>
 <li>
-<strong>Simulation</strong>: The statistical models estimated in Step 1 are combined to construct an economic model. For a given model structure, disease progression, QALYs, and costs are simulated from “input data”, based on the target population and treatment strategies of interest.</li>
+<strong>Simulation</strong>: The statistical models estimated in Step 1 are combined to construct an economic model. For a given model structure, disease progression, QALYs, and costs are simulated from “input data,” based on the target population and treatment strategies of interest.</li>
 <li>
 <strong>Decision analysis</strong>: Simulated outcomes from Step 2 are used to perform decision analysis using approaches such as <a href="https://en.wikipedia.org/wiki/Cost-effectiveness_analysis">cost-effectiveness analysis (CEA)</a> and <a href="https://en.wikipedia.org/wiki/Multiple-criteria_decision_analysis">multi-criteria decision analysis (MCDA)</a>, although only CEA is currently supported.</li>
 </ol>
@@ -195,7 +195,7 @@ Individual-level continuous time state transition model (iCTSTM)
 <p>Let’s consider an example where we use an iCTSTM to evaluate two competing treatment strategies, the <em>standard of care (SOC)</em> and a <em>New</em> treatment. We will consider a generic model of disease progression with three health states (<em>stage 1</em>, <em>stage 2</em>, and <em>death</em>) with four transitions (<em>stage 1 -&gt; stage 2</em>, <em>stage 2 -&gt; stage 1</em>, <em>stage 1 -&gt; death</em>, and <em>stage 2 -&gt; death</em>). Since we are using an individual-level model, we must simulate a target population that is sufficiently large so that uncertainty reflects uncertainty in the model parameters, rather than variability across simulated individuals. For the sake of illustration, we will create subgroups stratified by sex.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://Rdatatable.gitlab.io/data.table">"data.table"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com">"data.table"</a></span><span class="op">)</span>
 
 <span class="co"># Treatment strategies</span>
 <span class="va">strategies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
@@ -279,7 +279,7 @@ Individual-level continuous time state transition model (iCTSTM)
 <div id="parameterization" class="section level1">
 <h1 class="hasAnchor">
 <a href="#parameterization" class="anchor"></a>Parameterization</h1>
-<p>Each submodel contains fields for the model parameters and the input data. Models can be parameterized by either fitting statistical models using <code>R</code>, inputting values directly, or from a combination of the two. There are two types of parameter objects, standard parameter objects prefixed by “params” and “transformed” parameter objects prefixed by “tparams”. The former contain the underlying parameters of a statistical model and are used alongside the input data to make predictions. The latter contain parameters more immediate to prediction that have already been transformed as function of the input data. The regression coefficients of a logistic regression are an example of a parameter objects while the predicted probabilities are examples of a transformed parameter object.</p>
+<p>Each submodel contains fields for the model parameters and the input data. Models can be parameterized by either fitting statistical models using <code>R</code>, inputting values directly, or from a combination of the two. There are two types of parameter objects, standard parameter objects prefixed by “params” and “transformed” parameter objects prefixed by “tparams.” The former contain the underlying parameters of a statistical model and are used alongside the input data to make predictions. The latter contain parameters more immediate to prediction that have already been transformed as function of the input data. The regression coefficients of a logistic regression are an example of a parameter objects while the predicted probabilities are examples of a transformed parameter object.</p>
 <div id="disease-progression" class="section level2">
 <h2 class="hasAnchor">
 <a href="#disease-progression" class="anchor"></a>Disease progression</h2>
@@ -372,7 +372,7 @@ Multi-state model (transition-specific)
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/chjackson/flexsurv-dev">"flexsurv"</a></span><span class="op">)</span>
 <span class="va">mstate_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span><span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">transitions</span><span class="op">)</span>
 <span class="va">mstate_data</span><span class="op">[</span>, <span class="va">trans</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">trans</span><span class="op">)</span><span class="op">]</span>
-<span class="va">fit_wei</span> <span class="op">&lt;-</span> <span class="fu">flexsurv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html">flexsurvreg</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">years</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">trans</span> <span class="op">+</span> 
+<span class="va">fit_wei</span> <span class="op">&lt;-</span> <span class="fu">flexsurv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html">flexsurvreg</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">years</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">trans</span> <span class="op">+</span> 
                                                        <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">strategy_id</span><span class="op">)</span><span class="op">:</span><span class="va">trans</span> <span class="op">+</span>
                                                        <span class="va">age</span><span class="op">:</span><span class="va">trans</span> <span class="op">+</span> 
                                                        <span class="va">female</span><span class="op">:</span> <span class="va">trans</span> <span class="op">+</span>

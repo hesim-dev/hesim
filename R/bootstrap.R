@@ -11,15 +11,13 @@
 #' @param silent Logical indicating whether error messages should be suppressed. Passed to
 #' the `silent` argument of [`try()`].
 #' @param ... Further arguments passed to or from other methods. Currently unused.
-#' 
+#' @keywords internal
 #' @return Sampled values of the parameters.
-#' @export
 bootstrap <- function (object, B, ...) {
   UseMethod("bootstrap", object)
 }
 
 #' @name bootstrap
-#' @export
 bootstrap.partsurvfit <- function(object, B, max_errors = 0, silent = FALSE, ...){
   n_obs <- nrow(object$data)
   n_models <- length(object$models)
@@ -93,18 +91,16 @@ bootstrap.partsurvfit <- function(object, B, max_errors = 0, silent = FALSE, ...
 # Draw parameters from multivariate normal distribution ------------------------
 #' Draw parameters of statistical model from multivariate normal distribution
 #' 
-#' \code{normboot} is a generic function for drawing parameters from a fitted 
+#' `normboot` is a generic function for drawing parameters from a fitted 
 #' statistical model from their (asymptotic) multivariate normal distribution.
 #' @param object A statistical model.
 #' @param B Number of draws of the parameters.
 #' @param ... Further arguments passed to or from other methods.
-#' @export
 #' @keywords internal
 normboot <- function (object, B, ...) {
   UseMethod("normboot", object)
 }
 
-#' @export
 #' @name normboot
 #' @keywords internal
 normboot.msm <- function(object, B = 1000, ...) {

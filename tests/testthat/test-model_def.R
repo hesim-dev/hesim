@@ -38,11 +38,11 @@ rng_def <- define_rng({
    alpha_names = tpmatrix_names(c("A", "B"), prefix = "")) 
 rng <- eval_rng(x = rng_def, params)
 
-test_that( "eval_rng() runs without error", {
+test_that("eval_rng() runs without error", {
   expect_true(inherits(rng, "eval_rng"))
 })
 
-test_that( "Can add elements to eval_rng() objects", {
+test_that("Can add elements to eval_rng() objects", {
   rng2 <- c(rng, list(z = 2))
   expect_true(inherits(rng2, "eval_rng"))
   expect_equal(rng2$z, 2)
@@ -53,45 +53,45 @@ test_that( "Can add elements to eval_rng() objects", {
   expect_equal(rng2, rng3)
 })
  
-test_that( "eval_rng has correct number of samples", {
+test_that("eval_rng has correct number of samples", {
   n <- sapply(rng, function (z) if (length(dim(z)) < 2) length(z) else nrow(z))
   expect_true(all(n == rng_def$n))
 })
 
-test_that( "dirichlet_rng has correct column names", {
+test_that("dirichlet_rng has correct column names", {
   expect_equal(colnames(rng$dir1), rng_def$alpha_names)
   expect_equal(colnames(rng$dir2), tpmatrix_names(c("s1", "s2"), prefix = ""))
   expect_equal(colnames(rng$dir3), rng_def$alpha_names)
 })
 
-test_that( "uv_rng() produces correct random variates for each column", {
+test_that("uv_rng() produces correct random variates for each column", {
   expect_equal(c(as.matrix(rng$normal)), 
                as.numeric(rep(params$normal_mean, each = rng_def$n)))
 })
 
-test_that( "uv_rng() produces correct vector or data.table", {
+test_that("uv_rng() produces correct vector or data.table", {
   expect_true(inherits(rng$unif_vec, "numeric"))
   expect_true(inherits(rng$unif_dt, "data.table"))
 })
 
-test_that( "mom_fun_rng produces fixed samples is sd == 0", {
+test_that("mom_fun_rng produces fixed samples is sd == 0", {
   expect_true(all(rng$beta$A == .2))
   expect_true(all(rng$beta$C == 0))
   expect_equal(which(colnames(rng$beta) == "A"), 1)
   expect_equal(which(colnames(rng$beta) == "C"), 3)
 })
 
-test_that( "fixed() produces vector or data.table", {
+test_that("fixed() produces vector or data.table", {
   expect_true(inherits(rng$fixed_vec, "numeric"))
   expect_true(inherits(rng$fixed_dt, "data.table"))
 })
 
-test_that( "custom() produces vector or data.table", {
+test_that("custom() produces vector or data.table", {
   expect_true(inherits(rng$custom_vec, "integer"))
   expect_true(inherits(rng$custom_dt, "data.table"))
 })
 
-test_that( "custom() produces correct column names", {
+test_that("custom() produces correct column names", {
   rng_def <- define_rng({
     custom3 <- custom(x = matrix(1:4, ncol = 2, nrow = 2))
     names(custom3) <- c("A", "B")
@@ -122,13 +122,13 @@ test_that("custom() produces a warning if n > n_samples", {
                         "consequently been drawn with replacement."), fixed = TRUE)
 })
 
-test_that( "Column names for multi-parameter RNG is as expcted", {
+test_that("Column names for multi-parameter RNG is as expcted", {
   expect_equal(colnames(rng$gamma), names(params$gamma_mean))
   expect_equal(colnames(rng$beta), rng_def$beta_colnames)
   expect_equal(colnames(rng$mvnorm), c("v1", "v2"))
 })
 
-test_that( "multi_normal_rng() returns correct output when n = 1", {
+test_that("multi_normal_rng() returns correct output when n = 1", {
   fun <- function(n, m = 0, V = 1){
     define_rng({ 
       list(x = multi_normal_rng(mu = m, Sigma = V))
@@ -141,7 +141,7 @@ test_that( "multi_normal_rng() returns correct output when n = 1", {
   )
 })
 
-test_that( "define_rng() must return a list", {
+test_that("define_rng() must return a list", {
   rng_def <- define_rng({
     data.frame(2)
   })
@@ -149,7 +149,7 @@ test_that( "define_rng() must return a list", {
                "define_rng() must return a list.", fixed = TRUE)
 })
 
-test_that( "define_rng() has incorrect number of samples", {
+test_that("define_rng() has incorrect number of samples", {
   rng_def <- define_rng({
     list(
       x = gamma_rng(mean = c(10, 10),
@@ -161,6 +161,22 @@ test_that( "define_rng() has incorrect number of samples", {
                paste0("The number of samples produced by define_rng() must be ",
                "equal to n unless a scalar (of length 1) is returned."), 
                fixed = TRUE)
+})
+
+# Concatenate and as.list methods for random number generation -----------------
+test_that("concatenate method for eval_rng objects", {
+  p <- c(rng, new1 = 2, new2 = 3)
+  expect_equal(length(p), length(rng) + 2)
+  expect_true(all(c("new1", "new2") %in% names(p)))
+  expect_equal(p$new1, 2)
+  expect_equal(attr(p, "n"), attr(rng, "n"))
+  expect_equal(attr(p, "checked"), FALSE)
+})
+
+test_that("as.list method for eval_rng objects", {
+  l <- as.list(rng)
+  expect_true(all(names(l) == names(rng)))
+  expect_equal(class(l), "list")
 })
 
 # Summary and print methods for random number generation -----------------------
