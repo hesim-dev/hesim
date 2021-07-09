@@ -14,6 +14,10 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
+```{r, include = FALSE}
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
 # Overview
 When discrete time data is collected at evenly spaced intervals, cohort discrete time state transition models (cDTSTMs)---often referred to as Markov cohort models---can be parameterized using multinomial logistic regression. Separate multinomial logit model are estimated for each health state and predict the probability of transitioning from that state to all other states. Mathematically, the probability of a transition from state $r$ at model cycle $t$ to state $s$ at model cycle $t+1$ is given by,
 

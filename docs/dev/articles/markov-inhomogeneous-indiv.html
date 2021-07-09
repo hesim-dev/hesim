@@ -105,7 +105,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,13 +119,13 @@
 
       
 
-      </header><script src="markov-inhomogeneous-indiv_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="markov-inhomogeneous-indiv_files/kePrint-0.0.1/kePrint.js"></script><link href="markov-inhomogeneous-indiv_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="markov-inhomogeneous-indiv_files/header-attrs-2.9/header-attrs.js"></script><script src="markov-inhomogeneous-indiv_files/kePrint-0.0.1/kePrint.js"></script><link href="markov-inhomogeneous-indiv_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov individual-level models</h1>
             
-            <h4 class="date">2021-05-08</h4>
+            <h4 class="date">2021-07-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/markov-inhomogeneous-indiv.Rmd"><code>vignettes/markov-inhomogeneous-indiv.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-indiv.Rmd</code></div>
@@ -151,7 +151,7 @@ Costs_{m, hik} &amp;= \int_{0}^{T} c_{m, hik}(t)e^{-rt}dt,
 <p>This example will demonstrate the use of IPS to simulate a clock forward model. To facilitate comparison to a cohort approach, we will revisit the total hip replacement (THR) example from the <a href="markov-inhomogeneous-cohort.html">time inhomogeneous Markov cohort</a> modeling vignette. The following <code>R</code> packages will be used during the analysis.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://Rdatatable.gitlab.io/data.table">"data.table"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com">"data.table"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://haozhu233.github.io/kableExtra/">"kableExtra"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/chjackson/flexsurv-dev">"flexsurv"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org">"ggplot2"</a></span><span class="op">)</span></code></pre></div>
@@ -490,21 +490,21 @@ NA
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">log_omrPTHR</span><span class="op">)</span></code></pre></div>
 <pre><code>##           cons
-## [1,] -4.007595
-## [2,] -3.859293
-## [3,] -2.721304
-## [4,] -3.257985
-## [5,] -3.203710
-## [6,] -3.693935</code></pre>
+## [1,] -4.142929
+## [2,] -6.346190
+## [3,] -5.605126
+## [4,] -3.210648
+## [5,] -5.303767
+## [6,] -6.037251</code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">rr_scale</span><span class="op">)</span></code></pre></div>
 <pre><code>##           cons         age      male        np1
-## [1,] -5.398742 -0.03831411 0.6329636 -2.4658151
-## [2,] -5.583237 -0.03613944 0.7025371 -1.7995925
-## [3,] -5.837963 -0.02809503 0.6920411 -1.1098554
-## [4,] -5.536742 -0.03360788 0.7701563 -0.3337165
-## [5,] -5.505269 -0.03738890 0.8660992 -1.6461267
-## [6,] -5.324749 -0.04790991 1.0019470 -1.3382238</code></pre>
+## [1,] -5.355232 -0.03910622 0.7891045 -0.9249273
+## [2,] -5.237414 -0.05034448 0.7561615 -1.9123193
+## [3,] -5.092184 -0.03909202 0.7539623 -1.6057345
+## [4,] -5.305593 -0.04080063 0.7100808 -1.9369455
+## [5,] -5.396247 -0.03652811 0.9810058 -1.1711434
+## [6,] -5.529636 -0.03678319 0.5484954 -1.2832439</code></pre>
 <p>In addition to the coefficients, a complete parameterization of a transition model requires specification of the survival distributions and potentially auxiliary information (e.g., the times at which rates change in a piecewise exponential model). The parameters are stored in a <code><a href="../reference/params_surv_list.html">params_surv_list()</a></code> object, which is a list of <code><a href="../reference/params_surv.html">params_surv()</a></code> objects.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transmod_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/params_surv_list.html">params_surv_list</a></span><span class="op">(</span>
@@ -656,16 +656,16 @@ NA
 <span class="va">econmod</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span>max_t <span class="op">=</span> <span class="fl">60</span>, max_age <span class="op">=</span> <span class="fl">120</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   2.557   0.140   2.735</code></pre>
+##   2.435   0.134   2.581</code></pre>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></code></pre></div>
 <pre><code>##    sample strategy_id patient_id grp_id from to final time_start  time_stop
 ## 1:      1           1          1      1    1  2     0  0.0000000  0.6931472
-## 2:      1           1          1      1    2  5     1  0.6931472  4.8015701
+## 2:      1           1          1      1    2  5     1  0.6931472 21.7022651
 ## 3:      1           1          2      1    1  2     0  0.0000000  0.6931472
-## 4:      1           1          2      1    2  5     1  0.6931472 33.2202221
+## 4:      1           1          2      1    2  5     1  0.6931472 25.1663983
 ## 5:      1           1          3      1    1  2     0  0.0000000  0.6931472
-## 6:      1           1          3      1    2  3     0  0.6931472 42.0172659</code></pre>
+## 6:      1           1          3      1    2  5     1  0.6931472 33.7632554</code></pre>
 <p>The simulated patient trajectories can be summarized by computing the probability of being in each health state over time (by averaging across the simulated patients). Here, we will compute state occupancy probabilities at yearly intervals. They are generally quite similar to those in the cohort model.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span></code></pre></div>
@@ -684,10 +684,10 @@ NA
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>##    Discount rate        Outcome  Standard prosthesis       New prosthesis
-## 1:         0.015          QALYs 15.22 (14.03, 16.39) 15.27 (14.06, 16.48)
+## 1:         0.015          QALYs 15.24 (14.02, 16.33) 15.28 (14.02, 16.40)
 ## 2:         0.060    Costs: Drug       394 (394, 394)       579 (579, 579)
-## 3:         0.060 Costs: Medical        118 (46, 234)           33 (7, 89)
-## 4:         0.060   Costs: total       512 (440, 628)       612 (586, 668)</code></pre>
+## 3:         0.060 Costs: Medical        122 (49, 234)           35 (6, 90)
+## 4:         0.060   Costs: total       516 (443, 628)       614 (585, 669)</code></pre>
 </div>
 </div>
 </div>
@@ -701,10 +701,10 @@ NA
 <span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span>digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##              Outcome          New prosthesis
-## 1: Incremental QALYs   0.053 (-0.504, 0.593)
-## 2: Incremental costs           100 (-8, 164)
-## 3:   Incremental NMB 2,527 (-25,212, 29,526)
-## 4:              ICER                   1,913</code></pre>
+## 1: Incremental QALYs   0.041 (-0.552, 0.587)
+## 2: Incremental costs             98 (5, 164)
+## 3:   Incremental NMB 1,932 (-27,671, 29,234)
+## 4:              ICER                   2,416</code></pre>
 </div>
   </div>
 
