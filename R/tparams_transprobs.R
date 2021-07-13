@@ -302,7 +302,7 @@ tparams_transprobs.eval_model <- function(object, ...){
 #' possible transition by the relevant ID variables. 
 #' 
 #' @inheritParams summary.tpmatrix
-#' @param object,x A [`tparams_transprobs`] object.
+#' @param object A [`tparams_transprobs`] object.
 #' 
 #' @return `summary.tparams_transprobs()` uses the [summary.tpmatrix()]
 #' method under the hood and returns the same output. 
