@@ -2,6 +2,7 @@
 % Please edit documentation in R/tparams_transprobs.R
 \name{tparams_transprobs}
 \alias{tparams_transprobs}
+\alias{print.tparams_transprobs}
 \alias{tparams_transprobs.array}
 \alias{tparams_transprobs.data.table}
 \alias{tparams_transprobs.data.frame}

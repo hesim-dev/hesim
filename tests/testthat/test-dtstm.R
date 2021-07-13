@@ -125,6 +125,7 @@ test_that("tparams_transprobs.array() works with only 1 time interval", {
   expect_true(all(tprob_t1$time_id == 1))
 })
 
+# summary.tparams_transprobs() -------------------------------------------------
 test_that("Summary method for tparams_transprobs.array() works as expected", {
   ts <- summary(tprob)
   expect_equal(
@@ -156,16 +157,48 @@ test_that("Summary method for tparams_transprobs uses correct state names", {
   )
 })
 
+# print.tparams_transprobs() -------------------------------------------------
 test_that("Print method for tparams_transprobs works as expected", {
   expect_output(print(tprob), "A \"tparams_transprobs\" object")
-  expect_output(print(tprob), "Summary of transition probabilities:")
+  expect_output(
+    print(tprob), 
+    "Column binding the ID variables with the transition probabilities:"
+  )
 })
 
 # as.data.table.tparams_transprobs() -------------------------------------------
 tprob_dt <- as.data.table(tprob)
   
-test_that("as.data.table.tparams_transprobs() returns a data.table" , {
-  expect_true(inherits(as.data.table(tprob), "data.table"))
+test_that("as.data.table.tparams_transprobs() returns correct output" , {
+  x1 <- as.data.table(tprob)
+  x2 <- as.data.table(tprob, long = TRUE)
+  
+  # Should be a data.table
+  expect_true(inherits(x1, "data.table"))
+  expect_true(inherits(x2, "data.table"))
+  
+  # Should have right columns
+  expect_equal(
+    colnames(x1),
+    c("sample", "strategy_id", "patient_id", "time_id", "time_start",
+      "time_stop", 
+      tpmatrix_names(states = paste0("s", 1:3), prefix = "prob_", sep = "_"))
+  )
+  expect_equal(
+    colnames(x2),
+    c("sample", "strategy_id", "patient_id", "time_id", "time_start",
+      "time_stop", "from", "to", "prob")
+  )
+})
+
+
+test_that("as.data.table.tparams_transprobs() returns the same output with wide and long formats" , {
+  x1 <- as.data.table(tprob)
+  x2 <- as.data.table(tprob, long = TRUE)
+  expect_equal(
+    c(t(x1[, grepl("prob_", colnames(x1)), with = FALSE])),
+    x2$prob
+  )
 })
 
 # tparams_transprobs.data.table() ----------------------------------------------

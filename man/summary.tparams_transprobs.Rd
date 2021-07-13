@@ -2,12 +2,9 @@
 % Please edit documentation in R/tparams_transprobs.R
 \name{summary.tparams_transprobs}
 \alias{summary.tparams_transprobs}
-\alias{print.tparams_transprobs}
 \title{Summarize \code{tparams_transprobs} object}
 \usage{
 \method{summary}{tparams_transprobs}(object, probs = c(0.025, 0.975), unflatten = FALSE, ...)
-
-\method{print}{tparams_transprobs}(x, ...)
 }
 \arguments{
 \item{object, x}{A \code{\link{tparams_transprobs}} object.}
@@ -23,8 +20,7 @@ is a vector and the generated table contains one row
 transition probability matrices formed by "unflattening" the one-dimensional
 vectors. See "Value" below for additional details.}
 
-\item{...}{For the \code{print()} method, arguments to pass to \code{summary.tparams_transprobs};
-currently unused for the \code{summary()} method.}
+\item{...}{Additional arguments affecting the summary. Currently unused.}
 }
 \value{
 \code{summary.tparams_transprobs()} uses the \code{\link[=summary.tpmatrix]{summary.tpmatrix()}}
@@ -33,12 +29,10 @@ method under the hood and returns the same output.
 \description{
 The \code{summary()} method summarizes a \code{\link{tparams_transprobs}} object containing
 predicted transition probabilities; summary statistics are computed for each
-possible transition by the relevant ID variables. The \code{print()} method
-summarizes the object using \code{summary.tparams_transprobs()} and prints it to the
-console.
+possible transition by the relevant ID variables.
 }
 \seealso{
-See \code{\link{tparams_transprobs}} for an example use of the summary and
-print methods. Also see \code{\link[=summary.tpmatrix]{summary.tpmatrix()}} for more information on what is
+See \code{\link{tparams_transprobs}} for an example use of the summary method.
+Also see \code{\link[=summary.tpmatrix]{summary.tpmatrix()}} for more information on what is
 returned.
 }
