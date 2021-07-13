@@ -100,6 +100,7 @@
 #' 
 #' @example man-roxygen/example-tparams_transprobs.R
 #' @rdname tparams_transprobs
+#' @aliases print.tparams_transprobs
 #' @export
 tparams_transprobs <- function(object, ...){
   if (missing(object)){
@@ -298,18 +299,16 @@ tparams_transprobs.eval_model <- function(object, ...){
 #' 
 #' The `summary()` method summarizes a [`tparams_transprobs`] object containing 
 #' predicted transition probabilities; summary statistics are computed for each 
-#' possible transition by the relevant ID variables. The `print()` method
-#' summarizes the object using `summary.tparams_transprobs()` and prints it to the
-#' console. 
+#' possible transition by the relevant ID variables. 
 #' 
 #' @inheritParams summary.tpmatrix
-#' @param object,x A [`tparams_transprobs`] object.
+#' @param object A [`tparams_transprobs`] object.
 #' 
 #' @return `summary.tparams_transprobs()` uses the [summary.tpmatrix()]
 #' method under the hood and returns the same output. 
 #' 
-#' @seealso See [`tparams_transprobs`] for an example use of the summary and
-#' print methods. Also see [summary.tpmatrix()] for more information on what is 
+#' @seealso See [`tparams_transprobs`] for an example use of the summary method. 
+#' Also see [summary.tpmatrix()] for more information on what is 
 #' returned.
 #' 
 #' @export
@@ -328,14 +327,11 @@ summary.tparams_transprobs <- function(object, probs = c(0.025, 0.975),
 }
 
 # print.tparams_transprobs -----------------------------------------------------
-#' @rdname summary.tparams_transprobs
-#' @param ... For the `print()` method, arguments to pass to `summary.tparams_transprobs`;
-#' currently unused for the `summary()` method.
 #' @export
 print.tparams_transprobs <- function(x, ...) {
   cat("A \"tparams_transprobs\" object \n\n")
-  cat("Summary of transition probabilities:\n")
-  print(summary(x, ...))
+  cat("Column binding the ID variables with the transition probabilities:\n")
+  print(as.data.table(x, long = TRUE))
   invisible(x)
 }
 
@@ -343,18 +339,26 @@ print.tparams_transprobs <- function(x, ...) {
 #' Coerce to `data.table`
 #' 
 #' Creates a `data.table` that combines the transition probability matrices 
-#' and ID columns from a [tparams_transprobs] object. This is often useful for 
+#' and ID variables from a [`tparams_transprobs`] object. This is often useful for 
 #' debugging. 
-#' @param x A [tparams_transprobs] object.
+#' @param x A [`tparams_transprobs`] object.
 #' @param prefix,sep Arguments passed to [tpmatrix_names()] for naming
 #' the transition probability columns. The `states` argument is based on
 #' the column names (i.e., names of the second dimension) of the `$value`
 #' element of `x`; if `NULL`, then states are named `s1`, ..., `sh` where h is 
-#' the number of states.
+#' the number of states. Only used if `long = FALSE`.
+#' @param long If `TRUE`, then output is returned in a longer format with
+#' one row for each transition; if `FALSE`, then each row contains an entire
+#' flattened transition probability matrix.
 #' @param ... Currently unused. 
 #' 
-#' @seealso [tparams_transprobs]
-#' @return A `data.table` with one row for each transition probability matrix.
+#' @seealso [tparams_transprobs()]
+#' @return The output always contains columns for the ID variables and the
+#' transition probabilities, but the form depends on on the `long` argument. 
+#' If `FALSE`, then a `data.table` with one row for each transition probability 
+#' matrix is returned; otherwise, the `data.table` contains one row for each 
+#' transition and columns `from` (the state being transitioned from) and 
+#' `to` (the state being transitioned to) are added.
 #' 
 #' @examples 
 #' # Create tparams_transprobs object
@@ -370,19 +374,49 @@ print.tparams_transprobs <- function(x, ...) {
 #' )
 #' tprobs <- tparams_transprobs(tpmat, tpmat_id)
 #' 
-#' # Convert to data.table
+#' # Convert to data.table in "wide" format
 #' as.data.table(tprobs)
 #' as.data.table(tprobs, prefix = "")
 #' as.data.table(tprobs, prefix = "", sep = ".")
 #' 
+#' # Convert to data.table in "long: format
+#' as.data.table(tprobs, long = TRUE)
+#' 
 #' @export
-as.data.table.tparams_transprobs <- function(x, ..., prefix = "prob_", sep = "_"){
-  probs <- as_tbl2(x$value, prefix = prefix, sep = sep)
-  id_dt <- as.data.table(x[c("sample", "strategy_id", "patient_id")])
-  time_dt <- x$time_intervals[match(x$time_id, x$time_intervals$time_id)]
-  x_dt <- data.table(id_dt, time_dt, probs)
+as.data.table.tparams_transprobs <- function(x, ..., prefix = "prob_", sep = "_",
+                                             long = FALSE){
+  
+  id_dt <- cbind(
+    as.data.table(x[c("sample", "strategy_id", "patient_id")]),
+    x$time_intervals[match(x$time_id, x$time_intervals$time_id)]
+  )
+  
+  # Separate case depending on whether output is in long or wide format
+  if (!long) {
+    x_dt <- data.table(
+      id_dt,
+      as_tbl2(x$value, prefix = prefix, sep = sep)
+    )
+  } else {
+    n_states <- dim(x$value)[1]
+    n_trans <- n_states * n_states
+    states <- rownames(x$value)
+    if (is.null(states)) states <- paste0("s", 1:n_states)
+    from <- rep(rep(states, each = n_states),
+                times = nrow(id_dt))
+    to <- rep(rep(states, times = n_states),
+                  times = nrow(id_dt))
+    x_dt <- data.table(
+      id_dt <- id_dt[rep(seq_len(nrow(id_dt)), each = n_trans), ],
+      from = from,
+      to = to,
+      prob = c(aperm(x$value, c(2, 1, 3)))
+    )
+  }
+  
+  # Return
   for (v in c("n_samples", "n_strategies", "n_patients", "n_times")){
     setattr(x_dt, v, x[[v]])
   }
-  return(x_dt)
+  x_dt[, ]
 }

@@ -4,10 +4,10 @@
 \alias{as.data.table.tparams_transprobs}
 \title{Coerce to \code{data.table}}
 \usage{
-\method{as.data.table}{tparams_transprobs}(x, ..., prefix = "prob_", sep = "_")
+\method{as.data.table}{tparams_transprobs}(x, ..., prefix = "prob_", sep = "_", long = FALSE)
 }
 \arguments{
-\item{x}{A \link{tparams_transprobs} object.}
+\item{x}{A \code{\link{tparams_transprobs}} object.}
 
 \item{...}{Currently unused.}
 
@@ -15,14 +15,23 @@
 the transition probability columns. The \code{states} argument is based on
 the column names (i.e., names of the second dimension) of the \verb{$value}
 element of \code{x}; if \code{NULL}, then states are named \code{s1}, ..., \code{sh} where h is
-the number of states.}
+the number of states. Only used if \code{long = FALSE}.}
+
+\item{long}{If \code{TRUE}, then output is returned in a longer format with
+one row for each transition; if \code{FALSE}, then each row contains an entire
+flattened transition probability matrix.}
 }
 \value{
-A \code{data.table} with one row for each transition probability matrix.
+The output always contains columns for the ID variables and the
+transition probabilities, but the form depends on on the \code{long} argument.
+If \code{FALSE}, then a \code{data.table} with one row for each transition probability
+matrix is returned; otherwise, the \code{data.table} contains one row for each
+transition and columns \code{from} (the state being transitioned from) and
+\code{to} (the state being transitioned to) are added.
 }
 \description{
 Creates a \code{data.table} that combines the transition probability matrices
-and ID columns from a \link{tparams_transprobs} object. This is often useful for
+and ID variables from a \code{\link{tparams_transprobs}} object. This is often useful for
 debugging.
 }
 \examples{
@@ -39,12 +48,15 @@ tpmat <- tpmatrix(
 )
 tprobs <- tparams_transprobs(tpmat, tpmat_id)
 
-# Convert to data.table
+# Convert to data.table in "wide" format
 as.data.table(tprobs)
 as.data.table(tprobs, prefix = "")
 as.data.table(tprobs, prefix = "", sep = ".")
 
+# Convert to data.table in "long: format
+as.data.table(tprobs, long = TRUE)
+
 }
 \seealso{
-\link{tparams_transprobs}
+\code{\link[=tparams_transprobs]{tparams_transprobs()}}
 }
