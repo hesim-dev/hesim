@@ -213,13 +213,19 @@ vectors. See "Value" below for additional details.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>summary.tparams_transprobs()</code> uses the <code><a href='summary.tpmatrix.html'>summary.tpmatrix()</a></code>
-method under the hood and returns the same output.</p>
+    <p>If <code>unflatten = "FALSE"</code> (the default), then a <code><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></code>
+is returned with columns for (i) the health state that is being transitioned
+from (<code>from</code>), (ii) the health state that is being transitioned to (<code>to</code>)
+(iii) the mean of each parameter across parameter samples (<code>mean</code>),
+(iv) the standard deviation of the parameter samples (<code>sd</code>), and
+(v) quantiles of the parameter samples corresponding to the <code>probs</code> argument.</p>
+<p>If, on the other hand, <code>unflatten = "TRUE"</code>, then the parameters are unflattened
+to form transition probability matrices; that is, the <code>mean</code>, <code>sd</code>, and
+quantile columns are (lists of) matrices.</p>
+<p>In both cases, the ID variables are also returned as columns.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>See <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> for an example use of the summary method.
-Also see <code><a href='summary.tpmatrix.html'>summary.tpmatrix()</a></code> for more information on what is
-returned.</p></div>
+    <div class='dont-index'><p>See <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> for an example use of the summary method.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

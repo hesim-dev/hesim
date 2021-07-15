@@ -93,6 +93,9 @@ tpmatrix(pmat, complement = c(1, 4),
 
 }
 \seealso{
-\code{\link[=define_model]{define_model()}}, \code{\link[=define_tparams]{define_tparams()}},
-\code{\link[=tpmatrix_id]{tpmatrix_id()}}, \code{\link[=tparams_transprobs]{tparams_transprobs()}}, \code{\link[=CohortDtstmTrans]{CohortDtstmTrans()}}
+A \code{tpmatrix} is useful because it provides a convenient
+way to construct a \code{\link{tparams_transprobs}} object, which is the object in
+\code{hesim} used to specify the transition probabilities required to simulate
+Markov chains with the \code{\link{CohortDtstmTrans}} class. See the
+\code{\link{tparams_transprobs}} documentation for more details.
 }

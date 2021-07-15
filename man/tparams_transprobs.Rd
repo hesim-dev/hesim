@@ -128,15 +128,19 @@ tpmat <- tpmatrix(
 tprobs <- tparams_transprobs(tpmat, tpmat_id)
 names(tprobs) # Names of list elements
 
-# Convert to data.table
+# Convert to data.table in wide format
 as.data.table(tprobs)
 
-# Print output to console
-tprobs
+# Convert to data.table in long format
+as.data.table(tprobs, long = TRUE)
 
-# Summary methods
+# Summary where each column is a vector
 summary(tprobs)
-summary(tprobs, unflatten = TRUE)
+
+# Summary where each column is a matrix
+ps <- summary(tprobs, id = tpmat_id, unflatten = TRUE)
+ps
+ps$mean
 }
 \seealso{
 A \code{tparams_transprobs} object is used to store the "parameters" of

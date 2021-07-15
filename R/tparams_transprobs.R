@@ -295,6 +295,31 @@ tparams_transprobs.eval_model <- function(object, ...){
 }
 
 # summary.tparams_transprobs ---------------------------------------------------
+summarize_transprobs_dt <- function(x, probs, unflatten,
+                                    states) {
+  # Summarize
+  bycols <- colnames(x)[colnames(x) != "prob"]
+  out <- summarize_params(x, probs = probs, by = bycols)
+  out[, ("param") := NULL]
+  
+  # Unflatten
+  # Convert to lists of matrices if specified
+  if (unflatten) {
+    n_states <- length(states)
+    sdcols <- colnames(out)[!colnames(out) %in% bycols]
+    bycols <- bycols[!bycols %in% c("from", "to")]
+    out <- out[, lapply(.SD, function (z) {
+      list(t(
+        matrix(z, nrow = n_states, dimnames = list(states, states))
+      ))
+    }),
+    .SDcols = sdcols, by = bycols]
+  }
+  
+  # Return 
+  out[, ]
+}
+
 #' Summarize `tparams_transprobs` object
 #' 
 #' The `summary()` method summarizes a [`tparams_transprobs`] object containing 
@@ -304,26 +329,29 @@ tparams_transprobs.eval_model <- function(object, ...){
 #' @inheritParams summary.tpmatrix
 #' @param object A [`tparams_transprobs`] object.
 #' 
-#' @return `summary.tparams_transprobs()` uses the [summary.tpmatrix()]
-#' method under the hood and returns the same output. 
+#' @return If `unflatten = "FALSE"` (the default), then a [`data.table`]
+#' is returned with columns for (i) the health state that is being transitioned
+#' from (`from`), (ii) the health state that is being transitioned to (`to`)
+#' (iii) the mean of each parameter across parameter samples (`mean`),
+#' (iv) the standard deviation of the parameter samples (`sd`), and
+#' (v) quantiles of the parameter samples corresponding to the `probs` argument. 
+#' 
+#' If, on the other hand, `unflatten = "TRUE"`, then the parameters are unflattened
+#' to form transition probability matrices; that is, the `mean`, `sd`, and 
+#' quantile columns are (lists of) matrices.
+#' 
+#' In both cases, the ID variables are also returned as columns. 
 #' 
 #' @seealso See [`tparams_transprobs`] for an example use of the summary method. 
-#' Also see [summary.tpmatrix()] for more information on what is 
-#' returned.
 #' 
 #' @export
 summary.tparams_transprobs <- function(object, probs = c(0.025, 0.975), 
                                        unflatten = FALSE, ...) {
-  # Convert value element to tpmatrix
-  object_dt <- as_tbl2(object$value)
-  tpmat <- tpmatrix(object_dt, states = colnames(object$value))
   
-  # Create tpmatrix_id object
-  id_dt <- make_id_data_table(object)
-  setattr(id_dt, "class", c("tpmatrix_id", "data.table", "data.frame"))
-  
-  # Summarize
-  summary(tpmat, id = id_dt, probs = probs, unflatten = unflatten)
+  object_dt <- as.data.table(object, long = TRUE)
+  object_dt[, sample := NULL] # We will summarize across samples
+  summarize_transprobs_dt(object_dt, probs = probs, unflatten = unflatten,
+                          states <- rownames(object$value))
 }
 
 # print.tparams_transprobs -----------------------------------------------------
@@ -386,10 +414,7 @@ print.tparams_transprobs <- function(x, ...) {
 as.data.table.tparams_transprobs <- function(x, ..., prefix = "prob_", sep = "_",
                                              long = FALSE){
   
-  id_dt <- cbind(
-    as.data.table(x[c("sample", "strategy_id", "patient_id")]),
-    x$time_intervals[match(x$time_id, x$time_intervals$time_id)]
-  )
+  id_dt <- make_id_data_table(x)
   
   # Separate case depending on whether output is in long or wide format
   if (!long) {
