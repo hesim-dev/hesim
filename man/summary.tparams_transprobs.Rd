@@ -23,8 +23,18 @@ vectors. See "Value" below for additional details.}
 \item{...}{Additional arguments affecting the summary. Currently unused.}
 }
 \value{
-\code{summary.tparams_transprobs()} uses the \code{\link[=summary.tpmatrix]{summary.tpmatrix()}}
-method under the hood and returns the same output.
+If \code{unflatten = "FALSE"} (the default), then a \code{\link{data.table}}
+is returned with columns for (i) the health state that is being transitioned
+from (\code{from}), (ii) the health state that is being transitioned to (\code{to})
+(iii) the mean of each parameter across parameter samples (\code{mean}),
+(iv) the standard deviation of the parameter samples (\code{sd}), and
+(v) quantiles of the parameter samples corresponding to the \code{probs} argument.
+
+If, on the other hand, \code{unflatten = "TRUE"}, then the parameters are unflattened
+to form transition probability matrices; that is, the \code{mean}, \code{sd}, and
+quantile columns are (lists of) matrices.
+
+In both cases, the ID variables are also returned as columns.
 }
 \description{
 The \code{summary()} method summarizes a \code{\link{tparams_transprobs}} object containing
@@ -33,6 +43,4 @@ possible transition by the relevant ID variables.
 }
 \seealso{
 See \code{\link{tparams_transprobs}} for an example use of the summary method.
-Also see \code{\link[=summary.tpmatrix]{summary.tpmatrix()}} for more information on what is
-returned.
 }

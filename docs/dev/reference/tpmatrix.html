@@ -227,8 +227,11 @@ specified with the <code>complement</code> argument. There can only be one compl
 for each row in a transition probability matrix.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code>,
-<code><a href='tpmatrix_id.html'>tpmatrix_id()</a></code>, <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>, <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans()</a></code></p></div>
+    <div class='dont-index'><p>A <code>tpmatrix</code> is useful because it provides a convenient
+way to construct a <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> object, which is the object in
+<code>hesim</code> used to specify the transition probabilities required to simulate
+Markov chains with the <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> class. See the
+<code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> documentation for more details.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>p_12</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.7</span>, <span class='fl'>.6</span><span class='op'>)</span>

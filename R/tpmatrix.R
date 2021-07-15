@@ -266,8 +266,12 @@ replace_Qdiag <- function(x, n_states) {
 #' tpmatrix(pmat, complement = c(1, 4),
 #'          states = c("state1", "state2"), sep = ".")
 #' 
-#' @seealso [define_model()], [define_tparams()], 
-#' [tpmatrix_id()], [tparams_transprobs()], [CohortDtstmTrans()]
+#' @seealso A `tpmatrix` is useful because it provides a convenient
+#' way to construct a [`tparams_transprobs`] object, which is the object in
+#' `hesim` used to specify the transition probabilities required to simulate 
+#' Markov chains with the [`CohortDtstmTrans`] class. See the 
+#' [`tparams_transprobs`] documentation for more details.
+#' 
 #' @export
 tpmatrix <- function(..., complement = NULL, states = NULL,
                      prefix = "", sep = "_"){
@@ -336,11 +340,13 @@ tpmatrix <- function(..., complement = NULL, states = NULL,
 #' (iii) the mean of each parameter across parameter samples (`mean`),
 #' (iv) the standard deviation of the parameter samples (`sd`), and
 #' (v) quantiles of the parameter samples corresponding to the `probs` argument. 
-#' If `id` is not `NULL`, then the ID variables are also returned as columns.
 #' 
 #' If, on the other hand, `unflatten = "TRUE"`, then the parameters are unflattened
 #' to form transition probability matrices; that is, the `mean`, `sd`, and 
 #' quantile columns are (lists of) matrices. 
+#' 
+#' In both cases, if `id` is not `NULL`, then the ID variables are also 
+#' returned as columns.
 #' @examples 
 #' library("data.table")
 #' hesim_dat <-  hesim_data(strategies = data.table(strategy_id = 1:2),
@@ -380,48 +386,40 @@ tpmatrix <- function(..., complement = NULL, states = NULL,
 #' @export
 summary.tpmatrix <- function(object, id = NULL, probs = c(.025, .975), 
                              unflatten = FALSE, ...) {
+  
   states <- attr(object, "states")
   n_states <- length(states)
   n_trans <- ncol(object)
+  n_id <- nrow(object)
   
-  # Get columns to summarize parameters by
+  # Convert transition probabilities to long format
+  object_dt <- data.table(
+    from = rep(rep(states, each = n_states), n_id),
+    to = rep(rep(states, times = n_states), n_id),
+    prob = c(t(object))
+  )
+  
+  # Add ID variables if they are passed by user
   if (!is.null(id)) {
     check_is_class(id, "tpmatrix_id", "tpmatrix_id")
+    
+    # Get relevant ID variables
     id_cols <- attr(id, "id_vars")
     if ("time_start" %in% colnames(id)) id_cols <- c(id_cols, "time_start") 
     if ("time_stop" %in% colnames(id)) id_cols <- c(id_cols, "time_stop") 
-    id <- id[, id_cols, with = FALSE]
-    by <- colnames(id)
-    object <- cbind(object, id)
+    
+    # Lengthen ID table to same length as long transition probabilities
+    # and column bind relevant ID variables
+    id2 <- id[rep(seq_len(nrow(id)), each = n_trans)]
+    id2 <- id2[, id_cols, with = FALSE]
+    object_dt <- cbind(id2, object_dt)
   } else {
     by <- NULL
   }
   
-  # Summarize the parameters
-  out <- summarize_params(object, probs = probs, by = by)
-  
-  # Add from/to columns
-  n_id <- nrow(out)/n_trans
-  out[, ("from") := rep(rep(states, each = n_states), n_id)]
-  out[, ("to") := rep(rep(states, times = n_states), n_id)]
-  param_index <- which(colnames(out) == "param")
-  setcolorder(out, c(colnames(out)[1:(param_index - 1)],
-                     "from", "to"))
-  out[, ("param") := NULL]
-  
-  # Convert to lists of matrices if specified
-  if (unflatten) {
-    sdcols <- colnames(out)[!colnames(out) %in% c(by, "from", "to")]
-    out <- out[, lapply(.SD, function (z) {
-      list(t(
-        matrix(z, nrow = n_states, dimnames = list(states, states))
-      ))
-    }),
-    .SDcols = sdcols, by = by]
-  }
-  
-  # Return
-  out[, ]
+  # Summarize and return
+  summarize_transprobs_dt(object_dt, probs = probs, unflatten = unflatten,
+                          states = states)
 }
 
 #' Transition probability matrix IDs
