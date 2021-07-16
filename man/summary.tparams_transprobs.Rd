@@ -4,14 +4,14 @@
 \alias{summary.tparams_transprobs}
 \title{Summarize \code{tparams_transprobs} object}
 \usage{
-\method{summary}{tparams_transprobs}(object, probs = c(0.025, 0.975), unflatten = FALSE, ...)
+\method{summary}{tparams_transprobs}(object, probs = NULL, unflatten = FALSE, ...)
 }
 \arguments{
 \item{object}{A \code{\link{tparams_transprobs}} object.}
 
 \item{probs}{A numeric vector of probabilities with values in \verb{[0,1]} used
-to compute quantiles. By default, the 2.5th and 97.5th percentiles are
-computed.}
+to compute quantiles. Computing quantiles can be slow when \code{object} is large,
+so the default is \code{NULL}, meaning that no quantiles are computed.}
 
 \item{unflatten}{If \code{FALSE}, then each column containing a summary statistic
 is a vector and the generated table contains one row

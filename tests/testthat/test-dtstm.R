@@ -126,13 +126,13 @@ test_that("tparams_transprobs.array() works with only 1 time interval", {
 })
 
 # summary.tparams_transprobs() -------------------------------------------------
-test_that("Summary method for tparams_transprobs.array() works as expected", {
+test_that("Summary method for tparams_transprobs.array() works as expected with defaults", {
   ts <- summary(tprob)
   expect_equal(
     colnames(ts),
     c("strategy_id", "patient_id", "time_id", "time_start", "time_stop",
       "from", "to", 
-      "mean", "sd", "2.5%", "97.5%")
+      "mean", "sd")
   )
   
   # Check means
@@ -142,6 +142,16 @@ test_that("Summary method for tparams_transprobs.array() works as expected", {
   expect_equal(
     c(t(m)),
     ts[patient_id == 1 & strategy_id == 1 & time_id == 2]$mean
+  )
+})
+
+test_that("Summary method for tparams_transprobs.array() works with quantiles", {
+  ts <- summary(tprob, probs = c(.025, .975))
+  expect_equal(
+    colnames(ts),
+    c("strategy_id", "patient_id", "time_id", "time_start", "time_stop",
+      "from", "to", 
+      "mean", "sd", "2.5%", "97.5%")
   )
 })
 

@@ -81,7 +81,7 @@ p <- tpmatrix(
 
 test_that("summarize.tpmatrix() works without unflattening" , {
   ps <- summary(p)
-  expect_equal(colnames(ps), c("from", "to", "mean", "sd", "2.5%", "97.5%"))
+  expect_equal(colnames(ps), c("from", "to", "mean", "sd"))
   expect_equal(nrow(ps), 4)
   expect_equal(colnames(p), paste0(ps$from, "_", ps$to))
   expect_equivalent(ps$mean, apply(p, 2, mean))
@@ -97,7 +97,7 @@ test_that("summarize.tpmatrix() works with variables probs arguments" , {
 
 test_that("summarize.tpmatrix() works with unflattening" , {
   ps <- summary(p, unflatten = TRUE)
-  expect_equal(colnames(ps), c("mean", "sd", "2.5%", "97.5%"))
+  expect_equal(colnames(ps), c("mean", "sd"))
   expect_true(is.matrix(ps$mean[[1]]))
   states <- attr(p, "states")
   expect_equal(
@@ -112,7 +112,7 @@ test_that("summarize.tpmatrix() works with ID argument" , {
   ps <- summary(p, id = tpmat_id)
   expect_equal(nrow(input_data) * 4, nrow(ps))
   expect_equal(colnames(ps), c("strategy_id", "patient_id",
-                               "from", "to", "mean", "sd", "2.5%", "97.5%"))
+                               "from", "to", "mean", "sd"))
   expect_true(all(ps$sd == 0))
   expect_true(all(ps[strategy_id == 1 & from == "s1" & to == "s2"]$mean == .6))
   expect_true(all(ps[strategy_id == 2 & from == "s1" & to == "s2"]$mean == .7))

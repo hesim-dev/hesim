@@ -22,6 +22,7 @@ as.data.table(tprobs, long = TRUE)
 
 # Summary where each column is a vector
 summary(tprobs)
+summary(tprobs, probs = c(.025, .975))
 
 # Summary where each column is a matrix
 ps <- summary(tprobs, id = tpmat_id, unflatten = TRUE)

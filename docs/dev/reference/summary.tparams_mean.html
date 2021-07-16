@@ -200,8 +200,8 @@ console.</p>
     <tr>
       <th>probs</th>
       <td><p>A numeric vector of probabilities with values in <code>[0,1]</code> used
-to compute quantiles. By default, the 2.5th and 97.5th percentiles are
-computed.</p></td>
+to compute quantiles. Computing quantiles can be slow when <code>object</code> is large,
+so the default is <code>NULL</code>, meaning that no quantiles are computed.</p></td>
     </tr>
     <tr>
       <th>...</th>

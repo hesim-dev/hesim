@@ -297,10 +297,27 @@ tparams_transprobs.eval_model <- function(object, ...){
 # summary.tparams_transprobs ---------------------------------------------------
 summarize_transprobs_dt <- function(x, probs, unflatten,
                                     states) {
+  mean <- sd <- prob <- NULL
+  
   # Summarize
   bycols <- colnames(x)[colnames(x) != "prob"]
-  out <- summarize_params(x, probs = probs, by = bycols)
-  out[, ("param") := NULL]
+  
+  if (is.null(probs)) {
+    out <- x[, list(
+      mean = mean(prob),
+      sd = sd(prob)
+    ),
+    by = bycols]
+  } else {
+    out <- x[, c(
+      list(
+        mean = mean(prob),
+        sd = sd(prob)
+      ),
+      as.list(stats::quantile(prob, probs = probs))
+    ),
+    by = bycols]
+  }
   
   # Unflatten
   # Convert to lists of matrices if specified
@@ -345,7 +362,7 @@ summarize_transprobs_dt <- function(x, probs, unflatten,
 #' @seealso See [`tparams_transprobs`] for an example use of the summary method. 
 #' 
 #' @export
-summary.tparams_transprobs <- function(object, probs = c(0.025, 0.975), 
+summary.tparams_transprobs <- function(object, probs = NULL, 
                                        unflatten = FALSE, ...) {
   
   object_dt <- as.data.table(object, long = TRUE)
