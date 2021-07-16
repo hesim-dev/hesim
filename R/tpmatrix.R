@@ -272,6 +272,9 @@ replace_Qdiag <- function(x, n_states) {
 #' Markov chains with the [`CohortDtstmTrans`] class. See the 
 #' [`tparams_transprobs`] documentation for more details.
 #' 
+#' The [summary.tpmatrix()] method can be used to summarize a `tpmatrix` 
+#' across parameter samples.
+#' 
 #' @export
 tpmatrix <- function(..., complement = NULL, states = NULL,
                      prefix = "", sep = "_"){
@@ -321,11 +324,13 @@ tpmatrix <- function(..., complement = NULL, states = NULL,
 #' Summarize a [`tpmatrix`] object storing transition probability matrices. 
 #' Summary statistics are computed for each possible transition. 
 #' 
-#' @inheritParams summary.params
 #' @param object A [`tpmatrix`] object.
 #' @param id A [`tpmatrix_id`] object for which columns contain the ID variables 
 #' for each row in `object`. If not `NULL`, then transition probability matrices
 #' are summarized by the ID variables in `id`. 
+#' @param probs  A numeric vector of probabilities with values in `[0,1]` used
+#' to compute quantiles. Computing quantiles can be slow when `object` is large,
+#' so the default is `NULL`, meaning that no quantiles are computed.
 #' @param unflatten If `FALSE`, then each column containing a summary statistic
 #'  is a vector and the generated table contains one row 
 #'  (for each set of ID variables) for each possible transition; if
@@ -362,6 +367,7 @@ tpmatrix <- function(..., complement = NULL, states = NULL,
 #' 
 #' ## Summary where each column is a vector
 #' summary(p)
+#' summary(p, probs = c(.025, .975))
 #' 
 #' ## Summary where each column is a matrix
 #' ps <- summary(p, probs = .5, unflatten = TRUE)
@@ -384,7 +390,7 @@ tpmatrix <- function(..., complement = NULL, states = NULL,
 #' ps
 #' ps$mean
 #' @export
-summary.tpmatrix <- function(object, id = NULL, probs = c(.025, .975), 
+summary.tpmatrix <- function(object, id = NULL, probs = NULL, 
                              unflatten = FALSE, ...) {
   
   states <- attr(object, "states")

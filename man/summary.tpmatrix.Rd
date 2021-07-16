@@ -4,7 +4,7 @@
 \alias{summary.tpmatrix}
 \title{Summarize transition probability matrix}
 \usage{
-\method{summary}{tpmatrix}(object, id = NULL, probs = c(0.025, 0.975), unflatten = FALSE, ...)
+\method{summary}{tpmatrix}(object, id = NULL, probs = NULL, unflatten = FALSE, ...)
 }
 \arguments{
 \item{object}{A \code{\link{tpmatrix}} object.}
@@ -14,8 +14,8 @@ for each row in \code{object}. If not \code{NULL}, then transition probability m
 are summarized by the ID variables in \code{id}.}
 
 \item{probs}{A numeric vector of probabilities with values in \verb{[0,1]} used
-to compute quantiles. By default, the 2.5th and 97.5th percentiles are
-computed.}
+to compute quantiles. Computing quantiles can be slow when \code{object} is large,
+so the default is \code{NULL}, meaning that no quantiles are computed.}
 
 \item{unflatten}{If \code{FALSE}, then each column containing a summary statistic
 is a vector and the generated table contains one row
@@ -60,6 +60,7 @@ p <- tpmatrix(
 
 ## Summary where each column is a vector
 summary(p)
+summary(p, probs = c(.025, .975))
 
 ## Summary where each column is a matrix
 ps <- summary(p, probs = .5, unflatten = TRUE)

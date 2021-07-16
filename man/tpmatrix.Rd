@@ -98,4 +98,7 @@ way to construct a \code{\link{tparams_transprobs}} object, which is the object 
 \code{hesim} used to specify the transition probabilities required to simulate
 Markov chains with the \code{\link{CohortDtstmTrans}} class. See the
 \code{\link{tparams_transprobs}} documentation for more details.
+
+The \code{\link[=summary.tpmatrix]{summary.tpmatrix()}} method can be used to summarize a \code{tpmatrix}
+across parameter samples.
 }
