@@ -3,7 +3,7 @@
 \name{summary.eval_rng}
 \alias{summary.eval_rng}
 \alias{print.eval_rng}
-\title{Sumnmarize \code{eval_rng} object}
+\title{Summarize \code{eval_rng} object}
 \usage{
 \method{summary}{eval_rng}(object, probs = c(0.025, 0.975), sep = "_", ...)
 

@@ -110,7 +110,7 @@ c.eval_rng <- function(...) {
   x
 }
 
-#' Sumnmarize `eval_rng` object
+#' Summarize `eval_rng` object
 #' 
 #' Summarize the model parameters randomly sampled for probabilistic sensitivity 
 #' analysis with [eval_rng()]. 
