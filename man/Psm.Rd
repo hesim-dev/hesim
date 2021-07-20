@@ -86,10 +86,11 @@ state probabilities is described in Section 2.1.
 The \code{\link{PsmCurves}} documentation
 describes the class for the survival models and the \code{\link{StateVals}} documentation
 describes the class for the cost and utility models. A \code{\link{PsmCurves}}
-object is typically created using \code{\link[=create_PsmCurves]{create_PsmCurves()}}. A longer example is
-provided in \code{vignette("psm")}.
-
-\code{\link{PsmCurves}}, \code{\link[=create_PsmCurves]{create_PsmCurves()}}
+object is typically created using \code{\link[=create_PsmCurves]{create_PsmCurves()}}.
+The \code{\link{PsmCurves}} documentation provides an example in which the model
+is parameterized from parameter objects (i.e., without having the patient-level
+data required to fit a model with \code{R}). A longer example is provided in
+\code{vignette("psm")}.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
