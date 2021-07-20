@@ -117,7 +117,7 @@ psm_curves2 <- create_PsmCurves(params, input_data = surv_input_data)
 ## There are minor discrepancies between the case where models were fit
 ## with flexsurvreg() and the case where the "params_surv_list" object
 ## was constructed manually due to differences in the random draws
-## of the parameter samples. These differences are decreasing the the size 
+## of the parameter samples. These differences are decreasing in the size 
 ## of N_SAMPLES
 times <- seq(0, 10, 1/12) # Monthly times
 
