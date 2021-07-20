@@ -138,7 +138,12 @@ PsmCurves <- R6::R6Class(
 #' @param ... Further arguments passed to or from other methods. Passed to [`create_params.partsurvfit()`]
 #' when `object` is of class [`flexsurvreg_list`].
 #' @return Returns an `R6Class` object of class [`PsmCurves`].
-#' @seealso See [`PsmCurves`] and [`Psm`] for examples.
+#' @seealso See [`PsmCurves`] and [`Psm`] for examples. [`PsmCurves`] provides
+#' an example in which a model is parameterized both with 
+#' (via `create_PsmCurves.flexsurvreg_list()`) and without (via 
+#' `create_PsmCurves.params_surv_list()`) access to patient-level data. 
+#' The [`Psm`] example shows how state probabilities, costs, and utilities can 
+#' be computed from predicted survival curves.
 #' @export
 create_PsmCurves <- function(object, ...){
   UseMethod("create_PsmCurves", object)
@@ -186,10 +191,13 @@ create_PsmCurves.params_surv_list <- function(object, input_data, ...){
 #' @seealso The [`PsmCurves`] documentation
 #' describes the class for the survival models and the [`StateVals`] documentation
 #' describes the class for the cost and utility models. A [`PsmCurves`] 
-#' object is typically created using [create_PsmCurves()]. A longer example is 
-#' provided in `vignette("psm")`.
+#' object is typically created using [create_PsmCurves()].
+#' The [`PsmCurves`] documentation provides an example in which the model
+#' is parameterized from parameter objects (i.e., without having the patient-level
+#' data required to fit a model with `R`). A longer example is provided in 
+#' `vignette("psm")`.
 #' 
-#' [`PsmCurves`], [`create_PsmCurves()`]
+#' 
 #' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437).
 #' See Section 2.3 for a mathematical description of a PSM and Section 4.2 for an 
 #' example in oncology. The mathematical approach used to simulate costs and QALYs from

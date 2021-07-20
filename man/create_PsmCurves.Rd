@@ -47,5 +47,10 @@ Returns an \code{R6Class} object of class \code{\link{PsmCurves}}.
 A generic function for creating a \code{\link{PsmCurves}} object.
 }
 \seealso{
-See \code{\link{PsmCurves}} and \code{\link{Psm}} for examples.
+See \code{\link{PsmCurves}} and \code{\link{Psm}} for examples. \code{\link{PsmCurves}} provides
+an example in which a model is parameterized both with
+(via \code{create_PsmCurves.flexsurvreg_list()}) and without (via
+\code{create_PsmCurves.params_surv_list()}) access to patient-level data.
+The \code{\link{Psm}} example shows how state probabilities, costs, and utilities can
+be computed from predicted survival curves.
 }
