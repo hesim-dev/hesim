@@ -1,4 +1,4 @@
-pandoc: 2.7.3
+pandoc: 2.11.4
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
@@ -11,7 +11,7 @@ articles:
   mlogit: mlogit.html
   mstate: mstate.html
   psm: psm.html
-last_built: 2021-02-17T06:20Z
+last_built: 2021-07-22T05:14Z
 urls:
   reference: https://hesim-dev.github.io/hesim/reference
   article: https://hesim-dev.github.io/hesim/articles

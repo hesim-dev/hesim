@@ -93,7 +93,7 @@ This allows multiple transition matrices to be stored as either tabular objects
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -153,7 +153,7 @@ This allows multiple transition matrices to be stored as either tabular objects
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -184,7 +184,12 @@ This allows multiple transition matrices to be stored as either tabular objects
 
     <pre class="usage"><span class='fu'>as_array3</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='fu'>as_tbl2</span><span class='op'>(</span><span class='va'>x</span>, output <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"data.table"</span>, <span class='st'>"data.frame"</span>, <span class='st'>"matrix"</span>, <span class='st'>"tpmatrix"</span><span class='op'>)</span><span class='op'>)</span></pre>
+<span class='fu'>as_tbl2</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  output <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"data.table"</span>, <span class='st'>"data.frame"</span>, <span class='st'>"matrix"</span>, <span class='st'>"tpmatrix"</span><span class='op'>)</span>,
+  prefix <span class='op'>=</span> <span class='st'>""</span>,
+  sep <span class='op'>=</span> <span class='st'>"_"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -200,6 +205,14 @@ where each slice is a square matrix.</p></td>
       <th>output</th>
       <td><p>The class of the object returned by the function. Either
 a <code>data.table</code>, <code>data.frame</code>, <code>matrix</code>, or <code><a href='tpmatrix.html'>tpmatrix</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>prefix, sep</th>
+      <td><p>Arguments passed to <code><a href='tpmatrix_names.html'>tpmatrix_names()</a></code> for naming
+the transition probability columns. The <code>states</code> argument is based on
+the column names (i.e., names of the second dimension) of array;
+if <code>NULL</code>, then states are named <code>s1</code>, ..., <code>sh</code> where h is
+the number of states.</p></td>
     </tr>
     </table>
 
@@ -224,15 +237,15 @@ for <code>as_tbl2()</code> a 2-dimensional tabular object as specified by <code>
 <span class='fu'>as_array3</span><span class='op'>(</span><span class='va'>pmat</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; , , 1
 #&gt; 
-#&gt;      [,1] [,2]
-#&gt; [1,]  0.3  0.7
-#&gt; [2,]  0.0  1.0
+#&gt;     s1  s2
+#&gt; s1 0.3 0.7
+#&gt; s2 0.0 1.0
 #&gt; 
 #&gt; , , 2
 #&gt; 
-#&gt;      [,1] [,2]
-#&gt; [1,]  0.4  0.6
-#&gt; [2,]  0.0  1.0
+#&gt;     s1  s2
+#&gt; s1 0.4 0.6
+#&gt; s2 0.0 1.0
 #&gt; </div><div class='input'><span class='fu'>as_array3</span><span class='op'>(</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>pmat</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; , , 1
 #&gt; 
@@ -248,7 +261,10 @@ for <code>as_tbl2()</code> a 2-dimensional tabular object as specified by <code>
 #&gt; </div><div class='input'><span class='fu'>as_tbl2</span><span class='op'>(</span><span class='fu'>as_array3</span><span class='op'>(</span><span class='va'>pmat</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
 #&gt; 1:   0.3   0.7     0     1
-#&gt; 2:   0.4   0.6     0     1</div></pre>
+#&gt; 2:   0.4   0.6     0     1</div><div class='input'><span class='fu'>as_tbl2</span><span class='op'>(</span><span class='fu'>as_array3</span><span class='op'>(</span><span class='va'>pmat</span><span class='op'>)</span>, prefix <span class='op'>=</span> <span class='st'>"p_"</span>, sep <span class='op'>=</span> <span class='st'>"."</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    p_s1.s1 p_s1.s2 p_s2.s1 p_s2.s2
+#&gt; 1:     0.3     0.7       0       1
+#&gt; 2:     0.4     0.6       0       1</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

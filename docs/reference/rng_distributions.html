@@ -91,7 +91,7 @@ distributions with define_rng()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -151,7 +151,7 @@ distributions with define_rng()." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -178,23 +178,30 @@ distributions with define_rng()." />
 distributions with <code><a href='define_rng.html'>define_rng()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>beta_rng</span><span class='op'>(</span>shape1 <span class='op'>=</span> <span class='fl'>1</span>, shape2 <span class='op'>=</span> <span class='fl'>1</span>, mean <span class='op'>=</span> <span class='cn'>NULL</span>, sd <span class='op'>=</span> <span class='cn'>NULL</span>, names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>beta_rng</span><span class='op'>(</span>
+  shape1 <span class='op'>=</span> <span class='fl'>1</span>,
+  shape2 <span class='op'>=</span> <span class='fl'>1</span>,
+  mean <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sd <span class='op'>=</span> <span class='cn'>NULL</span>,
+  names <span class='op'>=</span> <span class='cn'>NULL</span>,
+  n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>n</span>
+<span class='op'>)</span>
 
-<span class='fu'>dirichlet_rng</span><span class='op'>(</span><span class='va'>alpha</span>, names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>dirichlet_rng</span><span class='op'>(</span><span class='va'>alpha</span>, names <span class='op'>=</span> <span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>n</span><span class='op'>)</span>
 
-<span class='fu'>fixed</span><span class='op'>(</span><span class='va'>est</span>, names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>fixed</span><span class='op'>(</span><span class='va'>est</span>, names <span class='op'>=</span> <span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>n</span><span class='op'>)</span>
 
-<span class='fu'>custom</span><span class='op'>(</span><span class='va'>x</span>, names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>custom</span><span class='op'>(</span><span class='va'>x</span>, names <span class='op'>=</span> <span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>n</span><span class='op'>)</span>
 
-<span class='fu'>gamma_rng</span><span class='op'>(</span><span class='va'>mean</span>, <span class='va'>sd</span>, names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>gamma_rng</span><span class='op'>(</span><span class='va'>mean</span>, <span class='va'>sd</span>, names <span class='op'>=</span> <span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>n</span><span class='op'>)</span>
 
-<span class='fu'>lognormal_rng</span><span class='op'>(</span><span class='va'>meanlog</span>, <span class='va'>sdlog</span>, names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>lognormal_rng</span><span class='op'>(</span><span class='va'>meanlog</span>, <span class='va'>sdlog</span>, names <span class='op'>=</span> <span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>n</span><span class='op'>)</span>
 
-<span class='fu'>multi_normal_rng</span><span class='op'>(</span><span class='va'>mu</span>, <span class='va'>Sigma</span>, names <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>multi_normal_rng</span><span class='op'>(</span><span class='va'>mu</span>, <span class='va'>Sigma</span>, names <span class='op'>=</span> <span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>n</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>normal_rng</span><span class='op'>(</span><span class='va'>mean</span>, <span class='va'>sd</span>, names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>normal_rng</span><span class='op'>(</span><span class='va'>mean</span>, <span class='va'>sd</span>, names <span class='op'>=</span> <span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>n</span><span class='op'>)</span>
 
-<span class='fu'>uniform_rng</span><span class='op'>(</span><span class='va'>min</span>, <span class='va'>max</span>, names <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+<span class='fu'>uniform_rng</span><span class='op'>(</span><span class='va'>min</span>, <span class='va'>max</span>, names <span class='op'>=</span> <span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>n</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,6 +218,13 @@ distributions with <code><a href='define_rng.html'>define_rng()</a></code>.</p>
       <th>names</th>
       <td><p>Names for columns if an object with multiple columns is returned
 by the function.</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>The number of random samples of the parameters to draw. Default is
+the value of <code>n</code> in the environment in which the function is called, which
+can be useful when used inside <code>define_rng</code> because it means that a value does
+not need to be explictly passed to <code>n</code>.</p></td>
     </tr>
     <tr>
       <th>alpha</th>

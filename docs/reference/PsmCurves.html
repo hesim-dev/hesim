@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -150,7 +150,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -183,7 +183,10 @@
     <p>An <a href='https://r6.r-lib.org/reference/R6Class.html'>R6::R6Class</a> object.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='Psm.html'>Psm</a></code>, <code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code></p></div>
+    <div class='dont-index'><p><code>PsmCurves</code> are conveniently created from either fitted models or
+parameter objects with <code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code>. A complete economic model can be
+implemented with the <code><a href='Psm.html'>Psm</a></code> class. A longer example is provided in
+<code><a href='../articles/psm.html'>vignette("psm")</a></code>.</p></div>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
@@ -309,54 +312,176 @@ for each survival curve.</p><h4 class='hasAnchor' id='arguments'><a class='ancho
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
+<span class='va'>N_SAMPLES</span> <span class='op'>&lt;-</span> <span class='fl'>5</span> <span class='co'># Number of parameter samples for PSA</span>
 
-<span class='co'># Simulation data</span>
-<span class='va'>dt_strategies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>dt_patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>,
-                          age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>45</span>, <span class='fl'>50</span>, <span class='fl'>60</span><span class='op'>)</span>,
-                          female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='va'>dt_strategies</span>,
-                        patients <span class='op'>=</span> <span class='va'>dt_patients</span><span class='op'>)</span>
+<span class='co'># Consider a 3-state model where there is a </span>
+<span class='co'># progression-free survival (PFS) and an</span>
+<span class='co'># overall survival (OS) endpoint</span>
 
-<span class='co'># Fit survival models</span>
-<span class='va'>surv_est_data</span> <span class='op'>&lt;-</span> <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>survival</span>
-<span class='va'>fit1</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>endpoint1_time</span>, <span class='va'>endpoint1_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>age</span>,
-                              data <span class='op'>=</span> <span class='va'>surv_est_data</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
-<span class='va'>fit2</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>endpoint2_time</span>, <span class='va'>endpoint2_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>age</span>,
-                              data <span class='op'>=</span> <span class='va'>surv_est_data</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
-<span class='va'>fit3</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>endpoint3_time</span>, <span class='va'>endpoint3_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>age</span>,
-                              data <span class='op'>=</span> <span class='va'>surv_est_data</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
-<span class='va'>fits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span><span class='op'>(</span><span class='va'>fit1</span>, <span class='va'>fit2</span>, <span class='va'>fit3</span><span class='op'>)</span>
+<span class='co'># (0) Model setup</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>
+  strategies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+    strategy_name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SOC"</span>, <span class='st'>"New 1"</span><span class='op'>)</span>
+  <span class='op'>)</span>,
+  patients <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    patient_id <span class='op'>=</span> <span class='fl'>1</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='co'># Form PsmCurves</span>
+<span class='co'># (1) Parameterize survival models</span>
+<span class='co'>## (1.1) If patient-level data is available, </span>
+<span class='co'>## we can fit survival models</span>
+
+<span class='co'>### (1.1.1) Data for estimation (for simplicity, only use 2 strategies)</span>
+<span class='va'>surv_est_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as_pfs_os.html'>as_pfs_os</a></span><span class='op'>(</span>
+  <span class='va'>onc3</span><span class='op'>[</span><span class='va'>strategy_name</span> <span class='op'>!=</span> <span class='st'>"New 2"</span><span class='op'>]</span>, 
+  patient_vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"patient_id"</span>, <span class='st'>"strategy_name"</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>surv_est_data</span><span class='op'>$</span><span class='va'>strategy_name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/droplevels.html'>droplevels</a></span><span class='op'>(</span><span class='va'>surv_est_data</span><span class='op'>$</span><span class='va'>strategy_name</span><span class='op'>)</span>
+
+<span class='co'>### (1.1.2) Fit models</span>
+<span class='va'>fit_pfs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>pfs_time</span>, <span class='va'>pfs_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>strategy_name</span>,
+                       data <span class='op'>=</span> <span class='va'>surv_est_data</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
+<span class='va'>fit_os</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span><span class='fu'>Surv</span><span class='op'>(</span><span class='va'>os_time</span>, <span class='va'>os_status</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>strategy_name</span>,
+                      data <span class='op'>=</span> <span class='va'>surv_est_data</span>, dist <span class='op'>=</span> <span class='st'>"exp"</span><span class='op'>)</span>
+<span class='va'>fits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='flexsurvreg_list.html'>flexsurvreg_list</a></span><span class='op'>(</span>pfs <span class='op'>=</span> <span class='va'>fit_pfs</span>, os <span class='op'>=</span> <span class='va'>fit_os</span><span class='op'>)</span>
+
+<span class='co'>## (1.2) If patient-level data is NOT available, </span>
+<span class='co'>## we can construct the parameter objects "manually"</span>
+
+<span class='co'>### (1.2.1) Baseline hazard:</span>
+<span class='co'>### Assume that we know the (log) rate parameters for both PFS and OS </span>
+<span class='co'>### for SOC (i.e., the intercept) and their standard error</span>
+<span class='va'>logint_pfs_est</span> <span class='op'>&lt;-</span> <span class='op'>-</span><span class='fl'>1.7470900</span>
+<span class='va'>logint_pfs_se</span> <span class='op'>&lt;-</span>  <span class='fl'>0.03866223</span>
+<span class='va'>logint_os_est</span> <span class='op'>&lt;-</span> <span class='op'>-</span><span class='fl'>2.7487675</span>
+<span class='va'>logint_os_se</span> <span class='op'>&lt;-</span> <span class='fl'>0.04845015</span>
+
+<span class='co'>### (1.2.2) Relative treatment effect:</span>
+<span class='co'>### Assume we know the log hazard ratios (and their standard errors) </span>
+<span class='co'>### for comparing the new interventions to the SOC</span>
+<span class='va'>loghr_pfs_est_new1</span> <span class='op'>&lt;-</span> <span class='op'>-</span><span class='fl'>0.1772028</span> 
+<span class='va'>loghr_pfs_se_new1</span> <span class='op'>&lt;-</span> <span class='fl'>0.05420119</span>
+<span class='va'>loghr_os_est_new1</span> <span class='op'>&lt;-</span> <span class='op'>-</span><span class='fl'>0.1603632</span>
+<span class='va'>loghr_os_se_new1</span> <span class='op'>&lt;-</span> <span class='fl'>0.06948962</span>
+
+<span class='co'>### (1.2.3) Create "params_surv_list" object by combining the baseline hazard </span>
+<span class='co'>### and relative treatment effects</span>
+<span class='va'>params</span> <span class='op'>&lt;-</span> <span class='fu'><a href='params_surv_list.html'>params_surv_list</a></span><span class='op'>(</span>
+  <span class='co'>#### Model for PFS</span>
+  pfs <span class='op'>=</span> <span class='fu'><a href='params_surv.html'>params_surv</a></span><span class='op'>(</span>
+    coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span> 
+      rate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span> <span class='co'># coefficients predict log rate</span>
+        intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N_SAMPLES</span>, <span class='va'>logint_pfs_est</span>, <span class='va'>logint_pfs_se</span><span class='op'>)</span>,
+        new1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N_SAMPLES</span>, <span class='va'>loghr_pfs_est_new1</span>, <span class='va'>loghr_pfs_se_new1</span><span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    dist <span class='op'>=</span> <span class='st'>"exp"</span>
+  <span class='op'>)</span>,
+  
+  <span class='co'>#### Model for OS</span>
+  os <span class='op'>=</span> <span class='fu'><a href='params_surv.html'>params_surv</a></span><span class='op'>(</span>
+    coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      rate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+        intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N_SAMPLES</span>, <span class='va'>logint_os_est</span>, <span class='va'>logint_os_se</span><span class='op'>)</span>,
+        new1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N_SAMPLES</span>, <span class='va'>loghr_os_est_new1</span>, <span class='va'>loghr_os_se_new1</span><span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    dist <span class='op'>=</span> <span class='st'>"exp"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='co'>#### The print (and summary) methods for the "params_surv_list" object will </span>
+<span class='co'>#### summarize each of the model terms, which is a good way to check</span>
+<span class='co'>#### if it's been setup correctly</span>
+<span class='va'>params</span> 
+</div><div class='output co'>#&gt; A "params_surv_list" object 
+#&gt; 
+#&gt; Summary of coefficients:
+#&gt;    model parameter      term       mean         sd       2.5%       97.5%
+#&gt; 1:   pfs      rate intercept -1.7485021 0.03947666 -1.7864545 -1.69543149
+#&gt; 2:   pfs      rate      new1 -0.1283063 0.05808532 -0.2164273 -0.08005826
+#&gt; 3:    os      rate intercept -2.7452407 0.03625975 -2.7783701 -2.69718181
+#&gt; 4:    os      rate      new1 -0.1333935 0.04073142 -0.1598637 -0.06980461
+#&gt; 
+#&gt; Number of parameter samples: 5
+#&gt; Distributions: 
+#&gt;   pfs    os 
+#&gt; "exp" "exp" </div><div class='input'>
+<span class='co'># (2) Simulation</span>
+<span class='co'>## (2.1) Construct the model</span>
+<span class='co'>### (2.1.1) Case where patient-level data was available</span>
+<span class='co'>### Use create_PsmCurves.params_flexsurvreg_list() method</span>
 <span class='va'>surv_input_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"strategies"</span>, <span class='st'>"patients"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>psm_curves</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_PsmCurves.html'>create_PsmCurves</a></span><span class='op'>(</span><span class='va'>fits</span>, input_data <span class='op'>=</span> <span class='va'>surv_input_data</span>, n <span class='op'>=</span> <span class='fl'>3</span>,
-                               uncertainty <span class='op'>=</span> <span class='st'>"bootstrap"</span>, est_data <span class='op'>=</span> <span class='va'>surv_est_data</span><span class='op'>)</span>
+<span class='va'>psm_curves1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_PsmCurves.html'>create_PsmCurves</a></span><span class='op'>(</span><span class='va'>fits</span>, input_data <span class='op'>=</span> <span class='va'>surv_input_data</span>, 
+                                n <span class='op'>=</span> <span class='va'>N_SAMPLES</span>,
+                                uncertainty <span class='op'>=</span> <span class='st'>"normal"</span>,
+                                est_data <span class='op'>=</span> <span class='va'>surv_est_data</span><span class='op'>)</span>
 
-<span class='co'># Summarize survival curves</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves</span><span class='op'>$</span><span class='fu'>quantile</span><span class='op'>(</span>p <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'>### (2.1.2) Case where patient-level data was NOT available</span>
+<span class='co'>### Use create_PsmCurves.params_surv_list() method</span>
+<span class='va'>surv_input_data</span><span class='op'>$</span><span class='va'>intercept</span> <span class='op'>&lt;-</span> <span class='fl'>1</span>
+<span class='va'>surv_input_data</span><span class='op'>$</span><span class='va'>new1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>surv_input_data</span><span class='op'>$</span><span class='va'>strategy_name</span> <span class='op'>==</span> <span class='st'>"New 1"</span>, 
+                               <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>
+<span class='va'>psm_curves2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_PsmCurves.html'>create_PsmCurves</a></span><span class='op'>(</span><span class='va'>params</span>, input_data <span class='op'>=</span> <span class='va'>surv_input_data</span><span class='op'>)</span>
+
+<span class='co'>## (2.2) Summarize survival models</span>
+<span class='co'>## There are minor discrepancies between the case where models were fit</span>
+<span class='co'>## with flexsurvreg() and the case where the "params_surv_list" object</span>
+<span class='co'>## was constructed manually due to differences in the random draws</span>
+<span class='co'>## of the parameter samples. These differences are decreasing in the size </span>
+<span class='co'>## of N_SAMPLES</span>
+<span class='va'>times</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>12</span><span class='op'>)</span> <span class='co'># Monthly times</span>
+
+<span class='co'>### Quantiles</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves1</span><span class='op'>$</span><span class='fu'>quantile</span><span class='op'>(</span>p <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve    p  quantile
-#&gt; 1:      1           1          1      1     1 0.25 0.1841517
-#&gt; 2:      1           1          1      1     1 0.50 0.4436989
-#&gt; 3:      1           1          1      1     1 0.75 0.8873978
-#&gt; 4:      1           1          1      1     2 0.25 0.3644132
-#&gt; 5:      1           1          1      1     2 0.50 0.8780249
-#&gt; 6:      1           1          1      1     2 0.75 1.7560497</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves</span><span class='op'>$</span><span class='fu'>survival</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span>, by <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve   t  survival
-#&gt; 1:      1           1          1      1     1 0.0 1.0000000
-#&gt; 2:      1           1          1      1     1 0.1 0.8553708
-#&gt; 3:      1           1          1      1     1 0.2 0.7316593
-#&gt; 4:      1           1          1      1     1 0.3 0.6258400
-#&gt; 5:      1           1          1      1     1 0.4 0.5353253
-#&gt; 6:      1           1          1      1     1 0.5 0.4579016</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves</span><span class='op'>$</span><span class='fu'>rmst</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve t      rmst
-#&gt; 1:      1           1          1      1     1 2 0.6119804
-#&gt; 2:      1           1          1      1     1 5 0.6398628
-#&gt; 3:      1           1          1      1     2 2 1.0055161
-#&gt; 4:      1           1          1      1     2 5 1.2422633
-#&gt; 5:      1           1          1      1     3 2 1.1909968
-#&gt; 6:      1           1          1      1     3 5 1.6472404</div><div class='input'>
-</div></pre>
+#&gt; 1:      1           1          1      1     1 0.25  1.576211
+#&gt; 2:      1           1          1      1     1 0.50  3.797756
+#&gt; 3:      1           1          1      1     1 0.75  7.595513
+#&gt; 4:      1           1          1      1     2 0.25  4.644797
+#&gt; 5:      1           1          1      1     2 0.50 11.191271
+#&gt; 6:      1           1          1      1     2 0.75 22.382543</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves2</span><span class='op'>$</span><span class='fu'>quantile</span><span class='op'>(</span>p <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve    p  quantile
+#&gt; 1:      1           1          1      1     1 0.25  1.701678
+#&gt; 2:      1           1          1      1     1 0.50  4.100060
+#&gt; 3:      1           1          1      1     1 0.75  8.200119
+#&gt; 4:      1           1          1      1     2 0.25  4.629897
+#&gt; 5:      1           1          1      1     2 0.50 11.155370
+#&gt; 6:      1           1          1      1     2 0.75 22.310739</div><div class='input'>
+<span class='co'>### Survival curves</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves1</span><span class='op'>$</span><span class='fu'>survival</span><span class='op'>(</span>t <span class='op'>=</span> <span class='va'>times</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve          t  survival
+#&gt; 1:      1           1          1      1     1 0.00000000 1.0000000
+#&gt; 2:      1           1          1      1     1 0.08333333 0.9849055
+#&gt; 3:      1           1          1      1     1 0.16666667 0.9700389
+#&gt; 4:      1           1          1      1     1 0.25000000 0.9553966
+#&gt; 5:      1           1          1      1     1 0.33333333 0.9409754
+#&gt; 6:      1           1          1      1     1 0.41666667 0.9267718</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves2</span><span class='op'>$</span><span class='fu'>survival</span><span class='op'>(</span>t <span class='op'>=</span> <span class='va'>times</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve          t  survival
+#&gt; 1:      1           1          1      1     1 0.00000000 1.0000000
+#&gt; 2:      1           1          1      1     1 0.08333333 0.9860106
+#&gt; 3:      1           1          1      1     1 0.16666667 0.9722169
+#&gt; 4:      1           1          1      1     1 0.25000000 0.9586162
+#&gt; 5:      1           1          1      1     1 0.33333333 0.9452058
+#&gt; 6:      1           1          1      1     1 0.41666667 0.9319829</div><div class='input'>
+<span class='co'>### Restricted mean survival</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves1</span><span class='op'>$</span><span class='fu'>rmst</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve t     rmst
+#&gt; 1:      1           1          1      1     1 2 1.675611
+#&gt; 2:      1           1          1      1     1 5 3.279243
+#&gt; 3:      1           1          1      1     2 2 1.881087
+#&gt; 4:      1           1          1      1     2 5 4.299891
+#&gt; 5:      1           2          1      1     1 2 1.731940
+#&gt; 6:      1           2          1      1     1 5 3.536659</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>psm_curves2</span><span class='op'>$</span><span class='fu'>rmst</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    sample strategy_id patient_id grp_id curve t     rmst
+#&gt; 1:      1           1          1      1     1 2 1.696977
+#&gt; 2:      1           1          1      1     1 5 3.374980
+#&gt; 3:      1           1          1      1     2 2 1.880720
+#&gt; 4:      1           1          1      1     2 5 4.297859
+#&gt; 5:      1           2          1      1     1 2 1.752854
+#&gt; 6:      1           2          1      1     1 5 3.636406</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

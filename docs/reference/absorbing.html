@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Absorbing states — absorbing" />
-<meta property="og:description" content="Returns a vector of absorbing states from a transition matrix." />
+<meta property="og:description" content="This is a generic function that returns a vector of absorbing states." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -150,7 +150,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -173,18 +173,25 @@
     </div>
 
     <div class="ref-description">
-    <p>Returns a vector of absorbing states from a transition matrix.</p>
+    <p>This is a generic function that returns a vector of absorbing states.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>absorbing</span><span class='op'>(</span><span class='va'>trans_mat</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>absorbing</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for matrix</span>
+<span class='fu'>absorbing</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for tparams_transprobs</span>
+<span class='fu'>absorbing</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>trans_mat</th>
-      <td><p>A transition matrix in the format from the <code><a href='https://rdrr.io/pkg/mstate/man/mstate-package.html'>mstate</a></code> package.
-See <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>.</p></td>
+      <th>x</th>
+      <td><p>An object of the appropriate class. When <code>x</code> is a <code>matrix</code>,
+it must be a transition matrix in the format from the
+<code><a href='https://rdrr.io/pkg/mstate/man/mstate-package.html'>mstate</a></code> package (see also <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code>).</p></td>
     </tr>
     </table>
 

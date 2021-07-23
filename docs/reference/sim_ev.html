@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Expected values — sim_ev • hesim</title>
+<title>Expected values from state probabilities — sim_ev • hesim</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,10 @@
 
 
 
-<meta property="og:title" content="Expected values — sim_ev" />
-<meta property="og:description" content="Simulate costs and quality-adjusted life-years (QALYs) as a function of
-simulated state occupancy probabilities." />
+<meta property="og:title" content="Expected values from state probabilities — sim_ev" />
+<meta property="og:description" content="Simulate expected values as a function of simulated state occupancy
+probabilities, with simulation of costs and quality-adjusted life-years
+(QALYs) as particular use cases." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -91,7 +92,7 @@ simulated state occupancy probabilities." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -151,7 +152,7 @@ simulated state occupancy probabilities." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -168,19 +169,42 @@ simulated state occupancy probabilities." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Expected values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/statevals.R'><code>R/statevals.R</code></a></small>
+    <h1>Expected values from state probabilities</h1>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/sim-general.R'><code>R/sim-general.R</code></a></small>
     <div class="hidden name"><code>sim_ev.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Simulate costs and quality-adjusted life-years (QALYs) as a function of
-simulated state occupancy probabilities.</p>
+    <p>Simulate expected values as a function of simulated state occupancy
+probabilities, with simulation of costs and quality-adjusted life-years
+(QALYs) as particular use cases.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sim_qalys</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>utility_model</span>, <span class='va'>dr</span>, <span class='va'>integrate_method</span>, <span class='va'>lys</span><span class='op'>)</span>
+    <pre class="usage"><span class='co'># S3 method for stateprobs</span>
+<span class='fu'>sim_ev</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  models <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dr <span class='op'>=</span> <span class='fl'>0.03</span>,
+  integrate_method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span><span class='op'>)</span>,
+  value_name <span class='op'>=</span> <span class='st'>"value"</span>,
+  outcome_name <span class='op'>=</span> <span class='st'>"outcome"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
-<span class='fu'>sim_costs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>cost_models</span>, <span class='va'>dr</span>, <span class='va'>integrate_method</span><span class='op'>)</span></pre>
+<span class='fu'>sim_qalys</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>model</span>,
+  dr <span class='op'>=</span> <span class='fl'>0.03</span>,
+  integrate_method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span><span class='op'>)</span>,
+  lys <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
+
+<span class='fu'>sim_costs</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  <span class='va'>models</span>,
+  dr <span class='op'>=</span> <span class='fl'>0.03</span>,
+  integrate_method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"trapz"</span>, <span class='st'>"riemann_left"</span>, <span class='st'>"riemann_right"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,41 +214,226 @@ simulated state occupancy probabilities.</p>
       <td><p>A <code><a href='stateprobs.html'>stateprobs</a></code> object.</p></td>
     </tr>
     <tr>
-      <th>utility_model</th>
-      <td><p>A single object of class <code><a href='StateVals.html'>StateVals</a></code> used
-to simulate utility.</p></td>
-    </tr>
-    <tr>
       <th>dr</th>
       <td><p>Discount rate.</p></td>
     </tr>
     <tr>
       <th>integrate_method</th>
       <td><p>Method used to integrate state values when computing
-weighted length of stay. Options are <code>trapz</code> for the trapezoid rule,
+costs or QALYs. Options are <code>trapz</code> (the default) for the trapezoid rule,
 <code>riemann_left</code> left for a left Riemann sum, and
 <code>riemann_right</code> right for a right Riemann sum.</p></td>
+    </tr>
+    <tr>
+      <th>value_name</th>
+      <td><p>Name of the column containing values of the outcome. Default
+is <code>"value"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>outcome_name</th>
+      <td><p>Name of the column indicating the outcome corresponding
+to each model. Only used if <code>models</code> is a list. Default is <code>"outcome"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently unused.</p></td>
+    </tr>
+    <tr>
+      <th>model, models</th>
+      <td><p>An object or list of objects of class <code><a href='StateVals.html'>StateVals</a></code> used to
+model state values. When using <code>sim_qalys()</code>, this should be
+a single model for utility. With <code>sim_costs()</code>, a list of models should be
+used with one model for each cost category. Finally, with <code>sim_ev()</code>,
+this may either be a single model or a list of models. May also be <code>NULL</code>,
+in which case length of stay is computed based on the state probabilities
+contained in <code>object</code>.</p></td>
     </tr>
     <tr>
       <th>lys</th>
       <td><p>If <code>TRUE</code>, then life-years are simulated in addition to
 QALYs.</p></td>
     </tr>
-    <tr>
-      <th>cost_models</th>
-      <td><p>A list of objects of class <code><a href='StateVals.html'>StateVals</a></code> used
-to simulate costs.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>sim_costs()</code> and <code>sim_qalys()</code> return objects of class
-<code><a href='costs.html'>costs</a></code> and <code><a href='qalys.html'>qalys</a></code>, respectively.</p>
+    <p><code>sim_ev()</code> returns a <code>data.table</code> with the following columns:</p><dl>
+<dt>sample</dt><dd><p>A random sample from the PSA.</p></dd>
+<dt>strategy_id</dt><dd><p>The treatment strategy ID.</p></dd>
+<dt>patient_id</dt><dd><p>The patient ID.</p></dd>
+<dt>grp_id</dt><dd><p>The subgroup ID.</p></dd>
+<dt>state_id</dt><dd><p>The health state ID.</p></dd>
+<dt>dr</dt><dd><p>The rate used to discount costs.</p></dd>
+<dt>outcome</dt><dd><p>The outcome corresponding to each model in <code>models</code>.
+Only included if <code>models</code> is a list.</p></dd>
+<dt>value</dt><dd><p>The expected value.</p></dd>
+
+</dl><p>The names of the <code>outcome</code> and <code>value</code> columns may be changed with the
+<code>value_name</code> and <code>outcome_name</code> arguments. <code>sim_costs()</code> and <code>sim_qalys()</code>
+return similar objects, that are of class <code><a href='costs.html'>costs</a></code> and <code><a href='qalys.html'>qalys</a></code>, respectively.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>See <code>vignette("expected-values")</code> for details.</p>
+    <p>Expected values in cohort models (i.e.,  those implemented with
+the <code><a href='CohortDtstm.html'>CohortDtstm</a></code> and <code><a href='Psm.html'>Psm</a></code> classes) are mean outcomes for patients comprising
+the cohort. The method used to simulate expected values depends on the
+<code>$method</code> field in the <code><a href='StateVals.html'>StateVals</a></code> object(s) stored in <code>model(s)</code>. If
+<code>$method = "starting"</code>, then state values represent a one-time value that
+occurs at time 0.</p>
+<p>The more common use case is <code>$method = "wlos"</code>, or a "weighted length of stay".
+That is, expected values for each health state can be thought of as state values
+weighted by the time a patient spends in each state (and discounted by a
+discount factor that depends on the discount rate <code>dr</code>). The
+precise computation proceeds in four steps. In the first step, the probability
+of being in each health state at each discrete time point is simulated
+(this is the output contained in the <code><a href='stateprobs.html'>stateprobs</a></code> object). Second, a
+<code><a href='StateVals.html'>StateVals</a></code> model is used to predict state values at each time point.
+Third an expected value at each time point is computed by multiplying the
+state probability, the state value, and the discount factor. Fourth, the
+expected values at each time point are summed across all time points.</p>
+<p>The summation in the fourth step can be thought of as a discrete approximation
+of an integral. In particular, the limits of integration can be partitioned
+into time intervals, with each interval containing a start and an end.
+The <code>integrate_method</code> argument determines the approach used
+for this approximation:</p><ol>
+<li><p>A left Riemann sum (<code>integrate_method = "riemann_left"</code>) uses expected values
+at the start of each time interval.</p></li>
+<li><p>A right Riemann sum (<code>integrate_method = "riemann_right"</code>) uses expected values
+at the end of each time interval.</p></li>
+<li><p>The trapezoid rule (<code>integrate_method = "trapz"</code>) averages expected values
+at the start and end of each time interval. (This will generally be the
+most accurate and is recommended.)</p></li>
+</ol>
 
+<p>Mathematical details are provided in the reference within the "References"
+section below.</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>The ID variables in the state value models in <code>models</code> must be
+consistent with the ID variables contained in <code>object</code>. In particular,
+the <code>models</code> should predict state values for each non-absorbing health state
+in <code>object</code>; that is, the number of health states modeled with the
+<code>models</code> should equal the number of health states in <code>object</code> less the number
+of absorbing states.</p>
+<p>The absorbing states are saved as an attribute named <code>absorbing</code> to
+<code><a href='stateprobs.html'>stateprobs</a></code> objects. When simulating state probabilities with a
+<code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> object, the absorbing state is determined by the
+<code>absorbing</code> field in the class; in a <code>Psm</code> (or with
+<code><a href='sim_stateprobs.survival.html'>sim_stateprobs.survival()</a></code>), the absorbing state is always equal to the
+final health state.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><a href='https://arxiv.org/abs/2102.09437'>Incerti and Jansen (2021)</a>.
+See Section 2.1 for mathematical details.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>State probabilities can be simulated using the
+<code>$sim_stateprobs()</code> methods from either the <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code>
+(or <code><a href='CohortDtstm.html'>CohortDtstm</a></code>) or <code><a href='Psm.html'>Psm</a></code> classes. State probabilities can also be
+computed directly from survival curves with the generic method
+<code><a href='sim_stateprobs.survival.html'>sim_stateprobs.survival()</a></code>.</p>
+<p>Costs and QALYs are typically computed within the <code>R6</code> model classes
+using the <code>$sim_costs()</code> and <code>$sim_qalys()</code> methods. For instance, see the
+documentation and examples for the <code><a href='CohortDtstm.html'>CohortDtstm</a></code> and <code><a href='Psm.html'>Psm</a></code> classes.
+The <code>sim_qalys()</code> and <code>sim_costs()</code> functions are exported to give users
+additional flexibility when creating their own modeling pipelines.
+<code>sim_ev()</code> may be useful for computing outcomes other than costs or QALYs.</p>
+<p><code><a href='costs.html'>costs</a></code> and <code><a href='qalys.html'>qalys</a></code> objects can be passed to <code><a href='summarize_ce.html'>summarize_ce()</a></code> to
+create a cost-effectiveness object for performing a cost-effectiveness analysis
+with <code><a href='cea.html'>cea()</a></code>. Although note that typically the <code>$summarize()</code> method
+belonging to the <code><a href='CohortDtstm.html'>CohortDtstm</a></code> or <code><a href='Psm.html'>Psm</a></code> classes would be used instead.</p>
+<p>Use the <code><a href='IndivCtstm.html'>IndivCtstm</a></code> class to simulate costs and QALYs with an individual
+continuous-time state transition model.</p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># We need (i) a state probability object and (ii) a model for state values</span>
+<span class='co'>## We should start by setting up our decision problem</span>
+<span class='va'>hesim_dat</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='hesim_data.html'>hesim_data</a></span><span class='op'>(</span>strategies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>,
+                         patients <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>patient_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>,
+                         states <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>state_id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>input_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='expand.html'>expand</a></span><span class='op'>(</span><span class='va'>hesim_dat</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"strategies"</span>, <span class='st'>"patients"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'>## (i) Simulate a state probability object</span>
+<span class='va'>tpmat_id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tpmatrix_id.html'>tpmatrix_id</a></span><span class='op'>(</span><span class='va'>input_data</span>, n_samples <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> 
+<span class='va'>p_12</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>tpmat_id</span><span class='op'>$</span><span class='va'>strategy_id</span> <span class='op'>==</span> <span class='fl'>1</span>, <span class='fl'>.15</span>, <span class='fl'>.1</span><span class='op'>)</span>
+<span class='va'>tpmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tpmatrix.html'>tpmatrix</a></span><span class='op'>(</span>
+  <span class='va'>C</span>, <span class='va'>p_12</span>,
+  <span class='fl'>0</span>, <span class='fl'>1</span>
+<span class='op'>)</span>
+<span class='va'>transmod</span> <span class='op'>&lt;-</span> <span class='va'><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>params <span class='op'>=</span> <span class='fu'><a href='tparams_transprobs.html'>tparams_transprobs</a></span><span class='op'>(</span><span class='va'>tpmat</span>, <span class='va'>tpmat_id</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>stprobs</span> <span class='op'>&lt;-</span> <span class='va'>transmod</span><span class='op'>$</span><span class='fu'>sim_stateprobs</span><span class='op'>(</span>n_cycles <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+
+<span class='co'>## Construct model for state values</span>
+<span class='va'>outcome_tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='stateval_tbl.html'>stateval_tbl</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    state_id <span class='op'>=</span> <span class='fl'>1</span>,
+    est <span class='op'>=</span> <span class='fl'>5000</span>
+  <span class='op'>)</span>,
+  dist <span class='op'>=</span> <span class='st'>"fixed"</span>
+<span class='op'>)</span>
+<span class='va'>outmod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_StateVals.html'>create_StateVals</a></span><span class='op'>(</span><span class='va'>outcome_tbl</span>, n <span class='op'>=</span> <span class='fl'>2</span>, hesim_data <span class='op'>=</span> <span class='va'>hesim_dat</span><span class='op'>)</span>
+
+<span class='co'># We can then simulate expected values</span>
+<span class='co'>## The generic expected values function</span>
+<span class='fu'>sim_ev</span><span class='op'>(</span><span class='va'>stprobs</span>, models <span class='op'>=</span> <span class='va'>outmod</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id grp_id state_id   dr    value
+#&gt;  1:      1           1          1      1        1 0.03 11429.69
+#&gt;  2:      1           1          2      1        1 0.03 11429.69
+#&gt;  3:      1           1          3      1        1 0.03 11429.69
+#&gt;  4:      1           2          1      1        1 0.03 12346.79
+#&gt;  5:      1           2          2      1        1 0.03 12346.79
+#&gt;  6:      1           2          3      1        1 0.03 12346.79
+#&gt;  7:      2           1          1      1        1 0.03 11429.69
+#&gt;  8:      2           1          2      1        1 0.03 11429.69
+#&gt;  9:      2           1          3      1        1 0.03 11429.69
+#&gt; 10:      2           2          1      1        1 0.03 12346.79
+#&gt; 11:      2           2          2      1        1 0.03 12346.79
+#&gt; 12:      2           2          3      1        1 0.03 12346.79</div><div class='input'>
+<span class='co'>## We can also pass a list of models</span>
+<span class='fu'>sim_ev</span><span class='op'>(</span><span class='va'>stprobs</span>, models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>`Outcome 1` <span class='op'>=</span> <span class='va'>outmod</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id grp_id state_id   dr   outcome    value
+#&gt;  1:      1           1          1      1        1 0.03 Outcome 1 11429.69
+#&gt;  2:      1           1          2      1        1 0.03 Outcome 1 11429.69
+#&gt;  3:      1           1          3      1        1 0.03 Outcome 1 11429.69
+#&gt;  4:      1           2          1      1        1 0.03 Outcome 1 12346.79
+#&gt;  5:      1           2          2      1        1 0.03 Outcome 1 12346.79
+#&gt;  6:      1           2          3      1        1 0.03 Outcome 1 12346.79
+#&gt;  7:      2           1          1      1        1 0.03 Outcome 1 11429.69
+#&gt;  8:      2           1          2      1        1 0.03 Outcome 1 11429.69
+#&gt;  9:      2           1          3      1        1 0.03 Outcome 1 11429.69
+#&gt; 10:      2           2          1      1        1 0.03 Outcome 1 12346.79
+#&gt; 11:      2           2          2      1        1 0.03 Outcome 1 12346.79
+#&gt; 12:      2           2          3      1        1 0.03 Outcome 1 12346.79</div><div class='input'>
+<span class='co'>## Suppose the outcome were a cost category. Then we might</span>
+<span class='co'>## prefer the following:</span>
+<span class='fu'>sim_costs</span><span class='op'>(</span><span class='va'>stprobs</span>, models <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>drug <span class='op'>=</span> <span class='va'>outmod</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id grp_id state_id   dr category    costs
+#&gt;  1:      1           1          1      1        1 0.03     drug 11429.69
+#&gt;  2:      1           1          2      1        1 0.03     drug 11429.69
+#&gt;  3:      1           1          3      1        1 0.03     drug 11429.69
+#&gt;  4:      1           2          1      1        1 0.03     drug 12346.79
+#&gt;  5:      1           2          2      1        1 0.03     drug 12346.79
+#&gt;  6:      1           2          3      1        1 0.03     drug 12346.79
+#&gt;  7:      2           1          1      1        1 0.03     drug 11429.69
+#&gt;  8:      2           1          2      1        1 0.03     drug 11429.69
+#&gt;  9:      2           1          3      1        1 0.03     drug 11429.69
+#&gt; 10:      2           2          1      1        1 0.03     drug 12346.79
+#&gt; 11:      2           2          2      1        1 0.03     drug 12346.79
+#&gt; 12:      2           2          3      1        1 0.03     drug 12346.79</div><div class='input'>
+<span class='co'>## Length of stay is computed if there is no state value model</span>
+<span class='fu'>sim_ev</span><span class='op'>(</span><span class='va'>stprobs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     sample strategy_id patient_id grp_id state_id    value
+#&gt;  1:      1           1          1      1        1 2.285938
+#&gt;  2:      1           1          2      1        1 2.285938
+#&gt;  3:      1           1          3      1        1 2.285938
+#&gt;  4:      1           2          1      1        1 2.469358
+#&gt;  5:      1           2          2      1        1 2.469358
+#&gt;  6:      1           2          3      1        1 2.469358
+#&gt;  7:      2           1          1      1        1 2.285938
+#&gt;  8:      2           1          2      1        1 2.285938
+#&gt;  9:      2           1          3      1        1 2.285938
+#&gt; 10:      2           2          1      1        1 2.469358
+#&gt; 11:      2           2          2      1        1 2.469358
+#&gt; 12:      2           2          3      1        1 2.469358</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
