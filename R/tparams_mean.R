@@ -62,7 +62,7 @@ check.tparams_mean <- function(object, ...){
 #' summarizes the object using `summary.tparams_mean()` and prints it to the
 #' console. 
 #' 
-#' @inheritParams summary.tparams_transprobs
+#' @inheritParams summary.params
 #' @param object,x A [`tparams_mean`] object.
 #' @param ... Currently unused.
 #' 
