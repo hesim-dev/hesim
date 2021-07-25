@@ -49,7 +49,7 @@ by the function.}
 \item{n}{The number of random samples of the parameters to draw. Default is
 the value of \code{n} in the environment in which the function is called, which
 can be useful when used inside \code{define_rng} because it means that a value does
-not need to be explictly passed to \code{n}.}
+not need to be explicitly passed to \code{n}.}
 
 \item{alpha}{A matrix where each row is a separate vector of shape parameters.}
 

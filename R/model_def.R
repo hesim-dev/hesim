@@ -281,7 +281,7 @@ uv_rng <- function(n, params, rng_fun, mom_fun = NULL, names = NULL){
 #' @param n The number of random samples of the parameters to draw. Default is
 #' the value of `n` in the environment in which the function is called, which 
 #' can be useful when used inside `define_rng` because it means that a value does
-#' not need to be explictly passed to `n`.
+#' not need to be explicitly passed to `n`.
 #' @param ... Additional arguments to pass to underlying random number generation
 #' functions. See "details". 
 #' 
