@@ -92,7 +92,7 @@ then random samples from suitable probability distributions are returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -152,7 +152,7 @@ then random samples from suitable probability distributions are returned." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -170,7 +170,7 @@ then random samples from suitable probability distributions are returned." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a parameter object from a fitted model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_lm.R'><code>R/params_lm.R</code></a>, <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit.R'><code>R/params_mlogit.R</code></a>, and 3 more</small>
     <div class="hidden name"><code>create_params.Rd</code></div>
     </div>
 
@@ -185,13 +185,13 @@ then random samples from suitable probability distributions are returned.</p>
 <span class='co'># S3 method for lm</span>
 <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='co'># S3 method for flexsurvreg</span>
-<span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
-
 <span class='co'># S3 method for multinom</span>
 <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for multinom_list</span>
+<span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for flexsurvreg</span>
 <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>object</span>, n <span class='op'>=</span> <span class='fl'>1000</span>, uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"none"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for flexsurvreg_list</span>
@@ -202,6 +202,8 @@ then random samples from suitable probability distributions are returned.</p>
   <span class='va'>object</span>,
   n <span class='op'>=</span> <span class='fl'>1000</span>,
   uncertainty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"bootstrap"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
+  max_errors <span class='op'>=</span> <span class='fl'>0</span>,
+  silent <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -214,9 +216,7 @@ then random samples from suitable probability distributions are returned.</p>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments passed to or from other methods. Only used when
-<code>object</code> is of class <code>partsurvfit</code>, in which case the arguments are passed
-to <code><a href='bootstrap.html'>bootstrap.partsurvfit()</a></code>.</p></td>
+      <td><p>Currently unused.</p></td>
     </tr>
     <tr>
       <th>n</th>
@@ -226,8 +226,19 @@ to <code><a href='bootstrap.html'>bootstrap.partsurvfit()</a></code>.</p></td>
       <th>uncertainty</th>
       <td><p>Method determining how parameter uncertainty should be handled.
 If <code>"normal"</code>, then parameters are randomly drawn from their multivariate normal
-distribution. If <code>"bootstrap</code>, then parameters are bootstrapped using <code><a href='bootstrap.html'>bootstrap</a></code>.
-If <code>"none</code>, then only point estimates are returned.</p></td>
+distribution. If <code>"bootstrap"</code>, then parameters are bootstrapped using <code><a href='bootstrap.html'>bootstrap</a></code>.
+If <code>"none"</code>, then only point estimates are returned.</p></td>
+    </tr>
+    <tr>
+      <th>max_errors</th>
+      <td><p>Maximum number of errors that are allowed when fitting statistical models
+during the bootstrap procedure. This argument may be useful if, for instance, the model
+fails to converge during some bootstrap replications. Default is 0.</p></td>
+    </tr>
+    <tr>
+      <th>silent</th>
+      <td><p>Logical indicating whether error messages should be suppressed. Passed to
+the <code>silent</code> argument of <code><a href='https://rdrr.io/r/base/try.html'>try()</a></code>.</p></td>
     </tr>
     </table>
 
@@ -243,43 +254,54 @@ and the classes of the returned objects are:</p><ul>
 <li><p><code>create_params.partsurvfit</code> -&gt; <code><a href='params_surv_list.html'>params_surv_list</a></code></p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>These methods are typically used alongside <code><a href='create_input_mats.html'>create_input_mats()</a></code>
+to create model objects as a function of input data and a
+fitted statistical model. For instance,
+<code><a href='create_PsmCurves.html'>create_PsmCurves()</a></code> creates the survival model for a partitioned survival model,
+<code><a href='create_IndivCtstmTrans.html'>create_IndivCtstmTrans()</a></code> creates the transition model for an individual
+continuous time state transition model,
+<code><a href='create_CohortDtstmTrans.html'>create_CohortDtstmTrans()</a></code> creates the transition model for a cohort discrete
+time state transition model, and
+<code><a href='create_StateVals.html'>create_StateVals()</a></code> creates a health state values model.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># create_params.lm</span>
-<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>costs</span> <span class='op'>~</span> <span class='va'>female</span>, data <span class='op'>=</span> <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span><span class='op'>)</span>
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>costs</span> <span class='op'>~</span> <span class='va'>female</span>, data <span class='op'>=</span> <span class='va'>psm4_exdata</span><span class='op'>$</span><span class='va'>costs</span><span class='op'>$</span><span class='va'>medical</span><span class='op'>)</span>
 <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
 <span class='va'>params_lm</span> <span class='op'>&lt;-</span> <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>fit</span>, n <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      (Intercept)     female
-#&gt; [1,]    32401.24 3907.96888
-#&gt; [2,]    32317.73 1590.17913
-#&gt; [3,]    30786.07 2058.30430
-#&gt; [4,]    32569.48  -61.17965
-#&gt; [5,]    30876.11   69.98317</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      (Intercept)    female
+#&gt; [1,]    31262.29  882.5941
+#&gt; [2,]    32447.73 1905.9169
+#&gt; [3,]    28861.79 4782.5384
+#&gt; [4,]    28628.35 7038.5227
+#&gt; [5,]    30309.50 3072.4469</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_lm</span><span class='op'>$</span><span class='va'>sigma</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 10311.3 10311.3 10311.3 10311.3 10311.3</div><div class='input'>
 <span class='co'># create_params.flexsurvreg</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/chjackson/flexsurv-dev'>"flexsurv"</a></span><span class='op'>)</span>
-<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'>flexsurv</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span>formula <span class='op'>=</span> <span class='fu'>Surv</span><span class='op'>(</span><span class='va'>futime</span>, <span class='va'>fustat</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, 
-                    data <span class='op'>=</span> <span class='va'>ovarian</span>, dist <span class='op'>=</span> <span class='st'>"weibull"</span><span class='op'>)</span>
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html'>flexsurvreg</a></span><span class='op'>(</span>formula <span class='op'>=</span> <span class='fu'>Surv</span><span class='op'>(</span><span class='va'>futime</span>, <span class='va'>fustat</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, 
+                   data <span class='op'>=</span> <span class='va'>ovarian</span>, dist <span class='op'>=</span> <span class='st'>"weibull"</span><span class='op'>)</span>
 <span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>5</span>
 <span class='va'>params_surv_wei</span> <span class='op'>&lt;-</span> <span class='fu'>create_params</span><span class='op'>(</span><span class='va'>fit</span>, n <span class='op'>=</span> <span class='va'>n</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>params_surv_wei</span><span class='op'>$</span><span class='va'>dist</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "weibull.quiet"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>params_surv_wei</span><span class='op'>$</span><span class='va'>coefs</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $shape
-#&gt;       (Intercept)
-#&gt; [1,]  0.001458613
-#&gt; [2,]  0.262720800
-#&gt; [3,] -0.132028464
-#&gt; [4,]  0.186166943
-#&gt; [5,]  0.022700315
+#&gt;      (Intercept)
+#&gt; [1,]  -0.1721055
+#&gt; [2,]  -0.1228815
+#&gt; [3,]   0.2868667
+#&gt; [4,]   0.3138653
+#&gt; [5,]   0.3201733
 #&gt; 
 #&gt; $scale
 #&gt;      (Intercept)
-#&gt; [1,]    7.580215
-#&gt; [2,]    6.514265
-#&gt; [3,]    7.150658
-#&gt; [4,]    6.900664
-#&gt; [5,]    6.901837
+#&gt; [1,]    7.059577
+#&gt; [2,]    7.261128
+#&gt; [3,]    7.390533
+#&gt; [4,]    6.926668
+#&gt; [5,]    6.719093
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

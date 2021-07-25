@@ -101,7 +101,7 @@ and output for a cost-effectiveness acceptability curve.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -161,7 +161,7 @@ and output for a cost-effectiveness acceptability curve.
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -314,7 +314,7 @@ incremental net monetary benefits for the range of specified willingness to pay 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://Rdatatable.gitlab.io/data.table'>"data.table"</a></span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://r-datatable.com'>"data.table"</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme_get.html'>theme_set</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
@@ -341,10 +341,10 @@ incremental net monetary benefits for the range of specified willingness to pay 
 <span class='co'>## in each group with a willingness to pay of 20,000</span>
 <span class='va'>cea_out</span><span class='op'>$</span><span class='va'>mce</span><span class='op'>[</span><span class='va'>k</span> <span class='op'>==</span> <span class='fl'>20000</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;        k strategy_id grp_id best      prob
-#&gt; 1: 20000           1      1    1 0.6333333
-#&gt; 2: 20000           2      1    0 0.3666667
-#&gt; 3: 20000           1      2    1 0.5666667
-#&gt; 4: 20000           2      2    0 0.4333333</div><div class='input'>
+#&gt; 1: 20000           1      1    0 0.5333333
+#&gt; 2: 20000           2      1    1 0.4666667
+#&gt; 3: 20000           1      2    1 0.7333333
+#&gt; 4: 20000           2      2    0 0.2666667</div><div class='input'>
 <span class='co'># Pairwise cost-effectiveness analysis</span>
 <span class='va'>cea_pw_out</span> <span class='op'>&lt;-</span>  <span class='fu'>cea_pw</span><span class='op'>(</span><span class='va'>sim</span>,  k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>200000</span>, <span class='fl'>500</span><span class='op'>)</span>, comparator <span class='op'>=</span> <span class='fl'>1</span>,
                       sample <span class='op'>=</span> <span class='st'>"sample"</span>, strategy <span class='op'>=</span> <span class='st'>"strategy_id"</span>, 
@@ -355,25 +355,25 @@ incremental net monetary benefits for the range of specified willingness to pay 
 <span class='co'>## The cost-effectiveness acceptability curve</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>cea_pw_out</span><span class='op'>$</span><span class='va'>ceac</span><span class='op'>[</span><span class='va'>k</span> <span class='op'>&gt;=</span> <span class='fl'>20000</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;        k strategy_id grp_id      prob
-#&gt; 1: 20000           2      1 0.3666667
-#&gt; 2: 20000           2      2 0.4333333
-#&gt; 3: 20500           2      1 0.4333333
-#&gt; 4: 20500           2      2 0.5000000
-#&gt; 5: 21000           2      1 0.4333333
-#&gt; 6: 21000           2      2 0.5666667</div><div class='input'>
+#&gt; 1: 20000           2      1 0.4666667
+#&gt; 2: 20000           2      2 0.2666667
+#&gt; 3: 20500           2      1 0.5333333
+#&gt; 4: 20500           2      2 0.2666667
+#&gt; 5: 21000           2      1 0.5666667
+#&gt; 6: 21000           2      2 0.4000000</div><div class='input'>
 <span class='co'># Summarize the incremental cost-effectiveness ratio</span>
 <span class='va'>labs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>strategy_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Strategy 1"</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='st'>"Strategy 2"</span> <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
              grp_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Group 1"</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='st'>"Group 2"</span> <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='icer.html'>icer</a></span><span class='op'>(</span><span class='va'>cea_pw_out</span>, labels <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      Group           Outcome               Strategy 2
-#&gt; 1: Group 1 Incremental QALYs        2.88 (1.70, 4.03)
-#&gt; 2: Group 1 Incremental costs  61,777 (53,583, 71,755)
-#&gt; 3: Group 1   Incremental NMB 82,208 (24,437, 144,331)
-#&gt; 4: Group 1              ICER                   21,453
-#&gt; 5: Group 2 Incremental QALYs        2.94 (2.22, 3.87)
-#&gt; 6: Group 2 Incremental costs  60,143 (51,396, 70,523)
-#&gt; 7: Group 2   Incremental NMB 86,714 (44,313, 128,935)
-#&gt; 8: Group 2              ICER                   20,477</div><div class='input'>
+#&gt; 1: Group 1 Incremental QALYs        3.13 (2.14, 4.61)
+#&gt; 2: Group 1 Incremental costs  60,590 (52,259, 67,593)
+#&gt; 3: Group 1   Incremental NMB 95,883 (46,261, 167,036)
+#&gt; 4: Group 1              ICER                   19,361
+#&gt; 5: Group 2 Incremental QALYs        2.73 (1.74, 3.98)
+#&gt; 6: Group 2 Incremental costs  61,783 (53,030, 73,175)
+#&gt; 7: Group 2   Incremental NMB 74,908 (24,545, 138,061)
+#&gt; 8: Group 2              ICER                   22,599</div><div class='input'>
 <span class='co'># Plots</span>
 <span class='fu'><a href='plot_ceplane.html'>plot_ceplane</a></span><span class='op'>(</span><span class='va'>cea_pw_out</span>, label <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span>
 </div><div class='img'><img src='cea-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot_ceac.html'>plot_ceac</a></span><span class='op'>(</span><span class='va'>cea_out</span>, label <span class='op'>=</span> <span class='va'>labs</span><span class='op'>)</span>

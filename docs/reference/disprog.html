@@ -92,7 +92,7 @@ through a multi-state model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -152,7 +152,7 @@ through a multi-state model." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -170,7 +170,7 @@ through a multi-state model." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Disease progression object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/output.R'><code>R/output.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/sim-general.R'><code>R/sim-general.R</code></a></small>
     <div class="hidden name"><code>disprog.Rd</code></div>
     </div>
 
@@ -201,9 +201,18 @@ state during the simulation and 0 otherwise.</p></dd>
 
 </dl>
 
+<p>The object also contains <code>size</code> and <code>absorbing</code> attributes.
+The <code>size</code> attribute is a numeric vector with the elements <code>n_samples</code>,
+<code>n_strategies</code>, <code>n_patients</code>, and <code>n_states</code> denoting the number of samples,
+treatment strategies, patients, and health states The <code>absorbing</code> attribute
+is a numeric vector containing the absorbing health states; i.e., the
+health states that cannot be transitioned from. Operationally, an
+absorbing state is a row in a transition matrix (as in the <code>trans_mat</code> field
+of the <code>IndivCtstmTrans</code> class) with all <code>NA</code>s.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='IndivCtstm.html'>IndivCtstm</a></code>, <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code></p></div>
+    <div class='dont-index'><p>A disease progression object can be simulated with either the
+<code><a href='IndivCtstm.html'>IndivCtstm</a></code> or <code><a href='IndivCtstmTrans.html'>IndivCtstmTrans</a></code> classes.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,12 +118,12 @@
 
       
 
-      </header><script src="mstate_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="mstate_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Markov and semi-Markov multi-state models</h1>
             
-            <h4 class="date">2021-02-16</h4>
+            <h4 class="date">2021-07-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/mstate.Rmd"><code>vignettes/mstate.Rmd</code></a></small>
       <div class="hidden name"><code>mstate.Rmd</code></div>
@@ -162,7 +162,7 @@
 <p>In a cost-effectiveness analysis, the treatments strategies of interest and characteristics of the target population must be specified in addition to the selected model structure. We will consider a simple case with two treatment strategies (the standard of care (SOC) and a new intervention) and a heterogeneous population of 1000 patients who differ by age and sex. The model contains 3 health states (2 of which are non-death states).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://Rdatatable.gitlab.io/data.table">"data.table"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com">"data.table"</a></span><span class="op">)</span>
 <span class="va">strategies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
                          strategy_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SOC"</span>, <span class="st">"New"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">n_patients</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
@@ -207,7 +207,7 @@
 <span class="va">n_trans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">tmat</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># Number of transitions</span>
 <span class="va">wei_fits_cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>length <span class="op">=</span> <span class="va">n_trans</span>, mode <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span> 
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">wei_fits_cr</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">wei_fits_cr</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">flexsurv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html">flexsurvreg</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">years</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">strategy_id</span><span class="op">)</span>, 
+  <span class="va">wei_fits_cr</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">flexsurv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html">flexsurvreg</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">years</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">strategy_id</span><span class="op">)</span>, 
                                             data <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">transitions</span>, 
                                             subset <span class="op">=</span> <span class="op">(</span><span class="va">trans</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span> , 
                                             dist <span class="op">=</span> <span class="st">"weibull"</span><span class="op">)</span> 
@@ -217,7 +217,7 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">wei_fits_cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>length <span class="op">=</span> <span class="va">n_trans</span>, mode <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span> 
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">wei_fits_cf</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">wei_fits_cf</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">flexsurv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html">flexsurvreg</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">Tstart</span>, <span class="va">Tstop</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">strategy_id</span><span class="op">)</span>, 
+  <span class="va">wei_fits_cf</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">flexsurv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html">flexsurvreg</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">Tstart</span>, <span class="va">Tstop</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">strategy_id</span><span class="op">)</span>, 
                                             data <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">transitions</span>, 
                                             subset <span class="op">=</span> <span class="op">(</span><span class="va">trans</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span> , 
                                             dist <span class="op">=</span> <span class="st">"weibull"</span><span class="op">)</span> 
@@ -266,12 +266,12 @@
                         by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategies"</span>, <span class="st">"patients"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">transmod_data</span><span class="op">)</span></code></pre></div>
 <pre><code>##    strategy_id patient_id strategy_name      age female
-## 1:           1          1           SOC 54.62246      1
-## 2:           1          2           SOC 50.96467      1
-## 3:           1          3           SOC 57.22522      0
-## 4:           1          4           SOC 45.22456      1
-## 5:           1          5           SOC 37.70764      0
-## 6:           1          6           SOC 38.09246      1</code></pre>
+## 1:           1          1           SOC 44.55322      1
+## 2:           1          2           SOC 47.36511      0
+## 3:           1          3           SOC 43.29213      0
+## 4:           1          4           SOC 41.48645      1
+## 5:           1          5           SOC 49.05939      0
+## 6:           1          6           SOC 52.75728      0</code></pre>
 <p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transmod_cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span><span class="op">(</span><span class="va">wei_fits_cr</span>, <span class="va">transmod_data</span>,
@@ -311,7 +311,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">trans_name</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Years"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Hazard"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linetype.html">scale_linetype_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> </code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> </code></pre></div>
 <p><img src="mstate_files/figure-html/predicted_hazards_plot-1.png" width="672"></p>
 <p>While the hazards from the healthy state are similar between the “clock forward” and “clock reset” approaches, they differ significantly in the sick state. Treatment effects (i.e., the hazard ratios between treatment strategies 1 and 2) are also largest in the sick state.</p>
 <p>Additional analyses should be conducted as well. For instance, the hazards for treatment strategy 1 (the reference treatment strategy) could be assessed by comparing the Weibull model’s predictions with predictions from non-parametric (i.e., the Kaplan-Meier estimator) or semi-parametric (i.e., Cox) models. This can be performed using <code>mstate</code>, which can predict cumulative hazards and state probabilities in non-parametric and semi-parametric models. Furthermore, the Weibull model’s proportional hazards assumption should be tested using standard techniques such as plots of log time vs. the log cumulative hazard, inclusion of time-dependent covariates, and tests of the Schoenfeld residuals.</p>
@@ -355,12 +355,12 @@
 <span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></code></pre></div>
 <pre><code>##    sample strategy_id patient_id grp_id from to final time_start time_stop
-## 1:      1           1          1      1    1  2     0   0.000000  1.706832
-## 2:      1           1          1      1    2  1     0   1.706832  3.210611
-## 3:      1           1          1      1    1  2     0   3.210611  4.917121
-## 4:      1           1          1      1    2  1     0   4.917121  6.796385
-## 5:      1           1          1      1    1  3     1   6.796385  8.504383
-## 6:      1           1          2      1    1  2     0   0.000000  0.144717</code></pre>
+## 1:      1           1          1      1    1  3     1  0.0000000 7.6990264
+## 2:      1           1          2      1    1  2     0  0.0000000 0.5531879
+## 3:      1           1          2      1    2  3     1  0.5531879 1.0066206
+## 4:      1           1          3      1    1  2     0  0.0000000 4.8401232
+## 5:      1           1          3      1    2  1     0  4.8401232 5.5348257
+## 6:      1           1          3      1    1  2     0  5.5348257 5.7941650</code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># "Clock forward"</span>
 <span class="va">econmod_cf</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -381,7 +381,7 @@
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">stprobs_cr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">prob_mean</span>, col <span class="op">=</span> <span class="va">strategy_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">state_name</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Years"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Probability in health state"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </code></pre></div>
 <p><img src="mstate_files/figure-html/stprobs_by_strategy_plot-1.png" width="672"></p>
 <p>Next, we compare the state probabilities from the “clock reset” and “clock forward” models.</p>
@@ -396,7 +396,7 @@
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">prob_mean</span>, col <span class="op">=</span> <span class="va">clock</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">state_name</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Years"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Probability in health state"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_hue.html">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </code></pre></div>
 <p><img src="mstate_files/figure-html/stprobs_by_timescale_plot-1.png" width="672"></p>
 <p>The probabilities are generally quite similar, implying that the choice of timescale has a small impact on the results. This is not unexpected given that patients spend considerably more time in the healthy state and the predicted hazard rates are very similar in the healthy state.</p>
@@ -408,13 +408,13 @@
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.03</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></code></pre></div>
-<pre><code>##    sample strategy_id grp_id state_id dr    qalys       lys
-## 1:      1           1      1        1  0 4.355856 4.8095595
-## 2:      1           1      1        2  0 1.292551 1.6715439
-## 3:      1           2      1        1  0 6.482122 7.1572958
-## 4:      1           2      1        2  0 0.708504 0.9162464
-## 5:      2           1      1        1  0 4.203324 6.0945483
-## 6:      2           1      1        2  0 1.690100 1.9438245</code></pre>
+<pre><code>##    sample strategy_id grp_id state_id dr     qalys       lys
+## 1:      1           1      1        1  0 4.1683269 5.9582213
+## 2:      1           1      1        2  0 1.5133082 1.5133096
+## 3:      1           2      1        1  0 5.8915365 8.4213831
+## 4:      1           2      1        2  0 0.8894526 0.8894534
+## 5:      2           1      1        1  0 2.8864869 4.9638770
+## 6:      2           1      1        2  0 0.5444524 1.2143097</code></pre>
 <p>Let’s compute means (across the PSA samples) by treatment strategy and health state to see how much each health state contributes to total QALYs.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">qalys_summary</span> <span class="op">&lt;-</span> <span class="va">econmod_cr</span><span class="op">$</span><span class="va">qalys_</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">qalys</span><span class="op">)</span><span class="op">)</span>,
@@ -432,12 +432,12 @@
 <code class="sourceCode R"><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></code></pre></div>
 <pre><code>##    sample strategy_id grp_id state_id   dr category     costs
-## 1:      1           1      1        1 0.03     Drug 19995.670
-## 2:      1           1      1        2 0.03     Drug  6901.437
-## 3:      1           2      1        1 0.03     Drug 57251.825
-## 4:      1           2      1        2 0.03     Drug  7324.520
-## 5:      2           1      1        1 0.03     Drug 24427.650
-## 6:      2           1      1        2 0.03     Drug  7755.047</code></pre>
+## 1:      1           1      1        1 0.03     Drug 24027.410
+## 2:      1           1      1        2 0.03     Drug  6073.569
+## 3:      1           2      1        1 0.03     Drug 64015.831
+## 4:      1           2      1        2 0.03     Drug  6978.986
+## 5:      2           1      1        1 0.03     Drug 20831.390
+## 6:      2           1      1        2 0.03     Drug  5068.347</code></pre>
 </div>
 </div>
 </div>
@@ -449,11 +449,11 @@
 <code class="sourceCode R"><span class="va">ce_sim</span> <span class="op">&lt;-</span> <span class="va">econmod_cr</span><span class="op">$</span><span class="fu">summarize</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##    Discount rate        Outcome                     SOC                     New
-## 1:          0.00          QALYs       5.10 (2.72, 7.25)       6.09 (3.12, 9.08)
-## 2:          0.03          QALYs       4.12 (2.22, 5.72)       4.71 (2.44, 6.83)
-## 3:          0.03    Costs: Drug 29,894 (25,486, 35,056) 69,730 (58,792, 81,721)
-## 4:          0.03 Costs: Medical    6,669 (5,724, 7,810)    7,494 (6,363, 8,722)
-## 5:          0.03   Costs: total 36,563 (31,247, 42,904) 77,223 (65,139, 90,428)</code></pre>
+## 1:          0.00          QALYs       5.07 (2.68, 7.29)       6.05 (2.87, 8.93)
+## 2:          0.03          QALYs       4.09 (2.20, 5.78)       4.68 (2.22, 6.72)
+## 3:          0.03    Costs: Drug 29,900 (24,913, 34,797) 69,760 (58,720, 82,342)
+## 4:          0.03 Costs: Medical    6,678 (5,613, 7,781)    7,501 (6,326, 8,762)
+## 5:          0.03   Costs: total 36,578 (30,500, 42,511) 77,261 (65,156, 91,102)</code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cea_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea</a></span><span class="op">(</span><span class="va">ce_sim</span>, dr_qalys <span class="op">=</span> <span class="fl">.03</span>, dr_costs <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span>
 <span class="va">cea_pw_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce_sim</span>, comparator <span class="op">=</span> <span class="fl">1</span>, dr_qalys <span class="op">=</span> <span class="fl">.03</span>, dr_costs <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></code></pre></div>

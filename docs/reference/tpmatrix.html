@@ -94,7 +94,7 @@ for simulating health state transitions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -154,7 +154,7 @@ for simulating health state transitions." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -184,7 +184,7 @@ object. These are, in turn, ultimately used to create a <a href='CohortDtstmTran
 for simulating health state transitions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tpmatrix</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tpmatrix</span><span class='op'>(</span><span class='va'>...</span>, complement <span class='op'>=</span> <span class='cn'>NULL</span>, states <span class='op'>=</span> <span class='cn'>NULL</span>, prefix <span class='op'>=</span> <span class='st'>""</span>, sep <span class='op'>=</span> <span class='st'>"_"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,6 +194,20 @@ for simulating health state transitions.</p>
       <td><p>Named values of expressions defining elements of the matrix. Each
 element of <code>...</code> should either be a vector or a 2-dimensional tabular object
 such as a data frame. See "Details" and the examples below.</p></td>
+    </tr>
+    <tr>
+      <th>complement</th>
+      <td><p>Either a character vector or a numeric vector denoting the
+transitions (i.e., the columns of the tabular object formed from <code>...</code>) that
+are complementary (see "Details" below). If a character vector, each element
+should be the name of a column in the tabular object; if a numeric vector,
+each element should be the index of a column in the tabular object.</p></td>
+    </tr>
+    <tr>
+      <th>states, prefix, sep</th>
+      <td><p>Arguments passed to <code><a href='tpmatrix_names.html'>tpmatrix_names()</a></code> for naming
+the columns. If <code>states = NULL</code> (the default), then the states are named
+<code>s1</code>, ..., <code>sh</code> where <code>h</code> is the number of health states.</p></td>
     </tr>
     </table>
 
@@ -206,20 +220,23 @@ elements ordered rowwise.</p>
 
     <p>A <code>tpmatrix</code> is a 2-dimensional tabular object that stores flattened
 square transition probability matrices in each row. Each transition probability
-matrix is filled rowwise. The complementary probability
-(equal to \(1\) minus the sum of the probabilities
-of all other elements in a row of a transition probability matrix)
-can be conveniently referred to as <code>C</code>. There can
-only be one complement for each row in a transition
-probability matrix.</p>
+matrix is filled rowwise. The complementary probability (equal to \(1\)
+minus the sum of the probabilities of all other elements in a row of a
+transition probability matrix) can be conveniently referred to as <code>C</code> or
+specified with the <code>complement</code> argument. There can only be one complement
+for each row in a transition probability matrix.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='define_model.html'>define_model()</a></code>, <code><a href='define_tparams.html'>define_tparams()</a></code>,
-<code><a href='tpmatrix_id.html'>tpmatrix_id()</a></code>, <code><a href='tparams_transprobs.html'>tparams_transprobs()</a></code>, <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans()</a></code></p></div>
+    <div class='dont-index'><p>A <code>tpmatrix</code> is useful because it provides a convenient
+way to construct a <code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> object, which is the object in
+<code>hesim</code> used to specify the transition probabilities required to simulate
+Markov chains with the <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> class. See the
+<code><a href='tparams_transprobs.html'>tparams_transprobs</a></code> documentation for more details.</p>
+<p>The <code><a href='summary.tpmatrix.html'>summary.tpmatrix()</a></code> method can be used to summarize a <code>tpmatrix</code>
+across parameter samples.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Pass vectors</span>
-<span class='va'>p_12</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.7</span>, <span class='fl'>.6</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='va'>p_12</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.7</span>, <span class='fl'>.6</span><span class='op'>)</span>
 <span class='fu'>tpmatrix</span><span class='op'>(</span>
   <span class='va'>C</span>, <span class='va'>p_12</span>,
   <span class='fl'>0</span>, <span class='fl'>1</span>
@@ -241,7 +258,7 @@ probability matrix.</p>
 #&gt; 1:   0.5   0.5   0.3   0.7</div><div class='input'>
 <span class='co'># Pass vectors and data frames</span>
 <span class='va'>p1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-  p_12 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.7</span>, <span class='fl'>.6</span><span class='op'>)</span>, 
+  p_12 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.7</span>, <span class='fl'>.6</span><span class='op'>)</span>,
   p_13 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.1</span>, <span class='fl'>.2</span><span class='op'>)</span>
 <span class='op'>)</span>
 
@@ -265,7 +282,18 @@ probability matrix.</p>
 </div><div class='output co'>#&gt;    s1_s1 s1_s2 s1_s3 s2_s1 s2_s2 s2_s3 s3_s1 s3_s2 s3_s3
 #&gt; 1:   0.2   0.7   0.1     0  0.40  0.60     0     0     1
 #&gt; 2:   0.2   0.6   0.2     0  0.45  0.55     0     0     1</div><div class='input'>
-
+<span class='co'># Use the 'complement' argument</span>
+<span class='va'>pmat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>s1_s1 <span class='op'>=</span> <span class='fl'>0</span>, s1_s2 <span class='op'>=</span> <span class='fl'>.5</span>, s2_s1 <span class='op'>=</span> <span class='fl'>.3</span>, s2_s2 <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+<span class='fu'>tpmatrix</span><span class='op'>(</span><span class='va'>pmat</span>, complement <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"s1_s1"</span>, <span class='st'>"s2_s2"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
+#&gt; 1:   0.5   0.5   0.3   0.7</div><div class='input'><span class='fu'>tpmatrix</span><span class='op'>(</span><span class='va'>pmat</span>, complement <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Can also pass integers</span>
+</div><div class='output co'>#&gt;    s1_s1 s1_s2 s2_s1 s2_s2
+#&gt; 1:   0.5   0.5   0.3   0.7</div><div class='input'>
+<span class='co'># Can control column names</span>
+<span class='fu'>tpmatrix</span><span class='op'>(</span><span class='va'>pmat</span>, complement <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>4</span><span class='op'>)</span>,
+         states <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"state1"</span>, <span class='st'>"state2"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>"."</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    state1.state1 state1.state2 state2.state1 state2.state2
+#&gt; 1:           0.5           0.5           0.3           0.7</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

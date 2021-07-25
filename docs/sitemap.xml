@@ -61,7 +61,7 @@
     <loc>https://hesim-dev.github.io/hesim/reference/check.html</loc>
   </url>
   <url>
-    <loc>https://hesim-dev.github.io/hesim/reference/check_edata.html</loc>
+    <loc>https://hesim-dev.github.io/hesim/reference/check_input_data.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/costs.html</loc>
@@ -83,6 +83,9 @@
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/create_input_mats.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/create_input_mats.formula_list.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/create_lines_dt.html</loc>
@@ -157,9 +160,6 @@
     <loc>https://hesim-dev.github.io/hesim/reference/input_mats.html</loc>
   </url>
   <url>
-    <loc>https://hesim-dev.github.io/hesim/reference/joined.html</loc>
-  </url>
-  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/lm_list.html</loc>
   </url>
   <url>
@@ -190,16 +190,7 @@
     <loc>https://hesim-dev.github.io/hesim/reference/params.html</loc>
   </url>
   <url>
-    <loc>https://hesim-dev.github.io/hesim/reference/params_joined_surv.html</loc>
-  </url>
-  <url>
-    <loc>https://hesim-dev.github.io/hesim/reference/params_joined_surv_list.html</loc>
-  </url>
-  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/params_lm.html</loc>
-  </url>
-  <url>
-    <loc>https://hesim-dev.github.io/hesim/reference/params_lm_list.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/params_mlogit.html</loc>
@@ -265,6 +256,12 @@
     <loc>https://hesim-dev.github.io/hesim/reference/sim_ev.html</loc>
   </url>
   <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/sim_stateprobs.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/sim_stateprobs.survival.html</loc>
+  </url>
+  <url>
     <loc>https://hesim-dev.github.io/hesim/reference/stateprobs.html</loc>
   </url>
   <url>
@@ -275,6 +272,21 @@
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/summary.ce.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/summary.eval_rng.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/summary.params.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/summary.tparams_mean.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/summary.tparams_transprobs.html</loc>
+  </url>
+  <url>
+    <loc>https://hesim-dev.github.io/hesim/reference/summary.tpmatrix.html</loc>
   </url>
   <url>
     <loc>https://hesim-dev.github.io/hesim/reference/surv_quantile.html</loc>

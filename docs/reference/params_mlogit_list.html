@@ -47,7 +47,9 @@
 
 
 <meta property="og:title" content="Parameters of a list of multinomial logit models — params_mlogit_list" />
-<meta property="og:description" content="Create a list containing the parameters of multiple fitted multinomial logit models." />
+<meta property="og:description" content="Create a list containing the parameters of multiple fitted multinomial logit models.
+Can be used to parameterize state transitions in a discrete time transition model
+by passing to the params field of a CohortDtstmTrans object." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -90,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -150,7 +152,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -168,12 +170,14 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Parameters of a list of multinomial logit models</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params.R'><code>R/params.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/params_mlogit_list.R'><code>R/params_mlogit_list.R</code></a></small>
     <div class="hidden name"><code>params_mlogit_list.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a list containing the parameters of multiple fitted multinomial logit models.</p>
+    <p>Create a list containing the parameters of multiple fitted multinomial logit models.
+Can be used to parameterize state transitions in a discrete time transition model
+by passing to the <code>params</code> field of a <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> object.</p>
     </div>
 
     <pre class="usage"><span class='fu'>params_mlogit_list</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
@@ -191,7 +195,61 @@
 
     <p>An object of class <code>params_mlogit_list</code>, which is a list containing
 <code><a href='params_mlogit.html'>params_mlogit</a></code> objects.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
+    <div class='dont-index'><p><code><a href='summary.params.html'>summary.params_mlogit_list()</a></code>, <code><a href='params_mlogit.html'>params_mlogit()</a></code>, <code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Consider a sick-sicker model</span>
+
+<span class='va'>params</span> <span class='op'>&lt;-</span> <span class='fu'>params_mlogit_list</span><span class='op'>(</span>
+  <span class='co'>## Transitions from sick state (sick -&gt; sicker, sick -&gt; death)</span>
+  sick <span class='op'>=</span> <span class='fu'><a href='params_mlogit.html'>params_mlogit</a></span><span class='op'>(</span>
+    coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      sicker <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+        intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.33</span>, <span class='op'>-</span><span class='fl'>.2</span><span class='op'>)</span>,
+        treat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.75</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.8</span><span class='op'>)</span><span class='op'>)</span>
+      <span class='op'>)</span>,
+      death <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+        intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='op'>-</span><span class='fl'>1.2</span><span class='op'>)</span>,
+        treat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.6</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.65</span><span class='op'>)</span><span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  
+  <span class='co'>## Transitions from sicker state (sicker -&gt; death)</span>
+  sicker <span class='op'>=</span> <span class='fu'><a href='params_mlogit.html'>params_mlogit</a></span><span class='op'>(</span>
+    coefs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      death <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+        intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1.5</span>, <span class='op'>-</span><span class='fl'>1.4</span><span class='op'>)</span>,
+        treat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.5</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.55</span><span class='op'>)</span><span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>params</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      from     to      term       mean         sd       2.5%      97.5%
+#&gt; 1:   sick sicker intercept -0.2650000 0.09192388 -0.3267500 -0.2032500
+#&gt; 2:   sick sicker     treat -0.2554128 0.04563563 -0.2860686 -0.2247570
+#&gt; 3:   sick  death intercept -1.1000000 0.14142136 -1.1950000 -1.0050000
+#&gt; 4:   sick  death     treat -0.4708043 0.05659874 -0.5088246 -0.4327840
+#&gt; 5: sicker  death intercept -1.4500000 0.07071068 -1.4975000 -1.4025000
+#&gt; 6: sicker  death     treat -0.6454921 0.06739447 -0.6907644 -0.6002198</div><div class='input'><span class='va'>params</span>
+</div><div class='output co'>#&gt; A "params_mlogit_list" object
+#&gt; 
+#&gt; Summary of coefficients:
+#&gt;      from     to      term       mean         sd       2.5%      97.5%
+#&gt; 1:   sick sicker intercept -0.2650000 0.09192388 -0.3267500 -0.2032500
+#&gt; 2:   sick sicker     treat -0.2554128 0.04563563 -0.2860686 -0.2247570
+#&gt; 3:   sick  death intercept -1.1000000 0.14142136 -1.1950000 -1.0050000
+#&gt; 4:   sick  death     treat -0.4708043 0.05659874 -0.5088246 -0.4327840
+#&gt; 5: sicker  death intercept -1.4500000 0.07071068 -1.4975000 -1.4025000
+#&gt; 6: sicker  death     treat -0.6454921 0.06739447 -0.6907644 -0.6002198
+#&gt; 
+#&gt; Number of parameter samples: 2
+#&gt; Number of starting (non-absorbing) states: 2
+#&gt; Number of transitions by starting state: 2 1</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

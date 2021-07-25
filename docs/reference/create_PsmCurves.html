@@ -47,8 +47,7 @@
 
 
 <meta property="og:title" content="Create PsmCurves object — create_PsmCurves" />
-<meta property="og:description" content="create_PsmCurves is a function for creating an object of class
-PsmCurves." />
+<meta property="og:description" content="A generic function for creating a PsmCurves object." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -91,7 +90,7 @@ PsmCurves." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -151,7 +150,7 @@ PsmCurves." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -174,8 +173,7 @@ PsmCurves." />
     </div>
 
     <div class="ref-description">
-    <p><code>create_PsmCurves</code> is a function for creating an object of class
-<code><a href='PsmCurves.html'>PsmCurves</a></code>.</p>
+    <p>A generic function for creating a <code><a href='PsmCurves.html'>PsmCurves</a></code> object.</p>
     </div>
 
     <pre class="usage"><span class='fu'>create_PsmCurves</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -198,7 +196,8 @@ PsmCurves." />
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>Fitted survival models.</p></td>
+      <td><p>An object of the appropriate class containing either fitted
+survival models or parameters of survival models.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -208,17 +207,19 @@ when <code>object</code> is of class <code><a href='flexsurvreg_list.html'>flexs
     <tr>
       <th>input_data</th>
       <td><p>An object of class <code>expanded_hesim_data</code> returned by
-<code><a href='expand.hesim_data.html'>expand.hesim_data</a></code>. Must be expanded by the data tables "strategies" and
-"patients".</p></td>
+<code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>. Must be expanded by the data tables <code>"strategies"</code> and
+<code>"patients"</code>.</p></td>
     </tr>
     <tr>
       <th>n</th>
-      <td><p>Number of random observations of the parameters to draw.</p></td>
+      <td><p>Number of random observations to draw. Not used if <code>uncertainty = "none"</code>.</p></td>
     </tr>
     <tr>
       <th>uncertainty</th>
-      <td><p>Method determining how parameter uncertainty should be handled. See
-documentation in <code><a href='create_params.html'>create_params()</a></code>.</p></td>
+      <td><p>Method determining how parameter uncertainty should be handled.
+If <code>"normal"</code>, then parameters are randomly drawn from their multivariate normal
+distribution. If <code>"bootstrap"</code>, then parameters are bootstrapped using <code><a href='bootstrap.html'>bootstrap</a></code>.
+If <code>"none"</code>, then only point estimates are returned.</p></td>
     </tr>
     <tr>
       <th>est_data</th>
@@ -230,9 +231,34 @@ used to fit survival models during bootstrap replications.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns an <code>R6Class</code> object of class <code><a href='PsmCurves.html'>PsmCurves</a></code>.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Disease models may either be created from a fitted statistical
+model or from a parameter object. In the case of the former, <code>input_data</code>
+is a data frame like object that is used to look for variables from
+the statistical model that are required for simulation. In this sense,
+<code>input_data</code> is very similar to the <code>newdata</code> argument in most <code><a href='https://rdrr.io/r/stats/predict.html'>predict()</a></code>
+methods (e.g., see <code><a href='https://rdrr.io/r/stats/predict.lm.html'>predict.lm()</a></code>). In other words, variables used in the
+<code><a href='https://rdrr.io/r/stats/formula.html'>formula</a></code> of the statistical model must also be in <code>input_data</code>.</p>
+<p>In the case of the latter, the columns of <code>input_data</code> must be named in a
+manner that is consistent with the parameter object. In the typical case
+(e.g., with <code><a href='params_surv.html'>params_surv</a></code> or <code><a href='params_mlogit.html'>params_mlogit</a></code>), the parameter object
+contains coefficients from a regression model, usually stored as matrix
+where rows index parameter samples (i.e., for a probabilistic sensitivity
+analysis) and columns index model terms. In such instances, there must
+be one column from <code>input_data</code> with the same name as each model term in the
+coefficient matrix; that is, the columns in <code>input_data</code> are matched with
+the columns of the coefficient matrices by name. If there are model terms
+in the coefficient matrices that are not contained in <code>input_data</code>, then
+an error will be thrown.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='PsmCurves.html'>PsmCurves</a></code></p></div>
+    <div class='dont-index'><p>See <code><a href='PsmCurves.html'>PsmCurves</a></code> and <code><a href='Psm.html'>Psm</a></code> for examples. <code><a href='PsmCurves.html'>PsmCurves</a></code> provides
+an example in which a model is parameterized both with
+(via <code>create_PsmCurves.flexsurvreg_list()</code>) and without (via
+<code>create_PsmCurves.params_surv_list()</code>) access to patient-level data.
+The <code><a href='Psm.html'>Psm</a></code> example shows how state probabilities, costs, and utilities can
+be computed from predicted survival curves.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

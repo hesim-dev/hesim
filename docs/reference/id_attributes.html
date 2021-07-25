@@ -91,7 +91,7 @@ and transformed parameter objects already predicted from covariates." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -151,7 +151,7 @@ and transformed parameter objects already predicted from covariates." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -273,14 +273,14 @@ within a subgroup.</p></td>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>When using the ID variables to index <a href='input_mats.html'>input_mats</a>, sorting order should be
-the same as specified in <code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>; that is,
-observations must be sorted by: (i) <code>strategy_id</code>, (ii) <code>patient_id</code>,
-and (iii) the health-related ID variable (either <code>state_id</code> or
-<code>transition_id</code>). When using ID variables to index transformed parameter
-objects and <code>sample</code> is used for indexing, then observations must be sorted by:
-(i) <code>sample</code>, (ii) <code>strategy_id</code>, (iii) <code>patient_id</code>, and
-(iv) the health-related ID variable.</p>
+    <p>When using the ID variables to index <a href='input_mats.html'>input_mats</a>, the sorting order
+should be the same as specified in <code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>; that is,
+observations must be sorted by prioritizing: (i) <code>strategy_id</code>, (ii) <code>patient_id</code>,
+(iii) the health-related ID variable (either <code>state_id</code> or <code>transition_id</code>),
+and (iv) <code>time_id</code>. When using ID variables are used to index transformed parameter
+objects and <code>sample</code> is used for indexing, then observations must be sorted by
+prioritizing: (i) <code>sample</code>, (ii) <code>strategy_id</code>, (iii) <code>patient_id</code>,
+(iv) the health-related ID variable, and (v) <code>time_id</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='hesim_data.html'>hesim_data()</a></code>,<code><a href='expand.hesim_data.html'>expand.hesim_data()</a></code>, <a href='input_mats.html'>input_mats</a></p></div>

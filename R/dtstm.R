@@ -179,7 +179,8 @@ CohortDtstmTrans <- R6::R6Class(
 #' Create `CohortDtstmTrans` object
 #' 
 #' A generic function for creating an object of class [`CohortDtstmTrans`].
-#' @param object An object of the appropriate class. 
+#' @param object An object of the appropriate class containing either a 
+#' fitted statistical model or model parameters.
 #' @param ... Further arguments passed to `CohortDtstmTrans$new()` in 
 #' [`CohortDtstmTrans`].
 #' @param input_data An object of class `expanded_hesim_data` returned by 
@@ -192,6 +193,7 @@ CohortDtstmTrans <- R6::R6Class(
 #' If `"normal"`, then parameters are randomly drawn from their multivariate normal 
 #' distribution. If `"none"`, then only point estimates are returned.
 #' @inheritParams create_params
+#' @template details-create_disease_model
 #' @seealso See [`CohortDtstmTrans`] for examples. 
 #' @export
 create_CohortDtstmTrans <- function(object, ...){

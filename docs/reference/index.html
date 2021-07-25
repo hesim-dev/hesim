@@ -89,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -149,7 +149,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -290,6 +290,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="summary.tpmatrix.html">summary(<i>&lt;tpmatrix&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summarize transition probability matrix</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="qmatrix.matrix.html">qmatrix(<i>&lt;matrix&gt;</i>)</a></code> <code><a href="qmatrix.matrix.html">qmatrix(<i>&lt;data.table&gt;</i>)</a></code> <code><a href="qmatrix.matrix.html">qmatrix(<i>&lt;data.frame&gt;</i>)</a></code> </p>
         </td>
         <td><p>Transition intensity matrix from tabular object</p></td>
@@ -311,12 +317,6 @@
           <p><code><a href="as_array3.html">as_array3()</a></code> <code><a href="as_array3.html">as_tbl2()</a></code> </p>
         </td>
         <td><p>Convert between 2D tabular objects and 3D arrays</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as.data.table.tparams_transprobs.html">as.data.table(<i>&lt;tparams_transprobs&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Coerce to <code>data.table</code></p></td>
       </tr><tr>
         
         <td>
@@ -381,6 +381,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="summary.params.html">summary(<i>&lt;params_lm&gt;</i>)</a></code> <code><a href="summary.params.html">summary(<i>&lt;params_mlogit&gt;</i>)</a></code> <code><a href="summary.params.html">summary(<i>&lt;params_mlogit_list&gt;</i>)</a></code> <code><a href="summary.params.html">summary(<i>&lt;params_surv&gt;</i>)</a></code> <code><a href="summary.params.html">summary(<i>&lt;params_surv_list&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summarize parameter objects</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="tparams.html">tparams</a></code> </p>
         </td>
         <td><p>Transformed parameter object</p></td>
@@ -393,9 +399,27 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="summary.tparams_mean.html">summary(<i>&lt;tparams_mean&gt;</i>)</a></code> <code><a href="summary.tparams_mean.html">print(<i>&lt;tparams_mean&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summarize <code>tparams_mean</code> object</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="tparams_transprobs.html">tparams_transprobs()</a></code> </p>
         </td>
         <td><p>Transition probabilities</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="as.data.table.tparams_transprobs.html">as.data.table(<i>&lt;tparams_transprobs&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Coerce to <code>data.table</code></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="summary.tparams_transprobs.html">summary(<i>&lt;tparams_transprobs&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summarize <code>tparams_transprobs</code> object</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -436,7 +460,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="input_mats.html">input_mats()</a></code> </p>
+          <p><code><a href="input_mats.html">input_mats()</a></code> <code><a href="input_mats.html">as.data.table(<i>&lt;input_mats&gt;</i>)</a></code> <code><a href="input_mats.html">print(<i>&lt;input_mats&gt;</i>)</a></code> </p>
         </td>
         <td><p>Input matrices for a statistical model</p></td>
       </tr><tr>
@@ -476,6 +500,12 @@
           <p><code><a href="define_rng.html">define_rng()</a></code> <code><a href="define_rng.html">eval_rng()</a></code> </p>
         </td>
         <td><p>Define and evaluate random number generation expressions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="summary.eval_rng.html">summary(<i>&lt;eval_rng&gt;</i>)</a></code> <code><a href="summary.eval_rng.html">print(<i>&lt;eval_rng&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Summarize <code>eval_rng</code> object</p></td>
       </tr><tr>
         
         <td>
@@ -622,7 +652,7 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-simulation-output" class="hasAnchor"><a href="#section-simulation-output" class="anchor"></a>Simulation output</h2>
+          <h2 id="section-general-simulation-functions-and-output" class="hasAnchor"><a href="#section-general-simulation-functions-and-output" class="anchor"></a>General simulation functions and output</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -640,15 +670,27 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="survival.html">survival</a></code> </p>
+          <p><code><a href="survival.html">survival()</a></code> </p>
         </td>
         <td><p>Survival object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sim_stateprobs.survival.html">sim_stateprobs(<i>&lt;survival&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Simulate state probabilities from survival curves</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="stateprobs.html">stateprobs</a></code> </p>
         </td>
         <td><p>State probability object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sim_ev.html">sim_ev(<i>&lt;stateprobs&gt;</i>)</a></code> <code><a href="sim_ev.html">sim_qalys()</a></code> <code><a href="sim_ev.html">sim_costs()</a></code> </p>
+        </td>
+        <td><p>Expected values from state probabilities</p></td>
       </tr><tr>
         
         <td>

@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,12 +118,12 @@
 
       
 
-      </header><script src="cea_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="cea_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cost-effectiveness analysis</h1>
             
-            <h4 class="date">2021-02-16</h4>
+            <h4 class="date">2021-07-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/cea.Rmd"><code>vignettes/cea.Rmd</code></a></small>
       <div class="hidden name"><code>cea.Rmd</code></div>
@@ -218,7 +218,7 @@ c_{gj} &amp;= [c_{gj}^1, c_{gj}^2, \dots, c_{gj}^n].
 <span class="va">e</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.6</span><span class="op">)</span>
 
 <span class="co"># cost and effectiveness by strategy and simulation</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://Rdatatable.gitlab.io/data.table">"data.table"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com">"data.table"</a></span><span class="op">)</span>
 <span class="va">ce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">n_samples</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span>,
                  strategy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Strategy "</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, 
                                 each <span class="op">=</span> <span class="va">n_samples</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>,
@@ -335,16 +335,33 @@ maxj
 <tbody>
 <tr>
 <td style="text-align:right;">
-147
+13
 </td>
 <td style="text-align:right;">
-408976
+405726
 </td>
 <td style="text-align:right;">
-494112
+412252
 </td>
 <td style="text-align:right;">
-472283
+484698
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+76
+</td>
+<td style="text-align:right;">
+400762
+</td>
+<td style="text-align:right;">
+505159
+</td>
+<td style="text-align:right;">
+484223
 </td>
 <td style="text-align:left;">
 2
@@ -352,16 +369,16 @@ maxj
 </tr>
 <tr>
 <td style="text-align:right;">
-149
+373
 </td>
 <td style="text-align:right;">
-395561
+400002
 </td>
 <td style="text-align:right;">
-469586
+494164
 </td>
 <td style="text-align:right;">
-493175
+509141
 </td>
 <td style="text-align:left;">
 3
@@ -369,16 +386,67 @@ maxj
 </tr>
 <tr>
 <td style="text-align:right;">
-276
+428
 </td>
 <td style="text-align:right;">
-392631
+401576
 </td>
 <td style="text-align:right;">
-521097
+469362
 </td>
 <td style="text-align:right;">
-473366
+486300
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+591
+</td>
+<td style="text-align:right;">
+406327
+</td>
+<td style="text-align:right;">
+321313
+</td>
+<td style="text-align:right;">
+475207
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+645
+</td>
+<td style="text-align:right;">
+405765
+</td>
+<td style="text-align:right;">
+472386
+</td>
+<td style="text-align:right;">
+494958
+</td>
+<td style="text-align:left;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+672
+</td>
+<td style="text-align:right;">
+417981
+</td>
+<td style="text-align:right;">
+490431
+</td>
+<td style="text-align:right;">
+478320
 </td>
 <td style="text-align:left;">
 2
@@ -386,84 +454,16 @@ maxj
 </tr>
 <tr>
 <td style="text-align:right;">
-305
+735
 </td>
 <td style="text-align:right;">
-412249
+397519
 </td>
 <td style="text-align:right;">
-412030
+479065
 </td>
 <td style="text-align:right;">
-478475
-</td>
-<td style="text-align:left;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-313
-</td>
-<td style="text-align:right;">
-405562
-</td>
-<td style="text-align:right;">
-509923
-</td>
-<td style="text-align:right;">
-582889
-</td>
-<td style="text-align:left;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-484
-</td>
-<td style="text-align:right;">
-395422
-</td>
-<td style="text-align:right;">
-432624
-</td>
-<td style="text-align:right;">
-499491
-</td>
-<td style="text-align:left;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-732
-</td>
-<td style="text-align:right;">
-379436
-</td>
-<td style="text-align:right;">
-405206
-</td>
-<td style="text-align:right;">
-551546
-</td>
-<td style="text-align:left;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-775
-</td>
-<td style="text-align:right;">
-384483
-</td>
-<td style="text-align:right;">
-487100
-</td>
-<td style="text-align:right;">
-455548
+425354
 </td>
 <td style="text-align:left;">
 2
@@ -471,33 +471,33 @@ maxj
 </tr>
 <tr>
 <td style="text-align:right;">
-810
+807
 </td>
 <td style="text-align:right;">
-399747
+404348
 </td>
 <td style="text-align:right;">
-446121
+428433
 </td>
 <td style="text-align:right;">
-478490
+410789
 </td>
 <td style="text-align:left;">
-3
+2
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-929
+995
 </td>
 <td style="text-align:right;">
-395425
+399232
 </td>
 <td style="text-align:right;">
-325021
+459246
 </td>
 <td style="text-align:right;">
-478976
+460238
 </td>
 <td style="text-align:left;">
 3
@@ -510,8 +510,8 @@ maxj
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">mce</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ##   1   2   3 
-## 0.0 0.3 0.7</code></pre>
-<p>Treatments 1, 2, and 3 have the highest NMBs a fraction 0, 0.3, and 0.7 of the time respectively. <code><a href="../reference/cea.html">cea()</a></code> computes this for a range of values of <span class="math inline">\(k\)</span>. Relevant output is stored in the <code>mce</code> element returned by <code><a href="../reference/cea.html">cea_pw()</a></code>.</p>
+## 0.0 0.4 0.6</code></pre>
+<p>Treatments 1, 2, and 3 have the highest NMBs a fraction 0, 0.4, and 0.6 of the time respectively. <code><a href="../reference/cea.html">cea()</a></code> computes this for a range of values of <span class="math inline">\(k\)</span>. Relevant output is stored in the <code>mce</code> element returned by <code><a href="../reference/cea.html">cea_pw()</a></code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_ceac.html">plot_ceac</a></span><span class="op">(</span><span class="va">cea_out</span><span class="op">)</span></code></pre></div>
 <p><img src="cea_files/figure-html/mce_plot-1.png" width="768"></p>
@@ -583,232 +583,232 @@ nmbci
 <tbody>
 <tr>
 <td style="text-align:right;">
-147
+13
 </td>
 <td style="text-align:right;">
-408976
+405726
 </td>
 <td style="text-align:right;">
-494112
+412252
 </td>
 <td style="text-align:right;">
-472283
+484698
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+484698
+</td>
+<td style="text-align:right;">
+484698
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+76
+</td>
+<td style="text-align:right;">
+400762
+</td>
+<td style="text-align:right;">
+505159
+</td>
+<td style="text-align:right;">
+484223
 </td>
 <td style="text-align:left;">
 2
 </td>
 <td style="text-align:right;">
-494112
+505159
 </td>
 <td style="text-align:right;">
-472283
+484223
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-149
+373
 </td>
 <td style="text-align:right;">
-395561
+400002
 </td>
 <td style="text-align:right;">
-469586
+494164
 </td>
 <td style="text-align:right;">
-493175
+509141
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-493175
+509141
 </td>
 <td style="text-align:right;">
-493175
+509141
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-276
+428
 </td>
 <td style="text-align:right;">
-392631
+401576
 </td>
 <td style="text-align:right;">
-521097
+469362
 </td>
 <td style="text-align:right;">
-473366
+486300
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+486300
+</td>
+<td style="text-align:right;">
+486300
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+591
+</td>
+<td style="text-align:right;">
+406327
+</td>
+<td style="text-align:right;">
+321313
+</td>
+<td style="text-align:right;">
+475207
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+475207
+</td>
+<td style="text-align:right;">
+475207
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+645
+</td>
+<td style="text-align:right;">
+405765
+</td>
+<td style="text-align:right;">
+472386
+</td>
+<td style="text-align:right;">
+494958
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+494958
+</td>
+<td style="text-align:right;">
+494958
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+672
+</td>
+<td style="text-align:right;">
+417981
+</td>
+<td style="text-align:right;">
+490431
+</td>
+<td style="text-align:right;">
+478320
 </td>
 <td style="text-align:left;">
 2
 </td>
 <td style="text-align:right;">
-521097
+490431
 </td>
 <td style="text-align:right;">
-473366
+478320
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-305
+735
 </td>
 <td style="text-align:right;">
-412249
+397519
 </td>
 <td style="text-align:right;">
-412030
+479065
 </td>
 <td style="text-align:right;">
-478475
-</td>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:right;">
-478475
-</td>
-<td style="text-align:right;">
-478475
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-313
-</td>
-<td style="text-align:right;">
-405562
-</td>
-<td style="text-align:right;">
-509923
-</td>
-<td style="text-align:right;">
-582889
-</td>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:right;">
-582889
-</td>
-<td style="text-align:right;">
-582889
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-484
-</td>
-<td style="text-align:right;">
-395422
-</td>
-<td style="text-align:right;">
-432624
-</td>
-<td style="text-align:right;">
-499491
-</td>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:right;">
-499491
-</td>
-<td style="text-align:right;">
-499491
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-732
-</td>
-<td style="text-align:right;">
-379436
-</td>
-<td style="text-align:right;">
-405206
-</td>
-<td style="text-align:right;">
-551546
-</td>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:right;">
-551546
-</td>
-<td style="text-align:right;">
-551546
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-775
-</td>
-<td style="text-align:right;">
-384483
-</td>
-<td style="text-align:right;">
-487100
-</td>
-<td style="text-align:right;">
-455548
+425354
 </td>
 <td style="text-align:left;">
 2
 </td>
 <td style="text-align:right;">
-487100
+479065
 </td>
 <td style="text-align:right;">
-455548
+425354
 </td>
 </tr>
 <tr>
 <td style="text-align:right;">
-810
+807
 </td>
 <td style="text-align:right;">
-399747
+404348
 </td>
 <td style="text-align:right;">
-446121
+428433
 </td>
 <td style="text-align:right;">
-478490
+410789
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+428433
+</td>
+<td style="text-align:right;">
+410789
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+995
+</td>
+<td style="text-align:right;">
+399232
+</td>
+<td style="text-align:right;">
+459246
+</td>
+<td style="text-align:right;">
+460238
 </td>
 <td style="text-align:left;">
 3
 </td>
 <td style="text-align:right;">
-478490
+460238
 </td>
 <td style="text-align:right;">
-478490
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-929
-</td>
-<td style="text-align:right;">
-395425
-</td>
-<td style="text-align:right;">
-325021
-</td>
-<td style="text-align:right;">
-478976
-</td>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:right;">
-478976
-</td>
-<td style="text-align:right;">
-478976
+460238
 </td>
 </tr>
 </tbody>
@@ -818,13 +818,13 @@ nmbci
 <code class="sourceCode R"><span class="va">enmbpi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">$</span><span class="va">nmbpi</span><span class="op">)</span>
 <span class="va">enmbci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">$</span><span class="va">nmbci</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">enmbpi</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 506535</code></pre>
+<pre><code>## [1] 481362.9</code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">enmbci</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 496423.9</code></pre>
+<pre><code>## [1] 470922.7</code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">enmbpi</span> <span class="op">-</span> <span class="va">enmbci</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 10111.09</code></pre>
+<pre><code>## [1] 10440.18</code></pre>
 <p>The <code><a href="../reference/cea.html">cea()</a></code> function performs this same calculation across all simulation draws from the PSA and for a number of values of <span class="math inline">\(k\)</span>. A plot by group of the the EVPI for different values of <span class="math inline">\(k\)</span> is shown below. The kinks represent values of <span class="math inline">\(k\)</span> where the optimal strategy changes.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_evpi.html">plot_evpi</a></span><span class="op">(</span><span class="va">cea_out</span><span class="op">)</span></code></pre></div>
@@ -845,8 +845,8 @@ totEVPI &amp;= \sum_{g=1}^{G} w_g EVPI_g,
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Willingness to pay"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Total EVPI"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">ktop</span>, <span class="fl">100000</span><span class="op">)</span>, 
-                     label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span><span class="op">)</span> <span class="op">+</span>
+                     label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_dollar.html">dollar</a></span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_dollar.html">dollar</a></span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </code></pre></div>
 <p><img src="cea_files/figure-html/totevpi-1.png" width="576"></p>
 </div>
@@ -895,21 +895,21 @@ j^{*} = \text{argmax}_j \sum_{g=1}^{G} w_g E_{\theta}\left[NMB_g(j,\theta)\right
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<div id="refs" class="references">
-<div id="ref-baio2012bayesian">
-<p>Baio, Gianluca. 2012. <em>Bayesian Methods in Health Economics</em>. CRC Press.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-baio2012bayesian" class="csl-entry">
+Baio, Gianluca. 2012. <em>Bayesian Methods in Health Economics</em>. CRC Press.
 </div>
-<div id="ref-baio2015probabilistic">
-<p>Baio, Gianluca, and A Philip Dawid. 2015. “Probabilistic Sensitivity Analysis in Health Economics.” <em>Statistical Methods in Medical Research</em> 24 (6): 615–34.</p>
+<div id="ref-baio2015probabilistic" class="csl-entry">
+Baio, Gianluca, and A Philip Dawid. 2015. <span>“Probabilistic Sensitivity Analysis in Health Economics.”</span> <em>Statistical Methods in Medical Research</em> 24 (6): 615–34.
 </div>
-<div id="ref-barton2008optimal">
-<p>Barton, Garry R, Andrew H Briggs, and Elisabeth AL Fenwick. 2008. “Optimal Cost-Effectiveness Decisions: The Role of the Cost-Effectiveness Acceptability Curve (Ceac), the Cost-Effectiveness Acceptability Frontier (Ceaf), and the Expected Value of Perfection Information (Evpi).” <em>Value in Health</em> 11 (5): 886–97.</p>
+<div id="ref-barton2008optimal" class="csl-entry">
+Barton, Garry R, Andrew H Briggs, and Elisabeth AL Fenwick. 2008. <span>“Optimal Cost-Effectiveness Decisions: The Role of the Cost-Effectiveness Acceptability Curve (CEAC), the Cost-Effectiveness Acceptability Frontier (CEAF), and the Expected Value of Perfection Information (EVPI).”</span> <em>Value in Health</em> 11 (5): 886–97.
 </div>
-<div id="ref-basu2007value">
-<p>Basu, Anirban, and David Meltzer. 2007. “Value of Information on Preference Heterogeneity and Individualized Care.” <em>Medical Decision Making</em> 27 (2): 112–27.</p>
+<div id="ref-basu2007value" class="csl-entry">
+Basu, Anirban, and David Meltzer. 2007. <span>“Value of Information on Preference Heterogeneity and Individualized Care.”</span> <em>Medical Decision Making</em> 27 (2): 112–27.
 </div>
-<div id="ref-espinoza2014value">
-<p>Espinoza, Manuel A, Andrea Manca, Karl Claxton, and Mark J Sculpher. 2014. “The Value of Heterogeneity for Cost-Effectiveness Subgroup Analysis: Conceptual Framework and Application.” <em>Medical Decision Making</em> 34 (8): 951–64.</p>
+<div id="ref-espinoza2014value" class="csl-entry">
+Espinoza, Manuel A, Andrea Manca, Karl Claxton, and Mark J Sculpher. 2014. <span>“The Value of Heterogeneity for Cost-Effectiveness Subgroup Analysis: Conceptual Framework and Application.”</span> <em>Medical Decision Making</em> 34 (8): 951–64.
 </div>
 </div>
 </div>

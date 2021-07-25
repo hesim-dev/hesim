@@ -47,8 +47,8 @@
 
 
 <meta property="og:title" content="State probability object — stateprobs" />
-<meta property="og:description" content="An object of class stateprobs returned from methods
-$sim_stateprobs() in model classes." />
+<meta property="og:description" content="An object of class stateprobs returned by sim_stateprobs() or from
+$sim_stateprobs() methods in model classes." />
 <meta property="og:image" content="https://hesim-dev.github.io/hesim/logo.png" />
 
 
@@ -91,7 +91,7 @@ $sim_stateprobs() in model classes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
       </span>
     </div>
 
@@ -151,7 +151,7 @@ $sim_stateprobs() in model classes." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/hesim-dev/hesim/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -169,13 +169,13 @@ $sim_stateprobs() in model classes." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>State probability object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/output.R'><code>R/output.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/hesim-dev/hesim/blob/master/R/sim-general.R'><code>R/sim-general.R</code></a></small>
     <div class="hidden name"><code>stateprobs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>An object of class <code>stateprobs</code> returned from methods
-<code>$sim_stateprobs()</code> in model classes.</p>
+    <p>An object of class <code>stateprobs</code> returned by <code><a href='sim_stateprobs.html'>sim_stateprobs()</a></code> or from
+<code>$sim_stateprobs()</code> methods in model classes.</p>
     </div>
 
 
@@ -199,6 +199,13 @@ the following columns:</p>
 
 <p>When simulating individual-level models, the <code>patient_id</code> column is
 not included as state probabilities are computed by averaging across patients.</p>
+<p>In cohort models, the object also contains <code>size</code> and <code>absorbing</code> attributes.
+The <code>size</code> attribute is a numeric vector with the elements <code>n_samples</code>,
+<code>n_strategies</code>, <code>n_patients</code>, <code>n_states</code>, and
+<code>n_times</code> denoting the number of samples, treatment strategies, patients,
+health states, and times. The <code>absorbing</code> attribute is a numeric vector
+containing the absorbing health states (see the <code>absorbing</code> field of the
+<code><a href='CohortDtstmTrans.html'>CohortDtstmTrans</a></code> class for more details).</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

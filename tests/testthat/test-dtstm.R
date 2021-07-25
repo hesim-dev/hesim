@@ -524,7 +524,7 @@ test_that("create_CohortDtstmTrans requires numeric input data when built from p
   
   expect_error(
     create_CohortDtstmTrans(p2, input_data = input_dat, trans_mat = tmat),
-    "'data' must only include numeric variables."
+    "'input_data' must only include numeric variables."
   )
 })
 
