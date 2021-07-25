@@ -206,12 +206,12 @@ extract_X <- function(coef_mat, data){
          call. = FALSE)
   }
   if(!all(varnames %in% colnames(data))){
-    stop("Not all variables in 'object' are contained in 'data'.",
+    stop("Not all variables in 'object' are contained in 'input_data'.",
          call. = FALSE)
   }  
   X <- as.matrix(data[, varnames, with = FALSE])
   if (!is.numeric(X)) {
-    stop("'data' must only include numeric variables.",
+    stop("'input_data' must only include numeric variables.",
          call. = FALSE)
   }
   return(X)
