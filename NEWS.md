@@ -1,4 +1,4 @@
-## hesim 0.5.0.9999
+## hesim 0.5.1
 
 ### New features
 
