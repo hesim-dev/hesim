@@ -344,7 +344,8 @@ IndivCtstmTrans <- R6::R6Class(
 #' Create `IndivCtstmTrans` object
 #' 
 #' A generic function for creating an object of class [`IndivCtstmTrans`].
-#' @param object A fitted survival model or the parameters of a survival model.  
+#' @param object An object of the appropriate class containing either a fitted 
+#' multi-state model or parameters of a multi-state model. 
 #' @param input_data An object of class `expanded_hesim_data` returned by 
 #' [`expand.hesim_data`].
 #' @param trans_mat The transition matrix describing the states and transitions in a 
@@ -356,6 +357,7 @@ IndivCtstmTrans <- R6::R6Class(
 #' @inheritParams create_CohortDtstmTrans
 #' @param ... Further arguments passed to `IndivCtstmTrans$new()` in [`IndivCtstmTrans`].
 #' @return Returns an [`R6Class`] object of class [`IndivCtstmTrans`].
+#' @template details-create_disease_model
 #' @seealso See [`IndivCtstmTrans`] and [`IndivCtstm`] for examples.
 #' @name create_IndivCtstmTrans
 #' @rdname create_IndivCtstmTrans

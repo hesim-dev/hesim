@@ -196,8 +196,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>An object of the appropriate class containing fitted survival
-models.</p></td>
+      <td><p>An object of the appropriate class containing either fitted
+survival models or parameters of survival models.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -231,6 +231,26 @@ used to fit survival models during bootstrap replications.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns an <code>R6Class</code> object of class <code><a href='PsmCurves.html'>PsmCurves</a></code>.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Disease models may either be created from a fitted statistical
+model or from a parameter object. In the case of the former, <code>input_data</code>
+is a data frame like object that is used to look for variables from
+the statistical model that are required for simulation. In this sense,
+<code>input_data</code> is very similar to the <code>newdata</code> argument in most <code><a href='https://rdrr.io/r/stats/predict.html'>predict()</a></code>
+methods (e.g., see <code><a href='https://rdrr.io/r/stats/predict.lm.html'>predict.lm()</a></code>). In other words, variables used in the
+<code><a href='https://rdrr.io/r/stats/formula.html'>formula</a></code> of the statistical model must also be in <code>input_data</code>.</p>
+<p>In the case of the latter, the columns of <code>input_data</code> must be named in a
+manner that is consistent with the parameter object. In the typical case
+(e.g., with <code><a href='params_surv.html'>params_surv</a></code> or <code><a href='params_mlogit.html'>params_mlogit</a></code>), the parameter object
+contains coefficients from a regression model, usually stored as matrix
+where rows index parameter samples (i.e., for a probabilistic sensitivity
+analysis) and columns index model terms. In such instances, there must
+be one column from <code>input_data</code> with the same name as each model term in the
+coefficient matrix; that is, the columns in <code>input_data</code> are matched with
+the columns of the coefficient matrices by name. If there are model terms
+in the coefficient matrices that are not contained in <code>input_data</code>, then
+an error will be thrown.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>See <code><a href='PsmCurves.html'>PsmCurves</a></code> and <code><a href='Psm.html'>Psm</a></code> for examples. <code><a href='PsmCurves.html'>PsmCurves</a></code> provides

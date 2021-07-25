@@ -30,7 +30,8 @@ create_CohortDtstmTrans(object, ...)
 \method{create_CohortDtstmTrans}{params_mlogit_list}(object, input_data, trans_mat, ...)
 }
 \arguments{
-\item{object}{An object of the appropriate class.}
+\item{object}{An object of the appropriate class containing either a
+fitted statistical model or model parameters.}
 
 \item{...}{Further arguments passed to \code{CohortDtstmTrans$new()} in
 \code{\link{CohortDtstmTrans}}.}
@@ -52,6 +53,27 @@ is 1 meaning that model cycles are 1 year long.}
 }
 \description{
 A generic function for creating an object of class \code{\link{CohortDtstmTrans}}.
+}
+\details{
+Disease models may either be created from a fitted statistical
+model or from a parameter object. In the case of the former, \code{input_data}
+is a data frame like object that is used to look for variables from
+the statistical model that are required for simulation. In this sense,
+\code{input_data} is very similar to the \code{newdata} argument in most \code{\link[=predict]{predict()}}
+methods (e.g., see \code{\link[=predict.lm]{predict.lm()}}). In other words, variables used in the
+\code{\link{formula}} of the statistical model must also be in \code{input_data}.
+
+In the case of the latter, the columns of \code{input_data} must be named in a
+manner that is consistent with the parameter object. In the typical case
+(e.g., with \code{\link{params_surv}} or \code{\link{params_mlogit}}), the parameter object
+contains coefficients from a regression model, usually stored as matrix
+where rows index parameter samples (i.e., for a probabilistic sensitivity
+analysis) and columns index model terms. In such instances, there must
+be one column from \code{input_data} with the same name as each model term in the
+coefficient matrix; that is, the columns in \code{input_data} are matched with
+the columns of the coefficient matrices by name. If there are model terms
+in the coefficient matrices that are not contained in \code{input_data}, then
+an error will be thrown.
 }
 \seealso{
 See \code{\link{CohortDtstmTrans}} for examples.

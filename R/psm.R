@@ -127,8 +127,8 @@ PsmCurves <- R6::R6Class(
 #' Create \code{PsmCurves} object
 #' 
 #' A generic function for creating a [`PsmCurves`] object.
-#' @param object An object of the appropriate class containing fitted survival
-#' models.
+#' @param object An object of the appropriate class containing either fitted 
+#' survival models or parameters of survival models.
 #' @param input_data An object of class `expanded_hesim_data` returned by 
 #' [expand.hesim_data()]. Must be expanded by the data tables `"strategies"` and
 #' `"patients"`. 
@@ -138,6 +138,7 @@ PsmCurves <- R6::R6Class(
 #' @param ... Further arguments passed to or from other methods. Passed to [`create_params.partsurvfit()`]
 #' when `object` is of class [`flexsurvreg_list`].
 #' @return Returns an `R6Class` object of class [`PsmCurves`].
+#' @template details-create_disease_model
 #' @seealso See [`PsmCurves`] and [`Psm`] for examples. [`PsmCurves`] provides
 #' an example in which a model is parameterized both with 
 #' (via `create_PsmCurves.flexsurvreg_list()`) and without (via 
