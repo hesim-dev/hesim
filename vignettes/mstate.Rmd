@@ -86,10 +86,10 @@ library("flexsurv")
 n_trans <- max(tmat, na.rm = TRUE) # Number of transitions
 wei_fits_cr <- vector(length = n_trans, mode = "list") 
 for (i in 1:length(wei_fits_cr)){
-  wei_fits_cr[[i]] <- flexsurv::flexsurvreg(Surv(years, status) ~ factor(strategy_id), 
-                                            data = mstate3_exdata$transitions, 
-                                            subset = (trans == i) , 
-                                            dist = "weibull") 
+  wei_fits_cr[[i]] <- flexsurvreg(Surv(years, status) ~ factor(strategy_id), 
+                                  data = mstate3_exdata$transitions, 
+                                  subset = (trans == i) , 
+                                  dist = "weibull") 
 }
 wei_fits_cr <- flexsurvreg_list(wei_fits_cr)
 ```
@@ -99,10 +99,10 @@ wei_fits_cr <- flexsurvreg_list(wei_fits_cr)
 ```{r}
 wei_fits_cf <- vector(length = n_trans, mode = "list") 
 for (i in 1:length(wei_fits_cf)){
-  wei_fits_cf[[i]] <- flexsurv::flexsurvreg(Surv(Tstart, Tstop, status) ~ factor(strategy_id), 
-                                            data = mstate3_exdata$transitions, 
-                                            subset = (trans == i) , 
-                                            dist = "weibull") 
+  wei_fits_cf[[i]] <- flexsurvreg(Surv(Tstart, Tstop, status) ~ factor(strategy_id), 
+                                  data = mstate3_exdata$transitions, 
+                                  subset = (trans == i) , 
+                                  dist = "weibull") 
 }
 wei_fits_cf <- flexsurvreg_list(wei_fits_cf)
 ```
