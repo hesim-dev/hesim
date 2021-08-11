@@ -63,8 +63,11 @@ msfit_list <- flexsurvreg_list(msfit_list)
 
 ## Joint
 data("ebmt4")
-tmat_ebmt4 <- transMat(x = list(c(2, 3, 5, 6), c(4, 5, 6), c(4, 5, 6), c(5, 6),
-                c(), c()), names = c("Tx", "Rec", "AE", "Rec+AE", "Rel", "Death"))
+tmat_ebmt4 <- transMat(
+  x = list(c(2, 3, 5, 6), c(4, 5, 6), c(4, 5, 6), c(5, 6),
+          c(), c()), 
+  names = c("Tx", "Rec", "AE", "Rec+AE", "Rel", "Death")
+)
 msebmt <- msprep(data = ebmt4, trans = tmat_ebmt4, time = c(NA, "rec", "ae",
                  "recae", "rel", "srv"), status = c(NA, "rec.s", "ae.s", "recae.s",
                   "rel.s", "srv.s"), keep = c("match", "proph", "year", "agecl"))
@@ -138,23 +141,41 @@ test_that("C_ctstm_indiv_stateprobs", {
 })
 
 # Create transition model ------------------------------------------------------
-check_transition_model <- function(fit) {
-  m <- create_IndivCtstmTrans(fit, input_data = msfit_data, 
+# Transition specific models
+msfit_list_data <- expand(hesim_dat)
+
+test_that("create_IndivCtstmTrans has correct fields for transition specific models", {
+  m <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
+                              trans_mat = tmat_ebmt4, 
+                              clock = "reset", n = n_samples)
+  expect_equal(m$clock, "reset")
+  expect_equal(m$trans_mat, tmat_ebmt4)
+  expect_equal(m$params[[1]]$n_samples, n_samples)
+  
+  m <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
+                              trans_mat = tmat_ebmt4, 
+                              clock = "forward", n = n_samples)
+  expect_equal(m$clock, "forward")
+})
+
+# Joint model
+transitions <- create_trans_dt(tmat_ebmt4)
+transitions[, trans := transition_id]
+hesim_dat$transitions <- transitions
+msfit_data <- expand(hesim_dat, by = c("strategies", "patients", "transitions"))
+
+test_that("create_IndivCtstmTrans has correct fields for joint model", {
+  m <- create_IndivCtstmTrans(msfit, input_data = msfit_data, 
                               trans_mat = tmat_ebmt4, 
                               clock = "reset", n = n_samples)
   expect_equal(m$clock, "reset")
   expect_equal(m$trans_mat, tmat_ebmt4)
   expect_equal(m$params$n_samples, n_samples)
   
-  m <- create_IndivCtstmTrans(fit, input_data = msfit_data, 
+  m <- create_IndivCtstmTrans(msfit_cf, input_data = msfit_data, 
                               trans_mat = tmat_ebmt4, 
                               clock = "forward", n = n_samples)
   expect_equal(m$clock, "forward")
-}
-
-test_that("create_IndivCtstmTrans has correct fields", {
-  check_transition_model(msfit_cf) # Transition specific model
-  check_transition_model(msfit) # Joint model
 })
 
 # Simulate economic model ------------------------------------------------------
@@ -168,11 +189,9 @@ drugcostsmod <- create_StateVals(drugcost_tbl, n = n_samples, hesim_data = hesim
 
 ## Transitions
 ### With transition specific survival models
-msfit_list_data <- expand(hesim_dat)
 tmat <- rbind(c(NA, 1, 2),
               c(NA, NA, 3),
               c(NA, NA, NA))
-
 test_that("IndivCtstmTrans - transition specific", {
   mstate_list <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
                                         trans_mat = tmat,
@@ -230,11 +249,6 @@ test_that("IndivCtstmTrans - transition specific", {
 })  
 
 ### With a joint model
-transitions <- create_trans_dt(tmat_ebmt4)
-transitions[, trans := transition_id]
-hesim_dat$transitions <- transitions
-msfit_data <- expand(hesim_dat, by = c("strategies", "patients", "transitions"))
-
 test_that("IndivCtstmTrans - joint", {
   mstate <- create_IndivCtstmTrans(msfit, input_data = msfit_data, 
                                    trans_mat = tmat_ebmt4,
