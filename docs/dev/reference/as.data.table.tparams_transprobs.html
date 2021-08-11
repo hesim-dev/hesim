@@ -92,7 +92,7 @@ debugging." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.1.9999</span>
       </span>
     </div>
 
@@ -239,83 +239,83 @@ transition and columns <code>from</code> (the state being transitioned from) and
 <span class='co'># Convert to data.table in "wide" format</span>
 <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     sample strategy_id patient_id time_id time_start time_stop prob_s1_s1
-#&gt;  1:      1           1          1       1          0       Inf  0.3408858
-#&gt;  2:      1           1          2       1          0       Inf  0.3237039
-#&gt;  3:      1           1          3       1          0       Inf  0.3630757
-#&gt;  4:      1           2          1       1          0       Inf  0.2656787
-#&gt;  5:      1           2          2       1          0       Inf  0.3147803
-#&gt;  6:      1           2          3       1          0       Inf  0.3226292
-#&gt;  7:      2           1          1       1          0       Inf  0.3806817
-#&gt;  8:      2           1          2       1          0       Inf  0.3197921
-#&gt;  9:      2           1          3       1          0       Inf  0.3594769
-#&gt; 10:      2           2          1       1          0       Inf  0.2639828
-#&gt; 11:      2           2          2       1          0       Inf  0.2776902
-#&gt; 12:      2           2          3       1          0       Inf  0.2943335
+#&gt;  1:      1           1          1       1          0       Inf  0.3649139
+#&gt;  2:      1           1          2       1          0       Inf  0.3661345
+#&gt;  3:      1           1          3       1          0       Inf  0.3897945
+#&gt;  4:      1           2          1       1          0       Inf  0.2952595
+#&gt;  5:      1           2          2       1          0       Inf  0.2936636
+#&gt;  6:      1           2          3       1          0       Inf  0.3029685
+#&gt;  7:      2           1          1       1          0       Inf  0.3418968
+#&gt;  8:      2           1          2       1          0       Inf  0.3645832
+#&gt;  9:      2           1          3       1          0       Inf  0.3852402
+#&gt; 10:      2           2          1       1          0       Inf  0.2553074
+#&gt; 11:      2           2          2       1          0       Inf  0.2761609
+#&gt; 12:      2           2          3       1          0       Inf  0.2710729
 #&gt;     prob_s1_s2 prob_s2_s1 prob_s2_s2
-#&gt;  1:  0.6591142          0          1
-#&gt;  2:  0.6762961          0          1
-#&gt;  3:  0.6369243          0          1
-#&gt;  4:  0.7343213          0          1
-#&gt;  5:  0.6852197          0          1
-#&gt;  6:  0.6773708          0          1
-#&gt;  7:  0.6193183          0          1
-#&gt;  8:  0.6802079          0          1
-#&gt;  9:  0.6405231          0          1
-#&gt; 10:  0.7360172          0          1
-#&gt; 11:  0.7223098          0          1
-#&gt; 12:  0.7056665          0          1</div><div class='input'><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span>, prefix <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
+#&gt;  1:  0.6350861          0          1
+#&gt;  2:  0.6338655          0          1
+#&gt;  3:  0.6102055          0          1
+#&gt;  4:  0.7047405          0          1
+#&gt;  5:  0.7063364          0          1
+#&gt;  6:  0.6970315          0          1
+#&gt;  7:  0.6581032          0          1
+#&gt;  8:  0.6354168          0          1
+#&gt;  9:  0.6147598          0          1
+#&gt; 10:  0.7446926          0          1
+#&gt; 11:  0.7238391          0          1
+#&gt; 12:  0.7289271          0          1</div><div class='input'><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span>, prefix <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     sample strategy_id patient_id time_id time_start time_stop     s1_s1
-#&gt;  1:      1           1          1       1          0       Inf 0.3408858
-#&gt;  2:      1           1          2       1          0       Inf 0.3237039
-#&gt;  3:      1           1          3       1          0       Inf 0.3630757
-#&gt;  4:      1           2          1       1          0       Inf 0.2656787
-#&gt;  5:      1           2          2       1          0       Inf 0.3147803
-#&gt;  6:      1           2          3       1          0       Inf 0.3226292
-#&gt;  7:      2           1          1       1          0       Inf 0.3806817
-#&gt;  8:      2           1          2       1          0       Inf 0.3197921
-#&gt;  9:      2           1          3       1          0       Inf 0.3594769
-#&gt; 10:      2           2          1       1          0       Inf 0.2639828
-#&gt; 11:      2           2          2       1          0       Inf 0.2776902
-#&gt; 12:      2           2          3       1          0       Inf 0.2943335
+#&gt;  1:      1           1          1       1          0       Inf 0.3649139
+#&gt;  2:      1           1          2       1          0       Inf 0.3661345
+#&gt;  3:      1           1          3       1          0       Inf 0.3897945
+#&gt;  4:      1           2          1       1          0       Inf 0.2952595
+#&gt;  5:      1           2          2       1          0       Inf 0.2936636
+#&gt;  6:      1           2          3       1          0       Inf 0.3029685
+#&gt;  7:      2           1          1       1          0       Inf 0.3418968
+#&gt;  8:      2           1          2       1          0       Inf 0.3645832
+#&gt;  9:      2           1          3       1          0       Inf 0.3852402
+#&gt; 10:      2           2          1       1          0       Inf 0.2553074
+#&gt; 11:      2           2          2       1          0       Inf 0.2761609
+#&gt; 12:      2           2          3       1          0       Inf 0.2710729
 #&gt;         s1_s2 s2_s1 s2_s2
-#&gt;  1: 0.6591142     0     1
-#&gt;  2: 0.6762961     0     1
-#&gt;  3: 0.6369243     0     1
-#&gt;  4: 0.7343213     0     1
-#&gt;  5: 0.6852197     0     1
-#&gt;  6: 0.6773708     0     1
-#&gt;  7: 0.6193183     0     1
-#&gt;  8: 0.6802079     0     1
-#&gt;  9: 0.6405231     0     1
-#&gt; 10: 0.7360172     0     1
-#&gt; 11: 0.7223098     0     1
-#&gt; 12: 0.7056665     0     1</div><div class='input'><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span>, prefix <span class='op'>=</span> <span class='st'>""</span>, sep <span class='op'>=</span> <span class='st'>"."</span><span class='op'>)</span>
+#&gt;  1: 0.6350861     0     1
+#&gt;  2: 0.6338655     0     1
+#&gt;  3: 0.6102055     0     1
+#&gt;  4: 0.7047405     0     1
+#&gt;  5: 0.7063364     0     1
+#&gt;  6: 0.6970315     0     1
+#&gt;  7: 0.6581032     0     1
+#&gt;  8: 0.6354168     0     1
+#&gt;  9: 0.6147598     0     1
+#&gt; 10: 0.7446926     0     1
+#&gt; 11: 0.7238391     0     1
+#&gt; 12: 0.7289271     0     1</div><div class='input'><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span>, prefix <span class='op'>=</span> <span class='st'>""</span>, sep <span class='op'>=</span> <span class='st'>"."</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     sample strategy_id patient_id time_id time_start time_stop     s1.s1
-#&gt;  1:      1           1          1       1          0       Inf 0.3408858
-#&gt;  2:      1           1          2       1          0       Inf 0.3237039
-#&gt;  3:      1           1          3       1          0       Inf 0.3630757
-#&gt;  4:      1           2          1       1          0       Inf 0.2656787
-#&gt;  5:      1           2          2       1          0       Inf 0.3147803
-#&gt;  6:      1           2          3       1          0       Inf 0.3226292
-#&gt;  7:      2           1          1       1          0       Inf 0.3806817
-#&gt;  8:      2           1          2       1          0       Inf 0.3197921
-#&gt;  9:      2           1          3       1          0       Inf 0.3594769
-#&gt; 10:      2           2          1       1          0       Inf 0.2639828
-#&gt; 11:      2           2          2       1          0       Inf 0.2776902
-#&gt; 12:      2           2          3       1          0       Inf 0.2943335
+#&gt;  1:      1           1          1       1          0       Inf 0.3649139
+#&gt;  2:      1           1          2       1          0       Inf 0.3661345
+#&gt;  3:      1           1          3       1          0       Inf 0.3897945
+#&gt;  4:      1           2          1       1          0       Inf 0.2952595
+#&gt;  5:      1           2          2       1          0       Inf 0.2936636
+#&gt;  6:      1           2          3       1          0       Inf 0.3029685
+#&gt;  7:      2           1          1       1          0       Inf 0.3418968
+#&gt;  8:      2           1          2       1          0       Inf 0.3645832
+#&gt;  9:      2           1          3       1          0       Inf 0.3852402
+#&gt; 10:      2           2          1       1          0       Inf 0.2553074
+#&gt; 11:      2           2          2       1          0       Inf 0.2761609
+#&gt; 12:      2           2          3       1          0       Inf 0.2710729
 #&gt;         s1.s2 s2.s1 s2.s2
-#&gt;  1: 0.6591142     0     1
-#&gt;  2: 0.6762961     0     1
-#&gt;  3: 0.6369243     0     1
-#&gt;  4: 0.7343213     0     1
-#&gt;  5: 0.6852197     0     1
-#&gt;  6: 0.6773708     0     1
-#&gt;  7: 0.6193183     0     1
-#&gt;  8: 0.6802079     0     1
-#&gt;  9: 0.6405231     0     1
-#&gt; 10: 0.7360172     0     1
-#&gt; 11: 0.7223098     0     1
-#&gt; 12: 0.7056665     0     1</div><div class='input'>
+#&gt;  1: 0.6350861     0     1
+#&gt;  2: 0.6338655     0     1
+#&gt;  3: 0.6102055     0     1
+#&gt;  4: 0.7047405     0     1
+#&gt;  5: 0.7063364     0     1
+#&gt;  6: 0.6970315     0     1
+#&gt;  7: 0.6581032     0     1
+#&gt;  8: 0.6354168     0     1
+#&gt;  9: 0.6147598     0     1
+#&gt; 10: 0.7446926     0     1
+#&gt; 11: 0.7238391     0     1
+#&gt; 12: 0.7289271     0     1</div><div class='input'>
 <span class='co'># Convert to data.table in "long: format</span>
 <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>tprobs</span>, long <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     sample strategy_id patient_id time_id time_start time_stop from to
@@ -369,52 +369,52 @@ transition and columns <code>from</code> (the state being transitioned from) and
 #&gt; 48:      2           2          3       1          0       Inf   s2 s2
 #&gt;     sample strategy_id patient_id time_id time_start time_stop from to
 #&gt;          prob
-#&gt;  1: 0.3408858
-#&gt;  2: 0.6591142
+#&gt;  1: 0.3649139
+#&gt;  2: 0.6350861
 #&gt;  3: 0.0000000
 #&gt;  4: 1.0000000
-#&gt;  5: 0.3237039
-#&gt;  6: 0.6762961
+#&gt;  5: 0.3661345
+#&gt;  6: 0.6338655
 #&gt;  7: 0.0000000
 #&gt;  8: 1.0000000
-#&gt;  9: 0.3630757
-#&gt; 10: 0.6369243
+#&gt;  9: 0.3897945
+#&gt; 10: 0.6102055
 #&gt; 11: 0.0000000
 #&gt; 12: 1.0000000
-#&gt; 13: 0.2656787
-#&gt; 14: 0.7343213
+#&gt; 13: 0.2952595
+#&gt; 14: 0.7047405
 #&gt; 15: 0.0000000
 #&gt; 16: 1.0000000
-#&gt; 17: 0.3147803
-#&gt; 18: 0.6852197
+#&gt; 17: 0.2936636
+#&gt; 18: 0.7063364
 #&gt; 19: 0.0000000
 #&gt; 20: 1.0000000
-#&gt; 21: 0.3226292
-#&gt; 22: 0.6773708
+#&gt; 21: 0.3029685
+#&gt; 22: 0.6970315
 #&gt; 23: 0.0000000
 #&gt; 24: 1.0000000
-#&gt; 25: 0.3806817
-#&gt; 26: 0.6193183
+#&gt; 25: 0.3418968
+#&gt; 26: 0.6581032
 #&gt; 27: 0.0000000
 #&gt; 28: 1.0000000
-#&gt; 29: 0.3197921
-#&gt; 30: 0.6802079
+#&gt; 29: 0.3645832
+#&gt; 30: 0.6354168
 #&gt; 31: 0.0000000
 #&gt; 32: 1.0000000
-#&gt; 33: 0.3594769
-#&gt; 34: 0.6405231
+#&gt; 33: 0.3852402
+#&gt; 34: 0.6147598
 #&gt; 35: 0.0000000
 #&gt; 36: 1.0000000
-#&gt; 37: 0.2639828
-#&gt; 38: 0.7360172
+#&gt; 37: 0.2553074
+#&gt; 38: 0.7446926
 #&gt; 39: 0.0000000
 #&gt; 40: 1.0000000
-#&gt; 41: 0.2776902
-#&gt; 42: 0.7223098
+#&gt; 41: 0.2761609
+#&gt; 42: 0.7238391
 #&gt; 43: 0.0000000
 #&gt; 44: 1.0000000
-#&gt; 45: 0.2943335
-#&gt; 46: 0.7056665
+#&gt; 45: 0.2710729
+#&gt; 46: 0.7289271
 #&gt; 47: 0.0000000
 #&gt; 48: 1.0000000
 #&gt;          prob</div><div class='input'>

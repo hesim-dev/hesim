@@ -89,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.1.9999</span>
       </span>
     </div>
 
@@ -170,9 +170,20 @@
       <small>Source: <a href='https://github.com/hesim-dev/hesim/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="hesim-0509999" class="section level2">
+    <div id="hesim-0519999" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hesim-0509999" class="anchor"></a>hesim 0.5.0.9999</h2>
+<a href="#hesim-0519999" class="anchor"></a>hesim 0.5.1.9999</h2>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>Fixed a bug introduced in the previous version in which the <code>clock</code> argument of <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans()</a></code> was not being passed to <code>IndivCtstmTrans$new()</code>.</li>
+</ul>
+</div>
+</div>
+    <div id="hesim-051" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hesim-051" class="anchor"></a>hesim 0.5.1</h2>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
@@ -191,12 +202,12 @@
 <li><p><code><a href="../reference/sim_ev.html">sim_ev()</a></code>, <code><a href="../reference/sim_ev.html">sim_costs()</a></code>, and <code><a href="../reference/sim_ev.html">sim_qalys()</a></code> are now exported functions that give users additional flexibility in their modeling pipelines and provide improved documentation for computation of expected values in cohort models. <code><a href="../reference/sim_ev.html">sim_ev()</a></code> is particularly useful for computing outcomes that depend on time in state other than costs or quality-adjusted life-years (QALYs).</p></li>
 <li><p>Multiple absorbing states (or none at all) are possible in <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> and <code><a href="../reference/IndivCtstm.html">hesim::IndivCtstm</a></code> models (previously the final health state was always assumed to be a death state). In cohort models, the absorbing states can be set manually using the <code>absorbing</code> field in the <code><a href="../reference/CohortDtstmTrans.html">hesim::CohortDtstmTrans</a></code> class; if not, they are set automatically based on the transition probabilities. The number of health states in state value models (class <code><a href="../reference/StateVals.html">hesim::StateVals</a></code>) must equal the number of health states in the transition models less the number of absorbing states.</p></li>
 <li><p>A new <code><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans.params_mlogit_list()</a></code> method allows the transition component of a cohort discrete time state transition model (cDTSTM) to be created directly from multinomial logistic regression parameter objects.</p></li>
-<li><p>The coefficient elements of parameter objects can be constructed from any object (e.g., data frame) than can be passed to <code><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix()</a></code> (rather than only from matrices as in previous versions). See, for instance, <code><a href="../reference/params_surv.html">params_surv()</a></code>.</p></li>
+<li><p>The coefficient elements of parameter objects can be constructed from any object (e.g., data frame) than can be passed to <code><a href="https://rdrr.io/r/base/matrix.html">as.matrix()</a></code> (rather than only from matrices as in previous versions). See, for instance, <code><a href="../reference/params_surv.html">params_surv()</a></code>.</p></li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level3">
+<div id="bug-fixes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>
 <code><a href="../reference/sim_stateprobs.survival.html">sim_stateprobs.survival()</a></code> handles scenarios where survival curves cross better, ensuring that state probabilities sum to 1 (<a href='https://github.com/hesim-dev/hesim/issues/56'>#56</a>).</li>
@@ -235,9 +246,9 @@
 <li>Performance benchmarks are now provided <a href="../articles/benchmarks.html">here</a>.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>The <code>$summarize()</code> method of <code><a href="../reference/Psm.html">hesim::Psm</a></code> now contains the <code>by_grp</code> argument so that subgroup analyses can be performed.</li>
 </ul>
@@ -265,9 +276,9 @@
 <li><p>The function <code><a href="../reference/as_pfs_os.html">as_pfs_os()</a></code> can convert a multi-state dataset in the same format as <code><a href="../reference/onc3.html">hesim::onc3</a></code> into a dataset with one row per patients containing time to event information for progression free survival (PFS) and overall survival (OS).</p></li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level3">
+<div id="bug-fixes-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li><p>The <code>cycle_length</code> field in <code>CohortDtstmTrans</code> was fixed so that it corresponds to a model cycle in terms of years (e.g., a value of 2 means a model cycle is 2 years long and that state probabilities are computed every 2 years with <code>$sim_stateprobs()</code>).</p></li>
 <li><p>The simulated dataset <code>multinom3_exdata</code> was fixed by removing a bug where some patients were simulated to have died more than once.</p></li>
@@ -304,9 +315,9 @@
 <code><a href="../reference/icea.html">icea()</a></code> and <code><a href="../reference/icea.html">icea_pw()</a></code> have been deprecated and replaced by <code><a href="../reference/cea.html">cea()</a></code> and <code><a href="../reference/cea.html">cea_pw()</a></code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level3">
+<div id="bug-fixes-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li><p>The <code>lys</code> argument for the <code>$sim_qalys()</code> method of <code><a href="../reference/Psm.html">hesim::Psm</a></code> and <code><a href="../reference/CohortDtstm.html">hesim::CohortDtstm</a></code> classes now works.</p></li>
 <li><p>The <code>$sim_stateprobs()</code> argument for the <code><a href="../reference/Psm.html">hesim::Psm</a></code> class now properly returns the <code>patient_wt</code> column.</p></li>
