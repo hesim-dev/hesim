@@ -93,7 +93,7 @@ an object of class model_def defined using define_model()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.0.9999</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.5.1.9999</span>
       </span>
     </div>
 
@@ -279,35 +279,35 @@ It can be useful to summarize an evaluated expression with <code><a href='summar
 <span class='va'>params_sample</span> <span class='op'>&lt;-</span> <span class='fu'>eval_rng</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>rng_def</span>, <span class='va'>params</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>params_sample</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;            param         mean           sd         2.5%        97.5%
-#&gt;  1:      p_s1_s1    0.7621685   0.07870205    0.7093003    0.8150367
-#&gt;  2:      p_s1_s2    0.2378315   0.07870205    0.1849633    0.2906997
-#&gt;  3:      p_s2_s1    0.3437881   0.03690159    0.3189994    0.3685768
-#&gt;  4:      p_s2_s2    0.6562119   0.03690159    0.6314232    0.6810006
-#&gt;  5:   inptcost_A  127.2549374 137.00952494   35.2185914  219.2912834
-#&gt;  6:   inptcost_B 1386.8615205 647.91003255  951.6270217 1822.0960192
-#&gt;  7:   inptcost_C  947.4761838 512.92812900  602.9159735 1292.0363942
-#&gt;  8: outptcost_v1  350.0000000  70.71067812  302.5000000  397.5000000
-#&gt;  9: outptcost_v2  650.0000000  70.71067812  602.5000000  697.5000000
-#&gt; 10: outptcost_v3  750.0000000  70.71067812  702.5000000  797.5000000
-#&gt; 11:     aecost_A  262.7569859 133.59079269  173.0171783  352.4967936
-#&gt; 12:     aecost_B 1235.9532861 259.64713519 1061.5349486 1410.3716236
-#&gt; 13:     aecost_C  913.1637611 597.04997925  512.0945765 1314.2329457</div><div class='input'><span class='va'>params_sample</span>
+#&gt;  1:      p_s1_s1    0.7702367 4.716169e-02    0.7385557    0.8019176
+#&gt;  2:      p_s1_s2    0.2297633 4.716169e-02    0.1980824    0.2614443
+#&gt;  3:      p_s2_s1    0.3644564 3.105112e-02    0.3435978    0.3853150
+#&gt;  4:      p_s2_s2    0.6355436 3.105112e-02    0.6146850    0.6564022
+#&gt;  5:   inptcost_A  445.3385839 2.029738e+02  308.9906423  581.6865255
+#&gt;  6:   inptcost_B 1204.8593951 1.521172e+03  183.0095902 2226.7092000
+#&gt;  7:   inptcost_C 3224.6960145 2.754789e+03 1374.1624755 5075.2295536
+#&gt;  8: outptcost_v1  350.0000000 7.071068e+01  302.5000000  397.5000000
+#&gt;  9: outptcost_v2  650.0000000 7.071068e+01  602.5000000  697.5000000
+#&gt; 10: outptcost_v3  750.0000000 7.071068e+01  702.5000000  797.5000000
+#&gt; 11:     aecost_A  582.9307337 1.060057e+02  511.7212755  654.1401919
+#&gt; 12:     aecost_B 1418.9059007 8.511182e+02  847.1659978 1990.6458036
+#&gt; 13:     aecost_C  245.4707724 8.486242e+01  188.4643193  302.4772255</div><div class='input'><span class='va'>params_sample</span>
 </div><div class='output co'>#&gt; A summary of the "eval_rng" object:
 #&gt; 
 #&gt;            param         mean           sd         2.5%        97.5%
-#&gt;  1:      p_s1_s1    0.7621685   0.07870205    0.7093003    0.8150367
-#&gt;  2:      p_s1_s2    0.2378315   0.07870205    0.1849633    0.2906997
-#&gt;  3:      p_s2_s1    0.3437881   0.03690159    0.3189994    0.3685768
-#&gt;  4:      p_s2_s2    0.6562119   0.03690159    0.6314232    0.6810006
-#&gt;  5:   inptcost_A  127.2549374 137.00952494   35.2185914  219.2912834
-#&gt;  6:   inptcost_B 1386.8615205 647.91003255  951.6270217 1822.0960192
-#&gt;  7:   inptcost_C  947.4761838 512.92812900  602.9159735 1292.0363942
-#&gt;  8: outptcost_v1  350.0000000  70.71067812  302.5000000  397.5000000
-#&gt;  9: outptcost_v2  650.0000000  70.71067812  602.5000000  697.5000000
-#&gt; 10: outptcost_v3  750.0000000  70.71067812  702.5000000  797.5000000
-#&gt; 11:     aecost_A  262.7569859 133.59079269  173.0171783  352.4967936
-#&gt; 12:     aecost_B 1235.9532861 259.64713519 1061.5349486 1410.3716236
-#&gt; 13:     aecost_C  913.1637611 597.04997925  512.0945765 1314.2329457</div></pre>
+#&gt;  1:      p_s1_s1    0.7702367 4.716169e-02    0.7385557    0.8019176
+#&gt;  2:      p_s1_s2    0.2297633 4.716169e-02    0.1980824    0.2614443
+#&gt;  3:      p_s2_s1    0.3644564 3.105112e-02    0.3435978    0.3853150
+#&gt;  4:      p_s2_s2    0.6355436 3.105112e-02    0.6146850    0.6564022
+#&gt;  5:   inptcost_A  445.3385839 2.029738e+02  308.9906423  581.6865255
+#&gt;  6:   inptcost_B 1204.8593951 1.521172e+03  183.0095902 2226.7092000
+#&gt;  7:   inptcost_C 3224.6960145 2.754789e+03 1374.1624755 5075.2295536
+#&gt;  8: outptcost_v1  350.0000000 7.071068e+01  302.5000000  397.5000000
+#&gt;  9: outptcost_v2  650.0000000 7.071068e+01  602.5000000  697.5000000
+#&gt; 10: outptcost_v3  750.0000000 7.071068e+01  702.5000000  797.5000000
+#&gt; 11:     aecost_A  582.9307337 1.060057e+02  511.7212755  654.1401919
+#&gt; 12:     aecost_B 1418.9059007 8.511182e+02  847.1659978 1990.6458036
+#&gt; 13:     aecost_C  245.4707724 8.486242e+01  188.4643193  302.4772255</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

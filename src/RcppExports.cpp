@@ -7,6 +7,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // C_apply_rr
 arma::cube C_apply_rr(const arma::cube& x, const arma::mat rr, const arma::umat index, const arma::umat complement);
 RcppExport SEXP _hesim_C_apply_rr(SEXP xSEXP, SEXP rrSEXP, SEXP indexSEXP, SEXP complementSEXP) {
