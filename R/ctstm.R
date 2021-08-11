@@ -379,11 +379,11 @@ create_IndivCtstmTrans_flexsurvreg <- function(object, input_data, trans_mat, cl
   uncertainty <- match.arg(uncertainty)
   input_mats <- create_input_mats(object, input_data)
   params <- create_params(object, n = n, uncertainty = uncertainty)
-  return(
-    do.call(IndivCtstmTrans$new, 
-            c(list(input_data = input_mats, params = params, trans_mat = trans_mat,
-                   clock = match.arg(clock)), 
-              dots))
+  do.call(
+    IndivCtstmTrans$new, 
+     c(list(input_data = input_mats, params = params, trans_mat = trans_mat,
+            clock = match.arg(clock)), 
+        dots)
   )
   
 }
@@ -393,10 +393,15 @@ create_IndivCtstmTrans_flexsurvreg <- function(object, input_data, trans_mat, cl
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg_list <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
                                                     n = 1000, uncertainty = c("normal", "none"), ...){
-  return(
-    create_IndivCtstmTrans_flexsurvreg(object = object, input_data = input_data, trans_mat = trans_mat,
-                                       n = n, uncertainty = uncertainty,
-                                       is_uncertainty_missing = missing(uncertainty), ...)
+  create_IndivCtstmTrans_flexsurvreg(
+    object = object, 
+    input_data = input_data, 
+    trans_mat = trans_mat,
+    clock = clock,
+    n = n, 
+    uncertainty = uncertainty,
+    is_uncertainty_missing = missing(uncertainty), 
+    ...
   )
 }
 
@@ -404,12 +409,14 @@ create_IndivCtstmTrans.flexsurvreg_list <- function(object, input_data, trans_ma
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.flexsurvreg <- function(object, input_data, trans_mat, clock = c("reset", "forward"),
                                                n = 1000, uncertainty = c("normal", "none"), ...){
-  
-  return(
-    create_IndivCtstmTrans_flexsurvreg(object = object, input_data = input_data, trans_mat = trans_mat,
-                                       n = n, uncertainty = uncertainty,
-                                       is_uncertainty_missing = missing(uncertainty), ...)
-  )
+  create_IndivCtstmTrans_flexsurvreg(
+    object = object, 
+    input_data = input_data, 
+    trans_mat = trans_mat,
+    clock = clock,
+    n = n, uncertainty = uncertainty,
+    is_uncertainty_missing = missing(uncertainty),
+    ...)
 }
 
 #' @export

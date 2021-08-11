@@ -1,3 +1,8 @@
+## hesim 0.5.1.9999
+
+### Bug fixes
+* Fixed a bug introduced in the previous version in which the `clock` argument of `create_IndivCtstmTrans()` was not being passed to `IndivCtstmTrans$new()`. 
+
 ## hesim 0.5.1
 
 ### New features
