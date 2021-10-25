@@ -256,7 +256,7 @@ In addition to the coefficients, a complete parameterization of a transition mod
 transmod_params <- params_surv_list(
   # 1. Primary THR:Successful primary (1:2)
   params_surv(coefs = list(rate = transmod_coef$log_ttrrPTHR), 
-              dist = "fixed"),
+              dist = "exp"),
   
   # 2. Primary THR:Death (1:5)
   params_surv(coefs = list(rate = transmod_coef$log_omrPTHR), 
