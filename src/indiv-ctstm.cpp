@@ -14,6 +14,12 @@
  * @param start_time The starting time of the simulation.
  * @param max_t The maximum time to simulate the model for.
  * @param max_age The maximum age that a patient can live to.
+ * @param progress An integer specifying the PSA iteration (i.e.,m sample) that
+ * should be printed every @c progrtess PSA iterations.
+ * @param max_jumps A positive integer denoting the maximum number of jumps
+ * (i.e., transitions to new states) that each patient can make. Default is -1, 
+ * in which case there is no limit and the duration of the simulation is
+ *  determined by @c max_t and @c max_age.
  * @return An R data frame of the same format as ctstm::disease_prog.
  ******************************************************************************/ 
 // [[Rcpp::export]]
@@ -25,7 +31,8 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
                                     std::string clock, 
                                     std::vector<int> reset_states,
                                     double max_t, double max_age,
-                                    int progress){
+                                    int progress,
+                                    int max_jumps = -1){
  
   // Initialize
   hesim::check_R_infinity(max_t);
@@ -59,7 +66,10 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
           patient.state_ = start_state[i];
           patient.max_t_ = max_t;
          
-          while (!absorbing[patient.state_] && patient.time_ < max_t && patient.age_ < max_age){
+         int jump = 1; 
+          while (!absorbing[patient.state_] && patient.time_ < max_t && 
+                 patient.age_ < max_age &&
+                 (max_jumps < 0 || jump <= max_jumps)){
             int from_state = patient.state_;
             double time_start = patient.time_;
             
@@ -81,6 +91,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
             else{
               disease_prog.final_.push_back(1);
             }
+            ++jump;
           
          } // end while loop for patient
        } // end patient loop

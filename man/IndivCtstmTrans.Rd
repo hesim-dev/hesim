@@ -166,7 +166,12 @@ A new \code{IndivCtstmTrans} object.
 Simulate disease progression (i.e., individual trajectories through a
 multi-state model using an individual patient simulation).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{IndivCtstmTrans$sim_disease(max_t = 100, max_age = 100, progress = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{IndivCtstmTrans$sim_disease(
+  max_t = 100,
+  max_age = 100,
+  progress = NULL,
+  max_jumps = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -182,6 +187,12 @@ each patient until. If a vector, must be equal to the number of simulated patien
 should be printed every progress PSA iterations. For example, if progress = 2,
 then every second PSA iteration is printed. Default is NULL, in which case
 no output is printed.}
+
+\item{\code{max_jumps}}{A positive integer denoting the maximum number of jumps
+(i.e., transitions to new states) that each patient can make. This is
+useful if you don't want to run a full simulation. Default is NULL,
+in which case there is no limit and the duration of the simulation is
+determined by \code{max_t} and \code{max_age}.}
 }
 \if{html}{\out{</div>}}
 }

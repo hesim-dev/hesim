@@ -144,7 +144,8 @@ test_that("C_ctstm_indiv_stateprobs", {
 # Transition specific models
 msfit_list_data <- expand(hesim_dat)
 
-test_that("create_IndivCtstmTrans has correct fields for transition specific models", {
+test_that("create_IndivCtstmTrans has correct fields for transition 
+          specific models", {
   m <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
                               trans_mat = tmat_ebmt4, 
                               clock = "reset", n = n_samples)
@@ -177,6 +178,33 @@ test_that("create_IndivCtstmTrans has correct fields for joint model", {
                               clock = "forward", n = n_samples)
   expect_equal(m$clock, "forward")
 })
+
+# Simulate transition model ----------------------------------------------------
+tmat <- rbind(c(NA, 1, 2),
+              c(NA, NA, 3),
+              c(NA, NA, NA))
+m <- create_IndivCtstmTrans(msfit_list, input_data = msfit_list_data, 
+                            trans_mat = tmat, uncertainty = "none", 
+                            start_age = 55)  
+
+test_that("IndivCtstmTrans$sim_disease() returns correct # of rows 
+          given max_jumps ", {
+  
+  disprog <- m$sim_disease(max_jumps = 1)
+  expect_equal(nrow(disprog), nrow(msfit_list_data))
+  
+  disprog <- m$sim_disease(max_jumps = 2)
+  expect_true(nrow(disprog) <= nrow(msfit_list_data) * 2)
+})
+
+test_that("IndivCtstmTrans$sim_disease() returns correct # of rows 
+          given max_jumps ", {
+            
+  disprog <- m$sim_disease(max_age = 56)
+  expect_true(all(disprog$time_start <= 1))
+            
+})
+
 
 # Simulate economic model ------------------------------------------------------
 # Construct economic model

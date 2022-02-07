@@ -75,7 +75,7 @@ CtstmTrans <- R6::R6Class(
 
 # IndivCtstmTrans class --------------------------------------------------------
 indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
-                                    progress = NULL){
+                                    progress = NULL, max_jumps = NULL){
   sample <- from <- to <- NULL # to avoid no visible bindings CRAN warning
   if (any(trans_model$start_age > max_age)){
     stop("Starting ages in the simulation must be less than maximum age.",
@@ -84,6 +84,9 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
   if (is.null(progress)){
     progress <- 0
   }
+  if (is.null(max_jumps)){
+    max_jumps <- -1
+  }
   
   # Simulate
   disprog <- C_ctstm_sim_disease(trans_model, trans_model$start_state - 1, 
@@ -91,7 +94,8 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
                                  rep(0, trans_model$input_data$n_patients), # Start time is always 0
                                  trans_model$death_state - 1, 
                                  trans_model$clock, trans_model$reset_states - 1,
-                                 max_t, max_age, progress)
+                                 max_t, max_age, progress, 
+                                 max_jumps)
   disprog <- data.table(disprog)
   disprog[, sample := sample + 1]
   disprog[, from := from + 1]
@@ -301,14 +305,21 @@ IndivCtstmTrans <- R6::R6Class(
     #' @param progress An integer, specifying the PSA iteration (i.e., sample) that 
     #' should be printed every progress PSA iterations. For example, if progress = 2,
     #' then every second PSA iteration is printed. Default is NULL, in which case
-    #'  no output is printed.
+    #' no output is printed.
+    #' @param max_jumps A positive integer denoting the maximum number of jumps
+    #' (i.e., transitions to new states) that each patient can make. This is 
+    #' useful if you don't want to run a full simulation. Default is `NULL`, 
+    #' in which case there is no limit and the duration of the simulation is 
+    #' determined by `max_t` and `max_age`.
     #' @return An object of class [`disprog`].  
-    sim_disease = function(max_t = 100, max_age = 100, progress = NULL){
+    sim_disease = function(max_t = 100, max_age = 100, progress = NULL, 
+                           max_jumps = NULL){
       self$check()
       disprog <- indiv_ctstm_sim_disease(self,
                                          max_t = max_t,
                                          max_age = max_age,
-                                         progress = progress)
+                                         progress = progress,
+                                         max_jumps = max_jumps)
       return(disprog)
     },
 
