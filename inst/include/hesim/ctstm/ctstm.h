@@ -113,7 +113,10 @@ private:
   static statmods::surv init_survmod_(Rcpp::Environment R_CtstmTrans){
 
     // Input matrices
-    Rcpp::List R_input_mats = Rcpp::as<Rcpp::List> (R_CtstmTrans["input_data"]);
+    Rcpp::Function R_get_input_mats = Rcpp::as<Rcpp::Function> (
+      R_CtstmTrans["get_input_mats"]
+    );
+    Rcpp::List R_input_mats = R_get_input_mats();
     Rcpp::List X_list = R_input_mats["X"];
     vecmats X = Rcpp::as<vecmats>(X_list);
 
@@ -174,7 +177,10 @@ private:
   static std::vector<statmods::surv> init_survmods_(Rcpp::Environment R_CtstmTrans){
 
     // Input matrices
-    Rcpp::List R_input_mats = Rcpp::as<Rcpp::List> (R_CtstmTrans["input_data"]);
+    Rcpp::Function R_get_input_mats = Rcpp::as<Rcpp::Function> (
+      R_CtstmTrans["get_input_mats"]
+    );
+    Rcpp::List R_input_mats = R_get_input_mats();
     Rcpp::List X_list = R_input_mats["X"];
     vecmats_2d X = Rcpp::as<vecmats_2d>(X_list);
 

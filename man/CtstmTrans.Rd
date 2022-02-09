@@ -20,6 +20,7 @@ methodology used for prediction of state probabilities.
 \itemize{
 \item \href{#method-hazard}{\code{CtstmTrans$hazard()}}
 \item \href{#method-cumhazard}{\code{CtstmTrans$cumhazard()}}
+\item \href{#method-get_input_mats}{\code{CtstmTrans$get_input_mats()}}
 \item \href{#method-clone}{\code{CtstmTrans$clone()}}
 }
 }
@@ -63,6 +64,19 @@ Predict the cumulative hazard functions for each health state transition.
 \subsection{Returns}{
 A \code{data.table} with columns \code{transition_id},
 \code{sample}, \code{strategy_id}, \code{grp_id}, \code{t}, and \code{cumhazard}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_input_mats"></a>}}
+\if{latex}{\out{\hypertarget{method-get_input_mats}{}}}
+\subsection{Method \code{get_input_mats()}}{
+Get input matrices.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CtstmTrans$get_input_mats()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+An \code{input_mats} object.
 }
 }
 \if{html}{\out{<hr>}}

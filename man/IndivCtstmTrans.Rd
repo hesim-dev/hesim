@@ -112,6 +112,7 @@ start of the model or from when time was previously reset. Only used if
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="cumhazard">}\href{../../hesim/html/CtstmTrans.html#method-cumhazard}{\code{hesim::CtstmTrans$cumhazard()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="get_input_mats">}\href{../../hesim/html/CtstmTrans.html#method-get_input_mats}{\code{hesim::CtstmTrans$get_input_mats()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="hazard">}\href{../../hesim/html/CtstmTrans.html#method-hazard}{\code{hesim::CtstmTrans$hazard()}}\out{</span>}
 }
 \out{</details>}
@@ -190,7 +191,7 @@ no output is printed.}
 
 \item{\code{max_jumps}}{A positive integer denoting the maximum number of jumps
 (i.e., transitions to new states) that each patient can make. This is
-useful if you don't want to run a full simulation. Default is NULL,
+useful if you don't want to run a full simulation. Default is \code{NULL},
 in which case there is no limit and the duration of the simulation is
 determined by \code{max_t} and \code{max_age}.}
 }

@@ -69,6 +69,17 @@ CtstmTrans <- R6::R6Class(
     #'  `sample`, `strategy_id`, `grp_id`, `t`, and `cumhazard`.
     cumhazard = function(t){
        private$summary(t, "cumhazard")
+    },
+    
+    #' @description
+    #' Get input matrices.
+    #' @return An `input_mats` object.
+    get_input_mats = function(){
+      if(inherits(self$input_data, "input_mats")){
+        return(self$input_data)
+      } else {
+        return(create_input_mats(self$fit, input_data = self$input_data))
+      }
     }
   )
 )
