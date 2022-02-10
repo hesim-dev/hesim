@@ -371,7 +371,10 @@ test_that("Simulate costs and QALYs", {
   expect_error(ictstm2$sim_qalys())
   
   ##### Cannot repeat discount rates
-  expect_error(ictstm$sim_qalys(dr = c(.03, .03))$qalys)
+  expect_error(
+    ictstm$sim_qalys(dr = c(.03, .03))$qalys,
+    "You cannot specify the same discount rate twice."
+  )
   
   ##### Incorrect number of PSA samples
   ictstm2 <- ictstm$clone(deep = TRUE)

@@ -95,6 +95,9 @@ since entering the initial state. If \code{"mix"} is used, then
 Hazard functions are always a function of elapsed time since either the
 start of the model or from when time was previously reset. Only used if
 \code{clock = "mix"}.}
+
+\item{\code{fit}}{A fitted statistical model. Used to create an input matrix if
+\code{input_data} is not an object of class \code{\link{input_mats}}.}
 }
 \if{html}{\out{</div>}}
 }

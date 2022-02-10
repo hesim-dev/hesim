@@ -24,7 +24,7 @@ public:
    * @param R_CtstmTrans An @c R object of class @c CtstmTrans.
    */ 
   transmod(Rcpp::Environment R_CtstmTrans)
-    : obs_index_(Rcpp::as<Rcpp::List>(R_CtstmTrans["input_data"])),
+    : obs_index_(Rcpp::as<Rcpp::Function> (R_CtstmTrans["get_input_mats"])()),
       trans_mat_(Rcpp::as<arma::mat>(R_CtstmTrans["trans_mat"])){
   }
   virtual ~transmod() {}
