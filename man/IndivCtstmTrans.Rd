@@ -96,7 +96,7 @@ Hazard functions are always a function of elapsed time since either the
 start of the model or from when time was previously reset. Only used if
 \code{clock = "mix"}.}
 
-\item{\code{fit}}{A fitted statistical model. Used to create an input matrix if
+\item{\code{fit}}{A fitted statistical model. Used to create the input matrices if
 \code{input_data} is not an object of class \code{\link{input_mats}}.}
 }
 \if{html}{\out{</div>}}
@@ -134,7 +134,8 @@ Create a new \code{IndivCtstmTrans} object.
   start_age = 38,
   death_state = NULL,
   clock = c("reset", "forward", "mix"),
-  reset_states = NULL
+  reset_states = NULL,
+  fit = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -156,6 +157,8 @@ Create a new \code{IndivCtstmTrans} object.
 \item{\code{clock}}{The \code{clock} field.}
 
 \item{\code{reset_states}}{The \code{reset_states} field.}
+
+\item{\code{fit}}{The \code{fit} field.}
 }
 \if{html}{\out{</div>}}
 }

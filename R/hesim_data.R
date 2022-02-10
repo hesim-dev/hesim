@@ -521,6 +521,15 @@ check.id_attributes <- function(object){
   }
 }
 
+id_size_map <- function(x){
+  switch(x,
+         strategy_id = "n_strategies",
+         patient_id = "n_patients",
+         transition_id = "n_transitions",
+         state_id = "n_states",
+         time_id = "n_times")
+}
+
 # Get the object containing ID attributes
 get_id_object <- function(x){
   if (is.null(x$input_data)){
@@ -530,17 +539,79 @@ get_id_object <- function(x){
   }
 }
 
+#' Get size of an ID attribute
+#' 
+#' A generic function for getting the size (i.e., number of unique values) of
+#' an ID variable.
+#' @param x An object used to select a method.
+get_id_size <- function(x, ...){
+  UseMethod("get_id_size", x)
+}
+
+#' @rdname get_id_size
+get_id_size.input_mats <- function(x, id_name) {
+  size_name <- id_size_map(id_name)
+  size <- x[[size_name]]
+}
+
+#' @rdname get_id_size
+get_id_size.expanded_hesim_data <- function(x, id_name) {
+  unique_value <- unique(x[[id_name]])
+  if (is.null(unique_value)) return(NULL) else return(length(unique_value))
+}
+
+#' @rdname get_id_size
+get_id_size.default <- function(x, id_name) {
+  is_tparams <- grepl("tparams_", class(x)[1])
+  if (is_tparams) {
+    size_name <- id_size_map(id_name)
+    size <- x[[size_name]]
+  } else {
+    y <- get_id_object(x)
+    get_id_size(y, id_name)
+  }
+}
+
+#' Generic getters
+#' 
+#' Generic functions for getting the size of ID variables from objects.
+#' @param x An object used to select a method.
+#' @name id_getters
+get_n_strategies <- function(x, ...){
+  get_id_size(x, "strategy_id")
+}
+
+#' @rdname id_getters
+get_n_patients <- function(x, ...){
+  get_id_size(x, "patient_id")
+}
+
+#' @rdname id_getters
+get_n_states <- function(x, ...){
+  get_id_size(x, "state_id")
+}
+
+#' @rdname id_getters
+get_n_transitions<- function(x, ...){
+  get_id_size(x, "transition_id")
+}
+
+#' @rdname id_getters
+get_n_times <- function(x, ...){
+  get_id_size(x, "time_id")
+}
+
 # Get sizes from an ID object
 get_size <- function(x) {
   y <- get_id_object(x)
-  return(c(
+  c(
     n_samples = get_n_samples(x$params),
-    n_strategies = y$n_strategies,
-    n_patients = y$n_patients,
-    n_states = y$n_states,
-    n_transitions = y$n_transitions,
-    n_times = y$n_times
-  ))
+    n_strategies = get_n_strategies(y),
+    n_patients = get_n_patients(y),
+    n_states = get_n_states(y),
+    n_transitions = get_n_transitions(y),
+    n_times = get_n_times(y)
+  )
 }
 
 make_id_data_table <- function(x) {
@@ -556,7 +627,7 @@ make_id_data_table <- function(x) {
     id_dt <- cbind(id_dt, ti)
   }
   setattr(id_dt, "id_vars", id_vars[id_vars != "sample"])
-  return(id_dt)
+  id_dt
 }
 
 # Labels -----------------------------------------------------------------------

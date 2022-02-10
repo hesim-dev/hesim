@@ -81,22 +81,7 @@ CtstmTrans <- R6::R6Class(
       } else {
         return(create_input_mats(self$fit, input_data = self$input_data))
       }
-    },
-    
-    #' @description
-    #' Get number of patients.
-    #' @return An integer value for the number of patients.
-    get_n_patients = function(){
-      self$get_input_mats()[["n_patients"]]
-    },
-    
-    #' @description
-    #' Get number of strategies.
-    #' @return An integer value for the number of strategies.
-    get_n_strategies = function(){
-      self$get_input_mats()[["n_strategies"]]
     }
-    
   )
 )
 
@@ -120,7 +105,7 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
     trans_model, 
     trans_model$start_state - 1, 
     trans_model$start_age,
-    rep(0, trans_model$get_n_patients()), # Start time is always 0
+    rep(0, get_n_patients(trans_model)), # Start time is always 0
     trans_model$death_state - 1, 
     trans_model$clock, 
     trans_model$reset_states - 1,
@@ -136,8 +121,8 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
   setattr(disprog, "class", c("disprog", "data.table", "data.frame"))
   setattr(disprog, "size",
     c(n_samples = get_n_samples(trans_model$params),
-      n_strategies = trans_model$get_n_strategies(),
-      n_patients = trans_model$get_n_patients(),
+      n_strategies = get_n_strategies(trans_model),
+      n_patients = get_n_patients(trans_model),
       n_states = nrow(trans_model$trans_mat))
   )
   setattr(disprog, "absorbing", absorbing(trans_model$trans_mat))
@@ -170,8 +155,8 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
   ## Dimensions of simulation
   n_grps <- length(unique(disprog$grp_id))
   n_states <- nrow(trans_model$trans_mat)
-  n_strategies <- trans_model$get_n_strategies()
-  n_patients <- trans_model$get_n_patients()
+  n_strategies <- get_n_strategies(trans_model)
+  n_patients <- get_n_patients(trans_model)
   if (inherits(trans_model$params, "params_surv_list")){
     n_samples <- trans_model$params[[1]]$n_samples
   } else{
@@ -233,7 +218,7 @@ IndivCtstmTrans <- R6::R6Class(
     
     check_history = function(field){
       field_name <- deparse(substitute(field))
-      n_patients <- self$get_n_patients()
+      n_patients <- get_n_patients(self)
       if (length(field) !=1 & length(field) != n_patients){
         stop(paste0("The length of '", field_name, "' must either be 1 or the number ",
                           "of simulated patients."),
@@ -685,7 +670,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                     from, unique = TRUE)]
           } else{
             by_cols <- c("sample", "strategy_id", "grp_id", "from")
-            n_patients <- self$trans_model$get_n_patients()
+            n_patients <- get_n_patients(self$trans_model)
             ev_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]

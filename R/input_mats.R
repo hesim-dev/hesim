@@ -165,12 +165,15 @@ size_id_map <- function(){
 }
 
 get_input_mats_id_vars <- function(data){
-  map <- size_id_map()
   res <- list() 
   id_vars <- attr(data, "id_vars")
   for (i in 1:length(id_vars)){
     res[[id_vars[i]]] <- data[[id_vars[i]]]
-    res[[map[id_vars[i]]]] <- length(unique(data[[id_vars[i]]]))
+    
+    size_name <- id_size_map(id_vars[[i]])
+    size_getter <- paste0("get_", size_name)
+    res[[size_name]] <- do.call(size_getter, list(x = data))
+    
     if (id_vars[[i]] == "time_id"){
       res[["time_intervals"]] <- attr(data, "time_intervals")
     }
