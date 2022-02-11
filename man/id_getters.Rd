@@ -21,6 +21,8 @@ get_n_times(x, ...)
 }
 \arguments{
 \item{x}{An object used to select a method.}
+
+\item{...}{Further arguments passed to methods.}
 }
 \description{
 Generic functions for getting the size of ID variables from objects.

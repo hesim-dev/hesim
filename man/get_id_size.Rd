@@ -17,6 +17,10 @@ get_id_size(x, ...)
 }
 \arguments{
 \item{x}{An object used to select a method.}
+
+\item{...}{Further arguments passed to methods.}
+
+\item{id_name}{The name of the ID variable to get the size for.}
 }
 \description{
 A generic function for getting the size (i.e., number of unique values) of

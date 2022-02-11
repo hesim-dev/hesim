@@ -544,6 +544,8 @@ get_id_object <- function(x){
 #' A generic function for getting the size (i.e., number of unique values) of
 #' an ID variable.
 #' @param x An object used to select a method.
+#' @param ... Further arguments passed to methods.
+#' @param id_name The name of the ID variable to get the size for.
 get_id_size <- function(x, ...){
   UseMethod("get_id_size", x)
 }
@@ -576,6 +578,7 @@ get_id_size.default <- function(x, id_name) {
 #' 
 #' Generic functions for getting the size of ID variables from objects.
 #' @param x An object used to select a method.
+#' @param ... Further arguments passed to methods.
 #' @name id_getters
 get_n_strategies <- function(x, ...){
   get_id_size(x, "strategy_id")
