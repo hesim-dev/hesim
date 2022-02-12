@@ -86,49 +86,6 @@ CtstmTrans <- R6::R6Class(
 )
 
 # IndivCtstmTrans class --------------------------------------------------------
-indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
-                                    progress = NULL, max_jumps = NULL){
-  sample <- from <- to <- NULL # to avoid no visible bindings CRAN warning
-  if (any(trans_model$start_age > max_age)){
-    stop("Starting ages in the simulation must be less than maximum age.",
-         call. = FALSE)
-  }
-  if (is.null(progress)){
-    progress <- 0
-  }
-  if (is.null(max_jumps)){
-    max_jumps <- -1
-  }
-  
-  # Simulate
-  disprog <- C_ctstm_sim_disease(
-    trans_model, 
-    trans_model$start_state - 1, 
-    trans_model$start_age,
-    rep(0, get_n_patients(trans_model)), # Start time is always 0
-    trans_model$death_state - 1, 
-    trans_model$clock, 
-    trans_model$reset_states - 1,
-    max_t, 
-    max_age, 
-    progress, 
-    max_jumps
-  )
-  disprog <- data.table(disprog)
-  disprog[, sample := sample + 1]
-  disprog[, from := from + 1]
-  disprog[, to := to + 1]
-  setattr(disprog, "class", c("disprog", "data.table", "data.frame"))
-  setattr(disprog, "size",
-    c(n_samples = get_n_samples(trans_model$params),
-      n_strategies = get_n_strategies(trans_model),
-      n_patients = get_n_patients(trans_model),
-      n_states = nrow(trans_model$trans_mat))
-  )
-  setattr(disprog, "absorbing", absorbing(trans_model$trans_mat))
-  return(disprog[, ])
-}
-
 indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ...){
   
   # Simulate disease progression if 'disprog' is missing
@@ -228,7 +185,53 @@ IndivCtstmTrans <- R6::R6Class(
         field <- rep(field, n_patients)
       }
       return(field)
+    },
+    
+    
+    sim_disease_no_update = function(max_t = 100, max_age = 100,
+                                     progress = NULL, max_jumps = NULL){
+      
+      sample <- from <- to <- NULL # to avoid no visible bindings CRAN warning
+      if (any(self$start_age > max_age)){
+        stop("Starting ages in the simulation must be less than maximum age.",
+             call. = FALSE)
+      }
+      if (is.null(progress)){
+        progress <- 0
+      }
+      if (is.null(max_jumps)){
+        max_jumps <- -1
+      }
+      
+      # Simulate
+      disprog <- C_ctstm_sim_disease(
+        self, 
+        self$start_state - 1, 
+        self$start_age,
+        rep(0, get_n_patients(self)), # Start time is always 0
+        self$death_state - 1, 
+        self$clock, 
+        self$reset_states - 1,
+        max_t, 
+        max_age, 
+        progress, 
+        max_jumps
+      )
+      disprog <- data.table(disprog)
+      disprog[, sample := sample + 1]
+      disprog[, from := from + 1]
+      disprog[, to := to + 1]
+      setattr(disprog, "class", c("disprog", "data.table", "data.frame"))
+      setattr(disprog, "size",
+              c(n_samples = get_n_samples(self$params),
+                n_strategies = get_n_strategies(self),
+                n_patients = get_n_patients(self),
+                n_states = nrow(self$trans_mat))
+      )
+      setattr(disprog, "absorbing", absorbing(self$trans_mat))
+      return(disprog[, ])
     }
+    
   ), # end private
 
   public = list(
@@ -349,12 +352,12 @@ IndivCtstmTrans <- R6::R6Class(
     sim_disease = function(max_t = 100, max_age = 100, progress = NULL, 
                            max_jumps = NULL){
       self$check()
-      disprog <- indiv_ctstm_sim_disease(self,
-                                         max_t = max_t,
-                                         max_age = max_age,
-                                         progress = progress,
-                                         max_jumps = max_jumps)
-      return(disprog)
+      private$sim_disease_no_update(
+        max_t = max_t,
+        max_age = max_age,
+        progress = progress,
+        max_jumps = max_jumps
+      )
     },
 
     #' @description
@@ -369,10 +372,9 @@ IndivCtstmTrans <- R6::R6Class(
     sim_stateprobs = function(t, disprog = NULL, ...){
       self$check()
       if (is.null(disprog)){
-        args <- c(trans_model = self, list(...))
-        disprog <- do.call("indiv_ctstm_sim_disease", args)
+        disprog <- private$sim_disease_no_update(...)
       }
-      return(indiv_ctstm_sim_stateprobs(disprog, self, t))
+      indiv_ctstm_sim_stateprobs(disprog, self, t)
     },
     
     #' @description
