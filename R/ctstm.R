@@ -371,10 +371,64 @@ IndivCtstmTrans <- R6::R6Class(
     #' @return An object of class [`stateprobs`].  
     sim_stateprobs = function(t, disprog = NULL, ...){
       self$check()
+      
+      # Simulate disease progression if 'disprog' is missing
       if (is.null(disprog)){
-        disprog <- private$sim_disease_no_update(...)
+        disprog <- self$sim_disease(...)
+      } else{
+        disprog <- copy(disprog)
       }
-      indiv_ctstm_sim_stateprobs(disprog, self, t)
+      
+      # Compute state probabilities
+      ## Indexing for C++
+      disprog[, strategy_index := .GRP, by = "strategy_id"]
+      strategy_index <- disprog$strategy_index - 1
+      disprog[, strategy_index := NULL]
+      
+      disprog[, grp_index := .GRP, by = "grp_id"]
+      grp_index <- disprog$grp_index - 1
+      disprog[, grp_index := NULL]
+      
+      ## Dimensions of simulation
+      n_grps <- length(unique(disprog$grp_id))
+      n_states <- nrow(self$trans_mat)
+      n_strategies <- get_n_strategies(self)
+      n_patients <- get_n_patients(self)
+      if (inherits(self$params, "params_surv_list")){
+        n_samples <- self$params[[1]]$n_samples
+      } else{
+        n_samples <- self$params$n_samples
+      }
+      unique_strategy_id <- unique(self$input_data$strategy_id)
+      if (!is.null(self$input_data$grp_id)) {
+        unique_grp_id <- unique(self$input_data$grp_id)
+      } else {
+        unique_grp_id <- 1
+      }
+      
+      
+      ## Computation
+      stprobs <- C_ctstm_indiv_stateprobs(disprog, 
+                                          t, 
+                                          n_samples,
+                                          n_strategies, 
+                                          unique_strategy_id,
+                                          strategy_index,
+                                          n_grps,
+                                          unique_grp_id,
+                                          grp_index,
+                                          n_states,
+                                          n_patients)
+      stprobs <- data.table(stprobs)
+      
+      ## C++ to R indexing
+      stprobs[, "sample" := get("sample") + 1]
+      stprobs[, "state_id" := get("state_id") + 1]
+      
+      # Return
+      setattr(stprobs, "class", 
+              c("stateprobs", "data.table", "data.frame"))
+      stprobs[]     
     },
     
     #' @description
@@ -785,9 +839,10 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
         stop("You must first simulate disease progression using '$sim_disease'.",
             call. = FALSE)
       }
-      self$stateprobs_ <- indiv_ctstm_sim_stateprobs(self$disprog_,
-                                                     self$trans_model,
-                                                     t = t)
+      self$stateprobs_ <- self$trans_model$sim_stateprobs(
+        t = t, 
+        disprog = self$disprog_
+      )
       invisible(self)
     },
     
