@@ -176,12 +176,13 @@ IndivCtstmTrans <- R6::R6Class(
     #' @field input_data Input data used to simulate health state transitions 
     #' by sample from the probabilistic sensitivity analysis (PSA), 
     #' treatment strategy and patient. Must either be an object of class 
-    #' [`input_mats`] or of class [`expanded_hesim_data`]. If `params` contains 
-    #' parameters from a list of models (i.e., of class [`params_surv_list`]), 
-    #' then `input_data` must contain a unique row for each treatment strategy
-    #' and patient; if `params` contains parameters from a joint model 
-    #' (i.e., of class [`params_surv`]), then `input_data` must contain a unique
-    #' row for each treatment strategy, patient, and transition.
+    #' [`input_mats`] or of class [`expanded_hesim_data`][expand.hesim_data()]. 
+    #' If `params` contains parameters from a list of models (i.e., of class 
+    #' [`params_surv_list`]), then `input_data` must contain a unique row for 
+    #' each treatment strategy and patient; if `params` contains parameters 
+    #' from a joint model (i.e., of class [`params_surv`]), then `input_data` 
+    #' must contain a unique row for each treatment strategy, patient, and 
+    #' transition.
     input_data = NULL,
     
     #' @field trans_mat A transition matrix describing the states and transitions 
@@ -219,6 +220,18 @@ IndivCtstmTrans <- R6::R6Class(
     #' @field fit A fitted statistical model. Used to create the input matrices if
     #' `input_data` is not an object of class [`input_mats`].
     fit = NULL,
+    
+    #' @field update_input_data A  custom function to update the input data 
+    #' dynamically as patients progress through the simulation. Must take two 
+    #' arguments. The first argument is the input data (an 
+    #' [`expanded_hesim_data`][expand.hesim_data()] object as contained in the 
+    #' `input_data` field). The second argument is the disease progression 
+    #' output (i.e., a [`disprog`] object). The order of the function arguments
+    #' matters but the argument names do not. The input data and disease 
+    #' progression objects are both `data.table`s and will always have the same 
+    #' number of rows. The function is applied each time the cohort of 
+    #' patients transitions to a new health state.
+    update_input_data = NULL,
   
     
     #' @description
@@ -232,6 +245,7 @@ IndivCtstmTrans <- R6::R6Class(
     #' @param clock The `clock` field.
     #' @param reset_states The `reset_states` field.
     #' @param fit The `fit` field.
+    #' @param update_input_data The `update_input_data` field.
     #' @return A new `IndivCtstmTrans` object.    
     initialize = function(params, input_data, trans_mat, 
                           start_state = 1,
@@ -239,7 +253,8 @@ IndivCtstmTrans <- R6::R6Class(
                           death_state = NULL,
                           clock = c("reset", "forward", "mix"),
                           reset_states = NULL,
-                          fit = NULL) {
+                          fit = NULL,
+                          update_input_data = NULL) {
       self$params <- params
       self$input_data <- input_data
       self$trans_mat <- trans_mat
@@ -250,6 +265,7 @@ IndivCtstmTrans <- R6::R6Class(
         self$reset_states <- reset_states
       }
       self$fit <- fit
+      self$update_input_data <- update_input_data
       
       # history
       self$start_state <- private$check_history(start_state)

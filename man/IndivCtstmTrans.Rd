@@ -64,12 +64,13 @@ A complete economic model can be implemented with the \code{\link{IndivCtstm}} c
 \item{\code{input_data}}{Input data used to simulate health state transitions
 by sample from the probabilistic sensitivity analysis (PSA),
 treatment strategy and patient. Must either be an object of class
-\code{\link{input_mats}} or of class \code{\link{expanded_hesim_data}}. If \code{params} contains
-parameters from a list of models (i.e., of class \code{\link{params_surv_list}}),
-then \code{input_data} must contain a unique row for each treatment strategy
-and patient; if \code{params} contains parameters from a joint model
-(i.e., of class \code{\link{params_surv}}), then \code{input_data} must contain a unique
-row for each treatment strategy, patient, and transition.}
+\code{\link{input_mats}} or of class \code{\link[=expand.hesim_data]{expanded_hesim_data}}.
+If \code{params} contains parameters from a list of models (i.e., of class
+\code{\link{params_surv_list}}), then \code{input_data} must contain a unique row for
+each treatment strategy and patient; if \code{params} contains parameters
+from a joint model (i.e., of class \code{\link{params_surv}}), then \code{input_data}
+must contain a unique row for each treatment strategy, patient, and
+transition.}
 
 \item{\code{trans_mat}}{A transition matrix describing the states and transitions
 in a multi-state model in the format from the \code{\link[mstate:mstate-package]{mstate}} package.
@@ -99,6 +100,17 @@ start of the model or from when time was previously reset. Only used if
 
 \item{\code{fit}}{A fitted statistical model. Used to create the input matrices if
 \code{input_data} is not an object of class \code{\link{input_mats}}.}
+
+\item{\code{update_input_data}}{A  custom function to update the input data
+dynamically as patients progress through the simulation. Must take two
+arguments. The first argument is the input data (an
+\code{\link[=expand.hesim_data]{expanded_hesim_data}} object as contained in the
+\code{input_data} field). The second argument is the disease progression
+output (i.e., a \code{\link{disprog}} object). The order of the function arguments
+matters but the argument names do not. The input data and disease
+progression object are both \code{data.table}s and will always have the same
+number of rows and the function is applied each time the cohort of
+patients transitions to a new health state.}
 }
 \if{html}{\out{</div>}}
 }
@@ -136,7 +148,8 @@ Create a new \code{IndivCtstmTrans} object.
   death_state = NULL,
   clock = c("reset", "forward", "mix"),
   reset_states = NULL,
-  fit = NULL
+  fit = NULL,
+  update_input_data = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -160,6 +173,8 @@ Create a new \code{IndivCtstmTrans} object.
 \item{\code{reset_states}}{The \code{reset_states} field.}
 
 \item{\code{fit}}{The \code{fit} field.}
+
+\item{\code{update_input_data}}{The \code{update_input_data} field.}
 }
 \if{html}{\out{</div>}}
 }
