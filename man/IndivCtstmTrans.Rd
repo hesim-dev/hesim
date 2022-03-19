@@ -62,10 +62,11 @@ A complete economic model can be implemented with the \code{\link{IndivCtstm}} c
 \item{\code{params}}{An object of class \code{\link{params_surv}} or \code{\link{params_surv_list}}.}
 
 \item{\code{input_data}}{Input data used to simulate health state transitions
-by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
-Must be an object of class \code{\link{input_mats}}. If \code{params} contains parameters from
-a list of models (i.e., of class \code{\link{params_surv_list}}), then \code{input_data}
-must contain a unique row for each treatment strategy
+by sample from the probabilistic sensitivity analysis (PSA),
+treatment strategy and patient. Must either be an object of class
+\code{\link{input_mats}} or of class \code{\link{expanded_hesim_data}}. If \code{params} contains
+parameters from a list of models (i.e., of class \code{\link{params_surv_list}}),
+then \code{input_data} must contain a unique row for each treatment strategy
 and patient; if \code{params} contains parameters from a joint model
 (i.e., of class \code{\link{params_surv}}), then \code{input_data} must contain a unique
 row for each treatment strategy, patient, and transition.}

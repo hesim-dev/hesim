@@ -174,10 +174,11 @@ IndivCtstmTrans <- R6::R6Class(
     params = NULL,
     
     #' @field input_data Input data used to simulate health state transitions 
-    #' by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
-    #' Must be an object of class [`input_mats`]. If `params` contains parameters from
-    #' a list of models (i.e., of class [`params_surv_list`]), then `input_data` 
-    #' must contain a unique row for each treatment strategy
+    #' by sample from the probabilistic sensitivity analysis (PSA), 
+    #' treatment strategy and patient. Must either be an object of class 
+    #' [`input_mats`] or of class [`expanded_hesim_data`]. If `params` contains 
+    #' parameters from a list of models (i.e., of class [`params_surv_list`]), 
+    #' then `input_data` must contain a unique row for each treatment strategy
     #' and patient; if `params` contains parameters from a joint model 
     #' (i.e., of class [`params_surv`]), then `input_data` must contain a unique
     #' row for each treatment strategy, patient, and transition.
@@ -218,6 +219,7 @@ IndivCtstmTrans <- R6::R6Class(
     #' @field fit A fitted statistical model. Used to create the input matrices if
     #' `input_data` is not an object of class [`input_mats`].
     fit = NULL,
+  
     
     #' @description
     #' Create a new `IndivCtstmTrans` object.
