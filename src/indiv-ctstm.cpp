@@ -32,14 +32,18 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
                                     std::vector<int> reset_states,
                                     double max_t, double max_age,
                                     int progress,
-                                    int max_jumps = -1){
+                                    int max_jumps = -1,
+                                    int sample_start = 0,
+                                    int n_samples = -1){
  
   // Initialize
   hesim::check_R_infinity(max_t);
   std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
   transmod->set_max_x(max_t);
   std::vector<bool> absorbing = transmod->trans_mat_.absorbing_;
-  int n_samples = transmod->get_n_samples();
+  if (n_samples < 0) {
+    n_samples = transmod->get_n_samples();
+  }
   int n_strategies = transmod->get_n_strategies(); 
   int n_patients = transmod->get_n_patients();
   hesim::ctstm::patient patient(transmod.get(), start_age[0], start_time[0],
@@ -50,7 +54,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
   disease_prog.reserve(N);
   
    // Loop
-  for (int s = 0; s < n_samples; ++s){
+  for (int s = sample_start; s < n_samples + sample_start; ++s){
     if (progress > 0){
       if ((s + 1) % progress == 0){ // R-based indexing
         Rcpp::Rcout << "sample = " << s + 1 << std::endl;  

@@ -53,8 +53,8 @@ C_cohort_dtstm_sim_stateprobs <- function(R_CohortDtstmTrans, times) {
     .Call('_hesim_C_cohort_dtstm_sim_stateprobs', PACKAGE = 'hesim', R_CohortDtstmTrans, times)
 }
 
-C_ctstm_sim_disease <- function(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress, max_jumps = -1L) {
-    .Call('_hesim_C_ctstm_sim_disease', PACKAGE = 'hesim', R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress, max_jumps)
+C_ctstm_sim_disease <- function(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress, max_jumps = -1L, sample_start = 0L, n_samples = -1L) {
+    .Call('_hesim_C_ctstm_sim_disease', PACKAGE = 'hesim', R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress, max_jumps, sample_start, n_samples)
 }
 
 C_ctstm_indiv_stateprobs <- function(R_disease_prog, t, n_samples, n_strategies, unique_strategy_id, strategy_index, n_grps, unique_grp_id, grp_index, n_states, n_patients) {
