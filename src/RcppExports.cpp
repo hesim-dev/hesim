@@ -187,8 +187,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_ctstm_sim_disease
-Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, std::vector<int> start_state, std::vector<double> start_age, std::vector<double> start_time, int death_state, std::string clock, std::vector<int> reset_states, double max_t, double max_age, int progress, int max_jumps, int sample_start, int n_samples);
-RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP start_timeSEXP, SEXP death_stateSEXP, SEXP clockSEXP, SEXP reset_statesSEXP, SEXP max_tSEXP, SEXP max_ageSEXP, SEXP progressSEXP, SEXP max_jumpsSEXP, SEXP sample_startSEXP, SEXP n_samplesSEXP) {
+Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, std::vector<int> start_state, std::vector<double> start_age, std::vector<double> start_time, int death_state, std::string clock, std::vector<int> reset_states, double max_t, double max_age, int progress, int max_jumps, int sample_start, int sample_stop);
+RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP start_timeSEXP, SEXP death_stateSEXP, SEXP clockSEXP, SEXP reset_statesSEXP, SEXP max_tSEXP, SEXP max_ageSEXP, SEXP progressSEXP, SEXP max_jumpsSEXP, SEXP sample_startSEXP, SEXP sample_stopSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -204,8 +204,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type progress(progressSEXP);
     Rcpp::traits::input_parameter< int >::type max_jumps(max_jumpsSEXP);
     Rcpp::traits::input_parameter< int >::type sample_start(sample_startSEXP);
-    Rcpp::traits::input_parameter< int >::type n_samples(n_samplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_ctstm_sim_disease(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress, max_jumps, sample_start, n_samples));
+    Rcpp::traits::input_parameter< int >::type sample_stop(sample_stopSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_ctstm_sim_disease(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress, max_jumps, sample_start, sample_stop));
     return rcpp_result_gen;
 END_RCPP
 }

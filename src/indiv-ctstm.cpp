@@ -20,6 +20,9 @@
  * (i.e., transitions to new states) that each patient can make. Default is -1, 
  * in which case there is no limit and the duration of the simulation is
  *  determined by @c max_t and @c max_age.
+ * @param sample_start, sample_stop Starting and stopping parameter sample to 
+ * iterate over. Default is to start at 0 and stop at the final parameter 
+ * sample.
  * @return An R data frame of the same format as ctstm::disease_prog.
  ******************************************************************************/ 
 // [[Rcpp::export]]
@@ -34,15 +37,16 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
                                     int progress,
                                     int max_jumps = -1,
                                     int sample_start = 0,
-                                    int n_samples = -1){
+                                    int sample_stop = -1){
  
   // Initialize
   hesim::check_R_infinity(max_t);
   std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
   transmod->set_max_x(max_t);
   std::vector<bool> absorbing = transmod->trans_mat_.absorbing_;
-  if (n_samples < 0) {
-    n_samples = transmod->get_n_samples();
+  int n_samples = transmod->get_n_samples();
+  if (sample_stop < 0) {
+    sample_stop = n_samples - 1;
   }
   int n_strategies = transmod->get_n_strategies(); 
   int n_patients = transmod->get_n_patients();
@@ -54,7 +58,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
   disease_prog.reserve(N);
   
    // Loop
-  for (int s = sample_start; s < n_samples + sample_start; ++s){
+  for (int s = sample_start; s < sample_stop + 1; ++s){
     if (progress > 0){
       if ((s + 1) % progress == 0){ // R-based indexing
         Rcpp::Rcout << "sample = " << s + 1 << std::endl;  
