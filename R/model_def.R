@@ -426,7 +426,7 @@ custom <- function(x, names = NULL, n = parent.frame()$n){
   # Return samples from posterior distribution
   samples <- sample_from_posterior(n = n,
                                    n_samples = nrow(x))
-  x <- x[samples, ]
+  x <- x[samples, , drop = FALSE]
   
   # Return
   if (n_dims < 2){
