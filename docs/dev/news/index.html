@@ -99,7 +99,9 @@
 <h2 class="page-header" data-toc-text="0.5.1.9999" id="hesim-0519999">hesim 0.5.1.9999<a class="anchor" aria-label="anchor" href="#hesim-0519999"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-5-1-9999">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-5-1-9999"></a></h3>
-<ul><li><p>Modifies <code><a href="../reference/expmat.html">expmat()</a></code> to eliminate
+<ul><li><p><code><a href="../reference/rng_distributions.html">custom()</a></code> works properly when
+<code>n=1</code>.</p></li>
+<li><p>Modifies <code><a href="../reference/expmat.html">expmat()</a></code> to eliminate
 <code>length &gt; 1 in coercion to logical</code> warnings in R-devel
 caused by <code><a href="https://rdrr.io/pkg/msm/man/MatrixExp.html" class="external-link">msm::MatrixExp()</a></code>.</p></li>
 <li><p>Fixed a bug introduced in the previous version in which the
@@ -177,7 +179,7 @@ transition model (cDTSTM) to be created directly from multinomial
 logistic regression parameter objects.</p></li>
 <li><p>The coefficient elements of parameter objects can be constructed
 from any object (e.g., data frame) than can be passed to
-<code><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix()</a></code> (rather than only from matrices as in previous
+<code><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix()</a></code> (rather than only from matrices as in previous
 versions). See, for instance, <code><a href="../reference/params_surv.html">params_surv()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
