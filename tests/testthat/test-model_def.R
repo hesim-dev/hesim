@@ -122,6 +122,15 @@ test_that("custom() produces a warning if n > n_samples", {
                         "consequently been drawn with replacement."), fixed = TRUE)
 })
 
+test_that("custom() works with n = 1", {
+  rng_def <- define_rng({
+    list(
+      custom = custom(matrix(1:4, ncol = 2, nrow = 2))
+    )
+  }, n = 1)
+  expect_equal(colnames(eval_rng(rng_def)$custom), c("v1", "v2"))
+})
+
 test_that("Column names for multi-parameter RNG is as expcted", {
   expect_equal(colnames(rng$gamma), names(params$gamma_mean))
   expect_equal(colnames(rng$beta), rng_def$beta_colnames)
