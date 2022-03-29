@@ -33,6 +33,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -55,7 +57,7 @@
   <a href="../reference/index.html">API</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -65,7 +67,8 @@
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Cohort discrete time state transition models</li>
+    </li>
+<li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
       <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
@@ -76,7 +79,8 @@
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Individual continuous time state transition models</li>
+    </li>
+<li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
       <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
@@ -84,12 +88,14 @@
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Partitioned survival analysis</li>
+    </li>
+<li class="dropdown-header">Partitioned survival analysis</li>
     <li>
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Decision analysis</li>
+    </li>
+<li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
@@ -104,7 +110,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/hesim-dev/hesim/">
+  <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -119,29 +125,41 @@
 
       
 
-      </header><script src="mstate_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Markov and semi-Markov multi-state models</h1>
             
-            <h4 class="date">2021-08-12</h4>
+            <h4 data-toc-skip class="date">2022-03-28</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/mstate.Rmd"><code>vignettes/mstate.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/mstate.Rmd" class="external-link"><code>vignettes/mstate.Rmd</code></a></small>
       <div class="hidden name"><code>mstate.Rmd</code></div>
 
     </div>
 
     
     
-<div id="overview" class="section level1">
-<h1 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h1>
-<p>The <a href="markov-inhomogeneous-indiv.html">time inhomogeneous Markov individual-level</a> modeling vignette shows how to simulate a continuous times state transition model (CTSTM) and perform a cost-effectiveness analysis (CEA). The model was parameterized using a variety of disparate data sources and parameter estimates. However, in an ideal scenario, a CTSTM can be fully parameterized by estimating a single statistical model. In this example, we demonstrate by fitting a multi-state model—a generalization of a survival model with more than two states—using patient-level data.</p>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p>The <a href="markov-inhomogeneous-indiv.html">time inhomogeneous
+Markov individual-level</a> modeling vignette shows how to simulate a
+continuous times state transition model (CTSTM) and perform a
+cost-effectiveness analysis (CEA). The model was parameterized using a
+variety of disparate data sources and parameter estimates. However, in
+an ideal scenario, a CTSTM can be fully parameterized by estimating a
+single statistical model. In this example, we demonstrate by fitting a
+multi-state model—a generalization of a survival model with more than
+two states—using patient-level data.</p>
 </div>
-<div id="an-example-3-state-model" class="section level1">
-<h1 class="hasAnchor">
-<a href="#an-example-3-state-model" class="anchor"></a>An example 3-state model</h1>
-<p>The reversible illness-death model is a commonly used state transition model (see figure below) with 3 health states and 4 transitions. In this example, we will use 3 generic health states: (1) Healthy, (2) Sick, and (3) Death. The following 4 transitions are possible.</p>
+<div class="section level2">
+<h2 id="an-example-3-state-model">An example 3-state model<a class="anchor" aria-label="anchor" href="#an-example-3-state-model"></a>
+</h2>
+<p>The reversible illness-death model is a commonly used state
+transition model (see figure below) with 3 health states and 4
+transitions. In this example, we will use 3 generic health states: (1)
+Healthy, (2) Sick, and (3) Death. The following 4 transitions are
+possible.</p>
 <ol style="list-style-type: decimal">
 <li>Healthy to Sick</li>
 <li>Sick to Healthy</li>
@@ -149,131 +167,177 @@
 <li>Sick to Death</li>
 </ol>
 <p><br><img src="reversible-illness-death.png" width="500px"><br><br></p>
-<p>In general, the transitions of a multi-state model can be characterized with an H x H transition matrix where <span class="math inline">\(H\)</span> is the number of health states, which is a square-matrix where the (r,s) element is a positive integer if a transition from r to s is possible and NA otherwise. A 4 x 4 transition matrix is appropriate for the reversible illness death model.</p>
+<p>In general, the transitions of a multi-state model can be
+characterized with an H x H transition matrix where <span class="math inline">\(H\)</span> is the number of health states, which
+is a square-matrix where the (r,s) element is a positive integer if a
+transition from r to s is possible and NA otherwise. A 4 x 4 transition
+matrix is appropriate for the reversible illness death model.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
-              <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="cn">NA</span>, <span class="fl">4</span><span class="op">)</span>,
-              <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Healthy"</span>, <span class="st">"Sick"</span>, <span class="st">"Death"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span></code></pre></div>
-<pre><code>##         Healthy Sick Death
-## Healthy      NA    1     2
-## Sick          3   NA     4
-## Death        NA   NA    NA</code></pre>
-<p>In a cost-effectiveness analysis, the treatments strategies of interest and characteristics of the target population must be specified in addition to the selected model structure. We will consider a simple case with two treatment strategies (the standard of care (SOC) and a new intervention) and a heterogeneous population of 1000 patients who differ by age and sex. The model contains 3 health states (2 of which are non-death states).</p>
+<code class="sourceCode R"><span class="va">tmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
+              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="cn">NA</span>, <span class="fl">4</span><span class="op">)</span>,
+              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Healthy"</span>, <span class="st">"Sick"</span>, <span class="st">"Death"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##         Healthy Sick Death</span>
+<span class="co">## Healthy      NA    1     2</span>
+<span class="co">## Sick          3   NA     4</span>
+<span class="co">## Death        NA   NA    NA</span></code></pre>
+<p>In a cost-effectiveness analysis, the treatments strategies of
+interest and characteristics of the target population must be specified
+in addition to the selected model structure. We will consider a simple
+case with two treatment strategies (the standard of care (SOC) and a new
+intervention) and a heterogeneous population of 1000 patients who differ
+by age and sex. The model contains 3 health states (2 of which are
+non-death states).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com">"data.table"</a></span><span class="op">)</span>
-<span class="va">strategies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
-                         strategy_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SOC"</span>, <span class="st">"New"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com" class="external-link">"data.table"</a></span><span class="op">)</span>
+<span class="va">strategies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
+                         strategy_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SOC"</span>, <span class="st">"New"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">n_patients</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
-<span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_patients</span>,
-                       age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_patients</span>, mean <span class="op">=</span> <span class="fl">45</span>, sd <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,
-                       female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="va">n_patients</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">.51</span><span class="op">)</span><span class="op">)</span>
-<span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
-                     state_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="co"># Non-death health states</span>
+<span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_patients</span>,
+                       age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_patients</span>, mean <span class="op">=</span> <span class="fl">45</span>, sd <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,
+                       female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n_patients</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">.51</span><span class="op">)</span><span class="op">)</span>
+<span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
+                     state_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="co"># Non-death health states</span>
 <span class="va">hesim_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span><span class="op">(</span>strategies <span class="op">=</span> <span class="va">strategies</span>,
                         patients <span class="op">=</span> <span class="va">patients</span>, 
                         states <span class="op">=</span> <span class="va">states</span><span class="op">)</span></code></pre></div>
 <p>We will create nice labels for the plots and summary tables.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">labs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_labels.html">get_labels</a></span><span class="op">(</span><span class="va">hesim_dat</span><span class="op">)</span>
-<span class="va">labs</span><span class="op">$</span><span class="va">transition_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Healthy-&gt; Sick"</span> <span class="op">=</span> <span class="fl">1</span>, 
+<span class="va">labs</span><span class="op">$</span><span class="va">transition_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Healthy-&gt; Sick"</span> <span class="op">=</span> <span class="fl">1</span>, 
                         <span class="st">"Healthy -&gt; Death"</span> <span class="op">=</span> <span class="fl">2</span>,
                         <span class="st">"Sick -&gt; Healthy"</span> <span class="op">=</span> <span class="fl">3</span>,
                         <span class="st">"Sick -&gt; Death"</span> <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">labs</span><span class="op">)</span></code></pre></div>
-<pre><code>## $strategy_id
-## SOC New 
-##   1   2 
-## 
-## $state_id
-## Healthy    Sick   Death 
-##       1       2       3 
-## 
-## $transition_id
-##   Healthy-&gt; Sick Healthy -&gt; Death  Sick -&gt; Healthy    Sick -&gt; Death 
-##                1                2                3                4</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">labs</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## $strategy_id</span>
+<span class="co">## SOC New </span>
+<span class="co">##   1   2 </span>
+<span class="co">## </span>
+<span class="co">## $state_id</span>
+<span class="co">## Healthy    Sick   Death </span>
+<span class="co">##       1       2       3 </span>
+<span class="co">## </span>
+<span class="co">## $transition_id</span>
+<span class="co">##   Healthy-&gt; Sick Healthy -&gt; Death  Sick -&gt; Healthy    Sick -&gt; Death </span>
+<span class="co">##                1                2                3                4</span></code></pre>
 </div>
-<div id="parameter-estimation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#parameter-estimation" class="anchor"></a>Parameter estimation</h1>
-<div id="multi-state-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#multi-state-model" class="anchor"></a>Multi-state model</h2>
-<p>CTSTMs can be parameterized by fitting statistical models in <code>R</code> or by storing the parameters from a model fit outside <code>R</code> as described in the <a href="intro.html#disease-progression">introduction</a> to <code>hesim</code>. Either a single joint model can be estimated encompassing all transitions or separate models can be estimated for each possible transition. In the <a href="intro.html#disease-progression">introduction</a> we considered a joint model; here, we will fit separate models. A number of parametric and flexibly parametric approaches are available (as described more detail in the <code><a href="../reference/params_surv.html">params_surv()</a></code> documentation), but we will illustrate with a Weibull model.</p>
-<p>We will begin by fitting a “clock reset” model using <code><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html">flexsurvreg()</a></code>.</p>
+<div class="section level2">
+<h2 id="parameter-estimation">Parameter estimation<a class="anchor" aria-label="anchor" href="#parameter-estimation"></a>
+</h2>
+<div class="section level3">
+<h3 id="multi-state-model">Multi-state model<a class="anchor" aria-label="anchor" href="#multi-state-model"></a>
+</h3>
+<p>CTSTMs can be parameterized by fitting statistical models in
+<code>R</code> or by storing the parameters from a model fit outside
+<code>R</code> as described in the <a href="intro.html#disease-progression">introduction</a> to
+<code>hesim</code>. Either a single joint model can be estimated
+encompassing all transitions or separate models can be estimated for
+each possible transition. In the <a href="intro.html#disease-progression">introduction</a> we considered a
+joint model; here, we will fit separate models. A number of parametric
+and flexibly parametric approaches are available (as described more
+detail in the <code><a href="../reference/params_surv.html">params_surv()</a></code> documentation), but we will
+illustrate with a Weibull model.</p>
+<p>We will begin by fitting a “clock reset” model using
+<code><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html" class="external-link">flexsurvreg()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/chjackson/flexsurv-dev">"flexsurv"</a></span><span class="op">)</span>
-<span class="va">n_trans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">tmat</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># Number of transitions</span>
-<span class="va">wei_fits_cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>length <span class="op">=</span> <span class="va">n_trans</span>, mode <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span> 
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">wei_fits_cr</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">wei_fits_cr</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html">flexsurvreg</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">years</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">strategy_id</span><span class="op">)</span>, 
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/chjackson/flexsurv-dev" class="external-link">"flexsurv"</a></span><span class="op">)</span>
+<span class="va">n_trans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">tmat</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># Number of transitions</span>
+<span class="va">wei_fits_cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span>length <span class="op">=</span> <span class="va">n_trans</span>, mode <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span> 
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">wei_fits_cr</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">wei_fits_cr</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html" class="external-link">flexsurvreg</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">years</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">strategy_id</span><span class="op">)</span>, 
                                   data <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">transitions</span>, 
                                   subset <span class="op">=</span> <span class="op">(</span><span class="va">trans</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span> , 
                                   dist <span class="op">=</span> <span class="st">"weibull"</span><span class="op">)</span> 
 <span class="op">}</span>
 <span class="va">wei_fits_cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span><span class="op">(</span><span class="va">wei_fits_cr</span><span class="op">)</span></code></pre></div>
-<p>“Clock forward” models are fit in a similar fashion by specifying both the starting (<code>Tstop</code>) and stopping (<code>Tstop</code>) times associated with each transition.</p>
+<p>“Clock forward” models are fit in a similar fashion by specifying
+both the starting (<code>Tstop</code>) and stopping (<code>Tstop</code>)
+times associated with each transition.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">wei_fits_cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>length <span class="op">=</span> <span class="va">n_trans</span>, mode <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span> 
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">wei_fits_cf</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">wei_fits_cf</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html">flexsurvreg</a></span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">Tstart</span>, <span class="va">Tstop</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">strategy_id</span><span class="op">)</span>, 
+<code class="sourceCode R"><span class="va">wei_fits_cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span>length <span class="op">=</span> <span class="va">n_trans</span>, mode <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span> 
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">wei_fits_cf</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">wei_fits_cf</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html" class="external-link">flexsurvreg</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">Tstart</span>, <span class="va">Tstop</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">strategy_id</span><span class="op">)</span>, 
                                   data <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">transitions</span>, 
                                   subset <span class="op">=</span> <span class="op">(</span><span class="va">trans</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span> , 
                                   dist <span class="op">=</span> <span class="st">"weibull"</span><span class="op">)</span> 
 <span class="op">}</span>
 <span class="va">wei_fits_cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span><span class="op">(</span><span class="va">wei_fits_cf</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="utility-and-costs" class="section level2">
-<h2 class="hasAnchor">
-<a href="#utility-and-costs" class="anchor"></a>Utility and costs</h2>
-<p>The most straightforward way to assign utility and cost values to health states is with a <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code>. For example, we can specify the mean and standard error of utilities by health state (implying that utility values do not vary by treatment strategy or patient) and that we will use a beta distribution to randomly sample utility values for the probabilistic sensitivity analysis (PSA).</p>
+<div class="section level3">
+<h3 id="utility-and-costs">Utility and costs<a class="anchor" aria-label="anchor" href="#utility-and-costs"></a>
+</h3>
+<p>The most straightforward way to assign utility and cost values to
+health states is with a <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code>. For example, we can
+specify the mean and standard error of utilities by health state
+(implying that utility values do not vary by treatment strategy or
+patient) and that we will use a beta distribution to randomly sample
+utility values for the probabilistic sensitivity analysis (PSA).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">utility_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="va">states</span><span class="op">$</span><span class="va">state_id</span>,
+<code class="sourceCode R"><span class="va">utility_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="va">states</span><span class="op">$</span><span class="va">state_id</span>,
                                        mean <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">utility</span><span class="op">$</span><span class="va">mean</span>,
                                        se <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">utility</span><span class="op">$</span><span class="va">se</span><span class="op">)</span>,
                             dist <span class="op">=</span> <span class="st">"beta"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">utility_tbl</span><span class="op">)</span></code></pre></div>
-<pre><code>##    state_id mean        se
-## 1:        1 0.65 0.1732051
-## 2:        2 0.85 0.2000000</code></pre>
-<p>Drug and medical costs can be specified in a similar fashion. Drug costs are assumed to be known with certainty and vary by treatment strategy whereas medical costs are assumed to vary by health state and to follow a gamma distribution.</p>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">utility_tbl</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    state_id mean        se</span>
+<span class="co">## 1:        1 0.65 0.1732051</span>
+<span class="co">## 2:        2 0.85 0.2000000</span></code></pre>
+<p>Drug and medical costs can be specified in a similar fashion. Drug
+costs are assumed to be known with certainty and vary by treatment
+strategy whereas medical costs are assumed to vary by health state and
+to follow a gamma distribution.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">drugcost_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="va">strategies</span><span class="op">$</span><span class="va">strategy_id</span>,
+<code class="sourceCode R"><span class="va">drugcost_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="va">strategies</span><span class="op">$</span><span class="va">strategy_id</span>,
                                        est <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">costs</span><span class="op">$</span><span class="va">drugs</span><span class="op">$</span><span class="va">costs</span><span class="op">)</span>,
                             dist <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>
-<span class="va">medcost_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="va">states</span><span class="op">$</span><span class="va">state_id</span>,
+<span class="va">medcost_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="va">states</span><span class="op">$</span><span class="va">state_id</span>,
                                        mean <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">costs</span><span class="op">$</span><span class="va">medical</span><span class="op">$</span><span class="va">mean</span>,
                                        se <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">costs</span><span class="op">$</span><span class="va">medical</span><span class="op">$</span><span class="va">se</span><span class="op">)</span>,
                             dist <span class="op">=</span> <span class="st">"gamma"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="simulation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#simulation" class="anchor"></a>Simulation</h1>
-<div id="constructing-the-economic-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#constructing-the-economic-model" class="anchor"></a>Constructing the economic model</h2>
-<p>As in any <code>hesim</code> model, the economic model consists of a model for disease progression and models for assigning utility and cost values to health states. In this example, we will use 1000 samples of the parameters for the probabilistic sensitivity analysis (PSA).</p>
+<div class="section level2">
+<h2 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
+</h2>
+<div class="section level3">
+<h3 id="constructing-the-economic-model">Constructing the economic model<a class="anchor" aria-label="anchor" href="#constructing-the-economic-model"></a>
+</h3>
+<p>As in any <code>hesim</code> model, the economic model consists of a
+model for disease progression and models for assigning utility and cost
+values to health states. In this example, we will use 1000 samples of
+the parameters for the probabilistic sensitivity analysis (PSA).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">1000</span></code></pre></div>
-<div id="disease-model" class="section level3">
-<h3 class="hasAnchor">
-<a href="#disease-model" class="anchor"></a>Disease model</h3>
-<p>We begin by constructing the model for health state transitions, which is a function of input data (i.e., covariates) and a fitted multi-state model (or a parameter object). When separate multi-state models are fit by transition, the input data consists of one observation for each treatment strategy and patient combination (joint models consist of one observation for each treatment strategy, patient, and transition combination). It can be created easily by using the <code><a href="../reference/expand.html">expand()</a></code> function to expand the <code><a href="../reference/hesim_data.html">hesim_data()</a></code> object created above.</p>
+<div class="section level4">
+<h4 id="disease-model">Disease model<a class="anchor" aria-label="anchor" href="#disease-model"></a>
+</h4>
+<p>We begin by constructing the model for health state transitions,
+which is a function of input data (i.e., covariates) and a fitted
+multi-state model (or a parameter object). When separate multi-state
+models are fit by transition, the input data consists of one observation
+for each treatment strategy and patient combination (joint models
+consist of one observation for each treatment strategy, patient, and
+transition combination). It can be created easily by using the
+<code><a href="../reference/expand.html">expand()</a></code> function to expand the <code><a href="../reference/hesim_data.html">hesim_data()</a></code>
+object created above.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transmod_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/expand.html">expand</a></span><span class="op">(</span><span class="va">hesim_dat</span>, 
-                        by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategies"</span>, <span class="st">"patients"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">transmod_data</span><span class="op">)</span></code></pre></div>
-<pre><code>##    strategy_id patient_id strategy_name      age female
-## 1:           1          1           SOC 42.09645      1
-## 2:           1          2           SOC 45.16086      1
-## 3:           1          3           SOC 41.61453      0
-## 4:           1          4           SOC 34.26582      1
-## 5:           1          5           SOC 45.86079      0
-## 6:           1          6           SOC 55.38047      0</code></pre>
-<p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
+                        by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategies"</span>, <span class="st">"patients"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod_data</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    strategy_id patient_id strategy_name      age female</span>
+<span class="co">## 1:           1          1           SOC 40.57022      0</span>
+<span class="co">## 2:           1          2           SOC 41.39258      0</span>
+<span class="co">## 3:           1          3           SOC 46.84521      0</span>
+<span class="co">## 4:           1          4           SOC 35.48049      0</span>
+<span class="co">## 5:           1          5           SOC 37.72923      1</span>
+<span class="co">## 6:           1          6           SOC 29.78312      0</span></code></pre>
+<p>“Clock reset” and “clock forward” transition models are created by
+combining the fitted models and input data with the transition matrix,
+desired number of PSA samples, the timescale of the model, and the
+starting age of each patient in the simulation (by default, patients are
+assumed to live no longer than age 100 in the individual-level
+simulation).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transmod_cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span><span class="op">(</span><span class="va">wei_fits_cr</span>, <span class="va">transmod_data</span>,
                                       trans_mat <span class="op">=</span> <span class="va">tmat</span>, n <span class="op">=</span> <span class="va">n_samples</span>,
@@ -283,7 +347,15 @@
                                       trans_mat <span class="op">=</span> <span class="va">tmat</span>, n <span class="op">=</span> <span class="va">n_samples</span>,
                                       clock <span class="op">=</span> <span class="st">"forward"</span>,
                                       start_age <span class="op">=</span> <span class="va">patients</span><span class="op">$</span><span class="va">age</span><span class="op">)</span></code></pre></div>
-<p>It is a good idea to evaluate the assumptions underlying multi-state models. <code>hesim</code> can help facilitate these analyses since hazards (<code>$hazard()</code>), cumulative hazards (<code>$cumhazard()</code>), and state probabilities (<code>$stateprobs()</code>) can be easily computed. As an illustration, we will predict hazards using the maximum likelihood estimates of the Weibull model for a single patient (<code>patient_id = 1</code>). To do so, we create new transition models based on a subset of the dataset <code>transmod_data</code> used above.</p>
+<p>It is a good idea to evaluate the assumptions underlying multi-state
+models. <code>hesim</code> can help facilitate these analyses since
+hazards (<code>$hazard()</code>), cumulative hazards
+(<code>$cumhazard()</code>), and state probabilities
+(<code>$stateprobs()</code>) can be easily computed. As an illustration,
+we will predict hazards using the maximum likelihood estimates of the
+Weibull model for a single patient (<code>patient_id = 1</code>). To do
+so, we create new transition models based on a subset of the dataset
+<code>transmod_data</code> used above.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Predict hazard</span>
 <span class="va">transmod_data_pat1</span> <span class="op">&lt;-</span> <span class="va">transmod_data</span><span class="op">[</span><span class="va">patient_id</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span>
@@ -292,35 +364,52 @@
                                             trans_mat <span class="op">=</span> <span class="va">tmat</span>, 
                                             clock <span class="op">=</span> <span class="va">clock</span>,
                                             uncertainty <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>
-  <span class="va">haz</span> <span class="op">&lt;-</span> <span class="va">transmod_cr_pat1</span><span class="op">$</span><span class="fu">hazard</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">title_clock</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html">toupper</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span><span class="op">(</span><span class="va">clock</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, 
-                       <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span><span class="op">(</span><span class="va">clock</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/nchar.html">nchar</a></span><span class="op">(</span><span class="va">clock</span><span class="op">)</span><span class="op">)</span>, sep<span class="op">=</span><span class="st">""</span><span class="op">)</span>
+  <span class="va">haz</span> <span class="op">&lt;-</span> <span class="va">transmod_cr_pat1</span><span class="op">$</span><span class="fu">hazard</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">title_clock</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">clock</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, 
+                       <span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">clock</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">clock</span><span class="op">)</span><span class="op">)</span>, sep<span class="op">=</span><span class="st">""</span><span class="op">)</span>
   <span class="va">haz</span><span class="op">[</span>, <span class="va">clock</span> <span class="op">:=</span> <span class="va">title_clock</span><span class="op">]</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">haz</span><span class="op">[</span>, <span class="op">]</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">haz</span><span class="op">[</span>, <span class="op">]</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>We then plot the predicted hazard by treatment strategy and timescale.</p>
+<p>We then plot the predicted hazard by treatment strategy and
+timescale.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Plot hazards</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org">"ggplot2"</a></span><span class="op">)</span>
-<span class="va">haz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span><span class="op">(</span><span class="fu">predict_haz</span><span class="op">(</span><span class="va">wei_fits_cr</span>, <span class="st">"reset"</span><span class="op">)</span>,
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span>
+<span class="va">haz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">predict_haz</span><span class="op">(</span><span class="va">wei_fits_cr</span>, <span class="st">"reset"</span><span class="op">)</span>,
              <span class="fu">predict_haz</span><span class="op">(</span><span class="va">wei_fits_cf</span>, <span class="st">"forward"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/set_labels.html">set_labels</a></span><span class="op">(</span><span class="va">haz</span>, labels <span class="op">=</span> <span class="va">labs</span>, 
-           new_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_name"</span>, <span class="st">"trans_name"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">haz</span><span class="op">[</span><span class="va">t</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span>, 
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">hazard</span>, col <span class="op">=</span> <span class="va">clock</span>, linetype <span class="op">=</span> <span class="va">strategy_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">trans_name</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Years"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Hazard"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linetype.html">scale_linetype_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> </code></pre></div>
+           new_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy_name"</span>, <span class="st">"trans_name"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">haz</span><span class="op">[</span><span class="va">t</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span>, 
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">hazard</span>, col <span class="op">=</span> <span class="va">clock</span>, linetype <span class="op">=</span> <span class="va">strategy_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">trans_name</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Years"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Hazard"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linetype.html" class="external-link">scale_linetype_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> </code></pre></div>
 <p><img src="mstate_files/figure-html/predicted_hazards_plot-1.png" width="672"></p>
-<p>While the hazards from the healthy state are similar between the “clock forward” and “clock reset” approaches, they differ significantly in the sick state. Treatment effects (i.e., the hazard ratios between treatment strategies 1 and 2) are also largest in the sick state.</p>
-<p>Additional analyses should be conducted as well. For instance, the hazards for treatment strategy 1 (the reference treatment strategy) could be assessed by comparing the Weibull model’s predictions with predictions from non-parametric (i.e., the Kaplan-Meier estimator) or semi-parametric (i.e., Cox) models. This can be performed using <code>mstate</code>, which can predict cumulative hazards and state probabilities in non-parametric and semi-parametric models. Furthermore, the Weibull model’s proportional hazards assumption should be tested using standard techniques such as plots of log time vs. the log cumulative hazard, inclusion of time-dependent covariates, and tests of the Schoenfeld residuals.</p>
+<p>While the hazards from the healthy state are similar between the
+“clock forward” and “clock reset” approaches, they differ significantly
+in the sick state. Treatment effects (i.e., the hazard ratios between
+treatment strategies 1 and 2) are also largest in the sick state.</p>
+<p>Additional analyses should be conducted as well. For instance, the
+hazards for treatment strategy 1 (the reference treatment strategy)
+could be assessed by comparing the Weibull model’s predictions with
+predictions from non-parametric (i.e., the Kaplan-Meier estimator) or
+semi-parametric (i.e., Cox) models. This can be performed using
+<code>mstate</code>, which can predict cumulative hazards and state
+probabilities in non-parametric and semi-parametric models. Furthermore,
+the Weibull model’s proportional hazards assumption should be tested
+using standard techniques such as plots of log time vs. the log
+cumulative hazard, inclusion of time-dependent covariates, and tests of
+the Schoenfeld residuals.</p>
 </div>
-<div id="utility-and-cost-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#utility-and-cost-models" class="anchor"></a>Utility and cost models</h3>
-<p>Cost and utility models can be easily created from the <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> output above. Note that these models are based on predicted means (see <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) and do depend on covariates.</p>
+<div class="section level4">
+<h4 id="utility-and-cost-models">Utility and cost models<a class="anchor" aria-label="anchor" href="#utility-and-cost-models"></a>
+</h4>
+<p>Cost and utility models can be easily created from the
+<code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> output above. Note that these models are
+based on predicted means (see <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) and do depend
+on covariates.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Utility</span>
 <span class="va">utilitymod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span><span class="op">(</span><span class="va">utility_tbl</span>, n <span class="op">=</span> <span class="va">n_samples</span>, hesim_data <span class="op">=</span> <span class="va">hesim_dat</span><span class="op">)</span>
@@ -328,13 +417,15 @@
 <span class="co"># Costs</span>
 <span class="va">drugcostmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span><span class="op">(</span><span class="va">drugcost_tbl</span>, n <span class="op">=</span> <span class="va">n_samples</span>, hesim_data <span class="op">=</span> <span class="va">hesim_dat</span><span class="op">)</span>
 <span class="va">medcostmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span><span class="op">(</span><span class="va">medcost_tbl</span>, n <span class="op">=</span> <span class="va">n_samples</span>, hesim_data <span class="op">=</span> <span class="va">hesim_dat</span><span class="op">)</span>
-<span class="va">costmods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Drug <span class="op">=</span> <span class="va">drugcostmod</span>,
+<span class="va">costmods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Drug <span class="op">=</span> <span class="va">drugcostmod</span>,
                  Medical <span class="op">=</span> <span class="va">medcostmod</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="combining-the-disease-progression-cost-and-utility-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#combining-the-disease-progression-cost-and-utility-models" class="anchor"></a>Combining the disease progression, cost, and utility models</h3>
-<p>Now that the necessary transition, utility, and cost models have been created, we combine them to create separate economic models based on the “clock reset” and “clock forward” transition models, respectively.</p>
+<div class="section level4">
+<h4 id="combining-the-disease-progression-cost-and-utility-models">Combining the disease progression, cost, and utility models<a class="anchor" aria-label="anchor" href="#combining-the-disease-progression-cost-and-utility-models"></a>
+</h4>
+<p>Now that the necessary transition, utility, and cost models have been
+created, we combine them to create separate economic models based on the
+“clock reset” and “clock forward” transition models, respectively.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod_cr</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/IndivCtstm.html">IndivCtstm</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>trans_model <span class="op">=</span> <span class="va">transmod_cr</span>,
                              utility_model <span class="op">=</span> <span class="va">utilitymod</span>,
@@ -344,117 +435,147 @@
                              cost_models <span class="op">=</span> <span class="va">costmods</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="simulating-outcomes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulating-outcomes" class="anchor"></a>Simulating outcomes</h2>
-<div id="disease-progression" class="section level3">
-<h3 class="hasAnchor">
-<a href="#disease-progression" class="anchor"></a>Disease progression</h3>
-<p>Disease progression can be simulated using the <code>$sim_disease()</code> method. In the individual-level simulation, unique trajectories through the multi-state model are simulated for each patient, treatment strategy, and PSA sample. Patients transition <code>from</code> an old health state that was entered at time <code>time_start</code> <code>to</code> a new health state at time <code>time_stop</code>.</p>
+<div class="section level3">
+<h3 id="simulating-outcomes">Simulating outcomes<a class="anchor" aria-label="anchor" href="#simulating-outcomes"></a>
+</h3>
+<div class="section level4">
+<h4 id="disease-progression">Disease progression<a class="anchor" aria-label="anchor" href="#disease-progression"></a>
+</h4>
+<p>Disease progression can be simulated using the
+<code>$sim_disease()</code> method. In the individual-level simulation,
+unique trajectories through the multi-state model are simulated for each
+patient, treatment strategy, and PSA sample. Patients transition
+<code>from</code> an old health state that was entered at time
+<code>time_start</code> <code>to</code> a new health state at time
+<code>time_stop</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># "Clock reset"</span>
 <span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></code></pre></div>
-<pre><code>##    sample strategy_id patient_id grp_id from to final time_start time_stop
-## 1:      1           1          1      1    1  2     0   0.000000 7.8823463
-## 2:      1           1          1      1    2  1     0   7.882346 8.2162231
-## 3:      1           1          1      1    1  2     0   8.216223 8.2924463
-## 4:      1           1          1      1    2  3     1   8.292446 8.8287218
-## 5:      1           1          2      1    1  3     1   0.000000 0.6634458
-## 6:      1           1          3      1    1  2     0   0.000000 0.7459449</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    sample strategy_id patient_id grp_id from to final time_start time_stop</span>
+<span class="co">## 1:      1           1          1      1    1  2     0   0.000000  2.540705</span>
+<span class="co">## 2:      1           1          1      1    2  1     0   2.540705  2.548113</span>
+<span class="co">## 3:      1           1          1      1    1  3     1   2.548113  8.188508</span>
+<span class="co">## 4:      1           1          2      1    1  3     1   0.000000  4.127999</span>
+<span class="co">## 5:      1           1          3      1    1  2     0   0.000000  2.181902</span>
+<span class="co">## 6:      1           1          3      1    2  1     0   2.181902  2.753481</span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># "Clock forward"</span>
 <span class="va">econmod_cf</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>State occupancy probabilities at different time points are computed using <code>$sim_stateprobs()</code>. First, we simulate state probabilities for the “clock reset” model.</p>
+<p>State occupancy probabilities at different time points are computed
+using <code>$sim_stateprobs()</code>. First, we simulate state
+probabilities for the “clock reset” model.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span> , <span class="fl">1</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
-<p>We can then compare state probabilities between the competing treatment strategies.</p>
+<code class="sourceCode R"><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span> , <span class="fl">1</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
+<p>We can then compare state probabilities between the competing
+treatment strategies.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Short function to create state probability "dataset" for plotting</span>
 <span class="va">summarize_stprobs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">stateprobs</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">stateprobs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>prob_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span><span class="op">)</span>,
-                  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"t"</span><span class="op">)</span><span class="op">]</span>
-  <span class="fu"><a href="../reference/set_labels.html">set_labels</a></span><span class="op">(</span><span class="va">x</span>, labels <span class="op">=</span> <span class="va">labs</span>, new_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_name"</span>, <span class="st">"state_name"</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">stateprobs</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>prob_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span><span class="op">)</span>,
+                  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"t"</span><span class="op">)</span><span class="op">]</span>
+  <span class="fu"><a href="../reference/set_labels.html">set_labels</a></span><span class="op">(</span><span class="va">x</span>, labels <span class="op">=</span> <span class="va">labs</span>, new_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy_name"</span>, <span class="st">"state_name"</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co"># Plot of state probabilities</span>
 <span class="va">stprobs_cr</span> <span class="op">&lt;-</span> <span class="fu">summarize_stprobs</span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">stprobs_cr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">prob_mean</span>, col <span class="op">=</span> <span class="va">strategy_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">state_name</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Years"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Probability in health state"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </code></pre></div>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">stprobs_cr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">prob_mean</span>, col <span class="op">=</span> <span class="va">strategy_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">state_name</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Years"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Probability in health state"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </code></pre></div>
 <p><img src="mstate_files/figure-html/stprobs_by_strategy_plot-1.png" width="672"></p>
-<p>Next, we compare the state probabilities from the “clock reset” and “clock forward” models.</p>
+<p>Next, we compare the state probabilities from the “clock reset” and
+“clock forward” models.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">econmod_cf</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span> , <span class="fl">1</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> 
+<code class="sourceCode R"><span class="va">econmod_cf</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span> , <span class="fl">1</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> 
 <span class="va">stprobs_cf</span> <span class="op">&lt;-</span> <span class="fu">summarize_stprobs</span><span class="op">(</span><span class="va">econmod_cf</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">)</span>
 
 <span class="co"># Compare "clock forward" and "clock reset" cases</span>
-<span class="va">stprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span><span class="va">stprobs_cf</span>, clock <span class="op">=</span> <span class="st">"Forward"</span><span class="op">)</span>,
-                 <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span><span class="va">stprobs_cr</span>, clock <span class="op">=</span> <span class="st">"Reset"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">stprobs</span><span class="op">[</span><span class="va">strategy_id</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span>, 
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">prob_mean</span>, col <span class="op">=</span> <span class="va">clock</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">state_name</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Years"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Probability in health state"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </code></pre></div>
+<span class="va">stprobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">stprobs_cf</span>, clock <span class="op">=</span> <span class="st">"Forward"</span><span class="op">)</span>,
+                 <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">stprobs_cr</span>, clock <span class="op">=</span> <span class="st">"Reset"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">stprobs</span><span class="op">[</span><span class="va">strategy_id</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span>, 
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">t</span>, y <span class="op">=</span> <span class="va">prob_mean</span>, col <span class="op">=</span> <span class="va">clock</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">state_name</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Years"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Probability in health state"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </code></pre></div>
 <p><img src="mstate_files/figure-html/stprobs_by_timescale_plot-1.png" width="672"></p>
-<p>The probabilities are generally quite similar, implying that the choice of timescale has a small impact on the results. This is not unexpected given that patients spend considerably more time in the healthy state and the predicted hazard rates are very similar in the healthy state.</p>
+<p>The probabilities are generally quite similar, implying that the
+choice of timescale has a small impact on the results. This is not
+unexpected given that patients spend considerably more time in the
+healthy state and the predicted hazard rates are very similar in the
+healthy state.</p>
 </div>
-<div id="costs-and-qalys" class="section level3">
-<h3 class="hasAnchor">
-<a href="#costs-and-qalys" class="anchor"></a>Costs and QALYs</h3>
-<p>QALYs (and life-years) are simulated using <code>$sim_qalys()</code>. By default, mean QALYs are computed by treatment strategy, health state, and PSA sample (the <code>by_patient</code> option can be used to compute QALYs at the patient level). Here, we used the “clock reset” model to compute both undiscounted QALYs (<code>dr = 0</code>) and QALYs discounted at 3%.</p>
+<div class="section level4">
+<h4 id="costs-and-qalys">Costs and QALYs<a class="anchor" aria-label="anchor" href="#costs-and-qalys"></a>
+</h4>
+<p>QALYs (and life-years) are simulated using <code>$sim_qalys()</code>.
+By default, mean QALYs are computed by treatment strategy, health state,
+and PSA sample (the <code>by_patient</code> option can be used to
+compute QALYs at the patient level). Here, we used the “clock reset”
+model to compute both undiscounted QALYs (<code>dr = 0</code>) and QALYs
+discounted at 3%.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.03</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></code></pre></div>
-<pre><code>##    sample strategy_id grp_id state_id dr    qalys      lys
-## 1:      1           1      1        1  0 4.428423 7.004227
-## 2:      1           1      1        2  0 1.451726 1.578470
-## 3:      1           2      1        1  0 5.718226 9.044249
-## 4:      1           2      1        2  0 1.050737 1.142472
-## 5:      2           1      1        1  0 6.317131 7.610411
-## 6:      2           1      1        2  0 1.021789 1.670533</code></pre>
-<p>Let’s compute means (across the PSA samples) by treatment strategy and health state to see how much each health state contributes to total QALYs.</p>
+<code class="sourceCode R"><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.03</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    sample strategy_id grp_id state_id dr     qalys      lys</span>
+<span class="co">## 1:      1           1      1        1  0 3.5691301 6.453358</span>
+<span class="co">## 2:      1           1      1        2  0 1.5678735 1.568318</span>
+<span class="co">## 3:      1           2      1        1  0 5.2172800 9.433383</span>
+<span class="co">## 4:      1           2      1        2  0 1.0700113 1.070315</span>
+<span class="co">## 5:      2           1      1        1  0 4.9985094 6.462267</span>
+<span class="co">## 6:      2           1      1        2  0 0.3884138 1.781556</span></code></pre>
+<p>Let’s compute means (across the PSA samples) by treatment strategy
+and health state to see how much each health state contributes to total
+QALYs.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">qalys_summary</span> <span class="op">&lt;-</span> <span class="va">econmod_cr</span><span class="op">$</span><span class="va">qalys_</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">qalys</span><span class="op">)</span><span class="op">)</span>,
-                                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span><span class="op">)</span><span class="op">]</span>
+<code class="sourceCode R"><span class="va">qalys_summary</span> <span class="op">&lt;-</span> <span class="va">econmod_cr</span><span class="op">$</span><span class="va">qalys_</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">qalys</span><span class="op">)</span><span class="op">)</span>,
+                                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span><span class="op">)</span><span class="op">]</span>
 <span class="fu"><a href="../reference/set_labels.html">set_labels</a></span><span class="op">(</span><span class="va">qalys_summary</span>, labels <span class="op">=</span> <span class="va">labs</span>,
-           new_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy_name"</span>, <span class="st">"state_name"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">qalys_summary</span><span class="op">[</span><span class="va">dr</span> <span class="op">==</span> <span class="fl">.03</span><span class="op">]</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">strategy_name</span>, y <span class="op">=</span> <span class="va">mean</span>, fill <span class="op">=</span> <span class="va">state_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_fill_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Mean QALYs"</span><span class="op">)</span> </code></pre></div>
+           new_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy_name"</span>, <span class="st">"state_name"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">qalys_summary</span><span class="op">[</span><span class="va">dr</span> <span class="op">==</span> <span class="fl">.03</span><span class="op">]</span>,
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">strategy_name</span>, y <span class="op">=</span> <span class="va">mean</span>, fill <span class="op">=</span> <span class="va">state_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_fill_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Mean QALYs"</span><span class="op">)</span> </code></pre></div>
 <p><img src="mstate_files/figure-html/qalys_plot-1.png" width="576"></p>
-<p>Costs are computed in the same way as QALYs, except that they are computed by category. We use the “clock reset” model and a 3% discount rate.</p>
+<p>Costs are computed in the same way as QALYs, except that they are
+computed by category. We use the “clock reset” model and a 3% discount
+rate.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></code></pre></div>
-<pre><code>##    sample strategy_id grp_id state_id   dr category     costs
-## 1:      1           1      1        1 0.03     Drug 27610.571
-## 2:      1           1      1        2 0.03     Drug  6108.276
-## 3:      1           2      1        1 0.03     Drug 68993.671
-## 4:      1           2      1        2 0.03     Drug  8553.587
-## 5:      2           1      1        1 0.03     Drug 29517.949
-## 6:      2           1      1        2 0.03     Drug  6471.188</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    sample strategy_id grp_id state_id   dr category     costs</span>
+<span class="co">## 1:      1           1      1        1 0.03     Drug 25622.153</span>
+<span class="co">## 2:      1           1      1        2 0.03     Drug  6231.300</span>
+<span class="co">## 3:      1           2      1        1 0.03     Drug 70646.377</span>
+<span class="co">## 4:      1           2      1        2 0.03     Drug  8261.272</span>
+<span class="co">## 5:      2           1      1        1 0.03     Drug 25618.702</span>
+<span class="co">## 6:      2           1      1        2 0.03     Drug  7026.223</span></code></pre>
 </div>
 </div>
 </div>
-<div id="decision-analysis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#decision-analysis" class="anchor"></a>Decision analysis</h1>
-<p>Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The <code>$summarize()</code> method creates a <code><a href="../reference/ce.html">hesim::ce</a></code> object with mean costs and QALYs computed for each PSA sample and summary results are produced with <code><a href="../reference/summary.ce.html">summary.ce()</a></code>. The <code><a href="../reference/cea.html">cea()</a></code> and <code><a href="../reference/cea.html">cea_pw()</a></code> can then be used for cost-effectiveness analysis as described in the <a href="cea.html">cost-effectiveness analysis</a> vignette.</p>
+<div class="section level2">
+<h2 id="decision-analysis">Decision analysis<a class="anchor" aria-label="anchor" href="#decision-analysis"></a>
+</h2>
+<p>Once costs and QALYs are computed a cost-effectiveness analysis can
+be performed. The <code>$summarize()</code> method creates a
+<code><a href="../reference/ce.html">hesim::ce</a></code> object with mean costs and QALYs computed for
+each PSA sample and summary results are produced with
+<code><a href="../reference/summary.ce.html">summary.ce()</a></code>. The <code><a href="../reference/cea.html">cea()</a></code> and
+<code><a href="../reference/cea.html">cea_pw()</a></code> can then be used for cost-effectiveness analysis
+as described in the <a href="cea.html">cost-effectiveness analysis</a>
+vignette.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ce_sim</span> <span class="op">&lt;-</span> <span class="va">econmod_cr</span><span class="op">$</span><span class="fu">summarize</span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##    Discount rate        Outcome                     SOC                     New
-## 1:          0.00          QALYs       5.13 (2.75, 7.50)       6.06 (2.98, 8.79)
-## 2:          0.03          QALYs       4.14 (2.27, 5.82)       4.70 (2.41, 6.64)
-## 3:          0.03    Costs: Drug 30,128 (25,130, 35,767) 69,740 (59,060, 82,123)
-## 4:          0.03 Costs: Medical    6,725 (5,637, 7,880)    7,499 (6,356, 8,829)
-## 5:          0.03   Costs: total 36,854 (30,833, 43,653) 77,240 (65,382, 90,823)</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    Discount rate        Outcome                     SOC                     New</span>
+<span class="co">## 1:          0.00          QALYs       5.11 (2.70, 7.45)       6.05 (3.03, 8.99)</span>
+<span class="co">## 2:          0.03          QALYs       4.12 (2.23, 5.89)       4.69 (2.36, 6.77)</span>
+<span class="co">## 3:          0.03    Costs: Drug 29,976 (25,227, 35,268) 69,719 (58,922, 80,939)</span>
+<span class="co">## 4:          0.03 Costs: Medical    6,693 (5,636, 7,831)    7,493 (6,327, 8,681)</span>
+<span class="co">## 5:          0.03   Costs: total 36,668 (30,903, 43,012) 77,212 (65,250, 89,550)</span></code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cea_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea</a></span><span class="op">(</span><span class="va">ce_sim</span>, dr_qalys <span class="op">=</span> <span class="fl">.03</span>, dr_costs <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span>
 <span class="va">cea_pw_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce_sim</span>, comparator <span class="op">=</span> <span class="fl">1</span>, dr_qalys <span class="op">=</span> <span class="fl">.03</span>, dr_costs <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></code></pre></div>
@@ -472,11 +593,14 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p>
+<p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
@@ -484,6 +608,8 @@
 
   
 
+
+  
 
   </body>
 </html>

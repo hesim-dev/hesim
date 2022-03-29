@@ -671,13 +671,13 @@ expmat <- function(x, t = 1, ...) {
   n <- dim(x)[3]
   n_states <- dim(x)[1]
   n_t <- length(t)
-  start <- 1
-  end <- start + n_t - 1
   res <- array(NA, dim = c(n_states, n_states, n * n_t))
+  counter <- 1
   for (i in 1:n) {
-    res[,, start:end] <- msm::MatrixExp(x[,, i], t = t, ...)
-    start <- start + n_t
-    end <- end + n_t
+    for (j in seq_along(t)) {
+      res[,, counter] <- msm::MatrixExp(x[,, i], t = t[j], ...)
+      counter <- counter + 1
+    }
   }
   return(res)
 }
