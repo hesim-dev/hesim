@@ -1,6 +1,10 @@
 ## hesim 0.5.1.9999
 
 ### Bug fixes
+* The Markov inhomogeneous individual-level model vignette has been corrected so that `eval_rng()` can be summarized using `summary.eval_rng()`.  
+
+* `print.params_surv()` has been fixed for the piecewise exponential distribution.
+
 * `custom()` works properly when `n=1`.
 
 * Modifies `expmat()` to eliminate `length > 1 in coercion to logical` warnings in R-devel caused by `msm::MatrixExp()`.
