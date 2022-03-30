@@ -1,4 +1,4 @@
-## hesim 0.5.1.9999
+## hesim 0.5.2
 
 ### API change
 * The default value of the `check` argument of `eval_rng()` has been changed to `TRUE`.
