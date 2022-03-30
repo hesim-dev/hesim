@@ -32,6 +32,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -44,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
       </span>
     </div>
 
@@ -54,7 +56,7 @@
   <a href="../reference/index.html">API</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -64,7 +66,8 @@
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Cohort discrete time state transition models</li>
+    </li>
+<li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
       <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
@@ -75,7 +78,8 @@
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Individual continuous time state transition models</li>
+    </li>
+<li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
       <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
@@ -83,12 +87,14 @@
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Partitioned survival analysis</li>
+    </li>
+<li class="dropdown-header">Partitioned survival analysis</li>
     <li>
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Decision analysis</li>
+    </li>
+<li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
@@ -103,7 +109,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/hesim-dev/hesim/">
+  <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -118,141 +124,192 @@
 
       
 
-      </header><script src="mlogit_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Markov models with multinomial logistic regression</h1>
+      <h1 data-toc-skip>Markov models with multinomial logistic
+regression</h1>
             
-            <h4 class="date">2021-07-21</h4>
+            <h4 data-toc-skip class="date">2022-03-30</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/mlogit.Rmd"><code>vignettes/mlogit.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/mlogit.Rmd" class="external-link"><code>vignettes/mlogit.Rmd</code></a></small>
       <div class="hidden name"><code>mlogit.Rmd</code></div>
 
     </div>
 
     
     
-<div id="overview" class="section level1">
-<h1 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h1>
-<p>When discrete time data is collected at evenly spaced intervals, cohort discrete time state transition models (cDTSTMs)—often referred to as Markov cohort models—can be parameterized using multinomial logistic regression. Separate multinomial logit model are estimated for each health state and predict the probability of transitioning from that state to all other states. Mathematically, the probability of a transition from state <span class="math inline">\(r\)</span> at model cycle <span class="math inline">\(t\)</span> to state <span class="math inline">\(s\)</span> at model cycle <span class="math inline">\(t+1\)</span> is given by,</p>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p>When discrete time data is collected at evenly spaced intervals,
+cohort discrete time state transition models (cDTSTMs)—often referred to
+as Markov cohort models—can be parameterized using multinomial logistic
+regression. Separate multinomial logit model are estimated for each
+health state and predict the probability of transitioning from that
+state to all other states. Mathematically, the probability of a
+transition from state <span class="math inline">\(r\)</span> at model
+cycle <span class="math inline">\(t\)</span> to state <span class="math inline">\(s\)</span> at model cycle <span class="math inline">\(t+1\)</span> is given by,</p>
 <p><span class="math display">\[
-Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{rh}}}
+Pr(y_{t+1} = s| y_t = r) =
+\frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{rh}}}
 \]</span></p>
 </div>
-<div id="an-example-3-state-model" class="section level1">
-<h1 class="hasAnchor">
-<a href="#an-example-3-state-model" class="anchor"></a>An example 3-state model</h1>
-<p>We illustrate by considering an illness-death model with 3 generic health states: (1) Healthy, (2) Sick, and (3) Death We will assume that patients can only transition to a more severe health state:</p>
+<div class="section level2">
+<h2 id="an-example-3-state-model">An example 3-state model<a class="anchor" aria-label="anchor" href="#an-example-3-state-model"></a>
+</h2>
+<p>We illustrate by considering an illness-death model with 3 generic
+health states: (1) Healthy, (2) Sick, and (3) Death We will assume that
+patients can only transition to a more severe health state:</p>
 <ol style="list-style-type: decimal">
 <li>Healthy to Sick</li>
 <li>Healthy to Death</li>
 <li>Sick to Death</li>
 </ol>
 <p><br><img src="illness-death.png" width="500px"><br><br></p>
-<p>The transitions of this model can be characterized with a transition matrix with the number of rows and columns equal to the number of health states. In the multinomial logistic regression case, the reference category in each multinomial logit fit is assigned a value of zero. Elements representing transitions that are not possible are <code>NA</code>. All other transitions are represented with integer values from 1 to <span class="math inline">\(K_r -1\)</span> where <span class="math inline">\(K_r\)</span> is the number of states in the multinomial logit model for state <span class="math inline">\(r\)</span>.</p>
+<p>The transitions of this model can be characterized with a transition
+matrix with the number of rows and columns equal to the number of health
+states. In the multinomial logistic regression case, the reference
+category in each multinomial logit fit is assigned a value of zero.
+Elements representing transitions that are not possible are
+<code>NA</code>. All other transitions are represented with integer
+values from 1 to <span class="math inline">\(K_r -1\)</span> where <span class="math inline">\(K_r\)</span> is the number of states in the
+multinomial logit model for state <span class="math inline">\(r\)</span>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
-              <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
-              <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Healthy"</span>, <span class="st">"Sick"</span>, <span class="st">"Death"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span></code></pre></div>
-<pre><code>##         Healthy Sick Death
-## Healthy       0    1     2
-## Sick         NA    0     1
-## Death        NA   NA    NA</code></pre>
-<p>The cost-effectiveness analysis will compare two treatment strategies—the “Intervention” and the “Reference” treatment. Separate multinomial logistic regressions are fit for patients starting in the healthy state and the sick state using the <code>multinom3_exdata</code> example dataset, which tracks patient health states at yearly time intervals in a longitudinal fashion.</p>
+<code class="sourceCode R"><span class="va">tmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
+              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
+              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Healthy"</span>, <span class="st">"Sick"</span>, <span class="st">"Death"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##         Healthy Sick Death</span>
+<span class="co">## Healthy       0    1     2</span>
+<span class="co">## Sick         NA    0     1</span>
+<span class="co">## Death        NA   NA    NA</span></code></pre>
+<p>The cost-effectiveness analysis will compare two treatment
+strategies—the “Intervention” and the “Reference” treatment. Separate
+multinomial logistic regressions are fit for patients starting in the
+healthy state and the sick state using the <code>multinom3_exdata</code>
+example dataset, which tracks patient health states at yearly time
+intervals in a longitudinal fashion.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com">"data.table"</a></span><span class="op">)</span>
-<span class="va">transitions_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span><span class="va">multinom3_exdata</span><span class="op">$</span><span class="va">transitions</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">transitions_data</span><span class="op">)</span></code></pre></div>
-<pre><code>##    patient_id strategy_id strategy_name      age        age_cat female year
-## 1:          1           1     Reference 37.68882       Age &lt; 40      0    1
-## 2:          2           1     Reference 20.17811       Age &lt; 40      0    1
-## 3:          3           1     Reference 62.81725      Age &gt;= 60      0    1
-## 4:          4           2  Intervention 58.12408 40 &lt;= Age &lt; 60      0    1
-## 5:          5           2  Intervention 30.72299       Age &lt; 40      1    1
-## 6:          6           1     Reference 33.49259       Age &lt; 40      0    1
-##    state_from state_to year_cat
-## 1:    Healthy     Sick Year &lt; 3
-## 2:    Healthy  Healthy Year &lt; 3
-## 3:    Healthy  Healthy Year &lt; 3
-## 4:    Healthy     Dead Year &lt; 3
-## 5:    Healthy     Sick Year &lt; 3
-## 6:    Healthy  Healthy Year &lt; 3</code></pre>
-<p>In a typical Markov cohort model, either a single cohort or a small number of cohorts is simulated. However, one advantage of using an explicit statistical model to predict transition probabilities is that a large heterogeneous cohort of patients can be easily simulated. Here, we will simulate 100 representative patients (i.e., cohorts), which arguably better captures the underlying heterogeneity in the population. To do so, we will randomly sample 100 patients from the <code>multinom3_exdata</code> dataset. In our data, we observe differences in age and gender.</p>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com" class="external-link">"data.table"</a></span><span class="op">)</span>
+<span class="va">transitions_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">multinom3_exdata</span><span class="op">$</span><span class="va">transitions</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transitions_data</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    patient_id strategy_id strategy_name      age        age_cat female year</span>
+<span class="co">## 1:          1           1     Reference 37.68882       Age &lt; 40      0    1</span>
+<span class="co">## 2:          2           1     Reference 20.17811       Age &lt; 40      0    1</span>
+<span class="co">## 3:          3           1     Reference 62.81725      Age &gt;= 60      0    1</span>
+<span class="co">## 4:          4           2  Intervention 58.12408 40 &lt;= Age &lt; 60      0    1</span>
+<span class="co">## 5:          5           2  Intervention 30.72299       Age &lt; 40      1    1</span>
+<span class="co">## 6:          6           1     Reference 33.49259       Age &lt; 40      0    1</span>
+<span class="co">##    state_from state_to year_cat</span>
+<span class="co">## 1:    Healthy     Sick Year &lt; 3</span>
+<span class="co">## 2:    Healthy  Healthy Year &lt; 3</span>
+<span class="co">## 3:    Healthy  Healthy Year &lt; 3</span>
+<span class="co">## 4:    Healthy     Dead Year &lt; 3</span>
+<span class="co">## 5:    Healthy     Sick Year &lt; 3</span>
+<span class="co">## 6:    Healthy  Healthy Year &lt; 3</span></code></pre>
+<p>In a typical Markov cohort model, either a single cohort or a small
+number of cohorts is simulated. However, one advantage of using an
+explicit statistical model to predict transition probabilities is that a
+large heterogeneous cohort of patients can be easily simulated. Here, we
+will simulate 100 representative patients (i.e., cohorts), which
+arguably better captures the underlying heterogeneity in the population.
+To do so, we will randomly sample 100 patients from the
+<code>multinom3_exdata</code> dataset. In our data, we observe
+differences in age and gender.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">n_patients</span> <span class="op">&lt;-</span> <span class="fl">100</span>
 <span class="va">patients</span> <span class="op">&lt;-</span> <span class="va">transitions_data</span><span class="op">[</span><span class="va">year</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu">.</span><span class="op">(</span><span class="va">patient_id</span>, <span class="va">age</span>, <span class="va">female</span><span class="op">)</span><span class="op">]</span><span class="op">[</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample.int</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">transitions_data</span><span class="op">[</span><span class="va">year</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="va">n_patients</span><span class="op">)</span><span class="op">]</span><span class="op">[</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">transitions_data</span><span class="op">[</span><span class="va">year</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="va">n_patients</span><span class="op">)</span><span class="op">]</span><span class="op">[</span>
   , <span class="va">grp_id</span> <span class="op">:=</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_patients</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span></code></pre></div>
-<pre><code>##    patient_id      age female grp_id
-## 1:       2824 26.50917      0      1
-## 2:       4837 25.36993      0      2
-## 3:        165 33.74583      1      3
-## 4:       7377 84.95401      1      4
-## 5:        832 85.82880      0      5
-## 6:       5489 48.36246      0      6</code></pre>
-<p>To perform the cost-effectiveness analysis, each patient is simulated twice, once with the reference treatment and once with the intervention. The non-death states use for simulating costs and quality-adjusted life-years (QALYs) are the healthy and sick states.</p>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    patient_id      age female grp_id</span>
+<span class="co">## 1:         25 87.68757      0      1</span>
+<span class="co">## 2:       8797 81.27148      1      2</span>
+<span class="co">## 3:        147 43.82642      0      3</span>
+<span class="co">## 4:       7260 26.19325      1      4</span>
+<span class="co">## 5:       6025 35.16528      1      5</span>
+<span class="co">## 6:        947 96.89038      0      6</span></code></pre>
+<p>To perform the cost-effectiveness analysis, each patient is simulated
+twice, once with the reference treatment and once with the intervention.
+The non-death states use for simulating costs and quality-adjusted
+life-years (QALYs) are the healthy and sick states.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">hesim_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hesim_data.html">hesim_data</a></span><span class="op">(</span>
   patients <span class="op">=</span> <span class="va">patients</span>,
-  strategies <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,
-                          strategy_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Reference"</span>, <span class="st">"Intervention"</span><span class="op">)</span><span class="op">)</span>,
-  states <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
-                     state_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="co"># Non-death health states</span>
+  strategies <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,
+                          strategy_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Reference"</span>, <span class="st">"Intervention"</span><span class="op">)</span><span class="op">)</span>,
+  states <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
+                     state_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tmat</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="co"># Non-death health states</span>
 <span class="op">)</span></code></pre></div>
-<p>We can use <code><a href="../reference/get_labels.html">get_labels()</a></code> to create nice labels for the plots and summary tables.</p>
+<p>We can use <code><a href="../reference/get_labels.html">get_labels()</a></code> to create nice labels for the
+plots and summary tables.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">labs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_labels.html">get_labels</a></span><span class="op">(</span><span class="va">hesim_dat</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">labs</span><span class="op">)</span></code></pre></div>
-<pre><code>## $strategy_id
-##    Reference Intervention 
-##            1            2 
-## 
-## $state_id
-## Healthy    Sick   Death 
-##       1       2       3</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">labs</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## $strategy_id</span>
+<span class="co">##    Reference Intervention </span>
+<span class="co">##            1            2 </span>
+<span class="co">## </span>
+<span class="co">## $state_id</span>
+<span class="co">## Healthy    Sick   Death </span>
+<span class="co">##       1       2       3</span></code></pre>
 </div>
-<div id="parameter-estimation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#parameter-estimation" class="anchor"></a>Parameter estimation</h1>
-<div id="multinomial-logit-model-for-transition-probabilities" class="section level2">
-<h2 class="hasAnchor">
-<a href="#multinomial-logit-model-for-transition-probabilities" class="anchor"></a>Multinomial logit model for transition probabilities</h2>
-<p><code>hesim</code> can simulate cDTSTMs with transition probabilities fit via multinomial logistic regression with the <code>nnet</code> package. The probability of a health state transition is modeled as a function of the treatment strategy, patient age, and gender. The nonlinear impact of age is modeled using a natural spline with <code><a href="https://rdrr.io/r/splines/ns.html">splines::ns()</a></code>. In addition, time period indicator variables (<code>year_cat</code>) are included so that transition probabilities can change over time, which makes the Markov model time inhomogeneous.</p>
+<div class="section level2">
+<h2 id="parameter-estimation">Parameter estimation<a class="anchor" aria-label="anchor" href="#parameter-estimation"></a>
+</h2>
+<div class="section level3">
+<h3 id="multinomial-logit-model-for-transition-probabilities">Multinomial logit model for transition probabilities<a class="anchor" aria-label="anchor" href="#multinomial-logit-model-for-transition-probabilities"></a>
+</h3>
+<p><code>hesim</code> can simulate cDTSTMs with transition probabilities
+fit via multinomial logistic regression with the <code>nnet</code>
+package. The probability of a health state transition is modeled as a
+function of the treatment strategy, patient age, and gender. The
+nonlinear impact of age is modeled using a natural spline with
+<code><a href="https://rdrr.io/r/splines/ns.html" class="external-link">splines::ns()</a></code>. In addition, time period indicator variables
+(<code>year_cat</code>) are included so that transition probabilities
+can change over time, which makes the Markov model time
+inhomogeneous.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">"nnet"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st">"splines"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">"nnet"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"splines"</span><span class="op">)</span>
 
 <span class="co"># Transitions from healthy state</span>
 <span class="va">data_healthy</span> <span class="op">&lt;-</span> <span class="va">transitions_data</span><span class="op">[</span><span class="va">state_from</span> <span class="op">==</span> <span class="st">"Healthy"</span><span class="op">]</span>
-<span class="va">fit_healthy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html">multinom</a></span><span class="op">(</span><span class="va">state_to</span> <span class="op">~</span> <span class="va">strategy_name</span> <span class="op">+</span> <span class="va">female</span> <span class="op">+</span> 
-                          <span class="fu"><a href="https://rdrr.io/r/splines/ns.html">ns</a></span><span class="op">(</span><span class="va">age</span>, df <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span> <span class="va">year_cat</span>, 
+<span class="va">fit_healthy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="va">state_to</span> <span class="op">~</span> <span class="va">strategy_name</span> <span class="op">+</span> <span class="va">female</span> <span class="op">+</span> 
+                          <span class="fu"><a href="https://rdrr.io/r/splines/ns.html" class="external-link">ns</a></span><span class="op">(</span><span class="va">age</span>, df <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span> <span class="va">year_cat</span>, 
                         data <span class="op">=</span> <span class="va">data_healthy</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co"># Transitions from sick state</span>
-<span class="va">data_sick</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html">droplevels</a></span><span class="op">(</span><span class="va">transitions_data</span><span class="op">[</span><span class="va">state_from</span> <span class="op">==</span> <span class="st">"Sick"</span><span class="op">]</span><span class="op">)</span>
-<span class="va">fit_sick</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html">multinom</a></span><span class="op">(</span><span class="va">state_to</span> <span class="op">~</span> <span class="va">strategy_name</span> <span class="op">+</span> <span class="va">female</span> <span class="op">+</span> 
-                       <span class="fu"><a href="https://rdrr.io/r/splines/ns.html">ns</a></span><span class="op">(</span><span class="va">age</span>, df <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span> <span class="va">year_cat</span>, 
+<span class="va">data_sick</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">transitions_data</span><span class="op">[</span><span class="va">state_from</span> <span class="op">==</span> <span class="st">"Sick"</span><span class="op">]</span><span class="op">)</span>
+<span class="va">fit_sick</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="va">state_to</span> <span class="op">~</span> <span class="va">strategy_name</span> <span class="op">+</span> <span class="va">female</span> <span class="op">+</span> 
+                       <span class="fu"><a href="https://rdrr.io/r/splines/ns.html" class="external-link">ns</a></span><span class="op">(</span><span class="va">age</span>, df <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span> <span class="va">year_cat</span>, 
                      data <span class="op">=</span> <span class="va">data_sick</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p>The separate fits are stored in a list to facilitate prediction of the transition probability matrix.</p>
+<p>The separate fits are stored in a list to facilitate prediction of
+the transition probability matrix.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transfits</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/multinom_list.html">multinom_list</a></span><span class="op">(</span>healthy <span class="op">=</span> <span class="va">fit_healthy</span>, sick <span class="op">=</span> <span class="va">fit_sick</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="utility-and-costs" class="section level2">
-<h2 class="hasAnchor">
-<a href="#utility-and-costs" class="anchor"></a>Utility and costs</h2>
-<p>As in the <a href="markov-cohort.html">simple Markov cohort</a> and <a href="markov-inhomogeneous-cohort.html">time inhomogeneous Markov cohort</a> modeling vignettes, utility and costs models could be generated using mathematical expressions with <code><a href="../reference/define_model.html">define_model()</a></code>. However, in this case it is simpler and more direct (and thus more computationally efficient) to use the <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> functionality. Separate tables are created for utility, drug costs, and medical costs.</p>
+<div class="section level3">
+<h3 id="utility-and-costs">Utility and costs<a class="anchor" aria-label="anchor" href="#utility-and-costs"></a>
+</h3>
+<p>As in the <a href="markov-cohort.html">simple Markov cohort</a> and
+<a href="markov-inhomogeneous-cohort.html">time inhomogeneous Markov
+cohort</a> modeling vignettes, utility and costs models could be
+generated using mathematical expressions with
+<code><a href="../reference/define_model.html">define_model()</a></code>. However, in this case it is simpler and
+more direct (and thus more computationally efficient) to use the
+<code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> functionality. Separate tables are created
+for utility, drug costs, and medical costs.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">utility_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="va">multinom3_exdata</span><span class="op">$</span><span class="va">utility</span>,
                             dist <span class="op">=</span> <span class="st">"beta"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">utility_tbl</span><span class="op">)</span></code></pre></div>
-<pre><code>##    state_id state_name mean        se
-## 1:        1    Healthy 0.90 0.1732051
-## 2:        2       Sick 0.65 0.2000000</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">utility_tbl</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    state_id state_name mean        se</span>
+<span class="co">## 1:        1    Healthy 0.90 0.1732051</span>
+<span class="co">## 2:        2       Sick 0.65 0.2000000</span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">drugcost_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="va">multinom3_exdata</span><span class="op">$</span><span class="va">costs</span><span class="op">$</span><span class="va">drugs</span>,
                             dist <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>
@@ -260,22 +317,30 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
                             dist <span class="op">=</span> <span class="st">"gamma"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="simulation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#simulation" class="anchor"></a>Simulation</h1>
-<p>The economic model consists of a model for disease progression and models for assigning utility and cost values to health states. Since we are performing a PSA, we must specify the number of times to sample the parameters.</p>
+<div class="section level2">
+<h2 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
+</h2>
+<p>The economic model consists of a model for disease progression and
+models for assigning utility and cost values to health states. Since we
+are performing a PSA, we must specify the number of times to sample the
+parameters.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">100</span></code></pre></div>
-<div id="constructing-the-economic-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#constructing-the-economic-model" class="anchor"></a>Constructing the economic model</h2>
-<div id="disease-model" class="section level3">
-<h3 class="hasAnchor">
-<a href="#disease-model" class="anchor"></a>Disease model</h3>
-<p>The disease model can be easily constructed from our fitted multinomial logistic regression models and input data. The input data has one observation for each treatment strategy and patient. In addition, since we included time period dummies, we separate the covariates into distinct time intervals in order to make the model time inhomogeneous.</p>
+<div class="section level3">
+<h3 id="constructing-the-economic-model">Constructing the economic model<a class="anchor" aria-label="anchor" href="#constructing-the-economic-model"></a>
+</h3>
+<div class="section level4">
+<h4 id="disease-model">Disease model<a class="anchor" aria-label="anchor" href="#disease-model"></a>
+</h4>
+<p>The disease model can be easily constructed from our fitted
+multinomial logistic regression models and input data. The input data
+has one observation for each treatment strategy and patient. In
+addition, since we included time period dummies, we separate the
+covariates into distinct time intervals in order to make the model time
+inhomogeneous.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tintervals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/time_intervals.html">time_intervals</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/duplicated.html">unique</a></span><span class="op">(</span><span class="va">transitions_data</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">year_cat</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-                             <span class="op">[</span>, <span class="va">time_start</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">6</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">tintervals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/time_intervals.html">time_intervals</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/duplicated.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">transitions_data</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">year_cat</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+                             <span class="op">[</span>, <span class="va">time_start</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">6</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="va">transmod_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/expand.html">expand</a></span><span class="op">(</span><span class="va">hesim_dat</span>, times <span class="op">=</span> <span class="va">tintervals</span><span class="op">)</span>
 <span class="va">transmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_CohortDtstmTrans.html">create_CohortDtstmTrans</a></span><span class="op">(</span><span class="va">transfits</span>,
                                     input_data <span class="op">=</span> <span class="va">transmod_data</span>,
@@ -283,10 +348,15 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
                                     n <span class="op">=</span> <span class="va">n_samples</span>,
                                     uncertainty <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="utility-and-cost-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#utility-and-cost-models" class="anchor"></a>Utility and cost models</h3>
-<p>The utility and cost models can be created directly from the utility and cost tables since they do not include covariates. That is, unlike the disease model which explicitly models the transition probabilities as a function of covariates, they are based solely on predicted means (see <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) and therefore do not require input data.</p>
+<div class="section level4">
+<h4 id="utility-and-cost-models">Utility and cost models<a class="anchor" aria-label="anchor" href="#utility-and-cost-models"></a>
+</h4>
+<p>The utility and cost models can be created directly from the utility
+and cost tables since they do not include covariates. That is, unlike
+the disease model which explicitly models the transition probabilities
+as a function of covariates, they are based solely on predicted means
+(see <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) and therefore do not require input
+data.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Utility</span>
 <span class="va">utilitymod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span><span class="op">(</span><span class="va">utility_tbl</span>, n <span class="op">=</span> <span class="va">n_samples</span>, hesim_data <span class="op">=</span> <span class="va">hesim_dat</span><span class="op">)</span>
@@ -294,68 +364,89 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 <span class="co"># Costs</span>
 <span class="va">drugcostmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span><span class="op">(</span><span class="va">drugcost_tbl</span>, n <span class="op">=</span> <span class="va">n_samples</span>, hesim_data <span class="op">=</span> <span class="va">hesim_dat</span><span class="op">)</span>
 <span class="va">medcostmod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span><span class="op">(</span><span class="va">medcost_tbl</span>, n <span class="op">=</span> <span class="va">n_samples</span>, hesim_data <span class="op">=</span> <span class="va">hesim_dat</span><span class="op">)</span>
-<span class="va">costmods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Drug <span class="op">=</span> <span class="va">drugcostmod</span>,
+<span class="va">costmods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Drug <span class="op">=</span> <span class="va">drugcostmod</span>,
                  Medical <span class="op">=</span> <span class="va">medcostmod</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="combining-the-disease-progression-cost-and-utility-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#combining-the-disease-progression-cost-and-utility-models" class="anchor"></a>Combining the disease progression, cost, and utility models</h3>
-<p>The transition, utility, and cost models are combined to create the cDTSTM.</p>
+<div class="section level4">
+<h4 id="combining-the-disease-progression-cost-and-utility-models">Combining the disease progression, cost, and utility models<a class="anchor" aria-label="anchor" href="#combining-the-disease-progression-cost-and-utility-models"></a>
+</h4>
+<p>The transition, utility, and cost models are combined to create the
+cDTSTM.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortDtstm.html">CohortDtstm</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>trans_model <span class="op">=</span> <span class="va">transmod</span>,
                            utility_model <span class="op">=</span> <span class="va">utilitymod</span>,
                            cost_models <span class="op">=</span> <span class="va">costmods</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-<div id="simulating-outcomes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulating-outcomes" class="anchor"></a>Simulating outcomes</h2>
-<div id="disease-progression" class="section level3">
-<h3 class="hasAnchor">
-<a href="#disease-progression" class="anchor"></a>Disease progression</h3>
-<p>We simulate state probabilities over 20 years with 1-year model cycles. <code><a href="../reference/autoplot.stateprobs.html">autoplot.stateprobs()</a></code> is used to plot the probability of being in each of the 3 states over the model’s time horizon, with the solid lines representing means from the PSA and the shaded regions representing 95% confidence intervals.</p>
+<div class="section level3">
+<h3 id="simulating-outcomes">Simulating outcomes<a class="anchor" aria-label="anchor" href="#simulating-outcomes"></a>
+</h3>
+<div class="section level4">
+<h4 id="disease-progression">Disease progression<a class="anchor" aria-label="anchor" href="#disease-progression"></a>
+</h4>
+<p>We simulate state probabilities over 20 years with 1-year model
+cycles. <code><a href="../reference/autoplot.stateprobs.html">autoplot.stateprobs()</a></code> is used to plot the
+probability of being in each of the 3 states over the model’s time
+horizon, with the solid lines representing means from the PSA and the
+shaded regions representing 95% confidence intervals.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>n_cycles <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">stateprobs_</span>, labels <span class="op">=</span> <span class="va">labs</span>,
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">stateprobs_</span>, labels <span class="op">=</span> <span class="va">labs</span>,
          ci <span class="op">=</span> <span class="cn">TRUE</span>, ci_style <span class="op">=</span> <span class="st">"ribbon"</span><span class="op">)</span></code></pre></div>
 <p><img src="mlogit_files/figure-html/stateprobs-1.png" width="672"></p>
 </div>
-<div id="costs-and-qalys" class="section level3">
-<h3 class="hasAnchor">
-<a href="#costs-and-qalys" class="anchor"></a>Costs and QALYs</h3>
-<p>After simulating the health state transitions, costs and QALYs are simulated in a straightforward manner. As is typical, we use a 3 percent discount rate.</p>
+<div class="section level4">
+<h4 id="costs-and-qalys">Costs and QALYs<a class="anchor" aria-label="anchor" href="#costs-and-qalys"></a>
+</h4>
+<p>After simulating the health state transitions, costs and QALYs are
+simulated in a straightforward manner. As is typical, we use a 3 percent
+discount rate.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span>
 <span class="va">econmod</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 </div>
-<div id="decision-analysis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#decision-analysis" class="anchor"></a>Decision analysis</h1>
-<p>Now that costs and QALYs have been simulated with the PSA, a decision analysis can be performed. We will focus on the pairwise comparison between the “Intervention” and the “Reference” treatment.</p>
+<div class="section level2">
+<h2 id="decision-analysis">Decision analysis<a class="anchor" aria-label="anchor" href="#decision-analysis"></a>
+</h2>
+<p>Now that costs and QALYs have been simulated with the PSA, a decision
+analysis can be performed. We will focus on the pairwise comparison
+between the “Intervention” and the “Reference” treatment.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ce_sim</span> <span class="op">&lt;-</span> <span class="va">econmod</span><span class="op">$</span><span class="fu">summarize</span><span class="op">(</span>by_grp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">cea_pw_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce_sim</span>, comparator <span class="op">=</span> <span class="fl">1</span>, dr_qalys <span class="op">=</span> <span class="fl">.03</span>, dr_costs <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></code></pre></div>
-<p>Since we modeled the health state transitions as a function of covariates, transition rates vary by patient characteristics. The impact of gender and the (nonlinear) impact of age on transitions have a similar effect on the incremental cost-effectiveness ratio (ICER). The ICERs were lower for females and tended to rise with age, suggesting that the “Intervention” was more effective for patients with a lower baseline risk.</p>
+<p>Since we modeled the health state transitions as a function of
+covariates, transition rates vary by patient characteristics. The impact
+of gender and the (nonlinear) impact of age on transitions have a
+similar effect on the incremental cost-effectiveness ratio (ICER). The
+ICERs were lower for females and tended to rise with age, suggesting
+that the “Intervention” was more effective for patients with a lower
+baseline risk.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">icers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/merge.html">merge</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">$</span><span class="va">summary</span>,
+<code class="sourceCode R"><span class="va">icers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">$</span><span class="va">summary</span>,
                <span class="va">hesim_dat</span><span class="op">$</span><span class="va">patients</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">grp_id</span>, <span class="va">age</span>, <span class="va">female</span><span class="op">)</span><span class="op">]</span>,
                by <span class="op">=</span> <span class="st">"grp_id"</span><span class="op">)</span>
-<span class="va">icers</span><span class="op">[</span>, <span class="va">gender</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">female</span>, 
-                         levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
-                         labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
+<span class="va">icers</span><span class="op">[</span>, <span class="va">gender</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">female</span>, 
+                         levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
+                         labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
 
 <span class="co"># Plot of ICER by demographics</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org">"ggplot2"</a></span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">icers</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">","</span>, <span class="st">""</span>, <span class="va">icer</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">gender</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Age"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Incremental cost-effectiveness ratio"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/label_dollar.html">dollar_format</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html">scale_colour_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">icers</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">","</span>, <span class="st">""</span>, <span class="va">icer</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">gender</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Age"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Incremental cost-effectiveness ratio"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/label_dollar.html" class="external-link">dollar_format</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_colour_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="mlogit_files/figure-html/icerHeterogeneity-1.png" width="672"></p>
-<p>Of note, the heterogeneous ICER arises completely through differences in baseline risk since the effect of the “Intervention” relative to the “Reference” on transitions was assumed to be constant across patients (i.e., the treatment strategy covariate did not have any effect modifiers). This example highlights an advantage of modeling disease progression with a statistical model in that it can facilitate analyses that assess the consequences of patient heterogeneity.</p>
+<p>Of note, the heterogeneous ICER arises completely through differences
+in baseline risk since the effect of the “Intervention” relative to the
+“Reference” on transitions was assumed to be constant across patients
+(i.e., the treatment strategy covariate did not have any effect
+modifiers). This example highlights an advantage of modeling disease
+progression with a statistical model in that it can facilitate analyses
+that assess the consequences of patient heterogeneity.</p>
 </div>
   </div>
 
@@ -370,11 +461,14 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 
 
       <footer><div class="copyright">
-  <p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p>
+<p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
@@ -382,6 +476,8 @@ Pr(y_{t+1} = s| y_t = r) = \frac{e^{x_r\beta_{rs}}}{\sum_{h=1}^{H}e^{x_r\beta_{r
 
   
 
+
+  
 
   </body>
 </html>

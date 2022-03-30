@@ -32,6 +32,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -44,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
       </span>
     </div>
 
@@ -54,7 +56,7 @@
   <a href="../reference/index.html">API</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -64,7 +66,8 @@
       <a href="../articles/intro.html">Introduction to hesim</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Cohort discrete time state transition models</li>
+    </li>
+<li class="dropdown-header">Cohort discrete time state transition models</li>
     <li>
       <a href="../articles/markov-cohort.html">Simple Markov cohort model</a>
     </li>
@@ -75,7 +78,8 @@
       <a href="../articles/mlogit.html">Markov models with multinomial logistic regression</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Individual continuous time state transition models</li>
+    </li>
+<li class="dropdown-header">Individual continuous time state transition models</li>
     <li>
       <a href="../articles/markov-inhomogeneous-indiv.html">Time inhomogeneous Markov individual-level models</a>
     </li>
@@ -83,12 +87,14 @@
       <a href="../articles/mstate.html">Markov and semi-Markov multi-state models</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Partitioned survival analysis</li>
+    </li>
+<li class="dropdown-header">Partitioned survival analysis</li>
     <li>
       <a href="../articles/psm.html">N-state partitioned survival models</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Decision analysis</li>
+    </li>
+<li class="dropdown-header">Decision analysis</li>
     <li>
       <a href="../articles/cea.html">Cost-effectiveness analysis</a>
     </li>
@@ -103,7 +109,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/hesim-dev/hesim/">
+  <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -118,24 +124,29 @@
 
       
 
-      </header><script src="cea_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cost-effectiveness analysis</h1>
             
-            <h4 class="date">2021-07-21</h4>
+            <h4 data-toc-skip class="date">2022-03-30</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/master/vignettes/cea.Rmd"><code>vignettes/cea.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/cea.Rmd" class="external-link"><code>vignettes/cea.Rmd</code></a></small>
       <div class="hidden name"><code>cea.Rmd</code></div>
 
     </div>
 
     
     
-<div id="overview" class="section level1">
-<h1 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h1>
-<p><code>hesim</code> provides functions for using simulated costs and quality-adjusted life-years (QALYs) from a probabilistic sensitivity analysis (PSA) for decision-analysis in a cost-effectiveness framework, including representing decision uncertainty and conducting value of information analysis. Common metrics that can be produced include the following:</p>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p><code>hesim</code> provides functions for using simulated costs and
+quality-adjusted life-years (QALYs) from a probabilistic sensitivity
+analysis (PSA) for decision-analysis in a cost-effectiveness framework,
+including representing decision uncertainty and conducting value of
+information analysis. Common metrics that can be produced include the
+following:</p>
 <ul>
 <li>incremental cost-effectiveness ratios (ICERs)</li>
 <li>cost-effectiveness planes planes</li>
@@ -143,177 +154,279 @@
 <li>cost-effectiveness acceptability frontiers (CEAFs)</li>
 <li>the expected value of perfect information (EVPI)</li>
 </ul>
-<p>Cost-effectiveness analysis (CEA) can be performed for a single target population or for different subgroups. The latter is sometimes referred to as individualized CEA (iCEA).</p>
-<p>The rest of this article provides an overview of CEA and how it can be conducted using <code>hesim</code>. The perspective is Bayesian in nature in that it is concerned with estimating the distribution of outcomes rather than just expected values <span class="citation">(Baio 2012; Baio and Dawid 2015)</span>. It also shows how an iCEA can be performed so that both optimal treatments and the cost-effectiveness of those treatments vary across individuals <span class="citation">(Basu and Meltzer 2007; Espinoza et al. 2014)</span>.</p>
+<p>Cost-effectiveness analysis (CEA) can be performed for a single
+target population or for different subgroups. The latter is sometimes
+referred to as individualized CEA (iCEA).</p>
+<p>The rest of this article provides an overview of CEA and how it can
+be conducted using <code>hesim</code>. The perspective is Bayesian in
+nature in that it is concerned with estimating the distribution of
+outcomes rather than just expected values <span class="citation">(Baio
+2012; Baio and Dawid 2015)</span>. It also shows how an iCEA can be
+performed so that both optimal treatments and the cost-effectiveness of
+those treatments vary across individuals <span class="citation">(Basu
+and Meltzer 2007; Espinoza et al. 2014)</span>.</p>
 </div>
-<div id="framework" class="section level1">
-<h1 class="hasAnchor">
-<a href="#framework" class="anchor"></a>Framework</h1>
-<p>Decision theory provides a formal framework for making treatment decisions based on the utility that a therapy provides to a patient population. Decisions are typically made using a net benefit approach grounded in expected utility theory. The optimal treatment strategy is the one that maximizes expected NMBs where expected NMBs are calculated by averaging over the patient population and uncertain parameters <span class="math inline">\(\theta\)</span>. For a given subgroup <span class="math inline">\(g\)</span> and parameter set <span class="math inline">\(\theta\)</span>, NMBs are computed as the difference between the monetized health gains from an intervention less costs, or,</p>
+<div class="section level2">
+<h2 id="framework">Framework<a class="anchor" aria-label="anchor" href="#framework"></a>
+</h2>
+<p>Decision theory provides a formal framework for making treatment
+decisions based on the utility that a therapy provides to a patient
+population. Decisions are typically made using a net benefit approach
+grounded in expected utility theory. The optimal treatment strategy is
+the one that maximizes expected NMBs where expected NMBs are calculated
+by averaging over the patient population and uncertain parameters <span class="math inline">\(\theta\)</span>. For a given subgroup <span class="math inline">\(g\)</span> and parameter set <span class="math inline">\(\theta\)</span>, NMBs are computed as the
+difference between the monetized health gains from an intervention less
+costs, or,</p>
 <p><span class="math display">\[
 \begin{aligned}
 NMB_g(j,\theta) = e_{gj}\cdot k- c_{gj},
 \end{aligned}
 \]</span></p>
-<p>where <span class="math inline">\(e_{gj}\)</span> and <span class="math inline">\(c_{gj}\)</span> are measures of clinical effectiveness (e.g. QALYs) and costs in subgroup <span class="math inline">\(g\)</span> using treatment <span class="math inline">\(j\)</span> respectively, and <span class="math inline">\(k\)</span> is a decision makers willingness to pay (WTP) per unit of clinical effectiveness. The optimal treatment for a given subgroup is the one that maximizes expected NMBs,</p>
+<p>where <span class="math inline">\(e_{gj}\)</span> and <span class="math inline">\(c_{gj}\)</span> are measures of clinical
+effectiveness (e.g. QALYs) and costs in subgroup <span class="math inline">\(g\)</span> using treatment <span class="math inline">\(j\)</span> respectively, and <span class="math inline">\(k\)</span> is a decision makers willingness to pay
+(WTP) per unit of clinical effectiveness. The optimal treatment for a
+given subgroup is the one that maximizes expected NMBs,</p>
 <p><span class="math display">\[
 \begin{aligned}
 j^{*}_g = \text{argmax}_j E_{\theta} \left[NMB_g(j,\theta)\right].
 \end{aligned}
 \]</span></p>
-<p>In practice, new interventions are usually compared to a standard treatment often referred to as the comparator. In these cases, a new treatment in a given subgroup is preferred to the comparator if the expected incremental net monetary benefit (INMB) of the new treatment is positive; that is, treatment 1 is preferred to treatment 0 in subgroup <span class="math inline">\(g\)</span> if <span class="math inline">\(E_\theta \left[INMB_g\right] &gt; 0\)</span> where the INMB in a particular subgroup is given by</p>
+<p>In practice, new interventions are usually compared to a standard
+treatment often referred to as the comparator. In these cases, a new
+treatment in a given subgroup is preferred to the comparator if the
+expected incremental net monetary benefit (INMB) of the new treatment is
+positive; that is, treatment 1 is preferred to treatment 0 in subgroup
+<span class="math inline">\(g\)</span> if <span class="math inline">\(E_\theta \left[INMB_g\right] &gt; 0\)</span> where
+the INMB in a particular subgroup is given by</p>
 <p><span class="math display">\[
 \begin{aligned}
 INMB_g(\theta) = NMB_g(j = 1, \theta) - NMB_g(j = 0, \theta).
 \end{aligned}
 \]</span></p>
-<p>Treatments can be compared in an equivalent manner using the ICER. The most common case occurs when a new treatment is more effective and more costly so that treatment <span class="math inline">\(1\)</span> is preferred to treatment <span class="math inline">\(0\)</span> in subgroup <span class="math inline">\(g\)</span> if the ICER is less than the WTP threshold <span class="math inline">\(k\)</span>,</p>
+<p>Treatments can be compared in an equivalent manner using the ICER.
+The most common case occurs when a new treatment is more effective and
+more costly so that treatment <span class="math inline">\(1\)</span> is
+preferred to treatment <span class="math inline">\(0\)</span> in
+subgroup <span class="math inline">\(g\)</span> if the ICER is less than
+the WTP threshold <span class="math inline">\(k\)</span>,</p>
 <p><span class="math display">\[
 \begin{aligned}
-k &gt; \frac{E_\theta [c_{g1} - c_{g0}]}{E_\theta [e_{g1} - e_{g0}]} = ICER_g.
+k &gt; \frac{E_\theta [c_{g1} - c_{g0}]}{E_\theta [e_{g1} - e_{g0}]} =
+ICER_g.
 \end{aligned}
 \]</span> There are three additional cases:</p>
 <ul>
-<li>Treatment <span class="math inline">\(1\)</span> <em>dominates</em> treatment <span class="math inline">\(0\)</span> if it is more effective and less costly.<br>
+<li>Treatment <span class="math inline">\(1\)</span> <em>dominates</em>
+treatment <span class="math inline">\(0\)</span> if it is more effective
+and less costly.<br>
 </li>
-<li>Treatment <span class="math inline">\(1\)</span> is <em>dominated</em> by treatment <span class="math inline">\(0\)</span> if it is less effective and more costly.<br>
+<li>Treatment <span class="math inline">\(1\)</span> is
+<em>dominated</em> by treatment <span class="math inline">\(0\)</span>
+if it is less effective and more costly.<br>
 </li>
-<li>Treatment <span class="math inline">\(1\)</span> is preferred to treatment <span class="math inline">\(0\)</span> if it is less effective and less costly when <span class="math inline">\(k &lt; ICER_g\)</span>.</li>
+<li>Treatment <span class="math inline">\(1\)</span> is preferred to
+treatment <span class="math inline">\(0\)</span> if it is less effective
+and less costly when <span class="math inline">\(k &lt;
+ICER_g\)</span>.</li>
 </ul>
 </div>
-<div id="probabilistic-sensitivity-analysis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#probabilistic-sensitivity-analysis" class="anchor"></a>Probabilistic sensitivity analysis</h1>
-<p>Expected NMBs are expected values, which implies that NMBs are uncertain and that optimal treatment strategies may be selected incorrectly. This uncertainty can be quantified using PSA, which uses Bayesian and quasi-Bayesian techniques to estimate the distribution of NMBs given the distribution of the parameters for each treatment strategy.</p>
-<p>Since the joint distribution of the model parameters cannot be derived analytically (except in the simplest cases), the distribution of <span class="math inline">\(\theta\)</span> is typically approximated by simulating the parameters from suitable probability distribution and calculating relevant quantities of interest as a function of the simulated parameters. For each treatment strategy and subgroup, PSA therefore produces <span class="math inline">\(n\)</span> random draws from the distribution of clinical effectiveness and costs,</p>
+<div class="section level2">
+<h2 id="probabilistic-sensitivity-analysis">Probabilistic sensitivity analysis<a class="anchor" aria-label="anchor" href="#probabilistic-sensitivity-analysis"></a>
+</h2>
+<p>Expected NMBs are expected values, which implies that NMBs are
+uncertain and that optimal treatment strategies may be selected
+incorrectly. This uncertainty can be quantified using PSA, which uses
+Bayesian and quasi-Bayesian techniques to estimate the distribution of
+NMBs given the distribution of the parameters for each treatment
+strategy.</p>
+<p>Since the joint distribution of the model parameters cannot be
+derived analytically (except in the simplest cases), the distribution of
+<span class="math inline">\(\theta\)</span> is typically approximated by
+simulating the parameters from suitable probability distribution and
+calculating relevant quantities of interest as a function of the
+simulated parameters. For each treatment strategy and subgroup, PSA
+therefore produces <span class="math inline">\(n\)</span> random draws
+from the distribution of clinical effectiveness and costs,</p>
 <p><span class="math display">\[
 \begin{aligned}
 e_{gj} &amp;= [e_{gj}^1, e_{gj}^2, \dots, e_{gj}^n] \\
 c_{gj} &amp;= [c_{gj}^1, c_{gj}^2, \dots, c_{gj}^n].
 \end{aligned}
 \]</span></p>
-<p>Below we simulate costs and QALYs for three treatment strategies and two subgroups (in a real world analysis, this output would be derived from economic models like those supported by <code>hesim</code>). Strategy 1 is the current standard of care; it is the cheapest therapy, but also the least efficacious. Strategies 2 and 3 are equally costly, but Strategy 2 is more effective in subgroup 1 while Strategy 3 is more effective in subgroup 2.</p>
+<p>Below we simulate costs and QALYs for three treatment strategies and
+two subgroups (in a real world analysis, this output would be derived
+from economic models like those supported by <code>hesim</code>).
+Strategy 1 is the current standard of care; it is the cheapest therapy,
+but also the least efficacious. Strategies 2 and 3 are equally costly,
+but Strategy 2 is more effective in subgroup 1 while Strategy 3 is more
+effective in subgroup 2.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">131</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">131</span><span class="op">)</span>
 <span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
 
 <span class="co"># cost</span>
-<span class="va">c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">c</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Strategy 1, Grp 1"</span>, <span class="st">"Strategy 1, Grp 2"</span>, <span class="st">"Strategy 2, Grp 1"</span>,
+<span class="va">c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">c</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Strategy 1, Grp 1"</span>, <span class="st">"Strategy 1, Grp 2"</span>, <span class="st">"Strategy 2, Grp 1"</span>,
               <span class="st">"Strategy 2, Grp 2"</span>, <span class="st">"Strategy 3, Grp 1"</span>, <span class="st">"Strategy 3, Grp 2"</span><span class="op">)</span>
-<span class="va">c</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">2</span>, <span class="fl">.1</span><span class="op">)</span>
-<span class="va">c</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">2</span>, <span class="fl">.1</span><span class="op">)</span>
-<span class="va">c</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.15</span><span class="op">)</span>
-<span class="va">c</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.15</span><span class="op">)</span>
-<span class="va">c</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.15</span><span class="op">)</span>
-<span class="va">c</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.15</span><span class="op">)</span>
+<span class="va">c</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">2</span>, <span class="fl">.1</span><span class="op">)</span>
+<span class="va">c</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">2</span>, <span class="fl">.1</span><span class="op">)</span>
+<span class="va">c</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.15</span><span class="op">)</span>
+<span class="va">c</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.15</span><span class="op">)</span>
+<span class="va">c</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.15</span><span class="op">)</span>
+<span class="va">c</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.15</span><span class="op">)</span>
 
 <span class="co"># effectiveness</span>
 <span class="va">e</span> <span class="op">&lt;-</span> <span class="va">c</span>
-<span class="va">e</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">8</span>, <span class="fl">.2</span><span class="op">)</span>
-<span class="va">e</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">8</span>, <span class="fl">.2</span><span class="op">)</span>
-<span class="va">e</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">10</span>, <span class="fl">.8</span><span class="op">)</span>
-<span class="va">e</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">10.5</span>, <span class="fl">.8</span><span class="op">)</span>
-<span class="va">e</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">8.5</span>, <span class="fl">.6</span><span class="op">)</span>
-<span class="va">e</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.6</span><span class="op">)</span>
+<span class="va">e</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">8</span>, <span class="fl">.2</span><span class="op">)</span>
+<span class="va">e</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">8</span>, <span class="fl">.2</span><span class="op">)</span>
+<span class="va">e</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">10</span>, <span class="fl">.8</span><span class="op">)</span>
+<span class="va">e</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">10.5</span>, <span class="fl">.8</span><span class="op">)</span>
+<span class="va">e</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">8.5</span>, <span class="fl">.6</span><span class="op">)</span>
+<span class="va">e</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_samples</span>, <span class="fl">11</span>, <span class="fl">.6</span><span class="op">)</span>
 
 <span class="co"># cost and effectiveness by strategy and simulation</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com">"data.table"</a></span><span class="op">)</span>
-<span class="va">ce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">n_samples</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span>,
-                 strategy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Strategy "</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, 
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com" class="external-link">"data.table"</a></span><span class="op">)</span>
+<span class="va">ce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">n_samples</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span>,
+                 strategy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Strategy "</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, 
                                 each <span class="op">=</span> <span class="va">n_samples</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>,
-                 grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Group 1"</span>, <span class="st">"Group 2"</span><span class="op">)</span>,
+                 grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Group 1"</span>, <span class="st">"Group 2"</span><span class="op">)</span>,
                                each <span class="op">=</span> <span class="va">n_samples</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>,
-                 cost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="va">c</span><span class="op">)</span>, qalys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ce</span><span class="op">)</span></code></pre></div>
-<pre><code>##    sample   strategy     grp     cost    qalys
-## 1:      1 Strategy 1 Group 1 6.808115 7.984456
-## 2:      2 Strategy 1 Group 1 6.997936 7.984085
-## 3:      3 Strategy 1 Group 1 8.183247 8.221359
-## 4:      4 Strategy 1 Group 1 7.423647 8.155250
-## 5:      5 Strategy 1 Group 1 7.063846 8.292916
-## 6:      6 Strategy 1 Group 1 7.234418 8.066187</code></pre>
+                 cost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="va">c</span><span class="op">)</span>, qalys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ce</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    sample   strategy     grp     cost    qalys</span>
+<span class="co">## 1:      1 Strategy 1 Group 1 6.808115 7.984456</span>
+<span class="co">## 2:      2 Strategy 1 Group 1 6.997936 7.984085</span>
+<span class="co">## 3:      3 Strategy 1 Group 1 8.183247 8.221359</span>
+<span class="co">## 4:      4 Strategy 1 Group 1 7.423647 8.155250</span>
+<span class="co">## 5:      5 Strategy 1 Group 1 7.063846 8.292916</span>
+<span class="co">## 6:      6 Strategy 1 Group 1 7.234418 8.066187</span></code></pre>
 </div>
-<div id="decision-analysis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#decision-analysis" class="anchor"></a>Decision analysis</h1>
-<p>Decision analysis is performed within a CEA framework using the <code><a href="../reference/cea.html">cea()</a></code> and <code><a href="../reference/cea.html">cea_pw()</a></code> functions. The former summarizes results by simultaneously accounting for each treatment strategy in the analysis, while the latter summarizes “pairwise” results in which each treatment is compared to a comparator.</p>
-<p>Both are generic functions that can be used to summarize results from a <code>data.table</code> containing simulated costs and QALYs or from a <code><a href="../reference/ce.html">hesim::ce</a></code> object produced from the <code>$summarize()</code> method of an economic model. In this example we use a <code>data.table</code> object.</p>
+<div class="section level2">
+<h2 id="decision-analysis">Decision analysis<a class="anchor" aria-label="anchor" href="#decision-analysis"></a>
+</h2>
+<p>Decision analysis is performed within a CEA framework using the
+<code><a href="../reference/cea.html">cea()</a></code> and <code><a href="../reference/cea.html">cea_pw()</a></code> functions. The former
+summarizes results by simultaneously accounting for each treatment
+strategy in the analysis, while the latter summarizes “pairwise” results
+in which each treatment is compared to a comparator.</p>
+<p>Both are generic functions that can be used to summarize results from
+a <code>data.table</code> containing simulated costs and QALYs or from a
+<code><a href="../reference/ce.html">hesim::ce</a></code> object produced from the
+<code>$summarize()</code> method of an economic model. In this example
+we use a <code>data.table</code> object.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span>
 <span class="va">ktop</span> <span class="op">&lt;-</span> <span class="fl">200000</span>
-<span class="va">cea_out</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/cea.html">cea</a></span><span class="op">(</span><span class="va">ce</span>, k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">ktop</span>, <span class="fl">500</span><span class="op">)</span>, sample <span class="op">=</span> <span class="st">"sample"</span>, strategy <span class="op">=</span> <span class="st">"strategy"</span>,
+<span class="va">cea_out</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/cea.html">cea</a></span><span class="op">(</span><span class="va">ce</span>, k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">ktop</span>, <span class="fl">500</span><span class="op">)</span>, sample <span class="op">=</span> <span class="st">"sample"</span>, strategy <span class="op">=</span> <span class="st">"strategy"</span>,
                 grp <span class="op">=</span> <span class="st">"grp"</span>, e <span class="op">=</span> <span class="st">"qalys"</span>, c <span class="op">=</span> <span class="st">"cost"</span><span class="op">)</span></code></pre></div>
-<p>The first argument is a <code>data.table</code> that contains columns for the parameter sample (<code>sample</code>), treatment strategy (<code>strategy</code>), subgroup (<code>grp</code>), clinical effectiveness (<code>e</code>), and costs (<code>c</code>). Users specify the names of the relevant columns in their output table as strings. The other relevant parameter is <span class="math inline">\(k\)</span>, which is a range of WTP values to use for estimating NMBs.</p>
-<p>Likewise, we can use <code><a href="../reference/cea.html">cea_pw()</a></code> to summarize the PSA when directly comparing the two treatment strategies (Strategy 2 and Strategy 3) to the comparator (Strategy 1). The same inputs are used as in <code><a href="../reference/cea.html">cea()</a></code> except users must specify the name of the comparator strategy.</p>
+<p>The first argument is a <code>data.table</code> that contains columns
+for the parameter sample (<code>sample</code>), treatment strategy
+(<code>strategy</code>), subgroup (<code>grp</code>), clinical
+effectiveness (<code>e</code>), and costs (<code>c</code>). Users
+specify the names of the relevant columns in their output table as
+strings. The other relevant parameter is <span class="math inline">\(k\)</span>, which is a range of WTP values to use
+for estimating NMBs.</p>
+<p>Likewise, we can use <code><a href="../reference/cea.html">cea_pw()</a></code> to summarize the PSA when
+directly comparing the two treatment strategies (Strategy 2 and Strategy
+3) to the comparator (Strategy 1). The same inputs are used as in
+<code><a href="../reference/cea.html">cea()</a></code> except users must specify the name of the comparator
+strategy.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cea_pw_out</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce</span>,  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">ktop</span>, <span class="fl">500</span><span class="op">)</span>, comparator <span class="op">=</span> <span class="st">"Strategy 1"</span>,
+<code class="sourceCode R"><span class="va">cea_pw_out</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce</span>,  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">ktop</span>, <span class="fl">500</span><span class="op">)</span>, comparator <span class="op">=</span> <span class="st">"Strategy 1"</span>,
                       sample <span class="op">=</span> <span class="st">"sample"</span>, strategy <span class="op">=</span> <span class="st">"strategy"</span>, grp <span class="op">=</span> <span class="st">"grp"</span>,
                        e <span class="op">=</span> <span class="st">"qalys"</span>, c <span class="op">=</span> <span class="st">"cost"</span><span class="op">)</span></code></pre></div>
-<p>The primary metrics are the ICER and representations of decision uncertainty including cost-effectiveness planes, CEACs, CEAFs, and the EVPI. Plots using <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a> graphics can be quickly generated with the <code><a href="../reference/plot_ceplane.html">plot_ceplane()</a></code>, <code><a href="../reference/plot_ceac.html">plot_ceac()</a></code>, <code><a href="../reference/plot_ceaf.html">plot_ceaf()</a></code>, and <code><a href="../reference/plot_evpi.html">plot_evpi()</a></code> functions, respectively, although output is readily available so users may create custom plots as well.</p>
-<div id="incremental-cost-effectiveness-ratio-icer" class="section level2">
-<h2 class="hasAnchor">
-<a href="#incremental-cost-effectiveness-ratio-icer" class="anchor"></a>Incremental cost-effectiveness ratio (ICER)</h2>
-<p>The ICER is computed with <code><a href="../reference/cea.html">cea_pw()</a></code> and can be summarized with the<code><a href="../reference/icer.html">icer()</a></code> function. <code><a href="../reference/icer.html">icer()</a></code> creates a tidy table that can be formatted for prettier printing with <code><a href="https://rdrr.io/r/base/format.html">format()</a></code>. The argument <code>k</code> is the WTP threshold and is used to compute the INMB. Estimates of incremental QALYs and incremental costs are computed by averaging over PSA samples. By default, 95% confidence intervals are presented and are computed using quantiles from the PSA.</p>
+<p>The primary metrics are the ICER and representations of decision
+uncertainty including cost-effectiveness planes, CEACs, CEAFs, and the
+EVPI. Plots using <a href="https://ggplot2.tidyverse.org/" class="external-link"><code>ggplot2</code></a> graphics
+can be quickly generated with the <code><a href="../reference/plot_ceplane.html">plot_ceplane()</a></code>,
+<code><a href="../reference/plot_ceac.html">plot_ceac()</a></code>, <code><a href="../reference/plot_ceaf.html">plot_ceaf()</a></code>, and
+<code><a href="../reference/plot_evpi.html">plot_evpi()</a></code> functions, respectively, although output is
+readily available so users may create custom plots as well.</p>
+<div class="section level3">
+<h3 id="incremental-cost-effectiveness-ratio-icer">Incremental cost-effectiveness ratio (ICER)<a class="anchor" aria-label="anchor" href="#incremental-cost-effectiveness-ratio-icer"></a>
+</h3>
+<p>The ICER is computed with <code><a href="../reference/cea.html">cea_pw()</a></code> and can be summarized
+with the<code><a href="../reference/icer.html">icer()</a></code> function. <code><a href="../reference/icer.html">icer()</a></code> creates a tidy
+table that can be formatted for prettier printing with
+<code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code>. The argument <code>k</code> is the WTP threshold
+and is used to compute the INMB. Estimates of incremental QALYs and
+incremental costs are computed by averaging over PSA samples. By
+default, 95% confidence intervals are presented and are computed using
+quantiles from the PSA.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://magrittr.tidyverse.org">"magrittr"</a></span><span class="op">)</span> <span class="co"># Use pipes</span>
-<span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, k <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>##      Group           Outcome                Strategy 2
-## 1: Group 1 Incremental QALYs         2.05 (0.44, 3.68)
-## 2: Group 1 Incremental costs   60,579 (45,170, 80,640)
-## 3: Group 1   Incremental NMB 41,980 (-38,916, 122,227)
-## 4: Group 1              ICER                    29,534
-## 5: Group 2 Incremental QALYs         2.47 (0.83, 4.06)
-## 6: Group 2 Incremental costs   60,689 (44,088, 80,040)
-## 7: Group 2   Incremental NMB 62,588 (-23,058, 143,866)
-## 8: Group 2              ICER                    24,615
-##                    Strategy 3
-## 1:         0.51 (-0.75, 1.72)
-## 2:    60,750 (44,408, 79,245)
-## 3: -35,460 (-100,074, 32,748)
-## 4:                    120,106
-## 5:          3.00 (1.74, 4.19)
-## 6:    60,726 (44,978, 82,943)
-## 7:   89,198 (25,693, 151,890)
-## 8:                     20,252</code></pre>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://magrittr.tidyverse.org" class="external-link">"magrittr"</a></span><span class="op">)</span> <span class="co"># Use pipes</span>
+<span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, k <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##      Group           Outcome                Strategy 2</span>
+<span class="co">## 1: Group 1 Incremental QALYs         2.05 (0.44, 3.68)</span>
+<span class="co">## 2: Group 1 Incremental costs   60,579 (45,170, 80,640)</span>
+<span class="co">## 3: Group 1   Incremental NMB 41,980 (-38,916, 122,227)</span>
+<span class="co">## 4: Group 1              ICER                    29,534</span>
+<span class="co">## 5: Group 2 Incremental QALYs         2.47 (0.83, 4.06)</span>
+<span class="co">## 6: Group 2 Incremental costs   60,689 (44,088, 80,040)</span>
+<span class="co">## 7: Group 2   Incremental NMB 62,588 (-23,058, 143,866)</span>
+<span class="co">## 8: Group 2              ICER                    24,615</span>
+<span class="co">##                    Strategy 3</span>
+<span class="co">## 1:         0.51 (-0.75, 1.72)</span>
+<span class="co">## 2:    60,750 (44,408, 79,245)</span>
+<span class="co">## 3: -35,460 (-100,074, 32,748)</span>
+<span class="co">## 4:                    120,106</span>
+<span class="co">## 5:          3.00 (1.74, 4.19)</span>
+<span class="co">## 6:    60,726 (44,978, 82,943)</span>
+<span class="co">## 7:   89,198 (25,693, 151,890)</span>
+<span class="co">## 8:                     20,252</span></code></pre>
 </div>
-<div id="cost-effectiveness-plane" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cost-effectiveness-plane" class="anchor"></a>Cost-effectiveness plane</h2>
-<p>The cost-effectiveness plane plots the incremental effectiveness of a treatment strategy (relative to a comparator) against the incremental cost of the treatment strategy. The plot is useful because it demonstrates both the uncertainty and the magnitude of the estimates. Each point on the plot is from a particular random draw from the PSA.</p>
-<p>Data for plotting a cost-effectiveness plane comes from the <code>delta</code> output generated from the <code><a href="../reference/cea.html">cea_pw()</a></code> function, which, for each sampled parameter set and treatment strategy, estimates differences in costs and QALYs relative to the comparator.</p>
+<div class="section level3">
+<h3 id="cost-effectiveness-plane">Cost-effectiveness plane<a class="anchor" aria-label="anchor" href="#cost-effectiveness-plane"></a>
+</h3>
+<p>The cost-effectiveness plane plots the incremental effectiveness of a
+treatment strategy (relative to a comparator) against the incremental
+cost of the treatment strategy. The plot is useful because it
+demonstrates both the uncertainty and the magnitude of the estimates.
+Each point on the plot is from a particular random draw from the
+PSA.</p>
+<p>Data for plotting a cost-effectiveness plane comes from the
+<code>delta</code> output generated from the <code><a href="../reference/cea.html">cea_pw()</a></code>
+function, which, for each sampled parameter set and treatment strategy,
+estimates differences in costs and QALYs relative to the comparator.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">$</span><span class="va">delta</span><span class="op">)</span></code></pre></div>
-<pre><code>##    sample   strategy     grp       ie       ic
-## 1:      1 Strategy 2 Group 1 1.497467 57687.97
-## 2:      2 Strategy 2 Group 1 1.428877 65857.23
-## 3:      3 Strategy 2 Group 1 3.184584 44830.68
-## 4:      4 Strategy 2 Group 1 1.475885 64228.60
-## 5:      5 Strategy 2 Group 1 1.045039 58613.55
-## 6:      6 Strategy 2 Group 1 1.303221 45173.35</code></pre>
-<p>The dotted line in the plot is the WTP line, with slope equal to the value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are cost-effective while those above it are not.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">$</span><span class="va">delta</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##    sample   strategy     grp       ie       ic</span>
+<span class="co">## 1:      1 Strategy 2 Group 1 1.497467 57687.97</span>
+<span class="co">## 2:      2 Strategy 2 Group 1 1.428877 65857.23</span>
+<span class="co">## 3:      3 Strategy 2 Group 1 3.184584 44830.68</span>
+<span class="co">## 4:      4 Strategy 2 Group 1 1.475885 64228.60</span>
+<span class="co">## 5:      5 Strategy 2 Group 1 1.045039 58613.55</span>
+<span class="co">## 6:      6 Strategy 2 Group 1 1.303221 45173.35</span></code></pre>
+<p>The dotted line in the plot is the WTP line, with slope equal to the
+value of <span class="math inline">\(k\)</span>. For a given <span class="math inline">\(k\)</span>, points below the line are
+cost-effective while those above it are not.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org">"ggplot2"</a></span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_ceplane.html">plot_ceplane</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, k <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span></code></pre></div>
 <p><img src="cea_files/figure-html/ceplane_plot-1.png" width="768"></p>
 </div>
-<div id="cost-effectiveness-acceptability-curves-ceac" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cost-effectiveness-acceptability-curves-ceac" class="anchor"></a>Cost-effectiveness acceptability curves (CEAC)</h2>
-<div id="simultaneous-comparison" class="section level3">
-<h3 class="hasAnchor">
-<a href="#simultaneous-comparison" class="anchor"></a>Simultaneous comparison</h3>
-<p>A useful summary measure for quantifying uncertainty is the probability that each treatment strategy is the most cost effective. For a particular subgroup, this is estimated from simulation output as the proportion of simulation draws that each strategy has the highest NMB. For example, consider a random sample of 10 draws from the PSA simulation output and suppose k is equal to 50,000.</p>
+<div class="section level3">
+<h3 id="cost-effectiveness-acceptability-curves-ceac">Cost-effectiveness acceptability curves (CEAC)<a class="anchor" aria-label="anchor" href="#cost-effectiveness-acceptability-curves-ceac"></a>
+</h3>
+<div class="section level4">
+<h4 id="simultaneous-comparison">Simultaneous comparison<a class="anchor" aria-label="anchor" href="#simultaneous-comparison"></a>
+</h4>
+<p>A useful summary measure for quantifying uncertainty is the
+probability that each treatment strategy is the most cost effective. For
+a particular subgroup, this is estimated from simulation output as the
+proportion of simulation draws that each strategy has the highest NMB.
+For example, consider a random sample of 10 draws from the PSA
+simulation output and suppose k is equal to 50,000.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ce</span> <span class="op">&lt;-</span> <span class="va">ce</span><span class="op">[</span>, <span class="va">nmb</span> <span class="op">:=</span> <span class="fl">50000</span> <span class="op">*</span> <span class="va">qalys</span> <span class="op">-</span> <span class="va">cost</span><span class="op">]</span>
-<span class="va">random_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_samples</span>, <span class="fl">10</span><span class="op">)</span>
-<span class="va">nmb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html">dcast</a></span><span class="op">(</span><span class="va">ce</span><span class="op">[</span><span class="va">sample</span> <span class="op">%in%</span> <span class="va">random_rows</span> <span class="op">&amp;</span> <span class="va">grp</span> <span class="op">==</span> <span class="st">"Group 2"</span><span class="op">]</span>, 
+<span class="va">random_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_samples</span>, <span class="fl">10</span><span class="op">)</span>
+<span class="va">nmb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">ce</span><span class="op">[</span><span class="va">sample</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">random_rows</span> <span class="op">&amp;</span> <span class="va">grp</span> <span class="op">==</span> <span class="st">"Group 2"</span><span class="op">]</span>, 
                 <span class="va">sample</span> <span class="op">~</span> <span class="va">strategy</span>, value.var <span class="op">=</span> <span class="st">"nmb"</span><span class="op">)</span>
-<span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setattr.html">setnames</a></span><span class="op">(</span><span class="va">nmb</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"nmb1"</span>, <span class="st">"nmb2"</span>, <span class="st">"nmb3"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">maxj</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">nmb1</span>, <span class="va">nmb2</span>, <span class="va">nmb3</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span>
-<span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">maxj</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">maxj</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">nmb</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"nmb1"</span>, <span class="st">"nmb2"</span>, <span class="st">"nmb3"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">maxj</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">nmb1</span>, <span class="va">nmb2</span>, <span class="va">nmb3</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span>
+<span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">maxj</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">maxj</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:right;">
@@ -506,56 +619,91 @@ maxj
 </tbody>
 </table>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proportions.html">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">$</span><span class="va">maxj</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">mce</span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-##   1   2   3 
-## 0.0 0.4 0.6</code></pre>
-<p>Treatments 1, 2, and 3 have the highest NMBs a fraction 0, 0.4, and 0.6 of the time respectively. <code><a href="../reference/cea.html">cea()</a></code> computes this for a range of values of <span class="math inline">\(k\)</span>. Relevant output is stored in the <code>mce</code> element returned by <code><a href="../reference/cea.html">cea_pw()</a></code>.</p>
+<code class="sourceCode R"><span class="va">mce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">$</span><span class="va">maxj</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mce</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## </span>
+<span class="co">##   1   2   3 </span>
+<span class="co">## 0.0 0.4 0.6</span></code></pre>
+<p>Treatments 1, 2, and 3 have the highest NMBs a fraction 0, 0.4, and
+0.6 of the time respectively. <code><a href="../reference/cea.html">cea()</a></code> computes this for a
+range of values of <span class="math inline">\(k\)</span>. Relevant
+output is stored in the <code>mce</code> element returned by
+<code><a href="../reference/cea.html">cea_pw()</a></code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_ceac.html">plot_ceac</a></span><span class="op">(</span><span class="va">cea_out</span><span class="op">)</span></code></pre></div>
 <p><img src="cea_files/figure-html/mce_plot-1.png" width="768"></p>
-<p>In group 1, Strategy 2 provides the greatest NMBs with high probability for almost all reasonable values of k. In group 2, the results are less certain, although Strategy 3 provides the greatest NMBs with a higher probability than Strategy 2 for most values of k.</p>
+<p>In group 1, Strategy 2 provides the greatest NMBs with high
+probability for almost all reasonable values of k. In group 2, the
+results are less certain, although Strategy 3 provides the greatest NMBs
+with a higher probability than Strategy 2 for most values of k.</p>
 </div>
-<div id="pairwise-comparison" class="section level3">
-<h3 class="hasAnchor">
-<a href="#pairwise-comparison" class="anchor"></a>Pairwise comparison</h3>
-<p>It is also possible to compare each strategy to a single comparator. The <code>ceac</code> element returned by <code><a href="../reference/cea.html">cea_pw()</a></code> contains the data for the CEACs.</p>
-<p>The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than Strategy 1 with very high probability for reasonable values of <span class="math inline">\(k\)</span>. Strategy 3 also has higher NMBs than Strategy 1 with probability over 1/2 for values of <span class="math inline">\(k\)</span> larger than 120,500. In group 2, both Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost all values of <span class="math inline">\(k\)</span>.</p>
+<div class="section level4">
+<h4 id="pairwise-comparison">Pairwise comparison<a class="anchor" aria-label="anchor" href="#pairwise-comparison"></a>
+</h4>
+<p>It is also possible to compare each strategy to a single comparator.
+The <code>ceac</code> element returned by <code><a href="../reference/cea.html">cea_pw()</a></code> contains
+the data for the CEACs.</p>
+<p>The plot shows that, in subgroup 1, Strategy 2 has larger NMBs than
+Strategy 1 with very high probability for reasonable values of <span class="math inline">\(k\)</span>. Strategy 3 also has higher NMBs than
+Strategy 1 with probability over 1/2 for values of <span class="math inline">\(k\)</span> larger than 120,500. In group 2, both
+Strategy 2 and Strategy 3 have higher NMBs than Strategy 1 for almost
+all values of <span class="math inline">\(k\)</span>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_ceac.html">plot_ceac</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span></code></pre></div>
 <p><img src="cea_files/figure-html/ceac_plot-1.png" width="768"></p>
 </div>
 </div>
-<div id="cost-effectiveness-acceptability-frontier-ceaf" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cost-effectiveness-acceptability-frontier-ceaf" class="anchor"></a>Cost-effectiveness acceptability frontier (CEAF)</h2>
-<p>One drawback of a CEAC is that the probability of being cost-effective cannot be used to determine the optimal treatment option. Instead, if a decision-makers objective is to maximize health gain, then decisions should be based on the expected NMB <span class="citation">(Barton, Briggs, and Fenwick 2008)</span>. The CEAF, which plots the probability that the optimal treatment strategy (i.e., the strategy with the highest expected NMB) is cost-effective, is appropriate in this context.</p>
-<p>A CEAF curve can be created by using the <code>best</code> column to subset to the treatment strategy with the highest expected NMB for each WTP value and group. <code><a href="../reference/plot_ceaf.html">plot_ceaf()</a></code> will quickly generate a plot of the CEAF.</p>
+<div class="section level3">
+<h3 id="cost-effectiveness-acceptability-frontier-ceaf">Cost-effectiveness acceptability frontier (CEAF)<a class="anchor" aria-label="anchor" href="#cost-effectiveness-acceptability-frontier-ceaf"></a>
+</h3>
+<p>One drawback of a CEAC is that the probability of being
+cost-effective cannot be used to determine the optimal treatment option.
+Instead, if a decision-makers objective is to maximize health gain, then
+decisions should be based on the expected NMB <span class="citation">(Barton, Briggs, and Fenwick 2008)</span>. The CEAF,
+which plots the probability that the optimal treatment strategy (i.e.,
+the strategy with the highest expected NMB) is cost-effective, is
+appropriate in this context.</p>
+<p>A CEAF curve can be created by using the <code>best</code> column to
+subset to the treatment strategy with the highest expected NMB for each
+WTP value and group. <code><a href="../reference/plot_ceaf.html">plot_ceaf()</a></code> will quickly generate a
+plot of the CEAF.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_ceaf.html">plot_ceaf</a></span><span class="op">(</span><span class="va">cea_out</span><span class="op">)</span></code></pre></div>
 <p><img src="cea_files/figure-html/ceaf_plot-1.png" width="768"></p>
 </div>
-<div id="value-of-perfect-information" class="section level2">
-<h2 class="hasAnchor">
-<a href="#value-of-perfect-information" class="anchor"></a>Value of perfect information</h2>
-<p>A limitation of the prior measures are that they ignore the magnitude of cost or QALY gains. A measure which combines the probability of being most effective with the magnitude of the expected NMB is the expected value of perfect information (EVPI). Intuitively, the EVPI provides an estimate of the amount that a decision maker would be willing to pay to collect additional data and completely eliminate uncertainty. Mathematically, the EVPI is defined as the difference between the maximum expected NMB given perfect information and the maximum expected NMB given current information. In other words, we calculate the NMB for the optimal treatment strategy for each random draw of the parameters and compare that to the NMB for the treatment strategy that is optimal when averaging across all parameters. The EVPI for subgroup <span class="math inline">\(g\)</span> is,</p>
+<div class="section level3">
+<h3 id="value-of-perfect-information">Value of perfect information<a class="anchor" aria-label="anchor" href="#value-of-perfect-information"></a>
+</h3>
+<p>A limitation of the prior measures are that they ignore the magnitude
+of cost or QALY gains. A measure which combines the probability of being
+most effective with the magnitude of the expected NMB is the expected
+value of perfect information (EVPI). Intuitively, the EVPI provides an
+estimate of the amount that a decision maker would be willing to pay to
+collect additional data and completely eliminate uncertainty.
+Mathematically, the EVPI is defined as the difference between the
+maximum expected NMB given perfect information and the maximum expected
+NMB given current information. In other words, we calculate the NMB for
+the optimal treatment strategy for each random draw of the parameters
+and compare that to the NMB for the treatment strategy that is optimal
+when averaging across all parameters. The EVPI for subgroup <span class="math inline">\(g\)</span> is,</p>
 <p><span class="math display">\[
 \begin{aligned}
-EVPI_g &amp;= E_\theta \left[\text{max}_j NMB_g(j, \theta)\right] - \text{max}_j E_\theta \left [ NMB_g(j, \theta)\right]. \\
+EVPI_g &amp;= E_\theta \left[\text{max}_j NMB_g(j, \theta)\right] -
+\text{max}_j E_\theta \left [ NMB_g(j, \theta)\right]. \\
 \end{aligned}
 \]</span></p>
-<p>To illustrate consider the same random sample of 10 draws from our simulation output used above.</p>
+<p>To illustrate consider the same random sample of 10 draws from our
+simulation output used above.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Expected net monetary benefit</span>
-<span class="va">enmb</span> <span class="op">&lt;-</span> <span class="va">ce</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>enmb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">]</span>
-<span class="va">enmb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html">dcast</a></span><span class="op">(</span><span class="va">enmb</span>, <span class="va">strategy</span> <span class="op">~</span> <span class="va">grp</span>, value.var <span class="op">=</span> <span class="st">"enmb"</span><span class="op">)</span>
-<span class="va">strategymax_g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">enmb</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="co"># Optimal strategy group 2</span>
+<span class="va">enmb</span> <span class="op">&lt;-</span> <span class="va">ce</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>enmb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">]</span>
+<span class="va">enmb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">enmb</span>, <span class="va">strategy</span> <span class="op">~</span> <span class="va">grp</span>, value.var <span class="op">=</span> <span class="st">"enmb"</span><span class="op">)</span>
+<span class="va">strategymax_g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="va">enmb</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="co"># Optimal strategy group 2</span>
 
 <span class="co"># Net monetary benefit (with perfect and current information)</span>
-<span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">nmbpi</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">nmb1</span>, <span class="va">nmb2</span>, <span class="va">nmb3</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">max</span><span class="op">)</span><span class="op">]</span>
+<span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">nmbpi</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">nmb1</span>, <span class="va">nmb2</span>, <span class="va">nmb3</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">max</span><span class="op">)</span><span class="op">]</span>
 <span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">nmbci</span> <span class="op">:=</span> <span class="va">nmb</span><span class="op">[[</span><span class="va">strategymax_g2</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">nmb</span>, digits <span class="op">=</span> <span class="fl">0</span>, format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">nmb</span>, digits <span class="op">=</span> <span class="fl">0</span>, format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:right;">
@@ -813,103 +961,135 @@ nmbci
 </tr>
 </tbody>
 </table>
-<p><br> To calculate EVPI, we average NMBs given current information and NMBs given perfect information across simulation draws.</p>
+<p><br> To calculate EVPI, we average NMBs given current information and
+NMBs given perfect information across simulation draws.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">enmbpi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">$</span><span class="va">nmbpi</span><span class="op">)</span>
-<span class="va">enmbci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">$</span><span class="va">nmbci</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">enmbpi</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 481362.9</code></pre>
+<code class="sourceCode R"><span class="va">enmbpi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">$</span><span class="va">nmbpi</span><span class="op">)</span>
+<span class="va">enmbci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">$</span><span class="va">nmbci</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">enmbpi</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] 481362.9</span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">enmbci</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 470922.7</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">enmbci</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] 470922.7</span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">enmbpi</span> <span class="op">-</span> <span class="va">enmbci</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 10440.18</code></pre>
-<p>The <code><a href="../reference/cea.html">cea()</a></code> function performs this same calculation across all simulation draws from the PSA and for a number of values of <span class="math inline">\(k\)</span>. A plot by group of the the EVPI for different values of <span class="math inline">\(k\)</span> is shown below. The kinks represent values of <span class="math inline">\(k\)</span> where the optimal strategy changes.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">enmbpi</span> <span class="op">-</span> <span class="va">enmbci</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] 10440.18</span></code></pre>
+<p>The <code><a href="../reference/cea.html">cea()</a></code> function performs this same calculation across
+all simulation draws from the PSA and for a number of values of <span class="math inline">\(k\)</span>. A plot by group of the the EVPI for
+different values of <span class="math inline">\(k\)</span> is shown
+below. The kinks represent values of <span class="math inline">\(k\)</span> where the optimal strategy changes.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_evpi.html">plot_evpi</a></span><span class="op">(</span><span class="va">cea_out</span><span class="op">)</span></code></pre></div>
 <p><img src="cea_files/figure-html/evpi_plot-1.png" width="768"></p>
-<p>We might also be interested in aggregating across subgroups. In particular, the total EVPI can be calculated as a weighted average of the group specific EVPIs,</p>
+<p>We might also be interested in aggregating across subgroups. In
+particular, the total EVPI can be calculated as a weighted average of
+the group specific EVPIs,</p>
 <p><span class="math display">\[
 \begin{aligned}
 totEVPI &amp;= \sum_{g=1}^{G} w_g EVPI_g,
 \end{aligned}
-\]</span> where <span class="math inline">\(w_g \in (0, 1)\)</span> is a weight denoting that proportion of the population represented by subgroup <span class="math inline">\(g\)</span> and <span class="math inline">\(\sum_{g=1}^{G} w_g = 1\)</span>.</p>
+\]</span> where <span class="math inline">\(w_g \in (0, 1)\)</span> is a
+weight denoting that proportion of the population represented by
+subgroup <span class="math inline">\(g\)</span> and <span class="math inline">\(\sum_{g=1}^{G} w_g = 1\)</span>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">w_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Group "</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">.75</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">w_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group "</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">.75</span><span class="op">)</span><span class="op">)</span>
 <span class="va">evpi</span> <span class="op">&lt;-</span> <span class="va">cea_out</span><span class="op">$</span><span class="va">evpi</span>
-<span class="va">evpi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/merge.html">merge</a></span><span class="op">(</span><span class="va">evpi</span>, <span class="va">w_dt</span>, by <span class="op">=</span> <span class="st">"grp"</span><span class="op">)</span>
-<span class="va">totevpi</span> <span class="op">&lt;-</span> <span class="va">evpi</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">.SD</span>, <span class="va">weighted.mean</span>, w <span class="op">=</span> <span class="va">w</span><span class="op">)</span>,
-                by <span class="op">=</span> <span class="st">"k"</span>, .SDcols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"evpi"</span><span class="op">)</span><span class="op">]</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">totevpi</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">k</span>, y <span class="op">=</span> <span class="va">evpi</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Willingness to pay"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Total EVPI"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">ktop</span>, <span class="fl">100000</span><span class="op">)</span>, 
-                     label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_dollar.html">dollar</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_dollar.html">dollar</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </code></pre></div>
+<span class="va">evpi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">evpi</span>, <span class="va">w_dt</span>, by <span class="op">=</span> <span class="st">"grp"</span><span class="op">)</span>
+<span class="va">totevpi</span> <span class="op">&lt;-</span> <span class="va">evpi</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">.SD</span>, <span class="va">weighted.mean</span>, w <span class="op">=</span> <span class="va">w</span><span class="op">)</span>,
+                by <span class="op">=</span> <span class="st">"k"</span>, .SDcols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"evpi"</span><span class="op">)</span><span class="op">]</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">totevpi</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">k</span>, y <span class="op">=</span> <span class="va">evpi</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Willingness to pay"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Total EVPI"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">ktop</span>, <span class="fl">100000</span><span class="op">)</span>, 
+                     label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_dollar.html" class="external-link">dollar</a></span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_dollar.html" class="external-link">dollar</a></span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </code></pre></div>
 <p><img src="cea_files/figure-html/totevpi-1.png" width="576"></p>
 </div>
 </div>
-<div id="value-of-individualized-care" class="section level1">
-<h1 class="hasAnchor">
-<a href="#value-of-individualized-care" class="anchor"></a>Value of individualized care</h1>
-<p>The previous analyses allow NMBs and optimal treatment decisions to vary by subgroup. In contrast, most CEAs estimate the treatment, <span class="math inline">\(j^{*}\)</span>, that is optimal when averaging NMBs over the entire population. In particular, if the population is broken up into <span class="math inline">\(G\)</span> distinct subgroups, the optimal treatment is given by,</p>
+<div class="section level2">
+<h2 id="value-of-individualized-care">Value of individualized care<a class="anchor" aria-label="anchor" href="#value-of-individualized-care"></a>
+</h2>
+<p>The previous analyses allow NMBs and optimal treatment decisions to
+vary by subgroup. In contrast, most CEAs estimate the treatment, <span class="math inline">\(j^{*}\)</span>, that is optimal when averaging
+NMBs over the entire population. In particular, if the population is
+broken up into <span class="math inline">\(G\)</span> distinct
+subgroups, the optimal treatment is given by,</p>
 <p><span class="math display">\[
 \begin{aligned}
-j^{*} = \text{argmax}_j \sum_{g=1}^{G} w_g E_{\theta}\left[NMB_g(j,\theta)\right].
+j^{*} = \text{argmax}_j \sum_{g=1}^{G} w_g
+E_{\theta}\left[NMB_g(j,\theta)\right].
 \end{aligned}
 \]</span></p>
-<p><span class="citation">Basu and Meltzer (2007)</span> have shown that selecting subgroup specific treatments increases expected net benefits relative to this one-size fits all approach. They refer to additional net benefit as the expected value of individualized care (EPIC), which can be computed in terms of NMBs using the subgroup approach illustrated here as,</p>
+<p><span class="citation">Basu and Meltzer (2007)</span> have shown that
+selecting subgroup specific treatments increases expected net benefits
+relative to this one-size fits all approach. They refer to additional
+net benefit as the expected value of individualized care (EPIC), which
+can be computed in terms of NMBs using the subgroup approach illustrated
+here as,</p>
 <p><span class="math display">\[
 \begin{aligned}
-\sum_{g=1}^G w_g E_{\theta}\left[NMB_g(j^{*}_s,\theta)\right] - \sum_{g=1}^G w_g  E_{\theta}\left[NMB_g(j^{*},\theta)\right].
+\sum_{g=1}^G w_g E_{\theta}\left[NMB_g(j^{*}_s,\theta)\right] -
+\sum_{g=1}^G w_g  E_{\theta}\left[NMB_g(j^{*},\theta)\right].
 \end{aligned}
 \]</span></p>
 <p>We can estimate the value of individualized care as follows:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Compute total expected NMB with one-size fits all treatment</span>
-<span class="va">ce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/merge.html">merge</a></span><span class="op">(</span><span class="va">ce</span>, <span class="va">w_dt</span>, by <span class="op">=</span> <span class="st">"grp"</span><span class="op">)</span>
-<span class="va">totenmb</span> <span class="op">&lt;-</span> <span class="va">ce</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>totenmb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/weighted.mean.html">weighted.mean</a></span><span class="op">(</span><span class="va">nmb</span>, w <span class="op">=</span> <span class="va">w</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"strategy"</span><span class="op">)</span><span class="op">]</span>
-<span class="va">totenmb_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">totenmb</span><span class="op">$</span><span class="va">totenmb</span><span class="op">)</span></code></pre></div>
+<span class="va">ce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">ce</span>, <span class="va">w_dt</span>, by <span class="op">=</span> <span class="st">"grp"</span><span class="op">)</span>
+<span class="va">totenmb</span> <span class="op">&lt;-</span> <span class="va">ce</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>totenmb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/weighted.mean.html" class="external-link">weighted.mean</a></span><span class="op">(</span><span class="va">nmb</span>, w <span class="op">=</span> <span class="va">w</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy"</span><span class="op">)</span><span class="op">]</span>
+<span class="va">totenmb_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">totenmb</span><span class="op">$</span><span class="va">totenmb</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Compute total expected NMB with individualized treatment</span>
-<span class="va">itotenmb_grp_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">enmb</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span>, <span class="va">max</span><span class="op">)</span>
-<span class="va">itotenmb_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">itotenmb_grp_max</span> <span class="op">*</span> <span class="va">w_dt</span><span class="op">$</span><span class="va">w</span><span class="op">)</span></code></pre></div>
+<span class="va">itotenmb_grp_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">enmb</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fl">2</span>, <span class="va">max</span><span class="op">)</span>
+<span class="va">itotenmb_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">itotenmb_grp_max</span> <span class="op">*</span> <span class="va">w_dt</span><span class="op">$</span><span class="va">w</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Compute EVIC</span>
-<span class="va">totnmb_scenarios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">itotenmb_max</span>, <span class="va">totenmb_max</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">totnmb_scenarios</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Individualized total expected NMB"</span>,
+<span class="va">totnmb_scenarios</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">itotenmb_max</span>, <span class="va">totenmb_max</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">totnmb_scenarios</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Individualized total expected NMB"</span>,
                               <span class="st">"One-size fits all total expected NMB"</span><span class="op">)</span>
 <span class="va">evic</span> <span class="op">&lt;-</span> <span class="va">totnmb_scenarios</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">totnmb_scenarios</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">evic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"EVIC"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">evic</span><span class="op">)</span></code></pre></div>
-<pre><code>##     EVIC 
-## 19359.84</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">evic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"EVIC"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">evic</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##     EVIC </span>
+<span class="co">## 19359.84</span></code></pre>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">evic</span><span class="op">/</span><span class="fl">150000</span><span class="op">)</span></code></pre></div>
-<pre><code>##      EVIC 
-## 0.1290656</code></pre>
-<p>Our estimate of the EVIC is $19,359, or in terms of net health benefits, 0.129 QALYs.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">evic</span><span class="op">/</span><span class="fl">150000</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">##      EVIC </span>
+<span class="co">## 0.1290656</span></code></pre>
+<p>Our estimate of the EVIC is $19,359, or in terms of net health
+benefits, 0.129 QALYs.</p>
 </div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level2">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-baio2012bayesian" class="csl-entry">
-Baio, Gianluca. 2012. <em>Bayesian Methods in Health Economics</em>. CRC Press.
+Baio, Gianluca. 2012. <em>Bayesian Methods in Health Economics</em>. CRC
+Press.
 </div>
 <div id="ref-baio2015probabilistic" class="csl-entry">
-Baio, Gianluca, and A Philip Dawid. 2015. <span>“Probabilistic Sensitivity Analysis in Health Economics.”</span> <em>Statistical Methods in Medical Research</em> 24 (6): 615–34.
+Baio, Gianluca, and A Philip Dawid. 2015. <span>“Probabilistic
+Sensitivity Analysis in Health Economics.”</span> <em>Statistical
+Methods in Medical Research</em> 24 (6): 615–34.
 </div>
 <div id="ref-barton2008optimal" class="csl-entry">
-Barton, Garry R, Andrew H Briggs, and Elisabeth AL Fenwick. 2008. <span>“Optimal Cost-Effectiveness Decisions: The Role of the Cost-Effectiveness Acceptability Curve (CEAC), the Cost-Effectiveness Acceptability Frontier (CEAF), and the Expected Value of Perfection Information (EVPI).”</span> <em>Value in Health</em> 11 (5): 886–97.
+Barton, Garry R, Andrew H Briggs, and Elisabeth AL Fenwick. 2008.
+<span>“Optimal Cost-Effectiveness Decisions: The Role of the
+Cost-Effectiveness Acceptability Curve (CEAC), the Cost-Effectiveness
+Acceptability Frontier (CEAF), and the Expected Value of Perfection
+Information (EVPI).”</span> <em>Value in Health</em> 11 (5): 886–97.
 </div>
 <div id="ref-basu2007value" class="csl-entry">
-Basu, Anirban, and David Meltzer. 2007. <span>“Value of Information on Preference Heterogeneity and Individualized Care.”</span> <em>Medical Decision Making</em> 27 (2): 112–27.
+Basu, Anirban, and David Meltzer. 2007. <span>“Value of Information on
+Preference Heterogeneity and Individualized Care.”</span> <em>Medical
+Decision Making</em> 27 (2): 112–27.
 </div>
 <div id="ref-espinoza2014value" class="csl-entry">
-Espinoza, Manuel A, Andrea Manca, Karl Claxton, and Mark J Sculpher. 2014. <span>“The Value of Heterogeneity for Cost-Effectiveness Subgroup Analysis: Conceptual Framework and Application.”</span> <em>Medical Decision Making</em> 34 (8): 951–64.
+Espinoza, Manuel A, Andrea Manca, Karl Claxton, and Mark J Sculpher.
+2014. <span>“The Value of Heterogeneity for Cost-Effectiveness Subgroup
+Analysis: Conceptual Framework and Application.”</span> <em>Medical
+Decision Making</em> 34 (8): 951–64.
 </div>
 </div>
 </div>
@@ -926,11 +1106,14 @@ Espinoza, Manuel A, Andrea Manca, Karl Claxton, and Mark J Sculpher. 2014. <span
 
 
       <footer><div class="copyright">
-  <p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p>
+<p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
@@ -938,6 +1121,8 @@ Espinoza, Manuel A, Andrea Manca, Karl Claxton, and Mark J Sculpher. 2014. <span
 
   
 
+
+  
 
   </body>
 </html>
