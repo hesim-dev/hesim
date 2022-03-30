@@ -1,5 +1,8 @@
 ## hesim 0.5.1.9999
 
+### API change
+* The default value of the `check` argument of `eval_rng()` has been changed to `TRUE`.
+
 ### Bug fixes
 * The Markov inhomogeneous individual-level model vignette has been corrected so that `eval_rng()` can be summarized using `summary.eval_rng()`.  
 
