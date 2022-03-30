@@ -1,11 +1,11 @@
 ## Release summary
-This release adds new features and fixes bugs as detailed on the package website [here](https://hesim-dev.github.io/hesim/news/index.html).
+This release fixes bugs and makes a minor API change as detailed on the package website [here](https://hesim-dev.github.io/hesim/news/index.html). One of the bug fixes addresses "the condition has length > 1" error noted by CRAN in a recent email.
 
 ## Test environments
-* Local OS X, R 4.1.0
-* OS X 10.15.7 (on GitHub actions), R 4.1.0
-* Ubuntu 20.04.2 (on GitHub actions), R-devel, R 4.1.0
-* Microsoft Windows Server 2019 10.0.17763 (on GitHub actions) R 4.1.0
+* Local OS X, R 4.1.3
+* OS X 11.6.5 (on GitHub actions), R 4.1.3
+* Ubuntu 20.04.4 (on GitHub actions), R-devel, R 4.1.3
+* Microsoft Windows Server 2022 10.0.20348 (on GitHub actions) R 4.1.3
 * win-builder (devel, release)
 * R-hub builder
 
@@ -13,7 +13,7 @@ This release adds new features and fixes bugs as detailed on the package website
 0 errors | 0 warnings | 1 note
 
 * checking installed package size ... NOTE
-    installed size is  5.9Mb
+    installed size is  6.1Mb
     sub-directories of 1Mb or more:
       doc    2.2Mb
-      libs   1.9Mb
+      libs   2.0Mb
