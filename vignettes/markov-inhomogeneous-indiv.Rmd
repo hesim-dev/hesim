@@ -15,11 +15,12 @@ vignette: >
 ---
 
 # Overview
-Continuous time state transition models (CTSTMs) are used to simulate trajectories for patients between mutually exclusive health states. Transitions between health states $r$ and $s$ for patient $i$ with treatment $k$ at time $t$ are governed by hazard functions, $\lambda_{rs}(t|x_{ik})$, that can depend on covariates $x_{ik}$. 
 
-Different assumptions can be made about the time scales used to determine the hazards. In a "clock forward" (i.e., Markov) model, time $t$ refers to time since entering the initial health state. Conversely, in a "clock reset" (i.e., semi-Markov) model, time $t$ refers to time since entering the current state $r$, meaning that time resets to 0 each time a patient enters a new state. 
+Continuous time state transition models (CTSTMs) are used to simulate trajectories for patients between mutually exclusive health states. Transitions between health states $r$ and $s$ for patient $i$ with treatment $k$ at time $t$ are governed by hazard functions, $\lambda_{rs}(t|x_{ik})$, that can depend on covariates $x_{ik}$.
 
-While state occupancy probabilities in "clock forward"  models can be estimated analytically using the [Aalen-Johansen](https://www.jstor.org/stable/4615704) estimator, state occupancy probabilities in "clock reset" models can only be computed in a general fashion using individual patient simulation (IPS). `hesim` can simulate either "clock forward",  "clock reset" models, or combinations of the two via IPS. 
+Different assumptions can be made about the time scales used to determine the hazards. In a "clock forward" (i.e., Markov) model, time $t$ refers to time since entering the initial health state. Conversely, in a "clock reset" (i.e., semi-Markov) model, time $t$ refers to time since entering the current state $r$, meaning that time resets to 0 each time a patient enters a new state.
+
+While state occupancy probabilities in "clock forward" models can be estimated analytically using the [Aalen-Johansen](https://www.jstor.org/stable/4615704) estimator, state occupancy probabilities in "clock reset" models can only be computed in a general fashion using individual patient simulation (IPS). `hesim` can simulate either "clock forward", "clock reset" models, or combinations of the two via IPS.
 
 Discounted costs and quality-adjusted life-years (QALYs) are computed using the continuous time present value of a flow of state values---$q_{hik}(t)$ for utility and $c_{m, hik}(t)$ for the $m$th cost category---that depend on the health state of a patient on a given treatment strategy at a particular point in time. Discounted QALYs and costs given a model starting at time $0$ with a time horizon of $T$ are then given by,
 
@@ -43,13 +44,14 @@ library("ggplot2")
 ```
 
 # Model setup
+
 The 5 health states---(i) primary THR, (ii) successful primary, (iii) revision THR, (iv) successful revision, and (v) death----are displayed again for convenience.
 
 ```{r, out.width = "700px", echo = FALSE}
 knitr::include_graphics("markov-inhomogeneous.png")
 ```
 
-We set up the model for two treatment strategies. We will follow the [*Decision Modeling for Health Economic Evaluation*](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook and simulate results for a 60 year-old female. 1,000 patients will be simulated to ensure that results are reasonably stable. 
+We set up the model for two treatment strategies. We will follow the [*Decision Modeling for Health Economic Evaluation*](https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation) textbook and simulate results for a 60 year-old female. 1,000 patients will be simulated to ensure that results are reasonably stable.
 
 ```{r, warning = FALSE, message = FALSE}
 # Treatment strategies
@@ -90,7 +92,9 @@ print(labs)
 ```
 
 # Parameters
+
 ## Transitions
+
 The possible transitions to and from each state are summarized with a matrix in an individual patient simulation.
 
 ```{r}
@@ -104,16 +108,20 @@ tmat %>%
   kable() %>%
   kable_styling()
 ```
+
 ### Estimates from literature
+
 #### Transition 1
-The model for the first transition determines the time from the original surgery until it is deemed "successful". In the Markov model, we used model cycles that were 1-year long meaning that this process took 1-year. Since there are no model cycles in a CTSTM, we can be more flexible. Let's assume that time to recovery (TTR) from surgery takes on average 6 months and follows an exponential distribution. 
+
+The model for the first transition determines the time from the original surgery until it is deemed "successful". In the Markov model, we used model cycles that were 1-year long meaning that this process took 1-year. Since there are no model cycles in a CTSTM, we can be more flexible. Let's assume that time to recovery (TTR) from surgery takes on average 6 months and follows an exponential distribution.
 
 ```{r}
 ttrrPTHR <- 2 # Time to recovery rate implies mean time of 1/2 years
 ```
 
 #### Transition 2
-The second transition depends on the operative mortality rate following primary THR (*omrPTHR*). As in the cohort model we will assume the probability of death (within 1-year) is drawn from a beta distributions. 
+
+The second transition depends on the operative mortality rate following primary THR (*omrPTHR*). As in the cohort model we will assume the probability of death (within 1-year) is drawn from a beta distributions.
 
 ```{r}
 # 2 out of 100 patients receiving primary THR died
@@ -121,7 +129,7 @@ omrPTHR_shape1 <- 2
 omrPTHR_shape2 <- 98
 ```
 
-Below we will convert this probability to a rate so that is can be simulated using an exponential distribution. We write a simple function to do this. 
+Below we will convert this probability to a rate so that is can be simulated using an exponential distribution. We write a simple function to do this.
 
 ```{r}
 prob_to_rate <- function(p, t = 1){
@@ -130,7 +138,8 @@ prob_to_rate <- function(p, t = 1){
 ```
 
 #### Transition 3
-Transition 3 depends on the revision rate (`rr`) for a prosthesis, which will again be modeled using a proportional hazards Weibull model. The coefficients and variance-covariance matrix are displayed below. 
+
+Transition 3 depends on the revision rate (`rr`) for a prosthesis, which will again be modeled using a proportional hazards Weibull model. The coefficients and variance-covariance matrix are displayed below.
 
 ```{r, include = FALSE, results = "hide"}
 rr_coef <- c(0.3740968, -5.490935, -0.0367022, 0.768536, -1.344474)
@@ -154,7 +163,8 @@ print(rr_vcov)
 ```
 
 #### Transition 4
-The fourth transition is modeled using the death rate following recovery from the THR (i.e., while in the successful primary state). We will again use age and sex specific mortality rates. 
+
+The fourth transition is modeled using the death rate following recovery from the THR (i.e., while in the successful primary state). We will again use age and sex specific mortality rates.
 
 ```{r, echo = FALSE}
 mort_tbl <- rbind(
@@ -169,7 +179,7 @@ colnames(mort_tbl) <- c("age_lower", "age_upper", "male", "female")
 mort_tbl <- data.frame(mort_tbl)
 ```
 
-Since we are running the simulation for a 60-year old female, the mortality rate at time $0$ is $0.0067$. We are using a clock-forward model, so the hazard depends on time since the start of the model. We can therefore model mortality over time with a piecewise exponential distribution with rates that vary over time. For a 60-year female, the rates will change at 5, 15, and 25 years. 
+Since we are running the simulation for a 60-year old female, the mortality rate at time $0$ is $0.0067$. We are using a clock-forward model, so the hazard depends on time since the start of the model. We can therefore model mortality over time with a piecewise exponential distribution with rates that vary over time. For a 60-year female, the rates will change at 5, 15, and 25 years.
 
 ```{r}
 mr <- c(.0067, .0193, .0535, .1548)
@@ -177,6 +187,7 @@ mr_times <- c(0, 5, 15, 25)
 ```
 
 #### Transition 5
+
 Transition 5 is similar to transition 1 in that it is a function of time to recovery from a THR. While we could again model this process with an exponential distribution, we will instead assume this time is "fixed" for illustration purposes. Specifically, let's assume it takes one year for every patient.
 
 ```{r}
@@ -184,12 +195,14 @@ ttrRTHR <- 1 # There is no rate, the time is fixed
 ```
 
 #### Transition 6
-Following the prior example, the sixth transition depends on the operative mortality rate following revision THR (*omrRTHR*) and the overall mortality rate (*mr*). The *omrRTHR* is assumed to follow the same distribution as the *omrPTHR*.  
 
-These probabilities will be converted to rates below and then added to overall mortality rate (*mr*) at times 0, 5, 15, and 25 years. Transition 6 will consequently be modeled using a piecewise exponential distribution. 
+Following the prior example, the sixth transition depends on the operative mortality rate following revision THR (*omrRTHR*) and the overall mortality rate (*mr*). The *omrRTHR* is assumed to follow the same distribution as the *omrPTHR*.
+
+These probabilities will be converted to rates below and then added to overall mortality rate (*mr*) at times 0, 5, 15, and 25 years. Transition 6 will consequently be modeled using a piecewise exponential distribution.
 
 #### Transition 7
-The re-revision rate (*rrr*) is used to model the seventh transition. Like the *omrPTHR*, the probability is modeled with a beta distribution and will be converted to a rate below. 
+
+The re-revision rate (*rrr*) is used to model the seventh transition. Like the *omrPTHR*, the probability is modeled with a beta distribution and will be converted to a rate below.
 
 ```{r}
 # 4 out of 100 patients with a successful revision needed another procedure r
@@ -198,28 +211,29 @@ omrRTHR_shape2 <- 96
 ```
 
 #### Transition 8
+
 The final transition is time to death following a successful revision. We model it with the same model used for transition 4; that is, we assume mortality rates following a successful revision THR are the same as mortality rates following a successful primary THR.
 
 ### Multi-state model
-The transition-specific estimates can be combined to create a multi-state model, which is comprised of survival models for each transition. Since we will perform a probabilistic sensitivity analysis (PSA), we will sample the parameters from the distributions described above. 500 iterations will be used.
 
+The transition-specific estimates can be combined to create a multi-state model, which is comprised of survival models for each transition. Since we will perform a probabilistic sensitivity analysis (PSA), we will sample the parameters from the distributions described above. 500 iterations will be used.
 
 ```{r}
 n_samples <- 500
 ```
 
-Survival models are regression models, so the parameters are regression coefficients. The coefficients of each model must be a matrix (rows for parameter samples and columns for covariates). Since we often use intercept only models, let's write a simple function to convert a vector to a matrix with a single column for the intercept. 
+Survival models are regression models, so the parameters are regression coefficients. The coefficients of each model must be a matrix or data frame (rows for parameter samples and columns for covariates). Since we often use intercept only models, let's write a simple function to convert a vector to a `data.table` with a single column for the intercept.
 
 ```{r}
-matrixv <- function(v, n = NULL){
+vec_to_dt <- function(v, n = NULL){
   if (length(v) == 1) v <- rep(v, n_samples) 
-  m <- matrix(v)
-  colnames(m) <- "cons"
-  return(m)
+  dt <- data.table(v)
+  colnames(dt) <- "cons"
+  return(dt)
 }
 ```
 
-Our new helper function can then used within `define_rng()` to sample distributions of the coefficients. 
+Our new helper function can then be used within `define_rng()` to sample distributions of the coefficients.
 
 ```{r}
 transmod_coef_def <- define_rng({
@@ -227,23 +241,30 @@ transmod_coef_def <- define_rng({
                                    shape2 = omrPTHR_shape2))
   mr <- fixed(mr)
   mr_omrPTHR <- omrPTHR + mr
+  colnames(mr) <- colnames(mr_omrPTHR) <- paste0("time_", mr_times)
   rr <- multi_normal_rng(mu = rr_coef, Sigma = rr_vcov)
   rrr <- prob_to_rate(beta_rng(shape1 = 4, shape2 = 96))
   
   list(
-    log_omrPTHR = matrixv(log(omrPTHR)),
-    log_mr = lapply(as.list(log(mr)), matrixv),
-    log_ttrrPTHR = matrixv(log(ttrrPTHR)),
-    log_mr_omrPTHR = lapply(as.list(log(mr_omrPTHR)), matrixv),
-    rr_shape = matrixv(rr$lngamma),
-    rr_scale = as.matrix(rr[, -1,]),
-    log_rrr = matrixv(log(rrr))
+    log_omrPTHR = vec_to_dt(log(omrPTHR)),
+    log_mr = log(mr),
+    log_ttrrPTHR = vec_to_dt(log(ttrrPTHR)),
+    log_mr_omrPTHR = log(mr_omrPTHR),
+    rr_shape = vec_to_dt(rr$lngamma),
+    rr_scale = rr[, -1,],
+    log_rrr = vec_to_dt(log(rrr))
   )
 }, n = n_samples)
 transmod_coef <- eval_rng(transmod_coef_def)
 ```
 
-To get a better understanding of the output, lets take a look at a few of the sampled coefficient matrices.
+To get a better understanding of the output, lets summarize the coefficients.
+
+```{r}
+summary(transmod_coef)
+```
+
+It is also helpful to take a look at a few of the sampled coefficient data tables.
 
 ```{r}
 head(transmod_coef$log_omrPTHR)
@@ -251,6 +272,16 @@ head(transmod_coef$rr_scale)
 ```
 
 In addition to the coefficients, a complete parameterization of a transition model requires specification of the survival distributions and potentially auxiliary information (e.g., the times at which rates change in a piecewise exponential model). The parameters are stored in a `params_surv_list()` object, which is a list of `params_surv()` objects.
+
+To create the `params_surv()` objects, it's helpful to first write another short helper function that can convert a single data table storing the rates for each time in a piecewise exponential to a list of regression coefficients data tables.
+
+```{r}
+as_dt_list <- function(x) {
+  lapply(as.list(x), vec_to_dt)
+}
+```
+
+The `params_surv_list()` object is then created as follows.
 
 ```{r}
 transmod_params <- params_surv_list(
@@ -268,16 +299,16 @@ transmod_params <- params_surv_list(
               dist = "weibullPH"), 
   
   # 4. Successful primary:Death (2:5)
-  params_surv(coefs = transmod_coef$log_mr,
+  params_surv(coefs = as_dt_list(transmod_coef$log_mr),
               aux = list(time = c(0, 5, 15, 25)),
               dist = "pwexp"),
   
   # 5. Revision THR:Successful revision (3:4)
-  params_surv(coefs = list(est = matrixv(ttrRTHR)),
+  params_surv(coefs = list(est = vec_to_dt(ttrRTHR)),
               dist = "fixed"),
   
   # 6. Revision THR:Death (3:5)
-  params_surv(coefs = transmod_coef$log_mr_omrPTHR,
+  params_surv(coefs = as_dt_list(transmod_coef$log_mr_omrPTHR),
               aux = list(time = c(0, 5, 15, 25)),
               dist = "pwexp"),
 
@@ -286,13 +317,14 @@ transmod_params <- params_surv_list(
               dist = "exp"), 
   
   # 8. Successful revision:Death (4:5)
-  params_surv(coefs = transmod_coef$log_mr,
+  params_surv(coefs = as_dt_list(transmod_coef$log_mr),
               aux = list(time = c(0, 5, 15, 25)),
               dist = "pwexp")
 )
 ```
 
 ## Utility and costs
+
 Costs and utilities are unchanged from the cohort model. The mean (standard error) of utility are estimated be $0.85$ ($0.03$), $0.30$ ($0.03$), and $0.75$ ($0.04$) in the successful primary, revision, and successful revision health states, respectively.
 
 ```{r}
@@ -305,7 +337,7 @@ utility_tbl <- stateval_tbl(
 head(utility_tbl)
 ```
 
-The standard prosthesis costs $£394$ while the new prosthesis costs $£579$. Both are assumed to be known with certainty. 
+The standard prosthesis costs $£394$ while the new prosthesis costs $£579$. Both are assumed to be known with certainty.
 
 Since the model assumes that there are no ongoing medical costs, the only remaining cost is the cost of the revision procedure, which was estimated to have a mean of $£5,294$ and standard error of $£1,487$.
 
@@ -327,11 +359,14 @@ medcost_tbl <- stateval_tbl(
 ```
 
 # Simulation
+
 ## Constructing the model
-The economic model consists of a model for disease progression and models for assigning utility and cost values to health states. 
+
+The economic model consists of a model for disease progression and models for assigning utility and cost values to health states.
 
 ### Disease model
-The transition model is a function of the parameters of the multi-state model and input data. The input data in this case is a dataset consisting of one row for each treatment strategy and patient. It can be generated using `expand.hesim_data()`. 
+
+The transition model is a function of the parameters of the multi-state model and input data. The input data in this case is a dataset consisting of one row for each treatment strategy and patient. It can be generated using `expand.hesim_data()`.
 
 ```{r}
 transmod_data <- expand(hesim_dat, by = c("strategies", "patients"))
@@ -358,7 +393,8 @@ transmod <- create_IndivCtstmTrans(transmod_params,
 ```
 
 ### Cost and utility models
-Models based on predicted means (see `tparams_mean()`) can be created directly from the utility and cost tables using since they do not include covariates and therefore do not require input data. 
+
+Models based on predicted means (see `tparams_mean()`) can be created directly from the utility and cost tables using since they do not include covariates and therefore do not require input data.
 
 ```{r}
 # Utility
@@ -375,6 +411,7 @@ costmods <- list(Drug = drugcostmod,
 ```
 
 ### Combining the models
+
 The full economic model is constructed by combining the disease, utility, and cost models.
 
 ```{r}
@@ -384,9 +421,10 @@ econmod <- IndivCtstm$new(trans_model = transmod,
 ```
 
 ## Simulating outcomes
-### Disease progression
-Disease progression is simulated using the `$sim_disease()` method. Unique trajectories are simulated for each patient, treatment strategy, and PSA sample. Patients transition `from` an old health state that was entered at time `time_start` `to` a new health state at time `time_stop`. We will simulate the model for 60 years, or equivalently, until they reach a maximum age of 120. As shown by the run time (in seconds), `hesim` is quite fast. 
 
+### Disease progression
+
+Disease progression is simulated using the `$sim_disease()` method. Unique trajectories are simulated for each patient, treatment strategy, and PSA sample. Patients transition `from` an old health state that was entered at time `time_start` `to` a new health state at time `time_stop`. We will simulate the model for 60 years, or equivalently, until they reach a maximum age of 120. As shown by the run time (in seconds), `hesim` is quite fast.
 
 ```{r}
 ptm <- proc.time()
@@ -417,6 +455,7 @@ ggplot(mean_stateprobs, aes(x = t, y = prob_mean, col = factor(strategy_id))) +
 ```
 
 ### Costs and QALYs
+
 Following the cohort model, we simulate costs and QALYs with 6% and 1.5% discount rates, respectively. While we are currently assuming that costs and QALYs are constant over time, we could have let them depend on time since entering a health state by setting `time_reset = TRUE` in the `StateVals` objects.
 
 ```{r}
@@ -424,7 +463,7 @@ econmod$sim_qalys(dr = .015)
 econmod$sim_costs(dr = .06)
 ```
 
-Mean costs and QALYs for each PSA sample are computed with the `$summarize()` method and summary results are produced with `summary.ce()`. Costs are very similar to the cohort model. Conversely, QALYs are slightly higher in the IPS since we assumed that patients remained in the primary THR (with utility = 0) state for longer than in the cohort model. This difference not only suggests that results may be sensitive to this assumption, but also shows that the flexibility of individual-level models may make them more realistic than cohort models. 
+Mean costs and QALYs for each PSA sample are computed with the `$summarize()` method and summary results are produced with `summary.ce()`. Costs are very similar to the cohort model. Conversely, QALYs are slightly higher in the IPS since we assumed that patients remained in the primary THR (with utility = 0) state for longer than in the cohort model. This difference not only suggests that results may be sensitive to this assumption, but also shows that the flexibility of individual-level models may make them more realistic than cohort models.
 
 ```{r}
 ce_sim <- econmod$summarize()
@@ -433,7 +472,8 @@ summary(ce_sim, labels = labs) %>%
 ```
 
 # Decision analysis
-Since we performed a PSA, decision uncertainty could be formally quantified. Since we cover that in detail in the [cost-effectiveness analysis](cea.html) vignette, we will simply compute the incremental cost-effectiveness ratio (ICER) here. 
+
+Since we performed a PSA, decision uncertainty could be formally quantified. Since we cover that in detail in the [cost-effectiveness analysis](cea.html) vignette, we will simply compute the incremental cost-effectiveness ratio (ICER) here.
 
 ```{r}
 cea_pw_out <- cea_pw(ce_sim, comparator = 1, dr_qalys = 0.015, dr_costs = .06,
@@ -468,10 +508,10 @@ transmod_coef2 <- define_rng({
   mr_omrPTHR <- multi_normal_rng(mu = fit_mort2_wei$res.t[, "est"],
                                  Sigma = vcov(fit_mort2_wei))
   list(
-    mr_shape = matrixv(mr$shape),
-    mr_scale = matrixv(mr$scale),
-    mr_omrPTHR_shape = matrixv(mr_omrPTHR$shape),
-    mr_omrPTHR_scale = matrixv(mr_omrPTHR$scale)
+    mr_shape = vec_to_dt(mr$shape),
+    mr_scale = vec_to_dt(mr$scale),
+    mr_omrPTHR_shape = vec_to_dt(mr_omrPTHR$shape),
+    mr_omrPTHR_scale = vec_to_dt(mr_omrPTHR$scale)
   )
 }, n = n_samples)
 transmod_coef2 <- eval_rng(transmod_coef2)
