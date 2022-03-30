@@ -3,7 +3,6 @@ This release fixes bugs and makes a minor API change as detailed on the package 
 
 ## Test environments
 * Local OS X, R 4.1.3
-* OS X 11.6.5 (on GitHub actions), R 4.1.3
 * Ubuntu 20.04.4 (on GitHub actions), R-devel, R 4.1.3
 * Microsoft Windows Server 2022 10.0.20348 (on GitHub actions) R 4.1.3
 * win-builder (devel, release)
