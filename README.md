@@ -3,11 +3,11 @@
 
 <!-- badges: start -->
 
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/hesim)](https://cran.r-project.org/package=hesim)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/hesim)](https://cran.r-project.org/package=hesim)
 [![R build
 status](https://github.com/hesim-dev/hesim/workflows/R-CMD-check/badge.svg)](https://github.com/hesim-dev/hesim/actions)
 [![Coverage
-Status](https://codecov.io/gh/hesim-dev/hesim/branch/master/graph/badge.svg)](https://codecov.io/gh/hesim-dev/hesim)
+Status](https://codecov.io/gh/hesim-dev/hesim/branch/master/graph/badge.svg)](https://app.codecov.io/gh/hesim-dev/hesim)
 <!-- badges: end -->
 
 ## Overview
@@ -25,19 +25,19 @@ making individual-level simulation, probabilistic sensitivity analysis
 
 Features of the current version can be summarized as follows:
 
-  - Cohort DTSTMs, individual-level CTSTMs, and N-state PSMs that
+-   Cohort DTSTMs, individual-level CTSTMs, and N-state PSMs that
     encompass Markov and semi-Markov processes
-  - Options to build models directly from fitted statistical models or
+-   Options to build models directly from fitted statistical models or
     by defining them in terms of expressions
-  - Parameter estimates from either an `R` based model or from an
+-   Parameter estimates from either an `R` based model or from an
     external source
-  - Convenience functions for sampling model parameters from parametric
+-   Convenience functions for sampling model parameters from parametric
     distributions or via bootstrapping
-  - Parameter uncertainty propagated with PSA
-  - Modeling patient heterogeneity
-  - Performing cost-effectiveness analyses and representing decision
+-   Parameter uncertainty propagated with PSA
+-   Modeling patient heterogeneity
+-   Performing cost-effectiveness analyses and representing decision
     uncertainty from PSAs
-  - Simulation code written in `C++` to boost performance
+-   Simulation code written in `C++` to boost performance
 
 ## Installation
 
@@ -75,24 +75,15 @@ progression (in terms of the baseline risk and relative treatment
 effects) and (ii) the available data (either individual patient data
 (IPD) or aggregate-level data).
 
-<table class="table" style="margin-left: auto; margin-right: auto;">
-
+<table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
 <thead>
-
 <tr>
-
 <th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
-
 </th>
-
 <th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
-
 </th>
-
 <th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
-
 </th>
-
 <th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
 
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
@@ -102,7 +93,6 @@ Baseline risk
 </div>
 
 </th>
-
 <th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
 
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
@@ -112,585 +102,310 @@ Treatment effect
 </div>
 
 </th>
-
 <th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
-
 </th>
-
 </tr>
-
 <tr>
-
 <th style="text-align:left;">
-
 </th>
-
 <th style="text-align:left;">
-
 Name
-
 </th>
-
 <th style="text-align:left;">
-
 Model
-
 </th>
-
 <th style="text-align:left;">
-
 Disease model
-
 </th>
-
 <th style="text-align:left;">
-
 Disease data
-
 </th>
-
 <th style="text-align:left;">
-
 Disease model
-
 </th>
-
 <th style="text-align:left;">
-
 Disease data
-
 </th>
-
 <th style="text-align:left;">
-
 Application
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 1
-
 </td>
-
 <td style="text-align:left;width: 15em; ">
-
 <a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Preprint
 4.1</a>
-
 </td>
-
 <td style="text-align:left;">
-
 iCTSTM
-
 </td>
-
 <td style="text-align:left;">
-
 Multi-state model
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 Coefficient (AFT)
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 Oncology
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2
-
 </td>
-
 <td style="text-align:left;width: 15em; ">
-
 <a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Preprint
 4.2</a>
-
 </td>
-
 <td style="text-align:left;">
-
 PSM
-
 </td>
-
 <td style="text-align:left;">
-
 Survival models
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 Coefficient (AFT)
-
 </td>
-
 <td style="text-align:left;">
-
 Aggregate
-
 </td>
-
 <td style="text-align:left;">
-
 Oncology
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 3
-
 </td>
-
 <td style="text-align:left;width: 15em; ">
-
 <a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Preprint
 4.3</a>
-
 </td>
-
 <td style="text-align:left;">
-
 cDTSTM
-
 </td>
-
 <td style="text-align:left;">
-
 Multi-state model (panel data)
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 RR
-
 </td>
-
 <td style="text-align:left;">
-
 Aggregate
-
 </td>
-
 <td style="text-align:left;">
-
 Oncology
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 4
-
 </td>
-
 <td style="text-align:left;width: 15em; ">
-
 <a href="https://hesim-dev.github.io/hesim/articles/markov-cohort.html" style="     ">Simple
 Markov cohort</a>
-
 </td>
-
 <td style="text-align:left;">
-
 cDTSTM
-
 </td>
-
 <td style="text-align:left;">
-
 Multinomial
-
 </td>
-
 <td style="text-align:left;">
-
 Aggregate
-
 </td>
-
 <td style="text-align:left;">
-
 RR
-
 </td>
-
 <td style="text-align:left;">
-
 Aggregate
-
 </td>
-
 <td style="text-align:left;">
-
 HIV
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 5
-
 </td>
-
 <td style="text-align:left;width: 15em; ">
-
 <a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-cohort.html" style="     ">Time
 inhomogeneous Markov (cohort)</a>
-
 </td>
-
 <td style="text-align:left;">
-
 cDTSTM
-
 </td>
-
 <td style="text-align:left;">
-
 Custom
-
 </td>
-
 <td style="text-align:left;">
-
 Aggregate
-
 </td>
-
 <td style="text-align:left;">
-
 Coefficient (HR)
-
 </td>
-
 <td style="text-align:left;">
-
 Aggregate
-
 </td>
-
 <td style="text-align:left;">
-
 Hip replacement
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 6
-
 </td>
-
 <td style="text-align:left;width: 15em; ">
-
 <a href="https://hesim-dev.github.io/hesim/articles/mlogit.html" style="     ">Multinomial
 logit</a>
-
 </td>
-
 <td style="text-align:left;">
-
 cDTSTM
-
 </td>
-
 <td style="text-align:left;">
-
 Multinomial logit
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 Coefficient (OR)
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 Generic
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 7
-
 </td>
-
 <td style="text-align:left;width: 15em; ">
-
 <a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-indiv.html" style="     ">Time
 inhomogeneous Markov (individual)</a>
-
 </td>
-
 <td style="text-align:left;">
-
 iCTSTM
-
 </td>
-
 <td style="text-align:left;">
-
 Custom
-
 </td>
-
 <td style="text-align:left;">
-
 Aggregate
-
 </td>
-
 <td style="text-align:left;">
-
 Coefficient (HR)
-
 </td>
-
 <td style="text-align:left;">
-
 Aggregate
-
 </td>
-
 <td style="text-align:left;">
-
 Hip replacement
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 8
-
 </td>
-
 <td style="text-align:left;width: 15em; ">
-
 <a href="https://hesim-dev.github.io/hesim/articles/mstate.html" style="     ">Semi-Markov
 multi-state</a>
-
 </td>
-
 <td style="text-align:left;">
-
 iCTSTM
-
 </td>
-
 <td style="text-align:left;">
-
 Multi-state model
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 Coefficient (AFT)
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 Generic
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 9
-
 </td>
-
 <td style="text-align:left;width: 15em; ">
-
 <a href="https://hesim-dev.github.io/hesim/articles/psm.html" style="     ">4-state
 PSM</a>
-
 </td>
-
 <td style="text-align:left;">
-
 PSM
-
 </td>
-
 <td style="text-align:left;">
-
 Survival models
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 Coefficient (AFT)
-
 </td>
-
 <td style="text-align:left;">
-
 IPD
-
 </td>
-
 <td style="text-align:left;">
-
 Oncology
-
 </td>
-
 </tr>
-
 </tbody>
-
 <tfoot>
-
 <tr>
-
-<td style="padding: 0; border: 0;" colspan="100%">
-
+<td style="padding: 0; " colspan="100%">
 <span style="font-style: italic;">Note: </span> <sup></sup> iCTSTM =
 Individual-level continuous time state transition model; PSM =
 partitioned survival model; cDTSTM = Cohort discrete time state
 transition model. AFT = accelerated failure time; RR = relative risk; HR
 = hazard ratio; OR = odds ratio. IPD = individual patient data.
-
 </td>
-
 </tr>
-
 </tfoot>
-
 </table>
 
 ## Citing hesim
 
 If you use `hesim`, please cite as follows:
 
-``` 
 
-  Devin Incerti and Jeroen P Jansen (2021). hesim: Health Economic
-  Simulation Modeling and Decision Analysis. arXiv:2102.09437
-  [stat.AP], URL https://arxiv.org/abs/2102.09437.
+      Devin Incerti and Jeroen P Jansen (2021). hesim: Health Economic
+      Simulation Modeling and Decision Analysis. arXiv:2102.09437
+      [stat.AP], URL https://arxiv.org/abs/2102.09437.
 
-A BibTeX entry for LaTeX users is
+    A BibTeX entry for LaTeX users is
 
-  @Misc{incerti2021hesim,
-    author = {Devin Incerti and Jeroen P. Jansen},
-    title = {hesim: Health Economic Simulation Modeling and Decision Analysis},
-    year = {2021},
-    eprint = {2102.09437},
-    archiveprefix = {arXiv},
-    primaryclass = {stat.AP},
-    url = {https://arxiv.org/abs/2102.09437},
-  }
-```
+      @Misc{incerti2021hesim,
+        author = {Devin Incerti and Jeroen P. Jansen},
+        title = {hesim: Health Economic Simulation Modeling and Decision Analysis},
+        year = {2021},
+        eprint = {2102.09437},
+        archiveprefix = {arXiv},
+        primaryclass = {stat.AP},
+        url = {https://arxiv.org/abs/2102.09437},
+      }
