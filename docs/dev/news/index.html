@@ -98,6 +98,11 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.5.1.9999" id="hesim-0519999">hesim 0.5.1.9999<a class="anchor" aria-label="anchor" href="#hesim-0519999"></a></h2>
 <div class="section level3">
+<h3 id="api-change-0-5-1-9999">API change<a class="anchor" aria-label="anchor" href="#api-change-0-5-1-9999"></a></h3>
+<ul><li>The default value of the <code>check</code> argument of
+<code><a href="../reference/define_rng.html">eval_rng()</a></code> has been changed to <code>TRUE</code>.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-0-5-1-9999">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-5-1-9999"></a></h3>
 <ul><li><p>The Markov inhomogeneous individual-level model vignette has been
 corrected so that <code><a href="../reference/define_rng.html">eval_rng()</a></code> can be summarized using
@@ -184,7 +189,7 @@ transition model (cDTSTM) to be created directly from multinomial
 logistic regression parameter objects.</p></li>
 <li><p>The coefficient elements of parameter objects can be constructed
 from any object (e.g., data frame) than can be passed to
-<code><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix()</a></code> (rather than only from matrices as in previous
+<code><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix()</a></code> (rather than only from matrices as in previous
 versions). See, for instance, <code><a href="../reference/params_surv.html">params_surv()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">

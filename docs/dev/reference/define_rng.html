@@ -109,7 +109,7 @@ an object of class <code>model_def</code> defined using <code><a href="define_mo
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">define_rng</span><span class="op">(</span><span class="va">expr</span>, n <span class="op">=</span> <span class="fl">1</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">eval_rng</span><span class="op">(</span><span class="va">x</span>, params <span class="op">=</span> <span class="cn">NULL</span>, check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="fu">eval_rng</span><span class="op">(</span><span class="va">x</span>, params <span class="op">=</span> <span class="cn">NULL</span>, check <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -134,7 +134,7 @@ generation. Each element of the list should either be a <code>vector</code>,
 <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code></p></dd>
 <dt>check</dt>
 <dd><p>Whether to check the returned output so that (i) it returns a list
-and (ii) each element has the correct length or number of rows. Default is <code>FALSE</code>,
+and (ii) each element has the correct length or number of rows. Default is <code>TRUE</code>,
 meaning that any output can be returned. This is always <code>TRUE</code> when used inside
 <code><a href="define_model.html">define_model()</a></code>.</p></dd>
 </dl></div>
@@ -195,36 +195,36 @@ It can be useful to summarize an evaluated expression with <code><a href="summar
 <span class="r-in"><span class="va">params_sample</span> <span class="op">&lt;-</span> <span class="fu">eval_rng</span><span class="op">(</span>x <span class="op">=</span> <span class="va">rng_def</span>, <span class="va">params</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">params_sample</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            param         mean           sd         2.5%        97.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      p_s1_s1    0.7702367 4.716169e-02    0.7385557    0.8019176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      p_s1_s2    0.2297633 4.716169e-02    0.1980824    0.2614443</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      p_s2_s1    0.3644564 3.105112e-02    0.3435978    0.3853150</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      p_s2_s2    0.6355436 3.105112e-02    0.6146850    0.6564022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:   inptcost_A  445.3385839 2.029738e+02  308.9906423  581.6865255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:   inptcost_B 1204.8593951 1.521172e+03  183.0095902 2226.7092000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:   inptcost_C 3224.6960145 2.754789e+03 1374.1624755 5075.2295536</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      p_s1_s1    0.7789265 4.842653e-02    0.7463959    0.8114571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      p_s1_s2    0.2210735 4.842653e-02    0.1885429    0.2536041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      p_s2_s1    0.3168633 8.220778e-02    0.2616401    0.3720865</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      p_s2_s2    0.6831367 8.220778e-02    0.6279135    0.7383599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:   inptcost_A  630.9004096 1.992242e+02  497.0712896  764.7295295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:   inptcost_B  896.1218504 1.381933e+02  803.2903076  988.9533932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:   inptcost_C 6219.6130967 5.305474e+03 2655.6533010 9783.5728924</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  8: outptcost_v1  350.0000000 7.071068e+01  302.5000000  397.5000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  9: outptcost_v2  650.0000000 7.071068e+01  602.5000000  697.5000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10: outptcost_v3  750.0000000 7.071068e+01  702.5000000  797.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:     aecost_A  582.9307337 1.060057e+02  511.7212755  654.1401919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:     aecost_B 1418.9059007 8.511182e+02  847.1659978 1990.6458036</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:     aecost_C  245.4707724 8.486242e+01  188.4643193  302.4772255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:     aecost_A  792.9384746 3.312734e+02  570.4050610 1015.4718882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:     aecost_B  326.8001814 4.320604e+02   36.5629983  617.0373644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:     aecost_C  500.3327391 6.051047e+02   93.8527961  906.8126820</span>
 <span class="r-in"><span class="va">params_sample</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A summary of the "eval_rng" object:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            param         mean           sd         2.5%        97.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      p_s1_s1    0.7702367 4.716169e-02    0.7385557    0.8019176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      p_s1_s2    0.2297633 4.716169e-02    0.1980824    0.2614443</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      p_s2_s1    0.3644564 3.105112e-02    0.3435978    0.3853150</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      p_s2_s2    0.6355436 3.105112e-02    0.6146850    0.6564022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:   inptcost_A  445.3385839 2.029738e+02  308.9906423  581.6865255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:   inptcost_B 1204.8593951 1.521172e+03  183.0095902 2226.7092000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:   inptcost_C 3224.6960145 2.754789e+03 1374.1624755 5075.2295536</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      p_s1_s1    0.7789265 4.842653e-02    0.7463959    0.8114571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      p_s1_s2    0.2210735 4.842653e-02    0.1885429    0.2536041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      p_s2_s1    0.3168633 8.220778e-02    0.2616401    0.3720865</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      p_s2_s2    0.6831367 8.220778e-02    0.6279135    0.7383599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:   inptcost_A  630.9004096 1.992242e+02  497.0712896  764.7295295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:   inptcost_B  896.1218504 1.381933e+02  803.2903076  988.9533932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:   inptcost_C 6219.6130967 5.305474e+03 2655.6533010 9783.5728924</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  8: outptcost_v1  350.0000000 7.071068e+01  302.5000000  397.5000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  9: outptcost_v2  650.0000000 7.071068e+01  602.5000000  697.5000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10: outptcost_v3  750.0000000 7.071068e+01  702.5000000  797.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:     aecost_A  582.9307337 1.060057e+02  511.7212755  654.1401919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:     aecost_B 1418.9059007 8.511182e+02  847.1659978 1990.6458036</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:     aecost_C  245.4707724 8.486242e+01  188.4643193  302.4772255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:     aecost_A  792.9384746 3.312734e+02  570.4050610 1015.4718882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:     aecost_B  326.8001814 4.320604e+02   36.5629983  617.0373644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:     aecost_C  500.3327391 6.051047e+02   93.8527961  906.8126820</span>
 </code></pre></div>
     </div>
   </div>

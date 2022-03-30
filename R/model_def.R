@@ -75,12 +75,12 @@ define_rng <- function(expr, n = 1, ...){
 #' generation. Each element of the list should either be a `vector`,
 #'  `matrix`, `data.frame`, or `data.table`
 #' @param check Whether to check the returned output so that (i) it returns a list
-#' and (ii) each element has the correct length or number of rows. Default is `FALSE`,
+#' and (ii) each element has the correct length or number of rows. Default is `TRUE`,
 #' meaning that any output can be returned. This is always `TRUE` when used inside
 #' [define_model()]. 
 #' @export
 #' @rdname define_rng
-eval_rng <- function(x, params = NULL, check = FALSE){
+eval_rng <- function(x, params = NULL, check = TRUE){
   y <- eval(x$expr, envir = c(x[-1], params)) # -1 is the position of "expr"
   if (!inherits(y, "list")){
     stop("define_rng() must return a list.", call. = FALSE)
