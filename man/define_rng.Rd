@@ -7,7 +7,7 @@
 \usage{
 define_rng(expr, n = 1, ...)
 
-eval_rng(x, params = NULL, check = FALSE)
+eval_rng(x, params = NULL, check = TRUE)
 }
 \arguments{
 \item{expr}{An expression used to randomly draw variates for each parameter of
@@ -29,7 +29,7 @@ generation. Each element of the list should either be a \code{vector},
 \code{matrix}, \code{data.frame}, or \code{data.table}}
 
 \item{check}{Whether to check the returned output so that (i) it returns a list
-and (ii) each element has the correct length or number of rows. Default is \code{FALSE},
+and (ii) each element has the correct length or number of rows. Default is \code{TRUE},
 meaning that any output can be returned. This is always \code{TRUE} when used inside
 \code{\link[=define_model]{define_model()}}.}
 }
