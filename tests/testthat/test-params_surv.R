@@ -156,7 +156,7 @@ test_that("print.params_surv() works as expected", {
 test_that("print.params_surv() works with piecewise exponential model", {
   p <- params_surv(coefs = list(rate1 = 1, rate = 2),
                    dist = "pwexp",
-                   aux = list(times = c(1, 5)))
+                   aux = list(time = c(1, 5)))
   expect_output(print(p), "Times: 1 5")
 })
 

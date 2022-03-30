@@ -317,7 +317,7 @@ print.params_surv <- function(x, ...) {
   if (!is.null(x$aux)) {
     a <- list() 
     if (x$dist == "pwexp") {
-      a[["Times:"]] <- x$aux$times
+      a[["Times:"]] <- x$aux$time
     }
     if (x$dist == "survspline") {
       a[["Knots:"]] <- x$aux$knots
