@@ -193,6 +193,7 @@ head(psm$survival_)
 
 # Plot
 library("ggplot2")
+labs <- c() # create empty object (named vector inserted in next line)
 labs$curve <- c("Curve 1" = 1, "Curve 2" = 2, "Curve 3" = 3)
 autoplot(psm$survival_, labels = labs,
          ci = TRUE, ci_style = "ribbon") +
