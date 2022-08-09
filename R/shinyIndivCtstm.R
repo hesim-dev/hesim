@@ -31,6 +31,14 @@ shinyIndivCtstm <- function() {
     message("Package 'DT' is required to run this function")
   if (!requireNamespace(package = "diagram"))
     message("Package 'diagram' is required to run this function")
+  if (!requireNamespace(package = "rmarkdown"))
+    message("Package 'rmarkdown' is required to run this function")
+  if (!requireNamespace(package = "bookdown"))
+    message("Package 'bookdown' is required to run this function")
+  if (!requireNamespace(package = "knitr"))
+    message("Package 'knitr' is required to run this function")
+  if (!requireNamespace(package = "kableExtra"))
+    message("Package 'kableExtra' is required to run this function")
 
   shiny::shinyAppDir(system.file("examples/IndivCtstm app", package = "hesim", mustWork = TRUE))
 }
