@@ -420,6 +420,15 @@ server <- function(input, output, session) {
       filename = "html-report_shiny.html",
       content = function(file) {
         
+        if (!requireNamespace(package = "rmarkdown"))
+          message("Package 'rmarkdown' is required to run this function")
+        if (!requireNamespace(package = "bookdown"))
+          message("Package 'bookdown' is required to run this function")
+        if (!requireNamespace(package = "knitr"))
+          message("Package 'knitr' is required to run this function")
+        if (!requireNamespace(package = "kableExtra"))
+          message("Package 'kableExtra' is required to run this function")
+        
         # Create a notification in front-end to show this is happening
         showNotification(
           paste("Creating html report, this will take a few moments..."),
@@ -454,6 +463,15 @@ server <- function(input, output, session) {
     filename = "pdf-report_shiny.pdf",
     content = function(file) {
       
+      if (!requireNamespace(package = "rmarkdown"))
+        message("Package 'rmarkdown' is required to run this function")
+      if (!requireNamespace(package = "bookdown"))
+        message("Package 'bookdown' is required to run this function")
+      if (!requireNamespace(package = "knitr"))
+        message("Package 'knitr' is required to run this function")
+      if (!requireNamespace(package = "kableExtra"))
+        message("Package 'kableExtra' is required to run this function")
+
       # Create a notification in front-end to show this is happening
       showNotification(
         paste("Creating pdf report, this will take a few moments..."),

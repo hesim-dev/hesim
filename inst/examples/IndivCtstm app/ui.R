@@ -13,10 +13,6 @@ library(ggplot2)           # Required for creating graphs
 library(magrittr)          # Required for the model functionality (see the 'hesim example model.R script')
 library(shinyWidgets)      # Used for creating lovely input options (in this case the % on the discount)
                            # see http://shinyapps.dreamrs.fr/shinyWidgets/ to see examples
-library(rmarkdown)         # For creating markdown outputs (html and pdf)
-library(bookdown)          # For creating markdown outputs (html and pdf)
-library(knitr)             # For creating markdown outputs (html and pdf)
-library(kableExtra)        # For creating nice-looking tables in rmarkdown
 library(diagram)           # Assists with creating the diagram from heemod
 library(heemod)            # Can produce a really simple model diagram - also has other useful functions for partitioned survival modelling
 library(survminer)         # useful for easily presenting Kaplan–Meier plots.
