@@ -124,29 +124,48 @@ for the Weibull distribution when parameterized for network meta-analysis.</p>
     <h2>Arguments</h2>
     <dl><dt>x, q</dt>
 <dd><p>Vector of quantiles</p></dd>
+
+
 <dt>a0</dt>
 <dd><p>Intercept of reparameterization of the Weibull distribution.</p></dd>
+
+
 <dt>a1</dt>
 <dd><p>Slope of the reparameterization of the Weibull distribution.</p></dd>
+
+
 <dt>log, log.p</dt>
 <dd><p>logical; if TRUE, probabilities p are given as log(p).</p></dd>
+
+
 <dt>lower.tail</dt>
 <dd><p>logical; if TRUE (default), probabilities are \(P(X
 \le x)\), otherwise, \(P(X &gt; x)\).</p></dd>
+
+
 <dt>p</dt>
 <dd><p>Vector of probabilities</p></dd>
+
+
 <dt>n</dt>
 <dd><p>Number of observations. If <code>length(n) &gt; 1</code>, the length is
 taken to be the number required.</p></dd>
+
+
 <dt>t</dt>
 <dd><p>Vector of times for which restricted mean survival time is evaluated.</p></dd>
+
+
 <dt>start</dt>
 <dd><p>Optional left-truncation time or times. The returned restricted
 mean survival will be conditional on survival up to this time.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>dweibullNMA</code> gives the density, <code>pweibullNMA</code> gives the
+    
+
+<p><code>dweibullNMA</code> gives the density, <code>pweibullNMA</code> gives the
 distribution function, <code>qweibullNMA</code> gives the quantile function,
 <code>rweibullNMA</code> generates random deviates, <code>HweibullNMA</code> returns the
 cumulative hazard and <code>hweibullNMA</code> the hazard.</p>
@@ -168,8 +187,7 @@ cumulative hazard and <code>hweibullNMA</code> the hazard.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

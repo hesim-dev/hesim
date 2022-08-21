@@ -119,20 +119,27 @@ the ith state to the jth state is of the form
     <dl><dt>states</dt>
 <dd><p>A character vector of the names of health states in the
 transition matrix.</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>A prefix that precedes the described transitions between states
 used to name a transition. For example, if <code>prefix = "p_"</code> (and <code>sep = "_"</code>),
 then a transition between state <code>i</code> and state <code>j</code> will be of the form
 <code>"p_states[i]_states[j]"</code>; similarly, if <code>prefix = ""</code>, then the same
 transition will be named <code>"states[i]_states[j]"</code>.</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>A character string to separate the terms representing
 state <code>i</code> and state <code>j</code>. For instance, if <code>sep = "."</code>, the resulting name
 will be of the form <code>"states[i].states[j]"</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A character vector containing a name for each element of the transition
+    
+
+<p>A character vector containing a name for each element of the transition
 probability matrix encompassing all possible transitions.</p>
     </div>
     <div id="see-also">
@@ -167,8 +174,7 @@ of the returned object.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

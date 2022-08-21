@@ -131,7 +131,7 @@
       <h1 data-toc-skip>Time inhomogeneous Markov individual-level
 models</h1>
             
-            <h4 data-toc-skip class="date">2022-03-30</h4>
+            <h4 data-toc-skip class="date">2022-08-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/markov-inhomogeneous-indiv.Rmd" class="external-link"><code>vignettes/markov-inhomogeneous-indiv.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-indiv.Rmd</code></div>
@@ -579,42 +579,42 @@ coefficients.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##                      param        mean          sd        2.5%       97.5%</span>
-<span class="co">##  1:       log_omrPTHR_cons -4.25111076 0.860636171 -6.30094213 -2.96368829</span>
+<span class="co">##  1:       log_omrPTHR_cons -4.11302092 0.776611981 -5.88399638 -2.85293798</span>
 <span class="co">##  2:          log_mr_time_0 -5.00564775 0.000000000 -5.00564775 -5.00564775</span>
 <span class="co">##  3:          log_mr_time_5 -3.94765018 0.000000000 -3.94765018 -3.94765018</span>
 <span class="co">##  4:         log_mr_time_15 -2.92807363 0.000000000 -2.92807363 -2.92807363</span>
 <span class="co">##  5:         log_mr_time_25 -1.86562132 0.000000000 -1.86562132 -1.86562132</span>
 <span class="co">##  6:      log_ttrrPTHR_cons  0.69314718 0.000000000  0.69314718  0.69314718</span>
-<span class="co">##  7:  log_mr_omrPTHR_time_0 -3.78614191 0.531219085 -4.76359224 -2.84167045</span>
-<span class="co">##  8:  log_mr_omrPTHR_time_5 -3.31274071 0.341739505 -3.85682735 -2.64608780</span>
-<span class="co">##  9: log_mr_omrPTHR_time_15 -2.63613134 0.182592084 -2.89435022 -2.25257506</span>
-<span class="co">## 10: log_mr_omrPTHR_time_25 -1.75077195 0.078867228 -1.85383716 -1.57780276</span>
-<span class="co">## 11:          rr_shape_cons  0.36919321 0.047227866  0.27888181  0.46032480</span>
-<span class="co">## 12:          rr_scale_cons -5.47668643 0.209006574 -5.91891274 -5.06715236</span>
-<span class="co">## 13:           rr_scale_age -0.03663356 0.005278769 -0.04682537 -0.02662117</span>
-<span class="co">## 14:          rr_scale_male  0.76369104 0.108249135  0.53377068  0.97703260</span>
-<span class="co">## 15:           rr_scale_np1 -1.35220360 0.364615681 -2.11064059 -0.67875458</span>
-<span class="co">## 16:           log_rrr_cons -3.33587304 0.581435413 -4.56827427 -2.33274645</span></code></pre>
+<span class="co">##  7:  log_mr_omrPTHR_time_0 -3.70738499 0.491714135 -4.65687120 -2.74303569</span>
+<span class="co">##  8:  log_mr_omrPTHR_time_5 -3.26648457 0.323660441 -3.81221784 -2.56427934</span>
+<span class="co">##  9: log_mr_omrPTHR_time_15 -2.61353369 0.176586562 -2.87705219 -2.19665295</span>
+<span class="co">## 10: log_mr_omrPTHR_time_25 -1.74159828 0.077478283 -1.84768844 -1.54893258</span>
+<span class="co">## 11:          rr_shape_cons  0.37433051 0.047592274  0.27933712  0.46035244</span>
+<span class="co">## 12:          rr_scale_cons -5.48466728 0.212216650 -5.88505985 -5.07161361</span>
+<span class="co">## 13:           rr_scale_age -0.03685391 0.005371273 -0.04697393 -0.02672023</span>
+<span class="co">## 14:          rr_scale_male  0.77056837 0.106685291  0.56696501  0.97849898</span>
+<span class="co">## 15:           rr_scale_np1 -1.33604671 0.393596380 -2.05478478 -0.57067348</span>
+<span class="co">## 16:           log_rrr_cons -3.31398715 0.532314925 -4.50361487 -2.39549515</span></code></pre>
 <p>It is also helpful to take a look at a few of the sampled coefficient
 data tables.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">log_omrPTHR</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##         cons</span>
-<span class="co">## 1: -3.265841</span>
-<span class="co">## 2: -4.084065</span>
-<span class="co">## 3: -3.641287</span>
-<span class="co">## 4: -4.934232</span>
-<span class="co">## 5: -4.936017</span>
-<span class="co">## 6: -4.860680</span></code></pre>
+<span class="co">## 1: -3.534138</span>
+<span class="co">## 2: -3.639016</span>
+<span class="co">## 3: -5.270505</span>
+<span class="co">## 4: -4.236468</span>
+<span class="co">## 5: -4.652824</span>
+<span class="co">## 6: -3.680732</span></code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">rr_scale</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##         cons         age      male       np1</span>
-<span class="co">## 1: -5.306868 -0.05091363 0.9172055 -1.100658</span>
-<span class="co">## 2: -5.325649 -0.04160298 0.8693437 -1.539225</span>
-<span class="co">## 3: -5.370969 -0.04514512 0.7128387 -1.640620</span>
-<span class="co">## 4: -5.443455 -0.03356988 0.6966116 -1.835766</span>
-<span class="co">## 5: -5.689275 -0.03283701 0.7375618 -1.364288</span>
-<span class="co">## 6: -5.862638 -0.02865853 0.7609794 -1.579899</span></code></pre>
+<span class="co">## 1: -5.731099 -0.03120110 0.7621815 -1.306266</span>
+<span class="co">## 2: -5.378315 -0.03699248 0.8652909 -1.589404</span>
+<span class="co">## 3: -5.534844 -0.03863748 0.6918454 -1.178815</span>
+<span class="co">## 4: -5.645230 -0.03031963 0.7672100 -1.008824</span>
+<span class="co">## 5: -5.045848 -0.04973246 0.7372582 -1.257769</span>
+<span class="co">## 6: -5.197968 -0.04486077 0.6238457 -1.287095</span></code></pre>
 <p>In addition to the coefficients, a complete parameterization of a
 transition model requires specification of the survival distributions
 and potentially auxiliary information (e.g., the times at which rates
@@ -807,16 +807,16 @@ time (in seconds), <code>hesim</code> is quite fast.</p>
 <span class="va">econmod</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span>max_t <span class="op">=</span> <span class="fl">60</span>, max_age <span class="op">=</span> <span class="fl">120</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">ptm</span></code></pre></div>
 <pre><code><span class="co">##    user  system elapsed </span>
-<span class="co">##   2.119   0.097   2.230</span></code></pre>
+<span class="co">##   2.323   0.110   2.490</span></code></pre>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##    sample strategy_id patient_id grp_id from to final  time_start    time_stop</span>
-<span class="co">## 1:      1           1          1      1    1  2     0 0.000000000  0.599912604</span>
-<span class="co">## 2:      1           1          1      1    2  5     1 0.599912604  6.736310045</span>
-<span class="co">## 3:      1           1          2      1    1  2     0 0.000000000  0.272057892</span>
-<span class="co">## 4:      1           1          2      1    2  5     1 0.272057892 19.113483889</span>
-<span class="co">## 5:      1           1          3      1    1  2     0 0.000000000  0.002479566</span>
-<span class="co">## 6:      1           1          3      1    2  5     1 0.002479566 20.542475704</span></code></pre>
+<pre><code><span class="co">##    sample strategy_id patient_id grp_id from to final time_start   time_stop</span>
+<span class="co">## 1:      1           1          1      1    1  2     0 0.00000000  0.01304958</span>
+<span class="co">## 2:      1           1          1      1    2  5     1 0.01304958 23.71389935</span>
+<span class="co">## 3:      1           1          2      1    1  2     0 0.00000000  0.08489503</span>
+<span class="co">## 4:      1           1          2      1    2  5     1 0.08489503 17.23938933</span>
+<span class="co">## 5:      1           1          3      1    1  2     0 0.00000000  0.52539823</span>
+<span class="co">## 6:      1           1          3      1    2  5     1 0.52539823 39.78477404</span></code></pre>
 <p>The simulated patient trajectories can be summarized by computing the
 probability of being in each health state over time (by averaging across
 the simulated patients). Here, we will compute state occupancy
@@ -852,10 +852,10 @@ models.</p>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##    Discount rate        Outcome  Standard prosthesis       New prosthesis</span>
-<span class="co">## 1:         0.015          QALYs 15.42 (14.27, 16.50) 15.45 (14.28, 16.56)</span>
+<span class="co">## 1:         0.015          QALYs 15.42 (14.22, 16.59) 15.47 (14.34, 16.59)</span>
 <span class="co">## 2:         0.060    Costs: Drug       394 (394, 394)       579 (579, 579)</span>
-<span class="co">## 3:         0.060 Costs: Medical        122 (54, 238)           34 (6, 90)</span>
-<span class="co">## 4:         0.060   Costs: total       516 (448, 632)       613 (585, 669)</span></code></pre>
+<span class="co">## 3:         0.060 Costs: Medical        122 (52, 251)           35 (8, 84)</span>
+<span class="co">## 4:         0.060   Costs: total       516 (446, 645)       614 (587, 663)</span></code></pre>
 </div>
 </div>
 </div>
@@ -871,10 +871,10 @@ compute the incremental cost-effectiveness ratio (ICER) here.</p>
 <span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span>digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">##              Outcome          New prosthesis</span>
-<span class="co">## 1: Incremental QALYs   0.032 (-0.485, 0.594)</span>
-<span class="co">## 2: Incremental costs             97 (7, 157)</span>
-<span class="co">## 3:   Incremental NMB 1,489 (-24,279, 29,605)</span>
-<span class="co">## 4:              ICER                   3,070</span></code></pre>
+<span class="co">## 1: Incremental QALYs   0.048 (-0.465, 0.656)</span>
+<span class="co">## 2: Incremental costs           98 (-17, 159)</span>
+<span class="co">## 3:   Incremental NMB 2,310 (-23,335, 32,705)</span>
+<span class="co">## 4:              ICER                   2,034</span></code></pre>
 </div>
   </div>
 
@@ -895,8 +895,7 @@ compute the incremental cost-effectiveness ratio (ICER) here.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

@@ -155,31 +155,57 @@ of clinical effectiveness and costs. If the default method is used, then <code>x
 must be a <code>data.frame</code> or <code>data.table</code> containing columns of
 mean costs and clinical effectiveness where each row denotes a randomly sampled parameter set
 and treatment strategy.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to or from other methods. Currently unused.</p></dd>
+
+
 <dt>k</dt>
 <dd><p>Vector of willingness to pay values.</p></dd>
+
+
 <dt>sample</dt>
 <dd><p>Character name of column from <code>x</code> denoting a randomly sampled parameter set.</p></dd>
+
+
 <dt>strategy</dt>
 <dd><p>Character name of column from <code>x</code> denoting treatment strategy.</p></dd>
+
+
 <dt>grp</dt>
 <dd><p>Character name of column from <code>x</code> denoting subgroup. If <code>NULL</code>, then
 it is assumed that there is only one group.</p></dd>
+
+
 <dt>e</dt>
 <dd><p>Character name of column from <code>x</code> denoting clinical effectiveness.</p></dd>
+
+
 <dt>c</dt>
 <dd><p>Character name of column from <code>x</code> denoting costs.</p></dd>
+
+
 <dt>comparator</dt>
 <dd><p>Name of the comparator strategy in <code>x</code>.</p></dd>
+
+
 <dt>dr_qalys</dt>
 <dd><p>Discount rate for quality-adjusted life-years (QALYs).</p></dd>
+
+
 <dt>dr_costs</dt>
 <dd><p>Discount rate for costs.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>cea()</code> returns a list of four <code>data.table</code> elements.</p><dl><dt>summary</dt>
+    
+
+<p><code>cea()</code> returns a list of four <code>data.table</code> elements.</p>
+
+
+<dl><dt>summary</dt>
 <dd><p>A <code>data.table</code> of the mean, 2.5% quantile, and 97.5%
 quantile by strategy and group for clinical effectiveness and costs.</p></dd>
 
@@ -314,8 +340,7 @@ incremental net monetary benefits for the range of specified willingness to pay 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

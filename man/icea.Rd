@@ -18,3 +18,4 @@ of clinical effectiveness and costs.?ic}
 \description{
 These functions are deprecated, use \code{\link[=cea]{cea()}} and \code{\link[=cea_pw]{cea_pw()}} instead.
 }
+\keyword{internal}

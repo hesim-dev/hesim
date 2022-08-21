@@ -63,3 +63,4 @@ for the Weibull distribution when parameterized for network meta-analysis.
 \seealso{
 \code{\link{dweibull}}
 }
+\keyword{internal}

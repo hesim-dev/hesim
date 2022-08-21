@@ -140,49 +140,30 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="health-economic-simulation-modeling-">Health economic simulation modeling
-<img src="reference/figures/logo.png" align="right" width="90"><a class="anchor" aria-label="anchor" href="#health-economic-simulation-modeling-"></a>
+<div class="page-header"><h1 id="health-economic-simulation-modeling-">Health economic simulation modeling <img src="reference/figures/logo.png" align="right" width="90"><a class="anchor" aria-label="anchor" href="#health-economic-simulation-modeling-"></a>
 </h1></div>
 <!-- badges: start -->
 
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p><code>hesim</code> is a modular and computationally efficient R
-package for health economic simulation modeling and decision analysis
-that provides a general framework for integrating statistical analyses
-with economic evaluation. The package supports cohort discrete time
-state transition models (DTSTMs), N-state partitioned survival models
-(PSMs), and individual-level continuous time state transition models
-(CTSTMs), encompassing both Markov (time-homogeneous and
-time-inhomogeneous) and semi-Markov processes. It heavily utilizes
-<code>Rcpp</code> and <code>data.table</code>, making individual-level
-simulation, probabilistic sensitivity analysis (PSA), and incorporation
-of patient heterogeneity fast.</p>
+<p><code>hesim</code> is a modular and computationally efficient R package for health economic simulation modeling and decision analysis that provides a general framework for integrating statistical analyses with economic evaluation. The package supports cohort discrete time state transition models (DTSTMs), N-state partitioned survival models (PSMs), and individual-level continuous time state transition models (CTSTMs), encompassing both Markov (time-homogeneous and time-inhomogeneous) and semi-Markov processes. It heavily utilizes <code>Rcpp</code> and <code>data.table</code>, making individual-level simulation, probabilistic sensitivity analysis (PSA), and incorporation of patient heterogeneity fast.</p>
 <p>Features of the current version can be summarized as follows:</p>
 <ul>
-<li>Cohort DTSTMs, individual-level CTSTMs, and N-state PSMs that
-encompass Markov and semi-Markov processes</li>
-<li>Options to build models directly from fitted statistical models or
-by defining them in terms of expressions</li>
-<li>Parameter estimates from either an <code>R</code> based model or
-from an external source</li>
-<li>Convenience functions for sampling model parameters from parametric
-distributions or via bootstrapping</li>
+<li>Cohort DTSTMs, individual-level CTSTMs, and N-state PSMs that encompass Markov and semi-Markov processes</li>
+<li>Options to build models directly from fitted statistical models or by defining them in terms of expressions</li>
+<li>Parameter estimates from either an <code>R</code> based model or from an external source</li>
+<li>Convenience functions for sampling model parameters from parametric distributions or via bootstrapping</li>
 <li>Parameter uncertainty propagated with PSA</li>
 <li>Modeling patient heterogeneity</li>
-<li>Performing cost-effectiveness analyses and representing decision
-uncertainty from PSAs</li>
-<li>Simulation code written in <code>C++</code> to boost
-performance</li>
+<li>Performing cost-effectiveness analyses and representing decision uncertainty from PSAs</li>
+<li>Simulation code written in <code>C++</code> to boost performance</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the <a href="https://hesim-dev.github.io/hesim/">current release</a> from CRAN
-or the most up to date <a href="https://hesim-dev.github.io/hesim/dev/">development version</a>
-from GitHub.</p>
+<p>You can install the <a href="https://hesim-dev.github.io/hesim/">current release</a> from CRAN or the most up to date <a href="https://hesim-dev.github.io/hesim/dev/">development version</a> from GitHub.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Install from CRAN:</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hesim"</span><span class="op">)</span>
@@ -196,20 +177,10 @@ from GitHub.</p>
 </h2>
 <p>There are two good places to start:</p>
 <ol style="list-style-type: decimal">
-<li><p>The <a href="https://hesim-dev.github.io/hesim/articles/intro.html">Introduction
-to <code>hesim</code></a> article provides a quick
-introduction.</p></li>
-<li><p>Our <a href="https://arxiv.org/abs/2102.09437" class="external-link">preprint</a>
-describes the package (including mathematical details) more
-thoroughly.</p></li>
+<li><p>The <a href="https://hesim-dev.github.io/hesim/articles/intro.html">Introduction to <code>hesim</code></a> article provides a quick introduction.</p></li>
+<li><p>Our <a href="https://arxiv.org/abs/2102.09437" class="external-link">preprint</a> describes the package (including mathematical details) more thoroughly.</p></li>
 </ol>
-<p>You might also want to explore our example analyses which can be
-found in the preprint and web articles. They are summarized in the table
-below, with some drawn from the <a href="https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation" class="external-link">Decision
-Modeling for Health Economic Evaluation</a> textbook. Key areas of focus
-are the (i) statistical models of disease progression (in terms of the
-baseline risk and relative treatment effects) and (ii) the available
-data (either individual patient data (IPD) or aggregate-level data).</p>
+<p>You might also want to explore our example analyses which can be found in the preprint and web articles. They are summarized in the table below, with some drawn from the <a href="https://www.herc.ox.ac.uk/downloads/decision-modelling-for-health-economic-evaluation" class="external-link">Decision Modeling for Health Economic Evaluation</a> textbook. Key areas of focus are the (i) statistical models of disease progression (in terms of the baseline risk and relative treatment effects) and (ii) the available data (either individual patient data (IPD) or aggregate-level data).</p>
 <table class="table table" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
 <thead>
 <tr>
@@ -264,8 +235,7 @@ Application
 1
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     " class="external-link">Preprint
-4.1</a>
+<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     " class="external-link">Preprint 4.1</a>
 </td>
 <td style="text-align:left;">
 iCTSTM
@@ -291,8 +261,7 @@ Oncology
 2
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     " class="external-link">Preprint
-4.2</a>
+<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     " class="external-link">Preprint 4.2</a>
 </td>
 <td style="text-align:left;">
 PSM
@@ -318,8 +287,7 @@ Oncology
 3
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     " class="external-link">Preprint
-4.3</a>
+<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     " class="external-link">Preprint 4.3</a>
 </td>
 <td style="text-align:left;">
 cDTSTM
@@ -345,8 +313,7 @@ Oncology
 4
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/markov-cohort.html" style="     ">Simple
-Markov cohort</a>
+<a href="https://hesim-dev.github.io/hesim/articles/markov-cohort.html" style="     ">Simple Markov cohort</a>
 </td>
 <td style="text-align:left;">
 cDTSTM
@@ -372,8 +339,7 @@ HIV
 5
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-cohort.html" style="     ">Time
-inhomogeneous Markov (cohort)</a>
+<a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-cohort.html" style="     ">Time inhomogeneous Markov (cohort)</a>
 </td>
 <td style="text-align:left;">
 cDTSTM
@@ -399,8 +365,7 @@ Hip replacement
 6
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/mlogit.html" style="     ">Multinomial
-logit</a>
+<a href="https://hesim-dev.github.io/hesim/articles/mlogit.html" style="     ">Multinomial logit</a>
 </td>
 <td style="text-align:left;">
 cDTSTM
@@ -426,8 +391,7 @@ Generic
 7
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-indiv.html" style="     ">Time
-inhomogeneous Markov (individual)</a>
+<a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-indiv.html" style="     ">Time inhomogeneous Markov (individual)</a>
 </td>
 <td style="text-align:left;">
 iCTSTM
@@ -453,8 +417,7 @@ Hip replacement
 8
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/mstate.html" style="     ">Semi-Markov
-multi-state</a>
+<a href="https://hesim-dev.github.io/hesim/articles/mstate.html" style="     ">Semi-Markov multi-state</a>
 </td>
 <td style="text-align:left;">
 iCTSTM
@@ -480,8 +443,7 @@ Generic
 9
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/psm.html" style="     ">4-state
-PSM</a>
+<a href="https://hesim-dev.github.io/hesim/articles/psm.html" style="     ">4-state PSM</a>
 </td>
 <td style="text-align:left;">
 PSM
@@ -505,11 +467,7 @@ Oncology
 </tbody>
 <tfoot><tr>
 <td style="padding: 0; " colspan="100%">
-<span style="font-style: italic;">Note: </span> <sup></sup> iCTSTM =
-Individual-level continuous time state transition model; PSM =
-partitioned survival model; cDTSTM = Cohort discrete time state
-transition model. AFT = accelerated failure time; RR = relative risk; HR
-= hazard ratio; OR = odds ratio. IPD = individual patient data.
+<span style="font-style: italic;">Note: </span> <sup></sup> iCTSTM = Individual-level continuous time state transition model; PSM = partitioned survival model; cDTSTM = Cohort discrete time state transition model. AFT = accelerated failure time; RR = relative risk; HR = hazard ratio; OR = odds ratio. IPD = individual patient data.
 </td>
 </tr></tfoot>
 </table>
@@ -571,14 +529,7 @@ transition model. AFT = accelerated failure time; RR = relative risk; HR
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=hesim" class="external-link"><img src="https://www.r-pkg.org/badges/version/hesim" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://github.com/hesim-dev/hesim/actions" class="external-link"><img src="https://github.com/hesim-dev/hesim/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://app.codecov.io/gh/hesim-dev/hesim" class="external-link"><img src="https://codecov.io/gh/hesim-dev/hesim/branch/master/graph/badge.svg" alt="Coverage Status"></a></li>
-</ul>
-</div>
+
 
   </div>
 </div>
@@ -591,8 +542,7 @@ transition model. AFT = accelerated failure time; RR = relative risk; HR
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

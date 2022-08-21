@@ -116,17 +116,27 @@ a given parameter. All parameters are expressed on the real line (e.g.,
 after log transformation if they are defined as positive). Each element
 of the list may also be an object coercible to a matrix such as a
 <code>data.frame</code> or <code>data.table</code>.</p></dd>
+
+
 <dt>dist</dt>
 <dd><p>Character vector denoting the parametric distribution. See "Details".</p></dd>
+
+
 <dt>aux</dt>
 <dd><p>Auxiliary arguments used with splines, fractional polynomial,
 or piecewise exponential models. See "Details".</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An object of class <code>params_surv</code>, which is a list containing <code>coefs</code>,
+    
+
+<p>An object of class <code>params_surv</code>, which is a list containing <code>coefs</code>,
 <code>dist</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the
-number of rows in each element of <code>coefs</code>, which must be the same. The <code>coefs</code>element is always converted into a list of matrices. The list may also contain
+number of rows in each element of <code>coefs</code>, which must be the same. The <code>coefs</code></p>
+
+
+<p>element is always converted into a list of matrices. The list may also contain
 <code>aux</code> if a spline, fractional polynomial, or piecewise exponential model is
 used.</p>
     </div>
@@ -285,8 +295,7 @@ cumulative hazard or using <code>"discrete"</code> for random number generation.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

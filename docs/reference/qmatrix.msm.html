@@ -111,23 +111,34 @@ from a fitted <code>msm</code> object.</p>
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A <code><a href="https://rdrr.io/pkg/msm/man/msm.html" class="external-link">msm::msm</a></code> object.</p></dd>
+
+
 <dt>newdata</dt>
 <dd><p>A data frame to look for variables with which to predict. A
 separate transition intensity matrix is predicted based on each row in
 <code>newdata</code>. Can be <code>NULL</code> if no covariates are included in the fitted <code>msm</code>
 object.</p></dd>
+
+
 <dt>uncertainty</dt>
 <dd><p>Method used to draw transition intensity matrices. If <code>"none</code>",
 then point estimates are used. If <code>"normal"</code>, then samples are drawn from the
 multivariate normal distribution of the regression coefficients.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>Number of random observations of the parameters to draw.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to or from other methods. Currently unused.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An array of transition intensity matrices with the third dimension
+    
+
+<p>An array of transition intensity matrices with the third dimension
 equal to the number of rows in <code>newdata</code>.</p>
     </div>
     <div id="see-also">
@@ -195,8 +206,7 @@ equal to the number of rows in <code>newdata</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

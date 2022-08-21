@@ -7,3 +7,4 @@
 \description{
 To learn more about \code{hesim} visit the \href{https://hesim-dev.github.io/hesim/}{website}.
 }
+\keyword{internal}

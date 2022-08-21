@@ -118,23 +118,34 @@ and overall survival (OS) time-to-event outcomes.</p>
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A multi-state dataset.</p></dd>
+
+
 <dt>patient_vars</dt>
 <dd><p>Character vector of the names of patient specific variables.</p></dd>
+
+
 <dt>status</dt>
 <dd><p>Character string with the name of the status variable (1 = event,
 0 = censored).</p></dd>
+
+
 <dt>time_stop</dt>
 <dd><p>Character string with the name of the stopping time variable
 (i.e., time patient transitions from state \(r\) to state \(s\)).</p></dd>
+
+
 <dt>transition</dt>
 <dd><p>Character string with the name of the variable identifying
 a transition. The transition variable should be integer valued with values
 1, 2, and 3 for the Stable -&gt; Progression, Stable -&gt; Death, and
 Progression -&gt; Death transitions, respectively.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.table</code> with one row per patient containing each variable in
+    
+
+<p>A <code>data.table</code> with one row per patient containing each variable in
 <code>patient_vars</code>  as well as a time variable and status indicator for both
 PFS (<code>pfs_status</code>, <code>pfs_time</code>) and OS (<code>os_time</code>, <code>os_status</code>).</p>
     </div>
@@ -181,8 +192,7 @@ PFS (<code>pfs_status</code>, <code>pfs_time</code>) and OS (<code>os_time</code
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

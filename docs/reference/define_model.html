@@ -123,27 +123,40 @@ specified with the <code>times</code> argument in <code><a href="define_tparams.
 Parameters for a transition probability matrix (<code>tpmatrix</code>), utilities (<code>utility</code>),
 and/or cost categories (<code>costs</code>) are returned as a named list (see <code><a href="define_tparams.html">define_tparams()</a></code>
 for more details).</p></dd>
+
+
 <dt>rng_def</dt>
 <dd><p>A <a href="define_rng.html">rng_def</a> object used to randomly draw samples
 of the parameters from suitable probability distributions.</p></dd>
+
+
 <dt>params</dt>
 <dd><p>Either (i) a list containing the values of parameters for random
 number generation or (ii) parameter samples that have already been randomly
 generated using <code><a href="define_rng.html">eval_rng()</a></code>. In case (ii), <code>rng_def</code> should be <code>NULL</code>.</p></dd>
+
+
 <dt>n_states</dt>
 <dd><p>The number of health states (inclusive of all health states
 including the the death state) in the model. If <code>tpmatrix</code> is
 an element returned by <code>tparams_def</code>, then it will be equal to the number of states
 in the transition probability matrix; otherwise it must be specified as an argument.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>An object of class <code>model_def</code> created with <code>define_model()</code>.</p></dd>
+
+
 <dt>input_data</dt>
 <dd><p>An object of class <a href="expand.hesim_data.html">expanded_hesim_data</a>
 expanded by patients and treatment strategies.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>define_model()</code> returns an object of class <code>model_def</code>,
+    
+
+<p><code>define_model()</code> returns an object of class <code>model_def</code>,
 which is a list containing the arguments to the function. <code>eval_model()</code> returns
 a list containing <a href="id_attributes.html">ID</a> variables
 identifying parameter samples, treatment strategies, patient cohorts, and time
@@ -300,8 +313,7 @@ defined inside a <code><a href="define_rng.html">define_rng()</a></code> block.<
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

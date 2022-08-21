@@ -124,19 +124,26 @@ This allows multiple transition matrices to be stored as either tabular objects
 square matrix ordered rowwise. Reasonable classes are <code>matrix</code>, <code>data.frame</code>,
 <code>data.table</code>, and <code>tpmatrix</code>. For <code>as_tbl2()</code> a 3-dimensional array
 where each slice is a square matrix.</p></dd>
+
+
 <dt>output</dt>
 <dd><p>The class of the object returned by the function. Either
 a <code>data.table</code>, <code>data.frame</code>, <code>matrix</code>, or <code><a href="tpmatrix.html">tpmatrix</a></code>.</p></dd>
+
+
 <dt>prefix, sep</dt>
 <dd><p>Arguments passed to <code><a href="tpmatrix_names.html">tpmatrix_names()</a></code> for naming
 the transition probability columns. The <code>states</code> argument is based on
 the column names (i.e., names of the second dimension) of array;
 if <code>NULL</code>, then states are named <code>s1</code>, ..., <code>sh</code> where h is
 the number of states.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>For <code>as_array3()</code> a 3-dimensional array of square matrices;
+    
+
+<p>For <code>as_array3()</code> a 3-dimensional array of square matrices;
 for <code>as_tbl2()</code> a 2-dimensional tabular object as specified by <code>output</code>.</p>
     </div>
     <div id="see-also">
@@ -204,8 +211,7 @@ for <code>as_tbl2()</code> a 2-dimensional tabular object as specified by <code>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -121,42 +121,65 @@ cea_pw()."><meta property="og:image" content="https://hesim-dev.github.io/hesim/
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>An object of class <code>cea_pw</code> returned by <code><a href="cea.html">cea_pw()</a></code>.</p></dd>
+
+
 <dt>k</dt>
 <dd><p>Willingness to pay.</p></dd>
+
+
 <dt>cri</dt>
 <dd><p>If <code>TRUE</code>, credible intervals are computed; otherwise
 they are not.</p></dd>
+
+
 <dt>prob</dt>
 <dd><p>A numeric scalar in the interval <code>(0,1)</code> giving the credible interval.
 Default is 0.95 for a 95 percent credible interval.</p></dd>
+
+
 <dt>digits_qalys</dt>
 <dd><p>Number of digits to use to report QALYs.</p></dd>
+
+
 <dt>digits_costs</dt>
 <dd><p>Number of digits to use to report costs.</p></dd>
+
+
 <dt>output</dt>
 <dd><p>Should output be a <code>data.table</code> or a list of matrices for
 each group.</p></dd>
+
+
 <dt>rownames</dt>
 <dd><p>Row names for matrices when <code>output = "matrix"</code>.</p></dd>
+
+
 <dt>colnames</dt>
 <dd><p>Column names for matrices when <code>output = "matrix"</code>.</p></dd>
+
+
 <dt>drop</dt>
 <dd><p>If <code>TRUE</code>, then the result is coerced to the lowest possible dimension.
 Relevant if <code>output = "matrix"</code> and there is one group, in which case a single
 matrix will be returned if <code>drop = TRUE</code> and a list of length 1 will be returned
 if <code>drop = FALSE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If <code>output = "matrix"</code>, then a list of matrices (or a matrix if
+    
+
+<p>If <code>output = "matrix"</code>, then a list of matrices (or a matrix if
 <code>drop = TRUE</code>) reporting incremental cost-effectiveness ratios (ICERs)
 by group. Specifically, each matrix contains five rows for: (i)
 incremental quality-adjusted life-years (QALYs), (ii) incremental costs,
 (iii) the incremental net monetary benefit (NMB), (iv) the ICER,
 and (v) a conclusion stating whether each strategy is cost-effective relative
 to a comparator. The number of columns is equal to the
-number of strategies (including the comparator).
-If <code>output = "data.table"</code>, then the results are reported as a <code>data.table</code>,
+number of strategies (including the comparator).</p>
+
+
+<p>If <code>output = "data.table"</code>, then the results are reported as a <code>data.table</code>,
 with one row for each strategy and group combination.</p>
     </div>
     <div id="see-also">
@@ -176,8 +199,7 @@ with one row for each strategy and group combination.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

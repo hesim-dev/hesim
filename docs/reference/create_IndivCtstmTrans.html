@@ -151,30 +151,47 @@
     <dl><dt>object</dt>
 <dd><p>An object of the appropriate class containing either a fitted
 multi-state model or parameters of a multi-state model.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to <code>IndivCtstmTrans$new()</code> in <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>.</p></dd>
+
+
 <dt>input_data</dt>
 <dd><p>An object of class <code>expanded_hesim_data</code> returned by
 <code><a href="expand.hesim_data.html">expand.hesim_data</a></code>.</p></dd>
+
+
 <dt>trans_mat</dt>
 <dd><p>The transition matrix describing the states and transitions in a
 multi-state model in the format from the <code><a href="https://rdrr.io/pkg/mstate/man/mstate-package.html" class="external-link">mstate</a></code> package. See <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>.</p></dd>
+
+
 <dt>clock</dt>
 <dd><p>"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
 of clock-reset and clock-forward models. See the field <code>clock</code> in <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>Number of random observations to draw. Not used if <code>uncertainty = "none"</code>.</p></dd>
+
+
 <dt>uncertainty</dt>
 <dd><p>Method determining how parameter uncertainty should be handled.
 If <code>"normal"</code>, then parameters are randomly drawn from their multivariate normal
 distribution. If <code>"none"</code>, then only point estimates are returned.</p></dd>
+
+
 <dt>reset_states</dt>
 <dd><p>A vector denoting the states in which time resets. See the field
 <code>reset_states</code> in <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns an <code>R6Class</code> object of class <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>.</p>
+    
+
+<p>Returns an <code>R6Class</code> object of class <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -214,8 +231,7 @@ an error will be thrown.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -133,40 +133,65 @@ distributions with <code><a href="define_rng.html">define_rng()</a></code>.</p>
     <h2>Arguments</h2>
     <dl><dt>shape1, shape2</dt>
 <dd><p>Non-negative parameters of the Beta distribution.</p></dd>
+
+
 <dt>mean, sd</dt>
 <dd><p>Mean and standard deviation of the random variable.</p></dd>
+
+
 <dt>names</dt>
 <dd><p>Names for columns if an object with multiple columns is returned
 by the function.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>The number of random samples of the parameters to draw. Default is
 the value of <code>n</code> in the environment in which the function is called, which
 can be useful when used inside <code>define_rng</code> because it means that a value does
 not need to be explicitly passed to <code>n</code>.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>A matrix where each row is a separate vector of shape parameters.</p></dd>
+
+
 <dt>est</dt>
 <dd><p>A vector of estimates of the variable of interest.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>A numeric <code>vector</code>, <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code> containing
 random samples of the variable of interest from a suitable probability distribution. This would
 typically be a posterior distribution from a Bayesian analysis.</p></dd>
+
+
 <dt>meanlog, sdlog</dt>
 <dd><p>Mean and standard deviation of the distribution on the
 log scale.</p></dd>
+
+
 <dt>mu, Sigma</dt>
 <dd><p><code>mu</code> is a vector giving the means of the variables and
 <code>Sigma</code> is a positive-definite symmetric matrix specifying the
 covariance matrix of the variables.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments to pass to underlying random number generation
 functions. See "details".</p></dd>
+
+
 <dt>min, max</dt>
 <dd><p>Lower and upper limits of the distribution. Must be finite.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Functions either return a vector of length <code>n</code> or an <code>n</code> by <code>k</code><code>data.table</code>.
+    
+
+<p>Functions either return a vector of length <code>n</code> or an <code>n</code> by <code>k</code></p>
+<p></p>
+<p><code>data.table</code>.
 Multivariate distributions always return a <code>data.table</code>. If a
 univariate distribution is used, then a <code>data.table</code> is returned if each
 parameter is specified as a vector with length greater than 1; otherwise, if
@@ -175,9 +200,14 @@ parameters are scalars, then a vector is returned. In the <code>data.table</code
 entered as  arguments. For example, if the probability distribution contained
 <code>mean</code> as an argument and <code>mean</code> were
 of length 3, then an <code>n</code> by 3 matrix would be returned. The length of all
-parameter vectors must be the same. For instance, if the vector <code>mean</code>were of length 3 then all additional parameters (e.g., <code>sd</code>)
-must also be of length 3.
-If a <code>data.table</code> is returned by a distribution, then its column names are set
+parameter vectors must be the same. For instance, if the vector <code>mean</code></p>
+
+
+<p>were of length 3 then all additional parameters (e.g., <code>sd</code>)
+must also be of length 3.</p>
+
+
+<p>If a <code>data.table</code> is returned by a distribution, then its column names are set
 according to the following hierarchy:</p><ol><li><p>With the <code>names</code> argument if it is not <code>NULL</code></p></li>
 <li><p>With the names of the parameter vectors if they are named vectors. If there
 are multiple parameter vector arguments, then the names of the first parameter
@@ -256,8 +286,7 @@ with <code><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

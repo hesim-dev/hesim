@@ -127,16 +127,23 @@ correctly and sampling distributions of the coefficients are as expected.</p>
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>An object of the appropriate class.</p></dd>
+
+
 <dt>probs</dt>
 <dd><p>A numeric vector of probabilities with values in <code>[0,1]</code> used
 to compute quantiles. By default, the 2.5th and 97.5th percentiles are
 computed.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments affecting the summary. Currently unused.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> that always contains the following columns:</p><dl><dt>term</dt>
+    
+
+<p>A <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> that always contains the following columns:</p><dl><dt>term</dt>
 <dd><p>The regression term.</p></dd>
 
 <dt>mean</dt>
@@ -148,8 +155,10 @@ computed.</p></dd>
 
 </dl><p>In addition, the <code>probs</code> argument determines the quantiles that are computed.
 By default, the columns <code>2.5%</code> and <code>97.5%</code> are returned corresponding to the
-2.5th and 97.5th percentiles.
-Finally, the following columns may also be present:</p><dl><dt>parameter</dt>
+2.5th and 97.5th percentiles.</p>
+
+
+<p>Finally, the following columns may also be present:</p><dl><dt>parameter</dt>
 <dd><p>The name of the parameter of interest. This is relevant
 for any parametric model in which the underlying probability distribution
 has multiple parameters. For instance, both <code><a href="params_surv.html">params_surv</a></code> and <code><a href="params_surv_list.html">params_surv_list</a></code>
@@ -194,8 +203,7 @@ logistic regression is used for each state that can be transitioned from.</p></d
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

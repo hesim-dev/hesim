@@ -122,27 +122,40 @@
     <dl><dt>object</dt>
 <dd><p>An object of the appropriate class containing either fitted
 survival models or parameters of survival models.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to or from other methods. Passed to <code><a href="create_params.html">create_params.partsurvfit()</a></code>
 when <code>object</code> is of class <code><a href="flexsurvreg_list.html">flexsurvreg_list</a></code>.</p></dd>
+
+
 <dt>input_data</dt>
 <dd><p>An object of class <code>expanded_hesim_data</code> returned by
 <code><a href="expand.hesim_data.html">expand.hesim_data()</a></code>. Must be expanded by the data tables <code>"strategies"</code> and
 <code>"patients"</code>.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>Number of random observations to draw. Not used if <code>uncertainty = "none"</code>.</p></dd>
+
+
 <dt>uncertainty</dt>
 <dd><p>Method determining how parameter uncertainty should be handled.
 If <code>"normal"</code>, then parameters are randomly drawn from their multivariate normal
 distribution. If <code>"bootstrap"</code>, then parameters are bootstrapped using <code><a href="bootstrap.html">bootstrap</a></code>.
 If <code>"none"</code>, then only point estimates are returned.</p></dd>
+
+
 <dt>est_data</dt>
 <dd><p>A <code>data.table</code> or <code>data.frame</code> of estimation data
 used to fit survival models during bootstrap replications.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns an <code>R6Class</code> object of class <code><a href="PsmCurves.html">PsmCurves</a></code>.</p>
+    
+
+<p>Returns an <code>R6Class</code> object of class <code><a href="PsmCurves.html">PsmCurves</a></code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -187,8 +200,7 @@ be computed from predicted survival curves.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

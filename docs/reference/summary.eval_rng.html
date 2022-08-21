@@ -114,20 +114,29 @@ analysis with <code><a href="define_rng.html">eval_rng()</a></code>.</p>
     <h2>Arguments</h2>
     <dl><dt>object, x</dt>
 <dd><p>An <code><a href="define_rng.html">eval_rng</a></code> object.</p></dd>
+
+
 <dt>probs</dt>
 <dd><p>A numeric vector of probabilities with values in <code>[0,1]</code> used to
 compute quantiles with <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>.</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>When a list element returned by <code>eval_rng</code> is a tabular object,
 the parameter name is created by concatenating the name of the list element
 with the columns of the tabular object. The <code>sep</code> argument determines the
 character string used to separate the terms.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>For the print method, arguments to pass to <code>summary.eval_rng()</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>summary.eval_rng()</code> returns a <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns for
+    
+
+<p><code>summary.eval_rng()</code> returns a <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with columns for
 (i) the name of the parameter (<code>param</code>), (ii) the mean of the parameter
 samples (<code>mean</code>), (iii) the standard deviation of the parameter samples (<code>sd</code>),
 and (iv) quantiles of the parameter samples corresponding
@@ -151,8 +160,7 @@ to the <code>probs</code> argument. <code>print.eval_rng()</code> prints the out
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

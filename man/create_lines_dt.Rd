@@ -31,3 +31,4 @@ strategies <- list(c(1, 2, 3),
                   c(1, 2))
 create_lines_dt(strategies)
 }
+\keyword{internal}

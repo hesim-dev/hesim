@@ -113,23 +113,36 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
 information on outcome variables for each randomly sampled parameter set from
 a PSA. Each row should denote a randomly sampled parameter set
 and treatment strategy.</p></dd>
+
+
 <dt>comparator</dt>
 <dd><p>The comparator strategy. If the strategy column is a character
 variable, then must be a character; if the strategy column is an integer variable,
 then must be an integer.</p></dd>
+
+
 <dt>sample</dt>
 <dd><p>Character name of column denoting a randomly sampled parameter set.</p></dd>
+
+
 <dt>strategy</dt>
 <dd><p>Character name of column denoting treatment strategy.</p></dd>
+
+
 <dt>grp</dt>
 <dd><p>Character name of column denoting subgroup. If <code>NULL</code>, then
 it is assumed that there is only one group.</p></dd>
+
+
 <dt>outcomes</dt>
 <dd><p>Name of columns to compute incremental changes for.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.table</code> containing the differences in the values of each variable
+    
+
+<p>A <code>data.table</code> containing the differences in the values of each variable
 specified in outcomes between each treatment strategy and the
 comparator.</p>
     </div>
@@ -173,8 +186,7 @@ comparator.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -117,31 +117,46 @@
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>A <code><a href="survival.html">survival</a></code> object.</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>A list of named vectors containing the values and labels of
 variables. The elements of each vector are the values of a variable and the
 names are the labels. The names of the list are the names of the variables.
 See the output returned by <code><a href="get_labels.html">get_labels()</a></code> for an example.</p></dd>
+
+
 <dt>ci</dt>
 <dd><p>A logical value indicating whether confidence intervals should be
 plotted. Default is <code>FALSE</code>.</p></dd>
+
+
 <dt>prob</dt>
 <dd><p>A numeric scalar in the interval <code>(0,1)</code> giving the confidence interval.
 Default is 0.95 for a 95 percent interval.</p></dd>
+
+
 <dt>ci_style</dt>
 <dd><p>Style to use for the confidence interval if <code>ci = TRUE</code>. If
 <code>"line"</code>, then dashed lines are used; if <code>"ribbon"</code>, then shaded confidence
 bands are plotted using <code><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">ggplot2::geom_ribbon()</a></code>.</p></dd>
+
+
 <dt>geom_alpha</dt>
 <dd><p>The opacity for the shaded confidence bands when
 <code>ci_style = "ribbon"</code>. This is the value of the value of the <code>alpha</code> aesthetic
 passed to <code><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">ggplot2::geom_ribbon()</a></code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to and from methods. Currently unused.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>ggplot</code> object.</p>
+    
+
+<p>A <code>ggplot</code> object.</p>
     </div>
     <div id="note">
     <h2>Note</h2>
@@ -166,8 +181,7 @@ prior to plotting.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

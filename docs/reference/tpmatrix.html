@@ -118,20 +118,30 @@ for simulating health state transitions.</p>
 <dd><p>Named values of expressions defining elements of the matrix. Each
 element of <code>...</code> should either be a vector or a 2-dimensional tabular object
 such as a data frame. See "Details" and the examples below.</p></dd>
+
+
 <dt>complement</dt>
 <dd><p>Either a character vector or a numeric vector denoting the
 transitions (i.e., the columns of the tabular object formed from <code>...</code>) that
 are complementary (see "Details" below). If a character vector, each element
 should be the name of a column in the tabular object; if a numeric vector,
 each element should be the index of a column in the tabular object.</p></dd>
+
+
 <dt>states, prefix, sep</dt>
 <dd><p>Arguments passed to <code><a href="tpmatrix_names.html">tpmatrix_names()</a></code> for naming
 the columns. If <code>states = NULL</code> (the default), then the states are named
 <code>s1</code>, ..., <code>sh</code> where <code>h</code> is the number of health states.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a <code>tpmatrix</code> object that inherits from <code>data.table</code>where each column is an element of the transition probability matrix with
+    
+
+<p>Returns a <code>tpmatrix</code> object that inherits from <code>data.table</code></p>
+
+
+<p>where each column is an element of the transition probability matrix with
 elements ordered rowwise.</p>
     </div>
     <div id="details">
@@ -236,8 +246,7 @@ across parameter samples.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

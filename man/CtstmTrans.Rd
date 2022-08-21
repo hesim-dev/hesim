@@ -15,6 +15,7 @@ methodology used for prediction of state probabilities.
 \seealso{
 \code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}, \code{\link{IndivCtstmTrans}}
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

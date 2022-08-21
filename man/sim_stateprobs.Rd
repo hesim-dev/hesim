@@ -21,3 +21,4 @@ class \code{\link{stateprobs}}.
 \seealso{
 \code{\link{sim_stateprobs.survival}}
 }
+\keyword{internal}

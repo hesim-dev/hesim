@@ -121,26 +121,39 @@ of the last expression within the braces is evaluated. The expression must
 return a list where each element is either a <code>vector</code> or tabular object
 ( <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code>). The length of the vector must
 either be or <code>n</code> and the number of rows in the tabular object must be <code>n</code>.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>Number of samples of the parameters to draw.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments to pass to the environment used to evaluate
 <code>expr</code>.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>An object of class <code>rng_def</code> created with <code>define_rng()</code>.</p></dd>
+
+
 <dt>params</dt>
 <dd><p>A list containing the values of parameters for random number
 generation. Each element of the list should either be a <code>vector</code>,
 <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code></p></dd>
+
+
 <dt>check</dt>
 <dd><p>Whether to check the returned output so that (i) it returns a list
 and (ii) each element has the correct length or number of rows. Default is <code>TRUE</code>,
 meaning that any output can be returned. This is always <code>TRUE</code> when used inside
 <code><a href="define_model.html">define_model()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>define_rng()</code> returns an object of class <code>rng_def</code>,
+    
+
+<p><code>define_rng()</code> returns an object of class <code>rng_def</code>,
 which is a list containing the unevaluated random number generation
 expressions passed  to <code>expr</code>, <code>n</code>, and any additional arguments passed to
 <code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and
@@ -239,8 +252,7 @@ It can be useful to summarize an evaluated expression with <code><a href="summar
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

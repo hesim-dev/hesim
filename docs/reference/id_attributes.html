@@ -126,23 +126,41 @@ and <a href="tparams.html">transformed parameter objects</a> already predicted f
     <h2>Arguments</h2>
     <dl><dt>strategy_id</dt>
 <dd><p>A numeric vector of integers denoting the treatment strategy.</p></dd>
+
+
 <dt>n_strategies</dt>
 <dd><p>A scalar denoting the number of unique treatment strategies.</p></dd>
+
+
 <dt>patient_id</dt>
 <dd><p>A numeric vector of integers denoting the patient.</p></dd>
+
+
 <dt>n_patients</dt>
 <dd><p>A scalar denoting the number of unique patients.</p></dd>
+
+
 <dt>state_id</dt>
 <dd><p>A numeric vector of integers denoting the health state.</p></dd>
+
+
 <dt>n_states</dt>
 <dd><p>A scalar denoting the number of unique health states.</p></dd>
+
+
 <dt>transition_id</dt>
 <dd><p>A numeric vector denoting the
 health state transition. This is only used for state transition models.</p></dd>
+
+
 <dt>n_transitions</dt>
 <dd><p>A scalar denoting the number of unique transitions.</p></dd>
+
+
 <dt>time_id</dt>
 <dd><p>A numeric vector of integers denoting a unique time interval.</p></dd>
+
+
 <dt>time_intervals</dt>
 <dd><p>A <code>data.table</code> denoting unique time intervals. Must
 contain the columns <code>time_id</code>, <code>time_start</code>, and <code>time_stop</code>.
@@ -151,19 +169,30 @@ the stopping time of an interval. Following the <a href="https://rdrr.io/pkg/sur
 time intervals are closed on the right and
 open on the left (except in the final interval where <code>time_stop</code> is equal to
 infinity).</p></dd>
+
+
 <dt>n_times</dt>
 <dd><p>A scalar denoting the number of time intervals. Equal to the
 number of rows in <code>time_intervals</code>.</p></dd>
+
+
 <dt>sample</dt>
 <dd><p>A numeric vector of integer denoting the sample from the posterior
 distribution of the parameters.</p></dd>
+
+
 <dt>n_samples</dt>
 <dd><p>A scalar denoting the number of samples.</p></dd>
+
+
 <dt>grp_id</dt>
 <dd><p>An optional numeric vector of integers denoting the subgroup.</p></dd>
+
+
 <dt>patient_wt</dt>
 <dd><p>An optional numeric vector denoting the weight to apply to each patient
 within a subgroup.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -193,8 +222,7 @@ prioritizing: (i) <code>sample</code>, (ii) <code>strategy_id</code>, (iii) <cod
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

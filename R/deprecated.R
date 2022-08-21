@@ -5,6 +5,7 @@
 #' @param x An object of simulation output characterizing the probability distribution
 #' of clinical effectiveness and costs.?ic
 #' @param ... Further arguments passed to or from other methods. 
+#' @keywords internal
 #' @export
 #' @rdname icea
 icea <- function(x, ...) {
@@ -63,6 +64,7 @@ format_cri <- function(est, lower, upper, costs = TRUE, digits){
 #' 
 #' If `output = "data.table"`, then the results are reported as a `data.table`,
 #' with one row for each strategy and group combination.
+#' @keywords internal
 #' @export
 icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95, 
                      digits_qalys = 2, 

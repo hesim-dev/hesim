@@ -113,10 +113,14 @@ possible transition by the relevant ID variables.</p>
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>A <code><a href="tparams_transprobs.html">tparams_transprobs</a></code> object.</p></dd>
+
+
 <dt>probs</dt>
 <dd><p>A numeric vector of probabilities with values in <code>[0,1]</code> used
 to compute quantiles. Computing quantiles can be slow when <code>object</code> is large,
 so the default is <code>NULL</code>, meaning that no quantiles are computed.</p></dd>
+
+
 <dt>unflatten</dt>
 <dd><p>If <code>FALSE</code>, then each column containing a summary statistic
 is a vector and the generated table contains one row
@@ -124,20 +128,32 @@ is a vector and the generated table contains one row
 <code>TRUE</code>, then each column stores a list of <code>matrix</code> objects containing
 transition probability matrices formed by "unflattening" the one-dimensional
 vectors. See "Value" below for additional details.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments affecting the summary. Currently unused.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If <code>unflatten = "FALSE"</code> (the default), then a <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code>is returned with columns for (i) the health state that is being transitioned
+    
+
+<p>If <code>unflatten = "FALSE"</code> (the default), then a <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code></p>
+
+
+<p>is returned with columns for (i) the health state that is being transitioned
 from (<code>from</code>), (ii) the health state that is being transitioned to (<code>to</code>)
 (iii) the mean of each parameter across parameter samples (<code>mean</code>),
 (iv) the standard deviation of the parameter samples (<code>sd</code>), and
-(v) quantiles of the parameter samples corresponding to the <code>probs</code> argument.
-If, on the other hand, <code>unflatten = "TRUE"</code>, then the parameters are unflattened
+(v) quantiles of the parameter samples corresponding to the <code>probs</code> argument.</p>
+
+
+<p>If, on the other hand, <code>unflatten = "TRUE"</code>, then the parameters are unflattened
 to form transition probability matrices; that is, the <code>mean</code>, <code>sd</code>, and
-quantile columns are (lists of) matrices.
-In both cases, the ID variables are also returned as columns.</p>
+quantile columns are (lists of) matrices.</p>
+
+
+<p>In both cases, the ID variables are also returned as columns.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -156,8 +172,7 @@ In both cases, the ID variables are also returned as columns.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

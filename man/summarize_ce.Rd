@@ -33,3 +33,4 @@ averaged across patients. A \code{grp_id} column can also be used so that
 outcomes are computed for each subgroup (if \code{by_grp = TRUE}); otherwise it is assumed that
 there is only one subgroup.
 }
+\keyword{internal}

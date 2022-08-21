@@ -114,13 +114,18 @@ most conveniently used along with <code><a href="tpmatrix.html">tpmatrix()</a></
 <dd><p>An object of class <code>expanded_hesim_data</code> returned by
 <code><a href="expand.hesim_data.html">expand.hesim_data()</a></code>. This dataset must be expanded by treatment
 strategies, patients, and optionally time intervals.</p></dd>
+
+
 <dt>n_samples</dt>
 <dd><p>The number of parameters samples used for the probabilistic
 sensitivity analysis (PSA).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a <code>tpmatrix_id</code> object that inherits from <code>data.table</code> with
+    
+
+<p>Returns a <code>tpmatrix_id</code> object that inherits from <code>data.table</code> with
 the same columns in <code>object</code> repeated <code>n_samples</code> times. That is, to facilitate
 creation of a <code><a href="tparams_transprobs.html">tparams_transprobs()</a></code> object,  there is one row for each
 parameter sample, treatment strategy, patient, and optionally time interval.</p>
@@ -166,8 +171,7 @@ parameter sample, treatment strategy, patient, and optionally time interval.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

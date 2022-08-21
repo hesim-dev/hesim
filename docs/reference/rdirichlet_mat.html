@@ -114,15 +114,22 @@ transition probability matrices.</p>
     <h2>Arguments</h2>
     <dl><dt>n</dt>
 <dd><p>Number of samples to draw.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>A matrix where each row is a separate vector of shape parameters.</p></dd>
+
+
 <dt>output</dt>
 <dd><p>The class of the object returned by the function. Either an
 <code>array</code>, <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If <code>output = "array"</code>, then an array of matrices is returned
+    
+
+<p>If <code>output = "array"</code>, then an array of matrices is returned
 where each row of each matrix is a sample from the Dirichlet distribution.
 If <code>output</code> results in a two dimensional object (i.e., a <code>matrix</code>,
 <code>data.frame</code>, or <code>data.table</code>, then each row contains
@@ -169,8 +176,7 @@ written in <code>C++</code> for speed.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

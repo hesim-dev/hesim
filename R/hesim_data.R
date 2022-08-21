@@ -19,6 +19,7 @@
 #' strategies <- list(c(1, 2, 3),
 #'                   c(1, 2))
 #' create_lines_dt(strategies)
+#' @keywords internal
 #' @export
 create_lines_dt <- function(strategy_list, strategy_ids = NULL){
   treatments <- unlist(strategy_list, use.names = FALSE)
@@ -399,6 +400,7 @@ time_intervals <- function(times){
 #' (iv) the health-related ID variable, and (v) `time_id`. 
 #'   
 #' @seealso [hesim_data()],[expand.hesim_data()], [input_mats]
+#' @keywords internal
 #' @export
 id_attributes <- function(strategy_id, n_strategies,
                           patient_id, n_patients,

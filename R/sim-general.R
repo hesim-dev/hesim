@@ -160,6 +160,7 @@ NULL
 #' 
 #' @return 
 #' A [`stateprobs`] object.
+#' @keywords internal
 #' @export
 #' @seealso [`sim_stateprobs.survival`]
 sim_stateprobs <- function(x, ...) {

@@ -113,22 +113,31 @@ debugging.</p>
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A <code><a href="tparams_transprobs.html">tparams_transprobs</a></code> object.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Currently unused.</p></dd>
+
+
 <dt>prefix, sep</dt>
 <dd><p>Arguments passed to <code><a href="tpmatrix_names.html">tpmatrix_names()</a></code> for naming
 the transition probability columns. The <code>states</code> argument is based on
 the column names (i.e., names of the second dimension) of the <code>$value</code>
 element of <code>x</code>; if <code>NULL</code>, then states are named <code>s1</code>, ..., <code>sh</code> where h is
 the number of states. Only used if <code>long = FALSE</code>.</p></dd>
+
+
 <dt>long</dt>
 <dd><p>If <code>TRUE</code>, then output is returned in a longer format with
 one row for each transition; if <code>FALSE</code>, then each row contains an entire
 flattened transition probability matrix.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The output always contains columns for the ID variables and the
+    
+
+<p>The output always contains columns for the ID variables and the
 transition probabilities, but the form depends on on the <code>long</code> argument.
 If <code>FALSE</code>, then a <code>data.table</code> with one row for each transition probability
 matrix is returned; otherwise, the <code>data.table</code> contains one row for each
@@ -355,8 +364,7 @@ transition and columns <code>from</code> (the state being transitioned from) and
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

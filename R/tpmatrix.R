@@ -488,6 +488,7 @@ tpmatrix_id <- function(object, n_samples){
 #' elements represent the instantaneous risk of moving between health states.
 #' @param x An `R` object.
 #' @param ... Further arguments passed to or from other methods. Currently unused.
+#' @keywords internal
 #' @export
 qmatrix <- function (x, ...) {
   UseMethod("qmatrix", x)

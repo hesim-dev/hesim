@@ -139,26 +139,39 @@ Markov chains with the <code><a href="CohortDtstmTrans.html">CohortDtstmTrans</a
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>An object of the appropriate class.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to or from other methods. Currently unused.</p></dd>
+
+
 <dt>tpmatrix_id</dt>
 <dd><p>An object of class <code><a href="tpmatrix_id.html">tpmatrix_id</a></code> (or an equivalent
 <code>data.table</code> with the same ID columns as returned by <code><a href="tpmatrix_id.html">tpmatrix_id()</a></code>).</p></dd>
+
+
 <dt>times</dt>
 <dd><p>An optional numeric vector of distinct times to pass to
 <a href="time_intervals.html">time_intervals</a> representing time intervals indexed by the 4th dimension of
 the array. May either be the start or the end of intervals.
 This argument is not required if there is only one time interval.</p></dd>
+
+
 <dt>grp_id</dt>
 <dd><p>An optional numeric vector of integers denoting the subgroups. Must
 be the same length as the 3rd dimension of the array.</p></dd>
+
+
 <dt>patient_wt</dt>
 <dd><p>An optional numeric vector denoting the weight to apply to each
 patient within a subgroup. Must be the same length as the 3rd dimension of the array.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An object of class <code>tparams_transprobs</code>,
+    
+
+<p>An object of class <code>tparams_transprobs</code>,
 which is a list containing <code>value</code> and relevant ID attributes. The element
 <code>value</code> is an array of predicted transition probability matrices from the
 probability distribution of the underlying statistical model. Each matrix in
@@ -562,8 +575,7 @@ also be summarized (across parameter samples) using
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

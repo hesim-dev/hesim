@@ -136,21 +136,33 @@ probabilities, with simulation of costs and quality-adjusted life-years
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>A <code><a href="stateprobs.html">stateprobs</a></code> object.</p></dd>
+
+
 <dt>dr</dt>
 <dd><p>Discount rate.</p></dd>
+
+
 <dt>integrate_method</dt>
 <dd><p>Method used to integrate state values when computing
 costs or QALYs. Options are <code>trapz</code> (the default) for the trapezoid rule,
 <code>riemann_left</code> left for a left Riemann sum, and
 <code>riemann_right</code> right for a right Riemann sum.</p></dd>
+
+
 <dt>value_name</dt>
 <dd><p>Name of the column containing values of the outcome. Default
 is <code>"value"</code>.</p></dd>
+
+
 <dt>outcome_name</dt>
 <dd><p>Name of the column indicating the outcome corresponding
 to each model. Only used if <code>models</code> is a list. Default is <code>"outcome"</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Currently unused.</p></dd>
+
+
 <dt>model, models</dt>
 <dd><p>An object or list of objects of class <code><a href="StateVals.html">StateVals</a></code> used to
 model state values. When using <code>sim_qalys()</code>, this should be
@@ -159,13 +171,18 @@ used with one model for each cost category. Finally, with <code>sim_ev()</code>,
 this may either be a single model or a list of models. May also be <code>NULL</code>,
 in which case length of stay is computed based on the state probabilities
 contained in <code>object</code>.</p></dd>
+
+
 <dt>lys</dt>
 <dd><p>If <code>TRUE</code>, then life-years are simulated in addition to
 QALYs.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>sim_ev()</code> returns a <code>data.table</code> with the following columns:</p><dl><dt>sample</dt>
+    
+
+<p><code>sim_ev()</code> returns a <code>data.table</code> with the following columns:</p><dl><dt>sample</dt>
 <dd><p>A random sample from the PSA.</p></dd>
 
 <dt>strategy_id</dt>
@@ -192,7 +209,10 @@ Only included if <code>models</code> is a list.</p></dd>
 
 
 </dl><p>The names of the <code>outcome</code> and <code>value</code> columns may be changed with the
-<code>value_name</code> and <code>outcome_name</code> arguments. <code>sim_costs()</code> and <code>sim_qalys()</code>return similar objects, that are of class <code><a href="costs.html">costs</a></code> and <code><a href="qalys.html">qalys</a></code>, respectively.</p>
+<code>value_name</code> and <code>outcome_name</code> arguments. <code>sim_costs()</code> and <code>sim_qalys()</code></p>
+
+
+<p>return similar objects, that are of class <code><a href="costs.html">costs</a></code> and <code><a href="qalys.html">qalys</a></code>, respectively.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -376,8 +396,7 @@ continuous-time state transition model.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

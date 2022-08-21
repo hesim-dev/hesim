@@ -120,10 +120,16 @@ coefficients under sampling uncertainty. May also be a
 list of objects (e.g., data frames) that can be coerced into matrices with
 <code><a href="https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html" class="external-link">as.matrix()</a></code>. Each matrix must have the same number of columns and the
 number of matrices must be equal to \(K-1\).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An object of class <code>params_mlogit</code>, which is a list containing <code>coefs</code>and <code>n_samples</code>, where <code>n_samples</code> is equal to the number of rows in each
+    
+
+<p>An object of class <code>params_mlogit</code>, which is a list containing <code>coefs</code></p>
+
+
+<p>and <code>n_samples</code>, where <code>n_samples</code> is equal to the number of rows in each
 element of <code>coefs</code>. The <code>coefs</code> element is always converted into
 a 3D array of stacked matrices.</p>
     </div>
@@ -221,8 +227,7 @@ $$Pr(y_i = c) = \frac{e^{\beta_c x_i}}{\sum_{k=1}^K e^{\beta_k x_i}}$$</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

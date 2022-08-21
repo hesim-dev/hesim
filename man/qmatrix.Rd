@@ -15,3 +15,4 @@ qmatrix(x, ...)
 A generic function for creating transition intensity matrices where
 elements represent the instantaneous risk of moving between health states.
 }
+\keyword{internal}

@@ -115,9 +115,13 @@ transition matrix (stored in 3-dimensional arrays).</p>
     <dl><dt>x</dt>
 <dd><p>A 3-dimensional array where each slice is a square transition
 probability matrix.</p></dd>
+
+
 <dt>rr</dt>
 <dd><p>A 2-dimensional tabular object such as a matrix or data frame where each
 column is a vector of relative risks to apply to each transition matrix in <code>x</code>.</p></dd>
+
+
 <dt>index</dt>
 <dd><p>The indices of the transition probability matrices that <code>rr</code>  is applied to.
 Should either be a matrix where the first column denotes a transition probability matrix row
@@ -125,16 +129,21 @@ and the second column denotes a transition probability matrix column or a list
 where each element is a vector of length 2 with the first element denoting
 a transition probability matrix row and the second column denoting a transition
 probability matrix column.</p></dd>
+
+
 <dt>complement</dt>
 <dd><p>Denotes indices of transition probability matrices that are
 "complements" (i.e.,  computed as \(1\) less the sum of all other
 elements in that row). Should be in the same format as <code>index</code>. There can be
 at most one complementary column in each row of a transition probability
 matrix. If <code>NULL</code>, then the diagonals are assumed to be the complements.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A 3-dimensional array where each slice contains matrices of the same
+    
+
+<p>A 3-dimensional array where each slice contains matrices of the same
 dimension as each matrix in <code>x</code> and the number of slices is equal to the number
 of rows in <code>rr</code>.</p>
     </div>
@@ -231,8 +240,7 @@ relative risks from multiple treatment strategies to a reference treatment.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

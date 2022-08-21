@@ -114,24 +114,33 @@ reference).</p>
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A <code>data.table</code>.</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>A list of named vectors containing the values and labels of
 variables. The elements of each vector are the values of a variable and the
 names are the labels. The names of the list are the names of the variables.
 See the output returned by <code><a href="get_labels.html">get_labels()</a></code> for an example.</p></dd>
+
+
 <dt>new_names</dt>
 <dd><p>A character vector of the same length as <code>labels</code> where
 each element denotes the name of a new variable to create for the
 corresponding element in <code>labels</code>. If <code>NULL</code>, then the variables in <code>labels</code>
 are modified and no new variables are created; otherwise, the existing variables
 are not modified and new variables are created instead.</p></dd>
+
+
 <dt>as_factor</dt>
 <dd><p>If <code>TRUE</code> factor variables are created; otherwise character
 vectors are created.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>x</code> is modified by reference and returned invisibly.</p>
+    
+
+<p><code>x</code> is modified by reference and returned invisibly.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -175,8 +184,7 @@ vectors are created.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
