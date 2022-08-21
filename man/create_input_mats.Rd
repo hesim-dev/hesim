@@ -88,3 +88,4 @@ input_mats
 \seealso{
 \code{\link[=input_mats]{input_mats()}}
 }
+\keyword{internal}

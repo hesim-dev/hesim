@@ -80,3 +80,4 @@ prioritizing: (i) \code{sample}, (ii) \code{strategy_id}, (iii) \code{patient_id
 \seealso{
 \code{\link[=hesim_data]{hesim_data()}},\code{\link[=expand.hesim_data]{expand.hesim_data()}}, \link{input_mats}
 }
+\keyword{internal}

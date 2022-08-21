@@ -132,6 +132,7 @@ sr2fsweiNMA <- function(sr){
 #' @param t Vector of times for which restricted mean survival time is evaluated.
 #' @param start Optional left-truncation time or times. The returned restricted
 #' mean survival will be conditional on survival up to this time.
+#' @keywords internal
 #' @name weibullNMA
 #' @return \code{dweibullNMA} gives the density, \code{pweibullNMA} gives the
 #' distribution function, \code{qweibullNMA} gives the quantile function,
@@ -222,7 +223,8 @@ mean_weibullNMA = function(a0, a1){
 #'    will always initialize the first of two parameters at 1, and the second 
 #'    (a scale parameter, for instance) at the mean of \code{t}.}
 #' }
-##' @export
+#' @keywords internal
+#' @export
 hesim_survdists <- list(
   weibullNMA = list(
              name = "weibullNMA",

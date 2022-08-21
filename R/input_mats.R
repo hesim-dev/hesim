@@ -186,6 +186,7 @@ get_input_mats_id_vars <- function(data){
 #' of the correct type. 
 #' @param input_data An object of class "expanded_hesim_data" returned by the function
 #'  [expand.hesim_data()]. 
+#' @keywords internal
 #' @return If all tests passed, returns nothing; otherwise, throws an exception.
 check_input_data <- function(input_data){
   if (!inherits(input_data, "expanded_hesim_data")){
@@ -242,6 +243,7 @@ get_terms <- function(object){
 #' @seealso [input_mats()]
 #' @example man-roxygen/example-create_input_mats.R
 #' @export
+#' @keywords internal
 #' @rdname create_input_mats
 create_input_mats <- function (object, ...) {
   if (missing(object)){

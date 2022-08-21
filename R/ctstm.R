@@ -8,6 +8,7 @@
 #' methodology used for prediction of state probabilities. 
 #' @format An [`R6::R6Class`] object.
 #' @seealso [`create_IndivCtstmTrans()`], [`IndivCtstmTrans`]
+#' @keywords internal
 #' @export
 CtstmTrans <- R6::R6Class(
   "CtstmTrans",

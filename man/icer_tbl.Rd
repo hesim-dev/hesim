@@ -64,3 +64,4 @@ Generate a table of incremental cost-effectiveness ratios given output from
 \seealso{
 \code{\link[=cea_pw]{cea_pw()}}
 }
+\keyword{internal}

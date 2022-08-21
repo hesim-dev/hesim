@@ -167,6 +167,7 @@ check_summarize <- function(x){
 #' averaged across patients. A `grp_id` column can also be used so that
 #' outcomes are computed for each subgroup (if `by_grp = TRUE`); otherwise it is assumed that 
 #' there is only one subgroup.
+#' @keywords internal
 #' @return An object of class [`ce`].
 summarize_ce <- function(costs, qalys, by_grp = FALSE) {
   patient_wt <- NULL

@@ -17,4 +17,5 @@ ggplot2::autoplot
 #' @import data.table
 #' @importFrom Rcpp evalCpp
 #' @importFrom ggplot2 .data
+#' @keywords internal
 NULL

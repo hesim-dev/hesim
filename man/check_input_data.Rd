@@ -17,3 +17,4 @@ If all tests passed, returns nothing; otherwise, throws an exception.
 Check that input data argument for \code{create_input_mats} exists and that it is
 of the correct type.
 }
+\keyword{internal}
