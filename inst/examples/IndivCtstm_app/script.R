@@ -284,22 +284,22 @@ Export_params <- list(
   labs_indiv            = labs_indiv
 )
 
-Markdown_location <- "./inst/examples/IndivCtstm app/"
+Markdown_location <- "./inst/examples/IndivCtstm_app/"
 
 # html document
 rmarkdown::render(
-  input = file.path(Markdown_location,"html report.Rmd"),
+  input = file.path(Markdown_location,"html-report.Rmd"),
   output_format = 'bookdown::html_document2',
-  output_file = "./inst/examples/IndivCtstm app/html-report.html",
+  output_file = "./inst/examples/IndivCtstm)app/html-report.html",
   params = Export_params,
   envir = environment()
 )
 
 # pdf document
 rmarkdown::render(
-  input = file.path(Markdown_location,"pdf report.Rmd"),
+  input = file.path(Markdown_location,"pdf-report.Rmd"),
   output_format = 'bookdown::pdf_document2',
-  output_file = "./inst/examples/IndivCtstm app/pdf-report.pdf", 
+  output_file = "./inst/examples/IndivCtstm_app/pdf-report.pdf", 
   params = Export_params,
   envir = environment()
 )

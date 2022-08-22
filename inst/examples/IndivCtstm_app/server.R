@@ -442,7 +442,7 @@ server <- function(input, output, session) {
 
         # html document
         rmarkdown::render(
-          input = file.path(Markdown_location,"html report.Rmd"),
+          input = file.path(Markdown_location,"html-report.Rmd"),
           output_format = 'bookdown::html_document2',
           output_file = file,
           params = Export_params,
@@ -476,7 +476,7 @@ server <- function(input, output, session) {
       
       # pdf document
       rmarkdown::render(
-        input = file.path(Markdown_location,"pdf report.Rmd"),
+        input = file.path(Markdown_location,"pdf_report.Rmd"),
         output_format = 'bookdown::pdf_document2',
         output_file = file,
         params = Export_params,

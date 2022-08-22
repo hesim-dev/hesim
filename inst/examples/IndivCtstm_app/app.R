@@ -10,7 +10,7 @@ options(encoding = "UTF-8")
 # setwd if running script from this file. Set wd() as the hesim project location
 # setwd()
 
-App_location <- "./inst/examples/IndivCtstm app/"
+App_location <- "./inst/examples/IndivCtstm_app/"
 
 runApp(appDir = file.path(getwd(),App_location),     # This looks for the ui.R, server.R and www folder within the wd. Do not rename these.
        launch.browser = TRUE,                    # This line will open the application in the user's default browser
