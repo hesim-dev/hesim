@@ -1,0 +1,18 @@
+pandoc: 2.14.2
+pkgdown: 2.0.6
+pkgdown_sha: ~
+articles:
+  benchmarks: benchmarks.html
+  cea: cea.html
+  intro: intro.html
+  markov-cohort: markov-cohort.html
+  markov-inhomogeneous-cohort: markov-inhomogeneous-cohort.html
+  markov-inhomogeneous-indiv: markov-inhomogeneous-indiv.html
+  mlogit: mlogit.html
+  mstate: mstate.html
+  psm: psm.html
+last_built: 2022-08-21T23:59Z
+urls:
+  reference: https://hesim-dev.github.io/hesim/reference
+  article: https://hesim-dev.github.io/hesim/articles
+
