@@ -476,7 +476,7 @@ server <- function(input, output, session) {
       
       # pdf document
       rmarkdown::render(
-        input = file.path(Markdown_location,"pdf_report.Rmd"),
+        input = file.path(Markdown_location,"pdf-report.Rmd"),
         output_format = 'bookdown::pdf_document2',
         output_file = file,
         params = Export_params,
