@@ -2,17 +2,19 @@ context("params_surv_list.R unit tests")
 library("flexsurv")
 
 n <- 5
-p_ex <-  params_surv_list(
+p_ex <- params_surv_list(
   # Model 1
   mod1 = params_surv(
     coefs = list(rate = data.frame(intercept = rlnorm(n, 0, 1))),
     dist = "exp"
   ),
-  
+
   # Model 2
   mod2 = params_surv(
-    coefs = list(rate = data.frame(intercept = rlnorm(n, 1, 1),
-                                   treat = rlnorm(n, .5, 1))),
+    coefs = list(rate = data.frame(
+      intercept = rlnorm(n, 1, 1),
+      treat = rlnorm(n, .5, 1)
+    )),
     dist = "exp"
   )
 )
@@ -60,24 +62,32 @@ test_that("print.params_surv_list()", {
 
 test_that("print.params_surv_list() with ancillary parameters", {
   p <- params_surv_list(
-    params_surv(coefs = list(gamma0 = 1, gamma1 = 2),
-                   dist = "survspline",
-                   aux = list(knots = c(1, 3)))
+    params_surv(
+      coefs = list(gamma0 = 1, gamma1 = 2),
+      dist = "survspline",
+      aux = list(knots = c(1, 3))
+    )
   )
-  
+
   expect_output(
-    print(p), 
+    print(p),
     "Inspect each element of the list to view values for auxilliary parameters."
   )
 })
 
 # create_params.flexsurvreg_list() ---------------------------------------------
-fit_exp <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ age, 
-                                 data = ovarian, dist = "exp")
-fit_wei <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ age, 
-                                 data = ovarian, dist = "weibull")
-fit_lnorm <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ age, 
-                                   data = ovarian, dist = "lognormal")
+fit_exp <- flexsurv::flexsurvreg(
+  formula = Surv(futime, fustat) ~ age,
+  data = ovarian, dist = "exp"
+)
+fit_wei <- flexsurv::flexsurvreg(
+  formula = Surv(futime, fustat) ~ age,
+  data = ovarian, dist = "weibull"
+)
+fit_lnorm <- flexsurv::flexsurvreg(
+  formula = Surv(futime, fustat) ~ age,
+  data = ovarian, dist = "lognormal"
+)
 params_surv_exp <- create_params(fit_exp, n = 2)
 params_surv_wei <- create_params(fit_wei, n = 2)
 params_surv_lnorm <- create_params(fit_lnorm, n = 2)
@@ -94,11 +104,14 @@ test_that("create_params.flexsurvreg_list() works as expected", {
 # create_params.partsurvfit() --------------------------------------------------
 test_that("create_params.partsurvfit() works as expected", {
   fit1 <- flexsurvspline(Surv(endpoint1_time, endpoint1_status) ~ age,
-                         data = psm4_exdata$survival[1:30, ])
+    data = psm4_exdata$survival[1:30, ]
+  )
   fit2 <- flexsurvspline(Surv(endpoint2_time, endpoint2_status) ~ age,
-                         data = psm4_exdata$survival[1:30, ])
-  partsurv_fit <- partsurvfit(flexsurvreg_list(fit1 = fit1, fit2 = fit2), 
-                              data = psm4_exdata$survival)
+    data = psm4_exdata$survival[1:30, ]
+  )
+  partsurv_fit <- partsurvfit(flexsurvreg_list(fit1 = fit1, fit2 = fit2),
+    data = psm4_exdata$survival
+  )
   pars_surv_list <- create_params(partsurv_fit, n = 2)
   expect_equal(length(pars_surv_list), 2)
 })

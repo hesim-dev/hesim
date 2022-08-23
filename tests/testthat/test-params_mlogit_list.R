@@ -14,7 +14,7 @@ p_ex <- params_mlogit_list(
       )
     )
   ),
-  
+
   ## Transitions from sicker state (sicker -> death)
   sicker = params_mlogit(
     coefs = list(

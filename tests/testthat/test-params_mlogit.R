@@ -8,7 +8,6 @@ test_that("params_mlogit() works with a list of data frames", {
         intercept = c(-0.33, -.2),
         treat = c(log(.75), log(.8))
       ),
-      
       death = data.frame(
         intercept = c(-1, -1.2),
         treat = c(log(.6), log(.65))
@@ -27,7 +26,7 @@ test_that("params_mlogit() works with a list of matrices", {
     )
   )
   expect_true(inherits(p, "params_mlogit"))
-  expect_equal(colnames(p$coef[,, 1]), c("x1", "x2"))
+  expect_equal(colnames(p$coef[, , 1]), c("x1", "x2"))
 })
 
 test_that("params_mlogit() works with array inputs", {
@@ -35,7 +34,7 @@ test_that("params_mlogit() works with array inputs", {
     coefs = array(1:8, dim = c(2, 2, 2))
   )
   expect_true(inherits(p, "params_mlogit"))
-  expect_equal(colnames(p$coef[,, 1]), c("x1", "x2"))
+  expect_equal(colnames(p$coef[, , 1]), c("x1", "x2"))
 })
 
 # params_mlogit() throws errors ------------------------------------------------
@@ -66,7 +65,6 @@ test_that("summary.params_mlogit()", {
         intercept = c(-0.30, -.2),
         treat = c(-.3, -.1)
       ),
-      
       death = data.frame(
         intercept = c(-1, -1.2),
         treat = c(-.5, -.4)

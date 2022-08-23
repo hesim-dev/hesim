@@ -1,124 +1,131 @@
 # Check ------------------------------------------------------------------------
 #' Input validation for class objects
-#' 
+#'
 #' \code{check} is a generic function for validating the inputs of class objects.
 #' @param object object to check.
 #' @param inner_class When checking a list of objects, the class of elements within
 #' the inner most list.
 #' @param ... Further arguments passed to or from other methods.
-#' 
+#'
 #' @return If validation is successful, returns the object in question; otherwise,
-#' informs the user that an error has occurred.  
+#' informs the user that an error has occurred.
 #' @keywords internal
-check <- function (object, ...) {
+check <- function(object, ...) {
   UseMethod("check")
 }
 
-check_is_class <- function(object, class, name = NULL){
-  if (is.null(name)){
+check_is_class <- function(object, class, name = NULL) {
+  if (is.null(name)) {
     name <- class
   }
-  if (!inherits(object, class)){
+  if (!inherits(object, class)) {
     stop(paste0("'", name, "' must be of class '", class, "'."),
-         call. = FALSE)
-  }  
+      call. = FALSE
+    )
+  }
 }
 
-check_scalar <- function(x, name){
-  if(!(is.atomic(x) && length(x) == 1L)){
+check_scalar <- function(x, name) {
+  if (!(is.atomic(x) && length(x) == 1L)) {
     stop(paste0(name, " must be a scalar."))
   }
 }
 
-check_dr <- function(dr){
-  if(anyDuplicated(dr) != 0L){
+check_dr <- function(dr) {
+  if (anyDuplicated(dr) != 0L) {
     stop("You cannot specify the same discount rate twice.",
-         call. = FALSE)
-  }  
+      call. = FALSE
+    )
+  }
 }
 
-check_StateVals <- function(models, object, 
+check_StateVals <- function(models, object,
                             object_name = c("stateprobs", "disprog")) {
-  
-  if(!is.list(models)){
+  if (!is.list(models)) {
     stop("'models' must be a list", call. = FALSE)
   }
   object_name <- match.arg(object_name)
-  
+
   # Generic check for state value model
-  for (i in 1:length(models)){
+  for (i in 1:length(models)) {
     models[[i]]$check()
   }
-  
+
   # Check that state value models have correct size
   if (!is.null(attr(object, "size"))) {
     expected_size <- attr(object, "size")
   } else {
     stop("'size' attribute missing from ", object_name, ".")
   }
-  
+
   ## The expected number of states depends on the number of absorbing states
   expected_states <- expected_size[["n_states"]]
   if (!is.null(attr(object, "absorbing"))) {
     expected_states <- expected_states - length(attr(object, "absorbing"))
   }
-  
+
   ## Loop over models
-  for (i in 1:length(models)){ 
-    
+  for (i in 1:length(models)) {
     check_size <- function(actual, expected, z = NULL, msg = NULL) {
       if (actual != expected) {
         if (is.null(msg)) {
-          msg <- paste0("The number of ", z, " in each 'StateVals' model must equal ",
-                        "the number of ", z,  " in the '", object_name, "' object, ",
-                        "which is ", expected, ".")
+          msg <- paste0(
+            "The number of ", z, " in each 'StateVals' model must equal ",
+            "the number of ", z, " in the '", object_name, "' object, ",
+            "which is ", expected, "."
+          )
         }
         stop(msg, call. = FALSE)
       }
     }
-    
+
     check_size(get_n_samples(models[[i]]$params),
-               expected_size[["n_samples"]],
-               z = "samples")
-    check_size(get_id_object(models[[i]])$n_strategies, 
-               expected_size[["n_strategies"]],
-               z = "strategies")
-    check_size(get_id_object(models[[i]])$n_patients, 
-               expected_size[["n_patients"]],
-               z = "patients")
+      expected_size[["n_samples"]],
+      z = "samples"
+    )
+    check_size(get_id_object(models[[i]])$n_strategies,
+      expected_size[["n_strategies"]],
+      z = "strategies"
+    )
+    check_size(get_id_object(models[[i]])$n_patients,
+      expected_size[["n_patients"]],
+      z = "patients"
+    )
     check_size(
-      get_id_object(models[[i]])$n_states, 
+      get_id_object(models[[i]])$n_states,
       expected_states,
-      msg = paste0("The number of states in each 'StateVals' model ", 
-                   "must equal the number of states in the ",
-                   "'", object_name, "' object less the number of ",
-                   "absorbing states, which is ", expected_states, ".")
+      msg = paste0(
+        "The number of states in each 'StateVals' model ",
+        "must equal the number of states in the ",
+        "'", object_name, "' object less the number of ",
+        "absorbing states, which is ", expected_states, "."
+      )
     )
   } # End loop over state value models
 }
 
 # Absorbing states -------------------------------------------------------------
 #' Absorbing states
-#' 
+#'
 #' This is a generic function that returns a vector of absorbing states.
-#' @param x An object of the appropriate class. When `x` is a `matrix`, 
-#' it must be a transition matrix in the format from the 
-#' [`mstate`][mstate::mstate] package (see also [`IndivCtstmTrans`]). 
+#' @param x An object of the appropriate class. When `x` is a `matrix`,
+#' it must be a transition matrix in the format from the
+#' [`mstate`][mstate::mstate] package (see also [`IndivCtstmTrans`]).
 #' @keywords internal
 absorbing <- function(x, ...) {
   UseMethod("absorbing")
 }
 
 #' @rdname absorbing
-absorbing.matrix <- function(x, ...){
+absorbing.matrix <- function(x, ...) {
   which(apply(x, 1, function(z) all(is.na(z))))
 }
 
 #' @rdname absorbing
-absorbing.tparams_transprobs <- function(x, ...){
+absorbing.tparams_transprobs <- function(x, ...) {
   n_states <- ncol(x$value)
   m <- apply(x$value, c(1, 2), mean)
-  sum_zero <- apply(m, 1, function (z) sum(z == 0))
+  sum_zero <- apply(m, 1, function(z) sum(z == 0))
   absorbing <- which(sum_zero == (n_states - 1))
   if (length(absorbing) == 0) absorbing <- NULL
   absorbing
@@ -126,37 +133,37 @@ absorbing.tparams_transprobs <- function(x, ...){
 
 # Additional utility methods ---------------------------------------------------
 #' Form a list from \code{...}
-#' 
+#'
 #' Form a list of objects from \code{...}.
 #' @param ... Objects used to form a list.
 #' @return A list of objects from \code{...}.
 #' @keywords internal
-create_object_list <- function(...){
+create_object_list <- function(...) {
   objects <- list(...)
-  if(length(objects) == 1 & inherits(objects[[1]], "list")){
+  if (length(objects) == 1 & inherits(objects[[1]], "list")) {
     objects <- objects[[1]]
   }
   return(objects)
 }
 
 # Create list of objects
-check_object_list <- function(x, inner_class){
-  for (i in 1:length(x)){
-    if(!inherits(x[[i]], inner_class)){
+check_object_list <- function(x, inner_class) {
+  for (i in 1:length(x)) {
+    if (!inherits(x[[i]], inner_class)) {
       msg <- paste0("Each element in list must be of class '", inner_class, "'")
       stop(msg, call. = FALSE)
     }
-  } 
+  }
   return(x)
 }
 
-new_object_list <- function(..., new_class){
+new_object_list <- function(..., new_class) {
   objects <- create_object_list(...)
   class(objects) <- new_class
   return(objects)
 }
 
-object_list <- function(..., inner_class, new_class){
+object_list <- function(..., inner_class, new_class) {
   res <- new_object_list(..., new_class = new_class)
   check_object_list(res, inner_class)
 }
@@ -168,23 +175,29 @@ list_depth <- function(list) {
 
 # Flatten a nested list
 flatten_lists <- function(x) {
-  if (!inherits(x, "list")) return(list(x))
-  else return(unlist(c(lapply(x, flatten_lists)), recursive = FALSE))
+  if (!inherits(x, "list")) {
+    return(list(x))
+  } else {
+    return(unlist(c(lapply(x, flatten_lists)), recursive = FALSE))
+  }
 }
 
 # Sample from a posterior distribution
-sample_from_posterior <- function(n, n_samples){
-  if (n < n_samples){
+sample_from_posterior <- function(n, n_samples) {
+  if (n < n_samples) {
     return(sample.int(n_samples, n, replace = FALSE))
   } else if (n > n_samples) {
-    warning(paste0("The number of requested draws for the probabilistic ",
-                   "sensitivity analysis (PSA), 'n', is larger than the number ",
-                   "of previously sampled values from the probability ",
-                   "distribution of interest. Samples for the PSA have ",
-                   "consequently been drawn with replacement."),
-            call. = FALSE)
+    warning(paste0(
+      "The number of requested draws for the probabilistic ",
+      "sensitivity analysis (PSA), 'n', is larger than the number ",
+      "of previously sampled values from the probability ",
+      "distribution of interest. Samples for the PSA have ",
+      "consequently been drawn with replacement."
+    ),
+    call. = FALSE
+    )
     return(sample.int(n_samples, n, replace = TRUE))
-  } else{
+  } else {
     return(1:n)
   }
 }
@@ -193,66 +206,66 @@ is_whole_number <- function(x, tol = .Machine$double.eps^0.5) {
   abs(x - round(x)) < tol
 }
 
-is_1d_vector <- function(x){
+is_1d_vector <- function(x) {
   is.atomic(x) && length(dim(x)) <= 1
 }
 
-is_3d_array <- function(x){
+is_3d_array <- function(x) {
   is.atomic(x) && length(dim(x)) == 3
 }
 
-check_patient_wt <- function(object, result){
+check_patient_wt <- function(object, result) {
   if (is.null(get_id_object(object)[["patient_wt"]])) {
     result[, ("patient_wt") := NULL]
   }
 }
 
-format_costs <- function(x, digits){
+format_costs <- function(x, digits) {
   formatC(x, format = "f", digits = digits, big.mark = ",")
 }
 
-format_qalys <- function(x, digits){
+format_qalys <- function(x, digits) {
   formatC(x, format = "f", digits = digits)
 }
 
 ci_alpha <- function(prob) {
-  if (prob > 1 | prob < 0){
+  if (prob > 1 | prob < 0) {
     stop("'prob' must be in the interval (0,1)",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
-  lower <- (1 - prob)/2
+  lower <- (1 - prob) / 2
   upper <- 1 - lower
   return(list(lower = lower, upper = upper))
 }
 
-format_ci <- function(est, lower, upper, costs = TRUE, digits){
-  if (costs){
+format_ci <- function(est, lower, upper, costs = TRUE, digits) {
+  if (costs) {
     est <- format_costs(est, digits = digits)
     lower <- format_costs(lower, digits = digits)
     upper <- format_costs(upper, digits = digits)
-  } else{
+  } else {
     est <- format_qalys(est, digits = digits)
     lower <- format_qalys(lower, digits = digits)
     upper <- format_qalys(upper, digits = digits)
   }
-  paste0(est, " (",lower, ", ", upper, ")")
+  paste0(est, " (", lower, ", ", upper, ")")
 }
 
 format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
-  
   if (!is.null(pivot_from)) {
     rhs <- pivot_from
     lhs <- setdiff(id_cols, pivot_from)
-    f <- paste(paste(lhs, collapse=" + "), paste(rhs, collapse = " + "),  sep=" ~ ")
+    f <- paste(paste(lhs, collapse = " + "), paste(rhs, collapse = " + "), sep = " ~ ")
     x <- dcast(x, f, value.var = "value", sep = ", ")
   }
-  
+
   # Drop group if desired
   if (drop_grp && ("grp" %in% colnames(x))) {
     n_grps <- length(unique(x$grp))
     if (n_grps == 1) x[, ("grp") := NULL]
   }
-  
+
   # Return
   return(x)
 }
@@ -287,15 +300,14 @@ summarize_params.integer <- function(x, probs, param_name = "param",
 }
 
 summarize_params.matrix <- function(x, probs, param_name = "param",
-                                    param_values = NULL,...) {
-  
+                                    param_values = NULL, ...) {
   apply_quantile <- function(x, probs) {
     y <- apply(x, 2, stats::quantile, probs = probs)
     if (length(probs) == 1) {
       y <- matrix(y, ncol = 1)
       colnames(y) <- paste0(probs * 100, "%")
       return(y)
-    } else{
+    } else {
       return(t(y))
     }
   }
@@ -312,16 +324,17 @@ summarize_params.matrix <- function(x, probs, param_name = "param",
 }
 
 summarize_params.data.table <- function(x, probs, param_name = "param",
-                                        param_values = NULL, cols = NULL,...) {
-  
+                                        param_values = NULL, cols = NULL, ...) {
   if (is.null(cols)) cols <- colnames(x)
   x <- as.matrix(x)
-  summarize_params.matrix(x, probs = probs, param_name = param_name,
-                          param_values = param_values)
-}  
+  summarize_params.matrix(x,
+    probs = probs, param_name = param_name,
+    param_values = param_values
+  )
+}
 
 # List of matrices -------------------------------------------------------------
-coeflist <- function(coefs){
+coeflist <- function(coefs) {
   if (inherits(coefs, "list")) {
     coefs <- lapply(coefs, function(x) {
       x <- as.matrix(x)
@@ -335,24 +348,26 @@ coeflist <- function(coefs){
   return(coefs)
 }
 
-check.coeflist <- function(coefs){
+check.coeflist <- function(coefs) {
   # Each element of 'coefs' must be a matrix
   matrix_bool <- unlist(lapply(coefs, is.matrix))
-  if(sum(!matrix_bool) > 0){
+  if (sum(!matrix_bool) > 0) {
     stop("'coefs' must be a list of matrices.",
-         call. = FALSE)
-  } 
-  
+      call. = FALSE
+    )
+  }
+
   # Number of rows in each matrix element of 'coefs' must be equal
   coefs_nrows <- unlist(lapply(coefs, nrow))
-  if(!all(coefs_nrows[[1]] == coefs_nrows)){
+  if (!all(coefs_nrows[[1]] == coefs_nrows)) {
     stop("Number of rows in all 'coefs' matrices must be equal.",
-         call. = FALSE)
-  } 
+      call. = FALSE
+    )
+  }
 }
 
 # Get number of samples --------------------------------------------------------
-get_n_samples <- function (x) {
+get_n_samples <- function(x) {
   UseMethod("get_n_samples")
 }
 
@@ -360,21 +375,21 @@ get_n_samples.default <- function(x) {
   if ("n_samples" %in% names(x)) {
     return(x[["n_samples"]])
   } else if (is.list(x) && ("n_samples" %in% names(x[[1]]))) {
-    return (x[[1]][["n_samples"]])
+    return(x[[1]][["n_samples"]])
   } else {
     stop("Could not find 'n_samples'.")
   }
-} 
+}
 
-get_n_samples.coeflist <- function(x){
+get_n_samples.coeflist <- function(x) {
   stopifnot(is.list(x))
-  if (!is.matrix(x[[1]])){
+  if (!is.matrix(x[[1]])) {
     stop("'coefs' must be a list of matrices.", call. = FALSE)
   }
   return(nrow(x[[1]]))
 }
 
-get_n_samples.array <- function(x){
+get_n_samples.array <- function(x) {
   stopifnot(is_3d_array(x))
   return(dim(x)[1])
 }

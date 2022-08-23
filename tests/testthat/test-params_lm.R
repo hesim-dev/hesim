@@ -1,8 +1,10 @@
 context("params_lm.R unit tests")
 library("MASS")
 
-p_ex <- params_lm(coefs = matrix(c(1, 2), nrow = 1),
-               sigma = 2)
+p_ex <- params_lm(
+  coefs = matrix(c(1, 2), nrow = 1),
+  sigma = 2
+)
 
 # params_lm() works as expected ------------------------------------------------
 test_that("params_lm works with matrix coefficients", {
@@ -14,8 +16,10 @@ test_that("params_lm automatically names matrix columns", {
 })
 
 test_that("params_lm works with data.frame coefficients", {
-  p <- params_lm(coefs = data.frame(intercept = c(1, 2)),
-                 sigma = 2)
+  p <- params_lm(
+    coefs = data.frame(intercept = c(1, 2)),
+    sigma = 2
+  )
   expect_equal(p$coefs[, "intercept"], c(1, 2))
 })
 
@@ -34,8 +38,10 @@ test_that("params_lm throws error if numbers of samples are inconsistent ", {
 
 test_that("params_lm throws error if sigma is not numeric", {
   expect_error(
-    params_lm(coefs = matrix(c(1, 2), nrow = 1),
-              sigma = "cat"),
+    params_lm(
+      coefs = matrix(c(1, 2), nrow = 1),
+      sigma = "cat"
+    ),
     "is.numeric(sigma) is not TRUE",
     fixed = TRUE
   )
@@ -46,8 +52,10 @@ test_that("summary.params_lm()", {
   ps <- summary(p_ex)
   expect_equal(ps$term, c("x1", "x2", "sigma"))
   expect_equal(ps$parameter, c("mean", "mean", "sd"))
-  expect_equal(unname(unlist(ps[term == "x1", .(mean, `2.5%`, `97.5%`)])), 
-               rep(1, 3))
+  expect_equal(
+    unname(unlist(ps[term == "x1", .(mean, `2.5%`, `97.5%`)])),
+    rep(1, 3)
+  )
 })
 
 # print_params.lm() ------------------------------------------------------------
@@ -58,11 +66,12 @@ test_that("print.params_lm()", {
 })
 
 # create_params.lm() -----------------------------------------------------------
-medcost_fit <- lm(costs ~ female + state_name, 
-                  data = psm4_exdata$costs$medical)
+medcost_fit <- lm(costs ~ female + state_name,
+  data = psm4_exdata$costs$medical
+)
 
 test_that("create_params.lm works with point estimates", {
-  
+
   # point estimates
   p <- create_params(medcost_fit, n = 5, uncertainty = "none")
   expect_equal(p$coefs[, ], coef(medcost_fit))

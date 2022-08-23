@@ -7,8 +7,8 @@ data.table::as.data.table
 ggplot2::autoplot
 
 #' `hesim`: Health Economic Simulation Modeling and Decision Analysis
-#' 
-#' @description 
+#'
+#' @description
 #' To learn more about `hesim` visit the [website](https://hesim-dev.github.io/hesim/).
 #'
 #' @docType package

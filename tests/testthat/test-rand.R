@@ -10,7 +10,7 @@ test_that("rcat", {
   p <- c(.2, .3, .5)
   samp <- rcat(10000, p)
   expect_equal(as.numeric(prop.table(table(samp))), p, tolerance = .03)
-  
+
   # does sampling work for a matrix with rows less than rows in n?
   p1 <- c(.3, .5, .2)
   p2 <- c(.1, .1, .8)
@@ -20,33 +20,33 @@ test_that("rcat", {
   samp2 <- samp[seq(2, length(samp), by = 2)]
   expect_equal(as.numeric(prop.table(table(samp1))), p1, tolerance = .03)
   expect_equal(as.numeric(prop.table(table(samp2))), p2, tolerance = .03)
-  
-  # should be equal to rmultinom  
+
+  # should be equal to rmultinom
   p <- c(.2, .5, .3, .5, .1, .4)
   n <- 1000
-  pmat <- matrix(rep(p, n/2), nrow = n, ncol = 3, byrow = TRUE)
-  
+  pmat <- matrix(rep(p, n / 2), nrow = n, ncol = 3, byrow = TRUE)
+
   ## rcat
   set.seed(100)
   samp1 <- rcat(n, pmat)
   prop.table(table(samp1))
-  
+
   ## rmultinom
   set.seed(100)
   samp2 <- t(apply(pmat, 1, rmultinom, n = 1, size = 1))
   samp2 <- apply(samp2, 1, function(x) which(x == 1))
   prop.table(table(samp2))
-  
+
   ## test equal
   expect_equal(samp1, samp2)
-  
+
   # n must be positive
   expect_error(rcat(n = -1, prob = c(.2, .8)))
 })
 
 # rpwexp -----------------------------------------------------------------------
 test_that("rpwexp", {
-  
+
   # does sampling work for a vector?
   n <- 10000
   r <- c(.6, 1.2, 1.3)
@@ -54,7 +54,7 @@ test_that("rpwexp", {
   samp1 <- rpwexp(n, rate = r, time = t)
   samp2 <- msm::rpexp(n, r, t)
   expect_equal(mean(samp1), mean(samp2), tol = .1, scale = 1)
-  
+
   # does sampling work for a matrix with rows less than rows in n?
   n <- 20000
   r1 <- c(.6, 1.2, 1.3)
@@ -64,32 +64,34 @@ test_that("rpwexp", {
   samp2.1 <- msm::rpexp(n, rate = r1, t = t)
   samp2.2 <- msm::rpexp(n, rate = r2, t = t)
   expect_equal(mean(samp1[seq(1, length(samp1), by = 2)]), mean(samp2.1), tol = .1, scale = 1)
-  
+
   # does sampling work for a matrix with rows equals to n?
   n <- 10000
   rmat <- matrix(c(.6, 1.2, 1.3), ncol = 3, nrow = n, byrow = TRUE)
   samp1 <- rpwexp(n, rate = rmat, time = t)
   samp2 <- msm::rpexp(n, rate = rmat[1, ], t = t)
   expect_equal(median(samp1), median(samp2), tol = .1, scale = 1)
-  
+
   # check errors
   expect_error(rpwexp(2, rate = c(.2, 1.2, 2.0), time = c(.2, 1)))
-  expect_error(rpwexp(2, rate = c(.2, 1.2, 2.0), 
-                      time = matrix(c(.2, 1), ncol = 2, byrow = TRUE)))
+  expect_error(rpwexp(2,
+    rate = c(.2, 1.2, 2.0),
+    time = matrix(c(.2, 1), ncol = 2, byrow = TRUE)
+  ))
   expect_error(rpwexp(n = -2))
   expect_error(rpwexp(n = 2, rmat))
 })
 
 # rdirichlet_mat ---------------------------------------------------------------
-rdirichlet <- function(n, alpha){
+rdirichlet <- function(n, alpha) {
   l <- length(alpha)
   x <- matrix(rgamma(l * n, alpha), ncol = l, byrow = TRUE)
   sm <- x %*% rep(1, l)
-  return(x/as.vector(sm))
+  return(x / as.vector(sm))
 }
 
 test_that("rdirichlet_mat", {
-  
+
   # check accuracy
   n <- 10000
   alpha <- matrix(c(100, 200, 500, 50, 70, 75), ncol = 3, nrow = 2, byrow = TRUE)
@@ -98,24 +100,36 @@ test_that("rdirichlet_mat", {
   mean1 <- apply(samp1, c(1, 2), mean)
   mean2.1 <- apply(samp2.1, 2, mean)
   expect_equal(mean1[1, ], mean2.1, tolerance = .02, scale = 1)
-  
+
   # works with vector and 2D array
   expect_error(rdirichlet_mat(n = 1, alpha[1, ]), NA)
   expect_error(rdirichlet_mat(n = 1, array(1:4, dim = c(2, 2))), NA)
-  
+
   # check errors
-  expect_error(rdirichlet_mat(n = -1, alpha),
-               "n must be greater than 0")
-  expect_error(rdirichlet_mat(n = 1, rbind(alpha, alpha), output = "data.frame"),
-               paste0("The number of rows of 'alpha' must be less than or ",
-                      "equal to the number of columns"))
-  expect_error(rdirichlet_mat(n = 1, c("1", "2")),
-               "alpha must be a numeric matrix or vector")
-  expect_error(rdirichlet_mat(n = 1, array(1:4, dim = c(2, 2, 1))),
-               "alpha must be a numeric matrix or vector")
-  
+  expect_error(
+    rdirichlet_mat(n = -1, alpha),
+    "n must be greater than 0"
+  )
+  expect_error(
+    rdirichlet_mat(n = 1, rbind(alpha, alpha), output = "data.frame"),
+    paste0(
+      "The number of rows of 'alpha' must be less than or ",
+      "equal to the number of columns"
+    )
+  )
+  expect_error(
+    rdirichlet_mat(n = 1, c("1", "2")),
+    "alpha must be a numeric matrix or vector"
+  )
+  expect_error(
+    rdirichlet_mat(n = 1, array(1:4, dim = c(2, 2, 1))),
+    "alpha must be a numeric matrix or vector"
+  )
+
   n <- 10000
-  m <- 2 ; s <- 1.7; q <- 1
+  m <- 2
+  s <- 1.7
+  q <- 1
   expect_error(hesim::fast_rgengamma(n, mu = m, sigma = c(1, 1), Q = q))
   expect_error(hesim::fast_rgengamma(n, mu = c(1, 1), sigma = s, Q = q))
   expect_error(hesim::fast_rgengamma(n, mu = m, sigma = s, Q = c(1, 5)))
