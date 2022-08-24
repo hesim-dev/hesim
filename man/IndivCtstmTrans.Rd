@@ -101,24 +101,24 @@ start of the model or from when time was previously reset. Only used if
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{IndivCtstmTrans$new()}}
-\item \href{#method-sim_disease}{\code{IndivCtstmTrans$sim_disease()}}
-\item \href{#method-sim_stateprobs}{\code{IndivCtstmTrans$sim_stateprobs()}}
-\item \href{#method-check}{\code{IndivCtstmTrans$check()}}
-\item \href{#method-clone}{\code{IndivCtstmTrans$clone()}}
+\item \href{#method-IndivCtstmTrans-new}{\code{IndivCtstmTrans$new()}}
+\item \href{#method-IndivCtstmTrans-sim_disease}{\code{IndivCtstmTrans$sim_disease()}}
+\item \href{#method-IndivCtstmTrans-sim_stateprobs}{\code{IndivCtstmTrans$sim_stateprobs()}}
+\item \href{#method-IndivCtstmTrans-check}{\code{IndivCtstmTrans$check()}}
+\item \href{#method-IndivCtstmTrans-clone}{\code{IndivCtstmTrans$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="cumhazard">}\href{../../hesim/html/CtstmTrans.html#method-cumhazard}{\code{hesim::CtstmTrans$cumhazard()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="hazard">}\href{../../hesim/html/CtstmTrans.html#method-hazard}{\code{hesim::CtstmTrans$hazard()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="cumhazard"><a href='../../hesim/html/CtstmTrans.html#method-CtstmTrans-cumhazard'><code>hesim::CtstmTrans$cumhazard()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="hazard"><a href='../../hesim/html/CtstmTrans.html#method-CtstmTrans-hazard'><code>hesim::CtstmTrans$hazard()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-IndivCtstmTrans-new"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstmTrans-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{IndivCtstmTrans} object.
 \subsection{Usage}{
@@ -160,8 +160,8 @@ A new \code{IndivCtstmTrans} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_disease"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_disease}{}}}
+\if{html}{\out{<a id="method-IndivCtstmTrans-sim_disease"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstmTrans-sim_disease}{}}}
 \subsection{Method \code{sim_disease()}}{
 Simulate disease progression (i.e., individual trajectories through a
 multi-state model using an individual patient simulation).
@@ -190,8 +190,8 @@ An object of class \code{\link{disprog}}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_stateprobs"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
+\if{html}{\out{<a id="method-IndivCtstmTrans-sim_stateprobs"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstmTrans-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
 Simulate health state probabilities from a \link{disprog} object.
 \subsection{Usage}{
@@ -217,8 +217,8 @@ An object of class \code{\link{stateprobs}}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check"></a>}}
-\if{latex}{\out{\hypertarget{method-check}{}}}
+\if{html}{\out{<a id="method-IndivCtstmTrans-check"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstmTrans-check}{}}}
 \subsection{Method \code{check()}}{
 Input validation for class. Checks that fields are the correct type.
 \subsection{Usage}{
@@ -227,8 +227,8 @@ Input validation for class. Checks that fields are the correct type.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-IndivCtstmTrans-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstmTrans-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -136,18 +136,18 @@ list represents a different cost category.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{IndivCtstm$new()}}
-\item \href{#method-sim_disease}{\code{IndivCtstm$sim_disease()}}
-\item \href{#method-sim_stateprobs}{\code{IndivCtstm$sim_stateprobs()}}
-\item \href{#method-sim_qalys}{\code{IndivCtstm$sim_qalys()}}
-\item \href{#method-sim_costs}{\code{IndivCtstm$sim_costs()}}
-\item \href{#method-summarize}{\code{IndivCtstm$summarize()}}
-\item \href{#method-clone}{\code{IndivCtstm$clone()}}
+\item \href{#method-IndivCtstm-new}{\code{IndivCtstm$new()}}
+\item \href{#method-IndivCtstm-sim_disease}{\code{IndivCtstm$sim_disease()}}
+\item \href{#method-IndivCtstm-sim_stateprobs}{\code{IndivCtstm$sim_stateprobs()}}
+\item \href{#method-IndivCtstm-sim_qalys}{\code{IndivCtstm$sim_qalys()}}
+\item \href{#method-IndivCtstm-sim_costs}{\code{IndivCtstm$sim_costs()}}
+\item \href{#method-IndivCtstm-summarize}{\code{IndivCtstm$summarize()}}
+\item \href{#method-IndivCtstm-clone}{\code{IndivCtstm$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-IndivCtstm-new"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstm-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{IndivCtstm} object.
 \subsection{Usage}{
@@ -170,8 +170,8 @@ A new \code{IndivCtstm} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_disease"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_disease}{}}}
+\if{html}{\out{<a id="method-IndivCtstm-sim_disease"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstm-sim_disease}{}}}
 \subsection{Method \code{sim_disease()}}{
 Simulate disease progression (i.e., individual trajectories through a multi-state
 model) using \code{IndivCtstmTrans$sim_disease()}.
@@ -200,8 +200,8 @@ An instance of self with simulated output stored in \code{disprog_}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_stateprobs"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
+\if{html}{\out{<a id="method-IndivCtstm-sim_stateprobs"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstm-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
 Simulate health state probabilities as a function of time using the
 simulation output stored in \code{disprog}.
@@ -222,8 +222,8 @@ stored in \code{stateprobs_}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_qalys"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_qalys}{}}}
+\if{html}{\out{<a id="method-IndivCtstm-sim_qalys"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstm-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{disprog_} and
 \code{utility_model}.
@@ -257,8 +257,8 @@ class \link{qalys} stored in \code{qalys_}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_costs"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_costs}{}}}
+\if{html}{\out{<a id="method-IndivCtstm-sim_costs"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstm-sim_costs}{}}}
 \subsection{Method \code{sim_costs()}}{
 Simulate costs as a function of \code{disprog_} and \code{cost_models}.
 \subsection{Usage}{
@@ -296,8 +296,8 @@ stored in \code{costs_}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-summarize"></a>}}
-\if{latex}{\out{\hypertarget{method-summarize}{}}}
+\if{html}{\out{<a id="method-IndivCtstm-summarize"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstm-summarize}{}}}
 \subsection{Method \code{summarize()}}{
 Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See \code{\link[=summarize_ce]{summarize_ce()}}.
@@ -315,8 +315,8 @@ See \code{\link[=summarize_ce]{summarize_ce()}}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-IndivCtstm-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-IndivCtstm-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
