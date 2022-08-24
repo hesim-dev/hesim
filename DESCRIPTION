@@ -1,7 +1,7 @@
 Package: hesim
 Type: Package
 Title: Health Economic Simulation Modeling and Decision Analysis
-Version: 0.5.2
+Version: 0.5.3
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", role = c("aut", "cre")),
     person("Jeroen P.", "Jansen", role = "aut"),
