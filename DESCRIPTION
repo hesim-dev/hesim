@@ -52,7 +52,17 @@ Suggests:
     rmarkdown,
     scales,
     testthat,
-    truncnorm
+    truncnorm,
+    shiny,
+    DT,
+    bookdown,
+    diagram,
+    heemod,
+    shinycssloaders,
+    shinydashboard,
+    shinyjs,
+    survminer,
+    R6
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
