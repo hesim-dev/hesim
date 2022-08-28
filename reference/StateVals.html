@@ -24,7 +24,7 @@ state transition or partitioned survival model."><meta property="og:image" conte
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
       </span>
     </div>
 
@@ -143,11 +143,11 @@ costs vary over time within health states. Only used if <code>method = wlos</cod
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>StateVals$new()</code></a></p></li>
-<li><p><a href="#method-sim"><code>StateVals$sim()</code></a></p></li>
-<li><p><a href="#method-check"><code>StateVals$check()</code></a></p></li>
-<li><p><a href="#method-clone"><code>StateVals$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-StateVals-new"><code>StateVals$new()</code></a></p></li>
+<li><p><a href="#method-StateVals-sim"><code>StateVals$sim()</code></a></p></li>
+<li><p><a href="#method-StateVals-check"><code>StateVals$check()</code></a></p></li>
+<li><p><a href="#method-StateVals-clone"><code>StateVals$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-StateVals-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new <code>StateVals</code> object.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -184,7 +184,7 @@ costs vary over time within health states. Only used if <code>method = wlos</cod
 <p>A new <code>StateVals</code> object.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim"></a><div class="section">
+</div><p></p><hr><a id="method-StateVals-sim"></a><div class="section">
 <h3 id="method-sim-">Method <code>sim()</code><a class="anchor" aria-label="anchor" href="#method-sim-"></a></h3>
 <p>Simulate state values with either predicted means or random samples by
 treatment strategy, patient, health state, and time <code>t</code>.</p><div class="section">
@@ -210,7 +210,7 @@ treatment strategy, patient, health state, and time <code>t</code>.</p><div clas
 <code>strategy_id</code>, <code>patient_id</code>, <code>state_id</code>, <code>time</code>, and <code>value</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-check"></a><div class="section">
+</div><p></p><hr><a id="method-StateVals-check"></a><div class="section">
 <h3 id="method-check-">Method <code><a href="check.html">check()</a></code><a class="anchor" aria-label="anchor" href="#method-check-"></a></h3>
 <p>Input validation for class. Checks that fields are the correct type.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
@@ -218,7 +218,7 @@ treatment strategy, patient, health state, and time <code>t</code>.</p><div clas
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-StateVals-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>

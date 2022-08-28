@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
       </span>
     </div>
 
@@ -131,15 +131,15 @@ be a unique treatment strategy and patient.</p></dd>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>PsmCurves$new()</code></a></p></li>
-<li><p><a href="#method-hazard"><code>PsmCurves$hazard()</code></a></p></li>
-<li><p><a href="#method-cumhazard"><code>PsmCurves$cumhazard()</code></a></p></li>
-<li><p><a href="#method-survival"><code>PsmCurves$survival()</code></a></p></li>
-<li><p><a href="#method-rmst"><code>PsmCurves$rmst()</code></a></p></li>
-<li><p><a href="#method-quantile"><code>PsmCurves$quantile()</code></a></p></li>
-<li><p><a href="#method-check"><code>PsmCurves$check()</code></a></p></li>
-<li><p><a href="#method-clone"><code>PsmCurves$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-PsmCurves-new"><code>PsmCurves$new()</code></a></p></li>
+<li><p><a href="#method-PsmCurves-hazard"><code>PsmCurves$hazard()</code></a></p></li>
+<li><p><a href="#method-PsmCurves-cumhazard"><code>PsmCurves$cumhazard()</code></a></p></li>
+<li><p><a href="#method-PsmCurves-survival"><code>PsmCurves$survival()</code></a></p></li>
+<li><p><a href="#method-PsmCurves-rmst"><code>PsmCurves$rmst()</code></a></p></li>
+<li><p><a href="#method-PsmCurves-quantile"><code>PsmCurves$quantile()</code></a></p></li>
+<li><p><a href="#method-PsmCurves-check"><code>PsmCurves$check()</code></a></p></li>
+<li><p><a href="#method-PsmCurves-clone"><code>PsmCurves$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-PsmCurves-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new <code>PsmCurves</code> object.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -163,7 +163,7 @@ be a unique treatment strategy and patient.</p></dd>
 <p>A new <code>PsmCurves</code> object.</p>
 </div>
 
-</div><p></p><hr><a id="method-hazard"></a><div class="section">
+</div><p></p><hr><a id="method-PsmCurves-hazard"></a><div class="section">
 <h3 id="method-hazard-">Method <code>hazard()</code><a class="anchor" aria-label="anchor" href="#method-hazard-"></a></h3>
 <p>Predict the hazard function for each survival curve as a function of time.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
@@ -184,7 +184,7 @@ be a unique treatment strategy and patient.</p></dd>
 <code>patient_id</code>, <code>grp_id</code>, <code>curve</code> (the curve number), <code>t</code>, and <code>hazard</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-cumhazard"></a><div class="section">
+</div><p></p><hr><a id="method-PsmCurves-cumhazard"></a><div class="section">
 <h3 id="method-cumhazard-">Method <code>cumhazard()</code><a class="anchor" aria-label="anchor" href="#method-cumhazard-"></a></h3>
 <p>Predict the cumulative hazard function for each survival curve as a function of time.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
@@ -205,7 +205,7 @@ be a unique treatment strategy and patient.</p></dd>
 <code>patient_id</code>, <code>grp_id</code>, <code>curve</code>, <code>t</code>, and <code>cumhazard</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-survival"></a><div class="section">
+</div><p></p><hr><a id="method-PsmCurves-survival"></a><div class="section">
 <h3 id="method-survival-">Method <code><a href="survival.html">survival()</a></code><a class="anchor" aria-label="anchor" href="#method-survival-"></a></h3>
 <p>Predict survival probabilities for each survival curve as a function of time.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
@@ -225,7 +225,7 @@ be a unique treatment strategy and patient.</p></dd>
 <p>An object of class <code><a href="survival.html">survival</a></code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-rmst"></a><div class="section">
+</div><p></p><hr><a id="method-PsmCurves-rmst"></a><div class="section">
 <h3 id="method-rmst-">Method <code>rmst()</code><a class="anchor" aria-label="anchor" href="#method-rmst-"></a></h3>
 <p>Predict the restricted mean survival time up until time points <code>t</code>
 for each survival curve.</p><div class="section">
@@ -251,7 +251,7 @@ for each survival curve.</p><div class="section">
 <code>patient_id</code>, <code>grp_id</code>, <code>curve</code>, <code>t</code>, and <code>rmst</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-quantile"></a><div class="section">
+</div><p></p><hr><a id="method-PsmCurves-quantile"></a><div class="section">
 <h3 id="method-quantile-">Method <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code><a class="anchor" aria-label="anchor" href="#method-quantile-"></a></h3>
 <p>Predict quantiles of the survival distribution for each survival curve.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
@@ -272,7 +272,7 @@ for each survival curve.</p><div class="section">
 <code>patient_id</code>, <code>grp_id</code>, <code>curve</code>, <code>p</code> and <code>quantile</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-check"></a><div class="section">
+</div><p></p><hr><a id="method-PsmCurves-check"></a><div class="section">
 <h3 id="method-check-">Method <code><a href="check.html">check()</a></code><a class="anchor" aria-label="anchor" href="#method-check-"></a></h3>
 <p>Input validation for class. Checks that fields are the correct type.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
@@ -280,7 +280,7 @@ for each survival curve.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-PsmCurves-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>

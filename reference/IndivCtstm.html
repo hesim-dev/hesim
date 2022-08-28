@@ -27,7 +27,7 @@ IndivCtstmTrans.'><meta property="og:image" content="https://hesim-dev.github.io
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
       </span>
     </div>
 
@@ -175,14 +175,14 @@ list represents a different cost category.</p></dd>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>IndivCtstm$new()</code></a></p></li>
-<li><p><a href="#method-sim_disease"><code>IndivCtstm$sim_disease()</code></a></p></li>
-<li><p><a href="#method-sim_stateprobs"><code>IndivCtstm$sim_stateprobs()</code></a></p></li>
-<li><p><a href="#method-sim_qalys"><code>IndivCtstm$sim_qalys()</code></a></p></li>
-<li><p><a href="#method-sim_costs"><code>IndivCtstm$sim_costs()</code></a></p></li>
-<li><p><a href="#method-summarize"><code>IndivCtstm$summarize()</code></a></p></li>
-<li><p><a href="#method-clone"><code>IndivCtstm$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-IndivCtstm-new"><code>IndivCtstm$new()</code></a></p></li>
+<li><p><a href="#method-IndivCtstm-sim_disease"><code>IndivCtstm$sim_disease()</code></a></p></li>
+<li><p><a href="#method-IndivCtstm-sim_stateprobs"><code>IndivCtstm$sim_stateprobs()</code></a></p></li>
+<li><p><a href="#method-IndivCtstm-sim_qalys"><code>IndivCtstm$sim_qalys()</code></a></p></li>
+<li><p><a href="#method-IndivCtstm-sim_costs"><code>IndivCtstm$sim_costs()</code></a></p></li>
+<li><p><a href="#method-IndivCtstm-summarize"><code>IndivCtstm$summarize()</code></a></p></li>
+<li><p><a href="#method-IndivCtstm-clone"><code>IndivCtstm$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-IndivCtstm-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new <code>IndivCtstm</code> object.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -210,7 +210,7 @@ list represents a different cost category.</p></dd>
 <p>A new <code>IndivCtstm</code> object.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_disease"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstm-sim_disease"></a><div class="section">
 <h3 id="method-sim-disease-">Method <code>sim_disease()</code><a class="anchor" aria-label="anchor" href="#method-sim-disease-"></a></h3>
 <p>Simulate disease progression (i.e., individual trajectories through a multi-state
 model) using <code>IndivCtstmTrans$sim_disease()</code>.</p><div class="section">
@@ -244,7 +244,7 @@ in which case no output is printed.</p></dd>
 <p>An instance of self with simulated output stored in <code>disprog_</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_stateprobs"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstm-sim_stateprobs"></a><div class="section">
 <h3 id="method-sim-stateprobs-">Method <code><a href="sim_stateprobs.html">sim_stateprobs()</a></code><a class="anchor" aria-label="anchor" href="#method-sim-stateprobs-"></a></h3>
 <p>Simulate health state probabilities as a function of time using the
 simulation output stored in <code>disprog</code>.</p><div class="section">
@@ -266,7 +266,7 @@ simulation output stored in <code>disprog</code>.</p><div class="section">
 stored in <code>stateprobs_</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_qalys"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstm-sim_qalys"></a><div class="section">
 <h3 id="method-sim-qalys-">Method <code><a href="sim_ev.html">sim_qalys()</a></code><a class="anchor" aria-label="anchor" href="#method-sim-qalys-"></a></h3>
 <p>Simulate quality-adjusted life-years (QALYs) as a function of <code>disprog_</code> and
 <code>utility_model</code>.</p><div class="section">
@@ -307,7 +307,7 @@ If <code>FALSE</code>, then they are averaged across patients by health state.</
 class <a href="qalys.html">qalys</a> stored in <code>qalys_</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_costs"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstm-sim_costs"></a><div class="section">
 <h3 id="method-sim-costs-">Method <code><a href="sim_ev.html">sim_costs()</a></code><a class="anchor" aria-label="anchor" href="#method-sim-costs-"></a></h3>
 <p>Simulate costs as a function of <code>disprog_</code> and <code>cost_models</code>.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
@@ -352,7 +352,7 @@ cost categories (e.g., <code>c(1, 2, Inf, 3)</code> for a model with four cost c
 stored in <code>costs_</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-summarize"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstm-summarize"></a><div class="section">
 <h3 id="method-summarize-">Method <code>summarize()</code><a class="anchor" aria-label="anchor" href="#method-summarize-"></a></h3>
 <p>Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See <code><a href="summarize_ce.html">summarize_ce()</a></code>.</p><div class="section">
@@ -370,7 +370,7 @@ See <code><a href="summarize_ce.html">summarize_ce()</a></code>.</p><div class="
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstm-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>

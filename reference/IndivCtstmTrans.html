@@ -24,7 +24,7 @@ transition model using parameters from a multi-state model."><meta property="og:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
       </span>
     </div>
 
@@ -180,14 +180,14 @@ start of the model or from when time was previously reset. Only used if
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>IndivCtstmTrans$new()</code></a></p></li>
-<li><p><a href="#method-sim_disease"><code>IndivCtstmTrans$sim_disease()</code></a></p></li>
-<li><p><a href="#method-sim_stateprobs"><code>IndivCtstmTrans$sim_stateprobs()</code></a></p></li>
-<li><p><a href="#method-check"><code>IndivCtstmTrans$check()</code></a></p></li>
-<li><p><a href="#method-clone"><code>IndivCtstmTrans$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="cumhazard"><a href="CtstmTrans.html#method-cumhazard"><code>hesim::CtstmTrans$cumhazard()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="hazard"><a href="CtstmTrans.html#method-hazard"><code>hesim::CtstmTrans$hazard()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-IndivCtstmTrans-new"><code>IndivCtstmTrans$new()</code></a></p></li>
+<li><p><a href="#method-IndivCtstmTrans-sim_disease"><code>IndivCtstmTrans$sim_disease()</code></a></p></li>
+<li><p><a href="#method-IndivCtstmTrans-sim_stateprobs"><code>IndivCtstmTrans$sim_stateprobs()</code></a></p></li>
+<li><p><a href="#method-IndivCtstmTrans-check"><code>IndivCtstmTrans$check()</code></a></p></li>
+<li><p><a href="#method-IndivCtstmTrans-clone"><code>IndivCtstmTrans$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="cumhazard"><a href="CtstmTrans.html#method-cumhazard"><code>hesim::CtstmTrans$cumhazard()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="hesim" data-topic="CtstmTrans" data-id="hazard"><a href="CtstmTrans.html#method-hazard"><code>hesim::CtstmTrans$hazard()</code></a></span></li>
+</ul></details></p><hr><a id="method-IndivCtstmTrans-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new <code>IndivCtstmTrans</code> object.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -244,7 +244,7 @@ start of the model or from when time was previously reset. Only used if
 <p>A new <code>IndivCtstmTrans</code> object.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_disease"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstmTrans-sim_disease"></a><div class="section">
 <h3 id="method-sim-disease-">Method <code>sim_disease()</code><a class="anchor" aria-label="anchor" href="#method-sim-disease-"></a></h3>
 <p>Simulate disease progression (i.e., individual trajectories through a
 multi-state model using an individual patient simulation).</p><div class="section">
@@ -278,7 +278,7 @@ no output is printed.</p></dd>
 <p>An object of class <code><a href="disprog.html">disprog</a></code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_stateprobs"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstmTrans-sim_stateprobs"></a><div class="section">
 <h3 id="method-sim-stateprobs-">Method <code><a href="sim_stateprobs.html">sim_stateprobs()</a></code><a class="anchor" aria-label="anchor" href="#method-sim-stateprobs-"></a></h3>
 <p>Simulate health state probabilities from a <a href="disprog.html">disprog</a> object.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
@@ -309,7 +309,7 @@ using <code>IndivCtstm$sim_disease()</code>.</p></dd>
 <p>An object of class <code><a href="stateprobs.html">stateprobs</a></code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-check"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstmTrans-check"></a><div class="section">
 <h3 id="method-check-">Method <code><a href="check.html">check()</a></code><a class="anchor" aria-label="anchor" href="#method-check-"></a></h3>
 <p>Input validation for class. Checks that fields are the correct type.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
@@ -317,7 +317,7 @@ using <code>IndivCtstm$sim_disease()</code>.</p></dd>
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-IndivCtstmTrans-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>

@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
       </span>
     </div>
 
@@ -174,14 +174,14 @@ by the argument <code>t</code> in <code>$sim_curves()</code>.</p></dd>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>Psm$new()</code></a></p></li>
-<li><p><a href="#method-sim_survival"><code>Psm$sim_survival()</code></a></p></li>
-<li><p><a href="#method-sim_stateprobs"><code>Psm$sim_stateprobs()</code></a></p></li>
-<li><p><a href="#method-sim_qalys"><code>Psm$sim_qalys()</code></a></p></li>
-<li><p><a href="#method-sim_costs"><code>Psm$sim_costs()</code></a></p></li>
-<li><p><a href="#method-summarize"><code>Psm$summarize()</code></a></p></li>
-<li><p><a href="#method-clone"><code>Psm$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-Psm-new"><code>Psm$new()</code></a></p></li>
+<li><p><a href="#method-Psm-sim_survival"><code>Psm$sim_survival()</code></a></p></li>
+<li><p><a href="#method-Psm-sim_stateprobs"><code>Psm$sim_stateprobs()</code></a></p></li>
+<li><p><a href="#method-Psm-sim_qalys"><code>Psm$sim_qalys()</code></a></p></li>
+<li><p><a href="#method-Psm-sim_costs"><code>Psm$sim_costs()</code></a></p></li>
+<li><p><a href="#method-Psm-summarize"><code>Psm$summarize()</code></a></p></li>
+<li><p><a href="#method-Psm-clone"><code>Psm$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-Psm-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new <code>Psm</code> object.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -214,7 +214,7 @@ by the argument <code>t</code> in <code>$sim_curves()</code>.</p></dd>
 <p>A new <code>Psm</code> object.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_survival"></a><div class="section">
+</div><p></p><hr><a id="method-Psm-sim_survival"></a><div class="section">
 <h3 id="method-sim-survival-">Method <code>sim_survival()</code><a class="anchor" aria-label="anchor" href="#method-sim-survival-"></a></h3>
 <p>Simulate survival curves as a function of time using <code>PsmCurves$survival()</code>.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
@@ -235,7 +235,7 @@ by the argument <code>t</code> in <code>$sim_curves()</code>.</p></dd>
 stored in <code>survival_</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_stateprobs"></a><div class="section">
+</div><p></p><hr><a id="method-Psm-sim_stateprobs"></a><div class="section">
 <h3 id="method-sim-stateprobs-">Method <code><a href="sim_stateprobs.html">sim_stateprobs()</a></code><a class="anchor" aria-label="anchor" href="#method-sim-stateprobs-"></a></h3>
 <p>Simulate health state probabilities from <code>survival_</code> using a partitioned
 survival analysis.</p><div class="section">
@@ -249,7 +249,7 @@ survival analysis.</p><div class="section">
 stored in <code>stateprobs_</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_qalys"></a><div class="section">
+</div><p></p><hr><a id="method-Psm-sim_qalys"></a><div class="section">
 <h3 id="method-sim-qalys-">Method <code><a href="sim_ev.html">sim_qalys()</a></code><a class="anchor" aria-label="anchor" href="#method-sim-qalys-"></a></h3>
 <p>Simulate quality-adjusted life-years (QALYs) as a function of <code>stateprobs_</code> and
 <code>utility_model</code>. See <code><a href="sim_ev.html">sim_qalys()</a></code> for details.</p><div class="section">
@@ -286,7 +286,7 @@ costs or QALYs. Options are <code>trapz</code> for the trapezoid rule,
 in <code>qalys_</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-sim_costs"></a><div class="section">
+</div><p></p><hr><a id="method-Psm-sim_costs"></a><div class="section">
 <h3 id="method-sim-costs-">Method <code><a href="sim_ev.html">sim_costs()</a></code><a class="anchor" aria-label="anchor" href="#method-sim-costs-"></a></h3>
 <p>Simulate costs as a function of <code>stateprobs_</code> and <code>cost_models</code>.
 See <code><a href="sim_ev.html">sim_costs()</a></code> for details.</p><div class="section">
@@ -318,7 +318,7 @@ costs or QALYs. Options are <code>trapz</code> for the trapezoid rule,
 in <code>costs_</code>.</p>
 </div>
 
-</div><p></p><hr><a id="method-summarize"></a><div class="section">
+</div><p></p><hr><a id="method-Psm-summarize"></a><div class="section">
 <h3 id="method-summarize-">Method <code>summarize()</code><a class="anchor" aria-label="anchor" href="#method-summarize-"></a></h3>
 <p>Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See <code><a href="summarize_ce.html">summarize_ce()</a></code>.</p><div class="section">
@@ -336,7 +336,7 @@ See <code><a href="summarize_ce.html">summarize_ce()</a></code>.</p><div class="
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-Psm-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
