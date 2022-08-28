@@ -152,19 +152,19 @@ be a unique treatment strategy and patient.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PsmCurves$new()}}
-\item \href{#method-hazard}{\code{PsmCurves$hazard()}}
-\item \href{#method-cumhazard}{\code{PsmCurves$cumhazard()}}
-\item \href{#method-survival}{\code{PsmCurves$survival()}}
-\item \href{#method-rmst}{\code{PsmCurves$rmst()}}
-\item \href{#method-quantile}{\code{PsmCurves$quantile()}}
-\item \href{#method-check}{\code{PsmCurves$check()}}
-\item \href{#method-clone}{\code{PsmCurves$clone()}}
+\item \href{#method-PsmCurves-new}{\code{PsmCurves$new()}}
+\item \href{#method-PsmCurves-hazard}{\code{PsmCurves$hazard()}}
+\item \href{#method-PsmCurves-cumhazard}{\code{PsmCurves$cumhazard()}}
+\item \href{#method-PsmCurves-survival}{\code{PsmCurves$survival()}}
+\item \href{#method-PsmCurves-rmst}{\code{PsmCurves$rmst()}}
+\item \href{#method-PsmCurves-quantile}{\code{PsmCurves$quantile()}}
+\item \href{#method-PsmCurves-check}{\code{PsmCurves$check()}}
+\item \href{#method-PsmCurves-clone}{\code{PsmCurves$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PsmCurves-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PsmCurves-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{PsmCurves} object.
 \subsection{Usage}{
@@ -185,8 +185,8 @@ A new \code{PsmCurves} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-hazard"></a>}}
-\if{latex}{\out{\hypertarget{method-hazard}{}}}
+\if{html}{\out{<a id="method-PsmCurves-hazard"></a>}}
+\if{latex}{\out{\hypertarget{method-PsmCurves-hazard}{}}}
 \subsection{Method \code{hazard()}}{
 Predict the hazard function for each survival curve as a function of time.
 \subsection{Usage}{
@@ -206,8 +206,8 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cumhazard"></a>}}
-\if{latex}{\out{\hypertarget{method-cumhazard}{}}}
+\if{html}{\out{<a id="method-PsmCurves-cumhazard"></a>}}
+\if{latex}{\out{\hypertarget{method-PsmCurves-cumhazard}{}}}
 \subsection{Method \code{cumhazard()}}{
 Predict the cumulative hazard function for each survival curve as a function of time.
 \subsection{Usage}{
@@ -227,8 +227,8 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-survival"></a>}}
-\if{latex}{\out{\hypertarget{method-survival}{}}}
+\if{html}{\out{<a id="method-PsmCurves-survival"></a>}}
+\if{latex}{\out{\hypertarget{method-PsmCurves-survival}{}}}
 \subsection{Method \code{survival()}}{
 Predict survival probabilities for each survival curve as a function of time.
 \subsection{Usage}{
@@ -247,8 +247,8 @@ An object of class \code{\link{survival}}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-rmst"></a>}}
-\if{latex}{\out{\hypertarget{method-rmst}{}}}
+\if{html}{\out{<a id="method-PsmCurves-rmst"></a>}}
+\if{latex}{\out{\hypertarget{method-PsmCurves-rmst}{}}}
 \subsection{Method \code{rmst()}}{
 Predict the restricted mean survival time up until time points \code{t}
 for each survival curve.
@@ -271,8 +271,8 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-quantile"></a>}}
-\if{latex}{\out{\hypertarget{method-quantile}{}}}
+\if{html}{\out{<a id="method-PsmCurves-quantile"></a>}}
+\if{latex}{\out{\hypertarget{method-PsmCurves-quantile}{}}}
 \subsection{Method \code{quantile()}}{
 Predict quantiles of the survival distribution for each survival curve.
 \subsection{Usage}{
@@ -292,8 +292,8 @@ A \code{data.table} with columns \code{sample}, \code{strategy_id},
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check"></a>}}
-\if{latex}{\out{\hypertarget{method-check}{}}}
+\if{html}{\out{<a id="method-PsmCurves-check"></a>}}
+\if{latex}{\out{\hypertarget{method-PsmCurves-check}{}}}
 \subsection{Method \code{check()}}{
 Input validation for class. Checks that fields are the correct type.
 \subsection{Usage}{
@@ -302,8 +302,8 @@ Input validation for class. Checks that fields are the correct type.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PsmCurves-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PsmCurves-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

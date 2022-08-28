@@ -1,10 +1,10 @@
 ## Release summary
-This release fixes bugs and makes a minor API change as detailed on the package website [here](https://hesim-dev.github.io/hesim/news/index.html). One of the bug fixes addresses "the condition has length > 1" error noted by CRAN in a recent email.
+This release fixes problems with the HTML version of the manual noted by CRAN in a recent email.
 
 ## Test environments
-* Local OS X, R 4.1.3
-* Ubuntu 20.04.4 (on GitHub actions), R-devel, R 4.1.3
-* Microsoft Windows Server 2022 10.0.20348 (on GitHub actions) R 4.1.3
+* Local OS X, R 4.2.1
+* Ubuntu 20.04.4 (on GitHub actions), R-devel, R 4.2.1
+* Microsoft Windows Server 2022 10.0.20348 (on GitHub actions) R 4.2.1
 * win-builder (devel, release)
 * R-hub builder
 
