@@ -1,5 +1,8 @@
 ## Release summary
-This release fixes problems with the HTML version of the manual noted by CRAN in a recent email.
+This is a second submission that fixes an invalid URL identified during the
+first submission.
+
+The purpose of the release more generally is to fix problems with the HTML version of the manual noted by CRAN in a recent email.
 
 ## Test environments
 * Local OS X, R 4.2.1
