@@ -129,7 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simple Markov cohort model</h1>
             
-            <h4 data-toc-skip class="date">2022-08-28</h4>
+            <h4 data-toc-skip class="date">2022-09-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/markov-cohort.Rmd" class="external-link"><code>vignettes/markov-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-cohort.Rmd</code></div>
@@ -317,11 +317,11 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id t      prob</span></span>
 <span><span class="co">## 1:      1           1          1      1        1 0 1.0000000</span></span>
-<span><span class="co">## 2:      1           1          1      1        1 1 0.7137298</span></span>
-<span><span class="co">## 3:      1           1          1      1        1 2 0.5094102</span></span>
-<span><span class="co">## 4:      1           1          1      1        1 3 0.3635812</span></span>
-<span><span class="co">## 5:      1           1          1      1        1 4 0.2594987</span></span>
-<span><span class="co">## 6:      1           1          1      1        1 5 0.1852120</span></span></code></pre>
+<span><span class="co">## 2:      1           1          1      1        1 1 0.7465143</span></span>
+<span><span class="co">## 3:      1           1          1      1        1 2 0.5572836</span></span>
+<span><span class="co">## 4:      1           1          1      1        1 3 0.4160202</span></span>
+<span><span class="co">## 5:      1           1          1      1        1 4 0.3105650</span></span>
+<span><span class="co">## 6:      1           1          1      1        1 5 0.2318412</span></span></code></pre>
 <p>A plot can be generated quickly using the <code><a href="../reference/autoplot.stateprobs.html">autoplot.stateprobs()</a></code> method. As expected, patients survive longer with combination therapy.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">stateprobs_</span>, labels <span class="op">=</span> <span class="va">labs</span>,</span>
@@ -336,22 +336,22 @@
 <code class="sourceCode R"><span><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id dr    qalys      lys</span></span>
-<span><span class="co">## 1:      1           1          1      1        1  0 2.490269 2.490269</span></span>
-<span><span class="co">## 2:      1           1          1      1        2  0 1.674461 1.674461</span></span>
-<span><span class="co">## 3:      1           1          1      1        3  0 3.821989 3.821989</span></span>
-<span><span class="co">## 4:      1           2          1      1        1  0 3.208694 3.208694</span></span>
-<span><span class="co">## 5:      1           2          1      1        2  0 1.723247 1.723247</span></span>
-<span><span class="co">## 6:      1           2          1      1        3  0 3.814114 3.814114</span></span></code></pre>
+<span><span class="co">## 1:      1           1          1      1        1  0 2.936487 2.936487</span></span>
+<span><span class="co">## 2:      1           1          1      1        2  0 1.736483 1.736483</span></span>
+<span><span class="co">## 3:      1           1          1      1        3  0 3.510296 3.510296</span></span>
+<span><span class="co">## 4:      1           2          1      1        1  0 4.210034 4.210034</span></span>
+<span><span class="co">## 5:      1           2          1      1        2  0 1.773336 1.773336</span></span>
+<span><span class="co">## 6:      1           2          1      1        3  0 3.476416 3.476416</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0.06</span>, integrate_method <span class="op">=</span> <span class="st">"riemann_right"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id   dr category    costs</span></span>
-<span><span class="co">## 1:      1           1          1      1        1 0.06     drug 4668.970</span></span>
-<span><span class="co">## 2:      1           1          1      1        2 0.06     drug 2922.950</span></span>
-<span><span class="co">## 3:      1           1          1      1        3 0.06     drug 5584.585</span></span>
-<span><span class="co">## 4:      1           2          1      1        1 0.06     drug 8868.743</span></span>
-<span><span class="co">## 5:      1           2          1      1        2 0.06     drug 3515.401</span></span>
-<span><span class="co">## 6:      1           2          1      1        3 0.06     drug 5618.452</span></span></code></pre>
+<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id   dr category     costs</span></span>
+<span><span class="co">## 1:      1           1          1      1        1 0.06     drug  5388.392</span></span>
+<span><span class="co">## 2:      1           1          1      1        2 0.06     drug  2956.575</span></span>
+<span><span class="co">## 3:      1           1          1      1        3 0.06     drug  5043.278</span></span>
+<span><span class="co">## 4:      1           2          1      1        1 0.06     drug 11011.504</span></span>
+<span><span class="co">## 5:      1           2          1      1        2 0.06     drug  3144.571</span></span>
+<span><span class="co">## 6:      1           2          1      1        3 0.06     drug  4763.973</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -368,11 +368,11 @@
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##              Outcome                       2</span></span>
-<span><span class="co">## 1: Incremental QALYs       0.93 (0.53, 1.23)</span></span>
-<span><span class="co">## 2: Incremental costs   5,892 (2,863, 10,527)</span></span>
-<span><span class="co">## 3:   Incremental NMB 40,482 (21,898, 54,869)</span></span>
-<span><span class="co">## 4:              ICER                   6,353</span></span></code></pre>
-<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.935 and approaches 1 at slightly higher WTP values.</p>
+<span><span class="co">## 1: Incremental QALYs       0.92 (0.56, 1.22)</span></span>
+<span><span class="co">## 2: Incremental costs    5,783 (3,035, 9,720)</span></span>
+<span><span class="co">## 3:   Incremental NMB 40,411 (22,931, 55,408)</span></span>
+<span><span class="co">## 4:              ICER                   6,260</span></span></code></pre>
+<p>A cost-effectiveness acceptability curve shows that the probability that combination therapy is more cost-effective than monotherapy increases quickly with the willingness to pay (WTP) for a QALY. At $10,000, the probability is 0.94 and approaches 1 at slightly higher WTP values.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_ceac.html">plot_ceac</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span></span></code></pre></div>
 <p><img src="markov-cohort_files/figure-html/ceac-1.png" width="576"></p>
