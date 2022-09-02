@@ -43,8 +43,7 @@ Features of the current version can be summarized as follows:
 
 You can install the [current
 release](https://hesim-dev.github.io/hesim/) from CRAN or the most up to
-date [development version](https://hesim-dev.github.io/hesim/dev/) from
-GitHub.
+date development version from GitHub.
 
 ``` r
 # Install from CRAN:

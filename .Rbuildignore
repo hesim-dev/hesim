@@ -21,3 +21,4 @@ DoxygenLayout.xml
 vignettes/benchmarks*
 ^vignettes/README
 ^vignettes/precompile.R
+^CRAN-SUBMISSION$
