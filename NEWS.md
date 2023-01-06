@@ -1,3 +1,6 @@
+## hesim 0.5.3
+Minor updates to the `.Rd` files to fix problems with the HTML version of the manual identified with the CRAN package checks.
+
 ## hesim 0.5.2
 
 ### API change

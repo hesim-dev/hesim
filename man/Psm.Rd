@@ -123,18 +123,18 @@ by the argument \code{t} in \verb{$sim_curves()}.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Psm$new()}}
-\item \href{#method-sim_survival}{\code{Psm$sim_survival()}}
-\item \href{#method-sim_stateprobs}{\code{Psm$sim_stateprobs()}}
-\item \href{#method-sim_qalys}{\code{Psm$sim_qalys()}}
-\item \href{#method-sim_costs}{\code{Psm$sim_costs()}}
-\item \href{#method-summarize}{\code{Psm$summarize()}}
-\item \href{#method-clone}{\code{Psm$clone()}}
+\item \href{#method-Psm-new}{\code{Psm$new()}}
+\item \href{#method-Psm-sim_survival}{\code{Psm$sim_survival()}}
+\item \href{#method-Psm-sim_stateprobs}{\code{Psm$sim_stateprobs()}}
+\item \href{#method-Psm-sim_qalys}{\code{Psm$sim_qalys()}}
+\item \href{#method-Psm-sim_costs}{\code{Psm$sim_costs()}}
+\item \href{#method-Psm-summarize}{\code{Psm$summarize()}}
+\item \href{#method-Psm-clone}{\code{Psm$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Psm-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Psm-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{Psm} object.
 \subsection{Usage}{
@@ -161,8 +161,8 @@ A new \code{Psm} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_survival"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_survival}{}}}
+\if{html}{\out{<a id="method-Psm-sim_survival"></a>}}
+\if{latex}{\out{\hypertarget{method-Psm-sim_survival}{}}}
 \subsection{Method \code{sim_survival()}}{
 Simulate survival curves as a function of time using \code{PsmCurves$survival()}.
 \subsection{Usage}{
@@ -182,8 +182,8 @@ stored in \code{survival_}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_stateprobs"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
+\if{html}{\out{<a id="method-Psm-sim_stateprobs"></a>}}
+\if{latex}{\out{\hypertarget{method-Psm-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
 Simulate health state probabilities from \code{survival_} using a partitioned
 survival analysis.
@@ -197,8 +197,8 @@ stored in \code{stateprobs_}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_qalys"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_qalys}{}}}
+\if{html}{\out{<a id="method-Psm-sim_qalys"></a>}}
+\if{latex}{\out{\hypertarget{method-Psm-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
 Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_} and
 \code{utility_model}. See \code{sim_qalys()} for details.
@@ -230,8 +230,8 @@ in \code{qalys_}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_costs"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_costs}{}}}
+\if{html}{\out{<a id="method-Psm-sim_costs"></a>}}
+\if{latex}{\out{\hypertarget{method-Psm-sim_costs}{}}}
 \subsection{Method \code{sim_costs()}}{
 Simulate costs as a function of \code{stateprobs_} and \code{cost_models}.
 See \code{sim_costs()} for details.
@@ -260,8 +260,8 @@ in \code{costs_}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-summarize"></a>}}
-\if{latex}{\out{\hypertarget{method-summarize}{}}}
+\if{html}{\out{<a id="method-Psm-summarize"></a>}}
+\if{latex}{\out{\hypertarget{method-Psm-summarize}{}}}
 \subsection{Method \code{summarize()}}{
 Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
 See \code{\link[=summarize_ce]{summarize_ce()}}.
@@ -279,8 +279,8 @@ See \code{\link[=summarize_ce]{summarize_ce()}}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Psm-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Psm-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

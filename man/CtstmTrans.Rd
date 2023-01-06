@@ -19,14 +19,14 @@ methodology used for prediction of state probabilities.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-hazard}{\code{CtstmTrans$hazard()}}
-\item \href{#method-cumhazard}{\code{CtstmTrans$cumhazard()}}
-\item \href{#method-clone}{\code{CtstmTrans$clone()}}
+\item \href{#method-CtstmTrans-hazard}{\code{CtstmTrans$hazard()}}
+\item \href{#method-CtstmTrans-cumhazard}{\code{CtstmTrans$cumhazard()}}
+\item \href{#method-CtstmTrans-clone}{\code{CtstmTrans$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-hazard"></a>}}
-\if{latex}{\out{\hypertarget{method-hazard}{}}}
+\if{html}{\out{<a id="method-CtstmTrans-hazard"></a>}}
+\if{latex}{\out{\hypertarget{method-CtstmTrans-hazard}{}}}
 \subsection{Method \code{hazard()}}{
 Predict the hazard functions for each health state transition.
 \subsection{Usage}{
@@ -46,8 +46,8 @@ A \code{data.table} with columns \code{transition_id},
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cumhazard"></a>}}
-\if{latex}{\out{\hypertarget{method-cumhazard}{}}}
+\if{html}{\out{<a id="method-CtstmTrans-cumhazard"></a>}}
+\if{latex}{\out{\hypertarget{method-CtstmTrans-cumhazard}{}}}
 \subsection{Method \code{cumhazard()}}{
 Predict the cumulative hazard functions for each health state transition.
 \subsection{Usage}{
@@ -67,8 +67,8 @@ A \code{data.table} with columns \code{transition_id},
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-CtstmTrans-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-CtstmTrans-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

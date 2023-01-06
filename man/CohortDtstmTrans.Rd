@@ -160,14 +160,14 @@ and the reference category for each row should be \code{0}.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{CohortDtstmTrans$new()}}
-\item \href{#method-sim_stateprobs}{\code{CohortDtstmTrans$sim_stateprobs()}}
-\item \href{#method-clone}{\code{CohortDtstmTrans$clone()}}
+\item \href{#method-CohortDtstmTrans-new}{\code{CohortDtstmTrans$new()}}
+\item \href{#method-CohortDtstmTrans-sim_stateprobs}{\code{CohortDtstmTrans$sim_stateprobs()}}
+\item \href{#method-CohortDtstmTrans-clone}{\code{CohortDtstmTrans$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-CohortDtstmTrans-new"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortDtstmTrans-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{CohortDtstmTrans} object.
 \subsection{Usage}{
@@ -205,8 +205,8 @@ A new \code{CohortDtstmTrans} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim_stateprobs"></a>}}
-\if{latex}{\out{\hypertarget{method-sim_stateprobs}{}}}
+\if{html}{\out{<a id="method-CohortDtstmTrans-sim_stateprobs"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortDtstmTrans-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
 Simulate probability of being in each health state during each model cycle.
 \subsection{Usage}{
@@ -225,8 +225,8 @@ An object of class \code{\link{stateprobs}}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-CohortDtstmTrans-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortDtstmTrans-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

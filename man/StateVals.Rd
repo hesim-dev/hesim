@@ -69,15 +69,15 @@ costs vary over time within health states. Only used if \code{method = wlos}.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{StateVals$new()}}
-\item \href{#method-sim}{\code{StateVals$sim()}}
-\item \href{#method-check}{\code{StateVals$check()}}
-\item \href{#method-clone}{\code{StateVals$clone()}}
+\item \href{#method-StateVals-new}{\code{StateVals$new()}}
+\item \href{#method-StateVals-sim}{\code{StateVals$sim()}}
+\item \href{#method-StateVals-check}{\code{StateVals$check()}}
+\item \href{#method-StateVals-clone}{\code{StateVals$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-StateVals-new"></a>}}
+\if{latex}{\out{\hypertarget{method-StateVals-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{StateVals} object.
 \subsection{Usage}{
@@ -107,8 +107,8 @@ A new \code{StateVals} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sim"></a>}}
-\if{latex}{\out{\hypertarget{method-sim}{}}}
+\if{html}{\out{<a id="method-StateVals-sim"></a>}}
+\if{latex}{\out{\hypertarget{method-StateVals-sim}{}}}
 \subsection{Method \code{sim()}}{
 Simulate state values with either predicted means or random samples by
 treatment strategy, patient, health state, and time \code{t}.
@@ -131,8 +131,8 @@ A \code{data.table} of simulated state values with columns for \code{sample},
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check"></a>}}
-\if{latex}{\out{\hypertarget{method-check}{}}}
+\if{html}{\out{<a id="method-StateVals-check"></a>}}
+\if{latex}{\out{\hypertarget{method-StateVals-check}{}}}
 \subsection{Method \code{check()}}{
 Input validation for class. Checks that fields are the correct type.
 \subsection{Usage}{
@@ -141,8 +141,8 @@ Input validation for class. Checks that fields are the correct type.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-StateVals-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-StateVals-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
