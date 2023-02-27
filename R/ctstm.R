@@ -91,7 +91,9 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
                                  trans_model$start_age,
                                  rep(0, trans_model$input_data$n_patients), # Start time is always 0
                                  trans_model$death_state - 1, 
-                                 trans_model$clock, trans_model$reset_states - 1,
+                                 trans_model$clock,
+                                 trans_model$reset_states - 1,
+                                 trans_model$reset_transitions - 1,
                                  max_t, max_age, progress)
   disprog <- data.table(disprog)
   disprog[, sample := sample + 1]
@@ -234,11 +236,13 @@ IndivCtstmTrans <- R6::R6Class(
     death_state = NULL,
     
     #' @field clock "reset" for a clock-reset model, "forward" for a clock-forward model, 
-    #' and "mix" for a mixture of clock-reset and clock-forward models. A clock-reset model 
+    #' "mix" for a mixture of clock-reset and clock-forward models by state, and
+    #' "mixt" for a mixture of clock-reset and clock-forward models by transition. A clock-reset model 
     #' is a semi-Markov model in which transition rates depend on time since entering a state. 
     #' A clock-forward model is a Markov model in which transition rates depend on time 
     #' since entering the initial state. If `"mix"` is used, then 
-    #' `reset_states` must be specified.
+    #' `reset_states` must be specified. If `"mixt"` is used, then `reset_transitions` must
+    #' be specified
     clock = NULL,
     
     #' @field reset_states A vector denoting the states in which time resets. 
@@ -246,6 +250,12 @@ IndivCtstmTrans <- R6::R6Class(
     #' start of the model or from when time was previously reset. Only used if 
     #' `clock = "mix"`.
     reset_states = NULL,
+    
+    #' @field reset_transitions A vector denoting the transitions in which time resets. 
+    #' Hazard functions are always a function of elapsed time since either the 
+    #' start of the model or from when time was previously reset. Only used if 
+    #' `clock = "mixt"`.
+    reset_transitions = NULL,
     
     #' @description
     #' Create a new `IndivCtstmTrans` object.
@@ -257,13 +267,15 @@ IndivCtstmTrans <- R6::R6Class(
     #' @param death_state The `death_state` field.
     #' @param clock The `clock` field.
     #' @param reset_states The `reset_states` field.
+    #' @param reset_transitions The `reset_transitions` field.
     #' @return A new `IndivCtstmTrans` object.    
     initialize = function(params, input_data, trans_mat, 
                           start_state = 1,
                           start_age = 38,
                           death_state = NULL,
-                          clock = c("reset", "forward", "mix"),
-                          reset_states = NULL) {
+                          clock = c("reset", "forward", "mix", "mixt"),
+                          reset_states = NULL,
+                          reset_transitions = NULL) {
       self$params <- params
       self$input_data <- input_data
       self$trans_mat <- trans_mat
@@ -272,6 +284,11 @@ IndivCtstmTrans <- R6::R6Class(
         self$reset_states <- vector(mode = "double")
       } else{
         self$reset_states <- reset_states
+      }
+      if (is.null(reset_transitions)){
+        self$reset_transitions <- vector(mode = "double")
+      } else{
+        self$reset_transitions <- reset_transitions
       }
       
       # history
@@ -351,10 +368,13 @@ IndivCtstmTrans <- R6::R6Class(
 #' [`expand.hesim_data`].
 #' @param trans_mat The transition matrix describing the states and transitions in a 
 #' multi-state model in the format from the [`mstate`][mstate::mstate] package. See [`IndivCtstmTrans`].
-#' @param clock "reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
+#' @param clock "reset" for a clock-reset model, "forward" for a clock-forward model,
+#' "mix" for a mixture by state, and "mixt" for a mixture by transition
 #' of clock-reset and clock-forward models. See the field `clock` in [`IndivCtstmTrans`].
 #' @param reset_states A vector denoting the states in which time resets. See the field 
 #' `reset_states` in [`IndivCtstmTrans`].
+#' @param reset_transitions A vector denoting the transitions in which time resets. See the field 
+#' `reset_transitions` in [`IndivCtstmTrans`].
 #' @inheritParams create_CohortDtstmTrans
 #' @param ... Further arguments passed to `IndivCtstmTrans$new()` in [`IndivCtstmTrans`].
 #' @return Returns an [`R6Class`] object of class [`IndivCtstmTrans`].
@@ -423,21 +443,25 @@ create_IndivCtstmTrans.flexsurvreg <- function(object, input_data, trans_mat, cl
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.params_surv <- function(object, input_data, trans_mat, 
-                                               clock = c("reset", "forward", "mix"),
-                                               reset_states = NULL,...){
+                                               clock = c("reset", "forward", "mix", "mixt"),
+                                               reset_states = NULL, reset_transitions = NULL,
+                                               ...){
   input_mats <- create_input_mats(object, input_data)
   return(IndivCtstmTrans$new(input_data = input_mats, params = object, trans_mat = trans_mat,
-                             clock = match.arg(clock), reset_states = reset_states, ...))
+                             clock = match.arg(clock), reset_states = reset_states,
+                             reset_transitions = reset_transitions, ...))
 }
 
 #' @export
 #' @rdname create_IndivCtstmTrans
 create_IndivCtstmTrans.params_surv_list <- function(object, input_data, trans_mat, 
-                                                    clock = c("reset", "forward", "mix"),
-                                                    reset_states = NULL,...){
+                                                    clock = c("reset", "forward", "mix", "mixt"),
+                                                    reset_states = NULL,
+                                                    reset_transitions = NULL, ...){
   input_mats <- create_input_mats(object, input_data)
   return(IndivCtstmTrans$new(input_data = input_mats, params = object, trans_mat = trans_mat,
-                             clock = match.arg(clock), reset_states = reset_states, ...))
+                             clock = match.arg(clock), reset_states = reset_states,
+                             reset_transitions = reset_transitions, ...))
 }
 
 # IndivCtstm class -------------------------------------------------------------

@@ -22,6 +22,7 @@ public:
   double max_t_;
   std::string clock_;
   std::vector<int> reset_states_;
+  std::vector<int> reset_transitions_;
   double clockmix_time_;
   
 /** 
@@ -30,7 +31,7 @@ public:
    */  
   patient(transmod * transmod, double age, double time, int state,
           double max_age, double max_t, int death_state, std::string clock,
-          std::vector<int> reset_states) 
+          std::vector<int> reset_states, std::vector<int> reset_transitions) 
     : transmod_(transmod) {
     age_ = age;
     time_ = time;
@@ -40,6 +41,7 @@ public:
     death_state_ = death_state;
     clock_ = clock;
     reset_states_ = reset_states;
+    reset_transitions_ = reset_transitions;
   }
   
   /** 
@@ -50,6 +52,21 @@ public:
     bool is = false;
     for (int i = 0; i < reset_states_.size(); ++i){
       if (state_ == reset_states_[i]){
+        is = true;
+        break;
+      }
+    }
+    return is;
+  }
+  
+  /** 
+   * Should model time be reset when a patient has a particular transition?
+   * @return True if a transition is a reset transition and false otherwise.
+   */    
+  bool is_reset_transition(int transition){
+    bool is = false;
+    for (int i = 0; i < reset_transitions_.size(); ++i){
+      if (transition == reset_transitions_[i]){
         is = true;
         break;
       }
@@ -75,6 +92,12 @@ public:
         random_times[i] = transmod_->random(trans_ids[i], sample); 
       } else if (clock_ == "forward"){
         random_times[i] = transmod_->trandom(trans_ids[i], sample, time_) - time_;
+      } else if (clock_ == "mixt"){
+          if (is_reset_transition(trans_ids[i])){
+            random_times[i] = transmod_->random(trans_ids[i], sample); 
+          } else{
+           random_times[i] = transmod_->trandom(trans_ids[i], sample, time_) - time_; 
+          }
       } else { // clock == "mix" case
           if (is_reset_state()){
             random_times[i] = transmod_->random(trans_ids[i], sample); 
