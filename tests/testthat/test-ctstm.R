@@ -614,6 +614,16 @@ test_that("IndivCtstm - joint", {
   ictstm <- IndivCtstm$new(trans_model = mstate_mix)
   disprog <- ictstm$sim_disease()$disprog_
   expect_true(is.data.table(disprog))
+
+  # Mixture
+  mstate_mix2 <- create_IndivCtstmTrans(params, input_data = msfit_data, 
+                                        trans_mat = tmat_ebmt4,
+                                        clock = "mixt",
+                                        reset_transitions = 1:max(tmat_ebmt4, na.rm=TRUE))  
+  expect_true(inherits(mstate_mix2, "IndivCtstmTrans"))
+  ictstm <- IndivCtstm$new(trans_model = mstate_mix2)
+  disprog <- ictstm$sim_disease()$disprog_
+  expect_true(is.data.table(disprog))
 })
 
 ## With fractional polynomial or survival spline from parameters object
