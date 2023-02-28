@@ -88,8 +88,10 @@ tpmatrix(pmat, complement = c("s1_s1", "s2_s2"))
 tpmatrix(pmat, complement = c(1, 4)) # Can also pass integers
 
 # Can control column names
-tpmatrix(pmat, complement = c(1, 4),
-         states = c("state1", "state2"), sep = ".")
+tpmatrix(pmat,
+  complement = c(1, 4),
+  states = c("state1", "state2"), sep = "."
+)
 
 }
 \seealso{

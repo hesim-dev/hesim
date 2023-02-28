@@ -77,33 +77,42 @@ but does not need to contain them all.
 }
 \examples{
 strategies <- data.frame(strategy_id = c(1, 2))
-patients <- data.frame(patient_id = seq(1, 3),
-                       grp = c(1, 1, 2),
-                       age = c(45, 50, 60),
-                       female = c(0, 0, 1))
+patients <- data.frame(
+  patient_id = seq(1, 3),
+  grp = c(1, 1, 2),
+  age = c(45, 50, 60),
+  female = c(0, 0, 1)
+)
 states <- data.frame(state_id = c(1, 2))
-hesim_dat <- hesim_data(strategies = strategies,
-                        patients = patients,
-                        states = states)
+hesim_dat <- hesim_data(
+  strategies = strategies,
+  patients = patients,
+  states = states
+)
 
 # Utility varies by health state and patient group
-utility_tbl <- stateval_tbl(data.frame(state_id = rep(states$state_id, 2),
-                                       grp = rep(rep(c(1, 2)), each = nrow(states)), 
-                                       mean = c(.8, .7, .75, .55),
-                                       se = c(.18, .12, .10, .06)),
-                            dist = "beta",
-                            grp_var = "grp")
+utility_tbl <- stateval_tbl(data.frame(
+  state_id = rep(states$state_id, 2),
+  grp = rep(rep(c(1, 2)), each = nrow(states)),
+  mean = c(.8, .7, .75, .55),
+  se = c(.18, .12, .10, .06)
+),
+dist = "beta",
+grp_var = "grp"
+)
 print(utility_tbl)
 utilmod <- create_StateVals(utility_tbl, n = 2, hesim_data = hesim_dat)
 
 # Costs vary by treatment strategy
-cost_tbl <- stateval_tbl(data.frame(strategy_id = strategies$strategy_id,
-                                    mean = c(5000, 3000),
-                                    se = c(200, 100)),
-                         dist = "gamma")
+cost_tbl <- stateval_tbl(data.frame(
+  strategy_id = strategies$strategy_id,
+  mean = c(5000, 3000),
+  se = c(200, 100)
+),
+dist = "gamma"
+)
 print(cost_tbl)
 costmod <- create_StateVals(cost_tbl, n = 2, hesim_data = hesim_dat)
-
 
 }
 \seealso{

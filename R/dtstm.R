@@ -2,11 +2,12 @@
 #' Transitions for a cohort discrete time state transition model
 #'
 #' @description
-#' Simulate health state transitions in a cohort discrete time state transition model.
+#' Simulate health state transitions in a cohort discrete time state transition
+#' model.
 #' @format An [R6::R6Class] object.
-#' @seealso [create_CohortDtstmTrans()] creates a [`CohortDtstmTrans`] object from either
-#' a fitted statistical model or a parameter object. A complete economic model can be implemented
-#' with the [`CohortDtstm`] class.
+#' @seealso [create_CohortDtstmTrans()] creates a [`CohortDtstmTrans`] object
+#' from either a fitted statistical model or a parameter object. A complete
+#' economic model can be implemented with the [`CohortDtstm`] class.
 #' @example man-roxygen/example-CohortDtstmTrans.R
 #' @name CohortDtstmTrans
 NULL
@@ -74,12 +75,12 @@ CohortDtstmTrans <- R6::R6Class(
     }
   ),
   active = list(
-    #' @field start_stateprobs A non-negative vector with length equal to the number of
-    #' health states containing the probability that the cohort is in each health
-    #' state at the start of the simulation. For example,
-    #' if there were three states and the cohort began the simulation in state 1,
-    #' then `start_stateprobs = c(1, 0, 0)`. Automatically normalized to sum to 1.
-    #' If `NULL`, then a vector with the first element equal to 1 and
+    #' @field start_stateprobs A non-negative vector with length equal to the
+    #' number of health states containing the probability that the cohort is
+    #' in each health state at the start of the simulation. For example,
+    #' if there were three states and the cohort began the simulation in state
+    #' 1, then `start_stateprobs = c(1, 0, 0)`. Automatically normalized to sum
+    #' to 1. If `NULL`, then a vector with the first element equal to 1 and
     #' all remaining elements equal to 0.
     start_stateprobs = function(x) {
       if (missing(x)) {
@@ -88,14 +89,15 @@ CohortDtstmTrans <- R6::R6Class(
       private$set_start_stateprobs(x)
     },
 
-    #' @field trans_mat A transition matrix describing the states and transitions
-    #' in a discrete-time multi-state model. Only required if the model is
-    #' parameterized using multinomial logistic regression. The `(i,j)` element
-    #' represents a transition from state `i` to state `j`. Each possible transition
-    #' from row `i` should be based on a separate multinomial logistic regression
-    #' and ordered from `0` to `K - 1` where `K` is the number of
-    #' possible transitions. Transitions that are not possible should be `NA`.
-    #' and the reference category for each row should be `0`.
+    #' @field trans_mat A transition matrix describing the states and
+    #' transitions in a discrete-time multi-state model. Only required if the
+    #' model is parameterized using multinomial logistic regression. The
+    #' `(i,j)` element represents a transition from state `i` to state `j`.
+    #' Each possible transition from row `i` should be based on a separate
+    #' multinomial logistic regression and ordered from `0` to `K - 1` where
+    #' `K` is the number of possible transitions. Transitions that are not
+    #' possible should be `NA` and the reference category for each row should
+    #' be `0`.
     trans_mat = function(x) {
       if (missing(x)) {
         return(private$.trans_mat)
@@ -105,7 +107,8 @@ CohortDtstmTrans <- R6::R6Class(
   ),
   public = list(
     #' @field params Parameters for simulating health state transitions.
-    #' Supports objects of class [`tparams_transprobs`] or [`params_mlogit_list`].
+    #' Supports objects of class [`tparams_transprobs`] or
+    #' [`params_mlogit_list`].
     params = NULL,
 
     #' @field input_data An object of class [`input_mats`].
@@ -129,8 +132,8 @@ CohortDtstmTrans <- R6::R6Class(
     #' @param start_stateprobs The `start_stateprobs` field.
     #' @param cycle_length The `cycle_length` field.
     #' @param absorbing The `absorbing` field. If `NULL`, then the constructor
-    #' will determine which states are absorbing automatically; non `NULL` values
-    #' will override this behavior.
+    #' will determine which states are absorbing automatically; non `NULL`
+    #' values will override this behavior.
     #' @return A new `CohortDtstmTrans` object.
     initialize = function(params,
                           input_data = NULL,
@@ -154,7 +157,8 @@ CohortDtstmTrans <- R6::R6Class(
     },
 
     #' @description
-    #' Simulate probability of being in each health state during each model cycle.
+    #' Simulate probability of being in each health state during each model
+    #' cycle.
     #' @param n_cycles The number of model cycles to simulate the model for.
     #' @return An object of class [`stateprobs`].
     sim_stateprobs = function(n_cycles) {
@@ -188,13 +192,14 @@ CohortDtstmTrans <- R6::R6Class(
 #' [`CohortDtstmTrans`].
 #' @param input_data An object of class `expanded_hesim_data` returned by
 #' [expand.hesim_data()]
-#' @param cycle_length The length of a model cycle in terms of years. The default
-#' is 1 meaning that model cycles are 1 year long.
+#' @param cycle_length The length of a model cycle in terms of years. The
+#' default is 1 meaning that model cycles are 1 year long.
 #' @param trans_mat A transition matrix describing the states and transitions
 #' in a discrete-time multi-state model. See [`CohortDtstmTrans`].
-#' @param uncertainty Method determining how parameter uncertainty should be handled.
-#' If `"normal"`, then parameters are randomly drawn from their multivariate normal
-#' distribution. If `"none"`, then only point estimates are returned.
+#' @param uncertainty Method determining how parameter uncertainty should be
+#' handled. If `"normal"`, then parameters are randomly drawn from their
+#' multivariate normal distribution. If `"none"`, then only point estimates are
+#' returned.
 #' @inheritParams create_params
 #' @template details-create_disease_model
 #' @seealso See [`CohortDtstmTrans`] for examples.
@@ -205,12 +210,16 @@ create_CohortDtstmTrans <- function(object, ...) {
 
 #' @export
 #' @rdname create_CohortDtstmTrans
-create_CohortDtstmTrans.multinom_list <- function(object, input_data,
-                                                  trans_mat,
-                                                  n = 1000,
-                                                  uncertainty = c("normal", "none"),
-                                                  ...) {
-  # For backwards compatibility until deprecated point_estimate argument is no longer supported
+create_CohortDtstmTrans.multinom_list <- function(
+    object,
+    input_data,
+    trans_mat,
+    n = 1000,
+    uncertainty = c("normal", "none"),
+    ...
+) {
+  # For backwards compatibility until deprecated point_estimate argument is
+  # no longer supported
   dots <- list(...)
   uncertainty <- deprecate_point_estimate(
     dots$point_estimate, uncertainty,
@@ -234,13 +243,18 @@ create_CohortDtstmTrans.multinom_list <- function(object, input_data,
 
 #' @export
 #' @rdname create_CohortDtstmTrans
-create_CohortDtstmTrans.msm <- function(object, input_data,
-                                        cycle_length,
-                                        n = 1000,
-                                        uncertainty = c("normal", "none"),
-                                        ...) {
+create_CohortDtstmTrans.msm <- function(
+    object,
+    input_data,
+    cycle_length,
+    n = 1000,
+    uncertainty = c("normal", "none"),
+    ...
+) {
   uncertainty <- match.arg(uncertainty)
-  qmat <- qmatrix(object, newdata = input_data, uncertainty = uncertainty, n = n)
+  qmat <- qmatrix(
+    object, newdata = input_data, uncertainty = uncertainty, n = n
+  )
   tpmat <- expmat(qmat, t = cycle_length)
   if (uncertainty == "none") n <- 1
   tpmat_id <- tpmatrix_id(input_data, n)
@@ -251,8 +265,9 @@ create_CohortDtstmTrans.msm <- function(object, input_data,
 
 #' @export
 #' @rdname create_CohortDtstmTrans
-create_CohortDtstmTrans.params_mlogit_list <- function(object, input_data,
-                                                       trans_mat, ...) {
+create_CohortDtstmTrans.params_mlogit_list <- function(
+    object, input_data, trans_mat, ...
+) {
   input_mats <- create_input_mats(object, input_data)
 
   CohortDtstmTrans$new(
@@ -269,17 +284,18 @@ create_CohortDtstmTrans.params_mlogit_list <- function(object, input_data,
 #' @format An [R6::R6Class] object.
 #' @seealso `CohortDtstm` objects can be created from model objects as
 #' documented in [create_CohortDtstm()]. The [`CohortDtstmTrans`] documentation
-#' describes the class for the transition model and the [`StateVals`] documentation
-#' describes the class for the cost and utility models. A [`CohortDtstmTrans`]
-#' object is typically created using [create_CohortDtstmTrans()].
+#' describes the class for the transition model and the [`StateVals`]
+#' documentation describes the class for the cost and utility models. A
+#' [`CohortDtstmTrans`] object is typically created using
+#' [create_CohortDtstmTrans()].
 #'
 #' There are currently three relevant vignettes. `vignette("markov-cohort")`
 #' details a relatively simple Markov model and
 #' `vignette("markov-inhomogeneous-cohort")` describes a more complex time
 #' inhomogeneous model in which transition probabilities vary in every model
-#' cycle. The `vignette("mlogit")` shows how a transition model can be parameterized
-#' using a multinomial logistic regression model when transition data is collected
-#' at evenly spaced intervals.
+#' cycle. The `vignette("mlogit")` shows how a transition model can be
+#' parameterized using a multinomial logistic regression model when transition
+#' data is collected at evenly spaced intervals.
 #'
 #' @references [Incerti and Jansen (2021)](https://arxiv.org/abs/2102.09437).
 #' See Section 2.1 for a description of a cohort DTSTM and details on
@@ -299,26 +315,29 @@ NULL
 CohortDtstm <- R6::R6Class(
   "CohortDtstm",
   public = list(
-    #' @field trans_model The model for health state transitions. Must be an object
-    #' of class [`CohortDtstmTrans`].
+    #' @field trans_model The model for health state transitions. Must be an
+    #' object of class [`CohortDtstmTrans`].
     trans_model = NULL,
 
-    #' @field utility_model The model for health state utility. Must be an object of
-    #' class [`StateVals`].
+    #' @field utility_model The model for health state utility. Must be an
+    #' object of class [`StateVals`].
     utility_model = NULL,
 
     #' @field cost_models The models used to predict costs by health state.
-    #' Must be a list of objects of class [`StateVals`], where each element of the
-    #' list represents a different cost category.
+    #' Must be a list of objects of class [`StateVals`], where each element of
+    #' the list represents a different cost category.
     cost_models = NULL,
 
-    #' @field stateprobs_ An object of class [`stateprobs`] simulated using `$sim_stateprobs()`.
+    #' @field stateprobs_ An object of class [`stateprobs`] simulated using
+    #' `$sim_stateprobs()`.
     stateprobs_ = NULL,
 
-    #' @field qalys_ An object of class [`qalys`] simulated using `$sim_qalys()`.
+    #' @field qalys_ An object of class [`qalys`] simulated using
+    #' `$sim_qalys()`.
     qalys_ = NULL,
 
-    #' @field costs_ An object of class [`costs`] simulated using `$sim_costs()`.
+    #' @field costs_ An object of class [`costs`] simulated using
+    #' `$sim_costs()`.
     costs_ = NULL,
 
     #' @description
@@ -327,14 +346,17 @@ CohortDtstm <- R6::R6Class(
     #' @param utility_model The `utility_model` field.
     #' @param cost_models The `cost_models` field.
     #' @return A new `CohortDtstm` object.
-    initialize = function(trans_model = NULL, utility_model = NULL, cost_models = NULL) {
+    initialize = function(
+      trans_model = NULL, utility_model = NULL, cost_models = NULL
+    ) {
       self$trans_model <- trans_model
       self$utility_model <- utility_model
       self$cost_models <- cost_models
     },
 
     #' @description
-    #' Simulate health state probabilities using `CohortDtstmTrans$sim_stateprobs()`.
+    #' Simulate health state probabilities using
+    #' `CohortDtstmTrans$sim_stateprobs()`.
     #' @param n_cycles The number of model cycles to simulate the model for.
     #' @return An instance of `self` with simulated output of class [stateprobs]
     #' stored in `stateprobs_`.
@@ -348,14 +370,16 @@ CohortDtstm <- R6::R6Class(
     },
 
     #' @description
-    #' Simulate quality-adjusted life-years (QALYs) as a function of `stateprobs_` and
-    #' `utility_model`. See `sim_qalys()` for details.
+    #' Simulate quality-adjusted life-years (QALYs) as a function of
+    #' `stateprobs_` and `utility_model`. See `sim_qalys()` for details.
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
-    #' @return An instance of `self` with simulated output of class [qalys] stored
-    #' in `qalys_`.
-    sim_qalys = function(dr = .03,
-                         integrate_method = c("trapz", "riemann_left", "riemann_right"),
-                         lys = TRUE) {
+    #' @return An instance of `self` with simulated output of class [qalys]
+    #' stored in `qalys_`.
+    sim_qalys = function(
+      dr = .03,
+      integrate_method = c("trapz", "riemann_left", "riemann_right"),
+      lys = TRUE
+    ) {
       self$qalys_ <- sim_qalys(
         self$stateprobs_, self$utility_model, dr, integrate_method,
         lys
@@ -366,19 +390,23 @@ CohortDtstm <- R6::R6Class(
     #' @description
     #' Simulate costs as a function of `stateprobs_` and `cost_models`.
     #' See `sim_costs()` for details.
-    #' @return An instance of `self` with simulated output of class [costs] stored
-    #' in `costs_`.
-    sim_costs = function(dr = .03,
-                         integrate_method = c("trapz", "riemann_left", "riemann_right")) {
-      self$costs_ <- sim_costs(self$stateprobs_, self$cost_models, dr, integrate_method)
+    #' @return An instance of `self` with simulated output of class [costs]
+    #' stored in `costs_`.
+    sim_costs = function(
+      dr = .03, integrate_method = c("trapz", "riemann_left", "riemann_right")
+    ) {
+      self$costs_ <- sim_costs(
+        self$stateprobs_, self$cost_models, dr, integrate_method
+      )
       invisible(self)
     },
 
     #' @description
-    #' Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
-    #' See [summarize_ce()].
-    #' @param by_grp If `TRUE`, then costs and QALYs are computed by subgroup. If
-    #' `FALSE`, then costs and QALYs are aggregated across all patients (and subgroups).
+    #' Summarize costs and QALYs so that cost-effectiveness analysis can be
+    #' performed. See [summarize_ce()].
+    #' @param by_grp If `TRUE`, then costs and QALYs are computed by subgroup.
+    #' If `FALSE`, then costs and QALYs are aggregated across all patients
+    #' (and subgroups).
     summarize = function(by_grp = FALSE) {
       check_summarize(self)
       return(summarize_ce(self$costs_, self$qalys_, by_grp))
@@ -391,11 +419,12 @@ CohortDtstm <- R6::R6Class(
 #'
 #' A generic function for creating an object of class [`CohortDtstm`].
 #' @param object An object of the appropriate class.
-#' @param input_data 	An object of class [`expanded_hesim_data`][expand.hesim_data()].
+#' @param input_data 	An object of class
+#' [`expanded_hesim_data`][expand.hesim_data()].
 #' @param cost_args A list of further arguments passed to `StateVals$new()` in
 #' [`StateVals`] when initiating cost models.
-#' @param utility_args A list of further arguments passed to `StateVals$new()` in
-#' [`StateVals`] when initiating the utility model.
+#' @param utility_args A list of further arguments passed to `StateVals$new()`
+#' in [`StateVals`] when initiating the utility model.
 #' @param ... Further arguments passed to `CohortDtstmTrans$new()` in
 #' [`CohortDtstmTrans`].
 #'
@@ -406,8 +435,9 @@ create_CohortDtstm <- function(object, ...) {
 
 #' @export
 #' @rdname create_CohortDtstm
-create_CohortDtstm.model_def <- function(object, input_data, cost_args = NULL,
-                                         utility_args = NULL, ...) {
+create_CohortDtstm.model_def <- function(
+    object, input_data, cost_args = NULL, utility_args = NULL, ...
+) {
   model_inputs <- eval_model(object, input_data)
 
   # Individual models

@@ -16,9 +16,9 @@ An object of class \code{flexsurvreg_list}.
 Combine \code{\link[flexsurv:flexsurvreg]{flexsurvreg}} objects into a list.
 }
 \examples{
- library("flexsurv")
- fit1 <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
- fit2 <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
- fsreg_list <- flexsurvreg_list(wei = fit1, exp = fit2)
- class(fsreg_list)
+library("flexsurv")
+fit1 <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, data = ovarian, dist = "weibull")
+fit2 <- flexsurv::flexsurvreg(formula = Surv(futime, fustat) ~ 1, data = ovarian, dist = "exp")
+fsreg_list <- flexsurvreg_list(wei = fit1, exp = fit2)
+class(fsreg_list)
 }

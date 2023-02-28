@@ -58,28 +58,38 @@ distinct parameters (e.g., costs for each health state, elements of a
 transition probability matrix).
 }
 \examples{
- 
 params <- list(
   alpha = matrix(c(75, 25, 33, 67), byrow = TRUE, ncol = 2),
   inptcost_mean = c(A = 900, B = 1500, C = 2000),
-  outptcost_mean = matrix(c(300, 600, 800,
-                            400, 700, 700),
-                           ncol = 3, byrow = TRUE)
-)
-rng_def <- define_rng({
-  aecost_mean <- c(500, 800, 1000) # Local object not 
-                                   # not returned by eval_rng()
-  list( # Sampled values of parameters returned by eval_rng()
-    p = dirichlet_rng(alpha), # Default column names
-    inptcost = gamma_rng(mean = inptcost_mean, # Column names based on 
-                         sd = inptcost_mean),  # named vector
-    outptcost = outptcost_mean, # No column names because
-                                # outptcost_mean has none.
-    aecost = gamma_rng(mean = aecost_mean, # Explicit naming of columns
-                       sd = aecost_mean,
-                       names = aecost_colnames)
+  outptcost_mean = matrix(c(
+    300, 600, 800,
+    400, 700, 700
+  ),
+  ncol = 3, byrow = TRUE
   )
-}, n = 2, aecost_colnames = c("A", "B", "C")) # Add aecost_colnames to environment
+)
+rng_def <- define_rng(
+  {
+    aecost_mean <- c(500, 800, 1000) # Local object not
+    # not returned by eval_rng()
+    list( # Sampled values of parameters returned by eval_rng()
+      p = dirichlet_rng(alpha), # Default column names
+      inptcost = gamma_rng(
+        mean = inptcost_mean, # Column names based on
+        sd = inptcost_mean
+      ), # named vector
+      outptcost = outptcost_mean, # No column names because
+      # outptcost_mean has none.
+      aecost = gamma_rng(
+        mean = aecost_mean, # Explicit naming of columns
+        sd = aecost_mean,
+        names = aecost_colnames
+      )
+    )
+  },
+  n = 2,
+  aecost_colnames = c("A", "B", "C")
+) # Add aecost_colnames to environment
 params_sample <- eval_rng(x = rng_def, params)
 summary(params_sample)
 params_sample

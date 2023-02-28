@@ -45,12 +45,12 @@ See the output returned by \code{\link[=get_labels]{get_labels()}} for an exampl
 \item{pivot_from}{Character vector denoting a column or columns used to
 "widen" the data. Should either be \code{"strategy"}, \code{"grp"}, \code{"outcome"},
 or some combination of the three. There will be one column for each value of
-the variables in \code{pivot_from}. Default is to widen so there is a column for each treatment
-strategy. Set to \code{NULL} if you do not want to widen the table.}
+the variables in \code{pivot_from}. Default is to widen so there is a column for
+each treatment strategy. Set to \code{NULL} if you do not want to widen the table.}
 
-\item{drop_grp}{If \code{TRUE}, then the group column will be removed if there is only
-one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column is never
-removed.}
+\item{drop_grp}{If \code{TRUE}, then the group column will be removed if there is
+only one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column
+is never removed.}
 
 \item{pretty_names}{Logical. If \code{TRUE}, then the columns \code{strategy}, \code{grp},
 \code{outcome}, \code{dr}, and \code{value} are renamed (if they exist) to \code{Strategy}, \code{Group},

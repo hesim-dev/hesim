@@ -33,7 +33,7 @@ samp1 <- rcat(n, pmat)
 proc.time() - ptm
 prop.table(table(samp1))
 
-# rmultinom from base R 
+# rmultinom from base R
 set.seed(100)
 ptm <- proc.time()
 samp2 <- t(apply(pmat, 1, rmultinom, n = 1, size = 1))

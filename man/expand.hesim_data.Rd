@@ -35,14 +35,22 @@ prioritizing ID variables as follows: (i) \code{strategy_id}, (ii) \code{patient
 }
 \examples{
 strategies <- data.frame(strategy_id = c(1, 2))
-patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
-                          gender = c("Female", "Female", "Male"))
-states <- data.frame(state_id =  seq(1, 3),
-                     state_var = c(2, 1, 9))
-hesim_dat <- hesim_data(strategies = strategies,
-                        patients = patients,
-                        states = states)
+patients <- data.frame(
+  patient_id = seq(1, 3), age = c(65, 50, 75),
+  gender = c("Female", "Female", "Male")
+)
+states <- data.frame(
+  state_id = seq(1, 3),
+  state_var = c(2, 1, 9)
+)
+hesim_dat <- hesim_data(
+  strategies = strategies,
+  patients = patients,
+  states = states
+)
 expand(hesim_dat, by = c("strategies", "patients"))
-expand(hesim_dat, by = c("strategies", "patients"),
-       times = c(0, 2, 10))
+expand(hesim_dat,
+  by = c("strategies", "patients"),
+  times = c(0, 2, 10)
+)
 }

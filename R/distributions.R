@@ -1,15 +1,15 @@
 #' Method of moments for beta distribution
 #'
-#' Compute the parameters \code{shape1} and \code{shape2} of the beta distribution
-#' using method of moments given the mean and standard
+#' Compute the parameters \code{shape1} and \code{shape2} of the beta
+#' distribution using method of moments given the mean and standard
 #' deviation of the random variable of interest.
 #' @param mean Mean of the random variable.
 #' @param sd Standard deviation of the random variable.
 #' @details
 #' If \eqn{\mu} is the mean and
-#' \eqn{\sigma} is the standard deviation of the random variable, then the method
-#' of moments estimates of the parameters \code{shape1} = \eqn{\alpha > 0} and
-#' \code{shape2} = \eqn{\beta > 0} are:
+#' \eqn{\sigma} is the standard deviation of the random variable, then the
+#' method of moments estimates of the parameters
+#' \code{shape1} = \eqn{\alpha > 0} and \code{shape2} = \eqn{\beta > 0} are:
 #' \deqn{\alpha = \mu \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)}
 #' and
 #' \deqn{\beta = (1 - \mu) \left(\frac{\mu(1-\mu)}{\sigma^2}-1 \right)}
@@ -25,7 +25,9 @@ mom_beta <- function(mean, sd) {
   term <- mean * (1 - mean) / sd^2 - 1
   shape1 <- mean * term
   shape2 <- (1 - mean) * term
-  if (any(sd^2 >= mean * (1 - mean))) stop("sd^2 must be less than mean * (1 - mean)")
+  if (any(sd^2 >= mean * (1 - mean))) {
+    stop("sd^2 must be less than mean * (1 - mean)")
+  }
   return(list(shape1 = shape1, shape2 = shape2))
 }
 
@@ -35,18 +37,19 @@ mom_beta <- function(mean, sd) {
 #' using method of moments for the random variable of interest.
 #' @param mean Mean of the random variable.
 #' @param sd Standard deviation of the random variable.
-#' @param scale Logical. If TRUE (default), then the scale parameter is returned; otherwise,
-#' the rate parameter is returned.
+#' @param scale Logical. If TRUE (default), then the scale parameter is
+#' returned; otherwise, the rate parameter is returned.
 #' @details
 #' If \eqn{\mu} is the mean and
-#' \eqn{\sigma} is the standard deviation of the random variable, then the method
-#' of moments estimates of the parameters \code{shape} = \eqn{\alpha > 0} and
-#' \code{scale} = \eqn{\theta > 0} are:
+#' \eqn{\sigma} is the standard deviation of the random variable, then the
+#' method of moments estimates of the parameters \code{shape} = \eqn{\alpha > 0}
+#' and \code{scale} = \eqn{\theta > 0} are:
 #' \deqn{\theta = \frac{\sigma^2}{\mu}}
 #' and
 #' \deqn{\alpha = \frac{\mu}{\theta}}
 #'
-#' The inverse of the scale parameter, \eqn{\beta = 1/\theta}, is the rate parameter.
+#' The inverse of the scale parameter, \eqn{\beta = 1/\theta}, is the rate
+#' parameter.
 #'
 #' @examples
 #' mom_gamma(mean = 10000, sd = 2000)
@@ -54,8 +57,9 @@ mom_beta <- function(mean, sd) {
 #' mom_gamma(mean = c(8000, 10000), sd = c(1500, 2000))
 #'
 #' @export
-#' @return If \code{scale = TRUE}, then a list containing the parameters \code{shape} and \code{scale}; otherwise,
-#'  if \code{scale = FALSE}, then a list containing the parameters \code{shape} and \code{rate}.
+#' @return If \code{scale = TRUE}, then a list containing the parameters
+#' \code{shape} and \code{scale}; otherwise, if \code{scale = FALSE}, then a
+#' list containing the parameters \code{shape} and \code{rate}.
 mom_gamma <- function(mean, sd, scale = TRUE) {
   if (scale) {
     scale <- sd^2 / mean
@@ -119,15 +123,20 @@ sr2fsweiNMA <- function(sr) {
   scale <- exp(stats::coef(sr)[1])
   beta.scale <- stats::coef(sr)[-1]
   shape <- mean(1 / sr$scale)
-  beta.shape <- if (length(sr$scale) > 1) log(sr$scale[1] / sr$scale[-1]) else numeric()
+  beta.shape <- if (length(sr$scale) > 1) {
+    log(sr$scale[1] / sr$scale[-1])
+  }  else {
+    numeric()
+  }
   pars <- weibull_to_weibullNMA(shape, scale)
   c(pars$a0, pars$a1, -beta.scale * shape, beta.shape)
 }
 
 #' Parameterization of the Weibull distribution for network meta-analysis
 #'
-#' Density, distribution function, hazards, quantile function and random generation
-#' for the Weibull distribution when parameterized for network meta-analysis.
+#' Density, distribution function, hazards, quantile function and random
+#' generation for the Weibull distribution when parameterized for network
+#' meta-analysis.
 #' @param x,q Vector of quantiles
 #' @param p Vector of probabilities
 #' @param n Number of observations. If \code{length(n) > 1}, the length is
@@ -137,7 +146,8 @@ sr2fsweiNMA <- function(sr) {
 #' @param log,log.p logical; if TRUE, probabilities p are given as log(p).
 #' @param lower.tail logical; if TRUE (default), probabilities are \eqn{P(X
 #'  \le x)}{P(X <= x)}, otherwise, \eqn{P(X > x)}{P(X > x)}.
-#' @param t Vector of times for which restricted mean survival time is evaluated.
+#' @param t Vector of times for which restricted mean survival time is
+#' evaluated.
 #' @param start Optional left-truncation time or times. The returned restricted
 #' mean survival will be conditional on survival up to this time.
 #' @keywords internal
@@ -213,27 +223,31 @@ mean_weibullNMA <- function(a0, a1) {
 #' List of survival distributions
 #'
 #' List of additional distributions for parametric survival analysis that are
-#' not contained in [`flexsurv`][flexsurv::flexsurv]. Can be used to fit models with
-#' [`flexsurv::flexsurvreg()`]. Same format as [`flexsurv::flexsurv.dists`].
+#' not contained in [`flexsurv`][flexsurv::flexsurv]. Can be used to fit models
+#' with [`flexsurv::flexsurvreg()`]. Same format as
+#' [`flexsurv::flexsurv.dists`].
 #'
 #' @format A list with the following elements:
 #' \describe{
 #'   \item{name}{Name of the probability distribution.}
 #'   \item{pars}{Vector of strings naming the parameters of the distribution.
-#'   These must be the same names as the arguments of the density and probability functions.}
+#'   These must be the same names as the arguments of the density and
+#'   probability functions.}
 #'   \item{location}{Name of the location parameter.}
 #'   \item{transforms}{List of R functions which transform the range of values
 #'   taken by each parameter onto the real line. For example,
 #'   \code{c(log, log)} for a distribution with two positive parameters.}
-#'   \item{inv.transforms}{List of R functions defining the corresponding inverse
-#'   transformations. Note these must be lists, even for single parameter
-#'   distributions they should be supplied as, e.g. \code{c(exp) or list(exp)}.}
+#'   \item{inv.transforms}{List of R functions defining the corresponding
+#'   inverse transformations. Note these must be lists, even for single
+#'   parameter distributions they should be supplied as, e.g.
+#'   \code{c(exp) or list(exp)}.}
 #'   \item{inits}{A function of the observed survival times \code{t} (including
-#'   right-censoring times, and using the halfway point for interval-censored times)
-#'   which returns a vector of reasonable initial values for maximum likelihood
-#'   estimation of each parameter. For example, \code{function(t){ c(1, mean(t)) }}
-#'    will always initialize the first of two parameters at 1, and the second
-#'    (a scale parameter, for instance) at the mean of \code{t}.}
+#'   right-censoring times, and using the halfway point for interval-censored
+#'   times) which returns a vector of reasonable initial values for maximum
+#'   likelihood estimation of each parameter. For example,
+#'   \code{function(t){ c(1, mean(t)) }} will always initialize the first of
+#'   two parameters at 1, and the second (a scale parameter, for instance) at
+#'   the mean of \code{t}.}
 #' }
 #' @keywords internal
 #' @export

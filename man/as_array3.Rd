@@ -42,8 +42,8 @@ This allows multiple transition matrices to be stored as either tabular objects
 \examples{
 p_12 <- c(.7, .6)
 pmat <- tpmatrix(
- C, p_12,
- 0, 1
+  C, p_12,
+  0, 1
 )
 pmat
 

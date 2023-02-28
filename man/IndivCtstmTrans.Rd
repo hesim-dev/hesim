@@ -7,8 +7,8 @@
 An \link[R6:R6Class]{R6::R6Class} object.
 }
 \description{
-Simulate health state transitions in an individual-level continuous time state
-transition model using parameters from a multi-state model.
+Simulate health state transitions in an individual-level continuous time
+state transition model using parameters from a multi-state model.
 }
 \examples{
 library("flexsurv")
@@ -62,34 +62,40 @@ A complete economic model can be implemented with the \code{\link{IndivCtstm}} c
 \item{\code{params}}{An object of class \code{\link{params_surv}} or \code{\link{params_surv_list}}.}
 
 \item{\code{input_data}}{Input data used to simulate health state transitions
-by sample from the probabilistic sensitivity analysis (PSA), treatment strategy and patient.
-Must be an object of class \code{\link{input_mats}}. If \code{params} contains parameters from
-a list of models (i.e., of class \code{\link{params_surv_list}}), then \code{input_data}
-must contain a unique row for each treatment strategy
-and patient; if \code{params} contains parameters from a joint model
-(i.e., of class \code{\link{params_surv}}), then \code{input_data} must contain a unique
-row for each treatment strategy, patient, and transition.}
+by sample from the probabilistic sensitivity analysis (PSA), treatment
+strategy and patient. Must be an object of class \code{\link{input_mats}}. If
+\code{params} contains parameters from a list of models (i.e., of class
+\code{\link{params_surv_list}}), then \code{input_data} must contain a unique row for
+each treatment strategy and patient; if \code{params} contains parameters from
+a joint model (i.e., of class \code{\link{params_surv}}), then \code{input_data} must
+contain a unique row for each treatment strategy, patient, and
+transition.}
 
-\item{\code{trans_mat}}{A transition matrix describing the states and transitions
-in a multi-state model in the format from the \code{\link[mstate:mstate-package]{mstate}} package.
-See the documentation for the argument \code{"trans"} in \code{\link[mstate:msprep]{mstate::msprep}}.}
+\item{\code{trans_mat}}{A transition matrix describing the states and
+transitions in a multi-state model in the format from the
+\code{\link[mstate:mstate-package]{mstate}} package. See the documentation for the
+argument \code{"trans"} in \code{\link[mstate:msprep]{mstate::msprep}}.}
 
 \item{\code{start_state}}{A scalar or vector denoting the starting health state.
-Default is the first health state. If a vector, must be equal to the number of simulated patients.}
+Default is the first health state. If a vector, must be equal to the
+number of simulated patients.}
 
-\item{\code{start_age}}{A scalar or vector denoting the starting age of each patient
-in the simulation. Default is 38. If a vector, must be equal to the number of simulated patients.}
+\item{\code{start_age}}{A scalar or vector denoting the starting age of each
+patient in the simulation. Default is 38. If a vector, must be equal to
+the number of simulated patients.}
 
 \item{\code{death_state}}{The death state in \code{trans_mat}. Used with \code{max_age}
-in \code{sim_disease} as patients transition to this state upon reaching maximum age.
-By default, it is set to the final absorbing state (i.e., a row in \code{trans_mat} with all NAs).}
+in \code{sim_disease} as patients transition to this state upon reaching
+maximum age. By default, it is set to the final absorbing state (i.e., a
+row in \code{trans_mat} with all NAs).}
 
-\item{\code{clock}}{"reset" for a clock-reset model, "forward" for a clock-forward model,
-and "mix" for a mixture of clock-reset and clock-forward models. A clock-reset model
-is a semi-Markov model in which transition rates depend on time since entering a state.
-A clock-forward model is a Markov model in which transition rates depend on time
-since entering the initial state. If \code{"mix"} is used, then
-\code{reset_states} must be specified.}
+\item{\code{clock}}{"reset" for a clock-reset model, "forward" for a
+clock-forward model, and "mix" for a mixture of clock-reset and
+clock-forward models. A clock-reset model is a semi-Markov model in which
+transition rates depend on time since entering a state. A clock-forward
+model is a Markov model in which transition rates depend on time since
+entering the initial state. If \code{"mix"} is used, then \code{reset_states} must
+be specified.}
 
 \item{\code{reset_states}}{A vector denoting the states in which time resets.
 Hazard functions are always a function of elapsed time since either the
@@ -172,16 +178,18 @@ multi-state model using an individual patient simulation).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{max_t}}{A scalar or vector denoting the length of time to simulate the model.
-If a vector, must be equal to the number of simulated patients.}
+\item{\code{max_t}}{A scalar or vector denoting the length of time to simulate
+the model. If a vector, must be equal to the number of simulated
+patients.}
 
 \item{\code{max_age}}{A scalar or vector denoting the maximum age to simulate
-each patient until. If a vector, must be equal to the number of simulated patients.}
+each patient until. If a vector, must be equal to the number of simulated
+patients.}
 
-\item{\code{progress}}{An integer, specifying the PSA iteration (i.e., sample) that
-should be printed every progress PSA iterations. For example, if progress = 2,
-then every second PSA iteration is printed. Default is NULL, in which case
-no output is printed.}
+\item{\code{progress}}{An integer, specifying the PSA iteration (i.e., sample)
+that should be printed every progress PSA iterations. For example, if
+progress = 2, then every second PSA iteration is printed. Default is
+NULL, in which case no output is printed.}
 }
 \if{html}{\out{</div>}}
 }
@@ -204,8 +212,8 @@ Simulate health state probabilities from a \link{disprog} object.
 \item{\code{t}}{A numeric vector of times.}
 
 \item{\code{disprog}}{A \link{disprog} object. If
-\code{NULL}, then this will be simulated prior to computing state probabilities
-using \code{IndivCtstm$sim_disease()}.}
+\code{NULL}, then this will be simulated prior to computing state
+probabilities using \code{IndivCtstm$sim_disease()}.}
 
 \item{\code{...}}{Additional arguments to pass to \code{IndivCtstm$sim_disease()} if
 \code{disprog = NULL}.}

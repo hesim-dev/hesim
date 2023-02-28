@@ -38,9 +38,11 @@ as the negative sum of the other rows.
 }
 \examples{
 # 3 state irreversible model
-tmat <- rbind(c(NA, 1, 2),
-              c(NA, NA, 3),
-              c(NA, NA, NA)) 
+tmat <- rbind(
+  c(NA, 1, 2),
+  c(NA, NA, 3),
+  c(NA, NA, NA)
+)
 q12 <- c(.8, .7)
 q13 <- c(.2, .3)
 q23 <- c(1.1, 1.2)

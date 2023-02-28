@@ -2,63 +2,70 @@
 #' Cost-effectiveness analysis
 #'
 #' Conduct cost-effectiveness analysis (CEA) given output of an economic
-#' model; that is, summarize a probabilistic sensitivity analysis (PSA), possibly
-#' by subgroup.
+#' model; that is, summarize a probabilistic sensitivity analysis (PSA),
+#' possibly by subgroup.
 #' \itemize{
 #'  \item [cea()] computes the probability that
-#' each treatment is most cost-effective, output for a cost-effectiveness acceptability frontier,
-#' the expected value of perfect information, and the net monetary benefit for each treatment.
-#' \item [cea_pw()] conducts pairwise CEA by comparing strategies to a comparator. Computed
-#' quantities include the incremental cost-effectiveness ratio, the
-#' incremental net monetary benefit, output for a cost-effectiveness plane,
-#' and output for a cost-effectiveness acceptability curve.
+#' each treatment is most cost-effective, output for a cost-effectiveness
+#' acceptability frontier, the expected value of perfect information, and the
+#' net monetary benefit for each treatment.
+#' \item [cea_pw()] conducts pairwise CEA by comparing strategies to a
+#' comparator. Computed quantities include the incremental cost-effectiveness
+#' ratio, the incremental net monetary benefit, output for a cost-effectiveness
+#' plane, and output for a cost-effectiveness acceptability curve.
 #' }
 #'
 #'
-#' @param x An object of simulation output characterizing the probability distribution
-#' of clinical effectiveness and costs. If the default method is used, then `x`
-#' must be a `data.frame` or `data.table` containing columns of
-#' mean costs and clinical effectiveness where each row denotes a randomly sampled parameter set
-#' and treatment strategy.
+#' @param x An object of simulation output characterizing the probability
+#' distribution of clinical effectiveness and costs. If the default method is
+#' used, then `x` must be a `data.frame` or `data.table` containing columns of
+#' mean costs and clinical effectiveness where each row denotes a randomly
+#' sampled parameter set and treatment strategy.
 #' @param k Vector of willingness to pay values.
 #' @param comparator Name of the comparator strategy in `x`.
-#' @param sample Character name of column from `x` denoting a randomly sampled parameter set.
-#' @param strategy Character name of column from `x` denoting treatment strategy.
-#' @param grp Character name of column from `x` denoting subgroup. If `NULL`, then
-#' it is assumed that there is only one group.
+#' @param sample Character name of column from `x` denoting a randomly sampled
+#' parameter set.
+#' @param strategy Character name of column from `x` denoting treatment
+#' strategy.
+#' @param grp Character name of column from `x` denoting subgroup. If `NULL`,
+#' then it is assumed that there is only one group.
 #' @param e Character name of column from `x` denoting clinical effectiveness.
 #' @param c Character name of column from `x` denoting costs.
-#' @param ... Further arguments passed to or from other methods. Currently unused.
+#' @param ... Further arguments passed to or from other methods. Currently
+#' unused.
 #' @return [cea()] returns a list of four `data.table` elements.
 #'
 #' \describe{
 #'   \item{summary}{A `data.table` of the mean, 2.5% quantile, and 97.5%
 #'   quantile by strategy and group for clinical effectiveness and costs.}
-#'   \item{mce}{The probability that each strategy is the most effective treatment
-#'   for each group for the range of specified willingness to pay values. In addition,
-#'   the column `best` denotes the optimal strategy (i.e., the strategy with the
-#'   highest expected net monetary benefit), which can be used to plot the
-#'   cost-effectiveness acceptability frontier (CEAF).}
-#'   \item{evpi}{The expected value of perfect information (EVPI) by group for the range
-#'   of specified willingness to pay values. The EVPI is computed by subtracting the expected net
-#'   monetary benefit given current information (i.e., the strategy with the highest
-#'   expected net monetary benefit) from the expected net monetary benefit given
-#'   perfect information.}
-#'    \item{nmb}{The mean, 2.5% quantile, and 97.5% quantile of net monetary benefits
-#'    for the range of specified willingness to pay values.}
+#'   \item{mce}{The probability that each strategy is the most effective
+#'   treatment for each group for the range of specified willingness to pay
+#'   values. In addition, the column `best` denotes the optimal strategy (i.e.,
+#'   the strategy with the highest expected net monetary benefit), which can be
+#'   used to plot the cost-effectiveness acceptability frontier (CEAF).}
+#'   \item{evpi}{The expected value of perfect information (EVPI) by group for
+#'   the range of specified willingness to pay values. The EVPI is computed by
+#'   subtracting the expected net monetary benefit given current information
+#'   (i.e., the strategy with the highest expected net monetary benefit) from
+#'   the expected net monetary benefit given perfect information.}
+#'   \item{nmb}{The mean, 2.5% quantile, and 97.5% quantile of net monetary
+#'   benefits for the range of specified willingness to pay values.}
 #' }
 #'
 #' \code{cea_pw} also returns a list of four `data.table` elements:
 #'  \describe{
 #'   \item{summary}{A data.table of the mean, 2.5% quantile, and 97.5%
-#'   quantile by strategy and group for incremental clinical effectiveness and costs.}
-#'   \item{delta}{Incremental effectiveness and incremental cost for each simulated
-#'   parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
-#'   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
-#'   group. The CEAC plots the probability that each strategy is more cost-effective than
-#'   the comparator for the specified willingness to pay values.}
-#'    \item{inmb}{The mean, 2.5% quantile, and 97.5% quantile of
-#'    incremental net monetary benefits for the range of specified willingness to pay values.}
+#'   quantile by strategy and group for incremental clinical effectiveness and
+#'   costs.}
+#'   \item{delta}{Incremental effectiveness and incremental cost for each
+#'   simulated parameter set by strategy and group. Can be used to plot a
+#'   cost-effectiveness plane.}
+#'   \item{ceac}{Values needed to plot a cost-effectiveness acceptability curve
+#'   by group. The CEAC plots the probability that each strategy is more
+#'   cost-effective than the comparator for the specified willingness to pay
+#'   values.}
+#'   \item{inmb}{The mean, 2.5% quantile, and 97.5% quantile of incremental net
+#'   monetary benefits for the range of specified willingness to pay values.}
 #' }
 #' @name cea
 #' @examples
@@ -160,9 +167,13 @@ cea.default <- function(x, k = seq(0, 200000, 500), sample, strategy,
   # estimates
   nmb <- nmb_summary(x, k, strategy, grp, e, c)
   enmb_best <- enmb_best(nmb, strategy, grp)
-  mce <- mce(x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps, enmb_best$row)
+  mce <- mce(
+    x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps, enmb_best$row
+  )
   enmb_best[, row := NULL]
-  evpi <- evpi(x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps, enmb_best)
+  evpi <- evpi(
+    x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps, enmb_best
+  )
   summary_table <- cea_table(x, strategy, grp, e, c)
   setnames(
     summary_table,
@@ -221,7 +232,9 @@ cea_pw.default <- function(x, k = seq(0, 200000, 500), comparator,
     n_samples, n_strategies, n_grps
   )
   inmb <- inmb_summary(delta, k, strategy, grp, e = "ie", c = "ic")
-  summary_table <- cea_table(delta, strategy, grp, e = "ie", c = "ic", icer = TRUE)
+  summary_table <- cea_table(
+    delta, strategy, grp, e = "ie", c = "ic", icer = TRUE
+  )
   l <- list(summary = summary_table, delta = delta, ceac = ceac, inmb = inmb)
   class(l) <- "cea_pw"
   attr(l, "strategy") <- strategy
@@ -258,7 +271,9 @@ cea.ce <- function(x, k = seq(0, 200000, 500), dr_qalys, dr_costs, ...) {
 
 #' @export
 #' @rdname cea
-cea_pw.ce <- function(x, k = seq(0, 200000, 500), comparator, dr_qalys, dr_costs, ...) {
+cea_pw.ce <- function(
+    x, k = seq(0, 200000, 500), comparator, dr_qalys, dr_costs, ...
+  ) {
   category <- dr <- NULL
   sim <- cbind(
     x$costs[
@@ -291,7 +306,9 @@ mce <- function(x, k, strategy, grp, e, c, n_samples, n_strategies, n_grps,
 }
 
 # Cost effectiveness acceptability curve
-ceac <- function(delta, k, strategy, grp, e, c, n_samples, n_strategies, n_grps) {
+ceac <- function(
+    delta, k, strategy, grp, e, c, n_samples, n_strategies, n_grps
+  ) {
   k_rep <- rep(k, each = n_strategies * n_grps)
   strategy_rep <- rep(unique(delta[[strategy]]), times = length(k) * n_grps)
   grp_rep <- rep(rep(unique(delta[[grp]]), each = n_strategies), length(k))
@@ -329,7 +346,9 @@ nmb_summary <- function(x, k, strategy, grp, e, c) {
 # incremental benefit summary statistics
 inmb_summary <- function(ix, k, strategy, grp, e, c) {
   inmb <- nmb_summary(ix, k, strategy, grp, e, c)
-  setnames(inmb, colnames(inmb), c(strategy, grp, "k", "einmb", "linmb", "uinmb"))
+  setnames(
+    inmb, colnames(inmb), c(strategy, grp, "k", "einmb", "linmb", "uinmb")
+  )
   return(inmb)
 }
 
@@ -360,10 +379,10 @@ evpi <- function(x, k, strategy, grp, e, c,
 
 # CEA summary table
 cea_table <- function(x, strategy, grp, e, c, icer = FALSE) {
-  FUN <- function(x) {
+  stat_summary <- function(x) {
     return(list(mean = mean(x), quant = stats::quantile(x, c(.025, .975))))
   }
-  ret <- x[, as.list(unlist(lapply(.SD, FUN))),
+  ret <- x[, as.list(unlist(lapply(.SD, stat_summary))),
     by = c(strategy, grp), .SDcols = c(e, c)
   ]
   setnames(ret, colnames(ret), c(
@@ -382,19 +401,20 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE) {
 # Incremental cost-effectiveness ratio------------------------------------------
 #' Incremental cost-effectiveness ratio
 #'
-#' Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
-#' [cea_pw()] with `icer()` and format for pretty printing with `format.icer()`.
+#' Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given
+#' output from [cea_pw()] with `icer()` and format for pretty printing with
+#' `format.icer()`.
 #'
 #' @inheritParams set_labels
 #' @param x An object of class `cea_pw` returned by [cea_pw()].
-#' @param prob A numeric scalar in the interval `(0,1)` giving the confidence interval.
-#' Default is 0.95 for a 95 percent interval.
+#' @param prob A numeric scalar in the interval `(0,1)` giving the confidence
+#' interval. Default is 0.95 for a 95 percent interval.
 #' @param k Willingness to pay per quality-adjusted life-year.
 #' @param ... Further arguments passed to and from methods. Currently unused.
 #'
-#' @details Note that `icer()` will report negative ICERs; however, `format()` will
-#' correctly note whether a treatment strategy is dominated by or dominates the
-#' reference treatment.
+#' @details Note that `icer()` will report negative ICERs; however, `format()`
+#' will correctly note whether a treatment strategy is dominated by or dominates
+#' the reference treatment.
 #'
 #' @return `icer()` returns an object of class `icer` that is a tidy
 #' `data.table` with the following columns:
@@ -402,7 +422,8 @@ cea_table <- function(x, strategy, grp, e, c, icer = FALSE) {
 #' \item{strategy}{The treatment strategy.}
 #' \item{grp}{The subgroup.}
 #' \item{outcome}{The outcome metric.}
-#' \item{estimate}{The point estimate computed as the average across the PSA samples.}
+#' \item{estimate}{The point estimate computed as the average across the PSA
+#' samples.}
 #' \item{lower}{The lower limit of the confidence interval.}
 #' \item{upper}{The upper limit of the confidence interval.}
 #' }
@@ -490,11 +511,11 @@ icer <- function(x, prob = .95, k = 50000, labels = NULL, ...) {
 #' @param pivot_from Character vector denoting a column or columns used to
 #' "widen" the data. Should either be `"strategy"`, `"grp"`, `"outcome"`,
 #' or some combination of the three. There will be one column for each value of
-#' the variables in `pivot_from`. Default is to widen so there is a column for each treatment
-#' strategy. Set to `NULL` if you do not want to widen the table.
-#' @param drop_grp If `TRUE`, then the group column will be removed if there is only
-#' one subgroup; other it will be kept. If `FALSE`, then the `grp` column is never
-#' removed.
+#' the variables in `pivot_from`. Default is to widen so there is a column for
+#' each treatment strategy. Set to `NULL` if you do not want to widen the table.
+#' @param drop_grp If `TRUE`, then the group column will be removed if there is
+#' only one subgroup; other it will be kept. If `FALSE`, then the `grp` column
+#' is never removed.
 #' @param pretty_names Logical. If `TRUE`, then the columns `strategy`, `grp`,
 #' `outcome`, and `value` are renamed (if they exist) to `Strategy`,
 #' `Group`, `Outcome`, and `Value`.

@@ -25,8 +25,8 @@ icer_tbl(
 \item{cri}{If \code{TRUE}, credible intervals are computed; otherwise
 they are not.}
 
-\item{prob}{A numeric scalar in the interval \verb{(0,1)} giving the credible interval.
-Default is 0.95 for a 95 percent credible interval.}
+\item{prob}{A numeric scalar in the interval \verb{(0,1)} giving the credible
+interval. Default is 0.95 for a 95 percent credible interval.}
 
 \item{digits_qalys}{Number of digits to use to report QALYs.}
 
@@ -39,10 +39,10 @@ each group.}
 
 \item{colnames}{Column names for matrices when \code{output = "matrix"}.}
 
-\item{drop}{If \code{TRUE}, then the result is coerced to the lowest possible dimension.
-Relevant if \code{output = "matrix"} and there is one group, in which case a single
-matrix will be returned if \code{drop = TRUE} and a list of length 1 will be returned
-if \code{drop = FALSE}.}
+\item{drop}{If \code{TRUE}, then the result is coerced to the lowest possible
+dimension. Relevant if \code{output = "matrix"} and there is one group, in which
+case a single matrix will be returned if \code{drop = TRUE} and a list of length
+1 will be returned if \code{drop = FALSE}.}
 }
 \value{
 If \code{output = "matrix"}, then a list of matrices (or a matrix if

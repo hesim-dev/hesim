@@ -93,43 +93,47 @@ format(summary(ce), pivot_from = "strategy")
 }
 \references{
 \href{https://arxiv.org/abs/2102.09437}{Incerti and Jansen (2021)}.
-See Section 2.2 for a mathematical description of an individual-level CTSTM and Section 4.1 for
-an example in oncology.
+See Section 2.2 for a mathematical description of an individual-level CTSTM
+and Section 4.1 for an example in oncology.
 }
 \seealso{
 The \code{\link{IndivCtstmTrans}} documentation
-describes the class for the transition model and the \code{\link{StateVals}} documentation
-describes the class for the cost and utility models. An \code{\link{IndivCtstmTrans}}
-object is typically created using \code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}.
+describes the class for the transition model and the \code{\link{StateVals}}
+documentation describes the class for the cost and utility models. An
+\code{\link{IndivCtstmTrans}} object is typically created using
+\code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}.
 
 There are currently two relevant vignettes. \code{vignette("mstate")} shows how to
 parameterize \code{IndivCtstmTrans} objects in cases where patient-level data is
-available by fitting a multi-state models. \code{vignette("markov-inhomogeneous-indiv")}
-shows how the time inhomogeneous Markov cohort model in
-\code{vignette("markov-inhomogeneous-cohort")} can be developed as an individual
-patient simulation; in doing so, it shows how \code{IndivCtstm} models can be
-used even without access to patient-level data.
+available by fitting a multi-state models.
+\code{vignette("markov-inhomogeneous-indiv")} shows how the time inhomogeneous
+Markov cohort model in \code{vignette("markov-inhomogeneous-cohort")} can be
+developed as an individual patient simulation; in doing so, it shows how
+\code{IndivCtstm} models can be used even without access to patient-level data.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{trans_model}}{The model for health state transitions. Must be an object
-of class \code{\link{IndivCtstmTrans}}.}
+\item{\code{trans_model}}{The model for health state transitions.
+Must be an object of class \code{\link{IndivCtstmTrans}}.}
 
-\item{\code{utility_model}}{The model for health state utility. Must be an object of
-class \code{\link{StateVals}}.}
+\item{\code{utility_model}}{The model for health state utility. Must be an
+object of class \code{\link{StateVals}}.}
 
 \item{\code{cost_models}}{The models used to predict costs by health state.
-Must be a list of objects of class \code{\link{StateVals}}, where each element of the
-list represents a different cost category.}
+Must be a list of objects of class \code{\link{StateVals}}, where each element of
+the list represents a different cost category.}
 
 \item{\code{disprog_}}{An object of class \code{\link{disprog}}.}
 
-\item{\code{stateprobs_}}{An object of class \code{\link{stateprobs}} simulated using \verb{$sim_stateprobs()}.}
+\item{\code{stateprobs_}}{An object of class \code{\link{stateprobs}} simulated using
+\verb{$sim_stateprobs()}.}
 
-\item{\code{qalys_}}{An object of class \code{\link{qalys}} simulated using \verb{$sim_qalys()}.}
+\item{\code{qalys_}}{An object of class \code{\link{qalys}} simulated using
+\verb{$sim_qalys()}.}
 
-\item{\code{costs_}}{An object of class \code{\link{costs}} simulated using \verb{$sim_costs()}.}
+\item{\code{costs_}}{An object of class \code{\link{costs}} simulated using
+\verb{$sim_costs()}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -173,8 +177,8 @@ A new \code{IndivCtstm} object.
 \if{html}{\out{<a id="method-IndivCtstm-sim_disease"></a>}}
 \if{latex}{\out{\hypertarget{method-IndivCtstm-sim_disease}{}}}
 \subsection{Method \code{sim_disease()}}{
-Simulate disease progression (i.e., individual trajectories through a multi-state
-model) using \code{IndivCtstmTrans$sim_disease()}.
+Simulate disease progression (i.e., individual trajectories through a
+multi-state model) using \code{IndivCtstmTrans$sim_disease()}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$sim_disease(max_t = 100, max_age = 100, progress = NULL)}\if{html}{\out{</div>}}
 }
@@ -182,16 +186,18 @@ model) using \code{IndivCtstmTrans$sim_disease()}.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{max_t}}{A scalar or vector denoting the length of time to simulate the model.
-If a vector, must be equal to the number of simulated patients.}
+\item{\code{max_t}}{A scalar or vector denoting the length of time to simulate
+the model. If a vector, must be equal to the number of simulated
+patients.}
 
-\item{\code{max_age}}{A scalar or vector denoting the maximum age to simulate each patient until.
-If a vector, must be equal to the number of simulated patients.}
+\item{\code{max_age}}{A scalar or vector denoting the maximum age to simulate
+each patient until. If a vector, must be equal to the number of
+simulated patients.}
 
-\item{\code{progress}}{An integer, specifying the PSA iteration (i.e., sample) that should be
-printed every \code{progress} PSA iterations. For example, if \code{progress = 2},
-then every second PSA iteration is printed. Default is \code{NULL},
-in which case no output is printed.}
+\item{\code{progress}}{An integer, specifying the PSA iteration (i.e., sample)
+that should be printed every \code{progress} PSA iterations. For example, if
+\code{progress = 2}, then every second PSA iteration is printed. Default is
+\code{NULL}, in which case no output is printed.}
 }
 \if{html}{\out{</div>}}
 }
@@ -217,16 +223,16 @@ simulation output stored in \code{disprog}.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An instance of \code{self} with simulated output of class \code{\link{stateprobs}}
-stored in \code{stateprobs_}.
+An instance of \code{self} with simulated output of class
+\code{\link{stateprobs}} stored in \code{stateprobs_}.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-IndivCtstm-sim_qalys"></a>}}
 \if{latex}{\out{\hypertarget{method-IndivCtstm-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
-Simulate quality-adjusted life-years (QALYs) as a function of \code{disprog_} and
-\code{utility_model}.
+Simulate quality-adjusted life-years (QALYs) as a function of \code{disprog_}
+and \code{utility_model}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$sim_qalys(
   dr = 0.03,
@@ -246,8 +252,9 @@ as in \verb{$sim()} in \code{\link{StateVals}}.}
 
 \item{\code{lys}}{If \code{TRUE}, then life-years are simulated in addition to QALYs.}
 
-\item{\code{by_patient}}{If \code{TRUE}, then QALYs and/or costs are computed at the patient level.
-If \code{FALSE}, then they are averaged across patients by health state.}
+\item{\code{by_patient}}{If \code{TRUE}, then QALYs and/or costs are computed at the
+patient level. If \code{FALSE}, then they are averaged across patients by health
+state.}
 }
 \if{html}{\out{</div>}}
 }
@@ -278,15 +285,17 @@ Simulate costs as a function of \code{disprog_} and \code{cost_models}.
 \item{\code{type}}{\code{"predict"} for mean values or \code{"random"} for random samples
 as in \verb{$sim()} in \code{\link{StateVals}}.}
 
-\item{\code{by_patient}}{If \code{TRUE}, then QALYs and/or costs are computed at the patient level.
-If \code{FALSE}, then they are averaged across patients by health state.}
+\item{\code{by_patient}}{If \code{TRUE}, then QALYs and/or costs are computed at the
+patient level. If \code{FALSE}, then they are averaged across patients by health
+state.}
 
 \item{\code{max_t}}{Maximum time duration to compute costs once a patient has
 entered a (new) health state. By default, equal to \code{Inf},
-so that costs are computed over the entire duration that a patient is in
-a given health state. If time varies by each cost category, then time
-can also be passed as a numeric vector of length equal to the number of
-cost categories (e.g., \code{c(1, 2, Inf, 3)} for a model with four cost categories).}
+so that costs are computed over the entire duration that a patient is
+in a given health state. If time varies by each cost category, then
+time can also be passed as a numeric vector of length equal to the
+number of cost categories (e.g., \code{c(1, 2, Inf, 3)} for a model with
+four cost categories).}
 }
 \if{html}{\out{</div>}}
 }
@@ -299,8 +308,8 @@ stored in \code{costs_}.
 \if{html}{\out{<a id="method-IndivCtstm-summarize"></a>}}
 \if{latex}{\out{\hypertarget{method-IndivCtstm-summarize}{}}}
 \subsection{Method \code{summarize()}}{
-Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
-See \code{\link[=summarize_ce]{summarize_ce()}}.
+Summarize costs and QALYs so that cost-effectiveness analysis can be
+performed. See \code{\link[=summarize_ce]{summarize_ce()}}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IndivCtstm$summarize(by_grp = FALSE)}\if{html}{\out{</div>}}
 }
@@ -308,8 +317,9 @@ See \code{\link[=summarize_ce]{summarize_ce()}}.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{by_grp}}{If \code{TRUE}, then costs and QALYs are computed by subgroup. If
-\code{FALSE}, then costs and QALYs are aggregated across all patients (and subgroups).}
+\item{\code{by_grp}}{If \code{TRUE}, then costs and QALYs are computed by subgroup.
+If \code{FALSE}, then costs and QALYs are aggregated across all patients
+(and subgroups).}
 }
 \if{html}{\out{</div>}}
 }

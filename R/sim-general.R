@@ -609,7 +609,7 @@ sim_ev.stateprobs <- function(object, models = NULL, dr = .03,
 
   ## Check the state value models, particularly that the size of the
   # ID variables is correct
-  check_StateVals(models, object)
+  check_state_vals(models, object)
 
 
   ## Simulate

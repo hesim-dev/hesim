@@ -9,20 +9,23 @@ A list with the following elements:
 \describe{
 \item{name}{Name of the probability distribution.}
 \item{pars}{Vector of strings naming the parameters of the distribution.
-These must be the same names as the arguments of the density and probability functions.}
+These must be the same names as the arguments of the density and
+probability functions.}
 \item{location}{Name of the location parameter.}
 \item{transforms}{List of R functions which transform the range of values
 taken by each parameter onto the real line. For example,
 \code{c(log, log)} for a distribution with two positive parameters.}
-\item{inv.transforms}{List of R functions defining the corresponding inverse
-transformations. Note these must be lists, even for single parameter
-distributions they should be supplied as, e.g. \code{c(exp) or list(exp)}.}
+\item{inv.transforms}{List of R functions defining the corresponding
+inverse transformations. Note these must be lists, even for single
+parameter distributions they should be supplied as, e.g.
+\code{c(exp) or list(exp)}.}
 \item{inits}{A function of the observed survival times \code{t} (including
-right-censoring times, and using the halfway point for interval-censored times)
-which returns a vector of reasonable initial values for maximum likelihood
-estimation of each parameter. For example, \code{function(t){ c(1, mean(t)) }}
-will always initialize the first of two parameters at 1, and the second
-(a scale parameter, for instance) at the mean of \code{t}.}
+right-censoring times, and using the halfway point for interval-censored
+times) which returns a vector of reasonable initial values for maximum
+likelihood estimation of each parameter. For example,
+\code{function(t){ c(1, mean(t)) }} will always initialize the first of
+two parameters at 1, and the second (a scale parameter, for instance) at
+the mean of \code{t}.}
 }
 }
 \usage{
@@ -30,7 +33,8 @@ hesim_survdists
 }
 \description{
 List of additional distributions for parametric survival analysis that are
-not contained in \code{\link[flexsurv:flexsurv-package]{flexsurv}}. Can be used to fit models with
-\code{\link[flexsurv:flexsurvreg]{flexsurv::flexsurvreg()}}. Same format as \code{\link[flexsurv:flexsurvreg]{flexsurv::flexsurv.dists}}.
+not contained in \code{\link[flexsurv:flexsurv-package]{flexsurv}}. Can be used to fit models
+with \code{\link[flexsurv:flexsurvreg]{flexsurv::flexsurvreg()}}. Same format as
+\code{\link[flexsurv:flexsurvreg]{flexsurv::flexsurv.dists}}.
 }
 \keyword{internal}

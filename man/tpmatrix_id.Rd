@@ -27,12 +27,16 @@ most conveniently used along with \code{tpmatrix()} to construct a
 }
 \examples{
 strategies <- data.frame(strategy_id = c(1, 2))
-patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
-                        gender = c("Female", "Female", "Male"))
-hesim_dat <- hesim_data(strategies = strategies,
-                        patients = patients)
-input_data <- expand(hesim_dat, by = c("strategies", "patients"))    
-tpmatrix_id(input_data, n_samples = 2)                   
+patients <- data.frame(
+  patient_id = seq(1, 3), age = c(65, 50, 75),
+  gender = c("Female", "Female", "Male")
+)
+hesim_dat <- hesim_data(
+  strategies = strategies,
+  patients = patients
+)
+input_data <- expand(hesim_dat, by = c("strategies", "patients"))
+tpmatrix_id(input_data, n_samples = 2)
 }
 \seealso{
 \code{\link[=tpmatrix]{tpmatrix()}}, \code{\link[=tparams_transprobs]{tparams_transprobs()}}, \code{\link[=expand.hesim_data]{expand.hesim_data()}}

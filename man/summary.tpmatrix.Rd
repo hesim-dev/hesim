@@ -47,8 +47,10 @@ Summary statistics are computed for each possible transition.
 }
 \examples{
 library("data.table")
-hesim_dat <-  hesim_data(strategies = data.table(strategy_id = 1:2),
-                                patients = data.table(patient_id = 1:3))
+hesim_dat <- hesim_data(
+  strategies = data.table(strategy_id = 1:2),
+  patients = data.table(patient_id = 1:3)
+)
 input_data <- expand(hesim_dat, by = c("strategies", "patients"))
 
 # Summarize across all rows in "input_data"
@@ -68,7 +70,7 @@ ps
 ps$mean
 
 # Summarize by ID variables
-tpmat_id <- tpmatrix_id(input_data, n_samples = 2) 
+tpmat_id <- tpmatrix_id(input_data, n_samples = 2)
 p_12 <- ifelse(tpmat_id$strategy_id == 1, .8, .6)
 p <- tpmatrix(
   C, p_12,

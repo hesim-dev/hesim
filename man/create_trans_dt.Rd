@@ -23,8 +23,10 @@ Create a data table of health state transitions from a transition matrix describ
 the states and transitions in a multi-state model suitable for use with \code{\link{hesim_data}}.
 }
 \examples{
-tmat <- rbind(c(NA, 1, 2),
-              c(NA, NA, 3),
-              c(NA, NA, NA))
+tmat <- rbind(
+  c(NA, 1, 2),
+  c(NA, NA, 3),
+  c(NA, NA, NA)
+)
 create_trans_dt(tmat)
 }

@@ -12,8 +12,8 @@
 #' \describe{
 #' \item{strategy_id}{Treatment strategy ids.}
 #' \item{line}{Line of therapy.}
-#' \item{treatment_id}{Treatment ID for treatment used at a given line of therapy
-#' within a treatment strategy.}
+#' \item{treatment_id}{Treatment ID for treatment used at a given line of
+#' therapy within a treatment strategy.}
 #' }
 #' @examples
 #' strategies <- list(
@@ -45,10 +45,11 @@ create_lines_dt <- function(strategy_list, strategy_ids = NULL) {
 
 #' Create a data table of health state transitions
 #'
-#' Create a data table of health state transitions from a transition matrix describing
-#' the states and transitions in a multi-state model suitable for use with [`hesim_data`].
-#' @param trans_mat A transition matrix in the format from the [`mstate`][mstate::mstate] package.
-#' See [`IndivCtstmTrans`].
+#' Create a data table of health state transitions from a transition matrix
+#' describing the states and transitions in a multi-state model suitable for use
+#' with [`hesim_data`].
+#' @param trans_mat A transition matrix in the format from the
+#' [`mstate`][mstate::mstate] package. See [`IndivCtstmTrans`].
 #' @return Returns a [`data.table`] in tidy format with three columns:
 #' \describe{
 #' \item{transition_id}{Health state transition ID.}
@@ -81,7 +82,7 @@ create_trans_dt <- function(trans_mat) {
     from = from,
     to = to
   )
-  if (!is.null(names(from)) & !is.null(names(to))) {
+  if (!is.null(names(from)) && !is.null(names(to))) {
     x$from_name <- names(from)
     x$to_name <- names(to)
   }
@@ -91,37 +92,39 @@ create_trans_dt <- function(trans_mat) {
 
 #' Data for health economic simulation modeling
 #'
-#' A list of tables required for health economic simulation modeling. This object
-#' is used to setup models by defining the treatment strategies, target population,
-#' and model structure.
+#' A list of tables required for health economic simulation modeling. This
+#' object is used to setup models by defining the treatment strategies, target
+#' population, and model structure.
 #' @param strategies A table of treatment strategies. Must contain the column
 #' `strategy_id` denoting a unique strategy. Other columns are variables
 #' describing the characteristics of a treatment strategy.
-#' @param patients A table of patients. Must contain the column `patient_id` denoting
-#' a unique patient. The number of rows should be equal to the number of patients
-#' in the model. The table may also include columns for `grp_id` for subgroups and
-#' `patient_wt` specifying the weight to apply to each patient (within a subgroup).
-#' If `grp_id` is `NULL`, then it is assumed that there is only one subgroup. If
-#' `patient_wt` is `NULL`. then each patient is given the same weight. Weights
-#' cannot be used in individual-level models because each patient should be
-#' weighted equally; that is, weights can only be specified in cohort models.
-#' Weights within subgroups are normalized to sum to one. Other columns are
-#' variables describing the characteristics of a patient.
+#' @param patients A table of patients. Must contain the column `patient_id`
+#' denoting a unique patient. The number of rows should be equal to the number
+#' of patients in the model. The table may also include columns for `grp_id`
+#' for subgroups and `patient_wt` specifying the weight to apply to each
+#' patient (within a subgroup). If `grp_id` is `NULL`, then it is assumed that
+#' there is only one subgroup. If `patient_wt` is `NULL`. then each patient is
+#' given the same weight. Weights cannot be used in individual-level models
+#' because each patient should be weighted equally; that is, weights can only
+#' be specified in cohort models. Weights within subgroups are normalized to
+#' sum to one. Other columns are variables describing the characteristics of a
+#' patient.
 #' @param states A table of health states. Must contain the column
 #' `state_id`, which denotes a unique health state. The number of rows should
-#' be equal to the number of health states in the model. Other columns can describe the
-#' characteristics of a health state.
-#' @param transitions A table of health state transitions. Must contain the column
-#' `transition_id`, which denotes a unique transition; `from`, which denotes
-#' the starting health state; and `to` which denotes the state that will be
-#' transitioned to.
+#' be equal to the number of health states in the model. Other columns can
+#' describe the characteristics of a health state.
+#' @param transitions A table of health state transitions. Must contain the
+#' column `transition_id`, which denotes a unique transition; `from`, which
+#' denotes the starting health state; and `to` which denotes the state that will
+#' be transitioned to.
 #'
-#' @note Each table must either be a `data.frame` or `data.table`. All ID variables
-#' within each table must be numeric vectors of integers and should be of the form
-#' 1,2,...N where N is the number of unique values of the ID variable.
+#' @note Each table must either be a `data.frame` or `data.table`. All ID
+#' variables within each table must be numeric vectors of integers and should be
+#' of the form 1,2,...N where N is the number of unique values of the ID
+#' variable.
 #'
-#' @return Returns an object of class `hesim_data`, which is a list of data tables for
-#' health economic simulation modeling.
+#' @return Returns an object of class `hesim_data`, which is a list of data
+#' tables for health economic simulation modeling.
 #' @seealso [`expand.hesim_data()`], [`get_labels()`]
 #' @examples
 #' strategies <- data.frame(strategy_id = c(1, 2))
@@ -207,7 +210,7 @@ check.hesim_data <- function(x) {
 }
 
 check_hesim_data_type <- function(tbl, tbl_name) {
-  if (!is.data.frame(tbl) & !is.data.table(tbl)) {
+  if (!is.data.frame(tbl) && !is.data.table(tbl)) {
     msg <- paste0("'", tbl_name, "'", " must be a data.frame or data.table.")
     stop(msg, call. = FALSE)
   }
@@ -227,22 +230,25 @@ expand <- function(object, by, times) {
 #' Expand hesim_data
 #'
 #' Create a data table in long format from all combinations of specified tables
-#' from an object of class [hesim_data] and optionally time intervals. See "Details" for
-#' an explanation of how the expansion is done.
+#' from an object of class [hesim_data] and optionally time intervals. See
+#' "Details" for an explanation of how the expansion is done.
 #' @param object An object of class `hesim_data`.
-#' @param by A character vector of the names of the data tables in `hesim_data` to expand by.
-#' @param times Either a numeric vector of distinct times denoting the start of time intervals or
-#' a [time_intervals] object.
-#' @details This function is similar to [expand.grid()], but works for data frames or data tables.
-#' Specifically, it creates a `data.table` from all combinations of the supplied tables in `object`
-#' and optionally the start of times intervals in `times`.
-#' The supplied tables are determined using the `by` argument. The resulting dataset is sorted by
-#' prioritizing ID variables as follows: (i) `strategy_id`, (ii) `patient_id`,
-#' (iii) the health-related ID variable (either `state_id` or `transition_id`, and
-#' (iv) the time intervals from `times`.
-#' @return An object of class `expanded_hesim_data`, which is a `data.table` with an "id_vars"
-#' attribute containing the names of the ID variables in the data table and, if `times` is
-#' not `NULL`, a `time_intervals` object derived from `times`.
+#' @param by A character vector of the names of the data tables in `hesim_data`
+#' to expand by.
+#' @param times Either a numeric vector of distinct times denoting the start of
+#' time intervals or a [time_intervals] object.
+#' @details This function is similar to [expand.grid()], but works for data
+#' frames or data tables. Specifically, it creates a `data.table` from all
+#' combinations of the supplied tables in `object` and optionally the start of
+#' times intervals in `times`. The supplied tables are determined using the
+#' `by` argument. The resulting dataset is sorted by prioritizing ID variables
+#' as follows: (i) `strategy_id`, (ii) `patient_id`, (iii) the health-related
+#' ID variable (either `state_id` or `transition_id`, and (iv) the time
+#' intervals from `times`.
+#' @return An object of class `expanded_hesim_data`, which is a `data.table`
+#' with an "id_vars" attribute containing the names of the ID variables in the
+#' data table and, if `times` is not `NULL`, a `time_intervals` object derived
+#' from `times`.
 #' @examples
 #' strategies <- data.frame(strategy_id = c(1, 2))
 #' patients <- data.frame(
@@ -266,14 +272,15 @@ expand <- function(object, by, times) {
 #' @export
 expand.hesim_data <- function(object, by = c("strategies", "patients"),
                               times = NULL) {
-  if ("transitions" %in% by & "states" %in% by) {
+  if ("transitions" %in% by && "states" %in% by) {
     stop("Cannot expand by both 'transitions' and 'states'.", call. = FALSE)
   }
   allowed_tables <- names(hesim_data_sorting_map()[
     !names(hesim_data_sorting_map()) == "times"
   ])
   if (!all(by %in% allowed_tables)) {
-    stop("One of the elements specified in 'by' is not a table in 'hesim_data'.",
+    stop(
+      "One of the elements specified in 'by' is not a table in 'hesim_data'.",
       call. = FALSE
     )
   }
@@ -288,7 +295,7 @@ expand.hesim_data <- function(object, by = c("strategies", "patients"),
     sorted_by <- hesim_data_sorted_by(c(by, "times"))
     tbl_list <- c(tbl_list, list(times = tintervals))
   }
-  for (i in 1:length(tbl_list)) {
+  for (i in seq_along(tbl_list)) {
     if (is.null(tbl_list[[i]])) {
       stop("Cannot merge a NULL data table.")
     }
@@ -347,8 +354,8 @@ sort_hesim_data <- function(data, sorted_by) {
 # ID attributes ----------------------------------------------------------------
 #' Time intervals
 #'
-#' Create a table of time intervals given a vector or data frame of unique times.
-#' This would typically be passed to [id_attributes].
+#' Create a table of time intervals given a vector or data frame of unique
+#' times. This would typically be passed to [id_attributes].
 #'
 #' @param times Either a vector of starting times for each interval or a
 #'  `data.frame` with at least one column named `time_start`.
@@ -390,7 +397,7 @@ time_intervals <- function(times) {
     times[, ("time_start") := as.numeric(get("time_start"))]
     setorderv(times, "time_start")
     time_intervals <- data.table(
-      time_id = 1:nrow(times),
+      time_id = seq_len(nrow(times)),
       times
     )
   } else {
@@ -398,23 +405,28 @@ time_intervals <- function(times) {
     times <- times[times >= 0]
     if (!any(times <= 0)) times <- c(0, times)
     time_intervals <- data.table(
-      time_id = 1:length(times),
+      time_id = seq_along(times),
       time_start = sort(as.numeric(times))
     )
   }
   time_intervals[, ("time_stop") := shift(get("time_start"), type = "lead")]
   time_intervals[is.na(get("time_stop")), "time_stop" := Inf]
-  setattr(time_intervals, "class", c("time_intervals", "data.table", "data.frame"))
+  setattr(
+    time_intervals, "class", c("time_intervals", "data.table", "data.frame")
+  )
   return(time_intervals[, ])
 }
 
 #' Attributes for ID variables
 #'
 #' Stores metadata related to the ID variables used to index [input_mats]
-#' and [transformed parameter objects][tparams] already predicted from covariates.
+#' and [transformed parameter objects][tparams] already predicted from
+#' covariates.
 #'
-#' @param strategy_id A numeric vector of integers denoting the treatment strategy.
-#' @param n_strategies A scalar denoting the number of unique treatment strategies.
+#' @param strategy_id A numeric vector of integers denoting the treatment
+#' strategy.
+#' @param n_strategies A scalar denoting the number of unique treatment
+#' strategies.
 #' @param patient_id A numeric vector of integers denoting the patient.
 #' @param n_patients A scalar denoting the number of unique patients.
 #' @param state_id A numeric vector of integers denoting the health state.
@@ -426,38 +438,48 @@ time_intervals <- function(times) {
 #' @param time_intervals A `data.table` denoting unique time intervals. Must
 #' contain the columns `time_id`, `time_start`, and `time_stop`.
 #' `time_start` is the starting time of an interval and `time_stop` is
-#' the stopping time of an interval. Following the [survival][survival::tmerge] package,
-#' time intervals are closed on the right and
-#' open on the left (except in the final interval where `time_stop` is equal to
-#' infinity).
+#' the stopping time of an interval. Following the [survival][survival::tmerge]
+#' package, time intervals are closed on the right and open on the left (except
+#' in the final interval where `time_stop` is equal to infinity).
 #' @param n_times A scalar denoting the number of time intervals. Equal to the
 #' number of rows in `time_intervals`.
-#' @param sample A numeric vector of integer denoting the sample from the posterior
-#' distribution of the parameters.
+#' @param sample A numeric vector of integer denoting the sample from the
+#' posterior distribution of the parameters.
 #' @param n_samples A scalar denoting the number of samples.
 #' @param grp_id An optional numeric vector of integers denoting the subgroup.
-#' @param patient_wt An optional numeric vector denoting the weight to apply to each patient
-#' within a subgroup.
+#' @param patient_wt An optional numeric vector denoting the weight to apply to
+#' each patient within a subgroup.
 #'
 #' @details When using the ID variables to index [input_mats], the sorting order
 #' should be the same as specified in [expand.hesim_data()]; that is,
-#' observations must be sorted by prioritizing: (i) `strategy_id`, (ii) `patient_id`,
-#' (iii) the health-related ID variable (either `state_id` or `transition_id`),
-#' and (iv) `time_id`. When using ID variables are used to index transformed parameter
-#' objects and `sample` is used for indexing, then observations must be sorted by
-#' prioritizing: (i) `sample`, (ii) `strategy_id`, (iii) `patient_id`,
-#' (iv) the health-related ID variable, and (v) `time_id`.
+#' observations must be sorted by prioritizing: (i) `strategy_id`,
+#' (ii)`patient_id`, (iii) the health-related ID variable (either `state_id` or
+#' `transition_id`), and (iv) `time_id`. When using ID variables are used to
+#' index transformed parameter objects and `sample` is used for indexing, then
+#' observations must be sorted by prioritizing: (i) `sample`,
+#' (ii) `strategy_id`, (iii) `patient_id`, (iv) the health-related ID variable,
+#' and (v) `time_id`.
 #'
 #' @seealso [hesim_data()],[expand.hesim_data()], [input_mats]
 #' @keywords internal
 #' @export
-id_attributes <- function(strategy_id, n_strategies,
-                          patient_id, n_patients,
-                          state_id = NULL, n_states = NULL,
-                          transition_id = NULL, n_transitions = NULL,
-                          time_id = NULL, time_intervals = NULL, n_times = NULL,
-                          sample = NULL, n_samples = NULL,
-                          grp_id = NULL, patient_wt = NULL) {
+id_attributes <- function(
+    strategy_id,
+    n_strategies,
+    patient_id,
+    n_patients,
+    state_id = NULL,
+    n_states = NULL,
+    transition_id = NULL,
+    n_transitions = NULL,
+    time_id = NULL,
+    time_intervals = NULL,
+    n_times = NULL,
+    sample = NULL,
+    n_samples = NULL,
+    grp_id = NULL,
+    patient_wt = NULL
+) {
   object <- new_id_attributes(
     strategy_id, n_strategies,
     patient_id, n_patients,
@@ -471,13 +493,23 @@ id_attributes <- function(strategy_id, n_strategies,
   return(object)
 }
 
-new_id_attributes <- function(strategy_id, n_strategies,
-                              patient_id, n_patients,
-                              state_id = NULL, n_states = NULL,
-                              transition_id = NULL, n_transitions = NULL,
-                              time_id = NULL, time_intervals = NULL, n_times = NULL,
-                              sample = NULL, n_samples = NULL,
-                              grp_id = NULL, patient_wt = NULL) {
+new_id_attributes <- function(
+    strategy_id,
+    n_strategies,
+    patient_id,
+    n_patients,
+    state_id = NULL,
+    n_states = NULL,
+    transition_id = NULL,
+    n_transitions = NULL,
+    time_id = NULL,
+    time_intervals = NULL,
+    n_times = NULL,
+    sample = NULL,
+    n_samples = NULL,
+    grp_id = NULL,
+    patient_wt = NULL
+) {
   stopifnot(is.numeric(strategy_id))
   stopifnot(is.numeric(n_strategies))
   stopifnot(is.numeric(patient_id))
@@ -539,7 +571,7 @@ check.id_attributes <- function(object) {
   }
 
   # Check that id variables have correct size
-  for (i in 1:length(id_vars)) {
+  for (i in seq_along(id_vars)) {
     if (length(unique(object[[id_vars[i]]])) != object[id_vars_n[i]]) {
       msg <- paste0(
         "The number of unique observations in '", id_vars[i],
@@ -635,9 +667,9 @@ make_id_data_table <- function(x) {
 #' Set value labels
 #'
 #' Update existing variables or create new ones that replace existing values
-#' with more informative labels as in [`factor()`]. All modifications are performed
-#' by reference (see [`data.table::set()`] for more information about assignment by
-#' reference).
+#' with more informative labels as in [`factor()`]. All modifications are
+#' performed by reference (see [`data.table::set()`] for more information about
+#' assignment by reference).
 #' @param x A `data.table`.
 #' @param labels A list of named vectors containing the values and labels of
 #' variables. The elements of each vector are the values of a variable and the
@@ -646,8 +678,8 @@ make_id_data_table <- function(x) {
 #' @param new_names A character vector of the same length as `labels` where
 #' each element denotes the name of a new variable to create for the
 #' corresponding element in `labels`. If `NULL`, then the variables in `labels`
-#' are modified and no new variables are created; otherwise, the existing variables
-#' are not modified and new variables are created instead.
+#' are modified and no new variables are created; otherwise, the existing
+#' variables are not modified and new variables are created instead.
 #' @param as_factor If `TRUE` factor variables are created; otherwise character
 #' vectors are created.
 #' @return `x` is modified by reference and returned invisibly.
@@ -677,9 +709,13 @@ set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
   labels <- labels[names(labels) %in% colnames(x)]
 
   if (length(labels) > 0) {
-    for (i in 1:length(labels)) {
+    for (i in seq_along(labels)) {
       old_name <- names(labels)[i]
-      if (!is.null(new_names)) new_name <- new_names[i] else new_name <- old_name
+      if (!is.null(new_names)) {
+        new_name <- new_names[i]
+      } else {
+        new_name <- old_name
+      }
       if (is.null(names(labels[[i]]))) {
         stop("Each element of 'labels' must be a named vector.")
       }
@@ -695,10 +731,10 @@ set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
 
 #' Get value labels
 #'
-#' Get value labels for the ID variables in a `hesim_data` object and create a list
-#' of named vectors that can be passed to formatting and plotting functions. This
-#' lets users create nice labels for treatment strategies, subgroups, health states,
-#' and/or transitions when presenting results.
+#' Get value labels for the ID variables in a `hesim_data` object and create a
+#' list of named vectors that can be passed to formatting and plotting
+#' functions. This lets users create nice labels for treatment strategies,
+#' subgroups, health states, and/or transitions when presenting results.
 #' @param object An object of class `hesim_data` created with [`hesim_data()`].
 #' @param strategy The name of the column in the `strategy` element of `object`
 #' containing labels for `strategy_id`.
@@ -706,15 +742,16 @@ set_labels <- function(x, labels, new_names = NULL, as_factor = TRUE) {
 #' containing labels for `grp_id`.
 #' @param state The name of the column in the `state` element of `object`
 #' containing labels for `state_id`.
-#' @param transition The name of the column in the `transition` element of `object`
-#' containing labels for `transition_id`.
+#' @param transition The name of the column in the `transition` element of
+#' `object` containing labels for `transition_id`.
 #' @param death_label The label to use for the death health state. By default a
-#' label named "Death" will be concatenated to the labels for the non-death health
-#' states. The death state can be omitted from labels for the health states by setting
-#' `death_label = NULL`.
+#' label named "Death" will be concatenated to the labels for the non-death
+#' health states. The death state can be omitted from labels for the health
+#' states by setting `death_label = NULL`.
 #' @return A list of named vectors containing the values and labels of
-#' variables. The elements of each vector are the values of a variable and the names
-#' are the labels. The names of the list are the names of the ID variables.
+#' variables. The elements of each vector are the values of a variable and the
+#' names are the labels. The names of the list are the names of the ID
+#' variables.
 #' @examples
 #' library("data.table")
 #' strategies <- data.table(
@@ -792,7 +829,7 @@ get_labels <- function(object, strategy = "strategy_name",
 
   l <- vector(mode = "list", length = nrow(m))
   names(l) <- m$id
-  for (i in 1:length(l)) {
+  for (i in seq_along(l)) {
     labs <- create_labels(object,
       id_var = m$id[i], label_var = m$label[i],
       table_name = m$table[i]
@@ -800,10 +837,12 @@ get_labels <- function(object, strategy = "strategy_name",
     if (!is.null(labs)) l[[i]] <- labs
   }
   l <- l[lengths(l) != 0]
-  if (length(l) == 0) stop("The selected labels are not contained in the tables of 'object'.")
+  if (length(l) == 0) {
+    stop("The selected labels are not contained in the tables of 'object'.")
+  }
 
   # Add death label
-  if ("state_id" %in% names(l) & !is.null(death_label)) {
+  if ("state_id" %in% names(l) && !is.null(death_label)) {
     l$state_id <- c(l$state_id, max(l$state_id) + 1L)
     names(l$state_id)[length(l$state_id)] <- death_label
   }

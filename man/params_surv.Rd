@@ -162,7 +162,7 @@ params <- params_surv(
     scale = data.frame(
       intercept = rnorm(n, 12.39, 1.49),
       age = rnorm(n, -.09, .023)
-   )
+    )
   ),
   dist = "weibull"
 )

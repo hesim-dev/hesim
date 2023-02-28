@@ -75,49 +75,63 @@ defined inside a \code{define_rng()} block.
 
 # Data
 library("data.table")
-strategies <- data.table(strategy_id = 1:2,
-                         strategy_name = c("Monotherapy", "Combination therapy"))
+strategies <- data.table(
+  strategy_id = 1:2,
+  strategy_name = c("Monotherapy", "Combination therapy")
+)
 patients <- data.table(patient_id = 1)
-hesim_dat <- hesim_data(strategies = strategies,
-                       patients = patients)
+hesim_dat <- hesim_data(
+  strategies = strategies,
+  patients = patients
+)
 data <- expand(hesim_dat)
 
 # Model parameters
-rng_def <- define_rng({
-  alpha <- matrix(c(1251, 350, 116, 17,
-                    0, 731, 512, 15,
-                    0, 0, 1312, 437,
-                    0, 0, 0, 469),
-                  nrow = 4, byrow = TRUE)
-  rownames(alpha) <- colnames(alpha) <- c("A", "B", "C", "D")
-  lrr_mean <- log(.509)
-  lrr_se <- (log(.710) - log(.365))/(2 * qnorm(.975))
-  
-  list(
-    p_mono = dirichlet_rng(alpha),
-    rr_comb = lognormal_rng(lrr_mean, lrr_se),
-    u = 1,
-    c_zido = 2278,
-    c_lam = 2086.50,
-    c_med = gamma_rng(mean = c(A = 2756, B = 3052, C = 9007),
-                      sd = c(A = 2756, B = 3052, C = 9007))
-  )
-}, n = 2)
+rng_def <- define_rng(
+  {
+    alpha <- matrix(c(
+      1251, 350, 116, 17,
+      0, 731, 512, 15,
+      0, 0, 1312, 437,
+      0, 0, 0, 469
+    ),
+    nrow = 4, byrow = TRUE
+    )
+    rownames(alpha) <- colnames(alpha) <- c("A", "B", "C", "D")
+    lrr_mean <- log(.509)
+    lrr_se <- (log(.710) - log(.365)) / (2 * qnorm(.975))
+
+    list(
+      p_mono = dirichlet_rng(alpha),
+      rr_comb = lognormal_rng(lrr_mean, lrr_se),
+      u = 1,
+      c_zido = 2278,
+      c_lam = 2086.50,
+      c_med = gamma_rng(
+        mean = c(A = 2756, B = 3052, C = 9007),
+        sd = c(A = 2756, B = 3052, C = 9007)
+      )
+    )
+  },
+  n = 2
+)
 
 tparams_def <- define_tparams({
-  rr = ifelse(strategy_name == "Monotherapy", 1, rr_comb)
+  rr <- ifelse(strategy_name == "Monotherapy", 1, rr_comb)
   list(
     tpmatrix = tpmatrix(
       C, p_mono$A_B * rr, p_mono$A_C * rr, p_mono$A_D * rr,
       0, C, p_mono$B_C * rr, p_mono$B_D * rr,
       0, 0, C, p_mono$C_D * rr,
-      0, 0, 0, 1),
+      0, 0, 0, 1
+    ),
     utility = u,
     costs = list(
       drug = ifelse(strategy_name == "Monotherapy",
-                    c_zido, c_zido + c_lam),
+        c_zido, c_zido + c_lam
+      ),
       medical = c_med
-    ) 
+    )
   )
 })
 
@@ -125,7 +139,8 @@ tparams_def <- define_tparams({
 ## Define the economic model
 model_def <- define_model(
   tparams_def = tparams_def,
-  rng_def = rng_def)
+  rng_def = rng_def
+)
 
 ### Evaluate the model expression to generate model inputs
 ### This can be useful for understanding the output of a model expression

@@ -22,16 +22,18 @@ params <- params_surv_list(
   # Model for progression free survival
   pfs = params_surv(
     coefs = list(
-      rate = data.frame(intercept = rnorm(n, log(.5), .5),
-                        new_strategy = rnorm(n, log(.8), .1))
-   ),
+      rate = data.frame(
+        intercept = rnorm(n, log(.5), .5),
+        new_strategy = rnorm(n, log(.8), .1)
+      )
+    ),
     dist = "exp"
   ),
- 
+
   # Model for overall survival
   os = params_surv(
     coefs = list(
-      rate = data.frame(intercept = rnorm(n, log(.3) , .5))
+      rate = data.frame(intercept = rnorm(n, log(.3), .5))
     ),
     dist = "exp"
   )

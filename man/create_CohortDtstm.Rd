@@ -21,13 +21,14 @@ create_CohortDtstm(object, ...)
 \item{...}{Further arguments passed to \code{CohortDtstmTrans$new()} in
 \code{\link{CohortDtstmTrans}}.}
 
-\item{input_data}{An object of class \code{\link[=expand.hesim_data]{expanded_hesim_data}}.}
+\item{input_data}{An object of class
+\code{\link[=expand.hesim_data]{expanded_hesim_data}}.}
 
 \item{cost_args}{A list of further arguments passed to \code{StateVals$new()} in
 \code{\link{StateVals}} when initiating cost models.}
 
-\item{utility_args}{A list of further arguments passed to \code{StateVals$new()} in
-\code{\link{StateVals}} when initiating the utility model.}
+\item{utility_args}{A list of further arguments passed to \code{StateVals$new()}
+in \code{\link{StateVals}} when initiating the utility model.}
 }
 \description{
 A generic function for creating an object of class \code{\link{CohortDtstm}}.

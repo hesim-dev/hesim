@@ -45,7 +45,8 @@ mean_weibullNMA(a0, a1)
 \item{n}{Number of observations. If \code{length(n) > 1}, the length is
 taken to be the number required.}
 
-\item{t}{Vector of times for which restricted mean survival time is evaluated.}
+\item{t}{Vector of times for which restricted mean survival time is
+evaluated.}
 
 \item{start}{Optional left-truncation time or times. The returned restricted
 mean survival will be conditional on survival up to this time.}
@@ -57,8 +58,9 @@ distribution function, \code{qweibullNMA} gives the quantile function,
 cumulative hazard and \code{hweibullNMA} the hazard.
 }
 \description{
-Density, distribution function, hazards, quantile function and random generation
-for the Weibull distribution when parameterized for network meta-analysis.
+Density, distribution function, hazards, quantile function and random
+generation for the Weibull distribution when parameterized for network
+meta-analysis.
 }
 \seealso{
 \code{\link{dweibull}}

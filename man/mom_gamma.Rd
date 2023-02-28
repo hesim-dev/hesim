@@ -11,12 +11,13 @@ mom_gamma(mean, sd, scale = TRUE)
 
 \item{sd}{Standard deviation of the random variable.}
 
-\item{scale}{Logical. If TRUE (default), then the scale parameter is returned; otherwise,
-the rate parameter is returned.}
+\item{scale}{Logical. If TRUE (default), then the scale parameter is
+returned; otherwise, the rate parameter is returned.}
 }
 \value{
-If \code{scale = TRUE}, then a list containing the parameters \code{shape} and \code{scale}; otherwise,
-if \code{scale = FALSE}, then a list containing the parameters \code{shape} and \code{rate}.
+If \code{scale = TRUE}, then a list containing the parameters
+\code{shape} and \code{scale}; otherwise, if \code{scale = FALSE}, then a
+list containing the parameters \code{shape} and \code{rate}.
 }
 \description{
 Compute the shape and scale (or rate) parameters of the gamma distribution
@@ -24,14 +25,15 @@ using method of moments for the random variable of interest.
 }
 \details{
 If \eqn{\mu} is the mean and
-\eqn{\sigma} is the standard deviation of the random variable, then the method
-of moments estimates of the parameters \code{shape} = \eqn{\alpha > 0} and
-\code{scale} = \eqn{\theta > 0} are:
+\eqn{\sigma} is the standard deviation of the random variable, then the
+method of moments estimates of the parameters \code{shape} = \eqn{\alpha > 0}
+and \code{scale} = \eqn{\theta > 0} are:
 \deqn{\theta = \frac{\sigma^2}{\mu}}
 and
 \deqn{\alpha = \frac{\mu}{\theta}}
 
-The inverse of the scale parameter, \eqn{\beta = 1/\theta}, is the rate parameter.
+The inverse of the scale parameter, \eqn{\beta = 1/\theta}, is the rate
+parameter.
 }
 \examples{
 mom_gamma(mean = 10000, sd = 2000)

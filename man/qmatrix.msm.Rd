@@ -33,19 +33,25 @@ from a fitted \code{msm} object.
 \examples{
 library("msm")
 set.seed(101)
- qinit <- rbind(
-   c(0, 0.28163, 0.01239),
-   c(0, 0, 0.10204),
-   c(0, 0, 0)
- )
-fit <- msm(state_id ~ time, subject = patient_id, 
-           data = onc3p[patient_id \%in\% sample(patient_id, 100)],
-           covariates = list("1-2" =~ age + strategy_name), 
-           qmatrix = qinit)
-qmatrix(fit, newdata = data.frame(age = 55, strategy_name = "New 1"),
-        uncertainty = "none")
-qmatrix(fit, newdata = data.frame(age = 55, strategy_name = "New 1"),
-        uncertainty = "normal",  n = 3)
+qinit <- rbind(
+  c(0, 0.28163, 0.01239),
+  c(0, 0, 0.10204),
+  c(0, 0, 0)
+)
+fit <- msm(state_id ~ time,
+  subject = patient_id,
+  data = onc3p[patient_id \%in\% sample(patient_id, 100)],
+  covariates = list("1-2" = ~ age + strategy_name),
+  qmatrix = qinit
+)
+qmatrix(fit,
+  newdata = data.frame(age = 55, strategy_name = "New 1"),
+  uncertainty = "none"
+)
+qmatrix(fit,
+  newdata = data.frame(age = 55, strategy_name = "New 1"),
+  uncertainty = "normal", n = 3
+)
 
 }
 \seealso{

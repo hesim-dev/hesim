@@ -44,12 +44,13 @@ in a discrete-time multi-state model. See \code{\link{CohortDtstmTrans}}.}
 
 \item{n}{Number of random observations to draw. Not used if \code{uncertainty = "none"}.}
 
-\item{uncertainty}{Method determining how parameter uncertainty should be handled.
-If \code{"normal"}, then parameters are randomly drawn from their multivariate normal
-distribution. If \code{"none"}, then only point estimates are returned.}
+\item{uncertainty}{Method determining how parameter uncertainty should be
+handled. If \code{"normal"}, then parameters are randomly drawn from their
+multivariate normal distribution. If \code{"none"}, then only point estimates are
+returned.}
 
-\item{cycle_length}{The length of a model cycle in terms of years. The default
-is 1 meaning that model cycles are 1 year long.}
+\item{cycle_length}{The length of a model cycle in terms of years. The
+default is 1 meaning that model cycles are 1 year long.}
 }
 \description{
 A generic function for creating an object of class \code{\link{CohortDtstmTrans}}.

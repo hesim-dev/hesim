@@ -163,36 +163,40 @@ is provided in Section 4.3.
 \seealso{
 \code{CohortDtstm} objects can be created from model objects as
 documented in \code{\link[=create_CohortDtstm]{create_CohortDtstm()}}. The \code{\link{CohortDtstmTrans}} documentation
-describes the class for the transition model and the \code{\link{StateVals}} documentation
-describes the class for the cost and utility models. A \code{\link{CohortDtstmTrans}}
-object is typically created using \code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}}.
+describes the class for the transition model and the \code{\link{StateVals}}
+documentation describes the class for the cost and utility models. A
+\code{\link{CohortDtstmTrans}} object is typically created using
+\code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}}.
 
 There are currently three relevant vignettes. \code{vignette("markov-cohort")}
 details a relatively simple Markov model and
 \code{vignette("markov-inhomogeneous-cohort")} describes a more complex time
 inhomogeneous model in which transition probabilities vary in every model
-cycle. The \code{vignette("mlogit")} shows how a transition model can be parameterized
-using a multinomial logistic regression model when transition data is collected
-at evenly spaced intervals.
+cycle. The \code{vignette("mlogit")} shows how a transition model can be
+parameterized using a multinomial logistic regression model when transition
+data is collected at evenly spaced intervals.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{trans_model}}{The model for health state transitions. Must be an object
-of class \code{\link{CohortDtstmTrans}}.}
+\item{\code{trans_model}}{The model for health state transitions. Must be an
+object of class \code{\link{CohortDtstmTrans}}.}
 
-\item{\code{utility_model}}{The model for health state utility. Must be an object of
-class \code{\link{StateVals}}.}
+\item{\code{utility_model}}{The model for health state utility. Must be an
+object of class \code{\link{StateVals}}.}
 
 \item{\code{cost_models}}{The models used to predict costs by health state.
-Must be a list of objects of class \code{\link{StateVals}}, where each element of the
-list represents a different cost category.}
+Must be a list of objects of class \code{\link{StateVals}}, where each element of
+the list represents a different cost category.}
 
-\item{\code{stateprobs_}}{An object of class \code{\link{stateprobs}} simulated using \verb{$sim_stateprobs()}.}
+\item{\code{stateprobs_}}{An object of class \code{\link{stateprobs}} simulated using
+\verb{$sim_stateprobs()}.}
 
-\item{\code{qalys_}}{An object of class \code{\link{qalys}} simulated using \verb{$sim_qalys()}.}
+\item{\code{qalys_}}{An object of class \code{\link{qalys}} simulated using
+\verb{$sim_qalys()}.}
 
-\item{\code{costs_}}{An object of class \code{\link{costs}} simulated using \verb{$sim_costs()}.}
+\item{\code{costs_}}{An object of class \code{\link{costs}} simulated using
+\verb{$sim_costs()}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -235,7 +239,8 @@ A new \code{CohortDtstm} object.
 \if{html}{\out{<a id="method-CohortDtstm-sim_stateprobs"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDtstm-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
-Simulate health state probabilities using \code{CohortDtstmTrans$sim_stateprobs()}.
+Simulate health state probabilities using
+\code{CohortDtstmTrans$sim_stateprobs()}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$sim_stateprobs(n_cycles)}\if{html}{\out{</div>}}
 }
@@ -256,8 +261,8 @@ stored in \code{stateprobs_}.
 \if{html}{\out{<a id="method-CohortDtstm-sim_qalys"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDtstm-sim_qalys}{}}}
 \subsection{Method \code{sim_qalys()}}{
-Simulate quality-adjusted life-years (QALYs) as a function of \code{stateprobs_} and
-\code{utility_model}. See \code{sim_qalys()} for details.
+Simulate quality-adjusted life-years (QALYs) as a function of
+\code{stateprobs_} and \code{utility_model}. See \code{sim_qalys()} for details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$sim_qalys(
   dr = 0.03,
@@ -281,8 +286,8 @@ costs or QALYs. Options are \code{trapz} for the trapezoid rule,
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An instance of \code{self} with simulated output of class \link{qalys} stored
-in \code{qalys_}.
+An instance of \code{self} with simulated output of class \link{qalys}
+stored in \code{qalys_}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -311,16 +316,16 @@ costs or QALYs. Options are \code{trapz} for the trapezoid rule,
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An instance of \code{self} with simulated output of class \link{costs} stored
-in \code{costs_}.
+An instance of \code{self} with simulated output of class \link{costs}
+stored in \code{costs_}.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortDtstm-summarize"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDtstm-summarize}{}}}
 \subsection{Method \code{summarize()}}{
-Summarize costs and QALYs so that cost-effectiveness analysis can be performed.
-See \code{\link[=summarize_ce]{summarize_ce()}}.
+Summarize costs and QALYs so that cost-effectiveness analysis can be
+performed. See \code{\link[=summarize_ce]{summarize_ce()}}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstm$summarize(by_grp = FALSE)}\if{html}{\out{</div>}}
 }
@@ -328,8 +333,9 @@ See \code{\link[=summarize_ce]{summarize_ce()}}.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{by_grp}}{If \code{TRUE}, then costs and QALYs are computed by subgroup. If
-\code{FALSE}, then costs and QALYs are aggregated across all patients (and subgroups).}
+\item{\code{by_grp}}{If \code{TRUE}, then costs and QALYs are computed by subgroup.
+If \code{FALSE}, then costs and QALYs are aggregated across all patients
+(and subgroups).}
 }
 \if{html}{\out{</div>}}
 }

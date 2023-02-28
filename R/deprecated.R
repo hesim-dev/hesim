@@ -2,8 +2,8 @@
 #' Individualized cost-effectiveness analysis
 #'
 #' These functions are deprecated, use [cea()] and [cea_pw()] instead.
-#' @param x An object of simulation output characterizing the probability distribution
-#' of clinical effectiveness and costs.?ic
+#' @param x An object of simulation output characterizing the probability
+#' distribution of clinical effectiveness and costs.
 #' @param ... Further arguments passed to or from other methods.
 #' @keywords internal
 #' @export
@@ -40,18 +40,18 @@ format_cri <- function(est, lower, upper, costs = TRUE, digits) {
 #' @param k Willingness to pay.
 #' @param cri If `TRUE`, credible intervals are computed; otherwise
 #' they are not.
-#' @param prob A numeric scalar in the interval `(0,1)` giving the credible interval.
-#' Default is 0.95 for a 95 percent credible interval.
+#' @param prob A numeric scalar in the interval `(0,1)` giving the credible
+#' interval. Default is 0.95 for a 95 percent credible interval.
 #' @param digits_qalys Number of digits to use to report QALYs.
 #' @param digits_costs Number of digits to use to report costs.
 #' @param output Should output be a `data.table` or a list of matrices for
 #' each group.
 #' @param rownames Row names for matrices when `output = "matrix"`.
 #' @param colnames Column names for matrices when `output = "matrix"`.
-#' @param drop If `TRUE`, then the result is coerced to the lowest possible dimension.
-#' Relevant if `output = "matrix"` and there is one group, in which case a single
-#' matrix will be returned if `drop = TRUE` and a list of length 1 will be returned
-#' if `drop = FALSE`.
+#' @param drop If `TRUE`, then the result is coerced to the lowest possible
+#' dimension. Relevant if `output = "matrix"` and there is one group, in which
+#' case a single matrix will be returned if `drop = TRUE` and a list of length
+#' 1 will be returned if `drop = FALSE`.
 #' @seealso [cea_pw()]
 #' @return If `output = "matrix"`, then a list of matrices (or a matrix if
 #' \code{drop = TRUE}) reporting incremental cost-effectiveness ratios (ICERs)
@@ -77,7 +77,7 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
       call. = FALSE
     )
   }
-  if (prob > 1 | prob < 0) {
+  if (prob > 1 || prob < 0) {
     stop("'prob' must be in the interval (0,1)",
       call. = FALSE
     )
@@ -94,8 +94,18 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
   tbl[, "iqalys" := format_qalys(get("ie_mean"), digits = digits_qalys)]
   tbl[, "icosts" := format_costs(get("ic_mean"), digits = digits_costs)]
   tbl[, "icer" := format_costs(get("icer"), digits = digits_costs)]
-  tbl[, "icer" := ifelse(get("ic_mean") < 0 & get("ie_mean") >= 0, "Dominates", get("icer"))]
-  tbl[, "icer" := ifelse(get("ic_mean") > 0 & get("ie_mean") <= 0, "Dominated", get("icer"))]
+  tbl[, "icer" := ifelse(
+      get("ic_mean") < 0 & get("ie_mean") >= 0,
+      "Dominates",
+      get("icer")
+    )
+  ]
+  tbl[, "icer" := ifelse(
+      get("ic_mean") > 0 & get("ie_mean") <= 0,
+      "Dominated",
+      get("icer")
+    )
+  ]
   tbl[, "inmb" := format_costs(get("inmb_numeric"), digits = digits_costs)]
 
   if (cri) {
@@ -103,20 +113,28 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
     prob_upper <- 1 - prob_lower
     x$delta[, "inmb" := k * get("ie") - get("ic")]
     if (prob == 0.95) {
-      tbl[, "iqalys" := format_cri(get("iqalys"), get("ie_lower"), get("ie_upper"),
-        costs = FALSE,
-        digits = digits_qalys
-      )]
-      tbl[, "icosts" := format_cri(get("icosts"), get("ic_lower"), get("ic_upper"),
-        costs = TRUE,
-        digits = digits_costs
-      )]
+      tbl[, "iqalys" := format_cri(
+          get("iqalys"),
+          get("ie_lower"),
+          get("ie_upper"),
+          costs = FALSE,
+          digits = digits_qalys
+        )
+      ]
+      tbl[, "icosts" := format_cri(
+          get("icosts"),
+          get("ic_lower"),
+          get("ic_upper"),
+          costs = TRUE,
+          digits = digits_costs
+        )
+      ]
       inmb_dt <- x$delta[, list(
-        mean = mean(get("inmb")),
-        lower = stats::quantile(get("inmb"), prob_lower),
-        upper = stats::quantile(get("inmb"), prob_upper)
-      ),
-      by = c(strategy, grp)
+          mean = mean(get("inmb")),
+          lower = stats::quantile(get("inmb"), prob_lower),
+          upper = stats::quantile(get("inmb"), prob_upper)
+        ),
+        by = c(strategy, grp)
       ]
       tbl[, "inmb" := format_cri(get("inmb"), inmb_dt$lower, inmb_dt$upper,
         costs = TRUE,
@@ -154,7 +172,8 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
   tbl[, "conclusion" := ifelse(get("inmb_numeric") >= 0,
     "Cost-effective", "Not cost-effective"
   )]
-  tbl <- tbl[, c(strategy, grp, "iqalys", "icosts", "inmb", "icer", "conclusion"),
+  tbl <- tbl[
+    , c(strategy, grp, "iqalys", "icosts", "inmb", "icer", "conclusion"),
     with = FALSE
   ]
 
@@ -181,7 +200,7 @@ icer_tbl <- function(x, k = 50000, cri = TRUE, prob = 0.95,
     } else {
       colnames(mat) <- colnames
     }
-    for (i in 1:length(mat_list)) {
+    for (i in seq_along(mat_list)) {
       mat[1, -comp_pos] <- tbl_list[[i]]$iqalys
       mat[2, -comp_pos] <- tbl_list[[i]]$icosts
       mat[3, -comp_pos] <- tbl_list[[i]]$inmb
@@ -208,7 +227,7 @@ deprecate_point_estimate <- function(old, new, is_new_missing) {
       call. = FALSE
     )
   }
-  if (!is.null(old) && (old == TRUE & is_new_missing == TRUE)) {
+  if (!is.null(old) && (old == TRUE && is_new_missing == TRUE)) {
     return("none")
   } else {
     return(new)
@@ -221,7 +240,7 @@ deprecate_bootstrap <- function(old, new, is_new_missing) {
       call. = FALSE
     )
   }
-  if (!is.null(old) && (old == TRUE & is_new_missing == TRUE)) {
+  if (!is.null(old) && (old == TRUE && is_new_missing == TRUE)) {
     return("bootstrap")
   } else {
     return(new)

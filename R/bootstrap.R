@@ -1,16 +1,18 @@
 # Bootstrapping ----------------------------------------------------------------
 #' Bootstrap a statistical model
 #'
-#' \code{bootstrap} is a generic function for generating bootstrap replicates of the parameters
-#' of a fitted statistical model.
+#' \code{bootstrap} is a generic function for generating bootstrap replicates
+#' of the parameters of a fitted statistical model.
 #' @param object A statistical model.
 #' @param B Number of bootstrap replications.
-#' @param max_errors Maximum number of errors that are allowed when fitting statistical models
-#' during the bootstrap procedure. This argument may be useful if, for instance, the model
-#' fails to converge during some bootstrap replications. Default is 0.
-#' @param silent Logical indicating whether error messages should be suppressed. Passed to
-#' the `silent` argument of [`try()`].
-#' @param ... Further arguments passed to or from other methods. Currently unused.
+#' @param max_errors Maximum number of errors that are allowed when fitting
+#' statistical models during the bootstrap procedure. This argument may be
+#' useful if, for instance, the model fails to converge during some bootstrap
+#' replications. Default is 0.
+#' @param silent Logical indicating whether error messages should be suppressed.
+#' Passed to the `silent` argument of [`try()`].
+#' @param ... Further arguments passed to or from other methods. Currently
+#' unused.
 #' @keywords internal
 #' @return Sampled values of the parameters.
 bootstrap <- function(object, B, ...) {
@@ -18,7 +20,9 @@ bootstrap <- function(object, B, ...) {
 }
 
 #' @name bootstrap
-bootstrap.partsurvfit <- function(object, B, max_errors = 0, silent = FALSE, ...) {
+bootstrap.partsurvfit <- function(
+    object, B, max_errors = 0, silent = FALSE, ...
+  ) {
   n_obs <- nrow(object$data)
   n_models <- length(object$models)
   boot <- vector(mode = "list", length = n_models)
@@ -38,8 +42,6 @@ bootstrap.partsurvfit <- function(object, B, max_errors = 0, silent = FALSE, ...
     for (j in 1:n_models) {
       object$models[[j]]$call$formula <- object$models[[j]]$all.formulae[[1]]
       fit <- try(stats::update(object$models[[j]],
-        # formula = object$models[[j]]$all.formulae[[1]],
-        # anc = object$models[[j]]$all.formulae[-1], but don't think should be needed
         data = data_i
       ),
       silent = silent
@@ -49,8 +51,11 @@ bootstrap.partsurvfit <- function(object, B, max_errors = 0, silent = FALSE, ...
         error_j <- error_j + 1
         if (n_errors > max_errors) {
           msg <- paste0(
-            "There were ", n_errors, " errors when fitting the statistical model, ",
-            "which is greater than the maximum number of allowed errors (max_errors = ",
+            "There were ",
+            n_errors,
+            " errors when fitting the statistical model, ",
+            "which is greater than the maximum number of allowed errors ",
+            "(max_errors = ",
             max_errors, ")."
           )
           stop(msg)
@@ -117,12 +122,21 @@ normboot.msm <- function(object, B = 1000, ...) {
   # As in msm:::normboot.msm simulate from a multivariate normal distribution
   ## Simulate from vector of unreplicated parameters to avoid numerical
   ## problems with rmvnorm when lots of correlations are 1
-  if (!x$foundse) stop("Asymptotic standard errors not available in fitted model.")
-  sim <- MASS::mvrnorm(B, x$opt$par, x$covmat[x$paramdata$optpars, x$paramdata$optpars])
-  params <- matrix(nrow = B, ncol = x$paramdata$npars) # replicate constrained parameters.
+  if (!x$foundse) {
+    stop("Asymptotic standard errors not available in fitted model.")
+  }
+  sim <- MASS::mvrnorm(
+    B, x$opt$par, x$covmat[x$paramdata$optpars, x$paramdata$optpars]
+  )
+  # Replicate constrained parametera
+  params <- matrix(nrow = B, ncol = x$paramdata$npars)
   params[, x$paramdata$optpars] <- sim
-  params[, x$paramdata$fixedpars] <- rep(x$paramdata$params[x$paramdata$fixedpars], each = B)
-  params <- params[, !duplicated(abs(x$paramdata$constr)), drop = FALSE][, abs(x$paramdata$constr), drop = FALSE] *
+  params[, x$paramdata$fixedpars] <- rep(
+    x$paramdata$params[x$paramdata$fixedpars], each = B
+  )
+  params <- params[
+    , !duplicated(abs(x$paramdata$constr)), drop = FALSE
+  ][, abs(x$paramdata$constr), drop = FALSE] *
     rep(sign(x$paramdata$constr), each = B)
   return(params)
 }

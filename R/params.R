@@ -1,9 +1,10 @@
 # Generic documentation for parameter object -----------------------------------
 #' Parameter object
 #'
-#' Objects prefixed by "params_" are lists containing the parameters of a statistical model
-#' used for simulation modeling. The parameters are used to simulate outcomes
-#' as a function of covariates contained in input matrices ([input_mats]).
+#' Objects prefixed by "params_" are lists containing the parameters of a
+#' statistical model used for simulation modeling. The parameters are used to
+#' simulate outcomes as a function of covariates contained in input matrices
+#' ([input_mats]).
 #'
 #' @name params
 #' @seealso [`tparams`]
@@ -14,8 +15,9 @@ NULL
 #'
 #' Summarize the coefficients of a parameter object by computing the mean,
 #' standard deviation, and quantiles for each model term.
-#' This is a convenient way to check whether a parameter object has been specified
-#' correctly and sampling distributions of the coefficients are as expected.
+#' This is a convenient way to check whether a parameter object has been
+#' specified correctly and sampling distributions of the coefficients are as
+#' expected.
 #' @param object An object of the appropriate class.
 #' @param probs A numeric vector of probabilities with values in `[0,1]` used
 #' to compute quantiles. By default, the 2.5th and 97.5th percentiles are
@@ -37,17 +39,19 @@ NULL
 #' \describe{
 #' \item{parameter}{The name of the parameter of interest. This is relevant
 #' for any parametric model in which the underlying probability distribution
-#' has multiple parameters. For instance, both [`params_surv`] and [`params_surv_list`]
-#' store regression coefficients that are used to model the underlying parameters
-#' of the survival distribution (e.g., shape and scale for a Weibull model). Similarly,
-#' there are two parameters (`mean` and `sd`) for [`params_lm`] objects.}
+#' has multiple parameters. For instance, both [`params_surv`] and
+#' [`params_surv_list`] store regression coefficients that are used to model
+#' the underlying parameters of the survival distribution (e.g., shape and
+#' scale for a Weibull model). Similarly, there are two parameters (`mean` and
+#' `sd`) for [`params_lm`] objects.}
 #' \item{model}{The name of the statistical model. This is used for a
-#' [`params_surv_list`] object, where each list element represents a separate model.
-#' In a state transition model, each model is a unique health state transition and
-#' in a partitioned survival model, there is a separate model for each curve.}
-#' \item{to}{The health state that is being transitioned to. In [`params_mlogit`]
-#'  and [`params_mlogit_list`] objects, there are coefficients for each health
-#'  state that can be transitioned to.}
+#' [`params_surv_list`] object, where each list element represents a separate
+#' model. In a state transition model, each model is a unique health state
+#' transition and in a partitioned survival model, there is a separate model
+#' for each curve.}
+#' \item{to}{The health state that is being transitioned to. In
+#' [`params_mlogit`] and [`params_mlogit_list`] objects, there are coefficients
+#' for each health state that can be transitioned to.}
 #'  \item{from}{The health state that is being transitions from. This is used
 #' for a [`params_mlogit_list`] objects where a different multinomial
 #' logistic regression is used for each state that can be transitioned from.}
@@ -71,7 +75,11 @@ check_params_list <- function(x) {
   inner_class <- class(x[[1]])
   n_samples <- sapply(x, function(y) y$n_samples)
   if (!all(n_samples == n_samples[1])) {
-    msg <- paste0("The number of samples in each '", inner_class, "' object must be the same.")
+    msg <- paste0(
+      "The number of samples in each '",
+      inner_class,
+      "' object must be the same."
+    )
     stop(msg, call. = FALSE)
   }
   return(x)
@@ -107,11 +115,13 @@ summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {
 #' parameters from a fitted statistical model. If `uncertainty != "none"`,
 #' then random samples from suitable probability distributions are returned.
 #' @param object A statistical model to randomly sample parameters from.
-#' @param n Number of random observations to draw. Not used if `uncertainty = "none"`.
-#' @param uncertainty Method determining how parameter uncertainty should be handled.
-#' If `"normal"`, then parameters are randomly drawn from their multivariate normal
-#' distribution. If `"bootstrap"`, then parameters are bootstrapped using [`bootstrap`].
-#' If `"none"`, then only point estimates are returned.
+#' @param n Number of random observations to draw. Not used if
+#' `uncertainty = "none"`.
+#' @param uncertainty Method determining how parameter uncertainty should be
+#' handled. If `"normal"`, then parameters are randomly drawn from their
+#' multivariate normal distribution. If `"bootstrap"`, then parameters are
+#' bootstrapped using [`bootstrap`]. If `"none"`, then only point estimates are
+#' returned.
 #' @param ... Currently unused.
 #' @return An object prefixed by `params_`. Mapping between `create_params`
 #' and the classes of the returned objects are:
@@ -146,12 +156,12 @@ summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {
 #' @seealso These methods are typically used alongside [create_input_mats()]
 #' to create model objects as a function of input data and a
 #' fitted statistical model. For instance,
-#' [create_PsmCurves()] creates the survival model for a partitioned survival model,
-#' [create_IndivCtstmTrans()] creates the transition model for an individual
-#' continuous time state transition model,
-#' [create_CohortDtstmTrans()] creates the transition model for a cohort discrete
-#' time state transition model, and
-#' [`create_StateVals()`] creates a health state values model.
+#' [create_PsmCurves()] creates the survival model for a partitioned survival
+#' model, [create_IndivCtstmTrans()] creates the transition model for an
+#' individual continuous time state transition model,
+#' [create_CohortDtstmTrans()] creates the transition model for a cohort
+#' discrete time state transition model, and [`create_StateVals()`] creates a
+#' health state values model.
 #' @rdname create_params
 create_params <- function(object, ...) {
   UseMethod("create_params", object)

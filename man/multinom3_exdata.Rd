@@ -7,8 +7,8 @@
 \format{
 A list containing the following elements:
 \itemize{
-\item{transitions}{ A data frame containing patient transitions between health
-states at discrete time intervals (i.e., on a yearly basis).}
+\item{transitions}{ A data frame containing patient transitions between
+health states at discrete time intervals (i.e., on a yearly basis).}
 \item{costs}{ A list of data frames. The first data frame contains
 drug cost data and the second contains summary medical cost estimates.}
 \item{utility}{ A data frame of summary utility estimates.}
@@ -33,11 +33,12 @@ The data frame has the following columns:
 \item{age_cat}{A factor variable with 3 age groups: (i) age less than 40,
 (ii) age at least 40 and less than 60, and (iii) age at least 60.}
 \item{female}{1 if a patient is female; 0 if male.}
-\item{year}{The year since the start of data collection with the first year equal to 1.}
+\item{year}{The year since the start of data collection with the first year
+equal to 1.}
 \item{state_from}{State making a transition from.}
 \item{state_to}{State making a transition to.}
-\item{year_cat}{Factor variable for year with 3 categories: (i) year 3 and below, (ii)
-year between 3 and 6, and (iii) year 7 and above.}
+\item{year_cat}{Factor variable for year with 3 categories: (i) year 3 and
+below, (ii) year between 3 and 6, and (iii) year 7 and above.}
 }
 }
 

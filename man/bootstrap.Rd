@@ -14,20 +14,22 @@ bootstrap(object, B, ...)
 
 \item{B}{Number of bootstrap replications.}
 
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
+\item{...}{Further arguments passed to or from other methods. Currently
+unused.}
 
-\item{max_errors}{Maximum number of errors that are allowed when fitting statistical models
-during the bootstrap procedure. This argument may be useful if, for instance, the model
-fails to converge during some bootstrap replications. Default is 0.}
+\item{max_errors}{Maximum number of errors that are allowed when fitting
+statistical models during the bootstrap procedure. This argument may be
+useful if, for instance, the model fails to converge during some bootstrap
+replications. Default is 0.}
 
-\item{silent}{Logical indicating whether error messages should be suppressed. Passed to
-the \code{silent} argument of \code{\link[=try]{try()}}.}
+\item{silent}{Logical indicating whether error messages should be suppressed.
+Passed to the \code{silent} argument of \code{\link[=try]{try()}}.}
 }
 \value{
 Sampled values of the parameters.
 }
 \description{
-\code{bootstrap} is a generic function for generating bootstrap replicates of the parameters
-of a fitted statistical model.
+\code{bootstrap} is a generic function for generating bootstrap replicates
+of the parameters of a fitted statistical model.
 }
 \keyword{internal}

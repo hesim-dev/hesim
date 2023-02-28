@@ -27,8 +27,10 @@ Convert a list of treatment lines for multiple treatment strategies to a
 \code{data.table}.
 }
 \examples{
-strategies <- list(c(1, 2, 3),
-                  c(1, 2))
+strategies <- list(
+  c(1, 2, 3),
+  c(1, 2)
+)
 create_lines_dt(strategies)
 }
 \keyword{internal}

@@ -28,7 +28,9 @@ for speed. Equivalent to \code{flexsurv::rgengamma}.
 }
 \examples{
 n <- 1000
-m <- 2 ; s <- 1.7; q <- 1
+m <- 2
+s <- 1.7
+q <- 1
 ptm <- proc.time()
 r1 <- fast_rgengamma(n, mu = m, sigma = s, Q = q)
 proc.time() - ptm

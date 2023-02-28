@@ -21,9 +21,13 @@ This would typically be passed to \link{id_attributes}.
 }
 \examples{
 time_intervals(c(0, 3, 5))
-time_intervals(data.frame(time_start = c(0, 3, 5),
-                          time_cat = c("Time <= 3", "3 < Time <= 5", 
-                                       "Time > 5")))
+time_intervals(data.frame(
+  time_start = c(0, 3, 5),
+  time_cat = c(
+    "Time <= 3", "3 < Time <= 5",
+    "Time > 5"
+  )
+))
 }
 \seealso{
 \link{id_attributes}

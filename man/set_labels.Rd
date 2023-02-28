@@ -34,12 +34,19 @@ reference).
 }
 \examples{
 library("data.table")
-labs <- list("strategy_id" = c("s1" = 1, 
-                               "s2" = 2),
-            "grp_id" = c("g1" = 1, 
-                         "g2" = 2))
+labs <- list(
+  "strategy_id" = c(
+    "s1" = 1,
+    "s2" = 2
+  ),
+  "grp_id" = c(
+    "g1" = 1,
+    "g2" = 2
+  )
+)
 d1 <- data.table(strategy_id = 1:2, grp_id = 1:2)
-d2 <- copy(d1); d3 <- copy(d2)
+d2 <- copy(d1)
+d3 <- copy(d2)
 set_labels(d2, labels = labs)
 set_labels(d3, labels = labs, new_names = c("strategy_name", "grp_name"))
 d1

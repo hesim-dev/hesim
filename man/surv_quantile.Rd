@@ -31,9 +31,13 @@ t <- seq(0, 10, by = .01)
 surv1 <- seq(1, .3, length.out = length(t))
 surv2 <- seq(1, .2, length.out = length(t))
 strategies <- c("Strategy 1", "Strategy 2")
-surv <- data.table(strategy = rep(strategies, each = length(t)),
-                   t = rep(t, 2), 
-                   surv = c(surv1, surv2))
-surv_quantile(surv, probs = c(.4, .5), t = "t",
-              surv_cols = "surv", by = "strategy")
+surv <- data.table(
+  strategy = rep(strategies, each = length(t)),
+  t = rep(t, 2),
+  surv = c(surv1, surv2)
+)
+surv_quantile(surv,
+  probs = c(.4, .5), t = "t",
+  surv_cols = "surv", by = "strategy"
+)
 }

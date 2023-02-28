@@ -43,8 +43,8 @@ params <- params_mlogit(
       intercept = c(-0.33, -.2, -.15),
       treat = c(log(.75), log(.8), log(.9))
     ),
-    
-   ### Transition from sick to death
+
+    ### Transition from sick to death
     death = data.frame(
       intercept = c(-1, -1.2, -.5),
       treat = c(log(.6), log(.65), log(.55))
@@ -66,8 +66,10 @@ coefs_death <- data.frame(
 
 params2 <- params_mlogit(
   coefs <- array(
-    data = c(as.matrix(coefs_sicker),
-             as.matrix(coefs_death)),
+    data = c(
+      as.matrix(coefs_sicker),
+      as.matrix(coefs_death)
+    ),
     dim = c(3, 2, 2),
     dimnames = list(NULL, c("intercept", "treat"), c("sicker", "death"))
   )

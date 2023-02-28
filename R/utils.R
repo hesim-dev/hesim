@@ -1,14 +1,15 @@
 # Check ------------------------------------------------------------------------
 #' Input validation for class objects
 #'
-#' \code{check} is a generic function for validating the inputs of class objects.
+#' \code{check} is a generic function for validating the inputs of class
+#' objects.
 #' @param object object to check.
-#' @param inner_class When checking a list of objects, the class of elements within
-#' the inner most list.
+#' @param inner_class When checking a list of objects, the class of elements
+#' within the inner most list.
 #' @param ... Further arguments passed to or from other methods.
 #'
-#' @return If validation is successful, returns the object in question; otherwise,
-#' informs the user that an error has occurred.
+#' @return If validation is successful, returns the object in question;
+#' otherwise, informs the user that an error has occurred.
 #' @keywords internal
 check <- function(object, ...) {
   UseMethod("check")
@@ -39,7 +40,7 @@ check_dr <- function(dr) {
   }
 }
 
-check_StateVals <- function(models, object,
+check_state_vals <- function(models, object,
                             object_name = c("stateprobs", "disprog")) {
   if (!is.list(models)) {
     stop("'models' must be a list", call. = FALSE)
@@ -47,7 +48,7 @@ check_StateVals <- function(models, object,
   object_name <- match.arg(object_name)
 
   # Generic check for state value model
-  for (i in 1:length(models)) {
+  for (i in seq_along(models)) {
     models[[i]]$check()
   }
 
@@ -65,7 +66,7 @@ check_StateVals <- function(models, object,
   }
 
   ## Loop over models
-  for (i in 1:length(models)) {
+  for (i in seq_along(models)) {
     check_size <- function(actual, expected, z = NULL, msg = NULL) {
       if (actual != expected) {
         if (is.null(msg)) {
@@ -140,7 +141,7 @@ absorbing.tparams_transprobs <- function(x, ...) {
 #' @keywords internal
 create_object_list <- function(...) {
   objects <- list(...)
-  if (length(objects) == 1 & inherits(objects[[1]], "list")) {
+  if (length(objects) == 1 && inherits(objects[[1]], "list")) {
     objects <- objects[[1]]
   }
   return(objects)
@@ -148,7 +149,7 @@ create_object_list <- function(...) {
 
 # Create list of objects
 check_object_list <- function(x, inner_class) {
-  for (i in 1:length(x)) {
+  for (i in seq_along(x)) {
     if (!inherits(x[[i]], inner_class)) {
       msg <- paste0("Each element in list must be of class '", inner_class, "'")
       stop(msg, call. = FALSE)
@@ -229,7 +230,7 @@ format_qalys <- function(x, digits) {
 }
 
 ci_alpha <- function(prob) {
-  if (prob > 1 | prob < 0) {
+  if (prob > 1 || prob < 0) {
     stop("'prob' must be in the interval (0,1)",
       call. = FALSE
     )
@@ -256,7 +257,9 @@ format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
   if (!is.null(pivot_from)) {
     rhs <- pivot_from
     lhs <- setdiff(id_cols, pivot_from)
-    f <- paste(paste(lhs, collapse = " + "), paste(rhs, collapse = " + "), sep = " ~ ")
+    f <- paste(
+      paste(lhs, collapse = " + "), paste(rhs, collapse = " + "), sep = " ~ "
+    )
     x <- dcast(x, f, value.var = "value", sep = ", ")
   }
 
@@ -271,7 +274,7 @@ format_summary_default <- function(x, pivot_from, id_cols, drop_grp) {
 }
 
 default_colnames <- function(x) {
-  paste0("x", 1:ncol(x))
+  paste0("x", seq_len(ncol(x)))
 }
 
 # Summarize parameter values ---------------------------------------------------

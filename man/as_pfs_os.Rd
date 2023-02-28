@@ -15,10 +15,11 @@ as_pfs_os(
 \arguments{
 \item{data}{A multi-state dataset.}
 
-\item{patient_vars}{Character vector of the names of patient specific variables.}
+\item{patient_vars}{Character vector of the names of patient specific
+variables.}
 
-\item{status}{Character string with the name of the status variable (1 = event,
-0 = censored).}
+\item{status}{Character string with the name of the status variable
+(1 = event, 0 = censored).}
 
 \item{time_stop}{Character string with the name of the stopping time variable
 (i.e., time patient transitions from state \eqn{r} to state \eqn{s}).}
@@ -34,11 +35,13 @@ A \code{data.table} with one row per patient containing each variable in
 PFS (\code{pfs_status}, \code{pfs_time}) and OS (\code{os_time}, \code{os_status}).
 }
 \description{
-Convert a multi-state dataset with irreversible transitions containing 3 health
-states to a dataset with one row per patient and progression-free survival (PFS)
-and overall survival (OS) time-to-event outcomes.
+Convert a multi-state dataset with irreversible transitions containing 3
+health states to a dataset with one row per patient and progression-free
+survival (PFS) and overall survival (OS) time-to-event outcomes.
 }
 \examples{
-as_pfs_os(onc3, patient_vars = c("patient_id", "strategy_name", "female", "age")) 
+as_pfs_os(
+  onc3, patient_vars = c("patient_id", "strategy_name", "female", "age")
+)
 
 }

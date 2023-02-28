@@ -18,12 +18,14 @@ Combine \link[stats:formula]{formula} or \link{formula_list} object into a
 }
 \examples{
 # Create from "formula" objects
-flist_wei <- formula_list(shape = formula(~ 1), scale = formula(~ x))
+flist_wei <- formula_list(shape = formula(~1), scale = formula(~x))
 class(flist_wei)
 
 # Create from "formula_list" objects
-flist <- formula_list(exponential = formula_list(rate = formula(~1)),
-                              weibull = flist_wei)
+flist <- formula_list(
+  exponential = formula_list(rate = formula(~1)),
+  weibull = flist_wei
+)
 
 }
 \keyword{internal}

@@ -32,22 +32,25 @@ cea_pw(x, ...)
 \method{cea_pw}{ce}(x, k = seq(0, 2e+05, 500), comparator, dr_qalys, dr_costs, ...)
 }
 \arguments{
-\item{x}{An object of simulation output characterizing the probability distribution
-of clinical effectiveness and costs. If the default method is used, then \code{x}
-must be a \code{data.frame} or \code{data.table} containing columns of
-mean costs and clinical effectiveness where each row denotes a randomly sampled parameter set
-and treatment strategy.}
+\item{x}{An object of simulation output characterizing the probability
+distribution of clinical effectiveness and costs. If the default method is
+used, then \code{x} must be a \code{data.frame} or \code{data.table} containing columns of
+mean costs and clinical effectiveness where each row denotes a randomly
+sampled parameter set and treatment strategy.}
 
-\item{...}{Further arguments passed to or from other methods. Currently unused.}
+\item{...}{Further arguments passed to or from other methods. Currently
+unused.}
 
 \item{k}{Vector of willingness to pay values.}
 
-\item{sample}{Character name of column from \code{x} denoting a randomly sampled parameter set.}
+\item{sample}{Character name of column from \code{x} denoting a randomly sampled
+parameter set.}
 
-\item{strategy}{Character name of column from \code{x} denoting treatment strategy.}
+\item{strategy}{Character name of column from \code{x} denoting treatment
+strategy.}
 
-\item{grp}{Character name of column from \code{x} denoting subgroup. If \code{NULL}, then
-it is assumed that there is only one group.}
+\item{grp}{Character name of column from \code{x} denoting subgroup. If \code{NULL},
+then it is assumed that there is only one group.}
 
 \item{e}{Character name of column from \code{x} denoting clinical effectiveness.}
 
@@ -65,45 +68,49 @@ it is assumed that there is only one group.}
 \describe{
 \item{summary}{A \code{data.table} of the mean, 2.5\% quantile, and 97.5\%
 quantile by strategy and group for clinical effectiveness and costs.}
-\item{mce}{The probability that each strategy is the most effective treatment
-for each group for the range of specified willingness to pay values. In addition,
-the column \code{best} denotes the optimal strategy (i.e., the strategy with the
-highest expected net monetary benefit), which can be used to plot the
-cost-effectiveness acceptability frontier (CEAF).}
-\item{evpi}{The expected value of perfect information (EVPI) by group for the range
-of specified willingness to pay values. The EVPI is computed by subtracting the expected net
-monetary benefit given current information (i.e., the strategy with the highest
-expected net monetary benefit) from the expected net monetary benefit given
-perfect information.}
-\item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of net monetary benefits
-for the range of specified willingness to pay values.}
+\item{mce}{The probability that each strategy is the most effective
+treatment for each group for the range of specified willingness to pay
+values. In addition, the column \code{best} denotes the optimal strategy (i.e.,
+the strategy with the highest expected net monetary benefit), which can be
+used to plot the cost-effectiveness acceptability frontier (CEAF).}
+\item{evpi}{The expected value of perfect information (EVPI) by group for
+the range of specified willingness to pay values. The EVPI is computed by
+subtracting the expected net monetary benefit given current information
+(i.e., the strategy with the highest expected net monetary benefit) from
+the expected net monetary benefit given perfect information.}
+\item{nmb}{The mean, 2.5\% quantile, and 97.5\% quantile of net monetary
+benefits for the range of specified willingness to pay values.}
 }
 
 \code{cea_pw} also returns a list of four \code{data.table} elements:
 \describe{
 \item{summary}{A data.table of the mean, 2.5\% quantile, and 97.5\%
-quantile by strategy and group for incremental clinical effectiveness and costs.}
-\item{delta}{Incremental effectiveness and incremental cost for each simulated
-parameter set by strategy and group. Can be used to plot a cost-effectiveness plane. }
-\item{ceac}{Values needed to plot a cost-effectiveness acceptability curve by
-group. The CEAC plots the probability that each strategy is more cost-effective than
-the comparator for the specified willingness to pay values.}
-\item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of
-incremental net monetary benefits for the range of specified willingness to pay values.}
+quantile by strategy and group for incremental clinical effectiveness and
+costs.}
+\item{delta}{Incremental effectiveness and incremental cost for each
+simulated parameter set by strategy and group. Can be used to plot a
+cost-effectiveness plane.}
+\item{ceac}{Values needed to plot a cost-effectiveness acceptability curve
+by group. The CEAC plots the probability that each strategy is more
+cost-effective than the comparator for the specified willingness to pay
+values.}
+\item{inmb}{The mean, 2.5\% quantile, and 97.5\% quantile of incremental net
+monetary benefits for the range of specified willingness to pay values.}
 }
 }
 \description{
 Conduct cost-effectiveness analysis (CEA) given output of an economic
-model; that is, summarize a probabilistic sensitivity analysis (PSA), possibly
-by subgroup.
+model; that is, summarize a probabilistic sensitivity analysis (PSA),
+possibly by subgroup.
 \itemize{
 \item \code{\link[=cea]{cea()}} computes the probability that
-each treatment is most cost-effective, output for a cost-effectiveness acceptability frontier,
-the expected value of perfect information, and the net monetary benefit for each treatment.
-\item \code{\link[=cea_pw]{cea_pw()}} conducts pairwise CEA by comparing strategies to a comparator. Computed
-quantities include the incremental cost-effectiveness ratio, the
-incremental net monetary benefit, output for a cost-effectiveness plane,
-and output for a cost-effectiveness acceptability curve.
+each treatment is most cost-effective, output for a cost-effectiveness
+acceptability frontier, the expected value of perfect information, and the
+net monetary benefit for each treatment.
+\item \code{\link[=cea_pw]{cea_pw()}} conducts pairwise CEA by comparing strategies to a
+comparator. Computed quantities include the incremental cost-effectiveness
+ratio, the incremental net monetary benefit, output for a cost-effectiveness
+plane, and output for a cost-effectiveness acceptability curve.
 }
 }
 \examples{
@@ -114,30 +121,39 @@ theme_set(theme_bw())
 # Simulation output
 n_samples <- 30
 
-sim <- data.table(sample = rep(seq(n_samples), 4),
-                  c = c(rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
-                        rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)),
-                  e = c(rnorm(n_samples, 8, .2), rnorm(n_samples, 8.5, .1),
-                        rnorm(n_samples, 11, .6), rnorm(n_samples, 11.5, .6)),
-                  strategy_id = rep(1:2, each = n_samples * 2),
-                  grp_id = rep(rep(1:2, each = n_samples), 2)
+sim <- data.table(
+  sample = rep(seq(n_samples), 4),
+  c = c(
+    rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
+    rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)
+  ),
+  e = c(
+    rnorm(n_samples, 8, .2), rnorm(n_samples, 8.5, .1),
+    rnorm(n_samples, 11, .6), rnorm(n_samples, 11.5, .6)
+  ),
+  strategy_id = rep(1:2, each = n_samples * 2),
+  grp_id = rep(rep(1:2, each = n_samples), 2)
 )
 
 # Cost-effectiveness analysis
-cea_out <- cea(sim, k = seq(0, 200000, 500), sample = "sample", 
-               strategy = "strategy_id", grp = "grp_id", 
-               e = "e", c = "c")
+cea_out <- cea(sim,
+  k = seq(0, 200000, 500), sample = "sample",
+  strategy = "strategy_id", grp = "grp_id",
+  e = "e", c = "c"
+)
 names(cea_out)
 
 ## Some sample output
-## The probability that each strategy is the most cost-effective 
+## The probability that each strategy is the most cost-effective
 ## in each group with a willingness to pay of 20,000
 cea_out$mce[k == 20000]
 
 # Pairwise cost-effectiveness analysis
-cea_pw_out <-  cea_pw(sim,  k = seq(0, 200000, 500), comparator = 1,
-                      sample = "sample", strategy = "strategy_id", 
-                      grp = "grp_id", e = "e", c = "c")
+cea_pw_out <- cea_pw(sim,
+  k = seq(0, 200000, 500), comparator = 1,
+  sample = "sample", strategy = "strategy_id",
+  grp = "grp_id", e = "e", c = "c"
+)
 names(cea_pw_out)
 
 ## Some sample output
@@ -145,8 +161,10 @@ names(cea_pw_out)
 head(cea_pw_out$ceac[k >= 20000])
 
 # Summarize the incremental cost-effectiveness ratio
-labs <- list(strategy_id = c("Strategy 1" = 1, "Strategy 2" = 2),
-             grp_id = c("Group 1" = 1, "Group 2" = 2))
+labs <- list(
+  strategy_id = c("Strategy 1" = 1, "Strategy 2" = 2),
+  grp_id = c("Group 1" = 1, "Group 2" = 2)
+)
 format(icer(cea_pw_out, labels = labs))
 
 # Plots

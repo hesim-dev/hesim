@@ -7,7 +7,8 @@
 An \link[R6:R6Class]{R6::R6Class} object.
 }
 \description{
-Simulate health state transitions in a cohort discrete time state transition model.
+Simulate health state transitions in a cohort discrete time state transition
+model.
 }
 \examples{
 library("msm")
@@ -113,15 +114,16 @@ transmod$sim_stateprobs(n_cycles = 2)
 }
 }
 \seealso{
-\code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}} creates a \code{\link{CohortDtstmTrans}} object from either
-a fitted statistical model or a parameter object. A complete economic model can be implemented
-with the \code{\link{CohortDtstm}} class.
+\code{\link[=create_CohortDtstmTrans]{create_CohortDtstmTrans()}} creates a \code{\link{CohortDtstmTrans}} object
+from either a fitted statistical model or a parameter object. A complete
+economic model can be implemented with the \code{\link{CohortDtstm}} class.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{params}}{Parameters for simulating health state transitions.
-Supports objects of class \code{\link{tparams_transprobs}} or \code{\link{params_mlogit_list}}.}
+Supports objects of class \code{\link{tparams_transprobs}} or
+\code{\link{params_mlogit_list}}.}
 
 \item{\code{input_data}}{An object of class \code{\link{input_mats}}.}
 
@@ -138,22 +140,23 @@ which should, in turn, be the index of the health state.}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{start_stateprobs}}{A non-negative vector with length equal to the number of
-health states containing the probability that the cohort is in each health
-state at the start of the simulation. For example,
-if there were three states and the cohort began the simulation in state 1,
-then \code{start_stateprobs = c(1, 0, 0)}. Automatically normalized to sum to 1.
-If \code{NULL}, then a vector with the first element equal to 1 and
+\item{\code{start_stateprobs}}{A non-negative vector with length equal to the
+number of health states containing the probability that the cohort is
+in each health state at the start of the simulation. For example,
+if there were three states and the cohort began the simulation in state
+1, then \code{start_stateprobs = c(1, 0, 0)}. Automatically normalized to sum
+to 1. If \code{NULL}, then a vector with the first element equal to 1 and
 all remaining elements equal to 0.}
 
-\item{\code{trans_mat}}{A transition matrix describing the states and transitions
-in a discrete-time multi-state model. Only required if the model is
-parameterized using multinomial logistic regression. The \verb{(i,j)} element
-represents a transition from state \code{i} to state \code{j}. Each possible transition
-from row \code{i} should be based on a separate multinomial logistic regression
-and ordered from \code{0} to \code{K - 1} where \code{K} is the number of
-possible transitions. Transitions that are not possible should be \code{NA}.
-and the reference category for each row should be \code{0}.}
+\item{\code{trans_mat}}{A transition matrix describing the states and
+transitions in a discrete-time multi-state model. Only required if the
+model is parameterized using multinomial logistic regression. The
+\verb{(i,j)} element represents a transition from state \code{i} to state \code{j}.
+Each possible transition from row \code{i} should be based on a separate
+multinomial logistic regression and ordered from \code{0} to \code{K - 1} where
+\code{K} is the number of possible transitions. Transitions that are not
+possible should be \code{NA} and the reference category for each row should
+be \code{0}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -195,8 +198,8 @@ Create a new \code{CohortDtstmTrans} object.
 \item{\code{cycle_length}}{The \code{cycle_length} field.}
 
 \item{\code{absorbing}}{The \code{absorbing} field. If \code{NULL}, then the constructor
-will determine which states are absorbing automatically; non \code{NULL} values
-will override this behavior.}
+will determine which states are absorbing automatically; non \code{NULL}
+values will override this behavior.}
 }
 \if{html}{\out{</div>}}
 }
@@ -208,7 +211,8 @@ A new \code{CohortDtstmTrans} object.
 \if{html}{\out{<a id="method-CohortDtstmTrans-sim_stateprobs"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDtstmTrans-sim_stateprobs}{}}}
 \subsection{Method \code{sim_stateprobs()}}{
-Simulate probability of being in each health state during each model cycle.
+Simulate probability of being in each health state during each model
+cycle.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortDtstmTrans$sim_stateprobs(n_cycles)}\if{html}{\out{</div>}}
 }

@@ -37,18 +37,27 @@ on outcome variables from a probabilistic sensitivity analysis relative to a com
 \examples{
 # simulation output
 n_samples <- 100
-sim <- data.frame(sample = rep(seq(n_samples), 4),
-             c = c(rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
-                    rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)),
-             e = c(rnorm(n_samples, 8, .2), rnorm(n_samples, 8.5, .1),
-                   rnorm(n_samples, 11, .6), rnorm(n_samples, 11.5, .6)),
-             strategy = rep(paste0("Strategy ", seq(1, 2)),
-                           each = n_samples * 2),
-             grp = rep(rep(c("Group 1", "Group 2"),
-                           each = n_samples), 2)
+sim <- data.frame(
+  sample = rep(seq(n_samples), 4),
+  c = c(
+    rlnorm(n_samples, 5, .1), rlnorm(n_samples, 5, .1),
+    rlnorm(n_samples, 11, .1), rlnorm(n_samples, 11, .1)
+  ),
+  e = c(
+    rnorm(n_samples, 8, .2), rnorm(n_samples, 8.5, .1),
+    rnorm(n_samples, 11, .6), rnorm(n_samples, 11.5, .6)
+  ),
+  strategy = rep(paste0("Strategy ", seq(1, 2)),
+    each = n_samples * 2
+  ),
+  grp = rep(rep(c("Group 1", "Group 2"),
+    each = n_samples
+  ), 2)
 )
 # calculate incremental effect of Strategy 2 relative to Strategy 1 by group
-ie <- incr_effect(sim, comparator = "Strategy 1", sample = "sample",
-                        strategy = "strategy", grp = "grp", outcomes = c("c", "e"))
+ie <- incr_effect(sim,
+  comparator = "Strategy 1", sample = "sample",
+  strategy = "strategy", grp = "grp", outcomes = c("c", "e")
+)
 head(ie)
 }

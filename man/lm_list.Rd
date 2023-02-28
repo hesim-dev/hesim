@@ -16,9 +16,11 @@ Returns an object of class \code{lm_list}.
 Combine \code{\link[stats:lm]{lm}} objects into a list
 }
 \examples{
- dat <- psm4_exdata$costs$medical
- lm_fits <- lm_list(fit1 = stats::lm(costs ~ 1, data = dat), 
-                    fit2 = stats::lm(costs ~ female, data = dat))
- class(lm_fits)
+dat <- psm4_exdata$costs$medical
+lm_fits <- lm_list(
+  fit1 = stats::lm(costs ~ 1, data = dat),
+  fit2 = stats::lm(costs ~ female, data = dat)
+)
+class(lm_fits)
 }
 \keyword{internal}

@@ -7,10 +7,10 @@
 An \code{\link[R6:R6Class]{R6::R6Class}} object.
 }
 \description{
-Contains methods that can be used to summarize both individual- and cohort-level
-continuous time state transition models. That is, this class is relevant for
-both Markov and semi-Markov multi-state models and does not depend on the
-methodology used for prediction of state probabilities.
+Contains methods that can be used to summarize both individual- and
+cohort-level continuous time state transition models. That is, this class is
+relevant for both Markov and semi-Markov multi-state models and does not
+depend on the methodology used for prediction of state probabilities.
 }
 \seealso{
 \code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}, \code{\link{IndivCtstmTrans}}

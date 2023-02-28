@@ -37,14 +37,15 @@ check(object, ...)
 
 \item{...}{Further arguments passed to or from other methods.}
 
-\item{inner_class}{When checking a list of objects, the class of elements within
-the inner most list.}
+\item{inner_class}{When checking a list of objects, the class of elements
+within the inner most list.}
 }
 \value{
-If validation is successful, returns the object in question; otherwise,
-informs the user that an error has occurred.
+If validation is successful, returns the object in question;
+otherwise, informs the user that an error has occurred.
 }
 \description{
-\code{check} is a generic function for validating the inputs of class objects.
+\code{check} is a generic function for validating the inputs of class
+objects.
 }
 \keyword{internal}

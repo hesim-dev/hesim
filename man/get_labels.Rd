@@ -57,7 +57,7 @@ patients <- data.table(
   grp_name = rep(c("Age 50-59", "Age 60-69"), each = 2)
 )
 states <- data.table(
-  state_id =  seq(1, 2),
+  state_id = seq(1, 2),
   state_name = c("State 1", "State 2")
 )
 hesim_dat <- hesim_data(
@@ -69,8 +69,10 @@ labs <- get_labels(hesim_dat)
 labs
 
 # Pass to set_labels()
-d <- data.table(strategy_id = c(1, 1, 2, 2),
-                grp_id = c(1, 2, 1, 2))
+d <- data.table(
+  strategy_id = c(1, 1, 2, 2),
+  grp_id = c(1, 2, 1, 2)
+)
 set_labels(d, labs, new_name = c("strategy_name", "grp_name"))
 d
 }

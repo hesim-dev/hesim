@@ -52,23 +52,25 @@ p_12 <- c(.7, .5)
 p_23 <- c(.1, .2)
 x <- as_array3(tpmatrix(
   C, p_12, .1,
-  0, C,     p_23,
-  0, 0,     1
+  0, C, p_23,
+  0, 0, 1
 ))
 
 # There are the same number of relative risk rows and transition probability matrices
 rr_12 <- runif(2, .8, 1)
 rr_13 <- runif(2, .9, 1)
 rr <- cbind(rr_12, rr_13)
-apply_rr(x, rr, 
-         index = list(c(1, 2), c(1, 3)),
-         complement = list(c(1, 1), c(2, 2)))
-         
+apply_rr(x, rr,
+  index = list(c(1, 2), c(1, 3)),
+  complement = list(c(1, 1), c(2, 2))
+)
+
 # There are more relative risk rows than transition probability matrices
 rr_12 <- runif(4, .8, 1)
 rr_13 <- runif(4, .9, 1)
 rr <- cbind(rr_12, rr_13)
-apply_rr(x, rr, 
-         index = list(c(1, 2), c(1, 3)),
-         complement = list(c(1, 1), c(2, 2)))
+apply_rr(x, rr,
+  index = list(c(1, 2), c(1, 3)),
+  complement = list(c(1, 1), c(2, 2))
+)
 }

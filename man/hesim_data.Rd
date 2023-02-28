@@ -48,13 +48,19 @@ within each table must be numeric vectors of integers and should be of the form
 }
 \examples{
 strategies <- data.frame(strategy_id = c(1, 2))
-patients <- data.frame(patient_id = seq(1, 3), age = c(65, 50, 75),
-                       gender = c("Female", "Female", "Male"))
-states <- data.frame(state_id =  seq(1, 3),
-                     state_var = c(2, 1, 9))
-hesim_dat <- hesim_data(strategies = strategies,
-                        patients = patients,
-                        states = states)
+patients <- data.frame(
+  patient_id = seq(1, 3), age = c(65, 50, 75),
+  gender = c("Female", "Female", "Male")
+)
+states <- data.frame(
+  state_id = seq(1, 3),
+  state_var = c(2, 1, 9)
+)
+hesim_dat <- hesim_data(
+  strategies = strategies,
+  patients = patients,
+  states = states
+)
 }
 \seealso{
 \code{\link[=expand.hesim_data]{expand.hesim_data()}}, \code{\link[=get_labels]{get_labels()}}

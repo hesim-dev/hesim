@@ -20,8 +20,8 @@ icer(x, prob = 0.95, k = 50000, labels = NULL, ...)
 \arguments{
 \item{x}{An object of class \code{cea_pw} returned by \code{\link[=cea_pw]{cea_pw()}}.}
 
-\item{prob}{A numeric scalar in the interval \verb{(0,1)} giving the confidence interval.
-Default is 0.95 for a 95 percent interval.}
+\item{prob}{A numeric scalar in the interval \verb{(0,1)} giving the confidence
+interval. Default is 0.95 for a 95 percent interval.}
 
 \item{k}{Willingness to pay per quality-adjusted life-year.}
 
@@ -39,12 +39,12 @@ See the output returned by \code{\link[=get_labels]{get_labels()}} for an exampl
 \item{pivot_from}{Character vector denoting a column or columns used to
 "widen" the data. Should either be \code{"strategy"}, \code{"grp"}, \code{"outcome"},
 or some combination of the three. There will be one column for each value of
-the variables in \code{pivot_from}. Default is to widen so there is a column for each treatment
-strategy. Set to \code{NULL} if you do not want to widen the table.}
+the variables in \code{pivot_from}. Default is to widen so there is a column for
+each treatment strategy. Set to \code{NULL} if you do not want to widen the table.}
 
-\item{drop_grp}{If \code{TRUE}, then the group column will be removed if there is only
-one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column is never
-removed.}
+\item{drop_grp}{If \code{TRUE}, then the group column will be removed if there is
+only one subgroup; other it will be kept. If \code{FALSE}, then the \code{grp} column
+is never removed.}
 
 \item{pretty_names}{Logical. If \code{TRUE}, then the columns \code{strategy}, \code{grp},
 \code{outcome}, and \code{value} are renamed (if they exist) to \code{Strategy},
@@ -57,7 +57,8 @@ removed.}
 \item{strategy}{The treatment strategy.}
 \item{grp}{The subgroup.}
 \item{outcome}{The outcome metric.}
-\item{estimate}{The point estimate computed as the average across the PSA samples.}
+\item{estimate}{The point estimate computed as the average across the PSA
+samples.}
 \item{lower}{The lower limit of the confidence interval.}
 \item{upper}{The upper limit of the confidence interval.}
 }
@@ -65,13 +66,14 @@ removed.}
 \code{format.icer()} formats the table according to the arguments passed.
 }
 \description{
-Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given output from
-\code{\link[=cea_pw]{cea_pw()}} with \code{icer()} and format for pretty printing with \code{format.icer()}.
+Generate a tidy table of incremental cost-effectiveness ratios (ICERs) given
+output from \code{\link[=cea_pw]{cea_pw()}} with \code{icer()} and format for pretty printing with
+\code{format.icer()}.
 }
 \details{
-Note that \code{icer()} will report negative ICERs; however, \code{format()} will
-correctly note whether a treatment strategy is dominated by or dominates the
-reference treatment.
+Note that \code{icer()} will report negative ICERs; however, \code{format()}
+will correctly note whether a treatment strategy is dominated by or dominates
+the reference treatment.
 }
 \seealso{
 \code{\link[=cea_pw]{cea_pw()}}
