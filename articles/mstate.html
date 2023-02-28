@@ -129,7 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Markov and semi-Markov multi-state models</h1>
             
-            <h4 data-toc-skip class="date">2022-09-02</h4>
+            <h4 data-toc-skip class="date">2023-02-28</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/mstate.Rmd" class="external-link"><code>vignettes/mstate.Rmd</code></a></small>
       <div class="hidden name"><code>mstate.Rmd</code></div>
@@ -141,12 +141,24 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The <a href="markov-inhomogeneous-indiv.html">time inhomogeneous Markov individual-level</a> modeling vignette shows how to simulate a continuous times state transition model (CTSTM) and perform a cost-effectiveness analysis (CEA). The model was parameterized using a variety of disparate data sources and parameter estimates. However, in an ideal scenario, a CTSTM can be fully parameterized by estimating a single statistical model. In this example, we demonstrate by fitting a multi-state model—a generalization of a survival model with more than two states—using patient-level data.</p>
+<p>The <a href="markov-inhomogeneous-indiv.html">time inhomogeneous
+Markov individual-level</a> modeling vignette shows how to simulate a
+continuous times state transition model (CTSTM) and perform a
+cost-effectiveness analysis (CEA). The model was parameterized using a
+variety of disparate data sources and parameter estimates. However, in
+an ideal scenario, a CTSTM can be fully parameterized by estimating a
+single statistical model. In this example, we demonstrate by fitting a
+multi-state model—a generalization of a survival model with more than
+two states—using patient-level data.</p>
 </div>
 <div class="section level2">
 <h2 id="an-example-3-state-model">An example 3-state model<a class="anchor" aria-label="anchor" href="#an-example-3-state-model"></a>
 </h2>
-<p>The reversible illness-death model is a commonly used state transition model (see figure below) with 3 health states and 4 transitions. In this example, we will use 3 generic health states: (1) Healthy, (2) Sick, and (3) Death. The following 4 transitions are possible.</p>
+<p>The reversible illness-death model is a commonly used state
+transition model (see figure below) with 3 health states and 4
+transitions. In this example, we will use 3 generic health states: (1)
+Healthy, (2) Sick, and (3) Death. The following 4 transitions are
+possible.</p>
 <ol style="list-style-type: decimal">
 <li>Healthy to Sick</li>
 <li>Sick to Healthy</li>
@@ -154,7 +166,11 @@
 <li>Sick to Death</li>
 </ol>
 <p><br><img src="reversible-illness-death.png" width="500px"><br><br></p>
-<p>In general, the transitions of a multi-state model can be characterized with an H x H transition matrix where <span class="math inline">\(H\)</span> is the number of health states, which is a square-matrix where the (r,s) element is a positive integer if a transition from r to s is possible and NA otherwise. A 4 x 4 transition matrix is appropriate for the reversible illness death model.</p>
+<p>In general, the transitions of a multi-state model can be
+characterized with an H x H transition matrix where <span class="math inline">\(H\)</span> is the number of health states, which
+is a square-matrix where the (r,s) element is a positive integer if a
+transition from r to s is possible and NA otherwise. A 4 x 4 transition
+matrix is appropriate for the reversible illness death model.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="cn">NA</span>, <span class="fl">4</span><span class="op">)</span>,</span>
@@ -165,7 +181,13 @@
 <span><span class="co">## Healthy      NA    1     2</span></span>
 <span><span class="co">## Sick          3   NA     4</span></span>
 <span><span class="co">## Death        NA   NA    NA</span></span></code></pre>
-<p>In a cost-effectiveness analysis, the treatments strategies of interest and characteristics of the target population must be specified in addition to the selected model structure. We will consider a simple case with two treatment strategies (the standard of care (SOC) and a new intervention) and a heterogeneous population of 1000 patients who differ by age and sex. The model contains 3 health states (2 of which are non-death states).</p>
+<p>In a cost-effectiveness analysis, the treatments strategies of
+interest and characteristics of the target population must be specified
+in addition to the selected model structure. We will consider a simple
+case with two treatment strategies (the standard of care (SOC) and a new
+intervention) and a heterogeneous population of 1000 patients who differ
+by age and sex. The model contains 3 health states (2 of which are
+non-death states).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://hesim-dev.github.io/hesim/">"hesim"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com" class="external-link">"data.table"</a></span><span class="op">)</span></span>
@@ -206,8 +228,18 @@
 <div class="section level3">
 <h3 id="multi-state-model">Multi-state model<a class="anchor" aria-label="anchor" href="#multi-state-model"></a>
 </h3>
-<p>CTSTMs can be parameterized by fitting statistical models in <code>R</code> or by storing the parameters from a model fit outside <code>R</code> as described in the <a href="intro.html#disease-progression">introduction</a> to <code>hesim</code>. Either a single joint model can be estimated encompassing all transitions or separate models can be estimated for each possible transition. In the <a href="intro.html#disease-progression">introduction</a> we considered a joint model; here, we will fit separate models. A number of parametric and flexibly parametric approaches are available (as described more detail in the <code><a href="../reference/params_surv.html">params_surv()</a></code> documentation), but we will illustrate with a Weibull model.</p>
-<p>We will begin by fitting a “clock reset” model using <code><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html" class="external-link">flexsurvreg()</a></code>.</p>
+<p>CTSTMs can be parameterized by fitting statistical models in
+<code>R</code> or by storing the parameters from a model fit outside
+<code>R</code> as described in the <a href="intro.html#disease-progression">introduction</a> to
+<code>hesim</code>. Either a single joint model can be estimated
+encompassing all transitions or separate models can be estimated for
+each possible transition. In the <a href="intro.html#disease-progression">introduction</a> we considered a
+joint model; here, we will fit separate models. A number of parametric
+and flexibly parametric approaches are available (as described more
+detail in the <code><a href="../reference/params_surv.html">params_surv()</a></code> documentation), but we will
+illustrate with a Weibull model.</p>
+<p>We will begin by fitting a “clock reset” model using
+<code><a href="https://rdrr.io/pkg/flexsurv/man/flexsurvreg.html" class="external-link">flexsurvreg()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/chjackson/flexsurv-dev" class="external-link">"flexsurv"</a></span><span class="op">)</span></span>
 <span><span class="va">n_trans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">tmat</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># Number of transitions</span></span>
@@ -219,7 +251,9 @@
 <span>                                  dist <span class="op">=</span> <span class="st">"weibull"</span><span class="op">)</span> </span>
 <span><span class="op">}</span></span>
 <span><span class="va">wei_fits_cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flexsurvreg_list.html">flexsurvreg_list</a></span><span class="op">(</span><span class="va">wei_fits_cr</span><span class="op">)</span></span></code></pre></div>
-<p>“Clock forward” models are fit in a similar fashion by specifying both the starting (<code>Tstop</code>) and stopping (<code>Tstop</code>) times associated with each transition.</p>
+<p>“Clock forward” models are fit in a similar fashion by specifying
+both the starting (<code>Tstop</code>) and stopping (<code>Tstop</code>)
+times associated with each transition.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wei_fits_cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span>length <span class="op">=</span> <span class="va">n_trans</span>, mode <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span> </span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">wei_fits_cf</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
@@ -233,7 +267,12 @@
 <div class="section level3">
 <h3 id="utility-and-costs">Utility and costs<a class="anchor" aria-label="anchor" href="#utility-and-costs"></a>
 </h3>
-<p>The most straightforward way to assign utility and cost values to health states is with a <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code>. For example, we can specify the mean and standard error of utilities by health state (implying that utility values do not vary by treatment strategy or patient) and that we will use a beta distribution to randomly sample utility values for the probabilistic sensitivity analysis (PSA).</p>
+<p>The most straightforward way to assign utility and cost values to
+health states is with a <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code>. For example, we can
+specify the mean and standard error of utilities by health state
+(implying that utility values do not vary by treatment strategy or
+patient) and that we will use a beta distribution to randomly sample
+utility values for the probabilistic sensitivity analysis (PSA).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">utility_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="va">states</span><span class="op">$</span><span class="va">state_id</span>,</span>
 <span>                                       mean <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">utility</span><span class="op">$</span><span class="va">mean</span>,</span>
@@ -243,7 +282,10 @@
 <pre><code><span><span class="co">##    state_id mean        se</span></span>
 <span><span class="co">## 1:        1 0.65 0.1732051</span></span>
 <span><span class="co">## 2:        2 0.85 0.2000000</span></span></code></pre>
-<p>Drug and medical costs can be specified in a similar fashion. Drug costs are assumed to be known with certainty and vary by treatment strategy whereas medical costs are assumed to vary by health state and to follow a gamma distribution.</p>
+<p>Drug and medical costs can be specified in a similar fashion. Drug
+costs are assumed to be known with certainty and vary by treatment
+strategy whereas medical costs are assumed to vary by health state and
+to follow a gamma distribution.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">drugcost_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="va">strategies</span><span class="op">$</span><span class="va">strategy_id</span>,</span>
 <span>                                       est <span class="op">=</span> <span class="va">mstate3_exdata</span><span class="op">$</span><span class="va">costs</span><span class="op">$</span><span class="va">drugs</span><span class="op">$</span><span class="va">costs</span><span class="op">)</span>,</span>
@@ -260,25 +302,41 @@
 <div class="section level3">
 <h3 id="constructing-the-economic-model">Constructing the economic model<a class="anchor" aria-label="anchor" href="#constructing-the-economic-model"></a>
 </h3>
-<p>As in any <code>hesim</code> model, the economic model consists of a model for disease progression and models for assigning utility and cost values to health states. In this example, we will use 1000 samples of the parameters for the probabilistic sensitivity analysis (PSA).</p>
+<p>As in any <code>hesim</code> model, the economic model consists of a
+model for disease progression and models for assigning utility and cost
+values to health states. In this example, we will use 1000 samples of
+the parameters for the probabilistic sensitivity analysis (PSA).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_samples</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="disease-model">Disease model<a class="anchor" aria-label="anchor" href="#disease-model"></a>
 </h4>
-<p>We begin by constructing the model for health state transitions, which is a function of input data (i.e., covariates) and a fitted multi-state model (or a parameter object). When separate multi-state models are fit by transition, the input data consists of one observation for each treatment strategy and patient combination (joint models consist of one observation for each treatment strategy, patient, and transition combination). It can be created easily by using the <code><a href="../reference/expand.html">expand()</a></code> function to expand the <code><a href="../reference/hesim_data.html">hesim_data()</a></code> object created above.</p>
+<p>We begin by constructing the model for health state transitions,
+which is a function of input data (i.e., covariates) and a fitted
+multi-state model (or a parameter object). When separate multi-state
+models are fit by transition, the input data consists of one observation
+for each treatment strategy and patient combination (joint models
+consist of one observation for each treatment strategy, patient, and
+transition combination). It can be created easily by using the
+<code><a href="../reference/expand.html">expand()</a></code> function to expand the <code><a href="../reference/hesim_data.html">hesim_data()</a></code>
+object created above.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transmod_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/expand.html">expand</a></span><span class="op">(</span><span class="va">hesim_dat</span>, </span>
 <span>                        by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategies"</span>, <span class="st">"patients"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod_data</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    strategy_id patient_id strategy_name      age female</span></span>
-<span><span class="co">## 1:           1          1           SOC 46.97393      1</span></span>
-<span><span class="co">## 2:           1          2           SOC 56.68950      1</span></span>
-<span><span class="co">## 3:           1          3           SOC 45.85590      0</span></span>
-<span><span class="co">## 4:           1          4           SOC 47.69401      0</span></span>
-<span><span class="co">## 5:           1          5           SOC 43.87282      1</span></span>
-<span><span class="co">## 6:           1          6           SOC 45.45876      1</span></span></code></pre>
-<p>“Clock reset” and “clock forward” transition models are created by combining the fitted models and input data with the transition matrix, desired number of PSA samples, the timescale of the model, and the starting age of each patient in the simulation (by default, patients are assumed to live no longer than age 100 in the individual-level simulation).</p>
+<span><span class="co">## 1:           1          1           SOC 35.65086      0</span></span>
+<span><span class="co">## 2:           1          2           SOC 39.88312      1</span></span>
+<span><span class="co">## 3:           1          3           SOC 51.75579      0</span></span>
+<span><span class="co">## 4:           1          4           SOC 52.69061      0</span></span>
+<span><span class="co">## 5:           1          5           SOC 42.06444      1</span></span>
+<span><span class="co">## 6:           1          6           SOC 45.07808      1</span></span></code></pre>
+<p>“Clock reset” and “clock forward” transition models are created by
+combining the fitted models and input data with the transition matrix,
+desired number of PSA samples, the timescale of the model, and the
+starting age of each patient in the simulation (by default, patients are
+assumed to live no longer than age 100 in the individual-level
+simulation).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transmod_cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans</a></span><span class="op">(</span><span class="va">wei_fits_cr</span>, <span class="va">transmod_data</span>,</span>
 <span>                                      trans_mat <span class="op">=</span> <span class="va">tmat</span>, n <span class="op">=</span> <span class="va">n_samples</span>,</span>
@@ -288,7 +346,15 @@
 <span>                                      trans_mat <span class="op">=</span> <span class="va">tmat</span>, n <span class="op">=</span> <span class="va">n_samples</span>,</span>
 <span>                                      clock <span class="op">=</span> <span class="st">"forward"</span>,</span>
 <span>                                      start_age <span class="op">=</span> <span class="va">patients</span><span class="op">$</span><span class="va">age</span><span class="op">)</span></span></code></pre></div>
-<p>It is a good idea to evaluate the assumptions underlying multi-state models. <code>hesim</code> can help facilitate these analyses since hazards (<code>$hazard()</code>), cumulative hazards (<code>$cumhazard()</code>), and state probabilities (<code>$stateprobs()</code>) can be easily computed. As an illustration, we will predict hazards using the maximum likelihood estimates of the Weibull model for a single patient (<code>patient_id = 1</code>). To do so, we create new transition models based on a subset of the dataset <code>transmod_data</code> used above.</p>
+<p>It is a good idea to evaluate the assumptions underlying multi-state
+models. <code>hesim</code> can help facilitate these analyses since
+hazards (<code>$hazard()</code>), cumulative hazards
+(<code>$cumhazard()</code>), and state probabilities
+(<code>$stateprobs()</code>) can be easily computed. As an illustration,
+we will predict hazards using the maximum likelihood estimates of the
+Weibull model for a single patient (<code>patient_id = 1</code>). To do
+so, we create new transition models based on a subset of the dataset
+<code>transmod_data</code> used above.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Predict hazard</span></span>
 <span><span class="va">transmod_data_pat1</span> <span class="op">&lt;-</span> <span class="va">transmod_data</span><span class="op">[</span><span class="va">patient_id</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span></span>
@@ -303,7 +369,8 @@
 <span>  <span class="va">haz</span><span class="op">[</span>, <span class="va">clock</span> <span class="op">:=</span> <span class="va">title_clock</span><span class="op">]</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">haz</span><span class="op">[</span>, <span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>We then plot the predicted hazard by treatment strategy and timescale.</p>
+<p>We then plot the predicted hazard by treatment strategy and
+timescale.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot hazards</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span></span>
@@ -319,13 +386,29 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_linetype.html" class="external-link">scale_linetype_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="mstate_files/figure-html/predicted_hazards_plot-1.png" width="672"></p>
-<p>While the hazards from the healthy state are similar between the “clock forward” and “clock reset” approaches, they differ significantly in the sick state. Treatment effects (i.e., the hazard ratios between treatment strategies 1 and 2) are also largest in the sick state.</p>
-<p>Additional analyses should be conducted as well. For instance, the hazards for treatment strategy 1 (the reference treatment strategy) could be assessed by comparing the Weibull model’s predictions with predictions from non-parametric (i.e., the Kaplan-Meier estimator) or semi-parametric (i.e., Cox) models. This can be performed using <code>mstate</code>, which can predict cumulative hazards and state probabilities in non-parametric and semi-parametric models. Furthermore, the Weibull model’s proportional hazards assumption should be tested using standard techniques such as plots of log time vs. the log cumulative hazard, inclusion of time-dependent covariates, and tests of the Schoenfeld residuals.</p>
+<p>While the hazards from the healthy state are similar between the
+“clock forward” and “clock reset” approaches, they differ significantly
+in the sick state. Treatment effects (i.e., the hazard ratios between
+treatment strategies 1 and 2) are also largest in the sick state.</p>
+<p>Additional analyses should be conducted as well. For instance, the
+hazards for treatment strategy 1 (the reference treatment strategy)
+could be assessed by comparing the Weibull model’s predictions with
+predictions from non-parametric (i.e., the Kaplan-Meier estimator) or
+semi-parametric (i.e., Cox) models. This can be performed using
+<code>mstate</code>, which can predict cumulative hazards and state
+probabilities in non-parametric and semi-parametric models. Furthermore,
+the Weibull model’s proportional hazards assumption should be tested
+using standard techniques such as plots of log time vs. the log
+cumulative hazard, inclusion of time-dependent covariates, and tests of
+the Schoenfeld residuals.</p>
 </div>
 <div class="section level4">
 <h4 id="utility-and-cost-models">Utility and cost models<a class="anchor" aria-label="anchor" href="#utility-and-cost-models"></a>
 </h4>
-<p>Cost and utility models can be easily created from the <code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> output above. Note that these models are based on predicted means (see <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) and do depend on covariates.</p>
+<p>Cost and utility models can be easily created from the
+<code><a href="../reference/stateval_tbl.html">stateval_tbl()</a></code> output above. Note that these models are
+based on predicted means (see <code><a href="../reference/tparams_mean.html">tparams_mean()</a></code>) and do depend
+on covariates.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Utility</span></span>
 <span><span class="va">utilitymod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_StateVals.html">create_StateVals</a></span><span class="op">(</span><span class="va">utility_tbl</span>, n <span class="op">=</span> <span class="va">n_samples</span>, hesim_data <span class="op">=</span> <span class="va">hesim_dat</span><span class="op">)</span></span>
@@ -339,7 +422,9 @@
 <div class="section level4">
 <h4 id="combining-the-disease-progression-cost-and-utility-models">Combining the disease progression, cost, and utility models<a class="anchor" aria-label="anchor" href="#combining-the-disease-progression-cost-and-utility-models"></a>
 </h4>
-<p>Now that the necessary transition, utility, and cost models have been created, we combine them to create separate economic models based on the “clock reset” and “clock forward” transition models, respectively.</p>
+<p>Now that the necessary transition, utility, and cost models have been
+created, we combine them to create separate economic models based on the
+“clock reset” and “clock forward” transition models, respectively.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">econmod_cr</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/IndivCtstm.html">IndivCtstm</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>trans_model <span class="op">=</span> <span class="va">transmod_cr</span>,</span>
 <span>                             utility_model <span class="op">=</span> <span class="va">utilitymod</span>,</span>
@@ -355,25 +440,34 @@
 <div class="section level4">
 <h4 id="disease-progression">Disease progression<a class="anchor" aria-label="anchor" href="#disease-progression"></a>
 </h4>
-<p>Disease progression can be simulated using the <code>$sim_disease()</code> method. In the individual-level simulation, unique trajectories through the multi-state model are simulated for each patient, treatment strategy, and PSA sample. Patients transition <code>from</code> an old health state that was entered at time <code>time_start</code> <code>to</code> a new health state at time <code>time_stop</code>.</p>
+<p>Disease progression can be simulated using the
+<code>$sim_disease()</code> method. In the individual-level simulation,
+unique trajectories through the multi-state model are simulated for each
+patient, treatment strategy, and PSA sample. Patients transition
+<code>from</code> an old health state that was entered at time
+<code>time_start</code> <code>to</code> a new health state at time
+<code>time_stop</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "Clock reset"</span></span>
 <span><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id from to final time_start   time_stop</span></span>
-<span><span class="co">## 1:      1           1          1      1    1  3     1  0.0000000  3.69146352</span></span>
-<span><span class="co">## 2:      1           1          2      1    1  3     1  0.0000000  0.06492628</span></span>
-<span><span class="co">## 3:      1           1          3      1    1  3     1  0.0000000  7.89098213</span></span>
-<span><span class="co">## 4:      1           1          4      1    1  2     0  0.0000000  0.46063149</span></span>
-<span><span class="co">## 5:      1           1          4      1    2  1     0  0.4606315  4.86249974</span></span>
-<span><span class="co">## 6:      1           1          4      1    1  3     1  4.8624997 13.26603919</span></span></code></pre>
+<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id from to final time_start time_stop</span></span>
+<span><span class="co">## 1:      1           1          1      1    1  3     1   0.000000  0.891433</span></span>
+<span><span class="co">## 2:      1           1          2      1    1  3     1   0.000000  3.305484</span></span>
+<span><span class="co">## 3:      1           1          3      1    1  3     1   0.000000  1.414649</span></span>
+<span><span class="co">## 4:      1           1          4      1    1  2     0   0.000000  0.571455</span></span>
+<span><span class="co">## 5:      1           1          4      1    2  1     0   0.571455  0.667000</span></span>
+<span><span class="co">## 6:      1           1          4      1    1  2     0   0.667000  1.657319</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "Clock forward"</span></span>
 <span><span class="va">econmod_cf</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>State occupancy probabilities at different time points are computed using <code>$sim_stateprobs()</code>. First, we simulate state probabilities for the “clock reset” model.</p>
+<p>State occupancy probabilities at different time points are computed
+using <code>$sim_stateprobs()</code>. First, we simulate state
+probabilities for the “clock reset” model.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span> , <span class="fl">1</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
-<p>We can then compare state probabilities between the competing treatment strategies.</p>
+<p>We can then compare state probabilities between the competing
+treatment strategies.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Short function to create state probability "dataset" for plotting</span></span>
 <span><span class="va">summarize_stprobs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">stateprobs</span><span class="op">)</span><span class="op">{</span></span>
@@ -390,7 +484,8 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="mstate_files/figure-html/stprobs_by_strategy_plot-1.png" width="672"></p>
-<p>Next, we compare the state probabilities from the “clock reset” and “clock forward” models.</p>
+<p>Next, we compare the state probabilities from the “clock reset” and
+“clock forward” models.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">econmod_cf</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span> , <span class="fl">1</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="va">stprobs_cf</span> <span class="op">&lt;-</span> <span class="fu">summarize_stprobs</span><span class="op">(</span><span class="va">econmod_cf</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">)</span></span>
@@ -405,23 +500,34 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_color_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Clock"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="mstate_files/figure-html/stprobs_by_timescale_plot-1.png" width="672"></p>
-<p>The probabilities are generally quite similar, implying that the choice of timescale has a small impact on the results. This is not unexpected given that patients spend considerably more time in the healthy state and the predicted hazard rates are very similar in the healthy state.</p>
+<p>The probabilities are generally quite similar, implying that the
+choice of timescale has a small impact on the results. This is not
+unexpected given that patients spend considerably more time in the
+healthy state and the predicted hazard rates are very similar in the
+healthy state.</p>
 </div>
 <div class="section level4">
 <h4 id="costs-and-qalys">Costs and QALYs<a class="anchor" aria-label="anchor" href="#costs-and-qalys"></a>
 </h4>
-<p>QALYs (and life-years) are simulated using <code>$sim_qalys()</code>. By default, mean QALYs are computed by treatment strategy, health state, and PSA sample (the <code>by_patient</code> option can be used to compute QALYs at the patient level). Here, we used the “clock reset” model to compute both undiscounted QALYs (<code>dr = 0</code>) and QALYs discounted at 3%.</p>
+<p>QALYs (and life-years) are simulated using <code>$sim_qalys()</code>.
+By default, mean QALYs are computed by treatment strategy, health state,
+and PSA sample (the <code>by_patient</code> option can be used to
+compute QALYs at the patient level). Here, we used the “clock reset”
+model to compute both undiscounted QALYs (<code>dr = 0</code>) and QALYs
+discounted at 3%.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.03</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    sample strategy_id grp_id state_id dr     qalys       lys</span></span>
-<span><span class="co">## 1:      1           1      1        1  0 3.1743501 5.7719299</span></span>
-<span><span class="co">## 2:      1           1      1        2  0 0.8575570 1.2072428</span></span>
-<span><span class="co">## 3:      1           2      1        1  0 4.0141141 7.2988754</span></span>
-<span><span class="co">## 4:      1           2      1        2  0 0.6503553 0.9155504</span></span>
-<span><span class="co">## 5:      2           1      1        1  0 3.7488752 6.3809891</span></span>
-<span><span class="co">## 6:      2           1      1        2  0 1.6546437 1.7117500</span></span></code></pre>
-<p>Let’s compute means (across the PSA samples) by treatment strategy and health state to see how much each health state contributes to total QALYs.</p>
+<pre><code><span><span class="co">##    sample strategy_id grp_id state_id dr    qalys      lys</span></span>
+<span><span class="co">## 1:      1           1      1        1  0 3.219877 5.634062</span></span>
+<span><span class="co">## 2:      1           1      1        2  0 1.036440 1.163553</span></span>
+<span><span class="co">## 3:      1           2      1        1  0 4.783149 8.369437</span></span>
+<span><span class="co">## 4:      1           2      1        2  0 1.037419 1.164652</span></span>
+<span><span class="co">## 5:      2           1      1        1  0 3.337333 5.107479</span></span>
+<span><span class="co">## 6:      2           1      1        2  0 1.190056 1.226265</span></span></code></pre>
+<p>Let’s compute means (across the PSA samples) by treatment strategy
+and health state to see how much each health state contributes to total
+QALYs.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">qalys_summary</span> <span class="op">&lt;-</span> <span class="va">econmod_cr</span><span class="op">$</span><span class="va">qalys_</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">qalys</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy_id"</span>, <span class="st">"state_id"</span>, <span class="st">"dr"</span><span class="op">)</span><span class="op">]</span></span>
@@ -433,33 +539,42 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_fill_discrete</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Strategy"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Mean QALYs"</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="mstate_files/figure-html/qalys_plot-1.png" width="576"></p>
-<p>Costs are computed in the same way as QALYs, except that they are computed by category. We use the “clock reset” model and a 3% discount rate.</p>
+<p>Costs are computed in the same way as QALYs, except that they are
+computed by category. We use the “clock reset” model and a 3% discount
+rate.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id grp_id state_id   dr category     costs</span></span>
-<span><span class="co">## 1:      1           1      1        1 0.03     Drug 23547.502</span></span>
-<span><span class="co">## 2:      1           1      1        2 0.03     Drug  4959.158</span></span>
-<span><span class="co">## 3:      1           2      1        1 0.03     Drug 58085.000</span></span>
-<span><span class="co">## 4:      1           2      1        2 0.03     Drug  7244.177</span></span>
-<span><span class="co">## 5:      2           1      1        1 0.03     Drug 25696.178</span></span>
-<span><span class="co">## 6:      2           1      1        2 0.03     Drug  6774.168</span></span></code></pre>
+<span><span class="co">## 1:      1           1      1        1 0.03     Drug 23099.805</span></span>
+<span><span class="co">## 2:      1           1      1        2 0.03     Drug  4714.955</span></span>
+<span><span class="co">## 3:      1           2      1        1 0.03     Drug 64561.578</span></span>
+<span><span class="co">## 4:      1           2      1        2 0.03     Drug  9174.500</span></span>
+<span><span class="co">## 5:      2           1      1        1 0.03     Drug 21273.902</span></span>
+<span><span class="co">## 6:      2           1      1        2 0.03     Drug  5075.931</span></span></code></pre>
 </div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="decision-analysis">Decision analysis<a class="anchor" aria-label="anchor" href="#decision-analysis"></a>
 </h2>
-<p>Once costs and QALYs are computed a cost-effectiveness analysis can be performed. The <code>$summarize()</code> method creates a <code><a href="../reference/ce.html">hesim::ce</a></code> object with mean costs and QALYs computed for each PSA sample and summary results are produced with <code><a href="../reference/summary.ce.html">summary.ce()</a></code>. The <code><a href="../reference/cea.html">cea()</a></code> and <code><a href="../reference/cea.html">cea_pw()</a></code> can then be used for cost-effectiveness analysis as described in the <a href="cea.html">cost-effectiveness analysis</a> vignette.</p>
+<p>Once costs and QALYs are computed a cost-effectiveness analysis can
+be performed. The <code>$summarize()</code> method creates a
+<code><a href="../reference/ce.html">hesim::ce</a></code> object with mean costs and QALYs computed for
+each PSA sample and summary results are produced with
+<code><a href="../reference/summary.ce.html">summary.ce()</a></code>. The <code><a href="../reference/cea.html">cea()</a></code> and
+<code><a href="../reference/cea.html">cea_pw()</a></code> can then be used for cost-effectiveness analysis
+as described in the <a href="cea.html">cost-effectiveness analysis</a>
+vignette.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ce_sim</span> <span class="op">&lt;-</span> <span class="va">econmod_cr</span><span class="op">$</span><span class="fu">summarize</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Discount rate        Outcome                     SOC                     New</span></span>
-<span><span class="co">## 1:          0.00          QALYs       5.05 (2.54, 7.35)       6.01 (2.89, 9.33)</span></span>
-<span><span class="co">## 2:          0.03          QALYs       4.08 (2.13, 5.82)       4.66 (2.28, 6.98)</span></span>
-<span><span class="co">## 3:          0.03    Costs: Drug 29,979 (25,076, 34,724) 69,847 (58,062, 82,140)</span></span>
-<span><span class="co">## 4:          0.03 Costs: Medical    6,691 (5,634, 7,701)    7,512 (6,251, 8,805)</span></span>
-<span><span class="co">## 5:          0.03   Costs: total 36,670 (30,747, 42,255) 77,359 (64,442, 91,074)</span></span></code></pre>
+<span><span class="co">## 1:          0.00          QALYs       5.04 (2.73, 7.40)       6.03 (3.06, 9.13)</span></span>
+<span><span class="co">## 2:          0.03          QALYs       4.07 (2.21, 5.85)       4.67 (2.35, 6.86)</span></span>
+<span><span class="co">## 3:          0.03    Costs: Drug 29,883 (25,144, 34,675) 69,944 (58,895, 82,299)</span></span>
+<span><span class="co">## 4:          0.03 Costs: Medical    6,667 (5,646, 7,762)    7,520 (6,377, 8,782)</span></span>
+<span><span class="co">## 5:          0.03   Costs: total 36,550 (30,797, 42,416) 77,464 (65,298, 91,103)</span></span></code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cea_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea</a></span><span class="op">(</span><span class="va">ce_sim</span>, dr_qalys <span class="op">=</span> <span class="fl">.03</span>, dr_costs <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></span>
 <span><span class="va">cea_pw_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce_sim</span>, comparator <span class="op">=</span> <span class="fl">1</span>, dr_qalys <span class="op">=</span> <span class="fl">.03</span>, dr_costs <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></span></code></pre></div>
@@ -483,7 +598,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
