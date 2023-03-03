@@ -36,7 +36,7 @@ create_IndivCtstmTrans(object, ...)
   trans_mat,
   clock = c("reset", "forward", "mix", "mixt"),
   reset_states = NULL,
-  reset_transitions = NULL,
+  transition_types = NULL,
   ...
 )
 
@@ -46,7 +46,7 @@ create_IndivCtstmTrans(object, ...)
   trans_mat,
   clock = c("reset", "forward", "mix", "mixt"),
   reset_states = NULL,
-  reset_transitions = NULL,
+  transition_types = NULL,
   ...
 )
 }
@@ -63,7 +63,7 @@ multi-state model or parameters of a multi-state model.}
 multi-state model in the format from the \code{\link[mstate:mstate-package]{mstate}} package. See \code{\link{IndivCtstmTrans}}.}
 
 \item{clock}{"reset" for a clock-reset model, "forward" for a clock-forward model,
-"mix" for a mixture by state, and "mixt" for a mixture by transition.
+"mix" for a mixture by state, and "mixt" for a mixture by transition
 of clock-reset and clock-forward models. See the field \code{clock} in \code{\link{IndivCtstmTrans}}.}
 
 \item{n}{Number of random observations to draw. Not used if \code{uncertainty = "none"}.}
@@ -75,8 +75,8 @@ distribution. If \code{"none"}, then only point estimates are returned.}
 \item{reset_states}{A vector denoting the states in which time resets. See the field
 \code{reset_states} in \code{\link{IndivCtstmTrans}}.}
 
-\item{reset_transitions}{A vector denoting the transitions in which time resets. See the field
-\code{reset_transitions} in \code{\link{IndivCtstmTrans}}.}
+\item{transition_types}{A vector denoting the type for each transition. See the field
+\code{transition_types} in \code{\link{IndivCtstmTrans}}.}
 }
 \value{
 Returns an \code{\link{R6Class}} object of class \code{\link{IndivCtstmTrans}}.

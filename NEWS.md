@@ -1,3 +1,6 @@
+## hesim 0.5.3.900
+* For individual CTSTMs, add experimental support for `clock="mixt"` option with a `transition_types` argument for transition-specific clocks (#96).
+
 ## hesim 0.5.3
 Minor updates to the `.Rd` files to fix problems with the HTML version of the manual identified with the CRAN package checks.
 

@@ -90,17 +90,18 @@ By default, it is set to the final absorbing state (i.e., a row in \code{trans_m
 is a semi-Markov model in which transition rates depend on time since entering a state.
 A clock-forward model is a Markov model in which transition rates depend on time
 since entering the initial state. If \code{"mix"} is used, then
-\code{reset_states} must be specified. If \code{"mixt"} is used, then \code{reset_transitions} must
-be specified}
+\code{reset_states} must be specified. If \code{"mixt"} is used, then \code{transition_types} must
+be specified.}
 
 \item{\code{reset_states}}{A vector denoting the states in which time resets.
 Hazard functions are always a function of elapsed time since either the
 start of the model or from when time was previously reset. Only used if
 \code{clock = "mix"}.}
 
-\item{\code{reset_transitions}}{A vector denoting the transitions in which time resets.
-Hazard functions are always a function of elapsed time since either the
-start of the model or from when time was previously reset. Only used if
+\item{\code{transition_types}}{A vector denoting the type of transition.
+The vector is of the same length as the number of transitions
+and takes values \code{"reset"}, \code{"time"} or \code{"age"} for hazards that are functions of
+reset time, time since study entry or age, respectively. Only used if
 \code{clock = "mixt"}.}
 }
 \if{html}{\out{</div>}}
@@ -138,7 +139,7 @@ Create a new \code{IndivCtstmTrans} object.
   death_state = NULL,
   clock = c("reset", "forward", "mix", "mixt"),
   reset_states = NULL,
-  reset_transitions = NULL
+  transition_types = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -161,7 +162,7 @@ Create a new \code{IndivCtstmTrans} object.
 
 \item{\code{reset_states}}{The \code{reset_states} field.}
 
-\item{\code{reset_transitions}}{The \code{reset_transitions} field.}
+\item{\code{transition_types}}{The \code{transition_types} field.}
 }
 \if{html}{\out{</div>}}
 }
