@@ -87,7 +87,6 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
   }
   
   # Simulate
-  print(match(trans_model$transition_types, c("reset","time","age")) - 1L)
   disprog <- C_ctstm_sim_disease(trans_model, trans_model$start_state - 1, 
                                  trans_model$start_age,
                                  rep(0, trans_model$input_data$n_patients), # Start time is always 0

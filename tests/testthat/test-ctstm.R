@@ -588,7 +588,7 @@ test_that("IndivCtstm - joint", {
   # Simulate disease progression
   expect_error(ictstm$sim_disease()$disprog_, NA)
   disprog <- ictstm$sim_disease()$disprog_
-  expect_error(ictstm$sim_disease(progress = 1), NA)
+  expect_error(ictstm$sim_disease(progress = 1), NA) # outputs sample = 1 and sample = 2
   expect_true(is.data.table(disprog))
   
   # Simulate state probabilities
@@ -604,7 +604,7 @@ test_that("IndivCtstm - joint", {
   disprog <- ictstm$sim_disease()$disprog_
   expect_true(is.data.table(disprog))
   
-  # Mixture
+  # Mixture - states
   params <- create_params(msfit, n = 2)
   msfit_data <- cbind(msfit_data, model.matrix(~factor(trans), msfit_data))
   mstate_mix <- create_IndivCtstmTrans(params, input_data = msfit_data, 
@@ -615,13 +615,29 @@ test_that("IndivCtstm - joint", {
   disprog <- ictstm$sim_disease()$disprog_
   expect_true(is.data.table(disprog))
 
-  # Mixture
-  mstate_mix2 <- create_IndivCtstmTrans(params, input_data = msfit_data, 
+  # Mixture - transitions
+  mstate_mixt <- create_IndivCtstmTrans(params, input_data = msfit_data,
                                         trans_mat = tmat_ebmt4,
                                         clock = "mixt",
-                                        transition_types = rep("r", max(tmat_ebmt4, na.rm=TRUE)))
-  expect_true(inherits(mstate_mix2, "IndivCtstmTrans"))
-  ictstm <- IndivCtstm$new(trans_model = mstate_mix2)
+                                        transition_types = rep("reset", max(tmat_ebmt4, na.rm=TRUE)))
+  expect_true(inherits(mstate_mixt, "IndivCtstmTrans"))
+  ictstm <- IndivCtstm$new(trans_model = mstate_mixt)
+  disprog <- ictstm$sim_disease()$disprog_
+  expect_true(is.data.table(disprog))
+  mstate_mixt <- create_IndivCtstmTrans(params, input_data = msfit_data,
+                                        trans_mat = tmat_ebmt4,
+                                        clock = "mixt",
+                                        transition_types = rep("age", max(tmat_ebmt4, na.rm=TRUE)))
+  expect_true(inherits(mstate_mixt, "IndivCtstmTrans"))
+  ictstm <- IndivCtstm$new(trans_model = mstate_mixt)
+  disprog <- ictstm$sim_disease()$disprog_
+  expect_true(is.data.table(disprog))
+  mstate_mixt <- create_IndivCtstmTrans(params, input_data = msfit_data,
+                                        trans_mat = tmat_ebmt4,
+                                        clock = "mixt",
+                                        transition_types = rep("time", max(tmat_ebmt4, na.rm=TRUE)))
+  expect_true(inherits(mstate_mixt, "IndivCtstmTrans"))
+  ictstm <- IndivCtstm$new(trans_model = mstate_mixt)
   disprog <- ictstm$sim_disease()$disprog_
   expect_true(is.data.table(disprog))
 })
