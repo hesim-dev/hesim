@@ -1,10 +1,11 @@
 Package: hesim
 Type: Package
 Title: Health Economic Simulation Modeling and Decision Analysis
-Version: 0.5.3
+Version: 0.5.3.9000
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", role = c("aut", "cre")),
     person("Jeroen P.", "Jansen", role = "aut"),
+    person("Mark", "Clements", role = "aut"),
     person(given = "R Core Team", role = "ctb",
     comment="hesim uses some slightly modified C functions from base R")
     )

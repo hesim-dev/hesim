@@ -22,7 +22,10 @@ public:
   double max_t_;
   std::string clock_;
   std::vector<int> reset_states_;
+  std::vector<int> transition_types_;
   double clockmix_time_;
+
+  enum TransitionType {tt_reset, tt_time, tt_age};
   
 /** 
    * The constructor.
@@ -30,7 +33,7 @@ public:
    */  
   patient(transmod * transmod, double age, double time, int state,
           double max_age, double max_t, int death_state, std::string clock,
-          std::vector<int> reset_states) 
+          std::vector<int> reset_states, std::vector<int> transition_types)
     : transmod_(transmod) {
     age_ = age;
     time_ = time;
@@ -40,6 +43,7 @@ public:
     death_state_ = death_state;
     clock_ = clock;
     reset_states_ = reset_states;
+    transition_types_ = transition_types;
   }
   
   /** 
@@ -75,6 +79,14 @@ public:
         random_times[i] = transmod_->random(trans_ids[i], sample); 
       } else if (clock_ == "forward"){
         random_times[i] = transmod_->trandom(trans_ids[i], sample, time_) - time_;
+      } else if (clock_ == "mixt"){
+          if (transition_types_[trans_ids[i]] == tt_reset){
+            random_times[i] = transmod_->random(trans_ids[i], sample); 
+          } else if (transition_types_[trans_ids[i]] == tt_age){
+            random_times[i] = transmod_->trandom(trans_ids[i], sample, age_) - age_;
+          } else { // transition_types_[trans_ids[i]] == tt_time
+            random_times[i] = transmod_->trandom(trans_ids[i], sample, time_) - time_;
+          }
       } else { // clock == "mix" case
           if (is_reset_state()){
             random_times[i] = transmod_->random(trans_ids[i], sample); 

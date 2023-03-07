@@ -85,16 +85,24 @@ in \code{sim_disease} as patients transition to this state upon reaching maximum
 By default, it is set to the final absorbing state (i.e., a row in \code{trans_mat} with all NAs).}
 
 \item{\code{clock}}{"reset" for a clock-reset model, "forward" for a clock-forward model,
-and "mix" for a mixture of clock-reset and clock-forward models. A clock-reset model
+"mix" for a mixture of clock-reset and clock-forward models by state, and
+"mixt" for a mixture of clock-reset and clock-forward models by transition. A clock-reset model
 is a semi-Markov model in which transition rates depend on time since entering a state.
 A clock-forward model is a Markov model in which transition rates depend on time
 since entering the initial state. If \code{"mix"} is used, then
-\code{reset_states} must be specified.}
+\code{reset_states} must be specified. If \code{"mixt"} is used, then \code{transition_types} must
+be specified.}
 
 \item{\code{reset_states}}{A vector denoting the states in which time resets.
 Hazard functions are always a function of elapsed time since either the
 start of the model or from when time was previously reset. Only used if
 \code{clock = "mix"}.}
+
+\item{\code{transition_types}}{A vector denoting the type of transition.
+The vector is of the same length as the number of transitions
+and takes values \code{"reset"}, \code{"time"} or \code{"age"} for hazards that are functions of
+reset time, time since study entry or age, respectively. Only used if
+\code{clock = "mixt"}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -129,8 +137,9 @@ Create a new \code{IndivCtstmTrans} object.
   start_state = 1,
   start_age = 38,
   death_state = NULL,
-  clock = c("reset", "forward", "mix"),
-  reset_states = NULL
+  clock = c("reset", "forward", "mix", "mixt"),
+  reset_states = NULL,
+  transition_types = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -152,6 +161,8 @@ Create a new \code{IndivCtstmTrans} object.
 \item{\code{clock}}{The \code{clock} field.}
 
 \item{\code{reset_states}}{The \code{reset_states} field.}
+
+\item{\code{transition_types}}{The \code{transition_types} field.}
 }
 \if{html}{\out{</div>}}
 }

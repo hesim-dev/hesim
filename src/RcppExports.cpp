@@ -187,8 +187,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // C_ctstm_sim_disease
-Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, std::vector<int> start_state, std::vector<double> start_age, std::vector<double> start_time, int death_state, std::string clock, std::vector<int> reset_states, double max_t, double max_age, int progress);
-RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP start_timeSEXP, SEXP death_stateSEXP, SEXP clockSEXP, SEXP reset_statesSEXP, SEXP max_tSEXP, SEXP max_ageSEXP, SEXP progressSEXP) {
+Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans, std::vector<int> start_state, std::vector<double> start_age, std::vector<double> start_time, int death_state, std::string clock, std::vector<int> reset_states, std::vector<int> transition_types, double max_t, double max_age, int progress);
+RcppExport SEXP _hesim_C_ctstm_sim_disease(SEXP R_CtstmTransSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP start_timeSEXP, SEXP death_stateSEXP, SEXP clockSEXP, SEXP reset_statesSEXP, SEXP transition_typesSEXP, SEXP max_tSEXP, SEXP max_ageSEXP, SEXP progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -199,10 +199,11 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type death_state(death_stateSEXP);
     Rcpp::traits::input_parameter< std::string >::type clock(clockSEXP);
     Rcpp::traits::input_parameter< std::vector<int> >::type reset_states(reset_statesSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type transition_types(transition_typesSEXP);
     Rcpp::traits::input_parameter< double >::type max_t(max_tSEXP);
     Rcpp::traits::input_parameter< double >::type max_age(max_ageSEXP);
     Rcpp::traits::input_parameter< int >::type progress(progressSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_ctstm_sim_disease(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, max_t, max_age, progress));
+    rcpp_result_gen = Rcpp::wrap(C_ctstm_sim_disease(R_CtstmTrans, start_state, start_age, start_time, death_state, clock, reset_states, transition_types, max_t, max_age, progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -656,7 +657,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_rdirichlet_mat", (DL_FUNC) &_hesim_C_rdirichlet_mat, 2},
     {"_hesim_C_normalize_transprobs", (DL_FUNC) &_hesim_C_normalize_transprobs, 1},
     {"_hesim_C_cohort_dtstm_sim_stateprobs", (DL_FUNC) &_hesim_C_cohort_dtstm_sim_stateprobs, 2},
-    {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 10},
+    {"_hesim_C_ctstm_sim_disease", (DL_FUNC) &_hesim_C_ctstm_sim_disease, 11},
     {"_hesim_C_ctstm_indiv_stateprobs", (DL_FUNC) &_hesim_C_ctstm_indiv_stateprobs, 11},
     {"_hesim_C_indiv_ctstm_wlos", (DL_FUNC) &_hesim_C_indiv_ctstm_wlos, 7},
     {"_hesim_C_indiv_ctstm_starting", (DL_FUNC) &_hesim_C_indiv_ctstm_starting, 6},

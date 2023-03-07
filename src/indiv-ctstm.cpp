@@ -24,6 +24,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
                                     int death_state,
                                     std::string clock, 
                                     std::vector<int> reset_states,
+                                    std::vector<int> transition_types,
                                     double max_t, double max_age,
                                     int progress){
  
@@ -37,7 +38,7 @@ Rcpp::DataFrame C_ctstm_sim_disease(Rcpp::Environment R_CtstmTrans,
   int n_patients = transmod->get_n_patients();
   hesim::ctstm::patient patient(transmod.get(), start_age[0], start_time[0],
                                 start_state[0], max_age, max_t, death_state, 
-                                clock, reset_states); 
+                                clock, reset_states, transition_types);
   hesim::ctstm::disease_prog disease_prog;
   int N = n_samples * n_strategies * n_patients;
   disease_prog.reserve(N);
