@@ -616,30 +616,19 @@ test_that("IndivCtstm - joint", {
   expect_true(is.data.table(disprog))
 
   # Mixture - transitions
-  mstate_mixt <- create_IndivCtstmTrans(params, input_data = msfit_data,
-                                        trans_mat = tmat_ebmt4,
-                                        clock = "mixt",
-                                        transition_types = rep("reset", max(tmat_ebmt4, na.rm=TRUE)))
-  expect_true(inherits(mstate_mixt, "IndivCtstmTrans"))
-  ictstm <- IndivCtstm$new(trans_model = mstate_mixt)
-  disprog <- ictstm$sim_disease()$disprog_
-  expect_true(is.data.table(disprog))
-  mstate_mixt <- create_IndivCtstmTrans(params, input_data = msfit_data,
-                                        trans_mat = tmat_ebmt4,
-                                        clock = "mixt",
-                                        transition_types = rep("age", max(tmat_ebmt4, na.rm=TRUE)))
-  expect_true(inherits(mstate_mixt, "IndivCtstmTrans"))
-  ictstm <- IndivCtstm$new(trans_model = mstate_mixt)
-  disprog <- ictstm$sim_disease()$disprog_
-  expect_true(is.data.table(disprog))
-  mstate_mixt <- create_IndivCtstmTrans(params, input_data = msfit_data,
-                                        trans_mat = tmat_ebmt4,
-                                        clock = "mixt",
-                                        transition_types = rep("time", max(tmat_ebmt4, na.rm=TRUE)))
-  expect_true(inherits(mstate_mixt, "IndivCtstmTrans"))
-  ictstm <- IndivCtstm$new(trans_model = mstate_mixt)
-  disprog <- ictstm$sim_disease()$disprog_
-  expect_true(is.data.table(disprog))
+  test_mixt <- function(trans_type) {
+    mstate_mixt <- create_IndivCtstmTrans(params, input_data = msfit_data,
+                                          trans_mat = tmat_ebmt4,
+                                          clock = "mixt",
+                                          transition_types = trans_type)
+    expect_true(inherits(mstate_mixt, "IndivCtstmTrans"))
+    ictstm <- IndivCtstm$new(trans_model = mstate_mixt)
+    disprog <- ictstm$sim_disease()$disprog_
+    expect_true(is.data.table(disprog))
+  }
+  test_mixt(rep("reset", max(tmat_ebmt4, na.rm=TRUE)))
+  test_mixt(rep("age", max(tmat_ebmt4, na.rm=TRUE)))
+  test_mixt(rep("time", max(tmat_ebmt4, na.rm=TRUE)))
 })
 
 ## With fractional polynomial or survival spline from parameters object
