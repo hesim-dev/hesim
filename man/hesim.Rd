@@ -3,8 +3,33 @@
 \docType{package}
 \name{hesim}
 \alias{hesim}
-\title{\code{hesim}: Health Economic Simulation Modeling and Decision Analysis}
+\alias{hesim-package}
+\title{hesim: Health Economic Simulation Modeling and Decision Analysis}
 \description{
 To learn more about \code{hesim} visit the \href{https://hesim-dev.github.io/hesim/}{website}.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://hesim-dev.github.io/hesim/}
+  \item \url{https://github.com/hesim-dev/hesim}
+  \item Report bugs at \url{https://github.com/hesim-dev/hesim/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Devin Incerti \email{devin.incerti@gmail.com}
+
+Authors:
+\itemize{
+  \item Jeroen P. Jansen
+  \item Mark Clements
+}
+
+Other contributors:
+\itemize{
+  \item R Core Team (hesim uses some slightly modified C functions from base R) [contributor]
+}
+
 }
 \keyword{internal}
