@@ -131,7 +131,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 data-toc-skip class="date">2023-03-07</h4>
+            <h4 data-toc-skip class="date">2024-01-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/markov-inhomogeneous-cohort.Rmd" class="external-link"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
@@ -174,7 +174,7 @@ defined by age and sex.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com" class="external-link">"data.table"</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Treatment strategies</span></span>
-<span><span class="va">strategies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
+<span><span class="va">strategies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
 <span>                         strategy_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Standard prosthesis"</span>, <span class="st">"New prosthesis"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Patients</span></span>
@@ -183,14 +183,14 @@ defined by age and sex.</p>
 <span><span class="va">sex_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.65</span>, <span class="fl">.35</span><span class="op">)</span></span>
 <span><span class="va">weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">age_weights</span>, times <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">*</span> </span>
 <span>           <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">sex_weights</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ages</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,</span>
+<span><span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,</span>
 <span>                       grp_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,</span>
 <span>                       sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Female"</span>, <span class="st">"Male"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ages</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                       age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">ages</span>, times <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>                       patient_wt <span class="op">=</span> <span class="va">weights</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Health states</span></span>
-<span><span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span><span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
 <span>                     state_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Primary THR"</span>, <span class="st">"Successful primary"</span>,</span>
 <span>                                    <span class="st">"Revision THR"</span>, <span class="st">"Successful revision"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -700,10 +700,10 @@ consistent with those from the textbook.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">[</span><span class="va">grp</span> <span class="op">==</span> <span class="fl">2</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Discount rate           Outcome  Standard prosthesis       New prosthesis</span></span>
-<span><span class="co">## 1:         0.015             QALYs 14.63 (13.46, 15.61) 14.68 (13.50, 15.66)</span></span>
+<span><span class="co">## 1:         0.015             QALYs 14.60 (13.37, 15.58) 14.64 (13.39, 15.63)</span></span>
 <span><span class="co">## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)</span></span>
-<span><span class="co">## 3:         0.060    Costs: medical        116 (49, 224)          33 (10, 86)</span></span>
-<span><span class="co">## 4:         0.060      Costs: total       510 (443, 618)       612 (589, 665)</span></span></code></pre>
+<span><span class="co">## 3:         0.060    Costs: medical        120 (53, 227)           33 (9, 77)</span></span>
+<span><span class="co">## 4:         0.060      Costs: total       514 (447, 621)       612 (588, 656)</span></span></code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each
 subgroup. There is considerable variation which is not unexpected since
 the the revision rate for prostheses (<em>rr</em>) depends on
@@ -712,27 +712,27 @@ covariates.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span>pivot_from <span class="op">=</span> <span class="st">"outcome"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     Group Strategy Incremental QALYs Incremental costs       Incremental NMB</span></span>
-<span><span class="co">##  1:     1        2 0.07 (0.03, 0.13)     71 (-41, 140)  3,467 (1,204, 6,463)</span></span>
-<span><span class="co">##  2:     2        2 0.04 (0.02, 0.08)     103 (22, 153)    2,088 (691, 4,008)</span></span>
-<span><span class="co">##  3:     3        2 0.03 (0.01, 0.05)     128 (70, 163)    1,183 (343, 2,340)</span></span>
-<span><span class="co">##  4:     4        2 0.02 (0.01, 0.03)    147 (106, 171)      610 (120, 1,313)</span></span>
-<span><span class="co">##  5:     5        2 0.01 (0.00, 0.02)    160 (133, 176)        267 (-12, 673)</span></span>
-<span><span class="co">##  6:     6        2 0.11 (0.04, 0.20)   -24 (-223, 105) 5,700 (1,987, 10,032)</span></span>
-<span><span class="co">##  7:     7        2 0.07 (0.03, 0.12)    37 (-103, 129)  3,415 (1,200, 6,234)</span></span>
-<span><span class="co">##  8:     8        2 0.04 (0.02, 0.07)     84 (-18, 148)    1,944 (663, 3,709)</span></span>
-<span><span class="co">##  9:     9        2 0.02 (0.01, 0.04)     118 (45, 161)    1,039 (299, 2,108)</span></span>
-<span><span class="co">## 10:    10        2 0.01 (0.00, 0.02)     142 (94, 170)       506 (82, 1,136)</span></span>
+<span><span class="co">##  1:     1        2 0.07 (0.03, 0.13)     64 (-41, 138)  3,571 (1,221, 6,589)</span></span>
+<span><span class="co">##  2:     2        2 0.05 (0.02, 0.08)      98 (21, 152)    2,158 (732, 4,096)</span></span>
+<span><span class="co">##  3:     3        2 0.03 (0.01, 0.05)     124 (68, 162)    1,227 (378, 2,414)</span></span>
+<span><span class="co">##  4:     4        2 0.02 (0.01, 0.03)    144 (104, 170)      638 (140, 1,342)</span></span>
+<span><span class="co">##  5:     5        2 0.01 (0.00, 0.02)    159 (132, 175)         283 (-2, 713)</span></span>
+<span><span class="co">##  6:     6        2 0.12 (0.05, 0.21)    -35 (-219, 93) 5,832 (2,363, 10,442)</span></span>
+<span><span class="co">##  7:     7        2 0.07 (0.03, 0.13)    29 (-104, 123)  3,505 (1,404, 6,468)</span></span>
+<span><span class="co">##  8:     8        2 0.04 (0.02, 0.08)     78 (-20, 144)    2,003 (720, 3,741)</span></span>
+<span><span class="co">##  9:     9        2 0.02 (0.01, 0.04)     114 (47, 158)    1,076 (336, 2,078)</span></span>
+<span><span class="co">## 10:    10        2 0.01 (0.01, 0.02)     139 (94, 168)       528 (95, 1,107)</span></span>
 <span><span class="co">##          ICER</span></span>
-<span><span class="co">##  1:     1,002</span></span>
-<span><span class="co">##  2:     2,347</span></span>
-<span><span class="co">##  3:     4,876</span></span>
-<span><span class="co">##  4:     9,687</span></span>
-<span><span class="co">##  5:    18,760</span></span>
+<span><span class="co">##  1:       883</span></span>
+<span><span class="co">##  2:     2,170</span></span>
+<span><span class="co">##  3:     4,598</span></span>
+<span><span class="co">##  4:     9,220</span></span>
+<span><span class="co">##  5:    17,939</span></span>
 <span><span class="co">##  6: Dominates</span></span>
-<span><span class="co">##  7:       534</span></span>
-<span><span class="co">##  8:     2,062</span></span>
-<span><span class="co">##  9:     5,086</span></span>
-<span><span class="co">## 10:    10,957</span></span></code></pre>
+<span><span class="co">##  7:       409</span></span>
+<span><span class="co">##  8:     1,876</span></span>
+<span><span class="co">##  9:     4,787</span></span>
+<span><span class="co">## 10:    10,446</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="overall">Overall<a class="anchor" aria-label="anchor" href="#overall"></a>
@@ -749,10 +749,10 @@ the input data.</p>
 <span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span>digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##              Outcome       New prosthesis</span></span>
-<span><span class="co">## 1: Incremental QALYs 0.029 (0.011, 0.052)</span></span>
-<span><span class="co">## 2: Incremental costs        120 (53, 160)</span></span>
-<span><span class="co">## 3:   Incremental NMB   1,307 (401, 2,570)</span></span>
-<span><span class="co">## 4:              ICER                4,192</span></span></code></pre>
+<span><span class="co">## 1: Incremental QALYs 0.029 (0.012, 0.054)</span></span>
+<span><span class="co">## 2: Incremental costs        116 (51, 158)</span></span>
+<span><span class="co">## 3:   Incremental NMB   1,352 (451, 2,624)</span></span>
+<span><span class="co">## 4:              ICER                3,946</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -963,12 +963,12 @@ by <code><a href="../reference/tpmatrix_id.html">tpmatrix_id()</a></code>.</p>
 <span>  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,   <span class="fl">0</span>, <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">tpmat</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##    s1_s1     s1_s2 s1_s3 s1_s4      s1_s5 s2_s1     s2_s2        s2_s3 s2_s4</span></span>
-<span><span class="co">## 1:     0 0.9572137     0     0 0.04278627     0 0.9927998 0.0005002101     0</span></span>
-<span><span class="co">##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4      s3_s5 s4_s1 s4_s2      s4_s3</span></span>
-<span><span class="co">## 1: 0.0067     0     0     0 0.9505137 0.04948627     0     0 0.03372468</span></span>
+<pre><code><span><span class="co">##    s1_s1     s1_s2 s1_s3 s1_s4       s1_s5 s2_s1     s2_s2        s2_s3 s2_s4</span></span>
+<span><span class="co">## 1:     0 0.9944824     0     0 0.005517599     0 0.9926293 0.0006706633     0</span></span>
+<span><span class="co">##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4     s3_s5 s4_s1 s4_s2      s4_s3</span></span>
+<span><span class="co">## 1: 0.0067     0     0     0 0.9877824 0.0122176     0     0 0.04950394</span></span>
 <span><span class="co">##        s4_s4  s4_s5 s5_s1 s5_s2 s5_s3 s5_s4 s5_s5</span></span>
-<span><span class="co">## 1: 0.9595753 0.0067     0     0     0     0     1</span></span></code></pre>
+<span><span class="co">## 1: 0.9437961 0.0067     0     0     0     0     1</span></span></code></pre>
 <p>Finally, we combine the ID variables and the transition probability
 matrices into a single object.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
@@ -991,17 +991,17 @@ very similar, as expected.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">[</span><span class="va">grp</span> <span class="op">==</span> <span class="fl">2</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Discount rate           Outcome  Standard prosthesis       New prosthesis</span></span>
-<span><span class="co">## 1:         0.015             QALYs 14.62 (13.43, 15.57) 14.66 (13.47, 15.62)</span></span>
+<span><span class="co">## 1:         0.015             QALYs 14.61 (13.37, 15.61) 14.66 (13.39, 15.67)</span></span>
 <span><span class="co">## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)</span></span>
-<span><span class="co">## 3:         0.060    Costs: medical        116 (48, 220)          32 (10, 72)</span></span>
-<span><span class="co">## 4:         0.060      Costs: total       510 (442, 614)       611 (589, 651)</span></span></code></pre>
-<p>However, time to construct the transition model was 3.2 times faster.
+<span><span class="co">## 3:         0.060    Costs: medical        118 (50, 213)          34 (10, 81)</span></span>
+<span><span class="co">## 4:         0.060      Costs: total       512 (444, 607)       613 (589, 660)</span></span></code></pre>
+<p>However, time to construct the transition model was 2.5 times faster.
 Although both are quite fast (time in the table is in seconds), this
 difference would become more pronounced as the number of parameter
 samples, treatment strategies, patients, and/or distinct time periods
 increased.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
 <span>  Method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"define_model()"</span>, <span class="st">"Custom tpmatrix()"</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
 <span>    <span class="va">run_time1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>,</span>
@@ -1031,13 +1031,13 @@ elapsed
 define_model()
 </td>
 <td style="text-align:right;">
-5.896
+3.251
 </td>
 <td style="text-align:right;">
-0.400
+0.189
 </td>
 <td style="text-align:right;">
-6.297
+3.332
 </td>
 </tr>
 <tr>
@@ -1045,13 +1045,13 @@ define_model()
 Custom tpmatrix()
 </td>
 <td style="text-align:right;">
-1.860
+1.411
 </td>
 <td style="text-align:right;">
-0.276
+0.480
 </td>
 <td style="text-align:right;">
-1.975
+1.355
 </td>
 </tr>
 </tbody>

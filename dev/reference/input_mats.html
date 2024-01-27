@@ -108,7 +108,7 @@ More details are provided under "Details" below.'><meta property="og:image" cont
 for simulating a statistical model. Consists of (i) input matrices, <code>X</code>, and
 (ii) <a href="id_attributes.html">metadata</a> used to index each matrix in <code>X</code>.</p>
 <p>Once created, an <code>input_mats</code> object can be converted
-to a <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with <code><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table()</a></code>, which is a helpful way to check that
+to a <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code> with <code><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table()</a></code>, which is a helpful way to check that
 the object is as expected. The <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method summarizes the object and
 prints it to the console.</p>
 <p>More details are provided under "Details" below.</p>
@@ -118,7 +118,7 @@ prints it to the console.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">input_mats</span><span class="op">(</span><span class="va">X</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for input_mats</span></span>
-<span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for input_mats</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -134,7 +134,7 @@ list of separate models is fit (e.g., with <code><a href="flexsurvreg_list.html"
 
 <dt>...</dt>
 <dd><p>For <code>input_mats()</code>, arguments to pass to <code><a href="id_attributes.html">id_attributes()</a></code>. For <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>,
-arguments to pass to <code><a href="https://Rdatatable.gitlab.io/data.table/reference/print.data.table.html" class="external-link">print.data.table()</a></code>.</p></dd>
+arguments to pass to <code><a href="https://rdatatable.gitlab.io/data.table/reference/print.data.table.html" class="external-link">print.data.table()</a></code>.</p></dd>
 
 
 <dt>x</dt>
@@ -161,9 +161,9 @@ create the input matrices using <code><a href="create_input_mats.html">create_in
 that they are in the correct format. Users may also use <code><a href="create_input_mats.html">create_input_mats()</a></code>
 methods, but there is not usually a good reason to do so.</p>
 <p><code>as.data.table.input_mats()</code> will convert input matrices into a single
-<code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table()</a></code> that column binds the ID variables and the unique combinations
+<code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table()</a></code> that column binds the ID variables and the unique combinations
 of variables contained in the elements of <code>$X</code>. <code>print.input_mats()</code> prints
-a call to <code><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table()</a></code> and provides additional information about the
+a call to <code><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table()</a></code> and provides additional information about the
 ID variables.</p>
     </div>
     <div id="see-also">
@@ -234,7 +234,7 @@ ID variables.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> n_strategies   n_patients </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            2            3 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">survmod</span><span class="op">$</span><span class="va">input_data</span><span class="op">)</span> <span class="co"># Convert "input_mats" object to data.table</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">survmod</span><span class="op">$</span><span class="va">input_data</span><span class="op">)</span> <span class="co"># Convert "input_mats" object to data.table</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id patient_id intercept new_strategy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1          1         1            0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:           1          2         1            0</span>

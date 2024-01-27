@@ -142,7 +142,7 @@ vectors. See "Value" below for additional details.</p></dd>
     <h2>Value</h2>
     
 
-<p>If <code>unflatten = "FALSE"</code> (the default), then a <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code></p>
+<p>If <code>unflatten = "FALSE"</code> (the default), then a <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code></p>
 
 
 <p>is returned with columns for (i) the health state that is being transitioned
@@ -164,8 +164,8 @@ returned as columns.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com" class="external-link">"data.table"</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">hesim_dat</span> <span class="op">&lt;-</span>  <span class="fu"><a href="hesim_data.html">hesim_data</a></span><span class="op">(</span>strategies <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                                patients <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">hesim_dat</span> <span class="op">&lt;-</span>  <span class="fu"><a href="hesim_data.html">hesim_data</a></span><span class="op">(</span>strategies <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                patients <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">input_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="expand.html">expand</a></span><span class="op">(</span><span class="va">hesim_dat</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategies"</span>, <span class="st">"patients"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summarize across all rows in "input_data"</span></span></span>

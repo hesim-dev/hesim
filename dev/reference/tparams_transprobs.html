@@ -267,7 +267,7 @@ also be summarized (across parameter samples) using
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "sample"         "n_samples"      "grp_id"        </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert to data.table in wide format</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tprobs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tprobs</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id patient_id time_id time_start time_stop prob_s1_s1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1          1       1          0       Inf  0.3573288</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1          2       1          0       Inf  0.3976430</span>
@@ -296,7 +296,7 @@ also be summarized (across parameter samples) using
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12:  0.7368562          0          1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert to data.table in long format</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tprobs</span>, long <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tprobs</span>, long <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id patient_id time_id time_start time_stop from to</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1          1       1          0       Inf   s1 s1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1          1       1          0       Inf   s1 s2</span>
