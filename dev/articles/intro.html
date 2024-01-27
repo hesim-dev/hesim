@@ -288,17 +288,17 @@ sex.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## $patients</span></span>
 <span><span class="co">##       patient_id      age female grp_id grp_name</span></span>
-<span><span class="co">##    1:          1 42.31556      0      2     Male</span></span>
-<span><span class="co">##    2:          2 54.03126      0      2     Male</span></span>
-<span><span class="co">##    3:          3 56.26759      0      2     Male</span></span>
-<span><span class="co">##    4:          4 37.02676      1      1   Female</span></span>
-<span><span class="co">##    5:          5 48.87340      0      2     Male</span></span>
+<span><span class="co">##    1:          1 53.92275      0      2     Male</span></span>
+<span><span class="co">##    2:          2 43.81230      1      1   Female</span></span>
+<span><span class="co">##    3:          3 44.36132      0      2     Male</span></span>
+<span><span class="co">##    4:          4 46.29523      0      2     Male</span></span>
+<span><span class="co">##    5:          5 41.48857      1      1   Female</span></span>
 <span><span class="co">##   ---                                           </span></span>
-<span><span class="co">##  996:        996 24.65024      1      1   Female</span></span>
-<span><span class="co">##  997:        997 36.82875      1      1   Female</span></span>
-<span><span class="co">##  998:        998 44.46771      0      2     Male</span></span>
-<span><span class="co">##  999:        999 32.32680      0      2     Male</span></span>
-<span><span class="co">## 1000:       1000 43.02593      1      1   Female</span></span>
+<span><span class="co">##  996:        996 36.81444      1      1   Female</span></span>
+<span><span class="co">##  997:        997 33.29717      1      1   Female</span></span>
+<span><span class="co">##  998:        998 47.33775      1      1   Female</span></span>
+<span><span class="co">##  999:        999 49.01875      0      2     Male</span></span>
+<span><span class="co">## 1000:       1000 36.11746      0      2     Male</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $states</span></span>
 <span><span class="co">##    state_id state_name</span></span>
@@ -655,19 +655,19 @@ expanding an object of class <code>hesim_data</code> using
 <span>                        by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategies"</span>, <span class="st">"patients"</span>, <span class="st">"transitions"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod_data</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    strategy_id patient_id transition_id strategy_name      age female grp_id</span></span>
-<span><span class="co">## 1:           1          1             1           SOC 42.31556      0      2</span></span>
-<span><span class="co">## 2:           1          1             2           SOC 42.31556      0      2</span></span>
-<span><span class="co">## 3:           1          1             3           SOC 42.31556      0      2</span></span>
-<span><span class="co">## 4:           1          1             4           SOC 42.31556      0      2</span></span>
-<span><span class="co">## 5:           1          2             1           SOC 54.03126      0      2</span></span>
-<span><span class="co">## 6:           1          2             2           SOC 54.03126      0      2</span></span>
+<span><span class="co">## 1:           1          1             1           SOC 53.92275      0      2</span></span>
+<span><span class="co">## 2:           1          1             2           SOC 53.92275      0      2</span></span>
+<span><span class="co">## 3:           1          1             3           SOC 53.92275      0      2</span></span>
+<span><span class="co">## 4:           1          1             4           SOC 53.92275      0      2</span></span>
+<span><span class="co">## 5:           1          2             1           SOC 43.81230      1      1</span></span>
+<span><span class="co">## 6:           1          2             2           SOC 43.81230      1      1</span></span>
 <span><span class="co">##    grp_name from to from_name to_name trans</span></span>
 <span><span class="co">## 1:     Male    1  2   Stage 1 Stage 2     1</span></span>
 <span><span class="co">## 2:     Male    1  3   Stage 1   Death     2</span></span>
 <span><span class="co">## 3:     Male    2  1   Stage 2 Stage 1     3</span></span>
 <span><span class="co">## 4:     Male    2  3   Stage 2   Death     4</span></span>
-<span><span class="co">## 5:     Male    1  2   Stage 1 Stage 2     1</span></span>
-<span><span class="co">## 6:     Male    1  3   Stage 1   Death     2</span></span></code></pre>
+<span><span class="co">## 5:   Female    1  2   Stage 1 Stage 2     1</span></span>
+<span><span class="co">## 6:   Female    1  3   Stage 1   Death     2</span></span></code></pre>
 <p>The disease model is instantiated using the
 <code><a href="../reference/create_IndivCtstmTrans.html">create_IndivCtstmTrans()</a></code> generic method. Parameters for the
 PSA are, by default, drawn from the multivariate normal distribution of
@@ -795,24 +795,24 @@ progression for each patient.</p>
 <code class="sourceCode R"><span><span class="va">ictstm</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ictstm</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id patient_id grp_id from to final time_start time_stop</span></span>
-<span><span class="co">## 1:      1           1          1      2    1  2     0   0.000000  1.417242</span></span>
-<span><span class="co">## 2:      1           1          1      2    2  1     0   1.417242  1.745228</span></span>
-<span><span class="co">## 3:      1           1          1      2    1  2     0   1.745228  9.782583</span></span>
-<span><span class="co">## 4:      1           1          1      2    2  1     0   9.782583 11.851995</span></span>
-<span><span class="co">## 5:      1           1          1      2    1  2     0  11.851995 12.116104</span></span>
-<span><span class="co">## 6:      1           1          1      2    2  1     0  12.116104 12.212929</span></span></code></pre>
+<span><span class="co">## 1:      1           1          1      2    1  2     0   0.000000  1.477153</span></span>
+<span><span class="co">## 2:      1           1          1      2    2  1     0   1.477153  4.019045</span></span>
+<span><span class="co">## 3:      1           1          1      2    1  2     0   4.019045  7.367298</span></span>
+<span><span class="co">## 4:      1           1          1      2    2  1     0   7.367298 12.074896</span></span>
+<span><span class="co">## 5:      1           1          1      2    1  3     1  12.074896 12.359255</span></span>
+<span><span class="co">## 6:      1           1          2      1    1  2     0   0.000000  6.175727</span></span></code></pre>
 <p>The disease trajectory is summarized with
 <code>$sim_stateprobs()</code>.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ictstm</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ictstm</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id grp_id state_id t  prob</span></span>
-<span><span class="co">## 1:      1           1      2        1 0 0.476</span></span>
-<span><span class="co">## 2:      1           1      2        1 1 0.414</span></span>
-<span><span class="co">## 3:      1           1      2        1 2 0.358</span></span>
-<span><span class="co">## 4:      1           1      2        1 3 0.343</span></span>
-<span><span class="co">## 5:      1           1      2        1 4 0.297</span></span>
-<span><span class="co">## 6:      1           1      2        1 5 0.290</span></span></code></pre>
+<span><span class="co">## 1:      1           1      2        1 0 0.488</span></span>
+<span><span class="co">## 2:      1           1      2        1 1 0.425</span></span>
+<span><span class="co">## 3:      1           1      2        1 2 0.391</span></span>
+<span><span class="co">## 4:      1           1      2        1 3 0.358</span></span>
+<span><span class="co">## 5:      1           1      2        1 4 0.333</span></span>
+<span><span class="co">## 6:      1           1      2        1 5 0.293</span></span></code></pre>
 <p>Finally, we compute QALYs and costs (using a discount rate of 3
 percent).</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -820,23 +820,23 @@ percent).</p>
 <span><span class="va">ictstm</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ictstm</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id grp_id state_id   dr     qalys       lys</span></span>
-<span><span class="co">## 1:      1           1      1        1 0.03 1.1951457 4.6310646</span></span>
-<span><span class="co">## 2:      1           1      1        2 0.03 0.9412860 0.9562447</span></span>
-<span><span class="co">## 3:      1           1      2        1 0.03 1.2083759 4.6823304</span></span>
-<span><span class="co">## 4:      1           1      2        2 0.03 1.0504056 1.0670984</span></span>
-<span><span class="co">## 5:      1           2      1        1 0.03 1.1416041 4.4235966</span></span>
-<span><span class="co">## 6:      1           2      1        2 0.03 0.5013918 0.5093598</span></span></code></pre>
+<span><span class="co">## 1:      1           1      1        1 0.03 1.4502359 4.3481626</span></span>
+<span><span class="co">## 2:      1           1      1        2 0.03 0.7202201 0.7617632</span></span>
+<span><span class="co">## 3:      1           1      2        1 0.03 1.6132693 4.8369768</span></span>
+<span><span class="co">## 4:      1           1      2        2 0.03 0.8038155 0.8501804</span></span>
+<span><span class="co">## 5:      1           2      1        1 0.03 1.2759244 3.8255342</span></span>
+<span><span class="co">## 6:      1           2      1        2 0.03 0.4611599 0.4877601</span></span></code></pre>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Costs</span></span>
 <span><span class="va">ictstm</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ictstm</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id grp_id state_id   dr category     costs</span></span>
-<span><span class="co">## 1:      1           1      1        1 0.03    drugs 23155.323</span></span>
-<span><span class="co">## 2:      1           1      1        2 0.03    drugs  4781.223</span></span>
-<span><span class="co">## 3:      1           1      2        1 0.03    drugs 23411.652</span></span>
-<span><span class="co">## 4:      1           1      2        2 0.03    drugs  5335.492</span></span>
-<span><span class="co">## 5:      1           2      1        1 0.03    drugs 44235.966</span></span>
-<span><span class="co">## 6:      1           2      1        2 0.03    drugs  5093.598</span></span></code></pre>
+<span><span class="co">## 1:      1           1      1        1 0.03    drugs 21740.813</span></span>
+<span><span class="co">## 2:      1           1      1        2 0.03    drugs  3808.816</span></span>
+<span><span class="co">## 3:      1           1      2        1 0.03    drugs 24184.884</span></span>
+<span><span class="co">## 4:      1           1      2        2 0.03    drugs  4250.902</span></span>
+<span><span class="co">## 5:      1           2      1        1 0.03    drugs 38255.342</span></span>
+<span><span class="co">## 6:      1           2      1        2 0.03    drugs  4877.601</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -856,31 +856,31 @@ aggregated across all patients (<code>by_grp = FALSE</code>).</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ce</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $costs</span></span>
 <span><span class="co">##       category   dr sample strategy_id     costs grp_id</span></span>
-<span><span class="co">##    1:    drugs 0.03      1           1  56683.69      1</span></span>
-<span><span class="co">##    2:    drugs 0.03      1           2  99018.01      1</span></span>
-<span><span class="co">##    3:    drugs 0.03      2           1  51249.06      1</span></span>
-<span><span class="co">##    4:    drugs 0.03      2           2  93857.79      1</span></span>
-<span><span class="co">##    5:    drugs 0.03      3           1  55472.43      1</span></span>
+<span><span class="co">##    1:    drugs 0.03      1           1  53985.42      1</span></span>
+<span><span class="co">##    2:    drugs 0.03      1           2  91780.62      1</span></span>
+<span><span class="co">##    3:    drugs 0.03      2           1  53138.09      1</span></span>
+<span><span class="co">##    4:    drugs 0.03      2           2 113956.15      1</span></span>
+<span><span class="co">##    5:    drugs 0.03      3           1  52745.31      1</span></span>
 <span><span class="co">##   ---                                                  </span></span>
-<span><span class="co">## 5996:    total 0.03    998           2 117742.48      1</span></span>
-<span><span class="co">## 5997:    total 0.03    999           1  57422.08      1</span></span>
-<span><span class="co">## 5998:    total 0.03    999           2 100740.33      1</span></span>
-<span><span class="co">## 5999:    total 0.03   1000           1  65894.52      1</span></span>
-<span><span class="co">## 6000:    total 0.03   1000           2 121288.79      1</span></span>
+<span><span class="co">## 5996:    total 0.03    998           2 117964.95      1</span></span>
+<span><span class="co">## 5997:    total 0.03    999           1  63482.94      1</span></span>
+<span><span class="co">## 5998:    total 0.03    999           2 121323.32      1</span></span>
+<span><span class="co">## 5999:    total 0.03   1000           1  71174.22      1</span></span>
+<span><span class="co">## 6000:    total 0.03   1000           2 124376.31      1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $qalys</span></span>
-<span><span class="co">##         dr sample strategy_id    qalys grp_id</span></span>
-<span><span class="co">##    1: 0.03      1           1 4.395213      1</span></span>
-<span><span class="co">##    2: 0.03      1           2 3.271784      1</span></span>
-<span><span class="co">##    3: 0.03      2           1 6.565516      1</span></span>
-<span><span class="co">##    4: 0.03      2           2 5.793386      1</span></span>
-<span><span class="co">##    5: 0.03      3           1 8.080418      1</span></span>
-<span><span class="co">##   ---                                        </span></span>
-<span><span class="co">## 1996: 0.03    998           2 6.971575      1</span></span>
-<span><span class="co">## 1997: 0.03    999           1 4.326242      1</span></span>
-<span><span class="co">## 1998: 0.03    999           2 4.027269      1</span></span>
-<span><span class="co">## 1999: 0.03   1000           1 8.890355      1</span></span>
-<span><span class="co">## 2000: 0.03   1000           2 9.151049      1</span></span>
+<span><span class="co">##         dr sample strategy_id     qalys grp_id</span></span>
+<span><span class="co">##    1: 0.03      1           1  4.587541      1</span></span>
+<span><span class="co">##    2: 0.03      1           2  3.719143      1</span></span>
+<span><span class="co">##    3: 0.03      2           1  7.799053      1</span></span>
+<span><span class="co">##    4: 0.03      2           2  8.248437      1</span></span>
+<span><span class="co">##    5: 0.03      3           1  5.766901      1</span></span>
+<span><span class="co">##   ---                                         </span></span>
+<span><span class="co">## 1996: 0.03    998           2  6.094831      1</span></span>
+<span><span class="co">## 1997: 0.03    999           1  8.005807      1</span></span>
+<span><span class="co">## 1998: 0.03    999           2  8.267796      1</span></span>
+<span><span class="co">## 1999: 0.03   1000           1 10.012172      1</span></span>
+<span><span class="co">## 2000: 0.03   1000           2  9.650856      1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## attr(,"class")</span></span>
 <span><span class="co">## [1] "ce"</span></span></code></pre>
