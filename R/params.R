@@ -112,12 +112,12 @@ summary_params_list <- function(object, prob = 0.95, idcol = "model", ...) {
 #' @return An object prefixed by `params_`. Mapping between `create_params` 
 #' and the classes of the returned objects are: 
 #' \itemize{
-#' \item{`create_params.lm` ->}{ [`params_lm`]}
-#' \item{`create_params.multinom` ->}{ [`params_mlogit`]}
-#' \item{`create_params.multinom_list` ->}{ [`params_mlogit_list`]}
-#' \item{`create_params.flexsurvreg` ->}{ [`params_surv`]}
-#' \item{`create_params.flexsurvreg_list` ->}{ [`params_surv_list`]}
-#' \item{`create_params.partsurvfit` ->}{ [`params_surv_list`]}
+#' \item `create_params.lm` -> [`params_lm`]
+#' \item `create_params.multinom` -> [`params_mlogit`]
+#' \item `create_params.multinom_list` ->  [`params_mlogit_list`]
+#' \item `create_params.flexsurvreg` -> [`params_surv`]
+#' \item `create_params.flexsurvreg_list` -> [`params_surv_list`]
+#' \item `create_params.partsurvfit` ->  [`params_surv_list`]
 #' }
 #' @name create_params
 #' @examples 
