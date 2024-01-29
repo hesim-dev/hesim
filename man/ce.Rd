@@ -5,7 +5,7 @@
 \title{A cost-effectiveness object}
 \format{
 A list containing two elements:
-\itemize{
+\describe{
 \item{\code{costs}}{ Total (discounted) costs by category.}
 \item{\code{qalys}}{ (Discounted) quality-adjusted life-years.}
 }
