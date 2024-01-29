@@ -7,8 +7,8 @@
 #' 
 #' @format 
 #' A list containing the following elements:
-#' \itemize{
-#' \item{Survival}{ A data frame containing patient information and time to 3 separate survival endpoints.}
+#' \describe{
+#' \item{Survival}{A data frame containing patient information and time to 3 separate survival endpoints.}
 #' \item{Costs}{A list of data frames. The first data frame contains medical cost data and the
 #' second data frame contains drug cost data.}
 #' }
