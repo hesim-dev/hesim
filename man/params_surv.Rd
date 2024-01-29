@@ -45,10 +45,10 @@ inverse transformation function \eqn{g^{-1}()},
 and the identity function if the parameter space is unrestricted.
 
 The types of distributions that can be specified are:
-\itemize{
+\describe{
 \item{\code{exponential} or \code{exp}}{ Exponential distribution. \code{coef}
 must contain the \code{rate} parameter on the log scale and the same parameterization as in
-\code{\link[stats:Exponential]{stats::Exponential}}}.
+\code{\link[stats:Exponential]{stats::Exponential}}.}
 
 \item{\code{weibull} or \code{weibull.quiet}}{ Weibull distribution. The first
 element of \code{coef} is the \code{shape} parameter (on the log scale) and the second

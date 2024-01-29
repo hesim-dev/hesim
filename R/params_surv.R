@@ -33,10 +33,10 @@
 #' and the identity function if the parameter space is unrestricted.
 #' 
 #' The types of distributions that can be specified are: 
-#' \itemize{
+#' \describe{
 #' \item{`exponential` or `exp`}{ Exponential distribution. `coef`
 #' must contain the `rate` parameter on the log scale and the same parameterization as in 
-#' [`stats::Exponential`]}.
+#' [`stats::Exponential`].}
 #' 
 #' \item{`weibull` or `weibull.quiet`}{ Weibull distribution. The first 
 #' element of `coef` is the `shape` parameter (on the log scale) and the second
