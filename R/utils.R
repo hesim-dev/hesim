@@ -3,8 +3,6 @@
 #' 
 #' \code{check} is a generic function for validating the inputs of class objects.
 #' @param object object to check.
-#' @param inner_class When checking a list of objects, the class of elements within
-#' the inner most list.
 #' @param ... Further arguments passed to or from other methods.
 #' 
 #' @return If validation is successful, returns the object in question; otherwise,

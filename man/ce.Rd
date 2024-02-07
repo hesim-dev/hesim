@@ -6,8 +6,8 @@
 \format{
 A list containing two elements:
 \describe{
-\item{\code{costs}}{ Total (discounted) costs by category.}
-\item{\code{qalys}}{ (Discounted) quality-adjusted life-years.}
+\item{\code{costs}}{Total (discounted) costs by category.}
+\item{\code{qalys}}{(Discounted) quality-adjusted life-years.}
 }
 }
 \description{
