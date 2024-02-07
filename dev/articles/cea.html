@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cost-effectiveness analysis</h1>
             
-            <h4 data-toc-skip class="date">2024-01-27</h4>
+            <h4 data-toc-skip class="date">2024-02-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/cea.Rmd" class="external-link"><code>vignettes/cea.Rmd</code></a></small>
       <div class="hidden name"><code>cea.Rmd</code></div>
@@ -295,6 +295,7 @@ effective in subgroup 2.</p>
 <span>                 cost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="va">c</span><span class="op">)</span>, qalys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ce</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample   strategy     grp     cost    qalys</span></span>
+<span><span class="co">##     &lt;int&gt;     &lt;char&gt;  &lt;char&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
 <span><span class="co">## 1:      1 Strategy 1 Group 1 6.808115 7.984456</span></span>
 <span><span class="co">## 2:      2 Strategy 1 Group 1 6.997936 7.984085</span></span>
 <span><span class="co">## 3:      3 Strategy 1 Group 1 8.183247 8.221359</span></span>
@@ -358,7 +359,9 @@ quantiles from the PSA.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://magrittr.tidyverse.org" class="external-link">"magrittr"</a></span><span class="op">)</span> <span class="co"># Use pipes</span></span>
 <span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, k <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##      Group           Outcome                Strategy 2</span></span>
+<pre><code><span><span class="co">## Key: &lt;Group, Outcome&gt;</span></span>
+<span><span class="co">##      Group           Outcome                Strategy 2</span></span>
+<span><span class="co">##     &lt;char&gt;            &lt;fctr&gt;                    &lt;char&gt;</span></span>
 <span><span class="co">## 1: Group 1 Incremental QALYs         2.05 (0.44, 3.68)</span></span>
 <span><span class="co">## 2: Group 1 Incremental costs   60,579 (45,170, 80,640)</span></span>
 <span><span class="co">## 3: Group 1   Incremental NMB 41,980 (-38,916, 122,227)</span></span>
@@ -368,6 +371,7 @@ quantiles from the PSA.</p>
 <span><span class="co">## 7: Group 2   Incremental NMB 62,588 (-23,058, 143,866)</span></span>
 <span><span class="co">## 8: Group 2              ICER                    24,615</span></span>
 <span><span class="co">##                    Strategy 3</span></span>
+<span><span class="co">##                        &lt;char&gt;</span></span>
 <span><span class="co">## 1:         0.51 (-0.75, 1.72)</span></span>
 <span><span class="co">## 2:    60,750 (44,408, 79,245)</span></span>
 <span><span class="co">## 3: -35,460 (-100,074, 32,748)</span></span>
@@ -393,6 +397,7 @@ estimates differences in costs and QALYs relative to the comparator.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">$</span><span class="va">delta</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample   strategy     grp       ie       ic</span></span>
+<span><span class="co">##     &lt;int&gt;     &lt;char&gt;  &lt;char&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
 <span><span class="co">## 1:      1 Strategy 2 Group 1 1.497467 57687.97</span></span>
 <span><span class="co">## 2:      2 Strategy 2 Group 1 1.428877 65857.23</span></span>
 <span><span class="co">## 3:      3 Strategy 2 Group 1 3.184584 44830.68</span></span>

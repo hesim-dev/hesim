@@ -130,6 +130,7 @@ described in <a href="id_attributes.html">id_attributes</a>.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">time_intervals</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    time_id time_start time_stop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;int&gt;      &lt;num&gt;     &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       1          0         3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:       2          3         5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:       3          5       Inf</span>
@@ -137,6 +138,7 @@ described in <a href="id_attributes.html">id_attributes</a>.</p>
 <span class="r-in"><span>                          time_cat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Time &lt;= 3"</span>, <span class="st">"3 &lt; Time &lt;= 5"</span>, </span></span>
 <span class="r-in"><span>                                       <span class="st">"Time &gt; 5"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    time_id time_start      time_cat time_stop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;int&gt;      &lt;num&gt;        &lt;char&gt;     &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:       1          0     Time &lt;= 3         3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:       2          3 3 &lt; Time &lt;= 5         5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:       3          5      Time &gt; 5       Inf</span>

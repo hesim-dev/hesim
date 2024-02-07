@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Partitioned survival models</h1>
             
-            <h4 data-toc-skip class="date">2024-01-27</h4>
+            <h4 data-toc-skip class="date">2024-02-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/psm.Rmd" class="external-link"><code>vignettes/psm.Rmd</code></a></small>
       <div class="hidden name"><code>psm.Rmd</code></div>
@@ -226,15 +226,17 @@ using <code><a href="../reference/hesim_data.html">hesim_data()</a></code>, whic
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">hesim_dat</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $strategies</span></span>
 <span><span class="co">##    strategy_id strategy_name</span></span>
+<span><span class="co">##          &lt;num&gt;        &lt;char&gt;</span></span>
 <span><span class="co">## 1:           1    Strategy 1</span></span>
 <span><span class="co">## 2:           2    Strategy 2</span></span>
 <span><span class="co">## 3:           3    Strategy 3</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $patients</span></span>
-<span><span class="co">##    patient_id age female</span></span>
-<span><span class="co">## 1:          1  45      0</span></span>
-<span><span class="co">## 2:          2  50      0</span></span>
-<span><span class="co">## 3:          3  60      1</span></span>
+<span><span class="co">##    patient_id   age female</span></span>
+<span><span class="co">##         &lt;int&gt; &lt;num&gt;  &lt;num&gt;</span></span>
+<span><span class="co">## 1:          1    45      0</span></span>
+<span><span class="co">## 2:          2    50      0</span></span>
+<span><span class="co">## 3:          3    60      1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $states</span></span>
 <span><span class="co">##   state_id                  state_name</span></span>
@@ -423,13 +425,14 @@ using <code><a href="../reference/autoplot.survival.html">autoplot.survival()</a
 <span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">12</span>, by <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
 <span><span class="va">psm</span><span class="op">$</span><span class="fu">sim_survival</span><span class="op">(</span>t <span class="op">=</span> <span class="va">times</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm</span><span class="op">$</span><span class="va">survival_</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id curve   t  survival</span></span>
-<span><span class="co">## 1:      1           1          1      1     1 0.0 1.0000000</span></span>
-<span><span class="co">## 2:      1           1          1      1     1 0.1 0.9189061</span></span>
-<span><span class="co">## 3:      1           1          1      1     1 0.2 0.8411512</span></span>
-<span><span class="co">## 4:      1           1          1      1     1 0.3 0.7688137</span></span>
-<span><span class="co">## 5:      1           1          1      1     1 0.4 0.7019982</span></span>
-<span><span class="co">## 6:      1           1          1      1     1 0.5 0.6405107</span></span></code></pre>
+<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id curve     t  survival</span></span>
+<span><span class="co">##     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">## 1:      1           1          1      1     1   0.0 1.0000000</span></span>
+<span><span class="co">## 2:      1           1          1      1     1   0.1 0.9189061</span></span>
+<span><span class="co">## 3:      1           1          1      1     1   0.2 0.8411512</span></span>
+<span><span class="co">## 4:      1           1          1      1     1   0.3 0.7688137</span></span>
+<span><span class="co">## 5:      1           1          1      1     1   0.4 0.7019982</span></span>
+<span><span class="co">## 6:      1           1          1      1     1   0.5 0.6405107</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span></span>
@@ -461,13 +464,14 @@ randomly sampled parameter set.</p>
 <code class="sourceCode R"><span><span class="co"># Simulate</span></span>
 <span><span class="va">psm</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id   t      prob</span></span>
-<span><span class="co">## 1:      1           1          1      1        1 0.0 1.0000000</span></span>
-<span><span class="co">## 2:      1           1          1      1        1 0.1 0.9189061</span></span>
-<span><span class="co">## 3:      1           1          1      1        1 0.2 0.8411512</span></span>
-<span><span class="co">## 4:      1           1          1      1        1 0.3 0.7688137</span></span>
-<span><span class="co">## 5:      1           1          1      1        1 0.4 0.7019982</span></span>
-<span><span class="co">## 6:      1           1          1      1        1 0.5 0.6405107</span></span></code></pre>
+<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id     t      prob</span></span>
+<span><span class="co">##     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt;    &lt;int&gt; &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">## 1:      1           1          1      1        1   0.0 1.0000000</span></span>
+<span><span class="co">## 2:      1           1          1      1        1   0.1 0.9189061</span></span>
+<span><span class="co">## 3:      1           1          1      1        1   0.2 0.8411512</span></span>
+<span><span class="co">## 4:      1           1          1      1        1   0.3 0.7688137</span></span>
+<span><span class="co">## 5:      1           1          1      1        1   0.4 0.7019982</span></span>
+<span><span class="co">## 6:      1           1          1      1        1   0.5 0.6405107</span></span></code></pre>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot</span></span>
 <span><span class="va">stateprobs</span> <span class="op">&lt;-</span> <span class="va">psm</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">[</span><span class="va">sample</span> <span class="op">==</span> <span class="fl">30</span> <span class="op">&amp;</span> <span class="va">patient_id</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span></span>
@@ -499,24 +503,26 @@ strategy, patient, health state, and sampled parameter set.</p>
 <code class="sourceCode R"><span><span class="co"># Costs</span></span>
 <span><span class="va">psm</span><span class="op">$</span><span class="fu">sim_costs</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id   dr category    costs</span></span>
-<span><span class="co">## 1:      1           1          1      1        1 0.03  medical 28707.06</span></span>
-<span><span class="co">## 2:      1           1          1      1        2 0.03  medical 24729.36</span></span>
-<span><span class="co">## 3:      1           1          1      1        3 0.03  medical 24914.92</span></span>
-<span><span class="co">## 4:      1           1          2      1        1 0.03  medical 27384.46</span></span>
-<span><span class="co">## 5:      1           1          2      1        2 0.03  medical 23700.48</span></span>
-<span><span class="co">## 6:      1           1          2      1        3 0.03  medical 23230.48</span></span></code></pre>
+<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id    dr category    costs</span></span>
+<span><span class="co">##     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt;    &lt;int&gt; &lt;num&gt;   &lt;char&gt;    &lt;num&gt;</span></span>
+<span><span class="co">## 1:      1           1          1      1        1  0.03  medical 28707.06</span></span>
+<span><span class="co">## 2:      1           1          1      1        2  0.03  medical 24729.36</span></span>
+<span><span class="co">## 3:      1           1          1      1        3  0.03  medical 24914.92</span></span>
+<span><span class="co">## 4:      1           1          2      1        1  0.03  medical 27384.46</span></span>
+<span><span class="co">## 5:      1           1          2      1        2  0.03  medical 23700.48</span></span>
+<span><span class="co">## 6:      1           1          2      1        3  0.03  medical 23230.48</span></span></code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># QALYs</span></span>
 <span><span class="va">psm</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span>dr <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id   dr     qalys       lys</span></span>
-<span><span class="co">## 1:      1           1          1      1        1 0.03 0.8913423 1.0479377</span></span>
-<span><span class="co">## 2:      1           1          1      1        2 0.03 0.5448242 0.7391231</span></span>
-<span><span class="co">## 3:      1           1          1      1        3 0.03 0.5277850 0.7778092</span></span>
-<span><span class="co">## 4:      1           1          2      1        1 0.03 0.8502762 0.9996569</span></span>
-<span><span class="co">## 5:      1           1          2      1        2 0.03 0.5221563 0.7083712</span></span>
-<span><span class="co">## 6:      1           1          2      1        3 0.03 0.4921027 0.7252234</span></span></code></pre>
+<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id state_id    dr     qalys       lys</span></span>
+<span><span class="co">##     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt;    &lt;int&gt; &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">## 1:      1           1          1      1        1  0.03 0.8913423 1.0479377</span></span>
+<span><span class="co">## 2:      1           1          1      1        2  0.03 0.5448242 0.7391231</span></span>
+<span><span class="co">## 3:      1           1          1      1        3  0.03 0.5277850 0.7778092</span></span>
+<span><span class="co">## 4:      1           1          2      1        1  0.03 0.8502762 0.9996569</span></span>
+<span><span class="co">## 5:      1           1          2      1        2  0.03 0.5221563 0.7083712</span></span>
+<span><span class="co">## 6:      1           1          2      1        3  0.03 0.4921027 0.7252234</span></span></code></pre>
 </div>
 </div>
 </div>
