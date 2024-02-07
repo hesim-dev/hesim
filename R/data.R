@@ -7,8 +7,8 @@
 #' 
 #' @format 
 #' A list containing the following elements:
-#' \itemize{
-#' \item{Survival}{ A data frame containing patient information and time to 3 separate survival endpoints.}
+#' \describe{
+#' \item{Survival}{A data frame containing patient information and time to 3 separate survival endpoints.}
 #' \item{Costs}{A list of data frames. The first data frame contains medical cost data and the
 #' second data frame contains drug cost data.}
 #' }
@@ -52,12 +52,12 @@
 #' are also included to facilitate cost-effectiveness analysis. 
 #' @format 
 #' A list containing the following elements:
-#' \itemize{
-#' \item{transitions}{ A data frame containing the times at which patient transitions between health states based
+#' \describe{
+#' \item{transitions}{A data frame containing the times at which patient transitions between health states based
 #' on the [prothr][mstate::prothr] dataset from the [mstate][mstate::mstate] package.}
-#' \item{costs}{ A list of data frames. The first data frame contains summary medical cost estimates and the
+#' \item{costs}{A list of data frames. The first data frame contains summary medical cost estimates and the
 #' second data frame contains drug cost data.}
-#' \item{utility}{ A data frame of summary utility estimates.}
+#' \item{utility}{A data frame of summary utility estimates.}
 #' }
 #' 
 #' @section Transitions data:
@@ -111,7 +111,7 @@
 #'
 #' @format 
 #' A list containing the following elements:
-#' \itemize{
+#' \describe{
 #' \item{transitions}{ A data frame containing patient transitions between health
 #' states at discrete time intervals (i.e., on a yearly basis).}
 #' \item{costs}{ A list of data frames. The first data frame contains 

@@ -663,9 +663,9 @@ sim_costs <- function(object, models, dr = .03,
 #' 
 #' @format 
 #' A list containing two elements:
-#' \itemize{
-#' \item{`costs`}{ Total (discounted) costs by category.}
-#' \item{`qalys`}{ (Discounted) quality-adjusted life-years.}
+#' \describe{
+#' \item{`costs`}{Total (discounted) costs by category.}
+#' \item{`qalys`}{(Discounted) quality-adjusted life-years.}
 #' }
 #' 
 #' @section Costs:

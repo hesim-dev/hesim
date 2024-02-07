@@ -36,9 +36,6 @@ check(object, ...)
 \item{object}{object to check.}
 
 \item{...}{Further arguments passed to or from other methods.}
-
-\item{inner_class}{When checking a list of objects, the class of elements within
-the inner most list.}
 }
 \value{
 If validation is successful, returns the object in question; otherwise,
