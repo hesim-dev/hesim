@@ -132,7 +132,7 @@
       <h1 data-toc-skip>Time inhomogeneous Markov individual-level
 models</h1>
             
-            <h4 data-toc-skip class="date">2024-02-07</h4>
+            <h4 data-toc-skip class="date">2024-02-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/markov-inhomogeneous-indiv.Rmd" class="external-link"><code>vignettes/markov-inhomogeneous-indiv.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-indiv.Rmd</code></div>
@@ -582,46 +582,46 @@ coefficients.</p>
 coefficients.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                      param       mean          sd        2.5%       97.5%</span></span>
-<span><span class="co">##                     &lt;char&gt;      &lt;num&gt;       &lt;num&gt;       &lt;num&gt;       &lt;num&gt;</span></span>
-<span><span class="co">##  1:       log_omrPTHR_cons -4.1774919 0.784122939 -5.97212689 -2.93380765</span></span>
-<span><span class="co">##  2:          log_mr_time_0 -5.0056478 0.000000000 -5.00564775 -5.00564775</span></span>
-<span><span class="co">##  3:          log_mr_time_5 -3.9476502 0.000000000 -3.94765018 -3.94765018</span></span>
-<span><span class="co">##  4:         log_mr_time_15 -2.9280736 0.000000000 -2.92807363 -2.92807363</span></span>
-<span><span class="co">##  5:         log_mr_time_25 -1.8656213 0.000000000 -1.86562132 -1.86562132</span></span>
-<span><span class="co">##  6:      log_ttrrPTHR_cons  0.6931472 0.000000000  0.69314718  0.69314718</span></span>
-<span><span class="co">##  7:  log_mr_omrPTHR_time_0 -3.7502222 0.486227243 -4.68323006 -2.81517654</span></span>
-<span><span class="co">##  8:  log_mr_omrPTHR_time_5 -3.2948186 0.315620058 -3.82359321 -2.62424880</span></span>
-<span><span class="co">##  9: log_mr_omrPTHR_time_15 -2.6289609 0.169595934 -2.88152579 -2.23778782</span></span>
-<span><span class="co">## 10: log_mr_omrPTHR_time_25 -1.7483476 0.073357557 -1.84928781 -1.57024437</span></span>
-<span><span class="co">## 11:          rr_shape_cons  0.3737688 0.046436542  0.28248896  0.46617926</span></span>
-<span><span class="co">## 12:          rr_scale_cons -5.4868698 0.214343351 -5.87037770 -5.08309984</span></span>
-<span><span class="co">## 13:           rr_scale_age -0.0367216 0.005480984 -0.04640731 -0.02628997</span></span>
-<span><span class="co">## 14:          rr_scale_male  0.7668030 0.111407472  0.54921275  0.98368609</span></span>
-<span><span class="co">## 15:           rr_scale_np1 -1.3649145 0.389072135 -2.06596257 -0.66062269</span></span>
-<span><span class="co">## 16:           log_rrr_cons -3.3647497 0.551661167 -4.54125342 -2.49027922</span></span></code></pre>
+<pre><code><span><span class="co">##                      param        mean          sd       2.5%      97.5%</span></span>
+<span><span class="co">##                     &lt;char&gt;       &lt;num&gt;       &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span></span>
+<span><span class="co">##  1:       log_omrPTHR_cons -4.23446153 0.801090832 -6.0968399 -2.9656677</span></span>
+<span><span class="co">##  2:          log_mr_time_0 -5.00564775 0.000000000 -5.0056478 -5.0056478</span></span>
+<span><span class="co">##  3:          log_mr_time_5 -3.94765018 0.000000000 -3.9476502 -3.9476502</span></span>
+<span><span class="co">##  4:         log_mr_time_15 -2.92807363 0.000000000 -2.9280736 -2.9280736</span></span>
+<span><span class="co">##  5:         log_mr_time_25 -1.86562132 0.000000000 -1.8656213 -1.8656213</span></span>
+<span><span class="co">##  6:      log_ttrrPTHR_cons  0.69314718 0.000000000  0.6931472  0.6931472</span></span>
+<span><span class="co">##  7:  log_mr_omrPTHR_time_0 -3.78583653 0.496740516 -4.7157239 -2.8434223</span></span>
+<span><span class="co">##  8:  log_mr_omrPTHR_time_5 -3.31654157 0.320660154 -3.8371913 -2.6475282</span></span>
+<span><span class="co">##  9: log_mr_omrPTHR_time_15 -2.63980532 0.171692693 -2.8867998 -2.2535466</span></span>
+<span><span class="co">## 10: log_mr_omrPTHR_time_25 -1.75276100 0.074231375 -1.8511626 -1.5782974</span></span>
+<span><span class="co">## 11:          rr_shape_cons  0.37255413 0.048850358  0.2743392  0.4674734</span></span>
+<span><span class="co">## 12:          rr_scale_cons -5.48029162 0.211411857 -5.8539128 -5.0731115</span></span>
+<span><span class="co">## 13:           rr_scale_age -0.03680017 0.005498753 -0.0466897 -0.0256466</span></span>
+<span><span class="co">## 14:          rr_scale_male  0.76392537 0.112235935  0.5423502  0.9775972</span></span>
+<span><span class="co">## 15:           rr_scale_np1 -1.35012277 0.398600884 -2.1417018 -0.5901343</span></span>
+<span><span class="co">## 16:           log_rrr_cons -3.29039240 0.546265433 -4.4909742 -2.3885033</span></span></code></pre>
 <p>It is also helpful to take a look at a few of the sampled coefficient
 data tables.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">log_omrPTHR</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##         cons</span></span>
 <span><span class="co">##        &lt;num&gt;</span></span>
-<span><span class="co">## 1: -3.698070</span></span>
-<span><span class="co">## 2: -4.947587</span></span>
-<span><span class="co">## 3: -3.257758</span></span>
-<span><span class="co">## 4: -4.974715</span></span>
-<span><span class="co">## 5: -4.335521</span></span>
-<span><span class="co">## 6: -3.184835</span></span></code></pre>
+<span><span class="co">## 1: -3.882605</span></span>
+<span><span class="co">## 2: -4.369951</span></span>
+<span><span class="co">## 3: -3.835415</span></span>
+<span><span class="co">## 4: -4.087298</span></span>
+<span><span class="co">## 5: -5.317716</span></span>
+<span><span class="co">## 6: -3.756484</span></span></code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod_coef</span><span class="op">$</span><span class="va">rr_scale</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##         cons         age      male        np1</span></span>
 <span><span class="co">##        &lt;num&gt;       &lt;num&gt;     &lt;num&gt;      &lt;num&gt;</span></span>
-<span><span class="co">## 1: -5.330343 -0.03418142 0.6261295 -1.5772790</span></span>
-<span><span class="co">## 2: -5.566011 -0.04155153 0.9209857 -1.4235974</span></span>
-<span><span class="co">## 3: -5.852078 -0.02742410 0.8399728 -1.8686809</span></span>
-<span><span class="co">## 4: -5.424295 -0.03422932 0.5936125 -1.1287412</span></span>
-<span><span class="co">## 5: -5.562622 -0.03470359 0.5183844 -0.8501759</span></span>
-<span><span class="co">## 6: -5.259385 -0.04120846 0.6949445 -1.4711540</span></span></code></pre>
+<span><span class="co">## 1: -5.416242 -0.03820687 0.7600474 -1.8244166</span></span>
+<span><span class="co">## 2: -5.674498 -0.03333618 0.7766092 -1.6439505</span></span>
+<span><span class="co">## 3: -5.079898 -0.04206834 0.6688652 -1.4182815</span></span>
+<span><span class="co">## 4: -5.618721 -0.03404598 0.8623508 -1.9659146</span></span>
+<span><span class="co">## 5: -5.553483 -0.03519363 0.9364966 -0.5985209</span></span>
+<span><span class="co">## 6: -5.297891 -0.03518841 0.7271629 -1.6473481</span></span></code></pre>
 <p>In addition to the coefficients, a complete parameterization of a
 transition model requires specification of the survival distributions
 and potentially auxiliary information (e.g., the times at which rates
@@ -816,17 +816,17 @@ time (in seconds), <code>hesim</code> is quite fast.</p>
 <span><span class="va">econmod</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span>max_t <span class="op">=</span> <span class="fl">60</span>, max_age <span class="op">=</span> <span class="fl">120</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">ptm</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   1.693   0.068   1.761</span></span></code></pre>
+<span><span class="co">##   1.599   0.068   1.668</span></span></code></pre>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id patient_id grp_id  from    to final time_start  time_stop</span></span>
 <span><span class="co">##     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;      &lt;num&gt;      &lt;num&gt;</span></span>
-<span><span class="co">## 1:      1           1          1      1     1     2     0  0.0000000  1.0302895</span></span>
-<span><span class="co">## 2:      1           1          1      1     2     5     1  1.0302895 23.6215100</span></span>
-<span><span class="co">## 3:      1           1          2      1     1     2     0  0.0000000  0.1128337</span></span>
-<span><span class="co">## 4:      1           1          2      1     2     5     1  0.1128337 28.1496644</span></span>
-<span><span class="co">## 5:      1           1          3      1     1     2     0  0.0000000  0.3767384</span></span>
-<span><span class="co">## 6:      1           1          3      1     2     5     1  0.3767384  8.4923491</span></span></code></pre>
+<span><span class="co">## 1:      1           1          1      1     1     2     0  0.0000000  0.2095793</span></span>
+<span><span class="co">## 2:      1           1          1      1     2     5     1  0.2095793 21.0542281</span></span>
+<span><span class="co">## 3:      1           1          2      1     1     2     0  0.0000000  1.1726178</span></span>
+<span><span class="co">## 4:      1           1          2      1     2     5     1  1.1726178 28.5390157</span></span>
+<span><span class="co">## 5:      1           1          3      1     1     2     0  0.0000000  1.0516303</span></span>
+<span><span class="co">## 6:      1           1          3      1     2     5     1  1.0516303 17.4398114</span></span></code></pre>
 <p>The simulated patient trajectories can be summarized by computing the
 probability of being in each health state over time (by averaging across
 the simulated patients). Here, we will compute state occupancy
@@ -863,10 +863,10 @@ models.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Discount rate        Outcome  Standard prosthesis       New prosthesis</span></span>
 <span><span class="co">##            &lt;num&gt;         &lt;fctr&gt;               &lt;char&gt;               &lt;char&gt;</span></span>
-<span><span class="co">## 1:         0.015          QALYs 15.40 (14.20, 16.42) 15.45 (14.21, 16.49)</span></span>
+<span><span class="co">## 1:         0.015          QALYs 15.48 (14.37, 16.42) 15.54 (14.36, 16.52)</span></span>
 <span><span class="co">## 2:         0.060    Costs: Drug       394 (394, 394)       579 (579, 579)</span></span>
-<span><span class="co">## 3:         0.060 Costs: Medical        119 (47, 241)           33 (6, 82)</span></span>
-<span><span class="co">## 4:         0.060   Costs: total       513 (441, 635)       612 (585, 661)</span></span></code></pre>
+<span><span class="co">## 3:         0.060 Costs: Medical        122 (48, 247)           33 (7, 89)</span></span>
+<span><span class="co">## 4:         0.060   Costs: total       516 (442, 641)       612 (586, 668)</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -883,10 +883,10 @@ compute the incremental cost-effectiveness ratio (ICER) here.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span>digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##              Outcome          New prosthesis</span></span>
 <span><span class="co">##               &lt;fctr&gt;                  &lt;char&gt;</span></span>
-<span><span class="co">## 1: Incremental QALYs   0.051 (-0.499, 0.636)</span></span>
-<span><span class="co">## 2: Incremental costs            99 (-8, 167)</span></span>
-<span><span class="co">## 3:   Incremental NMB 2,474 (-25,009, 31,777)</span></span>
-<span><span class="co">## 4:              ICER                   1,926</span></span></code></pre>
+<span><span class="co">## 1: Incremental QALYs   0.053 (-0.503, 0.681)</span></span>
+<span><span class="co">## 2: Incremental costs           97 (-26, 162)</span></span>
+<span><span class="co">## 3:   Incremental NMB 2,563 (-25,264, 33,933)</span></span>
+<span><span class="co">## 4:              ICER                   1,814</span></span></code></pre>
 </div>
   </div>
 
