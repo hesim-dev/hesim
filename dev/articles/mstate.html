@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Markov and semi-Markov multi-state models</h1>
             
-            <h4 data-toc-skip class="date">2024-02-08</h4>
+            <h4 data-toc-skip class="date">2024-02-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/mstate.Rmd" class="external-link"><code>vignettes/mstate.Rmd</code></a></small>
       <div class="hidden name"><code>mstate.Rmd</code></div>
@@ -328,12 +328,12 @@ object created above.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod_data</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    strategy_id patient_id strategy_name      age female</span></span>
 <span><span class="co">##          &lt;num&gt;      &lt;int&gt;        &lt;char&gt;    &lt;num&gt;  &lt;int&gt;</span></span>
-<span><span class="co">## 1:           1          1           SOC 35.48303      0</span></span>
-<span><span class="co">## 2:           1          2           SOC 43.54904      1</span></span>
-<span><span class="co">## 3:           1          3           SOC 44.48230      0</span></span>
-<span><span class="co">## 4:           1          4           SOC 39.14067      1</span></span>
-<span><span class="co">## 5:           1          5           SOC 43.79890      0</span></span>
-<span><span class="co">## 6:           1          6           SOC 39.56368      0</span></span></code></pre>
+<span><span class="co">## 1:           1          1           SOC 58.31169      1</span></span>
+<span><span class="co">## 2:           1          2           SOC 41.23656      0</span></span>
+<span><span class="co">## 3:           1          3           SOC 49.83464      0</span></span>
+<span><span class="co">## 4:           1          4           SOC 39.74932      0</span></span>
+<span><span class="co">## 5:           1          5           SOC 42.23109      1</span></span>
+<span><span class="co">## 6:           1          6           SOC 49.85644      0</span></span></code></pre>
 <p>“Clock reset” and “clock forward” transition models are created by
 combining the fitted models and input data with the transition matrix,
 desired number of PSA samples, the timescale of the model, and the
@@ -454,14 +454,14 @@ patient, treatment strategy, and PSA sample. Patients transition
 <code class="sourceCode R"><span><span class="co"># "Clock reset"</span></span>
 <span><span class="va">econmod_cr</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">disprog_</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id  from    to final time_start  time_stop</span></span>
-<span><span class="co">##     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;      &lt;num&gt;      &lt;num&gt;</span></span>
-<span><span class="co">## 1:      1           1          1      1     1     2     0 0.00000000 2.24213596</span></span>
-<span><span class="co">## 2:      1           1          1      1     2     1     0 2.24213596 4.44268862</span></span>
-<span><span class="co">## 3:      1           1          1      1     1     2     0 4.44268862 8.83663427</span></span>
-<span><span class="co">## 4:      1           1          1      1     2     3     1 8.83663427 9.11849332</span></span>
-<span><span class="co">## 5:      1           1          2      1     1     2     0 0.00000000 0.04852646</span></span>
-<span><span class="co">## 6:      1           1          2      1     2     1     0 0.04852646 1.20947492</span></span></code></pre>
+<pre><code><span><span class="co">##    sample strategy_id patient_id grp_id  from    to final time_start time_stop</span></span>
+<span><span class="co">##     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;      &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">## 1:      1           1          1      1     1     2     0   0.000000  7.185830</span></span>
+<span><span class="co">## 2:      1           1          1      1     2     3     1   7.185830  7.275507</span></span>
+<span><span class="co">## 3:      1           1          2      1     1     2     0   0.000000  2.698062</span></span>
+<span><span class="co">## 4:      1           1          2      1     2     3     1   2.698062  4.080509</span></span>
+<span><span class="co">## 5:      1           1          3      1     1     2     0   0.000000  2.111564</span></span>
+<span><span class="co">## 6:      1           1          3      1     2     1     0   2.111564  2.573150</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># "Clock forward"</span></span>
 <span><span class="va">econmod_cf</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -524,12 +524,12 @@ discounted at 3%.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">qalys_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id grp_id state_id    dr     qalys      lys</span></span>
 <span><span class="co">##     &lt;num&gt;       &lt;int&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">## 1:      1           1      1        1     0 2.8432425 5.004609</span></span>
-<span><span class="co">## 2:      1           1      1        2     0 1.1252891 1.248248</span></span>
-<span><span class="co">## 3:      1           2      1        1     0 3.9622823 6.974316</span></span>
-<span><span class="co">## 4:      1           2      1        2     0 0.9743743 1.080843</span></span>
-<span><span class="co">## 5:      2           1      1        1     0 4.7328514 5.717537</span></span>
-<span><span class="co">## 6:      2           1      1        2     0 0.2700319 1.396557</span></span></code></pre>
+<span><span class="co">## 1:      1           1      1        1     0 3.7804069 4.719924</span></span>
+<span><span class="co">## 2:      1           1      1        2     0 0.5122704 1.276258</span></span>
+<span><span class="co">## 3:      1           2      1        1     0 5.9100171 7.378791</span></span>
+<span><span class="co">## 4:      1           2      1        2     0 0.4688004 1.167958</span></span>
+<span><span class="co">## 5:      2           1      1        1     0 4.5009203 7.644270</span></span>
+<span><span class="co">## 6:      2           1      1        2     0 1.6717705 1.680016</span></span></code></pre>
 <p>Let’s compute means (across the PSA samples) by treatment strategy
 and health state to see how much each health state contributes to total
 QALYs.</p>
@@ -552,12 +552,12 @@ rate.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">econmod_cr</span><span class="op">$</span><span class="va">costs_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample strategy_id grp_id state_id    dr category     costs</span></span>
 <span><span class="co">##     &lt;num&gt;       &lt;int&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt;   &lt;char&gt;     &lt;num&gt;</span></span>
-<span><span class="co">## 1:      1           1      1        1  0.03     Drug 20727.262</span></span>
-<span><span class="co">## 2:      1           1      1        2  0.03     Drug  5131.610</span></span>
-<span><span class="co">## 3:      1           2      1        1  0.03     Drug 55595.537</span></span>
-<span><span class="co">## 4:      1           2      1        2  0.03     Drug  8653.848</span></span>
-<span><span class="co">## 5:      2           1      1        1  0.03     Drug 23436.171</span></span>
-<span><span class="co">## 6:      2           1      1        2  0.03     Drug  5669.450</span></span></code></pre>
+<span><span class="co">## 1:      1           1      1        1  0.03     Drug 19806.123</span></span>
+<span><span class="co">## 2:      1           1      1        2  0.03     Drug  5312.484</span></span>
+<span><span class="co">## 3:      1           2      1        1  0.03     Drug 58065.801</span></span>
+<span><span class="co">## 4:      1           2      1        2  0.03     Drug  9319.488</span></span>
+<span><span class="co">## 5:      2           1      1        1  0.03     Drug 29614.738</span></span>
+<span><span class="co">## 6:      2           1      1        2  0.03     Drug  6503.390</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -577,11 +577,11 @@ vignette.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ce_sim</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Discount rate        Outcome                     SOC                     New</span></span>
 <span><span class="co">##            &lt;num&gt;         &lt;fctr&gt;                  &lt;char&gt;                  &lt;char&gt;</span></span>
-<span><span class="co">## 1:          0.00          QALYs       5.13 (2.75, 7.37)       6.09 (3.04, 8.96)</span></span>
-<span><span class="co">## 2:          0.03          QALYs       4.14 (2.23, 5.87)       4.72 (2.33, 6.80)</span></span>
-<span><span class="co">## 3:          0.03    Costs: Drug 29,930 (25,313, 34,979) 69,704 (58,757, 81,643)</span></span>
-<span><span class="co">## 4:          0.03 Costs: Medical    6,685 (5,700, 7,752)    7,500 (6,346, 8,762)</span></span>
-<span><span class="co">## 5:          0.03   Costs: total 36,615 (31,066, 42,718) 77,205 (65,128, 90,316)</span></span></code></pre>
+<span><span class="co">## 1:          0.00          QALYs       5.15 (2.73, 7.55)       6.14 (3.05, 9.21)</span></span>
+<span><span class="co">## 2:          0.03          QALYs       4.16 (2.26, 5.96)       4.75 (2.38, 6.88)</span></span>
+<span><span class="co">## 3:          0.03    Costs: Drug 29,955 (25,445, 35,067) 69,930 (58,588, 82,193)</span></span>
+<span><span class="co">## 4:          0.03 Costs: Medical    6,685 (5,690, 7,799)    7,518 (6,344, 8,747)</span></span>
+<span><span class="co">## 5:          0.03   Costs: total 36,640 (31,100, 42,932) 77,448 (64,860, 90,960)</span></span></code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cea_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea</a></span><span class="op">(</span><span class="va">ce_sim</span>, dr_qalys <span class="op">=</span> <span class="fl">.03</span>, dr_costs <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></span>
 <span><span class="va">cea_pw_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cea.html">cea_pw</a></span><span class="op">(</span><span class="va">ce_sim</span>, comparator <span class="op">=</span> <span class="fl">1</span>, dr_qalys <span class="op">=</span> <span class="fl">.03</span>, dr_costs <span class="op">=</span> <span class="fl">.03</span><span class="op">)</span></span></code></pre></div>
