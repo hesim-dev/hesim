@@ -29,7 +29,7 @@ Markov chains with the CohortDtstmTrans class."><meta property="og:image" conten
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -267,8 +267,9 @@ also be summarized (across parameter samples) using
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "sample"         "n_samples"      "grp_id"        </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert to data.table in wide format</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tprobs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tprobs</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id patient_id time_id time_start time_stop prob_s1_s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;int&gt;       &lt;int&gt;      &lt;int&gt;   &lt;num&gt;      &lt;num&gt;     &lt;num&gt;      &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1          1       1          0       Inf  0.3573288</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1          2       1          0       Inf  0.3976430</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3:      1           1          3       1          0       Inf  0.3899896</span>
@@ -282,6 +283,7 @@ also be summarized (across parameter samples) using
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11:      2           2          2       1          0       Inf  0.2700455</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12:      2           2          3       1          0       Inf  0.2631438</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     prob_s1_s2 prob_s2_s1 prob_s2_s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:  0.6426712          0          1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:  0.6023570          0          1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3:  0.6100104          0          1</span>
@@ -296,58 +298,60 @@ also be summarized (across parameter samples) using
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12:  0.7368562          0          1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert to data.table in long format</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tprobs</span>, long <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id patient_id time_id time_start time_stop from to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1          1       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1          1       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      1           1          1       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      1           1          1       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:      1           1          2       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      1           1          2       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:      1           1          2       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:      1           1          2       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      1           1          3       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      1           1          3       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:      1           1          3       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:      1           1          3       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:      1           2          1       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:      1           2          1       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:      1           2          1       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:      1           2          1       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:      1           2          2       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:      1           2          2       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19:      1           2          2       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20:      1           2          2       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21:      1           2          3       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22:      1           2          3       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23:      1           2          3       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24:      1           2          3       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25:      2           1          1       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26:      2           1          1       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27:      2           1          1       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28:      2           1          1       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29:      2           1          2       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30:      2           1          2       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31:      2           1          2       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32:      2           1          2       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33:      2           1          3       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34:      2           1          3       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35:      2           1          3       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36:      2           1          3       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37:      2           2          1       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38:      2           2          1       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39:      2           2          1       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40:      2           2          1       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41:      2           2          2       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42:      2           2          2       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43:      2           2          2       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44:      2           2          2       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45:      2           2          3       1          0       Inf   s1 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46:      2           2          3       1          0       Inf   s1 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47:      2           2          3       1          0       Inf   s2 s1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48:      2           2          3       1          0       Inf   s2 s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id patient_id time_id time_start time_stop from to</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">tprobs</span>, long <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id patient_id time_id time_start time_stop   from     to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;int&gt;       &lt;int&gt;      &lt;int&gt;   &lt;num&gt;      &lt;num&gt;     &lt;num&gt; &lt;char&gt; &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1          1       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1          1       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      1           1          1       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      1           1          1       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:      1           1          2       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      1           1          2       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:      1           1          2       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:      1           1          2       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      1           1          3       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      1           1          3       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:      1           1          3       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:      1           1          3       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:      1           2          1       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:      1           2          1       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:      1           2          1       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:      1           2          1       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:      1           2          2       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:      1           2          2       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:      1           2          2       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:      1           2          2       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:      1           2          3       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:      1           2          3       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:      1           2          3       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:      1           2          3       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:      2           1          1       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26:      2           1          1       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27:      2           1          1       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28:      2           1          1       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29:      2           1          2       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30:      2           1          2       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31:      2           1          2       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32:      2           1          2       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33:      2           1          3       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34:      2           1          3       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35:      2           1          3       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36:      2           1          3       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37:      2           2          1       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38:      2           2          1       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39:      2           2          1       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40:      2           2          1       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41:      2           2          2       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42:      2           2          2       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43:      2           2          2       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44:      2           2          2       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45:      2           2          3       1          0       Inf     s1     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46:      2           2          3       1          0       Inf     s1     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47:      2           2          3       1          0       Inf     s2     s1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48:      2           2          3       1          0       Inf     s2     s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id patient_id time_id time_start time_stop   from     to</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          prob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 0.3573288</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2: 0.6426712</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3: 0.0000000</span>
@@ -400,33 +404,35 @@ also be summarized (across parameter samples) using
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summary where each column is a vector</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tprobs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id time_id time_start time_stop from to      mean</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:           1          1       1          0       Inf   s1 s1 0.3437247</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:           1          1       1          0       Inf   s1 s2 0.6562753</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:           1          1       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:           1          1       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:           1          2       1          0       Inf   s1 s1 0.3946369</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:           1          2       1          0       Inf   s1 s2 0.6053631</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:           1          2       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:           1          2       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:           1          3       1          0       Inf   s1 s1 0.3501535</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:           1          3       1          0       Inf   s1 s2 0.6498465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:           1          3       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:           1          3       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:           2          1       1          0       Inf   s1 s1 0.2911351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:           2          1       1          0       Inf   s1 s2 0.7088649</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:           2          1       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:           2          1       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:           2          2       1          0       Inf   s1 s1 0.2673824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:           2          2       1          0       Inf   s1 s2 0.7326176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19:           2          2       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20:           2          2       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21:           2          3       1          0       Inf   s1 s1 0.2867335</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22:           2          3       1          0       Inf   s1 s2 0.7132665</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23:           2          3       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24:           2          3       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id time_id time_start time_stop from to      mean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id time_id time_start time_stop   from     to      mean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;int&gt;      &lt;int&gt;   &lt;num&gt;      &lt;num&gt;     &lt;num&gt; &lt;char&gt; &lt;char&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:           1          1       1          0       Inf     s1     s1 0.3437247</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:           1          1       1          0       Inf     s1     s2 0.6562753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:           1          1       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:           1          1       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:           1          2       1          0       Inf     s1     s1 0.3946369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:           1          2       1          0       Inf     s1     s2 0.6053631</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:           1          2       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:           1          2       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:           1          3       1          0       Inf     s1     s1 0.3501535</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:           1          3       1          0       Inf     s1     s2 0.6498465</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:           1          3       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:           1          3       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:           2          1       1          0       Inf     s1     s1 0.2911351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:           2          1       1          0       Inf     s1     s2 0.7088649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:           2          1       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:           2          1       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:           2          2       1          0       Inf     s1     s1 0.2673824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:           2          2       1          0       Inf     s1     s2 0.7326176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:           2          2       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:           2          2       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:           2          3       1          0       Inf     s1     s1 0.2867335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:           2          3       1          0       Inf     s1     s2 0.7132665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:           2          3       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:           2          3       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id time_id time_start time_stop   from     to      mean</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              sd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 0.019239113</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2: 0.019239113</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3: 0.000000000</span>
@@ -453,33 +459,35 @@ also be summarized (across parameter samples) using
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24: 0.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              sd</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tprobs</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.025</span>, <span class="fl">.975</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id time_id time_start time_stop from to      mean</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:           1          1       1          0       Inf   s1 s1 0.3437247</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:           1          1       1          0       Inf   s1 s2 0.6562753</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:           1          1       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:           1          1       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:           1          2       1          0       Inf   s1 s1 0.3946369</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:           1          2       1          0       Inf   s1 s2 0.6053631</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:           1          2       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:           1          2       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:           1          3       1          0       Inf   s1 s1 0.3501535</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:           1          3       1          0       Inf   s1 s2 0.6498465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:           1          3       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:           1          3       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:           2          1       1          0       Inf   s1 s1 0.2911351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:           2          1       1          0       Inf   s1 s2 0.7088649</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:           2          1       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:           2          1       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:           2          2       1          0       Inf   s1 s1 0.2673824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:           2          2       1          0       Inf   s1 s2 0.7326176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19:           2          2       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20:           2          2       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21:           2          3       1          0       Inf   s1 s1 0.2867335</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22:           2          3       1          0       Inf   s1 s2 0.7132665</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23:           2          3       1          0       Inf   s2 s1 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24:           2          3       1          0       Inf   s2 s2 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id time_id time_start time_stop from to      mean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id time_id time_start time_stop   from     to      mean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;int&gt;      &lt;int&gt;   &lt;num&gt;      &lt;num&gt;     &lt;num&gt; &lt;char&gt; &lt;char&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:           1          1       1          0       Inf     s1     s1 0.3437247</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:           1          1       1          0       Inf     s1     s2 0.6562753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:           1          1       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:           1          1       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:           1          2       1          0       Inf     s1     s1 0.3946369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:           1          2       1          0       Inf     s1     s2 0.6053631</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:           1          2       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:           1          2       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:           1          3       1          0       Inf     s1     s1 0.3501535</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:           1          3       1          0       Inf     s1     s2 0.6498465</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:           1          3       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:           1          3       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:           2          1       1          0       Inf     s1     s1 0.2911351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:           2          1       1          0       Inf     s1     s2 0.7088649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:           2          1       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:           2          1       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:           2          2       1          0       Inf     s1     s1 0.2673824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:           2          2       1          0       Inf     s1     s2 0.7326176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:           2          2       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:           2          2       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:           2          3       1          0       Inf     s1     s1 0.2867335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:           2          3       1          0       Inf     s1     s2 0.7132665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:           2          3       1          0       Inf     s2     s1 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:           2          3       1          0       Inf     s2     s2 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id time_id time_start time_stop   from     to      mean</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              sd      2.5%     97.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 0.019239113 0.3308008 0.3566486</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2: 0.019239113 0.6433514 0.6691992</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3: 0.000000000 0.0000000 0.0000000</span>
@@ -510,6 +518,7 @@ also be summarized (across parameter samples) using
 <span class="r-in"><span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tprobs</span>, id <span class="op">=</span> <span class="va">tpmat_id</span>, unflatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ps</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id patient_id time_id time_start time_stop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;int&gt;      &lt;int&gt;   &lt;num&gt;      &lt;num&gt;     &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1          1       1          0       Inf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:           1          2       1          0       Inf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:           1          3       1          0       Inf</span>
@@ -517,6 +526,7 @@ also be summarized (across parameter samples) using
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:           2          2       1          0       Inf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:           2          3       1          0       Inf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                       mean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                     &lt;list&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.3437247,0.0000000,0.6562753,1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.3946369,0.0000000,0.6053631,1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3: 0.3501535,0.0000000,0.6498465,1.0000000</span>
@@ -524,6 +534,7 @@ also be summarized (across parameter samples) using
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5: 0.2673824,0.0000000,0.7326176,1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6: 0.2867335,0.0000000,0.7132665,1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                 sd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                             &lt;list&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:     0.01923911,0.00000000,0.01923911,0.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.004251159,0.000000000,0.004251159,0.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:     0.05633674,0.00000000,0.05633674,0.00000000</span>
@@ -571,7 +582,7 @@ also be summarized (across parameter samples) using
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

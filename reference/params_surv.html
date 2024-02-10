@@ -24,7 +24,7 @@ flexible parametric survival model."><meta property="og:image" content="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -151,58 +151,94 @@ inverse transformation function \(g^{-1}()\),
 $$\alpha_l =  g^{-1}(x_{l}^T \beta_l).$$
 \(g^{-1}()\) is typically \(exp()\) if a parameter is strictly positive
 and the identity function if the parameter space is unrestricted.</p>
-<p>The types of distributions that can be specified are:</p><ul><li><p><code>exponential</code> or <code>exp</code> Exponential distribution. <code>coef</code>
+<p>The types of distributions that can be specified are:</p><dl><dt><code>exponential</code> or <code>exp</code></dt>
+<dd><p>Exponential distribution. <code>coef</code>
 must contain the <code>rate</code> parameter on the log scale and the same parameterization as in
-<code><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">stats::Exponential</a></code>.</p></li>
-<li><p><code>weibull</code> or <code>weibull.quiet</code> Weibull distribution. The first
+<code><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">stats::Exponential</a></code>.</p></dd>
+
+
+<dt><code>weibull</code> or <code>weibull.quiet</code></dt>
+<dd><p>Weibull distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
-that same as in <code><a href="https://rdrr.io/r/stats/Weibull.html" class="external-link">stats::Weibull</a></code>.</p></li>
-<li><p><code>weibullPH</code> Weibull distribution with a proportional hazards
+that same as in <code><a href="https://rdrr.io/r/stats/Weibull.html" class="external-link">stats::Weibull</a></code>.</p></dd>
+
+
+<dt><code>weibullPH</code></dt>
+<dd><p>Weibull distribution with a proportional hazards
 parameterization. The first element of <code>coef</code> is the <code>shape</code> parameter
 (on the log scale) and the second element is the <code>scale</code> parameter
 (also on the log scale). The parameterization is
-that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/WeibullPH.html" class="external-link">flexsurv::WeibullPH</a></code>.</p></li>
-<li><p><code>gamma</code> Gamma distribution. The first
+that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/WeibullPH.html" class="external-link">flexsurv::WeibullPH</a></code>.</p></dd>
+
+
+<dt><code>gamma</code></dt>
+<dd><p>Gamma distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>rate</code> parameter (also on the log scale). The parameterization is
-that same as in <code><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">stats::GammaDist</a></code>.</p></li>
-<li><p><code>lnorm</code> Lognormal distribution. The first
+that same as in <code><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">stats::GammaDist</a></code>.</p></dd>
+
+
+<dt><code>lnorm</code></dt>
+<dd><p>Lognormal distribution. The first
 element of <code>coef</code> is the <code>meanlog</code> parameter (i.e., the mean of survival on
 the log scale) and the second element is the <code>sdlog</code> parameter (i.e.,
 the standard deviation of survival on the log scale). The parameterization is
 that same as in <code><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">stats::Lognormal</a></code>. The coefficients predicting the <code>meanlog</code>
 parameter are untransformed whereas the coefficients predicting the <code>sdlog</code>
-parameter are defined on the log scale.</p></li>
-<li><p><code>gompertz</code> Gompertz distribution. The first
+parameter are defined on the log scale.</p></dd>
+
+
+<dt><code>gompertz</code></dt>
+<dd><p>Gompertz distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter and the second
 element is the <code>rate</code> parameter (on the log scale). The parameterization is
-that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/Gompertz.html" class="external-link">flexsurv::Gompertz</a></code>.</p></li>
-<li><p><code>llogis</code> Log-logistic distribution. The first
+that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/Gompertz.html" class="external-link">flexsurv::Gompertz</a></code>.</p></dd>
+
+
+<dt><code>llogis</code></dt>
+<dd><p>Log-logistic distribution. The first
 element of <code>coef</code> is the <code>shape</code> parameter (on the log scale) and the second
 element is the <code>scale</code> parameter (also on the log scale). The parameterization is
-that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/Llogis.html" class="external-link">flexsurv::Llogis</a></code>.</p></li>
-<li><p><code>gengamma</code> Generalized gamma distribution. The first
+that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/Llogis.html" class="external-link">flexsurv::Llogis</a></code>.</p></dd>
+
+
+<dt><code>gengamma</code></dt>
+<dd><p>Generalized gamma distribution. The first
 element of <code>coef</code> is the location parameter <code>mu</code>, the second
 element is the scale parameter <code>sigma</code> (on the log scale), and the
 third element is the shape parameter <code>Q</code>. The parameterization is
-that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/GenGamma.html" class="external-link">flexsurv::GenGamma</a></code>.</p></li>
-<li><p><code>survspline</code> Survival splines. Each element of <code>coef</code> is a parameter of the
+that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/GenGamma.html" class="external-link">flexsurv::GenGamma</a></code>.</p></dd>
+
+
+<dt><code>survspline</code></dt>
+<dd><p>Survival splines. Each element of <code>coef</code> is a parameter of the
 spline model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
 to the number of knots (including the boundary knots). See below for details on the
-auxiliary arguments. The parameterization is that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/Survspline.html" class="external-link">flexsurv::Survspline</a></code>.</p></li>
-<li><p><code>fracpoly</code> Fractional polynomials. Each element of <code>coef</code> is a parameter of the
+auxiliary arguments. The parameterization is that same as in <code><a href="https://rdrr.io/pkg/flexsurv/man/Survspline.html" class="external-link">flexsurv::Survspline</a></code>.</p></dd>
+
+
+<dt><code>fracpoly</code></dt>
+<dd><p>Fractional polynomials. Each element of <code>coef</code> is a parameter of the
 fractional polynomial model (i.e. <code>gamma_0</code>, <code>gamma_1</code>, \(\ldots\)) with length equal
 to the number of powers plus 1. See below for details on the auxiliary arguments
-(i.e., <code>powers</code>).</p></li>
-<li><p><code>pwexp</code> Piecewise exponential distribution. Each element of <code>coef</code> is
+(i.e., <code>powers</code>).</p></dd>
+
+
+<dt><code>pwexp</code></dt>
+<dd><p>Piecewise exponential distribution. Each element of <code>coef</code> is
 rate parameter for a distinct time interval. The times at which the rates
 change should be specified with the auxiliary argument <code>time</code> (see below
-for more details).</p></li>
-<li><p><code>fixed</code> A fixed survival time. Can be used for "non-random" number
+for more details)</p></dd>
+.
+
+<dt><code>fixed</code></dt>
+<dd><p>A fixed survival time. Can be used for "non-random" number
 generation. <code>coef</code> should contain a single parameter, <code>est</code>, of the fixed
-survival times.</p></li>
-</ul><p>Auxiliary arguments for spline models should be specified as a list containing the elements:</p><dl><dt><code>knots</code></dt>
+survival times.</p></dd>
+
+
+</dl><p>Auxiliary arguments for spline models should be specified as a list containing the elements:</p><dl><dt><code>knots</code></dt>
 <dd><p>A numeric vector of knots.</p></dd>
 
 <dt><code>scale</code></dt>
@@ -267,6 +303,7 @@ cumulative hazard or using <code>"discrete"</code> for random number generation.
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    parameter      term        mean         sd       2.5%      97.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;char&gt;    &lt;char&gt;       &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:     shape intercept  0.55088444 0.20690627  0.3793033  0.9404121</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:     scale intercept 11.29702797 1.62742924  8.7760297 13.1101035</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:     scale       age -0.08523438 0.02072153 -0.1221598 -0.0595469</span>
@@ -275,6 +312,7 @@ cumulative hazard or using <code>"discrete"</code> for random number generation.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    parameter      term        mean         sd       2.5%      97.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;char&gt;    &lt;char&gt;       &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:     shape intercept  0.55088444 0.20690627  0.3793033  0.9404121</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:     scale intercept 11.29702797 1.62742924  8.7760297 13.1101035</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:     scale       age -0.08523438 0.02072153 -0.1221598 -0.0595469</span>
@@ -291,7 +329,7 @@ cumulative hazard or using <code>"discrete"</code> for random number generation.
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

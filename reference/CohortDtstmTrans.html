@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -271,11 +271,11 @@ will override this behavior.</p></dd>
 <span class="r-in"><span><span class="co"># a "params_mlogit_list" object.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># MODEL SETUP</span></span></span>
-<span class="r-in"><span><span class="va">strategies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">strategies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  strategy_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  strategy_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SOC"</span>, <span class="st">"New 1"</span>, <span class="st">"New 2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">hesim_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="hesim_data.html">hesim_data</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  strategies <span class="op">=</span> <span class="va">strategies</span>,</span></span>
 <span class="r-in"><span>  patients <span class="op">=</span> <span class="va">patients</span></span></span>
@@ -288,7 +288,7 @@ will override this behavior.</p></dd>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.10204</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/msm/man/msm.html" class="external-link">msm</a></span><span class="op">(</span><span class="va">state_id</span> <span class="op">~</span> <span class="va">time</span>, subject <span class="op">=</span> <span class="va">patient_id</span>,</span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://chjackson.github.io/msm/reference/msm.html" class="external-link">msm</a></span><span class="op">(</span><span class="va">state_id</span> <span class="op">~</span> <span class="va">time</span>, subject <span class="op">=</span> <span class="va">patient_id</span>,</span></span>
 <span class="r-in"><span>           data <span class="op">=</span> <span class="va">onc3p</span><span class="op">[</span><span class="va">patient_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">patient_id</span>, <span class="fl">100</span><span class="op">)</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>           covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"1-2"</span> <span class="op">=</span><span class="op">~</span> <span class="va">strategy_name</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>           qmatrix <span class="op">=</span> <span class="va">qinit</span><span class="op">)</span></span></span>
@@ -301,23 +301,25 @@ will override this behavior.</p></dd>
 <span class="r-in"><span>                                    fixedpars <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                                    n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">transmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>n_cycles <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      sample strategy_id patient_id grp_id state_id   t        prob</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:      1           1          1      1        1 0.0 1.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:      1           1          1      1        1 0.5 0.792695102</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:      1           1          1      1        1 1.0 0.628365524</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:      1           1          1      1        2 0.0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:      1           1          1      1        2 0.5 0.202046511</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104:      2           3          2      1        2 0.5 0.184425447</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105:      2           3          2      1        2 1.0 0.325475890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106:      2           3          2      1        3 0.0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107:      2           3          2      1        3 0.5 0.004553194</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108:      2           3          2      1        3 1.0 0.016768466</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      sample strategy_id patient_id grp_id state_id     t        prob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:      1           1          1      1        1   0.0 1.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:      1           1          1      1        1   0.5 0.792695102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:      1           1          1      1        1   1.0 0.628365524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:      1           1          1      1        2   0.0 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:      1           1          1      1        2   0.5 0.202046511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104:      2           3          2      1        2   0.5 0.184425447</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105:      2           3          2      1        2   1.0 0.325475890</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106:      2           3          2      1        3   0.0 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107:      2           3          2      1        3   0.5 0.004553194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108:      2           3          2      1        3   1.0 0.016768466</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># EXAMPLE #2: params_mlogit_list</span></span></span>
 <span class="r-in"><span><span class="co">## Input data</span></span></span>
 <span class="r-in"><span><span class="va">transmod_data</span><span class="op">[</span>, <span class="va">intercept</span> <span class="op">:=</span> <span class="fl">1</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id patient_id strategy_name intercept</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;      &lt;int&gt;        &lt;char&gt;     &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1          1           SOC         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:           1          2           SOC         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:           2          1         New 1         1</span>
@@ -325,21 +327,23 @@ will override this behavior.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:           3          1         New 2         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:           3          2         New 2         1</span>
 <span class="r-in"><span><span class="va">transmod_data</span><span class="op">[</span>, <span class="va">new1</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">strategy_name</span> <span class="op">==</span> <span class="st">"New 1"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id patient_id strategy_name intercept new1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1          1           SOC         1    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:           1          2           SOC         1    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:           2          1         New 1         1    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:           2          2         New 1         1    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:           3          1         New 2         1    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:           3          2         New 2         1    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id patient_id strategy_name intercept  new1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;      &lt;int&gt;        &lt;char&gt;     &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1          1           SOC         1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:           1          2           SOC         1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:           2          1         New 1         1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:           2          2         New 1         1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:           3          1         New 2         1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:           3          2         New 2         1     0</span>
 <span class="r-in"><span><span class="va">transmod_data</span><span class="op">[</span>, <span class="va">new2</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">strategy_name</span> <span class="op">==</span> <span class="st">"New 2"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id patient_id strategy_name intercept new1 new2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1          1           SOC         1    0    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:           1          2           SOC         1    0    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:           2          1         New 1         1    1    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:           2          2         New 1         1    1    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:           3          1         New 2         1    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:           3          2         New 2         1    0    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id patient_id strategy_name intercept  new1  new2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;      &lt;int&gt;        &lt;char&gt;     &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1          1           SOC         1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:           1          2           SOC         1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:           2          1         New 1         1     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:           2          2         New 1         1     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:           3          1         New 2         1     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:           3          2         New 2         1     0     1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Parameters</span></span></span>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
@@ -377,6 +381,7 @@ will override this behavior.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           from          to      term       mean         sd       2.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;char&gt;      &lt;char&gt;    &lt;char&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      stable progression intercept -0.6634794 0.05869755 -0.7388932</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      stable progression      new1 -0.2152838 0.01251555 -0.2372537</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      stable progression      new2 -0.2360914 1.24487406 -2.0402193</span>
@@ -387,6 +392,7 @@ will override this behavior.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8: progression       death      new1  0.0000000 0.00000000  0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9: progression       death      new2  0.0000000 0.00000000  0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         97.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: -0.5587877</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: -0.1993740</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:  1.9666138</span>
@@ -409,18 +415,19 @@ will override this behavior.</p></dd>
 <span class="r-in"><span>                                    input_data <span class="op">=</span> <span class="va">transmod_data</span>,</span></span>
 <span class="r-in"><span>                                    trans_mat <span class="op">=</span> <span class="va">tmat</span>, cycle_length <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">transmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>n_cycles <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      sample strategy_id patient_id grp_id state_id t        prob</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:      1           1          1      1        1 0 1.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:      1           1          1      1        1 1 0.644542208</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:      1           1          1      1        1 2 0.415434658</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:      1           1          1      1        2 0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:      1           1          1      1        2 1 0.338329178</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 536:     10           3          2      1        2 1 0.842673723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 537:     10           3          2      1        2 2 0.191956639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 538:     10           3          2      1        3 0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 539:     10           3          2      1        3 1 0.003998375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 540:     10           3          2      1        3 2 0.784533916</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      sample strategy_id patient_id grp_id state_id     t        prob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:      1           1          1      1        1     0 1.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:      1           1          1      1        1     1 0.644542208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:      1           1          1      1        1     2 0.415434658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:      1           1          1      1        2     0 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:      1           1          1      1        2     1 0.338329178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 536:     10           3          2      1        2     1 0.842673723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 537:     10           3          2      1        2     2 0.191956639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 538:     10           3          2      1        3     0 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 539:     10           3          2      1        3     1 0.003998375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 540:     10           3          2      1        3     2 0.784533916</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \dontshow{</span></span></span>
 <span class="r-in"><span>  <span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="expmat.html">expmat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">baseline</span><span class="op">)</span><span class="op">[</span>, , <span class="fl">1</span><span class="op">]</span></span></span>
@@ -446,7 +453,7 @@ will override this behavior.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

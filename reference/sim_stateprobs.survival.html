@@ -24,7 +24,7 @@ survival analysis."><meta property="og:image" content="https://hesim-dev.github.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -162,12 +162,12 @@ ensure that probabilities sum to 1.</p>
 <span class="r-in"><span><span class="co"># (0) We first setup our model per usual by defining the treatment strategies,</span></span></span>
 <span class="r-in"><span><span class="co"># target population, and health states</span></span></span>
 <span class="r-in"><span><span class="va">hesim_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="hesim_data.html">hesim_data</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  strategies <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span></span>
+<span class="r-in"><span>  strategies <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span></span>
 <span class="r-in"><span>                          strategy_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SOC"</span>, <span class="st">"New 1"</span>, <span class="st">"New 2"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  patients <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  patients <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                        female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                        grp_id <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  states <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  states <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                      state_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Stable"</span>, <span class="st">"Progression"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -196,8 +196,8 @@ ensure that probabilities sum to 1.</p>
 <span class="r-in"><span><span class="va">pfs</span> <span class="op">&lt;-</span> <span class="fu">predict_survival</span><span class="op">(</span><span class="va">fit_pfs</span>, newdata <span class="op">=</span> <span class="va">surv_input_data</span>, times <span class="op">=</span> <span class="va">times</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">os</span> <span class="op">&lt;-</span> <span class="fu">predict_survival</span><span class="op">(</span><span class="va">fit_os</span>, newdata <span class="op">=</span> <span class="va">surv_input_data</span>, times <span class="op">=</span> <span class="va">times</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">pfs</span><span class="op">)</span><span class="op">[</span>, <span class="va">curve</span> <span class="op">:=</span> <span class="fl">1L</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">os</span><span class="op">)</span><span class="op">[</span>, <span class="va">curve</span> <span class="op">:=</span> <span class="fl">2L</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">pfs</span><span class="op">)</span><span class="op">[</span>, <span class="va">curve</span> <span class="op">:=</span> <span class="fl">1L</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">os</span><span class="op">)</span><span class="op">[</span>, <span class="va">curve</span> <span class="op">:=</span> <span class="fl">2L</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Convert predictions to a survival object</span></span></span>
@@ -210,7 +210,7 @@ ensure that probabilities sum to 1.</p>
 <span class="r-in"><span><span class="co"># (3) Finally, we can use the state probabilities to compute QALYs and costs</span></span></span>
 <span class="r-in"><span><span class="co">## A dummy utility model to illustrate</span></span></span>
 <span class="r-in"><span><span class="va">utility_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="stateval_tbl.html">stateval_tbl</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>state_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>             est <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  dist <span class="op">=</span> <span class="st">"fixed"</span></span></span>
@@ -224,19 +224,20 @@ ensure that probabilities sum to 1.</p>
 <span class="r-in"><span><span class="va">psm</span><span class="op">$</span><span class="va">stateprobs_</span> <span class="op">&lt;-</span> <span class="va">stprobs</span></span></span>
 <span class="r-in"><span><span class="va">psm</span><span class="op">$</span><span class="fu">sim_qalys</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">psm</span><span class="op">$</span><span class="va">qalys_</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id patient_id grp_id state_id   dr    qalys      lys</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1          1      1        1 0.03 4.874007 4.874007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1          1      1        2 0.03 3.070008 3.070008</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      1           1          2      1        1 0.03 4.267061 4.267061</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      1           1          2      1        2 0.03 3.166468 3.166468</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:      1           2          1      1        1 0.03 5.640397 5.640397</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      1           2          1      1        2 0.03 2.605955 2.605955</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:      1           2          2      1        1 0.03 4.961563 4.961563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:      1           2          2      1        2 0.03 2.789254 2.789254</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      1           3          1      1        1 0.03 6.141992 6.141992</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      1           3          1      1        2 0.03 2.399936 2.399936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:      1           3          2      1        1 0.03 5.426923 5.426923</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:      1           3          2      1        2 0.03 2.639381 2.639381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id patient_id grp_id state_id    dr    qalys      lys</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt;    &lt;int&gt; &lt;num&gt;    &lt;num&gt;    &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1          1      1        1  0.03 4.874007 4.874007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1          1      1        2  0.03 3.070008 3.070008</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      1           1          2      1        1  0.03 4.267061 4.267061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      1           1          2      1        2  0.03 3.166468 3.166468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:      1           2          1      1        1  0.03 5.640397 5.640397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      1           2          1      1        2  0.03 2.605955 2.605955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:      1           2          2      1        1  0.03 4.961563 4.961563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:      1           2          2      1        2  0.03 2.789254 2.789254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      1           3          1      1        1  0.03 6.141992 6.141992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      1           3          1      1        2  0.03 2.399936 2.399936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:      1           3          2      1        1  0.03 5.426923 5.426923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:      1           3          2      1        2  0.03 2.639381 2.639381</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -248,7 +249,7 @@ ensure that probabilities sum to 1.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

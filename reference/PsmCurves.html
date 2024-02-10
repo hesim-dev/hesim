@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -390,11 +390,12 @@ for each survival curve.</p><div class="section">
 <span class="r-out co"><span class="r-pr">#&gt;</span> A "params_surv_list" object </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    model parameter      term       mean         sd       2.5%       97.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   pfs      rate intercept -1.7485021 0.03947666 -1.7864545 -1.69543149</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   pfs      rate      new1 -0.1283063 0.05808532 -0.2164273 -0.08005826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:    os      rate intercept -2.7452407 0.03625975 -2.7783701 -2.69718181</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:    os      rate      new1 -0.1333935 0.04073142 -0.1598637 -0.06980461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     model parameter      term       mean         sd       2.5%       97.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt;    &lt;char&gt;    &lt;char&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    pfs      rate intercept -1.7485021 0.03947666 -1.7864545 -1.69543149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:    pfs      rate      new1 -0.1283063 0.05808532 -0.2164273 -0.08005826</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     os      rate intercept -2.7452407 0.03625975 -2.7783701 -2.69718181</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     os      rate      new1 -0.1333935 0.04073142 -0.1598637 -0.06980461</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of parameter samples: 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Distributions: </span>
@@ -428,25 +429,28 @@ for each survival curve.</p><div class="section">
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Quantiles</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm_curves1</span><span class="op">$</span><span class="fu">quantile</span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.75</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve    p  quantile</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1 0.25  1.576211</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1 0.50  3.797756</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     1 0.75  7.595513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          1      1     2 0.25  4.644797</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      1           1          1      1     2 0.50 11.191271</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           1          1      1     2 0.75 22.382543</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve     p  quantile</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1  0.25  1.576211</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1  0.50  3.797756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     1  0.75  7.595513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          1      1     2  0.25  4.644797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      1           1          1      1     2  0.50 11.191271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           1          1      1     2  0.75 22.382543</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm_curves2</span><span class="op">$</span><span class="fu">quantile</span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.75</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve    p  quantile</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1 0.25  1.701678</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1 0.50  4.100060</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     1 0.75  8.200119</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          1      1     2 0.25  4.629897</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      1           1          1      1     2 0.50 11.155370</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           1          1      1     2 0.75 22.310739</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve     p  quantile</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1  0.25  1.701678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1  0.50  4.100060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     1  0.75  8.200119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          1      1     2  0.25  4.629897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      1           1          1      1     2  0.50 11.155370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           1          1      1     2  0.75 22.310739</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Survival curves</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm_curves1</span><span class="op">$</span><span class="fu">survival</span><span class="op">(</span>t <span class="op">=</span> <span class="va">times</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve          t  survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt;      &lt;num&gt;     &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1 0.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1 0.08333333 0.9849055</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     1 0.16666667 0.9700389</span>
@@ -455,6 +459,7 @@ for each survival curve.</p><div class="section">
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           1          1      1     1 0.41666667 0.9267718</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm_curves2</span><span class="op">$</span><span class="fu">survival</span><span class="op">(</span>t <span class="op">=</span> <span class="va">times</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve          t  survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt;      &lt;num&gt;     &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1 0.00000000 1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1 0.08333333 0.9860106</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     1 0.16666667 0.9722169</span>
@@ -464,21 +469,23 @@ for each survival curve.</p><div class="section">
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Restricted mean survival</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm_curves1</span><span class="op">$</span><span class="fu">rmst</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve t     rmst</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1 2 1.675611</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1 5 3.279243</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     2 2 1.881087</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          1      1     2 5 4.299891</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      1           2          1      1     1 2 1.731940</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           2          1      1     1 5 3.536659</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve     t     rmst</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt; &lt;num&gt;    &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1     2 1.675611</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1     5 3.279243</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     2     2 1.881087</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          1      1     2     5 4.299891</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      1           2          1      1     1     2 1.731940</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           2          1      1     1     5 3.536659</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">psm_curves2</span><span class="op">$</span><span class="fu">rmst</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve t     rmst</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1 2 1.696977</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1 5 3.374980</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     2 2 1.880720</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          1      1     2 5 4.297859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      1           2          1      1     1 2 1.752854</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           2          1      1     1 5 3.636406</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id curve     t     rmst</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt; &lt;num&gt;    &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1     2 1.696977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     1     5 3.374980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          1      1     2     2 1.880720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          1      1     2     5 4.297859</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:      1           2          1      1     1     2 1.752854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           2          1      1     1     5 3.636406</span>
 </code></pre></div>
     </div>
   </div>
@@ -489,7 +496,7 @@ for each survival curve.</p><div class="section">
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

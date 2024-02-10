@@ -26,7 +26,7 @@ reference)."><meta property="og:image" content="https://hesim-dev.github.io/hesi
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@ reference)."><meta property="og:image" content="https://hesim-dev.github.io/hesi
     <div class="ref-description">
     <p>Update existing variables or create new ones that replace existing values
 with more informative labels as in <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor()</a></code>. All modifications are performed
-by reference (see <code><a href="https://Rdatatable.gitlab.io/data.table/reference/assign.html" class="external-link">data.table::set()</a></code> for more information about assignment by
+by reference (see <code><a href="https://rdatatable.gitlab.io/data.table/reference/assign.html" class="external-link">data.table::set()</a></code> for more information about assignment by
 reference).</p>
     </div>
 
@@ -154,20 +154,23 @@ vectors are created.</p></dd>
 <span class="r-in"><span>                               <span class="st">"s2"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>            <span class="st">"grp_id"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"g1"</span> <span class="op">=</span> <span class="fl">1</span>, </span></span>
 <span class="r-in"><span>                         <span class="st">"g2"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, grp_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span>; <span class="va">d3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, grp_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span>; <span class="va">d3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">set_labels</span><span class="op">(</span><span class="va">d2</span>, labels <span class="op">=</span> <span class="va">labs</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">set_labels</span><span class="op">(</span><span class="va">d3</span>, labels <span class="op">=</span> <span class="va">labs</span>, new_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy_name"</span>, <span class="st">"grp_name"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">d1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id grp_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;int&gt;  &lt;int&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1      1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:           2      2</span>
 <span class="r-in"><span><span class="va">d2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id grp_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;fctr&gt; &lt;fctr&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:          s1     g1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:          s2     g2</span>
 <span class="r-in"><span><span class="va">d3</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id grp_id strategy_name grp_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;int&gt;  &lt;int&gt;        &lt;fctr&gt;   &lt;fctr&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1      1            s1       g1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:           2      2            s2       g2</span>
 </code></pre></div>
@@ -180,7 +183,7 @@ vectors are created.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

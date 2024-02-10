@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -129,7 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cost-effectiveness analysis</h1>
             
-            <h4 data-toc-skip class="date">2023-02-28</h4>
+            <h4 data-toc-skip class="date">2024-02-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/cea.Rmd" class="external-link"><code>vignettes/cea.Rmd</code></a></small>
       <div class="hidden name"><code>cea.Rmd</code></div>
@@ -286,7 +286,7 @@ effective in subgroup 2.</p>
 <span></span>
 <span><span class="co"># cost and effectiveness by strategy and simulation</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com" class="external-link">"data.table"</a></span><span class="op">)</span></span>
-<span><span class="va">ce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">n_samples</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span>,</span>
+<span><span class="va">ce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">n_samples</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                 strategy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Strategy "</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>                                each <span class="op">=</span> <span class="va">n_samples</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>                 grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Group 1"</span>, <span class="st">"Group 2"</span><span class="op">)</span>,</span>
@@ -294,6 +294,7 @@ effective in subgroup 2.</p>
 <span>                 cost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="va">c</span><span class="op">)</span>, qalys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"c"</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ce</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample   strategy     grp     cost    qalys</span></span>
+<span><span class="co">##     &lt;int&gt;     &lt;char&gt;  &lt;char&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
 <span><span class="co">## 1:      1 Strategy 1 Group 1 6.808115 7.984456</span></span>
 <span><span class="co">## 2:      2 Strategy 1 Group 1 6.997936 7.984085</span></span>
 <span><span class="co">## 3:      3 Strategy 1 Group 1 8.183247 8.221359</span></span>
@@ -357,7 +358,9 @@ quantiles from the PSA.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://magrittr.tidyverse.org" class="external-link">"magrittr"</a></span><span class="op">)</span> <span class="co"># Use pipes</span></span>
 <span><span class="fu"><a href="../reference/icer.html">icer</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, k <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##      Group           Outcome                Strategy 2</span></span>
+<pre><code><span><span class="co">## Key: &lt;Group, Outcome&gt;</span></span>
+<span><span class="co">##      Group           Outcome                Strategy 2</span></span>
+<span><span class="co">##     &lt;char&gt;            &lt;fctr&gt;                    &lt;char&gt;</span></span>
 <span><span class="co">## 1: Group 1 Incremental QALYs         2.05 (0.44, 3.68)</span></span>
 <span><span class="co">## 2: Group 1 Incremental costs   60,579 (45,170, 80,640)</span></span>
 <span><span class="co">## 3: Group 1   Incremental NMB 41,980 (-38,916, 122,227)</span></span>
@@ -367,6 +370,7 @@ quantiles from the PSA.</p>
 <span><span class="co">## 7: Group 2   Incremental NMB 62,588 (-23,058, 143,866)</span></span>
 <span><span class="co">## 8: Group 2              ICER                    24,615</span></span>
 <span><span class="co">##                    Strategy 3</span></span>
+<span><span class="co">##                        &lt;char&gt;</span></span>
 <span><span class="co">## 1:         0.51 (-0.75, 1.72)</span></span>
 <span><span class="co">## 2:    60,750 (44,408, 79,245)</span></span>
 <span><span class="co">## 3: -35,460 (-100,074, 32,748)</span></span>
@@ -392,6 +396,7 @@ estimates differences in costs and QALYs relative to the comparator.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">$</span><span class="va">delta</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    sample   strategy     grp       ie       ic</span></span>
+<span><span class="co">##     &lt;int&gt;     &lt;char&gt;  &lt;char&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
 <span><span class="co">## 1:      1 Strategy 2 Group 1 1.497467 57687.97</span></span>
 <span><span class="co">## 2:      2 Strategy 2 Group 1 1.428877 65857.23</span></span>
 <span><span class="co">## 3:      3 Strategy 2 Group 1 3.184584 44830.68</span></span>
@@ -422,9 +427,9 @@ simulation output and suppose k is equal to 50,000.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ce</span> <span class="op">&lt;-</span> <span class="va">ce</span><span class="op">[</span>, <span class="va">nmb</span> <span class="op">:=</span> <span class="fl">50000</span> <span class="op">*</span> <span class="va">qalys</span> <span class="op">-</span> <span class="va">cost</span><span class="op">]</span></span>
 <span><span class="va">random_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_samples</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">nmb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">ce</span><span class="op">[</span><span class="va">sample</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">random_rows</span> <span class="op">&amp;</span> <span class="va">grp</span> <span class="op">==</span> <span class="st">"Group 2"</span><span class="op">]</span>, </span>
+<span><span class="va">nmb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">ce</span><span class="op">[</span><span class="va">sample</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">random_rows</span> <span class="op">&amp;</span> <span class="va">grp</span> <span class="op">==</span> <span class="st">"Group 2"</span><span class="op">]</span>, </span>
 <span>                <span class="va">sample</span> <span class="op">~</span> <span class="va">strategy</span>, value.var <span class="op">=</span> <span class="st">"nmb"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">nmb</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"nmb1"</span>, <span class="st">"nmb2"</span>, <span class="st">"nmb3"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setattr.html" class="external-link">setnames</a></span><span class="op">(</span><span class="va">nmb</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"nmb1"</span>, <span class="st">"nmb2"</span>, <span class="st">"nmb3"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">maxj</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">nmb1</span>, <span class="va">nmb2</span>, <span class="va">nmb3</span><span class="op">)</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="va">nmb</span> <span class="op">&lt;-</span> <span class="va">nmb</span><span class="op">[</span>, <span class="va">maxj</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">maxj</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <table class="table">
@@ -697,7 +702,7 @@ simulation output used above.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Expected net monetary benefit</span></span>
 <span><span class="va">enmb</span> <span class="op">&lt;-</span> <span class="va">ce</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>enmb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">nmb</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategy"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">enmb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">enmb</span>, <span class="va">strategy</span> <span class="op">~</span> <span class="va">grp</span>, value.var <span class="op">=</span> <span class="st">"enmb"</span><span class="op">)</span></span>
+<span><span class="va">enmb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">enmb</span>, <span class="va">strategy</span> <span class="op">~</span> <span class="va">grp</span>, value.var <span class="op">=</span> <span class="st">"enmb"</span><span class="op">)</span></span>
 <span><span class="va">strategymax_g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="va">enmb</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="co"># Optimal strategy group 2</span></span>
 <span></span>
 <span><span class="co"># Net monetary benefit (with perfect and current information)</span></span>
@@ -992,7 +997,7 @@ totEVPI &amp;= \sum_{g=1}^{G} w_g EVPI_g,
 weight denoting that proportion of the population represented by
 subgroup <span class="math inline">\(g\)</span> and <span class="math inline">\(\sum_{g=1}^{G} w_g = 1\)</span>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">w_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group "</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">.75</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">w_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>grp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group "</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">.75</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">evpi</span> <span class="op">&lt;-</span> <span class="va">cea_out</span><span class="op">$</span><span class="va">evpi</span></span>
 <span><span class="va">evpi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">evpi</span>, <span class="va">w_dt</span>, by <span class="op">=</span> <span class="st">"grp"</span><span class="op">)</span></span>
 <span><span class="va">totevpi</span> <span class="op">&lt;-</span> <span class="va">evpi</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">.SD</span>, <span class="va">weighted.mean</span>, w <span class="op">=</span> <span class="va">w</span><span class="op">)</span>,</span>
@@ -1107,7 +1112,7 @@ Decision Making</em> 34 (8): 951–64.
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+<p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

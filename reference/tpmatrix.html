@@ -27,7 +27,7 @@ for simulating health state transitions."><meta property="og:image" content="htt
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -173,6 +173,7 @@ across parameter samples.</p></div>
 <span class="r-in"><span>  <span class="fl">0</span>, <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    s1_s1 s1_s2 s2_s1 s2_s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:   0.3   0.7     0     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:   0.4   0.6     0     1</span>
 <span class="r-in"><span></span></span>
@@ -181,6 +182,7 @@ across parameter samples.</p></div>
 <span class="r-in"><span>  <span class="va">C</span>, <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    s1_s1 s1_s2 s2_s1 s2_s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:   0.3   0.7     0     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:   0.4   0.6     0     1</span>
 <span class="r-in"><span></span></span>
@@ -188,6 +190,7 @@ across parameter samples.</p></div>
 <span class="r-in"><span><span class="va">pmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.5</span>, <span class="fl">.3</span>, <span class="fl">.7</span><span class="op">)</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">tpmatrix</span><span class="op">(</span><span class="va">pmat</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    s1_s1 s1_s2 s2_s1 s2_s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:   0.5   0.5   0.3   0.7</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Pass vectors and data frames</span></span></span>
@@ -214,6 +217,7 @@ across parameter samples.</p></div>
 <span class="r-in"><span>  <span class="va">p3</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    s1_s1 s1_s2 s1_s3 s2_s1 s2_s2 s2_s3 s3_s1 s3_s2 s3_s3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:   0.2   0.7   0.1     0  0.40  0.60     0     0     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:   0.2   0.6   0.2     0  0.45  0.55     0     0     1</span>
 <span class="r-in"><span></span></span>
@@ -221,15 +225,18 @@ across parameter samples.</p></div>
 <span class="r-in"><span><span class="va">pmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>s1_s1 <span class="op">=</span> <span class="fl">0</span>, s1_s2 <span class="op">=</span> <span class="fl">.5</span>, s2_s1 <span class="op">=</span> <span class="fl">.3</span>, s2_s2 <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">tpmatrix</span><span class="op">(</span><span class="va">pmat</span>, complement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"s1_s1"</span>, <span class="st">"s2_s2"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    s1_s1 s1_s2 s2_s1 s2_s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:   0.5   0.5   0.3   0.7</span>
 <span class="r-in"><span><span class="fu">tpmatrix</span><span class="op">(</span><span class="va">pmat</span>, complement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="co"># Can also pass integers</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    s1_s1 s1_s2 s2_s1 s2_s2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:   0.5   0.5   0.3   0.7</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Can control column names</span></span></span>
 <span class="r-in"><span><span class="fu">tpmatrix</span><span class="op">(</span><span class="va">pmat</span>, complement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>         states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"state1"</span>, <span class="st">"state2"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    state1.state1 state1.state2 state2.state1 state2.state2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            &lt;num&gt;         &lt;num&gt;         &lt;num&gt;         &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:           0.5           0.5           0.3           0.7</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -242,7 +249,7 @@ across parameter samples.</p></div>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

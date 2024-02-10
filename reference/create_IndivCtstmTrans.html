@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -130,8 +130,9 @@
 <span>  <span class="va">object</span>,</span>
 <span>  <span class="va">input_data</span>,</span>
 <span>  <span class="va">trans_mat</span>,</span>
-<span>  clock <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"reset"</span>, <span class="st">"forward"</span>, <span class="st">"mix"</span><span class="op">)</span>,</span>
+<span>  clock <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"reset"</span>, <span class="st">"forward"</span>, <span class="st">"mix"</span>, <span class="st">"mixt"</span><span class="op">)</span>,</span>
 <span>  reset_states <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transition_types <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -140,8 +141,9 @@
 <span>  <span class="va">object</span>,</span>
 <span>  <span class="va">input_data</span>,</span>
 <span>  <span class="va">trans_mat</span>,</span>
-<span>  clock <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"reset"</span>, <span class="st">"forward"</span>, <span class="st">"mix"</span><span class="op">)</span>,</span>
+<span>  clock <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"reset"</span>, <span class="st">"forward"</span>, <span class="st">"mix"</span>, <span class="st">"mixt"</span><span class="op">)</span>,</span>
 <span>  reset_states <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transition_types <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -168,7 +170,8 @@ multi-state model in the format from the <code><a href="https://rdrr.io/pkg/msta
 
 
 <dt>clock</dt>
-<dd><p>"reset" for a clock-reset model, "forward" for a clock-forward model, and "mix" for a mixture
+<dd><p>"reset" for a clock-reset model, "forward" for a clock-forward model,
+"mix" for a mixture by state, and "mixt" for a mixture by transition
 of clock-reset and clock-forward models. See the field <code>clock</code> in <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>.</p></dd>
 
 
@@ -185,6 +188,11 @@ distribution. If <code>"none"</code>, then only point estimates are returned.</p
 <dt>reset_states</dt>
 <dd><p>A vector denoting the states in which time resets. See the field
 <code>reset_states</code> in <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>.</p></dd>
+
+
+<dt>transition_types</dt>
+<dd><p>A vector denoting the type for each transition. See the field
+<code>transition_types</code> in <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -227,7 +235,7 @@ an error will be thrown.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

@@ -24,7 +24,7 @@ Summary statistics are computed for each possible transition."><meta property="o
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@ vectors. See "Value" below for additional details.</p></dd>
     <h2>Value</h2>
     
 
-<p>If <code>unflatten = "FALSE"</code> (the default), then a <code><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code></p>
+<p>If <code>unflatten = "FALSE"</code> (the default), then a <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></code></p>
 
 
 <p>is returned with columns for (i) the health state that is being transitioned
@@ -164,8 +164,8 @@ returned as columns.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com" class="external-link">"data.table"</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">hesim_dat</span> <span class="op">&lt;-</span>  <span class="fu"><a href="hesim_data.html">hesim_data</a></span><span class="op">(</span>strategies <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                                patients <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">hesim_dat</span> <span class="op">&lt;-</span>  <span class="fu"><a href="hesim_data.html">hesim_data</a></span><span class="op">(</span>strategies <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                patients <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>patient_id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">input_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="expand.html">expand</a></span><span class="op">(</span><span class="va">hesim_dat</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strategies"</span>, <span class="st">"patients"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summarize across all rows in "input_data"</span></span></span>
@@ -177,22 +177,25 @@ returned as columns.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Summary where each column is a vector</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    from to mean        sd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   s1 s1  0.3 0.1095445</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   s1 s2  0.7 0.1095445</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   s2 s1  0.0 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:   s2 s2  1.0 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      from     to  mean        sd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;char&gt; &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     s1     s1   0.3 0.1095445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     s1     s2   0.7 0.1095445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     s2     s1   0.0 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     s2     s2   1.0 0.0000000</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">p</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.025</span>, <span class="fl">.975</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    from to mean        sd 2.5% 97.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   s1 s1  0.3 0.1095445  0.2   0.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   s1 s2  0.7 0.1095445  0.6   0.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   s2 s1  0.0 0.0000000  0.0   0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:   s2 s2  1.0 0.0000000  1.0   1.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      from     to  mean        sd  2.5% 97.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;char&gt; &lt;num&gt;     &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     s1     s1   0.3 0.1095445   0.2   0.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     s1     s2   0.7 0.1095445   0.6   0.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     s2     s1   0.0 0.0000000   0.0   0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     s2     s2   1.0 0.0000000   1.0   1.0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Summary where each column is a matrix</span></span></span>
 <span class="r-in"><span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">p</span>, probs <span class="op">=</span> <span class="fl">.5</span>, unflatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ps</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               mean                                      sd             50%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             &lt;list&gt;                                  &lt;list&gt;          &lt;list&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.3,0.0,0.7,1.0 0.1095445,0.0000000,0.1095445,0.0000000 0.3,0.0,0.7,1.0</span>
 <span class="r-in"><span><span class="va">ps</span><span class="op">$</span><span class="va">mean</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
@@ -211,37 +214,39 @@ returned as columns.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Summary where each column is a vector</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">p</span>, id <span class="op">=</span> <span class="va">tpmat_id</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id from to mean sd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:           1          1   s1 s1  0.2  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:           1          1   s1 s2  0.8  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:           1          1   s2 s1  0.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:           1          1   s2 s2  1.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:           1          2   s1 s1  0.2  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:           1          2   s1 s2  0.8  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:           1          2   s2 s1  0.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:           1          2   s2 s2  1.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:           1          3   s1 s1  0.2  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:           1          3   s1 s2  0.8  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:           1          3   s2 s1  0.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:           1          3   s2 s2  1.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:           2          1   s1 s1  0.4  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:           2          1   s1 s2  0.6  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:           2          1   s2 s1  0.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:           2          1   s2 s2  1.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:           2          2   s1 s1  0.4  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:           2          2   s1 s2  0.6  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19:           2          2   s2 s1  0.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20:           2          2   s2 s2  1.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21:           2          3   s1 s1  0.4  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22:           2          3   s1 s2  0.6  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23:           2          3   s2 s1  0.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24:           2          3   s2 s2  1.0  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id from to mean sd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id   from     to  mean    sd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;int&gt;      &lt;int&gt; &lt;char&gt; &lt;char&gt; &lt;num&gt; &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:           1          1     s1     s1   0.2     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:           1          1     s1     s2   0.8     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:           1          1     s2     s1   0.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:           1          1     s2     s2   1.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:           1          2     s1     s1   0.2     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:           1          2     s1     s2   0.8     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:           1          2     s2     s1   0.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:           1          2     s2     s2   1.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:           1          3     s1     s1   0.2     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:           1          3     s1     s2   0.8     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:           1          3     s2     s1   0.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:           1          3     s2     s2   1.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:           2          1     s1     s1   0.4     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:           2          1     s1     s2   0.6     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:           2          1     s2     s1   0.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:           2          1     s2     s2   1.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:           2          2     s1     s1   0.4     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:           2          2     s1     s2   0.6     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:           2          2     s2     s1   0.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20:           2          2     s2     s2   1.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:           2          3     s1     s1   0.4     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:           2          3     s1     s2   0.6     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:           2          3     s2     s1   0.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:           2          3     s2     s2   1.0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     strategy_id patient_id   from     to  mean    sd</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Summary where each column is a matrix</span></span></span>
 <span class="r-in"><span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">p</span>, id <span class="op">=</span> <span class="va">tpmat_id</span>, unflatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ps</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    strategy_id patient_id            mean      sd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;int&gt;      &lt;int&gt;          &lt;list&gt;  &lt;list&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:           1          1 0.2,0.0,0.8,1.0 0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:           1          2 0.2,0.0,0.8,1.0 0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:           1          3 0.2,0.0,0.8,1.0 0,0,0,0</span>
@@ -289,7 +294,7 @@ returned as columns.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">

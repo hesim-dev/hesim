@@ -24,7 +24,7 @@ transition model using parameters from a multi-state model."><meta property="og:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">hesim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -158,11 +158,13 @@ By default, it is set to the final absorbing state (i.e., a row in <code>trans_m
 
 <dt><code>clock</code></dt>
 <dd><p>"reset" for a clock-reset model, "forward" for a clock-forward model,
-and "mix" for a mixture of clock-reset and clock-forward models. A clock-reset model
+"mix" for a mixture of clock-reset and clock-forward models by state, and
+"mixt" for a mixture of clock-reset and clock-forward models by transition. A clock-reset model
 is a semi-Markov model in which transition rates depend on time since entering a state.
 A clock-forward model is a Markov model in which transition rates depend on time
 since entering the initial state. If <code>"mix"</code> is used, then
-<code>reset_states</code> must be specified.</p></dd>
+<code>reset_states</code> must be specified. If <code>"mixt"</code> is used, then <code>transition_types</code> must
+be specified.</p></dd>
 
 
 <dt><code>reset_states</code></dt>
@@ -170,6 +172,14 @@ since entering the initial state. If <code>"mix"</code> is used, then
 Hazard functions are always a function of elapsed time since either the
 start of the model or from when time was previously reset. Only used if
 <code>clock = "mix"</code>.</p></dd>
+
+
+<dt><code>transition_types</code></dt>
+<dd><p>A vector denoting the type of transition.
+The vector is of the same length as the number of transitions
+and takes values <code>"reset"</code>, <code>"time"</code> or <code>"age"</code> for hazards that are functions of
+reset time, time since study entry or age, respectively. Only used if
+<code>clock = "mixt"</code>.</p></dd>
 
 
 </dl><p></p></div>
@@ -198,8 +208,9 @@ start of the model or from when time was previously reset. Only used if
 <span>  start_state <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  start_age <span class="op">=</span> <span class="fl">38</span>,</span>
 <span>  death_state <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  clock <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"reset"</span>, <span class="st">"forward"</span>, <span class="st">"mix"</span><span class="op">)</span>,</span>
-<span>  reset_states <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  clock <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"reset"</span>, <span class="st">"forward"</span>, <span class="st">"mix"</span>, <span class="st">"mixt"</span><span class="op">)</span>,</span>
+<span>  reset_states <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transition_types <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -235,6 +246,10 @@ start of the model or from when time was previously reset. Only used if
 
 <dt><code>reset_states</code></dt>
 <dd><p>The <code>reset_states</code> field.</p></dd>
+
+
+<dt><code>transition_types</code></dt>
+<dd><p>The <code>transition_types</code> field.</p></dd>
 
 
 </dl><p></p></div>
@@ -367,66 +382,70 @@ using <code>IndivCtstm$sim_disease()</code>.</p></dd>
 <span class="r-in"><span>                                   trans_mat <span class="op">=</span> <span class="va">tmat</span>,</span></span>
 <span class="r-in"><span>                                   n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod</span><span class="op">$</span><span class="fu">hazard</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    transition_id sample strategy_id patient_id grp_id t     hazard</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             1      1           1          1      1 1 0.19599086</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             1      1           1          1      1 2 0.19599086</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             1      1           1          1      1 3 0.19599086</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             2      1           1          1      1 1 0.04988861</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             2      1           1          1      1 2 0.04988861</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             2      1           1          1      1 3 0.04988861</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    transition_id sample strategy_id patient_id grp_id     t     hazard</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            &lt;num&gt;  &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             1      1           1          1      1     1 0.19599086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             1      1           1          1      1     2 0.19599086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             1      1           1          1      1     3 0.19599086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             2      1           1          1      1     1 0.04988861</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             2      1           1          1      1     2 0.04988861</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             2      1           1          1      1     3 0.04988861</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">transmod</span><span class="op">$</span><span class="fu">cumhazard</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    transition_id sample strategy_id patient_id grp_id t  cumhazard</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             1      1           1          1      1 1 0.19599086</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             1      1           1          1      1 2 0.39198173</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             1      1           1          1      1 3 0.58797259</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             2      1           1          1      1 1 0.04988861</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             2      1           1          1      1 2 0.09977722</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             2      1           1          1      1 3 0.14966583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    transition_id sample strategy_id patient_id grp_id     t  cumhazard</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            &lt;num&gt;  &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             1      1           1          1      1     1 0.19599086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             1      1           1          1      1     2 0.39198173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:             1      1           1          1      1     3 0.58797259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:             2      1           1          1      1     1 0.04988861</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:             2      1           1          1      1     2 0.09977722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:             2      1           1          1      1     3 0.14966583</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Simulate disease progression and state probabilities together</span></span></span>
 <span class="r-in"><span><span class="va">transmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="va">t</span> <span class="op">==</span> <span class="fl">5</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id grp_id state_id t      prob</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1      1        1 5 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1      1        2 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      1           1      1        3 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      1           2      1        1 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:      1           2      1        2 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      1           2      1        3 5 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:      1           3      1        1 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:      1           3      1        2 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      1           3      1        3 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      2           1      1        1 5 1.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:      2           1      1        2 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:      2           1      1        3 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:      2           2      1        1 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:      2           2      1        2 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:      2           2      1        3 5 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:      2           3      1        1 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:      2           3      1        2 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:      2           3      1        3 5 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id grp_id state_id     t      prob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;num&gt;       &lt;int&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1      1        1     5 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1      1        2     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      1           1      1        3     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      1           2      1        1     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:      1           2      1        2     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      1           2      1        3     5 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:      1           3      1        1     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:      1           3      1        2     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      1           3      1        3     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      2           1      1        1     5 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:      2           1      1        2     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:      2           1      1        3     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:      2           2      1        1     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:      2           2      1        2     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:      2           2      1        3     5 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:      2           3      1        1     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:      2           3      1        2     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:      2           3      1        3     5 0.6666667</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Simulate disease progression and state probabilities separately</span></span></span>
 <span class="r-in"><span><span class="va">disprog</span> <span class="op">&lt;-</span> <span class="va">transmod</span><span class="op">$</span><span class="fu">sim_disease</span><span class="op">(</span>max_t <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">transmod</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>, disprog <span class="op">=</span> <span class="va">disprog</span><span class="op">)</span><span class="op">[</span><span class="va">t</span> <span class="op">==</span> <span class="fl">5</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id grp_id state_id t      prob</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1      1        1 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1      1        2 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      1           1      1        3 5 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      1           2      1        1 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:      1           2      1        2 5 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      1           2      1        3 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:      1           3      1        1 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:      1           3      1        2 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      1           3      1        3 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      2           1      1        1 5 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:      2           1      1        2 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:      2           1      1        3 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13:      2           2      1        1 5 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14:      2           2      1        2 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15:      2           2      1        3 5 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16:      2           3      1        1 5 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17:      2           3      1        2 5 0.6666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18:      2           3      1        3 5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     sample strategy_id grp_id state_id     t      prob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;num&gt;       &lt;int&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1           1      1        1     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      1           1      1        2     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      1           1      1        3     5 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      1           2      1        1     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:      1           2      1        2     5 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      1           2      1        3     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:      1           3      1        1     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:      1           3      1        2     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      1           3      1        3     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      2           1      1        1     5 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:      2           1      1        2     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:      2           1      1        3     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:      2           2      1        1     5 0.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:      2           2      1        2     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:      2           2      1        3     5 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:      2           3      1        1     5 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:      2           3      1        2     5 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:      2           3      1        3     5 0.3333333</span>
 </code></pre></div>
     </div>
   </div>
@@ -437,7 +456,7 @@ using <code>IndivCtstm$sim_disease()</code>.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen.</p>
+  <p></p><p>Developed by Devin Incerti, Jeroen P. Jansen, Mark Clements.</p>
 </div>
 
 <div class="pkgdown">
