@@ -130,7 +130,7 @@
       <h1 data-toc-skip>Markov models with multinomial logistic
 regression</h1>
             
-            <h4 data-toc-skip class="date">2024-02-10</h4>
+            <h4 data-toc-skip class="date">2024-02-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/mlogit.Rmd" class="external-link"><code>vignettes/mlogit.Rmd</code></a></small>
       <div class="hidden name"><code>mlogit.Rmd</code></div>
@@ -229,12 +229,12 @@ differences in age and gender.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    patient_id      age female grp_id</span></span>
 <span><span class="co">##         &lt;int&gt;    &lt;num&gt;  &lt;int&gt;  &lt;int&gt;</span></span>
-<span><span class="co">## 1:         12 62.55323      1      1</span></span>
-<span><span class="co">## 2:       9645 30.36514      0      2</span></span>
-<span><span class="co">## 3:       2004 29.63812      0      3</span></span>
-<span><span class="co">## 4:       7699 38.35054      1      4</span></span>
-<span><span class="co">## 5:       2491 28.35680      1      5</span></span>
-<span><span class="co">## 6:       7616 55.50041      1      6</span></span></code></pre>
+<span><span class="co">## 1:       9031 30.93736      1      1</span></span>
+<span><span class="co">## 2:        940 60.31440      1      2</span></span>
+<span><span class="co">## 3:        168 84.85698      0      3</span></span>
+<span><span class="co">## 4:       4707 79.34795      1      4</span></span>
+<span><span class="co">## 5:       5768 40.06818      1      5</span></span>
+<span><span class="co">## 6:       1022 84.82807      0      6</span></span></code></pre>
 <p>To perform the cost-effectiveness analysis, each patient is simulated
 twice, once with the reference treatment and once with the intervention.
 The non-death states use for simulating costs and quality-adjusted
