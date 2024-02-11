@@ -67,7 +67,7 @@ new_input_mats <- function(X, ...){
 }
 
 #' @rdname check
-check.input_mats <- function(object){
+check.input_mats <- function(object, ...){
   # Check X
   if (!is.list(object$X)){
     stop("'X' must be a list or a list of lists.", call. = FALSE)

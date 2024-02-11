@@ -333,7 +333,8 @@ coeflist <- function(coefs){
   return(coefs)
 }
 
-check.coeflist <- function(coefs){
+check.coeflist <- function(object, ...){
+  coefs = object
   # Each element of 'coefs' must be a matrix
   matrix_bool <- unlist(lapply(coefs, is.matrix))
   if(sum(!matrix_bool) > 0){

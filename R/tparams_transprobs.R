@@ -122,7 +122,7 @@ create_tparams_transprobs <- function(value, ...){
 }
 
 #' @rdname check
-check.tparams_transprobs <- function(object){
+check.tparams_transprobs <- function(object, ...){
   stopifnot(is.array(object$value))
   stopifnot(is.numeric(object$sample))
   stopifnot(is.numeric(object$n_samples))
@@ -220,7 +220,7 @@ new_tparams_transprobs_array6 <- function (object, times = NULL,
 
 
 new_tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL, 
-                                          grp_id = NULL, patient_wt = NULL) {
+                                          grp_id = NULL, patient_wt = NULL, ...) {
   # Checks
   n_dim <- length(dim(object))
   if(!n_dim %in% c(3, 6)){
@@ -252,7 +252,7 @@ tparams_transprobs.array <- function (object, tpmatrix_id = NULL, times = NULL,
   return(check(res))
 }
 
-new_tparams_transprobs.data.table <- function (object) {
+new_tparams_transprobs.data.table <- function (object, ...) {
   id_args <- tparams_transprobs_id(object)
   indices <- grep("^prob_", colnames(object))
   if (length(indices) == 0) {
@@ -289,6 +289,7 @@ tparams_transprobs.tpmatrix <- function(object, tpmatrix_id, ...) {
   return(do.call("create_tparams_transprobs", c(list(value = value), id_args)))
 }
 
+#' @export
 tparams_transprobs.eval_model <- function(object, ...){
   id_index <- attr(object$tpmatrix, "id_index")
   return(tparams_transprobs(object$tpmatrix, object$id[[id_index]]))
