@@ -228,7 +228,7 @@ new_params_surv <- function(coefs, dist, n_samples, aux = NULL){
 }
 
 #' @rdname check
-check.params_surv <- function(object){
+check.params_surv <- function(object, ...){
   # Check coefficients
   if (list_depth(object$coefs) !=1 | length(object$dist) !=1){
     stop("'coefs' must only contain one survival model.", call. = FALSE)

@@ -392,6 +392,7 @@ sim_ev <- function (object, ...) {
   UseMethod("sim_ev", object)
 }
 
+#' @export
 sim_ev.NULL <- function(object, ...) {
   if (is.null(object)) {
     stop("You must first simulate state probabilities using '$sim_stateprobs'.",

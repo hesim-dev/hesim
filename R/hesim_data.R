@@ -142,46 +142,47 @@ new_hesim_data <- function(strategies, patients, states = NULL,
   return(data)
 }
 
-check.hesim_data <- function(x){
+check.hesim_data <- function(object, ...){
+  
   # Strategies
-  if (is.null(x$strategies)){
+  if (is.null(object$strategies)){
     stop("'strategies' cannot be NULL'.",
          call. = FALSE)
   }
-  check_hesim_data_type(x$strategies, "strategies")
-  if (!"strategy_id" %in% colnames(x$strategies)){
+  check_hesim_data_type(object$strategies, "strategies")
+  if (!"strategy_id" %in% colnames(object$strategies)){
     stop("'strategies' must contain the column 'strategy_id'.",
          call. = FALSE)
   }
   
   # Patients
-  if (!is.null(x$patients)){
-    check_hesim_data_type(x$patients, "patients")
-    if (!"patient_id" %in% colnames(x$patients)){
+  if (!is.null(object$patients)){
+    check_hesim_data_type(object$patients, "patients")
+    if (!"patient_id" %in% colnames(object$patients)){
       stop("'patients' must contain the column 'patient_id'.", 
            call. = FALSE)
     }
   }
   
   # States
-  if (!is.null(x$states)){
-    check_hesim_data_type(x$states, "states")
-    if (!"state_id" %in% colnames(x$states)){
+  if (!is.null(object$states)){
+    check_hesim_data_type(object$states, "states")
+    if (!"state_id" %in% colnames(object$states)){
       stop("'states' must contain the column 'state_id'.", 
            call. = FALSE)
     }
   }
   
   # Transitions
-  if (!is.null(x$transitions)){
-    check_hesim_data_type(x$transitions, "transitions")
-    if (!"transition_id" %in% colnames(x$transitions)){
+  if (!is.null(object$transitions)){
+    check_hesim_data_type(object$transitions, "transitions")
+    if (!"transition_id" %in% colnames(object$transitions)){
       stop("'transitions' must contain the column 'transition_id'.", 
            call. = FALSE)
     }
   }
   
-  return(x)
+  return(object)
 }
 
 check_hesim_data_type <- function(tbl, tbl_name){
@@ -457,7 +458,7 @@ new_id_attributes <- function(strategy_id, n_strategies,
 }
 
 #' @rdname check
-check.id_attributes <- function(object){
+check.id_attributes <- function(object, ...){
   # ID variables to check
   id_vars <- c("sample", "strategy_id", "patient_id", "state_id", 
                "transition_id", "time_id")

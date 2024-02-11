@@ -36,7 +36,7 @@ params_surv_list <- function(...){
 }
 
 #' @rdname check
-check.params_surv_list <- function(object){
+check.params_surv_list <- function(object, ...){
   check_params_list(object)
 }
 

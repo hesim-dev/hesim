@@ -54,7 +54,7 @@ new_params_lm <- function(coefs, sigma, n_samples){
 }
 
 #' @rdname check
-check.params_lm <- function(object){
+check.params_lm <- function(object, ...){
   if(object$n_samples != length(object$sigma)){
     stop("Number of samples in 'sigma' is not equal to the number of samples in 'coefs'.",
          call. = FALSE)

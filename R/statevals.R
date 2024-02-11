@@ -522,8 +522,9 @@ create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, .
   return(StateVals$new(params = tparams, ...))
 }
 
+#' @export
 create_StateVals.eval_model <- function(object, cost = TRUE, name = NULL,
-                                        init_args = NULL){
+                                        init_args = NULL, ...){
   out <- if (cost) object[["costs"]][[name]] else object$utility
   n_states <- object$n_states - 1 # The non-death states
   id  <- object$id[[attr(out, "id_index")]]

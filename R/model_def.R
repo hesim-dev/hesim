@@ -162,7 +162,7 @@ print.eval_rng <- function(x, ...) {
   invisible(x)
 }
 
-check.eval_rng <- function(object){
+check.eval_rng <- function(object, ...){
   
   object <- as.list(object)
   
@@ -701,14 +701,14 @@ define_model <- function(tparams_def, rng_def, params = NULL,
   return(x)
 }
 
-check.model_def <- function(x){
-  if (!all(sapply(x$tparams_def, function (z) inherits(z, "tparams_def")))){
+check.model_def <- function(object, ...){
+  if (!all(sapply(object$tparams_def, function (z) inherits(z, "tparams_def")))){
     stop(paste0("tparams_def must either be of class 'tparams_def'",
                 "or a list of objects of class 'tparams_def'"),
          call. = FALSE)
   }
-  if (!is.null(x$rng_def)) check_is_class(x$rng_def, class = "rng_def")
-  if (!is.null(x$n_states)) check_scalar(x$n_states, "n_states")
+  if (!is.null(object$rng_def)) check_is_class(object$rng_def, class = "rng_def")
+  if (!is.null(object$n_states)) check_scalar(object$n_states, "n_states")
 }
 
 
@@ -864,24 +864,24 @@ eval_model <- function(x, input_data){
   return(res)
 }
 
-check.eval_model <- function(x){
+check.eval_model <- function(object, ...){
   # Number of states
   ## Can't be NULL
-  if (is.null(x$n_states)){
+  if (is.null(object$n_states)){
     stop("'n_states' cannot be NULL.", call. = FALSE)
   }
   
   ## Correct number 
   check_n_states <- function(z, name){
     if (length(dim(z)) == 2){
-      if (ncol(z) != (x$n_states - 1)){
+      if (ncol(z) != (object$n_states - 1)){
         stop(paste0("The number of columns in ", name, " must equal ",
                     "'n_states' - 1."),
              call. = FALSE)
       }
     }
   }
-  check_n_states(x$utility, "'utility'")
-  lapply(x$costs, check_n_states, "each element of 'costs'")
+  check_n_states(object$utility, "'utility'")
+  lapply(object$costs, check_n_states, "each element of 'costs'")
 }
 

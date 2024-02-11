@@ -86,6 +86,7 @@ plot_ceac <- function(x, ...) {
   UseMethod("plot_ceac", x)
 }
 
+#' @export
 plot_ceac.default <- function(x, labels = NULL, ceaf = FALSE, ...) {
   best <- NULL
   

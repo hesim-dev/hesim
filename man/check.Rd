@@ -14,21 +14,21 @@
 \alias{check}
 \title{Input validation for class objects}
 \usage{
-\method{check}{id_attributes}(object)
+\method{check}{id_attributes}(object, ...)
 
-\method{check}{input_mats}(object)
+\method{check}{input_mats}(object, ...)
 
-\method{check}{params_lm}(object)
+\method{check}{params_lm}(object, ...)
 
-\method{check}{params_mlogit}(object)
+\method{check}{params_mlogit}(object, ...)
 
-\method{check}{params_surv}(object)
+\method{check}{params_surv}(object, ...)
 
-\method{check}{params_surv_list}(object)
+\method{check}{params_surv_list}(object, ...)
 
 \method{check}{tparams_mean}(object, ...)
 
-\method{check}{tparams_transprobs}(object)
+\method{check}{tparams_transprobs}(object, ...)
 
 check(object, ...)
 }

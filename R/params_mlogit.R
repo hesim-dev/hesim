@@ -97,7 +97,7 @@ new_params_mlogit <- function(coefs, n_samples){
 }
 
 #' @rdname check
-check.params_mlogit <- function(object){
+check.params_mlogit <- function(object, ...){
   if (!(is.numeric(object$coefs) && is_3d_array(object$coefs))) {
     stop("'coefs' must be a numeric 3D array.")
   } 
