@@ -377,3 +377,20 @@ get_n_samples.array <- function(x){
   stopifnot(is_3d_array(x))
   return(dim(x)[1])
 }
+
+#' Code to use the hesim package inline
+#' @param ... arguments
+#' @rdname plugin
+#' @export
+inlineCxxPlugin <- function(...) {
+    ismacos <- Sys.info()[["sysname"]] == "Darwin"
+    openmpflag <- if (ismacos) "" else "$(SHLIB_OPENMP_CFLAGS)"
+    plugin <- Rcpp::Rcpp.plugin.maker(include.before = "#include <hesim.h>",
+                                      libs           = paste(openmpflag,
+                                                             "$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)"),
+                                      package        = "hesim")
+    settings <- plugin()
+    settings$env$PKG_CPPFLAGS <- paste("-I../inst/include", openmpflag)
+    ## if (!ismacos) settings$env$USE_CXX11 <- "yes"
+    settings
+}
