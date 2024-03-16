@@ -378,8 +378,22 @@ get_n_samples.array <- function(x){
   return(dim(x)[1])
 }
 
-#' Code to use the hesim package inline
+#' Code to use the hesim package inline. Not directly called by the user.
 #' @param ... arguments
+#' @examples
+#' library(Rcpp)
+#' sourceCpp(code="
+#' // [[Rcpp::depends(hesim)]]
+#' // [[Rcpp::depends(RcppArmadillo)]]
+#' #include <hesim/stats/distributions.h>
+#' // [[Rcpp::export]]
+#' double test_inline_gengamma(double mu, double sigma, double Q) {
+#'   hesim::stats::gengamma gg(mu, sigma, Q);
+#'   return gg.random();
+#' }")
+#' set.seed(12345)
+#' test_inline_gengamma(1.0, 1.0, 1.0)
+
 #' @rdname plugin
 #' @export
 inlineCxxPlugin <- function(...) {
