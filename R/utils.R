@@ -395,7 +395,6 @@ get_n_samples.array <- function(x){
 #' test_inline_gengamma(1.0, 1.0, 1.0)
 
 #' @rdname plugin
-#' @export
 inlineCxxPlugin <- function(...) {
     ismacos <- Sys.info()[["sysname"]] == "Darwin"
     openmpflag <- if (ismacos) "" else "$(SHLIB_OPENMP_CFLAGS)"
