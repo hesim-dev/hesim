@@ -26,3 +26,4 @@ double test_inline_gengamma(double mu, double sigma, double Q) {
 set.seed(12345)
 test_inline_gengamma(1.0, 1.0, 1.0)
 }
+\keyword{internal}

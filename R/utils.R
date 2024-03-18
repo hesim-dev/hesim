@@ -393,7 +393,7 @@ get_n_samples.array <- function(x){
 #' }")
 #' set.seed(12345)
 #' test_inline_gengamma(1.0, 1.0, 1.0)
-
+#' @keywords internal
 #' @rdname plugin
 inlineCxxPlugin <- function(...) {
     ismacos <- Sys.info()[["sysname"]] == "Darwin"
