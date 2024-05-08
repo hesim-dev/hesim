@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 data-toc-skip class="date">2024-02-11</h4>
+            <h4 data-toc-skip class="date">2024-05-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/markov-inhomogeneous-cohort.Rmd" class="external-link"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
@@ -431,7 +431,7 @@ S(t) = \exp(-\lambda t^\gamma) \\
 \beta_3 \cdot new) \\
 \]</span></p>
 <p>Note that this Weibull distribution corresponds to the distribution
-implemented in <code><a href="https://rdrr.io/pkg/flexsurv/man/WeibullPH.html" class="external-link">flexsurv::pweibullPH()</a></code> with <span class="math inline">\(a = \gamma\)</span> and <span class="math inline">\(m = \lambda\)</span>. It can be shown (see
+implemented in <code><a href="http://chjackson.github.io/flexsurv-dev/reference/WeibullPH.html" class="external-link">flexsurv::pweibullPH()</a></code> with <span class="math inline">\(a = \gamma\)</span> and <span class="math inline">\(m = \lambda\)</span>. It can be shown (see
 Appendix below) that the transition probabilities (with a one-year model
 cycle) are given by,</p>
 <p><span class="math display">\[
@@ -704,10 +704,10 @@ consistent with those from the textbook.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Discount rate           Outcome  Standard prosthesis       New prosthesis</span></span>
 <span><span class="co">##            &lt;num&gt;            &lt;fctr&gt;               &lt;char&gt;               &lt;char&gt;</span></span>
-<span><span class="co">## 1:         0.015             QALYs 14.63 (13.57, 15.65) 14.68 (13.60, 15.71)</span></span>
+<span><span class="co">## 1:         0.015             QALYs 14.63 (13.53, 15.62) 14.68 (13.56, 15.68)</span></span>
 <span><span class="co">## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)</span></span>
-<span><span class="co">## 3:         0.060    Costs: medical        117 (52, 215)          34 (10, 81)</span></span>
-<span><span class="co">## 4:         0.060      Costs: total       511 (446, 609)       613 (589, 660)</span></span></code></pre>
+<span><span class="co">## 3:         0.060    Costs: medical        120 (58, 220)          33 (12, 74)</span></span>
+<span><span class="co">## 4:         0.060      Costs: total       514 (452, 614)       612 (591, 653)</span></span></code></pre>
 <p>We can then compute incremental cost-effectiveness ratios for each
 subgroup. There is considerable variation which is not unexpected since
 the the revision rate for prostheses (<em>rr</em>) depends on
@@ -718,28 +718,28 @@ covariates.</p>
 <pre><code><span><span class="co">## Key: &lt;Group, Strategy&gt;</span></span>
 <span><span class="co">##     Group Strategy Incremental QALYs Incremental costs       Incremental NMB</span></span>
 <span><span class="co">##     &lt;int&gt;    &lt;int&gt;            &lt;char&gt;            &lt;char&gt;                &lt;char&gt;</span></span>
-<span><span class="co">##  1:     1        2 0.07 (0.03, 0.13)     69 (-47, 138)  3,411 (1,139, 6,218)</span></span>
-<span><span class="co">##  2:     2        2 0.04 (0.02, 0.08)     102 (18, 152)    2,048 (639, 3,836)</span></span>
-<span><span class="co">##  3:     3        2 0.03 (0.01, 0.05)     127 (67, 162)    1,155 (326, 2,257)</span></span>
-<span><span class="co">##  4:     4        2 0.01 (0.01, 0.03)    146 (106, 170)      592 (110, 1,229)</span></span>
-<span><span class="co">##  5:     5        2 0.01 (0.00, 0.02)    160 (135, 176)        255 (-17, 630)</span></span>
-<span><span class="co">##  6:     6        2 0.11 (0.04, 0.20)    -27 (-246, 97) 5,590 (2,055, 10,227)</span></span>
-<span><span class="co">##  7:     7        2 0.07 (0.03, 0.12)    35 (-128, 125)  3,341 (1,217, 6,241)</span></span>
-<span><span class="co">##  8:     8        2 0.04 (0.02, 0.07)     83 (-33, 145)    1,896 (663, 3,681)</span></span>
-<span><span class="co">##  9:     9        2 0.02 (0.01, 0.04)     117 (39, 160)    1,008 (310, 2,039)</span></span>
-<span><span class="co">## 10:    10        2 0.01 (0.00, 0.02)     142 (89, 169)       486 (92, 1,077)</span></span>
+<span><span class="co">##  1:     1        2 0.07 (0.03, 0.13)     64 (-46, 134)  3,546 (1,208, 6,450)</span></span>
+<span><span class="co">##  2:     2        2 0.04 (0.02, 0.08)      98 (18, 149)    2,132 (716, 3,932)</span></span>
+<span><span class="co">##  3:     3        2 0.03 (0.01, 0.05)     125 (66, 160)    1,205 (366, 2,279)</span></span>
+<span><span class="co">##  4:     4        2 0.02 (0.01, 0.03)    145 (103, 169)      621 (136, 1,265)</span></span>
+<span><span class="co">##  5:     5        2 0.01 (0.00, 0.02)    159 (133, 175)          272 (3, 654)</span></span>
+<span><span class="co">##  6:     6        2 0.11 (0.04, 0.20)    -35 (-226, 92) 5,772 (2,144, 10,062)</span></span>
+<span><span class="co">##  7:     7        2 0.07 (0.03, 0.12)    29 (-109, 120)  3,450 (1,293, 6,057)</span></span>
+<span><span class="co">##  8:     8        2 0.04 (0.02, 0.07)     79 (-17, 141)    1,960 (713, 3,551)</span></span>
+<span><span class="co">##  9:     9        2 0.02 (0.01, 0.04)     115 (50, 158)    1,045 (354, 1,976)</span></span>
+<span><span class="co">## 10:    10        2 0.01 (0.01, 0.02)     140 (97, 168)      507 (117, 1,072)</span></span>
 <span><span class="co">##          ICER</span></span>
 <span><span class="co">##        &lt;char&gt;</span></span>
-<span><span class="co">##  1:       992</span></span>
-<span><span class="co">##  2:     2,369</span></span>
-<span><span class="co">##  3:     4,965</span></span>
-<span><span class="co">##  4:     9,917</span></span>
-<span><span class="co">##  5:    19,287</span></span>
+<span><span class="co">##  1:       884</span></span>
+<span><span class="co">##  2:     2,197</span></span>
+<span><span class="co">##  3:     4,684</span></span>
+<span><span class="co">##  4:     9,439</span></span>
+<span><span class="co">##  5:    18,444</span></span>
 <span><span class="co">##  6: Dominates</span></span>
-<span><span class="co">##  7:       523</span></span>
-<span><span class="co">##  8:     2,096</span></span>
-<span><span class="co">##  9:     5,216</span></span>
-<span><span class="co">## 10:    11,291</span></span></code></pre>
+<span><span class="co">##  7:       422</span></span>
+<span><span class="co">##  8:     1,935</span></span>
+<span><span class="co">##  9:     4,947</span></span>
+<span><span class="co">## 10:    10,828</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="overall">Overall<a class="anchor" aria-label="anchor" href="#overall"></a>
@@ -757,10 +757,10 @@ the input data.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span>digits_qalys <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##              Outcome       New prosthesis</span></span>
 <span><span class="co">##               &lt;fctr&gt;               &lt;char&gt;</span></span>
-<span><span class="co">## 1: Incremental QALYs 0.028 (0.011, 0.051)</span></span>
-<span><span class="co">## 2: Incremental costs        119 (48, 159)</span></span>
-<span><span class="co">## 3:   Incremental NMB   1,276 (394, 2,479)</span></span>
-<span><span class="co">## 4:              ICER                4,270</span></span></code></pre>
+<span><span class="co">## 1: Incremental QALYs 0.029 (0.011, 0.050)</span></span>
+<span><span class="co">## 2: Incremental costs        116 (54, 156)</span></span>
+<span><span class="co">## 3:   Incremental NMB   1,327 (443, 2,428)</span></span>
+<span><span class="co">## 4:              ICER                4,030</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -975,13 +975,13 @@ by <code><a href="../reference/tpmatrix_id.html">tpmatrix_id()</a></code>.</p>
 <span><span class="va">tpmat</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##    s1_s1     s1_s2 s1_s3 s1_s4      s1_s5 s2_s1     s2_s2        s2_s3 s2_s4</span></span>
 <span><span class="co">##    &lt;num&gt;     &lt;num&gt; &lt;num&gt; &lt;num&gt;      &lt;num&gt; &lt;num&gt;     &lt;num&gt;        &lt;num&gt; &lt;num&gt;</span></span>
-<span><span class="co">## 1:     0 0.9784834     0     0 0.02151661     0 0.9927689 0.0005311486     0</span></span>
-<span><span class="co">##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4      s3_s5 s4_s1 s4_s2     s4_s3</span></span>
-<span><span class="co">##     &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;      &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;</span></span>
-<span><span class="co">## 1: 0.0067     0     0     0 0.9717834 0.02821661     0     0 0.1089974</span></span>
+<span><span class="co">## 1:     0 0.9704688     0     0 0.02953116     0 0.9928041 0.0004959098     0</span></span>
+<span><span class="co">##     s2_s5 s3_s1 s3_s2 s3_s3     s3_s4      s3_s5 s4_s1 s4_s2      s4_s3</span></span>
+<span><span class="co">##     &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;     &lt;num&gt;      &lt;num&gt; &lt;num&gt; &lt;num&gt;      &lt;num&gt;</span></span>
+<span><span class="co">## 1: 0.0067     0     0     0 0.9637688 0.03623116     0     0 0.05859659</span></span>
 <span><span class="co">##        s4_s4  s4_s5 s5_s1 s5_s2 s5_s3 s5_s4 s5_s5</span></span>
 <span><span class="co">##        &lt;num&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span></span>
-<span><span class="co">## 1: 0.8843026 0.0067     0     0     0     0     1</span></span></code></pre>
+<span><span class="co">## 1: 0.9347034 0.0067     0     0     0     0     1</span></span></code></pre>
 <p>Finally, we combine the ID variables and the transition probability
 matrices into a single object.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
@@ -1005,11 +1005,11 @@ very similar, as expected.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Discount rate           Outcome  Standard prosthesis       New prosthesis</span></span>
 <span><span class="co">##            &lt;num&gt;            &lt;fctr&gt;               &lt;char&gt;               &lt;char&gt;</span></span>
-<span><span class="co">## 1:         0.015             QALYs 14.62 (13.44, 15.67) 14.67 (13.48, 15.73)</span></span>
+<span><span class="co">## 1:         0.015             QALYs 14.64 (13.46, 15.59) 14.69 (13.49, 15.63)</span></span>
 <span><span class="co">## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)</span></span>
-<span><span class="co">## 3:         0.060    Costs: medical        120 (52, 231)          33 (10, 75)</span></span>
-<span><span class="co">## 4:         0.060      Costs: total       514 (446, 625)       612 (589, 654)</span></span></code></pre>
-<p>However, time to construct the transition model was 2.4 times faster.
+<span><span class="co">## 3:         0.060    Costs: medical        122 (59, 233)          34 (11, 81)</span></span>
+<span><span class="co">## 4:         0.060      Costs: total       516 (453, 627)       613 (590, 660)</span></span></code></pre>
+<p>However, time to construct the transition model was 2.5 times faster.
 Although both are quite fast (time in the table is in seconds), this
 difference would become more pronounced as the number of parameter
 samples, treatment strategies, patients, and/or distinct time periods
@@ -1045,13 +1045,13 @@ elapsed
 define_model()
 </td>
 <td style="text-align:right;">
-3.205
+3.393
 </td>
 <td style="text-align:right;">
-0.2
+0.160
 </td>
 <td style="text-align:right;">
-3.305
+3.456
 </td>
 </tr>
 <tr>
@@ -1059,13 +1059,13 @@ define_model()
 Custom tpmatrix()
 </td>
 <td style="text-align:right;">
+1.410
+</td>
+<td style="text-align:right;">
+0.524
+</td>
+<td style="text-align:right;">
 1.393
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-1.355
 </td>
 </tr>
 </tbody>
@@ -1092,7 +1092,7 @@ Custom tpmatrix()
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -130,7 +130,7 @@
       <h1 data-toc-skip>Markov models with multinomial logistic
 regression</h1>
             
-            <h4 data-toc-skip class="date">2024-02-11</h4>
+            <h4 data-toc-skip class="date">2024-05-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/vignettes/mlogit.Rmd" class="external-link"><code>vignettes/mlogit.Rmd</code></a></small>
       <div class="hidden name"><code>mlogit.Rmd</code></div>
@@ -229,12 +229,12 @@ differences in age and gender.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    patient_id      age female grp_id</span></span>
 <span><span class="co">##         &lt;int&gt;    &lt;num&gt;  &lt;int&gt;  &lt;int&gt;</span></span>
-<span><span class="co">## 1:       9031 30.93736      1      1</span></span>
-<span><span class="co">## 2:        940 60.31440      1      2</span></span>
-<span><span class="co">## 3:        168 84.85698      0      3</span></span>
-<span><span class="co">## 4:       4707 79.34795      1      4</span></span>
-<span><span class="co">## 5:       5768 40.06818      1      5</span></span>
-<span><span class="co">## 6:       1022 84.82807      0      6</span></span></code></pre>
+<span><span class="co">## 1:       5293 19.71306      0      1</span></span>
+<span><span class="co">## 2:       5527 88.87563      1      2</span></span>
+<span><span class="co">## 3:       6604 90.16717      1      3</span></span>
+<span><span class="co">## 4:        485 18.88980      0      4</span></span>
+<span><span class="co">## 5:       2607 85.22011      1      5</span></span>
+<span><span class="co">## 6:       1476 19.70745      0      6</span></span></code></pre>
 <p>To perform the cost-effectiveness analysis, each patient is simulated
 twice, once with the reference treatment and once with the intervention.
 The non-death states use for simulating costs and quality-adjusted
@@ -471,7 +471,7 @@ that assess the consequences of patient heterogeneity.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
