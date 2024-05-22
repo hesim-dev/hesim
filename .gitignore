@@ -10,3 +10,4 @@ src/*.gcda
 doc
 Meta
 *_cache*
+*~
