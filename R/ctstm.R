@@ -576,8 +576,15 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                            private$disprog_idx$patient_idx,
                                            stateval_list[[i]], dr[j],
                                            sim_type)
+          } else if (stateval_list[[i]]$method == "transition"){
+            C_ev <- C_indiv_ctstm_trans(self$trans_model,
+                                        self$disprog_,
+                                        private$disprog_idx$strategy_idx,
+                                        private$disprog_idx$patient_idx,
+                                        stateval_list[[i]], dr[j],
+                                        sim_type)
           } else{
-            stop("The 'StateVals' 'method' must either be 'wlos' or 'starting'.")
+            stop("The 'StateVals' 'method' must be 'wlos', 'starting' or 'transition'.")
           }
           self$disprog_[, ev := C_ev]
           if (lys){

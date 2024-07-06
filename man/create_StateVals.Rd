@@ -16,7 +16,13 @@ create_StateVals(object, ...)
   ...
 )
 
-\method{create_StateVals}{stateval_tbl}(object, hesim_data = NULL, n = 1000, ...)
+\method{create_StateVals}{stateval_tbl}(
+  object,
+  hesim_data = NULL,
+  n = 1000,
+  method = c("wlos", "starting", "transition"),
+  ...
+)
 }
 \arguments{
 \item{object}{A model object of the appropriate class.}

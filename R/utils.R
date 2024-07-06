@@ -84,14 +84,15 @@ check_StateVals <- function(models, object,
     check_size(get_id_object(models[[i]])$n_patients, 
                expected_size[["n_patients"]],
                z = "patients")
-    check_size(
-      get_id_object(models[[i]])$n_states, 
-      expected_states,
-      msg = paste0("The number of states in each 'StateVals' model ", 
-                   "must equal the number of states in the ",
-                   "'", object_name, "' object less the number of ",
-                   "absorbing states, which is ", expected_states, ".")
-    )
+    if (models[[i]]$method != "transition")
+        check_size(
+            get_id_object(models[[i]])$n_states,
+            expected_states,
+            msg = paste0("The number of states in each 'StateVals' model ",
+                         "must equal the number of states in the ",
+                         "'", object_name, "' object less the number of ",
+                         "absorbing states, which is ", expected_states, ".")
+        )
   } # End loop over state value models
 }
 
