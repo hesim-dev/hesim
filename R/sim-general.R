@@ -23,8 +23,8 @@
 #'
 #' The object also contains `size` and `absorbing` attributes.
 #' The `size` attribute is a numeric vector with the elements `n_samples`, 
-#' `n_strategies`, `n_patients`, and `n_states` denoting the number of samples, 
-#' treatment strategies, patients, and health states The `absorbing` attribute 
+#' `n_strategies`, `n_patients`, `n_states`, and `n_trans` denoting the number of samples, 
+#' treatment strategies, patients, health states and transitions. The `absorbing` attribute 
 #' is a numeric vector containing the absorbing health states; i.e., the 
 #' health states that cannot be transitioned from. Operationally, an
 #' absorbing state is a row in a transition matrix (as in the `trans_mat` field
