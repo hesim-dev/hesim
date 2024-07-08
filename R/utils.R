@@ -84,7 +84,14 @@ check_StateVals <- function(models, object,
     check_size(get_id_object(models[[i]])$n_patients, 
                expected_size[["n_patients"]],
                z = "patients")
-    if (models[[i]]$method != "transition")
+    if (models[[i]]$method == "transition") {
+        if (object_name=="disprog") {
+            check_size(get_id_object(models[[i]])$n_trans,
+                       expected_size[["n_trans"]],
+                       z = "transitions")
+        } else stop(paste0("Transition-specific 'StateVals' not available for object_name == '",
+                           object_name,"'.")
+    } else # method != "transition"
         check_size(
             get_id_object(models[[i]])$n_states,
             expected_states,
