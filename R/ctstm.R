@@ -104,7 +104,7 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
           c("disprog", "data.table", "data.frame"))
   setattr(disprog, "size",
           c(get_size(trans_model), n_states = nrow(trans_model$trans_mat),
-            n_trans = max(trans_model$trans_mat, na.rm = TRUE)))
+            n_transitions = max(trans_model$trans_mat, na.rm = TRUE)))
   setattr(disprog, "absorbing", absorbing(trans_model$trans_mat))
   return(disprog[, ])
 }

@@ -27,8 +27,8 @@ state during the simulation and 0 otherwise.}
 
 The object also contains \code{size} and \code{absorbing} attributes.
 The \code{size} attribute is a numeric vector with the elements \code{n_samples},
-\code{n_strategies}, \code{n_patients}, and \code{n_states} denoting the number of samples,
-treatment strategies, patients, and health states The \code{absorbing} attribute
+\code{n_strategies}, \code{n_patients}, \code{n_states}, and \code{n_transitions} denoting the number of samples,
+treatment strategies, patients, health states and transitions. The \code{absorbing} attribute
 is a numeric vector containing the absorbing health states; i.e., the
 health states that cannot be transitioned from. Operationally, an
 absorbing state is a row in a transition matrix (as in the \code{trans_mat} field

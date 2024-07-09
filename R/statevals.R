@@ -509,7 +509,7 @@ create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000,
   } else{
     time_intervals <- NULL
   }
-  transp <- (method == "transitions")
+  transp <- (method == "transition")
   tparams <- new_tparams_mean(value = mu,
                               n_samples = n,
                               strategy_id = tbl$strategy_id,
