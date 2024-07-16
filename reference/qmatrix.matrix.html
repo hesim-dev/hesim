@@ -10,7 +10,7 @@ the instantaneous risk of moving between health states."><meta property="og:imag
 
   gtag('config', 'UA-131661920-2');
 </script></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -35,7 +35,7 @@ the instantaneous risk of moving between health states."><meta property="og:imag
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -80,20 +80,20 @@ the instantaneous risk of moving between health states."><meta property="og:imag
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Transition intensity matrix from tabular object</h1>
-    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/R/tpmatrix.R" class="external-link"><code>R/tpmatrix.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/main/R/tpmatrix.R" class="external-link"><code>R/tpmatrix.R</code></a></small>
     <div class="hidden name"><code>qmatrix.matrix.Rd</code></div>
     </div>
 
@@ -103,39 +103,39 @@ the instantaneous risk of moving between health states.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for matrix</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'matrix'</span></span>
 <span><span class="fu"><a href="qmatrix.html">qmatrix</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">trans_mat</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for data.table</span></span>
+<span><span class="co"># S3 method for class 'data.table'</span></span>
 <span><span class="fu"><a href="qmatrix.html">qmatrix</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">trans_mat</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="co"># S3 method for class 'data.frame'</span></span>
 <span><span class="fu"><a href="qmatrix.html">qmatrix</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">trans_mat</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>x</dt>
+
+
+<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A two-dimensional tabular object containing
 elements of the transition intensity matrix. A column represents a transition
 from state \(r\) to state \(s\). Each row represents elements of a different
 transition intensity matrix. See "Details" for more information.</p></dd>
 
 
-<dt>trans_mat</dt>
+<dt id="arg-trans-mat">trans_mat<a class="anchor" aria-label="anchor" href="#arg-trans-mat"></a></dt>
 <dd><p>Just as in <code><a href="IndivCtstmTrans.html">IndivCtstmTrans</a></code>, a transition matrix
 describing the states and transitions in a multi-state model.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Further arguments passed to or from other methods. Currently unused.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>An array of transition intensity matrices with the third dimension
+    <p>An array of transition intensity matrices with the third dimension
 equal to the number of rows in <code>x</code>.</p>
     </div>
     <div id="details">
@@ -207,15 +207,15 @@ as the negative sum of the other rows.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

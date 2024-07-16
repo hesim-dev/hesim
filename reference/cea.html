@@ -20,7 +20,7 @@ and output for a cost-effectiveness acceptability curve.
 
   gtag('config', 'UA-131661920-2');
 </script></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -45,7 +45,7 @@ and output for a cost-effectiveness acceptability curve.
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -90,20 +90,20 @@ and output for a cost-effectiveness acceptability curve.
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Cost-effectiveness analysis</h1>
-    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/R/cea.R" class="external-link"><code>R/cea.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/main/R/cea.R" class="external-link"><code>R/cea.R</code></a></small>
     <div class="hidden name"><code>cea.Rd</code></div>
     </div>
 
@@ -124,10 +124,10 @@ and output for a cost-effectiveness acceptability curve.</p></li>
 <span></span>
 <span><span class="fu">cea_pw</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for default</span></span>
+<span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">cea</span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2e+05</span>, <span class="fl">500</span><span class="op">)</span>, <span class="va">sample</span>, <span class="va">strategy</span>, grp <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">e</span>, <span class="va">c</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for default</span></span>
+<span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">cea_pw</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2e+05</span>, <span class="fl">500</span><span class="op">)</span>,</span>
@@ -140,16 +140,18 @@ and output for a cost-effectiveness acceptability curve.</p></li>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for ce</span></span>
+<span><span class="co"># S3 method for class 'ce'</span></span>
 <span><span class="fu">cea</span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2e+05</span>, <span class="fl">500</span><span class="op">)</span>, <span class="va">dr_qalys</span>, <span class="va">dr_costs</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for ce</span></span>
+<span><span class="co"># S3 method for class 'ce'</span></span>
 <span><span class="fu">cea_pw</span><span class="op">(</span><span class="va">x</span>, k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2e+05</span>, <span class="fl">500</span><span class="op">)</span>, <span class="va">comparator</span>, <span class="va">dr_qalys</span>, <span class="va">dr_costs</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>x</dt>
+
+
+<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>An object of simulation output characterizing the probability distribution
 of clinical effectiveness and costs. If the default method is used, then <code>x</code>
 must be a <code>data.frame</code> or <code>data.table</code> containing columns of
@@ -157,54 +159,50 @@ mean costs and clinical effectiveness where each row denotes a randomly sampled 
 and treatment strategy.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Further arguments passed to or from other methods. Currently unused.</p></dd>
 
 
-<dt>k</dt>
+<dt id="arg-k">k<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
 <dd><p>Vector of willingness to pay values.</p></dd>
 
 
-<dt>sample</dt>
+<dt id="arg-sample">sample<a class="anchor" aria-label="anchor" href="#arg-sample"></a></dt>
 <dd><p>Character name of column from <code>x</code> denoting a randomly sampled parameter set.</p></dd>
 
 
-<dt>strategy</dt>
+<dt id="arg-strategy">strategy<a class="anchor" aria-label="anchor" href="#arg-strategy"></a></dt>
 <dd><p>Character name of column from <code>x</code> denoting treatment strategy.</p></dd>
 
 
-<dt>grp</dt>
+<dt id="arg-grp">grp<a class="anchor" aria-label="anchor" href="#arg-grp"></a></dt>
 <dd><p>Character name of column from <code>x</code> denoting subgroup. If <code>NULL</code>, then
 it is assumed that there is only one group.</p></dd>
 
 
-<dt>e</dt>
+<dt id="arg-e">e<a class="anchor" aria-label="anchor" href="#arg-e"></a></dt>
 <dd><p>Character name of column from <code>x</code> denoting clinical effectiveness.</p></dd>
 
 
-<dt>c</dt>
+<dt id="arg-c">c<a class="anchor" aria-label="anchor" href="#arg-c"></a></dt>
 <dd><p>Character name of column from <code>x</code> denoting costs.</p></dd>
 
 
-<dt>comparator</dt>
+<dt id="arg-comparator">comparator<a class="anchor" aria-label="anchor" href="#arg-comparator"></a></dt>
 <dd><p>Name of the comparator strategy in <code>x</code>.</p></dd>
 
 
-<dt>dr_qalys</dt>
+<dt id="arg-dr-qalys">dr_qalys<a class="anchor" aria-label="anchor" href="#arg-dr-qalys"></a></dt>
 <dd><p>Discount rate for quality-adjusted life-years (QALYs).</p></dd>
 
 
-<dt>dr_costs</dt>
+<dt id="arg-dr-costs">dr_costs<a class="anchor" aria-label="anchor" href="#arg-dr-costs"></a></dt>
 <dd><p>Discount rate for costs.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p><code>cea()</code> returns a list of four <code>data.table</code> elements.</p>
-
-
+    <p><code>cea()</code> returns a list of four <code>data.table</code> elements.</p>
 <dl><dt>summary</dt>
 <dd><p>A <code>data.table</code> of the mean, 2.5% quantile, and 97.5%
 quantile by strategy and group for clinical effectiveness and costs.</p></dd>
@@ -344,15 +342,15 @@ incremental net monetary benefits for the range of specified willingness to pay 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

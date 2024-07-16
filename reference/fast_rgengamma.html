@@ -11,7 +11,7 @@ for speed. Equivalent to flexsurv::rgengamma."><meta property="og:image" content
 
   gtag('config', 'UA-131661920-2');
 </script></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -36,7 +36,7 @@ for speed. Equivalent to flexsurv::rgengamma."><meta property="og:image" content
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -81,20 +81,20 @@ for speed. Equivalent to flexsurv::rgengamma."><meta property="og:image" content
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Random generation for generalized gamma distribution</h1>
-    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/R/rand.R" class="external-link"><code>R/rand.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/main/R/rand.R" class="external-link"><code>R/rand.R</code></a></small>
     <div class="hidden name"><code>fast_rgengamma.Rd</code></div>
     </div>
 
@@ -110,28 +110,28 @@ for speed. Equivalent to <code><a href="http://chjackson.github.io/flexsurv-dev/
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>n</dt>
+
+
+<dl><dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
 <dd><p>Number of random observations to draw.</p></dd>
 
 
-<dt>mu</dt>
+<dt id="arg-mu">mu<a class="anchor" aria-label="anchor" href="#arg-mu"></a></dt>
 <dd><p>Vector of location parameters.
 and columns correspond to rates during specified time intervals.</p></dd>
 
 
-<dt>sigma</dt>
+<dt id="arg-sigma">sigma<a class="anchor" aria-label="anchor" href="#arg-sigma"></a></dt>
 <dd><p>Vector of scale parameters as described in <code>flexsurv</code>.</p></dd>
 
 
-<dt>Q</dt>
+<dt id="arg-q">Q<a class="anchor" aria-label="anchor" href="#arg-q"></a></dt>
 <dd><p>Vector of shape parameters.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>A vector of random samples from the generalized gamma distribution. The length of the sample is
+    <p>A vector of random samples from the generalized gamma distribution. The length of the sample is
 determined by n. The numerical arguments other than n are recycled so that the number of samples is
 equal to n.</p>
     </div>
@@ -150,7 +150,7 @@ equal to n.</p>
 <span class="r-in"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu">flexsurv</span><span class="fu">::</span><span class="fu"><a href="http://chjackson.github.io/flexsurv-dev/reference/GenGamma.html" class="external-link">rgengamma</a></span><span class="op">(</span><span class="va">n</span>, mu <span class="op">=</span> <span class="va">m</span>, sigma <span class="op">=</span> <span class="va">s</span>, Q <span class="op">=</span> <span class="va">q</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">ptm</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.003   0.000   0.002 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.002   0.000   0.003 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">r1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0000   0.9654   4.2415  11.8841  13.6872 195.9726 </span>
@@ -172,15 +172,15 @@ equal to n.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

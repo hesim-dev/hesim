@@ -9,7 +9,7 @@
 
   gtag('config', 'UA-131661920-2');
 </script></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -34,7 +34,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -79,20 +79,20 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Parameters of a linear model</h1>
-    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/R/params_lm.R" class="external-link"><code>R/params_lm.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/main/R/params_lm.R" class="external-link"><code>R/params_lm.R</code></a></small>
     <div class="hidden name"><code>params_lm.Rd</code></div>
     </div>
 
@@ -106,13 +106,15 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>coefs</dt>
+
+
+<dl><dt id="arg-coefs">coefs<a class="anchor" aria-label="anchor" href="#arg-coefs"></a></dt>
 <dd><p>Samples of the coefficients under sampling uncertainty.
 Must be a matrix or any object coercible to a matrix such as <code>data.frame</code>
 or <code>data.table</code>.</p></dd>
 
 
-<dt>sigma</dt>
+<dt id="arg-sigma">sigma<a class="anchor" aria-label="anchor" href="#arg-sigma"></a></dt>
 <dd><p>A vector of samples of the standard error of the regression model.
 Default value is 1 for all samples. Only used if the model is
 used to randomly simulate values (rather than to predict means).</p></dd>
@@ -120,9 +122,7 @@ used to randomly simulate values (rather than to predict means).</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>An object of class <code>params_lm</code>, which is a list containing <code>coefs</code>,
+    <p>An object of class <code>params_lm</code>, which is a list containing <code>coefs</code>,
 <code>sigma</code>, and <code>n_samples</code>. <code>n_samples</code> is equal to the
 number of rows in <code>coefs</code>. The <code>coefs</code> element is always converted into a
 matrix.</p>
@@ -189,15 +189,15 @@ use a <code><a href="stateval_tbl.html">stateval_tbl</a></code>. For an example 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

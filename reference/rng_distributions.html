@@ -10,7 +10,7 @@ distributions with define_rng()."><meta property="og:image" content="https://hes
 
   gtag('config', 'UA-131661920-2');
 </script></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -35,7 +35,7 @@ distributions with define_rng()."><meta property="og:image" content="https://hes
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -80,20 +80,20 @@ distributions with define_rng()."><meta property="og:image" content="https://hes
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Random number generation distributions</h1>
-    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/R/model_def.R" class="external-link"><code>R/model_def.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/main/R/model_def.R" class="external-link"><code>R/model_def.R</code></a></small>
     <div class="hidden name"><code>rng_distributions.Rd</code></div>
     </div>
 
@@ -131,67 +131,65 @@ distributions with <code><a href="define_rng.html">define_rng()</a></code>.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>shape1, shape2</dt>
+
+
+<dl><dt id="arg-shape-shape-">shape1, shape2<a class="anchor" aria-label="anchor" href="#arg-shape-shape-"></a></dt>
 <dd><p>Non-negative parameters of the Beta distribution.</p></dd>
 
 
-<dt>mean, sd</dt>
+<dt id="arg-mean-sd">mean, sd<a class="anchor" aria-label="anchor" href="#arg-mean-sd"></a></dt>
 <dd><p>Mean and standard deviation of the random variable.</p></dd>
 
 
-<dt>names</dt>
+<dt id="arg-names">names<a class="anchor" aria-label="anchor" href="#arg-names"></a></dt>
 <dd><p>Names for columns if an object with multiple columns is returned
 by the function.</p></dd>
 
 
-<dt>n</dt>
+<dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
 <dd><p>The number of random samples of the parameters to draw. Default is
 the value of <code>n</code> in the environment in which the function is called, which
 can be useful when used inside <code>define_rng</code> because it means that a value does
 not need to be explicitly passed to <code>n</code>.</p></dd>
 
 
-<dt>alpha</dt>
+<dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
 <dd><p>A matrix where each row is a separate vector of shape parameters.</p></dd>
 
 
-<dt>est</dt>
+<dt id="arg-est">est<a class="anchor" aria-label="anchor" href="#arg-est"></a></dt>
 <dd><p>A vector of estimates of the variable of interest.</p></dd>
 
 
-<dt>x</dt>
+<dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A numeric <code>vector</code>, <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code> containing
 random samples of the variable of interest from a suitable probability distribution. This would
 typically be a posterior distribution from a Bayesian analysis.</p></dd>
 
 
-<dt>meanlog, sdlog</dt>
+<dt id="arg-meanlog-sdlog">meanlog, sdlog<a class="anchor" aria-label="anchor" href="#arg-meanlog-sdlog"></a></dt>
 <dd><p>Mean and standard deviation of the distribution on the
 log scale.</p></dd>
 
 
-<dt>mu, Sigma</dt>
+<dt id="arg-mu-sigma">mu, Sigma<a class="anchor" aria-label="anchor" href="#arg-mu-sigma"></a></dt>
 <dd><p><code>mu</code> is a vector giving the means of the variables and
 <code>Sigma</code> is a positive-definite symmetric matrix specifying the
 covariance matrix of the variables.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to pass to underlying random number generation
 functions. See "details".</p></dd>
 
 
-<dt>min, max</dt>
+<dt id="arg-min-max">min, max<a class="anchor" aria-label="anchor" href="#arg-min-max"></a></dt>
 <dd><p>Lower and upper limits of the distribution. Must be finite.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>Functions either return a vector of length <code>n</code> or an <code>n</code> by <code>k</code></p>
-<p></p>
-<p><code>data.table</code>.
+    <p>Functions either return a vector of length <code>n</code> or an <code>n</code> by <code>k</code> <code>data.table</code>.
 Multivariate distributions always return a <code>data.table</code>. If a
 univariate distribution is used, then a <code>data.table</code> is returned if each
 parameter is specified as a vector with length greater than 1; otherwise, if
@@ -200,13 +198,9 @@ parameters are scalars, then a vector is returned. In the <code>data.table</code
 entered as  arguments. For example, if the probability distribution contained
 <code>mean</code> as an argument and <code>mean</code> were
 of length 3, then an <code>n</code> by 3 matrix would be returned. The length of all
-parameter vectors must be the same. For instance, if the vector <code>mean</code></p>
-
-
-<p>were of length 3 then all additional parameters (e.g., <code>sd</code>)
+parameter vectors must be the same. For instance, if the vector <code>mean</code>
+were of length 3 then all additional parameters (e.g., <code>sd</code>)
 must also be of length 3.</p>
-
-
 <p>If a <code>data.table</code> is returned by a distribution, then its column names are set
 according to the following hierarchy:</p><ol><li><p>With the <code>names</code> argument if it is not <code>NULL</code></p></li>
 <li><p>With the names of the parameter vectors if they are named vectors. If there
@@ -286,15 +280,15 @@ with <code><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

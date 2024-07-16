@@ -12,7 +12,7 @@ an object of class model_def defined using define_model()."><meta property="og:i
 
   gtag('config', 'UA-131661920-2');
 </script></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -37,7 +37,7 @@ an object of class model_def defined using define_model()."><meta property="og:i
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -82,20 +82,20 @@ an object of class model_def defined using define_model()."><meta property="og:i
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Define and evaluate random number generation expressions</h1>
-    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/R/model_def.R" class="external-link"><code>R/model_def.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/main/R/model_def.R" class="external-link"><code>R/model_def.R</code></a></small>
     <div class="hidden name"><code>define_rng.Rd</code></div>
     </div>
 
@@ -114,7 +114,9 @@ an object of class <code>model_def</code> defined using <code><a href="define_mo
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>expr</dt>
+
+
+<dl><dt id="arg-expr">expr<a class="anchor" aria-label="anchor" href="#arg-expr"></a></dt>
 <dd><p>An expression used to randomly draw variates for each parameter of
 interest in the model. <a href="https://rdrr.io/r/base/Paren.html" class="external-link">Braces</a> should be used so that the result
 of the last expression within the braces is evaluated. The expression must
@@ -123,26 +125,26 @@ return a list where each element is either a <code>vector</code> or tabular obje
 either be or <code>n</code> and the number of rows in the tabular object must be <code>n</code>.</p></dd>
 
 
-<dt>n</dt>
+<dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
 <dd><p>Number of samples of the parameters to draw.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to pass to the environment used to evaluate
 <code>expr</code>.</p></dd>
 
 
-<dt>x</dt>
+<dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>An object of class <code>rng_def</code> created with <code>define_rng()</code>.</p></dd>
 
 
-<dt>params</dt>
+<dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
 <dd><p>A list containing the values of parameters for random number
 generation. Each element of the list should either be a <code>vector</code>,
 <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code></p></dd>
 
 
-<dt>check</dt>
+<dt id="arg-check">check<a class="anchor" aria-label="anchor" href="#arg-check"></a></dt>
 <dd><p>Whether to check the returned output so that (i) it returns a list
 and (ii) each element has the correct length or number of rows. Default is <code>TRUE</code>,
 meaning that any output can be returned. This is always <code>TRUE</code> when used inside
@@ -151,9 +153,7 @@ meaning that any output can be returned. This is always <code>TRUE</code> when u
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p><code>define_rng()</code> returns an object of class <code>rng_def</code>,
+    <p><code>define_rng()</code> returns an object of class <code>rng_def</code>,
 which is a list containing the unevaluated random number generation
 expressions passed  to <code>expr</code>, <code>n</code>, and any additional arguments passed to
 <code>...</code> . <code>eval_rng()</code> evaluates the <code>rng_def</code> object and
@@ -254,15 +254,15 @@ It can be useful to summarize an evaluated expression with <code><a href="summar
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

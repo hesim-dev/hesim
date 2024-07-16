@@ -11,7 +11,7 @@ probabilities, with simulation of costs and quality-adjusted life-years
 
   gtag('config', 'UA-131661920-2');
 </script></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -36,7 +36,7 @@ probabilities, with simulation of costs and quality-adjusted life-years
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -81,20 +81,20 @@ probabilities, with simulation of costs and quality-adjusted life-years
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/hesim-dev/hesim/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Expected values from state probabilities</h1>
-    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/HEAD/R/sim-general.R" class="external-link"><code>R/sim-general.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/main/R/sim-general.R" class="external-link"><code>R/sim-general.R</code></a></small>
     <div class="hidden name"><code>sim_ev.Rd</code></div>
     </div>
 
@@ -105,7 +105,7 @@ probabilities, with simulation of costs and quality-adjusted life-years
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for stateprobs</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'stateprobs'</span></span>
 <span><span class="fu">sim_ev</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
 <span>  models <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -134,36 +134,38 @@ probabilities, with simulation of costs and quality-adjusted life-years
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>object</dt>
+
+
+<dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>A <code><a href="stateprobs.html">stateprobs</a></code> object.</p></dd>
 
 
-<dt>dr</dt>
+<dt id="arg-dr">dr<a class="anchor" aria-label="anchor" href="#arg-dr"></a></dt>
 <dd><p>Discount rate.</p></dd>
 
 
-<dt>integrate_method</dt>
+<dt id="arg-integrate-method">integrate_method<a class="anchor" aria-label="anchor" href="#arg-integrate-method"></a></dt>
 <dd><p>Method used to integrate state values when computing
 costs or QALYs. Options are <code>trapz</code> (the default) for the trapezoid rule,
 <code>riemann_left</code> left for a left Riemann sum, and
 <code>riemann_right</code> right for a right Riemann sum.</p></dd>
 
 
-<dt>value_name</dt>
+<dt id="arg-value-name">value_name<a class="anchor" aria-label="anchor" href="#arg-value-name"></a></dt>
 <dd><p>Name of the column containing values of the outcome. Default
 is <code>"value"</code>.</p></dd>
 
 
-<dt>outcome_name</dt>
+<dt id="arg-outcome-name">outcome_name<a class="anchor" aria-label="anchor" href="#arg-outcome-name"></a></dt>
 <dd><p>Name of the column indicating the outcome corresponding
 to each model. Only used if <code>models</code> is a list. Default is <code>"outcome"</code>.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently unused.</p></dd>
 
 
-<dt>model, models</dt>
+<dt id="arg-model-models">model, models<a class="anchor" aria-label="anchor" href="#arg-model-models"></a></dt>
 <dd><p>An object or list of objects of class <code><a href="StateVals.html">StateVals</a></code> used to
 model state values. When using <code>sim_qalys()</code>, this should be
 a single model for utility. With <code>sim_costs()</code>, a list of models should be
@@ -173,16 +175,14 @@ in which case length of stay is computed based on the state probabilities
 contained in <code>object</code>.</p></dd>
 
 
-<dt>lys</dt>
+<dt id="arg-lys">lys<a class="anchor" aria-label="anchor" href="#arg-lys"></a></dt>
 <dd><p>If <code>TRUE</code>, then life-years are simulated in addition to
 QALYs.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p><code>sim_ev()</code> returns a <code>data.table</code> with the following columns:</p><dl><dt>sample</dt>
+    <p><code>sim_ev()</code> returns a <code>data.table</code> with the following columns:</p><dl><dt>sample</dt>
 <dd><p>A random sample from the PSA.</p></dd>
 
 <dt>strategy_id</dt>
@@ -209,10 +209,8 @@ Only included if <code>models</code> is a list.</p></dd>
 
 
 </dl><p>The names of the <code>outcome</code> and <code>value</code> columns may be changed with the
-<code>value_name</code> and <code>outcome_name</code> arguments. <code>sim_costs()</code> and <code>sim_qalys()</code></p>
-
-
-<p>return similar objects, that are of class <code><a href="costs.html">costs</a></code> and <code><a href="qalys.html">qalys</a></code>, respectively.</p>
+<code>value_name</code> and <code>outcome_name</code> arguments. <code>sim_costs()</code> and <code>sim_qalys()</code>
+return similar objects, that are of class <code><a href="costs.html">costs</a></code> and <code><a href="qalys.html">qalys</a></code>, respectively.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -400,15 +398,15 @@ continuous-time state transition model.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 
