@@ -14,3 +14,4 @@ Meta
 hesim*.tar.gz
 ..Rcheck
 Makefile
+hesim.Rcheck
