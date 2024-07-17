@@ -19,7 +19,7 @@ A \code{ggplot} object.
 }
 \description{
 Plot the expected value of perfect information (EVPI) from the output of
-\code{\link[=cea]{cea()}} using \code{\link{ggplot2}}. Intuitively, the EVPI provides an estimate of the
+\code{\link[=cea]{cea()}} using \code{\link[ggplot2:ggplot]{ggplot2::ggplot}}. Intuitively, the EVPI provides an estimate of the
 amount that a decision maker would be willing to pay to collect additional data
 and completely eliminate uncertainty.
 }
