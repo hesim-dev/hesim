@@ -18,7 +18,7 @@ in a statistical model. May also be a list of lists of input matrices when a
 list of separate models is fit (e.g., with \code{\link[=flexsurvreg_list]{flexsurvreg_list()}}).}
 
 \item{...}{For \code{input_mats()}, arguments to pass to \code{\link[=id_attributes]{id_attributes()}}. For \code{print()},
-arguments to pass to \code{\link[=print.data.table]{print.data.table()}}.}
+arguments to pass to \code{\link[data.table:print.data.table]{data.table::print.data.table()}}.}
 
 \item{x}{An \code{\link{input_mats}} object.}
 }
@@ -28,7 +28,7 @@ for simulating a statistical model. Consists of (i) input matrices, \code{X}, an
 (ii) \link[=id_attributes]{metadata} used to index each matrix in \code{X}.
 
 Once created, an \code{input_mats} object can be converted
-to a \code{\link{data.table}} with \code{as.data.table()}, which is a helpful way to check that
+to a \code{\link[data.table:data.table]{data.table::data.table}} with \code{as.data.table()}, which is a helpful way to check that
 the object is as expected. The \code{print()} method summarizes the object and
 prints it to the console.
 

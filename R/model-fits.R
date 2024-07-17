@@ -82,12 +82,12 @@ multinom_list <- function(...){
 #' Partitioned survival regression object
 #'
 #' Create a partitioned survival regression object of class `partsurvfit`. The object contains a list
-#' of fitted survival models fit using either \code{\link{flexsurvreg}} or \code{\link{flexsurvspline}} (i.e.,
+#' of fitted survival models fit using either \code{\link[flexsurv]{flexsurvreg}} or \code{\link[flexsurv]{flexsurvspline}} (i.e.,
 #' an object of class \code{\link{flexsurvreg_list}}) and the data frame used to perform the fit of each model. 
 #' The same data frame must have been used for each fit.  
 #' @param object An object of class \code{\link{flexsurvreg_list}}.
 #' @param data The data frame used to fit each survival model in \code{object}.
-#' \code{\link{flexsurvreg}}.  
+#' \code{\link[flexsurv]{flexsurvreg}}.  
 #' @return Returns an object of class `partsurvfit`, which is a list containing two elements. 
 #' The first element, "models", contains the survival models passed to \code{object}, and the second 
 #' element, "data" contains the data frame passed to \code{data}.
