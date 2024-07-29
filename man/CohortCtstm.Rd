@@ -40,6 +40,12 @@ list represents a different cost category.}
 \item{\code{costs_}}{An object of class \code{\link{costs}} simulated using \verb{$sim_costs()}.}
 
 \item{\code{times_}}{A vector of times.}
+
+\item{\code{zero_tol_}}{A double for being close to zero (used to avoid hazard(0.0)).}
+
+\item{\code{abs_tol_}}{A double for the absolute tolerane in the ODE solver.}
+
+\item{\code{rel_tol_}}{A double for the relative tolerane in the ODE solver.}
 }
 \if{html}{\out{</div>}}
 }
@@ -58,7 +64,14 @@ list represents a different cost category.}
 \subsection{Method \code{new()}}{
 Create a new \code{CohortCtstm} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortCtstm$new(trans_model = NULL, utility_model = NULL, cost_models = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CohortCtstm$new(
+  trans_model = NULL,
+  utility_model = NULL,
+  cost_models = NULL,
+  zero_tol = 1e-100,
+  abs_tol = 1e-06,
+  rel_tol = 1e-06
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -69,6 +82,12 @@ Create a new \code{CohortCtstm} object.
 \item{\code{utility_model}}{The \code{utility_model} field.}
 
 \item{\code{cost_models}}{The \code{cost_models} field.}
+
+\item{\code{zero_tol}}{The \code{zero_tol_} field.}
+
+\item{\code{abs_tol}}{The \code{abs_tol_} field.}
+
+\item{\code{rel_tol}}{The \code{rel_tol_} field.}
 }
 \if{html}{\out{</div>}}
 }
@@ -90,31 +109,27 @@ Simulate quality-adjusted life-years (QALYs) as a function of
   type = c("predict", "random"),
   lys = TRUE,
   progress = NULL,
-  by_patient = TRUE,
-  eps = 1e-100
+  by_patient = TRUE
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{t}}{A vector of times to be reported in the simulation (including the start time).}
+\item{\code{t}}{Double vector of times to evaluate the model (including the time origin).}
 
-\item{\code{dr_qalys}}{A double for the discount rate for QALYs (not annualised).}
+\item{\code{dr_qalys}}{Double for the discount rate for QALYs (not annualised).}
 
-\item{\code{dr_costs}}{A double for the discount rate for costs (not annualised).}
+\item{\code{dr_costs}}{Double for the discount rate for costs (not annualised).}
 
-\item{\code{type}}{\code{"predict"} for mean values or \code{"random"} for random samples
-as in \verb{$sim()} in \code{\link{StateVals}}; used for both costs and QALYs.}
+\item{\code{type}}{String for the type of values calculated.}
 
-\item{\code{lys}}{A logical for whether to report life-years; defaults to TRUE.}
+\item{\code{lys}}{If \code{TRUE}, then life-years are simulated in addition to QALYs.}
 
-\item{\code{progress}}{An integer for how frequently to report progress; defaults to NULL (no reporting).#ctstm.R}
+\item{\code{progress}}{Integer for the number of simulations to report progress;
+defaults to NULL for no reporting.}
 
-\item{\code{by_patient}}{A logical for whether to give results for each patient profiles;
-defaults to TRUE.}
-
-\item{\code{eps}}{A double for the smallest modelled time (avoids calculating transitions at t=0).}
+\item{\code{by_patient}}{Logical for whether to report separately by patient; defaults to TRUE.}
 }
 \if{html}{\out{</div>}}
 }
