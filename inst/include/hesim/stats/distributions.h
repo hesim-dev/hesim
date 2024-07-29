@@ -329,6 +329,27 @@ public:
     return rpwexp(rate_, time_);
   }
   
+  double hazard (double x) const {
+    int n_times = time_.size();
+    for (int t = 1; t < n_times; ++t){
+      if (x < time_[t])
+	return rate_[t-1];
+    }
+    return rate_[n_times-1];
+  }
+  
+  double cumhazard (double x) const {
+    int n_times = time_.size();
+    double H = 0.0;
+    for (int t = 1; t < n_times; ++t){
+      if (x < time_[t])
+	return H+(x-time_[t-1])*rate_[t-1];
+      else
+	H += (time_[t]-time_[t-1])*rate_[t-1];
+    }
+    return H+(x-time_[n_times-1])*rate_[n_times-1];
+  }
+  
   double trandom(double lower, double upper) const {
     if (upper != INFINITY){
       Rcpp::stop("hesim does not currently support sampling from a piecewise exponential distribution truncated from above.");
