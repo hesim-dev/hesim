@@ -28,7 +28,8 @@ BugReports: https://github.com/hesim-dev/hesim/issues
 License: GPL-3
 LazyData: true
 LinkingTo: Rcpp,
-           RcppArmadillo
+           RcppArmadillo,
+	   BH
 Depends:
     R (>= 3.5.0)
 Imports:
