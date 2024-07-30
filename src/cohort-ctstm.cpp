@@ -185,7 +185,7 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 	  arma::mat report(n_times,p0.size());
 	  report.row(0) = p0.t();
 	  auto stepper = make_dense_output(rel_tol, abs_tol, runge_kutta_dopri5<state_type>());
-	  int j_counter=0;
+	  int j_counter=1;
 	  for (size_t j=1; j<n_full_times; j++) {
 	    // special case: point mass
 	    for (int trans_ = 0; trans_ < n_trans; ++trans_) {
