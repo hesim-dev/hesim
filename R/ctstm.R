@@ -812,6 +812,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
 #' @name CohortCtstm
 NULL
 
+#' @rdname CohortCtstm
 #' @export
 CohortCtstm <- R6::R6Class("CohortCtstm",
   public = list(
