@@ -811,6 +811,7 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
 #' There are currently no relevant vignettes. 
 #' @name CohortCtstm
 NULL
+
 #' @export
 CohortCtstm <- R6::R6Class("CohortCtstm",
   public = list(
