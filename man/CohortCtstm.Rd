@@ -18,6 +18,12 @@ describes the class for the transition model and the \code{\link{StateVals}} doc
 describes the class for the cost and utility models. An \code{\link{IndivCtstmTrans}}
 object is typically created using \code{\link[=create_IndivCtstmTrans]{create_IndivCtstmTrans()}}.
 
+This will provide very similar predictions to \code{IndivCtstm}, albeit
+without the individual-level Monte Carlo variation. One semantic
+difference is that point masses in \code{IndivCtstm} are always
+clock-reset (essentially fixed times in state), whereas in
+\code{CohortCtstm} the point masses are always clock-forward (Markov).
+
 There are currently no relevant vignettes.
 }
 \section{Public fields}{
@@ -122,7 +128,8 @@ Simulate quality-adjusted life-years (QALYs) as a function of
 
 \item{\code{dr_costs}}{Double for the discount rate for costs (not annualised).}
 
-\item{\code{type}}{String for the type of values calculated.}
+\item{\code{type}}{\code{"predict"} for mean values or \code{"random"} for random samples
+as in \verb{$sim()} in \code{\link{StateVals}}.}
 
 \item{\code{lys}}{If \code{TRUE}, then life-years are simulated in addition to QALYs.}
 
