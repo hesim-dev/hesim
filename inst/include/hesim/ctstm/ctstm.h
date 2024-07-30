@@ -2,6 +2,7 @@
 # define HESIM_CTSTM_H
 #include <hesim/statmods/obs_index.h>
 #include <hesim/statmods/statmods.h>
+#include <hesim/stats/distributions.h>
 
 namespace hesim {
 
@@ -209,6 +210,10 @@ public:
       survmods_[i].dist_->max_x_ = max_x;
     }
   }  
+
+  hesim::stats::distribution* get_dist(int trans) {
+    return survmods_[trans].dist_.get();
+  }
   
   std::vector<double> summary(int trans, int sample,
                               std::vector<double> t, std::string type) {

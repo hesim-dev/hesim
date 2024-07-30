@@ -4,8 +4,7 @@
 #include <hesim/ctstm/ctstm.h>
 #include <hesim/statevals.h>
 #include <hesim/dtstm.h>
-
-#include <algorithm> // count
+#include <hesim/utils.h> // member_of()
 
 // Boilerplate code to ensure that arma plays nicely with boost::numeric::odeint
 namespace boost {
@@ -153,12 +152,60 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
       transmod->obs_index_.set_strategy_index(k);
         for (int i = 0; i < n_patients; ++i){
           transmod->obs_index_.set_patient_index(i);
+	  // allow for point mass distributions using clock-forward
+	  std::vector<bool> is_point_mass(n_trans);
+	  std::vector<double> point_mass_times(n_trans);
+	  std::vector<double> full_times(times);
+	  // apologies for the ugly dynamic_cast's
+	  hesim::ctstm::mstate_list* tmp_transmod =
+	    dynamic_cast<hesim::ctstm::mstate_list*>(transmod.get());
+	  for (int trans_ = 0; trans_ < n_trans; ++trans_) {
+	    if (tmp_transmod) {
+	      hesim::stats::point_mass* tmp_point_mass =
+		dynamic_cast<hesim::stats::point_mass*>(tmp_transmod->get_dist(trans_));
+	      if (tmp_point_mass) {
+		is_point_mass[trans_] = true;
+		point_mass_times[trans_] = tmp_point_mass->random(); // actually, it is fixed:)
+		full_times.push_back(point_mass_times[trans_]);
+	      } else {
+		is_point_mass[trans_] = false;
+		point_mass_times[trans_] = 0.0;
+	      }
+	    } else {
+	      is_point_mass[trans_] = false;
+	      point_mass_times[trans_] = 0.0;
+	    }
+	  }
+	  // sort and unique for full_times
+	  std::set<double> set_full_times(full_times.begin(), full_times.end());
+	  full_times.assign(set_full_times.begin(), set_full_times.end());
+	  int n_full_times = full_times.size();
 	  arma::vec p0 = arma::zeros(n_states*(3+R_CostsStateVals.size()));
 	  p0[start_state[i]] = 1.0;
 	  arma::mat report(n_times,p0.size());
 	  report.row(0) = p0.t();
 	  auto stepper = make_dense_output(rel_tol, abs_tol, runge_kutta_dopri5<state_type>());
-	  for (size_t j=1; j<n_times; j++) {
+	  int j_counter=0;
+	  for (size_t j=1; j<n_full_times; j++) {
+	    // special case: point mass
+	    for (int trans_ = 0; trans_ < n_trans; ++trans_) {
+	      if (is_point_mass[trans_] && full_times[j-1]==point_mass_times[trans_]) {
+		for (int cost_=0; cost_<n_costs; ++cost_) {
+		  if (costs_lookup[cost_].method_ == "transition") {
+		    int t_index = hesim::hesim_bound(full_times[j-1], obs_index_costs[cost_].time_start_);
+		    int obs = obs_index_costs[cost_](k, // strategy
+						     i, // patient
+						     trans_, // assumes transition
+						     t_index);
+		    p0(from[trans_] + (3+cost_)*n_states) +=
+		      p0(from[trans_])*costs_lookup[cost_].sim(s, obs, type);
+		  }
+		}
+		// assumes transitions done in order if the times are the same
+		p0(to[trans_]) += p0(from[trans_]);
+		p0(from[trans_]) = 0.0;
+	      }
+	    }
 	    size_t n = integrate_adaptive(stepper,
 		       [&](const state_type &Y , state_type &dYdt, const double t)
 		       {
@@ -170,8 +217,11 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 			 double tstar = std::max(zero_tol,t);
 			 // Rprintf("Rate calculations\n");
 			 // rate calculations
-			 for (int state_ = 0; state_<n_states; ++state_) {
-			   for (int trans_ = 0; trans_ < n_trans; ++trans_){
+			 for (int trans_ = 0; trans_ < n_trans; ++trans_) {
+			   // special case: point_mass
+			   if (is_point_mass[trans_]) {
+			       rates[trans_] = 0.0;
+			   } else { // general case
 			     if (clock == "forward"){
 			       rates[trans_] = transmod->summary(trans_, s, {tstar}, "hazard")[0];
 			     } else { // clock == "mixt"
@@ -181,8 +231,8 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 				 rates[trans_] = transmod->summary(trans_, s, {tstar}, "hazard")[0];
 			       }
 			     }
-			   } // end loop over transitions
-			 } // end loop over states
+			   } // end general case
+			 } // end loop over transitions
 			 // Rprintf("Utility input calculations\n");
 			 // utility input calculations
 			 if (valid_R_QALYsStateVal) {
@@ -201,32 +251,32 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 			 // Rprintf("Cost input calculations\n");
 			 // cost input calculations
 			 for (int cost_=0; cost_<n_costs; ++cost_) {
-			   int t_index_costs = hesim::hesim_bound(t, obs_index_costs[cost_].time_start_);
+			   int t_index = hesim::hesim_bound(t, obs_index_costs[cost_].time_start_);
 			   if (costs_lookup[cost_].method_ == "wlos") {
 			     for (int state_ : live_states) {
-			       int obs_costs = obs_index_costs[cost_](k, // strategy
-								      i, // patient
-								      state_,
-								      t_index_costs);
-			       costs_by_state(state_, cost_) += costs_lookup[cost_].sim(s, obs_costs, type);
+			       int obs = obs_index_costs[cost_](k, // strategy
+								i, // patient
+								state_,
+								t_index);
+			       costs_by_state(state_, cost_) += costs_lookup[cost_].sim(s, obs, type);
 			     } // end loop over live states
 			   } else if (costs_lookup[cost_].method_ == "starting") {
 			     for (int trans_=0; trans_<n_trans; ++trans_) {
-			       if (std::count(live_states.begin(), live_states.end(), to[trans_])) {
-				 int obs_costs = obs_index_costs[cost_](k, // strategy
-									i, // patient
-									to(trans_),
-									t_index_costs);
-				 costs_by_transition(trans_, cost_) = costs_lookup[cost_].sim(s, obs_costs, type);
+			       if (hesim::member_of(to[trans_], live_states)) {
+				 int obs = obs_index_costs[cost_](k, // strategy
+								  i, // patient
+								  to(trans_),
+								  t_index);
+				 costs_by_transition(trans_, cost_) = costs_lookup[cost_].sim(s, obs, type);
 			       }
 			     } // end loop over transitions
 			   } else { // costs_lookup[cost_].method_ == "transition"
 			     for (int trans_=0; trans_<n_trans; ++trans_) {
-			       int obs_costs = obs_index_costs[cost_](k, // strategy
-								      i, // patient
-								      trans_, // assumes transition
-								      t_index_costs);
-			       costs_by_transition(trans_, cost_) = costs_lookup[cost_].sim(s, obs_costs, type); // by trans_
+			       int obs = obs_index_costs[cost_](k, // strategy
+								i, // patient
+								trans_, // assumes transition
+								t_index);
+			       costs_by_transition(trans_, cost_) = costs_lookup[cost_].sim(s, obs, type); // by trans_
 			     } // end loop over transitions
 			   } // end case: "transition"
 			 } // end loop over costs
@@ -255,11 +305,14 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 			 }
 		       },
 					  p0,
-					  times[j-1],
-					  times[j],
-					  times[j]-times[j-1]);
-	    report.row(j) = p0.t();
-	  } // end j times_ loop
+					  full_times[j-1],
+					  full_times[j],
+					  full_times[j]-full_times[j-1]);
+	    if (hesim::member_of(full_times[j], times)) {
+	      report.row(j_counter) = p0.t();
+	      j_counter++;
+	    }
+	  } // end j full_times_ loop
 	  for (int h = 0; h < n_states; ++h){
 	    for (int ti = 0; ti < n_times; ++ti){
 	      CTSTM_OUT(out,counter);

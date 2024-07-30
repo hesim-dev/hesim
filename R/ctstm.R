@@ -801,13 +801,16 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
 #' describes the class for the transition model and the [`StateVals`] documentation
 #' describes the class for the cost and utility models. An [`IndivCtstmTrans`] 
 #' object is typically created using [create_IndivCtstmTrans()]. 
+#'
+#' This will provide very similar predictions to `IndivCtstm`, albeit
+#' without the individual-level Monte Carlo variation. One semantic
+#' difference is that point masses in `IndivCtstm` are always
+#' clock-reset (essentially fixed times in state), whereas in
+#' `CohortCtstm` the point masses are always clock-forward (Markov).
 #' 
 #' There are currently no relevant vignettes. 
 #' @name CohortCtstm
 NULL
-#' @param dr Discount rate.
-#' @param type `"predict"` for mean values or `"random"` for random samples 
-#' as in `$sim()` in [`StateVals`].
 #' @export
 CohortCtstm <- R6::R6Class("CohortCtstm",
   public = list(
@@ -874,7 +877,8 @@ CohortCtstm <- R6::R6Class("CohortCtstm",
     #' @param t Double vector of times to evaluate the model (including the time origin).
     #' @param dr_qalys Double for the discount rate for QALYs (not annualised).
     #' @param dr_costs Double for the discount rate for costs (not annualised).
-    #' @param type String for the type of values calculated.
+    #' @param type `"predict"` for mean values or `"random"` for random samples 
+    #' as in `$sim()` in [`StateVals`].
     #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
     #' @param progress Integer for the number of simulations to report progress;
     #' defaults to NULL for no reporting.
