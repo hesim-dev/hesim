@@ -36,14 +36,6 @@ namespace boost {
   }
 } // namespace boost::numeric::odeint
 
-#define CTSTM_OUT(OBJECT,COUNTER)	     \
-  OBJECT.sample_[COUNTER] = s;		     \
-  OBJECT.strategy_id_[COUNTER] = k;	     \
-  OBJECT.patient_id_[COUNTER] = i;					\
-  OBJECT.grp_id_[COUNTER] = transmod->obs_index_.get_grp_id();		\
-  OBJECT.patient_wt_[COUNTER] = transmod->obs_index_.get_patient_wt();	\
-  OBJECT.state_id_[COUNTER] = h;
-
 /***************************************************************************//** 
  * @ingroup ctstm
  * Simulate disease progression (i.e., a path through a multi-state model),
@@ -315,20 +307,33 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 	  } // end j full_times_ loop
 	  for (int h = 0; h < n_states; ++h){
 	    for (int ti = 0; ti < n_times; ++ti){
-	      CTSTM_OUT(out,counter);
+	      out.sample_[counter] = s;
+	      out.strategy_id_[counter] = k;
+	      out.patient_id_[counter] = i;
+	      out.grp_id_[counter] = transmod->obs_index_.get_grp_id();
+	      out.patient_wt_[counter] = transmod->obs_index_.get_patient_wt();
+	      out.state_id_[counter] = h;
 	      out.t_[counter] = times[ti];
 	      out.prob_[counter] = report(ti, h);
 	      ++counter;                   
 	    } // end cycles loop
 	    // report for life-years
-	    CTSTM_OUT(out2,counter2);
+	    auto update_ev_out = [&](hesim::ev_out & object,int counter) {
+	      object.sample_[counter] = s;
+	      object.strategy_id_[counter] = k;
+	      object.patient_id_[counter] = i;
+	      object.grp_id_[counter] = transmod->obs_index_.get_grp_id();
+	      object.patient_wt_[counter] = transmod->obs_index_.get_patient_wt();
+	      object.state_id_[counter] = h;
+	    };
+	    update_ev_out(out2,counter2);
 	    out2.dr_[counter2] = 0.0; // assume no discounting for life-years
 	    out2.outcome_[counter2] = "ly";
 	    out2.value_[counter2] = report(n_times-1,n_states+h);
 	    ++counter2;
 	    // report for qalys
 	    if (valid_R_QALYsStateVal) {
-	      CTSTM_OUT(out2,counter2);
+	      update_ev_out(out2,counter2);
 	      out2.dr_[counter2] = dr_qalys;
 	      out2.outcome_[counter2] = "qaly";
 	      out2.value_[counter2] = report(n_times-1,2*n_states+h);
@@ -336,7 +341,7 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 	    }
 	    // report for costs
 	    for (int cost_=0; cost_<n_costs; ++cost_) {
-	      CTSTM_OUT(out2,counter2);
+	      update_ev_out(out2,counter2);
 	      out2.dr_[counter2] = dr_costs;
 	      out2.outcome_[counter2] = "Category " + std::to_string(cost_+1);
 	      out2.value_[counter2] = report(n_times-1,(3+cost_)*n_states+h);
@@ -352,18 +357,17 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 		      _["ev"]=out2.create_R_data_frame()));
 }
 
-#undef CTSTM_OUT
-
 // test example that does not use hesim
-class TestODE {
+class CohortCtstmTestODE {
 public:
   typedef arma::vec state_type;
   size_t n_states;
   double discount_rate;
-  TestODE(double discount_rate = 0.0)
+  CohortCtstmTestODE(double discount_rate = 0.0)
     : n_states(4), discount_rate(discount_rate) { }
   inline double hweibull(const double t, const double shape, const double scale) {
-    return R::dweibull(std::max(1e-100,t),shape,scale,0)/R::pweibull(t,shape,scale,0,0);
+    return R::dweibull(std::max(1e-100,t),shape,scale,0)/
+      R::pweibull(std::max(1e-100,t),shape,scale,0,0);
   }
   void operator() (const state_type &Y , state_type &dYdt, const double t)
   {
@@ -402,13 +406,17 @@ public:
     for (int j=0; j<4; ++j)
       dYdt(to[j] + 5*n_states) += starting_costs[to[j]] * Y(from[j]) * rates(j) * dr;
   }
-  arma::mat run(arma::vec p0, arma::vec times) {
+  Rcpp::List run(int start_state = 0, arma::vec times = {0.0, 1.0, 2.0, 10.0},
+		 double discount_rate = 0.0) {
+    this->discount_rate = discount_rate;
     using namespace boost::numeric::odeint;
     size_t n_times = times.size();
+    arma::vec p0(n_states*6); // probs, lys, qalys, 3*costs
+    p0(start_state) = 1.0;
     // combine the results
     arma::mat combined(n_times,p0.size());
     combined.row(0) = p0.t();
-    auto stepper = make_dense_output(1.0e-10, 1.0e-10, runge_kutta_dopri5<state_type>());
+    auto stepper = make_dense_output(1.0e-6, 1.0e-6, runge_kutta_dopri5<state_type>());
     for (size_t step_=1; step_<n_times; step_++) {
       size_t n = integrate_adaptive(stepper,
 				    [this](const state_type &Y , state_type &dYdt, const double t) {
@@ -420,12 +428,62 @@ public:
 				    times[step_]-times[step_-1]);
       combined.row(step_) = p0.t();
     }
-    return combined;
+    int counter=0;
+    hesim::stateprobs_out out(n_times * n_states);
+    for (int h = 0; h < n_states; ++h){
+      for (int ti = 0; ti < n_times; ++ti){
+	out.sample_[counter] = 0; // C-based indexing
+	out.strategy_id_[counter] = 0;
+	out.patient_id_[counter] = 0;
+	out.grp_id_[counter] = 1; // ???
+	out.patient_wt_[counter] = 1.0;
+	out.state_id_[counter] = h;
+	out.t_[counter] = times[ti];
+	out.prob_[counter] = combined(ti, h);
+	++counter;                   
+      } // end cycles loop
+    } // end 
+    hesim::ev_out out2(n_states * 5);
+    int counter2 = 0;
+    for (int h = 0; h < n_states; ++h) {
+      auto update_ev_out = [&](hesim::ev_out & object,int counter) {
+	object.sample_[counter] = 0;
+	object.strategy_id_[counter] = 0;
+	object.patient_id_[counter] = 0;
+	object.grp_id_[counter] = 1;
+	object.patient_wt_[counter] = 1.0;
+	object.state_id_[counter] = h;
+	object.dr_[counter] = discount_rate;
+      };
+      update_ev_out(out2,counter2);
+      out2.dr_[counter2] = 0.0;
+      out2.outcome_[counter2] = "ly";
+      out2.value_[counter2] = combined(n_times-1,1*n_states+h);
+      ++counter2;
+      update_ev_out(out2,counter2);
+      out2.outcome_[counter2] = "qaly";
+      out2.value_[counter2] = combined(n_times-1,2*n_states+h);
+      ++counter2;
+      update_ev_out(out2,counter2);
+      out2.outcome_[counter2] = "Category 1";
+      out2.value_[counter2] = combined(n_times-1,3*n_states+h);
+      ++counter2;
+      update_ev_out(out2,counter2);
+      out2.outcome_[counter2] = "Category 2";
+      out2.value_[counter2] = combined(n_times-1,4*n_states+h);
+      ++counter2;
+      update_ev_out(out2,counter2);
+      out2.outcome_[counter2] = "Category 3";
+      out2.value_[counter2] = combined(n_times-1,5*n_states+h);
+      ++counter2;
+    }
+    using namespace Rcpp;
+    return List::create(_["stateprobs_"]=out.create_R_data_frame(),
+			_["ev_"]=out2.create_R_data_frame());
   }
 };
 // [[Rcpp::export]]
-Rcpp::List runTestODE(arma::vec p0, arma::vec times, double discount_rate = 0.0) {
-  using namespace Rcpp;
-  return List::create(_("times")=times,
-		      _("Y")=TestODE(discount_rate).run(p0,times));
+Rcpp::List runCohortCtstmTestODE(int start_state, arma::vec times,
+				 double discount_rate = 0.0) {
+  return CohortCtstmTestODE().run(start_state,times,discount_rate);
 }

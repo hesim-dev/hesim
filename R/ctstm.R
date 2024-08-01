@@ -808,7 +808,11 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
 #' clock-reset (essentially fixed times in state), whereas in
 #' `CohortCtstm` the point masses are always clock-forward (Markov).
 #' 
-#' There are currently no relevant vignettes. 
+#' There is currently one relevant vignette.
+#' `vignette("markov-inhomogeneous-cohort-continuous")` shows how the
+#' individual-based time inhomogeneous Markov model in
+#' `vignette("markov-inhomogeneous-indiv")` can be developed as a
+#' cohort-based simulation.
 #' @name CohortCtstm
 NULL
 
@@ -965,3 +969,30 @@ CohortCtstm <- R6::R6Class("CohortCtstm",
     }
   ) # end public
 ) # end class
+
+#' @description 
+#' @internal
+run_CohortCtstmTestODE <- function(start_state=1, times=c(0,1,2,10), discount_rate=0.03) {
+    self <- runCohortCtstmTestODE(start_state - 1L, times, discount_rate)
+    ## NB: grp_id is already 1-based -- so do not update
+    self$stateprobs_ <-
+        as.data.table(self$stateprobs_)[,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,
+                                             patient_id=patient_id+1L,state_id=state_id+1L)]
+    ev <- as.data.table(self$ev_)
+    self$qalys_ <- ev[outcome=="qaly"][
+       ,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,patient_id=patient_id+1L,
+             state_id=state_id+1,category='qalys',qalys=value,value=NULL,outcome=NULL)]
+    self$qalys_$ly = ev[outcome=="ly","value"]
+    self$costs_ <- do.call(rbind,
+                           lapply(unique(grep("Category",ev$outcome,value=TRUE)),
+                                  function(pattern) {
+                                      ev2 <- ev[outcome==pattern][
+                                         ,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,
+                                               patient_id=patient_id+1L,state_id=state_id+1L,
+                                               category=pattern,costs=value,value=NULL,
+                                               outcome=NULL)]
+                                      ev2
+                                  }))
+    self$ev_ = NULL
+    self
+}

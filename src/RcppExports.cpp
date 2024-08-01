@@ -115,16 +115,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// runTestODE
-Rcpp::List runTestODE(arma::vec p0, arma::vec times, double discount_rate);
-RcppExport SEXP _hesim_runTestODE(SEXP p0SEXP, SEXP timesSEXP, SEXP discount_rateSEXP) {
+// runCohortCtstmTestODE
+Rcpp::List runCohortCtstmTestODE(int start_state, arma::vec times, double discount_rate);
+RcppExport SEXP _hesim_runCohortCtstmTestODE(SEXP start_stateSEXP, SEXP timesSEXP, SEXP discount_rateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type p0(p0SEXP);
+    Rcpp::traits::input_parameter< int >::type start_state(start_stateSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type times(timesSEXP);
     Rcpp::traits::input_parameter< double >::type discount_rate(discount_rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(runTestODE(p0, times, discount_rate));
+    rcpp_result_gen = Rcpp::wrap(runCohortCtstmTestODE(start_state, times, discount_rate));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -706,7 +706,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_mce", (DL_FUNC) &_hesim_C_mce, 6},
     {"_hesim_C_enmbpi", (DL_FUNC) &_hesim_C_enmbpi, 6},
     {"_hesim_C_cohort_ctstm_sim", (DL_FUNC) &_hesim_C_cohort_ctstm_sim, 16},
-    {"_hesim_runTestODE", (DL_FUNC) &_hesim_runTestODE, 3},
+    {"_hesim_runCohortCtstmTestODE", (DL_FUNC) &_hesim_runCohortCtstmTestODE, 3},
     {"_hesim_tmax_max", (DL_FUNC) &_hesim_tmax_max, 1},
     {"_hesim_C_ctstm_summary", (DL_FUNC) &_hesim_C_ctstm_summary, 3},
     {"_hesim_C_rgengamma", (DL_FUNC) &_hesim_C_rgengamma, 4},
