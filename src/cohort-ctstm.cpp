@@ -80,7 +80,7 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 			      double rel_tol = 1e-6) {
   using namespace boost::numeric::odeint;
   typedef arma::vec state_type;
-  enum TransitionType {tt_time, tt_age};
+  enum TransitionType {tt_reset, tt_time, tt_age}; // tt_reset is *not* allowed here
   // Initialize
   std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
   int n_costs = R_CostsStateVals.size();
@@ -205,7 +205,7 @@ Rcpp::List C_cohort_ctstm_sim(Rcpp::Environment R_CtstmTrans,
 			 arma::vec utilities(n_states);
 			 arma::mat costs_by_state(n_states,n_costs);
 			 arma::mat costs_by_transition(n_trans,n_costs);
-			 double age = start_age[i]+t;
+			 double age = std::max(zero_tol, start_age[i]+t);
 			 double tstar = std::max(zero_tol,t);
 			 // Rprintf("Rate calculations\n");
 			 // rate calculations
@@ -486,4 +486,397 @@ public:
 Rcpp::List runCohortCtstmTestODE(int start_state, arma::vec times,
 				 double discount_rate = 0.0) {
   return CohortCtstmTestODE().run(start_state,times,discount_rate);
+}
+
+arma::mat constant(double x, size_t n_rows, size_t n_cols) {
+  return x+arma::zeros(n_rows,n_cols);
+}
+arma::vec constant(double x, size_t len) {
+  return x+arma::zeros(len);
+}
+
+/***************************************************************************//** 
+ * @ingroup ctstm
+ * Simulate disease progression (i.e., a path through a semi-Markov multi-state model),
+ * together with costs and QALYs.
+ * This function is exported to @c R and used in @c CohortCtstm$sim().
+ * @param R_CtstmTrans An R object of class @c CohortCtstmTrans.
+ * @param R_CostsStateVals An R List of @c StateVal objects for costs.
+ * @param R_QALYsStateVal An R object of class @c StateVal for QALYs.
+ * @param live_states An integer vector the for the live states.
+ * @param start_state The starting health state for each patient,
+ * (TODO: allow for probabilities in the initial states).
+ * @param start_age The starting age of each patient in the simulation.
+ * @param max_time Double for the maximum time to be simulated.
+ * @param clock A string to specify the clock; allows for "forward" and "mixt".
+ * @param transition_types A vector of integers for the transitions when clock="mixt";
+ * 0=Time on study, 1=Age.
+ * @param delta_time Double for the time interval used to discretise time for the semi-Markov
+ * models.
+ * @param progress An integer for how to report progress; defaults to zero, 
+ * which is no reporting.
+ * @param dr_qalys A double for the discount rate for QALYs (NB: this is not annualised).
+ * @param dr_costs A double for the discount rate for costs (NB: this is not annualised).
+ * @param type A string for how costs and QALYs are calculated; defaults to "predict".
+ * @param eps A double for how to represent zero time; defaults to 1e-100.
+ * @param debug A boolean whether to print out debugging information
+ * @return An R List with elements "stateprobs", which is a data frame of the same format 
+ * as stateprobs_out, and "ev", which is a data frame of the same format as ev_out.
+ ******************************************************************************/ 
+// [[Rcpp::export]]
+Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
+			       Rcpp::List R_CostsStateVals,
+			       Rcpp::Environment R_QALYsStateVal,
+			       std::vector<int> live_states,
+			       std::vector<int> start_state, // by patient
+			       std::vector<double> start_age, // by patient
+			       double max_time,
+			       std::string clock,
+			       std::vector<int> transition_types,
+			       double delta_time = 0.1, // new
+			       int progress = 0,
+			       double dr_qalys = 0.0,
+			       double dr_costs = 0.0,
+			       std::string type="predict",
+			       double zero_tol = 1e-100,
+			       double abs_tol = 1e-6,
+			       double rel_tol = 1e-6,
+			       bool debug = false) {
+  using namespace boost::numeric::odeint;
+  typedef arma::vec state_type;
+  enum TransitionType {tt_reset, tt_time, tt_age};
+  // Initialize
+  std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
+  int n_costs = R_CostsStateVals.size();
+  std::vector<hesim::statevals> costs_lookup;
+  std::vector<hesim::statmods::obs_index> obs_index_costs;
+  std::vector<bool> costs_time_reset;
+  for (int cost_=0; cost_<n_costs; ++cost_) {
+    costs_time_reset.push_back(Rcpp::as<bool>(Rcpp::as<Rcpp::Environment>(R_CostsStateVals[cost_])["time_reset"]));
+    costs_lookup.push_back(hesim::statevals(Rcpp::as<Rcpp::Environment>(R_CostsStateVals[cost_])));
+    obs_index_costs.push_back(hesim::statmods::obs_index(hesim::statmods::get_id_object(Rcpp::as<Rcpp::Environment>(R_CostsStateVals[cost_]))));
+  }
+  // use unique_ptr because statevals and obs_index can be null and do not have null constructors
+  std::unique_ptr<hesim::statevals> qalys_lookup;
+  std::unique_ptr<hesim::statmods::obs_index> obs_index_qalys;
+  bool valid_R_QALYsStateVal = R_QALYsStateVal.exists("method");
+  bool qalys_time_reset = false;
+  if (valid_R_QALYsStateVal) {
+    qalys_time_reset = Rcpp::as<bool>(R_QALYsStateVal["time_reset"]);
+    qalys_lookup = std::unique_ptr<hesim::statevals>(new hesim::statevals(R_QALYsStateVal));
+    auto id_object = hesim::statmods::get_id_object(R_QALYsStateVal);
+    obs_index_qalys =
+      std::unique_ptr<hesim::statmods::obs_index>(new hesim::statmods::obs_index(id_object));
+  }
+  int n_samples = transmod->get_n_samples();
+  int n_strategies = transmod->get_n_strategies(); 
+  int n_patients = transmod->get_n_patients(); // actually, the number of patient profiles
+  int n_times = ceil(max_time / delta_time);
+  int n_states = transmod->trans_mat_.n_states_; // NB: includes death states
+  if (debug) Rprintf("n_states=%i\n",n_states);
+  int N = n_samples * 
+    n_strategies *  
+    n_patients *
+    n_states *
+    n_times;
+  hesim::stateprobs_out out(N);
+  int N2 = n_samples * 
+    n_strategies *  
+    n_patients *
+    n_states *
+    (1+(valid_R_QALYsStateVal ? 1 : 0)+n_costs); // LYs, QALYs, cost categories
+  int n_trans = transmod->trans_mat_.n_trans_;
+  arma::uvec from(n_trans);
+  arma::uvec to(n_trans);
+  for (int state_id : live_states) {
+    std::vector<int> trans_ids = transmod->trans_mat_.trans_id(state_id);
+    std::vector<int> tos = transmod->trans_mat_.to(state_id);
+    int n_trans_state = trans_ids.size();
+    for (int trans_ = 0; trans_ < n_trans_state; ++trans_){ // NB: within a state
+      int trans_id = trans_ids[trans_];
+      from(trans_id) = state_id;
+      to(trans_id) = tos[trans_];
+    }
+  }
+  hesim::ev_out out2(N2);
+  int counter = 0, counter2 = 0;
+  if (debug) Rprintf("Main loop\n");
+  // main loop
+  for (int s = 0; s < n_samples; ++s){
+    if (progress > 0){
+      if ((s + 1) % progress == 0){ // R-based indexing
+        Rcpp::Rcout << "sample = " << s + 1 << std::endl;  
+      }
+    }
+    for (int k = 0; k < n_strategies; ++k){
+      transmod->obs_index_.set_strategy_index(k);
+      for (int i = 0; i < n_patients; ++i){
+	transmod->obs_index_.set_patient_index(i);
+	// NOTE: can utilities and costs depend on duration -- or can we collapse for duration?
+	size_t n_rows = n_states*(3+R_CostsStateVals.size());
+	arma::vec p0 = arma::zeros(n_rows);
+	p0(start_state[i]) = 1.0; // assumes starts with zero duration (TODO: generalise)
+	arma::mat report(n_rows,n_times); // transposed cf. C_cohort_ctstm_sim()
+	report.col(0) = p0;
+	auto stepper = make_dense_output(rel_tol, abs_tol, runge_kutta_dopri5<state_type>());
+	for (size_t j=1; j<n_times; j++) {
+	  if (debug) Rprintf("j=%i\n",j);
+	  p0 = join_cols(p0, arma::zeros(n_rows)); // add zeros at the end for flows out
+	  size_t n = integrate_adaptive(stepper,
+					[&](const state_type &Y , state_type &dYdt, const double u)
+					{
+					  arma::mat y(Y.memptr(), Y.n_elem/(j+1), j); // NB: excludes the last column
+					  arma::vec y0 = arma::zeros(n_rows); 
+					  arma::mat dydt = y*0.0;
+					  arma::vec dy0dt = y0*0.0;
+					  arma::mat rates(n_trans,j);
+					  arma::mat utilities(n_states,j);
+					  arma::cube costs_by_state(n_costs,n_states,j);
+					  arma::cube costs_by_transition(n_costs,n_trans,j);
+					  double t = (j-1)*delta_time+u;
+					  double tstar = std::max(zero_tol, t);
+					  double age = std::max(zero_tol,start_age[i]+u);
+					  arma::vec duration = arma::linspace(0.0, (j-1)*delta_time, j);
+					  std::vector<double> vduration(duration.begin(), duration.end());
+					  if (debug) Rprintf("Rate calculations\n");
+					  for (int trans_ = 0; trans_ < n_trans; ++trans_) {
+					    if (debug) Rprintf("trans_=%i\n",trans_);
+					    if (clock == "forward"){ // NB: this should never be reached
+					      if (debug) Rprintf("clock forward\n");
+					      rates.row(trans_) = rates.row(trans_)*0.0+transmod->summary(trans_, s, {tstar}, "hazard")[0];
+					    } else if (clock == "mixt") { // clock == "mixt"
+					      if (debug) Rprintf("clock mixt\n");
+					      if (transition_types[trans_] == tt_age) {
+						if (debug) Rprintf("tt_age\n");
+						rates.row(trans_) = rates.row(trans_)*0.0+transmod->summary(trans_, s, {age}, "hazard")[0];
+					      } else if (transition_types[trans_] == tt_time) {
+						if (debug) Rprintf("tt_time\n");
+						rates.row(trans_) = rates.row(trans_)*0.0+transmod->summary(trans_, s, {tstar}, "hazard")[0];
+					      } else { 
+						if (debug) Rprintf("tt_reset\n");
+						std::vector<double> vrow =
+						  transmod->summary(trans_, s, vduration, "hazard");
+						if (debug) Rprintf("vrow.size()=%i, rates.n_rows=%i, rates.n_cols=%i\n",
+								   vrow.size(), rates.n_rows, rates.n_cols);
+						arma::rowvec row(vrow.data(), vrow.size(), false);
+						rates.row(trans_) = row;
+					      }
+					    } else { // clock == "reset"
+					      if (debug) Rprintf("clock reset\n");
+					      std::vector<double> vrow =
+						transmod->summary(trans_, s, vduration, "hazard");
+					      if (debug) Rprintf("vrow.size()=%i, rates.n_rows=%i, rates.n_cols=%i\n",
+						      vrow.size(), rates.n_rows, rates.n_cols);
+					      arma::rowvec row(vrow.data(), vrow.size(), false);
+					      rates.row(trans_) = row;
+					    }
+					    if (debug) Rprintf("end loop trans_\n");
+					  } // end loop over transitions
+					  // utility input calculations
+					  if (valid_R_QALYsStateVal) {
+					    if (debug) Rprintf("Utility input calculations\n");
+					    for (size_t d_index=0; d_index < duration.size(); ++d_index) {
+					      int t_index = qalys_time_reset ?
+						hesim::hesim_bound(duration[d_index]+u,obs_index_qalys->time_start_) :
+						hesim::hesim_bound(t,obs_index_qalys->time_start_);
+					      for (int state_ : live_states) {
+						int obs = (*obs_index_qalys)(k, // strategy
+									     i, // patient
+									     state_,
+									     t_index);
+						// if (debug) Rprintf("Utility: k=%i, i=%i, state_=%i, t_index=%i, s=%i, obs=%i\n",
+						// 		     k, i, state_, t_index, s, obs);
+						utilities(state_,d_index) = qalys_lookup->sim(s, obs, type);
+					      } // loop over state_
+					    } // loop over d_index
+					    if (debug) Rprintf("Utility done\n");
+					  }
+					  if (debug) Rprintf("Cost input calculations\n");
+					  // cost input calculations
+					  for (int cost_=0; cost_<n_costs; ++cost_) {
+					    int t_index = hesim::hesim_bound(t, obs_index_costs[cost_].time_start_); // if clock-forward
+					    for (size_t d_index = 0; d_index < duration.size(); ++d_index) {
+					      if (costs_time_reset[cost_])
+						t_index = hesim::hesim_bound(duration[d_index]+u, obs_index_costs[cost_].time_start_);
+					      if (costs_lookup[cost_].method_ == "wlos") {
+						for (int state_ : live_states) {
+						  int obs = obs_index_costs[cost_](k, // strategy
+										   i, // patient
+										   state_,
+										   t_index);
+						  costs_by_state(cost_, state_, d_index) += costs_lookup[cost_].sim(s, obs, type);
+						} // end loop over live states
+					      }
+					      else if (costs_lookup[cost_].method_ == "starting") {
+						for (int trans_=0; trans_<n_trans; ++trans_) {
+						  if (hesim::member_of(to[trans_], live_states)) {
+						    int obs = obs_index_costs[cost_](k, // strategy
+										     i, // patient
+										     to(trans_),
+										     t_index);
+						    costs_by_transition(cost_, trans_, d_index) = costs_lookup[cost_].sim(s, obs, type);
+						  } // end condition for live states
+						} // loop over trans_
+					      } // end case "starting"
+					      else { // costs_lookup[cost_].method_ == "transition"
+						for (int trans_=0; trans_<n_trans; ++trans_) {
+						  int obs = obs_index_costs[cost_](k, // strategy
+										   i, // patient
+										   trans_, // assumes transition
+										   t_index);
+						  costs_by_transition(cost_, trans_, d_index) = costs_lookup[cost_].sim(s, obs, type); // by trans_
+						} // end loop over trans_
+					      }
+					    } // end loop over d_index
+					  } // end loop over costs
+					  if (debug) Rprintf("Transition intensity calculations\n");
+					  // flow from y
+					  arma::uvec all_columns = arma::regspace<arma::uvec>(0, y.n_cols-1);
+					  if (debug) Rprintf("flow_y\n");
+					  arma::mat flow_y = y(from,all_columns) % rates;
+					  if (debug) Rprintf("dydt\n");
+					  dydt(from,all_columns) -= flow_y;
+					  if (debug) Rprintf("dy0dt\n");
+					  dy0dt(to) += sum(flow_y,1);
+					  // flow from y0 to y0
+					  if (debug) Rprintf("Transition intensity (y0)\n");
+					  arma::vec flow_y0 = y0(from) % rates.col(0);
+					  dy0dt(from) -= flow_y0;
+					  dy0dt(to) += flow_y0;
+					  // discounting
+					  double drr_utilities = std::exp(-dr_qalys*t);
+					  double drr_costs = std::exp(-dr_costs*t);
+					  if (debug) Rprintf("Length of stay calculations\n");
+					  dydt(arma::span(n_states,2*n_states-1), arma::span::all) =
+					    y(arma::span(0,n_states-1), arma::span::all);
+					  dy0dt(arma::span(n_states,2*n_states-1)) = y0(arma::span(0,n_states-1));
+					  if (debug) Rprintf("Discounted utilities\n");
+					  dydt(arma::span(2*n_states,3*n_states-1),arma::span::all) =
+					    y(arma::span(0,n_states-1), arma::span::all).each_col() % utilities *drr_utilities;
+					  if (debug) Rprintf("Discounted costs (y0)\n");
+					  dy0dt(arma::span(2*n_states,3*n_states-1)) =
+					    y0(arma::span(0,n_states-1)) % utilities * drr_utilities;
+					  if (debug) Rprintf("Discounted costs\n");
+					  for (int cost_=0; cost_<n_costs; ++cost_) {
+					    if (debug) Rprintf("Costs %i\n", cost_);
+					    if (costs_lookup[cost_].method_ == "wlos") {
+					      if (debug) Rprintf("wlos\n");
+					      arma::mat costs = costs_by_state.row(cost_);
+					      dydt(arma::span((3+cost_)*n_states,(4+cost_)*n_states-1),arma::span::all) +=
+						y(arma::span(0,n_states-1),arma::span::all) %
+						costs * drr_costs;
+					      if (debug) Rprintf("y0 calculation\n");
+					      dy0dt(arma::span((3+cost_)*n_states,(4+cost_)*n_states-1)) +=
+						y0(arma::span(0,n_states-1)) % costs.col(0) * drr_costs;
+					    } else if (costs_lookup[cost_].method_ == "starting") {
+					      if (debug) Rprintf("starting\n");
+					      arma::mat costs = costs_by_transition.row(cost_);
+					      for (int trans_=0; trans_<n_trans; ++trans_) {
+						dydt(to(trans_) + (3+cost_)*n_states, arma::span::all) +=
+						  costs(trans_,arma::span::all) % y(from(trans_), arma::span::all) % rates(trans_,arma::span::all) * drr_costs;
+						if (debug) Rprintf("y0 calculation\n");
+						dy0dt(to(trans_) + (3+cost_)*n_states) +=
+						  costs(trans_,0) * y0(from(trans_)) * rates(trans_,0) * drr_costs;
+					      }
+					    } else { // costs_lookup[cost_].method_ == "transition"
+					      if (debug) Rprintf("transition\n");
+					      arma::mat costs = costs_by_transition.row(cost_);
+					      for (int trans_=0; trans_<n_trans; ++trans_) {
+						dydt(from(trans_) + (3+cost_)*n_states, arma::span::all) +=
+						  // costs arbitrarily assigned to the state of origin (from state)
+						  costs.row(trans_) %
+						  y.row(from(trans_)) %
+						  rates.row(trans_) * drr_costs;
+						if (debug) Rprintf("y0 calculation\n");
+						dy0dt(from(trans_) + (3+cost_)*n_states) +=
+						  costs(trans_,0) * y0(from(trans_)) * rates(trans_, 0) * drr_costs;
+					      }
+					    }
+					  }
+					  if (debug) Rprintf("End of ODE processing\n");
+					  if (debug) Rprintf("dydt.n_rows=%i, dydt.n_cols=%i, dy0dt.n_elem=%i\n",
+						  dydt.n_rows, dydt.n_cols, dy0dt.n_elem);
+					  arma::mat dy = join_horiz(dydt, dy0dt);
+					  if (debug) Rprintf("create vector...\n");
+					  arma::vec dYdt_copy(dy.memptr(), dy.n_cols * dy.n_rows);
+					  if (debug) Rprintf("assign copy...\n");
+					  dYdt = dYdt_copy;
+					  if (debug) Rprintf("End of ODE\n");
+					},
+					p0,
+					0.0,
+					delta_time,
+					delta_time);
+	  if (debug) Rprintf("Calculate new p0\n");
+	  if (debug) Rprintf("p0.n_elem=%i, n_rows=%i\n", p0.n_elem, n_rows);
+	  if (j>1)
+	    p0 = join_cols(join_cols(0.5*p0(arma::span(p0.n_elem-n_rows,p0.n_elem-1)),  // half of y0
+				     0.5*p0(arma::span(p0.n_elem-n_rows,p0.n_elem-1)) + // half of y0 and the first column
+				     p0(arma::span(0,n_rows-1))),
+			   p0(arma::span(n_rows,p0.n_elem-n_rows-1))); // the remainder of p0
+	  else // j==1
+	    p0 = join_cols(0.5*p0(arma::span(p0.n_elem-n_rows,p0.n_elem-1)),  // half of y0
+			   0.5*p0(arma::span(p0.n_elem-n_rows,p0.n_elem-1)) + // half of y0 and the first column
+			   p0(arma::span(0,n_rows-1)));
+	  if (debug) Rprintf("Create p0_update\n");
+	  arma::mat p0_update(p0.memptr(), n_rows, j+1);
+	  if (debug) Rprintf("Add to report\n");
+	  // p0_update.print("p0_update");
+	  report.col(j) = sum(p0_update,1);
+	  if (debug) Rprintf("End of j loop\n");
+	} // end j loop
+	if (debug) Rprintf("Start of reporting\n");
+	for (int h = 0; h < n_states; ++h){
+	  if (debug) Rprintf("Report stateprobs\n");
+	  for (int ti = 0; ti < n_times; ++ti){
+	    out.sample_[counter] = s;
+	    out.strategy_id_[counter] = k;
+	    out.patient_id_[counter] = i;
+	    out.grp_id_[counter] = transmod->obs_index_.get_grp_id();
+	    out.patient_wt_[counter] = transmod->obs_index_.get_patient_wt();
+	    out.state_id_[counter] = h;
+	    out.t_[counter] = delta_time*ti;
+	    out.prob_[counter] = report(h,ti);
+	    ++counter;
+	  } // end cycles loop
+	    // report for life-years
+	  auto update_ev_out = [&](hesim::ev_out & object,int counter) {
+	    object.sample_[counter] = s;
+	    object.strategy_id_[counter] = k;
+	    object.patient_id_[counter] = i;
+	    object.grp_id_[counter] = transmod->obs_index_.get_grp_id();
+	    object.patient_wt_[counter] = transmod->obs_index_.get_patient_wt();
+	    object.state_id_[counter] = h;
+	  };
+	  if (debug) Rprintf("Report for life-years\n");
+	  update_ev_out(out2,counter2);
+	  out2.dr_[counter2] = 0.0; // assume no discounting for life-years
+	  out2.outcome_[counter2] = "ly";
+	  out2.value_[counter2] = report(n_states+h,n_times-1);
+	  ++counter2;
+	  if (debug) Rprintf("Report for QALYs\n");
+	  // report for qalys
+	  if (valid_R_QALYsStateVal) {
+	    update_ev_out(out2,counter2);
+	    out2.dr_[counter2] = dr_qalys;
+	    out2.outcome_[counter2] = "qaly";
+	    out2.value_[counter2] = report(2*n_states+h,n_times-1);
+	    ++counter2;
+	  }
+	  if (debug) Rprintf("Report for costs\n");
+	  for (int cost_=0; cost_<n_costs; ++cost_) {
+	    update_ev_out(out2,counter2);
+	    out2.dr_[counter2] = dr_costs;
+	    out2.outcome_[counter2] = "Category " + std::to_string(cost_+1);
+	    out2.value_[counter2] = report((3+cost_)*n_states+h,n_times-1);
+	    ++counter2;
+	  } // end cost category loop
+	} // end state loop
+      } // end patient loop
+    } // end strategy loop
+  } // end parameter sampling loop
+  // Return
+  using namespace Rcpp;
+  return(List::create(_["stateprobs"]=out.create_R_data_frame(),
+		      _["ev"]=out2.create_R_data_frame()));
 }

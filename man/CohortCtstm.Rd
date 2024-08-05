@@ -24,7 +24,11 @@ difference is that point masses in \code{IndivCtstm} are always
 clock-reset (essentially fixed times in state), whereas in
 \code{CohortCtstm} the point masses are always clock-forward (Markov).
 
-There are currently no relevant vignettes.
+There is currently one relevant vignette.
+\code{vignette("markov-inhomogeneous-cohort-continuous")} shows how the
+individual-based time inhomogeneous Markov model in
+\code{vignette("markov-inhomogeneous-indiv")} can be developed as a
+cohort-based simulation.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -52,6 +56,9 @@ list represents a different cost category.}
 \item{\code{abs_tol_}}{A double for the absolute tolerane in the ODE solver.}
 
 \item{\code{rel_tol_}}{A double for the relative tolerane in the ODE solver.}
+
+\item{\code{delta_time_}}{A double for the interval width used to
+discretise time for ' semi-Markov models}
 }
 \if{html}{\out{</div>}}
 }
@@ -76,7 +83,8 @@ Create a new \code{CohortCtstm} object.
   cost_models = NULL,
   zero_tol = 1e-100,
   abs_tol = 1e-06,
-  rel_tol = 1e-06
+  rel_tol = 1e-06,
+  delta_time = 0.1
 )}\if{html}{\out{</div>}}
 }
 
@@ -94,6 +102,8 @@ Create a new \code{CohortCtstm} object.
 \item{\code{abs_tol}}{The \code{abs_tol_} field.}
 
 \item{\code{rel_tol}}{The \code{rel_tol_} field.}
+
+\item{\code{delta_time}}{The \code{delta_time_} field.}
 }
 \if{html}{\out{</div>}}
 }
@@ -115,7 +125,8 @@ Simulate quality-adjusted life-years (QALYs) as a function of
   type = c("predict", "random"),
   lys = TRUE,
   progress = NULL,
-  by_patient = TRUE
+  by_patient = TRUE,
+  debug = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -137,6 +148,8 @@ as in \verb{$sim()} in \code{\link{StateVals}}.}
 defaults to NULL for no reporting.}
 
 \item{\code{by_patient}}{Logical for whether to report separately by patient; defaults to TRUE.}
+
+\item{\code{debug}}{Logical for whether to print out debugging information; defaults to FALSE}
 }
 \if{html}{\out{</div>}}
 }

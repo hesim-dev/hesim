@@ -29,6 +29,10 @@ runCohortCtstmTestODE <- function(start_state, times, discount_rate = 0.0) {
     .Call('_hesim_runCohortCtstmTestODE', PACKAGE = 'hesim', start_state, times, discount_rate)
 }
 
+C_cohort_ctstm_sim2 <- function(R_CtstmTrans, R_CostsStateVals, R_QALYsStateVal, live_states, start_state, start_age, max_time, clock, transition_types, delta_time = 0.1, progress = 0L, dr_qalys = 0.0, dr_costs = 0.0, type = "predict", zero_tol = 1e-100, abs_tol = 1e-6, rel_tol = 1e-6, debug = FALSE) {
+    .Call('_hesim_C_cohort_ctstm_sim2', PACKAGE = 'hesim', R_CtstmTrans, R_CostsStateVals, R_QALYsStateVal, live_states, start_state, start_age, max_time, clock, transition_types, delta_time, progress, dr_qalys, dr_costs, type, zero_tol, abs_tol, rel_tol, debug)
+}
+
 tmax_max <- function(m) {
     .Call('_hesim_tmax_max', PACKAGE = 'hesim', m)
 }

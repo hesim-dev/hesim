@@ -853,6 +853,10 @@ CohortCtstm <- R6::R6Class("CohortCtstm",
 
     #' @field rel_tol_ A double for the relative tolerane in the ODE solver.
     rel_tol_ = NULL,
+
+    #' @field delta_time_ A double for the interval width used to
+    #' discretise time for ' semi-Markov models
+    delta_time_ = NULL,
     #' @description
     #' Create a new `CohortCtstm` object.
     #' @param trans_model The `trans_model` field.
@@ -861,15 +865,19 @@ CohortCtstm <- R6::R6Class("CohortCtstm",
     #' @param zero_tol The `zero_tol_` field.
     #' @param abs_tol The `abs_tol_` field.
     #' @param rel_tol The `rel_tol_` field.
+    #' @param delta_time The `delta_time_` field.
     #' @return A new `CohortCtstm` object.      
     initialize = function(trans_model = NULL, utility_model = NULL, cost_models = NULL,
-                          zero_tol=1e-100, abs_tol=1e-6, rel_tol=1e-6) {
+                          zero_tol=1e-100, abs_tol=1e-6, rel_tol=1e-6, delta_time=0.1) {
+        if (trans_model$clock == "mix")
+            stop("cCTSTM not currently implemented for clock=\"mix\" -- perhaps use \"mixt\"?")
         self$trans_model <- trans_model
         self$utility_model <- if (is.null(utility_model)) new.env() else utility_model
         self$cost_models <- cost_models
         self$zero_tol_ <- zero_tol
         self$abs_tol_ <- abs_tol
         self$rel_tol_ <- rel_tol
+        self$delta_time_ <- delta_time
         ## size attribute needed for check_StateVals()
         setattr(self$trans_model, "size",
                 c(get_size(trans_model), n_states = nrow(trans_model$trans_mat),
@@ -889,11 +897,12 @@ CohortCtstm <- R6::R6Class("CohortCtstm",
     #' @param progress Integer for the number of simulations to report progress;
     #' defaults to NULL for no reporting.
     #' @param by_patient Logical for whether to report separately by patient; defaults to TRUE.
+    #' @param debug Logical for whether to print out debugging information; defaults to FALSE
     #' @return An instance of `self` with simulated output of
     #' class [qalys] stored in `qalys_` and class [costs] stored in `costs_`..    
     sim = function(t=c(0,1), dr_qalys = .03, dr_costs=.03, type = c("predict", "random"),
                    lys = TRUE, progress=NULL,
-                   by_patient = TRUE){
+                   by_patient = TRUE, debug = FALSE){
       if(!inherits(self$utility_model, "StateVals")){
         stop("'utility_model' must be an object of class 'StateVals'",
           call. = FALSE)
@@ -919,24 +928,52 @@ CohortCtstm <- R6::R6Class("CohortCtstm",
                                   object_name = "trans_model")
       self$times_ <- t
       ## browser()
-      C_ev <- C_cohort_ctstm_sim(R_CtstmTrans=self$trans_model,
-                                 R_CostsStateVals=self$cost_models,
-                                 R_QALYsStateVal=self$utility_model,
-                                 live_states=setdiff(1:nrow(self$trans_model$trans_mat),
-                                                     absorbing(self$trans_model$trans_mat)) - 1L,
-                                 start_state=self$trans_model$start_state - 1L,
-                                 start_age=self$trans_model$start_age, 
-                                 times=self$times_,
-                                 clock=self$trans_model$clock, 
-                                 transition_types=match(self$trans_model$transition_types,
-                                                        c("time","age")) - 1L,
-                                 progress=if(is.null(progress)) 0 else progress,
-                                 dr_qalys=dr_qalys,
-                                 dr_costs=dr_costs,
-                                 type=match.arg(type),
-                                 zero_tol=self$zero_tol_,
-                                 abs_tol=self$abs_tol_,
-                                 rel_tol=self$rel_tol_)
+      if (self$trans_model$clock == "forward" ||
+          (self$trans_model$clock == "mixt" && all(self$trans_model$transition_types %in%
+                                                   c("time","age"))))
+          C_ev <- C_cohort_ctstm_sim(R_CtstmTrans=self$trans_model,
+                                     R_CostsStateVals=self$cost_models,
+                                     R_QALYsStateVal=self$utility_model,
+                                     live_states=setdiff(1:nrow(self$trans_model$trans_mat),
+                                                         absorbing(self$trans_model$trans_mat)) - 1L,
+                                     start_state=self$trans_model$start_state - 1L,
+                                     start_age=self$trans_model$start_age, 
+                                     times=self$times_,
+                                     clock=self$trans_model$clock, 
+                                     transition_types=match(self$trans_model$transition_types,
+                                                            c("reset","time","age")) - 1L,
+                                     progress=if(is.null(progress)) 0 else progress,
+                                     dr_qalys=dr_qalys,
+                                     dr_costs=dr_costs,
+                                     type=match.arg(type),
+                                     zero_tol=self$zero_tol_,
+                                     abs_tol=self$abs_tol_,
+                                     rel_tol=self$rel_tol_)
+      else { # allow for duration
+          if(any("fixed" %in% sapply(self$trans_model$params, "[[", "dist")))
+              stop("A fixed distribution is not currently supported for cCTSTMs with clock reset")
+          C_ev <- C_cohort_ctstm_sim2(R_CtstmTrans=self$trans_model,
+                                     R_CostsStateVals=self$cost_models,
+                                     R_QALYsStateVal=self$utility_model,
+                                     live_states=setdiff(1:nrow(self$trans_model$trans_mat),
+                                                         absorbing(self$trans_model$trans_mat)) - 1L,
+                                     start_state=self$trans_model$start_state - 1L,
+                                     start_age=self$trans_model$start_age, 
+                                     max_time=max(self$times_), ## TODO: separate argument?
+                                     clock=self$trans_model$clock, 
+                                     transition_types=match(self$trans_model$transition_types,
+                                                            c("reset","time","age")) - 1L,
+                                     delta_time=self$delta_time_,
+                                     progress=if(is.null(progress)) 0 else progress,
+                                     dr_qalys=dr_qalys,
+                                     dr_costs=dr_costs,
+                                     type=match.arg(type),
+                                     zero_tol=self$zero_tol_,
+                                     abs_tol=self$abs_tol_,
+                                     rel_tol=self$rel_tol_,
+                                     debug=debug)
+      }
+          
       self$stateprobs_ <-
           as.data.table(C_ev$stateprobs)[,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,
                                                patient_id=patient_id+1L,state_id=state_id+1)]
@@ -970,8 +1007,9 @@ CohortCtstm <- R6::R6Class("CohortCtstm",
   ) # end public
 ) # end class
 
-#' @description 
-#' @internal
+#' @title Test code for Markov cCTSTMs
+#' @keywords internal
+#' @export
 run_CohortCtstmTestODE <- function(start_state=1, times=c(0,1,2,10), discount_rate=0.03) {
     self <- runCohortCtstmTestODE(start_state - 1L, times, discount_rate)
     ## NB: grp_id is already 1-based -- so do not update

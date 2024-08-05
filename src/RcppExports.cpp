@@ -128,6 +128,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_cohort_ctstm_sim2
+Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans, Rcpp::List R_CostsStateVals, Rcpp::Environment R_QALYsStateVal, std::vector<int> live_states, std::vector<int> start_state, std::vector<double> start_age, double max_time, std::string clock, std::vector<int> transition_types, double delta_time, int progress, double dr_qalys, double dr_costs, std::string type, double zero_tol, double abs_tol, double rel_tol, bool debug);
+RcppExport SEXP _hesim_C_cohort_ctstm_sim2(SEXP R_CtstmTransSEXP, SEXP R_CostsStateValsSEXP, SEXP R_QALYsStateValSEXP, SEXP live_statesSEXP, SEXP start_stateSEXP, SEXP start_ageSEXP, SEXP max_timeSEXP, SEXP clockSEXP, SEXP transition_typesSEXP, SEXP delta_timeSEXP, SEXP progressSEXP, SEXP dr_qalysSEXP, SEXP dr_costsSEXP, SEXP typeSEXP, SEXP zero_tolSEXP, SEXP abs_tolSEXP, SEXP rel_tolSEXP, SEXP debugSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_CtstmTrans(R_CtstmTransSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type R_CostsStateVals(R_CostsStateValsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type R_QALYsStateVal(R_QALYsStateValSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type live_states(live_statesSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type start_state(start_stateSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type start_age(start_ageSEXP);
+    Rcpp::traits::input_parameter< double >::type max_time(max_timeSEXP);
+    Rcpp::traits::input_parameter< std::string >::type clock(clockSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type transition_types(transition_typesSEXP);
+    Rcpp::traits::input_parameter< double >::type delta_time(delta_timeSEXP);
+    Rcpp::traits::input_parameter< int >::type progress(progressSEXP);
+    Rcpp::traits::input_parameter< double >::type dr_qalys(dr_qalysSEXP);
+    Rcpp::traits::input_parameter< double >::type dr_costs(dr_costsSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    Rcpp::traits::input_parameter< double >::type zero_tol(zero_tolSEXP);
+    Rcpp::traits::input_parameter< double >::type abs_tol(abs_tolSEXP);
+    Rcpp::traits::input_parameter< double >::type rel_tol(rel_tolSEXP);
+    Rcpp::traits::input_parameter< bool >::type debug(debugSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_cohort_ctstm_sim2(R_CtstmTrans, R_CostsStateVals, R_QALYsStateVal, live_states, start_state, start_age, max_time, clock, transition_types, delta_time, progress, dr_qalys, dr_costs, type, zero_tol, abs_tol, rel_tol, debug));
+    return rcpp_result_gen;
+END_RCPP
+}
 // tmax_max
 int tmax_max(arma::mat m);
 RcppExport SEXP _hesim_tmax_max(SEXP mSEXP) {
@@ -707,6 +735,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_enmbpi", (DL_FUNC) &_hesim_C_enmbpi, 6},
     {"_hesim_C_cohort_ctstm_sim", (DL_FUNC) &_hesim_C_cohort_ctstm_sim, 16},
     {"_hesim_runCohortCtstmTestODE", (DL_FUNC) &_hesim_runCohortCtstmTestODE, 3},
+    {"_hesim_C_cohort_ctstm_sim2", (DL_FUNC) &_hesim_C_cohort_ctstm_sim2, 18},
     {"_hesim_tmax_max", (DL_FUNC) &_hesim_tmax_max, 1},
     {"_hesim_C_ctstm_summary", (DL_FUNC) &_hesim_C_ctstm_summary, 3},
     {"_hesim_C_rgengamma", (DL_FUNC) &_hesim_C_rgengamma, 4},
