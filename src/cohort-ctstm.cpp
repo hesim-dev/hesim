@@ -631,8 +631,8 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 					  arma::vec dy0dt = y0*0.0;
 					  arma::mat rates(n_trans,j);
 					  arma::mat utilities(n_states,j);
-					  arma::cube costs_by_state(n_costs,n_states,j);
-					  arma::cube costs_by_transition(n_costs,n_trans,j);
+					  arma::cube costs_by_state(n_states,j,n_costs);
+					  arma::cube costs_by_transition(n_trans,j,n_costs);
 					  double t = (j-1)*delta_time+u;
 					  double tstar = std::max(zero_tol, t);
 					  double age = std::max(zero_tol,start_age[i]+u);
@@ -694,17 +694,20 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 					  if (debug) Rprintf("Cost input calculations\n");
 					  // cost input calculations
 					  for (int cost_=0; cost_<n_costs; ++cost_) {
-					    int t_index = hesim::hesim_bound(t, obs_index_costs[cost_].time_start_); // if clock-forward
+					    int t_index = 0;
+					    if (!costs_time_reset[cost_])
+					      t_index = hesim::hesim_bound(t, obs_index_costs[cost_].time_start_);
 					    for (size_t d_index = 0; d_index < duration.size(); ++d_index) {
 					      if (costs_time_reset[cost_])
-						t_index = hesim::hesim_bound(duration[d_index]+u, obs_index_costs[cost_].time_start_);
+						t_index = hesim::hesim_bound(duration[d_index]+u,
+									     obs_index_costs[cost_].time_start_);
 					      if (costs_lookup[cost_].method_ == "wlos") {
 						for (int state_ : live_states) {
 						  int obs = obs_index_costs[cost_](k, // strategy
 										   i, // patient
 										   state_,
 										   t_index);
-						  costs_by_state(cost_, state_, d_index) += costs_lookup[cost_].sim(s, obs, type);
+						  costs_by_state(state_, d_index, cost_) += costs_lookup[cost_].sim(s, obs, type);
 						} // end loop over live states
 					      }
 					      else if (costs_lookup[cost_].method_ == "starting") {
@@ -714,7 +717,8 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 										     i, // patient
 										     to(trans_),
 										     t_index);
-						    costs_by_transition(cost_, trans_, d_index) = costs_lookup[cost_].sim(s, obs, type);
+						    costs_by_transition(trans_, d_index, cost_) =
+						      costs_lookup[cost_].sim(s, obs, type);
 						  } // end condition for live states
 						} // loop over trans_
 					      } // end case "starting"
@@ -724,7 +728,8 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 										   i, // patient
 										   trans_, // assumes transition
 										   t_index);
-						  costs_by_transition(cost_, trans_, d_index) = costs_lookup[cost_].sim(s, obs, type); // by trans_
+						  costs_by_transition(trans_, d_index, cost_) =
+						    costs_lookup[cost_].sim(s, obs, type); // by trans_
 						} // end loop over trans_
 					      }
 					    } // end loop over d_index
@@ -752,16 +757,16 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 					  dy0dt(arma::span(n_states,2*n_states-1)) = y0(arma::span(0,n_states-1));
 					  if (debug) Rprintf("Discounted utilities\n");
 					  dydt(arma::span(2*n_states,3*n_states-1),arma::span::all) =
-					    y(arma::span(0,n_states-1), arma::span::all).each_col() % utilities *drr_utilities;
+					    y(arma::span(0,n_states-1), arma::span::all) % utilities * drr_utilities;
 					  if (debug) Rprintf("Discounted costs (y0)\n");
 					  dy0dt(arma::span(2*n_states,3*n_states-1)) =
-					    y0(arma::span(0,n_states-1)) % utilities * drr_utilities;
+					    y0(arma::span(0,n_states-1)) % utilities.col(0) * drr_utilities;
 					  if (debug) Rprintf("Discounted costs\n");
 					  for (int cost_=0; cost_<n_costs; ++cost_) {
 					    if (debug) Rprintf("Costs %i\n", cost_);
 					    if (costs_lookup[cost_].method_ == "wlos") {
 					      if (debug) Rprintf("wlos\n");
-					      arma::mat costs = costs_by_state.row(cost_);
+					      arma::mat costs = costs_by_state.slice(cost_);
 					      dydt(arma::span((3+cost_)*n_states,(4+cost_)*n_states-1),arma::span::all) +=
 						y(arma::span(0,n_states-1),arma::span::all) %
 						costs * drr_costs;
@@ -770,17 +775,17 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 						y0(arma::span(0,n_states-1)) % costs.col(0) * drr_costs;
 					    } else if (costs_lookup[cost_].method_ == "starting") {
 					      if (debug) Rprintf("starting\n");
-					      arma::mat costs = costs_by_transition.row(cost_);
+					      arma::mat costs = costs_by_transition.slice(cost_);
 					      for (int trans_=0; trans_<n_trans; ++trans_) {
-						dydt(to(trans_) + (3+cost_)*n_states, arma::span::all) +=
-						  costs(trans_,arma::span::all) % y(from(trans_), arma::span::all) % rates(trans_,arma::span::all) * drr_costs;
+						dydt.row(to(trans_) + (3+cost_)*n_states) +=
+						  costs.row(trans_) % y.row(from(trans_)) % rates.row(trans_) * drr_costs;
 						if (debug) Rprintf("y0 calculation\n");
 						dy0dt(to(trans_) + (3+cost_)*n_states) +=
 						  costs(trans_,0) * y0(from(trans_)) * rates(trans_,0) * drr_costs;
 					      }
 					    } else { // costs_lookup[cost_].method_ == "transition"
 					      if (debug) Rprintf("transition\n");
-					      arma::mat costs = costs_by_transition.row(cost_);
+					      arma::mat costs = costs_by_transition.slice(cost_);
 					      for (int trans_=0; trans_<n_trans; ++trans_) {
 						dydt(from(trans_) + (3+cost_)*n_states, arma::span::all) +=
 						  // costs arbitrarily assigned to the state of origin (from state)
