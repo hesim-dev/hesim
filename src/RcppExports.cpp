@@ -116,12 +116,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // runCohortCtstmTestODE
-Rcpp::List runCohortCtstmTestODE(int start_state, arma::vec times, double discount_rate);
+Rcpp::List runCohortCtstmTestODE(size_t start_state, arma::vec times, double discount_rate);
 RcppExport SEXP _hesim_runCohortCtstmTestODE(SEXP start_stateSEXP, SEXP timesSEXP, SEXP discount_rateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type start_state(start_stateSEXP);
+    Rcpp::traits::input_parameter< size_t >::type start_state(start_stateSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type times(timesSEXP);
     Rcpp::traits::input_parameter< double >::type discount_rate(discount_rateSEXP);
     rcpp_result_gen = Rcpp::wrap(runCohortCtstmTestODE(start_state, times, discount_rate));
