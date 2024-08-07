@@ -1,5 +1,6 @@
 CXX_STD=C++11
 PKG_CPPFLAGS = -I../inst/include
+## PKG_LIBS = -lprofiler
 VER=
 CCACHE=ccache
 CC=$(CCACHE) gcc$(VER)
