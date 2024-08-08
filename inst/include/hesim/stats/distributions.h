@@ -306,10 +306,11 @@ public:
  ******************************************************************************/ 
 class piecewise_exponential : public distribution {
 private: 
-  std::vector<double> rate_; ///< rate parameter at each time
+  std::vector<double> rate_; ///< rate parameter from each time
+  std::vector<double> cumrate_; ///< cumulative rate parameter up to each time
   std::vector<double> time_; ///<A vector equal to the number of elements in rate
                              /// giving the times at which the rate changes
-  
+
 public:
   /** 
    * The constructor.
@@ -318,15 +319,42 @@ public:
   piecewise_exponential(std::vector<double> rate, std::vector<double> time){
     rate_ = rate;
     time_ = time;
+    cumrate_.resize(rate_.size());
+    cumrate_[0]=0.0;
+    for (int i=1; i<rate_.size(); ++i)
+      cumrate_[i] = cumrate_[i-1]+(time_[i]-time_[i-1])*rate_[i-1];
   }
   
   void set_params(std::vector<double> params) {
     std::transform(params.begin(), params.end(), rate_.begin(), 
                    [](double x) { return std::exp(x); });
   }
-  
+
   double random() const {
     return rpwexp(rate_, time_);
+  }
+  
+  double hazard (double x) const {
+    return rate_[hesim_bound(x, time_)];
+  }
+  
+  double cumhazard (double x) const {
+    int i = hesim_bound(x, cumrate_);
+    return cumrate_[i]+rate_[i]*(x-time_[i]);
+  }
+
+  double cdf(double x) const {
+    return 1.0 - exp(-cumhazard(x));
+  }
+
+  double pdf(double x) const {
+    return hazard(x) * exp(-cumhazard(x));
+  }
+  
+  double quantile(double p) const {
+    double H = -log(1.0 - p);
+    int i = hesim_bound(H, cumrate_);
+    return time_[i] + (H - cumrate_[i])/rate_[i];
   }
   
   double trandom(double lower, double upper) const {

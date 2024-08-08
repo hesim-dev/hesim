@@ -87,6 +87,7 @@ reference:
       - IndivCtstmTrans
       - create_IndivCtstmTrans
       - IndivCtstm
+      - CohortCtstm
   - title: "General simulation functions and output"
     contents:
       - disprog
@@ -132,6 +133,7 @@ articles:
   - markov-inhomogeneous-cohort
   - mlogit
   - markov-inhomogeneous-indiv
+  - markov-inhomogeneous-cohort-continuous
   - mstate
   - psm
   - cea
@@ -158,6 +160,8 @@ navbar:
       - text: "Individual continuous time state transition models"
       - text: "Time inhomogeneous Markov individual-level models"
         href: articles/markov-inhomogeneous-indiv.html
+      - text: "Time inhomogeneous Markov cohort-level models"
+        href: articles/markov-inhomogeneous-cohort-continous.html
       - text: "Markov and semi-Markov multi-state models"
         href: articles/mstate.html
       - text: "---"

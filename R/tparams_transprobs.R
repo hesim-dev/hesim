@@ -347,7 +347,7 @@ summarize_transprobs_dt <- function(x, probs, unflatten,
 #' @inheritParams summary.tpmatrix
 #' @param object A [`tparams_transprobs`] object.
 #' 
-#' @return If `unflatten = "FALSE"` (the default), then a [`data.table`]
+#' @return If `unflatten = "FALSE"` (the default), then a [`data.table::data.table`]
 #' is returned with columns for (i) the health state that is being transitioned
 #' from (`from`), (ii) the health state that is being transitioned to (`to`)
 #' (iii) the mean of each parameter across parameter samples (`mean`),

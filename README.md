@@ -136,7 +136,7 @@ Application
 1
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Preprint
+<a href="https://arxiv.org/pdf/2102.09437" style="     ">Preprint
 4.1</a>
 </td>
 <td style="text-align:left;">
@@ -163,7 +163,7 @@ Oncology
 2
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Preprint
+<a href="https://arxiv.org/pdf/2102.09437" style="     ">Preprint
 4.2</a>
 </td>
 <td style="text-align:left;">
@@ -190,7 +190,7 @@ Oncology
 3
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://arxiv.org/pdf/2102.09437.pdf" style="     ">Preprint
+<a href="https://arxiv.org/pdf/2102.09437" style="     ">Preprint
 4.3</a>
 </td>
 <td style="text-align:left;">

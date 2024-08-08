@@ -7,6 +7,7 @@
 #' both Markov and semi-Markov multi-state models and does not depend on the 
 #' methodology used for prediction of state probabilities. 
 #' @format An [`R6::R6Class`] object.
+#' @importFrom R6 R6Class
 #' @seealso [`create_IndivCtstmTrans()`], [`IndivCtstmTrans`]
 #' @keywords internal
 #' @export
@@ -103,7 +104,8 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
   setattr(disprog, "class", 
           c("disprog", "data.table", "data.frame"))
   setattr(disprog, "size",
-          c(get_size(trans_model), n_states = nrow(trans_model$trans_mat)))
+          c(get_size(trans_model), n_states = nrow(trans_model$trans_mat),
+            n_transitions = max(trans_model$trans_mat, na.rm = TRUE)))
   setattr(disprog, "absorbing", absorbing(trans_model$trans_mat))
   return(disprog[, ])
 }
@@ -383,7 +385,7 @@ IndivCtstmTrans <- R6::R6Class(
 #' `transition_types` in [`IndivCtstmTrans`].
 #' @inheritParams create_CohortDtstmTrans
 #' @param ... Further arguments passed to `IndivCtstmTrans$new()` in [`IndivCtstmTrans`].
-#' @return Returns an [`R6Class`] object of class [`IndivCtstmTrans`].
+#' @return Returns an [`R6::R6Class`] object of class [`IndivCtstmTrans`].
 #' @template details-create_disease_model
 #' @seealso See [`IndivCtstmTrans`] and [`IndivCtstm`] for examples.
 #' @name create_IndivCtstmTrans
@@ -576,8 +578,15 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                            private$disprog_idx$patient_idx,
                                            stateval_list[[i]], dr[j],
                                            sim_type)
+          } else if (stateval_list[[i]]$method == "transition"){
+            C_ev <- C_indiv_ctstm_trans(self$trans_model,
+                                        self$disprog_,
+                                        private$disprog_idx$strategy_idx,
+                                        private$disprog_idx$patient_idx,
+                                        stateval_list[[i]], dr[j],
+                                        sim_type)
           } else{
-            stop("The 'StateVals' 'method' must either be 'wlos' or 'starting'.")
+            stop("The 'StateVals' 'method' must be 'wlos', 'starting' or 'transition'.")
           }
           self$disprog_[, ev := C_ev]
           if (lys){
@@ -778,3 +787,252 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     
   ) # end public
 ) # end class
+
+# CohortCtstm class -------------------------------------------------------------
+#' Cohort-level continuous time state transition model
+#'
+#' @description
+#' Simulate outcomes from a cohort-level continuous time state transition 
+#' model (CTSTM). The class supports "clock-forward" (i.e., Markov), and mixtures of 
+#' clock-age and clock-forward multi-state models as described in 
+#' [`IndivCtstmTrans`]. 
+#' @format An [R6::R6Class] object.
+#' @seealso  The [`IndivCtstmTrans`] documentation
+#' describes the class for the transition model and the [`StateVals`] documentation
+#' describes the class for the cost and utility models. An [`IndivCtstmTrans`] 
+#' object is typically created using [create_IndivCtstmTrans()]. 
+#'
+#' This will provide very similar predictions to `IndivCtstm`, albeit
+#' without the individual-level Monte Carlo variation. One semantic
+#' difference is that point masses in `IndivCtstm` are always
+#' clock-reset (essentially fixed times in state), whereas in
+#' `CohortCtstm` the point masses are always clock-forward (Markov).
+#' 
+#' There is currently one relevant vignette.
+#' `vignette("markov-inhomogeneous-cohort-continuous")` shows how the
+#' individual-based time inhomogeneous Markov model in
+#' `vignette("markov-inhomogeneous-indiv")` can be developed as a
+#' cohort-based simulation.
+#' @name CohortCtstm
+NULL
+
+#' @rdname CohortCtstm
+#' @export
+CohortCtstm <- R6::R6Class("CohortCtstm",
+  public = list(
+    #' @field trans_model The model for health state transitions. Must be an object 
+    #' of class [`IndivCtstmTrans`]. 
+    trans_model = NULL,
+      
+    #' @field utility_model The model for health state utility. Must be an object of
+    #' class [`StateVals`].    
+    utility_model = NULL,
+
+    #' @field cost_models The models used to predict costs by health state. 
+    #' Must be a list of objects of class [`StateVals`], where each element of the 
+    #' list represents a different cost category.    
+    cost_models = NULL,
+
+    #' @field stateprobs_ An object of class [`stateprobs`] simulated using `$sim_stateprobs()`.    
+    stateprobs_ = NULL,
+
+    #' @field qalys_ An object of class [`qalys`] simulated using `$sim_qalys()`.
+    qalys_ = NULL,
+
+    #' @field costs_ An object of class [`costs`] simulated using `$sim_costs()`.
+    costs_ = NULL,
+
+    #' @field times_ A vector of times.
+    times_ = NULL,
+
+    #' @field zero_tol_ A double for being close to zero (used to avoid hazard(0.0)).
+    zero_tol_ = NULL,
+
+    #' @field abs_tol_ A double for the absolute tolerane in the ODE solver.
+    abs_tol_ = NULL,
+
+    #' @field rel_tol_ A double for the relative tolerane in the ODE solver.
+    rel_tol_ = NULL,
+
+    #' @field delta_time_ A double for the interval width used to
+    #' discretise time for ' semi-Markov models
+    delta_time_ = NULL,
+    #' @description
+    #' Create a new `CohortCtstm` object.
+    #' @param trans_model The `trans_model` field.
+    #' @param utility_model The `utility_model` field.
+    #' @param cost_models The `cost_models` field.
+    #' @param zero_tol The `zero_tol_` field.
+    #' @param abs_tol The `abs_tol_` field.
+    #' @param rel_tol The `rel_tol_` field.
+    #' @param delta_time The `delta_time_` field.
+    #' @return A new `CohortCtstm` object.      
+    initialize = function(trans_model = NULL, utility_model = NULL, cost_models = NULL,
+                          zero_tol=1e-100, abs_tol=1e-6, rel_tol=1e-6, delta_time=0.1) {
+        if (trans_model$clock == "mix")
+            stop("cCTSTM not currently implemented for clock=\"mix\" -- perhaps use \"mixt\"?")
+        self$trans_model <- trans_model
+        self$utility_model <- if (is.null(utility_model)) new.env() else utility_model
+        self$cost_models <- cost_models
+        self$zero_tol_ <- zero_tol
+        self$abs_tol_ <- abs_tol
+        self$rel_tol_ <- rel_tol
+        self$delta_time_ <- delta_time
+        ## size attribute needed for check_StateVals()
+        setattr(self$trans_model, "size",
+                c(get_size(trans_model), n_states = nrow(trans_model$trans_mat),
+                  n_transitions = max(trans_model$trans_mat, na.rm = TRUE)))
+        setattr(self$trans_model, "absorbing",
+                absorbing(trans_model$trans_mat))
+    },
+    #' @description
+    #' Simulate quality-adjusted life-years (QALYs) as a function of 
+    #' `utility_model` and costs as a function of `cost_models`. 
+    #' @param t Double vector of times to evaluate the model (including the time origin).
+    #' @param dr_qalys Double for the discount rate for QALYs (not annualised).
+    #' @param dr_costs Double for the discount rate for costs (not annualised).
+    #' @param type `"predict"` for mean values or `"random"` for random samples 
+    #' as in `$sim()` in [`StateVals`].
+    #' @param lys If `TRUE`, then life-years are simulated in addition to QALYs.
+    #' @param progress Integer for the number of simulations to report progress;
+    #' defaults to NULL for no reporting.
+    #' @param by_patient Logical for whether to report separately by patient; defaults to TRUE.
+    #' @param debug Logical for whether to print out debugging information; defaults to FALSE
+    #' @return An instance of `self` with simulated output of
+    #' class [qalys] stored in `qalys_` and class [costs] stored in `costs_`..    
+    sim = function(t=c(0,1), dr_qalys = .03, dr_costs=.03, type = c("predict", "random"),
+                   lys = TRUE, progress=NULL,
+                   by_patient = TRUE, debug = FALSE){
+      if(!inherits(self$utility_model, "StateVals")){
+        stop("'utility_model' must be an object of class 'StateVals'",
+          call. = FALSE)
+      }
+      if(!is.list(self$cost_models)){
+        stop("'cost_models' must be a list of objects of class 'StateVals'",
+          call. = FALSE)
+      } else{
+        for (i in 1:length(self$cost_models)){
+          if (!inherits(self$cost_models[[i]], "StateVals")){
+            stop("'cost_models' must be a list of objects of class 'StateVals'",
+                call. = FALSE)
+          }
+        }
+      }
+      type <- match.arg(type)
+      check_dr(dr_qalys)
+      check_dr(dr_costs)
+      if (!is.null(self$costs_models)) 
+          check_StateVals(self$cost_models, self$trans_model, object_name = "trans_model")
+      if (!is.null(self$utility_model)) 
+          check_StateVals(list(self$utility_model), self$trans_model,
+                                  object_name = "trans_model")
+      self$times_ <- t
+      ## browser()
+      if (self$trans_model$clock == "forward" ||
+          (self$trans_model$clock == "mixt" && all(self$trans_model$transition_types %in%
+                                                   c("time","age"))))
+          C_ev <- C_cohort_ctstm_sim(R_CtstmTrans=self$trans_model,
+                                     R_CostsStateVals=self$cost_models,
+                                     R_QALYsStateVal=self$utility_model,
+                                     live_states=setdiff(1:nrow(self$trans_model$trans_mat),
+                                                         absorbing(self$trans_model$trans_mat)) - 1L,
+                                     start_state=self$trans_model$start_state - 1L,
+                                     start_age=self$trans_model$start_age, 
+                                     times=self$times_,
+                                     clock=self$trans_model$clock, 
+                                     transition_types=match(self$trans_model$transition_types,
+                                                            c("reset","time","age")) - 1L,
+                                     progress=if(is.null(progress)) 0 else progress,
+                                     dr_qalys=dr_qalys,
+                                     dr_costs=dr_costs,
+                                     type=match.arg(type),
+                                     zero_tol=self$zero_tol_,
+                                     abs_tol=self$abs_tol_,
+                                     rel_tol=self$rel_tol_)
+      else { # allow for duration
+          if(any("fixed" %in% sapply(self$trans_model$params, "[[", "dist")))
+              stop("A fixed distribution is not currently supported for cCTSTMs with clock reset")
+          C_ev <- C_cohort_ctstm_sim2(R_CtstmTrans=self$trans_model,
+                                     R_CostsStateVals=self$cost_models,
+                                     R_QALYsStateVal=self$utility_model,
+                                     live_states=setdiff(1:nrow(self$trans_model$trans_mat),
+                                                         absorbing(self$trans_model$trans_mat)) - 1L,
+                                     start_state=self$trans_model$start_state - 1L,
+                                     start_age=self$trans_model$start_age, 
+                                     max_time=max(self$times_), ## TODO: separate argument?
+                                     clock=self$trans_model$clock, 
+                                     transition_types=match(self$trans_model$transition_types,
+                                                            c("reset","time","age")) - 1L,
+                                     delta_time=self$delta_time_,
+                                     progress=if(is.null(progress)) 0 else progress,
+                                     dr_qalys=dr_qalys,
+                                     dr_costs=dr_costs,
+                                     type=match.arg(type),
+                                     zero_tol=self$zero_tol_,
+                                     abs_tol=self$abs_tol_,
+                                     rel_tol=self$rel_tol_,
+                                     debug=debug)
+      }
+          
+      self$stateprobs_ <-
+          as.data.table(C_ev$stateprobs)[,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,
+                                               patient_id=patient_id+1L,state_id=state_id+1)]
+      ev <- as.data.table(C_ev$ev)
+      self$qalys_ <- ev[outcome=="qaly"][
+         ,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,patient_id=patient_id+1L,
+               state_id=state_id+1,category='qalys',qalys=value,value=NULL,outcome=NULL)]
+      if (lys)
+          self$qalys_$ly = ev[outcome=="ly","value"]
+      self$costs_ <- do.call(rbind,
+                             lapply(unique(grep("Category",ev$outcome,value=TRUE)),
+                                    function(pattern) {
+                                        ev2 <- ev[outcome==pattern][
+                                           ,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,
+                                                 patient_id=patient_id+1L,state_id=state_id+1,
+                                                 category=pattern,costs=value,value=NULL,
+                                                 outcome=NULL)]
+                                        ev2
+                                    }))
+      invisible(self)
+    },
+    #' @description
+    #' Summarize costs and QALYs so that cost-effectiveness analysis can be performed. 
+    #' See [summarize_ce()].    
+    #' @param by_grp If `TRUE`, then costs and QALYs are computed by subgroup. If
+    #' `FALSE`, then costs and QALYs are aggregated across all patients (and subgroups).
+    summarize = function(by_grp = FALSE) {
+      check_summarize(self)
+      summarize_ce(self$costs_, self$qalys_, by_grp)
+    }
+  ) # end public
+) # end class
+
+#' @title Test code for Markov cCTSTMs
+#' @keywords internal
+#' @export
+run_CohortCtstmTestODE <- function(start_state=1, times=c(0,1,2,10), discount_rate=0.03) {
+    ## deal with "no visible binding for global variable" checks
+    outcome <- strategy_id <- patient_id <- state_id <- value <- NULL
+    self <- runCohortCtstmTestODE(start_state - 1L, times, discount_rate)
+    ## NB: grp_id is already 1-based -- so do not update
+    self$stateprobs_ <-
+        as.data.table(self$stateprobs_)[,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,
+                                             patient_id=patient_id+1L,state_id=state_id+1L)]
+    ev <- as.data.table(self$ev_)
+    self$qalys_ <- ev[outcome=="qaly"][
+       ,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,patient_id=patient_id+1L,
+             state_id=state_id+1,category='qalys',qalys=value,value=NULL,outcome=NULL)]
+    self$qalys_$ly = ev[outcome=="ly","value"]
+    self$costs_ <- do.call(rbind,
+                           lapply(unique(grep("Category",ev$outcome,value=TRUE)),
+                                  function(pattern) {
+                                      ev2 <- ev[outcome==pattern][
+                                         ,`:=`(sample=sample+1L,strategy_id=strategy_id+1L,
+                                               patient_id=patient_id+1L,state_id=state_id+1L,
+                                               category=pattern,costs=value,value=NULL,
+                                               outcome=NULL)]
+                                      ev2
+                                  }))
+    self$ev_ = NULL
+    self
+}

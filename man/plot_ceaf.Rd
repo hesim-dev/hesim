@@ -19,7 +19,7 @@ A \code{ggplot} object.
 }
 \description{
 Plot a cost-effectiveness acceptability frontier (CEAF) from the output of
-\code{\link{cea}} using \code{\link{ggplot2}}. The CEAF plots the probability
+\code{\link{cea}} using \code{\link[ggplot2:ggplot]{ggplot2::ggplot}}. The CEAF plots the probability
 that the optimal treatment strategy (i.e., the strategy with the highest
 expected net monetary benefit) is cost-effective.
 }

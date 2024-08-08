@@ -23,8 +23,8 @@
 #'
 #' The object also contains `size` and `absorbing` attributes.
 #' The `size` attribute is a numeric vector with the elements `n_samples`, 
-#' `n_strategies`, `n_patients`, and `n_states` denoting the number of samples, 
-#' treatment strategies, patients, and health states The `absorbing` attribute 
+#' `n_strategies`, `n_patients`, `n_states`, and `n_transitions` denoting the number of samples, 
+#' treatment strategies, patients, health states and transitions. The `absorbing` attribute 
 #' is a numeric vector containing the absorbing health states; i.e., the 
 #' health states that cannot be transitioned from. Operationally, an
 #' absorbing state is a row in a transition matrix (as in the `trans_mat` field
@@ -433,7 +433,8 @@ sim_ev.NULL <- function(object, ...) {
 #' the cohort. The method used to simulate expected values depends on the
 #' `$method` field in the [`StateVals`] object(s) stored in `model(s)`. If
 #' `$method = "starting"`, then state values represent a one-time value that
-#' occurs at time 0. 
+#' occurs at time 0. If `$method = "transition"`, then the state values represent
+#' a value for the transition at the transition time.
 #' 
 #' The more common use case is `$method = "wlos"`, or a "weighted length of stay". 
 #' That is, expected values for each health state can be thought of as state values

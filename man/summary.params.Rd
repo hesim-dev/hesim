@@ -30,7 +30,7 @@ computed.}
 \item{...}{Additional arguments affecting the summary. Currently unused.}
 }
 \value{
-A \code{\link{data.table}} that always contains the following columns:
+A \code{\link[data.table:data.table]{data.table::data.table}} that always contains the following columns:
 \describe{
 \item{term}{The regression term.}
 \item{mean}{The mean value of the regression term.}

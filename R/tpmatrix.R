@@ -339,7 +339,7 @@ tpmatrix <- function(..., complement = NULL, states = NULL,
 #' vectors. See "Value" below for additional details.
 #' @param ... Additional arguments affecting the summary. Currently unused.
 #' 
-#' @return If `unflatten = "FALSE"` (the default), then a [`data.table`]
+#' @return If `unflatten = "FALSE"` (the default), then a [`data.table::data.table`]
 #' is returned with columns for (i) the health state that is being transitioned
 #' from (`from`), (ii) the health state that is being transitioned to (`to`)
 #' (iii) the mean of each parameter across parameter samples (`mean`),

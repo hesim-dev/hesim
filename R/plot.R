@@ -6,7 +6,7 @@ format_dollar <- function(x) {
 # Cost-effectiveness plane -----------------------------------------------------
 #' Plot cost-effectiveness plane
 #' 
-#' Plot a cost-effectiveness plane from the output of [`cea_pw()`] using [`ggplot2`]. 
+#' Plot a cost-effectiveness plane from the output of [`cea_pw()`] using [`ggplot2::ggplot`]. 
 #' Each point is a random draw of incremental costs (y-axis) and incremental QALYs (x-axis)
 #' from a probabilistic sensitivity analysis.
 #' @inheritParams set_labels
@@ -69,7 +69,7 @@ plot_ceplane <- function(x, k = 50000, labels = NULL) {
 #' Plot cost-effectiveness acceptability curve
 #' 
 #' Plot a cost-effectiveness curve from either the output of [`cea()`] or
-#' [`cea_pw()`] using [`ggplot2`]. The former compares all treatment strategies
+#' [`cea_pw()`] using [`ggplot2::ggplot`]. The former compares all treatment strategies
 #' simultaneously and uses the probabilistic sensitivity analysis (PSA) to compute
 #' the probability that each strategy is the most cost-effective at a given 
 #' willingness to pay value, while the latter uses the PSA to compute the probability
@@ -154,7 +154,7 @@ plot_ceac.cea <- function(x, labels = NULL, ...) {
 #' Plot cost-effectiveness acceptability frontier
 #' 
 #' Plot a cost-effectiveness acceptability frontier (CEAF) from the output of 
-#' [`cea`] using [`ggplot2`]. The CEAF plots the probability
+#' [`cea`] using [`ggplot2::ggplot`]. The CEAF plots the probability
 #' that the optimal treatment strategy (i.e., the strategy with the highest 
 #' expected net monetary benefit) is cost-effective. 
 #' @inheritParams set_labels
@@ -172,7 +172,7 @@ plot_ceaf <- function(x, labels = NULL) {
 #' Plot expected value of perfect information
 #' 
 #' Plot the expected value of perfect information (EVPI) from the output of 
-#' [`cea()`] using [`ggplot2`]. Intuitively, the EVPI provides an estimate of the 
+#' [`cea()`] using [`ggplot2::ggplot`]. Intuitively, the EVPI provides an estimate of the 
 #' amount that a decision maker would be willing to pay to collect additional data 
 #' and completely eliminate uncertainty.
 #' @inheritParams set_labels

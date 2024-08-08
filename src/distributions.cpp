@@ -109,6 +109,11 @@ RCPP_MODULE(distributions){
   Rcpp::class_<hesim::stats::piecewise_exponential>("piecewise_exponential")
     .derives<hesim::stats::distribution>("distribution")
     .constructor<std::vector<double>, std::vector<double>>()
+    .method("pdf", &hesim::stats::piecewise_exponential::pdf)
+    .method("cdf", &hesim::stats::piecewise_exponential::cdf)
+    .method("quantile", &hesim::stats::piecewise_exponential::quantile)
+    .method("hazard", &hesim::stats::piecewise_exponential::hazard)
+    .method("cumhazard", &hesim::stats::piecewise_exponential::cumhazard)
     .method("random", &hesim::stats::piecewise_exponential::random)
     .method("trandom", &hesim::stats::piecewise_exponential::trandom)
   ;

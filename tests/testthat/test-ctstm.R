@@ -551,6 +551,24 @@ test_that("Simulate costs and QALYs", {
     expect_equal(costs$costs, costs$R_costs)
   }
   test_starting(ictstm2)
+
+  ## Using method = "transition"
+  drugcost_tbl2 <- stateval_tbl(tbl = data.frame(state_id = 1:3,
+                                                 est = c(10, 20, 30)),
+                                dist = "fixed")
+  drugcostsmod2 <- create_StateVals(drugcost_tbl2, n = n_samples,
+                                    time_reset = FALSE, method = "transition",
+                                    hesim_data = hesim_dat) 
+  ictstm2 <- ictstm$clone()
+  ictstm2$cost_models <- list(drugs=drugcostsmod2)
+  ictstm2$sim_costs(dr = 0, by_patient = TRUE)
+  test_transition_costs <- function(model){
+      model$disprog_[, costs := ifelse(from==1 & to==2, 10,
+                                ifelse(from==1 & to==3, 20, 30))]
+      expect_equal(model$disprog_[, sum(costs), by=from]$V1,
+                   model$costs_[, sum(costs), by=state_id]$V1)
+  }
+  test_transition_costs(ictstm2)
    
   # Summarize costs and QALYs
   ## By patient = TRUE
@@ -576,6 +594,104 @@ test_that("Simulate costs and QALYs", {
                    dr_costs = 0, dr_qalys = 0)
   expect_true("ceac" %in% names(cea_pw))
 })
+
+test_that("Simulate a cohort-based continuous-time Markov model", {
+    strategies <- data.frame(strategy_id = 1L)
+    patients <- data.frame(patient_id = 1:2, intercept=1)
+    ## Multi-state model with transition specific models (as per testODE in the C++ code)
+    tmat <- rbind(c(NA, 1, NA, NA),
+                  c(2, NA, 3, NA),
+                  c(NA, NA, NA, 4),
+                  c(NA, NA, NA, NA))
+    ## short utility function
+    make_param <- function(shape,scale,dist="weibull")
+        params_surv(
+            coefs = list(
+                shape = data.frame(
+                    intercept = log(shape)
+                ),
+                scale = data.frame(
+                    intercept = log(scale)
+                )
+            ),
+            dist = dist)
+    fits = params_surv_list(make_param(0.8, 1.0), make_param(0.8, 1.0),
+                            make_param(0.8, 2.0), make_param(0.8, 3.0))
+    ## Simulation model
+    hesim_dat <- hesim_data(strategies = strategies,
+                            patients = patients)
+    fits_data <- expand(hesim_dat)
+    ## create_IndivCtstmTrans can also be used for cCTSTM:)
+    transmod <- create_IndivCtstmTrans(fits, input_data = fits_data,
+                                       trans_mat = tmat,
+                                       start_age=50,
+                                       start_state=1,
+                                       clock="mixt",
+                                       transition_types=c("time","time","time","time"))
+    ## utilities
+    utilities_tbl = stateval_tbl(data.frame(state_id=1:3,
+                                            est=c(0.9, 0.8, 0.7)),
+                                 dist="fixed")
+    utilities = create_StateVals(utilities_tbl, hesim_data=hesim_dat, n=1)
+    ## costs
+    costs_wlos_tbl = stateval_tbl(data.frame(state_id=1:3,
+                                             est=c(10000.0, 20000.0, 30000.0)),
+                                  dist="fixed")
+    costs_wlos = create_StateVals(costs_wlos_tbl, hesim_data=hesim_dat, n=1)
+    ## for the transition costs, "state_id" is actually the id for the transition
+    costs_transition_tbl <- stateval_tbl(tbl = data.frame(state_id = 1:4,
+                                                          est = c(10, 15, 20, 30)),
+                                         dist = "fixed")
+    costs_transition <- create_StateVals(costs_transition_tbl, n = 1,
+                                         time_reset = FALSE, method = "transition",
+                                         hesim_data = hesim_dat) 
+    costs_starting_tbl = stateval_tbl(data.frame(state_id=1:3,
+                                                 est=c(0.0, 2000.0, 3000.0)),
+                                      dist="fixed")
+    costs_starting = create_StateVals(costs_starting_tbl, hesim_data=hesim_dat, n=1,
+                                      method="starting")
+
+    test <- CohortCtstm$new(trans_model = transmod,
+                        utility_model = utilities,
+                        cost_models = list(costs_wlos,costs_transition,costs_starting))
+
+    ## 0.03 discount rate
+    test$sim(t=c(0,1,2,10), dr_qalys=0.03, dr_costs=0.03)
+    test2 <- hesim:::run_CohortCtstmTestODE(1, c(0,1,2,10), 0.03)
+    expect_true(max(abs(subset(test$stateprobs_, patient_id==1) - test2$stateprobs_)) < 5e-15)
+    expect_true(all(subset(test$qalys_, patient_id==1)[,-(9:10)] == test2$qalys_[,-(9:10)]))
+    expect_true(max(abs(subset(test$qalys_, patient_id==1)[,-8] - test2$qalys_[,-8])) < 5e-15)
+    expect_true(all(subset(test$costs_, patient_id==1)[,-9] == test2$costs_[,-9]))
+    expect_true(max(abs(subset(test$qalys_, patient_id==1)[,-8] - test2$qalys_[,-8])) < 5e-15)
+
+    ## zero discount
+    test$sim(t=c(0,1,2,10), dr_qalys=0.0, dr_costs=0.0)
+    test2 <- hesim:::run_CohortCtstmTestODE(1, c(0,1,2,10), 0.0)
+    expect_true(max(abs(subset(test$stateprobs_, patient_id==1) - test2$stateprobs_)) < 5e-15)
+    expect_true(all(subset(test$qalys_, patient_id==1)[,-(9:10)] == test2$qalys_[,-(9:10)]))
+    expect_true(max(abs(subset(test$qalys_, patient_id==1)[,-8] - test2$qalys_[,-8])) < 5e-15)
+    expect_true(all(subset(test$costs_, patient_id==1)[,-9] == test2$costs_[,-9]))
+    expect_true(max(abs(subset(test$qalys_, patient_id==1)[,-8] - test2$qalys_[,-8])) < 5e-15)
+
+    ## start_state=2
+    transmod <- create_IndivCtstmTrans(fits, input_data = fits_data,
+                                   trans_mat = tmat,
+                                   start_age=50,
+                                   start_state=2,
+                                   clock="mixt",
+                                   transition_types=c("time","time","time","time"))
+    test <- CohortCtstm$new(trans_model = transmod,
+                            utility_model = utilities,
+                            cost_models = list(costs_wlos,costs_transition,costs_starting))
+    test$sim(t=c(0,1,2,10), dr_qalys=0.03, dr_costs=0.03)
+    test2 <- hesim:::run_CohortCtstmTestODE(2, c(0,1,2,10), 0.03)
+    expect_true(max(abs(subset(test$stateprobs_, patient_id==1) - test2$stateprobs_)) < 5e-15)
+    expect_true(all(subset(test$qalys_, patient_id==1)[,-(9:10)] == test2$qalys_[,-(9:10)]))
+    expect_true(max(abs(subset(test$qalys_, patient_id==1)[,-8] - test2$qalys_[,-8])) < 5e-15)
+    expect_true(all(subset(test$costs_, patient_id==1)[,-9] == test2$costs_[,-9]))
+    expect_true(max(abs(subset(test$qalys_, patient_id==1)[,-8] - test2$qalys_[,-8])) < 5e-15)
+})
+
 
 ## With a joint survival model
 test_that("IndivCtstm - joint", {
