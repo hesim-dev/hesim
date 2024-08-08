@@ -1011,6 +1011,8 @@ CohortCtstm <- R6::R6Class("CohortCtstm",
 #' @keywords internal
 #' @export
 run_CohortCtstmTestODE <- function(start_state=1, times=c(0,1,2,10), discount_rate=0.03) {
+    ## deal with "no visible binding for global variable" checks
+    outcome <- strategy_id <- patient_id <- state_id <- value <- NULL
     self <- runCohortCtstmTestODE(start_state - 1L, times, discount_rate)
     ## NB: grp_id is already 1-based -- so do not update
     self$stateprobs_ <-

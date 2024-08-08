@@ -589,7 +589,7 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
   size_t n_times = ceil(max_time / delta_time);
   size_t n_states = transmod->trans_mat_.n_states_; // NB: includes death states
   size_t n_reps = 2+(valid_R_QALYsStateVal ? 1 : 0)+n_costs;
-  if (debug) Rprintf("n_states=%i\n",n_states);
+  if (debug) Rprintf("n_states=%zu\n",n_states);
   size_t N = n_samples * 
     n_strategies *  
     n_patients *
@@ -636,7 +636,7 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 	report.col(0) = p0;
 	auto stepper = make_dense_output(rel_tol, abs_tol, runge_kutta_dopri5<state_type>());
 	for (size_t j=1; j<n_times; j++) {
-	  if (debug) Rprintf("j=%i\n",j);
+	  if (debug) Rprintf("j=%zu\n",j);
 	  p0 = join_vert(p0, arma::zeros(n_rows)); // add zeros at the end for flows out
 	  size_t n = integrate_adaptive(stepper,
 					[&](const state_type &Y , state_type &dYdt, const double u)
@@ -657,7 +657,7 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 					  std::vector<double> vduration(duration.begin(), duration.end());
 					  if (debug) Rprintf("Rate calculations\n");
 					  for (size_t trans_ = 0; trans_ < n_trans; ++trans_) {
-					    if (debug) Rprintf("trans_=%i\n",trans_);
+					    if (debug) Rprintf("trans_=%zu\n",trans_);
 					    if (clock == "forward"){ // NB: this should never be reached
 					      if (debug) Rprintf("clock forward\n");
 					      rates.row(trans_) = rates.row(trans_)*0.0+transmod->summary(trans_, s, {t}, "hazard")[0];
@@ -676,7 +676,7 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 						if (debug) Rprintf("tt_reset\n");
 						std::vector<double> vrow =
 						  transmod->summary(trans_, s, vduration, "hazard");
-						if (debug) Rprintf("vrow.size()=%i, rates.n_rows=%i, rates.n_cols=%i\n",
+						if (debug) Rprintf("vrow.size()=%zu, rates.n_rows=%i, rates.n_cols=%i\n",
 								   vrow.size(), rates.n_rows, rates.n_cols);
 						rates.row(trans_) = arma::rowvec(vrow.data(), vrow.size(), false);
 						rates0(trans_) = transmod->summary(trans_, s, {u/2.0}, "hazard")[0];
@@ -685,7 +685,7 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 					      if (debug) Rprintf("clock reset\n");
 					      std::vector<double> vrow =
 						transmod->summary(trans_, s, vduration, "hazard");
-					      if (debug) Rprintf("vrow.size()=%i, rates.n_rows=%i, rates.n_cols=%i\n",
+					      if (debug) Rprintf("vrow.size()=%zu, rates.n_rows=%i, rates.n_cols=%i\n",
 						      vrow.size(), rates.n_rows, rates.n_cols);
 					      rates.row(trans_) = arma::rowvec(vrow.data(), vrow.size(), false);
 					      rates0(trans_) = transmod->summary(trans_, s, {u/2.0}, "hazard")[0];
@@ -704,7 +704,7 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 									     i, // patient
 									     state_,
 									     t_index);
-						// if (debug) Rprintf("Utility: k=%i, i=%i, state_=%i, t_index=%i, s=%i, obs=%i\n",
+						// if (debug) Rprintf("Utility: k=%zu, i=%zu, state_=%zu, t_index=%zu, s=%zu, obs=%zu\n",
 						// 		     k, i, state_, t_index, s, obs);
 						utilities(state_,d_index) = qalys_lookup->sim(s, obs, type);
 					      } // loop over state_
@@ -713,7 +713,7 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 					  }
 					  if (debug) Rprintf("Cost input calculations\n");
 					  for (size_t cost_=0; cost_<n_costs; ++cost_) {
-					    if (debug) Rprintf("Cost %i\n", cost_);
+					    if (debug) Rprintf("Cost %zu\n", cost_);
 					    size_t t_index = 0;
 					    if (!costs_time_reset[cost_]) {
 					      t_index = hesim::hesim_bound(t, obs_index_costs[cost_].time_start_);
@@ -816,7 +816,7 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 					    y0(arma::span(0,n_states-1)) % utilities.col(0) * drr_utilities;
 					  if (debug) Rprintf("Discounted costs\n");
 					  for (size_t cost_=0; cost_<n_costs; ++cost_) {
-					    if (debug) Rprintf("Costs %i\n", cost_);
+					    if (debug) Rprintf("Costs %zu\n", cost_);
 					    if (costs_lookup[cost_].method_ == "wlos") {
 					      if (debug) Rprintf("wlos\n");
 					      arma::mat costs = costs_by_state.slice(cost_);
@@ -866,7 +866,7 @@ Rcpp::List C_cohort_ctstm_sim2(Rcpp::Environment R_CtstmTrans,
 					delta_time,
 					delta_time);
 	  if (debug) Rprintf("Calculate new p0\n");
-	  if (debug) Rprintf("p0.n_elem=%i, n_rows=%i\n", p0.n_elem, n_rows);
+	  if (debug) Rprintf("p0.n_elem=%i, n_rows=%zu\n", p0.n_elem, n_rows);
 	  arma::vec w0a = 0.5 * arma::ones(n_states);
 	  for (size_t w0_index=0; w0_index < n_states; ++w0_index)
 	    if (p0(p0.n_elem-n_rows+w0_index) != 0.0)
