@@ -229,8 +229,9 @@ fit <- msm(state_id ~ time, subject = patient_id,
 
 test_that("qmatrix.msm() works with factor covariates and 'newdata' is one row" , {
   newdata <- data.frame(strategy_name = "New 1", age = 50)
+  msmq <- msm::qmatrix.msm(fit, newdata[1, , drop = FALSE], ci = "none")
   expect_equal(
-    msm::qmatrix.msm(fit, newdata[1, , drop = FALSE], ci = "none"),
+    unclass(msmq), 
     qmatrix(fit, newdata, uncertainty = "none")[, , 1],
     check.attributes = FALSE
   )
@@ -239,8 +240,9 @@ test_that("qmatrix.msm() works with factor covariates and 'newdata' is one row" 
 test_that("qmatrix.msm() works with factor covariates and 'newdata' is multiple rows" , {
   newdata <- data.frame(strategy_name = c("New 1", "New 2"),
                         age = c(50, 55))
+  msmq <- msm::qmatrix.msm(fit, newdata[2, , drop = FALSE], ci = "none")
   expect_equal(
-    msm::qmatrix.msm(fit, newdata[2, , drop = FALSE], ci = "none"),
+    unclass(msmq),
     qmatrix(fit, newdata, uncertainty = "none")[, , 2],
     check.attributes = FALSE
   )
@@ -250,8 +252,9 @@ test_that("qmatrix.msm() works with covariates that vary by transition" , {
   fit <- update(fit, covariates = list("1-2" = ~ strategy_name + age))
   newdata <- data.frame(strategy_name = c("New 1", "New 2"),
                         age = c(50, 55))
+  msmq <- msm::qmatrix.msm(fit, newdata[2, , drop = FALSE], ci = "none")
   expect_equal(
-    msm::qmatrix.msm(fit, newdata[2, , drop = FALSE], ci = "none"),
+    unclass(msmq),
     qmatrix(fit, newdata, uncertainty = "none")[, , 2],
     check.attributes = FALSE
   )
@@ -277,8 +280,9 @@ test_that("qmatrix.msm() works with a hidden Markov model" , {
               hconstraint = list(acute = c(1, 1)), 
               death = 3,
               method = "BFGS")
+  msmq <- msm::qmatrix.msm(fith, covariates = list(acute = 0), ci = "none")
   expect_equal(
-    msm::qmatrix.msm(fith, covariates = list(acute = 0), ci = "none"),
+    unclass(msmq),
     qmatrix(fith, data.frame(acute = 0), uncertainty = "none")[,,1],
     check.attributes = FALSE
   )
@@ -299,8 +303,9 @@ test_that("qmatrix.msm() requires 'newdata' if covariates are included in the mo
 
 test_that("qmatrix.msm() does not require 'newdata' if no covariates are included in the model." , {
   fit <- update(fit, covariates =~ 1)
+  msmq <- msm::qmatrix.msm(fit, ci = "none")
   expect_equal(
-    msm::qmatrix.msm(fit, ci = "none"),
+    unclass(msmq),
     qmatrix(fit, uncertainty = "none")[,,1],
     check.attributes = FALSE
   )
@@ -408,4 +413,4 @@ test_that("apply_rr() can only have one complementary column for each row in mat
              complement = list(c(1, 1), c(1,2))),
     "There can only be one complementary column in each row."
   )
-})
+})})
