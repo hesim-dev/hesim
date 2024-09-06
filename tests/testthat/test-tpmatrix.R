@@ -413,4 +413,4 @@ test_that("apply_rr() can only have one complementary column for each row in mat
              complement = list(c(1, 1), c(1,2))),
     "There can only be one complementary column in each row."
   )
-})})
+})
