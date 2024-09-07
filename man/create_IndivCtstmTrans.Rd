@@ -79,7 +79,7 @@ distribution. If \code{"none"}, then only point estimates are returned.}
 \code{transition_types} in \code{\link{IndivCtstmTrans}}.}
 }
 \value{
-Returns an \code{\link{R6Class}} object of class \code{\link{IndivCtstmTrans}}.
+Returns an \code{\link[R6:R6Class]{R6::R6Class}} object of class \code{\link{IndivCtstmTrans}}.
 }
 \description{
 A generic function for creating an object of class \code{\link{IndivCtstmTrans}}.

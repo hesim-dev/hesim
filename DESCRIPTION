@@ -1,7 +1,7 @@
 Package: hesim
 Type: Package
 Title: Health Economic Simulation Modeling and Decision Analysis
-Version: 0.5.4
+Version: 0.5.5
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", role = c("aut", "cre")),
     person("Jeroen P.", "Jansen", role = "aut"),
@@ -28,7 +28,8 @@ BugReports: https://github.com/hesim-dev/hesim/issues
 License: GPL-3
 LazyData: true
 LinkingTo: Rcpp,
-           RcppArmadillo
+           RcppArmadillo,
+	   BH
 Depends:
     R (>= 3.5.0)
 Imports:

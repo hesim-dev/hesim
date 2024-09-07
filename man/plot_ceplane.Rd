@@ -20,7 +20,7 @@ See the output returned by \code{\link[=get_labels]{get_labels()}} for an exampl
 A \code{ggplot} object.
 }
 \description{
-Plot a cost-effectiveness plane from the output of \code{\link[=cea_pw]{cea_pw()}} using \code{\link{ggplot2}}.
+Plot a cost-effectiveness plane from the output of \code{\link[=cea_pw]{cea_pw()}} using \code{\link[ggplot2:ggplot]{ggplot2::ggplot}}.
 Each point is a random draw of incremental costs (y-axis) and incremental QALYs (x-axis)
 from a probabilistic sensitivity analysis.
 }

@@ -22,7 +22,7 @@ NULL
 #' computed.
 #' @param ... Additional arguments affecting the summary. Currently unused. 
 #' 
-#' @return A [`data.table`] that always contains the following columns:
+#' @return A [`data.table::data.table`] that always contains the following columns:
 #' \describe{
 #' \item{term}{The regression term.}
 #' \item{mean}{The mean value of the regression term.}
