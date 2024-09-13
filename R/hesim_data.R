@@ -44,7 +44,7 @@ create_lines_dt <- function(strategy_list, strategy_ids = NULL){
 #' the states and transitions in a multi-state model suitable for use with [`hesim_data`]. 
 #' @param trans_mat A transition matrix in the format from the [`mstate`][mstate::mstate] package. 
 #' See [`IndivCtstmTrans`].
-#' @return Returns a [`data.table`] in tidy format with three columns:
+#' @return Returns a [`data.table::data.table`] in tidy format with three columns:
 #' \describe{
 #' \item{transition_id}{Health state transition ID.}
 #' \item{from}{The starting health state.}

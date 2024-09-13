@@ -23,7 +23,7 @@ vectors. See "Value" below for additional details.}
 \item{...}{Additional arguments affecting the summary. Currently unused.}
 }
 \value{
-If \code{unflatten = "FALSE"} (the default), then a \code{\link{data.table}}
+If \code{unflatten = "FALSE"} (the default), then a \code{\link[data.table:data.table]{data.table::data.table}}
 is returned with columns for (i) the health state that is being transitioned
 from (\code{from}), (ii) the health state that is being transitioned to (\code{to})
 (iii) the mean of each parameter across parameter samples (\code{mean}),

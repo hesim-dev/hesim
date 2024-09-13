@@ -7,7 +7,7 @@
 #' (ii) [metadata][id_attributes()] used to index each matrix in `X`. 
 #' 
 #' Once created, an `input_mats` object can be converted 
-#' to a [`data.table`] with `as.data.table()`, which is a helpful way to check that 
+#' to a [`data.table::data.table`] with `as.data.table()`, which is a helpful way to check that 
 #' the object is as expected. The `print()` method summarizes the object and 
 #' prints it to the console. 
 #' 
@@ -18,7 +18,7 @@
 #' in a statistical model. May also be a list of lists of input matrices when a 
 #' list of separate models is fit (e.g., with [flexsurvreg_list()]).
 #' @param ... For `input_mats()`, arguments to pass to [id_attributes()]. For `print()`,
-#' arguments to pass to [print.data.table()].
+#' arguments to pass to [`data.table::print.data.table()`].
 #' 
 #' @details 
 #' `input_mats` objects are used with [`params`] objects to simulate

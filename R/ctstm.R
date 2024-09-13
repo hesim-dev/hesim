@@ -383,7 +383,7 @@ IndivCtstmTrans <- R6::R6Class(
 #' `transition_types` in [`IndivCtstmTrans`].
 #' @inheritParams create_CohortDtstmTrans
 #' @param ... Further arguments passed to `IndivCtstmTrans$new()` in [`IndivCtstmTrans`].
-#' @return Returns an [`R6Class`] object of class [`IndivCtstmTrans`].
+#' @return Returns an [`R6::R6Class`] object of class [`IndivCtstmTrans`].
 #' @template details-create_disease_model
 #' @seealso See [`IndivCtstmTrans`] and [`IndivCtstm`] for examples.
 #' @name create_IndivCtstmTrans

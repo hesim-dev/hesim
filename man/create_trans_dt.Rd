@@ -11,7 +11,7 @@ create_trans_dt(trans_mat)
 See \code{\link{IndivCtstmTrans}}.}
 }
 \value{
-Returns a \code{\link{data.table}} in tidy format with three columns:
+Returns a \code{\link[data.table:data.table]{data.table::data.table}} in tidy format with three columns:
 \describe{
 \item{transition_id}{Health state transition ID.}
 \item{from}{The starting health state.}

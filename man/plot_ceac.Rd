@@ -24,7 +24,7 @@ See the output returned by \code{\link[=get_labels]{get_labels()}} for an exampl
 }
 \description{
 Plot a cost-effectiveness curve from either the output of \code{\link[=cea]{cea()}} or
-\code{\link[=cea_pw]{cea_pw()}} using \code{\link{ggplot2}}. The former compares all treatment strategies
+\code{\link[=cea_pw]{cea_pw()}} using \code{\link[ggplot2:ggplot]{ggplot2::ggplot}}. The former compares all treatment strategies
 simultaneously and uses the probabilistic sensitivity analysis (PSA) to compute
 the probability that each strategy is the most cost-effective at a given
 willingness to pay value, while the latter uses the PSA to compute the probability

@@ -23,7 +23,7 @@ character string used to separate the terms.}
 \item{...}{For the print method, arguments to pass to \code{summary.eval_rng()}.}
 }
 \value{
-\code{summary.eval_rng()} returns a \code{\link{data.table}} with columns for
+\code{summary.eval_rng()} returns a \code{\link[data.table:data,table]{data.table::data,table}} with columns for
 (i) the name of the parameter (\code{param}), (ii) the mean of the parameter
 samples (\code{mean}), (iii) the standard deviation of the parameter samples (\code{sd}),
 and (iv) quantiles of the parameter samples corresponding

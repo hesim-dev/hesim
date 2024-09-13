@@ -123,7 +123,7 @@ c.eval_rng <- function(...) {
 #' character string used to separate the terms.
 #' @param ... For the print method, arguments to pass to `summary.eval_rng()`. 
 #' 
-#' @return `summary.eval_rng()` returns a [`data.table`] with columns for
+#' @return `summary.eval_rng()` returns a [`data.table::data,table`] with columns for
 #' (i) the name of the parameter (`param`), (ii) the mean of the parameter
 #' samples (`mean`), (iii) the standard deviation of the parameter samples (`sd`),
 #' and (iv) quantiles of the parameter samples corresponding
