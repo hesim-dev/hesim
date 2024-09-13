@@ -34,8 +34,6 @@ documentation in \code{\link[=create_params]{create_params()}}.}
 
 \item{hesim_data}{A \code{\link{hesim_data}} object. Only required when \code{object} is of class
 \code{\link{stateval_tbl}}. See "details".}
-
-\item{method}{String matching a list of methods used for the \code{StateVals} object.}
 }
 \value{
 A \code{\link{StateVals}} object.

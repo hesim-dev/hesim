@@ -2,8 +2,8 @@
 % Please edit documentation in R/hesim.R
 \docType{package}
 \name{hesim}
-\alias{hesim}
 \alias{hesim-package}
+\alias{hesim}
 \title{hesim: Health Economic Simulation Modeling and Decision Analysis}
 \description{
 To learn more about \code{hesim} visit the \href{https://hesim-dev.github.io/hesim/}{website}.

@@ -362,7 +362,6 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
 }
 
 #' @rdname create_StateVals
-#' @param method String matching a list of methods used for the `StateVals` object.
 #' @export
 create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, ...){
   
