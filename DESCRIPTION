@@ -1,7 +1,7 @@
 Package: hesim
 Type: Package
 Title: Health Economic Simulation Modeling and Decision Analysis
-Version: 0.5.4
+Version: 0.5.5
 Authors@R: c(
     person("Devin", "Incerti", , "devin.incerti@gmail.com", role = c("aut", "cre")),
     person("Jeroen P.", "Jansen", role = "aut"),
@@ -56,4 +56,4 @@ Suggests:
     truncnorm
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2

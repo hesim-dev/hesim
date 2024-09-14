@@ -51,7 +51,7 @@ library("knitr")
 library("kableExtra")
 level <- c("Cohort", "Cohort", "Cohort", "Cohort", "Individual", "Individual", "Cohort")
 links <- c(
-  rep("https://arxiv.org/pdf/2102.09437.pdf", 3),
+  rep("https://arxiv.org/pdf/2102.09437", 3),
   "https://hesim-dev.github.io/hesim/articles/markov-cohort.html",
   "https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-cohort.html",
   "https://hesim-dev.github.io/hesim/articles/mlogit.html",

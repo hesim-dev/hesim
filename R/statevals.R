@@ -361,7 +361,7 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
   return(StateVals$new(params = params, input_data = input_mats, ...))
 }
 
-#' @rdname create_StateVals 
+#' @rdname create_StateVals
 #' @export
 create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, ...){
   
