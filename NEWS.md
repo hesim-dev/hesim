@@ -1,3 +1,6 @@
+## hesim 0.5.5
+Minor updates to the `.Rd` files and tests to fix problem identified with the CRAN package checks.
+
 ## hesim 0.5.4
 * For individual CTSTMs, adds experimental support for `clock="mixt"` option with a `transition_types` argument for transition-specific clocks (#106).
 * Fixes several CRAN checks that were producing NOTEs related to package
