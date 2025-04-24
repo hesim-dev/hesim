@@ -4,10 +4,9 @@
 <!-- badges: start -->
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/hesim)](https://cran.r-project.org/package=hesim)
-[![R build
-status](https://github.com/hesim-dev/hesim/workflows/R-CMD-check/badge.svg)](https://github.com/hesim-dev/hesim/actions)
 [![Coverage
 Status](https://codecov.io/gh/hesim-dev/hesim/branch/master/graph/badge.svg)](https://app.codecov.io/gh/hesim-dev/hesim)
+[![R-CMD-check](https://github.com/hesim-dev/hesim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hesim-dev/hesim/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Overview
@@ -25,19 +24,19 @@ making individual-level simulation, probabilistic sensitivity analysis
 
 Features of the current version can be summarized as follows:
 
--   Cohort DTSTMs, individual-level CTSTMs, and N-state PSMs that
-    encompass Markov and semi-Markov processes
--   Options to build models directly from fitted statistical models or
-    by defining them in terms of expressions
--   Parameter estimates from either an `R` based model or from an
-    external source
--   Convenience functions for sampling model parameters from parametric
-    distributions or via bootstrapping
--   Parameter uncertainty propagated with PSA
--   Modeling patient heterogeneity
--   Performing cost-effectiveness analyses and representing decision
-    uncertainty from PSAs
--   Simulation code written in `C++` to boost performance
+- Cohort DTSTMs, individual-level CTSTMs, and N-state PSMs that
+  encompass Markov and semi-Markov processes
+- Options to build models directly from fitted statistical models or by
+  defining them in terms of expressions
+- Parameter estimates from either an `R` based model or from an external
+  source
+- Convenience functions for sampling model parameters from parametric
+  distributions or via bootstrapping
+- Parameter uncertainty propagated with PSA
+- Modeling patient heterogeneity
+- Performing cost-effectiveness analyses and representing decision
+  uncertainty from PSAs
+- Simulation code written in `C++` to boost performance
 
 ## Installation
 
@@ -136,8 +135,8 @@ Application
 1
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://arxiv.org/pdf/2102.09437" style="     ">Preprint
-4.1</a>
+\<a href=“<https://arxiv.org/pdf/2102.09437>” style=” ” \>Preprint
+4.1\</a\>
 </td>
 <td style="text-align:left;">
 iCTSTM
@@ -163,8 +162,8 @@ Oncology
 2
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://arxiv.org/pdf/2102.09437" style="     ">Preprint
-4.2</a>
+\<a href=“<https://arxiv.org/pdf/2102.09437>” style=” ” \>Preprint
+4.2\</a\>
 </td>
 <td style="text-align:left;">
 PSM
@@ -190,8 +189,8 @@ Oncology
 3
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://arxiv.org/pdf/2102.09437" style="     ">Preprint
-4.3</a>
+\<a href=“<https://arxiv.org/pdf/2102.09437>” style=” ” \>Preprint
+4.3\</a\>
 </td>
 <td style="text-align:left;">
 cDTSTM
@@ -217,8 +216,9 @@ Oncology
 4
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/markov-cohort.html" style="     ">Simple
-Markov cohort</a>
+\<a
+href=“<https://hesim-dev.github.io/hesim/articles/markov-cohort.html>”
+style=” ” \>Simple Markov cohort\</a\>
 </td>
 <td style="text-align:left;">
 cDTSTM
@@ -244,8 +244,9 @@ HIV
 5
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-cohort.html" style="     ">Time
-inhomogeneous Markov (cohort)</a>
+\<a
+href=“<https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-cohort.html>”
+style=” ” \>Time inhomogeneous Markov (cohort)\</a\>
 </td>
 <td style="text-align:left;">
 cDTSTM
@@ -271,8 +272,8 @@ Hip replacement
 6
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/mlogit.html" style="     ">Multinomial
-logit</a>
+\<a href=“<https://hesim-dev.github.io/hesim/articles/mlogit.html>”
+style=” ” \>Multinomial logit\</a\>
 </td>
 <td style="text-align:left;">
 cDTSTM
@@ -298,8 +299,9 @@ Generic
 7
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-indiv.html" style="     ">Time
-inhomogeneous Markov (individual)</a>
+\<a
+href=“<https://hesim-dev.github.io/hesim/articles/markov-inhomogeneous-indiv.html>”
+style=” ” \>Time inhomogeneous Markov (individual)\</a\>
 </td>
 <td style="text-align:left;">
 iCTSTM
@@ -325,8 +327,8 @@ Hip replacement
 8
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/mstate.html" style="     ">Semi-Markov
-multi-state</a>
+\<a href=“<https://hesim-dev.github.io/hesim/articles/mstate.html>”
+style=” ” \>Semi-Markov multi-state\</a\>
 </td>
 <td style="text-align:left;">
 iCTSTM
@@ -352,8 +354,8 @@ Generic
 9
 </td>
 <td style="text-align:left;width: 15em; ">
-<a href="https://hesim-dev.github.io/hesim/articles/psm.html" style="     ">4-state
-PSM</a>
+\<a href=“<https://hesim-dev.github.io/hesim/articles/psm.html>” style=”
+” \>4-state PSM\</a\>
 </td>
 <td style="text-align:left;">
 PSM
@@ -392,6 +394,7 @@ transition model. AFT = accelerated failure time; RR = relative risk; HR
 
 If you use `hesim`, please cite as follows:
 
+    To cite package 'hesim' in publications use:
 
       Devin Incerti and Jeroen P Jansen (2021). hesim: Health Economic
       Simulation Modeling and Decision Analysis. arXiv:2102.09437
