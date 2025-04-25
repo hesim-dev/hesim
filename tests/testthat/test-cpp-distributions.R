@@ -51,19 +51,21 @@ test_that("pwexp", {
   pwexp <- new(PwExp, rate = rate, time = time)
   
   # pdf
-  expect_error(pwexp$pdf(3))
+  expect_equal(pwexp$pdf(5.5), 1.2*exp(-(5.0*0.8 + 0.5*1.2)))
   
   # cdf
-  expect_error(pwexp$cdf(3)) 
+  expect_equal(pwexp$cdf(5.5), 1.0-exp(-(5.0*0.8 + 0.5*1.2)))
   
   # quantile
-  expect_error(exp$quantile(.025))
+  expect_equal(pwexp$quantile(1.0-exp(-(5.0*0.8 + 0.5*1.2))), 5.5)
   
   # hazard
-  expect_error(exp$hazard(1))
+  expect_equal(pwexp$hazard(5.5), 1.2)
+  expect_equal(pwexp$hazard(0.0), 0.8)
   
   # cumhazard
-  expect_error(exp$cumhazard(4))
+  expect_equal(pwexp$cumhazard(5.5), 5.0*0.8 + 0.5*1.2)
+  expect_equal(pwexp$cumhazard(5.0), 5.0*0.8)
   
   # random
   set.seed(101)
