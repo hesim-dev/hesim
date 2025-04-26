@@ -344,7 +344,7 @@ public:
   }
 
   double cdf(double x) const {
-    return 1.0 - exp(-cumhazard(x));
+    return -expm1(-cumhazard(x));
   }
 
   double pdf(double x) const {
@@ -352,7 +352,7 @@ public:
   }
 
   double quantile(double p) const {
-    double H = -log(1.0 - p);
+    double H = -log1p(-p);
     int i = hesim_bound(H, cumrate_);
     return time_[i] + (H - cumrate_[i])/rate_[i];
   }
