@@ -32,7 +32,9 @@ StateVals <- R6::R6Class(
     #' used in a cohort model, the state values only accrue at time 0; 
     #' in contrast, in an individual-level model, state values
     #' accrue each time a patient enters a new state and are discounted based on
-    #' time of entrance into that state. 
+    #' time of entrance into that state. When `transition`, then state values
+    #' represent a value that occurs at the transition time; only used for
+    #' individual-level models.
     method = NULL,
     
     #' @field time_reset If `FALSE` then time intervals are based on time since
@@ -49,7 +51,7 @@ StateVals <- R6::R6Class(
     #' @param time_reset The `time_reset` field.
     #' @return A new `StateVals` object.
     initialize = function(params, input_data = NULL,
-                          method = c("wlos", "starting"),
+                          method = c("wlos", "starting", "transition"),
                           time_reset = FALSE) {
       self$params <- params
       self$input_data <- input_data
@@ -362,9 +364,12 @@ create_StateVals.lm <- function(object, input_data = NULL, n = 1000,
 }
 
 #' @rdname create_StateVals
+#' @param method String matching a list of methods used for the `StateVals` object.
 #' @export
-create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, ...){
-  
+create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000,
+                                          method = c("wlos","starting","transition"),
+                                          ...){
+  method <- match.arg(method)
   grp_var <- attr(object, "grp_var")
   
   # For backwards compatibility, use hesim_data attribute of object 
@@ -505,21 +510,24 @@ create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, .
   } else{
     time_intervals <- NULL
   }
-  
+
+  transp <- (method == "transition")
   tparams <- new_tparams_mean(value = mu,
                               n_samples = n,
                               strategy_id = tbl$strategy_id,
                               n_strategies = length(unique(tbl$strategy_id)),
                               patient_id = tbl$patient_id,
                               n_patients = length(unique(tbl$patient_id)),
-                              state_id = tbl$state_id,
-                              n_states = length(unique(tbl$state_id)),
+                              state_id = if (transp) NULL else tbl$state_id,
+                              transition_id = if (transp) tbl$state_id else NULL,
+                              n_states = if (transp) NULL else length(unique(tbl$state_id)),
+                              n_transitions = if (transp) length(unique(tbl$state_id)) else NULL,
                               time_id = tbl$time_id,
                               time_intervals = time_intervals,
                               n_times = nrow(time_intervals),
                               grp_id = tbl$grp_id,
                               patient_wt = tbl$patient_wt) 
-  return(StateVals$new(params = tparams, ...))
+  return(StateVals$new(params = tparams, method=method, ...))
 }
 
 #' @export

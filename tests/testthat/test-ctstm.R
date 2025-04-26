@@ -552,6 +552,25 @@ test_that("Simulate costs and QALYs", {
   }
   test_starting(ictstm2)
    
+
+  ## Using method = "transition"
+  drugcost_tbl2 <- stateval_tbl(tbl = data.frame(state_id = 1:3,
+                                                 est = c(10, 20, 30)),
+                                dist = "fixed")
+  drugcostsmod2 <- create_StateVals(drugcost_tbl2, n = n_samples,
+                                    time_reset = FALSE, method = "transition",
+                                    hesim_data = hesim_dat) 
+  ictstm2 <- ictstm$clone()
+  ictstm2$cost_models <- list(drugs=drugcostsmod2)
+  ictstm2$sim_costs(dr = 0, by_patient = TRUE)
+  test_transition_costs <- function(model){
+      model$disprog_[, costs := ifelse(from==1 & to==2, 10,
+                                ifelse(from==1 & to==3, 20, 30))]
+      expect_equal(model$disprog_[, sum(costs), by=from]$V1,
+                   model$costs_[, sum(costs), by=state_id]$V1)
+  }
+  test_transition_costs(ictstm2)
+  
   # Summarize costs and QALYs
   ## By patient = TRUE
   ce_summary <- ictstm$summarize()

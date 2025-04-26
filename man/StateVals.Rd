@@ -57,7 +57,9 @@ that occurs when a patient enters a health state. When \code{starting} is
 used in a cohort model, the state values only accrue at time 0;
 in contrast, in an individual-level model, state values
 accrue each time a patient enters a new state and are discounted based on
-time of entrance into that state.}
+time of entrance into that state. When \code{transition}, then state values
+represent a value that occurs at the transition time; only used for
+individual-level models.}
 
 \item{\code{time_reset}}{If \code{FALSE} then time intervals are based on time since
 the start of the simulation. If \code{TRUE}, then time intervals reset each
@@ -84,7 +86,7 @@ Create a new \code{StateVals} object.
 \if{html}{\out{<div class="r">}}\preformatted{StateVals$new(
   params,
   input_data = NULL,
-  method = c("wlos", "starting"),
+  method = c("wlos", "starting", "transition"),
   time_reset = FALSE
 )}\if{html}{\out{</div>}}
 }

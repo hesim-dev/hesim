@@ -16,7 +16,13 @@ create_StateVals(object, ...)
   ...
 )
 
-\method{create_StateVals}{stateval_tbl}(object, hesim_data = NULL, n = 1000, ...)
+\method{create_StateVals}{stateval_tbl}(
+  object,
+  hesim_data = NULL,
+  n = 1000,
+  method = c("wlos", "starting", "transition"),
+  ...
+)
 }
 \arguments{
 \item{object}{A model object of the appropriate class.}
@@ -34,6 +40,8 @@ documentation in \code{\link[=create_params]{create_params()}}.}
 
 \item{hesim_data}{A \code{\link{hesim_data}} object. Only required when \code{object} is of class
 \code{\link{stateval_tbl}}. See "details".}
+
+\item{method}{String matching a list of methods used for the \code{StateVals} object.}
 }
 \value{
 A \code{\link{StateVals}} object.
