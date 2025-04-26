@@ -1,6 +1,11 @@
 context("plot.R unit tests")
 library("data.table")
 
+get_labs <- function(x) x$labels
+if ("get_labs" %in% getNamespaceExports("ggplot2")) {
+  get_labs <- ggplot2::get_labs
+}
+
 # Test autoplot method for survival --------------------------------------------
 # Create mock survival object
 hesim_dat <- hesim_data(
@@ -49,11 +54,11 @@ test_that("autoplot.survival() correctly passes labels", {
 test_that("autoplot.survival() allows confidence intervals", {
   # Confidence intervals as lines
   p <- autoplot(surv, labels = labs, ci = TRUE)
-  expect_equal(p$labels$fill, "curve")
   
+  expect_equal(get_labs(p)$fill, "Curve")
   # Confidence intervals as ribbon
   p <- autoplot(surv, labels = labs, ci = TRUE, ci_style = "ribbon")
-  expect_equal(p$labels$fill, "curve")
+  expect_equal(get_labs(p)$fill, "Curve")
 })
 
 test_that("autoplot.survival() works with patient weights", {
@@ -92,11 +97,11 @@ test_that("autoplot.stateprobs() correctly passes labels", {
 test_that("autoplot.stateprobs() allows confidence intervals", {
   # Confidence intervals as lines
   p <- autoplot(stprobs, labels = labs, ci = TRUE)
-  expect_equal(p$labels$fill, "strategy_id")
   
+  expect_equal(get_labs(p)$fill, "Strategy")
   # Confidence intervals as ribbon
   p <- autoplot(stprobs, labels = labs, ci = TRUE, ci_style = "ribbon")
-  expect_equal(p$labels$fill, "strategy_id")
+  expect_equal(get_labs(p)$fill, "Strategy")
 
 })
 
