@@ -128,7 +128,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 data-toc-skip class="date">2025-04-25</h4>
+            <h4 data-toc-skip class="date">2025-04-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/main/vignettes/markov-inhomogeneous-cohort.Rmd" class="external-link"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
@@ -1060,7 +1060,7 @@ very similar, as expected.</p>
 <span><span class="co">## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)</span></span>
 <span><span class="co">## 3:         0.060    Costs: medical        122 (59, 233)          34 (11, 81)</span></span>
 <span><span class="co">## 4:         0.060      Costs: total       516 (453, 627)       613 (590, 660)</span></span></code></pre>
-<p>However, time to construct the transition model was 2.6 times faster.
+<p>However, time to construct the transition model was 2.4 times faster.
 Although both are quite fast (time in the table is in seconds), this
 difference would become more pronounced as the number of parameter
 samples, treatment strategies, patients, and/or distinct time periods
@@ -1096,13 +1096,13 @@ elapsed
 define_model()
 </td>
 <td style="text-align:right;">
-3.709
+3.217
 </td>
 <td style="text-align:right;">
-0.198
+0.190
 </td>
 <td style="text-align:right;">
-3.799
+3.305
 </td>
 </tr>
 <tr>
@@ -1110,13 +1110,13 @@ define_model()
 Custom tpmatrix()
 </td>
 <td style="text-align:right;">
-1.457
+1.410
 </td>
 <td style="text-align:right;">
-0.526
+0.532
 </td>
 <td style="text-align:right;">
-1.462
+1.369
 </td>
 </tr>
 </tbody>
