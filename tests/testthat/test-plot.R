@@ -55,10 +55,10 @@ test_that("autoplot.survival() allows confidence intervals", {
   # Confidence intervals as lines
   p <- autoplot(surv, labels = labs, ci = TRUE)
   
-  expect_equal(get_labs(p)$fill, "curve")
+  expect_equal(get_labs(p)$fill, "Curve")
   # Confidence intervals as ribbon
   p <- autoplot(surv, labels = labs, ci = TRUE, ci_style = "ribbon")
-  expect_equal(get_labs(p)$fill, "curve")
+  expect_equal(get_labs(p)$fill, "Curve")
 })
 
 test_that("autoplot.survival() works with patient weights", {
@@ -98,10 +98,10 @@ test_that("autoplot.stateprobs() allows confidence intervals", {
   # Confidence intervals as lines
   p <- autoplot(stprobs, labels = labs, ci = TRUE)
   
-  expect_equal(get_labs(p)$fill, "strategy_id")
+  expect_equal(get_labs(p)$fill, "Strategy")
   # Confidence intervals as ribbon
   p <- autoplot(stprobs, labels = labs, ci = TRUE, ci_style = "ribbon")
-  expect_equal(get_labs(p)$fill, "strategy_id")
+  expect_equal(get_labs(p)$fill, "Strategy")
 
 })
 
