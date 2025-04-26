@@ -38,3 +38,26 @@ test_that("max_lt", {
   expect_equal(hesim:::C_test_max_lt(seq(0, 10), 5.1), 5)
   expect_equal(hesim:::C_test_max_lt(seq(0, 10), Inf), 10)
 })
+
+# Test c++ function hesim_bound -----------------------------------------------------
+test_that("hesim_bound", {
+    range = c(0,3,5)
+    expect_equal(hesim:::C_test_hesim_bound(-1,range),0)
+    expect_equal(hesim:::C_test_hesim_bound(0,range),0)
+    expect_equal(hesim:::C_test_hesim_bound(1,range),0)
+    expect_equal(hesim:::C_test_hesim_bound(3,range),0) # should this be 1?
+    expect_equal(hesim:::C_test_hesim_bound(3.1,range),1)
+    expect_equal(hesim:::C_test_hesim_bound(5,range),1) # should this be 2?
+    expect_equal(hesim:::C_test_hesim_bound(5.1,range),2)
+})
+
+# Test c++ function member_of -----------------------------------------------------
+test_that("member_of", {
+    lookup = c(0,3,5)
+    expect_equal(hesim:::C_test_member_of(-1,lookup),FALSE)
+    expect_equal(hesim:::C_test_member_of(0,lookup),TRUE)
+    expect_equal(hesim:::C_test_member_of(0.1,lookup),FALSE)
+    expect_equal(hesim:::C_test_member_of(3,lookup),TRUE)
+    expect_equal(hesim:::C_test_member_of(5,lookup),TRUE)
+    expect_equal(hesim:::C_test_member_of(6,lookup),FALSE)
+})
