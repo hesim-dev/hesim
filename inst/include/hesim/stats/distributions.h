@@ -306,7 +306,7 @@ public:
  ******************************************************************************/ 
 class piecewise_exponential : public distribution {
 private: 
-  std::vector<double> rate_; ///< rate parameter from each time
+  std::vector<double> rate_; ///< rate parameter for each time period
   std::vector<double> cumrate_; ///< cumulative rate parameter up to each time
   std::vector<double> time_; ///<A vector equal to the number of elements in rate
                              /// giving the times at which the rate changes
