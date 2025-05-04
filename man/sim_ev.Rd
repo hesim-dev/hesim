@@ -89,7 +89,8 @@ the \code{\link{CohortDtstm}} and \code{\link{Psm}} classes) are mean outcomes f
 the cohort. The method used to simulate expected values depends on the
 \verb{$method} field in the \code{\link{StateVals}} object(s) stored in \code{model(s)}. If
 \verb{$method = "starting"}, then state values represent a one-time value that
-occurs at time 0.
+occurs at time 0. If \verb{$method = "transition"}, then the state values represent
+a value for the transition at the transition time.
 
 The more common use case is \verb{$method = "wlos"}, or a "weighted length of stay".
 That is, expected values for each health state can be thought of as state values

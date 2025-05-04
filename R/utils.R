@@ -36,7 +36,7 @@ check_dr <- function(dr){
 }
 
 check_StateVals <- function(models, object, 
-                            object_name = c("stateprobs", "disprog")) {
+                            object_name = c("stateprobs", "disprog", "trans_model")) {
   
   if(!is.list(models)){
     stop("'models' must be a list", call. = FALSE)
@@ -84,14 +84,22 @@ check_StateVals <- function(models, object,
     check_size(get_id_object(models[[i]])$n_patients, 
                expected_size[["n_patients"]],
                z = "patients")
-    check_size(
-      get_id_object(models[[i]])$n_states, 
-      expected_states,
-      msg = paste0("The number of states in each 'StateVals' model ", 
-                   "must equal the number of states in the ",
-                   "'", object_name, "' object less the number of ",
-                   "absorbing states, which is ", expected_states, ".")
-    )
+      if (models[[i]]$method == "transition") {
+          if (object_name %in% c("disprog", "trans_model")) {
+              check_size(get_id_object(models[[i]])$n_transitions,
+                         expected_size[["n_transitions"]],
+                         z = "transitions")
+          } else stop(paste0("Transition-specific 'StateVals' not available for object_name == '",
+                             object_name,"'."))
+      } else # method != "transition"
+          check_size(
+              get_id_object(models[[i]])$n_states,
+              expected_states,
+              msg = paste0("The number of states in each 'StateVals' model ",
+                           "must equal the number of states in the ",
+                           "'", object_name, "' object less the number of ",
+                           "absorbing states, which is ", expected_states, ".")
+          )
   } # End loop over state value models
 }
 

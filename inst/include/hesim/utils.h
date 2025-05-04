@@ -293,6 +293,18 @@ public:
   
 };
 
+  /***************************************************************************/
+  /**
+   * Integer bound for the x being in the vector range such that x<=range[1] -> 0
+   * and range[i] < x <= range[i+1] -> i
+   */
+  inline int hesim_bound(double x, std::vector<double> range) {
+    auto lower = std::lower_bound(range.begin(), range.end(), x);
+    if (lower==range.end() || (*lower >= x && x > range[0]))
+      lower--;
+    return std::distance(range.begin(), lower);
+  }
+
 } // end hesim namespace
 
 
