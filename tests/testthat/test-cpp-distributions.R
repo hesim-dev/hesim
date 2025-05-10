@@ -53,6 +53,9 @@ test_that("pwexp", {
   # pdf
   expect_equal(pwexp$pdf(5.5), 1.2*exp(-(5.0*0.8 + 0.5*1.2)))
   
+  expect_equal(pwexp$pdf(5), 1.2*exp(-(5.0*0.8)))
+  expect_equal(pwexp$pdf(5), 1.2*exp(-(5.0*0.8)))
+  
   # cdf
   expect_equal(pwexp$cdf(5.5), 1.0-exp(-(5.0*0.8 + 0.5*1.2)))
   
