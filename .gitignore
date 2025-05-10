@@ -11,3 +11,7 @@ doc
 Meta
 *_cache*
 *~
+Makefile
+hesim*.tar.gz
+..Rcheck
+hesim.Rcheck

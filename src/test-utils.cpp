@@ -38,3 +38,13 @@ double C_test_max_lt(std::vector<double> v, double value){
   auto it = hesim::max_lt(v.begin(), v.end(), value);
   return *it;
 }
+
+// [[Rcpp::export]]
+double C_test_hesim_bound(double x, std::vector<double> range){
+  return hesim::hesim_bound(x, range);
+}
+
+// [[Rcpp::export]]
+bool C_test_member_of(double x, std::vector<double> lookup){
+  return hesim::member_of(x, lookup);
+}

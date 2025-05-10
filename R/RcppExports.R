@@ -181,6 +181,14 @@ C_test_max_lt <- function(v, value) {
     .Call('_hesim_C_test_max_lt', PACKAGE = 'hesim', v, value)
 }
 
+C_test_hesim_bound <- function(x, range) {
+    .Call('_hesim_C_test_hesim_bound', PACKAGE = 'hesim', x, range)
+}
+
+C_test_member_of <- function(x, lookup) {
+    .Call('_hesim_C_test_member_of', PACKAGE = 'hesim', x, lookup)
+}
+
 test_zeroin <- function() {
     .Call('_hesim_test_zeroin', PACKAGE = 'hesim')
 }
