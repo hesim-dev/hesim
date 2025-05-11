@@ -321,7 +321,7 @@ public:
     time_ = time;
     cumrate_.resize(rate_.size());
     cumrate_[0]=0.0;
-    for (int i=1; i<rate_.size(); ++i)
+    for (int i=1; i < (int) rate_.size(); ++i)
       cumrate_[i] = cumrate_[i-1]+(time_[i]-time_[i-1])*rate_[i-1];
   }
   
@@ -335,11 +335,11 @@ public:
   }
   
   double hazard (double x) const {
-    return rate_[hesim_bound(x, time_)];
+    return rate_[find_interval(x,time_)];
   }
 
   double cumhazard (double x) const {
-    int i = hesim_bound(x, cumrate_);
+    int i = find_interval(x, cumrate_);
     return cumrate_[i]+rate_[i]*(x-time_[i]);
   }
 
@@ -353,7 +353,7 @@ public:
 
   double quantile(double p) const {
     double H = -log1p(-p);
-    int i = hesim_bound(H, cumrate_);
+    int i = find_interval(H, cumrate_);
     return time_[i] + (H - cumrate_[i])/rate_[i];
   }
 

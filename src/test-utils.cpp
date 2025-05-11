@@ -40,8 +40,8 @@ double C_test_max_lt(std::vector<double> v, double value){
 }
 
 // [[Rcpp::export]]
-double C_test_hesim_bound(double x, std::vector<double> range){
-  return hesim::hesim_bound(x, range);
+double C_test_find_interval(double x, std::vector<double> vec){
+  return hesim::find_interval(x, vec);
 }
 
 // [[Rcpp::export]]

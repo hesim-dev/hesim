@@ -2,6 +2,7 @@ context("distributions.cpp unit tests")
 library("flexsurv")
 library("numDeriv")
 library("Rcpp")
+library("msm")
 module <- Rcpp::Module('distributions', PACKAGE = "hesim")
 
 # Exponential distribution -----------------------------------------------------
@@ -52,15 +53,19 @@ test_that("pwexp", {
   
   # pdf
   expect_equal(pwexp$pdf(5.5), 1.2*exp(-(5.0*0.8 + 0.5*1.2)))
+  expect_equal(pwexp$pdf(5.5), msm::dpexp(5.5, rate, time))
   
   # cdf
   expect_equal(pwexp$cdf(5.5), 1.0-exp(-(5.0*0.8 + 0.5*1.2)))
+  expect_equal(pwexp$cdf(5.5), msm::ppexp(5.5, rate, time))
   
   # quantile
   expect_equal(pwexp$quantile(1.0-exp(-(5.0*0.8 + 0.5*1.2))), 5.5)
+  expect_equal(pwexp$quantile(0.9), msm::qpexp(0.9, rate, time))
   
   # hazard
   expect_equal(pwexp$hazard(5.5), 1.2)
+  expect_equal(pwexp$hazard(5), 1.2)
   expect_equal(pwexp$hazard(0.0), 0.8)
   
   # cumhazard

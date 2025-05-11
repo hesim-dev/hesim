@@ -41,14 +41,14 @@ test_that("max_lt", {
 
 # Test c++ function hesim_bound -----------------------------------------------------
 test_that("hesim_bound", {
-    range = c(0,3,5)
-    expect_equal(hesim:::C_test_hesim_bound(-1,range),0)
-    expect_equal(hesim:::C_test_hesim_bound(0,range),0)
-    expect_equal(hesim:::C_test_hesim_bound(1,range),0)
-    expect_equal(hesim:::C_test_hesim_bound(3,range),0) # should this be 1?
-    expect_equal(hesim:::C_test_hesim_bound(3.1,range),1)
-    expect_equal(hesim:::C_test_hesim_bound(5,range),1) # should this be 2?
-    expect_equal(hesim:::C_test_hesim_bound(5.1,range),2)
+    vec = c(0,3,5)
+    expect_equal(hesim:::C_test_find_interval(-1,vec),0)
+    expect_equal(hesim:::C_test_find_interval(0,vec),0)
+    expect_equal(hesim:::C_test_find_interval(1,vec),0)
+    expect_equal(hesim:::C_test_find_interval(3,vec),1)
+    expect_equal(hesim:::C_test_find_interval(3.1,vec),1)
+    expect_equal(hesim:::C_test_find_interval(5,vec),2)
+    expect_equal(hesim:::C_test_find_interval(5.1,vec),2)
 })
 
 # Test c++ function member_of -----------------------------------------------------
