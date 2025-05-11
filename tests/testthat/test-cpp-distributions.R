@@ -56,7 +56,7 @@ test_that("pwexp", {
   expect_equal(pwexp$pdf(5.5), msm::dpexp(5.5, rate, time))
   
   expect_equal(pwexp$pdf(5), 1.2*exp(-(5.0*0.8)))
-  expect_equal(pwexp$pdf(5), 1.2*exp(-(5.0*0.8)))
+  expect_equal(pwexp$pdf(5), msm::dpexp(5, rate, time))
   
   # cdf
   expect_equal(pwexp$cdf(5.5), 1.0-exp(-(5.0*0.8 + 0.5*1.2)))
