@@ -54,10 +54,10 @@ test_that("hesim_bound", {
 # Test c++ function member_of -----------------------------------------------------
 test_that("member_of", {
     lookup = c(0,3,5)
-    expect_equal(hesim:::C_test_member_of(-1,lookup),FALSE)
-    expect_equal(hesim:::C_test_member_of(0,lookup),TRUE)
-    expect_equal(hesim:::C_test_member_of(0.1,lookup),FALSE)
-    expect_equal(hesim:::C_test_member_of(3,lookup),TRUE)
-    expect_equal(hesim:::C_test_member_of(5,lookup),TRUE)
-    expect_equal(hesim:::C_test_member_of(6,lookup),FALSE)
+    expect_equal(hesim:::C_test_is_member_of(-1,lookup),FALSE)
+    expect_equal(hesim:::C_test_is_member_of(0,lookup),TRUE)
+    expect_equal(hesim:::C_test_is_member_of(0.1,lookup),FALSE)
+    expect_equal(hesim:::C_test_is_member_of(3,lookup),TRUE)
+    expect_equal(hesim:::C_test_is_member_of(5,lookup),TRUE)
+    expect_equal(hesim:::C_test_is_member_of(6,lookup),FALSE)
 })

@@ -45,6 +45,6 @@ double C_test_find_interval(double x, std::vector<double> vec){
 }
 
 // [[Rcpp::export]]
-bool C_test_member_of(double x, std::vector<double> lookup){
-  return hesim::member_of(x, lookup);
+bool C_test_is_member_of(double x, std::vector<double> lookup){
+  return hesim::is_member_of(x, lookup);
 }

@@ -185,8 +185,8 @@ C_test_find_interval <- function(x, vec) {
     .Call('_hesim_C_test_find_interval', PACKAGE = 'hesim', x, vec)
 }
 
-C_test_member_of <- function(x, lookup) {
-    .Call('_hesim_C_test_member_of', PACKAGE = 'hesim', x, lookup)
+C_test_is_member_of <- function(x, lookup) {
+    .Call('_hesim_C_test_is_member_of', PACKAGE = 'hesim', x, lookup)
 }
 
 test_zeroin <- function() {

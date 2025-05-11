@@ -311,7 +311,7 @@ public:
    * Test whether the value x is in the vector/set lookup
    */
   template<class T, class V>
-  bool member_of(T x, V lookup) {
+  bool is_member_of(T x, V lookup) {
     return lookup.empty() ? false :
       (std::find(lookup.begin(), lookup.end(), x) != lookup.end());
   }
