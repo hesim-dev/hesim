@@ -157,7 +157,7 @@ public:
     set_time_index(time);
     if (obs_index_() != current_obs_index_ || obs_index_() == 0){
       current_obs_index_ = obs_index_();
-      for (int i = 0; i < mlogit_list_.size(); ++i){
+      for (int i = 0; i < (int) mlogit_list_.size(); ++i){
         if (!absorbing_[i]){
           p_.row(i) =  mlogit_list_[i].multi_predict(s, obs_index_());
         }

@@ -36,7 +36,7 @@ Rcpp::DataFrame C_ctstm_summary(Rcpp::Environment R_CtstmTrans,
           }
           
           // store results
-          for (int l = 0; l < t.size(); ++l){
+          for (int l = 0; l < (int) t.size(); ++l){
             out.transition_id_[counter] = h;
             out.sample_[counter] = s;
             out.strategy_id_[counter] = transmod->obs_index_.get_strategy_id();

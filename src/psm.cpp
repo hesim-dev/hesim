@@ -230,7 +230,7 @@ Rcpp::DataFrame C_psm_curves_summary(Rcpp::Environment R_PsmCurves,
           }
 
           // Store results
-          for (int j = 0; j < x.size(); ++j){
+          for (int j = 0; j < (int) x.size(); ++j){
             out.curve_[counter] = h;
             out.sample_[counter] = s;
             out.strategy_id_[counter] = survmods->obs_index_.get_strategy_id();

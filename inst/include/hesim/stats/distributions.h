@@ -373,7 +373,7 @@ public:
     double out = 0.0;
     for (int t = j; t < n_times; ++t){
       double rexp_t = R::rexp(1/rate_[t]);
-      if (t == j){
+      if (t == (int) j){
         out = lower + rexp_t;
       } 
       else{
