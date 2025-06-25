@@ -4,7 +4,7 @@
 
 arma::rowvec apply_complement(arma::rowvec x, const int complement) {
   double rowsums = 0;
-  for (int i = 0; i < x.size(); ++i) {
+  for (int i = 0; i < (int) x.size(); ++i) {
     if (i != complement) rowsums += x[i];
   }
   x(complement) = 1 - rowsums;
@@ -12,7 +12,7 @@ arma::rowvec apply_complement(arma::rowvec x, const int complement) {
 }
 
 void apply_complement(arma::mat &x, const arma::umat complement) {
-  for (int i = 0; i < complement.n_rows; ++i) {
+  for (int i = 0; i < (int) complement.n_rows; ++i) {
     int r = complement(i, 0);
     x.row(r) = apply_complement(x.row(r), complement(i, 1));
   }
@@ -21,7 +21,7 @@ void apply_complement(arma::mat &x, const arma::umat complement) {
 arma::mat apply_rr(const arma::mat &x, const arma::rowvec rr, const arma::umat index,
               const arma::umat complement){
   arma::mat y = x;
-  for (int i = 0; i < index.n_rows; ++ i) { 
+  for (int i = 0; i < (int) index.n_rows; ++ i) { 
     int r = index(i, 0); 
     int s = index(i, 1);
     y(r, s) = x(r, s) * rr(i);

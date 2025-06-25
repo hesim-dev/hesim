@@ -52,7 +52,7 @@ public:
    */    
   bool is_reset_state(){
     bool is = false;
-    for (int i = 0; i < reset_states_.size(); ++i){
+    for (int i = 0; i < (int) reset_states_.size(); ++i){
       if (state_ == reset_states_[i]){
         is = true;
         break;
