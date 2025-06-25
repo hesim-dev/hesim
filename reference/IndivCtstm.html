@@ -469,19 +469,19 @@ See <code><a href="summarize_ce.html">summarize_ce()</a></code>.</p><div class="
 <span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id patient_id grp_id  from    to final  time_start</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;num&gt;       &lt;int&gt;      &lt;int&gt;  &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;       &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      1           1          1      1     1     2     0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     2     3     1 0.393003227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      1           1          1      1     2     3     1 0.510474437</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:      1           1          2      1     1     2     0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          2      1     2     3     1 1.702282887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      1           1          2      1     2     3     1 2.256996537</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:      1           1          3      1     1     2     0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           1          3      1     2     1     0 0.003928804</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:      1           1          3      1     2     1     0 0.004784208</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      time_stop</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.393003227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.855571106</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 1.702282887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 3.171624306</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 0.003928804</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 1.679816474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.510474437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.856385547</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 2.256996537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 3.391679991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 0.004784208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 1.984802109</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ictstm</span><span class="op">$</span><span class="fu">sim_stateprobs</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">stateprobs_</span><span class="op">[</span><span class="va">t</span> <span class="op">==</span> <span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    sample strategy_id grp_id state_id     t      prob</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;num&gt;       &lt;int&gt;  &lt;int&gt;    &lt;num&gt; &lt;num&gt;     &lt;num&gt;</span>
@@ -500,34 +500,34 @@ See <code><a href="summarize_ce.html">summarize_ce()</a></code>.</p><div class="
 <span class="r-out co"><span class="r-pr">#&gt;</span> $costs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     category    dr sample strategy_id     costs grp_id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;char&gt; &lt;num&gt;  &lt;num&gt;       &lt;int&gt;     &lt;num&gt;  &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:    drugs  0.03      1           1 10144.883      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:    drugs  0.03      1           2 38646.339      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:    drugs  0.03      2           1 27826.855      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:    drugs  0.03      2           2 33744.345      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  medical  0.03      1           1  2707.041      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  medical  0.03      1           2  4092.512      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  medical  0.03      2           1  6864.213      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  medical  0.03      2           2  3551.016      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:    total  0.03      1           1 12851.924      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    total  0.03      1           2 42738.851      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11:    total  0.03      2           1 34691.069      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12:    total  0.03      2           2 37295.361      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:    drugs  0.03      1           1 10773.444      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:    drugs  0.03      1           2 34382.318      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:    drugs  0.03      2           1 21758.408      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:    drugs  0.03      2           2 69171.569      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  medical  0.03      1           1  2800.748      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  medical  0.03      1           2  3705.578      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:  medical  0.03      2           1  5605.367      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:  medical  0.03      2           2  7622.882      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:    total  0.03      1           1 13574.191      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    total  0.03      1           2 38087.897      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:    total  0.03      2           1 27363.774      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:    total  0.03      2           2 76794.451      1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $qalys</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       dr sample strategy_id    qalys grp_id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt;  &lt;num&gt;       &lt;int&gt;    &lt;num&gt;  &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  0.03      1           1 1.756493      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  0.03      1           2 2.869877      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.03      2           1 5.032089      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  0.03      2           2 2.920488      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  0.03      1           1 1.973715      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  0.03      1           2 2.976314      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.03      2           1 3.985595      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  0.03      2           2 6.060111      1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ce</span><span class="op">)</span>, pivot_from <span class="op">=</span> <span class="st">"strategy"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Discount rate        Outcome                       1                       2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            &lt;num&gt;         &lt;fctr&gt;                  &lt;char&gt;                  &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:          0.03          QALYs       3.39 (1.84, 4.95)       2.90 (2.87, 2.92)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:          0.03   Costs: drugs 18,986 (10,587, 27,385) 36,195 (33,867, 38,524)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:          0.03 Costs: medical    4,786 (2,811, 6,760)    3,822 (3,565, 4,079)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:          0.03   Costs: total 23,771 (13,398, 34,145) 40,017 (37,431, 42,603)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:          0.03          QALYs       2.98 (2.02, 3.94)       4.52 (3.05, 5.98)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:          0.03   Costs: drugs 16,266 (11,048, 21,484) 51,777 (35,252, 68,302)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:          0.03 Costs: medical    4,203 (2,871, 5,535)    5,664 (3,804, 7,525)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:          0.03   Costs: total 20,469 (13,919, 27,019) 57,441 (39,056, 75,827)</span>
 </code></pre></div>
     </div>
   </div>
@@ -542,7 +542,7 @@ See <code><a href="summarize_ce.html">summarize_ce()</a></code>.</p><div class="
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

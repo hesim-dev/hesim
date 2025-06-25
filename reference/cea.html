@@ -277,10 +277,10 @@ incremental net monetary benefits for the range of specified willingness to pay 
 <span class="r-in"><span><span class="va">cea_out</span><span class="op">$</span><span class="va">mce</span><span class="op">[</span><span class="va">k</span> <span class="op">==</span> <span class="fl">20000</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        k strategy_id grp_id  best      prob</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt;       &lt;int&gt;  &lt;int&gt; &lt;num&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 20000           1      1     0 0.5333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 20000           2      1     1 0.4666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 20000           1      2     1 0.7333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 20000           2      2     0 0.2666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 20000           1      1     1 0.6000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 20000           2      1     0 0.4000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 20000           1      2     1 0.6333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 20000           2      2     0 0.3666667</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Pairwise cost-effectiveness analysis</span></span></span>
 <span class="r-in"><span><span class="va">cea_pw_out</span> <span class="op">&lt;-</span>  <span class="fu">cea_pw</span><span class="op">(</span><span class="va">sim</span>,  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">200000</span>, <span class="fl">500</span><span class="op">)</span>, comparator <span class="op">=</span> <span class="fl">1</span>,</span></span>
@@ -294,12 +294,12 @@ incremental net monetary benefits for the range of specified willingness to pay 
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cea_pw_out</span><span class="op">$</span><span class="va">ceac</span><span class="op">[</span><span class="va">k</span> <span class="op">&gt;=</span> <span class="fl">20000</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        k strategy_id grp_id      prob</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt;       &lt;int&gt;  &lt;int&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 20000           2      1 0.4666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 20000           2      2 0.2666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 20500           2      1 0.5333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 20500           2      2 0.2666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 21000           2      1 0.5666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 21000           2      2 0.4000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 20000           2      1 0.4000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 20000           2      2 0.3666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 20500           2      1 0.4333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 20500           2      2 0.4000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 21000           2      1 0.4666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 21000           2      2 0.5333333</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summarize the incremental cost-effectiveness ratio</span></span></span>
 <span class="r-in"><span><span class="va">labs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>strategy_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Strategy 1"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"Strategy 2"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
@@ -308,14 +308,14 @@ incremental net monetary benefits for the range of specified willingness to pay 
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;Group, Outcome&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Group           Outcome               Strategy 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;fctr&gt;            &lt;fctr&gt;                   &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: Group 1 Incremental QALYs        3.13 (2.14, 4.61)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: Group 1 Incremental costs  60,590 (52,259, 67,593)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: Group 1   Incremental NMB 95,883 (46,261, 167,036)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: Group 1              ICER                   19,361</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: Group 2 Incremental QALYs        2.73 (1.74, 3.98)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: Group 2 Incremental costs  61,783 (53,030, 73,175)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7: Group 2   Incremental NMB 74,908 (24,545, 138,061)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8: Group 2              ICER                   22,599</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: Group 1 Incremental QALYs        2.99 (1.86, 4.61)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: Group 1 Incremental costs  60,651 (51,135, 69,411)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: Group 1   Incremental NMB 88,813 (29,191, 167,036)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: Group 1              ICER                   20,289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: Group 2 Incremental QALYs        2.83 (1.60, 4.26)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: Group 2 Incremental costs  60,998 (53,646, 70,509)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7: Group 2   Incremental NMB 80,349 (18,534, 156,884)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8: Group 2              ICER                   21,577</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plots</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot_ceplane.html">plot_ceplane</a></span><span class="op">(</span><span class="va">cea_pw_out</span>, label <span class="op">=</span> <span class="va">labs</span><span class="op">)</span></span></span>
@@ -342,7 +342,7 @@ incremental net monetary benefits for the range of specified willingness to pay 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>
