@@ -128,8 +128,8 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
   hesim::ctstm::disease_prog disease_prog(R_disease_prog);
   hesim::stateprobs_out out(n_samples * n_strategies * n_grps * n_states * t.size());
   
-  for(int i = 0; i < disease_prog.time_start_.size(); ++i){
-    for(int j = 0; j < t.size(); ++j){
+  for(int i = 0; i < (int) disease_prog.time_start_.size(); ++i){
+    for(int j = 0; j < (int) t.size(); ++j){
       int state;
       if (disease_prog.final_[i] == 1 && t[j] >= disease_prog.time_stop_[i]){
         state = disease_prog.to_[i];
@@ -150,7 +150,7 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
   } // end loop over disease progression data frame 
   
   // Convert sum to proportion
-  for (int i = 0; i < out.prob_.size(); ++i){
+  for (int i = 0; i < (int) out.prob_.size(); ++i){
     out.prob_[i] = out.prob_[i]/n_patients;
   }
   
@@ -160,7 +160,7 @@ Rcpp::DataFrame C_ctstm_indiv_stateprobs(Rcpp::DataFrame R_disease_prog,
     for (int k = 0; k < n_strategies; ++k){
       for (int g = 0; g < n_grps; ++g){
         for (int h = 0; h < n_states; ++h){
-          for (int r = 0; r < t.size(); ++r){
+          for (int r = 0; r < (int) t.size(); ++r){
             out.sample_[index] = s;
             out.strategy_id_[index] = unique_strategy_id[k];
             out.grp_id_[index] = unique_grp_id[g];
@@ -315,7 +315,7 @@ std::vector<double> C_indiv_ctstm_starting(Rcpp::DataFrame R_disease_prog,
   int N = disease_prog.sample_.size();
   std::vector<double> out(N);
   int time_index = 0;
-  for (unsigned int i = 0; i < N; ++i){
+  for (unsigned int i = 0; i < (unsigned int) N; ++i){
     double time = disease_prog.time_start_[i];
     obs_index.set_strategy_index(strategy_idx[i]);
     obs_index.set_patient_index(patient_idx[i]);

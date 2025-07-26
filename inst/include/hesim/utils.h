@@ -92,7 +92,7 @@ inline std::vector<int> grp_counter(std::vector<T> v){
   std::vector<int> v2(v.size());
   int grp = 0;
   v2[0] = grp;
-  for (int i = 1; i < v.size(); ++i){
+  for (int i = 1; i < (int) v.size(); ++i){
     if(v[i] != v[i-1]){
       ++grp;
     }
@@ -200,8 +200,8 @@ private:
    */                                          
   int count_non_nan(arma::mat m){
     int sum_non_nan = 0;
-    for (int i = 0; i < m.n_rows; ++i){
-      for (int j = 0; j < m.n_cols; ++j){
+    for (int i = 0; i < (int) m.n_rows; ++i){
+      for (int j = 0; j < (int) m.n_cols; ++j){
         if (!std::isnan(m(i, j))){
           ++sum_non_nan;
         }
@@ -217,7 +217,7 @@ private:
    */     
   std::vector<bool> is_absorbing(std::vector<std::vector<int> > trans){
     std::vector<bool> absorbing(trans.size());
-    for (int i = 0; i < trans.size(); ++i){
+    for (int i = 0; i < (int) trans.size(); ++i){
       if(trans[i].size() > 0){
         absorbing[i] = false;
       }
@@ -249,11 +249,11 @@ public:
     n_states_ = m.n_rows;
     
     // Initialize trans_ and to_
-    for (int i = 0; i < m.n_rows; ++i){
+    for (int i = 0; i < (int) m.n_rows; ++i){
       arma::rowvec m_row = m.row(i);
       std::vector<int> trans_i;
       std::vector<int> to_i;
-      for (int j = 0; j < m_row.n_elem; ++j){
+      for (int j = 0; j < (int) m_row.n_elem; ++j){
         if(!std::isnan(m_row(j))){
           if (R_index){
             trans_i.push_back(m_row(j) - 1); 
@@ -293,6 +293,29 @@ public:
   
 };
 
+  /**
+   * Integer bound for the x being in the vector range such that x<=vec[0] -> 0
+   * and vec[i] <= x < vec[i+1] -> i
+   * @param x A double value to be put into an interval
+   * @param vec An std::vector<double> with the lower bounds of the intervals
+   * @return a 0-based index of the lower interval
+   */
+  inline int find_interval(double x, std::vector<double> vec, int ilo = 1) {
+    int new_ilo, mflag = 0;
+    new_ilo = findInterval(&vec[0], vec.size(), x, FALSE, FALSE, ilo, &mflag);
+    return new_ilo==0 ? 0 : new_ilo-1;
+  }
+
+  /***************************************************************************/
+  /**
+   * Test whether the value x is in the vector/set lookup
+   */
+  template<class T, class V>
+  bool is_member_of(T x, V lookup) {
+    return lookup.empty() ? false :
+      (std::find(lookup.begin(), lookup.end(), x) != lookup.end());
+  }
+  
 } // end hesim namespace
 
 
