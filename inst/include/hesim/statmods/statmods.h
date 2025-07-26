@@ -243,7 +243,7 @@ public:
                               double dr = 0){
     std::vector<double> out(t.size());
     set_dist(sample, obs);
-    for (int i = 0; i < t.size(); ++i){
+    for (int i = 0; i < (int) t.size(); ++i){
       if (type == "hazard"){
         out[i] = dist_->hazard(t[i]);
       }
@@ -277,7 +277,7 @@ public:
   std::vector<double> quantile(int sample, int obs, std::vector<double> p) {
     std::vector<double> out(p.size());
     set_dist(sample, obs);
-    for (int i = 0; i < p.size(); ++i){
+    for (int i = 0; i < (int) p.size(); ++i){
       out[i] = dist_->quantile(p[i]);
     }
     return out;

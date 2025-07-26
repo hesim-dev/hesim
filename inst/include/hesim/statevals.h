@@ -408,7 +408,7 @@ public:
     
     auto stateprob_it = stateprob_first;
     std::vector<double> value(std::distance(times.begin(), times.end()));
-    for (int i = 0; i < times.size(); ++i) {
+    for (int i = 0; i < (int) times.size(); ++i) {
       value[i] = exp(-dr * times[i]) * *stateprob_it;
       ++stateprob_it;
     }
@@ -437,8 +437,8 @@ public:
     ev_out out(N * dr.size() * statevals_.size());
     
     int counter = 0;
-    for (int k = 0; k < statevals_.size(); ++k){ // start outcome loop
-      for (int j = 0; j < dr.size(); ++j){ // start discount rate loop
+    for (int k = 0; k < (int) statevals_.size(); ++k){ // start outcome loop
+      for (int j = 0; j < (int) dr.size(); ++j){ // start discount rate loop
         int integrate_start = 0;
         double dr_j = dr[j];
         for (int s = 0; s < n_samples; ++s){ // start samples loop

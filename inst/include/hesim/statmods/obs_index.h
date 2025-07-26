@@ -287,7 +287,7 @@ public:
    * Get the health ID given the current indices
    */    
   int get_health_id(){
-    if (health_id_vec_.size() != n_obs_){
+    if ((int) health_id_vec_.size() != n_obs_){
       Rcpp::stop("There is no 'health_id' in 'input_data'.");
     }
     return health_id_vec_[index_];

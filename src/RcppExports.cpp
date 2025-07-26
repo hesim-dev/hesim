@@ -625,6 +625,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// C_test_find_interval
+double C_test_find_interval(double x, std::vector<double> vec);
+RcppExport SEXP _hesim_C_test_find_interval(SEXP xSEXP, SEXP vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type vec(vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_find_interval(x, vec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// C_test_is_member_of
+bool C_test_is_member_of(double x, std::vector<double> lookup);
+RcppExport SEXP _hesim_C_test_is_member_of(SEXP xSEXP, SEXP lookupSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type lookup(lookupSEXP);
+    rcpp_result_gen = Rcpp::wrap(C_test_is_member_of(x, lookup));
+    return rcpp_result_gen;
+END_RCPP
+}
 // test_zeroin
 double test_zeroin();
 RcppExport SEXP _hesim_test_zeroin() {
@@ -707,6 +731,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hesim_C_test_pv", (DL_FUNC) &_hesim_C_test_pv, 4},
     {"_hesim_C_test_seq", (DL_FUNC) &_hesim_C_test_seq, 3},
     {"_hesim_C_test_max_lt", (DL_FUNC) &_hesim_C_test_max_lt, 2},
+    {"_hesim_C_test_find_interval", (DL_FUNC) &_hesim_C_test_find_interval, 2},
+    {"_hesim_C_test_is_member_of", (DL_FUNC) &_hesim_C_test_is_member_of, 2},
     {"_hesim_test_zeroin", (DL_FUNC) &_hesim_test_zeroin, 0},
     {"_hesim_C_rowmax", (DL_FUNC) &_hesim_C_rowmax, 1},
     {"_hesim_C_rowmax_index", (DL_FUNC) &_hesim_C_rowmax_index, 1},
