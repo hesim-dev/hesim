@@ -339,6 +339,68 @@ std::vector<double> C_indiv_ctstm_starting(Rcpp::DataFrame R_disease_prog,
   return out;
 }
 
+/***************************************************************************//**
+ * @ingroup ctstm
+ * Transition-specific expected values.
+ * Simulate expected values in an individual patient simulation based on transition-
+ * specific values that occur when a patient follows a transition. Values
+ * accrue each time a patient has a transition and are discounted based on the
+ * transition.
+ * @param R_disease_prog An R object of simulating disease progression generated
+ * using C_ctstm_sim_disease.
+ * @param strategy_idx The strategy index starting at 0.
+ * @param patient_idx The patient index starting at 0.
+ * @param R_StateVal An R object of class @c StateVal.
+ * @param dr The discount rate.
+ * @param type @c predict for mean values or @c random for random samples.
+ * @return A vector of expected values in each row in R_disease_prog. These
+ * values are then summed by @c patient_id using @c data.table at the @c R level
+ *  in the private member function @c IndivCtstm$sim_trans.
+ ******************************************************************************/
+// [[Rcpp::export]]
+std::vector<double> C_indiv_ctstm_trans(Rcpp::Environment R_CtstmTrans,
+					Rcpp::DataFrame R_disease_prog,
+					std::vector<int> strategy_idx,
+					std::vector<int> patient_idx,
+					Rcpp::Environment R_StateVal,
+					double dr, std::string type
+					){
+  std::unique_ptr<hesim::ctstm::transmod> transmod = hesim::ctstm::transmod::create(R_CtstmTrans);
+  hesim::ctstm::disease_prog disease_prog(R_disease_prog);
+  bool time_reset = Rcpp::as<bool>(R_StateVal["time_reset"]);
+  hesim::statmods::obs_index obs_index(hesim::statmods::get_id_object(R_StateVal));
+  hesim::statevals stvals(R_StateVal);
+
+  int N = disease_prog.sample_.size();
+  std::vector<double> out(N);
+  for (unsigned int i = 0; (int) i < N; ++i){
+    std::vector<int> ids = transmod->trans_mat_.trans_id(disease_prog.from_[i]);
+    std::vector<int> tos = transmod->trans_mat_.to(disease_prog.from_[i]);
+    // find the transition index
+    int transition_idx = ids.size(); // default: no match
+    for (int j=0; j<(int)ids.size(); ++j) {
+      if (tos[j] == disease_prog.to_[i]) {
+	transition_idx = ids[j];
+	break;
+      }
+    }
+    if (transition_idx != (int) ids.size()) {
+      double time = time_reset ? (disease_prog.to_[i]-disease_prog.from_[i]) :
+	disease_prog.to_[i];
+      int time_idx = hesim::find_interval(time, obs_index.time_start_);
+      int obs = obs_index(strategy_idx[i],
+			  patient_idx[i],
+			  transition_idx,
+			  time_idx);
+      double yhat = stvals.sim(disease_prog.sample_[i], obs, type);
+      out[i] = exp(-dr * time) * yhat;
+    } else {
+      out[i] = 0.0;
+    }
+  }
+  return out;
+}
+
 /***************************************************************************//** 
  * @ingroup ctstm
  * Simulate length of stay given simulated disease progression 

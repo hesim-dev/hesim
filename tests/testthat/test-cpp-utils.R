@@ -40,7 +40,7 @@ test_that("max_lt", {
 })
 
 # Test c++ function hesim_bound -----------------------------------------------------
-test_that("hesim_bound", {
+test_that("find_interval", {
     vec = c(0,3,5)
     expect_equal(hesim:::C_test_find_interval(-1,vec),0)
     expect_equal(hesim:::C_test_find_interval(0,vec),0)
