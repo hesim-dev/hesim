@@ -373,21 +373,21 @@ std::vector<double> C_indiv_ctstm_trans(Rcpp::Environment R_CtstmTrans,
 
   int N = disease_prog.sample_.size();
   std::vector<double> out(N);
-  for (unsigned int i = 0; i < N; ++i){
+  for (unsigned int i = 0; (int) i < N; ++i){
     std::vector<int> ids = transmod->trans_mat_.trans_id(disease_prog.from_[i]);
     std::vector<int> tos = transmod->trans_mat_.to(disease_prog.from_[i]);
     // find the transition index
     int transition_idx = ids.size(); // default: no match
-    for (int j=0; j<ids.size(); ++j) {
+    for (int j=0; j<(int)ids.size(); ++j) {
       if (tos[j] == disease_prog.to_[i]) {
 	transition_idx = ids[j];
 	break;
       }
     }
-    if (transition_idx != ids.size()) {
+    if (transition_idx != (int) ids.size()) {
       double time = time_reset ? (disease_prog.to_[i]-disease_prog.from_[i]) :
 	disease_prog.to_[i];
-      int time_idx = hesim::hesim_bound(time, obs_index.time_start_);
+      int time_idx = hesim::find_interval(time, obs_index.time_start_);
       int obs = obs_index(strategy_idx[i],
 			  patient_idx[i],
 			  transition_idx,
