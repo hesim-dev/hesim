@@ -1,0 +1,150 @@
+---
+title: "hesim html example report"
+author: "Example using IndivCtstm"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  bookdown::html_document2:
+    number_sections: no
+    fig_caption: yes
+    toc: true
+    toc_depth: 2
+fontsize: 11pt
+sansfont: Calibri Light
+# fontfamily: newcent
+# spacing: double
+endnote: no
+always_allow_html: true
+params:
+  Stateprobs: "params$Stateprobs"
+  Summarisedf: "params$Summarisedf"
+  labs_indiv: "params$labs_indiv"
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(
+  cache = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.height = (12 / 2.5),
+  fig.width = (18 / 2.5),
+  dpi = 350
+)
+```
+
+<br> 
+
+# Introduction 
+
+Producing automated reports for modelers and users is possible using R Markdown. This enables you to focus the writing of technical reports on the story surrounding the results and ensures that the outputs match the model. R Markdown has several features that make it ideal for this purpose: 
+
+1. Links directly to the code within the text and outputs
+2. Allows passing of information from an R Shiny app to the markdown document script for rendering an up-to-date report
+3. Reasonably flexible with respect to formatting, including tables, figures, Microsoft Word templates and so on
+4. Easy to use and to understand the script documents
+5. Allows presentation of the code used to generate a rendered output for simple and effective QC, communication and general transparency
+
+The majority of any R Markdown document will be raw text, though the front matter may be the most important part of the document. The document will be generated that includes both content as well as the output of any embedded R code chunks within the document. There are a lot of cheat sheets and reference guides for Markdown and bookdown (e.g. [Yihui Xie](https://bookdown.org/yihui/rmarkdown-cookbook/), [Adam Prichard](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet))
+
+The purpose of this report is to demonstrate the use of R Markdown through outputting the results of the `hesim` example model.
+
+# Results
+
+The results of the `hesim` example are passed to R Markdown via the `rmarkdown::render()` function. Within this function, `envir` is used to import the current user environment with loaded libraries. For instance, `ggplot2` was loaded in the main R script, so importing the script environment into R Markdown means it does not need to be loaded again here. This means that the data and values that were created in the R script are also loaded in. `params` can also be specified, which lists the data to be used in the report; this is particularly important if `rmarkdown::render()` is being called from a `shiny` application, as it may be that the outputs are dynamically generated. In this example, the state probability data frame, the summary data frame with the discounted outcomes, and the state and strategy labels were passed to R Markdown via the code below. The differences in how the information is passed from within the R script and from within the `shiny` application are shown.
+
+In the code below, the `input` refers to the .Rmd file (this file), which lays out the R Markdown document. The output The `output_format` is the selected format of the document, in this case `"html_document"` is used to create a html output (see [other options](https://rmarkdown.rstudio.com/lesson-9.html)). `output_file` refers to the name of the output to be created, which needs to be consistent with the output format. 
+
+***Gathering results from R script:***
+```markdown 
+
+Note: This code chunk uses markdown instead of r. markdown shows the script without running it, whereas r runs the script. Both markdown and r code chunks look the same when rendered into the document
+
+ Export_params <- list(
+   # Main results
+   Stateprobs            = ictstm$stateprobs_,
+   Summarisedf           = ce_sim_ictstm,
+   labs_indiv            = labs_indiv
+ )
+
+ # html document
+ rmarkdown::render(
+   input = "./hesim report.Rmd",
+   output_format = 'bookdown::html_document2',
+   output_file = "hesim-html-report.html",
+   params = Export_params,
+   envir = environment()
+ )
+ 
+```
+
+***Gathering results from R shiny app:***
+```markdown
+
+  output$Create_htmlreport <- downloadHandler(
+      filename = "hesim-html-report.html",
+      content = function(file) {
+        
+        ce_sim_ictstm <- ictstm()$summarize()
+
+        Export_params <- list(
+          # Main results
+          Stateprobs            = ictstm()$stateprobs_,
+          Summarisedf           = ce_sim_ictstm,
+          labs_indiv            = labs_indiv
+        )
+
+        # html document
+        rmarkdown::render(
+          input = "./hesim report.Rmd",
+          output_format = 'bookdown::html_document2',
+          output_file = file,
+          params = Export_params,
+          envir = environment()
+        )
+      }
+    )
+ 
+```
+
+The two subsections below (as denoted by the `##` in the .Rmd script) below show how inputs from the main model can be used within the document
+
+## State transition probabilities
+
+The code below is an r chunk, which means that is it run as the R Markdown document renders. It will therefore return the outputs of the code. `print(params$Stateprobs)` is called below, which prints the value of `params$Stateprobs`. If `echo = TRUE` is specified at the top of the chunk, then the code is also printed into the document.
+
+```{r FigStateTransitionTable, echo = TRUE}
+print(params$Stateprobs)
+
+```
+
+<br> 
+Figures can be printed into the document within the r chunks in exactly the same way as they are called in the main R script.
+
+```{r FigStateTransitionPlot, echo = TRUE, fig.cap="State transition probabilities over time"}
+autoplot(params$Stateprobs, labels = params$labs_indiv,
+            ci = FALSE) + theme_bw() + ggplot2::theme(legend.position = "bottom")
+
+```
+
+
+## Cost and survival summary
+
+Tables can also be displayed in R Markdown documents in a similar way to figures. The `kableExtra` package can be used with `knitr` to format tables in the desired way.
+
+Note that the `echo = FALSE` parameter can be added to code chunks to prevent printing of the R code that generated the output.
+
+```{r TableSummary, echo = FALSE}
+Tableout <- summary(params$Summarisedf, labels = params$labs_indiv) %>% format()
+kbl(Tableout, booktabs = T, position = "h", align = "c", centering = T, caption = "Summary of total costs and QALYs") %>% 
+  kable_styling(latex_options = "hold_position")
+
+```
+
+# Discussion
+The purpose of R Markdown is to make reporting from R automated and accessible for modelers and intended audience. However, it is always important to leave room for thoughtful interpretation and messaging. It is recommended that you note throughout your document where further results interpretation is needed upon document finalization. Useful formatting tips include:
+
+- Single asterisks italicize text *like this*. 
+- Double asterisks embolden text **like this**.
+- Use <span style="color: red;"> text colour </span> to mark sections
+
+To assist with discussions and interpretations, the values that have been calculated or used in the R chunks can be directly imported into the text, for example, the top row of Table 1 shows that is the `r colnames(Tableout)[3]` regimen `r Tableout[1,2]` outcome value is `r Tableout[1,3]`.
+
