@@ -293,13 +293,27 @@ autoplot.survival <- function(object, labels = NULL, ci = FALSE,
   # Add confidence intervals 
   if (ci) {
     if (ci_style == "line") {
-      p <-  p + ggplot2::geom_ribbon(ggplot2::aes(x = t, ymin = lower, ymax = upper,
-                                                  fill = .data[["curve"]]), 
-                                     alpha = 0, linetype = "dashed")
+      p <-  p + ggplot2::geom_ribbon(
+        ggplot2::aes(
+          x = t, 
+          ymin = lower, 
+          ymax = upper,
+          fill = .data[["curve"]]
+        ), 
+        alpha = 0, linetype = "dashed",
+        show.legend = FALSE
+        )
     } else if (ci_style == "ribbon") {
-      p <- p + ggplot2::geom_ribbon(ggplot2::aes(x = t, ymin = lower, ymax = upper,
-                                                 fill = .data[["curve"]]), 
-                                    alpha = geom_alpha)
+      p <- p + ggplot2::geom_ribbon(
+        ggplot2::aes(
+          x = t, 
+          ymin = lower, 
+          ymax = upper,
+          fill = .data[["curve"]]
+        ), 
+        alpha = geom_alpha,
+        show.legend = FALSE
+      )
     }
     p <- p + ggplot2::scale_fill_discrete("Curve")
   }
@@ -373,13 +387,28 @@ autoplot.stateprobs <- function(object, labels = NULL, ci = FALSE,
   # Add confidence intervals 
   if (ci) {
     if (ci_style == "line") {
-      p <-  p + ggplot2::geom_ribbon(ggplot2::aes(x = t, ymin = lower, ymax = upper,
-                                                  fill = .data[["strategy_id"]]), 
-                                     alpha = 0, linetype = "dashed")
+      p <-  p + ggplot2::geom_ribbon(
+        ggplot2::aes(
+          x = t, 
+          ymin = lower, 
+          ymax = upper, 
+          fill = .data[["strategy_id"]]
+        ), 
+        alpha = 0, 
+        linetype = "dashed",
+        show.legend = FALSE
+      )
     } else if (ci_style == "ribbon") {
-      p <- p + ggplot2::geom_ribbon(ggplot2::aes(x = t, ymin = lower, ymax = upper,
-                                            fill = .data[["strategy_id"]]), 
-                               alpha = geom_alpha)
+      p <- p + ggplot2::geom_ribbon(
+        ggplot2::aes(
+          x = t, 
+          ymin = lower, 
+          ymax = upper,
+          fill = .data[["strategy_id"]]
+        ), 
+        alpha = geom_alpha,
+        show.legend = FALSE
+      )
     }
     p <- p + ggplot2::scale_fill_discrete("Strategy")
   }
