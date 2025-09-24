@@ -1,5 +1,6 @@
 context("plot.R unit tests")
 library("data.table")
+library("ggplot2")
 
 
 # Test autoplot method for survival --------------------------------------------
