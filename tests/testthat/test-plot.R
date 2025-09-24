@@ -1,7 +1,10 @@
 context("plot.R unit tests")
 library("data.table")
-library("ggplot2")
 
+get_labs <- function(x) x$labels
+if ("get_labs" %in% getNamespaceExports("ggplot2")) {
+  get_labs <- ggplot2::get_labs
+}
 
 # Test autoplot method for survival --------------------------------------------
 # Create mock survival object
