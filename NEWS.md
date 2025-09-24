@@ -1,3 +1,6 @@
+## hesim 0.5.6
+Ensure compatibility with `ggplot v4.0.0`. 
+
 ## hesim 0.5.5
 Minor updates to the `.Rd` files and tests to fix problem identified with the CRAN package checks.
 
