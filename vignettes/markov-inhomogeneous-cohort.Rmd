@@ -331,11 +331,11 @@ set_labels(stateprob_summary, labels = labs,
            new_names = c("strategy_name", "state_name"))
 ggplot(stateprob_summary, aes(x = t, y = count_mean)) +
   geom_line(aes(col = strategy_name)) +
-  geom_ribbon(aes(x = t, ymin = count_lower, ymax = count_upper,
-                  fill = strategy_name), alpha = .3) +
   facet_wrap(~state_name, scale = "free_y") +
   xlab("Year") + ylab("Count") +
-  scale_fill_discrete("Strategy") + scale_color_discrete("Strategy")
+  scale_colour_discrete(name = "Strategy") +
+  geom_ribbon(aes(x = t, ymin = count_lower, ymax = count_upper,
+                  fill = strategy_name), alpha = .3, show.legend = FALSE)
 ```
 
 ## Costs and QALYs
