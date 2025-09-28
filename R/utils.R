@@ -381,6 +381,7 @@ get_n_samples.array <- function(x){
 #' Code to use the hesim package inline. Not directly called by the user.
 #' @param ... arguments
 #' @examples
+#'  \dontrun{
 #'   library(Rcpp)
 #'   sourceCpp(code="
 #'   // [[Rcpp::depends(hesim)]]
@@ -393,6 +394,8 @@ get_n_samples.array <- function(x){
 #'   }")
 #'   set.seed(12345)
 #'   test_inline_gengamma(1.0, 1.0, 1.0)
+#'   }
+#'   
 #' @keywords internal
 #' @rdname plugin
 inlineCxxPlugin <- function(...) {
