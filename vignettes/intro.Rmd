@@ -229,7 +229,7 @@ n_samples <- 1000
 ```
 
 ### Disease model
-The disease model is constructed as a function of the fitted multi-state model (using the stored regression coefficients) and input data. The input data must be an object of class `expanded_hesim_data`, which is a [`data.table`](https://rdatatable.gitlab.io/data.table/) containing the covariates for the statistical model. In our multi-state model, each row is a unique treatment strategy, patient, and health-state transition.
+The disease model is constructed as a function of the fitted multi-state model (using the stored regression coefficients) and input data. The input data must be an object of class `expanded_hesim_data`, which is a [`data.table`](https://github.com/Rdatatable/data.table) containing the covariates for the statistical model. In our multi-state model, each row is a unique treatment strategy, patient, and health-state transition.
 
 An `expanded_hesim_data` object can be created by expanding an object of class `hesim_data` using `expand.hesim_data()`.
 
