@@ -13,6 +13,7 @@ inlineCxxPlugin(...)
 Code to use the hesim package inline. Not directly called by the user.
 }
 \examples{
+ \dontrun{
   library(Rcpp)
   sourceCpp(code="
   // [[Rcpp::depends(hesim)]]
@@ -25,5 +26,7 @@ Code to use the hesim package inline. Not directly called by the user.
   }")
   set.seed(12345)
   test_inline_gengamma(1.0, 1.0, 1.0)
+  }
+  
 }
 \keyword{internal}
