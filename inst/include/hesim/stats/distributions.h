@@ -317,6 +317,13 @@ public:
    * Instantiates an exponential distribution with a given rate parameter.
    */ 
   piecewise_exponential(std::vector<double> rate, std::vector<double> time){
+    if (time.size() != rate.size()) {
+      std::ostringstream oss_time, oss_rate;
+      for (auto x : time) oss_time << x << " ";
+      for (auto x : rate) oss_rate << x << " ";
+      Rcpp::stop("Time and rate must be the same length.\nTime: " + oss_time.str() + "\nRate: " + oss_rate.str());
+    }
+    
     rate_ = rate;
     time_ = time;
     cumrate_.resize(rate_.size());
