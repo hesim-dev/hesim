@@ -127,9 +127,9 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Time inhomogeneous Markov cohort models</h1>
             
-            <h4 data-toc-skip class="date">2025-10-06</h4>
+            <h4 data-toc-skip class="date">2025-10-09</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/main/vignettes/markov-inhomogeneous-cohort.Rmd" class="external-link"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/hesim-dev/hesim/blob/v0.5.6/vignettes/markov-inhomogeneous-cohort.Rmd" class="external-link"><code>vignettes/markov-inhomogeneous-cohort.Rmd</code></a></small>
       <div class="hidden name"><code>markov-inhomogeneous-cohort.Rmd</code></div>
 
     </div>
@@ -1059,7 +1059,7 @@ very similar, as expected.</p>
 <span><span class="co">## 2:         0.060 Costs: prosthesis       394 (394, 394)       579 (579, 579)</span></span>
 <span><span class="co">## 3:         0.060    Costs: medical        122 (59, 233)          34 (11, 81)</span></span>
 <span><span class="co">## 4:         0.060      Costs: total       516 (453, 627)       613 (590, 660)</span></span></code></pre>
-<p>However, time to construct the transition model was 2.8 times faster.
+<p>However, time to construct the transition model was 2.7 times faster.
 Although both are quite fast (time in the table is in seconds), this
 difference would become more pronounced as the number of parameter
 samples, treatment strategies, patients, and/or distinct time periods
@@ -1095,13 +1095,13 @@ elapsed
 define_model()
 </td>
 <td style="text-align:right;">
-3.791
+3.644
 </td>
 <td style="text-align:right;">
-0.201
+0.183
 </td>
 <td style="text-align:right;">
-3.885
+3.721
 </td>
 </tr>
 <tr>
@@ -1109,13 +1109,13 @@ define_model()
 Custom tpmatrix()
 </td>
 <td style="text-align:right;">
-1.401
+1.360
 </td>
 <td style="text-align:right;">
-0.537
+0.549
 </td>
 <td style="text-align:right;">
-1.365
+1.366
 </td>
 </tr>
 </tbody>
