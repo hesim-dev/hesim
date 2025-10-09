@@ -169,7 +169,7 @@ private:
     }
     else if (dist_name == "pwexp"){
       int n_times = params_surv.pwexp_aux_.time_.size();
-      std::vector<double> rate(n_times + 1, 0.0);
+      std::vector<double> rate(n_times, 0.0);
       d = new stats::piecewise_exponential(rate,
                                            params_surv.pwexp_aux_.time_);
     }

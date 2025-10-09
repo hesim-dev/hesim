@@ -310,6 +310,25 @@ private:
   std::vector<double> cumrate_; ///< cumulative rate parameter up to each time
   std::vector<double> time_; ///<A vector equal to the number of elements in rate
                              /// giving the times at which the rate changes
+                             
+ /**
+  * Check that the time and rate vectors have the same length.
+  * 
+  * @param time Vector of times at which the rate changes.
+  * @param rate Vector of rate parameters.
+  * 
+  * @throws Rcpp::stop if time and rate vectors are not the same length.
+  */
+ void check_same_length(const std::vector<double>& time, const std::vector<double>& rate) {
+   if (time.size() != rate.size()) {
+     std::ostringstream oss_time, oss_rate;
+     for (auto x : time) oss_time << x << " ";
+     for (auto x : rate) oss_rate << x << " ";
+     Rcpp::stop("'time' and 'rate' must be the same length.\n" +
+       std::string("time: ") + oss_time.str() + "\n" +
+       std::string("rate: ") + oss_rate.str());
+   }
+ }
   
 public:
   /** 
@@ -317,6 +336,8 @@ public:
    * Instantiates an exponential distribution with a given rate parameter.
    */ 
   piecewise_exponential(std::vector<double> rate, std::vector<double> time){
+    check_same_length(time, rate);
+    
     rate_ = rate;
     time_ = time;
     cumrate_.resize(rate_.size());

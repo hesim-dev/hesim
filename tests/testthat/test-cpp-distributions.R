@@ -96,6 +96,13 @@ test_that("pwexp", {
   expect_true(all(r >= max(time) + 1))
 })
 
+# An error is thrown if time and rate are not the same length
+expect_error(
+  new(PwExp, rate = c(1, 2), time = c(0, 2, 4)), 
+  "'time' and 'rate' must be the same length."
+)
+
+
 # Weibull distribution (AFT) ---------------------------------------------------
 test_that("weibull", {
   Weibull <- module$weibull
