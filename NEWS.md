@@ -1,3 +1,8 @@
+## hesim 0.5.7
+Fix memory access issue identified in piecewise exponential distributions by
+ensuring that the `time` and `rate` vectors are of the same length. Previously,
+an off-by-one allocation could cause undefined behavior on some systems.
+
 ## hesim 0.5.6
 Ensure compatibility with `ggplot v4.0.0`. 
 
