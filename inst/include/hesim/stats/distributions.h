@@ -312,7 +312,7 @@ private:
                              /// giving the times at which the rate changes
                              
  /**
-  * Checks that the time and rate vectors have the same length.
+  * Check that the time and rate vectors have the same length.
   * 
   * @param time Vector of times at which the rate changes.
   * @param rate Vector of rate parameters.
