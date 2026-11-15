@@ -218,7 +218,8 @@ simulation output stored in \code{disprog}.
 }
 \subsection{Returns}{
 An instance of \code{self} with simulated output of class \code{\link{stateprobs}}
-stored in \code{stateprobs_}.
+stored in \code{stateprobs_}. Probabilities are conditional on subgroup, with
+equal weight per patient (\code{patient_wt} is not supported).
 }
 }
 \if{html}{\out{<hr>}}
@@ -247,7 +248,10 @@ as in \verb{$sim()} in \code{\link{StateVals}}.}
 \item{\code{lys}}{If \code{TRUE}, then life-years are simulated in addition to QALYs.}
 
 \item{\code{by_patient}}{If \code{TRUE}, then QALYs and/or costs are computed at the patient level.
-If \code{FALSE}, then they are averaged across patients by health state.}
+If \code{FALSE}, then they are averaged across patients within each subgroup and
+health state. The returned \code{n_patients} column records subgroup size and must
+be retained for population summaries. With \code{TRUE}, only actual patient/subgroup
+pairs are returned. Patients receive equal weight; \code{patient_wt} is not supported.}
 }
 \if{html}{\out{</div>}}
 }
@@ -279,7 +283,10 @@ Simulate costs as a function of \code{disprog_} and \code{cost_models}.
 as in \verb{$sim()} in \code{\link{StateVals}}.}
 
 \item{\code{by_patient}}{If \code{TRUE}, then QALYs and/or costs are computed at the patient level.
-If \code{FALSE}, then they are averaged across patients by health state.}
+If \code{FALSE}, then they are averaged across patients within each subgroup and
+health state. The returned \code{n_patients} column records subgroup size and must
+be retained for population summaries. With \code{TRUE}, only actual patient/subgroup
+pairs are returned. Patients receive equal weight; \code{patient_wt} is not supported.}
 
 \item{\code{max_t}}{Maximum time duration to compute costs once a patient has
 entered a (new) health state. By default, equal to \code{Inf},

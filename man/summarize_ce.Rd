@@ -31,6 +31,10 @@ and health state (\code{state_id}). Alternatively, there can be a column
 denoting a patient (\code{patient_id}), in which case outcomes will first be
 averaged across patients. A \code{grp_id} column can also be used so that
 outcomes are computed for each subgroup (if \code{by_grp = TRUE}); otherwise it is assumed that
-there is only one subgroup.
+there is only one subgroup. Aggregated \code{IndivCtstm} output contains conditional
+subgroup means and an \code{n_patients} column. Retain this column: population
+summaries weight subgroup means by these counts after summing health states.
+Without patient IDs or counts, the legacy behavior is to sum the supplied
+values (including across groups when \code{by_grp = FALSE}).
 }
 \keyword{internal}

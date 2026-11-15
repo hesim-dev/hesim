@@ -109,6 +109,16 @@ indiv_ctstm_sim_disease <- function(trans_model, max_t = 100, max_age = 100,
   return(disprog[, ])
 }
 
+# Membership must be fixed across strategies, transitions, and time intervals.
+indiv_ctstm_membership <- function(input_data){
+  membership <- unique(data.table(patient_id = input_data$patient_id,
+                                  grp_id = input_data$grp_id))
+  if (anyNA(membership) || anyDuplicated(membership$patient_id)){
+    stop("Each patient must belong to exactly one non-missing subgroup.", call. = FALSE)
+  }
+  membership
+}
+
 indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ...){
   
   # Simulate disease progression if 'disprog' is missing
@@ -124,26 +134,25 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
   
   # Compute state probabilities
   ## Indexing for C++
-  disprog[, strategy_index := .GRP, by = "strategy_id"]
-  strategy_index <- disprog$strategy_index - 1
-  disprog[, strategy_index := NULL]
-  
-  disprog[, grp_index := .GRP, by = "grp_id"]
-  grp_index <- disprog$grp_index - 1
-  disprog[, grp_index := NULL]
+  unique_strategy_id <- unique(trans_model$input_data$strategy_id)
+  membership <- indiv_ctstm_membership(trans_model$input_data)
+  grp_counts <- membership[, .(n_patients = .N), by = "grp_id"]
+  unique_grp_id <- grp_counts$grp_id
+  strategy_index <- match(disprog$strategy_id, unique_strategy_id) - 1L
+  grp_index <- match(disprog$grp_id, unique_grp_id) - 1L
+  if (anyNA(strategy_index) || anyNA(grp_index)){
+    stop("Disease progression IDs must match the transition model.", call. = FALSE)
+  }
 
   ## Dimensions of simulation
-  n_grps <- length(unique(disprog$grp_id))
+  n_grps <- length(unique_grp_id)
   n_states <- nrow(trans_model$trans_mat)
   n_strategies <- trans_model$input_data$n_strategies
-  n_patients <- trans_model$input_data$n_patients
   if (inherits(trans_model$params, "params_surv_list")){
     n_samples <- trans_model$params[[1]]$n_samples
   } else{
     n_samples <- trans_model$params$n_samples
   }
-  unique_strategy_id <- unique(trans_model$input_data$strategy_id)
-  unique_grp_id <- unique(trans_model$input_data$grp_id)
   
   ## Computation
   stprobs <- C_ctstm_indiv_stateprobs(disprog, 
@@ -156,8 +165,9 @@ indiv_ctstm_sim_stateprobs <- function(disprog = NULL, trans_model = NULL, t, ..
                                       unique_grp_id,
                                       grp_index,
                                       n_states,
-                                      n_patients)
+                                      1L) # Return occupancy counts; normalize within subgroup below.
   stprobs <- data.table(stprobs)
+  stprobs[, prob := prob / grp_counts$n_patients[match(grp_id, grp_counts$grp_id)]]
       
   ## C++ to R indexing
   stprobs[, "sample" := get("sample") + 1]
@@ -504,7 +514,10 @@ NULL
 #' @param type `"predict"` for mean values or `"random"` for random samples 
 #' as in `$sim()` in [`StateVals`].
 #' @param by_patient If `TRUE`, then QALYs and/or costs are computed at the patient level.
-#'  If `FALSE`, then they are averaged across patients by health state.
+#'  If `FALSE`, then they are averaged across patients within each subgroup and
+#'  health state. The returned `n_patients` column records subgroup size and must
+#'  be retained for population summaries. With `TRUE`, only actual patient/subgroup
+#'  pairs are returned. Patients receive equal weight; `patient_wt` is not supported.
 #' @export
 IndivCtstm <- R6::R6Class("IndivCtstm",
   private = list(  
@@ -524,6 +537,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
       }
       check_dr(dr)
       check_StateVals(stateval_list, self$disprog_, object_name = "disprog")
+      membership <- indiv_ctstm_membership(self$trans_model$input_data)
+      grp_counts <- membership[, .(n_patients = .N), by = "grp_id"]
       
       # Indexing patient and strategy ID's
       if (is.null(private$disprog_idx)){
@@ -597,21 +612,26 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
                                                         .SDcols = sdcols,
                                                         by = by_cols]
             setkeyv(ev_list[[counter]], by_cols)
-            # Pad missing health states within sample/strategy pairs with  NA's
-            ev_list[[counter]] <- ev_list[[counter]][CJ(sample, strategy_id, patient_id, grp_id, from,
-                                                              unique = TRUE)]
+            # Pad states, not fictitious patient/subgroup pairs.
+            padding <- CJ(sample = unique(self$disprog_$sample),
+                          strategy_id = unique(self$disprog_$strategy_id),
+                          patient_id = membership$patient_id,
+                          from = unique(self$disprog_$from))
+            padding[membership, on = "patient_id", grp_id := i.grp_id]
+            ev_list[[counter]] <- ev_list[[counter]][padding, on = by_cols]
           } else{
             by_cols <- c("sample", "strategy_id", "grp_id", "from")
-            n_patients <- self$trans_model$input_data$n_patients
             ev_list[[counter]] <- self$disprog_[, lapply(.SD, sum), 
                                                         .SDcols = sdcols,
                                                         by = by_cols]
-            ev_list[[counter]][, ev := ev/n_patients]
-            if(lys) ev_list[[counter]][, lys := lys/n_patients]
             # Pad missing health states within sample/strategy pairs with NA's
             setkeyv(ev_list[[counter]], by_cols)
-            ev_list[[counter]] <- ev_list[[counter]][CJ(sample, strategy_id, grp_id, from,
+            ev_list[[counter]] <- ev_list[[counter]][CJ(sample, strategy_id,
+                                                            grp_id = grp_counts$grp_id, from,
                                                             unique = TRUE)]
+            ev_list[[counter]][grp_counts, on = "grp_id", n_patients := i.n_patients]
+            ev_list[[counter]][, ev := ev/n_patients]
+            if(lys) ev_list[[counter]][, lys := lys/n_patients]
           }
           ev_list[[counter]][, "dr" := dr[j]]
           ev_list[[counter]][, "category" := categories[i]]
@@ -709,7 +729,8 @@ IndivCtstm <- R6::R6Class("IndivCtstm",
     #' simulation output stored in `disprog`.
     #' @param t A numeric vector of times.
     #' @return An instance of `self` with simulated output of class [`stateprobs`] 
-    #' stored in `stateprobs_`.    
+    #' stored in `stateprobs_`. Probabilities are conditional on subgroup, with
+    #' equal weight per patient (`patient_wt` is not supported).
     sim_stateprobs = function(t){
       if(is.null(self$disprog_)){
         stop("You must first simulate disease progression using '$sim_disease'.",
