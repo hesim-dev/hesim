@@ -233,15 +233,26 @@ std::vector<double> C_indiv_ctstm_wlos(Rcpp::DataFrame R_disease_prog,
       if (time_reset){   // If time_reset = TRUE, then reset time when a patient enters a new state
         time_index = 0;  // In disease_prog_ each row denotes a transition to a new health state
       }
-      else{ // Otherwise, reset time for each new patient
+      else{ // Otherwise, reset time for each new trajectory
         if (disease_prog.patient_id_[i] != disease_prog.patient_id_[i-1] ||
+            disease_prog.strategy_id_[i] != disease_prog.strategy_id_[i-1] ||
             disease_prog.sample_[i] != disease_prog.sample_[i-1]){
               time_index = 0;
         }
       }
-    } 
+    }
+    // A capped course can end before the next entry crosses a tariff change.
+    if (!time_reset){
+      while (time_index < obs_index.n_times_ - 1 &&
+             obs_index.time_stop_[time_index] <= time_start_it){
+        ++time_index;
+      }
+    }
     int t_start = time_index;
     for (int t = t_start; t < obs_index.n_times_; ++t){
+      if (time_start_it >= time_stop_i_max){
+        break;
+      }
       int obs = obs_index(strategy_idx[i],
                           patient_idx[i],
                           disease_prog.from_[i],
