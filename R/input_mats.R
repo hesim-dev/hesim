@@ -289,7 +289,10 @@ create_input_mats.formula_list <- function(object, input_data, ...){
 create_input_mats.lm <- function(object, input_data, ...){
   check_input_data(input_data)
   terms <- get_terms(object)
-  X <- stats::model.matrix(terms, data = input_data, ...)
+  mf <- stats::model.frame(terms, input_data, xlev = object$xlevels)
+  if (!is.null(cl <- attr(terms, "dataClasses")))
+    stats::.checkMFClasses(cl, mf)
+  X <- stats::model.matrix(terms, mf, contrasts.arg = object$contrasts, ...)
   args <- c(list(X = list(mu = X)),
            get_input_mats_id_vars(input_data))
   return(do.call("new_input_mats", args))
