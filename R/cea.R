@@ -401,8 +401,7 @@ icer <- function(x, prob = .95, k = 50000, labels = NULL, ...){
     ic_mean < 0 & ie_mean >= 0, "Dominates",
     ic_mean > 0 & ie_mean <= 0, "Dominated"
   )]
-  icer_plane <- tbl$icer_plane
-  tbl <- melt(tbl, id.vars = c(strategy, grp),
+  tbl <- melt(tbl, id.vars = c(strategy, grp, "icer_plane"),
               measure.vars = list(c("ie_mean", "ic_mean", "inmb_mean", "icer"),
                                   c("ie_lower", "ic_lower", "inmb_lower"),
                                   c("ie_upper", "ic_upper", "inmb_upper")),
@@ -421,6 +420,8 @@ icer <- function(x, prob = .95, k = 50000, labels = NULL, ...){
 
   # Return
   setorderv(tbl, c("grp", "strategy"))
+  icer_plane <- tbl[["icer_plane"]][tbl[["outcome"]] == "ICER"]
+  tbl[, ("icer_plane") := NULL]
   setattr(tbl, "class", c("icer", "data.table", "data.frame"))
   setattr(tbl, "k", k)
   setattr(tbl, "icer_plane", icer_plane)
