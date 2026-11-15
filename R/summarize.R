@@ -56,8 +56,8 @@ incr_effect <- function(x, comparator, sample, strategy, grp = NULL, outcomes){
   n_strategies <- length(unique(x_treat[[strategy]]))
   n_samples <- length(unique(x_treat[[sample]]))
   n_grps <- length(unique(x_treat[[grp]]))
-  setorderv(x_treat, c(strategy, sample))
-  setorderv(x_comparator, c(strategy, sample))
+  setorderv(x_treat, c(grp, strategy, sample))
+  setorderv(x_comparator, c(grp, strategy, sample))
   
   # estimation
   return(calc_incr_effect(x_treat, x_comparator, sample, strategy, grp, outcomes, 
