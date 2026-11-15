@@ -314,7 +314,6 @@ std::vector<double> C_indiv_ctstm_starting(Rcpp::DataFrame R_disease_prog,
   
   int N = disease_prog.sample_.size();
   std::vector<double> out(N);
-  int time_index = 0;
   for (unsigned int i = 0; i < (unsigned int) N; ++i){
     double time = disease_prog.time_start_[i];
     obs_index.set_strategy_index(strategy_idx[i]);
@@ -323,14 +322,9 @@ std::vector<double> C_indiv_ctstm_starting(Rcpp::DataFrame R_disease_prog,
     obs_index.set_time_index(0);
     
     if (!time_reset){
-      if (i > 0 && 
-          (disease_prog.patient_id_[i] != disease_prog.patient_id_[i-1] ||
-          disease_prog.sample_[i] != disease_prog.sample_[i-1])){
-          time_index = 0;
-      }
-      while (obs_index.get_time_stop() < time){
-        ++time_index;
-        obs_index.set_time_index(time_index);
+      while (obs_index.get_time_index() + 1 < obs_index.n_times_ &&
+             obs_index.get_time_stop() < time){
+        obs_index.set_time_index(obs_index.get_time_index() + 1);
       }
     }
     double yhat = stvals.sim(disease_prog.sample_[i], obs_index(), type);
