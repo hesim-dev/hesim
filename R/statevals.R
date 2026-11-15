@@ -438,6 +438,9 @@ create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, .
   } else if (attr(object, "dist") == "fixed"){
     mu <- rep(tbl$est, times = n)
   } else if (attr(object, "dist") == "custom"){
+    id_cols <- intersect(c("sample", "strategy_id", "patient_id", grp_var,
+                           "state_id", "time_id"), names(tbl))
+    setorderv(tbl, id_cols)
     mu <- tbl$value
   }
   
@@ -445,7 +448,6 @@ create_StateVals.stateval_tbl <- function(object, hesim_data = NULL, n = 1000, .
   if (attr(object, "dist") != "custom"){
     mu <- matrix(mu, ncol = n, byrow = FALSE) 
   } else {
-    setorderv(tbl, "sample") 
     if (!is.null(n)){
       n_samples <- length(unique(tbl$sample))
       mu <- matrix(mu, ncol = n_samples, byrow = FALSE)
