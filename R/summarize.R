@@ -166,11 +166,15 @@ check_summarize <- function(x){
 #' denoting a patient (`patient_id`), in which case outcomes will first be
 #' averaged across patients. A `grp_id` column can also be used so that
 #' outcomes are computed for each subgroup (if `by_grp = TRUE`); otherwise it is assumed that 
-#' there is only one subgroup.
+#' there is only one subgroup. Aggregated `IndivCtstm` output contains conditional
+#' subgroup means and an `n_patients` column. Retain this column: population
+#' summaries weight subgroup means by these counts after summing health states.
+#' Without patient IDs or counts, the legacy behavior is to sum the supplied
+#' values (including across groups when `by_grp = FALSE`).
 #' @keywords internal
 #' @return An object of class [`ce`].
 summarize_ce <- function(costs, qalys, by_grp = FALSE) {
-  patient_wt <- NULL
+  patient_wt <- n_patients <- NULL
   by_cols <- c("dr", "sample", "strategy_id")
   if (by_grp) by_cols <- c(by_cols, "grp_id")
   
@@ -200,8 +204,15 @@ summarize_ce <- function(costs, qalys, by_grp = FALSE) {
         x_summary <- x_summary[, lapply(.SD, mean), by = by_cols, .SDcols = sd_cols]
       }
       
+    } else if ("n_patients" %in% colnames(x) && !by_grp){
+      # Conditional subgroup means: sum states first, then weight each group
+      # once by its population size, not once per health-state row.
+      x_summary <- x[, lapply(.SD, sum),
+                     by = c(by_cols, "grp_id", "n_patients"), .SDcols = sd_cols]
+      x_summary <- x_summary[, lapply(.SD, stats::weighted.mean, w = n_patients),
+                             by = by_cols, .SDcols = sd_cols]
     } else{ # Mean already computed by health state, so sum across health states
-      # Only for individual patient simulation
+      # Legacy inputs without counts retain their additive semantics.
       x_summary <- x[, lapply(.SD, sum), by = by_cols, .SDcols = sd_cols]
     }
   }
